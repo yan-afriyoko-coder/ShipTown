@@ -9,6 +9,11 @@ class productController extends snsController
     protected $topicName = "Products";
 
     function validation($message) {
+
+        if(!(isset($message))){
+            return false;
+        }
+        
         return true;
     }
 }
