@@ -8,15 +8,12 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SnsTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function testExample()
+    public function testValidation()
     {
-        $response = $this->get('/');
+        $controller = new \App\Http\Controllers\productController();
 
-        $response->assertStatus(200);
+        $response = $controller->validation();
+
+        $this->assertTrue($response);
     }
 }
