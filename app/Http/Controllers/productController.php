@@ -6,8 +6,7 @@ use Illuminate\Http\Request;
 
 class productController extends snsController
 {
-    //protected $topicName='product';
-    protected $topicName = "snsProductsPostTopic";
+    protected $topicName = "Products";
 
     function validation() {
         return true;
