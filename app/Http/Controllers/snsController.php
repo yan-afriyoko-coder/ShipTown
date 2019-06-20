@@ -11,6 +11,9 @@ class snsController extends Controller
 
     function store(Request $request){
         $message = $request->getContent();
+        if(!$this->validation($message)){
+            return response()->json("Error 422: Invalid data", 422);
+        }
         $this->sendTo($this->getTopicName(), $message);
     }
 
@@ -29,5 +32,9 @@ class snsController extends Controller
     function getTopicName(){
         return "arn:aws:sns:eu-west-1:310005059065:".auth('api')->user()->id."_sns".$this->topicName."PostTopic";
 
+    }
+
+    function validation($message){
+        //
     }
 }

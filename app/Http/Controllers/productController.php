@@ -8,7 +8,7 @@ class productController extends snsController
 {
     protected $topicName = "Products";
 
-    function validation() {
+    function validation($message) {
         return true;
     }
 }
