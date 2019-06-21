@@ -10,10 +10,9 @@ class productController extends snsController
 
     function validation($message) {
 
-        if(!(isset($message))){
+        if($message == ""){
             return false;
         }
-        
         return true;
     }
 }
