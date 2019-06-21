@@ -8,15 +8,16 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SnsControllerTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function testExample()
-    {
-        $response = $this->get('/');
+    public function test_if_empty_message_is_not_allowed () {
 
-        $response->assertStatus(200);
+        $data = "";
+
+        $response = $this->withHeaders([
+            'Authorization'=>env('TEST_AUTH'),
+            ])->json('POST', 'api/products',[
+                $data
+            ]);
+
+        $response->assertStatus(422);
     }
 }
