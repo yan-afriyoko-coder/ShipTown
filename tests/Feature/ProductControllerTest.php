@@ -8,29 +8,40 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProductControllerTest extends TestCase
 {
-    public function testResponseStatus()
-    {
+
+    public function test_products_route () {
+
+        $data =
+            '{
+                "sku": "123456",
+                "description": "Blue bag",
+                "price": 78
+            }';
+
+
         $response = $this->withHeaders([
             'Authorization'=>env('TEST_AUTH'),
-        ])->json('POST', 'api/products', ['Message' => 'test']);
+            ])->json('POST', 'api/products',[
+                $data
+            ]);
 
-        $response ->assertStatus(200);
+        $response->assertStatus(200);
+
     }
 
-    public function testValidation()
-    {
-        $controller = new \App\Http\Controllers\productController();
+    public function test_if_unauthenticated_user_is_not_allowed () {
 
-        $validMessage = "Hello";
+        $data =
+            '{
+                "sku": "123456",
+                "description": "Blue bag",
+                "price": 78
+            }';
 
-        $response = $controller->validation($validMessage);
+        $response = $this->json('POST', 'api/products',[
+                $data
+            ]);
 
-        $this->assertTrue($response);
-
-        $invalidMessage = null;
-
-        $response = $controller->validation($invalidMessage);
-
-        $this->assertFalse($response);
+        $response->assertStatus(401);
     }
 }
