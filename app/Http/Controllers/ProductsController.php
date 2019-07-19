@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class productController extends snsController
+class ProductsController extends snsController
 {
     protected $topicName = "Products";
 
