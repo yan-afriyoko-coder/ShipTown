@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use AWS;
 use Auth;
 
-class snsController extends Controller
+class SnsBaseController extends Controller
 {
     protected $topicName = "";
 
