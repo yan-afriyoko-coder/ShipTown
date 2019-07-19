@@ -6,7 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class SnsControllerTest extends TestCase
+class SnsBaseControllerTest extends TestCase
 {
     public function test_if_empty_message_is_not_allowed () {
 
