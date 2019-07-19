@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class ProductControllerTest extends TestCase
 {
 
-    public function test_products_route () {
+    public function test_products_route_authenticated_user () {
 
         $data =
             '{
@@ -29,7 +29,7 @@ class ProductControllerTest extends TestCase
 
     }
 
-    public function test_if_unauthenticated_user_is_not_allowed () {
+    public function test_products_route_unauthenticated_user () {
 
         $data =
             '{
