@@ -6,9 +6,9 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class OrderControllerTest extends TestCase
+class OrdersControllerTest extends TestCase
 {
-    public function test_orders_route () {
+    public function test_orders_route_authenticated_user () {
 
         $data =
             '{
@@ -30,7 +30,7 @@ class OrderControllerTest extends TestCase
 
     }
 
-    public function test_if_unauthenticated_user_is_not_allowed () {
+    public function test_orders_route_unauthenticated_user () {
 
         $data =
             '{
