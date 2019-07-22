@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use AWS;
-use Auth;
+use Log;
+use Aws\Exception\AwsException;
 
 class SnsBaseController extends Controller
 {
@@ -15,13 +16,17 @@ class SnsBaseController extends Controller
         $message = $request->getContent();
 
         if(!$this->validation($message)){
+
+            Log::warning('Invalid message: '.$message);
             return response()->json("Error 422: Invalid data", 422);
+
         }
 
         if ($this->sendTo($this->getTopicName(), $message)) {
-            return response()->json("ok", 200);
-        };
 
+            return response()->json("ok", 200);
+            
+        };
 
     }
 
@@ -40,6 +45,20 @@ class SnsBaseController extends Controller
     function getTopicName(){
 
         $userID = auth('api')->user()->id;
+
+        $snsClient = AWS::createClient('sns');
+
+        try {
+
+            $snsClient->createTopic([
+                'Name' => "snsTopic_".$this->topicName."_User".$userID,
+            ]);
+
+        } catch (AwsException $e) {
+
+            Log::alert("AWS error: ".$e);
+
+        }
 
         return "arn:aws:sns:".env('AWS_REGION').":".env('AWS_USER_CODE').":snsTopic_".$this->topicName."_User".$userID;
     }
