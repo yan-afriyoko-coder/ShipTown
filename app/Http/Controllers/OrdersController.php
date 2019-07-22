@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Log;
-
 class OrdersController extends SnsBaseController
 {
     protected $topicName = "Orders";
