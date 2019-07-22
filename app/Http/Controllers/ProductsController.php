@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Log;
+
 
 class ProductsController extends SnsBaseController
 {
@@ -11,8 +12,11 @@ class ProductsController extends SnsBaseController
     function validation($message) {
 
         if(($message == "") or (!isset($message)) or ($message == '[""]')){
+
             return false;
+
         }
+
         return true;
     }
 }
