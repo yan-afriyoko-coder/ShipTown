@@ -3,10 +3,10 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\User;
+use Laravel\Passport\Passport;
 
-class ProductControllerTest extends TestCase
+class ProductsControllerTest extends TestCase
 {
 
     public function test_products_route_authenticated_user () {
@@ -19,13 +19,13 @@ class ProductControllerTest extends TestCase
             }';
 
 
-        $response = $this->withHeaders([
-            'Authorization'=>env('TEST_AUTH'),
-            ])->json('POST', 'api/products',[
-                $data
-            ]);
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
 
-        $response->assertStatus(200);
+
+        $this->json('POST', 'api/products', [$data])->assertStatus(200);
+
 
     }
 
