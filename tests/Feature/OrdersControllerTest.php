@@ -31,19 +31,15 @@ class OrdersControllerTest extends TestCase
 
     public function test_orders_route_unauthenticated_user () {
 
-        $data =
-            '{
-                "orderID": "001241",
-                "sku": "123456",
-                "quantity": 9,
-                "pricePerUnit": 78,
-                "priceTotal": 702
-            }';
+        $data = [
+            'orderID'      => '001241',
+            'sku'          => '123456',
+            'quantity'     => 9,
+            'pricePerUnit' => 78,
+            'priceTotal'   => 702,
+        ];
 
-        $response = $this->json('POST', 'api/orders',[
-                $data
-            ]);
+        $this->json('POST', 'api/orders', [$data])->assertStatus(401);
 
-        $response->assertStatus(401);
     }
 }
