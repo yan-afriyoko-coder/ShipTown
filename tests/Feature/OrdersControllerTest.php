@@ -5,11 +5,12 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\User;
 use Laravel\Passport\Passport;
-
-
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class OrdersControllerTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_orders_route_authenticated_user () {
 
         Passport::actingAs(

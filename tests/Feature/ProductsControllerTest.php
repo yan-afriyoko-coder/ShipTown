@@ -5,9 +5,11 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\User;
 use Laravel\Passport\Passport;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProductsControllerTest extends TestCase
 {
+    use RefreshDatabase;
 
     public function test_products_route_authenticated_user () {
 

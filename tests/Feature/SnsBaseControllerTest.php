@@ -3,21 +3,24 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Passport\Passport;
+use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SnsBaseControllerTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_if_empty_message_is_not_allowed () {
 
         $data = "";
 
-        $response = $this->withHeaders([
-            'Authorization'=>env('TEST_AUTH'),
-            ])->json('POST', 'api/products',[
-                $data
-            ]);
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
 
-        $response->assertStatus(422);
+
+        $this->json('POST', 'api/products', [$data])->assertStatus(422);
+
     }
 }
