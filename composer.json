@@ -61,6 +61,8 @@
             "@php artisan key:generate --ansi"
         ],
         "post-install-cmd": [
+            "php artisan key:generate",
+            "php artisan migrate",
             "php artisan passport:install --force"
         ]
     }
