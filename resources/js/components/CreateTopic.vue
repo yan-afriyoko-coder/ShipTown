@@ -18,10 +18,6 @@
                                 <th>Products Topic</th>
                                 <th><button id="product-btn" class="btn-primary" v-on:click="createTopic('Products')">Create</button></th>
                             </tr>
-                            <tr>
-                                <th>Orders Topic</th>
-                                <th><button id="orders-btn" class="btn-primary" v-on:click="createTopic('Orders')">Create</button></th>
-                            </tr>
                         </thead>
                     </table>
                 </div>
@@ -38,16 +34,16 @@
             createTopic : function(name) {
 
                 axios.post('/api/createtopic', name)
-
-                console.log(name);
+                    .then(response => {
+                        if (!(response.status == 200)) {
+                            alert(response.data);
+                        }
+                        else {
+                            alert(response.data)
+                        }
+                    })
             }
         }
-
-
     }
-
-
-
-
 
 </script>

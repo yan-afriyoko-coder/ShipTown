@@ -1725,15 +1725,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   methods: {
     createTopic: function createTopic(name) {
-      axios.post('/api/createtopic', name);
-      console.log(name);
+      axios.post('/api/createtopic', name).then(function (response) {
+        if (!(response.status == 200)) {
+          alert(response.data);
+        } else {
+          alert(response.data);
+        }
+      });
     }
   }
 });
@@ -38600,26 +38601,6 @@ var render = function() {
                       on: {
                         click: function($event) {
                           return _vm.createTopic("Products")
-                        }
-                      }
-                    },
-                    [_vm._v("Create")]
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("tr", [
-                _c("th", [_vm._v("Orders Topic")]),
-                _vm._v(" "),
-                _c("th", [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn-primary",
-                      attrs: { id: "orders-btn" },
-                      on: {
-                        click: function($event) {
-                          return _vm.createTopic("Orders")
                         }
                       }
                     },
