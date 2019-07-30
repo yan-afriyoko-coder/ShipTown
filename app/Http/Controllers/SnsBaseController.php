@@ -68,8 +68,10 @@ class SnsBaseController extends Controller
         } catch (AwsException $e) {
 
             Log::alert("AWS error: ".$e);
+            return response()->json("AWS error: ".$e);
 
         }
+        return response()->json("Successfully created topic '".$topic."' for user ".$userID, 200);
     }
 
     function validation($message){
