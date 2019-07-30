@@ -12,29 +12,42 @@
 
                 <div class="card-body">
 
-                    <!-- Personal Access Tokens -->
                     <table class="table table-borderless mb-0">
                         <thead>
                             <tr>
                                 <th>Products Topic</th>
-                                <th><button id="product-btn" class="btn-primary">Create</button></th>
+                                <th><button id="product-btn" class="btn-primary" v-on:click="createTopic('Products')">Create</button></th>
                             </tr>
                             <tr>
                                 <th>Orders Topic</th>
-                                <th><button id="orders-btn" class="btn-primary">Create</button></th>
+                                <th><button id="orders-btn" class="btn-primary" v-on:click="createTopic('Orders')">Create</button></th>
                             </tr>
                         </thead>
                     </table>
                 </div>
             </div>
         </div>
-
-
-
-
     </div>
 </template>
 
 <script>
+
+    export default {
+        methods: {
+
+            createTopic : function(name) {
+
+                axios.post('/api/createtopic', name)
+
+                console.log(name);
+            }
+        }
+
+
+    }
+
+
+
+
 
 </script>
