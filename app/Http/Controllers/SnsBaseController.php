@@ -52,8 +52,10 @@ class SnsBaseController extends Controller
     function create(Request $request) {
 
         $topic = $request->getContent();
-        
+
         $userID = auth('api')->user()->id;
+
+        Log::debug($userID);
 
         $snsClient = AWS::createClient('sns');
 
