@@ -51,18 +51,20 @@ class SnsBaseController extends Controller
 
     function create(Request $request) {
 
+
         $topic = $request->getContent();
 
         $userID = auth('api')->user()->id;
 
-        Log::debug($userID);
-
         $snsClient = AWS::createClient('sns');
+
 
         try {
 
             $snsClient->createTopic([
+
                 'Name' => "snsTopic_".$topic."_User".$userID,
+
             ]);
 
         } catch (AwsException $e) {
@@ -71,7 +73,46 @@ class SnsBaseController extends Controller
             return response()->json("AWS error: ".$e);
 
         }
+
         return response()->json("Successfully created topic '".$topic."' for user ".$userID, 200);
+    }
+
+    function subscribe(Request $request) {
+
+
+        $url = $request->getContent();
+
+        $userID = auth('api')->user()->id;
+
+        $snsClient = AWS::createClient('sns');
+
+        $protocol = 'https';
+
+        $endpoint = $url;
+
+        $topic = "arn:aws:sns:".env('AWS_REGION').":".env('AWS_USER_CODE').":snsTopic_Products_User".$userID;
+
+
+
+        try {
+
+            $result = $snsClient->subscribe([
+
+                'Protocol' => $protocol,
+                'Endpoint' => $endpoint,
+                'ReturnSubscriptionArn' => true,
+                'TopicArn' => $topic,
+
+            ]);
+
+        } catch (AwsException $e) {
+
+            return response()->json("AWS error: ".$e);
+
+        }
+
+        return response()->json("Successfully subscribed '".$url."' to products topic", 200);
+
     }
 
     function validation($message){
