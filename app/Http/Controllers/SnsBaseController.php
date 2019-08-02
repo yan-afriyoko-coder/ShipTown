@@ -25,7 +25,7 @@ class SnsBaseController extends Controller
         if ($this->sendTo($this->getTopicName(), $message)) {
 
             return response()->json("ok", 200);
-            
+
         };
 
     }
@@ -46,21 +46,32 @@ class SnsBaseController extends Controller
 
         $userID = auth('api')->user()->id;
 
+        return "arn:aws:sns:".env('AWS_REGION').":".env('AWS_USER_CODE').":snsTopic_".$this->topicName."_User".$userID;
+    }
+
+    function create(Request $request) {
+
+        $topic = $request->getContent();
+
+        $userID = auth('api')->user()->id;
+
+        Log::debug($userID);
+
         $snsClient = AWS::createClient('sns');
 
         try {
 
             $snsClient->createTopic([
-                'Name' => "snsTopic_".$this->topicName."_User".$userID,
+                'Name' => "snsTopic_".$topic."_User".$userID,
             ]);
 
         } catch (AwsException $e) {
 
             Log::alert("AWS error: ".$e);
+            return response()->json("AWS error: ".$e);
 
         }
-
-        return "arn:aws:sns:".env('AWS_REGION').":".env('AWS_USER_CODE').":snsTopic_".$this->topicName."_User".$userID;
+        return response()->json("Successfully created topic '".$topic."' for user ".$userID, 200);
     }
 
     function validation($message){

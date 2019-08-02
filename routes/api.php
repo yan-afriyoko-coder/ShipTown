@@ -20,3 +20,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::middleware('auth:api')->post('/products', 'ProductsController@store');
 
 Route::middleware('auth:api')->post('/orders', 'OrdersController@store');
+
+Route::post('/createtopic', 'SnsBaseController@create');
