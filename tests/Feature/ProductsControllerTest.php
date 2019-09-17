@@ -21,14 +21,12 @@ class ProductsControllerTest extends TestCase
             'Price'         => 702,
         ];
 
-
         Passport::actingAs(
             factory(User::class)->create()
         );
 
-
-        $this->json('POST', 'api/products', [$data])->assertStatus(200);
-
+        $this->json('POST', 'api/products', [$data])
+            ->assertStatus(200);
 
     }
 
@@ -42,6 +40,7 @@ class ProductsControllerTest extends TestCase
             'Price'         => 702,
         ];
 
-        $this->json('POST', 'api/products', [$data])->assertStatus(401);
+        $this->json('POST', 'api/products', [$data])
+            ->assertStatus(401);
     }
 }
