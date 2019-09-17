@@ -13,19 +13,29 @@ class OrdersControllerTest extends TestCase
 
     public function test_orders_route_authenticated_user () {
 
+        $data = [
+            'orderID'      => '001241',
+            "products" => [
+                [
+                    'sku' => '123',
+                    'quantity'     => 2,
+                    'price'        => 4,
+                ],
+
+                [
+                    'sku' => '456',
+                    'quantity'     => 5,
+                    'price'        => 10,
+                ],
+            ]
+        ];
+
         Passport::actingAs(
             factory(User::class)->create()
         );
 
-        $data = [
-            'orderID'      => '001241',
-            'sku'          => '123456',
-            'quantity'     => 9,
-            'pricePerUnit' => 78,
-            'priceTotal'   => 702,
-        ];
-
-        $this->json('POST', 'api/orders', [$data])->assertStatus(200);
+        $this->json('POST', 'api/orders', [$data])
+            ->assertStatus(200);
 
     }
 
@@ -33,13 +43,23 @@ class OrdersControllerTest extends TestCase
 
         $data = [
             'orderID'      => '001241',
-            'sku'          => '123456',
-            'quantity'     => 9,
-            'pricePerUnit' => 78,
-            'priceTotal'   => 702,
+            "products" => [
+                [
+                    'sku' => '123',
+                    'quantity'     => 2,
+                    'price'        => 4,
+                ],
+
+                [
+                    'sku' => '456',
+                    'quantity'     => 5,
+                    'price'        => 10,
+                ],
+            ]
         ];
 
-        $this->json('POST', 'api/orders', [$data])->assertStatus(401);
+        $this->json('POST', 'api/orders', [$data])
+            ->assertStatus(401);
 
     }
 }

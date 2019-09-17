@@ -17,10 +17,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user()->id;
 });
 
-Route::middleware('auth:api')->post('/products', 'ProductsController@store');
+Route::middleware('auth:api')->group(function() {
+    Route::post('products', 'ProductsController@store');
+    Route::post('orders', 'OrdersController@store');
+    Route::post('topics/{topic_prefix}/subscriptions', 'TopicSubscriptionsController@store');
+});
 
-Route::middleware('auth:api')->post('/orders', 'OrdersController@store');
 
-Route::post('/createtopic', 'SnsBaseController@create');
 
-Route::post('/subscribetopic', 'SnsBaseController@subscribe');
+

@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-class ProductsController extends SnsBaseController
+use Illuminate\Http\Request;
+
+class ProductsController extends Controller
 {
-    protected $topicName = "Products";
+    public function store(Request $request){
 
-    function validation($message) {
+        $snsTopic = new SnsTopicController('products');
 
-        if(($message == "") or (!isset($message)) or ($message == '[""]')){
+        $message = $request->getContent();
 
-            return false;
+        if ($snsTopic->publish_message($message)) {
+            $this->respond_OK_200();
+        };
 
-        }
-
-        return true;
     }
 }
