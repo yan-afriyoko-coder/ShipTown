@@ -28,7 +28,7 @@ class SnsBaseController extends Controller
 
         }
 
-        if ($this->publishMessage($this->getTopicName(), $message)) {
+        if ($this->publishMessage($message)) {
 
             return response()->json("ok", 200);
 
@@ -36,11 +36,11 @@ class SnsBaseController extends Controller
 
     }
 
-    function publishMessage($topicName, $message){
+    function publishMessage($message){
 
         $result = $this->awsSnsClient->publish([
             'Message'   => $message,
-            'TargetArn' => $topicName
+            'TargetArn' => $this->getTopicName()
         ]);
 
         return $result['MessageId'];
