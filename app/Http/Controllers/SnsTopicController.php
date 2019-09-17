@@ -17,11 +17,11 @@ class SnsTopicController extends Controller
         $this->_topicPrefix = $topic_prefix;
     }
 
-    public function create_user_topic($prefix) {
+    public function create_user_topic() {
 
         try {
             $this->awsSnsClient->createTopic([
-                'Name' => $this->get_user_specific_topic_name($prefix)
+                'Name' => $this->get_user_specific_topic_name()
             ]);
 
         } catch (AwsException $e) {
@@ -32,13 +32,13 @@ class SnsTopicController extends Controller
         return true;
     }
 
-    public function subscribe_to_user_topic($topic_prefix, $subscription_url) {
+    public function subscribe_to_user_topic($subscription_url) {
         try {
             $this->awsSnsClient->subscribe([
                 'Protocol' => 'https',
                 'Endpoint' => $subscription_url,
                 'ReturnSubscriptionArn' => true,
-                'TopicArn' => $this->get_user_specific_topic_arn($topic_prefix),
+                'TopicArn' => $this->get_user_specific_topic_arn(),
             ]);
 
         } catch (AwsException $e) {
@@ -49,11 +49,11 @@ class SnsTopicController extends Controller
         return true;
     }
 
-    public function delete_user_topic($prefix) {
+    public function delete_user_topic() {
 
         try {
             $this->awsSnsClient->deleteTopic([
-                'TopicArn' => $this->get_user_specific_topic_arn($prefix)
+                'TopicArn' => $this->get_user_specific_topic_arn()
             ]);
 
         } catch (AwsException $e) {
@@ -64,17 +64,17 @@ class SnsTopicController extends Controller
         return true;
     }
 
-    private function get_user_specific_topic_name($prefix): string
+    private function get_user_specific_topic_name(): string
     {
         $userID = auth('api')->user()->id;
 
-        return $prefix."_user".$userID;
+        return $this->_topicPrefix."_user".$userID;
     }
 
-   private function get_user_specific_topic_arn($prefix): string
+   private function get_user_specific_topic_arn(): string
     {
         $arn = "arn:aws:sns:".env('AWS_REGION').":".env('AWS_USER_CODE');
 
-        return $arn.":".$this->get_user_specific_topic_name($prefix);
+        return $arn.":".$this->get_user_specific_topic_name();
     }
 }

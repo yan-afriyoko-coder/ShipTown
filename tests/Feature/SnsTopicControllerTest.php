@@ -28,17 +28,17 @@ class SnsTopicControllerTest extends TestCase
         $snsClient = new SnsTopicController("testTopic");
 
         $this->assertTrue(
-            $snsClient->create_user_topic('testPrefix'),
+            $snsClient->create_user_topic(),
             "Could not create topic"
         );
 
         $this->assertTrue(
-            $snsClient->subscribe_to_user_topic('testPrefix', 'https://blue.black'),
+            $snsClient->subscribe_to_user_topic('https://blue.black'),
             "Could not subscribe to topic"
         );
 
         $this->assertTrue(
-            $snsClient->delete_user_topic('testPrefix'),
+            $snsClient->delete_user_topic(),
             "Could not delete topic"
         );
 
