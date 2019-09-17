@@ -13,7 +13,7 @@ class ProductsController extends Controller
         $message = $request->getContent();
 
         if ($snsTopic->publish_message($message)) {
-            return response()->json("ok", 200);
+            $this->respond_OK_200();
         };
 
     }

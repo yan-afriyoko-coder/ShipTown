@@ -33,7 +33,7 @@ class SnsTopicControllerTest extends TestCase
         );
 
         $this->assertTrue(
-            $snsClient->subscribe_to_user_topic('https://blue.black'),
+            $snsClient->subscribe_to_user_topic('https://phpunit.test.subscription.url'),
             "Could not subscribe to topic"
         );
 

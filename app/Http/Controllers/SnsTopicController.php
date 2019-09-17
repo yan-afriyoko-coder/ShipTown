@@ -52,14 +52,23 @@ class SnsTopicController extends Controller
     function publish_message($message){
 
         try {
-            $this->awsSnsClient->publish([
+            $result = $this->awsSnsClient->publish([
                 'Message'   => $message,
                 'TargetArn' => $this->get_user_specific_topic_arn()
             ]);
 
         } catch (AwsException $e) {
-            Log::critical("Could not publish message", ["code" => $e->getStatusCode(), "message" => $e->getMessage()]);
-            return false;
+            switch ($e->getStatusCode())
+            {
+                case 404:
+                    $this->create_user_topic();
+                    $this->publish_message($message);
+                    break;
+                default:
+                    Log::critical("Could not publish message", ["code" => $e->getStatusCode(), "message" => $e->getMessage()]);
+                    return false;
+            }
+
         }
 
         return true;
