@@ -25,7 +25,7 @@ class SnsControllerTest extends TestCase
             factory(User::class)->create()
         );
 
-        $snsClient = new SnsController();
+        $snsClient = new SnsController("testTopic");
 
         $this->assertTrue(
             $snsClient->create_user_topic('testPrefix'),

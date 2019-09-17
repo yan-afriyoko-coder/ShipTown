@@ -9,10 +9,12 @@ use Illuminate\Support\Facades\Log;
 class SnsController extends Controller
 {
     private $awsSnsClient;
+    private $_topicPrefix;
 
-    public function __construct()
+    public function __construct($topic_prefix)
     {
         $this->awsSnsClient = \AWS::createClient('sns');
+        $this->_topicPrefix = $topic_prefix;
     }
 
     public function create_user_topic($prefix) {
@@ -46,7 +48,6 @@ class SnsController extends Controller
 
         return true;
     }
-
 
     public function delete_user_topic($prefix) {
 
