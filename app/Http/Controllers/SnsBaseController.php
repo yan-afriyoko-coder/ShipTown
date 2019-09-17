@@ -80,8 +80,6 @@ class SnsBaseController extends Controller
 
         $subscribeUrl = $request->getContent();
 
-        $userID = auth('api')->user()->id;
-
         $endpoint = $subscribeUrl;
 
         try {
