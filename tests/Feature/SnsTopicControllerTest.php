@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\Http\Controllers\SnsController;
+use App\Http\Controllers\SnsTopicController;
 use App\User;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class SnsControllerTest extends TestCase
+class SnsTopicControllerTest extends TestCase
 {
     public function test_if_aws_credentials_are_set()
     {
@@ -25,7 +25,7 @@ class SnsControllerTest extends TestCase
             factory(User::class)->create()
         );
 
-        $snsClient = new SnsController("testTopic");
+        $snsClient = new SnsTopicController("testTopic");
 
         $this->assertTrue(
             $snsClient->create_user_topic('testPrefix'),

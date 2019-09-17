@@ -6,7 +6,7 @@ use Aws\Exception\AwsException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class SnsController extends Controller
+class SnsTopicController extends Controller
 {
     private $awsSnsClient;
     private $_topicPrefix;
