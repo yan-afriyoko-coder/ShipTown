@@ -78,13 +78,13 @@ class SnsBaseController extends Controller
     function subscribe(Request $request) {
 
 
-        $url = $request->getContent();
+        $subscribeUrl = $request->getContent();
 
         $userID = auth('api')->user()->id;
 
         $protocol = 'https';
 
-        $endpoint = $url;
+        $endpoint = $subscribeUrl;
 
         $topic = "arn:aws:sns:".env('AWS_REGION').":".env('AWS_USER_CODE').":snsTopic_Products_User".$userID;
 
@@ -107,7 +107,7 @@ class SnsBaseController extends Controller
 
         }
 
-        return response()->json("Successfully subscribed '".$url."' to products topic", 200);
+        return response()->json("Successfully subscribed '".$subscribeUrl."' to products topic", 200);
 
     }
 
