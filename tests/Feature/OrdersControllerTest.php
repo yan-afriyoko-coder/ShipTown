@@ -15,10 +15,19 @@ class OrdersControllerTest extends TestCase
 
         $data = [
             'orderID'      => '001241',
-            'sku'          => '123456',
-            'quantity'     => 9,
-            'pricePerUnit' => 78,
-            'priceTotal'   => 702,
+            "products" => [
+                [
+                    'sku' => '123',
+                    'quantity'     => 2,
+                    'price'        => 4,
+                ],
+
+                [
+                    'sku' => '456',
+                    'quantity'     => 5,
+                    'price'        => 10,
+                ],
+            ]
         ];
 
         Passport::actingAs(
@@ -34,10 +43,19 @@ class OrdersControllerTest extends TestCase
 
         $data = [
             'orderID'      => '001241',
-            'sku'          => '123456',
-            'quantity'     => 9,
-            'pricePerUnit' => 78,
-            'priceTotal'   => 702,
+            "products" => [
+                [
+                    'sku' => '123',
+                    'quantity'     => 2,
+                    'price'        => 4,
+                ],
+
+                [
+                    'sku' => '456',
+                    'quantity'     => 5,
+                    'price'        => 10,
+                ],
+            ]
         ];
 
         $this->json('POST', 'api/orders', [$data])
