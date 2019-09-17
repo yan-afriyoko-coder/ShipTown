@@ -19,33 +19,35 @@ class SnsBaseController extends Controller
 
     function publishMessage($message){
 
+        try {
         $result = $this->awsSnsClient->publish([
             'Message'   => $message,
             'TargetArn' => $this->getTargetArn()
         ]);
 
+        } catch (AwsException $awsException) {
+
+        }
         return $result['MessageId'];
     }
 
-    function getUserSpecificTopicName(){
+    function getUserSpecificTopicName($prefix){
 
         $userID = auth('api')->user()->id;
 
         return "snsTopic_".$this->topicNamePrefix."_user".$userID;
     }
 
-    public function getTargetArn()
+    public function getTargetArn($prefix)
     {
-        return "arn:aws:sns:".env('AWS_REGION').":".env('AWS_USER_CODE').":".$this->getUserSpecificTopicName();
+        return "arn:aws:sns:".env('AWS_REGION').":".env('AWS_USER_CODE').":".$this->getUserSpecificTopicName($prefix);
     }
 
-    public function createSnsTopic(Request $request) {
-
-        $topic = $request->getContent();
+    public function createTopic($prefix) {
 
         try {
             $this->awsSnsClient->createTopic([
-                'Name' => $this->getUserSpecificTopicName()
+                'Name' => $this->getUserSpecificTopicName($prefix)
             ]);
 
         } catch (AwsException $e) {
