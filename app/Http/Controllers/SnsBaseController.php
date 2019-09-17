@@ -76,30 +76,22 @@ class SnsBaseController extends Controller
     }
 
     function subscribe(Request $request) {
-
-
         $subscribeUrl = $request->getContent();
 
-
         try {
-
             $result = $this->awsSnsClient->subscribe([
-
                 'Protocol' => 'https',
                 'Endpoint' => $subscribeUrl,
                 'ReturnSubscriptionArn' => true,
                 'TopicArn' => $this->getTargetArn(),
-
             ]);
 
         } catch (AwsException $e) {
-
             return response()->json("AWS error: ".$e);
 
         }
 
         return response()->json("Successfully subscribed '".$subscribeUrl."' to products topic", 200);
-
     }
 
     function validation($message){
