@@ -15,11 +15,27 @@ class SnsController extends Controller
         $this->awsSnsClient = \AWS::createClient('sns');
     }
 
-    public function createTopic($prefix) {
+    public function create_user_topic($prefix) {
 
         try {
             $this->awsSnsClient->createTopic([
                 'Name' => $this->get_user_specific_topic_name($prefix)
+            ]);
+
+        } catch (AwsException $e) {
+            Log::critical("Could not create SNS topic", ["code" => $e->getStatusCode(), "message" => $e->getMessage()]);
+            return false;
+        }
+
+        return true;
+    }
+
+
+    public function delete_user_topic($prefix) {
+
+        try {
+            $this->awsSnsClient->deleteTopic([
+                'TopicArn' => $this->get_user_specific_topic_arn($prefix)
             ]);
 
         } catch (AwsException $e) {
@@ -37,7 +53,7 @@ class SnsController extends Controller
         return $prefix."_user".$userID;
     }
 
-   private function getUserSpecificArn($prefix): string
+   private function get_user_specific_topic_arn($prefix): string
     {
         $arn = "arn:aws:sns:".env('AWS_REGION').":".env('AWS_USER_CODE');
 

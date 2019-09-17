@@ -39,7 +39,20 @@ class SnsControllerTest extends TestCase
 
         $snsClient = new SnsController();
 
-        $result = $snsClient->createTopic('test');
+        $result = $snsClient->create_user_topic('testPrefix');
+
+        $this->assertTrue($result);
+    }
+
+    public function test_topic_deletion()
+    {
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        $snsClient = new SnsController();
+
+        $result = $snsClient->delete_user_topic('testPrefix');
 
         $this->assertTrue($result);
     }
