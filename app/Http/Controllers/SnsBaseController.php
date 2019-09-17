@@ -9,7 +9,13 @@ use Aws\Exception\AwsException;
 
 class SnsBaseController extends Controller
 {
+    private $awsSnsClient;
     protected $topicName = "";
+
+    public function __construct()
+    {
+        $this->awsSnsClient = AWS::createClient('sns');
+    }
 
     function store(Request $request){
 
@@ -32,9 +38,7 @@ class SnsBaseController extends Controller
 
     function sendTo($topicName, $message){
 
-        $aws = AWS::createClient('sns');
-
-        $result = $aws->publish([
+        $result = $this->awsSnsClient->publish([
             'Message'   => $message,
             'TargetArn' => $topicName
         ]);
