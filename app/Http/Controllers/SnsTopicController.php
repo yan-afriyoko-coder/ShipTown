@@ -8,19 +8,19 @@ use Illuminate\Support\Facades\Log;
 
 class SnsTopicController extends Controller
 {
-    private $awsSnsClient;
+    private $_awsSnsClient;
     private $_topicPrefix;
 
     public function __construct($topic_prefix)
     {
-        $this->awsSnsClient = \AWS::createClient('sns');
+        $this->_awsSnsClient = \AWS::createClient('sns');
         $this->_topicPrefix = $topic_prefix;
     }
 
     public function create_user_topic() {
 
         try {
-            $this->awsSnsClient->createTopic([
+            $this->_awsSnsClient->createTopic([
                 'Name' => $this->get_user_specific_topic_name()
             ]);
 
@@ -34,7 +34,7 @@ class SnsTopicController extends Controller
 
     public function subscribe_to_user_topic($subscription_url) {
         try {
-            $this->awsSnsClient->subscribe([
+            $this->_awsSnsClient->subscribe([
                 'Protocol' => 'https',
                 'Endpoint' => $subscription_url,
                 'ReturnSubscriptionArn' => true,
@@ -52,7 +52,7 @@ class SnsTopicController extends Controller
     function publish_message($message){
 
         try {
-            $result = $this->awsSnsClient->publish([
+            $result = $this->_awsSnsClient->publish([
                 'Message'   => $message,
                 'TargetArn' => $this->get_user_specific_topic_arn()
             ]);
@@ -77,7 +77,7 @@ class SnsTopicController extends Controller
     public function delete_user_topic() {
 
         try {
-            $this->awsSnsClient->deleteTopic([
+            $this->_awsSnsClient->deleteTopic([
                 'TopicArn' => $this->get_user_specific_topic_arn()
             ]);
 
