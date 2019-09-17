@@ -80,14 +80,13 @@ class SnsBaseController extends Controller
 
         $subscribeUrl = $request->getContent();
 
-        $endpoint = $subscribeUrl;
 
         try {
 
             $result = $this->awsSnsClient->subscribe([
 
                 'Protocol' => 'https',
-                'Endpoint' => $endpoint,
+                'Endpoint' => $subscribeUrl,
                 'ReturnSubscriptionArn' => true,
                 'TopicArn' => $this->getTargetArn(),
 
