@@ -60,27 +60,19 @@ class SnsBaseController extends Controller
 
     function create(Request $request) {
 
-
         $topic = $request->getContent();
 
-        $userID = auth('api')->user()->id;
-
         try {
-
             $this->awsSnsClient->createTopic([
-
-                'Name' => "snsTopic_".$topic."_User".$userID,
-
+                'Name' => $this->getTopicName()
             ]);
 
         } catch (AwsException $e) {
-
             Log::alert("AWS error: ".$e);
             return response()->json("AWS error: ".$e);
-
         }
 
-        return response()->json("Successfully created topic '".$topic."' for user ".$userID, 200);
+        return response()->json("Successfully created topic", 200);
     }
 
     function subscribe(Request $request) {
