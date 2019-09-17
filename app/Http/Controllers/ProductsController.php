@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class ProductsController extends SnsBaseController
+class ProductsController extends Controller
 {
-    protected $topicNamePrefix = "Products";
-
     public function store(Request $request){
+
+        $snsTopic = new SnsTopicController('products');
 
         $message = $request->getContent();
 
-        if ($this->publishMessage($message)) {
+        if ($snsTopic->publish_message($message)) {
             return response()->json("ok", 200);
         };
 
