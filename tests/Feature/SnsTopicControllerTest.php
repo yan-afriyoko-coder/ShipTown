@@ -38,6 +38,11 @@ class SnsTopicControllerTest extends TestCase
         );
 
         $this->assertTrue(
+            $snsClient->publish_message("This is test message"),
+            "Could not publish message"
+        );
+
+        $this->assertTrue(
             $snsClient->delete_user_topic(),
             "Could not delete topic"
         );
