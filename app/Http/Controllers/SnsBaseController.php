@@ -60,12 +60,9 @@ class SnsBaseController extends Controller
 
         $userID = auth('api')->user()->id;
 
-        $snsClient = AWS::createClient('sns');
-
-
         try {
 
-            $snsClient->createTopic([
+            $this->awsSnsClient->createTopic([
 
                 'Name' => "snsTopic_".$topic."_User".$userID,
 
@@ -88,8 +85,6 @@ class SnsBaseController extends Controller
 
         $userID = auth('api')->user()->id;
 
-        $snsClient = AWS::createClient('sns');
-
         $protocol = 'https';
 
         $endpoint = $url;
@@ -100,7 +95,7 @@ class SnsBaseController extends Controller
 
         try {
 
-            $result = $snsClient->subscribe([
+            $result = $this->awsSnsClient->subscribe([
 
                 'Protocol' => $protocol,
                 'Endpoint' => $endpoint,
