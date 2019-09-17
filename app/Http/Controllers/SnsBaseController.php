@@ -40,7 +40,7 @@ class SnsBaseController extends Controller
 
         $result = $this->awsSnsClient->publish([
             'Message'   => $message,
-            'TargetArn' => $this->getTopicName()
+            'TargetArn' => $this->getTargetArn()
         ]);
 
         return $result['MessageId'];
@@ -50,7 +50,12 @@ class SnsBaseController extends Controller
 
         $userID = auth('api')->user()->id;
 
-        return "arn:aws:sns:".env('AWS_REGION').":".env('AWS_USER_CODE').":snsTopic_".$this->topicNamePrefix."_User".$userID;
+        return "snsTopic_".$this->topicNamePrefix."_User".$userID;
+    }
+
+    public function getTargetArn()
+    {
+        return "arn:aws:sns:".env('AWS_REGION').":".env('AWS_USER_CODE').":".$this->getTopicName();
     }
 
     function create(Request $request) {
