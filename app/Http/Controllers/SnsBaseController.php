@@ -82,8 +82,6 @@ class SnsBaseController extends Controller
 
         $userID = auth('api')->user()->id;
 
-        $protocol = 'https';
-
         $endpoint = $subscribeUrl;
 
         $topic = "arn:aws:sns:".env('AWS_REGION').":".env('AWS_USER_CODE').":snsTopic_Products_User".$userID;
@@ -94,7 +92,7 @@ class SnsBaseController extends Controller
 
             $result = $this->awsSnsClient->subscribe([
 
-                'Protocol' => $protocol,
+                'Protocol' => 'https',
                 'Endpoint' => $endpoint,
                 'ReturnSubscriptionArn' => true,
                 'TopicArn' => $topic,
