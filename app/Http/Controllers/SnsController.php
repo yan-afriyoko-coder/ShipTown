@@ -32,7 +32,7 @@ class SnsController extends Controller
 
     public function subscribe_to_user_topic($topic_prefix, $subscription_url) {
         try {
-            $result = $this->awsSnsClient->subscribe([
+            $this->awsSnsClient->subscribe([
                 'Protocol' => 'https',
                 'Endpoint' => $subscription_url,
                 'ReturnSubscriptionArn' => true,
@@ -40,7 +40,6 @@ class SnsController extends Controller
             ]);
 
         } catch (AwsException $e) {
-            dd($e);
             Log::critical("Could not subscribe to SNS topic", ["code" => $e->getStatusCode(), "message" => $e->getMessage()]);
             return false;
         }
