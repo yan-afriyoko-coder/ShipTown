@@ -39,6 +39,8 @@ class SnsControllerTest extends TestCase
 
         $snsClient = new SnsBaseController();
 
-        $snsClient->createTopic('test');
+        $result = $snsClient->createTopic('test');
+
+        $this->assertTrue($result);
     }
 }

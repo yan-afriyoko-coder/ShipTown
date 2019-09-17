@@ -35,7 +35,7 @@ class SnsBaseController extends Controller
 
         $userID = auth('api')->user()->id;
 
-        return "snsTopic_".$this->topicNamePrefix."_user".$userID;
+        return "snsTopic_".$prefix."_user".$userID;
     }
 
     public function getTargetArn($prefix)
@@ -52,10 +52,10 @@ class SnsBaseController extends Controller
 
         } catch (AwsException $e) {
             Log::alert("AWS error: ".$e);
-            return response()->json("AWS error: ".$e);
+            return false;
         }
 
-        return response()->json("Successfully created topic", 200);
+        return true;
     }
 
     public function subscribeToTopic(Request $request) {
