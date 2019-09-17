@@ -75,7 +75,7 @@ class SnsBaseController extends Controller
         return response()->json("Successfully created topic", 200);
     }
 
-    function subscribe(Request $request) {
+    public function subscribeToTopic(Request $request) {
         $subscribeUrl = $request->getContent();
 
         try {
