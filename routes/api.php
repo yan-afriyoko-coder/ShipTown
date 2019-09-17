@@ -21,7 +21,7 @@ Route::middleware('auth:api')->group(function() {
 
     Route::post('products', 'ProductsController@store');
     Route::post('orders', 'OrdersController@store');
-    Route::post('createtopic', 'SnsBaseController@create');
+    Route::post('createtopic', 'SnsBaseController@createSnsTopic');
     Route::post('subscribetopic', 'SnsBaseController@subscribe');
 
 });

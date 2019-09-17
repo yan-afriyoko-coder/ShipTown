@@ -58,7 +58,7 @@ class SnsBaseController extends Controller
         return "arn:aws:sns:".env('AWS_REGION').":".env('AWS_USER_CODE').":".$this->getUserSpecificTopicName();
     }
 
-    function create(Request $request) {
+    public function createSnsTopic(Request $request) {
 
         $topic = $request->getContent();
 
