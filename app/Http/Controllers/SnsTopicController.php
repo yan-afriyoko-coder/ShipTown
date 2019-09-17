@@ -49,6 +49,22 @@ class SnsTopicController extends Controller
         return true;
     }
 
+    function publish_message($message){
+
+        try {
+            $this->awsSnsClient->publish([
+                'Message'   => $message,
+                'TargetArn' => $this->get_user_specific_topic_arn()
+            ]);
+
+        } catch (AwsException $e) {
+            Log::critical("Could not publish message", ["code" => $e->getStatusCode(), "message" => $e->getMessage()]);
+            return false;
+        }
+
+        return true;
+    }
+
     public function delete_user_topic() {
 
         try {
