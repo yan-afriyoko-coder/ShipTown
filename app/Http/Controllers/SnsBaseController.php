@@ -17,25 +17,6 @@ class SnsBaseController extends Controller
         $this->awsSnsClient = AWS::createClient('sns');
     }
 
-    function store(Request $request){
-
-        $message = $request->getContent();
-
-        if(!$this->validation($message)){
-
-            Log::warning('Invalid message: '.$message);
-            return response()->json("Error 422: Invalid data", 422);
-
-        }
-
-        if ($this->publishMessage($message)) {
-
-            return response()->json("ok", 200);
-
-        };
-
-    }
-
     function publishMessage($message){
 
         $result = $this->awsSnsClient->publish([
