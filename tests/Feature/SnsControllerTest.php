@@ -11,18 +11,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SnsControllerTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function testExample()
-    {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
-    }
-
     public function test_if_aws_credentials_are_set()
     {
         $this->assertNotEmpty(env('AWS_ACCESS_KEY_ID'), 'AWS_ACCESS_KEY_ID is not set');
@@ -31,7 +19,7 @@ class SnsControllerTest extends TestCase
         $this->assertNotEmpty(env('AWS_USER_CODE'), 'AWS_USER_CODE is not set');
     }
 
-    public function test_topic_creation()
+    public function test_topic_create_subscribe_delete()
     {
         Passport::actingAs(
             factory(User::class)->create()
@@ -39,34 +27,20 @@ class SnsControllerTest extends TestCase
 
         $snsClient = new SnsController();
 
-        $result = $snsClient->create_user_topic('testPrefix');
-
-        $this->assertTrue($result);
-    }
-
-    public function test_topic_subscription()
-    {
-        Passport::actingAs(
-            factory(User::class)->create()
+        $this->assertTrue(
+            $snsClient->create_user_topic('testPrefix'),
+            "Could not create topic"
         );
 
-        $snsClient = new SnsController();
-
-        $result = $snsClient->subscribe_to_user_topic('testPrefix', 'https://localhost');
-
-        $this->assertTrue($result);
-    }
-
-    public function test_topic_deletion()
-    {
-        Passport::actingAs(
-            factory(User::class)->create()
+        $this->assertTrue(
+            $snsClient->subscribe_to_user_topic('testPrefix', 'https://blue.black'),
+            "Could not subscribe to topic"
         );
 
-        $snsClient = new SnsController();
+        $this->assertTrue(
+            $snsClient->delete_user_topic('testPrefix'),
+            "Could not delete topic"
+        );
 
-        $result = $snsClient->delete_user_topic('testPrefix');
-
-        $this->assertTrue($result);
     }
 }

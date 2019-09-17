@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5838be9d-0cdc-48c1-9eb5-654fe00eb3d3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SnsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SnsController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/Feature/SnsControllerTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Feature/SnsControllerTest.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -177,7 +178,7 @@
       <workItem from="1564133798852" duration="2283000" />
       <workItem from="1568451184017" duration="25000" />
       <workItem from="1568451210659" duration="3614000" />
-      <workItem from="1568712654741" duration="17806000" />
+      <workItem from="1568712654741" duration="18589000" />
     </task>
     <servers />
   </component>

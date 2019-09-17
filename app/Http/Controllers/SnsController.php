@@ -30,6 +30,24 @@ class SnsController extends Controller
         return true;
     }
 
+    public function subscribe_to_user_topic($topic_prefix, $subscription_url) {
+        try {
+            $result = $this->awsSnsClient->subscribe([
+                'Protocol' => 'https',
+                'Endpoint' => $subscription_url,
+                'ReturnSubscriptionArn' => true,
+                'TopicArn' => $this->get_user_specific_topic_arn($topic_prefix),
+            ]);
+
+        } catch (AwsException $e) {
+            dd($e);
+            Log::critical("Could not subscribe to SNS topic", ["code" => $e->getStatusCode(), "message" => $e->getMessage()]);
+            return false;
+        }
+
+        return true;
+    }
+
 
     public function delete_user_topic($prefix) {
 
@@ -39,7 +57,7 @@ class SnsController extends Controller
             ]);
 
         } catch (AwsException $e) {
-            Log::critical("Could not create SNS topic", ["code" => $e->getStatusCode(), "message" => $e->getMessage()]);
+            Log::critical("Could not delete SNS topic", ["code" => $e->getStatusCode(), "message" => $e->getMessage()]);
             return false;
         }
 
