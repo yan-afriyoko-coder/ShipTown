@@ -44,6 +44,19 @@ class SnsControllerTest extends TestCase
         $this->assertTrue($result);
     }
 
+    public function test_topic_subscription()
+    {
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        $snsClient = new SnsController();
+
+        $result = $snsClient->subscribe_to_user_topic('testPrefix', 'https://localhost');
+
+        $this->assertTrue($result);
+    }
+
     public function test_topic_deletion()
     {
         Passport::actingAs(
