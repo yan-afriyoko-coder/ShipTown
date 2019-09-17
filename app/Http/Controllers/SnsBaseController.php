@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use AWS;
-use Log;
 use Aws\Exception\AwsException;
+use Illuminate\Support\Facades\Log;
 
 class SnsBaseController extends Controller
 {
@@ -35,7 +35,7 @@ class SnsBaseController extends Controller
 
         $userID = auth('api')->user()->id;
 
-        return "snsTopic_".$prefix."_user".$userID;
+        return $prefix."_user".$userID;
     }
 
     public function getTargetArn($prefix)
@@ -51,7 +51,7 @@ class SnsBaseController extends Controller
             ]);
 
         } catch (AwsException $e) {
-            Log::alert("AWS error: ".$e);
+            Log::critical("Could not create SNS topic", ["code" => $e->getStatusCode(), "message" => $e->getMessage()]);
             return false;
         }
 
