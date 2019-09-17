@@ -46,16 +46,16 @@ class SnsBaseController extends Controller
         return $result['MessageId'];
     }
 
-    function getTopicName(){
+    function getUserSpecificTopicName(){
 
         $userID = auth('api')->user()->id;
 
-        return "snsTopic_".$this->topicNamePrefix."_User".$userID;
+        return "snsTopic_".$this->topicNamePrefix."_user".$userID;
     }
 
     public function getTargetArn()
     {
-        return "arn:aws:sns:".env('AWS_REGION').":".env('AWS_USER_CODE').":".$this->getTopicName();
+        return "arn:aws:sns:".env('AWS_REGION').":".env('AWS_USER_CODE').":".$this->getUserSpecificTopicName();
     }
 
     function create(Request $request) {
@@ -64,7 +64,7 @@ class SnsBaseController extends Controller
 
         try {
             $this->awsSnsClient->createTopic([
-                'Name' => $this->getTopicName()
+                'Name' => $this->getUserSpecificTopicName()
             ]);
 
         } catch (AwsException $e) {
