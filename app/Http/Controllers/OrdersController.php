@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 class OrdersController extends SnsBaseController
 {
-    protected $topicName = "Orders";
+    protected $topicNamePrefix = "Orders";
 
     function validation($message) {
 

@@ -10,7 +10,7 @@ use Aws\Exception\AwsException;
 class SnsBaseController extends Controller
 {
     private $awsSnsClient;
-    protected $topicName = "";
+    protected $topicNamePrefix = "";
 
     public function __construct()
     {
@@ -50,7 +50,7 @@ class SnsBaseController extends Controller
 
         $userID = auth('api')->user()->id;
 
-        return "arn:aws:sns:".env('AWS_REGION').":".env('AWS_USER_CODE').":snsTopic_".$this->topicName."_User".$userID;
+        return "arn:aws:sns:".env('AWS_REGION').":".env('AWS_USER_CODE').":snsTopic_".$this->topicNamePrefix."_User".$userID;
     }
 
     function create(Request $request) {
