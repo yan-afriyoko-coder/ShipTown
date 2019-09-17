@@ -14,11 +14,8 @@ class ProductsControllerTest extends TestCase
     public function test_products_route_authenticated_user () {
 
         $data = [
-            'ProductName'   => '001241',
-            'ProductModel'  => '123456',
-            'Description'   => 9,
-            'SKU'           => 78,
-            'Price'         => 702,
+            "sku"   => "001241",
+            "price"  => 25,
         ];
 
         Passport::actingAs(
@@ -33,11 +30,8 @@ class ProductsControllerTest extends TestCase
     public function test_products_route_unauthenticated_user () {
 
         $data = [
-            'ProductName'   => '001241',
-            'ProductModel'  => '123456',
-            'Description'   => 9,
-            'SKU'           => 78,
-            'Price'         => 702,
+            "sku"   => "001241",
+            "price"  => 25,
         ];
 
         $this->json('POST', 'api/products', [$data])
