@@ -26,6 +26,6 @@ class AwsAccessTest extends TestCase
         $this->assertNotEmpty(env('AWS_SECRET_ACCESS_KEY'), 'AWS_SECRET_ACCESS_KEY is not set');
         $this->assertNotEmpty(env('AWS_REGION'), 'AWS_REGION is not set');
         $this->assertNotEmpty(env('AWS_USER_CODE'), 'AWS_USER_CODE is not set');
-        $this->assertNotEmpty(env('AWS_BUCKET'), 'AWS_BUCKET is not set');
+//        $this->assertNotEmpty(env('AWS_BUCKET'), 'AWS_BUCKET is not set');
     }
 }
