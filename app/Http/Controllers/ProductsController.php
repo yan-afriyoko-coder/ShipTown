@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+
 class ProductsController extends SnsBaseController
 {
     protected $topicNamePrefix = "Products";
 
-    function validation($message) {
+    function store(Request $request){
 
-        if(($message == "") or (!isset($message)) or ($message == '[""]')){
+        $message = $request->getContent();
 
-            return false;
+        if ($this->publishMessage($message)) {
 
-        }
+            return response()->json("ok", 200);
 
-        return true;
+        };
+
     }
 }
