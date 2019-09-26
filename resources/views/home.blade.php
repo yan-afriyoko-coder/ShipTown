@@ -16,14 +16,11 @@
 
                     <passport-clients></passport-clients>
                     <br />
-                    
+
                     <passport-authorized-clients></passport-authorized-clients>
                     <br />
 
                     <passport-personal-access-tokens></passport-personal-access-tokens>
-                    <br />
-
-                    <create-topic></create-topic>
                     <br />
 
                     <subscribe-topic></subscribe-topic>
