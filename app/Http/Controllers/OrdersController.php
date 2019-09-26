@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\EventTypes;
 use Illuminate\Http\Request;
 
 class OrdersController extends Controller
 {
+
     public function store(Request $request){
 
-        $snsTopic = new SnsTopicController('orders');
+        $order = json_decode($request->getContent(), true);
 
-        $message = $request->getContent();
+        event(EventTypes::ORDER_CREATED, new EventTypes($order));
 
-        if ($snsTopic->publish_message($message)) {
-            $this->respond_OK_200();
-        };
     }
 }
