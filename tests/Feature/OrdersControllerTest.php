@@ -37,6 +37,10 @@ class OrdersControllerTest extends TestCase
         $this->json('POST', 'api/orders', [$data])
             ->assertStatus(200);
 
+        $this->assertDatabaseHas('orders', [
+            'order_number' => $data['orderID']
+        ]);
+
     }
 
     public function test_orders_route_unauthenticated_user () {
