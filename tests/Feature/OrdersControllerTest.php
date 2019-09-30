@@ -14,7 +14,7 @@ class OrdersControllerTest extends TestCase
     public function test_orders_route_authenticated_user () {
 
         $data = [
-            'orderID'      => '001241',
+            'order_number'      => '001241',
             "products" => [
                 [
                     'sku' => '123',
@@ -34,8 +34,12 @@ class OrdersControllerTest extends TestCase
             factory(User::class)->create()
         );
 
-        $this->json('POST', 'api/orders', [$data])
+        $this->json('POST', 'api/orders', $data)
             ->assertStatus(200);
+
+        $this->assertDatabaseHas('orders', [
+            'order_number' => $data['order_number']
+        ]);
 
     }
 
