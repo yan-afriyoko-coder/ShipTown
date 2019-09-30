@@ -10,9 +10,13 @@ class OrdersController extends Controller
 
     public function store(Request $request){
 
-        $order_data = json_decode($request->getContent(), true);
+        $order = \App\Order::updateOrCreate(
+            ['order_number' => $request->order_number],
+            ['order_json' => $request->all()]);
 
-        event(EventTypes::ORDER_CREATED, new EventTypes($order_data));
+        event(EventTypes::ORDER_CREATED, new EventTypes($order));
+
+        return response()->json($order, 200);
 
     }
 }
