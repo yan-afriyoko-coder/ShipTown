@@ -34,7 +34,7 @@ class OrdersControllerTest extends TestCase
             factory(User::class)->create()
         );
 
-        $this->json('POST', 'api/orders', [$data])
+        $this->json('POST', 'api/orders', $data)
             ->assertStatus(200);
 
         $this->assertDatabaseHas('orders', [
