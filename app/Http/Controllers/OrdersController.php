@@ -10,9 +10,9 @@ class OrdersController extends Controller
 
     public function store(Request $request){
 
-        $order = json_decode($request->getContent(), true);
+        $order_data = json_decode($request->getContent(), true);
 
-        event(EventTypes::ORDER_CREATED, new EventTypes($order));
+        event(EventTypes::ORDER_CREATED, new EventTypes($order_data));
 
     }
 }
