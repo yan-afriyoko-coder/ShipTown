@@ -111,4 +111,24 @@ class OrdersControllerTest extends TestCase
             ->assertStatus(422)
             ->assertJsonValidationErrors(['products']);
     }
+
+    public function test_correct_products_section() {
+
+        $data = [
+            'order_number'      => '001241',
+            "products" => [
+                [] // blank products record
+            ]
+        ];
+
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        $this->json('POST', 'api/orders', $data)
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['products.0.sku'])
+            ->assertJsonValidationErrors(['products.0.quantity'])
+            ->assertJsonValidationErrors(['products.0.price']);
+    }
 }
