@@ -92,7 +92,7 @@ class OrdersControllerTest extends TestCase
         );
 
         $this->json('POST', 'api/orders', $data)
-            ->assertStatus(200);
+            ->assertStatus(422);
 
     }
 }
