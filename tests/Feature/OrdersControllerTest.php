@@ -95,4 +95,20 @@ class OrdersControllerTest extends TestCase
             ->assertStatus(422);
 
     }
+
+    public function test_if_missing_products_section_is_not_allowed() {
+
+        $data = [
+            'order_number'      => '001241',
+        ];
+
+
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        $this->json('POST', 'api/orders', $data)
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['products']);
+    }
 }
