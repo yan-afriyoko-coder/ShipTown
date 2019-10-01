@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Events\EventTypes;
+use App\Http\Requests\StoreOrderRequest;
 use Illuminate\Http\Request;
 
 class OrdersController extends Controller
 {
 
-    public function store(Request $request){
+    public function store(StoreOrderRequest $request){
 
         $order = \App\Order::updateOrCreate(
             ['order_number' => $request->order_number],
