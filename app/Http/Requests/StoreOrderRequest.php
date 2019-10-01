@@ -24,7 +24,11 @@ class StoreOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'order_number' => 'required'
+            'order_number' => 'required',
+            'products' => 'required|array',
+            'products.*.sku' => 'required',
+            'products.*.quantity' => 'required|numeric',
+            'products.*.price' => 'required|numeric',
         ];
     }
 }
