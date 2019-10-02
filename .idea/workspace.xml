@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5838be9d-0cdc-48c1-9eb5-654fe00eb3d3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/tests/Feature/OrdersControllerTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Feature/OrdersControllerTest.php" afterDir="false" />
-    </list>
+    <list default="true" id="5838be9d-0cdc-48c1-9eb5-654fe00eb3d3" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -139,6 +137,9 @@
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\arthu\projects\management.products.api\tests\Unit" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\arthu\projects\management.products.api" />
     </key>
@@ -190,7 +191,8 @@
       <workItem from="1569830725841" duration="14312000" />
       <workItem from="1569915020653" duration="1329000" />
       <workItem from="1569918896882" duration="1408000" />
-      <workItem from="1569923207307" duration="3263000" />
+      <workItem from="1569923207307" duration="5004000" />
+      <workItem from="1570006097347" duration="6754000" />
     </task>
     <servers />
   </component>
