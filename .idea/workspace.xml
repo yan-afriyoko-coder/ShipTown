@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5838be9d-0cdc-48c1-9eb5-654fe00eb3d3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/tests/Feature/OrdersControllerTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Feature/OrdersControllerTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -190,7 +190,8 @@
       <workItem from="1569830725841" duration="14312000" />
       <workItem from="1569915020653" duration="1329000" />
       <workItem from="1569918896882" duration="1408000" />
-      <workItem from="1569923207307" duration="3263000" />
+      <workItem from="1569923207307" duration="5004000" />
+      <workItem from="1570006097347" duration="705000" />
     </task>
     <servers />
   </component>
