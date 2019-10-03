@@ -8,7 +8,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 
-class SnsSubscriber
+class PublishSnsMessage
 {
     /**
      * Register the listeners for the subscriber.
@@ -19,7 +19,7 @@ class SnsSubscriber
     {
         $events->listen(
             EventTypes::ORDER_CREATED,
-            'App\Listeners\SnsSubscriber@on_order_created'
+            'App\Listeners\PublishSnsMessage@on_order_created'
         );
     }
 
