@@ -17,10 +17,7 @@ class PublishSnsMessage
      */
     public function subscribe($events)
     {
-        $events->listen(
-            EventTypes::ORDER_CREATED,
-            'App\Listeners\PublishSnsMessage@on_order_created'
-        );
+        $events->listen(EventTypes::ORDER_CREATED,'App\Listeners\PublishSnsMessage@on_order_created');
     }
 
 
