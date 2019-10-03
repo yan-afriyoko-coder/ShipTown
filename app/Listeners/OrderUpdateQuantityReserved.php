@@ -14,7 +14,7 @@ class OrderUpdateQuantityReserved
      */
     public function subscribe($events)
     {
-        $events->listen(EventTypes::ORDER_CREATED, 'App\Listeners\ReserveQuantityOnNewOrder@on_order_created');
+        $events->listen(EventTypes::ORDER_CREATED, 'App\Listeners\OrderUpdateQuantityReserved@on_order_created');
     }
 
 
