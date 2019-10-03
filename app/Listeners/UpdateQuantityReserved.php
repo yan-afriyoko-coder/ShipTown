@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\EventTypes;
+use App\Managers\ProductManager;
 use App\Models\Product;
 
 class UpdateQuantityReserved
@@ -23,15 +24,13 @@ class UpdateQuantityReserved
 
         $order = $event->data;
 
-        $products = $order->order_json['products'];
+        foreach ($order->order_json['products'] as $product) {
 
-        foreach ($products as $product) {
-
-            $message = "Order ".$order['order_number'];
-
-            $aProduct = Product::firstOrCreate(["sku" => $product["sku"]]);
-
-            $aProduct->reserve($product['quantity'], $message);
+            ProductManager::reserve(
+                $product["sku"],
+                $product['quantity'],
+                "Order ".$order['order_number']
+            );
 
         }
 
@@ -44,11 +43,13 @@ class UpdateQuantityReserved
 
         foreach ($order->order_json['products'] as $product) {
 
-            $message = "Order ".$order['order_number'];
+            $negativeQuantity = -1 * $product['quantity'];
 
-            $aProduct = Product::firstOrCreate(["sku" => $product["sku"]]);
-
-            $aProduct->reserve( -1 * $product['quantity'], $message);
+            ProductManager::reserve(
+                $product["sku"],
+                 $negativeQuantity,
+                "Order ".$order['order_number']
+            );
 
         }
 
