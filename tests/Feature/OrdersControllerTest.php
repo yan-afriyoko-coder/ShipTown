@@ -12,10 +12,10 @@ class OrdersControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_orders_route_authenticated_user () {
+    public function test_orders_create_and_delete_route_authenticated_user () {
 
         $data = [
-            'order_number'      => '001241',
+            'order_number'      => '0123456789',
             "products" => [
                 [
                     'sku' => '123',
@@ -39,6 +39,13 @@ class OrdersControllerTest extends TestCase
             ->assertStatus(200);
 
         $this->assertDatabaseHas('orders', [
+            'order_number' => $data['order_number']
+        ]);
+
+        $this->json('DELETE', 'api/orders/0123456789')
+            ->assertStatus(200);
+
+        $this->assertDatabaseMissing('orders', [
             'order_number' => $data['order_number']
         ]);
 
@@ -159,6 +166,33 @@ class OrdersControllerTest extends TestCase
 
         $this->assertEquals($product_after->quantity_reserved, $product_before->quantity_reserved + 2);
 
+    }
+
+    public function test_if_quantities_are_release_on_order_deleted()
+    {
+        $order = [
+            'order_number'      => '0123456789',
+            "products" => [
+                [
+                    'sku'       => '0123456',
+                    'quantity'  => 2,
+                    'price'     => 4,
+                ]
+            ]
+        ];
+
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        $product_before = Product::firstOrCreate(["sku" => '0123456']);
+
+        $this->json('POST', 'api/orders', $order)->assertStatus(200);
+        $this->json('DELETE', 'api/orders/0123456789')->assertStatus(200);
+
+        $product_after = $product_before->fresh();
+
+        $this->assertEquals($product_after->quantity_reserved, $product_before->quantity_reserved);
     }
 
 }

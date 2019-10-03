@@ -19,6 +19,8 @@ class EventTypes
 
     const ORDER_UPDATED = 'order.updated';
 
+    const ORDER_DELETED = 'order.deleted';
+
     public $data;
 
     public function __construct($data)
