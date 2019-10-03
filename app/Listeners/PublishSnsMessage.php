@@ -23,9 +23,9 @@ class PublishSnsMessage
 
     public function on_order_created(EventTypes $event) {
 
-        $snsTopic = new SnsTopicController('orders');
-
         $order = $event->data;
+
+        $snsTopic = new SnsTopicController('orders');
 
         $snsTopic->publish_message(json_encode($order));
     }
