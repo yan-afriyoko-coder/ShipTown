@@ -11,6 +11,7 @@ class ProductManager
     {
         $aProduct = Product::firstOrCreate(["sku" => $sku]);
 
-        $aProduct->reserve($quantity, $message);
+        $aProduct->increment("quantity_reserved", $quantity);
     }
+
 }

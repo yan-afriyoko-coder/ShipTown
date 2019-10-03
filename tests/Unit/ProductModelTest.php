@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Managers\ProductManager;
 use App\Models\Product;
 use Illuminate\Support\Collection;
 use Tests\TestCase;
@@ -18,16 +19,17 @@ class ProductModelTest extends TestCase
      */
     public function test_if_reserves_correctly()
     {
-        $product = Product::firstOrCreate(
-            ["sku" => "12345"]
+        $product_before = Product::firstOrCreate(["sku" => '0123456']);
+
+        ProductManager::reserve(
+            "0123456",
+            5,
+            "ProductModeTest reservation"
         );
 
-        // get current values
-        $previous_quantity_reserved = $product->quantity_reserved;
+        $product_after = $product_before->fresh();
 
-        $product->reserve(5,'ProductModeTest reservation');
-
-        $this->assertEquals($previous_quantity_reserved, $product->quantity_reserved - 5);
+        $this->assertEquals($product_after->quantity_reserved, $product_before->quantity_reserved + 5);
 
     }
 }
