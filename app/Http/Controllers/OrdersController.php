@@ -23,7 +23,8 @@ class OrdersController extends Controller
     }
 
     public function destroy($order_number) {
-       // dd($order_number);
+       $order = Order::where('order_number', $order_number)->firstOrFail();
+       $order->delete();
     }
 
 }
