@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\EventTypes;
-use App\Product;
+use App\Models\Product;
 
 class UpdateQuantityReserved
 {
