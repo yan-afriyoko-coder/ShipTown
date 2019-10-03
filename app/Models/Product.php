@@ -14,10 +14,13 @@ class Product extends Model
         'quantity_reserved_details' => 'array'
     ];
 
+    protected $attributes = [
+        'quantity_reserved' => 0,
+    ];
+
     public function reserve($quantity, $comment): Product
     {
-
-        $this->increment('quantity_reserved', $quantity);
+        $this->increment("quantity_reserved", $quantity);
 
         $this->addReservedComment($quantity, $comment);
 
