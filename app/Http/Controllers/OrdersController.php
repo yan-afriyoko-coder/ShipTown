@@ -21,4 +21,9 @@ class OrdersController extends Controller
         return response()->json($order, 200);
 
     }
+
+    public function destroy($order_number) {
+       // dd($order_number);
+    }
+
 }
