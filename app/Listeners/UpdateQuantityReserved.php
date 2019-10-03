@@ -5,7 +5,7 @@ namespace App\Listeners;
 use App\Events\EventTypes;
 use App\Product;
 
-class OrderUpdateQuantityReserved
+class UpdateQuantityReserved
 {
     /**
      * Register the listeners for the subscriber.
@@ -14,7 +14,7 @@ class OrderUpdateQuantityReserved
      */
     public function subscribe($events)
     {
-        $events->listen(EventTypes::ORDER_CREATED, 'App\Listeners\OrderUpdateQuantityReserved@on_order_created');
+        $events->listen(EventTypes::ORDER_CREATED, 'App\Listeners\UpdateQuantityReserved@on_order_created');
     }
 
 
