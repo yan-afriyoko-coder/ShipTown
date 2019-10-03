@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Product;
 use Tests\TestCase;
 use App\User;
 use Laravel\Passport\Passport;
@@ -131,4 +132,33 @@ class OrdersControllerTest extends TestCase
             ->assertJsonValidationErrors(['products.0.quantity'])
             ->assertJsonValidationErrors(['products.0.price']);
     }
+
+    public function test_if_quantities_are_reserved_on_new_order() {
+
+        $order = [
+            'order_number'      => '001241',
+            "products" => [
+                [
+                    'sku'       => '0123456',
+                    'quantity'  => 2,
+                    'price'     => 4,
+                ]
+            ]
+        ];
+
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        $product_before = Product::firstOrCreate(["sku" => '0123456']);
+
+        $this->json('POST', 'api/orders', $order)
+            ->assertStatus(200);
+
+        $product_after = $product_before->fresh();
+
+        $this->assertEquals($product_after->quantity_reserved, $product_before->quantity_reserved + 2);
+
+    }
+
 }

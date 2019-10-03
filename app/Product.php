@@ -14,7 +14,8 @@ class Product extends Model
         'quantity_reserved_details' => 'array'
     ];
 
-    public function reserve($quantity, $comment) {
+    public function reserve($quantity, $comment): Product
+    {
 
         $this->increment('quantity_reserved', $quantity);
 
@@ -22,13 +23,16 @@ class Product extends Model
 
         $this->save();
 
+        return $this;
+
     }
 
     /**
      * @param $quantity
      * @param $comment
+     * @return Product
      */
-    public function addReservedComment($quantity, $comment): void
+    public function addReservedComment($quantity, $comment): Product
     {
         $quantity_reserved_details = $this->quantity_reserved_details;
 
@@ -38,5 +42,7 @@ class Product extends Model
         ];
 
         $this->quantity_reserved_details = $quantity_reserved_details;
+
+        return $this;
     }
 }
