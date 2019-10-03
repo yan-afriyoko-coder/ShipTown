@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\EventTypes;
 use App\Http\Requests\StoreOrderRequest;
-use App\Order;
+use App\Models\Order;
 use Illuminate\Http\Request;
 
 class OrdersController extends Controller
