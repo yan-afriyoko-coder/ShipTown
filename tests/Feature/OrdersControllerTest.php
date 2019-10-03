@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\Product;
+use App\Models\Product;
 use Tests\TestCase;
-use App\User;
+use App\Models\User;
 use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
