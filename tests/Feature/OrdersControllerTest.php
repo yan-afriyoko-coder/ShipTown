@@ -168,4 +168,31 @@ class OrdersControllerTest extends TestCase
 
     }
 
+    public function test_if_quantities_are_release_on_order_deleted()
+    {
+        $order = [
+            'order_number'      => '0123456789',
+            "products" => [
+                [
+                    'sku'       => '0123456',
+                    'quantity'  => 2,
+                    'price'     => 4,
+                ]
+            ]
+        ];
+
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        $product_before = Product::firstOrCreate(["sku" => '0123456']);
+
+        $this->json('POST', 'api/orders', $order)->assertStatus(200);
+        $this->json('DELETE', 'api/orders/0123456789')->assertStatus(200);
+
+        $product_after = $product_before->fresh();
+
+        $this->assertEquals($product_after->quantity_reserved, $product_before->quantity_reserved);
+    }
+
 }
