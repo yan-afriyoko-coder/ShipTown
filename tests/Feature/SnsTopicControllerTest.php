@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Http\Controllers\SnsTopicController;
-use App\Models\User as User;
+use App\User as User;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
