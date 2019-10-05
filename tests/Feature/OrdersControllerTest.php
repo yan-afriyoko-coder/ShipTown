@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Product;
+use Mockery\Generator\StringManipulation\Pass\Pass;
 use Tests\TestCase;
 use App\User;
 use Laravel\Passport\Passport;
@@ -11,6 +12,17 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class OrdersControllerTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_orders_get_route() {
+
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        $this->json('GET', 'api/orders')
+            ->assertStatus(200);
+
+    }
 
     public function test_orders_create_and_delete_route_authenticated_user () {
 
