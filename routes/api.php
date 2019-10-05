@@ -20,7 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::middleware('auth:api')->group(function() {
     Route::post('products', 'ProductsController@store');
 
-    Route::get('orders', 'OrdersController@show');
+    Route::get('orders', 'OrdersController@index');
     Route::post('orders', 'OrdersController@store');
     Route::delete('orders/{order_number}', 'OrdersController@destroy');
 });
