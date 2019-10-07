@@ -8,6 +8,7 @@ use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class OrdersController extends Controller
 {
@@ -27,9 +28,15 @@ class OrdersController extends Controller
         return response()->json($order, 200);
     }
 
-    public function destroy(DeleteOrderRequest $request)
+    public function destroy($order_number)
     {
-       $order = Order::where('order_number', $request->order_number)->firstOrFail();
+        try {
+            $order = Order::where('order_number', $order_number)->firstOrFail();
+        }
+        catch (ModelNotFoundException $e)
+        {
+            return $this->respond_NotFound();
+        }
 
        $order->delete();
 
