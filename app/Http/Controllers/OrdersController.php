@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\EventTypes;
+use App\Http\Requests\DeleteOrderRequest;
 use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
 use App\Models\Product;
@@ -26,9 +27,9 @@ class OrdersController extends Controller
         return response()->json($order, 200);
     }
 
-    public function destroy($order_number)
+    public function destroy(DeleteOrderRequest $request)
     {
-       $order = Order::where('order_number', $order_number)->firstOrFail();
+       $order = Order::where('order_number', $request->order_number)->firstOrFail();
 
        $order->delete();
 
