@@ -16,7 +16,7 @@ class Controller extends BaseController
 
     public function respond($message) {
         $response = response()->json(
-            $message,
+            ["message" => $message],
             $this->getStatusCode()
         );
 
