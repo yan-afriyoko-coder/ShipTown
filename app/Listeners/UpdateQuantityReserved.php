@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Events\EventTypes;
 use App\Managers\ProductManager;
 use App\Models\Product;
+use Illuminate\Support\Facades\Log;
 
 class UpdateQuantityReserved
 {
@@ -16,42 +17,73 @@ class UpdateQuantityReserved
     public function subscribe($events)
     {
         $events->listen(EventTypes::ORDER_CREATED, 'App\Listeners\UpdateQuantityReserved@on_order_created');
+        $events->listen(EventTypes::ORDER_UPDATED, 'App\Listeners\UpdateQuantityReserved@on_order_updated');
         $events->listen(EventTypes::ORDER_DELETED, 'App\Listeners\UpdateQuantityReserved@on_order_deleted');
     }
 
+    public function on_order_updated(EventTypes $event)
+    {
+        $order_old = json_decode($event->data['original']['order_json'], true);
+
+        $this->releaseQuantities($order_old);
+
+        $order_new = json_decode($event->data['new']['order_json'], true);
+
+        $this->reserveQuantities($order_new);
+
+        Log::info("Order Updated Event", [
+            $order_old,
+            $order_new
+        ]);
+
+    }
 
     public function on_order_created(EventTypes $event) {
+        $order = $event->data->order_json;
 
-        $order = $event->data;
+        $this->reserveQuantities($order);
 
-        foreach ($order->order_json['products'] as $product) {
-
-            ProductManager::reserve(
-                $product["sku"],
-                $product['quantity'],
-                "Order ".$order['order_number']
-            );
-
-        }
-
+        Log::info("Order Created Event", ["order_number" => $order["order_number"]]);
     }
 
 
     public function on_order_deleted(EventTypes $event) {
 
-        $order = $event->data;
+        $order = $event->data->order_json;
 
-        foreach ($order->order_json['products'] as $product) {
+        $this->releaseQuantities($order);
 
-            $negativeQuantity = -1 * $product['quantity'];
+    }
+
+    /**
+     * @param $order
+     */
+    private function reserveQuantities($order): void
+    {
+        foreach ($order['products'] as $product) {
 
             ProductManager::reserve(
                 $product["sku"],
-                 $negativeQuantity,
-                "Order ".$order['order_number']
+                $product['quantity'],
+                "Order " . $order['order_number']
             );
 
         }
+    }
 
+    /**
+     * @param $order
+     */
+    private function releaseQuantities($order): void
+    {
+        foreach ($order['products'] as $product) {
+
+            ProductManager::reserve(
+                $product["sku"],
+                $product['quantity'] * (-1),
+                "Order " . $order['order_number']
+            );
+
+        }
     }
 }
