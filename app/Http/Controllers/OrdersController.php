@@ -23,8 +23,6 @@ class OrdersController extends Controller
             ['order_number' => $request->order_number],
             ['order_json' => $request->all()]);
 
-        event(EventTypes::ORDER_CREATED, new EventTypes($order));
-
         return response()->json($order, 200);
     }
 

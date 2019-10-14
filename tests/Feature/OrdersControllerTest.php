@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Order;
 use App\Models\Product;
 use Mockery\Generator\StringManipulation\Pass\Pass;
 use Tests\TestCase;
@@ -12,6 +13,52 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class OrdersControllerTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_order_update () {
+
+        $order_v1 = [
+            'order_number'      => '0123456789',
+            "products" => [
+                [
+                    'sku' => '123',
+                    'quantity'     => 2,
+                    'price'        => 4,
+                ]
+            ]
+        ];
+
+        $order_v2 = [
+            'order_number'      => '0123456789',
+            "products" => [
+                [
+                    'sku' => '123',
+                    'quantity'     => 20,
+                    'price'        => 4,
+                ]
+            ]
+        ];
+
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        $this->json('POST', 'api/orders', $order_v1)
+            ->assertStatus(200);
+
+        $product_before = Product::firstOrCreate(["sku" => '123']);
+
+        $this->json('POST', 'api/orders', $order_v2)
+            ->assertStatus(200)
+            ->assertJsonFragment(['quantity' => $order_v2['products'][0]['quantity']]);
+
+        $product_after = $product_before->fresh();
+
+        $quantity_reserved_diff_actual = $product_after->quantity_reserved - $product_before->quantity_reserved;
+        $quantity_reserved_diff_expected = $order_v2['products'][0]['quantity'] - $order_v1['products'][0]['quantity'];
+
+        $this->assertEquals($quantity_reserved_diff_expected, $quantity_reserved_diff_actual);
+
+    }
 
     public function test_orders_get_route() {
 
@@ -24,7 +71,7 @@ class OrdersControllerTest extends TestCase
 
     }
 
-    public function test_orders_create_and_delete_route_authenticated_user () {
+    public function test_orders_create_and_delete_routes_for_authenticated_user () {
 
         $data = [
             'order_number'      => '0123456789',
@@ -63,7 +110,7 @@ class OrdersControllerTest extends TestCase
 
     }
 
-    public function test_orders_route_unauthenticated_user () {
+    public function test_orders_route_for_unauthenticated_user () {
 
         $data = [
             'orderID'      => '001241',
@@ -87,7 +134,7 @@ class OrdersControllerTest extends TestCase
 
     }
 
-    public function test_if_missing_order_number_not_allowed() {
+    public function test_if_missing_order_number_is_not_allowed() {
 
         $data = [
             //'order_number'      => '001241',
@@ -132,7 +179,7 @@ class OrdersControllerTest extends TestCase
             ->assertJsonValidationErrors(['products']);
     }
 
-    public function test_correct_products_section() {
+    public function test_correct_products_sections() {
 
         $data = [
             'order_number'      => '001241',
@@ -152,7 +199,7 @@ class OrdersControllerTest extends TestCase
             ->assertJsonValidationErrors(['products.0.price']);
     }
 
-    public function test_if_quantities_are_reserved_on_new_order() {
+    public function test_if_quantities_are_reserved_when_new_order_created() {
 
         $order = [
             'order_number'      => '001241',
@@ -180,7 +227,7 @@ class OrdersControllerTest extends TestCase
 
     }
 
-    public function test_if_quantities_are_release_on_order_deleted()
+    public function test_if_quantities_are_released_when_order_deleted()
     {
         $order = [
             'order_number'      => '0123456789',
