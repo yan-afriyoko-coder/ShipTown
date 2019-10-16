@@ -10,10 +10,6 @@ class Product extends Model
         "sku"
     ];
 
-    protected $casts = [
-        'quantity_reserved_details' => 'array'
-    ];
-
     protected $attributes = [
         'quantity_reserved' => 0,
     ];
