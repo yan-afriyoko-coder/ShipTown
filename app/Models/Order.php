@@ -14,7 +14,7 @@ class Order extends Model
     ];
 
     protected $casts = [
-        'order_json' => 'array'
+        'order_as_json' => 'array'
     ];
 
     public function __construct(array $attributes = [])
