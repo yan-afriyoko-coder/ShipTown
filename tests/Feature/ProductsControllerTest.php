@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Tests\ModelSample;
 use Tests\TestCase;
 use App\User;
 use Laravel\Passport\Passport;
@@ -11,18 +12,13 @@ class ProductsControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_products_route_authenticated_user () {
-
-        $data = [
-            "sku"   => "001241",
-            "price"  => 25,
-        ];
-
+    public function test_products_route_authenticated_user ()
+    {
         Passport::actingAs(
             factory(User::class)->create()
         );
 
-        $this->json('POST', 'api/products', [$data])
+        $this->json('POST', 'api/products', ModelSample::PRODUCT)
             ->assertStatus(200);
 
     }
