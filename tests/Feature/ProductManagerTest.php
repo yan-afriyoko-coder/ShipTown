@@ -76,7 +76,7 @@ class ProductManagerTest extends TestCase
 
         $product_after = json_decode($product_after, true);
 
-        $quantity_reserved_diff = $product_after['quantity_reserved'] - $product_before['quantity_reserved'];
+        $quantity_reserved_diff =  $product_before['quantity_reserved'] - $product_after['quantity_reserved'];
 
         $this->assertEquals($quantity_to_release, $quantity_reserved_diff);
     }
