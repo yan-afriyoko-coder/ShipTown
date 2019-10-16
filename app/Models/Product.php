@@ -20,4 +20,10 @@ class Product extends Model
         'quantity_reserved' => 0,
     ];
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->user_id = auth()->id();
+    }
 }
