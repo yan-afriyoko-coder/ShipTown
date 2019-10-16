@@ -10,7 +10,7 @@ use Illuminate\Support\Arr;
 class Order extends Model
 {
     protected $fillable = [
-        'order_number', 'order_json'
+        'order_number', 'order_as_json'
     ];
 
     protected $casts = [
