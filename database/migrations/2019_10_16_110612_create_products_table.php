@@ -20,6 +20,10 @@ class CreateProductsTableNew extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('sku', 20);
             $table->string('name', 100);
+            $table->decimal('price', 8,2);
+            $table->decimal('sale_price', 8,2);
+            $table->date('sale_price_start_date');
+            $table->date('sale_price_end_date');
             $table->decimal('quantity')->default(0);
             $table->decimal('quantity_reserved')->default(0);
             $table->softDeletes();
