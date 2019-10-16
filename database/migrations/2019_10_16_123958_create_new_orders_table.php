@@ -35,6 +35,6 @@ class CreateNewOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('new_orders');
+        Schema::dropIfExists('orders');
     }
 }
