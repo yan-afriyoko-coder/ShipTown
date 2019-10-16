@@ -17,6 +17,13 @@ class Order extends Model
         'order_json' => 'array'
     ];
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->user_id = auth()->id();
+    }
+
     protected static function boot()
     {
         parent::boot();
