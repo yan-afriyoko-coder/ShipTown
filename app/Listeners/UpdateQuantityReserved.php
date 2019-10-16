@@ -27,7 +27,7 @@ class UpdateQuantityReserved
 
         $this->releaseQuantities($order_old);
 
-        $order_new = json_decode($event->data['original']['order_as_json'], true);
+        $order_new = json_decode($event->data['new']['order_as_json'], true);
 
         $this->reserveQuantities($order_new);
     }
@@ -71,9 +71,9 @@ class UpdateQuantityReserved
     {
         foreach ($order['products'] as $product) {
 
-            ProductManager::reserve(
+            ProductManager::release(
                 $product["sku"],
-                $product['quantity'] * (-1),
+                $product['quantity'],
                 "Order " . $order['order_number']
             );
 
