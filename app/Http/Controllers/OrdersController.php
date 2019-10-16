@@ -21,7 +21,7 @@ class OrdersController extends Controller
     {
         $order = Order::updateOrCreate(
             ['order_number' => $request->order_number],
-            ['order_json' => $request->all()]);
+            ['order_as_json' => $request->all()]);
 
         return response()->json($order, 200);
     }
