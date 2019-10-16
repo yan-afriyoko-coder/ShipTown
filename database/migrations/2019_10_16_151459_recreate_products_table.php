@@ -19,7 +19,7 @@ class RecreateProductsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->string('sku', 20);
-            $table->string('name', 100);
+            $table->string('name', 100)->default('');
             $table->decimal('price', 8,2)->default(0);
             $table->decimal('sale_price', 8,2)->default(0);
             $table->date('sale_price_start_date')->default('1899-01-01');
