@@ -10,12 +10,19 @@ use Illuminate\Support\Arr;
 class Order extends Model
 {
     protected $fillable = [
-        'order_number', 'order_json'
+        'order_number', 'order_as_json'
     ];
 
     protected $casts = [
-        'order_json' => 'array'
+        'order_as_json' => 'array'
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->user_id = auth()->id();
+    }
 
     protected static function boot()
     {

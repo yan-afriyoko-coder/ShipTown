@@ -23,33 +23,26 @@ class UpdateQuantityReserved
 
     public function on_order_updated(EventTypes $event)
     {
-        $order_old = json_decode($event->data['original']['order_json'], true);
+        $order_old = json_decode($event->data['original']['order_as_json'], true);
 
         $this->releaseQuantities($order_old);
 
-        $order_new = json_decode($event->data['new']['order_json'], true);
+        $order_new = json_decode($event->data['new']['order_as_json'], true);
 
         $this->reserveQuantities($order_new);
-
-        Log::info("Order Updated Event", [
-            $order_old,
-            $order_new
-        ]);
-
     }
 
-    public function on_order_created(EventTypes $event) {
-        $order = $event->data->order_json;
+    public function on_order_created(EventTypes $event)
+    {
+        $order = $event->data->order_as_json;
 
         $this->reserveQuantities($order);
-
-        Log::info("Order Created Event", ["order_number" => $order["order_number"]]);
     }
 
 
-    public function on_order_deleted(EventTypes $event) {
-
-        $order = $event->data->order_json;
+    public function on_order_deleted(EventTypes $event)
+    {
+        $order = $event->data->order_as_json;
 
         $this->releaseQuantities($order);
 
@@ -78,9 +71,9 @@ class UpdateQuantityReserved
     {
         foreach ($order['products'] as $product) {
 
-            ProductManager::reserve(
+            ProductManager::release(
                 $product["sku"],
-                $product['quantity'] * (-1),
+                $product['quantity'],
                 "Order " . $order['order_number']
             );
 

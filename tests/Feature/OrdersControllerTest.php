@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Order;
 use App\Models\Product;
 use Mockery\Generator\StringManipulation\Pass\Pass;
+use Tests\ModelSample;
 use Tests\TestCase;
 use App\User;
 use Laravel\Passport\Passport;
@@ -42,19 +43,43 @@ class OrdersControllerTest extends TestCase
             factory(User::class)->create()
         );
 
-        $this->json('POST', 'api/orders', $order_v1)
+        // create product
+        $product_before = $this->json('POST', "api/products", ModelSample::PRODUCT)
+            ->assertStatus(200)
+            ->getContent();
+
+        // submit first order
+        $this->json('POST', 'api/orders', ModelSample::ORDER_01)
             ->assertStatus(200);
 
-        $product_before = Product::firstOrCreate(["sku" => '123']);
 
-        $this->json('POST', 'api/orders', $order_v2)
+
+
+
+        // get product before submitting second order
+        $product_before = $this->json('POST', "api/products", ModelSample::PRODUCT)
             ->assertStatus(200)
-            ->assertJsonFragment(['quantity' => $order_v2['products'][0]['quantity']]);
+            ->getContent();
 
-        $product_after = $product_before->fresh();
+        $product_before = json_decode($product_before, true);
 
-        $quantity_reserved_diff_actual = $product_after->quantity_reserved - $product_before->quantity_reserved;
-        $quantity_reserved_diff_expected = $order_v2['products'][0]['quantity'] - $order_v1['products'][0]['quantity'];
+        // submit second order
+        $this->json('POST', 'api/orders', ModelSample::ORDER_02)
+            ->assertStatus(200);
+
+        // get product after submitting second order
+        $product_after = $this->json('POST', "api/products", ModelSample::PRODUCT)
+            ->assertStatus(200)
+            ->getContent();
+
+        $product_after = json_decode($product_after, true);
+
+
+
+
+        $quantity_reserved_diff_actual = $product_after['quantity_reserved'] - $product_before['quantity_reserved'];
+
+        $quantity_reserved_diff_expected = ModelSample::ORDER_02['products'][0]['quantity'] - ModelSample::ORDER_01['products'][0]['quantity'];
 
         $this->assertEquals($quantity_reserved_diff_expected, $quantity_reserved_diff_actual);
 

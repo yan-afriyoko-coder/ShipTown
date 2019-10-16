@@ -21,6 +21,10 @@ class EventTypes
 
     const ORDER_DELETED = 'order.deleted';
 
+    const PRODUCT_CREATED = 'product.created';
+
+    const PRODUCT_UPDATED = 'product.updated';
+
     public $data;
 
     public function __construct($data)

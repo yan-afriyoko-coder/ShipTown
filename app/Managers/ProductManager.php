@@ -14,4 +14,11 @@ class ProductManager
         $aProduct->increment("quantity_reserved", $quantity);
     }
 
+    public static function release($sku, $quantity, $message)
+    {
+        $aProduct = Product::firstOrCreate(["sku" => $sku]);
+
+        $aProduct->decrement("quantity_reserved", $quantity);
+    }
+
 }

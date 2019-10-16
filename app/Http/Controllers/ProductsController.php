@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductsController extends Controller
 {
-    public function store(Request $request){
+    public function store(Request $request)
+    {
+        $product = Product::updateOrCreate(
+            ['sku' => $request->sku],
+            $request->all()
+        );
 
-        $snsTopic = new SnsTopicController('products');
-
-        $message = $request->getContent();
-
-        if ($snsTopic->publish_message($message)) {
-            $this->respond_OK_200();
-        };
-
+        return response()->json($product, 200);
     }
 }

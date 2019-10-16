@@ -4,7 +4,9 @@ namespace Tests\Unit;
 
 use App\Managers\ProductManager;
 use App\Models\Product;
+use App\User;
 use Illuminate\Support\Collection;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -12,6 +14,15 @@ use Illuminate\Support\Arr;
 
 class ProductModelTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+    }
+
     /**
      * A basic feature test example.
      *
