@@ -23,4 +23,27 @@ class ModelSample
         "sale_price_end_date" => '2050-01-30',
     ];
 
+
+    const ORDER_01 = [
+        'order_number' => '0123456789',
+        "products" => [
+            [
+                'sku' => '123456',
+                'quantity'     => 2,
+                'price'        => 4,
+            ]
+        ]
+    ];
+
+    const ORDER_02 = [
+        'order_number' => '0123456789',
+        "products" => [
+            [
+                'sku' => '123456',
+                'quantity'     => 20,
+                'price'        => 30,
+            ]
+        ]
+    ];
+
 }
