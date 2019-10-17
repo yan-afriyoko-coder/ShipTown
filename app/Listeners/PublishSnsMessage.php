@@ -51,11 +51,13 @@ class PublishSnsMessage
     {
         $updated_event = $event;
 
-        $updated_event->data = $event->data["new"];
-        $updated_event->data["original"] = $event->data["original"];
-        $updated_event->data["new"] = $event->data["new"];
+        // below line should be deleted and event with new
+        // structure (original & new) should be send
+        // as per original event.
+        $updated_event->data = array_merge($event->data["new"], $event->data);
 
-        $this->publishMessage($updated_event->data,'products');
+
+        $this->publishMessage($updated_event,'products');
     }
 
     /**
