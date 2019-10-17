@@ -20,7 +20,8 @@ class PublishSnsMessage
         $events->listen(EventTypes::ORDER_CREATED,'App\Listeners\PublishSnsMessage@on_order_created');
 
         //products
-        $events->listen(EventTypes::ORDER_CREATED,'App\Listeners\PublishSnsMessage@on_product_updated');
+        $events->listen(EventTypes::PRODUCT_CREATED,'App\Listeners\PublishSnsMessage@on_product_created');
+        $events->listen(EventTypes::PRODUCT_UPDATED,'App\Listeners\PublishSnsMessage@on_product_updated');
     }
 
 
@@ -31,6 +32,15 @@ class PublishSnsMessage
         $snsTopic = new SnsTopicController('orders');
 
         $snsTopic->publish_message(json_encode($order));
+    }
+
+    public function on_product_created(EventTypes $event)
+    {
+        $product = $event->data;
+
+        $snsTopic = new SnsTopicController('products');
+
+        $snsTopic->publish_message(json_encode($product));
     }
 
     public function on_product_updated(EventTypes $event)
