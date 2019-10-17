@@ -8,6 +8,10 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Class PublishSnsMessage
+ * @package App\Listeners
+ */
 class PublishSnsMessage
 {
     /**
@@ -24,32 +28,45 @@ class PublishSnsMessage
         $events->listen(EventTypes::PRODUCT_UPDATED,'App\Listeners\PublishSnsMessage@on_product_updated');
     }
 
-
-    public function on_order_created(EventTypes $event) {
-
-        $order = $event->data;
-
-        $snsTopic = new SnsTopicController('orders');
-
-        $snsTopic->publish_message(json_encode($order));
+    /**
+     * @param EventTypes $event
+     */
+    public function on_order_created(EventTypes $event)
+    {
+        $this->publishMessage($event, "orders");
     }
 
+    /**
+     * @param EventTypes $event
+     */
     public function on_product_created(EventTypes $event)
     {
-        $product = $event->data;
-
-        $snsTopic = new SnsTopicController('products');
-
-        $snsTopic->publish_message(json_encode($product));
+        $this->publishMessage($event,'products');
     }
 
+    /**
+     * @param EventTypes $event
+     */
     public function on_product_updated(EventTypes $event)
     {
-        $product = $event->data;
+        $updated_event = $event;
 
-        $snsTopic = new SnsTopicController('products');
+        $updated_event->data = $event->data["new"];
+        $updated_event->data["original"] = $event->data["original"];
+        $updated_event->data["new"] = $event->data["new"];
 
-        $snsTopic->publish_message(json_encode($product));
+        $this->publishMessage($updated_event->data,'products');
+    }
+
+    /**
+     * @param EventTypes $event
+     * @param $topic_prefix
+     */
+    private function publishMessage(EventTypes $event, $topic_prefix): void
+    {
+        $snsTopic = new SnsTopicController($topic_prefix);
+
+        $snsTopic->publish_message(json_encode($event->data));
     }
 
 }
