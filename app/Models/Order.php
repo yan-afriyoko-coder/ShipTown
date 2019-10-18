@@ -33,10 +33,7 @@ class Order extends Model
         });
 
         self::updating(function($model) {
-            event(EventTypes::ORDER_UPDATED, new EventTypes([
-                "original" => $model->getOriginal(),
-                "new" => $model->getAttributes()
-            ]));
+            event(EventTypes::ORDER_UPDATED, new EventTypes($model));
         });
     }
 }
