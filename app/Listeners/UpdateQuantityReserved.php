@@ -23,11 +23,11 @@ class UpdateQuantityReserved
 
     public function on_order_updated(EventTypes $event)
     {
-        $order_old = json_decode($event->data['original']['order_as_json'], true);
+        $order_old = json_decode($event->data->getOriginal()['order_as_json'], true);
 
         $this->releaseQuantities($order_old);
 
-        $order_new = json_decode($event->data['new']['order_as_json'], true);
+        $order_new = json_decode($event->data->getAttributes()['order_as_json'], true);
 
         $this->reserveQuantities($order_new);
     }

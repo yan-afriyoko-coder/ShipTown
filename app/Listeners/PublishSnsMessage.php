@@ -49,15 +49,7 @@ class PublishSnsMessage
      */
     public function on_product_updated(EventTypes $event)
     {
-        $updated_event = $event;
-
-        // below line should be deleted and event with new
-        // structure (original & new) should be send
-        // as per original event.
-        $updated_event->data = array_merge($event->data["new"], $event->data);
-
-
-        $this->publishMessage($updated_event,'products');
+        $this->publishMessage($event,'products');
     }
 
     /**
@@ -66,11 +58,11 @@ class PublishSnsMessage
      */
     private function publishMessage(EventTypes $event, $topic_prefix): void
     {
-        Log::debug("Publishing SNS message ($topic_prefix)", $event->data);
+        Log::debug("Publishing SNS message ($topic_prefix)", $event->data->getAttributes());
 
         $snsTopic = new SnsTopicController($topic_prefix);
 
-        $snsTopic->publish_message(json_encode($event->data));
+        $snsTopic->publish_message(json_encode($event->data->getAttributes()));
     }
 
 }
