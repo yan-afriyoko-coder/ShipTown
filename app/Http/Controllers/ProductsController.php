@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ProductsController extends Controller
 {
     public function store(Request $request)
     {
+        Log::debug('Received product update request', $request->all());
+
         $product = Product::updateOrCreate(
             ['sku' => $request->sku],
             $request->all()
