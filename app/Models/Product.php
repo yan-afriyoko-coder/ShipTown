@@ -37,12 +37,7 @@ class Product extends Model
         });
 
         self::updating(function($model) {
-            $model_history = [
-                "original" => $model->getOriginal(),
-                "new" => $model->getAttributes()
-            ];
-
-            event(EventTypes::PRODUCT_UPDATED, new EventTypes($model_history));
+            event(EventTypes::PRODUCT_UPDATED, new EventTypes($model));
         });
     }
 }
