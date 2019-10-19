@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\imports\orders;
+namespace Tests\Feature\import\orders;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
