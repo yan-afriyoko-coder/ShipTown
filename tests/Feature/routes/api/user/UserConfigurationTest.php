@@ -11,6 +11,15 @@ class UserConfigurationTest extends TestCase
 {
     use AuthorizedUserTestCase;
 
+    public function test_successful_post()
+    {
+        $data = [];
+
+        $response = $this->json('POST', 'api/user/configuration', $data);
+
+        $response->assertStatus(200);
+    }
+
     public function test_successful_get()
     {
         $response = $this->json('GET', 'api/user/configuration');
