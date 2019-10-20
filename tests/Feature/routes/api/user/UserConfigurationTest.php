@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Feature\routes\api\user\configuration;
+namespace Tests\Feature\routes\api\user;
 
 use Tests\Feature\AuthorizedUserTestCase;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class getTest extends TestCase
+class UserConfigurationTest extends TestCase
 {
     use AuthorizedUserTestCase;
 
