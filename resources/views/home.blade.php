@@ -24,6 +24,11 @@
                     <br />
 
                     <subscribe-topic></subscribe-topic>
+                    <br />
+
+                    <api2cart-store-key></api2cart-store-key>
+                    <br />
+
                 </div>
             </div>
         </div>
