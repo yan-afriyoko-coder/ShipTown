@@ -24,7 +24,7 @@ Route::middleware('auth:api')->group(function() {
     Route::post('orders', 'OrdersController@store');
     Route::delete('orders/{order_number}', 'OrdersController@destroy');
 
-    Route::get("import/orders/api2cart", "ImportOrdersController@api2cart");
+    Route::get("import/orders/api2cart", "ImportOrdersController@fromApi2Cart");
 
 });
 
