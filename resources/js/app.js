@@ -46,6 +46,11 @@ Vue.component(
     require('./components/SubscribeTopic.vue').default
 );
 
+Vue.component(
+    'api2cart-store-key',
+    require('./components/api2cart-store-key.vue').default
+);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
