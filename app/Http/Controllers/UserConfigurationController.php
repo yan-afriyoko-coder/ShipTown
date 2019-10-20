@@ -12,4 +12,11 @@ class UserConfigurationController extends Controller
 
         return response($jsonConfig, 200);
     }
+
+    public function store(Request $request)
+    {
+        $data = [];
+
+        return response($data, 200);
+    }
 }
