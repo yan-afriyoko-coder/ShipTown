@@ -17,7 +17,11 @@ class api2CartTest extends TestCase
      */
     public function test_get_route()
     {
+        Queue::fake();
+
         $response = $this->get('api/import/orders/api2cart');
+
+        Queue::assertPushed();
 
         $response->assertStatus(200);
     }
