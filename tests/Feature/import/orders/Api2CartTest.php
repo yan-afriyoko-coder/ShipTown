@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\import\orders;
 
+use App\Jobs\JobImportOrderApi2Cart;
 use Illuminate\Support\Facades\Queue;
 use Tests\Feature\AuthorizedUserTestCase;
 use Tests\TestCase;
@@ -21,7 +22,7 @@ class api2CartTest extends TestCase
 
         $response = $this->get('api/import/orders/api2cart');
 
-        Queue::assertPushed();
+        Queue::assertPushed(JobImportOrderApi2Cart::class);
 
         $response->assertStatus(200);
     }
