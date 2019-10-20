@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use http\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -29,6 +30,22 @@ class JobImportOrderApi2Cart implements ShouldQueue
      */
     public function handle()
     {
-        //
+        $store_key = "";
+
+        $guzzle = new \GuzzleHttp\Client([
+            'base_uri' =>  'https://api.api2cart.com/v1.1/',
+            'timeout' => 60,
+            'exceptions' => true,
+        ]);
+
+        $result = $guzzle->get(
+            'orders.list.json',
+            [
+                'query' => [
+                    "api_key" => env('API2CART_API_KEY', ""),
+                    "store_key" => $store_key
+                ]
+            ]
+        );
     }
 }
