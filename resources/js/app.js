@@ -47,8 +47,8 @@ Vue.component(
 );
 
 Vue.component(
-    'api2cart-store-key',
-    require('./components/api2cart-store-key.vue').default
+    'user-configuration',
+    require('./components/UserConfiguration.vue').default
 );
 
 /**

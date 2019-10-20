@@ -26,7 +26,7 @@
                     <subscribe-topic></subscribe-topic>
                     <br />
 
-                    <api2cart-store-key></api2cart-store-key>
+                    <user-configuration></user-configuration>
                     <br />
 
                 </div>
