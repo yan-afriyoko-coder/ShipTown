@@ -16,7 +16,7 @@ class CreateUserConfigurationsTable extends Migration
         Schema::create('user_configurations', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->json('jsonConfig');
+            $table->json('config');
             $table->softDeletes();
             $table->timestamps();
 

@@ -2,16 +2,17 @@
 
 namespace App\Models;
 
+use App\Scopes\AuthenticatedUserScope;
 use Illuminate\Database\Eloquent\Model;
 
 class UserConfiguration extends Model
 {
     protected $fillable = [
-        'jsonConfig'
+        'config'
     ];
 
     protected $casts = [
-        'jsonConfig' => 'array'
+        'config' => 'array'
     ];
 
     public function __construct(array $attributes = [])
@@ -19,5 +20,12 @@ class UserConfiguration extends Model
         parent::__construct($attributes);
 
         $this->user_id = auth()->id();
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new AuthenticatedUserScope());
     }
 }

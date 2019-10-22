@@ -2,21 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserConfiguration;
 use Illuminate\Http\Request;
 
 class UserConfigurationController extends Controller
 {
     public function show()
     {
-        $jsonConfig = json_encode("{}");
+        $config = UserConfiguration::firstOrCreate([], ["config" => "{}"]);
 
-        return response($jsonConfig, 200);
+        $config["config"] = json_decode($config["config"]);
+
+        return response($config, 200);
     }
 
     public function store(Request $request)
     {
-        $data = [];
+        $data = [
+            "config" => $request->getContent()
+        ];
 
-        return response($data, 200);
+        $config = UserConfiguration::updateOrCreate([], $data);
+
+        $config["config"] = json_decode($config["config"]);
+
+        return response($config, 200);
     }
 }

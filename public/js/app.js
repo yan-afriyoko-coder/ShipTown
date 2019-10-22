@@ -1906,7 +1906,7 @@ __webpack_require__.r(__webpack_exports__);
   */
   data: function data() {
     return {
-      jsonConfig: ""
+      configData: ""
     };
   },
 
@@ -1935,11 +1935,11 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get('/api/user/configuration').then(function (response) {
-        _this.jsonConfig = response.data;
+        _this.configData = JSON.stringify(response.data["config"], 2);
       });
     },
-    saveConfig: function saveConfig(jsonConfig) {
-      axios.post('/api/user/configuration', jsonConfig).then(function (response) {
+    saveConfig: function saveConfig(configData) {
+      axios.post('/api/user/configuration', configData).then(function (response) {
         if (response.status !== 200) {
           alert("Issue occurred while saving data, try again");
         }
@@ -39004,7 +39004,7 @@ var render = function() {
               _c("tr", [
                 _c("th", [
                   _c("div", { staticClass: "form-group" }, [
-                    _c("label", { attrs: { for: "jsonConfig" } }, [
+                    _c("label", { attrs: { for: "configData" } }, [
                       _vm._v("Configurtion")
                     ]),
                     _vm._v(" "),
@@ -39013,23 +39013,23 @@ var render = function() {
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.jsonConfig,
-                          expression: "jsonConfig"
+                          value: _vm.configData,
+                          expression: "configData"
                         }
                       ],
                       staticClass: "form-control",
                       attrs: {
                         type: "textarea",
-                        id: "jsonConfig",
+                        id: "configData",
                         placeholder: "Json configuration here"
                       },
-                      domProps: { value: _vm.jsonConfig },
+                      domProps: { value: _vm.configData },
                       on: {
                         input: function($event) {
                           if ($event.target.composing) {
                             return
                           }
-                          _vm.jsonConfig = $event.target.value
+                          _vm.configData = $event.target.value
                         }
                       }
                     })
@@ -39047,7 +39047,7 @@ var render = function() {
                         attrs: { id: "product-btn" },
                         on: {
                           click: function($event) {
-                            return _vm.saveConfig(_vm.jsonConfig)
+                            return _vm.saveConfig(_vm.configData)
                           }
                         }
                       },
