@@ -17,13 +17,13 @@
                             <tr>
                                 <th>
                                     <div class="form-group">
-                                        <label for="jsonConfig">Configurtion</label>
-                                        <textarea type="textarea" class="form-control" id="jsonConfig" v-model="jsonConfig" placeholder="Json configuration here"></textarea>
+                                        <label for="configData">Configurtion</label>
+                                        <textarea type="textarea" class="form-control" id="configData" v-model="configData" placeholder="Json configuration here"></textarea>
                                     </div>
                                 </th>
                             </tr>
                             <tr>
-                                <th><div class="text-center"><button id="product-btn" class="btn-primary centre" v-on:click="saveConfig(jsonConfig)">Save</button></div></th>
+                                <th><div class="text-center"><button id="product-btn" class="btn-primary centre" v-on:click="saveConfig(configData)">Save</button></div></th>
                             </tr>
                         </thead>
                     </table>
@@ -41,7 +41,7 @@
         */
         data() {
             return {
-                jsonConfig: ""
+                configData: ""
             };
         },
 
@@ -70,13 +70,13 @@
             getConfiguration() {
                 axios.get('/api/user/configuration')
                     .then(response => {
-                        this.jsonConfig = response.data;
+                        this.configData = JSON.stringify(response.data["config"], 2);
                     });
             },
 
-            saveConfig : function(jsonConfig) {
+            saveConfig : function(configData) {
 
-                axios.post('/api/user/configuration', jsonConfig)
+                axios.post('/api/user/configuration', configData)
                     .then(response => {
                         if (response.status !== 200) {
                             alert("Issue occurred while saving data, try again");
