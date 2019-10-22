@@ -24,6 +24,11 @@
                     <br />
 
                     <subscribe-topic></subscribe-topic>
+                    <br />
+
+                    <user-configuration></user-configuration>
+                    <br />
+
                 </div>
             </div>
         </div>

@@ -26,6 +26,8 @@ Route::middleware('auth:api')->group(function() {
 
     Route::get("import/orders/api2cart", "ImportOrdersController@fromApi2Cart");
 
+    Route::get("user/configuration", "UserConfigurationController@show");
+    Route::post("user/configuration", "UserConfigurationController@store");
 });
 
 
