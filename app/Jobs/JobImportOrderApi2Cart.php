@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Exceptions\Api2CartKeyNotSetException;
 use App\Models\Product;
 use App\Scopes\AuthenticatedUserScope;
 use Illuminate\Bus\Queueable;
@@ -36,9 +37,14 @@ class JobImportOrderApi2Cart implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws Api2CartKeyNotSetException
      */
     public function handle()
     {
+        if(empty($this->api2cart_store_key)) {
+            throw new Api2CartKeyNotSetException();
+        }
+
         $guzzle = new \GuzzleHttp\Client([
             'base_uri' =>  'https://api.api2cart.com/v1.1/',
             'timeout' => 60,
