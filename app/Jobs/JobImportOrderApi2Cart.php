@@ -48,6 +48,10 @@ class JobImportOrderApi2Cart implements ShouldQueue
             throw new Api2CartKeyNotSetException();
         }
 
+        if(empty($this->api2cart_app_key)) {
+            throw new Api2CartKeyNotSetException();
+        }
+
         $guzzle = new \GuzzleHttp\Client([
             'base_uri' =>  'https://api.api2cart.com/v1.1/',
             'timeout' => 60,
