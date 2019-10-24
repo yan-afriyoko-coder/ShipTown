@@ -20,6 +20,7 @@ class JobImportOrderApi2Cart implements ShouldQueue
     private $api2cart_store_key;
     private $callback;
     private $auth;
+    private $api2cart_app_key;
 
     /**
      * Create a new job instance.
@@ -31,6 +32,8 @@ class JobImportOrderApi2Cart implements ShouldQueue
     {
         $this->user = $user;
         $this->api2cart_store_key = $api2cart_store_key;
+
+        $this->api2cart_app_key = env('API2CART_API_KEY', "");
     }
 
     /**
@@ -51,11 +54,12 @@ class JobImportOrderApi2Cart implements ShouldQueue
             'exceptions' => true,
         ]);
 
+
         $response = $guzzle->get(
             'order.list.json',
             [
                 'query' => [
-                    "api_key" => env('API2CART_API_KEY', ""),
+                    "api_key" => $this->api2cart_app_key,
                     "store_key" => $this->api2cart_store_key,
                     "count" => 999,
                     "params" => "force_all",
