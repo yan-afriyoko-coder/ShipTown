@@ -58,11 +58,11 @@ class PublishSnsMessage
      */
     private function publishMessage(EventTypes $event, $topic_prefix): void
     {
-        Log::debug("Publishing SNS message ($topic_prefix)", $event->data->getAttributes());
+        Log::debug("Publishing SNS message ($topic_prefix)", $event->data->toArray());
 
         $snsTopic = new SnsTopicController($topic_prefix);
 
-        $snsTopic->publish_message(json_encode($event->data->getAttributes()));
+        $snsTopic->publish_message(json_encode($event->data->toJson()));
     }
 
 }
