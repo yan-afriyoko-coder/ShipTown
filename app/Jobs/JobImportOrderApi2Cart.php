@@ -2,8 +2,10 @@
 
 namespace App\Jobs;
 
-use http\Client;
+use App\Models\Product;
+use App\Scopes\AuthenticatedUserScope;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,14 +15,21 @@ class JobImportOrderApi2Cart implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    private $user;
+    private $api2cart_store_key;
+    private $callback;
+    private $auth;
+
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param $user Authenticatable
+     * @param $api2cart_store_key
      */
-    public function __construct()
+    public function __construct($user, $api2cart_store_key)
     {
-        //
+        $this->user = $user;
+        $this->api2cart_store_key = $api2cart_store_key;
     }
 
     /**
@@ -30,22 +39,60 @@ class JobImportOrderApi2Cart implements ShouldQueue
      */
     public function handle()
     {
-        $store_key = "";
-
         $guzzle = new \GuzzleHttp\Client([
             'base_uri' =>  'https://api.api2cart.com/v1.1/',
             'timeout' => 60,
             'exceptions' => true,
         ]);
 
-        $result = $guzzle->get(
-            'orders.list.json',
+        $response = $guzzle->get(
+            'order.list.json',
             [
                 'query' => [
                     "api_key" => env('API2CART_API_KEY', ""),
-                    "store_key" => $store_key
+                    "store_key" => $this->api2cart_store_key,
+                    "count" => 999,
+                    "params" => "force_all",
+                    "order_status" => "Processing",
                 ]
             ]
         );
+
+        $content = $response->getBody()->getContents();
+
+        $content = json_decode($content, true);
+
+        $orders = $content["result"]["order"];
+
+        $products_to_reserve = [];
+
+        foreach ($orders as $order) {
+
+            foreach ($order["order_products"] as $product) {
+
+                $products_to_reserve[] = [
+                    "sku" => $product["model"],
+                    "quantity" => $product["quantity"],
+                ];
+
+            }
+
+        }
+
+        Product::withoutGlobalScope(AuthenticatedUserScope::class)
+            ->where("user_id", $this->user->id)
+            ->where("quantity_reserved", ">", 0)
+            ->update(["quantity_reserved" => 0]);
+
+        foreach ($products_to_reserve as $product) {
+            $aProduct = Product::withoutGlobalScope(AuthenticatedUserScope::class)
+                ->firstOrCreate([
+                    "user_id" => $this->user->id,
+                    "sku" => $product["sku"]
+                ]);
+
+            $aProduct->increment("quantity_reserved", $product["quantity"]);
+        };
+
     }
 }
