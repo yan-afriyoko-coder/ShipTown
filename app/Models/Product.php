@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Events\EventTypes;
+use App\Scopes\AuthenticatedUserScope;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -31,6 +32,8 @@ class Product extends Model
     protected static function boot()
     {
         parent::boot();
+
+        static::addGlobalScope(new AuthenticatedUserScope());
 
         self::created(function($model) {
             event(EventTypes::PRODUCT_CREATED, new EventTypes($model));
