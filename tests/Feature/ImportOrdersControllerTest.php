@@ -29,17 +29,17 @@ class ImportOrdersControllerTest extends TestCase
         Queue::assertPushed(JobImportOrderApi2Cart::class);
     }
 
-    public function test_if_job_executes_without_exceptions()
-    {
-        $api2cart_demo_store_key = "ed58a22dfecb405a50ea3ea56979360d";
-
-        $job = new JobImportOrderApi2Cart(
-            auth()->user(),
-            $api2cart_demo_store_key
-        );
-
-        $job->handle();
-
-        $this->assertTrue(True);
-    }
+//    public function test_if_job_executes_without_exceptions()
+//    {
+//        $api2cart_demo_store_key = "ed58a22dfecb405a50ea3ea56979360d";
+//
+//        $job = new JobImportOrderApi2Cart(
+//            auth()->user(),
+//            $api2cart_demo_store_key
+//        );
+//
+//        $job->handle();
+//
+//        $this->assertTrue(True);
+//    }
 }
