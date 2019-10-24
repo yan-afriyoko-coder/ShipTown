@@ -2,12 +2,15 @@
 
 namespace Tests\Feature\api;
 
+use Tests\Feature\AuthorizedUserTestCase;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProductGetRouteTest extends TestCase
 {
+    use AuthorizedUserTestCase;
+
     /**
      * @return void
      */
