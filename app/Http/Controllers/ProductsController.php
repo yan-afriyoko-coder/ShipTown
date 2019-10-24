@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Log;
 
 class ProductsController extends Controller
 {
+    public function index(Request $request)
+    {
+        return Product::all();
+    }
+
     public function store(Request $request)
     {
         Log::debug('Received product update request', $request->all());
