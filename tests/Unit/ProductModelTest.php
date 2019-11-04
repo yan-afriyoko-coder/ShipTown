@@ -28,7 +28,7 @@ class ProductModelTest extends TestCase
 
         $product_after = $product_before->fresh();
 
-        $this->assertEquals(0, $product_before->quantity_available);
+        $this->assertEquals(0, $product_after->quantity_available);
     }
 
     protected function setUp(): void
