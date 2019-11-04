@@ -26,8 +26,15 @@ class Product extends Model
         'quantity_reserved' => 0,
     ];
 
-    public function getQuantityAvailableAttribute() {
-        return $this->quantity - $this->quantity_reserved;
+    public function getQuantityAvailableAttribute()
+    {
+        $quantity_available = $this->quantity - $this->quantity_reserved;
+
+        if ($quantity_available<0) {
+            return 0;
+        }
+
+        return $quantity_available;
     }
 
     public function __construct(array $attributes = [])
