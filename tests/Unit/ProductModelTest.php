@@ -14,6 +14,23 @@ use Illuminate\Support\Arr;
 
 class ProductModelTest extends TestCase
 {
+    public function test_if_quantity_available_below_0_not_allowed()
+    {
+        $product_before = Product::firstOrCreate(["sku" => '0123456']);
+
+        // reserve 1 more than actually in stock
+        // so quantity_available < 0
+        ProductManager::reserve(
+            "0123456",
+            $product_before->quantity + 1,
+            "ProductModeTest reservation"
+        );
+
+        $product_after = $product_before->fresh();
+
+        $this->assertEquals(0, $product_before->quantity_available);
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
