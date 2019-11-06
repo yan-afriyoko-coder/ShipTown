@@ -66,7 +66,7 @@ class SnsTopicController extends Controller
                     break;
                 default:
                     Log::critical("Could not publish message", ["code" => $e->getStatusCode(), "message" => $e->getMessage()]);
-                    return false;
+                    throw $e;
             }
 
         }
