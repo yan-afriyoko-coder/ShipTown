@@ -22,5 +22,9 @@
         "sass-loader": "^7.1.0",
         "vue": "^2.5.17",
         "vue-template-compiler": "^2.6.10"
+    },
+    "dependencies": {
+        "@handsontable/vue": "^4.1.1",
+        "handsontable": "^7.3.0"
     }
 }

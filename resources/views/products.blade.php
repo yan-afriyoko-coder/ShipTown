@@ -13,7 +13,8 @@
                             {{ session('status') }}
                         </div>
                     @endif
-
+                        <products-table></products-table>
+                        <br />
 
                 </div>
             </div>
@@ -21,3 +22,4 @@
     </div>
 </div>
 @endsection
+

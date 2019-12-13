@@ -51,6 +51,11 @@ Vue.component(
     require('./components/UserConfiguration.vue').default
 );
 
+Vue.component(
+    'products-table',
+    require('./components/Products.vue').default
+);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
