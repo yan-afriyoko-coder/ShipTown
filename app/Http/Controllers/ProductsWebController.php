@@ -19,6 +19,6 @@ class ProductsWebController extends Controller
 
     public function index(Request $request)
     {
-        return Product::paginate(10);
+        return view('products');
     }
 }
