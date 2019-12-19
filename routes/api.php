@@ -21,7 +21,7 @@ Route::middleware('auth:api')->group(function() {
     Route::post('products', 'ProductsController@store');
     Route::get('products', 'ProductsController@index');
 
-    Route::get("inventory", "InventoryController@show");
+    Route::get("inventory", "InventoryController@index");
 
     Route::get('orders', 'OrdersController@index');
     Route::post('orders', 'OrdersController@store');
