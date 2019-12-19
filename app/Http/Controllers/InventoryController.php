@@ -9,6 +9,6 @@ use Illuminate\Http\Request;
 class InventoryController extends Controller
 {
     public function index() {
-        return Product::all();
+        return Product::where("quantity_reserved", ">", 0)->get();
     }
 }
