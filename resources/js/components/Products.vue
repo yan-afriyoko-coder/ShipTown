@@ -6,8 +6,33 @@
     import { HotTable } from '@handsontable/vue';
 
     export default {
+        created: function() {
+            this.loadProductList();
+        },
+
+        methods: {
+            feedData: function(outputTo) {
+                axios({
+                    method:'get',
+                    url: '/api/inventory',
+                    mode: 'no-cors',
+                })
+                    .then(function(response) {
+                        outputTo = response['data'];
+                    })
+                    .catch(function (error) {
+                    });
+            },
+            loadProductList: function() {
+                this.feedData(this.products);
+            },
+
+        },
+
         data: function() {
             return {
+                api_url: "https://live.bellababy.hq.rmsapi.products.management/api/",
+                api_limit: 20,
                 data: [
                     ["164965","15cm stainless Steel milk pan","HARDWARE",1,7,6],
                     ["133423","Doorstopper white 5pcs","HARDWARE",2,3,1],
@@ -30,6 +55,7 @@
                 },
             };
         },
+
         components: {
             HotTable
         }
