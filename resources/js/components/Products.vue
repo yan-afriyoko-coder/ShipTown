@@ -11,22 +11,19 @@
         },
 
         methods: {
-            feedData: function(outputTo) {
+            feedData: function() {
                 axios({
                     method:'get',
                     url: '/api/inventory',
                     mode: 'no-cors',
                 })
-                    .then(function(response) {
-                        outputTo = response['data'];
-                    })
-                    .catch(function (error) {
-                    });
+                .then(function(response) {
+                    return response['data'];
+                })
             },
             loadProductList: function() {
-                this.feedData(this.products);
+                this.data = this.feedData();
             },
-
         },
 
         data: function() {
