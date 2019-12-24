@@ -14,23 +14,16 @@
             loadProductList: function() {
                 axios.get('/api/inventory')
                     .then(response => {
-
-                        const resultArray = [];
-
-                        response.data.forEach(function(record) {
-                            const result = [
-                                record["sku"], // sku
-                                record["name"], // product name
-                                record["category"], // category
-                                0, // TODO: quantity available web
-                                record["quantity_reserved"], // quantity reserved (on web orders)
-                                0, // TODO: quantity required from warehouse
+                        this.data = response.data.map(record => {
+                            return [
+                                record.sku,// sku
+                                record.name, // product name
+                                record.category, // category
+                                null, // TODO: quantity available web
+                                record.quantity_reserved, // quantity reserved (on web orders)
+                                null, // TODO: quantity required from warehouse
                             ];
-
-                            resultArray.push(result);
                         });
-
-                        this.data = resultArray;
                     });
             },
         },
@@ -40,7 +33,14 @@
                 data: null,
                 settings: {
                     licenseKey: 'non-commercial-and-evaluation',
-                    colHeaders: ["SKU", "Name", "Category", "Qty Avail (Web)", "Qty Ord (Web)", "Qty Req (WH)"],
+                    colHeaders: [
+                        "SKU",
+                        "Name",
+                        "Category",
+                        "Qty Avail (Web)",
+                        "Qty Ord (Web)",
+                        "Qty Req (WH)"
+                    ],
                     rowHeaders: false,
                 },
             };
