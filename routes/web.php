@@ -11,11 +11,14 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::middleware('auth:api')->group(function() {
+    Route::get('/', function () {
+        return view('welcome');
+    });
 });
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/settings', 'SettingsController@index')->name('settings');
 Route::get('/products', 'ProductsWebController@index')->name('products');
