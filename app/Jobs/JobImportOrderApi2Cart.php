@@ -86,6 +86,7 @@ class JobImportOrderApi2Cart implements ShouldQueue
 
                 $products_to_reserve[] = [
                     "sku" => $product["model"],
+                    "name" => $product["name"],
                     "quantity" => $product["quantity"],
                 ];
 
@@ -99,6 +100,7 @@ class JobImportOrderApi2Cart implements ShouldQueue
             ->update(["quantity_reserved" => 0]);
 
         foreach ($products_to_reserve as $product) {
+
             $aProduct = Product::withoutGlobalScope(AuthenticatedUserScope::class)
                 ->firstOrCreate([
                     "user_id" => $this->user->id,
