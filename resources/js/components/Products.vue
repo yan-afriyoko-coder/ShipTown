@@ -19,7 +19,7 @@
                                 record.sku,// sku
                                 record.name, // product name
                                 record.category, // category
-                                null, // TODO: quantity available web
+                                record.quantity, // quantity in stock
                                 record.quantity_reserved, // quantity reserved (on web orders)
                                 null, // TODO: quantity required from warehouse
                             ];
