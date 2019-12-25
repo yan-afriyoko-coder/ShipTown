@@ -102,7 +102,8 @@ class JobImportOrderApi2Cart implements ShouldQueue
             $aProduct = Product::withoutGlobalScope(AuthenticatedUserScope::class)
                 ->firstOrCreate([
                     "user_id" => $this->user->id,
-                    "sku" => $product["sku"]
+                    "sku" => $product["sku"],
+                    "name" => $product["name"]
                 ]);
 
             $aProduct->increment("quantity_reserved", $product["quantity"]);
