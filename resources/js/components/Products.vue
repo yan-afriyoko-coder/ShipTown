@@ -21,7 +21,7 @@
                                 record.category, // category
                                 record.quantity, // quantity in stock
                                 record.quantity_reserved, // quantity reserved (on web orders)
-                                null, // TODO: quantity required from warehouse
+                                record.quantity - record.quantity_reserved, // quantity required from warehouse
                             ];
                         });
                     });
