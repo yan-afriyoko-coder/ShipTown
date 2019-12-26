@@ -10,7 +10,7 @@ class InventoryController extends Controller
 {
     public function index() {
         return Product::where("quantity_reserved", ">", 0)
-            ->where("quantity", "<", "quantity_reserved")
+            ->whereRaw("(quantity < quantity_reserved)")
             ->get();
     }
 }
