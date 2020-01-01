@@ -47,8 +47,6 @@ class ProductEventsTest extends TestCase
 
 
         // Act
-        $product_new = new Product($product_data);
-
         $response = $this->json("POST", '/api/products', $product_data);
 
 
