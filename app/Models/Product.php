@@ -5,9 +5,12 @@ namespace App\Models;
 use App\Events\EventTypes;
 use App\Scopes\AuthenticatedUserScope;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Product extends Model
 {
+    use Notifiable;
+
     protected $fillable = [
         "sku",
         "name",
@@ -22,8 +25,28 @@ class Product extends Model
         "quantity_available"
     ];
 
+    // we use attributes to set default values
+    // we wont use database default values
+    // as this is then not populated
+    // correctly to events
     protected $attributes = [
+        'name' => '',
+        'price' => 0,
+        "sale_price" => 0,
+        "sale_price_start_date" => '2001-01-01 00:00:00',
+        "sale_price_end_date" => '2001-01-01 00:00:00',
+        "quantity" => 0,
         'quantity_reserved' => 0,
+    ];
+
+    protected $dates = [
+        'sale_price_start_date',
+        'sale_price_end_date'
+    ];
+
+    protected $dispatchesEvents = [
+        'created'  => \App\Events\ProductCreatedEvent::class,
+        'updated'  => \App\Events\ProductUpdatedEvent::class,
     ];
 
     public function getQuantityAvailableAttribute()
