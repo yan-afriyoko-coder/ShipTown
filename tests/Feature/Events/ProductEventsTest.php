@@ -60,4 +60,48 @@ class ProductEventsTest extends TestCase
         });
 
     }
+
+
+    /**
+     * Test ProductCreatedEvent
+     */
+    public function test_if_ProductUpdatedEvent_is_dispatched_with_required_fields()
+    {
+        // Assign
+        Event::fake();
+
+        $product_new = [
+            'sku' => 'test'
+        ];
+        $product_update = [
+            'sku' => 'test',
+            'price' => 1
+        ];
+
+        $required_fields = [
+            "sku",
+            "name",
+            "price",
+            "sale_price",
+            "sale_price_start_date",
+            "sale_price_end_date",
+            "quantity",
+            "quantity_reserved",
+            "quantity_available"
+        ];
+
+
+        // Act
+        $response_create = $this->json("POST", '/api/products', $product_new);
+        $response_update = $this->json("POST", '/api/products', $product_update);
+
+        // Assert
+        $response_create->assertStatus(200);
+        $response_update->assertStatus(200);
+
+        Event::assertDispatched(ProductUpdatedEvent::class, function (ProductUpdatedEvent $event) use ($required_fields) {
+            return Arr::has($event->product->toArray(), $required_fields);
+        });
+
+    }
 }
