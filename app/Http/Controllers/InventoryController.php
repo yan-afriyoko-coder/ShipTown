@@ -14,4 +14,8 @@ class InventoryController extends Controller
             ->whereRaw("(quantity < quantity_reserved)")
             ->get();
     }
+
+    public function store() {
+        return $this->respond_OK_200();
+    }
 }
