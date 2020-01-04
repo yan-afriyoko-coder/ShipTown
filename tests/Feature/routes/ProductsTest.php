@@ -3,6 +3,8 @@
 namespace Tests\Feature\routes;
 
 use App\User;
+use Doctrine\DBAL\Events;
+use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
 use Tests\ModelSample;
 use Tests\TestCase;
@@ -27,6 +29,8 @@ class ProductsTest extends TestCase
      */
     public function test_POST_route()
     {
+        Event::fake();
+
         $response = $this->post('api/products', ModelSample::PRODUCT)
             ->assertStatus(200)
             ->assertJson(['sku' => ModelSample::PRODUCT['sku']])
