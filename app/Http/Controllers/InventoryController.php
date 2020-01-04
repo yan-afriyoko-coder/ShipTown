@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Inventory;
 use App\Models\Product;
 use App\Scopes\AuthenticatedUserScope;
 use Illuminate\Http\Request;
@@ -9,7 +10,7 @@ use Illuminate\Http\Request;
 class InventoryController extends Controller
 {
     public function index() {
-        return Product::where("quantity_reserved", ">", 0)
+        return Inventory::where("quantity_reserved", ">", 0)
             ->whereRaw("(quantity < quantity_reserved)")
             ->get();
     }
