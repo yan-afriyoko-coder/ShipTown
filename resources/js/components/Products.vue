@@ -22,6 +22,7 @@
                                 record.quantity, // quantity in stock
                                 record.quantity_reserved, // quantity reserved (on web orders)
                                 record.quantity - record.quantity_reserved, // quantity required from warehouse
+                                'n/a', // quantity available in warehouse
                             ];
                         });
                     });
@@ -39,7 +40,8 @@
                         "Category",
                         "Qty Avail (Web)",
                         "Qty Ord (Web)",
-                        "Qty Req (WH)"
+                        "Qty Req (WH)",
+                        "Qty Avail (WH)"
                     ],
                     rowHeaders: false,
                 },
