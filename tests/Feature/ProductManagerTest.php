@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Managers\ProductManager;
 use App\User;
+use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
 use Tests\ModelSample;
 use Tests\TestCase;
@@ -28,6 +29,8 @@ class ProductManagerTest extends TestCase
      */
     public function test_if_reserves_correctly()
     {
+        Event::fake();
+
         $quantity_to_reserve = 10;
 
         $product_before = $this->json('POST', 'api/products', ModelSample::PRODUCT)
@@ -58,6 +61,8 @@ class ProductManagerTest extends TestCase
      */
     public function test_if_releases_quantity_correctly()
     {
+        Event::fake();
+
         $quantity_to_release = 10;
 
         $product_before = $this->json('POST', 'api/products', ModelSample::PRODUCT)
