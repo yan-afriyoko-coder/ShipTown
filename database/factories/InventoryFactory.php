@@ -3,13 +3,14 @@
 /* @var $factory \Illuminate\Database\Eloquent\Factory */
 
 use App\Models\Inventory;
+use App\Scopes\AuthenticatedUserScope;
 use Faker\Generator as Faker;
 
 $factory->define(Inventory::class, function (Faker $faker) {
     return [
-        'sku' => $faker->word,
         'location_id' => $faker->numberBetween(1,100),
-        'quantity' => $faker->randomNumber(),
-        'quantity_reserved' => $faker->randomNumber(),
+        'product_id' => \App\Models\Product::withoutGlobalScope(AuthenticatedUserScope::class)->inRandomOrder()->first()->id,
+        'quantity' => $faker->numberBetween(0,10000),
+        'quantity_reserved' => $faker->numberBetween(0, 10000),
     ];
 });

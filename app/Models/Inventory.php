@@ -6,7 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Inventory extends Model
 {
-    //
+    protected $fillable = [
+        'location_id',
+        'product_id',
+        'quantity',
+        'quantity_reserved'
+    ];
+
     protected $table = 'inventory';
 
     protected $appends = [
@@ -22,6 +28,11 @@ class Inventory extends Model
         }
 
         return $quantity_available;
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
     }
 
 }

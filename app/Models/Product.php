@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Events\EventTypes;
 use App\Scopes\AuthenticatedUserScope;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
@@ -12,6 +13,7 @@ class Product extends Model
     use Notifiable;
 
     protected $fillable = [
+        "user_id",
         "sku",
         "name",
         "price",
@@ -19,6 +21,7 @@ class Product extends Model
         "sale_price_start_date",
         "sale_price_end_date",
         "quantity",
+        "quantity_reserved"
     ];
 
     protected $appends = [
@@ -80,5 +83,15 @@ class Product extends Model
         self::updating(function($model) {
             event(EventTypes::PRODUCT_UPDATED, new EventTypes($model));
         });
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function inventory()
+    {
+        return $this->hasMany(Inventory::class);
     }
 }
