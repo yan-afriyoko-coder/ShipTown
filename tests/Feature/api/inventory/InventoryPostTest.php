@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\api\inventory;
 
+use App\Models\Inventory;
+use App\Models\Product;
 use App\User;
 use Laravel\Passport\Passport;
 use Mockery\Generator\StringManipulation\Pass\Pass;
@@ -21,5 +23,26 @@ class InventoryPostTest extends TestCase
         $response = $this->postJson('/api/inventory', []);
 
         $response->assertStatus(422);
+    }
+
+    public function test_quantity_update() {
+
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        $inventory = factory(Inventory::class)->make();
+
+        $product = factory(Product::class)->create();
+
+        $update = [
+            'sku' => $product->sku,
+            'quantity' => $inventory->quantity,
+            'quantity_reserved' => $inventory->quantity_reserved
+        ];
+
+        $response = $this->postJson('/api/inventory', $update);
+
+        $response->assertStatus(200);
     }
 }
