@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Listeners\PublishSnsMessage;
 use App\Models\Order;
 use App\Models\Product;
+use Illuminate\Support\Facades\Event;
 use Mockery\Generator\StringManipulation\Pass\Pass;
 use Tests\ModelSample;
 use Tests\TestCase;
@@ -87,6 +89,8 @@ class OrdersControllerTest extends TestCase
 
     public function test_orders_get_route() {
 
+        Event::fake();
+
         Passport::actingAs(
             factory(User::class)->create()
         );
@@ -97,6 +101,8 @@ class OrdersControllerTest extends TestCase
     }
 
     public function test_orders_create_and_delete_routes_for_authenticated_user () {
+
+        Event::fake();
 
         $data = [
             'order_number'      => '0123456789',

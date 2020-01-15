@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Support\Facades\Event;
 use Tests\ModelSample;
 use Tests\TestCase;
 use App\User;
@@ -14,6 +15,8 @@ class ProductsControllerTest extends TestCase
 
     public function test_products_route_authenticated_user ()
     {
+        Event::fake();
+
         Passport::actingAs(
             factory(User::class)->create()
         );
