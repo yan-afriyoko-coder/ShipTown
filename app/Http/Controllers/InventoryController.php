@@ -35,7 +35,17 @@ class InventoryController extends Controller
     }
 
     public function store(StoreInventoryRequest $request) {
-        $product = Product::query()->where('sku', '=', $request->sku);
+        $product = Product::query()->where('sku', '=', $request->sku)->first();
+
+        $update = $request->all();
+
+        $update['product_id'] = $product->id;
+
+        $inventory = Inventory::updateOrCreate([
+            "product_id" => $update['product_id']
+            ]
+        , $update);
+
         return $this->respond_OK_200();
     }
 }

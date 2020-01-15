@@ -37,6 +37,7 @@ class InventoryPostTest extends TestCase
 
         $update = [
             'sku' => $product->sku,
+            'location_id' => 0,
             'quantity' => $inventory->quantity,
             'quantity_reserved' => $inventory->quantity_reserved
         ];
