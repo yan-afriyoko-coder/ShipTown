@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreInventoryRequest;
 use App\Http\Resources\InventoryResource;
 use App\Http\Resources\InventoryResourceCollection;
 use App\Http\Resources\ProductResource;
@@ -9,6 +10,7 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Scopes\AuthenticatedUserScope;
 use Illuminate\Http\Request;
+use Illuminate\Session\Store;
 
 class InventoryController extends Controller
 {
@@ -32,7 +34,18 @@ class InventoryController extends Controller
 //            ->get();
     }
 
-    public function store() {
+    public function store(StoreInventoryRequest $request) {
+        $product = Product::query()->where('sku', '=', $request->sku)->first();
+
+        $update = $request->all();
+
+        $update['product_id'] = $product->id;
+
+        $inventory = Inventory::updateOrCreate([
+            "product_id" => $update['product_id']
+            ]
+        , $update);
+
         return $this->respond_OK_200();
     }
 }
