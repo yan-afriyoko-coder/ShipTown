@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreInventoryRequest;
 use App\Http\Resources\InventoryResource;
 use App\Http\Resources\InventoryResourceCollection;
 use App\Http\Resources\ProductResource;
@@ -9,6 +10,7 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Scopes\AuthenticatedUserScope;
 use Illuminate\Http\Request;
+use Illuminate\Session\Store;
 
 class InventoryController extends Controller
 {
@@ -32,7 +34,7 @@ class InventoryController extends Controller
 //            ->get();
     }
 
-    public function store() {
+    public function store(StoreInventoryRequest $request) {
         return $this->respond_OK_200();
     }
 }
