@@ -35,6 +35,7 @@ class InventoryController extends Controller
     }
 
     public function store(StoreInventoryRequest $request) {
+        $product = Product::query()->where('sku', '=', $request->sku);
         return $this->respond_OK_200();
     }
 }
