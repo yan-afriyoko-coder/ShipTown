@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\import\orders;
+namespace Tests\Feature;
 
 use App\Jobs\JobImportOrderApi2Cart;
 use Illuminate\Support\Facades\Queue;

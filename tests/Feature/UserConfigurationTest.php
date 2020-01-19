@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\routes\api\user;
+namespace Tests\Feature;
 
 use Tests\Feature\AuthorizedUserTestCase;
 use Tests\TestCase;

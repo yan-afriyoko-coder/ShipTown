@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Events;
+namespace Tests\Feature;
 
 
 use App\Events\EventTypes;

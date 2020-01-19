@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\routes;
+namespace Tests\Feature;
 
 use App\User;
 use Doctrine\DBAL\Events;
