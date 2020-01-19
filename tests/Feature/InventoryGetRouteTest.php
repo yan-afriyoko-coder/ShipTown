@@ -1,24 +1,23 @@
 <?php
 
-namespace Tests\Feature\web;
+namespace Tests\Feature;
 
 use Tests\Feature\AuthorizedUserTestCase;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ProductsRouteTest extends TestCase
+class InventoryGetRouteTest extends TestCase
 {
     use AuthorizedUserTestCase;
-
     /**
      * A basic feature test example.
      *
      * @return void
      */
-    public function test_if_products_route_works()
+    public function test_get_inventory_route()
     {
-        $response = $this->get('/products');
+        $response = $this->get('/api/inventory');
 
         $response->assertStatus(200);
     }

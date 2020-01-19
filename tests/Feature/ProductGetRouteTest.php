@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\api;
+namespace Tests\Feature;
 
 use Tests\Feature\AuthorizedUserTestCase;
 use Tests\ModelSample;
