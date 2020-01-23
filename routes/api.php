@@ -18,8 +18,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:api')->group(function() {
-    Route::post('products', 'ProductsController@store');
+    Route::get("user/configuration", "UserConfigurationController@show");
+    Route::post("user/configuration", "UserConfigurationController@store");
+
     Route::get('products', 'ProductsController@index');
+    Route::post('products', 'ProductsController@store');
 
     Route::get("inventory", "InventoryController@index");
     Route::post("inventory", "InventoryController@store");
@@ -30,8 +33,6 @@ Route::middleware('auth:api')->group(function() {
 
     Route::get("import/orders/api2cart", "ImportOrdersController@fromApi2Cart");
 
-    Route::get("user/configuration", "UserConfigurationController@show");
-    Route::post("user/configuration", "UserConfigurationController@store");
 });
 
 

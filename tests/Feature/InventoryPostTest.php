@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\api\inventory;
+namespace Tests\Feature;
 
 use App\Models\Inventory;
 use App\Models\Product;
