@@ -102,17 +102,14 @@ class JobImportOrderApi2Cart implements ShouldQueue
         foreach ($products_to_reserve as $product) {
 
             $aProduct = Product::withoutGlobalScope(AuthenticatedUserScope::class)
-                ->firstOrCreate(
-                    [
-                        "user_id" => $this->user->id,
-                        "sku" => $product["sku"]
-                    ],
-                    [
-                        "name" => $product["name"]
-                    ]
-                );
+                ->where("user_id", $this->user->id)
+                ->where("sku", $product["sku"])
+                ->first();
 
-            $aProduct->increment("quantity_reserved", $product["quantity"]);
+            if($aProduct) {
+                $aProduct->increment("quantity_reserved", $product["quantity"]);
+            }
+
         };
 
     }
