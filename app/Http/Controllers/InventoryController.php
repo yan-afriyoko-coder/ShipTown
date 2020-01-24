@@ -37,6 +37,10 @@ class InventoryController extends Controller
     public function store(StoreInventoryRequest $request) {
         $product = Product::query()->where('sku', '=', $request->sku)->first();
 
+        if(!$product) {
+            return $this->respond_NotFound("SKU not found!");
+        }
+
         $update = $request->all();
 
         $update['product_id'] = $product->id;
