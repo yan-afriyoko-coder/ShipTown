@@ -24,6 +24,17 @@ class DatabaseSeeder extends Seeder
         }
 
 
+        // for each user create sample product sku = 12345
+        User::all()->each(function (User $u) {
+
+            $product = factory(\App\Models\Product::class)
+                ->make(['sku' => '12345']);
+
+            $u->products()->save($product);
+
+        });
+
+
         // for each user create sample product list
         User::all()->each(function (User $u) {
 
