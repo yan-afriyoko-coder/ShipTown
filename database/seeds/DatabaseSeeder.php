@@ -60,21 +60,52 @@ class DatabaseSeeder extends Seeder
         });
 
 
-        // create inventory entries for random products
-        factory(\App\Models\Inventory::class, 1500)
-            ->create([
-                'location_id' => 99
-            ]);
+        \App\Models\Product::withoutGlobalScope(AuthenticatedUserScope::class)
+            ->get()
+            ->each(function (\App\Models\Product $product) {
+                factory(\App\Models\Inventory::class)
+                    ->create([
+                        'product_id' => $product->id,
+                        'location_id' => 1
+                    ]);
+            });
 
-        // create inventory entries for random products
-        factory(\App\Models\Inventory::class, 1500)
-            ->create([
-                'location_id' => 100
-            ]);
+        \App\Models\Product::withoutGlobalScope(AuthenticatedUserScope::class)
+            ->get()
+            ->each(function (\App\Models\Product $product) {
+                factory(\App\Models\Inventory::class)
+                    ->create([
+                        'product_id' => $product->id,
+                        'location_id' => 99
+                    ]);
+            });
 
-        // create inventory entries for random products
-        factory(\App\Models\Inventory::class, 1500)
-            ->create();
+        \App\Models\Product::withoutGlobalScope(AuthenticatedUserScope::class)
+            ->get()
+            ->each(function (\App\Models\Product $product) {
+                factory(\App\Models\Inventory::class)
+                    ->create([
+                        'product_id' => $product->id,
+                        'location_id' => 100
+                    ]);
+            });
+
+//
+//        // create inventory entries for random products
+//        factory(\App\Models\Inventory::class, 1500)
+//            ->create([
+//                'location_id' => 99
+//            ]);
+//
+//        // create inventory entries for random products
+//        factory(\App\Models\Inventory::class, 1500)
+//            ->create([
+//                'location_id' => 100
+//            ]);
+//
+//        // create inventory entries for random products
+//        factory(\App\Models\Inventory::class, 1500)
+//            ->create();
 
 
         // $this->call(UsersTableSeeder::class);
