@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "354fc02826df4b15631494d911f3c157",
+    "content-hash": "5517cc5574e4b216d0431fa12b104fe9",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -1179,6 +1179,55 @@
                 "psr-7"
             ],
             "time": "2018-07-31T19:32:56+00:00"
+        },
+        {
+            "name": "hulkur/laravel-hasmany-keyby",
+            "version": "1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hulkur/laravel-hasmany-keyby.git",
+                "reference": "cd9e5520e0ba56af1522179023276ee2d9e6317c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hulkur/laravel-hasmany-keyby/zipball/cd9e5520e0ba56af1522179023276ee2d9e6317c",
+                "reference": "cd9e5520e0ba56af1522179023276ee2d9e6317c",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "5.7.*|5.8.*|^6.0",
+                "php": "^7.2"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.2",
+                "phpunit/phpunit": "^7.5|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Hulkur\\HasManyKeyBy\\ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Hulkur\\HasManyKeyBy\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jaanus Vapper",
+                    "email": "hullkuri@gmail.com"
+                }
+            ],
+            "description": "Add possibility to have related models in many-to-many relationship attached to the parent model by defined key values.",
+            "homepage": "https://github.com/hulkur/laravel-hasmany-keyby",
+            "time": "2019-09-09T13:03:58+00:00"
         },
         {
             "name": "jakub-onderka/php-console-color",
