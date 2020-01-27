@@ -90,24 +90,6 @@ class DatabaseSeeder extends Seeder
                     ]);
             });
 
-//
-//        // create inventory entries for random products
-//        factory(\App\Models\Inventory::class, 1500)
-//            ->create([
-//                'location_id' => 99
-//            ]);
-//
-//        // create inventory entries for random products
-//        factory(\App\Models\Inventory::class, 1500)
-//            ->create([
-//                'location_id' => 100
-//            ]);
-//
-//        // create inventory entries for random products
-//        factory(\App\Models\Inventory::class, 1500)
-//            ->create();
-
-
         // $this->call(UsersTableSeeder::class);
     }
 }
