@@ -5,12 +5,13 @@ namespace App\Models;
 use App\Events\EventTypes;
 use App\Scopes\AuthenticatedUserScope;
 use App\User;
+use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
 class Product extends Model
 {
-    use Notifiable;
+    use Notifiable, HasManyKeyByRelationship;
 
     protected $fillable = [
         "user_id",
@@ -39,7 +40,7 @@ class Product extends Model
         "sale_price_start_date" => '2001-01-01 00:00:00',
         "sale_price_end_date" => '2001-01-01 00:00:00',
         "quantity" => 0,
-        'quantity_reserved' => 0,
+        'quantity_reserved' => 0
     ];
 
     protected $dates = [
@@ -92,6 +93,7 @@ class Product extends Model
 
     public function inventory()
     {
-        return $this->hasMany(Inventory::class);
+        return $this->hasMany(Inventory::class)
+            ->keyBy('location_id');
     }
 }
