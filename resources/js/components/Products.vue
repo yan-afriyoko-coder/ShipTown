@@ -14,31 +14,21 @@
             loadProductList: function() {
                 axios.get('/api/inventory')
                     .then(response => {
-                        var data = response.data.data;
-
-                        data = data.filter(record => record.inventory.length > 0);
-
-                        data = data.map(record => {
-                            const inventory_list = record.inventory;
-                            record['inventory'] = [];
-
-                            record['inventory']['99'] = inventory_list.filter(inventory => inventory.location_id = 99)[0];
-                            record['inventory']['100'] = inventory_list.filter(inventory => inventory.location_id = 100)[0];
-
-                            return record;
-                        });
+                        var data = response.data;
 
                         data = data.map(record => {
                             return [
                                 record.sku,// sku
                                 record.name, // product name
                                 record.category, // category
+                                record.inventory['100'] ? record.inventory['100'].quantity: 0, // quantity on hand in web
+                                record.inventory['100'] ? record.inventory['100'].quantity_reserved: 0, // quantity available in web
                                 record.inventory['100'] ? record.inventory['100'].quantity_available: 0, // quantity available in web
-                                record.inventory['100'] ? record.inventory['100'].quantity_reserved: 0, // quantity ord (web)
                                 record.inventory['100'] ? record.inventory['100'].quantity - record.inventory['100'].quantity_reserved:'', // quantity required from warehouse
                                 record.inventory['99'] ? record.inventory['99'].quantity_available:'', // quantity available in warehous
                             ];
                         });
+
                         this.data = data;
                     });
             },
@@ -53,10 +43,11 @@
                         "SKU",
                         "Name",
                         "Category",
+                        "Qty On Hand (Web)",
+                        "Qty Reserved (Web)",
                         "Qty Avail (Web)",
-                        "Qty Ord (Web)",
-                        "Qty Req (WH)",
-                        "Qty Avail (WH)"
+                        "Qty Req",
+                        "Qty Avail (WH)",
                     ],
                     rowHeaders: false,
                 },
