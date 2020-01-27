@@ -16,25 +16,14 @@ class InventoryController extends Controller
 {
     public function index() {
 
-        return ProductResource::collection(
-            Product::query()
-                ->limit(50)
-                ->get()
-                ->load('inventory')
-        );
+        return Product::query()
+            ->get()
+            ->load('inventory');
 
-        return InventoryResource::collection(
-            Inventory::all()
-//                ->load('product')
-        );
-//        return Inventory::query()
-//            //->with(Product::class)
-//            //->where("quantity_reserved", ">", 0)
-//            //->whereRaw("(quantity < quantity_reserved)")
-//            ->get();
     }
 
     public function store(StoreInventoryRequest $request) {
+
         $product = Product::query()->where('sku', '=', $request->sku)->first();
 
         if(!$product) {
