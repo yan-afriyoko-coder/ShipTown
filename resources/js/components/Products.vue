@@ -18,9 +18,8 @@
 
                         data = data.map(record => {
 
-                            let quantity_on_hand_rms_web = record.inventory['100'] ? record.inventory['100'].quantity: 0;
-                            let quantity_reserved_web = record.inventory['999'] ? record.inventory['999'].quantity_reserved: 0;
                             let quantity_available_rms_web = record.inventory['100'] ? record.inventory['100'].quantity_available: 0;
+                            let quantity_reserved_web = record.inventory['999'] ? record.inventory['999'].quantity_reserved: 0;
                             let quantity_required = quantity_reserved_web > quantity_available_rms_web ? quantity_reserved_web - quantity_available_rms_web: 0;
                             let quantity_available_warehouse = record.inventory['99'] ? record.inventory['99'].quantity_available: 0;
 
@@ -28,9 +27,8 @@
                                 record.sku,
                                 record.name,
                                 record.category,
-                                quantity_on_hand_rms_web,
-                                quantity_reserved_web,
                                 quantity_available_rms_web,
+                                quantity_reserved_web,
                                 quantity_required,
                                 quantity_available_warehouse,
                             ];
@@ -55,11 +53,10 @@
                         "SKU",
                         "Name",
                         "Category",
-                        "Qty On Hand (Web)",
+                        "Qty Avail (RMS Web)",
                         "Qty Reserved (Web)",
-                        "Qty Avail (Web)",
-                        "Qty Req",
-                        "Qty Avail (WH)",
+                        "Qty Required",
+                        "Qty Avail (RMS WH)",
                     ],
                     rowHeaders: false,
                 },
