@@ -36,7 +36,7 @@
                         });
 
                         data = data.filter(record => {
-                            return (record[6] > 0) && (record[7] > 0);
+                            return (record[5] > 0) && (record[6] > 0);
                         });
 
                         this.data = data;
