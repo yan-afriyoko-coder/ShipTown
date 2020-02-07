@@ -83,12 +83,12 @@ class JobImportOrderApi2Cart implements ShouldQueue
 
         foreach ($orders as $order) {
 
-            foreach ($order["order_products"] as $product) {
+            foreach ($order["order_products"] as $product_to_reserve) {
 
                 $products_to_reserve[] = [
-                    "sku" => $product["model"],
-                    "name" => $product["name"],
-                    "quantity" => $product["quantity"],
+                    "sku" => $product_to_reserve["model"],
+                    "name" => $product_to_reserve["name"],
+                    "quantity" => $product_to_reserve["quantity"],
                 ];
 
             }
@@ -106,22 +106,22 @@ class JobImportOrderApi2Cart implements ShouldQueue
                 "quantity_reserved" => 0
             ]);
 
-        foreach ($products_to_reserve as $product) {
+        foreach ($products_to_reserve as $product_to_reserve) {
 
-            $aProduct = Product::withoutGlobalScope(AuthenticatedUserScope::class)
+            $product = Product::withoutGlobalScope(AuthenticatedUserScope::class)
                 ->where("user_id", $this->user->id)
-                ->where("sku", $product["sku"])
+                ->where("sku", $product_to_reserve["sku"])
                 ->first();
 
-            if($aProduct) {
-                $aProduct->increment("quantity_reserved", $product["quantity"]);
+            if($product) {
+                $product->increment("quantity_reserved", $product_to_reserve["quantity"]);
 
                 $inventory = Inventory::query()->firstOrCreate([
                     'product_id' => $product->id,
                     'location_id' => 999
                 ]);
 
-                $inventory->increment("quantity_reserved", $product["quantity"]);
+                $inventory->increment("quantity_reserved", $product_to_reserve["quantity"]);
             }
 
         };
