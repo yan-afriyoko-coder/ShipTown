@@ -16,9 +16,16 @@ class InventoryController extends Controller
 {
     public function index() {
 
-        return Product::query()
+        return Product::query()->withoutGlobalScope(AuthenticatedUserScope::class)
+            ->whereHas('inventory', function($query) {
+                $query->where('quantity_reserved', '>', 0);
+            })
             ->get()
             ->load('inventory');
+
+//        return Product::query()
+//            ->get()
+//            ->load('inventory');
 
     }
 
