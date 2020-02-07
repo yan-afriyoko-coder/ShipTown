@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Exceptions\Api2CartKeyNotSetException;
+use App\Models\Inventory;
 use App\Models\Product;
 use App\Scopes\AuthenticatedUserScope;
 use Illuminate\Bus\Queueable;
@@ -99,6 +100,12 @@ class JobImportOrderApi2Cart implements ShouldQueue
             ->where("quantity_reserved", ">", 0)
             ->update(["quantity_reserved" => 0]);
 
+        Inventory::query()
+            ->where('location_id','=',999)
+            ->update([
+                "quantity_reserved" => 0
+            ]);
+
         foreach ($products_to_reserve as $product) {
 
             $aProduct = Product::withoutGlobalScope(AuthenticatedUserScope::class)
@@ -108,6 +115,13 @@ class JobImportOrderApi2Cart implements ShouldQueue
 
             if($aProduct) {
                 $aProduct->increment("quantity_reserved", $product["quantity"]);
+
+                $inventory = Inventory::query()->firstOrCreate([
+                    'product_id' => $product->id,
+                    'location_id' => 999
+                ]);
+
+                $inventory->increment("quantity_reserved", $product["quantity"]);
             }
 
         };
