@@ -22,9 +22,9 @@
                                 record.name, // product name
                                 record.category, // category
                                 record.inventory['100'] ? record.inventory['100'].quantity: 0, // quantity on hand in web
-                                record.inventory['100'] ? record.inventory['100'].quantity_reserved: 0, // quantity available in web
+                                record.inventory['999'] ? record.inventory['999'].quantity_reserved: 0, // quantity reserved in web
                                 record.inventory['100'] ? record.inventory['100'].quantity_available: 0, // quantity available in web
-                                record.inventory['100'] ? record.inventory['100'].quantity - record.inventory['100'].quantity_reserved:'', // quantity required from warehouse
+                                record.inventory['100'] ? record.inventory['100'].quantity - record.inventory['999'].quantity_reserved:'', // quantity required from warehouse
                                 record.inventory['99'] ? record.inventory['99'].quantity_available:'', // quantity available in warehous
                             ];
                         });
