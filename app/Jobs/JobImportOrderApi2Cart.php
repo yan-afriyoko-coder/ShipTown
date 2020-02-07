@@ -117,7 +117,7 @@ class JobImportOrderApi2Cart implements ShouldQueue
                 $aProduct->increment("quantity_reserved", $product["quantity"]);
 
                 $inventory = Inventory::query()->firstOrCreate([
-                    'product_id' => $product->id,
+                    'product_id' => $aProduct->id,
                     'location_id' => 999
                 ]);
 
