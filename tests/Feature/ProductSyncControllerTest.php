@@ -15,6 +15,6 @@ class ProductSyncControllerTest extends TestCase
     {
         $response = $this->get('/products/123456/sync');
 
-        $response->assertStatus(200);
+        $response->assertStatus(302);
     }
 }
