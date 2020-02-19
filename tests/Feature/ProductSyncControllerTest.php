@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Product;
 use App\User;
 use Faker\Factory;
 use Laravel\Passport\Passport;
@@ -12,7 +13,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProductSyncControllerTest extends TestCase
 {
-    public function test_if_404_returned_when_product_not_found
+    public function test_if_404_returned_when_product_not_found()
     {
         Passport::actingAs(
             factory(User::class)->make()
@@ -25,7 +26,7 @@ class ProductSyncControllerTest extends TestCase
 
     public function test_route()
     {
-        $response = $this->get('/products/123456/sync');
+        $response = $this->get('/products/0/sync');
 
         // assert route is protected
         $response->assertStatus(302);
@@ -34,10 +35,12 @@ class ProductSyncControllerTest extends TestCase
     public function test_route_authenticated()
     {
         Passport::actingAs(
-            factory(User::class)->make()
+            factory(User::class)->create()
         );
 
-        $response = $this->get("/products/123456/sync");
+        $product = \factory(Product::class)->create();
+
+        $response = $this->get("/products/$product->sku/sync");
 
         $response->assertStatus(200);
     }
