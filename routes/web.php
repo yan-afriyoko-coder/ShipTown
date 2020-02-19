@@ -17,6 +17,10 @@ Route::middleware('auth:api')->group(function() {
         return view('welcome');
     });
 
+});
+
+Route::middleware('auth')->group(function () {
+
     Route::get('/products/{sku}/sync', 'ProductSyncController@index')->name('productsSync');
 
 });
