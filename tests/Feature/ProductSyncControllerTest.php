@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\User;
 use Faker\Factory;
 use Laravel\Passport\Passport;
 use Mockery\Generator\StringManipulation\Pass\Pass;
@@ -24,7 +25,9 @@ class ProductSyncControllerTest extends TestCase
 
     public function test_route_authenticated()
     {
-        Passport::actingAs(factory()->make());
+        Passport::actingAs(
+            factory(User::class)->make()
+        );
 
         $response = $this->get("/products/123456/sync");
 
