@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Aws\Exception\AwsException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -91,7 +92,7 @@ class SnsTopicController extends Controller
 
     private function get_user_specific_topic_name(): string
     {
-        $userID = auth('api')->user()->id;
+        $userID = auth()->user()->id;
 
         return $this->_topicPrefix."_user".$userID;
     }
