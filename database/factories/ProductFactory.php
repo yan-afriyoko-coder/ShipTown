@@ -7,7 +7,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Product::class, function (Faker $faker) {
     return [
-        'user_id' => 1,
+        'user_id' => \App\User::all()->random()->user_id,
         'sku' => $faker->unique()->randomNumber(6),
         'name' => $faker->title,
         'price' => $faker->randomFloat(2, 0, 1000),
