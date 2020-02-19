@@ -30,6 +30,7 @@ class ProductSyncControllerTest extends TestCase
 
         // assert route is protected
         $response->assertStatus(302);
+
     }
 
     public function test_route_authenticated()
@@ -42,6 +43,6 @@ class ProductSyncControllerTest extends TestCase
 
         $response = $this->get("/products/$product->sku/sync");
 
-        $response->assertStatus(200);
+        $response->assertOk();
     }
 }
