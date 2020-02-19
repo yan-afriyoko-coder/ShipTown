@@ -15,6 +15,7 @@ class ProductSyncControllerTest extends TestCase
     {
         $response = $this->get('/products/123456/sync');
 
+        // assert route is protected
         $response->assertStatus(302);
     }
 }
