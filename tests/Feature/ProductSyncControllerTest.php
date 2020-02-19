@@ -12,9 +12,17 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProductSyncControllerTest extends TestCase
 {
-    /**
-     * @return void
-     */
+    public function test_if_404_returned_when_product_not_found
+    {
+        Passport::actingAs(
+            factory(User::class)->make()
+        );
+
+        $response = $this->get("/products/0/sync");
+
+        $response->assertNotFound();
+    }
+
     public function test_route()
     {
         $response = $this->get('/products/123456/sync');
