@@ -11,14 +11,14 @@ class ProductsController extends Controller
 {
     public function index(Request $request)
     {
-        return Product::paginate(10);
+        return Product::query()->paginate(10);
     }
 
     public function store(Request $request)
     {
         Log::debug('Received product update request', $request->all());
 
-        $product = Product::updateOrCreate(
+        $product = Product::query()->updateOrCreate(
             ['sku' => $request->sku],
             $request->all()
         );
