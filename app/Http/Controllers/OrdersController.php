@@ -21,7 +21,7 @@ class OrdersController extends Controller
 
     public function store(StoreOrderRequest $request)
     {
-        $order = Order::updateOrCreate(
+        $order = Order::query()->updateOrCreate(
             ['order_number' => $request->order_number],
             ['order_as_json' => $request->all()]);
 
@@ -31,7 +31,7 @@ class OrdersController extends Controller
     public function destroy($order_number)
     {
         try {
-            $order = Order::where('order_number', $order_number)->firstOrFail();
+            $order = Order::query()->where('order_number', $order_number)->firstOrFail();
         }
         catch (ModelNotFoundException $e)
         {
