@@ -25,4 +25,15 @@ class ProductsController extends Controller
 
         return response()->json($product, 200);
     }
+
+    public function publish($sku) {
+
+    $product = Product::query()->where("sku", $sku)->firstOrFail();
+
+    $sns = new SnsTopicController("products");
+
+    $sns->publish_message(json_encode($product->toArray()));
+
+    $this->respond_OK_200();
+}
 }

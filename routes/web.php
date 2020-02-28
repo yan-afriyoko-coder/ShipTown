@@ -25,7 +25,7 @@ Route::middleware('auth')->group(function () {
 
     Route::view('/products', 'products')->name('products');
 
-    Route::get('/products/{sku}/sync', 'ProductSyncController@index')->name('productsSync');
+    Route::get('/products/{sku}/sync', 'ProductsController@publish')->name('productsSync');
 
 });
 
