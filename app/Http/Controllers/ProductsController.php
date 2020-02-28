@@ -11,18 +11,29 @@ class ProductsController extends Controller
 {
     public function index(Request $request)
     {
-        return Product::paginate(10);
+        return Product::query()->paginate(10);
     }
 
     public function store(Request $request)
     {
         Log::debug('Received product update request', $request->all());
 
-        $product = Product::updateOrCreate(
+        $product = Product::query()->updateOrCreate(
             ['sku' => $request->sku],
             $request->all()
         );
 
         return response()->json($product, 200);
+    }
+
+    public function publish($sku)
+    {
+        $product = Product::query()->where("sku", $sku)->firstOrFail();
+
+        $sns = new SnsTopicController("products");
+
+        $sns->publish_message(json_encode($product->toArray()));
+
+        $this->respond_OK_200();
     }
 }

@@ -9,7 +9,7 @@ class UserConfigurationController extends Controller
 {
     public function show()
     {
-        $config = UserConfiguration::firstOrCreate([], ["config" => "{}"]);
+        $config = UserConfiguration::query()->firstOrCreate([], ["config" => "{}"]);
 
         $config["config"] = json_decode($config["config"]);
 
@@ -22,7 +22,7 @@ class UserConfigurationController extends Controller
             "config" => $request->getContent()
         ];
 
-        $config = UserConfiguration::updateOrCreate([], $data);
+        $config = UserConfiguration::query()->updateOrCreate([], $data);
 
         $config["config"] = json_decode($config["config"]);
 

@@ -23,6 +23,7 @@ Route::middleware('auth:api')->group(function() {
 
     Route::get('products', 'ProductsController@index');
     Route::post('products', 'ProductsController@store');
+    Route::get('products/{sku}/sync', 'ProductsController@publish');
 
     Route::get("inventory", "InventoryController@index");
     Route::post("inventory", "InventoryController@store");
@@ -31,7 +32,7 @@ Route::middleware('auth:api')->group(function() {
     Route::post('orders', 'OrdersController@store');
     Route::delete('orders/{order_number}', 'OrdersController@destroy');
 
-    Route::get("import/orders/api2cart", "ImportOrdersController@fromApi2Cart");
+    Route::get("import/orders/api2cart", "OrdersController@importFromApi2Cart");
 
 });
 

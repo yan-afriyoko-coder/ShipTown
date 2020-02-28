@@ -14,23 +14,18 @@ use Illuminate\Session\Store;
 
 class InventoryController extends Controller
 {
-    public function index() {
-
+    public function index()
+    {
         return Product::query()->withoutGlobalScope(AuthenticatedUserScope::class)
             ->whereHas('inventory', function($query) {
                 $query->where('quantity_reserved', '>', 0);
             })
             ->get()
             ->load('inventory');
-
-//        return Product::query()
-//            ->get()
-//            ->load('inventory');
-
     }
 
-    public function store(StoreInventoryRequest $request) {
-
+    public function store(StoreInventoryRequest $request)
+    {
         $product = Product::query()->where('sku', '=', $request->sku)->first();
 
         if(!$product) {

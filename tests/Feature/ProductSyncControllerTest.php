@@ -19,14 +19,14 @@ class ProductSyncControllerTest extends TestCase
             factory(User::class)->make()
         );
 
-        $response = $this->get("/products/0/sync");
+        $response = $this->get("api/products/0/sync");
 
         $response->assertNotFound();
     }
 
     public function test_route()
     {
-        $response = $this->get('/products/0/sync');
+        $response = $this->get('api/products/0/sync');
 
         // assert route is protected
         $response->assertStatus(302);
@@ -41,7 +41,7 @@ class ProductSyncControllerTest extends TestCase
 
         $product = \factory(Product::class)->create();
 
-        $response = $this->get("/products/$product->sku/sync");
+        $response = $this->get("api/products/$product->sku/sync");
 
         $response->assertOk();
     }

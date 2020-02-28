@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Events\EventTypes;
 use App\Http\Requests\DeleteOrderRequest;
 use App\Http\Requests\StoreOrderRequest;
+use App\Jobs\JobImportOrderApi2Cart;
+use App\Managers\UserConfigurationManager;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -19,7 +21,7 @@ class OrdersController extends Controller
 
     public function store(StoreOrderRequest $request)
     {
-        $order = Order::updateOrCreate(
+        $order = Order::query()->updateOrCreate(
             ['order_number' => $request->order_number],
             ['order_as_json' => $request->all()]);
 
@@ -29,7 +31,7 @@ class OrdersController extends Controller
     public function destroy($order_number)
     {
         try {
-            $order = Order::where('order_number', $order_number)->firstOrFail();
+            $order = Order::query()->where('order_number', $order_number)->firstOrFail();
         }
         catch (ModelNotFoundException $e)
         {
@@ -41,6 +43,24 @@ class OrdersController extends Controller
        event(EventTypes::ORDER_DELETED, new EventTypes($order));
 
        return $this->respond_OK_200();
+    }
+
+    public function importFromApi2Cart()
+    {
+        $user_id = auth()->id();
+
+        $api2cart_store_key = UserConfigurationManager::getValue("api2cart_store_key", $user_id);
+
+        JobImportOrderApi2Cart::dispatch(auth()->user(), $api2cart_store_key);
+
+        info('Import Order from api2cart dispatched');
+
+        $responseText = [
+            "message" => "",
+            "error_id" => 0,
+        ];
+
+        return response()->json($responseText,200);
     }
 
 }

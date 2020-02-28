@@ -21,7 +21,9 @@ Route::middleware('auth:api')->group(function() {
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/products/{sku}/sync', 'ProductSyncController@index')->name('productsSync');
+    Route::view('/settings', 'settings')->name('settings');
+
+    Route::view('/products', 'products')->name('products');
 
 });
 
@@ -29,6 +31,4 @@ Auth::routes();
 
 
 
-Route::get('/settings', 'SettingsController@index')->name('settings');
-Route::get('/products', 'ProductsWebController@index')->name('products');
 
