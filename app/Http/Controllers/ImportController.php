@@ -11,9 +11,9 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
 
-class ImportOrdersController extends Controller
+class ImportController extends Controller
 {
-    public function fromApi2Cart()
+    public function orders_fromApi2Cart()
     {
         $user_id = auth()->id();
 
