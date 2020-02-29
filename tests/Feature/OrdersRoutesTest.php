@@ -13,7 +13,7 @@ use App\User;
 use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class OrdersControllerTest extends TestCase
+class OrdersRoutesTest extends TestCase
 {
     use RefreshDatabase;
 
