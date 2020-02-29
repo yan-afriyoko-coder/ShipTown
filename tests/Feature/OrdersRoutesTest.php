@@ -2,10 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Jobs\JobImportOrderApi2Cart;
 use App\Listeners\PublishSnsMessage;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Queue;
 use Mockery\Generator\StringManipulation\Pass\Pass;
 use Tests\ModelSample;
 use Tests\TestCase;
@@ -16,6 +18,24 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class OrdersRoutesTest extends TestCase
 {
     use RefreshDatabase;
+
+    /**
+     * @return void
+     */
+    public function test_if_job_is_pushed_to_queue()
+    {
+        Queue::fake();
+
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        $response = $this->get('/api/import/orders/api2cart');
+
+        $response->assertStatus(200);
+
+        Queue::assertPushed(JobImportOrderApi2Cart::class);
+    }
 
     public function test_order_update () {
 
