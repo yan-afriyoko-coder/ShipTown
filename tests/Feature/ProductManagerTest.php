@@ -13,15 +13,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProductManagerTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        Passport::actingAs(
-            factory(User::class)->create()
-        );
-    }
-
     /**
      * A basic feature test example.
      *
@@ -29,6 +20,10 @@ class ProductManagerTest extends TestCase
      */
     public function test_if_reserves_correctly()
     {
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
         Event::fake();
 
         $quantity_to_reserve = 10;
@@ -61,6 +56,10 @@ class ProductManagerTest extends TestCase
      */
     public function test_if_releases_quantity_correctly()
     {
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
         Event::fake();
 
         $quantity_to_release = 10;
