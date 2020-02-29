@@ -27,7 +27,7 @@ class PublishSnsMessage
 
         //products
         $events->listen('eloquent.created: App\Models\Product','App\Listeners\PublishSnsMessage@on_product_created');
-        $events->listen(EventTypes::PRODUCT_UPDATED,'App\Listeners\PublishSnsMessage@on_product_updated');
+        $events->listen('eloquent.updated: App\Models\Product','App\Listeners\PublishSnsMessage@on_product_updated');
     }
 
     /**
@@ -44,11 +44,11 @@ class PublishSnsMessage
     }
 
     /**
-     * @param EventTypes $event
+     * @param Product $product
      */
-    public function on_product_updated(EventTypes $event)
+    public function on_product_updated(Product $product)
     {
-        $this->publishMessage($event,'products');
+        $this->publishMessageArray($product->toArray(),'products');
     }
 
     /**

@@ -48,10 +48,6 @@ class Product extends Model
         'sale_price_end_date'
     ];
 
-    protected $dispatchesEvents = [
-        'updated'  => \App\Events\ProductUpdatedEvent::class,
-    ];
-
     public function getQuantityAvailableAttribute()
     {
         $quantity_available = $this->quantity - $this->quantity_reserved;
