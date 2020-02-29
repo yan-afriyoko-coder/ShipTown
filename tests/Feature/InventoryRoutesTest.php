@@ -30,6 +30,16 @@ class InventoryRoutesTest extends TestCase
         $response->assertStatus(200);
     }
 
+    /**
+     * @return void
+     */
+    public function test_if_post_route_is_protected()
+    {
+        $response = $this->post('api/inventory');
+
+        $response->assertStatus(302);
+    }
+
     public function test_if_cant_post_without_data()
     {
         Passport::actingAs(
