@@ -3,16 +3,15 @@
 namespace Tests\Feature;
 
 use App\Jobs\JobImportOrderApi2Cart;
+use App\User;
 use Illuminate\Support\Facades\Queue;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ImportOrdersControllerTest extends TestCase
 {
-
-    use AuthorizedUserTestCase;
-
     /**
      * A basic feature test example.
      *
@@ -21,6 +20,10 @@ class ImportOrdersControllerTest extends TestCase
     public function test_if_job_is_pushed_to_queue()
     {
         Queue::fake();
+
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
 
         $response = $this->get('/api/import/orders/api2cart');
 
