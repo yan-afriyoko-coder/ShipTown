@@ -71,14 +71,6 @@ class Product extends Model
         parent::boot();
 
         static::addGlobalScope(new AuthenticatedUserScope());
-
-        self::created(function($model) {
-            event(EventTypes::PRODUCT_CREATED, new EventTypes($model));
-        });
-
-        self::updating(function($model) {
-            event(EventTypes::PRODUCT_UPDATED, new EventTypes($model));
-        });
     }
 
     public function user()

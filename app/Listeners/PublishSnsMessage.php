@@ -2,8 +2,8 @@
 
 namespace App\Listeners;
 
-use App\Events\EventTypes;
 use App\Http\Controllers\SnsTopicController;
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Queue\InteractsWithQueue;
@@ -23,19 +23,16 @@ class PublishSnsMessage
      */
     public function subscribe($events)
     {
-        $events->listen(EventTypes::ORDER_CREATED,'App\Listeners\PublishSnsMessage@on_order_created');
+        $events->listen('eloquent.created: App\Models\Order','App\Listeners\PublishSnsMessage@on_order_created');
 
         //products
         $events->listen('eloquent.created: App\Models\Product','App\Listeners\PublishSnsMessage@on_product_created');
         $events->listen('eloquent.updated: App\Models\Product','App\Listeners\PublishSnsMessage@on_product_updated');
     }
 
-    /**
-     * @param EventTypes $event
-     */
-    public function on_order_created(EventTypes $event)
+    public function on_order_created(Order $order)
     {
-        $this->publishMessage($event, "orders");
+        $this->publishMessageArray($order->toArray(), "orders");
     }
 
     public function on_product_created(Product $product)
