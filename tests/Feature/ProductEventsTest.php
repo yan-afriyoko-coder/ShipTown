@@ -57,8 +57,8 @@ class ProductEventsTest extends TestCase
         // Assert
         $response->assertStatus(200);
 
-        Event::assertDispatched(ProductCreatedEvent::class, function (ProductCreatedEvent $event) {
-            return Arr::has($event->product->toArray(), self::REQUIRED_FIELDS);
+        Event::assertDispatched('eloquent.created: App\Models\Product', function ($event, Product $product) {
+            return Arr::has($product->toArray(), self::REQUIRED_FIELDS);
         });
 
     }

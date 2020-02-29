@@ -4,6 +4,8 @@ namespace App\Listeners;
 
 use App\Events\EventTypes;
 use App\Http\Controllers\SnsTopicController;
+use App\Models\Product;
+use Illuminate\Events\Dispatcher;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
@@ -24,7 +26,7 @@ class PublishSnsMessage
         $events->listen(EventTypes::ORDER_CREATED,'App\Listeners\PublishSnsMessage@on_order_created');
 
         //products
-        $events->listen(EventTypes::PRODUCT_CREATED,'App\Listeners\PublishSnsMessage@on_product_created');
+        $events->listen('eloquent.created: App\Models\Product','App\Listeners\PublishSnsMessage@on_product_created');
         $events->listen(EventTypes::PRODUCT_UPDATED,'App\Listeners\PublishSnsMessage@on_product_updated');
     }
 
@@ -36,12 +38,9 @@ class PublishSnsMessage
         $this->publishMessage($event, "orders");
     }
 
-    /**
-     * @param EventTypes $event
-     */
-    public function on_product_created(EventTypes $event)
+    public function on_product_created(Product $product)
     {
-        $this->publishMessage($event,'products');
+        $this->publishMessageArray($product->toArray(),'products');
     }
 
     /**
@@ -63,6 +62,19 @@ class PublishSnsMessage
         $snsTopic = new SnsTopicController($topic_prefix);
 
         $snsTopic->publish_message(json_encode($event->data->toArray()));
+    }
+
+    /**
+     * @param array $array
+     * @param string $topic_prefix
+     */
+    private function publishMessageArray(array $array, string $topic_prefix): void
+    {
+        Log::debug("Publishing SNS message ($topic_prefix)", $array);
+
+        $snsTopic = new SnsTopicController($topic_prefix);
+
+        $snsTopic->publish_message(json_encode($array));
     }
 
 }

@@ -49,7 +49,6 @@ class Product extends Model
     ];
 
     protected $dispatchesEvents = [
-        'created'  => \App\Events\ProductCreatedEvent::class,
         'updated'  => \App\Events\ProductUpdatedEvent::class,
     ];
 
