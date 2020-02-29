@@ -7,7 +7,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ProductsRouteTest extends TestCase
+class ProductsRoutesTest extends TestCase
 {
     use AuthorizedUserTestCase;
 
