@@ -24,4 +24,11 @@ class ProductsRoutesTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_get_products_route_unauthenticated()
+    {
+        $response = $this->get('/products');
+
+        $response->assertStatus(302);
+    }
 }
