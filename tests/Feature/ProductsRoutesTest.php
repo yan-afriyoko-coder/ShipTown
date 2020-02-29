@@ -66,4 +66,37 @@ class ProductsRoutesTest extends TestCase
             "total",
         ]);
     }
+
+    public function test_if_products_sync_returns_404_when_product_not_found()
+    {
+        Passport::actingAs(
+            factory(User::class)->make()
+        );
+
+        $response = $this->get("api/products/0/sync");
+
+        $response->assertNotFound();
+    }
+
+    public function test_products_sync_route_unauthenticated()
+    {
+        $response = $this->get('api/products/0/sync');
+
+        // assert route is protected
+        $response->assertStatus(302);
+
+    }
+
+    public function test_product_sync_route_authenticated()
+    {
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        $product = \factory(Product::class)->create();
+
+        $response = $this->get("api/products/$product->sku/sync");
+
+        $response->assertOk();
+    }
 }
