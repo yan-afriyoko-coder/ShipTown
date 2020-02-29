@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\Product;
 use App\User;
 use Laravel\Passport\Passport;
-use Tests\Feature\AuthorizedUserTestCase;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;

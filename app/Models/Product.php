@@ -48,11 +48,6 @@ class Product extends Model
         'sale_price_end_date'
     ];
 
-    protected $dispatchesEvents = [
-        'created'  => \App\Events\ProductCreatedEvent::class,
-        'updated'  => \App\Events\ProductUpdatedEvent::class,
-    ];
-
     public function getQuantityAvailableAttribute()
     {
         $quantity_available = $this->quantity - $this->quantity_reserved;
@@ -76,14 +71,6 @@ class Product extends Model
         parent::boot();
 
         static::addGlobalScope(new AuthenticatedUserScope());
-
-        self::created(function($model) {
-            event(EventTypes::PRODUCT_CREATED, new EventTypes($model));
-        });
-
-        self::updating(function($model) {
-            event(EventTypes::PRODUCT_UPDATED, new EventTypes($model));
-        });
     }
 
     public function user()

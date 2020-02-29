@@ -40,8 +40,6 @@ class OrdersController extends Controller
 
        $order->delete();
 
-       event(EventTypes::ORDER_DELETED, new EventTypes($order));
-
        return $this->respond_OK_200();
     }
 

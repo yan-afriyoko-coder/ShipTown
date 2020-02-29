@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\EventTypes;
 use App\Managers\ProductManager;
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\Log;
 
@@ -16,33 +17,33 @@ class UpdateQuantityReserved
      */
     public function subscribe($events)
     {
-        $events->listen(EventTypes::ORDER_CREATED, 'App\Listeners\UpdateQuantityReserved@on_order_created');
-        $events->listen(EventTypes::ORDER_UPDATED, 'App\Listeners\UpdateQuantityReserved@on_order_updated');
-        $events->listen(EventTypes::ORDER_DELETED, 'App\Listeners\UpdateQuantityReserved@on_order_deleted');
+        $events->listen('eloquent.created: App\Models\Order', 'App\Listeners\UpdateQuantityReserved@on_order_created');
+        $events->listen('eloquent.updated: App\Models\Order', 'App\Listeners\UpdateQuantityReserved@on_order_updated');
+        $events->listen('eloquent.deleted: App\Models\Order', 'App\Listeners\UpdateQuantityReserved@on_order_deleted');
     }
 
-    public function on_order_updated(EventTypes $event)
+    public function on_order_updated(Order $order)
     {
-        $order_old = json_decode($event->data->getOriginal()['order_as_json'], true);
+        $order_old = json_decode($order->getOriginal()['order_as_json'], true);
 
         $this->releaseQuantities($order_old);
 
-        $order_new = json_decode($event->data->getAttributes()['order_as_json'], true);
+        $order_new = json_decode($order->getAttributes()['order_as_json'], true);
 
         $this->reserveQuantities($order_new);
     }
 
-    public function on_order_created(EventTypes $event)
+    public function on_order_created(Order $order)
     {
-        $order = $event->data->order_as_json;
+        $order = $order->order_as_json;
 
         $this->reserveQuantities($order);
     }
 
 
-    public function on_order_deleted(EventTypes $event)
+    public function on_order_deleted(Order $order)
     {
-        $order = $event->data->order_as_json;
+        $order = $order->order_as_json;
 
         $this->releaseQuantities($order);
 
