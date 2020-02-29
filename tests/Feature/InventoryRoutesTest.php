@@ -6,13 +6,39 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\User;
 use Laravel\Passport\Passport;
-use Mockery\Generator\StringManipulation\Pass\Pass;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class InventoryPostTest extends TestCase
+class InventoryRoutesTest extends TestCase
 {
+    public function test_get_route_unauthorized()
+    {
+        $response = $this->get('/api/inventory');
+
+        $response->assertStatus(302);
+    }
+
+    public function test_get_route_authorized()
+    {
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        $response = $this->get('/api/inventory');
+
+        $response->assertStatus(200);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_if_post_route_is_protected()
+    {
+        $response = $this->post('api/inventory');
+
+        $response->assertStatus(302);
+    }
 
     public function test_if_cant_post_without_data()
     {
@@ -25,8 +51,8 @@ class InventoryPostTest extends TestCase
         $response->assertStatus(422);
     }
 
-    public function test_quantity_update() {
-
+    public function test_quantity_update()
+    {
         Passport::actingAs(
             factory(User::class)->create()
         );
@@ -46,4 +72,5 @@ class InventoryPostTest extends TestCase
 
         $response->assertStatus(200);
     }
+
 }

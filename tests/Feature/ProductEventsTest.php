@@ -8,8 +8,10 @@ use App\Events\ProductCreatedEvent;
 use App\Events\ProductUpdatedEvent;
 use App\Listeners\PublishSnsMessage;
 use App\Models\Product;
+use App\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Event;
+use Laravel\Passport\Passport;
 use Mockery;
 use Tests\Feature\AuthorizedUserTestCase;
 use Tests\ModelSample;
@@ -19,8 +21,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProductEventsTest extends TestCase
 {
-    use AuthorizedUserTestCase;
-
     CONST REQUIRED_FIELDS = [
         "sku",
         "name",
@@ -38,6 +38,10 @@ class ProductEventsTest extends TestCase
      */
     public function test_if_ProductCreatedEvent_is_dispatched_with_required_fields()
     {
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
         // Assign
         Event::fake();
 
@@ -65,6 +69,10 @@ class ProductEventsTest extends TestCase
      */
     public function test_if_ProductUpdatedEvent_is_dispatched_with_required_fields()
     {
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
         // Assign
         Event::fake();
 
