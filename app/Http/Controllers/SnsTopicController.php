@@ -58,6 +58,15 @@ class SnsTopicController extends Controller
                 'TargetArn' => $this->get_user_specific_topic_arn()
             ]);
 
+            $content = [
+                "Message" => $message,
+                "TargetArn" => $this->get_user_specific_topic_arn(),
+                "MessageId" => $result["MessageId"],
+                "Result" => $result["@metadata"]["statusCode"]
+            ];
+
+            info("SNS message published", $content);
+
         } catch (AwsException $e) {
             switch ($e->getStatusCode())
             {
