@@ -50,6 +50,10 @@ class SnsTopicController extends Controller
         return true;
     }
 
+    /**
+     * @param $message
+     * @return bool
+     */
     function publish_message($message){
 
         try {
@@ -67,6 +71,8 @@ class SnsTopicController extends Controller
 
             info("SNS message published", $content);
 
+            return true;
+
         } catch (AwsException $e) {
             switch ($e->getStatusCode())
             {
@@ -81,7 +87,7 @@ class SnsTopicController extends Controller
 
         }
 
-        return true;
+
     }
 
     public function delete_user_topic() {
