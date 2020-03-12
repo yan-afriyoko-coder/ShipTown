@@ -102,16 +102,22 @@ class JobImportOrderApi2Cart implements ShouldQueue
 
         }
 
+        logger('Clearing quantity_reserved');
+
         Product::withoutGlobalScope(AuthenticatedUserScope::class)
             ->where("user_id", $this->user->id)
             ->where("quantity_reserved", ">", 0)
             ->update(["quantity_reserved" => 0]);
+
+        logger('Clearing quantity_reserved in inventory');
 
         Inventory::query()
             ->where('location_id','=',999)
             ->update([
                 "quantity_reserved" => 0
             ]);
+
+        logger('Updating quantity_reserved');
 
         foreach ($products_to_reserve as $product_to_reserve) {
 
