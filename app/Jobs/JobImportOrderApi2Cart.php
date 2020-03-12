@@ -117,7 +117,9 @@ class JobImportOrderApi2Cart implements ShouldQueue
                 "quantity_reserved" => 0
             ]);
 
-        logger('Updating quantity_reserved');
+        logger('Updating quantity_reserved', [
+            "product_count" => count($products_to_reserve)
+        ]);
 
         foreach ($products_to_reserve as $product_to_reserve) {
 
