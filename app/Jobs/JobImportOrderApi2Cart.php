@@ -53,6 +53,8 @@ class JobImportOrderApi2Cart implements ShouldQueue
             throw new Api2CartKeyNotSetException();
         }
 
+        logger('Retrieving orders from API2CART');
+
         $guzzle = new \GuzzleHttp\Client([
             'base_uri' =>  'https://api.api2cart.com/v1.1/',
             'timeout' => 60,
@@ -73,9 +75,14 @@ class JobImportOrderApi2Cart implements ShouldQueue
             ]
         );
 
+
         $content = $response->getBody()->getContents();
 
         $content = json_decode($content, true);
+
+        logger('Retrieved orders from API2CART', [
+            "count" => count($content)
+        ]);
 
         $orders = $content["result"]["order"];
 
