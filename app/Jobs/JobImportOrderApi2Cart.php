@@ -90,6 +90,11 @@ class JobImportOrderApi2Cart implements ShouldQueue
 
         foreach ($orders as $order) {
 
+            logger('Order', [
+               "order_id" => $order["order_id"],
+               "products_count" => count($order["order_products"])
+            ]);
+
             foreach ($order["order_products"] as $product_to_reserve) {
 
                 $products_to_reserve[] = [
