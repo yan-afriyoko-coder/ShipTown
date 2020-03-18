@@ -15,13 +15,14 @@ use function Psy\debug;
 class Orders extends Entity
 {
     /**
+     * @param string $store_key
      * @param array $params
      * @return array|null
      * @throws Exception
      */
-    public static function getOrdersCollection(array $params)
+    public static function getOrdersCollection(string $store_key, array $params)
     {
-        $response = Client::GET('', 'order.list.json', $params);
+        $response = Client::GET($store_key, 'order.list.json', $params);
 
         if($response->isSuccess()) {
             return $response->getResult();
