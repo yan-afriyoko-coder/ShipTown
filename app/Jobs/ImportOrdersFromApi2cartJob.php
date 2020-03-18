@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Modules\Api2cart\Orders;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -20,17 +21,18 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
      */
     public function __construct()
     {
-        $params = [];
-        $ordersCollection = Orders::getCollection($params);
+        //
     }
 
     /**
      * Execute the job.
      *
      * @return void
+     * @throws Exception
      */
     public function handle()
     {
-        //
+        $params = [];
+        $ordersCollection = Orders::getOrdersCollection($params);
     }
 }
