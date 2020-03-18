@@ -34,6 +34,8 @@ Route::middleware('auth:api')->group(function() {
 
     Route::get("import/orders/api2cart", "OrdersController@importFromApi2Cart");
 
+    Route::get("import/orders/from/api2cart", "ImportController@importOrdersFromApi2cart");
+
 });
 
 
