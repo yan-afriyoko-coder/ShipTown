@@ -28,6 +28,6 @@ class Orders extends Entity
         }
 
         Log::error('order.list.json call failed', $response->asArray());
-        throw new Exception('order.list.json call failed');
+        throw new Exception('order.list.json call failed - '.$response->getReturnMessage());
     }
 }
