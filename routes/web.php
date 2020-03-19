@@ -17,9 +17,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 
 Route::middleware('auth:api')->group(function() {
-    Route::get('/', function () {
-        return view('welcome');
-    });
+    Route::view('/', 'welcome');
 });
 
 Route::middleware('auth')->group(function () {
