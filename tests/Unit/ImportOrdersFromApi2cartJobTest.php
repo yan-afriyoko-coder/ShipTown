@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Jobs\ImportOrdersFromApi2cartJob;
+use App\Managers\Config;
 use App\User;
 use Laravel\Passport\Passport;
 use Mockery\Generator\StringManipulation\Pass\Pass;
@@ -18,12 +19,14 @@ class ImportOrdersFromApi2cartJobTest extends TestCase
             factory(User::class)->create()
         );
 
-        $user_id = auth()->id();
+//        Config::setApi2cartStoreKey('');
 
-        $job = new ImportOrdersFromApi2cartJob($user_id);
+        $job = new ImportOrdersFromApi2cartJob(auth()->id());
 
         $job->handle();
 
+        // we just checking if there is no exceptions
+        // this test only has to pass
         $this->assertTrue(true);
     }
 }
