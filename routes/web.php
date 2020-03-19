@@ -11,23 +11,28 @@
 |
 */
 
+use App\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 
 Route::middleware('auth:api')->group(function() {
     Route::get('/', function () {
         return view('welcome');
     });
-
 });
 
 Route::middleware('auth')->group(function () {
-
     Route::view('/settings', 'settings')->name('settings');
-
     Route::view('/products', 'products')->name('products');
-
 });
+;
+if (Schema::hasTable('users') && User::query()->exists()) {
+    Auth::routes(['register' => false]);
+}  else {
+    Auth::routes(['register' => true]);
+}
 
-Auth::routes();
 
 
 
