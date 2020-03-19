@@ -2,6 +2,9 @@
 
 namespace App\Jobs;
 
+use App\Managers\Config;
+use App\Modules\Api2cart\Orders;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -13,22 +16,32 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
+     * @var int
+     */
+    private $user_id;
+
+    /**
      * Create a new job instance.
      *
-     * @return void
+     * @param int $user_id
      */
-    public function __construct()
+    public function __construct(int $user_id)
     {
-        //
+        $this->user_id = $user_id;
     }
 
     /**
      * Execute the job.
      *
      * @return void
+     * @throws Exception
      */
     public function handle()
     {
-        //
+        $params = [];
+
+//        $api2cart_store_key = Config::API2CART_STORE_KEY();
+//
+//        $ordersCollection = Orders::getOrdersCollection($api2cart_store_key, $params);
     }
 }

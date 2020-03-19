@@ -8,7 +8,7 @@ use App\Models\UserConfiguration;
 use App\Scopes\AuthenticatedUserScope;
 use Illuminate\Support\Arr;
 
-class UserConfigurationManager
+class Config
 {
     public static function getValue($key, $user_id = null)
     {
@@ -31,5 +31,13 @@ class UserConfigurationManager
         }
 
         return null;
+    }
+
+    /**
+     * @return string|null
+     */
+    public static function API2CART_STORE_KEY()
+    {
+        return Config::getValue("api2cart_store_key");
     }
 }

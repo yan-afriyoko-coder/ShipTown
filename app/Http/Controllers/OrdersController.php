@@ -6,7 +6,7 @@ use App\Events\EventTypes;
 use App\Http\Requests\DeleteOrderRequest;
 use App\Http\Requests\StoreOrderRequest;
 use App\Jobs\JobImportOrderApi2Cart;
-use App\Managers\UserConfigurationManager;
+use App\Managers\Config;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -47,7 +47,7 @@ class OrdersController extends Controller
     {
         $user_id = auth()->id();
 
-        $api2cart_store_key = UserConfigurationManager::getValue("api2cart_store_key", $user_id);
+        $api2cart_store_key = Config::getValue("api2cart_store_key", $user_id);
 
         JobImportOrderApi2Cart::dispatch(auth()->user(), $api2cart_store_key);
 
