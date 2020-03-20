@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:api')->group(function() {
+    Route::post('company/configuration', "CompanyController@storeConfiguration");
+
     Route::get("user/configuration", "UserConfigurationController@show");
     Route::post("user/configuration", "UserConfigurationController@store");
 
