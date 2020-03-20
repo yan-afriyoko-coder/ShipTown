@@ -40,7 +40,7 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
     {
         $params = [];
 
-//        $api2cart_store_key = Config::API2CART_STORE_KEY();
+        $api2cart_store_key = Config::API2CART_STORE_KEY();
 //
 //        $ordersCollection = Orders::getOrdersCollection($api2cart_store_key, $params);
     }

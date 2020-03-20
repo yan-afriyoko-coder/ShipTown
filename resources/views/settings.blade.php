@@ -26,6 +26,9 @@
                     <subscribe-topic></subscribe-topic>
                     <br />
 
+                    <api2cart-configuration></api2cart-configuration>
+                    <br />
+
                     <user-configuration></user-configuration>
                     <br />
 
