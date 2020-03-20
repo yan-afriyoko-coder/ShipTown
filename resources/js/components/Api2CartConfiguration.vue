@@ -18,7 +18,7 @@
                                 <th>
                                     <div class="form-group">
                                         <label for="web_store_key">API Key</label>
-                                        <input type="text" class="form-control" id="web_store_key" v-model="web_store_key" placeholder="API Key">
+                                        <input type="text" class="form-control" id="web_store_key" v-model="web_store_key" placeholder="Enter new API key">
                                     </div>
                                 </th>
                             </tr>
@@ -38,11 +38,41 @@
     export default {
         data() {
             return {
-                web_store_key: "test"
+                // configuration: [],
+                web_store_key: ""
             };
         },
 
+        /**
+         * Prepare the component (Vue 1.x).
+         */
+        ready() {
+            this.prepareComponent();
+        },
+
+        /**
+         * Prepare the component (Vue 2.x).
+         */
+        mounted() {
+            this.prepareComponent();
+        },
+
         methods: {
+
+            prepareComponent() {
+                this.getConfiguration();
+            },
+
+            /**
+             * Get all of the personal access tokens for the user.
+             */
+            getConfiguration() {
+                // axios.get('/api/company/configuration')
+                //     .then(response => {
+                //         this.configuration = response.data;
+                //     });
+            },
+
             saveConfiguration : function() {
                 axios.post('/api/company/configuration', {
                     "bridge_api_key": this.web_store_key
