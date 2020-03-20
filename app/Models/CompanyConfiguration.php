@@ -9,4 +9,6 @@ class CompanyConfiguration extends Model
     protected $fillable = [
         "bridge_api_key"
     ];
+
+    protected $table = "company_configuration";
 }
