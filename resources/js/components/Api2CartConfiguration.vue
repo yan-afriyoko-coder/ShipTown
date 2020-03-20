@@ -47,7 +47,7 @@
 
                 console.log(this.data);
 
-                axios.post('/api/configuration', this.data)
+                axios.post('/api/company/configuration', this.data)
                     .then(response => {
                         alert("Configuration saved");
                     })
