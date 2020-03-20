@@ -17,8 +17,8 @@
                             <tr>
                                 <th>
                                     <div class="form-group">
-                                        <label for="URL">URL</label>
-                                        <input type="text" class="form-control" id="URL" v-model="url" placeholder="Enter the URL">
+                                        <label for="url">URL</label>
+                                        <input type="text" class="form-control" id="url" v-model="url" placeholder="Enter the URL">
                                     </div>
                                 </th>
                             </tr>
@@ -36,18 +36,21 @@
 <script>
 
     export default {
+        data() {
+            return {
+                url: null
+            };
+        },
+
         methods: {
 
             subscribe : function(url) {
-
                 axios.post('/api/subscribetopic', url)
                     .then(response => {
-                        if (!(response.status == 200)) {
-                            alert("Subscribed to topic");
-                        }
-                        else {
-                            alert(response.data)
-                        }
+                        alert("Subscribed to topic");
+                    })
+                    .catch(error => {
+                        alert("Something went wrong. Please try again.")
                     })
             }
         }
