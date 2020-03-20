@@ -38,19 +38,21 @@
     export default {
         data() {
             return {
-                web_store_key: null
+                web_store_key: "test"
             };
         },
 
         methods: {
             saveConfiguration : function() {
-                axios.post('/api/company/configuration', this.data)
-                    .then(response => {
-                        alert("Configuration saved");
-                    })
-                    .catch(error => {
-                        alert("Something went wrong. Please try again");
-                    });
+                axios.post('/api/company/configuration', {
+                    "bridge_api_key": this.web_store_key
+                })
+                .then(response => {
+                    //alert("Configuration saved");
+                })
+                .catch(error => {
+                    alert("Something went wrong. Please try again");
+                });
             }
         }
     }

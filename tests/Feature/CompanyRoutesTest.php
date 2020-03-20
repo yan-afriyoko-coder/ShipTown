@@ -25,11 +25,7 @@ class CompanyRoutesTest extends TestCase
 
     public function test_if_post_route_requires_authentication()
     {
-        $data = [
-            "web_store_key"
-        ];
-
-        $response = $this->postJson('api/company/configuration', $data);
+        $response = $this->postJson('api/company/configuration');
 
         $response->assertUnauthorized();
     }
