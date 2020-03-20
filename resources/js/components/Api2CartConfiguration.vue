@@ -5,7 +5,7 @@
                 <div class="card-header">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span>
-                            API2CART Configuration
+                            Web Bridge Configuration
                         </span>
                     </div>
                 </div>
@@ -17,13 +17,13 @@
                             <tr>
                                 <th>
                                     <div class="form-group">
-                                        <label for="storeKey">Store Key</label>
-                                        <input type="text" class="form-control" id="storeKey" v-model="storeKey" placeholder="Store Key">
+                                        <label for="web_store_key">API Key</label>
+                                        <input type="text" class="form-control" id="web_store_key" v-model="web_store_key" placeholder="API Key">
                                     </div>
                                 </th>
                             </tr>
                             <tr>
-                                <th><div class="text-center"><button id="product-btn" class="btn-primary centre" v-on:click="saveStoreKey">Save</button></div></th>
+                                <th><div class="text-center"><button id="product-btn" class="btn-primary centre" v-on:click="saveConfiguration">Save</button></div></th>
                             </tr>
                         </thead>
                     </table>
@@ -38,15 +38,12 @@
     export default {
         data() {
             return {
-                storeKey: null
+                web_store_key: null
             };
         },
 
         methods: {
-            saveStoreKey : function() {
-
-                console.log(this.data);
-
+            saveConfiguration : function() {
                 axios.post('/api/company/configuration', this.data)
                     .then(response => {
                         alert("Configuration saved");
