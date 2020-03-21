@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Managers\CompanyConfigurationManager;
 use App\Managers\Config;
 use App\Modules\Api2cart\Orders;
 use Exception;
@@ -40,7 +41,7 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
     {
         $params = [];
 
-        $api2cart_store_key = Config::API2CART_STORE_KEY();
+        $api2cart_store_key = CompanyConfigurationManager::getBridgeApiKey();
 //
 //        $ordersCollection = Orders::getOrdersCollection($api2cart_store_key, $params);
     }
