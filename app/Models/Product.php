@@ -14,7 +14,6 @@ class Product extends Model
     use Notifiable, HasManyKeyByRelationship;
 
     protected $fillable = [
-        "user_id",
         "sku",
         "name",
         "price",
@@ -57,25 +56,6 @@ class Product extends Model
         }
 
         return $quantity_available;
-    }
-
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-
-        $this->user_id = auth()->id();
-    }
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::addGlobalScope(new AuthenticatedUserScope());
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
     }
 
     public function inventory()
