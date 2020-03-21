@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Managers\CompanyConfigurationManager;
-use App\Managers\Config;
 use App\Modules\Api2cart\Orders;
 use Exception;
 use Illuminate\Bus\Queueable;
