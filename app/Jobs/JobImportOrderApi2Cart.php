@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Exceptions\Api2CartKeyNotSetException;
+use App\Managers\CompanyConfigurationManager;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Scopes\AuthenticatedUserScope;
@@ -29,10 +30,10 @@ class JobImportOrderApi2Cart implements ShouldQueue
      * @param $user Authenticatable
      * @param $api2cart_store_key
      */
-    public function __construct($user, $api2cart_store_key)
+    public function __construct($user)
     {
         $this->user = $user;
-        $this->api2cart_store_key = $api2cart_store_key;
+        $this->api2cart_store_key = CompanyConfigurationManager::getBridgeApiKey();
 
         $this->api2cart_app_key = env('API2CART_API_KEY', "");
     }
