@@ -24,43 +24,16 @@ class DatabaseSeeder extends Seeder
         }
 
 
-        // for each user create sample product sku = 12345
-        User::all()->each(function (User $u) {
+        factory(\App\Models\Product::class)->create(['sku' => '12345']);
 
-            $product = factory(\App\Models\Product::class)
-                ->make(['sku' => '12345']);
+        factory(\App\Models\Product::class, 500)->create();
 
-            $u->products()->save($product);
+        factory(\App\Models\Product::class, 50)->create([
+           "quantity" => 50,
+           "quantity_reserved" => 50
+        ]);
 
-        });
-
-
-        // for each user create sample product list
-        User::all()->each(function (User $u) {
-
-           $u->products()->saveMany(
-               factory(\App\Models\Product::class, 500)
-                   ->make()
-           );
-
-        });
-
-
-        // for each user create some products where quantity_available should be 0
-        User::all()->each(function (User $u) {
-
-            $u->products()->saveMany(
-               factory(\App\Models\Product::class, 50)
-                   ->make([
-                       "quantity" => 50,
-                       "quantity_reserved" => 50
-                   ])
-           );
-
-        });
-
-
-        \App\Models\Product::withoutGlobalScope(AuthenticatedUserScope::class)
+        \App\Models\Product::query()
             ->get()
             ->each(function (\App\Models\Product $product) {
                 factory(\App\Models\Inventory::class)
@@ -70,7 +43,7 @@ class DatabaseSeeder extends Seeder
                     ]);
             });
 
-        \App\Models\Product::withoutGlobalScope(AuthenticatedUserScope::class)
+        \App\Models\Product::query()
             ->get()
             ->each(function (\App\Models\Product $product) {
                 factory(\App\Models\Inventory::class)
@@ -80,7 +53,7 @@ class DatabaseSeeder extends Seeder
                     ]);
             });
 
-        \App\Models\Product::withoutGlobalScope(AuthenticatedUserScope::class)
+        \App\Models\Product::query()
             ->get()
             ->each(function (\App\Models\Product $product) {
                 factory(\App\Models\Inventory::class)

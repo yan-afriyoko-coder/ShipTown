@@ -110,8 +110,7 @@ class JobImportOrderApi2Cart implements ShouldQueue
 
         logger('Clearing quantity_reserved');
 
-        Product::withoutGlobalScope(AuthenticatedUserScope::class)
-            ->where("user_id", $this->user->id)
+        Product::query()
             ->where("quantity_reserved", ">", 0)
             ->update(["quantity_reserved" => 0]);
 
@@ -131,8 +130,7 @@ class JobImportOrderApi2Cart implements ShouldQueue
 
             logger('Retrieving product');
 
-            $product = Product::withoutGlobalScope(AuthenticatedUserScope::class)
-                ->where("user_id", $this->user->id)
+            $product = Product::query()
                 ->where("sku", $product_to_reserve["sku"])
                 ->first();
 

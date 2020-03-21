@@ -1,10 +1,7 @@
 <?php
 
 namespace App\Models;
-
-use App\Events\EventTypes;
-use App\Scopes\AuthenticatedUserScope;
-use App\User;
+;
 use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;

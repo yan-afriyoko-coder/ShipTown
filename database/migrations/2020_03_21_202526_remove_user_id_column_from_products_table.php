@@ -14,7 +14,8 @@ class RemoveUserIdColumnFromProductsTable extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->removeColumn('user_id');
+            $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
         });
     }
 
