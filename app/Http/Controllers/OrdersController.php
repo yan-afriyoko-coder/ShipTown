@@ -46,8 +46,6 @@ class OrdersController extends Controller
 
     public function importFromApi2Cart()
     {
-        $user_id = auth()->id();
-
         $api2cart_store_key = CompanyConfigurationManager::getBridgeApiKey();
 
         JobImportOrderApi2Cart::dispatch(auth()->user(), $api2cart_store_key);
