@@ -9,7 +9,7 @@ class ImportController extends Controller
 {
     public function importOrdersFromApi2cart()
     {
-        ImportOrdersFromApi2cartJob::dispatch(auth()->id());
+        ImportOrdersFromApi2cartJob::dispatch();
 
         return $this->respond_OK_200();
     }

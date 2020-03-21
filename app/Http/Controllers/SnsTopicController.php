@@ -39,7 +39,7 @@ class SnsTopicController extends Controller
                 'Protocol' => 'https',
                 'Endpoint' => $subscription_url,
                 'ReturnSubscriptionArn' => true,
-                'TopicArn' => $this->get_user_specific_topic_arn(),
+                'TopicArn' => $this->getTargetArn(),
             ]);
 
         } catch (AwsException $e) {
@@ -59,12 +59,12 @@ class SnsTopicController extends Controller
         try {
             $result = $this->_awsSnsClient->publish([
                 'Message'   => $message,
-                'TargetArn' => $this->get_user_specific_topic_arn()
+                'TargetArn' => $this->getTargetArn()
             ]);
 
             $content = [
                 "Message" => $message,
-                "TargetArn" => $this->get_user_specific_topic_arn(),
+                "TargetArn" => $this->getTargetArn(),
                 "MessageId" => $result["MessageId"],
                 "Result" => $result["@metadata"]["statusCode"]
             ];
@@ -94,7 +94,7 @@ class SnsTopicController extends Controller
 
         try {
             $this->_awsSnsClient->deleteTopic([
-                'TopicArn' => $this->get_user_specific_topic_arn()
+                'TopicArn' => $this->getTargetArn()
             ]);
 
         } catch (AwsException $e) {
@@ -117,5 +117,29 @@ class SnsTopicController extends Controller
         $arn = "arn:aws:sns:".env('AWS_REGION').":".env('AWS_USER_CODE');
 
         return $arn.":".$this->get_user_specific_topic_name();
+    }
+
+    /**
+     * @return string
+     */
+    private function getTargetArn(): string
+    {
+        $useSubdomainPrefixedTopicName = config('use_subdomain_prefixed_topic_name');
+
+        if($useSubdomainPrefixedTopicName) {
+            return implode(":",[
+                "arn",
+                "aws",
+                "sns",
+                env('AWS_REGION'),
+                env('AWS_USER_CODE'),
+                implode('_',[
+                    env('DB_TABLE_PREFIX',''),
+                    $this->_topicPrefix
+                ])
+            ]);
+        }
+
+        return $this->get_user_specific_topic_arn();
     }
 }
