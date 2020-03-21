@@ -29,9 +29,6 @@
                     <api2cart-configuration></api2cart-configuration>
                     <br />
 
-                    <user-configuration></user-configuration>
-                    <br />
-
                 </div>
             </div>
         </div>

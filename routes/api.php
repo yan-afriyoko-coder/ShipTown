@@ -21,9 +21,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::middleware('auth:api')->group(function() {
     Route::post('company/configuration', "CompanyController@storeConfiguration");
 
-    Route::get("user/configuration", "UserConfigurationController@show");
-    Route::post("user/configuration", "UserConfigurationController@store");
-
     Route::get('products', 'ProductsController@index');
     Route::post('products', 'ProductsController@store');
     Route::get('products/{sku}/sync', 'ProductsController@publish');
