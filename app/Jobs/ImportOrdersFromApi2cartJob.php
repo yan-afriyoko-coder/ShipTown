@@ -17,18 +17,11 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * @var int
-     */
-    private $user_id;
-
-    /**
      * Create a new job instance.
      *
-     * @param int $user_id
      */
-    public function __construct(int $user_id)
+    public function __construct()
     {
-        $this->user_id = $user_id;
     }
 
     /**
