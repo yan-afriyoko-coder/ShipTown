@@ -22,7 +22,7 @@ class SnsTopicController extends Controller
 
         try {
             $this->_awsSnsClient->createTopic([
-                'Name' => $this->getTargetArn()
+                'Name' => $this->getTopicName()
             ]);
 
         } catch (AwsException $e) {
@@ -105,18 +105,18 @@ class SnsTopicController extends Controller
         return true;
     }
 
-    private function get_user_specific_topic_name(): string
+    private function getTopicName(): string
     {
+        if(config('use_subdomain_prefixed_topic_name')) {
+            return implode('_',[
+                env('DB_TABLE_PREFIX',''),
+                $this->_topicPrefix
+            ]);
+        }
+
         $userID = auth()->user()->id;
 
         return $this->_topicPrefix."_user".$userID;
-    }
-
-   private function get_user_specific_topic_arn(): string
-    {
-        $arn = "arn:aws:sns:".env('AWS_REGION').":".env('AWS_USER_CODE');
-
-        return $arn.":".$this->get_user_specific_topic_name();
     }
 
     /**
@@ -124,22 +124,13 @@ class SnsTopicController extends Controller
      */
     private function getTargetArn(): string
     {
-        $useSubdomainPrefixedTopicName = config('use_subdomain_prefixed_topic_name');
-
-        if($useSubdomainPrefixedTopicName) {
-            return implode(":",[
-                "arn",
-                "aws",
-                "sns",
-                env('AWS_REGION'),
-                env('AWS_USER_CODE'),
-                implode('_',[
-                    env('DB_TABLE_PREFIX',''),
-                    $this->_topicPrefix
-                ])
-            ]);
-        }
-
-        return $this->get_user_specific_topic_arn();
+        return implode(":",[
+            "arn",
+            "aws",
+            "sns",
+            env('AWS_REGION'),
+            env('AWS_USER_CODE'),
+            $this->getTopicName()
+        ]);
     }
 }
