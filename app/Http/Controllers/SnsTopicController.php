@@ -22,7 +22,7 @@ class SnsTopicController extends Controller
 
         try {
             $this->_awsSnsClient->createTopic([
-                'Name' => $this->get_user_specific_topic_name()
+                'Name' => $this->getTargetArn()
             ]);
 
         } catch (AwsException $e) {
