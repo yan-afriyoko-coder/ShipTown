@@ -5,6 +5,7 @@ namespace App\Managers;
 
 
 use App\Models\CompanyConfiguration;
+use Faker\Provider\Company;
 
 class CompanyConfigurationManager
 {
@@ -13,7 +14,8 @@ class CompanyConfigurationManager
      */
     public static function getBridgeApiKey()
     {
-        $result = CompanyConfiguration::query()->first('bridge_api_key');
+        $result = CompanyConfiguration::query()->select('bridge_api_key')->firstOrCreate([]);
+
         return $result['bridge_api_key'];
     }
 }
