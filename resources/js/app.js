@@ -46,10 +46,6 @@ Vue.component(
     require('./components/SubscribeTopic.vue').default
 );
 
-Vue.component(
-    'user-configuration',
-    require('./components/UserConfiguration.vue').default
-);
 
 Vue.component(
     'products-table',
