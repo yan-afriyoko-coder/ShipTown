@@ -23,8 +23,9 @@
                     <passport-personal-access-tokens></passport-personal-access-tokens>
                     <br />
 
-                    <subscribe-topic></subscribe-topic>
-                    <br />
+{{--                    <subscribe-topic></subscribe-topic>--}}
+{{--                    <br />--}}
+
 
                     <api2cart-configuration></api2cart-configuration>
                     <br />
