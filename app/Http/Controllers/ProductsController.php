@@ -16,7 +16,9 @@ class ProductsController extends Controller
 
     public function store(Request $request)
     {
-        Log::debug('Received product update request', $request->all());
+        Log::debug('Received product update request', [
+            'request'=>$request->all()
+        ]);
 
         $product = Product::query()->updateOrCreate(
             ['sku' => $request->sku],
