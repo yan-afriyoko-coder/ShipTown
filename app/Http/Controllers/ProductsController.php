@@ -15,7 +15,7 @@ class ProductsController extends Controller
         return Product::query()->paginate(10);
     }
 
-    public function store(StoreProductsRequest $request)
+    public function store(Request $request)
     {
         Log::debug('Received product update request', [
             'request'=>$request->all()
