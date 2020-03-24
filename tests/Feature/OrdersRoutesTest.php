@@ -65,18 +65,18 @@ class OrdersRoutesTest extends TestCase
             factory(User::class)->create()
         );
 
+
         // create product
         $product_before = $this->json('POST', "api/products", ModelSample::PRODUCT)
-            ->assertStatus(200)
+            //->assertStatus(200)
             ->getContent();
+
+        dd($product_before);
+
 
         // submit first order
         $this->json('POST', 'api/orders', ModelSample::ORDER_01)
             ->assertStatus(200);
-
-
-
-
 
         // get product before submitting second order
         $product_before = $this->json('POST', "api/products", ModelSample::PRODUCT)
