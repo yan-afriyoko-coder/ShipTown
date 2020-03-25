@@ -56,7 +56,7 @@ class SnsTopicController extends Controller
      */
     function publish_message($message){
 
-        logger("Publishing SNS message", $message);
+        logger("Publishing SNS message", ["message" => $message]);
 
         $notification = [
             'Message'   => $message,
