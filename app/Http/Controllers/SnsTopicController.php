@@ -83,7 +83,11 @@ class SnsTopicController extends Controller
                     $this->publish_message($message);
                     break;
                 default:
-                    Log::critical("Could not publish message", ["code" => $e->getStatusCode(), "message" => $e->getMessage()]);
+                    Log::error("Could not publish SNS message", [
+                        "code" => $e->getStatusCode(),
+                        "return_message" => $e->getMessage(),
+                        "message" => $message
+                    ]);
                     throw $e;
             }
 
@@ -130,8 +134,8 @@ class SnsTopicController extends Controller
             "arn",
             "aws",
             "sns",
-            env('AWS_REGION'),
-            env('AWS_USER_CODE'),
+            config('aws.region'),
+            config('aws.user_code'),
             $this->getTopicName()
         ]);
     }
