@@ -57,19 +57,21 @@ class SnsTopicController extends Controller
     function publish_message($message){
 
         try {
-            $result = $this->_awsSnsClient->publish([
+            $message = [
                 'Message'   => $message,
                 'TargetArn' => $this->getTargetArn()
-            ]);
+            ];
 
-            $content = [
+            info("Publishing SNS message", $message);
+
+            $result = $this->_awsSnsClient->publish($message);
+
+            logger("SNS message published", [
                 "Message" => $message,
                 "TargetArn" => $this->getTargetArn(),
                 "MessageId" => $result["MessageId"],
                 "Result" => $result["@metadata"]["statusCode"]
-            ];
-
-            info("SNS message published", $content);
+            ]);
 
             return true;
 
