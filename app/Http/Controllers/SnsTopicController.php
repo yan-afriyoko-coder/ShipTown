@@ -113,7 +113,7 @@ class SnsTopicController extends Controller
 
     private function getTopicName(): string
     {
-        if(config('use_subdomain_prefixed_topic_name')) {
+        if(config('app.use_subdomain_prefixed_topic_name')) {
             return implode('_',[
                 env('DB_TABLE_PREFIX',''),
                 $this->_topicPrefix
