@@ -15,4 +15,12 @@ class Order extends Model
     protected $casts = [
         'order_as_json' => 'array'
     ];
+
+    // we use attributes to set default values
+    // we wont use database default values
+    // as this is then not populated
+    // correctly to events
+    protected $attributes = [
+        'order_as_json' => '{}'
+    ];
 }
