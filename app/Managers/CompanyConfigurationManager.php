@@ -18,9 +18,7 @@ class CompanyConfigurationManager
     {
         $result = CompanyConfiguration::query()->select('bridge_api_key')->firstOrCreate([],[]);
 
-        dd($result);
         $key = $result['bridge_api_key'];
-
 
         if(is_null($key)) {
             throw new Api2CartKeyNotSetException("Bridge API key not set");
