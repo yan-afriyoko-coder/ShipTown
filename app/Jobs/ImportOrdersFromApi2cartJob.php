@@ -41,7 +41,11 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
     {
         // initialize variables
         $params = [
-            'params' => 'force_all'
+            'params' => 'force_all',
+            'sort_by' => 'modified_at',
+            'sort_direction' => 'asc',
+            'count' => 999,
+            'modified_from' => '2020-01-01 00:00:00',
         ];
 
         $api2cart_store_key = CompanyConfigurationManager::getBridgeApiKey();
