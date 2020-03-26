@@ -6,6 +6,7 @@ use App\Managers\CompanyConfigurationManager;
 use App\Models\ConfigurationApi2cart;
 use App\Models\Order;
 use App\Modules\Api2cart\src\Orders;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -45,7 +46,7 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
             'params' => 'force_all',
             'sort_by' => 'modified_at',
             'sort_direction' => 'asc',
-            'count' => 999,
+            'count' => 50,
             'modified_from' => $this->getLastSyncedModifiedFrom(),
         ];
 
@@ -77,6 +78,13 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
                     ['order_as_json' => $order]
                 )
             );
+
+            ConfigurationApi2cart::query()->updateOrCreate([],[
+                'last_synced_modified_at' => Carbon::createFromFormat(
+                    $order['original_json']['modified_at']['format'],
+                    $order['original_json']['modified_at']['value']
+                )
+            ]);
         }
 
         // finalize
