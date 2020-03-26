@@ -21,6 +21,7 @@ class Order extends Model
     // as this is then not populated
     // correctly to events
     protected $attributes = [
-        'order_as_json' => '{}'
+        'order_as_json' => '{}',
+        'originalJson' => '{}',
     ];
 }
