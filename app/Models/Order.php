@@ -9,17 +9,22 @@ use Illuminate\Support\Arr;
 class Order extends Model
 {
     protected $fillable = [
-        'order_number', 'order_as_json'
+        'order_number',
+        'order_as_json',
+        'original_json'
     ];
 
     protected $casts = [
-        'order_as_json' => 'array'
+        'order_as_json' => 'array',
+        'original_json' => 'array'
     ];
 
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-
-        $this->user_id = auth()->id();
-    }
+    // we use attributes to set default values
+    // we wont use database default values
+    // as this is then not populated
+    // correctly to events
+    protected $attributes = [
+        'order_as_json' => '{}',
+        'original_json' => '{}',
+    ];
 }

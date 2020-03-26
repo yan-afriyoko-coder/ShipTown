@@ -31,15 +31,6 @@ class ProductModelTest extends TestCase
         $this->assertEquals(0, $product_after->quantity_available);
     }
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        Passport::actingAs(
-            factory(User::class)->create()
-        );
-    }
-
     /**
      * A basic feature test example.
      *
@@ -58,6 +49,5 @@ class ProductModelTest extends TestCase
         $product_after = $product_before->fresh();
 
         $this->assertEquals($product_after->quantity_reserved, $product_before->quantity_reserved + 5);
-
     }
 }

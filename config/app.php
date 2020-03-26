@@ -3,10 +3,12 @@
 return [
 
     /*
-    |--------------------------------------------------------------------------
-    | ApplicatNameion
-    |--------------------------------------------------------------------------
-    |
+     * API2CART application API key
+     */
+
+    "api2cart_api_key" => env('API2CART_API_KEY', ''),
+
+    /*
     | This determinate if we should use domain specific SNS topic name
     | sample: "democompany_products"
     | if false it will use user specific

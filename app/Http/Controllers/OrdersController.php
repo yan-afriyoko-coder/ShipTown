@@ -46,7 +46,7 @@ class OrdersController extends Controller
 
     public function importFromApi2Cart()
     {
-        JobImportOrderApi2Cart::dispatch(auth()->user());
+        JobImportOrderApi2Cart::dispatch();
 
         info('Import Order from api2cart dispatched');
 
