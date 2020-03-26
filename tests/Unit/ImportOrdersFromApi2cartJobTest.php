@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Jobs\ImportOrdersFromApi2cartJob;
+use App\Managers\CompanyConfigurationManager;
 use App\Managers\Config;
 use App\User;
 use Laravel\Passport\Passport;
@@ -15,9 +16,8 @@ class ImportOrdersFromApi2cartJobTest extends TestCase
 {
     public function test_if_job_runs_without_exceptions()
     {
-        Passport::actingAs(
-            factory(User::class)->create()
-        );
+        // we set key to api2cart demo store
+        CompanyConfigurationManager::set('bridge_api_key', 'ed58a22dfecb405a50ea3ea56979360d');
 
 //        Config::setApi2cartStoreKey('');
 
