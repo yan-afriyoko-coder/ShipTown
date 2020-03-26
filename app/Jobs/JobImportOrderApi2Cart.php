@@ -18,25 +18,10 @@ class JobImportOrderApi2Cart implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $user;
     private $api2cart_store_key;
     private $callback;
     private $auth;
     private $api2cart_app_key;
-
-    /**
-     * Create a new job instance.
-     *
-     * @param $user Authenticatable
-     * @throws Api2CartKeyNotSetException
-     */
-    public function __construct($user)
-    {
-        $this->user = $user;
-        $this->api2cart_store_key = CompanyConfigurationManager::getBridgeApiKey();
-
-        $this->api2cart_app_key =  config('app.api2cart_api_key');
-    }
 
     /**
      * Execute the job.
@@ -46,6 +31,10 @@ class JobImportOrderApi2Cart implements ShouldQueue
      */
     public function handle()
     {
+        $this->api2cart_store_key = CompanyConfigurationManager::getBridgeApiKey();
+
+        $this->api2cart_app_key =  config('app.api2cart_api_key');
+
         if(empty($this->api2cart_store_key)) {
             throw new Api2CartKeyNotSetException();
         }

@@ -6,6 +6,7 @@ use App\Jobs\JobImportOrderApi2Cart;
 use App\Listeners\PublishSnsMessage;
 use App\Models\Order;
 use App\Models\Product;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Queue;
 use Mockery\Generator\StringManipulation\Pass\Pass;
@@ -24,7 +25,7 @@ class OrdersRoutesTest extends TestCase
      */
     public function test_if_job_is_pushed_to_queue()
     {
-        Queue::fake();
+        Bus::fake();
 
         Passport::actingAs(
             factory(User::class)->create()
@@ -34,7 +35,7 @@ class OrdersRoutesTest extends TestCase
 
         $response->assertStatus(200);
 
-        Queue::assertPushed(JobImportOrderApi2Cart::class);
+        Bus::assertDispatched(JobImportOrderApi2Cart::class);
     }
 
     public function test_order_update () {
