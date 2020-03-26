@@ -6,6 +6,7 @@ use App\Events\EventTypes;
 use App\Managers\ProductManager;
 use App\Models\Order;
 use App\Models\Product;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
 class UpdateQuantityReserved
@@ -70,6 +71,10 @@ class UpdateQuantityReserved
      */
     private function releaseQuantities($order): void
     {
+        if(!Arr::has($order, 'products')) {
+            return;
+        }
+
         foreach ($order['products'] as $product) {
 
             ProductManager::release(
