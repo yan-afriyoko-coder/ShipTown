@@ -11,4 +11,7 @@ class ConfigurationApi2cart extends Model
         "bridge_api_key",
         "last_synced_modified_at"
     ];
+
+    protected $table = 'configuration_api2cart';
+
 }

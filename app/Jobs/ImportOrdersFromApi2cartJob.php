@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Managers\CompanyConfigurationManager;
+use App\Models\ConfigurationApi2cart;
 use App\Models\Order;
 use App\Modules\Api2cart\src\Orders;
 use Exception;
@@ -45,7 +46,7 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
             'sort_by' => 'modified_at',
             'sort_direction' => 'asc',
             'count' => 999,
-            'modified_from' => '2020-01-01 00:00:00',
+            'modified_from' => $this->getLastSyncedModifiedFrom(),
         ];
 
         $api2cart_store_key = CompanyConfigurationManager::getBridgeApiKey();
@@ -95,5 +96,13 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
         }
 
         return $result;
+    }
+
+    public function getLastSyncedModifiedFrom() {
+
+        $config = ConfigurationApi2cart::query()->firstOrCreate([],[]);
+
+        return $config['last_synced_modified_at'];
+
     }
 }

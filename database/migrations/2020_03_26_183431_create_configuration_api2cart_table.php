@@ -16,7 +16,7 @@ class CreateConfigurationApi2cartTable extends Migration
         Schema::create('configuration_api2cart', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('bridge_api_key')->nullable();
-            $table->dateTime('last_synced_modified_at');
+            $table->dateTime('last_synced_modified_at')->default('2020-01-01 00:00:00');
             $table->timestamps();
         });
     }
