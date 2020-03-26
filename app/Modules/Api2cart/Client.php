@@ -102,7 +102,7 @@ class Client
 
     static function getApiKey()
     {
-        return env('API2CART_API_KEY', '');
+        return config('app.api2cart_api_key');
     }
 
 }
