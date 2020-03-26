@@ -11,12 +11,12 @@ class Order extends Model
     protected $fillable = [
         'order_number',
         'order_as_json',
-        'originalJson'
+        'original_json'
     ];
 
     protected $casts = [
         'order_as_json' => 'array',
-        'originalJson' => 'array'
+        'original_json' => 'array'
     ];
 
     // we use attributes to set default values
@@ -25,6 +25,6 @@ class Order extends Model
     // correctly to events
     protected $attributes = [
         'order_as_json' => '{}',
-        'originalJson' => '{}',
+        'original_json' => '{}',
     ];
 }

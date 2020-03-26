@@ -14,7 +14,7 @@ class OrdersTableAddColumnOriginalJson extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->json('originalJson');
+            $table->json('original_json');
         });
     }
 
@@ -26,7 +26,7 @@ class OrdersTableAddColumnOriginalJson extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('originalJson');
+            $table->dropColumn('original_json');
         });
     }
 }
