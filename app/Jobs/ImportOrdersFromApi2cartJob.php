@@ -16,11 +16,17 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
+     * @var bool
+     */
+    public $finishedSuccessfully;
+
+    /**
      * Create a new job instance.
      *
      */
     public function __construct()
     {
+        $this->finishedSuccessfully = false;
     }
 
     /**
@@ -36,5 +42,7 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
         $api2cart_store_key = CompanyConfigurationManager::getBridgeApiKey();
 //
 //        $ordersCollection = Orders::getOrdersCollection($api2cart_store_key, $params);
+
+        $this->finishedSuccessfully = true;
     }
 }
