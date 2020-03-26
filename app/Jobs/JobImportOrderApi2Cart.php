@@ -6,9 +6,7 @@ use App\Exceptions\Api2CartKeyNotSetException;
 use App\Managers\CompanyConfigurationManager;
 use App\Models\Inventory;
 use App\Models\Product;
-use App\Scopes\AuthenticatedUserScope;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -19,8 +17,6 @@ class JobImportOrderApi2Cart implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $api2cart_store_key;
-    private $callback;
-    private $auth;
     private $api2cart_app_key;
 
     /**
