@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\Managers\CompanyConfigurationManager;
 use App\Models\Order;
-use App\Modules\Api2cart\Orders;
+use App\Modules\Api2cart\src\Orders;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;

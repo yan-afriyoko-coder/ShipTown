@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Modules\Api2cart;
+namespace App\Modules\Api2cart\src;
 
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use App\Modules\Api2cart\RequestResponse;
+use App\Modules\Api2cart\src\RequestResponse;
 
 class Products extends Entity
 {

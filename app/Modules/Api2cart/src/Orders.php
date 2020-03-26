@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Modules\Api2cart;
+namespace App\Modules\Api2cart\src;
 
 
 use Exception;
