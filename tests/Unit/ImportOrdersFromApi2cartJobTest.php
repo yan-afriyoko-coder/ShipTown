@@ -21,7 +21,7 @@ class ImportOrdersFromApi2cartJobTest extends TestCase
 
 //        Config::setApi2cartStoreKey('');
 
-        $job = new ImportOrdersFromApi2cartJob(auth()->id());
+        $job = new ImportOrdersFromApi2cartJob();
 
         $job->handle();
 
