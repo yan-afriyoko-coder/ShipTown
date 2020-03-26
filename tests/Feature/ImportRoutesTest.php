@@ -28,4 +28,13 @@ class ImportRoutesTest extends TestCase
 
         Bus::assertDispatched(ImportOrdersFromApi2cartJob::class);
     }
+
+    public function test_if_import_job_runs_correctly() {
+
+        $job = new ImportOrdersFromApi2cartJob();
+
+        $job->handle();
+
+        $this->assertTrue($job->finishedSuccessfully);
+    }
 }
