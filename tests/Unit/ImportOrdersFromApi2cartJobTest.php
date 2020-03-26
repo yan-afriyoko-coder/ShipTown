@@ -19,8 +19,6 @@ class ImportOrdersFromApi2cartJobTest extends TestCase
         // we set key to api2cart demo store
         CompanyConfigurationManager::set('bridge_api_key', 'ed58a22dfecb405a50ea3ea56979360d');
 
-//        Config::setApi2cartStoreKey('');
-
         $job = new ImportOrdersFromApi2cartJob();
 
         $job->handle();
