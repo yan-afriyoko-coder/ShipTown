@@ -11,6 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Arr;
 
 class ImportOrdersFromApi2cartJob implements ShouldQueue
 {
@@ -47,11 +48,22 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
         $ordersCollection = Orders::getOrdersCollection($api2cart_store_key, $params);
 
         foreach ($ordersCollection['order'] as $order) {
+
+            $newOrder = [
+                'order_number' => $order['order_id'],
+                'products' => Arr::has($order, 'products')
+                    ? $order['order_products']
+                    : [],
+            ];
+
             Order::query()->updateOrCreate(
                 [
-                    "order_number" => $order['order_id']
+                    "order_number" => $newOrder['order_number'],
                 ],
-                $order
+                array_merge(
+                    $newOrder,
+                    ['order_as_json' => $newOrder]
+                )
             );
         }
 
