@@ -45,34 +45,36 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
         ];
 
         $api2cart_store_key = CompanyConfigurationManager::getBridgeApiKey();
+        $orderToImportCollection = [];
 
         // pull orders
-        $ordersCollection = Orders::getOrdersCollection($api2cart_store_key, $params);
+        $webOrdersCollection = Orders::getOrdersCollection($api2cart_store_key, $params);
 
         // transforms orders
-        foreach ($ordersCollection['order'] as $order) {
-
-            $newOrder = [
+        foreach ($webOrdersCollection['order'] as $order) {
+            $orderToImportCollection[] = [
                 'order_number' => $order['order_id'],
                 'original_json' => $order,
                 'products' => Arr::has($order, 'order_products')
                     ? $this->convertProducts($order['order_products'])
                     : [],
             ];
+        }
 
+        // save orders
+        foreach ($orderToImportCollection as $order) {
             Order::query()->updateOrCreate(
                 [
-                    "order_number" => $newOrder['order_number'],
+                    "order_number" => $order['order_number'],
                 ],
                 array_merge(
-                    $newOrder,
-                    ['order_as_json' => $newOrder]
+                    $order,
+                    ['order_as_json' => $order]
                 )
             );
         }
 
-        // save orders
-
+        // finalize
         $this->finishedSuccessfully = true;
     }
 
