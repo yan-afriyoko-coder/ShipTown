@@ -52,7 +52,7 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
             $newOrder = [
                 'order_number' => $order['order_id'],
                 'products' => Arr::has($order, 'order_products')
-                    ? $order['order_products']
+                    ? $this->convertProducts($order['order_products'])
                     : [],
             ];
 
@@ -68,5 +68,20 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
         }
 
         $this->finishedSuccessfully = true;
+    }
+
+    public function convertProducts(array $products) {
+
+        $result = [];
+
+        foreach ($products as $product) {
+            $result[] = [
+                'sku' => $product['model'],
+                'price' => $product['price'],
+                'quantity' => $product['quantity']
+            ];
+        }
+
+        return $result;
     }
 }
