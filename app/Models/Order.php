@@ -15,11 +15,4 @@ class Order extends Model
     protected $casts = [
         'order_as_json' => 'array'
     ];
-
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-
-        $this->user_id = auth()->id();
-    }
 }
