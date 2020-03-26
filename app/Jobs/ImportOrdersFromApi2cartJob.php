@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Managers\CompanyConfigurationManager;
+use App\Models\Order;
 use App\Modules\Api2cart\Orders;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -37,11 +38,22 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
      */
     public function handle()
     {
-        $params = [];
+        $params = [
+            'params' => 'force_all'
+        ];
 
         $api2cart_store_key = CompanyConfigurationManager::getBridgeApiKey();
-//
-//        $ordersCollection = Orders::getOrdersCollection($api2cart_store_key, $params);
+
+        $ordersCollection = Orders::getOrdersCollection($api2cart_store_key, $params);
+
+        foreach ($ordersCollection['order'] as $order) {
+            Order::query()->updateOrCreate(
+                [
+                    "order_number" => $order['order_id']
+                ],
+                $order
+            );
+        }
 
         $this->finishedSuccessfully = true;
     }
