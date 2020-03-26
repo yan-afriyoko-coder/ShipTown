@@ -26,4 +26,15 @@ class CompanyConfigurationManager
 
         return $key;
     }
+
+    /**
+     * @param $key
+     * @param $value
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     */
+    public static function set($key, $value) {
+        return CompanyConfiguration::query()->updateOrCreate([], [
+            $key => $value
+        ]);
+    }
 }
