@@ -39,14 +39,17 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
      */
     public function handle()
     {
+        // initialize variables
         $params = [
             'params' => 'force_all'
         ];
 
         $api2cart_store_key = CompanyConfigurationManager::getBridgeApiKey();
 
+        // pull orders
         $ordersCollection = Orders::getOrdersCollection($api2cart_store_key, $params);
 
+        // transforms orders
         foreach ($ordersCollection['order'] as $order) {
 
             $newOrder = [
@@ -67,6 +70,8 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
                 )
             );
         }
+
+        // save orders
 
         $this->finishedSuccessfully = true;
     }
