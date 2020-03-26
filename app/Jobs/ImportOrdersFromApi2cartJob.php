@@ -51,6 +51,7 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
 
             $newOrder = [
                 'order_number' => $order['order_id'],
+                'originalJson' => $order,
                 'products' => Arr::has($order, 'order_products')
                     ? $this->convertProducts($order['order_products'])
                     : [],

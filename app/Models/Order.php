@@ -9,11 +9,14 @@ use Illuminate\Support\Arr;
 class Order extends Model
 {
     protected $fillable = [
-        'order_number', 'order_as_json'
+        'order_number',
+        'order_as_json',
+        'originalJson'
     ];
 
     protected $casts = [
-        'order_as_json' => 'array'
+        'order_as_json' => 'array',
+        'originalJson' => 'array'
     ];
 
     // we use attributes to set default values
