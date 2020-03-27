@@ -4,21 +4,49 @@
 namespace App\Managers;
 
 use App\Models\Product;
+use Illuminate\Support\Facades\Log;
 
+/**
+ * Class ProductManager
+ * @package App\Managers
+ */
 class ProductManager
 {
-    public static function reserve($sku, $quantity, $message)
+    /**
+     * @param string $sku
+     * @param float $quantity
+     * @param string $message
+     * @return bool
+     */
+    public static function reserve(string $sku, float $quantity, string $message)
     {
-        $aProduct = Product::firstOrCreate(["sku" => $sku]);
+        $aProduct = Product::query()->where(["sku" => $sku])->first();
 
-        $aProduct->increment("quantity_reserved", $quantity);
+        if($aProduct) {
+            $aProduct->increment("quantity_reserved", $quantity);
+            return true;
+        }
+
+        Log::warning('Could not reserve quantity - SKU does not exist', ["sku" => $sku]);
+        return false;
     }
 
-    public static function release($sku, $quantity, $message)
+    /**
+     * @param string $sku
+     * @param float $quantity
+     * @param string $message
+     * @return bool
+     */
+    public static function release(string $sku, float $quantity, string $message)
     {
-        $aProduct = Product::firstOrCreate(["sku" => $sku]);
+        $aProduct = Product::query()->where(["sku" => $sku])->first();
 
-        $aProduct->decrement("quantity_reserved", $quantity);
+        if($aProduct) {
+            $aProduct->decrement("quantity_reserved", $quantity);
+            return true;
+        }
+
+        Log::warning('Could not release quantity - SKU does not exist', ["sku" => $sku]);
+        return false;
     }
-
 }
