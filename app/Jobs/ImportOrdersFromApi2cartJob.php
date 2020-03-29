@@ -41,34 +41,18 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
      */
     public function handle()
     {
-        // initialize variables
-        $params = [
-            'params' => 'force_all',
-            'sort_by' => 'modified_at',
-            'sort_direction' => 'asc',
-            'count' => 50,
-            'modified_from' => $this->getLastSyncedTimestamp(),
-        ];
+        $lastSyncedTimeStamp = $this->getLastSyncedTimestamp();
 
-        $api2cart_store_key = CompanyConfigurationManager::getBridgeApiKey();
-        $orderToImportCollection = [];
+        $ordersCollection = $this->fetchOrders($lastSyncedTimeStamp, 10);
 
-        // pull orders
-        $webOrdersCollection = Orders::getOrdersCollection($api2cart_store_key, $params);
+        $transformedOrdersCollection = $this->convertOrdersFormat($ordersCollection);
 
-        // transforms orders
-        foreach ($webOrdersCollection['order'] as $order) {
-            $orderToImportCollection[] = [
-                'order_number' => $order['order_id'],
-                'original_json' => $order,
-                'products' => Arr::has($order, 'order_products')
-                    ? $this->convertProducts($order['order_products'])
-                    : [],
-            ];
-        }
+        $this->satLastSyncedTimestamp($ordersCollection);
+
+        $this->pushCollection($transformedOrdersCollection);
 
         // save orders
-        foreach ($orderToImportCollection as $order) {
+        foreach ($transformedOrdersCollection as $order) {
             Order::query()->updateOrCreate(
                 [
                     "order_number" => $order['order_number'],
@@ -85,12 +69,17 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
                     $order['original_json']['modified_at']['value']
                 )
             ]);
+
         }
 
         // finalize
         $this->finishedSuccessfully = true;
     }
 
+    /**
+     * @param array $products
+     * @return array
+     */
     public function convertProducts(array $products) {
 
         $result = [];
@@ -106,11 +95,73 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
         return $result;
     }
 
+    /**
+     * @return mixed
+     */
     public function getLastSyncedTimestamp() {
 
         $config = ConfigurationApi2cart::query()->firstOrCreate([],[]);
 
         return $config['last_synced_modified_at'];
+
+    }
+
+    /**
+     * @param mixed $timestamp
+     * @param int $count
+     * @return array
+     * @throws \App\Exceptions\Api2CartKeyNotSetException
+     */
+    private function fetchOrders($timestamp, int $count){
+
+        // initialize variables
+        $params = [
+            'params' => 'force_all',
+            'sort_by' => 'modified_at',
+            'sort_direction' => 'asc',
+            'count' => $count,
+            'modified_from' => $timestamp,
+        ];
+
+        $api2cart_store_key = CompanyConfigurationManager::getBridgeApiKey();
+
+        return Orders::getOrdersCollection($api2cart_store_key, $params);
+    }
+
+    /**
+     * @param array $ordersCollection
+     * @return array
+     */
+    private function convertOrdersFormat(array $ordersCollection)
+    {
+        $convertedOrdersCollection = [];
+
+        foreach ($ordersCollection['order'] as $order) {
+
+            $convertedOrdersCollection[] = [
+                'order_number' => $order['order_id'],
+                'original_json' => $order,
+                'products' => Arr::has($order, 'order_products')
+                    ? $this->convertProducts($order['order_products'])
+                    : [],
+            ];
+
+        }
+
+        return $convertedOrdersCollection;
+    }
+
+    /**
+     * @param array $ordersCollection
+     */
+    private function satLastSyncedTimestamp(array $ordersCollection){
+
+    }
+
+    /**
+     * @param array $transformedOrdersCollection
+     */
+    private function pushCollection(array $transformedOrdersCollection){
 
     }
 }
