@@ -47,7 +47,7 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
 
         $transformedOrdersCollection = $this->convertOrdersFormat($ordersCollection);
 
-        ImportOrdersCollection::dispatchNow($transformedOrdersCollection);
+        SaveOrdersCollection::dispatchNow($transformedOrdersCollection);
 
         $this->satLastSyncedTimestamp($ordersCollection);
 
