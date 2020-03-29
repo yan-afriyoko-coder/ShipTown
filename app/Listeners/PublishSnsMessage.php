@@ -17,31 +17,40 @@ use Illuminate\Support\Facades\Log;
 class PublishSnsMessage
 {
     /**
-     * Register the listeners for the subscriber.
+     * Register the listeners for SNS publisher
      *
      * @param Dispatcher $events
      */
     public function subscribe($events)
     {
-        $events->listen('eloquent.created: App\Models\Order','App\Listeners\PublishSnsMessage@on_order_created');
-        $events->listen('eloquent.updated: App\Models\Order','App\Listeners\PublishSnsMessage@on_order_updated');
+        $events->listen('eloquent.created: App\Models\Order','App\Listeners\PublishSnsMessage@orderCreated');
+        $events->listen('eloquent.updated: App\Models\Order','App\Listeners\PublishSnsMessage@orderUpdated');
 
         //products
-        $events->listen('eloquent.created: App\Models\Product','App\Listeners\PublishSnsMessage@on_product_created');
-        $events->listen('eloquent.updated: App\Models\Product','App\Listeners\PublishSnsMessage@on_product_updated');
+        $events->listen('eloquent.created: App\Models\Product','App\Listeners\PublishSnsMessage@productCreated');
+        $events->listen('eloquent.updated: App\Models\Product','App\Listeners\PublishSnsMessage@productUpdated');
     }
 
-    public function on_order_created(Order $order)
+    /**
+     * @param Order $order
+     */
+    public function orderCreated(Order $order)
     {
         $this->publishMessageArray($order->toArray(), "orders");
     }
 
-    public function on_order_updated(Order $order)
+    /**
+     * @param Order $order
+     */
+    public function orderUpdated(Order $order)
     {
         $this->publishMessageArray($order->toArray(), "orders");
     }
 
-    public function on_product_created(Product $product)
+    /**
+     * @param Product $product
+     */
+    public function productCreated(Product $product)
     {
         $this->publishMessageArray($product->toArray(),'products');
     }
@@ -49,7 +58,7 @@ class PublishSnsMessage
     /**
      * @param Product $product
      */
-    public function on_product_updated(Product $product)
+    public function productUpdated(Product $product)
     {
         $this->publishMessageArray($product->toArray(),'products');
     }
