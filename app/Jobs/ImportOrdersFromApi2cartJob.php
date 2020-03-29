@@ -43,7 +43,7 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
     {
         $lastSyncedTimeStamp = $this->getLastSyncedTimestamp();
 
-        $ordersCollection = $this->fetchOrders($lastSyncedTimeStamp, 30);
+        $ordersCollection = $this->fetchOrders($lastSyncedTimeStamp, 50);
 
         $transformedOrdersCollection = $this->convertOrdersFormat($ordersCollection);
 
