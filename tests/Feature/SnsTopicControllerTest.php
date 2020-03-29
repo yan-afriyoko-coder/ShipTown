@@ -33,7 +33,7 @@ class SnsTopicControllerTest extends TestCase
         );
 
         $this->assertTrue(
-            $snsClient->subscribe_to_user_topic('https://phpunit.test.subscription.url'),
+            $snsClient->subscribeToTopic('https://phpunit.test.subscription.url'),
             "Could not subscribe to topic"
         );
 
@@ -43,7 +43,7 @@ class SnsTopicControllerTest extends TestCase
         );
 
         $this->assertTrue(
-            $snsClient->delete_user_topic(),
+            $snsClient->deleteTopic(),
             "Could not delete topic"
         );
 

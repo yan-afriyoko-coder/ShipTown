@@ -33,13 +33,13 @@ class SnsTopicController extends Controller
         return true;
     }
 
-    public function subscribe_to_user_topic($subscription_url) {
+    public function subscribeToTopic($subscription_url) {
         try {
             $this->_awsSnsClient->subscribe([
                 'Protocol' => 'https',
                 'Endpoint' => $subscription_url,
                 'ReturnSubscriptionArn' => true,
-                'TopicArn' => $this->getTargetArn(),
+                'TopicArn' => $this->getTopicArn(),
             ]);
 
         } catch (AwsException $e) {
@@ -60,7 +60,7 @@ class SnsTopicController extends Controller
 
         $notification = [
             'Message'   => $message,
-            'TargetArn' => $this->getTargetArn()
+            'TargetArn' => $this->getTopicArn()
         ];
 
         try {
@@ -96,11 +96,11 @@ class SnsTopicController extends Controller
 
     }
 
-    public function delete_user_topic() {
+    public function deleteTopic() {
 
         try {
             $this->_awsSnsClient->deleteTopic([
-                'TopicArn' => $this->getTargetArn()
+                'TopicArn' => $this->getTopicArn()
             ]);
 
         } catch (AwsException $e) {
@@ -128,7 +128,7 @@ class SnsTopicController extends Controller
     /**
      * @return string
      */
-    private function getTargetArn(): string
+    private function getTopicArn(): string
     {
         return implode(":",[
             "arn",
