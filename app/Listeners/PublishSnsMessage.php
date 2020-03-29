@@ -73,7 +73,7 @@ class PublishSnsMessage
 
         $snsTopic = new SnsTopicController($topic_prefix);
 
-        $snsTopic->publish_message(json_encode($data));
+        $snsTopic->publish(json_encode($data));
     }
 
 }

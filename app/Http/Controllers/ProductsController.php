@@ -35,7 +35,7 @@ class ProductsController extends Controller
 
         $sns = new SnsTopicController("products");
 
-        $sns->publish_message(json_encode($product->toArray()));
+        $sns->publish(json_encode($product->toArray()));
 
         $this->respond_OK_200();
     }

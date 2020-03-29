@@ -9,19 +9,19 @@ use Illuminate\Support\Facades\Log;
 
 class SnsTopicController extends Controller
 {
-    private $_awsSnsClient;
-    private $_topicPrefix;
+    private $awsSnsClient;
+    private $topicName;
 
     public function __construct($topic_prefix)
     {
-        $this->_awsSnsClient = \AWS::createClient('sns');
-        $this->_topicPrefix = $topic_prefix;
+        $this->awsSnsClient = \AWS::createClient('sns');
+        $this->topicName = $topic_prefix;
     }
 
     public function createTopic() {
 
         try {
-            $this->_awsSnsClient->createTopic([
+            $this->awsSnsClient->createTopic([
                 'Name' => $this->getFullTopicName()
             ]);
 
@@ -35,7 +35,7 @@ class SnsTopicController extends Controller
 
     public function subscribeToTopic($subscription_url) {
         try {
-            $this->_awsSnsClient->subscribe([
+            $this->awsSnsClient->subscribe([
                 'Protocol' => 'https',
                 'Endpoint' => $subscription_url,
                 'ReturnSubscriptionArn' => true,
@@ -54,7 +54,7 @@ class SnsTopicController extends Controller
      * @param $message
      * @return bool
      */
-    function publish_message($message){
+    function publish($message){
 
         logger("Publishing SNS message", ["message" => $message]);
 
@@ -65,7 +65,7 @@ class SnsTopicController extends Controller
 
         try {
 
-            $result = $this->_awsSnsClient->publish($notification);
+            $result = $this->awsSnsClient->publish($notification);
 
             logger("SNS message published", [
                 "Message" => $notification,
@@ -80,7 +80,7 @@ class SnsTopicController extends Controller
             {
                 case 404:
                     $this->createTopic();
-                    $this->publish_message($message);
+                    $this->publish($message);
                     break;
                 default:
                     Log::error("Could not publish SNS message", [
@@ -99,7 +99,7 @@ class SnsTopicController extends Controller
     public function deleteTopic() {
 
         try {
-            $this->_awsSnsClient->deleteTopic([
+            $this->awsSnsClient->deleteTopic([
                 'TopicArn' => $this->getTopicArn()
             ]);
 
@@ -115,7 +115,7 @@ class SnsTopicController extends Controller
     {
         return implode('', [
             config('app.sns_topic_prefix', ''),
-            $this->_topicPrefix
+            $this->topicName
         ]);
     }
 

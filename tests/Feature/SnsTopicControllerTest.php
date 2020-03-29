@@ -38,7 +38,7 @@ class SnsTopicControllerTest extends TestCase
         );
 
         $this->assertTrue(
-            $snsClient->publish_message("This is test message"),
+            $snsClient->publish("This is test message"),
             "Could not publish message"
         );
 
