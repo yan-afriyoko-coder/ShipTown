@@ -12,14 +12,21 @@ class SnsTopicController extends Controller
     private $awsSnsClient;
     private $topicName;
 
+    /**
+     * SnsTopicController constructor.
+     * @param $topic_prefix
+     */
     public function __construct($topic_prefix)
     {
         $this->awsSnsClient = \AWS::createClient('sns');
         $this->topicName = $topic_prefix;
     }
 
-    public function createTopic() {
-
+    /**
+     * @return bool
+     */
+    public function createTopic()
+    {
         try {
             $this->awsSnsClient->createTopic([
                 'Name' => $this->getFullTopicName()
@@ -33,7 +40,11 @@ class SnsTopicController extends Controller
         return true;
     }
 
-    public function subscribeToTopic($subscription_url) {
+    /**
+     * @param string $subscription_url
+     * @return bool
+     */
+    public function subscribeToTopic(string $subscription_url) {
         try {
             $this->awsSnsClient->subscribe([
                 'Protocol' => 'https',
@@ -51,10 +62,10 @@ class SnsTopicController extends Controller
     }
 
     /**
-     * @param $message
+     * @param string $message
      * @return bool
      */
-    function publish($message){
+    function publish(string $message){
 
         logger("Publishing SNS message", ["message" => $message]);
 
@@ -96,6 +107,9 @@ class SnsTopicController extends Controller
 
     }
 
+    /**
+     * @return bool
+     */
     public function deleteTopic() {
 
         try {
@@ -111,6 +125,9 @@ class SnsTopicController extends Controller
         return true;
     }
 
+    /**
+     * @return string
+     */
     private function getFullTopicName(): string
     {
         return implode('', [
