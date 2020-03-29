@@ -14,12 +14,12 @@ class SnsTopicController extends Controller
 
     /**
      * SnsTopicController constructor.
-     * @param $topic_prefix
+     * @param $topicName
      */
-    public function __construct($topic_prefix)
+    public function __construct($topicName)
     {
         $this->awsSnsClient = \AWS::createClient('sns');
-        $this->topicName = $topic_prefix;
+        $this->topicName = $topicName;
     }
 
     /**
