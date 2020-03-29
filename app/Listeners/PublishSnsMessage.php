@@ -36,7 +36,7 @@ class PublishSnsMessage
      */
     public function orderCreated(Order $order)
     {
-        $this->publishMessageArray($order->toArray(), "orders");
+        $this->publishMessageArray($order->toArray(), "orders_events");
     }
 
     /**
@@ -44,7 +44,7 @@ class PublishSnsMessage
      */
     public function orderUpdated(Order $order)
     {
-        $this->publishMessageArray($order->toArray(), "orders");
+        $this->publishMessageArray($order->toArray(), "orders_events");
     }
 
     /**
@@ -52,7 +52,7 @@ class PublishSnsMessage
      */
     public function productCreated(Product $product)
     {
-        $this->publishMessageArray($product->toArray(),'products');
+        $this->publishMessageArray($product->toArray(),'products_events');
     }
 
     /**
@@ -60,7 +60,7 @@ class PublishSnsMessage
      */
     public function productUpdated(Product $product)
     {
-        $this->publishMessageArray($product->toArray(),'products');
+        $this->publishMessageArray($product->toArray(),'products_events');
     }
 
     /**
