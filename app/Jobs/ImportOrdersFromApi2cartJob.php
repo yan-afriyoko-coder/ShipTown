@@ -41,56 +41,24 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
      */
     public function handle()
     {
-        // initialize variables
-        $params = [
-            'params' => 'force_all',
-            'sort_by' => 'modified_at',
-            'sort_direction' => 'asc',
-            'count' => 50,
-            'modified_from' => $this->getLastSyncedModifiedFrom(),
-        ];
+        $lastSyncedTimeStamp = $this->getLastSyncedTimestamp();
 
-        $api2cart_store_key = CompanyConfigurationManager::getBridgeApiKey();
-        $orderToImportCollection = [];
+        $ordersCollection = $this->fetchOrders($lastSyncedTimeStamp, 10);
 
-        // pull orders
-        $webOrdersCollection = Orders::getOrdersCollection($api2cart_store_key, $params);
+        $transformedOrdersCollection = $this->convertOrdersFormat($ordersCollection);
 
-        // transforms orders
-        foreach ($webOrdersCollection['order'] as $order) {
-            $orderToImportCollection[] = [
-                'order_number' => $order['order_id'],
-                'original_json' => $order,
-                'products' => Arr::has($order, 'order_products')
-                    ? $this->convertProducts($order['order_products'])
-                    : [],
-            ];
-        }
+        ImportOrdersCollection::dispatchNow($transformedOrdersCollection);
 
-        // save orders
-        foreach ($orderToImportCollection as $order) {
-            Order::query()->updateOrCreate(
-                [
-                    "order_number" => $order['order_number'],
-                ],
-                array_merge(
-                    $order,
-                    ['order_as_json' => $order]
-                )
-            );
-
-            ConfigurationApi2cart::query()->updateOrCreate([],[
-                'last_synced_modified_at' => Carbon::createFromFormat(
-                    $order['original_json']['modified_at']['format'],
-                    $order['original_json']['modified_at']['value']
-                )
-            ]);
-        }
+        $this->satLastSyncedTimestamp($ordersCollection);
 
         // finalize
         $this->finishedSuccessfully = true;
     }
 
+    /**
+     * @param array $products
+     * @return array
+     */
     public function convertProducts(array $products) {
 
         $result = [];
@@ -106,11 +74,75 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
         return $result;
     }
 
-    public function getLastSyncedModifiedFrom() {
+    /**
+     * @return mixed
+     */
+    public function getLastSyncedTimestamp() {
 
         $config = ConfigurationApi2cart::query()->firstOrCreate([],[]);
 
         return $config['last_synced_modified_at'];
 
+    }
+
+    /**
+     * @param mixed $timestamp
+     * @param int $count
+     * @return array
+     * @throws \App\Exceptions\Api2CartKeyNotSetException
+     * @throws Exception
+     */
+    private function fetchOrders($timestamp, int $count){
+
+        // initialize params
+        $params = [
+            'params' => 'force_all',
+            'sort_by' => 'modified_at',
+            'sort_direction' => 'asc',
+            'count' => $count,
+            'modified_from' => $timestamp,
+        ];
+
+        $api2cart_store_key = CompanyConfigurationManager::getBridgeApiKey();
+
+        return Orders::getOrdersCollection($api2cart_store_key, $params);
+    }
+
+    /**
+     * @param array $ordersCollection
+     * @return array
+     */
+    private function convertOrdersFormat(array $ordersCollection)
+    {
+        $convertedOrdersCollection = [];
+
+        foreach ($ordersCollection['order'] as $order) {
+
+            $convertedOrdersCollection[] = [
+                'order_number' => $order['order_id'],
+                'original_json' => $order,
+                'products' => Arr::has($order, 'order_products')
+                    ? $this->convertProducts($order['order_products'])
+                    : [],
+            ];
+
+        }
+
+        return $convertedOrdersCollection;
+    }
+
+    /**
+     * @param array $ordersCollection
+     */
+    private function satLastSyncedTimestamp(array $ordersCollection)
+    {
+        $lastOrder = Arr::last($ordersCollection['order']);
+
+        ConfigurationApi2cart::query()->updateOrCreate([],[
+            'last_synced_modified_at' => Carbon::createFromFormat(
+                $lastOrder['modified_at']['format'],
+                $lastOrder['modified_at']['value']
+            )
+        ]);
     }
 }

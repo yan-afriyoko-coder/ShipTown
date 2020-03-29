@@ -28,22 +28,22 @@ class SnsTopicControllerTest extends TestCase
         $snsClient = new SnsTopicController("testTopic");
 
         $this->assertTrue(
-            $snsClient->create_user_topic(),
+            $snsClient->createTopic(),
             "Could not create topic"
         );
 
         $this->assertTrue(
-            $snsClient->subscribe_to_user_topic('https://phpunit.test.subscription.url'),
+            $snsClient->subscribeToTopic('https://phpunit.test.subscription.url'),
             "Could not subscribe to topic"
         );
 
         $this->assertTrue(
-            $snsClient->publish_message("This is test message"),
+            $snsClient->publish("This is test message"),
             "Could not publish message"
         );
 
         $this->assertTrue(
-            $snsClient->delete_user_topic(),
+            $snsClient->deleteTopic(),
             "Could not delete topic"
         );
 

@@ -17,61 +17,66 @@ use Illuminate\Support\Facades\Log;
 class PublishSnsMessage
 {
     /**
-     * Register the listeners for the subscriber.
+     * Register the listeners for SNS publisher
      *
      * @param Dispatcher $events
      */
     public function subscribe($events)
     {
-        $events->listen('eloquent.created: App\Models\Order','App\Listeners\PublishSnsMessage@on_order_created');
+        $events->listen('eloquent.created: App\Models\Order','App\Listeners\PublishSnsMessage@orderCreated');
+        $events->listen('eloquent.updated: App\Models\Order','App\Listeners\PublishSnsMessage@orderUpdated');
 
         //products
-        $events->listen('eloquent.created: App\Models\Product','App\Listeners\PublishSnsMessage@on_product_created');
-        $events->listen('eloquent.updated: App\Models\Product','App\Listeners\PublishSnsMessage@on_product_updated');
+        $events->listen('eloquent.created: App\Models\Product','App\Listeners\PublishSnsMessage@productCreated');
+        $events->listen('eloquent.updated: App\Models\Product','App\Listeners\PublishSnsMessage@productUpdated');
     }
 
-    public function on_order_created(Order $order)
+    /**
+     * @param Order $order
+     */
+    public function orderCreated(Order $order)
     {
-        $this->publishMessageArray($order->toArray(), "orders");
+        $this->publishMessageArray($order->toArray(), "orders_events");
     }
 
-    public function on_product_created(Product $product)
+    /**
+     * @param Order $order
+     */
+    public function orderUpdated(Order $order)
     {
-        $this->publishMessageArray($product->toArray(),'products');
+        $this->publishMessageArray($order->toArray(), "orders_events");
     }
 
     /**
      * @param Product $product
      */
-    public function on_product_updated(Product $product)
+    public function productCreated(Product $product)
     {
-        $this->publishMessageArray($product->toArray(),'products');
+        $this->publishMessageArray($product->toArray(),'products_events');
     }
 
     /**
-     * @param EventTypes $event
-     * @param $topic_prefix
+     * @param Product $product
      */
-    private function publishMessage(EventTypes $event, $topic_prefix): void
+    public function productUpdated(Product $product)
     {
-        Log::debug("Publishing SNS message ($topic_prefix)", $event->data->toArray());
-
-        $snsTopic = new SnsTopicController($topic_prefix);
-
-        $snsTopic->publish_message(json_encode($event->data->toArray()));
+        $this->publishMessageArray($product->toArray(),'products_events');
     }
 
     /**
-     * @param array $array
-     * @param string $topic_prefix
+     * @param array $data
+     * @param string $topicName
      */
-    private function publishMessageArray(array $array, string $topic_prefix): void
+    private function publishMessageArray(array $data, string $topicName): void
     {
-        Log::debug("Publishing SNS message ($topic_prefix)", $array);
+        Log::debug("Publishing SNS message", [
+            "topic" => $topicName,
+            "data" =>$data
+        ]);
 
-        $snsTopic = new SnsTopicController($topic_prefix);
+        $snsTopic = new SnsTopicController($topicName);
 
-        $snsTopic->publish_message(json_encode($array));
+        $snsTopic->publish(json_encode($data));
     }
 
 }

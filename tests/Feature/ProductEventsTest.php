@@ -2,22 +2,12 @@
 
 namespace Tests\Feature;
 
-
-use App\Events\EventTypes;
-use App\Events\ProductCreatedEvent;
-use App\Events\ProductUpdatedEvent;
-use App\Listeners\PublishSnsMessage;
 use App\Models\Product;
 use App\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
-use Mockery;
-use Tests\Feature\AuthorizedUserTestCase;
-use Tests\ModelSample;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProductEventsTest extends TestCase
 {
@@ -46,9 +36,13 @@ class ProductEventsTest extends TestCase
         Event::fake();
 
         $product_data = [
-            'sku' => 'test'
+            'sku' => 'test',
+            'name' => 'testName',
+            'price' => 10,
         ];
 
+
+        Product::query()->where('sku', '=', $product_data['sku'])->delete();
 
         // Act
         $response = $this->json("POST", '/api/products', $product_data);
@@ -76,20 +70,18 @@ class ProductEventsTest extends TestCase
         // Assign
         Event::fake();
 
-        $product_new = [
-            'sku' => 'test'
-        ];
+        $product = factory(Product::class)->create();
+
         $product_update = [
-            'sku' => 'test',
-            'price' => 1
+            'sku' => $product['sku'],
+            'name' => $product['name'],
+            'price' => $product['price'] * 2
         ];
 
         // Act
-        $response_create = $this->json("POST", '/api/products', $product_new);
         $response_update = $this->json("POST", '/api/products', $product_update);
 
         // Assert
-        $response_create->assertStatus(200);
         $response_update->assertStatus(200);
 
         Event::assertDispatched('eloquent.updated: App\Models\Product', function ($event, Product $product) {

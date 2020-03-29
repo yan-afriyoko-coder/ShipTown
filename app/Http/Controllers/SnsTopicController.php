@@ -9,20 +9,27 @@ use Illuminate\Support\Facades\Log;
 
 class SnsTopicController extends Controller
 {
-    private $_awsSnsClient;
-    private $_topicPrefix;
+    private $awsSnsClient;
+    private $topicName;
 
-    public function __construct($topic_prefix)
+    /**
+     * SnsTopicController constructor.
+     * @param $topicName
+     */
+    public function __construct($topicName)
     {
-        $this->_awsSnsClient = \AWS::createClient('sns');
-        $this->_topicPrefix = $topic_prefix;
+        $this->awsSnsClient = \AWS::createClient('sns');
+        $this->topicName = $topicName;
     }
 
-    public function create_user_topic() {
-
+    /**
+     * @return bool
+     */
+    public function createTopic()
+    {
         try {
-            $this->_awsSnsClient->createTopic([
-                'Name' => $this->getTopicName()
+            $this->awsSnsClient->createTopic([
+                'Name' => $this->getFullTopicName()
             ]);
 
         } catch (AwsException $e) {
@@ -33,13 +40,17 @@ class SnsTopicController extends Controller
         return true;
     }
 
-    public function subscribe_to_user_topic($subscription_url) {
+    /**
+     * @param string $subscription_url
+     * @return bool
+     */
+    public function subscribeToTopic(string $subscription_url) {
         try {
-            $this->_awsSnsClient->subscribe([
+            $this->awsSnsClient->subscribe([
                 'Protocol' => 'https',
                 'Endpoint' => $subscription_url,
                 'ReturnSubscriptionArn' => true,
-                'TopicArn' => $this->getTargetArn(),
+                'TopicArn' => $this->getTopicArn(),
             ]);
 
         } catch (AwsException $e) {
@@ -51,21 +62,21 @@ class SnsTopicController extends Controller
     }
 
     /**
-     * @param $message
+     * @param string $message
      * @return bool
      */
-    function publish_message($message){
+    function publish(string $message){
 
         logger("Publishing SNS message", ["message" => $message]);
 
         $notification = [
             'Message'   => $message,
-            'TargetArn' => $this->getTargetArn()
+            'TargetArn' => $this->getTopicArn()
         ];
 
         try {
 
-            $result = $this->_awsSnsClient->publish($notification);
+            $result = $this->awsSnsClient->publish($notification);
 
             logger("SNS message published", [
                 "Message" => $notification,
@@ -79,8 +90,8 @@ class SnsTopicController extends Controller
             switch ($e->getStatusCode())
             {
                 case 404:
-                    $this->create_user_topic();
-                    $this->publish_message($message);
+                    $this->createTopic();
+                    $this->publish($message);
                     break;
                 default:
                     Log::error("Could not publish SNS message", [
@@ -96,11 +107,14 @@ class SnsTopicController extends Controller
 
     }
 
-    public function delete_user_topic() {
+    /**
+     * @return bool
+     */
+    public function deleteTopic() {
 
         try {
-            $this->_awsSnsClient->deleteTopic([
-                'TopicArn' => $this->getTargetArn()
+            $this->awsSnsClient->deleteTopic([
+                'TopicArn' => $this->getTopicArn()
             ]);
 
         } catch (AwsException $e) {
@@ -111,24 +125,21 @@ class SnsTopicController extends Controller
         return true;
     }
 
-    private function getTopicName(): string
+    /**
+     * @return string
+     */
+    private function getFullTopicName(): string
     {
-        if(config('app.use_subdomain_prefixed_topic_name')) {
-            return implode('_',[
-                env('DB_TABLE_PREFIX',''),
-                $this->_topicPrefix
-            ]);
-        }
-
-        $userID = auth()->user()->id;
-
-        return $this->_topicPrefix."_user".$userID;
+        return implode('', [
+            config('app.sns_topic_prefix', ''),
+            $this->topicName
+        ]);
     }
 
     /**
      * @return string
      */
-    private function getTargetArn(): string
+    private function getTopicArn(): string
     {
         return implode(":",[
             "arn",
@@ -136,7 +147,7 @@ class SnsTopicController extends Controller
             "sns",
             config('aws.region'),
             config('aws.user_code'),
-            $this->getTopicName()
+            $this->getFullTopicName()
         ]);
     }
 }
