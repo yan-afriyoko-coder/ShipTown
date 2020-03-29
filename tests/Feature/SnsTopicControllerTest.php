@@ -28,7 +28,7 @@ class SnsTopicControllerTest extends TestCase
         $snsClient = new SnsTopicController("testTopic");
 
         $this->assertTrue(
-            $snsClient->create_user_topic(),
+            $snsClient->createTopic(),
             "Could not create topic"
         );
 

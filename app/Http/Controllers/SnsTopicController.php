@@ -18,7 +18,7 @@ class SnsTopicController extends Controller
         $this->_topicPrefix = $topic_prefix;
     }
 
-    public function create_user_topic() {
+    public function createTopic() {
 
         try {
             $this->_awsSnsClient->createTopic([
@@ -79,7 +79,7 @@ class SnsTopicController extends Controller
             switch ($e->getStatusCode())
             {
                 case 404:
-                    $this->create_user_topic();
+                    $this->createTopic();
                     $this->publish_message($message);
                     break;
                 default:
