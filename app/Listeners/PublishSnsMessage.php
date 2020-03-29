@@ -24,6 +24,7 @@ class PublishSnsMessage
     public function subscribe($events)
     {
         $events->listen('eloquent.created: App\Models\Order','App\Listeners\PublishSnsMessage@on_order_created');
+        $events->listen('eloquent.updated: App\Models\Order','App\Listeners\PublishSnsMessage@on_order_updated');
 
         //products
         $events->listen('eloquent.created: App\Models\Product','App\Listeners\PublishSnsMessage@on_product_created');
@@ -31,6 +32,11 @@ class PublishSnsMessage
     }
 
     public function on_order_created(Order $order)
+    {
+        $this->publishMessageArray($order->toArray(), "orders");
+    }
+
+    public function on_order_updated(Order $order)
     {
         $this->publishMessageArray($order->toArray(), "orders");
     }
@@ -49,29 +55,16 @@ class PublishSnsMessage
     }
 
     /**
-     * @param EventTypes $event
-     * @param $topic_prefix
-     */
-    private function publishMessage(EventTypes $event, $topic_prefix): void
-    {
-        Log::debug("Publishing SNS message ($topic_prefix)", $event->data->toArray());
-
-        $snsTopic = new SnsTopicController($topic_prefix);
-
-        $snsTopic->publish_message(json_encode($event->data->toArray()));
-    }
-
-    /**
-     * @param array $array
+     * @param array $data
      * @param string $topic_prefix
      */
-    private function publishMessageArray(array $array, string $topic_prefix): void
+    private function publishMessageArray(array $data, string $topic_prefix): void
     {
-        Log::debug("Publishing SNS message ($topic_prefix)", $array);
+        Log::debug("Publishing SNS message ($topic_prefix)", $data);
 
         $snsTopic = new SnsTopicController($topic_prefix);
 
-        $snsTopic->publish_message(json_encode($array));
+        $snsTopic->publish_message(json_encode($data));
     }
 
 }
