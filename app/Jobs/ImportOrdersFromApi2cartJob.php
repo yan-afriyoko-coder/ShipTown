@@ -47,7 +47,7 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
             'sort_by' => 'modified_at',
             'sort_direction' => 'asc',
             'count' => 50,
-            'modified_from' => $this->getLastSyncedModifiedFrom(),
+            'modified_from' => $this->getLastSyncedTimestamp(),
         ];
 
         $api2cart_store_key = CompanyConfigurationManager::getBridgeApiKey();
@@ -106,7 +106,7 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
         return $result;
     }
 
-    public function getLastSyncedModifiedFrom() {
+    public function getLastSyncedTimestamp() {
 
         $config = ConfigurationApi2cart::query()->firstOrCreate([],[]);
 
