@@ -113,16 +113,10 @@ class SnsTopicController extends Controller
 
     private function getTopicName(): string
     {
-        if(config('app.use_subdomain_prefixed_topic_name')) {
-            return implode('_',[
-                env('DB_TABLE_PREFIX',''),
-                $this->_topicPrefix
-            ]);
-        }
-
-        $userID = auth()->user()->id;
-
-        return $this->_topicPrefix."_user".$userID;
+        return implode('', [
+            config('app.sns_topic_prefix', ''),
+            $this->_topicPrefix
+        ]);
     }
 
     /**

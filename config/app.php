@@ -3,6 +3,14 @@
 return [
 
     /*
+     * Prefix used for all SNS topics
+     * This is used to have topics per tenant subdomain
+     * ie democompany_orders_events
+     */
+
+    'sns_topic_prefix' => env('DB_TABLE_PREFIX',''),
+
+    /*
      * API2CART application API key
      */
 
