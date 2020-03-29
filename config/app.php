@@ -17,15 +17,6 @@ return [
     "api2cart_api_key" => env('API2CART_API_KEY', ''),
 
     /*
-    | This determinate if we should use domain specific SNS topic name
-    | sample: "democompany_products"
-    | if false it will use user specific
-    | sample: "product_user12"
-    */
-
-    "use_subdomain_prefixed_topic_name" => env('USE_SUBDOMAIN_PREFIXED_TOPIC_NAME', false),
-
-    /*
     |--------------------------------------------------------------------------
     | Application Name
     |--------------------------------------------------------------------------
