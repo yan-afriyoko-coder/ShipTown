@@ -69,7 +69,10 @@ class PublishSnsMessage
      */
     private function publishMessageArray(array $data, string $topicName): void
     {
-        Log::debug("Publishing SNS message ($topicName)", $data);
+        Log::debug("Publishing SNS message", [
+            "topic" => $topicName,
+            "data" =>$data
+        ]);
 
         $snsTopic = new SnsTopicController($topicName);
 
