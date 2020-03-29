@@ -22,7 +22,7 @@ class SnsTopicController extends Controller
 
         try {
             $this->_awsSnsClient->createTopic([
-                'Name' => $this->getTopicName()
+                'Name' => $this->getFullTopicName()
             ]);
 
         } catch (AwsException $e) {
@@ -111,7 +111,7 @@ class SnsTopicController extends Controller
         return true;
     }
 
-    private function getTopicName(): string
+    private function getFullTopicName(): string
     {
         return implode('', [
             config('app.sns_topic_prefix', ''),
@@ -130,7 +130,7 @@ class SnsTopicController extends Controller
             "sns",
             config('aws.region'),
             config('aws.user_code'),
-            $this->getTopicName()
+            $this->getFullTopicName()
         ]);
     }
 }
