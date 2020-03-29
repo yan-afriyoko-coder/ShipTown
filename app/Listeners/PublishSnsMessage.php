@@ -65,13 +65,13 @@ class PublishSnsMessage
 
     /**
      * @param array $data
-     * @param string $topic_prefix
+     * @param string $topicName
      */
-    private function publishMessageArray(array $data, string $topic_prefix): void
+    private function publishMessageArray(array $data, string $topicName): void
     {
-        Log::debug("Publishing SNS message ($topic_prefix)", $data);
+        Log::debug("Publishing SNS message ($topicName)", $data);
 
-        $snsTopic = new SnsTopicController($topic_prefix);
+        $snsTopic = new SnsTopicController($topicName);
 
         $snsTopic->publish(json_encode($data));
     }
