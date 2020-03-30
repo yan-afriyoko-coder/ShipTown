@@ -46,12 +46,12 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
 
             $ordersCollection = $this->fetchOrders($lastSyncedTimeStamp, 100, 'force_all');
 
-            $batches = array_chunk($ordersCollection, 10);
+            $batches = array_chunk($ordersCollection, 20);
 
             foreach ($batches as $batch) {
                 $transformedOrdersCollection = $this->convertOrdersFormat($batch);
 
-                SaveOrdersCollection::dispatchNow($transformedOrdersCollection);
+                SaveOrdersCollection::dispatch($transformedOrdersCollection);
 
                 $this->satLastSyncedTimestamp($batch);
             }
