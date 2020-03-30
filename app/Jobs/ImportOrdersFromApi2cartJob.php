@@ -41,15 +41,22 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
      */
     public function handle()
     {
-        $lastSyncedTimeStamp = $this->getLastSyncedTimestamp();
+        do {
+            $lastSyncedTimeStamp = $this->getLastSyncedTimestamp();
 
-        $ordersCollection = $this->fetchOrders($lastSyncedTimeStamp, 50);
+            $ordersCollection = $this->fetchOrders($lastSyncedTimeStamp, 100, 'force_all');
 
-        $transformedOrdersCollection = $this->convertOrdersFormat($ordersCollection);
+            $batches = array_chunk($ordersCollection, 10);
 
-        SaveOrdersCollection::dispatchNow($transformedOrdersCollection);
+            foreach ($batches as $batch) {
+                $transformedOrdersCollection = $this->convertOrdersFormat($batch);
 
-        $this->satLastSyncedTimestamp($ordersCollection);
+                SaveOrdersCollection::dispatchNow($transformedOrdersCollection);
+
+                $this->satLastSyncedTimestamp($batch);
+            }
+
+        } while (count($ordersCollection) > 0);
 
         // finalize
         $this->finishedSuccessfully = true;
@@ -88,15 +95,15 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
     /**
      * @param mixed $timestamp
      * @param int $count
+     * @param string $params
      * @return array
      * @throws \App\Exceptions\Api2CartKeyNotSetException
-     * @throws Exception
      */
-    private function fetchOrders($timestamp, int $count){
+    private function fetchOrders($timestamp, int $count, string $params = 'force_all'){
 
         // initialize params
         $params = [
-            'params' => 'force_all',
+            'params' => $params,
             'sort_by' => 'modified_at',
             'sort_direction' => 'asc',
             'count' => $count,
@@ -116,7 +123,7 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
     {
         $convertedOrdersCollection = [];
 
-        foreach ($ordersCollection['order'] as $order) {
+        foreach ($ordersCollection as $order) {
 
             $convertedOrdersCollection[] = [
                 'order_number' => $order['order_id'],
@@ -136,13 +143,13 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
      */
     private function satLastSyncedTimestamp(array $ordersCollection)
     {
-        $lastOrder = Arr::last($ordersCollection['order']);
+        $lastOrder = Arr::last($ordersCollection);
 
         ConfigurationApi2cart::query()->updateOrCreate([],[
             'last_synced_modified_at' => Carbon::createFromFormat(
                 $lastOrder['modified_at']['format'],
                 $lastOrder['modified_at']['value']
-            )
+            )->addSecond()
         ]);
     }
 }

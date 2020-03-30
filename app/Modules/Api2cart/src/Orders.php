@@ -25,7 +25,11 @@ class Orders extends Entity
         $response = Client::GET($store_key, 'order.list.json', $params);
 
         if($response->isSuccess()) {
-            return $response->getResult();
+            logger('Fetched orders',[
+                'source' => 'API2CART',
+                'count' => $response->getResult()['orders_count'],
+            ]);
+            return $response->getResult()['order'];
         }
 
         Log::error('order.list.json call failed', $response->asArray());
