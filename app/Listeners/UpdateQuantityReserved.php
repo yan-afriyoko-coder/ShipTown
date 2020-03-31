@@ -18,9 +18,9 @@ class UpdateQuantityReserved
      */
     public function subscribe($events)
     {
-        $events->listen('eloquent.created: App\Models\Order', 'App\Listeners\UpdateQuantityReserved@on_order_created');
-        $events->listen('eloquent.updated: App\Models\Order', 'App\Listeners\UpdateQuantityReserved@on_order_updated');
-        $events->listen('eloquent.deleted: App\Models\Order', 'App\Listeners\UpdateQuantityReserved@on_order_deleted');
+//        $events->listen('eloquent.created: App\Models\Order', 'App\Listeners\UpdateQuantityReserved@on_order_created');
+//        $events->listen('eloquent.updated: App\Models\Order', 'App\Listeners\UpdateQuantityReserved@on_order_updated');
+//        $events->listen('eloquent.deleted: App\Models\Order', 'App\Listeners\UpdateQuantityReserved@on_order_deleted');
     }
 
     public function on_order_updated(Order $order)
