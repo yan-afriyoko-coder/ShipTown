@@ -45,7 +45,7 @@ class SaveOrdersCollection implements ShouldQueue
                 ],
                 array_merge(
                     $order,
-                    ['order_as_json' => $order]
+                    ['raw_import' => $order]
                 )
             );
 
