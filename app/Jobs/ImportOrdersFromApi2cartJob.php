@@ -42,43 +42,21 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
     public function handle()
     {
         do {
-            $lastSyncedTimeStamp = $this->getLastSyncedTimestamp();
-
-            $ordersCollection = $this->fetchOrders($lastSyncedTimeStamp, 100, 'force_all');
+            $ordersCollection = $this->fetchRecentlyChangedOrders();
 
             $batches = array_chunk($ordersCollection, 20);
 
             foreach ($batches as $batch) {
-                $transformedOrdersCollection = $this->convertOrdersFormat($batch);
+                $this->convertAndSave($batch);
 
-                SaveOrdersCollection::dispatch($transformedOrdersCollection);
-
-                $this->satLastSyncedTimestamp($batch);
+                $this->updateLastSyncedTimestamp($batch);
             }
 
+        // keep going until we import all
         } while (count($ordersCollection) > 0);
 
         // finalize
         $this->finishedSuccessfully = true;
-    }
-
-    /**
-     * @param array $products
-     * @return array
-     */
-    public function convertProducts(array $products) {
-
-        $result = [];
-
-        foreach ($products as $product) {
-            $result[] = [
-                'sku' => $product['model'],
-                'price' => $product['price'],
-                'quantity' => $product['quantity']
-            ];
-        }
-
-        return $result;
     }
 
     /**
@@ -128,9 +106,6 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
             $convertedOrdersCollection[] = [
                 'order_number' => $order['order_id'],
                 'original_json' => $order,
-                'products' => Arr::has($order, 'order_products')
-                    ? $this->convertProducts($order['order_products'])
-                    : [],
             ];
 
         }
@@ -141,7 +116,7 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
     /**
      * @param array $ordersCollection
      */
-    private function satLastSyncedTimestamp(array $ordersCollection)
+    private function updateLastSyncedTimestamp(array $ordersCollection)
     {
         $lastOrder = Arr::last($ordersCollection);
 
@@ -151,5 +126,26 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
                 $lastOrder['modified_at']['value']
             )->addSecond()
         ]);
+    }
+
+    /**
+     * @return array
+     * @throws \App\Exceptions\Api2CartKeyNotSetException
+     */
+    private function fetchRecentlyChangedOrders(): array
+    {
+        $lastSyncedTimeStamp = $this->getLastSyncedTimestamp();
+
+        return $this->fetchOrders($lastSyncedTimeStamp, 100);
+    }
+
+    /**
+     * @param $batch
+     */
+    private function convertAndSave($batch): void
+    {
+        $transformedOrdersCollection = $this->convertOrdersFormat($batch);
+
+        SaveOrdersCollection::dispatch($transformedOrdersCollection);
     }
 }

@@ -38,73 +38,6 @@ class OrdersRoutesTest extends TestCase
         Bus::assertDispatched(JobImportOrderApi2Cart::class);
     }
 
-    public function test_order_update () {
-
-        $order_v1 = [
-            'order_number'      => '0123456789',
-            "products" => [
-                [
-                    'sku' => '123',
-                    'quantity'     => 2,
-                    'price'        => 4,
-                ]
-            ]
-        ];
-
-        $order_v2 = [
-            'order_number'      => '0123456789',
-            "products" => [
-                [
-                    'sku' => '123',
-                    'quantity'     => 20,
-                    'price'        => 4,
-                ]
-            ]
-        ];
-
-        Passport::actingAs(
-            factory(User::class)->create()
-        );
-
-
-        // create product
-        $product_before = $this->json('POST', "api/products", ModelSample::PRODUCT)
-            ->assertStatus(200)
-            ->getContent();
-
-        // submit first order
-        $this->json('POST', 'api/orders', ModelSample::ORDER_01)
-            ->assertStatus(200);
-
-        // get product before submitting second order
-        $product_before = $this->json('POST', "api/products", ModelSample::PRODUCT)
-            ->assertStatus(200)
-            ->getContent();
-
-        $product_before = json_decode($product_before, true);
-
-        // submit second order
-        $this->json('POST', 'api/orders', ModelSample::ORDER_02)
-            ->assertStatus(200);
-
-        // get product after submitting second order
-        $product_after = $this->json('POST', "api/products", ModelSample::PRODUCT)
-            ->assertStatus(200)
-            ->getContent();
-
-        $product_after = json_decode($product_after, true);
-
-
-
-
-        $quantity_reserved_diff_actual = $product_after['quantity_reserved'] - $product_before['quantity_reserved'];
-
-        $quantity_reserved_diff_expected = ModelSample::ORDER_02['products'][0]['quantity'] - ModelSample::ORDER_01['products'][0]['quantity'];
-
-        $this->assertEquals($quantity_reserved_diff_expected, $quantity_reserved_diff_actual);
-
-    }
-
     public function test_orders_get_route() {
 
         Event::fake();
@@ -248,33 +181,33 @@ class OrdersRoutesTest extends TestCase
             ->assertJsonValidationErrors(['products.0.price']);
     }
 
-    public function test_if_quantities_are_reserved_when_new_order_created() {
-
-        $order = [
-            'order_number'      => '001241',
-            "products" => [
-                [
-                    'sku'       => '0123456',
-                    'quantity'  => 2,
-                    'price'     => 4,
-                ]
-            ]
-        ];
-
-        Passport::actingAs(
-            factory(User::class)->create()
-        );
-
-        $product_before = Product::firstOrCreate(["sku" => '0123456']);
-
-        $this->json('POST', 'api/orders', $order)
-            ->assertStatus(200);
-
-        $product_after = $product_before->fresh();
-
-        $this->assertEquals($product_after->quantity_reserved, $product_before->quantity_reserved + 2);
-
-    }
+//    public function test_if_quantities_are_reserved_when_new_order_created() {
+//
+//        $order = [
+//            'order_number'      => '001241',
+//            "products" => [
+//                [
+//                    'sku'       => '0123456',
+//                    'quantity'  => 2,
+//                    'price'     => 4,
+//                ]
+//            ]
+//        ];
+//
+//        Passport::actingAs(
+//            factory(User::class)->create()
+//        );
+//
+//        $product_before = Product::firstOrCreate(["sku" => '0123456']);
+//
+//        $this->json('POST', 'api/orders', $order)
+//            ->assertStatus(200);
+//
+//        $product_after = $product_before->fresh();
+//
+//        $this->assertEquals($product_after->quantity_reserved, $product_before->quantity_reserved + 2);
+//
+//    }
 
     public function test_if_quantities_are_released_when_order_deleted()
     {

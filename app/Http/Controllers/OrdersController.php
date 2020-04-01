@@ -24,7 +24,7 @@ class OrdersController extends Controller
     {
         $order = Order::query()->updateOrCreate(
             ['order_number' => $request->order_number],
-            ['order_as_json' => $request->all()]);
+            ['raw_import' => $request->all()]);
 
         return response()->json($order, 200);
     }
