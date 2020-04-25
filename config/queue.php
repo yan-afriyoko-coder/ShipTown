@@ -54,7 +54,7 @@ return [
             'key' => env('AWS_ACCESS_KEY_ID'),
             'secret' => env('AWS_SECRET_ACCESS_KEY'),
             'prefix' => 'https://sqs.'.env('AWS_REGION').'.amazonaws.com/'.env('AWS_USER_CODE'),
-            'queue' => 'management_products'.env('TENANT_NAME'),
+            'queue' => 'management_products_'.env('TENANT_NAME'),
             'region' => env('AWS_REGION', 'eu-west-1'),
         ],
 
