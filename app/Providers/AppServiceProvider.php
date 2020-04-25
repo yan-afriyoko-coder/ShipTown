@@ -13,7 +13,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        if(empty(env('TENANT_DB_TABLE_PREFIX'))) {
+            dd('Tenant name not specified');
+        }
     }
 
     /**
