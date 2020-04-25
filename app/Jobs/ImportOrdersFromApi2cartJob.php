@@ -103,7 +103,7 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
 
         foreach ($ordersCollection as $order)
         {
-            $order['order_number'] = $order['order_id'];
+            $order['order_number'] = $order['id'];
 
             $convertedOrdersCollection[] = $order;
         }
