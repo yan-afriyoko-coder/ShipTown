@@ -24,12 +24,15 @@ Route::middleware('auth')->group(function () {
     Route::view('/settings', 'settings')->name('settings');
     Route::view('/products', 'products')->name('products');
 });
-;
-if (Schema::hasTable('users') && User::query()->exists()) {
-    Auth::routes(['register' => false]);
-}  else {
-    Auth::routes(['register' => true]);
-}
+
+try {
+    $allowRegister = (Schema::hasTable('users') && User::query()->exists());
+} catch (\Exception $exception)
+{
+    $allowRegister = false;
+};
+
+Auth::routes(['register' => $allowRegister]);
 
 
 
