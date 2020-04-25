@@ -26,7 +26,7 @@ Route::middleware('auth')->group(function () {
 });
 
 try {
-    $allowRegister = (Schema::hasTable('users') && User::query()->exists());
+    $allowRegister = (Schema::hasTable('users') && !User::query()->exists());
 } catch (\Exception $exception)
 {
     $allowRegister = false;
