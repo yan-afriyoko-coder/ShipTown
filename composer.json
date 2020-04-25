@@ -58,15 +58,11 @@
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
         ],
-        "post-root-package-install": [
-        ],
-        "post-create-project-cmd": [
-        ],
         "post-install-cmd": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
             "@php artisan key:generate --ansi",
             "@php artisan migrate",
-            "@php artisan passport:install"
+            "@php artisan passport:keys"
         ]
     }
 }
