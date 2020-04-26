@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\External;
 
 use App\Http\Controllers\SnsTopicController;
 use App\User as User;
