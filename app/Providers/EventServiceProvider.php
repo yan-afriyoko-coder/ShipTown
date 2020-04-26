@@ -26,7 +26,7 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $subscribe = [
-        \App\Listeners\PublishSnsMessage::class,
+        \App\Listeners\PublishSnsNotifications::class,
         \App\Listeners\UpdateQuantityReserved::class,
     ];
 

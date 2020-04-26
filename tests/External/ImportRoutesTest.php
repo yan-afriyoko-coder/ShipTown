@@ -1,17 +1,13 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\External;
 
 use App\Jobs\ImportOrdersFromApi2cartJob;
 use App\Managers\CompanyConfigurationManager;
 use App\User;
 use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Queue;
 use Laravel\Passport\Passport;
-use Mockery\Generator\StringManipulation\Pass\Pass;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ImportRoutesTest extends TestCase
 {
