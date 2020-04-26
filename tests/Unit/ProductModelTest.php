@@ -6,7 +6,7 @@ use App\Managers\ProductManager;
 use App\Models\Product;
 use App\User;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -17,7 +17,7 @@ class ProductModelTest extends TestCase
 {
     public function test_if_quantity_available_below_0_not_allowed()
     {
-        Bus::fake();
+        Event::fake();
 
         $product_before = Product::firstOrCreate(["sku" => '0123456']);
 

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Product;
 use App\User;
+use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -16,6 +17,8 @@ class ProductsRoutesTest extends TestCase
      */
     public function test_get_products_route_authenticated()
     {
+        Event::fake();
+
         Passport::actingAs(
             factory(User::class)->create()
         );
@@ -88,6 +91,8 @@ class ProductsRoutesTest extends TestCase
 
     public function test_product_sync_route_authenticated()
     {
+        Event::fake();
+
         Passport::actingAs(
             factory(User::class)->create()
         );

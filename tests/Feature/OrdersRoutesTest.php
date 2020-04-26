@@ -211,6 +211,8 @@ class OrdersRoutesTest extends TestCase
 
     public function test_if_quantities_are_released_when_order_deleted()
     {
+        Event::fake();
+
         $order = [
             'order_number'      => '0123456789',
             "products" => [

@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\User;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -53,6 +55,8 @@ class InventoryRoutesTest extends TestCase
 
     public function test_quantity_update()
     {
+        Event::fake();
+
         Passport::actingAs(
             factory(User::class)->create()
         );
