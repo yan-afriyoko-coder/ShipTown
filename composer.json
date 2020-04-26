@@ -62,9 +62,7 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-install-cmd": [
-            "@php artisan key:generate --ansi",
-            "@php artisan migrate --force",
-            "@php artisan passport:keys"
+            "@php artisan app:install"
         ]
     }
 }
