@@ -19,6 +19,11 @@ class JobImportOrderApi2Cart implements ShouldQueue
     private $api2cart_store_key;
     private $api2cart_app_key;
 
+    public function __construct()
+    {
+        info('Job JobImportOrderApi2Cart dispatched');
+    }
+
     /**
      * Execute the job.
      *

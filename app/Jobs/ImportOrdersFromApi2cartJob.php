@@ -31,6 +31,7 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
     public function __construct()
     {
         $this->finishedSuccessfully = false;
+        info('Job ImportOrdersFromApi2cartJob dispatched');
     }
 
     /**
