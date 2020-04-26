@@ -9,7 +9,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class SnsTopicControllerTest extends TestCase
+class SnsControllerTest extends TestCase
 {
     public function test_if_aws_credentials_are_set()
     {
