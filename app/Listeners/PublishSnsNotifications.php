@@ -23,12 +23,12 @@ class PublishSnsNotifications
      */
     public function subscribe($events)
     {
-        $events->listen('eloquent.created: App\Models\Order','App\Listeners\PublishSnsMessage@orderCreated');
-        $events->listen('eloquent.updated: App\Models\Order','App\Listeners\PublishSnsMessage@orderUpdated');
+        $events->listen('eloquent.created: App\Models\Order','App\Listeners\PublishSnsNotifications@orderCreated');
+        $events->listen('eloquent.updated: App\Models\Order','App\Listeners\PublishSnsNotifications@orderUpdated');
 
         //products
-        $events->listen('eloquent.created: App\Models\Product','App\Listeners\PublishSnsMessage@productCreated');
-        $events->listen('eloquent.updated: App\Models\Product','App\Listeners\PublishSnsMessage@productUpdated');
+        $events->listen('eloquent.created: App\Models\Product','App\Listeners\PublishSnsNotifications@productCreated');
+        $events->listen('eloquent.updated: App\Models\Product','App\Listeners\PublishSnsNotifications@productUpdated');
     }
 
     /**
