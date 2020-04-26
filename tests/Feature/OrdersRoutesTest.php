@@ -3,14 +3,9 @@
 namespace Tests\Feature;
 
 use App\Jobs\JobImportOrderApi2Cart;
-use App\Listeners\PublishSnsMessage;
-use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Queue;
-use Mockery\Generator\StringManipulation\Pass\Pass;
-use Tests\ModelSample;
 use Tests\TestCase;
 use App\User;
 use Laravel\Passport\Passport;

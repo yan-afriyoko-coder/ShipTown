@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Http\Controllers\SnsTopicController;
+use App\Http\Controllers\SnsController;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Events\Dispatcher;
@@ -11,10 +11,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Class PublishSnsMessage
+ * Class PublishSnsNotifications
  * @package App\Listeners
  */
-class PublishSnsMessage
+class PublishSnsNotifications
 {
     /**
      * Register the listeners for SNS publisher
@@ -74,7 +74,7 @@ class PublishSnsMessage
             "data" =>$data
         ]);
 
-        $snsTopic = new SnsTopicController($topicName);
+        $snsTopic = new SnsController($topicName);
 
         $snsTopic->publish(json_encode($data));
     }
