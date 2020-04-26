@@ -33,9 +33,10 @@ class ProductsController extends Controller
     {
         $product = Product::query()->where("sku", $sku)->firstOrFail();
 
-        $sns = new SnsTopicController("products");
-
-        $sns->publish(json_encode($product->toArray()));
+        $product->save();
+//        $sns = new SnsTopicController("products");
+//
+//        $sns->publish(json_encode($product->toArray()));
 
         $this->respond_OK_200();
     }
