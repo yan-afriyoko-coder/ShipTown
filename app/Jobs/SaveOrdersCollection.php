@@ -28,6 +28,7 @@ class SaveOrdersCollection implements ShouldQueue
     public function __construct(array $ordersCollection)
     {
         $this->ordersCollection = $ordersCollection;
+        info('Job SaveOrdersCollection dispatched');
     }
 
     /**
