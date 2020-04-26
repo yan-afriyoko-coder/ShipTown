@@ -26,13 +26,13 @@ Route::middleware('auth')->group(function () {
 });
 
 try {
-    $allowRegister = (Schema::hasTable('users') && !User::query()->exists());
+    Auth::routes(['register' => ! User::query()->exists()]);
 } catch (\Exception $exception)
 {
-    $allowRegister = false;
+    Auth::routes(['register' => false]);
 };
 
-Auth::routes(['register' => $allowRegister]);
+
 
 
 
