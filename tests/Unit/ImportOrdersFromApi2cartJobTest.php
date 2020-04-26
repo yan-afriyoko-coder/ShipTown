@@ -6,6 +6,7 @@ use App\Jobs\ImportOrdersFromApi2cartJob;
 use App\Managers\CompanyConfigurationManager;
 use App\Managers\Config;
 use App\User;
+use Illuminate\Support\Facades\Bus;
 use Laravel\Passport\Passport;
 use Mockery\Generator\StringManipulation\Pass\Pass;
 use Tests\TestCase;
@@ -16,6 +17,8 @@ class ImportOrdersFromApi2cartJobTest extends TestCase
 {
     public function test_if_job_runs_without_exceptions()
     {
+        Bus::fake();
+
         // we set key to api2cart demo store
         CompanyConfigurationManager::set('bridge_api_key', 'ed58a22dfecb405a50ea3ea56979360d');
 
