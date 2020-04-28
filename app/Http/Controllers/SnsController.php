@@ -67,12 +67,12 @@ class SnsController extends Controller
      */
     function publish(string $message){
 
-        logger("Publishing SNS message", ["message" => $message]);
-
         $notification = [
+            'TargetArn' => $this->getTopicArn(),
             'Message'   => $message,
-            'TargetArn' => $this->getTopicArn()
         ];
+
+        logger("Publishing SNS message", $notification);
 
         try {
 

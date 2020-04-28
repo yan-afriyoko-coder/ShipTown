@@ -69,11 +69,6 @@ class PublishSnsNotifications
      */
     private function publishMessageArray(array $data, string $topicName): void
     {
-        Log::debug("Publishing SNS message", [
-            "topic" => $topicName,
-            "data" =>$data
-        ]);
-
         $snsTopic = new SnsController($topicName);
 
         $snsTopic->publish(json_encode($data));
