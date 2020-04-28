@@ -63,6 +63,16 @@ class DatabaseSeeder extends Seeder
                     ]);
             });
 
+        \App\Models\Product::query()
+            ->get()
+            ->each(function (\App\Models\Product $product) {
+                factory(\App\Models\Inventory::class)
+                    ->create([
+                        'product_id' => $product->id,
+                        'location_id' => 999
+                    ]);
+            });
+
         // $this->call(UsersTableSeeder::class);
     }
 }
