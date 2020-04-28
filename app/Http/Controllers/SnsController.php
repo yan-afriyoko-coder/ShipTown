@@ -135,7 +135,7 @@ class SnsController extends Controller
     /**
      * @return string
      */
-    private function getFullTopicName(): string
+    public function getFullTopicName(): string
     {
         return implode('', [
             config('app.sns_topic_prefix', ''),
