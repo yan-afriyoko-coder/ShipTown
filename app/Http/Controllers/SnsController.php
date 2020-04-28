@@ -12,6 +12,12 @@ class SnsController extends Controller
     private $awsSnsClient;
     private $topicName;
 
+
+    /**
+     * @var AwsException
+     */
+    public $lastException;
+
     /**
      * SnsController constructor.
      * @param $topicName
@@ -33,6 +39,7 @@ class SnsController extends Controller
             ]);
 
         } catch (AwsException $e) {
+            $this->lastException = $e;
             Log::critical("Could not create SNS topic", ["code" => $e->getStatusCode(), "message" => $e->getMessage()]);
             return false;
         }
