@@ -138,7 +138,8 @@ class SnsController extends Controller
     public function getFullTopicName(): string
     {
         return implode('', [
-            config('app.sns_topic_prefix', ''),
+            config('sns.topic.prefix', ''),
+            '_',
             $this->topicName
         ]);
     }
