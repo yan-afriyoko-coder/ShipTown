@@ -23,6 +23,7 @@ Route::middleware('auth:api')->group(function() {
 Route::middleware('auth')->group(function () {
     Route::view('/settings', 'settings')->name('settings');
     Route::view('/products', 'products')->name('products');
+    Route::view('/missing', 'missing')->name('missing');
 });
 
 try {

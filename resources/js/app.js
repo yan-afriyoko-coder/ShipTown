@@ -48,13 +48,13 @@ Vue.component(
 
 
 Vue.component(
-    'products-table',
-    require('./components/Products.vue').default
+    'missing-table',
+    require('./components/Missing.vue').default
 );
 
 Vue.component(
     'api2cart-configuration',
-    require('./components/api2cartConfiguration.vue').default
+    require('./components/Api2CartConfiguration.vue').default
 );
 
 /**
