@@ -54,7 +54,7 @@ Vue.component(
 
 Vue.component(
     'api2cart-configuration',
-    require('./components/api2cartConfiguration.vue').default
+    require('./components/Api2CartConfiguration.vue').default
 );
 
 /**
