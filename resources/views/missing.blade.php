@@ -13,7 +13,7 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                        <products-table></products-table>
+                        <missing-table></missing-table>
                         <br />
 
                 </div>

@@ -48,8 +48,8 @@ Vue.component(
 
 
 Vue.component(
-    'products-table',
-    require('./components/Products.vue').default
+    'missing-table',
+    require('./components/Missing.vue').default
 );
 
 Vue.component(
