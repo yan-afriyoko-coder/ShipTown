@@ -8,6 +8,10 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
+Vue.use(Loading);
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -19,7 +23,7 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('pagination', require('laravel-vue-pagination'));
 
 Vue.component(
     'passport-clients',
@@ -46,10 +50,14 @@ Vue.component(
     require('./components/SubscribeTopic.vue').default
 );
 
-
 Vue.component(
     'missing-table',
     require('./components/Missing.vue').default
+);
+
+Vue.component(
+    'products-table',
+    require('./components/Products.vue').default
 );
 
 Vue.component(
