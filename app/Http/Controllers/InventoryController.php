@@ -16,12 +16,11 @@ class InventoryController extends Controller
 {
     public function index()
     {
-        return Product::query()
-            ->whereHas('inventory', function($query) {
+        return Product::whereHas('inventory', function($query) {
                 $query->where('quantity_reserved', '>', 0);
             })
-            ->get()
-            ->load('inventory');
+            ->with('inventory')
+            ->paginate(100);
     }
 
     public function store(StoreInventoryRequest $request)
