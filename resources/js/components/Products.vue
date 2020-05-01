@@ -32,14 +32,14 @@
                 </ul>
             </div>
         </div>
-        <div v-if="productsData.total > 0" class="row">
-            <hot-table :data="tableData" :settings="settings"></hot-table>
+        <div class="row">
+            <hot-table ref="hotTable" :data="tableData" :settings="settings"></hot-table>
         </div>
-        <div class="row" v-else>
+        <div v-if="productsData.total == 0" class="row" >
             <div class="col">
                 <div class="alert alert-info" role="alert">
                     No products found.
-                </div>            
+                </div>
             </div>
         </div>
         <div class="row" style="margin-top: 10px">
@@ -53,6 +53,17 @@
 
     import loadingOverlay from '../mixins/loading-overlay';
 
+    const colHeaderMap = [
+        { col: 'sku', label: 'SKU' },
+        { col: 'name', label: 'Description' },
+        { col: 'quantity', label: 'Qty' },
+        { col: 'quantity_reserved', label: 'Qty Reserved' },
+        { col: 'price', label: 'Price' },
+        { col: 'sale_price', label: 'Sale Price' },
+        { col: 'sale_price_start_date', label: 'Sale Start Date' },
+        { col: 'sale_price_end_date', label: 'Sale End Date' },
+    ];
+
     export default {
         mixins: [loadingOverlay],
 
@@ -60,8 +71,23 @@
             HotTable
         },
 
-        created: function() {
+        created() {
             this.loadProductList(1);
+        },
+
+        mounted() {
+            this.$refs.hotTable.hotInstance.addHook('beforeColumnSort', (currentSortConfig, destinationSortConfigs) => {
+                if (destinationSortConfigs.length > 0) {
+                    let column = colHeaderMap[destinationSortConfigs[0].column];
+                    this.sort = column.col;
+                    this.order = destinationSortConfigs[0].sortOrder;
+                } else {
+                    this.sort = null;
+                    this.order = null;
+                }
+
+                this.loadProductList(1);
+            });
         },
 
         methods: {
@@ -71,6 +97,8 @@
                     params: {
                         page: page,
                         q: this.query,
+                        sort: this.sort,
+                        order: this.order,
                     }
                 }).then(({ data }) => {
                     this.productsData = data;
@@ -94,6 +122,8 @@
         data: function() {
             return {
                 query: null,
+                sort: null,
+                order: null,
                 productsData: {
                     data: [],
                     total: 0,
@@ -102,17 +132,11 @@
                 },
                 settings: {
                     licenseKey: 'non-commercial-and-evaluation',
-                    colHeaders: [
-                        'SKU',
-                        'Description',
-                        'Qty',
-                        'Qty Reserved',
-                        'Price',
-                        'Sale Price',
-                        'Sale Start Date',
-                        'Sale End Date',
-                    ],
+                    colHeaders: (index) => {
+                        return colHeaderMap[index].label
+                    },
                     rowHeaders: false,
+                    columnSorting: true
                 },
             };
         },

@@ -17,6 +17,10 @@ class ProductsController extends Controller
                 return $query
                     ->where('sku', 'like', '%' . $request->get('q') . '%')
                     ->orWhere('name', 'like', '%' . $request->get('q') . '%');
+            })
+            ->when($request->has('sort'), function ($query) use ($request) {
+                return $query
+                    ->orderBy($request->get('sort'), $request->get('order', 'asc'));
             });
             
         return $products->paginate(100);
