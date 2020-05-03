@@ -12,7 +12,14 @@ class ProductsController extends Controller
 {
     public function index(Request $request)
     {
-        return Product::query()->paginate(100);
+        $products = Product::query()
+            ->when($request->has('q'), function ($query) use ($request) {
+                return $query
+                    ->where('sku', 'like', '%' . $request->get('q') . '%')
+                    ->orWhere('name', 'like', '%' . $request->get('q') . '%');
+            });
+            
+        return $products->paginate(100);
     }
 
     public function store(StoreProductsRequest $request)
