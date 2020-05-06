@@ -20,14 +20,20 @@ class UpdateProductMasterQuantityTest extends TestCase
      */
     public function test_if_quantity_updates_on_inventory_create()
     {
+        // assign
        $product = factory(Product::class)->create();
 
-       $inventory = factory(Inventory::class)->create([
-           "product_id" => $product->id
+       $quantity = rand(0,1000);
+
+       $quantity_expected = $product->quantity + $quantity;
+
+       // act
+       factory(Inventory::class)->create([
+           "product_id" => $product->id,
+           "quantity" => $quantity
        ]);
 
-       $quantity_expected = $product->quantity + $inventory->quantity;
-
+        // assert
        $product = $product->fresh();
 
        $this->assertEquals($quantity_expected, $product->quantity);
@@ -38,6 +44,7 @@ class UpdateProductMasterQuantityTest extends TestCase
      */
     public function test_if_quantity_updates_on_inventory_delete()
     {
+        // assign
         $product = factory(Product::class)->create();
 
         $inventory = factory(Inventory::class)->create([
@@ -48,8 +55,10 @@ class UpdateProductMasterQuantityTest extends TestCase
 
         $quantity_expected = $product->quantity - $inventory->quantity;
 
+        // act
         $inventory->delete();
 
+        // assert
         $product = $product->fresh();
 
         $this->assertEquals($quantity_expected, $product->quantity);
@@ -60,6 +69,7 @@ class UpdateProductMasterQuantityTest extends TestCase
      */
     public function test_if_quantity_updates_on_inventory_update()
     {
+        // assign
         $product = factory(Product::class)->create();
 
         $inventory = factory(Inventory::class)->create([
@@ -72,8 +82,10 @@ class UpdateProductMasterQuantityTest extends TestCase
 
         $quantity_expected = $product->quantity - $inventory->quantity + $quantity;
 
+        // act
         $inventory->update(['quantity' => $quantity]);
 
+        // assert
         $product = $product->fresh();
 
         $this->assertEquals($quantity_expected, $product->quantity);
