@@ -45,6 +45,6 @@ class UpdateProductQuantity
      */
     public function onDeleted(Inventory $inventory)
     {
-        //TODO deduct quantity when inventory deleted
+        $inventory->product()->decrement('quantity', $inventory->quantity);
     }
 }
