@@ -32,7 +32,7 @@ class UpdateProductMasterQuantityTest extends TestCase
     /**
      *
      */
-    public function test_if_quantity_updated_on_inventory_delete()
+    public function test_if_quantity_updates_on_inventory_delete()
     {
         $product = factory(Product::class)->create();
 
