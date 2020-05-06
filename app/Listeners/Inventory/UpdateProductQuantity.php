@@ -36,8 +36,13 @@ class UpdateProductQuantity
      */
     public function onUpdated(Inventory $inventory)
     {
-        //TODO deduct old quantity on inventory updated
-        //TODO add new quantity on inventory updated
+        $inventory->product()->decrement(
+            'quantity', $inventory->getOriginal()['quantity']
+        );
+
+        $inventory->product()->increment(
+            'quantity', $inventory->quantity
+        );
     }
 
     /**
