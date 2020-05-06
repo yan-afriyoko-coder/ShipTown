@@ -17,7 +17,6 @@ class Product extends Model
         "sale_price",
         "sale_price_start_date",
         "sale_price_end_date",
-        "quantity",
         "quantity_reserved"
     ];
 
