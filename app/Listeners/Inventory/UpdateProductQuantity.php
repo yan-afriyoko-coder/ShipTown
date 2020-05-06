@@ -28,7 +28,7 @@ class UpdateProductQuantity
      */
     public function onCreated(Inventory $inventory)
     {
-        //TODO add quantity on inventory create
+        $inventory->product()->increment('quantity', $inventory->quantity);
     }
 
     /**
