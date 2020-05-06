@@ -29,6 +29,23 @@ class SnsController extends Controller
     }
 
     /**
+     * @param bool $expected
+     * @return bool
+     */
+    public function isConfigured($expected = true)
+    {
+        $isConfigured =
+            empty(config('sns.topic.prefix')) or
+            empty(config('aws.region')) or
+            empty(config('aws.user_code')) or
+            empty(config('aws.credentials.key')) or
+            empty(config('aws.credentials.secret'))
+        ;
+
+        return $isConfigured == $expected;
+    }
+
+    /**
      * @return bool
      */
     public function createTopic()
