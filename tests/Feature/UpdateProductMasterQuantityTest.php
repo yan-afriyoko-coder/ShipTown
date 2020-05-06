@@ -14,7 +14,7 @@ class UpdateProductMasterQuantityTest extends TestCase
      *
      * @return void
      */
-    public function test_if_quantity_updates_correctly()
+    public function test_if_quantity_updates_on_inventory_create()
     {
        $product = factory(Product::class)->create();
 
