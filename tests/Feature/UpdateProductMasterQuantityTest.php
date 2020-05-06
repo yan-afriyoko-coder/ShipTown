@@ -8,6 +8,10 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
+/**
+ * Class UpdateProductMasterQuantityTest
+ * @package Tests\Feature
+ */
 class UpdateProductMasterQuantityTest extends TestCase
 {
     /**
@@ -45,6 +49,30 @@ class UpdateProductMasterQuantityTest extends TestCase
         $quantity_expected = $product->quantity - $inventory->quantity;
 
         $inventory->delete();
+
+        $product = $product->fresh();
+
+        $this->assertEquals($quantity_expected, $product->quantity);
+    }
+
+    /**
+     *
+     */
+    public function test_if_quantity_updates_on_inventory_update()
+    {
+        $product = factory(Product::class)->create();
+
+        $inventory = factory(Inventory::class)->create([
+            "product_id" => $product->id
+        ]);
+
+        $product = $product->fresh();
+
+        $quantity = rand(0,1000);
+
+        $quantity_expected = $product->quantity - $inventory->quantity + $quantity;
+
+        $inventory->update(['quantity' => $quantity]);
 
         $product = $product->fresh();
 
