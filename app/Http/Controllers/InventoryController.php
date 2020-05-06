@@ -14,13 +14,21 @@ use Illuminate\Session\Store;
 
 class InventoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Product::whereHas('inventory', function($query) {
-                $query->where('quantity_reserved', '>', 0);
-            })
-            ->with('inventory')
-            ->paginate(100);
+        if ($request->get('per_page') == 'all') {
+            return Product::whereHas('inventory', function($query) {
+                    $query->where('quantity_reserved', '>', 0);
+                })
+                ->get()
+                ->load('inventory');
+        } else {
+            return Product::whereHas('inventory', function($query) {
+                    $query->where('quantity_reserved', '>', 0);
+                })
+                ->with('inventory')
+                ->paginate(100);
+        }
     }
 
     public function store(StoreInventoryRequest $request)
