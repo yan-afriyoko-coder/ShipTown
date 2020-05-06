@@ -30,5 +30,10 @@
         <server name="QUEUE_CONNECTION" value="sync"/>
         <server name="SESSION_DRIVER" value="array"/>
         <server name="LOG_CHANNEL" value="daily"/>
+
+        <server name="AWS_USER_CODE" value=""/>
+        <server name="AWS_ACCESS_KEY_ID" value=""/>
+        <server name="AWS_SECRET_ACCESS_KEY" value=""/>
+        <server name="AWS_REGION" value=""/>
     </php>
 </phpunit>
