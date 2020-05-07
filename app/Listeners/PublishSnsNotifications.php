@@ -71,11 +71,6 @@ class PublishSnsNotifications
     {
         $snsTopic = new SnsController($topicName);
 
-        if ($snsTopic->isConfigured(false)) {
-            Log::alert('AWS SNS is not configured correctly!');
-            return;
-        }
-
         $snsTopic->publish(json_encode($data));
     }
 

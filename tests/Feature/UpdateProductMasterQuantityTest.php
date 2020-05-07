@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Listeners\Inventory\UpdateProductQuantity;
 use App\Models\Inventory;
 use App\Models\Product;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -20,23 +22,29 @@ class UpdateProductMasterQuantityTest extends TestCase
      */
     public function test_if_quantity_updates_on_inventory_create()
     {
+        Event::fake();
+
         // assign
-       $product = factory(Product::class)->create();
+        $listener = new UpdateProductQuantity();
 
-       $quantity = rand(0,1000);
+        $product = factory(Product::class)->create();
 
-       $quantity_expected = $product->quantity + $quantity;
+        $quantity = rand(0,1000);
 
-       // act
-       factory(Inventory::class)->create([
+        $quantity_expected = $product->quantity + $quantity;
+
+        // act
+        $inventory = factory(Inventory::class)->create([
            "product_id" => $product->id,
            "quantity" => $quantity
-       ]);
+        ]);
+
+        $listener->onCreated($inventory);
 
         // assert
-       $product = $product->fresh();
+        $product = $product->fresh();
 
-       $this->assertEquals($quantity_expected, $product->quantity);
+        $this->assertEquals($quantity_expected, $product->quantity);
     }
 
     /**
@@ -44,12 +52,18 @@ class UpdateProductMasterQuantityTest extends TestCase
      */
     public function test_if_quantity_updates_on_inventory_delete()
     {
+        Event::fake();
+
         // assign
+        $listener = new UpdateProductQuantity();
+
         $product = factory(Product::class)->create();
 
         $inventory = factory(Inventory::class)->create([
             "product_id" => $product->id
         ]);
+
+        $listener->onCreated($inventory);
 
         $product = $product->fresh();
 
@@ -57,6 +71,8 @@ class UpdateProductMasterQuantityTest extends TestCase
 
         // act
         $inventory->delete();
+
+        $listener->onDeleted($inventory);
 
         // assert
         $product = $product->fresh();
@@ -69,12 +85,19 @@ class UpdateProductMasterQuantityTest extends TestCase
      */
     public function test_if_quantity_updates_on_inventory_update()
     {
+        Event::fake();
+
         // assign
+        $listener = new UpdateProductQuantity();
+
         $product = factory(Product::class)->create();
 
         $inventory = factory(Inventory::class)->create([
             "product_id" => $product->id
         ]);
+
+
+        $listener->onCreated($inventory);
 
         $product = $product->fresh();
 
@@ -83,7 +106,9 @@ class UpdateProductMasterQuantityTest extends TestCase
         $quantity_expected = $product->quantity - $inventory->quantity + $quantity;
 
         // act
-        $inventory->update(['quantity' => $quantity]);
+        $inventory->quantity = $quantity;
+
+        $listener->onUpdated($inventory);
 
         // assert
         $product = $product->fresh();
