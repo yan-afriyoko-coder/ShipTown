@@ -35,6 +35,9 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('products') }}">{{ __('Products') }}</a>
                         </li>
                         <li class="nav-item">
