@@ -73,6 +73,10 @@ class DatabaseSeeder extends Seeder
                     ]);
             });
 
+        $this->call([
+            OrdersSeeder::class
+        ]);
+
         // $this->call(UsersTableSeeder::class);
     }
 }
