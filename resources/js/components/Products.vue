@@ -1,161 +1,104 @@
 <template>
-    <div class="container">
-        <div class="row">
+    <div>
+        <div class="row mb-2 no-gutters">
             <div class="col">
-                <input class="form-control" @keyup.enter="handleSearchEnter" @blur="loadProductList(1)" v-model="query" placeholder="Search for products..." />
-            </div>
-            <div class="col">
-                <ul v-if="productsData.total > productsData.per_page" class="pagination">
-                    <li :class="{
-                        'page-item': true,
-                        'disabled': productsData.current_page == 1
-                    }">
-                        <a class="page-link" href="#" aria-label="Previous" @click.prevent="prev">
-                            <span aria-hidden="true">&laquo;</span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
-                            {{ productsData.from }} - {{ productsData.to }} of {{ productsData.total }}
-                        </a>
-                    </li>
-                    <li :class="{
-                        'page-item': true,
-                        'disabled': productsData.current_page == productsData.last_page
-                    }">
-                        <a class="page-link" href="#" aria-label="Next" @click.prevent="next">
-                            <span aria-hidden="true">&raquo;</span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </li>
-                </ul>
+                <input ref="search" @focus="handleSearchFocus" class="form-control" @keyup.enter="handleSearchEnter" v-model="query" placeholder="Search for products..." />
             </div>
         </div>
-        <div class="row">
-            <hot-table ref="hotTable" :data="tableData" :settings="settings"></hot-table>
-        </div>
-        <div v-if="productsData.total == 0" class="row" >
-            <div class="col">
-                <div class="alert alert-info" role="alert">
-                    No products found.
+        <div class="container">        
+            <div v-if="total == 0 && !isLoading" class="row" >
+                <div class="col">
+                    <div class="alert alert-info" role="alert">
+                        No products found.
+                    </div>
                 </div>
             </div>
+            <template v-else class="row">
+                <template v-for="product in products">
+                    <Product v-for="stock in product.inventory" :product="product" :stock="stock" :key="stock.id" />
+                </template>
+            </template>
         </div>
-        <div class="row" style="margin-top: 10px">
-            <pagination :data="productsData" @pagination-change-page="loadProductList"></pagination>
-        </div>
-    </div>
+    </div>    
 </template>
 
 <script>
-    import { HotTable } from '@handsontable/vue';
-
     import loadingOverlay from '../mixins/loading-overlay';
-
-    const colHeaderMap = [
-        { col: 'sku', label: 'SKU' },
-        { col: 'name', label: 'Description' },
-        { col: 'quantity', label: 'Qty' },
-        { col: 'quantity_reserved', label: 'Qty Reserved' },
-        { col: 'price', label: 'Price' },
-        { col: 'sale_price', label: 'Sale Price' },
-        { col: 'sale_price_start_date', label: 'Sale Start Date' },
-        { col: 'sale_price_end_date', label: 'Sale End Date' },
-    ];
+    import Product from './Product';
 
     export default {
         mixins: [loadingOverlay],
 
-        components: {
-            HotTable
-        },
+        components: { Product },
 
         created() {
-            this.loadProductList(1);
+            this.loadProductList(this.page);
         },
 
         mounted() {
-            this.$refs.hotTable.hotInstance.addHook('beforeColumnSort', (currentSortConfig, destinationSortConfigs) => {
-                if (destinationSortConfigs.length > 0) {
-                    let column = colHeaderMap[destinationSortConfigs[0].column];
-                    this.sort = column.col;
-                    this.order = destinationSortConfigs[0].sortOrder;
-                } else {
-                    this.sort = null;
-                    this.order = null;
-                }
-
-                this.loadProductList(1);
-            });
+            this.$refs.search.focus();
+            this.scroll();
         },
 
         methods: {
             loadProductList: function(page) {
-                this.showLoading();
-                axios.get('/api/products', {
-                    params: {
-                        page: page,
-                        q: this.query,
-                        sort: this.sort,
-                        order: this.order,
+                return new Promise((resolve, reject) => {
+                    this.showLoading();
+                    axios.get('/api/inventory', {
+                        params: {
+                            page: page,
+                            q: this.query,
+                            sort: this.sort,
+                            order: this.order,
+                        }
+                    }).then(({ data }) => {
+                        this.products = this.products.concat(data.data);
+                        this.total = data.total;
+                        this.last_page = data.last_page;
+                        resolve(data);
+                    })
+                    .catch(reject)
+                    .then(() => {
+                        this.hideLoading();
+                    });
+                });
+            },
+
+            handleSearchEnter(e) {
+                this.products = [];
+                this.page = 1;
+                this.last_page = 1;
+                this.total = 0;
+                this.loadProductList(1).then(this.handleSearchFocus);
+            },
+
+            handleSearchFocus() {
+                if (this.query) {
+                    setTimeout(() => { document.execCommand('selectall', null, false); });
+                }
+            },
+
+            scroll (person) {
+                window.onscroll = () => {
+                    let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
+
+                    if (bottomOfWindow && this.last_page > this.page) {
+                        this.loadProductList(++this.page);
                     }
-                }).then(({ data }) => {
-                    this.productsData = data;
-                }).then(this.hideLoading);
+                };
             },
-
-            next() {
-                console.log(this.productsData.current_page);
-                this.loadProductList(this.productsData.current_page + 1);
-            },
-
-            prev() {
-                this.loadProductList(this.productsData.current_page -1);
-            },
-
-            handleSearchEnter(event) {
-                event.target.blur();
-            }
         },
 
         data: function() {
             return {
                 query: null,
-                sort: null,
-                order: null,
-                productsData: {
-                    data: [],
-                    total: 0,
-                    per_page: 100,
-                    current_page: 1,
-                },
-                settings: {
-                    licenseKey: 'non-commercial-and-evaluation',
-                    colHeaders: (index) => {
-                        return colHeaderMap[index].label
-                    },
-                    rowHeaders: false,
-                    columnSorting: true
-                },
+                sort: 'sku',
+                order: 'asc',
+                products: [],
+                total: 0,
+                page: 1,
+                last_page: 1,
             };
         },
-
-        computed: {
-            tableData() {
-                return this.productsData.data.map((product => {
-                    return [
-                        product.sku,
-                        product.name,
-                        product.quantity,
-                        product.quantity_reserved,
-                        product.price,
-                        product.sale_price,
-                        product.sale_price_start_date,
-                        product.sale_price_end_date
-                    ];
-                }));
-            }
-        }
     }
 </script>

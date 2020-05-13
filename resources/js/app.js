@@ -10,7 +10,9 @@ window.Vue = require('vue');
 
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
+
 Vue.use(Loading);
+Vue.use(require('vue-moment'));
 
 /**
  * The following block of code may be used to automatically register your

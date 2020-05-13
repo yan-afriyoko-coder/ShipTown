@@ -2,22 +2,18 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header">Products</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-                        <products-table></products-table>
-                        <br />
-
-                </div>
+    @if (session('status'))
+    <div class="row">
+        <div class="col">
+            <div class="alert alert-success" role="alert">
+                {{ session('status') }}
             </div>
+        </div>
+    </div>    
+    @endif
+    <div class="row justify-content-center">
+        <div class="col-lg-12">            
+            <products-table></products-table>        
         </div>
     </div>
 </div>

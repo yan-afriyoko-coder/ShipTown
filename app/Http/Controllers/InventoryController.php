@@ -26,6 +26,15 @@ class InventoryController extends Controller
             return Product::whereHas('inventory', function($query) {
                     $query->where('quantity_reserved', '>', 0);
                 })
+                ->when($request->has('q'), function ($query) use ($request) {
+                    return $query
+                        ->where('sku', 'like', '%' . $request->get('q') . '%')
+                        ->orWhere('name', 'like', '%' . $request->get('q') . '%');
+                })
+                ->when($request->has('sort'), function ($query) use ($request) {
+                        return $query
+                            ->orderBy($request->get('sort'), $request->get('order', 'asc'));
+                    })
                 ->with('inventory')
                 ->paginate(100);
         }
