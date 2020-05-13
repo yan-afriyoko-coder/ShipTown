@@ -6,7 +6,7 @@
             </div>
         </div>
         <div class="container">        
-            <div v-if="productsData.total == 0 && !isLoading" class="row" >
+            <div v-if="total == 0 && !isLoading" class="row" >
                 <div class="col">
                     <div class="alert alert-info" role="alert">
                         No products found.
@@ -14,7 +14,7 @@
                 </div>
             </div>
             <template v-else class="row">
-                <template v-for="product in productsData.data">
+                <template v-for="product in products">
                     <Product v-for="stock in product.inventory" :product="product" :stock="stock" :key="stock.id" />
                 </template>
             </template>
@@ -32,39 +32,60 @@
         components: { Product },
 
         created() {
-            this.loadProductList(1);
+            this.loadProductList(this.page);
         },
 
         mounted() {
             this.$refs.search.focus();
+            this.scroll();
         },
 
         methods: {
             loadProductList: function(page) {
-                this.showLoading();
-                axios.get('/api/inventory', {
-                    params: {
-                        page: page,
-                        q: this.query,
-                        sort: this.sort,
-                        order: this.order,
-                    }
-                }).then(({ data }) => {
-                    this.productsData = data;
-                }).then(() => {
-                    this.hideLoading();
-                    this.$refs.search.focus();
+                return new Promise((resolve, reject) => {
+                    this.showLoading();
+                    axios.get('/api/inventory', {
+                        params: {
+                            page: page,
+                            q: this.query,
+                            sort: this.sort,
+                            order: this.order,
+                        }
+                    }).then(({ data }) => {
+                        this.products = this.products.concat(data.data);
+                        this.total = data.total;
+                        this.last_page = data.last_page;
+                        resolve(data);
+                    })
+                    .catch(reject)
+                    .then(() => {
+                        this.hideLoading();
+                    });
                 });
             },
 
             handleSearchEnter(e) {
-                this.loadProductList(1);
+                this.products = [];
+                this.page = 1;
+                this.last_page = 1;
+                this.total = 0;
+                this.loadProductList(1).then(this.handleSearchFocus);
             },
 
             handleSearchFocus() {
                 if (this.query) {
                     setTimeout(() => { document.execCommand('selectall', null, false); });
                 }
+            },
+
+            scroll (person) {
+                window.onscroll = () => {
+                    let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
+
+                    if (bottomOfWindow && this.last_page > this.page) {
+                        this.loadProductList(++this.page);
+                    }
+                };
             },
         },
 
@@ -73,12 +94,10 @@
                 query: null,
                 sort: 'sku',
                 order: 'asc',
-                productsData: {
-                    data: [],
-                    total: 0,
-                    per_page: 100,
-                    current_page: 1,
-                },
+                products: [],
+                total: 0,
+                page: 1,
+                last_page: 1,
             };
         },
     }

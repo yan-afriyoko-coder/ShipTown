@@ -10,10 +10,10 @@
                         <div class="col">{{ stock.location_id }}</div>
                     </div>
                 </div>
-                <div class="col-6">
-                    <span  class="align-middle">
+                <div class="col-6 sku-col">
+                    <div>
                         {{ product.sku }}
-                    </span>
+                    </div>
                 </div>
                 <div class="col-3">
                     <div class="row header-row">
@@ -89,5 +89,11 @@
 
     .row-product-name .col {
         padding: 10px;
+    }
+
+    .sku-col {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 </style>
