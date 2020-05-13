@@ -4,6 +4,7 @@ namespace Tests\External;
 
 use App\Jobs\ImportOrdersFromApi2cartJob;
 use App\Managers\CompanyConfigurationManager;
+use App\Modules\Api2cart\src\Client;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
@@ -14,7 +15,7 @@ class ImportOrdersFromApi2cartJobTest extends TestCase
         Event::fake();
 
         // we set key to api2cart demo store
-        CompanyConfigurationManager::set('bridge_api_key', 'ed58a22dfecb405a50ea3ea56979360d');
+        CompanyConfigurationManager::set('bridge_api_key', env('API2CART_TEST_STORE_KEY'));
 
         $job = new ImportOrdersFromApi2cartJob();
 

@@ -26,5 +26,6 @@
         <server name="QUEUE_CONNECTION" value="sync"/>
         <server name="SESSION_DRIVER" value="array"/>
         <server name="LOG_CHANNEL" value="daily"/>
+        <server name="API2CART_TEST_STORE_KEY" value="810f6979f064c4558938c233c0dd64cd"/>
     </php>
 </phpunit>

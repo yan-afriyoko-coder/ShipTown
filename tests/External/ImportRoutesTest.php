@@ -29,7 +29,7 @@ class ImportRoutesTest extends TestCase
     public function test_if_import_job_runs_correctly() {
 
         // we set key to api2cart demo store
-        CompanyConfigurationManager::set('bridge_api_key', 'ed58a22dfecb405a50ea3ea56979360d');
+        CompanyConfigurationManager::set('bridge_api_key', env('API2CART_TEST_STORE_KEY'));
 
         $job = new ImportOrdersFromApi2cartJob();
 
