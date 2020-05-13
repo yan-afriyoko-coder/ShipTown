@@ -19,10 +19,11 @@ class OrdersProcessing extends AbstractWidget
      */
     public function run()
     {
-        //
+        $count = \App\Models\Order::where(['status_code' => 'processing'])->count();
 
         return view('widgets.orders_processing', [
             'config' => $this->config,
+            'count' => $count
         ]);
     }
 }

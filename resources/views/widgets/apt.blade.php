@@ -1,9 +1,7 @@
-<div class="card text-center">
-  <div class="card-header">
-    30 DAY APT
-  </div>
+<div class="card text-center">  
   <div class="card-body">
+    <h4 class="card-title">30 DAY APT</h5>
     <h5 class="card-title">NOT "Processing"</h5>
-    <p class="card-text">98h 53m</p>
+    <h2 class="card-text"><strong>98h 53m</strong></h2>
   </div>
 </div>
