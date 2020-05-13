@@ -4,6 +4,6 @@
   </div>
   <div class="card-body">
     <h5 class="card-title">Processing</h5>
-    <p class="card-text">300</p>
+    <p class="card-text">{{ $count }}</p>
   </div>
 </div>
