@@ -44,9 +44,12 @@ class SaveOrdersCollection implements ShouldQueue
                 [
                     "order_number" => $order['order_number'],
                 ],
-                [
-                    'raw_import' => $order
-                ]
+                array_merge(
+                    $order,
+                    [
+                        'raw_import' => $order
+                    ]
+                )
             );
         }
 
