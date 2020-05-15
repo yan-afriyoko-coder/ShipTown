@@ -102,10 +102,16 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
     {
         $convertedOrdersCollection = [];
 
-        foreach ($ordersCollection as $order)
+        foreach ($ordersCollection as $raw_order)
         {
-            $order['order_number'] = $order['id'];
-            $order['status_code']  = $order['status']['id'];
+            $order = [];
+            $order['order_number']  = $raw_order['id'];
+            $order['product_count'] = 0;
+            $order['status_code']   = $raw_order['status']['id'];
+
+            foreach ($raw_order['order_products'] as $product) {
+                $order['product_count'] += $product['quantity'];
+            }
 
             $convertedOrdersCollection[] = $order;
         }

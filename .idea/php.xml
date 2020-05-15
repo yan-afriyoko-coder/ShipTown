@@ -122,6 +122,7 @@
       <path value="$PROJECT_DIR$/vendor/sebastian/type" />
       <path value="$PROJECT_DIR$/vendor/symfony/error-handler" />
       <path value="$PROJECT_DIR$/vendor/hulkur/laravel-hasmany-keyby" />
+      <path value="$PROJECT_DIR$/vendor/arrilot/laravel-widgets" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
