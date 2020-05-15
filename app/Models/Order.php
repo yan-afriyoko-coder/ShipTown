@@ -10,6 +10,7 @@ class Order extends Model
 {
     protected $fillable = [
         'order_number',
+        'product_count',
         'status_code',
         'raw_import'
     ];
