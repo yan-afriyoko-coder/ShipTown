@@ -15,10 +15,6 @@ class DatabaseSeeder extends Seeder
     {
         \Illuminate\Support\Facades\Event::fake();
 
-        $this->call([
-            ProductsSeeder::class
-        ]);
-
         // create demo user
         if(User::query()
             ->where('email','=','demo@products.management')
@@ -27,60 +23,11 @@ class DatabaseSeeder extends Seeder
                     ->create(['email' => 'demo@products.management']);
         }
 
-        \App\Models\Product::query()
-            ->get()
-            ->each(function (\App\Models\Product $product) {
-                factory(\App\Models\Inventory::class)
-                    ->create([
-                        'product_id' => $product->id,
-                        'location_id' => 1
-                    ]);
-            });
-
-        \App\Models\Product::query()
-            ->get()
-            ->each(function (\App\Models\Product $product) {
-                factory(\App\Models\Inventory::class)
-                    ->create([
-                        'product_id' => $product->id,
-                        'location_id' => 1
-                    ]);
-            });
-
-        \App\Models\Product::query()
-            ->get()
-            ->each(function (\App\Models\Product $product) {
-                factory(\App\Models\Inventory::class)
-                    ->create([
-                        'product_id' => $product->id,
-                        'location_id' => 99
-                    ]);
-            });
-
-        \App\Models\Product::query()
-            ->get()
-            ->each(function (\App\Models\Product $product) {
-                factory(\App\Models\Inventory::class)
-                    ->create([
-                        'product_id' => $product->id,
-                        'location_id' => 100
-                    ]);
-            });
-
-        \App\Models\Product::query()
-            ->get()
-            ->each(function (\App\Models\Product $product) {
-                factory(\App\Models\Inventory::class)
-                    ->create([
-                        'product_id' => $product->id,
-                        'location_id' => 999
-                    ]);
-            });
-
         $this->call([
+            ProductsSeeder::class,
+            InventorySeeder::class,
             OrdersSeeder::class
         ]);
 
-        // $this->call(UsersTableSeeder::class);
     }
 }
