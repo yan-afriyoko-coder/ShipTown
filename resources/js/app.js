@@ -10,9 +10,12 @@ window.Vue = require('vue');
 
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
+import { BootstrapVue } from 'bootstrap-vue';
 
 Vue.use(Loading);
 Vue.use(require('vue-moment'));
+// Install BootstrapVue
+Vue.use(BootstrapVue);
 
 /**
  * The following block of code may be used to automatically register your
@@ -65,6 +68,11 @@ Vue.component(
 Vue.component(
     'api2cart-configuration',
     require('./components/Api2CartConfiguration.vue').default
+);
+
+Vue.component(
+    'rmsapi-configuration',
+    require('./components/RMSApiConfiguration.vue').default
 );
 
 /**

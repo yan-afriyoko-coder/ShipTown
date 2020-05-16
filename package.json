@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "axios": "^0.18",
-    "bootstrap": "^4.1.0",
+    "bootstrap": "^4.5.0",
     "cross-env": "^5.1",
     "jquery": "^3.2",
     "laravel-mix": "^4.0.7",
@@ -25,8 +25,10 @@
   },
   "dependencies": {
     "@handsontable/vue": "^4.1.1",
+    "bootstrap-vue": "^2.14.0",
     "handsontable": "^7.3.0",
     "laravel-vue-pagination": "^2.3.1",
+    "vee-validate": "^3.3.0",
     "vue-loading-overlay": "^3.3.2",
     "vue-moment": "^4.1.0"
   }
