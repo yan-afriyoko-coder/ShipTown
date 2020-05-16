@@ -17,10 +17,10 @@ class DatabaseSeeder extends Seeder
 
         // create demo user
         if(User::query()
-            ->where('email','=','demo@demo.com')
+            ->where('email','=','demo@products.management')
             ->doesntExist()) {
                 factory(User::class, 1)
-                    ->create(['email' => 'demo@demo.com']);
+                    ->create(['email' => 'demo@products.management']);
         }
 
 
