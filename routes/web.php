@@ -25,6 +25,10 @@ Route::middleware('auth')->group(function () {
     Route::view('/settings', 'settings')->name('settings');
     Route::view('/products', 'products')->name('products');
     Route::view('/missing', 'missing')->name('missing');
+    Route::view('/missing', 'missing')->name('missing');
+
+    Route::get("import/orders/from/api2cart", "ImportController@importOrdersFromApi2cart");
+
 });
 
 try {
