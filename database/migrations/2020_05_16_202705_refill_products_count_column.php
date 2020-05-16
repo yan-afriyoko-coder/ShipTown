@@ -16,7 +16,9 @@ class RefillProductsCountColumn extends Migration
     {
         \Illuminate\Support\Facades\Event::fake();
 
-        \App\Models\Order::query()->chunk(500, function ($orders) {
+        \App\Models\Order::query()
+            ->where('products_count','=',0)
+            ->chunk(500, function ($orders) {
 
             foreach($orders as $order) {
 
