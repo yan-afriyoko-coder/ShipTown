@@ -93,7 +93,7 @@ class SnsController extends Controller
             return true;
 
         } catch (AwsException $e) {
-            dd(1);
+
             switch ($e->getStatusCode())
             {
                 case 404:
