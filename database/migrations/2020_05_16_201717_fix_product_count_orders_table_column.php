@@ -19,7 +19,7 @@ class FixProductCountOrdersTableColumn extends Migration
 
         Schema::table('orders', function (Blueprint $table) {
             $table->double('products_count')
-                ->nullable(true)
+                ->default(0)
                 ->after('order_number');
         });
     }
