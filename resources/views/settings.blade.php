@@ -30,6 +30,8 @@
                     <api2cart-configuration></api2cart-configuration>
                     <br />
 
+                    <rmsapi-configuration></rmsapi-configuration>
+                    <br />
                 </div>
             </div>
         </div>
