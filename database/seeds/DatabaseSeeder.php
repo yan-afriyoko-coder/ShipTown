@@ -15,6 +15,10 @@ class DatabaseSeeder extends Seeder
     {
         \Illuminate\Support\Facades\Event::fake();
 
+        $this->call([
+            ProductsSeeder::class
+        ]);
+
         // create demo user
         if(User::query()
             ->where('email','=','demo@products.management')
@@ -23,15 +27,15 @@ class DatabaseSeeder extends Seeder
                     ->create(['email' => 'demo@products.management']);
         }
 
-
-        factory(\App\Models\Product::class)->create(['sku' => '12345']);
-
-        factory(\App\Models\Product::class, 500)->create();
-
-        factory(\App\Models\Product::class, 50)->create([
-           "quantity" => 50,
-           "quantity_reserved" => 50
-        ]);
+        \App\Models\Product::query()
+            ->get()
+            ->each(function (\App\Models\Product $product) {
+                factory(\App\Models\Inventory::class)
+                    ->create([
+                        'product_id' => $product->id,
+                        'location_id' => 1
+                    ]);
+            });
 
         \App\Models\Product::query()
             ->get()
