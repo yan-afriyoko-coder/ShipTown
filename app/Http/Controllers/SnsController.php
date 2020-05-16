@@ -73,7 +73,6 @@ class SnsController extends Controller
      * @return bool
      */
     function publish(string $message){
-
         $notification = [
             'TargetArn' => $this->getTopicArn(),
             'Message'   => $message,
@@ -91,9 +90,11 @@ class SnsController extends Controller
                 "Result" => $result["@metadata"]["statusCode"]
             ]);
 
+            dd(1);
             return true;
 
         } catch (AwsException $e) {
+            dd(1);
             switch ($e->getStatusCode())
             {
                 case 404:
@@ -106,9 +107,15 @@ class SnsController extends Controller
                         "return_message" => $e->getMessage(),
                         "message" => $notification
                     ]);
-                    throw $e;
             }
 
+        }
+        catch (\Exception $e) {
+            Log::error("Could not publish SNS message", [
+                "code" => $e->getCode(),
+                "return_message" => $e->getMessage(),
+                "message" => $notification
+            ]);
         }
 
 
