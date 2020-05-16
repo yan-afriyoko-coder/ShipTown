@@ -90,7 +90,6 @@ class SnsController extends Controller
                 "Result" => $result["@metadata"]["statusCode"]
             ]);
 
-            dd(1);
             return true;
 
         } catch (AwsException $e) {
