@@ -15,6 +15,7 @@ class AddOrderPlacedAtColumnToOrdersTable extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->dateTime('order_placed_at')
+                ->useCurrent()
                 ->nullable(true)
                 ->after('order_number');
         });
