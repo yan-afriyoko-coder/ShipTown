@@ -15,6 +15,15 @@ class Apt extends AbstractWidget
     protected $config = [];
 
     /**
+     * @var array
+     */
+    protected $statuses = [
+        'complete',
+        'complete_manually_processed',
+        'completed_imported_to_rms'
+    ];
+
+    /**
      * Treat this method as a controller action.
      * Return view() or other content to display.
      */
@@ -22,14 +31,15 @@ class Apt extends AbstractWidget
     {
         $apt_seconds  = (integer) Order::query()
             ->selectRaw("AVG(TIME_TO_SEC(TIMEDIFF(order_closed_at, order_placed_at))) as apt")
-            ->whereIn('status_code', ['5','complete', 'complete_manually_processed','completed_imported_to_rms'])
+            ->whereIn('status_code', $this->statuses)
             ->whereRaw('order_closed_at > order_placed_at')
             ->whereRaw('order_closed_at BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() ')
             ->value('apt');
 
         return view('widgets.apt', [
             'config' => $this->config,
-            'apt_string' => $this->timeDiffForPrez($apt_seconds)
+            'apt_string' => $this->timeDiffForPrez($apt_seconds),
+            'statuses' => $this->statuses,
         ]);
     }
 
