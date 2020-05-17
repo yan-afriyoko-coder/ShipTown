@@ -20,8 +20,9 @@ class Apt extends AbstractWidget
      */
     public function run()
     {
-        $apt_seconds  = Order::query()
+        $apt_seconds  = (integer) Order::query()
             ->selectRaw("AVG(TIME_TO_SEC(TIMEDIFF(order_closed_at, order_placed_at))) as apt")
+            ->whereIn('status_code', ['5','complete', 'complete_manually_processed','completed_imported_to_rms'])
             ->whereRaw('order_closed_at > order_placed_at')
             ->whereRaw('order_closed_at BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() ')
             ->value('apt');
