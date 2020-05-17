@@ -105,7 +105,8 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
         foreach ($ordersCollection as $order)
         {
             $order['order_number']    = $order['id'];
-            $order['order_placed_at'] = Carbon::createFromTimeString($order['create_at']);
+            $order['order_placed_at'] = Carbon::createFromFormat($order['create_at']['format'],
+                $order['create_at']['value']);
             $order['products_count']  = 0;
             $order['status_code']     = $order['status']['id'];
 
