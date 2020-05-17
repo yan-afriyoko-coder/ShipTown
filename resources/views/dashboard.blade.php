@@ -5,7 +5,8 @@
     <div class="row row-cols-sm-2">
         <div class="col">@widget('ordersProcessing')</div>
         <div class="col">@widget('apt')</div>
-    </div>    
+        <div class="col">@widget('StatusOrderCount')</div>
+    </div>
 </div>
 @endsection
 
