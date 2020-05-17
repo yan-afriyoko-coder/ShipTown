@@ -119,7 +119,7 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
 
                     $time = $status['modified_time'];
 
-                    if(!isNull($time['value'])) {
+                    if(!is_null($time['value'])) {
                         $order['order_closed_at'] = Carbon::createFromFormat($time['format'], $time['value']);
                         break;
                     }
