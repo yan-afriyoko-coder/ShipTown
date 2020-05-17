@@ -11,6 +11,7 @@ class Order extends Model
     protected $fillable = [
         'order_number',
         'order_placed_at',
+        'order_closed_at',
         'products_count',
         'status_code',
         'raw_import'
