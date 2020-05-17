@@ -15,6 +15,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use function PHPUnit\Framework\isNull;
 
 class ImportOrdersFromApi2cartJob implements ShouldQueue
 {
@@ -114,10 +115,15 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
             $statuses = $this->getChronologicalStatusHistory($order);
 
             foreach ($statuses as $status) {
-                if($status['id'] !== 'processing') {
+                if ($status['id'] !== 'processing') {
+
                     $time = $status['modified_time'];
-                    $order['order_closed_at'] = Carbon::createFromFormat($time['format'], $time['value']);
-                    break;
+
+                    if(!isNull($time['value'])) {
+                        $order['order_closed_at'] = Carbon::createFromFormat($time['format'], $time['value']);
+                        break;
+                    }
+
                 }
             }
 
