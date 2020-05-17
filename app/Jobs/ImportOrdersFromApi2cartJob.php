@@ -14,6 +14,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class ImportOrdersFromApi2cartJob implements ShouldQueue
 {
@@ -110,6 +111,16 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
             $order['products_count']  = 0;
             $order['status_code']     = $order['status']['id'];
 
+            $statuses = $this->getChronologicalStatusHistory($order);
+
+            foreach ($statuses as $status) {
+                if($status['id'] !== 'processing') {
+                    $time = $status['modified_time'];
+                    $order['order_closed_at'] = Carbon::createFromFormat($time['format'], $time['value']);
+                    break;
+                }
+            }
+
             foreach ($order['order_products'] as $product) {
                 $order['products_count'] += $product['quantity'];
             }
@@ -154,5 +165,18 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
         $transformedOrdersCollection = $this->convertOrdersFormat($batch);
 
         SaveOrdersCollection::dispatch($transformedOrdersCollection);
+    }
+
+    /**
+     * @param array $order
+     * @return Collection
+     */
+    public function getChronologicalStatusHistory(array $order){
+        return Collection::make($order['status']['history'])
+            ->sort(function ($a, $b) {
+                $a_time = Carbon::make($a['modified_time']['value']);
+                $b_time = Carbon::make($b['modified_time']['value']);
+                return $a_time > $b_time;
+            });
     }
 }
