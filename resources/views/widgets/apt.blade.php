@@ -6,6 +6,6 @@
             {{$status}},
         @endforeach
     </h6>
-    <h2 class="card-text"><strong>{{  $apt_string }}m</strong></h2>
+    <h2 class="card-text"><strong>{{  $apt_string }}</strong></h2>
   </div>
 </div>
