@@ -11,6 +11,12 @@
 // Handsontable
 @import '~handsontable/dist/handsontable.full.css';
 
+.dashboard-widgets {
+    &> .row > .col > .card {
+        height: 100%;
+    }
+}
+
 .help-tip{
     z-index: 2;
     position: absolute;

@@ -2769,8 +2769,8 @@ pre code {
 
 .container {
   width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
+  padding-right: 2.5px;
+  padding-left: 2.5px;
   margin-right: auto;
   margin-left: auto;
 }
@@ -2805,8 +2805,8 @@ pre code {
 .container-md,
 .container-sm {
   width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
+  padding-right: 2.5px;
+  padding-left: 2.5px;
   margin-right: auto;
   margin-left: auto;
 }
@@ -2850,8 +2850,8 @@ pre code {
   display: flex;
   -webkit-flex-wrap: wrap;
           flex-wrap: wrap;
-  margin-right: -15px;
-  margin-left: -15px;
+  margin-right: -2.5px;
+  margin-left: -2.5px;
 }
 
 .no-gutters {
@@ -2937,8 +2937,8 @@ pre code {
 .col-1 {
   position: relative;
   width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
+  padding-right: 2.5px;
+  padding-left: 2.5px;
 }
 
 .col {
@@ -7557,7 +7557,7 @@ input[type=button].btn-block {
 }
 
 .card-deck .card {
-  margin-bottom: 15px;
+  margin-bottom: 2.5px;
 }
 
 @media (min-width: 576px) {
@@ -7566,21 +7566,21 @@ input[type=button].btn-block {
     display: flex;
     -webkit-flex-flow: row wrap;
             flex-flow: row wrap;
-    margin-right: -15px;
-    margin-left: -15px;
+    margin-right: -2.5px;
+    margin-left: -2.5px;
   }
 
   .card-deck .card {
     -webkit-flex: 1 0 0%;
             flex: 1 0 0%;
-    margin-right: 15px;
+    margin-right: 2.5px;
     margin-bottom: 0;
-    margin-left: 15px;
+    margin-left: 2.5px;
   }
 }
 
 .card-group > .card {
-  margin-bottom: 15px;
+  margin-bottom: 2.5px;
 }
 
 @media (min-width: 576px) {
@@ -16887,6 +16887,10 @@ input[type=color].form-control:disabled {
 .input-group-text .b-icon.bi {
   font-size: 125%;
   vertical-align: text-bottom;
+}
+
+.dashboard-widgets > .row > .col > .card {
+  height: 100%;
 }
 
 .help-tip {
