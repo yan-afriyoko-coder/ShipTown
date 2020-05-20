@@ -3,7 +3,7 @@
         APT - Average Processing Time<br>
         <br>
         This is the average time difference between time when order has been placed
-        and when status was status was first time changed to something different that "processsing" <br>
+        and time when status was first changed to something different that "processsing" <br>
         <br>
         Only orders with one of the following statuses are taken into calculations:<br>
         @foreach($statuses as $status)
