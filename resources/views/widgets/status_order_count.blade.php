@@ -1,5 +1,5 @@
 <div class="help-tip">
-    <p>This is the inline help tip! It can contain all kinds of HTML. Style it as you please.</p>
+    <p>This is the number of order with a given status</p>
 </div>
 <div class="card">
     <div class="card-body">
