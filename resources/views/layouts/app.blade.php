@@ -43,6 +43,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('missing') }}">{{ __('Missing') }}</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('picklist') }}">{{ __('Picklist') }}</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
