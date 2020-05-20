@@ -6,7 +6,7 @@
 </div>
     <div class="card text-center">
   <div class="card-body">
-    <h4 class="card-title">PENDING ORDERS</h5>
+    <h4 class="card-title">PENDING ORDERS</h4>
     <h5 class="card-title"></h5>
     <h2 class="card-text"><strong>{{ $count }}</strong></h2>
   </div>

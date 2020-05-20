@@ -1,9 +1,9 @@
 <div class="help-tip">
-    <p>This is the number of order with a given status</p>
+    <p>This is the number of orders with a given status</p>
 </div>
 <div class="card">
     <div class="card-body">
-        <h4 class="card-title text-center">LAST 30 DAY ORDERS</h5>
+        <h4 class="card-title text-center">LAST 30 DAY ORDERS</h4>
         <div class="row">
             <div class="col-8 offset-2">
                 <table class="table table-borderless">
