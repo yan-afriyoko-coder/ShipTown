@@ -1,5 +1,10 @@
-<div class="help-tip">
-    <p>This is the number of orders with a given status</p>
+<div class="widget-tools-container">
+    <font-awesome-icon icon="question-circle" name="status-help-icon"></font-awesome-icon>
+    <template>
+        <tippy to="status-help-icon" arrow>
+            <p>This is the number of orders with a given status</p>
+        </tippy>
+    </template>
 </div>
 <div class="card">
     <div class="card-body">

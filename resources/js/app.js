@@ -11,11 +11,21 @@ window.Vue = require('vue');
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import { BootstrapVue } from 'bootstrap-vue';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faCog, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import VueTippy, { TippyComponent } from "vue-tippy";
+
+library.add(faCog);
+library.add(faQuestionCircle);
+
+Vue.config.productionTip = false
 
 Vue.use(Loading);
 Vue.use(require('vue-moment'));
 // Install BootstrapVue
 Vue.use(BootstrapVue);
+Vue.use(VueTippy);
 
 /**
  * The following block of code may be used to automatically register your
@@ -28,8 +38,16 @@ Vue.use(BootstrapVue);
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
+/**
+ * Third Party components
+ */
 Vue.component('pagination', require('laravel-vue-pagination'));
+Vue.component('font-awesome-icon', FontAwesomeIcon);
+Vue.component("tippy", TippyComponent);
 
+/**
+ * Application components
+ */
 Vue.component(
     'passport-clients',
     require('./components/passport/Clients.vue').default
@@ -78,6 +96,11 @@ Vue.component(
 Vue.component(
     'picklist-table',
     require('./components/Picklist.vue').default
+);
+
+Vue.component(
+    'apt-configuration-modal',
+    require('./components/Widgets/APT/ConfigurationModal.vue').default
 );
 
 /**
