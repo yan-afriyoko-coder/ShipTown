@@ -37,6 +37,8 @@ Route::middleware('auth:api')->group(function() {
     Route::get("import/orders/from/api2cart", "ImportController@importOrdersFromApi2cart");
 
     Route::resource("rms_api_configuration", "ConfigurationRmsApiController");
+
+    Route::resource('widgets', 'WidgetsController');
 });
 
 

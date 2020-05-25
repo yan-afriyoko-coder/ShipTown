@@ -21,9 +21,15 @@
     <div class="card-body">
         <h4 class="card-title">30 DAY APT</h4>
         <h6 class="card-title"></h6>
-        <h2 class="card-text"><strong>{{  $apt_string }}</strong></h2>
+        <h2 class="card-text"><strong>{{ $apt_string }}</strong></h2>
     </div>
 </div>
 
 <!-- Modal -->
-<apt-configuration-modal id="aptConfigurationModal" :statuses='@json($statuses)'></apt-configuration-modal>
+<apt-configuration-modal 
+    id='aptConfigurationModal'
+    name='apt' 
+    :statuses='@json($statuses)'
+    :widget-config='@json($config)'
+    :widget-id="{{ $widget_id }}"
+></apt-configuration-modal>

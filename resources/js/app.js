@@ -15,6 +15,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCog, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VueTippy, { TippyComponent } from "vue-tippy";
+import Snotify from 'vue-snotify';
 
 library.add(faCog);
 library.add(faQuestionCircle);
@@ -26,6 +27,7 @@ Vue.use(require('vue-moment'));
 // Install BootstrapVue
 Vue.use(BootstrapVue);
 Vue.use(VueTippy);
+Vue.use(Snotify);
 
 /**
  * The following block of code may be used to automatically register your

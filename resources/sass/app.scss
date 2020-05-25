@@ -11,6 +11,8 @@
 // Handsontable
 @import '~handsontable/dist/handsontable.full.css';
 
+@import "~vue-snotify/styles/material";
+
 .dashboard-widgets {
     &> .row > .col > .card {
         height: 100%;
