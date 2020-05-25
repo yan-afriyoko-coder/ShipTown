@@ -53,7 +53,7 @@ export default {
 
     props: {
         statuses: Array,
-        widgetConfig: Object,
+        widgetConfig: [Array, Object],
         widgetId: [Number, String],
         name: String,
     },

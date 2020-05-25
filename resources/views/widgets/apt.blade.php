@@ -31,5 +31,7 @@
     name='apt' 
     :statuses='@json($statuses)'
     :widget-config='@json($config)'
-    :widget-id="{{ $widget_id }}"
+    @if($widget_id)
+        :widget-id="{{ $widget_id }}"
+    @endif
 ></apt-configuration-modal>
