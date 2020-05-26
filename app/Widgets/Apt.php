@@ -3,10 +3,11 @@
 namespace App\Widgets;
 
 use App\Models\Order;
-use Arrilot\Widgets\AbstractWidget;
 
-class Apt extends AbstractWidget
+class Apt extends BaseWidget
 {
+    protected $name = 'apt';
+
     /**
      * The configuration array.
      *
@@ -40,6 +41,8 @@ class Apt extends AbstractWidget
             'config' => $this->config,
             'apt_string' => $this->timeDiffForPrez($apt_seconds),
             'statuses' => $this->statuses,
+            'widget_id' => $this->widgetId,
+            'widget_name' => $this->name
         ]);
     }
 
