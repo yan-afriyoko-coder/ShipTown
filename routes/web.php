@@ -26,10 +26,13 @@ Route::middleware('auth')->group(function () {
     Route::view('/products', 'products')->name('products');
     Route::view('/missing', 'missing')->name('missing');
     Route::view('/picklist', 'picklist')->name('picklist');
+    Route::view('/users', 'users')->name('users');
 
     Route::get("import/orders/from/api2cart", "ImportController@importOrdersFromApi2cart");
-
 });
+
+Route::get('invites/{token}', 'InvitesController@accept')->name('accept');
+Route::post('invites/{token}', 'InvitesController@process');
 
 try {
     Auth::routes(['register' => ! User::query()->exists()]);

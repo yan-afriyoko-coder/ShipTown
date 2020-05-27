@@ -65,6 +65,11 @@
                                         {{ __('Settings') }}
                                     </a>
 
+                                    <!-- users -->
+                                    <a class="dropdown-item" href="{{ route('users') }}">
+                                        {{ __('Users') }}
+                                    </a>
+
                                     <!-- Logout -->
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
