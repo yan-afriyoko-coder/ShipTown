@@ -39,6 +39,10 @@ Route::middleware('auth:api')->group(function() {
     Route::resource("rms_api_configuration", "ConfigurationRmsApiController");
 
     Route::resource('widgets', 'WidgetsController');
+
+    Route::post('invites', 'InvitesController@store');
+
+    Route::get('users', 'UsersController@index');
 });
 
 
