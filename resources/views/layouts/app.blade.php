@@ -66,9 +66,11 @@
                                     </a>
 
                                     <!-- users -->
+                                    @can('manage users')
                                     <a class="dropdown-item" href="{{ route('users') }}">
                                         {{ __('Users') }}
                                     </a>
+                                    @endcan
 
                                     <!-- Logout -->
                                     <a class="dropdown-item" href="{{ route('logout') }}"
