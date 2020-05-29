@@ -28,7 +28,7 @@ class AddOrderClosedAtColumnToOrdersTable extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('order_placed_at');
+            $table->dropColumn('order_closed_at');
         });
     }
 }
