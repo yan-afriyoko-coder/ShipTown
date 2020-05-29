@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             ->doesntExist()) {
                 $user = factory(User::class, 1)
                     ->create(['email' => 'demo@products.management']);
-                $user->assignRole('admin');
+                $user->first()->assignRole('admin');
         }
 
         $this->call([
