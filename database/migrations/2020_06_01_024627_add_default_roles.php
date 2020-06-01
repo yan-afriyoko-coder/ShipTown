@@ -18,11 +18,13 @@ class AddDefaultRoles extends Migration
     public function up()
     {
         $admin = Role::create(['name' => 'admin']);
-        $manage = Permission::create(['name' => 'manage users']);
-        $invite = Permission::create(['name' => 'invite users']);
 
-        $admin->givePermissionTo($manage);
-        $admin->givePermissionTo($invite);
+        $defaultAdminPermissions = ['manage users', 'list users', 'list roles'];
+
+        foreach ($defaultAdminPermissions as $permissionName) {
+            $permission = Permission::create(['name' => $permissionName]);
+            $admin->givePermissionTo($permission);
+        }
 
         Role::create(['name' => 'user']);
 
