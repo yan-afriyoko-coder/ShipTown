@@ -27,7 +27,11 @@
                             <td>{{ user.id }}</td>
                             <td>{{ user.email }}</td>
                             <td>{{ user.name }}</td>
-                            <td></td>
+                            <td>
+                                <a @click.prevent="onEditClick(user.id)">
+                                    <font-awesome-icon icon="user-edit"></font-awesome-icon>
+                                </a>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -37,27 +41,35 @@
                 </p>
             </div>
         </div>
-        <!-- The modal -->
-        <b-modal ref="formModal" id="invite-modal" title="Invite User" @ok="handleModalOk">
-            <invite-modal ref="form"></invite-modal>   
+        <!-- The modals -->
+        <b-modal id="invite-modal" title="Invite User" @ok="handleInviteOk">
+            <invite-modal ref="inviteForm"></invite-modal>   
+        </b-modal>
+        <b-modal ref="editModal" id="edit-modal" title="Edit User" @ok="handleEditOk">
+            <edit-modal v-if="selectedId" :id="selectedId" :roles="roles" ref="editForm"></edit-modal>   
         </b-modal>
     </div>
 </template>
 
 <script>
 import Invite from './Invite';
+import Edit from './Edit';
 
 export default {
     components: {
         'invite-modal': Invite,
+        'edit-modal': Edit,
     },
 
     mounted() {
         this.loadUsers();
+        this.loadRoles();
     },
 
     data: () => ({
         users: [],
+        roles: [],
+        selectedId: null,
     }),
 
     methods: {
@@ -67,11 +79,27 @@ export default {
                     this.users = data.data;
                 });
         },
-        
-        handleModalOk(bvModalEvt) {
-            bvModalEvt.preventDefault();
-            this.$refs.form.submit();
+
+        loadRoles() {
+            axios.get('/api/roles').then(({ data }) => {
+                this.roles = data.data;
+            });
         },
+
+        handleInviteOk(bvModalEvt) {
+            bvModalEvt.preventDefault();
+            this.$refs.inviteForm.submit();
+        },
+
+        handleEditOk(bvModalEvt) {
+            bvModalEvt.preventDefault();
+            this.$refs.editForm.submit();
+        },
+
+        onEditClick(id) {
+            this.selectedId = id;
+            this.$refs.editModal.show();
+        }
     }
 }
 </script>

@@ -19,8 +19,9 @@ class DatabaseSeeder extends Seeder
         if(User::query()
             ->where('email','=','demo@products.management')
             ->doesntExist()) {
-                factory(User::class, 1)
+                $user = factory(User::class, 1)
                     ->create(['email' => 'demo@products.management']);
+                $user->first()->assignRole('admin');
         }
 
         $this->call([

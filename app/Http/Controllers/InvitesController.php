@@ -57,6 +57,8 @@ class InvitesController extends Controller
             'password' => Hash::make($request->input('password')),
         ]);
 
+        $user->assignRole('user');
+
         $invite->delete();
 
         Auth::guard()->login($user);

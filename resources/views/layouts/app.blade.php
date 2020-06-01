@@ -7,6 +7,10 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    @auth
+    <meta name="user-id" content="{{ Auth::user()->id }}">
+    @endauth
+
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
@@ -66,9 +70,11 @@
                                     </a>
 
                                     <!-- users -->
+                                    @can('manage users')
                                     <a class="dropdown-item" href="{{ route('users') }}">
                                         {{ __('Users') }}
                                     </a>
+                                    @endcan
 
                                     <!-- Logout -->
                                     <a class="dropdown-item" href="{{ route('logout') }}"
