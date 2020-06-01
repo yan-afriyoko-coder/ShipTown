@@ -19,7 +19,7 @@ class AddDefaultRoles extends Migration
     {
         $admin = Role::create(['name' => 'admin']);
 
-        $defaultAdminPermissions = ['manage users', 'list users', 'list roles'];
+        $defaultAdminPermissions = ['manage users', 'list users', 'invite users', 'list roles'];
 
         foreach ($defaultAdminPermissions as $permissionName) {
             $permission = Permission::create(['name' => $permissionName]);

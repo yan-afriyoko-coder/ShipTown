@@ -1,5 +1,5 @@
 <template>
-<ValidationObserver ref="form">
+    <ValidationObserver ref="form">
         <form class="form" @submit.prevent="submit" ref="loadingContainer">
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label" for="email">Email</label>

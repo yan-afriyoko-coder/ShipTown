@@ -42,7 +42,9 @@ Route::middleware('auth:api')->group(function() {
 
     Route::post('invites', 'InvitesController@store');
 
-    Route::get('users', 'UsersController@index');
+    Route::resource('users', 'UsersController')->middleware('can:manage users');
+
+    Route::get('roles', 'RolesController@index')->middleware('can:list roles');
 });
 
 
