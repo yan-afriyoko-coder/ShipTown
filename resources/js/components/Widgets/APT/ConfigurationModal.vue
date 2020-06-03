@@ -15,16 +15,12 @@
                             <label class="form-check-label" for="cb-complete">complete</label>
                         </div>
                         <div class="form-group form-check">
-                            <input v-model="config.cancelled" name="cancelled" type="checkbox" class="form-check-input" id="cb-cancelled" />
-                            <label class="form-check-label" for="cb-cancelled">cancelled</label>
+                            <input v-model="config.complete_manually_processed" name="complete_manually_processed" type="checkbox" class="form-check-input" id="cb-complete_manually_processed" />
+                            <label class="form-check-label" for="cb-complete_manually_processed">complete_manually_processed</label>
                         </div>
                         <div class="form-group form-check">
-                            <input v-model="config.on_hold" name="on_hold" type="checkbox" class="form-check-input" id="cb-on_hold" />
-                            <label class="form-check-label" for="cb-on_hold">on_hold</label>
-                        </div>
-                        <div class="form-group form-check">
-                            <input v-model="config.processing" name="processing" type="checkbox" class="form-check-input" id="cb-processing" />
-                            <label class="form-check-label" for="cb-processing">processing</label>
+                            <input v-model="config.completed_imported_to_rms" name="completed_imported_to_rms" type="checkbox" class="form-check-input" id="cb-completed_imported_to_rms" />
+                            <label class="form-check-label" for="cb-completed_imported_to_rms">completed_imported_to_rms</label>
                         </div>
                     </form>
                 </div>
@@ -62,9 +58,8 @@ export default {
         id: null,
         config: {
             complete: false,
-            cancelled: false,
-            on_hold: false,
-            processing: false,
+            complete_manually_processed: false,
+            completed_imported_to_rms: false,
         }
     }),
 
@@ -113,6 +108,7 @@ export default {
 
                 this.$snotify.success('APT Widget configuration saved.');
                 $(this.$el).modal('hide');
+                window.location.reload();
             }).then(this.hideLoading);
         }
     }
