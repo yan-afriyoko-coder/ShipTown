@@ -24,11 +24,6 @@ class Apt extends BaseWidget
         'completed_imported_to_rms'
     ];
 
-    public function placeholder()
-    {
-        return 'Loading...';
-    }
-
     /**
      * Treat this method as a controller action.
      * Return view() or other content to display.
