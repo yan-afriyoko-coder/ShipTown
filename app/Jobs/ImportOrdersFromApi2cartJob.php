@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Managers\CompanyConfigurationManager;
+use App\Models\Api2cartOrderImport;
 use App\Models\ConfigurationApi2cart;
 use App\Models\Order;
 use App\Modules\Api2cart\src\Orders;
