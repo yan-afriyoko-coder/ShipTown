@@ -51,6 +51,15 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
             $batches = array_chunk($ordersCollection, 20);
 
             foreach ($batches as $batch) {
+
+                foreach ($batch as $order) {
+
+                    Api2cartOrderImport::query()->create([
+                        'raw_import' => $order
+                    ]);
+
+                }
+
                 $this->convertAndSave($batch);
 
                 $this->updateLastSyncedTimestamp($batch);
