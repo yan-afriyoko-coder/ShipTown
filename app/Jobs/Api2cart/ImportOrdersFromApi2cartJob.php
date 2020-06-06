@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Api2cart;
 
 use App\Managers\CompanyConfigurationManager;
 use App\Models\Api2cartOrderImport;

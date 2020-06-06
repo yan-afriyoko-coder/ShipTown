@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\ImportOrdersFromApi2cartJob;
+use App\Jobs\Api2cart\ImportOrdersFromApi2cartJob;
 use Illuminate\Http\Request;
 
 class ImportController extends Controller

@@ -2,7 +2,7 @@
 
 namespace Tests\External;
 
-use App\Jobs\ImportOrdersFromApi2cartJob;
+use App\Jobs\Api2cart\ImportOrdersFromApi2cartJob;
 use App\Managers\CompanyConfigurationManager;
 use App\User;
 use Illuminate\Support\Facades\Bus;
