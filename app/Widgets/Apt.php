@@ -18,11 +18,7 @@ class Apt extends BaseWidget
     /**
      * @var array
      */
-    protected $statuses = [
-        'complete',
-        'complete_manually_processed',
-        'completed_imported_to_rms'
-    ];
+    protected $statuses = [];
 
     /**
      * Treat this method as a controller action.
@@ -30,6 +26,8 @@ class Apt extends BaseWidget
      */
     public function run()
     {
+        $this->statuses = Order::groupBy('status_code')->pluck('status_code')->toArray();
+
         $selectedStatuses = $this->statusesFromConfig();
 
         $apt_seconds  = (integer) Order::query()

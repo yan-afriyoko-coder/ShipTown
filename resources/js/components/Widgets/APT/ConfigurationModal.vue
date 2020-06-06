@@ -10,17 +10,9 @@
                 </div>
                 <div class="modal-body" style="margin: 0 auto 0;">
                     <form method="POST" action="gago" @submit.prevent="handleSubmit">
-                        <div class="form-group form-check">
-                            <input v-model="config.complete" name="complete" type="checkbox" class="form-check-input" id="cb-complete" />
-                            <label class="form-check-label" for="cb-complete">complete</label>
-                        </div>
-                        <div class="form-group form-check">
-                            <input v-model="config.complete_manually_processed" name="complete_manually_processed" type="checkbox" class="form-check-input" id="cb-complete_manually_processed" />
-                            <label class="form-check-label" for="cb-complete_manually_processed">complete_manually_processed</label>
-                        </div>
-                        <div class="form-group form-check">
-                            <input v-model="config.completed_imported_to_rms" name="completed_imported_to_rms" type="checkbox" class="form-check-input" id="cb-completed_imported_to_rms" />
-                            <label class="form-check-label" for="cb-completed_imported_to_rms">completed_imported_to_rms</label>
+                        <div v-for="(status,i) in statuses" class="form-group form-check" :key="i">
+                            <input v-model="config[status]" :name="status" type="checkbox" class="form-check-input" :id="`cb-${status}`" />
+                            <label class="form-check-label" :for="`cb-${status}`">{{ status }}</label>
                         </div>
                     </form>
                 </div>
@@ -56,11 +48,7 @@ export default {
 
     data: () => ({
         id: null,
-        config: {
-            complete: false,
-            complete_manually_processed: false,
-            completed_imported_to_rms: false,
-        }
+        config: {}
     }),
 
     computed: {
