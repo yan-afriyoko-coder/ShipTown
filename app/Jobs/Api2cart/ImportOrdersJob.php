@@ -4,10 +4,8 @@ namespace App\Jobs\Api2cart;
 
 use App\Exceptions\Api2CartKeyNotSetException;
 use App\Managers\CompanyConfigurationManager;
-use App\Models\Api2cartOrderImport;
 use App\Models\Api2cartOrderImports;
 use App\Models\ConfigurationApi2cart;
-use App\Models\Order;
 use App\Modules\Api2cart\src\Orders;
 use Carbon\Carbon;
 use Exception;
@@ -17,10 +15,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use function PHPUnit\Framework\isNull;
 
-class ImportOrdersFromApi2cartJob implements ShouldQueue
+class ImportOrdersJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -36,7 +32,7 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
     public function __construct()
     {
         $this->finishedSuccessfully = false;
-        info('Job ImportOrdersFromApi2cartJob dispatched');
+        info('Job ImportOrdersJob dispatched');
     }
 
     /**
@@ -48,22 +44,19 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
     public function handle()
     {
         do {
-            $ordersCollection = $this->fetchRecentlyChangedOrders();
+            $lastSyncedTimeStamp = $this->getLastSyncedTimestamp();
 
-            $batches = array_chunk($ordersCollection, 20);
+            $ordersCollection = $this->fetchOrders($lastSyncedTimeStamp, 100);
 
-            foreach ($batches as $batch) {
+            foreach ($ordersCollection as $order) {
 
-                foreach ($batch as $order) {
+                Api2cartOrderImports::query()->create([
+                    'raw_import' => $order
+                ]);
 
-                    Api2cartOrderImports::query()->create([
-                        'raw_import' => $order
-                    ]);
-
-                }
-
-                $this->updateLastSyncedTimestamp($batch);
             }
+
+            $this->updateLastSyncedTimestamp($ordersCollection);
 
         // keep going until we import all
         } while (count($ordersCollection) > 0);
@@ -113,6 +106,10 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
      */
     private function updateLastSyncedTimestamp(array $ordersCollection)
     {
+        if (empty($ordersCollection)) {
+            return;
+        }
+
         $lastOrder = Arr::last($ordersCollection);
 
         ConfigurationApi2cart::query()->updateOrCreate([],[
@@ -121,17 +118,6 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
                 $lastOrder['modified_at']['value']
             )->addSecond()
         ]);
-    }
-
-    /**
-     * @return array
-     * @throws Api2CartKeyNotSetException
-     */
-    private function fetchRecentlyChangedOrders(): array
-    {
-        $lastSyncedTimeStamp = $this->getLastSyncedTimestamp();
-
-        return $this->fetchOrders($lastSyncedTimeStamp, 100);
     }
 
 }
