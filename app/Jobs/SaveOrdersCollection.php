@@ -18,16 +18,16 @@ class SaveOrdersCollection implements ShouldQueue
     /**
      * @var array
      */
-    private $ordersCollection = [];
+    private $orders = [];
 
     /**
      * Create a new job instance.
      *
-     * @param array $ordersCollection
+     * @param array $orders
      */
-    public function __construct(array $ordersCollection)
+    public function __construct(array $orders)
     {
-        $this->ordersCollection = $ordersCollection;
+        $this->orders = $orders;
         info('Job SaveOrdersCollection dispatched');
     }
 
@@ -39,17 +39,12 @@ class SaveOrdersCollection implements ShouldQueue
     public function handle()
     {
         // save orders
-        foreach ($this->ordersCollection as $order) {
+        foreach ($this->orders as $order) {
             Order::query()->updateOrCreate(
                 [
                     "order_number" => $order['order_number'],
                 ],
-                array_merge(
-                    $order,
-                    [
-                        'raw_import' => $order
-                    ]
-                )
+                $order
             );
         }
 

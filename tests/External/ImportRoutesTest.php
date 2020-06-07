@@ -2,7 +2,7 @@
 
 namespace Tests\External;
 
-use App\Jobs\ImportOrdersFromApi2cartJob;
+use App\Jobs\Api2cart\ImportOrdersJob;
 use App\Managers\CompanyConfigurationManager;
 use App\User;
 use Illuminate\Support\Facades\Bus;
@@ -23,7 +23,7 @@ class ImportRoutesTest extends TestCase
 
         $response->assertOk();
 
-        Bus::assertDispatched(ImportOrdersFromApi2cartJob::class);
+        Bus::assertDispatched(ImportOrdersJob::class);
     }
 
     public function test_if_import_job_runs_correctly() {
@@ -31,7 +31,7 @@ class ImportRoutesTest extends TestCase
         // we set key to api2cart demo store
         CompanyConfigurationManager::set('bridge_api_key', env('API2CART_TEST_STORE_KEY'));
 
-        $job = new ImportOrdersFromApi2cartJob();
+        $job = new ImportOrdersJob();
 
         $job->handle();
 
