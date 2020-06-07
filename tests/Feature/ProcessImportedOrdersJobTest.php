@@ -8,10 +8,16 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
+/**
+ * Class ProcessImportedOrdersJobTest
+ * @package Tests\Feature
+ */
 class ProcessImportedOrdersJobTest extends TestCase
 {
     public function test_if_processes_correctly() {
 
+        // this is very basic test
+        // we only want to make sure that no Exceptions is thrown
         $this->doesNotPerformAssertions();
 
         factory(Api2cartOrderImports::class)->create();
