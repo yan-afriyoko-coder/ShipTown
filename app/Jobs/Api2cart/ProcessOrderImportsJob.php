@@ -2,12 +2,10 @@
 
 namespace App\Jobs\Api2cart;
 
-use App\Exceptions\Api2CartKeyNotSetException;
+use App\Jobs\SaveOrdersCollection;
 use App\Managers\CompanyConfigurationManager;
-use App\Models\Api2cartOrderImport;
 use App\Models\Api2cartOrderImports;
 use App\Models\ConfigurationApi2cart;
-use App\Models\Order;
 use App\Modules\Api2cart\src\Orders;
 use Carbon\Carbon;
 use Exception;
@@ -18,9 +16,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use function PHPUnit\Framework\isNull;
 
-class ImportOrdersFromApi2cartJob implements ShouldQueue
+class ProcessOrderImportsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -36,7 +33,7 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
     public function __construct()
     {
         $this->finishedSuccessfully = false;
-        info('Job ImportOrdersFromApi2cartJob dispatched');
+        info('Job Api2cart\ProcessOrderImports dispatched');
     }
 
     /**
@@ -61,6 +58,8 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
                     ]);
 
                 }
+
+                $this->convertAndSave($batch);
 
                 $this->updateLastSyncedTimestamp($batch);
             }
@@ -88,8 +87,7 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
      * @param int $count
      * @param string $params
      * @return array
-     * @throws Api2CartKeyNotSetException
-     * @throws Exception
+     * @throws \App\Exceptions\Api2CartKeyNotSetException
      */
     private function fetchOrders($timestamp, int $count, string $params = 'force_all'){
 
@@ -107,6 +105,46 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
         return Orders::getOrdersCollection($api2cart_store_key, $params);
     }
 
+    /**
+     * @param array $ordersCollection
+     * @return array
+     */
+    private function convertOrdersFormat(array $ordersCollection)
+    {
+        $convertedOrdersCollection = [];
+
+        foreach ($ordersCollection as $order)
+        {
+            $order['order_number']    = $order['id'];
+            $order['order_placed_at'] = Carbon::createFromFormat($order['create_at']['format'],
+                $order['create_at']['value']);
+            $order['products_count']  = 0;
+            $order['status_code']     = $order['status']['id'];
+
+            $statuses = $this->getChronologicalStatusHistory($order);
+
+            foreach ($statuses as $status) {
+                if ($status['id'] !== 'processing') {
+
+                    $time = $status['modified_time'];
+
+                    if(!is_null($time['value'])) {
+                        $order['order_closed_at'] = Carbon::createFromFormat($time['format'], $time['value']);
+                        break;
+                    }
+
+                }
+            }
+
+            foreach ($order['order_products'] as $product) {
+                $order['products_count'] += $product['quantity'];
+            }
+
+            $convertedOrdersCollection[] = $order;
+        }
+
+        return $convertedOrdersCollection;
+    }
 
     /**
      * @param array $ordersCollection
@@ -125,7 +163,7 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
 
     /**
      * @return array
-     * @throws Api2CartKeyNotSetException
+     * @throws \App\Exceptions\Api2CartKeyNotSetException
      */
     private function fetchRecentlyChangedOrders(): array
     {
@@ -134,4 +172,26 @@ class ImportOrdersFromApi2cartJob implements ShouldQueue
         return $this->fetchOrders($lastSyncedTimeStamp, 100);
     }
 
+    /**
+     * @param $batch
+     */
+    private function convertAndSave($batch): void
+    {
+        $transformedOrdersCollection = $this->convertOrdersFormat($batch);
+
+        SaveOrdersCollection::dispatch($transformedOrdersCollection);
+    }
+
+    /**
+     * @param array $order
+     * @return Collection
+     */
+    public function getChronologicalStatusHistory(array $order){
+        return Collection::make($order['status']['history'])
+            ->sort(function ($a, $b) {
+                $a_time = Carbon::make($a['modified_time']['value']);
+                $b_time = Carbon::make($b['modified_time']['value']);
+                return $a_time > $b_time;
+            });
+    }
 }
