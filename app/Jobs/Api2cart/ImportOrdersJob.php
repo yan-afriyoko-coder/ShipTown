@@ -61,6 +61,8 @@ class ImportOrdersJob implements ShouldQueue
         // keep going until we import all
         } while (count($ordersCollection) > 0);
 
+        ProcessImportedOrdersJob::dispatch();
+
         // finalize
         $this->finishedSuccessfully = true;
     }

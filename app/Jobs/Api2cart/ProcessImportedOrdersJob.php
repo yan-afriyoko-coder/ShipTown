@@ -3,10 +3,8 @@
 namespace App\Jobs\Api2cart;
 
 use App\Jobs\SaveOrdersCollection;
-use App\Managers\CompanyConfigurationManager;
 use App\Models\Api2cartOrderImports;
-use App\Models\ConfigurationApi2cart;
-use App\Modules\Api2cart\src\Orders;
+use App\Models\Order;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -14,10 +12,9 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
-class ProcessOrderImportsJob implements ShouldQueue
+class ProcessImportedOrdersJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -33,7 +30,7 @@ class ProcessOrderImportsJob implements ShouldQueue
     public function __construct()
     {
         $this->finishedSuccessfully = false;
-        info('Job Api2cart\ProcessOrderImports dispatched');
+        info('Job Api2cart\ProcessImportedOrders dispatched');
     }
 
     /**
@@ -44,147 +41,28 @@ class ProcessOrderImportsJob implements ShouldQueue
      */
     public function handle()
     {
+        $ordersCollection = Api2cartOrderImports::query()
+            ->whereNull('when_processed')
+            ->orderBy('id')
+            ->get();
 
-        $orders = Api2cartOrderImports::query()->whereNull('when_processed');
+        foreach ($ordersCollection as $order) {
 
-        dd($orders);
+            $attributes = $this->getAttributes($order['raw_import']);
 
-        do {
-            $ordersCollection = $this->fetchRecentlyChangedOrders();
+            Order::query()->updateOrCreate(
+                [
+                    "order_number" => $order['raw_import']['id'],
+                ],
+                $attributes
+            );
 
-            $batches = array_chunk($ordersCollection, 20);
-
-            foreach ($batches as $batch) {
-
-                foreach ($batch as $order) {
-
-                    Api2cartOrderImports::query()->create([
-                        'raw_import' => $order
-                    ]);
-
-                }
-
-                $this->convertAndSave($batch);
-
-                $this->updateLastSyncedTimestamp($batch);
-            }
-
-        // keep going until we import all
-        } while (count($ordersCollection) > 0);
+            $order->when_processed = now();
+            $order->save();
+        }
 
         // finalize
         $this->finishedSuccessfully = true;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLastSyncedTimestamp() {
-
-        $config = ConfigurationApi2cart::query()->firstOrCreate([],[]);
-
-        return $config['last_synced_modified_at'];
-
-    }
-
-    /**
-     * @param mixed $timestamp
-     * @param int $count
-     * @param string $params
-     * @return array
-     * @throws \App\Exceptions\Api2CartKeyNotSetException
-     */
-    private function fetchOrders($timestamp, int $count, string $params = 'force_all'){
-
-        // initialize params
-        $params = [
-            'params' => $params,
-            'sort_by' => 'modified_at',
-            'sort_direction' => 'asc',
-            'count' => $count,
-            'modified_from' => $timestamp,
-        ];
-
-        $api2cart_store_key = CompanyConfigurationManager::getBridgeApiKey();
-
-        return Orders::getOrdersCollection($api2cart_store_key, $params);
-    }
-
-    /**
-     * @param array $ordersCollection
-     * @return array
-     */
-    private function convertOrdersFormat(array $ordersCollection)
-    {
-        $convertedOrdersCollection = [];
-
-        foreach ($ordersCollection as $order)
-        {
-            $order['order_number']    = $order['id'];
-            $order['order_placed_at'] = Carbon::createFromFormat($order['create_at']['format'],
-                $order['create_at']['value']);
-            $order['products_count']  = 0;
-            $order['status_code']     = $order['status']['id'];
-
-            $statuses = $this->getChronologicalStatusHistory($order);
-
-            foreach ($statuses as $status) {
-                if ($status['id'] !== 'processing') {
-
-                    $time = $status['modified_time'];
-
-                    if(!is_null($time['value'])) {
-                        $order['order_closed_at'] = Carbon::createFromFormat($time['format'], $time['value']);
-                        break;
-                    }
-
-                }
-            }
-
-            foreach ($order['order_products'] as $product) {
-                $order['products_count'] += $product['quantity'];
-            }
-
-            $convertedOrdersCollection[] = $order;
-        }
-
-        return $convertedOrdersCollection;
-    }
-
-    /**
-     * @param array $ordersCollection
-     */
-    private function updateLastSyncedTimestamp(array $ordersCollection)
-    {
-        $lastOrder = Arr::last($ordersCollection);
-
-        ConfigurationApi2cart::query()->updateOrCreate([],[
-            'last_synced_modified_at' => Carbon::createFromFormat(
-                $lastOrder['modified_at']['format'],
-                $lastOrder['modified_at']['value']
-            )->addSecond()
-        ]);
-    }
-
-    /**
-     * @return array
-     * @throws \App\Exceptions\Api2CartKeyNotSetException
-     */
-    private function fetchRecentlyChangedOrders(): array
-    {
-        $lastSyncedTimeStamp = $this->getLastSyncedTimestamp();
-
-        return $this->fetchOrders($lastSyncedTimeStamp, 100);
-    }
-
-    /**
-     * @param $batch
-     */
-    private function convertAndSave($batch): void
-    {
-        $transformedOrdersCollection = $this->convertOrdersFormat($batch);
-
-        SaveOrdersCollection::dispatch($transformedOrdersCollection);
     }
 
     /**
@@ -198,5 +76,46 @@ class ProcessOrderImportsJob implements ShouldQueue
                 $b_time = Carbon::make($b['modified_time']['value']);
                 return $a_time > $b_time;
             });
+    }
+
+    /**
+     * @param $order
+     * @return mixed
+     */
+    private function getAttributes($order)
+    {
+        $result = [];
+        $result['order_number'] = $order['id'];
+
+        $result['order_placed_at'] = Carbon::createFromFormat(
+            $order['create_at']['format'],
+            $order['create_at']['value']
+        );
+
+        $result['status_code'] = $order['status']['id'];
+
+        $statuses = $this->getChronologicalStatusHistory($order);
+
+        foreach ($statuses as $status) {
+            if ($status['id'] !== 'processing') {
+
+                $time = $status['modified_time'];
+
+                if (!is_null($time['value'])) {
+                    $result['order_closed_at'] = Carbon::createFromFormat($time['format'], $time['value']);
+                    break;
+                }
+
+            }
+        }
+
+
+        $result['products_count'] = 0;
+
+        foreach ($order['order_products'] as $product) {
+            $result['products_count'] += $product['quantity'];
+        }
+
+        return $order;
     }
 }

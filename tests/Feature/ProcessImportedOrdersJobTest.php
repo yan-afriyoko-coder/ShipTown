@@ -16,6 +16,8 @@ class ProcessImportedOrdersJobTest extends TestCase
 {
     public function test_if_processes_correctly() {
 
+        Api2cartOrderImports::query()->delete();
+
         factory(Api2cartOrderImports::class)->create();
 
         $job = new ProcessImportedOrdersJob();
