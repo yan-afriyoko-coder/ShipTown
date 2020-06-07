@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateApi2cartOrdersImportsTable extends Migration
+class CreateApi2cartOrderImportsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateApi2cartOrdersImportsTable extends Migration
      */
     public function up()
     {
-        Schema::create('api2cart_orders_imports', function (Blueprint $table) {
+        Schema::create('api2cart_order_imports', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->dateTime('when_processed')->nullable();
             $table->json('raw_import');
@@ -28,6 +28,6 @@ class CreateApi2cartOrdersImportsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('api2cart_orders_imports');
+        Schema::dropIfExists('api2cart_order_imports');
     }
 }

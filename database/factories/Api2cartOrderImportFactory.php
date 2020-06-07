@@ -4,9 +4,9 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(\App\Models\Api2cartOrderImport::class, function (Faker $faker) {
+$factory->define(\App\Models\Api2cartOrderImports::class, function (Faker $faker) {
     return [
-        'raw_import' =>'
+        'raw_import' => json_decode('
             {
                 "id": "0",
                 "order_id": "0",
@@ -19,7 +19,7 @@ $factory->define(\App\Models\Api2cartOrderImport::class, function (Faker $faker)
                 },
                 "create_at": {
                     "value": "2014-02-18T22:00:53+0000",
-                    "format": "Y-m-d\\TH:i:sO"
+                    "format": "Y-m-d TH:i:sO"
                 },
                 "currency": {
                     "id": "2",
@@ -109,7 +109,7 @@ $factory->define(\App\Models\Api2cartOrderImport::class, function (Faker $faker)
                             "name": "Processing",
                             "modified_time": {
                                 "value": "2014-02-18T02:00:56+0000",
-                                "format": "Y-m-d\\TH:i:sO"
+                                "format": "Y-m-d TH:i:sO"
                             },
                             "notify": true,
                             "comment": "Processing"
@@ -146,13 +146,13 @@ $factory->define(\App\Models\Api2cartOrderImport::class, function (Faker $faker)
                 "bundles": [],
                 "modified_at": {
                     "value": "2014-02-26T13:06:49+0000",
-                    "format": "Y-m-d\\TH:i:sO"
+                    "format": "Y-m-d TH:i:sO"
                 },
                 "finished_time": null,
                 "comment": "",
                 "store_id": null,
                 "warehouses_ids": [],
                 "refunds": []
-            }'
+            }', true)
     ];
 });
