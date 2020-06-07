@@ -44,6 +44,11 @@ class ProcessOrderImportsJob implements ShouldQueue
      */
     public function handle()
     {
+
+        $orders = Api2cartOrderImports::query()->whereNull('when_processed');
+
+        dd($orders);
+
         do {
             $ordersCollection = $this->fetchRecentlyChangedOrders();
 
