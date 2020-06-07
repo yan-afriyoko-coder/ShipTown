@@ -16,15 +16,17 @@ class ProcessImportedOrdersJobTest extends TestCase
 {
     public function test_if_processes_correctly() {
 
-        // this is very basic test
-        // we only want to make sure that no Exceptions is thrown
-        $this->doesNotPerformAssertions();
-
         factory(Api2cartOrderImports::class)->create();
 
         $job = new ProcessImportedOrdersJob();
 
         $job->handle();
+
+        $unprocessedOrdersExists = Api2cartOrderImports::query()
+            ->whereNull('when_processed')
+            ->exists();
+
+        $this->assertFalse($unprocessedOrdersExists, 'Some orders still not processed');
 
     }
 }
