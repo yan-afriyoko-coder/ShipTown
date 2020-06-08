@@ -97,7 +97,7 @@ class ImportOrdersJob implements ShouldQueue
         ];
 
         if(isset($timestamp)) {
-            Arr::add($params, 'modified_from', $timestamp);
+            $params = Arr::add($params, 'modified_from', $timestamp);
         }
 
         $api2cart_store_key = CompanyConfigurationManager::getBridgeApiKey();
@@ -117,11 +117,13 @@ class ImportOrdersJob implements ShouldQueue
 
         $lastOrder = Arr::last($ordersCollection);
 
+        $lastTimeStamp = Carbon::createFromFormat(
+            $lastOrder['modified_at']['format'],
+            $lastOrder['modified_at']['value']
+        );
+
         ConfigurationApi2cart::query()->updateOrCreate([],[
-            'last_synced_modified_at' => Carbon::createFromFormat(
-                $lastOrder['modified_at']['format'],
-                $lastOrder['modified_at']['value']
-            )->addSecond()
+            'last_synced_modified_at' => $lastTimeStamp->addSecond()
         ]);
     }
 

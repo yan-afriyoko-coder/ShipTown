@@ -116,6 +116,6 @@ class ProcessImportedOrdersJob implements ShouldQueue
             $result['products_count'] += $product['quantity'];
         }
 
-        return $order;
+        return $result;
     }
 }
