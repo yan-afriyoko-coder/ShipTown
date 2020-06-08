@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ConfigurationApi2cart extends Model
+class Api2CartConnection extends Model
 {
     //
     protected $fillable = [
@@ -12,6 +12,6 @@ class ConfigurationApi2cart extends Model
         "last_synced_modified_at"
     ];
 
-    protected $table = 'configuration_api2cart';
+    protected $table = 'api2cart_connections';
 
 }

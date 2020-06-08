@@ -5,7 +5,7 @@ namespace App\Jobs\Api2cart;
 use App\Exceptions\Api2CartKeyNotSetException;
 use App\Managers\CompanyConfigurationManager;
 use App\Models\Api2cartOrderImports;
-use App\Models\ConfigurationApi2cart;
+use App\Models\Api2CartConnection;
 use App\Modules\Api2cart\src\Orders;
 use Carbon\Carbon;
 use Exception;
@@ -44,7 +44,7 @@ class ImportOrdersJob implements ShouldQueue
     public function handle()
     {
         do {
-            $connections = ConfigurationApi2cart::query()->first();
+            $connections = Api2CartConnection::query()->first();
 
             $ordersCollection = $this->fetchOrders($connections, 100);
 
@@ -72,21 +72,21 @@ class ImportOrdersJob implements ShouldQueue
      */
     public function getLastSyncedTimestamp() {
 
-        $config = ConfigurationApi2cart::query()->firstOrCreate([],[]);
+        $config = Api2CartConnection::query()->firstOrCreate([],[]);
 
         return $config['last_synced_modified_at'];
 
     }
 
     /**
-     * @param ConfigurationApi2cart $connection
+     * @param Api2CartConnection $connection
      * @param int $count
      * @param string $params
      * @return array
      * @throws Api2CartKeyNotSetException
      * @throws Exception
      */
-    private function fetchOrders(ConfigurationApi2cart $connection, int $count, string $params = 'force_all'){
+    private function fetchOrders(Api2CartConnection $connection, int $count, string $params = 'force_all'){
 
         // initialize params
         $params = [
@@ -120,7 +120,7 @@ class ImportOrdersJob implements ShouldQueue
             $lastOrder['modified_at']['value']
         );
 
-        ConfigurationApi2cart::query()->updateOrCreate([],[
+        Api2CartConnection::query()->updateOrCreate([],[
             'last_synced_modified_at' => $lastTimeStamp->addSecond()
         ]);
     }

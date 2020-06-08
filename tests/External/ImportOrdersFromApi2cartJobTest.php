@@ -4,7 +4,7 @@ namespace Tests\External;
 
 use App\Jobs\Api2cart\ImportOrdersJob;
 use App\Managers\CompanyConfigurationManager;
-use App\Models\ConfigurationApi2cart;
+use App\Models\Api2CartConnection;
 use App\Modules\Api2cart\src\Client;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
@@ -15,10 +15,10 @@ class ImportOrdersFromApi2cartJobTest extends TestCase
     {
         Event::fake();
 
-        ConfigurationApi2cart::query()->delete();
+        Api2CartConnection::query()->delete();
 
         // we set key to api2cart demo store
-        ConfigurationApi2cart::query()->create([
+        Api2CartConnection::query()->create([
             'bridge_api_key' => env('API2CART_TEST_STORE_KEY')
         ]);
 

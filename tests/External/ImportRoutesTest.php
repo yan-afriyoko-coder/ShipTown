@@ -4,7 +4,7 @@ namespace Tests\External;
 
 use App\Jobs\Api2cart\ImportOrdersJob;
 use App\Managers\CompanyConfigurationManager;
-use App\Models\ConfigurationApi2cart;
+use App\Models\Api2CartConnection;
 use App\User;
 use Illuminate\Support\Facades\Bus;
 use Laravel\Passport\Passport;
@@ -30,10 +30,10 @@ class ImportRoutesTest extends TestCase
     public function test_if_import_job_runs_correctly() {
 
         // we set key to api2cart demo store
-        ConfigurationApi2cart::query()->delete();
+        Api2CartConnection::query()->delete();
 
         // we set key to api2cart demo store
-        ConfigurationApi2cart::query()->create([
+        Api2CartConnection::query()->create([
             'bridge_api_key' => env('API2CART_TEST_STORE_KEY')
         ]);
 
