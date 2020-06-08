@@ -26,7 +26,8 @@ class RemoveRawImportColumnFromOrdersTable extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            //
+            $table->json('raw_import')
+                ->nullable(true);
         });
     }
 }
