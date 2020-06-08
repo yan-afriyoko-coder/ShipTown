@@ -5,7 +5,7 @@ namespace App\Jobs\Api2cart;
 use App\Exceptions\Api2CartKeyNotSetException;
 use App\Managers\CompanyConfigurationManager;
 use App\Models\Api2cartOrderImports;
-use App\Models\ConfigurationApi2cart;
+use App\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Orders;
 use Carbon\Carbon;
 use Exception;
@@ -43,23 +43,9 @@ class ImportOrdersJob implements ShouldQueue
      */
     public function handle()
     {
-        do {
-            $lastSyncedTimeStamp = $this->getLastSyncedTimestamp();
-
-            $ordersCollection = $this->fetchOrders($lastSyncedTimeStamp, 100);
-
-            foreach ($ordersCollection as $order) {
-
-                Api2cartOrderImports::query()->create([
-                    'raw_import' => $order
-                ]);
-
-            }
-
-            $this->updateLastSyncedTimestamp($ordersCollection);
-
-        // keep going until we import all
-        } while (count($ordersCollection) > 0);
+        foreach (Api2cartConnection::all() as $connection) {
+            $this->importOrders($connection);
+        }
 
         ProcessImportedOrdersJob::dispatch();
 
@@ -67,64 +53,74 @@ class ImportOrdersJob implements ShouldQueue
         $this->finishedSuccessfully = true;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getLastSyncedTimestamp() {
-
-        $config = ConfigurationApi2cart::query()->firstOrCreate([],[]);
-
-        return $config['last_synced_modified_at'];
-
-    }
 
     /**
-     * @param mixed $timestamp
-     * @param int $count
-     * @param string $params
-     * @return array
-     * @throws Api2CartKeyNotSetException
-     * @throws Exception
+     * @param Api2cartConnection $connection
+     * @param $order
      */
-    private function fetchOrders($timestamp, int $count, string $params = 'force_all'){
-
-        // initialize params
-        $params = [
-            'params' => $params,
-            'sort_by' => 'modified_at',
-            'sort_direction' => 'asc',
-            'count' => $count,
-        ];
-
-        if(isset($timestamp)) {
-            $params = Arr::add($params, 'modified_from', $timestamp);
-        }
-
-        $api2cart_store_key = CompanyConfigurationManager::getBridgeApiKey();
-
-        return Orders::getOrdersCollection($api2cart_store_key, $params);
-    }
-
-
-    /**
-     * @param array $ordersCollection
-     */
-    private function updateLastSyncedTimestamp(array $ordersCollection)
+    private function updateLastSyncedTimestamp(Api2cartConnection $connection, $order)
     {
-        if (empty($ordersCollection)) {
+        if (empty($order)) {
             return;
         }
 
-        $lastOrder = Arr::last($ordersCollection);
-
         $lastTimeStamp = Carbon::createFromFormat(
-            $lastOrder['modified_at']['format'],
-            $lastOrder['modified_at']['value']
+            $order['modified_at']['format'],
+            $order['modified_at']['value']
         );
 
-        ConfigurationApi2cart::query()->updateOrCreate([],[
+        $connection->update([
             'last_synced_modified_at' => $lastTimeStamp->addSecond()
         ]);
+    }
+
+    /**
+     * @param Api2cartConnection $connection
+     * @throws Exception
+     */
+    private function importOrders(Api2cartConnection $connection): void
+    {
+        do {
+
+            // initialize params
+            $params = [
+                'params' => 'force_all',
+                'sort_by' => 'modified_at',
+                'sort_direction' => 'asc',
+                'count' => 100,
+            ];
+
+            if(isset($connection->last_synced_modified_at)) {
+                $params = Arr::add($params, 'modified_from', $connection->last_synced_modified_at);
+            }
+
+            $ordersCollection = Orders::getOrdersCollection($connection->bridge_api_key, $params);
+
+            if (empty($ordersCollection)) {
+                break;
+            }
+
+            $this->saveOrders($connection, $ordersCollection);
+
+            // keep going until we import all
+        } while (count($ordersCollection) > 0);
+    }
+
+    /**
+     * @param Api2cartConnection $connection
+     * @param array $ordersCollection
+     */
+    private function saveOrders(Api2cartConnection $connection, array $ordersCollection): void
+    {
+        foreach ($ordersCollection as $order) {
+
+            Api2cartOrderImports::query()->create([
+                'raw_import' => $order
+            ]);
+
+            $this->updateLastSyncedTimestamp($connection, $order);
+
+        }
     }
 
 }

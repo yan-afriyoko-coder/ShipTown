@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\ConfigurationApi2cart;
+use App\Models\Api2cartConnection;
 use App\Models\Order;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
