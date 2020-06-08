@@ -94,8 +94,11 @@ class ImportOrdersJob implements ShouldQueue
             'sort_by' => 'modified_at',
             'sort_direction' => 'asc',
             'count' => $count,
-            'modified_from' => $timestamp,
         ];
+
+        if(isset($timestamp)) {
+            Arr::add($params, 'modified_from', $timestamp);
+        }
 
         $api2cart_store_key = CompanyConfigurationManager::getBridgeApiKey();
 
