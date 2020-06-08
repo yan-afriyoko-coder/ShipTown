@@ -44,9 +44,9 @@ class ImportOrdersJob implements ShouldQueue
     public function handle()
     {
         do {
-            $lastSyncedTimeStamp = $this->getLastSyncedTimestamp();
+            $connections = ConfigurationApi2cart::query()->first();
 
-            $ordersCollection = $this->fetchOrders($lastSyncedTimeStamp, 100);
+            $ordersCollection = $this->fetchOrders($connections, 100);
 
             foreach ($ordersCollection as $order) {
 
@@ -79,14 +79,14 @@ class ImportOrdersJob implements ShouldQueue
     }
 
     /**
-     * @param mixed $timestamp
+     * @param ConfigurationApi2cart $connection
      * @param int $count
      * @param string $params
      * @return array
      * @throws Api2CartKeyNotSetException
      * @throws Exception
      */
-    private function fetchOrders($timestamp, int $count, string $params = 'force_all'){
+    private function fetchOrders(ConfigurationApi2cart $connection, int $count, string $params = 'force_all'){
 
         // initialize params
         $params = [
@@ -96,13 +96,11 @@ class ImportOrdersJob implements ShouldQueue
             'count' => $count,
         ];
 
-        if(isset($timestamp)) {
-            $params = Arr::add($params, 'modified_from', $timestamp);
+        if(isset($connection->last_synced_modified_at)) {
+            $params = Arr::add($params, 'modified_from', $connection->last_synced_modified_at);
         }
 
-        $api2cart_store_key = ConfigurationApi2cart::query()->first()->bridge_api_key;
-
-        return Orders::getOrdersCollection($api2cart_store_key, $params);
+        return Orders::getOrdersCollection($connection->bridge_api_key, $params);
     }
 
 
