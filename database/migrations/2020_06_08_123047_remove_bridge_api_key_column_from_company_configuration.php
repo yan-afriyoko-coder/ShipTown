@@ -16,7 +16,7 @@ class RemoveBridgeApiKeyColumnFromCompanyConfiguration extends Migration
         $config = \App\Models\CompanyConfiguration::query()->first();
 
         if(isset($config->bridge_api_key)) {
-            $config_new = \App\Models\Api2CartConnection::query()->firstOrCreate([]);
+            $config_new = \App\Models\Api2cartConnection::query()->firstOrCreate([]);
 
             $config_new->bridge_api_key = $config->bridge_api_key;
 
