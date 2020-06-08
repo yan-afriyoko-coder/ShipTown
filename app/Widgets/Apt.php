@@ -18,11 +18,7 @@ class Apt extends BaseWidget
     /**
      * @var array
      */
-    protected $statuses = [
-        'complete',
-        'complete_manually_processed',
-        'completed_imported_to_rms'
-    ];
+    protected $statuses = [];
 
     /**
      * Treat this method as a controller action.
@@ -30,9 +26,18 @@ class Apt extends BaseWidget
      */
     public function run()
     {
+        $this->statuses = Order::groupBy('status_code')->pluck('status_code')->toArray();
+
+        $selectedStatuses = $this->statusesFromConfig();
+
         $apt_seconds  = (integer) Order::query()
             ->selectRaw("AVG(TIME_TO_SEC(TIMEDIFF(order_closed_at, order_placed_at))) as apt")
-            ->whereIn('status_code', $this->statuses)
+            ->when(count($selectedStatuses) == 0, function ($q) {
+                $q->whereIn('status_code', $this->statuses);
+            })
+            ->when(count($selectedStatuses) > 0, function ($q) use ($selectedStatuses) {
+                $q->whereIn('status_code', $selectedStatuses);
+            })
             ->whereRaw('order_closed_at > order_placed_at')
             ->whereRaw('order_closed_at BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() ')
             ->value('apt');
@@ -46,7 +51,7 @@ class Apt extends BaseWidget
         ]);
     }
 
-    function timeDiffForPrez(int $diffInSeconds)
+    private function timeDiffForPrez(int $diffInSeconds)
     {
         $result = '';
 
@@ -65,5 +70,15 @@ class Apt extends BaseWidget
         }
 
         return $result;
+    }
+
+    private function statusesFromConfig()
+    {
+        return array_keys(array_intersect($this->config, $this->selectedStatuses()));
+    }
+
+    private function selectedStatuses()
+    {
+        return array_filter($this->config, function ($isSelected) { return $isSelected === true; });
     }
 }

@@ -10,21 +10,9 @@
                 </div>
                 <div class="modal-body" style="margin: 0 auto 0;">
                     <form method="POST" action="gago" @submit.prevent="handleSubmit">
-                        <div class="form-group form-check">
-                            <input v-model="config.complete" name="complete" type="checkbox" class="form-check-input" id="cb-complete" />
-                            <label class="form-check-label" for="cb-complete">complete</label>
-                        </div>
-                        <div class="form-group form-check">
-                            <input v-model="config.cancelled" name="cancelled" type="checkbox" class="form-check-input" id="cb-cancelled" />
-                            <label class="form-check-label" for="cb-cancelled">cancelled</label>
-                        </div>
-                        <div class="form-group form-check">
-                            <input v-model="config.on_hold" name="on_hold" type="checkbox" class="form-check-input" id="cb-on_hold" />
-                            <label class="form-check-label" for="cb-on_hold">on_hold</label>
-                        </div>
-                        <div class="form-group form-check">
-                            <input v-model="config.processing" name="processing" type="checkbox" class="form-check-input" id="cb-processing" />
-                            <label class="form-check-label" for="cb-processing">processing</label>
+                        <div v-for="(status,i) in statuses" class="form-group form-check" :key="i">
+                            <input v-model="config[status]" :name="status" type="checkbox" class="form-check-input" :id="`cb-${status}`" />
+                            <label class="form-check-label" :for="`cb-${status}`">{{ status }}</label>
                         </div>
                     </form>
                 </div>
@@ -60,12 +48,7 @@ export default {
 
     data: () => ({
         id: null,
-        config: {
-            complete: false,
-            cancelled: false,
-            on_hold: false,
-            processing: false,
-        }
+        config: {}
     }),
 
     computed: {
@@ -113,6 +96,7 @@ export default {
 
                 this.$snotify.success('APT Widget configuration saved.');
                 $(this.$el).modal('hide');
+                window.location.reload();
             }).then(this.hideLoading);
         }
     }
