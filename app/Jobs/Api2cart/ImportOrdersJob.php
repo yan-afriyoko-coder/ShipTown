@@ -100,7 +100,7 @@ class ImportOrdersJob implements ShouldQueue
             $params = Arr::add($params, 'modified_from', $timestamp);
         }
 
-        $api2cart_store_key = CompanyConfigurationManager::getBridgeApiKey();
+        $api2cart_store_key = ConfigurationApi2cart::query()->first()->bridge_api_key;
 
         return Orders::getOrdersCollection($api2cart_store_key, $params);
     }
