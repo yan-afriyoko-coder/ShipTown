@@ -125,7 +125,7 @@ $factory->define(\App\Models\Api2cartOrderImports::class, function (Faker $faker
               "discount":0
            },
            "total":{
-              "subtotal_ex_tax":267,
+              "subtotal_ex_tax":279,
               "wrapping_ex_tax":null,
               "shipping_ex_tax":0,
               "total_discount":0,
