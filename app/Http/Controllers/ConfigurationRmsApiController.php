@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ConfigurationRmsApi;
+use App\Models\RmsApiConnection;
 use App\Http\Requests\StoreConfigurationRmsApiRequest;
 use App\Http\Resources\ConfigurationRmsApiResource;
 
@@ -10,19 +10,19 @@ class ConfigurationRmsApiController extends Controller
 {
     public function index()
     {
-        return ConfigurationRmsApiResource::collection(ConfigurationRmsApi::all());
+        return ConfigurationRmsApiResource::collection(RmsApiConnection::all());
     }
 
     public function store(StoreConfigurationRmsApiRequest $request)
     {
-        $config = new ConfigurationRmsApi();
+        $config = new RmsApiConnection();
         $config->fill($request->only($config->getFillable()));
         $config->save();
 
         return new ConfigurationRmsApiResource($config);
     }
 
-    public function destroy(ConfigurationRmsApi $rms_api_configuration)
+    public function destroy(RmsApiConnection $rms_api_configuration)
     {
         $rms_api_configuration->delete();
 
