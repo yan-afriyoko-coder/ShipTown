@@ -8,6 +8,7 @@ class Api2cartConnection extends Model
 {
     //
     protected $fillable = [
+        "prefix",
         "bridge_api_key",
         "last_synced_modified_at"
     ];
