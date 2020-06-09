@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ConfigurationApi2cart extends Model
+class ConfigurationApi2CartToRemove extends Model
 {
     //
     protected $fillable = [
