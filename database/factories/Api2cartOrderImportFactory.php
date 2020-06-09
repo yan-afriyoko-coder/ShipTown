@@ -4,7 +4,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(\App\Models\Api2CartOrderImports::class, function (Faker $faker) {
+$factory->define(\App\Models\Api2cartOrderImports::class, function (Faker $faker) {
     return [
         'raw_import' => json_decode('
         {

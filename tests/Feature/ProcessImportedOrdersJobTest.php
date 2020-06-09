@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Jobs\Api2cart\ProcessImportedOrdersJob;
-use App\Models\Api2CartOrderImports;
+use App\Models\Api2cartOrderImports;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -16,15 +16,15 @@ class ProcessImportedOrdersJobTest extends TestCase
 {
     public function test_if_processes_correctly() {
 
-        Api2CartOrderImports::query()->delete();
+        Api2cartOrderImports::query()->delete();
 
-        factory(Api2CartOrderImports::class)->create();
+        factory(Api2cartOrderImports::class)->create();
 
         $job = new ProcessImportedOrdersJob();
 
         $job->handle();
 
-        $unprocessedOrdersExists = Api2CartOrderImports::query()
+        $unprocessedOrdersExists = Api2cartOrderImports::query()
             ->whereNull('when_processed')
             ->exists();
 

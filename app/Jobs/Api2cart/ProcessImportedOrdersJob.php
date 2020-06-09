@@ -3,7 +3,7 @@
 namespace App\Jobs\Api2cart;
 
 use App\Jobs\SaveOrdersCollection;
-use App\Models\Api2CartOrderImports;
+use App\Models\Api2cartOrderImports;
 use App\Models\Order;
 use Carbon\Carbon;
 use Exception;
@@ -41,7 +41,7 @@ class ProcessImportedOrdersJob implements ShouldQueue
      */
     public function handle()
     {
-        $ordersCollection = Api2CartOrderImports::query()
+        $ordersCollection = Api2cartOrderImports::query()
             ->whereNull('when_processed')
             ->orderBy('id')
             ->get();

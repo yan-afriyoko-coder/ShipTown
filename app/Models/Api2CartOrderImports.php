@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Api2CartOrderImports extends Model
+class Api2cartOrderImports extends Model
 {
+    protected $table = 'api2cart_order_imports';
+
     protected $fillable = [
         'raw_import'
     ];
@@ -21,4 +23,6 @@ class Api2CartOrderImports extends Model
     protected $attributes = [
         'raw_import' => '{}',
     ];
+
+
 }
