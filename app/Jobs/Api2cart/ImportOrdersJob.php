@@ -4,7 +4,7 @@ namespace App\Jobs\Api2cart;
 
 use App\Exceptions\Api2CartKeyNotSetException;
 use App\Managers\CompanyConfigurationManager;
-use App\Models\Api2CartOrderImportsToRemove;
+use App\Models\Api2CartOrderImports;
 use App\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Orders;
 use Carbon\Carbon;
@@ -114,7 +114,7 @@ class ImportOrdersJob implements ShouldQueue
     {
         foreach ($ordersCollection as $order) {
 
-            Api2CartOrderImportsToRemove::query()->create([
+            Api2CartOrderImports::query()->create([
                 'raw_import' => $order
             ]);
 
