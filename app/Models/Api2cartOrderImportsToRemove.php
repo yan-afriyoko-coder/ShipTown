@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Api2cartOrderImports extends Model
+class Api2CartOrderImportsToRemove extends Model
 {
     protected $fillable = [
         'raw_import'

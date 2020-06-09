@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Api2cartOrderImports;
+use App\Models\Api2CartOrderImportsToRemove;
 use Illuminate\Database\Seeder;
 
 class Api2CartOrderImportSeeder extends Seeder
@@ -12,6 +12,6 @@ class Api2CartOrderImportSeeder extends Seeder
      */
     public function run()
     {
-        factory(Api2cartOrderImports::class)->create();
+        factory(Api2CartOrderImportsToRemove::class)->create();
     }
 }
