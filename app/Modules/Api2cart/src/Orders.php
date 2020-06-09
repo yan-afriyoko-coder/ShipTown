@@ -20,7 +20,7 @@ class Orders extends Entity
      * @return array|null
      * @throws Exception
      */
-    public static function getOrdersCollection(string $store_key, array $params)
+    public static function get(string $store_key, array $params)
     {
         $response = Client::GET($store_key, 'order.list.json', $params);
 
