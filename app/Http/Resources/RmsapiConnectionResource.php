@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ConfigurationRmsApiResource extends JsonResource
+class RmsapiConnectionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

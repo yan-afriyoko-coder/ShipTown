@@ -94,16 +94,16 @@ class ImportOrdersJob implements ShouldQueue
                 $params = Arr::add($params, 'modified_from', $connection->last_synced_modified_at);
             }
 
-            $ordersCollection = Orders::getOrdersCollection($connection->bridge_api_key, $params);
+            $orders = Orders::get($connection->bridge_api_key, $params);
 
-            if (empty($ordersCollection)) {
+            if (empty($orders)) {
                 break;
             }
 
-            $this->saveOrders($connection, $ordersCollection);
+            $this->saveOrders($connection, $orders);
 
             // keep going until we import all
-        } while (count($ordersCollection) > 0);
+        } while (count($orders) > 0);
     }
 
     /**
