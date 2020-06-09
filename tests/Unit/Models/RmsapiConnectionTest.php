@@ -4,13 +4,13 @@ namespace Tests\Unit\Models;
 
 use Tests\TestCase;
 
-use App\Models\RmsApiConnection;
+use App\Models\RmsapiConnection;
 
-class ConfigurationRmsApiTest extends TestCase
+class RmsapiConnectionTest extends TestCase
 {
     public function test_encrypts_password()
     {
-        $config = new RmsApiConnection();
+        $config = new RmsapiConnection();
         $config->password = 'foo';
 
         // Tests that that password is encrypted before saving to the database.
