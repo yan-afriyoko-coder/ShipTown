@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\External;
+namespace Tests\External\Api2cart;
 
 use App\Jobs\Api2cart\ImportOrdersJob;
 use App\Managers\CompanyConfigurationManager;
