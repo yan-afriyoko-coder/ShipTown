@@ -2,6 +2,8 @@
 
 namespace App\Jobs\Rmsapi;
 
+use App\Models\RmsapiConnection;
+use App\Modules\Rmsapi\src\Client as RmsapiClient;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -29,6 +31,10 @@ class ImportProductsJob implements ShouldQueue
      */
     public function handle()
     {
-        //
+        $connections = RmsapiConnection::all();
+
+        foreach ($connections as $connection) {
+           $products = RmsapiClient::GET($connection, 'api/products');
+        }
     }
 }
