@@ -73,7 +73,7 @@ class RequestResponse
      */
     public function getResult()
     {
-        return $this->asArray()["result"];
+        return $this->asArray()["data"];
     }
 
 }

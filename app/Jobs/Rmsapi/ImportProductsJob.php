@@ -3,6 +3,7 @@
 namespace App\Jobs\Rmsapi;
 
 use App\Models\RmsapiConnection;
+use App\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Client as RmsapiClient;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -34,7 +35,13 @@ class ImportProductsJob implements ShouldQueue
         $connections = RmsapiConnection::all();
 
         foreach ($connections as $connection) {
-           $products = RmsapiClient::GET($connection, 'api/products');
+            $products = RmsapiClient::GET($connection, 'api/products');
+
+            foreach ($products->getResult() as $product) {
+                RmsapiProductImport::query()->create([
+                   'raw_import' => $product
+               ]);
+           }
         }
     }
 }
