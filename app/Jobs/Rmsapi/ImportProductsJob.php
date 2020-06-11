@@ -49,6 +49,8 @@ class ImportProductsJob implements ShouldQueue
                    'connection_id' => $connection->id,
                    'raw_import' => $product
                ]);
+
+                dd($product->asArray());
             }
 
         }
