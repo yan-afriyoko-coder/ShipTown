@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Rmsapi;
 
+use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\RmsapiProductImport;
 use Illuminate\Bus\Queueable;
@@ -44,9 +45,13 @@ class ProcessImporedProductsJob implements ShouldQueue
                 "name" => $importedProduct->raw_import['description']
             ];
 
-            Product::query()->updateOrCreate([
+            $product = Product::query()->updateOrCreate([
                 "sku" => $attributes['sku']
             ], $attributes);
+
+            dd($product);
+
+            Inventory::query()->updateOrCreate();
 
             $importedProduct->update([
                 'when_processed' => now()

@@ -13,7 +13,7 @@ $factory->define(RmsapiProductImport::class, function (Faker $faker) {
 
     return [
         'connection_id' => $connection->id,
-        'raw_import' => '{
+        'raw_import' => json_decode('{
            "id":1,
            "cost":110.34,
            "price":149.99,
@@ -45,6 +45,6 @@ $factory->define(RmsapiProductImport::class, function (Faker $faker) {
            "quantity_committed":0,
            "quantity_discount_id":0
         }
-    '
+    ')
     ];
 });
