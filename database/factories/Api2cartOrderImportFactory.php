@@ -159,7 +159,17 @@ $factory->define(\App\Models\Api2cartOrderImports::class, function (Faker $faker
                  "tax_value":0,
                  "tax_value_after_discount":null,
                  "options":[
-
+                     {
+                        "option_id": "string",
+                        "name": "string",
+                        "value": "string",
+                        "price": 0,
+                        "weight": 0,
+                        "type": "string",
+                        "product_option_value_id": "string",
+                        "additional_fields": {},
+                        "custom_fields": {}
+                     }
                  ],
                  "variant_id":null,
                  "weight_unit":null,

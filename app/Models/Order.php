@@ -15,4 +15,9 @@ class Order extends Model
         'products_count',
         'status_code'
     ];
+
+    public function orderProducts()
+    {
+        return $this->hasMany(OrderProduct::class);
+    }
 }
