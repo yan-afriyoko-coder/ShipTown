@@ -10,6 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\DB;
 
 class ImportProductsJob implements ShouldQueue
 {
@@ -35,13 +36,23 @@ class ImportProductsJob implements ShouldQueue
         $connections = RmsapiConnection::all();
 
         foreach ($connections as $connection) {
-            $products = RmsapiClient::GET($connection, 'api/products');
+
+            $params = [
+                'per_page' => '1',
+                'order_by'=> 'db_change_stamp:asc',
+            ];
+
+            $products = RmsapiClient::GET($connection, 'api/products', $params);
 
             foreach ($products->getResult() as $product) {
                 RmsapiProductImport::query()->create([
+                   'connection_id' => $connection->id,
                    'raw_import' => $product
                ]);
-           }
+            }
+
         }
+
+        ImportProductsJob::dispatch();
     }
 }
