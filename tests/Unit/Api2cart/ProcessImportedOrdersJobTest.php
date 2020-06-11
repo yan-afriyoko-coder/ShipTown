@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit\Api2cart;
 
 use App\Jobs\Api2cart\ProcessImportedOrdersJob;
 use App\Models\Api2cartOrderImports;
