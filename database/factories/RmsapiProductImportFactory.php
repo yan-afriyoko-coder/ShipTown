@@ -8,8 +8,11 @@ use App\Models\RmsapiProductImport;
 use Faker\Generator as Faker;
 
 $factory->define(RmsapiProductImport::class, function (Faker $faker) {
+
+    $connection = factory(RmsapiConnection::class)->create();
+
     return [
-        'connection_id' => RmsapiConnection::first()->id,
+        'connection_id' => $connection->id,
         'raw_import' => '{
            "id":1,
            "cost":110.34,
