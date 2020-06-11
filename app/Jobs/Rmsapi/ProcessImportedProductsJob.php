@@ -4,6 +4,7 @@ namespace App\Jobs\Rmsapi;
 
 use App\Models\Inventory;
 use App\Models\Product;
+use App\Models\RmsapiConnection;
 use App\Models\RmsapiProductImport;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -12,7 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Arr;
 
-class ProcessImporedProductsJob implements ShouldQueue
+class ProcessImportedProductsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -49,9 +50,15 @@ class ProcessImporedProductsJob implements ShouldQueue
                 "sku" => $attributes['sku']
             ], $attributes);
 
-            dd($product);
+            $connection = RmsapiConnection::query()->find($importedProduct->connection_id);
 
-            Inventory::query()->updateOrCreate();
+            $inventory = Inventory::query()->updateOrCreate([
+                'product_id' => $product->id,
+                'location_id' => 2
+            ], [
+                'quantity' => $importedProduct->raw_import['quantity_on_hand'],
+                'quantity_reserved' => $importedProduct->raw_import['quantity_committed']
+            ]);
 
             $importedProduct->update([
                 'when_processed' => now()

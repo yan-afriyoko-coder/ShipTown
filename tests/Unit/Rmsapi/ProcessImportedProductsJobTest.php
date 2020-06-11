@@ -2,7 +2,8 @@
 
 namespace Tests\Unit\Rmsapi;
 
-use App\Jobs\Rmsapi\ProcessImporedProductsJob;
+use App\Jobs\Rmsapi\ProcessImportedProductsJob;
+use App\Models\Product;
 use App\Models\RmsapiProductImport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -15,9 +16,11 @@ class ProcessImportedProductsJobTest extends TestCase
         // make sure there is nothing left
         RmsapiProductImport::query()->delete();
 
+        Product::query()->delete();
+
         factory(RmsapiProductImport::class)->create();
 
-        $job = new ProcessImporedProductsJob();
+        $job = new ProcessImportedProductsJob();
 
         $job->handle();
 

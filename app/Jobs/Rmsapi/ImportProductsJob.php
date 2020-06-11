@@ -64,6 +64,6 @@ class ImportProductsJob implements ShouldQueue
             }
         }
 
-        ProcessImporedProductsJob::dispatch();
+        ProcessImportedProductsJob::dispatch();
     }
 }

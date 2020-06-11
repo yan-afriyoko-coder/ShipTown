@@ -4,7 +4,7 @@ namespace Tests\External\Rmsapi;
 
 use App\Jobs\Api2cart\ImportOrdersJob;
 use App\Jobs\Rmsapi\ImportProductsJob;
-use App\Jobs\Rmsapi\ProcessImporedProductsJob;
+use App\Jobs\Rmsapi\ProcessImportedProductsJob;
 use App\Models\RmsapiConnection;
 use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
@@ -30,7 +30,7 @@ class ImportProductsJobTest extends TestCase
 
         $job->handle();
 
-        Bus::assertDispatched(ProcessImporedProductsJob::class);
+        Bus::assertDispatched(ProcessImportedProductsJob::class);
     }
 
 }
