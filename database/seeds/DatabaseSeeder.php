@@ -30,7 +30,8 @@ class DatabaseSeeder extends Seeder
             InventorySeeder::class,
             OrdersSeeder::class,
             Api2CartOrderImportSeeder::class,
-            RmsapiConnectionSeeder::class
+            RmsapiConnectionSeeder::class,
+            RmsapiProductImportSeeder::class,
         ]);
 
     }
