@@ -15,6 +15,7 @@ class CreateRmsapiProductImportsTable extends Migration
     {
         Schema::create('rmsapi_product_imports', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('connection_id');
             $table->dateTime('when_processed')->nullable();
             $table->json('raw_import');
             $table->timestamps();
