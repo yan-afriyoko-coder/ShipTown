@@ -19,6 +19,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:api')->group(function() {
+    Route::get('sync', "SyncController@index");
+
     Route::post('company/configuration', "CompanyController@storeConfiguration");
 
     Route::get('products', 'ProductsController@index');
