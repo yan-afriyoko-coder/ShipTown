@@ -39,7 +39,7 @@ class ImportProductsJob implements ShouldQueue
 
             $params = [
                 'min:db_change_stamp' => $connection->products_last_timestamp,
-                'is_web_item' => 0,
+//                'is_web_item' => 0,
                 'per_page' => 100,
                 'order_by'=> 'db_change_stamp:asc',
             ];
