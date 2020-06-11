@@ -2,11 +2,14 @@
 
 namespace App\Jobs\Rmsapi;
 
+use App\Models\Product;
+use App\Models\RmsapiProductImport;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Arr;
 
 class ProcessImporedProductsJob implements ShouldQueue
 {
@@ -29,6 +32,26 @@ class ProcessImporedProductsJob implements ShouldQueue
      */
     public function handle()
     {
-        //
+        $imports = RmsapiProductImport::query()
+            ->whereNull('when_processed')
+            ->orderBy('id')
+            ->get();
+
+        foreach ($imports as $importedProduct) {
+
+            $attributes = [
+                "sku" => $importedProduct->raw_import['item_code'],
+                "name" => $importedProduct->raw_import['description']
+            ];
+
+            Product::query()->updateOrCreate([
+                "sku" => $attributes['sku']
+            ], $attributes);
+
+            $importedProduct->update([
+                'when_processed' => now()
+            ]);
+
+        }
     }
 }

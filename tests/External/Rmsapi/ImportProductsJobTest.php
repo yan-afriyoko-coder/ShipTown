@@ -3,6 +3,7 @@
 namespace Tests\External\Rmsapi;
 
 use App\Jobs\Rmsapi\ImportProductsJob;
+use App\Models\RmsapiConnection;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -16,6 +17,10 @@ class ImportProductsJobTest extends TestCase
      */
     public function test_if_job_runs()
     {
+        RmsapiConnection::query()->delete();
+
+        factory(RmsapiConnection::class)->create();
+
         $job = new ImportProductsJob();
 
         $job->handle();
