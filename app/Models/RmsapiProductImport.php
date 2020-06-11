@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class RmsapiProductImport extends Model
 {
     protected $fillable = [
+        'connection_id',
         'raw_import'
     ];
 
