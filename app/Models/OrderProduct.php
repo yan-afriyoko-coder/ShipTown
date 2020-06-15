@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class OrderProduct extends Model
 {
     protected $fillable = [
-        'product_id',
         'order_product_id',
         'model',
         'name',
@@ -42,5 +41,10 @@ class OrderProduct extends Model
     public function options()
     {
         return $this->hasMany(OrderProductOption::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
     }
 }

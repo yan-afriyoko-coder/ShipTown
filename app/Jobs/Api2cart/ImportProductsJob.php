@@ -3,6 +3,8 @@
 namespace App\Jobs\Api2cart;
 
 use App\Models\Api2cartOrderImports;
+use App\Models\Product;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -10,7 +12,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class ProcessImportedOrdersJob implements ShouldQueue
+class ImportProductsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -19,14 +21,17 @@ class ProcessImportedOrdersJob implements ShouldQueue
      */
     public $finishedSuccessfully;
 
+    private $orderImport = null;
+
     /**
      * Create a new job instance.
      *
      */
-    public function __construct()
+    public function __construct(Api2cartOrderImports $orderImport)
     {
         $this->finishedSuccessfully = false;
-        info('Job Api2cart\ProcessImportedOrders dispatched');
+        info('Job Api2cart\ImportProducts dispatched');
+        $this->orderImport = $orderImport;
     }
 
     /**
@@ -37,16 +42,16 @@ class ProcessImportedOrdersJob implements ShouldQueue
      */
     public function handle()
     {
-        $ordersCollection = Api2cartOrderImports::query()
-            ->whereNull('when_processed')
-            ->orderBy('id')
-            ->get();
+        $orderProducts = collect($this->orderImport['raw_import']['order_products']);
+        $productSKUs = $orderProducts->map(function ($item) {
+            return collect($item)->only(['name', 'model']);
+        });
 
-        foreach ($ordersCollection as $order) {
-            \App\Jobs\ChainedJobWrapper::withChain([
-                (new ImportProductsJob($order)), // Make sure products are imported first
-                (new ProcessImportedOrderJob($order))
-            ])->dispatch();
+        foreach ($productSKUs as $product) {
+            $x = Product::firstOrCreate([
+                'name' => $product['name'],
+                'sku' => $product['model']
+            ]);
         }
 
         // finalize
