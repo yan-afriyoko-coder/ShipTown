@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Api2cart;
+namespace Tests\Unit\Jobs\Api2cart;
 
 use App\Jobs\Api2cart\ProcessImportedOrdersJob;
 use App\Models\Api2cartOrderImports;
@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 /**
  * Class ProcessImportedOrdersJobTest
- * @package Tests\Feature
+ * @package Tests\Unit\Jobs\Api2cart
  */
 class ProcessImportedOrdersJobTest extends TestCase
 {
@@ -39,5 +39,8 @@ class ProcessImportedOrdersJobTest extends TestCase
         // Check if the order_products were saved and the relationship is working;
         $this->assertNotEmpty($order->orderProducts);
         $this->assertEquals($order->getKey(), $order->orderProducts[0]->order->getKey());
+        
+        
+        $this->assertEquals('Bag', $order->orderProducts[0]->product->name);
     }
 }
