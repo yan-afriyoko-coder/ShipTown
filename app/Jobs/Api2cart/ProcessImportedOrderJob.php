@@ -4,6 +4,7 @@ namespace App\Jobs\Api2cart;
 
 use App\Models\Api2cartOrderImports;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\OrderProduct;
 use App\Models\OrderProductOption;
 use Carbon\Carbon;
@@ -59,7 +60,12 @@ class ProcessImportedOrderJob implements ShouldQueue
         foreach ($this->orderImport['raw_import']['order_products'] as $rawOrderProduct) {
             $orderProductData = Collection::make($rawOrderProduct);
             $orderProduct = new OrderProduct();
-            $orderProduct->fill($orderProductData->except('options')->toArray());
+            $orderProduct->fill($orderProductData->except(['options', 'product_id'])->toArray());
+
+            $orderProduct->product_id = Product::where([
+                'name' => $rawOrderProduct['name'],
+                'sku' => $rawOrderProduct['model']
+            ])->first()->getKey();
 
             $order->orderProducts()->save($orderProduct);
 
