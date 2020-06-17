@@ -15,6 +15,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Arr;
+use function Psy\debug;
 
 class ImportOrdersJob implements ShouldQueue
 {
@@ -32,7 +33,7 @@ class ImportOrdersJob implements ShouldQueue
     public function __construct()
     {
         $this->finishedSuccessfully = false;
-        info('Job ImportOrdersJob dispatched');
+        logger('Job Api2cart\ImportOrdersJob dispatched');
     }
 
     /**

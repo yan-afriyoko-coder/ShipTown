@@ -23,6 +23,7 @@ class SyncRmsapiConnectionJob implements ShouldQueue
     public function __construct(RmsapiConnection $connection)
     {
         $this->connection = $connection;
+        logger('Job Rmsapi\SyncRmsapiConnectionJob dispatched');
     }
 
     /**

@@ -26,7 +26,7 @@ class ProcessImportedOrdersJob implements ShouldQueue
     public function __construct()
     {
         $this->finishedSuccessfully = false;
-        info('Job Api2cart\ProcessImportedOrders dispatched');
+        logger('Job Api2cart\ProcessImportedOrders dispatched');
     }
 
     /**

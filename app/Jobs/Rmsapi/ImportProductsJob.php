@@ -26,6 +26,7 @@ class ImportProductsJob implements ShouldQueue
     public function __construct(RmsapiConnection $connection)
     {
         $this->connection = $connection;
+        logger('Job Rmsapi\ImportProductsJob dispatched');
     }
 
     /**

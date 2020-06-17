@@ -21,6 +21,7 @@ class SyncRmsapiConnectionCollectionJob implements ShouldQueue
     public function __construct()
     {
         //
+        logger('Job Rmsapi\SyncRmsapiConnectionCollectionJob dispatched');
     }
 
     /**
