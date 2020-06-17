@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Rmsapi;
+namespace Tests\Unit\Jobs\Rmsapi;
 
 use App\Jobs\Rmsapi\ImportProductsJob;
 use App\Jobs\Rmsapi\ProcessImportedProductsJob;
