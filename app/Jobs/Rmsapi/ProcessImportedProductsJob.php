@@ -54,7 +54,7 @@ class ProcessImportedProductsJob implements ShouldQueue
 
             $inventory = Inventory::query()->updateOrCreate([
                 'product_id' => $product->id,
-                'location_id' => 2
+                'location_id' => $connection->location_id
             ], [
                 'quantity' => $importedProduct->raw_import['quantity_on_hand'],
                 'quantity_reserved' => $importedProduct->raw_import['quantity_committed']
