@@ -13,16 +13,21 @@ class ProcessImportedProductsJobTest extends TestCase
 {
     public function test_if_processes_correctly()
     {
-        // make sure there is nothing left
+        // prepare
         RmsapiProductImport::query()->delete();
-
         Product::query()->delete();
+        Inventory::query()->delete();
 
         $importData = factory(RmsapiProductImport::class)->create();
 
+
+        // act
         $job = new ProcessImportedProductsJob();
 
         $job->handle();
+
+
+        // checks
 
         // check if all imports were processed and when_processed updated
         $unprocessedOrdersExists = RmsapiProductImport::query()
@@ -39,6 +44,7 @@ class ProcessImportedProductsJobTest extends TestCase
         // check inventory update
         $inventoryUpdated = Inventory::query()
             ->where('product_id','=', $product->id)
+            ->where('location_id','=', $product->id)
             ->where('quantity','=', $importData->raw_import['quantity_on_hand'])
             ->where('quantity_reserved','=', $importData->raw_import['quantity_committed'])
             ->exists();
