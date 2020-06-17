@@ -40,6 +40,8 @@ Route::middleware('auth:api')->group(function() {
 
     Route::resource("rms_api_configuration", "RmsapiConnectionController");
 
+    Route::resource("api2cart_configuration", "Api2cartConnectionController");
+
     Route::resource('widgets', 'WidgetsController');
 
     Route::post('invites', 'InvitesController@store');
