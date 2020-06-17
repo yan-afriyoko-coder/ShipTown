@@ -8,7 +8,6 @@ use App\Http\Resources\InventoryResourceCollection;
 use App\Http\Resources\ProductResource;
 use App\Models\Inventory;
 use App\Models\Product;
-use App\Scopes\AuthenticatedUserScope;
 use Illuminate\Http\Request;
 use Illuminate\Session\Store;
 

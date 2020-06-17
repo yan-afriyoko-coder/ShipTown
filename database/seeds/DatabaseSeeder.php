@@ -1,6 +1,5 @@
 <?php
 
-use App\Scopes\AuthenticatedUserScope;
 use App\User;
 use Illuminate\Database\Seeder;
 
