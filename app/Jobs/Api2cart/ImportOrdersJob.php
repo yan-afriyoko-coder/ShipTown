@@ -2,8 +2,6 @@
 
 namespace App\Jobs\Api2cart;
 
-use App\Exceptions\Api2CartKeyNotSetException;
-use App\Managers\CompanyConfigurationManager;
 use App\Models\Api2cartOrderImports;
 use App\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Orders;
@@ -15,7 +13,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Arr;
-use function Psy\debug;
 
 class ImportOrdersJob implements ShouldQueue
 {

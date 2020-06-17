@@ -13,7 +13,7 @@ class SyncRmsapiConnectionJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $connection;
+    private $connection = null;
 
     /**
      * Create a new job instance.
