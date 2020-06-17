@@ -25,6 +25,7 @@ class ProcessImportedProductsJob implements ShouldQueue
     public function __construct()
     {
         //
+        logger('Job Rmsapi\ProcessImportedProductsJob dispatched');
     }
 
     /**

@@ -2,8 +2,6 @@
 
 namespace App\Jobs\Api2cart;
 
-use App\Exceptions\Api2CartKeyNotSetException;
-use App\Managers\CompanyConfigurationManager;
 use App\Models\Api2cartOrderImports;
 use App\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Orders;
@@ -32,7 +30,7 @@ class ImportOrdersJob implements ShouldQueue
     public function __construct()
     {
         $this->finishedSuccessfully = false;
-        info('Job ImportOrdersJob dispatched');
+        logger('Job Api2cart\ImportOrdersJob dispatched');
     }
 
     /**

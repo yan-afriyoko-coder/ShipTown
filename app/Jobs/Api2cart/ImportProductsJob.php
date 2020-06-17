@@ -4,7 +4,6 @@ namespace App\Jobs\Api2cart;
 
 use App\Models\Api2cartOrderImports;
 use App\Models\Product;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -30,8 +29,8 @@ class ImportProductsJob implements ShouldQueue
     public function __construct(Api2cartOrderImports $orderImport)
     {
         $this->finishedSuccessfully = false;
-        info('Job Api2cart\ImportProducts dispatched');
         $this->orderImport = $orderImport;
+        logger('Job Api2cart\ImportProducts dispatched');
     }
 
     /**

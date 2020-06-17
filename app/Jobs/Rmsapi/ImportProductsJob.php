@@ -16,16 +16,17 @@ class ImportProductsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $connection;
+    private $rmsapiConnection = null;
 
     /**
      * Create a new job instance.
      *
      * @param RmsapiConnection $connection
      */
-    public function __construct(RmsapiConnection $connection)
+    public function __construct(RmsapiConnection $rmsapiConnection)
     {
-        $this->connection = $connection;
+        $this->rmsapiConnection = $rmsapiConnection;
+        logger('Job Rmsapi\ImportProductsJob dispatched');
     }
 
     /**
@@ -36,29 +37,29 @@ class ImportProductsJob implements ShouldQueue
     public function handle()
     {
         $params = [
-            'min:db_change_stamp' => $this->connection->products_last_timestamp,
+            'min:db_change_stamp' => $this->rmsapiConnection->products_last_timestamp,
 //                'is_web_item' => 0,
             'per_page' => 100,
             'order_by'=> 'db_change_stamp:asc',
         ];
 
-        $products = RmsapiClient::GET($this->connection, 'api/products', $params);
+        $products = RmsapiClient::GET($this->rmsapiConnection, 'api/products', $params);
 
         foreach ($products->getResult() as $product) {
 
             RmsapiProductImport::query()->create([
-               'connection_id' => $this->connection->id,
+               'connection_id' => $this->rmsapiConnection->id,
                'raw_import' => $product
             ]);
 
-            $this->connection->update([
+            $this->rmsapiConnection->update([
                 'products_last_timestamp' => $product['db_change_stamp']
             ]);
 
         }
 
         if(isset($products->asArray()['next_page_url'])) {
-            ImportProductsJob::dispatchNow($this->connection);
+            ImportProductsJob::dispatchNow($this->rmsapiConnection);
         }
 
     }

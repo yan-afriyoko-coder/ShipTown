@@ -21,6 +21,7 @@ class SyncRmsapiConnectionCollectionJob implements ShouldQueue
     public function __construct()
     {
         //
+        logger('Job Rmsapi\SyncRmsapiConnectionCollectionJob dispatched');
     }
 
     /**
@@ -31,8 +32,8 @@ class SyncRmsapiConnectionCollectionJob implements ShouldQueue
     public function handle()
     {
 
-        foreach (RmsapiConnection::all() as $connection) {
-            SyncRmsapiConnectionJob::dispatch($connection);
+        foreach (RmsapiConnection::all() as $rmsapiConnection) {
+            SyncRmsapiConnectionJob::dispatch($rmsapiConnection);
         }
 
     }
