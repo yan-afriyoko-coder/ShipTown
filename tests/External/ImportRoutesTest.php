@@ -12,21 +12,6 @@ use Tests\TestCase;
 
 class ImportRoutesTest extends TestCase
 {
-    public function test_if_import_from_api2cart_route_works()
-    {
-        Bus::fake();
-
-        Passport::actingAs(
-            factory(User::class)->create()
-        );
-
-        $response = $this->get('api/import/orders/from/api2cart');
-
-        $response->assertOk();
-
-        Bus::assertDispatched(ImportOrdersJob::class);
-    }
-
     public function test_if_import_job_runs_correctly() {
 
         // we set key to api2cart demo store

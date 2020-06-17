@@ -34,10 +34,6 @@ Route::middleware('auth:api')->group(function() {
     Route::post('orders', 'OrdersController@store');
     Route::delete('orders/{order_number}', 'OrdersController@destroy');
 
-    Route::get("import/orders/api2cart", "OrdersController@importFromApi2Cart");
-
-    Route::get("import/orders/from/api2cart", "ImportController@importOrdersFromApi2cart");
-
     Route::resource("rms_api_configuration", "RmsapiConnectionController");
 
     Route::resource("api2cart_configuration", "Api2cartConnectionController");
