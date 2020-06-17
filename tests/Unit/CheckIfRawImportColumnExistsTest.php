@@ -11,7 +11,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CheckIfRawImportColumnExistsTest extends TestCase
 {
-    // raw_import column is required because LIVE.WEB.GUINEYS.RMSAPI.PRODUCTS.MANAGEMENT is using it
+    // raw_import column is required
+    // LIVE.WEB.GUINEYS.RMSAPI.PRODUCTS.MANAGEMENT is using it
     public function test_if_raw_import_column_is_populated_on_api2cart_import() {
         // Test for clean data
         Order::query()->delete();
