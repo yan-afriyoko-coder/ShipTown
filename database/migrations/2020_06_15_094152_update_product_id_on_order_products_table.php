@@ -13,8 +13,13 @@ class UpdateProductIdOnOrderProductsTable extends Migration
      */
     public function up()
     {
+        // we can do that because nothing is in production yet
         Schema::table('order_products', function (Blueprint $table) {
-            $table->unsignedInteger('product_id')->change();
+            $table->dropColumn('product_id');
+        });
+
+        Schema::table('order_products', function (Blueprint $table) {
+            $table->unsignedInteger('product_id');
         });
     }
 

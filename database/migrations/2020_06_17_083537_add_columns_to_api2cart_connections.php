@@ -14,9 +14,15 @@ class AddColumnsToApi2cartConnections extends Migration
     public function up()
     {
         Schema::table('api2cart_connections', function (Blueprint $table) {
-            $table->string('location_id');
-            $table->string('url');
-            $table->string('type');
+            $table->string('location_id')
+                ->after('id')
+                ->default('0');
+            $table->string('type')
+                ->default('')
+                ->after('location_id');
+            $table->string('url')
+                ->default('')
+                ->after('type');
         });
     }
 
