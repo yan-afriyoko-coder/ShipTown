@@ -16,14 +16,16 @@ class ImportProductsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $connection;
+
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param RmsapiConnection $connection
      */
-    public function __construct()
+    public function __construct(RmsapiConnection $connection)
     {
-        //
+        $this->connection = $connection;
     }
 
     /**
@@ -33,37 +35,31 @@ class ImportProductsJob implements ShouldQueue
      */
     public function handle()
     {
-        $connections = RmsapiConnection::all();
-
-        foreach ($connections as $connection) {
-
-            $params = [
-                'min:db_change_stamp' => $connection->products_last_timestamp,
+        $params = [
+            'min:db_change_stamp' => $this->connection->products_last_timestamp,
 //                'is_web_item' => 0,
-                'per_page' => 100,
-                'order_by'=> 'db_change_stamp:asc',
-            ];
+            'per_page' => 100,
+            'order_by'=> 'db_change_stamp:asc',
+        ];
 
-            $products = RmsapiClient::GET($connection, 'api/products', $params);
+        $products = RmsapiClient::GET($this->connection, 'api/products', $params);
 
-            foreach ($products->getResult() as $product) {
+        foreach ($products->getResult() as $product) {
 
-                RmsapiProductImport::query()->create([
-                   'connection_id' => $connection->id,
-                   'raw_import' => $product
-                ]);
+            RmsapiProductImport::query()->create([
+               'connection_id' => $this->connection->id,
+               'raw_import' => $product
+            ]);
 
-                $connection->update([
-                    'products_last_timestamp' => $product['db_change_stamp']
-                ]);
+            $this->connection->update([
+                'products_last_timestamp' => $product['db_change_stamp']
+            ]);
 
-            }
-
-            if(isset($products->asArray()['next_page_url'])) {
-                ImportProductsJob::dispatch();
-            }
         }
 
-        ProcessImportedProductsJob::dispatch();
+        if(isset($products->asArray()['next_page_url'])) {
+            ImportProductsJob::dispatchNow($this->connection);
+        }
+
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\Api2cart\ImportOrdersJob;
 use App\Jobs\Rmsapi\ImportProductsJob;
+use App\Jobs\Rmsapi\SyncRmsapiConnectionCollectionJob;
 use Illuminate\Http\Request;
 
 /**
@@ -20,7 +21,7 @@ class SyncController extends Controller
         ImportOrdersJob::dispatch();
 
         // import RMSAPI products
-        ImportProductsJob::dispatch();
+        SyncRmsapiConnectionCollectionJob::dispatch();
 
         return $this->respond_OK_200('Sync jobs dispatched');
     }
