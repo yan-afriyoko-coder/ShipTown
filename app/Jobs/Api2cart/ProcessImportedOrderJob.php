@@ -103,6 +103,7 @@ class ProcessImportedOrderJob implements ShouldQueue
     private function getAttributes($order)
     {
         $result = [];
+        $result['raw_import'] = $order;
         $result['order_number'] = $order['id'];
 
         $result['order_placed_at'] = Carbon::createFromFormat(
