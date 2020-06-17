@@ -22,10 +22,9 @@ class Api2cartConnectionController extends Controller
         return new JsonResource($config);
     }
 
-    public function destroy(Api2cartConnection $rms_api_configuration)
+    public function destroy(Api2cartConnection $api2cart_configuration)
     {
-        $rms_api_configuration->delete();
-
+        $api2cart_configuration->delete();
         return response('ok');
     }
 }
