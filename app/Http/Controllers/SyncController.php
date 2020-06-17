@@ -22,6 +22,6 @@ class SyncController extends Controller
         // import RMSAPI products
         ImportProductsJob::dispatch();
 
-        return $this->respond_OK_200('Sync job dispatched');
+        return $this->respond_OK_200('Sync jobs dispatched');
     }
 }
