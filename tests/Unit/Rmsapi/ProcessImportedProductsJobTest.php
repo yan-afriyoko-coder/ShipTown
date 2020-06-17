@@ -44,7 +44,6 @@ class ProcessImportedProductsJobTest extends TestCase
         // check inventory update
         $inventoryUpdated = Inventory::query()
             ->where('product_id','=', $product->id)
-            ->where('location_id','=', $product->id)
             ->where('quantity','=', $importData->raw_import['quantity_on_hand'])
             ->where('quantity_reserved','=', $importData->raw_import['quantity_committed'])
             ->exists();
