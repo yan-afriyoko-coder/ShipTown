@@ -13,16 +13,16 @@ class SyncRmsapiConnectionJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $connection = null;
+    private $rmsapiConnection = null;
 
     /**
      * Create a new job instance.
      *
-     * @param RmsapiConnection $connection
+     * @param RmsapiConnection $rmsapiConnection
      */
-    public function __construct(RmsapiConnection $connection)
+    public function __construct(RmsapiConnection $rmsapiConnection)
     {
-        $this->connection = $connection;
+        $this->rmsapiConnection = $rmsapiConnection;
         logger('Job Rmsapi\SyncRmsapiConnectionJob dispatched');
     }
 
@@ -33,7 +33,7 @@ class SyncRmsapiConnectionJob implements ShouldQueue
      */
     public function handle()
     {
-        ImportProductsJob::dispatch($this->connection);
+        ImportProductsJob::dispatch($this->rmsapiConnection);
 
         ProcessImportedProductsJob::dispatch();
     }
