@@ -2,9 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Jobs\JobImportOrderApi2Cart;
 use App\Models\Product;
-use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use App\User;
@@ -14,24 +12,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class OrdersRoutesTest extends TestCase
 {
     use RefreshDatabase;
-
-    /**
-     * @return void
-     */
-    public function test_if_job_is_pushed_to_queue()
-    {
-        Bus::fake();
-
-        Passport::actingAs(
-            factory(User::class)->create()
-        );
-
-        $response = $this->get('/api/import/orders/api2cart');
-
-        $response->assertStatus(200);
-
-        Bus::assertDispatched(JobImportOrderApi2Cart::class);
-    }
 
     public function test_orders_get_route() {
 

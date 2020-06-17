@@ -5,12 +5,8 @@ namespace App\Http\Controllers;
 use App\Events\EventTypes;
 use App\Http\Requests\DeleteOrderRequest;
 use App\Http\Requests\StoreOrderRequest;
-use App\Jobs\JobImportOrderApi2Cart;
-use App\Managers\CompanyConfigurationManager;
 use App\Managers\Config;
 use App\Models\Order;
-use App\Models\Product;
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class OrdersController extends Controller
@@ -44,19 +40,4 @@ class OrdersController extends Controller
 
        return $this->respond_OK_200();
     }
-
-    public function importFromApi2Cart()
-    {
-        JobImportOrderApi2Cart::dispatch();
-
-        info('Import Order from api2cart dispatched');
-
-        $responseText = [
-            "message" => "",
-            "error_id" => 0,
-        ];
-
-        return response()->json($responseText,200);
-    }
-
 }

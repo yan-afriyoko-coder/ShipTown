@@ -3,7 +3,6 @@
 /* @var $factory \Illuminate\Database\Eloquent\Factory */
 
 use App\Models\Inventory;
-use App\Scopes\AuthenticatedUserScope;
 use Faker\Generator as Faker;
 
 $factory->define(Inventory::class, function (Faker $faker) {
