@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Rmsapi;
 
+use App\Jobs\ChainedJobWrapper;
 use App\Models\RmsapiConnection;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -34,7 +35,5 @@ class SyncRmsapiConnectionJob implements ShouldQueue
     public function handle()
     {
         ImportProductsJob::dispatch($this->rmsapiConnection);
-
-        ProcessImportedProductsJob::dispatch();
     }
 }

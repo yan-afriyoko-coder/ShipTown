@@ -57,8 +57,10 @@ class ImportProductsJob implements ShouldQueue
 
         }
 
+        ProcessImportedProductsJob::dispatch();
+
         if(isset($products->asArray()['next_page_url'])) {
-            ImportProductsJob::dispatchNow($this->rmsapiConnection);
+            ImportProductsJob::dispatch($this->rmsapiConnection);
         }
 
     }
