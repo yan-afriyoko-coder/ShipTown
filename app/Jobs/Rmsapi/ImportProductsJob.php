@@ -38,10 +38,11 @@ class ImportProductsJob implements ShouldQueue
     {
         $params = [
             'min:db_change_stamp' => $this->rmsapiConnection->products_last_timestamp,
-//                'is_web_item' => 0,
-            'per_page' => 100,
+            'per_page' => config('rmsapi.import.products.per_page'),
             'order_by'=> 'db_change_stamp:asc',
         ];
+
+        dd($params);
 
         $products = RmsapiClient::GET($this->rmsapiConnection, 'api/products', $params);
 
