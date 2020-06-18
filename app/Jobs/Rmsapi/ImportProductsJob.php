@@ -42,8 +42,6 @@ class ImportProductsJob implements ShouldQueue
             'order_by'=> 'db_change_stamp:asc',
         ];
 
-        dd($params);
-
         $products = RmsapiClient::GET($this->rmsapiConnection, 'api/products', $params);
 
         foreach ($products->getResult() as $product) {
