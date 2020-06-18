@@ -11,6 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\DB;
+use Ramsey\Uuid\Uuid;
 
 class ImportProductsJob implements ShouldQueue
 {
@@ -33,21 +34,27 @@ class ImportProductsJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws \Exception
      */
     public function handle()
     {
+        $batch_uuid = Uuid::uuid4();
+
         $params = [
             'per_page' => config('rmsapi.import.products.per_page'),
             'order_by'=> 'db_change_stamp:asc',
             'min:db_change_stamp' => $this->rmsapiConnection->products_last_timestamp,
         ];
 
-        $products = RmsapiClient::GET($this->rmsapiConnection, 'api/products', $params);
+        $response = RmsapiClient::GET($this->rmsapiConnection, 'api/products', $params);
 
-        foreach ($products->getResult() as $product) {
+        $collection = collect($response->getResult());
+
+        foreach ($collection as $product) {
 
             RmsapiProductImport::query()->create([
                'connection_id' => $this->rmsapiConnection->id,
+               'batch_uuid' => $batch_uuid,
                'raw_import' => $product
             ]);
 
@@ -57,11 +64,12 @@ class ImportProductsJob implements ShouldQueue
 
         }
 
+        if($collection->isNotEmpty()) {
+            ProcessImportedProductsJob::dispatch($batch_uuid);
+        }
 
-
-        if(isset($products->asArray()['next_page_url'])) {
+        if(isset($response->asArray()['next_page_url'])) {
             ImportProductsJob::dispatch($this->rmsapiConnection);
-            ProcessImportedProductsJob::dispatch();
         }
 
     }

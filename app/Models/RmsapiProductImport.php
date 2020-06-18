@@ -8,6 +8,7 @@ class RmsapiProductImport extends Model
 {
     protected $fillable = [
         'connection_id',
+        'batch_uuid',
         'when_processed',
         'raw_import'
     ];

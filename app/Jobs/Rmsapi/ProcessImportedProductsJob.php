@@ -12,19 +12,22 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Arr;
+use Ramsey\Uuid\Uuid;
 
 class ProcessImportedProductsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    private $batch_uuid = null;
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param Uuid|null $batch_uuid
      */
-    public function __construct()
+    public function __construct(Uuid $batch_uuid = null)
     {
         //
+        $this->batch_uuid = $batch_uuid;
         logger('Job Rmsapi\ProcessImportedProductsJob dispatched');
     }
 
@@ -37,6 +40,9 @@ class ProcessImportedProductsJob implements ShouldQueue
     {
         $imports = RmsapiProductImport::query()
             ->whereNull('when_processed')
+            ->when(isset($this->batch_uuid), function ($query) {
+                return $query->where('batch_uuid', '=', $this->batch_uuid);
+            })
             ->orderBy('id')
             ->get();
 
