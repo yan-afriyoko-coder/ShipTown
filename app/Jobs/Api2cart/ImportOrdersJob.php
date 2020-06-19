@@ -98,6 +98,7 @@ class ImportOrdersJob implements ShouldQueue
 
         $this->saveOrders($connection, $orders);
 
+        // for better performance and no long blocking jobs
         // recursively dispatch another import job
         // if there might be still some more to import
         self::dispatch($connection);
