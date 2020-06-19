@@ -4,6 +4,7 @@ namespace Tests\External\Rmsapi;
 
 use App\Jobs\Rmsapi\ImportProductsJob;
 use App\Models\RmsapiConnection;
+use App\Models\RmsapiProductImport;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -21,7 +22,9 @@ class ImportProductsJobTest extends TestCase
     {
         Event::fake();
 
+        // we want clean data
         RmsapiConnection::query()->delete();
+        RmsapiProductImport::query()->delete();
 
         $connection = factory(RmsapiConnection::class)->create();
 
@@ -29,8 +32,7 @@ class ImportProductsJobTest extends TestCase
 
         $job->handle();
 
-        // we just check for no exceptions
-        $this->assertTrue(true);
+        $this->assertTrue(RmsapiProductImport::query()->exists(), 'No imports have been made');
     }
 
 }
