@@ -79,6 +79,10 @@ class ImportProductsJob implements ShouldQueue
         // be careful as this probably wont invoke event (not 100% sure)
         RmsapiProductImport::query()->insert($insertProductList->toArray());
 
+        $this->rmsapiConnection->update([
+            'products_last_timestamp' => $productList->last()['db_change_stamp']
+        ]);
+
         if($productList->isNotEmpty()) {
             ProcessImportedProductsJob::dispatch($this->batch_uuid);
         }
