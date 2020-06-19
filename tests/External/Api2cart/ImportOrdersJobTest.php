@@ -4,9 +4,7 @@ namespace Tests\External\Api2cart;
 
 use App\Jobs\Api2cart\ImportOrdersJob;
 use App\Jobs\Api2cart\ProcessImportedOrdersJob;
-use App\Managers\CompanyConfigurationManager;
 use App\Models\Api2cartConnection;
-use App\Modules\Api2cart\src\Client;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
