@@ -31,7 +31,7 @@ class ImportProductsJobTest extends TestCase
 
         $connection = factory(RmsapiConnection::class)->create();
 
-        $job = new ImportProductsJob($connection);
+        $job = new ImportProductsJob($connection->id);
 
         $job->handle();
 

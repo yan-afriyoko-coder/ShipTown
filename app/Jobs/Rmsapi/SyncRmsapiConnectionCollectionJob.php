@@ -33,7 +33,7 @@ class SyncRmsapiConnectionCollectionJob implements ShouldQueue
     {
 
         foreach (RmsapiConnection::all() as $rmsapiConnection) {
-            SyncRmsapiConnectionJob::dispatch($rmsapiConnection);
+            SyncRmsapiConnectionJob::dispatch($rmsapiConnection->id);
         }
 
     }

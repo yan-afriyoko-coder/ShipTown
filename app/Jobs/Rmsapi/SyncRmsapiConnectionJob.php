@@ -34,7 +34,7 @@ class SyncRmsapiConnectionJob implements ShouldQueue
      */
     public function handle()
     {
-        ImportProductsJob::dispatch($this->rmsapiConnection);
+        ImportProductsJob::dispatch($this->rmsapiConnection->id);
 //        ProcessImportedProductsJob::dispatch();
     }
 }
