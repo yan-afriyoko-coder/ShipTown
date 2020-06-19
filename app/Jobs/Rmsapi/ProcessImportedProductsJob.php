@@ -5,7 +5,7 @@ namespace App\Jobs\Rmsapi;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\RmsapiConnection;
-use App\Models\RmsapiProductImport;
+use App\Models\RmsapiImportedProduct;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -38,7 +38,7 @@ class ProcessImportedProductsJob implements ShouldQueue
      */
     public function handle()
     {
-        $imports = RmsapiProductImport::query()
+        $imports = RmsapiImportedProduct::query()
             ->whereNull('when_processed')
             ->when(isset($this->batch_uuid), function ($query) {
                 return $query->where('batch_uuid', '=', $this->batch_uuid);

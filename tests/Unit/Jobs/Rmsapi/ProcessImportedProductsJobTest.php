@@ -5,7 +5,7 @@ namespace Tests\Unit\Jobs\Rmsapi;
 use App\Jobs\Rmsapi\ProcessImportedProductsJob;
 use App\Models\Inventory;
 use App\Models\Product;
-use App\Models\RmsapiProductImport;
+use App\Models\RmsapiImportedProduct;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 
@@ -14,11 +14,11 @@ class ProcessImportedProductsJobTest extends TestCase
     public function test_if_processes_correctly()
     {
         // prepare
-        RmsapiProductImport::query()->delete();
+        RmsapiImportedProduct::query()->delete();
         Product::query()->delete();
         Inventory::query()->delete();
 
-        $importData = factory(RmsapiProductImport::class)->create();
+        $importData = factory(RmsapiImportedProduct::class)->create();
 
 
         // act
@@ -30,7 +30,7 @@ class ProcessImportedProductsJobTest extends TestCase
         // checks
 
         // check if all imports were processed and when_processed updated
-        $unprocessedOrdersExists = RmsapiProductImport::query()
+        $unprocessedOrdersExists = RmsapiImportedProduct::query()
             ->whereNull('when_processed')
             ->exists();
 

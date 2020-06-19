@@ -4,10 +4,10 @@
 
 use App\Model;
 use App\Models\RmsapiConnection;
-use App\Models\RmsapiProductImport;
+use App\Models\RmsapiImportedProduct;
 use Faker\Generator as Faker;
 
-$factory->define(RmsapiProductImport::class, function (Faker $faker) {
+$factory->define(RmsapiImportedProduct::class, function (Faker $faker) {
 
     $connection = factory(RmsapiConnection::class)->create();
 

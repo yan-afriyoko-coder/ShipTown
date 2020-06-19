@@ -3,7 +3,7 @@
 namespace App\Jobs\Rmsapi;
 
 use App\Models\RmsapiConnection;
-use App\Models\RmsapiProductImport;
+use App\Models\RmsapiImportedProduct;
 use App\Modules\Rmsapi\src\Client as RmsapiClient;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -77,7 +77,7 @@ class ImportProductsJob implements ShouldQueue
         // we will use insert instead of create as this is way faster
         // method of inputting bulk of records to database
         // be careful as this probably wont invoke event (not 100% sure)
-        RmsapiProductImport::query()->insert($insertProductList->toArray());
+        RmsapiImportedProduct::query()->insert($insertProductList->toArray());
 
         if($productList->isNotEmpty()) {
             ProcessImportedProductsJob::dispatch($this->batch_uuid);
