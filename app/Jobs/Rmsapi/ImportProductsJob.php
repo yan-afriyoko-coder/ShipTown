@@ -71,7 +71,7 @@ class ImportProductsJob implements ShouldQueue
         ProcessImportedProductsJob::dispatch($this->batch_uuid);
 
         if(isset($response->asArray()['next_page_url'])) {
-            ImportProductsJob::dispatch($this->rmsapiConnectionId);
+            ImportProductsJob::dispatchNow($this->rmsapiConnectionId);
         }
 
     }
