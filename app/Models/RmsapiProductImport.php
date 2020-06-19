@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RmsapiImportedProduct extends Model
+class RmsapiProductImport extends Model
 {
     protected $fillable = [
         'connection_id',
