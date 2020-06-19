@@ -13,10 +13,10 @@ class ImportOrdersJobTest extends TestCase
 {
     public function test_if_job_runs_without_exceptions()
     {
+        Bus::fake();
         Event::fake();
 
-        Bus::fake();
-
+        // we want to test on clean data
         Api2cartConnection::query()->delete();
 
         // we set key to api2cart demo store
