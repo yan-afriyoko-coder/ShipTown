@@ -3,8 +3,7 @@
 namespace Tests\Feature;
 
 use App\Jobs\Api2cart\DispatchImportOrdersJobs;
-use App\Jobs\Api2cart\ImportOrdersJob;
-use App\Jobs\Rmsapi\SyncRmsapiConnectionCollectionJob;
+use App\Jobs\Rmsapi\ImportProductsJob;
 use App\User;
 use Illuminate\Support\Facades\Bus;
 use Laravel\Passport\Passport;
@@ -30,6 +29,6 @@ class SyncControllerTest extends TestCase
         $response = $this->get('/api/sync');
 
         Bus::assertDispatched(DispatchImportOrdersJobs::class);
-        Bus::assertDispatched(SyncRmsapiConnectionCollectionJob::class);
+        Bus::assertDispatched(ImportProductsJob::class);
     }
 }
