@@ -11,14 +11,17 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 
 class ImportProductsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    /**
+     * @var RmsapiConnection
+     */
     private $rmsapiConnection = null;
+
     /**
      * @var \Ramsey\Uuid\UuidInterface
      */
@@ -58,21 +61,31 @@ class ImportProductsJob implements ShouldQueue
 
         $productList = collect($response->getResult());
 
+        // we will use the same time for all records to speed up process
+        $time = now()->toDateTimeString();
+
         $insertProductList = new Collection();
 
-        // we will use the same time for all records to speed up process
-        $time = now();
+//        // every record is carefully prepared
+//        foreach ($productList as $product) {
+//            $insertProductList->add([
+//                'connection_id' => $this->rmsapiConnection->id,
+//                'batch_uuid' => $this->batch_uuid->toString(),
+//                'raw_import' => json_encode($product),
+//                'created_at' => $time,
+//                'updated_at' => $time,
+//            ]);
+//        }
 
-        // every record is carefully prepared
-        foreach ($productList as $product) {
-            $insertProductList->add([
+        $insertProductList = $productList->map(function ($product) use ($time) {
+            return [
                 'connection_id' => $this->rmsapiConnection->id,
                 'batch_uuid' => $this->batch_uuid->toString(),
                 'raw_import' => json_encode($product),
                 'created_at' => $time,
                 'updated_at' => $time,
-            ]);
-        }
+            ];
+        });
 
         // we will use insert instead of create as this is way faster
         // method of inputting bulk of records to database
