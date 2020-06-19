@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Jobs\Api2cart\DispatchImportOrdersJobs;
 use App\Jobs\Api2cart\ImportOrdersJob;
 use App\Jobs\Rmsapi\SyncRmsapiConnectionCollectionJob;
 use App\User;
@@ -28,7 +29,7 @@ class SyncControllerTest extends TestCase
 
         $response = $this->get('/api/sync');
 
-        Bus::assertDispatched(ImportOrdersJob::class);
+        Bus::assertDispatched(DispatchImportOrdersJobs::class);
         Bus::assertDispatched(SyncRmsapiConnectionCollectionJob::class);
     }
 }

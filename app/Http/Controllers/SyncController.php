@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\Api2cart\DispatchImportOrdersJobs;
 use App\Jobs\Api2cart\ImportOrdersJob;
 use App\Jobs\Rmsapi\ImportProductsJob;
 use App\Jobs\Rmsapi\SyncRmsapiConnectionCollectionJob;
@@ -18,7 +19,7 @@ class SyncController extends Controller
      */
     public function index() {
         // import API2CART orders
-        ImportOrdersJob::dispatch();
+        DispatchImportOrdersJobs::dispatch();
 
         // import RMSAPI products
         SyncRmsapiConnectionCollectionJob::dispatch();
