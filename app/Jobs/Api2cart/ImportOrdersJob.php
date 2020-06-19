@@ -78,30 +78,29 @@ class ImportOrdersJob implements ShouldQueue
      */
     private function importOrders(Api2cartConnection $connection): void
     {
-        do {
+        // initialize params
+        $params = [
+            'params' => 'force_all',
+            'sort_by' => 'modified_at',
+            'sort_direction' => 'asc',
+            'count' => 100,
+        ];
 
-            // initialize params
-            $params = [
-                'params' => 'force_all',
-                'sort_by' => 'modified_at',
-                'sort_direction' => 'asc',
-                'count' => 100,
-            ];
+        if(isset($connection->last_synced_modified_at)) {
+            $params = Arr::add($params, 'modified_from', $connection->last_synced_modified_at);
+        }
 
-            if(isset($connection->last_synced_modified_at)) {
-                $params = Arr::add($params, 'modified_from', $connection->last_synced_modified_at);
-            }
+        $orders = Orders::get($connection->bridge_api_key, $params);
 
-            $orders = Orders::get($connection->bridge_api_key, $params);
+        if (empty($orders)) {
+            return;
+        }
 
-            if (empty($orders)) {
-                break;
-            }
+        $this->saveOrders($connection, $orders);
 
-            $this->saveOrders($connection, $orders);
-
-            // keep going until we import all
-        } while (count($orders) > 0);
+        // recursively dispatch another import job
+        // if there might be still some more to import
+        self::dispatch($connection);
     }
 
     /**
