@@ -24,11 +24,17 @@ class ImportOrdersJob implements ShouldQueue
     public $finishedSuccessfully;
 
     /**
-     * Create a new job instance.
-     *
+     * @var Api2cartConnection
      */
-    public function __construct()
+    private $api2cartConnection;
+
+    /**
+     * Create a new job instance.
+     * @param Api2cartConnection $api2cartConnection
+     */
+    public function __construct(Api2cartConnection $api2cartConnection)
     {
+        $this->api2cartConnection = $api2cartConnection;
         $this->finishedSuccessfully = false;
         logger('Job Api2cart\ImportOrdersJob dispatched');
     }
@@ -41,9 +47,7 @@ class ImportOrdersJob implements ShouldQueue
      */
     public function handle()
     {
-        foreach (Api2cartConnection::all() as $connection) {
-            $this->importOrders($connection);
-        }
+        $this->importOrders($this->api2cartConnection);
 
         ProcessImportedOrdersJob::dispatch();
 
