@@ -66,7 +66,7 @@ class ImportProductsJob implements ShouldQueue
         // every record is carefully prepared
         foreach ($productList as $product) {
             $insertProductList->add([
-                'connection_id' => 0,
+                'connection_id' => $this->rmsapiConnection->id,
                 'batch_uuid' => $this->batch_uuid->toString(),
                 'raw_import' => json_encode($product),
                 'created_at' => $time,
