@@ -44,6 +44,7 @@ class ImportProductsJobTest extends TestCase
             RmsapiProductImport::query()
                 ->where('connection_id', '=', $rmsapiConnection->id)
                 ->where('batch_uuid', '=', $job->batch_uuid)
+                ->whereNull('when_processed')
                 ->count(),
             'Did not save all records'
         );
