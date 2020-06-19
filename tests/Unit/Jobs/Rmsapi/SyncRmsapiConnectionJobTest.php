@@ -19,9 +19,9 @@ class SyncRmsapiConnectionJobTest extends TestCase
 
         RmsapiConnection::query()->delete();
 
-        $connection = factory(RmsapiConnection::class)->create();
+        $rmsapiConnection = factory(RmsapiConnection::class)->create();
 
-        $job = new SyncRmsapiConnectionJob($connection);
+        $job = new SyncRmsapiConnectionJob($rmsapiConnection);
 
         $job->handle();
 
