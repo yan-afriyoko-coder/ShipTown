@@ -45,6 +45,8 @@ Route::middleware('auth:api')->group(function() {
     Route::resource('users', 'UsersController')->middleware('can:manage users');
 
     Route::get('roles', 'RolesController@index')->middleware('can:list roles');
+
+    Route::post('picklist/{inventory}', 'PicklistController@store');
 });
 
 
