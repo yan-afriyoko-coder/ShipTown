@@ -9,7 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class DispatchImportOrdersJobs implements ShouldQueue
+class  DispatchImportOrdersJobs implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -31,7 +31,7 @@ class DispatchImportOrdersJobs implements ShouldQueue
     public function handle()
     {
         foreach (Api2cartConnection::all() as $api2cartConnection) {
-            ImportProductsJob::dispatch($api2cartConnection);
+            ImportOrdersJob::dispatch($api2cartConnection);
         }
     }
 }
