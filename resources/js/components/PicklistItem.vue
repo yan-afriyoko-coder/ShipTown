@@ -45,12 +45,12 @@
 
     export default {
         created() {
-            this.location_id = this.stock.location_id;
-            this.shelve_location = this.stock.shelve_location;
-            this.sku = this.product.sku;
-            this.quantity = this.stock.quantity;
-            this.name = this.product.name;
-            this.quantity_reserved = this.stock.quantity_reserved;
+            this.location_id = this.picklistItem.location_id;
+            this.shelve_location = this.picklistItem.shelve_location;
+            this.sku = this.picklistItem.product.sku;
+            this.quantity = this.picklistItem.quantity;
+            this.name = this.picklistItem.product.name;
+            this.quantity_reserved = this.picklistItem.quantity_reserved;
         },
 
         mounted() {
@@ -66,7 +66,7 @@
             swiper.on('transitionEnd', function () {
                 if (this.activeIndex === 0) {
                     self.$emit('transitionEnd', {
-                        id: self.stock.id,
+                        id: self.picklistItem.id,
                         quantity: self.quantity_reserved,
                     });
                     this.destroy();
@@ -76,12 +76,12 @@
         },
 
         props: {
-            product: Object,
-            stock: Object,
+            picklistItem: Object,
         },
 
         data: () => ({
             location_id: null,
+            shelve_location: null,
             sku: null,
             quantity: null,
             name: null,
@@ -94,7 +94,7 @@
 
         computed: {
             elID() {
-                return `picklist-item-${this.stock.id}`;
+                return `picklist-item-${this.picklistItem.id}`;
             }
         }
     }
