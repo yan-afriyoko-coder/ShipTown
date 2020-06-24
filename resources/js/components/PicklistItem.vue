@@ -1,35 +1,93 @@
 <template>
-    <div class="row mb-3">
-        <div class="col">
-            <div class="row text-center">
-                <div class="col-3">
-                    <div class="row">
-                        <div class="col">{{ stock.location_id }}</div>
+    <div :id="elID" lass="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide error"></div>
+            <div class="swiper-slide">
+                <div class="row mb-3">
+                    <div class="col">
+                        <div class="row text-center">
+                            <div class="col-3">
+                                <div class="row">
+                                    <div class="col">{{ location_id }}</div>
+                                </div>
+                            </div>
+                            <div class="col-6 sku-col">
+                                <div>
+                                    {{ sku }}
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="row">
+                                    <div class="col">{{ quantity }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center row-product-name">
+                            <div class="col text-center">{{ name }}</div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-6 sku-col">
-                    <div>
-                        {{ product.sku }}
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="row">
-                        <div class="col">{{ stock.quantity }}</div>
-                    </div>
-                </div>
-            </div>
-            <div class="row justify-content-center row-product-name">
-                <div class="col text-center">{{ product.name }}</div>
             </div>
         </div>
-    </div>
+    </div>    
 </template>
 
 <script>
+    import 'swiper/css/swiper.min.css';
+    import { Swiper } from 'swiper/js/swiper.esm.js';
+
     export default {
+        created() {
+            this.location_id = this.stock.location_id;
+            this.sku = this.product.sku;
+            this.quantity = this.stock.quantity;
+            this.name = this.product.name;
+            this.quantity_reserved = this.stock.quantity_reserved;
+        },
+
+        mounted() {
+            const self = this;
+            // Initialize Swiper
+            const swiper = new Swiper('#' + this.elID, {
+                initialSlide: 1,
+                resistanceRatio: 0,
+                speed: 150
+            });
+
+            // Event will be fired after transition
+            swiper.on('transitionEnd', function () {
+                if (this.activeIndex === 0) {
+                    self.$emit('transitionEnd', {
+                        id: self.stock.id,
+                        quantity: self.quantity_reserved,
+                    });
+                    this.destroy();
+                    self.$el.parentNode.removeChild(self.$el);
+                }
+            });
+        },
+
         props: {
             product: Object,
             stock: Object,
+        },
+
+        data: () => ({
+            location_id: null,
+            sku: null,
+            quantity: null,
+            name: null,
+            quantity_reserved: null,
+        }),
+
+        methods: {
+
+        },
+
+        computed: {
+            elID() {
+                return `picklist-item-${this.stock.id}`;
+            }
         }
     }
 </script>

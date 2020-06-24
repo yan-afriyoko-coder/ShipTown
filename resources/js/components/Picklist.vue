@@ -18,7 +18,7 @@
             </div>
             <template v-else class="row">
                 <template v-for="product in products">
-                    <picklist-item v-for="stock in product.inventory" :product="product" :stock="stock" :key="stock.id" />
+                    <picklist-item v-for="stock in product.inventory" :product="product" :stock="stock" :key="stock.id" @transitionEnd="pick" />
                 </template>
             </template>
         </div>
@@ -90,6 +90,12 @@
                     }
                 };
             },
+
+            pick({ id, quantity }) {
+                axios.post(`/api/picklist/${id}`, { quantity }).then(({ data }) => {
+                    this.$snotify.success(`${quantity} items picked.`);
+                });
+            }
         },
 
         data: function() {
