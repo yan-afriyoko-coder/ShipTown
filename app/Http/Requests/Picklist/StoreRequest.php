@@ -24,7 +24,7 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'quantity' => ['required', 'gt:0', 'numeric']
+            'quantity_picked' => ['required', 'gt:0', 'numeric']
         ];
     }
 }

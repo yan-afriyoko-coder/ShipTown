@@ -28,7 +28,7 @@
                             </div>
                             <div class="col-3">
                                 <div class="row">
-                                    <div class="col">{{ quantity }}</div>
+                                    <div class="col">{{ quantity_to_pick }}</div>
                                 </div>
                             </div>
                         </div>
@@ -48,9 +48,8 @@
             this.location_id = this.picklistItem.location_id;
             this.shelve_location = this.picklistItem.shelve_location;
             this.sku = this.picklistItem.product.sku;
-            this.quantity = this.picklistItem.quantity;
             this.name = this.picklistItem.product.name;
-            this.quantity_reserved = this.picklistItem.quantity_reserved;
+            this.quantity_to_pick = this.picklistItem.quantity_reserved;
         },
 
         mounted() {
@@ -67,7 +66,7 @@
                 if (this.activeIndex === 0) {
                     self.$emit('transitionEnd', {
                         id: self.picklistItem.id,
-                        quantity: self.quantity_reserved,
+                        quantity_picked: self.quantity_to_pick,
                     });
                     this.destroy();
                     self.$el.parentNode.removeChild(self.$el);

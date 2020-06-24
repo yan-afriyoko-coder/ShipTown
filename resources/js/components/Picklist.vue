@@ -91,9 +91,9 @@
                 };
             },
 
-            pick({ id, quantity }) {
-                axios.post(`/api/picklist/${id}`, { quantity }).then(({ data }) => {
-                    this.$snotify.success(`${quantity} items picked.`);
+            pick({ id, quantity_picked }) {
+                axios.post(`/api/picklist/${id}`, { quantity_picked }).then(({ data }) => {
+                    this.$snotify.success(`${quantity_picked} items picked.`);
                 });
             }
         },
