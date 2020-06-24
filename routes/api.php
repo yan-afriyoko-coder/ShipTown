@@ -46,6 +46,7 @@ Route::middleware('auth:api')->group(function() {
 
     Route::get('roles', 'RolesController@index')->middleware('can:list roles');
 
+    Route::get('picklist', 'PicklistController@index');
     Route::post('picklist/{inventory}', 'PicklistController@store');
 });
 

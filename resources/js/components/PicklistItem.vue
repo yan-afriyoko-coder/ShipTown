@@ -6,30 +6,37 @@
                 <div class="row mb-3">
                     <div class="col">
                         <div class="row text-center">
-                            <div class="col-3">
+                            <div class="col-1">
                                 <div class="row">
                                     <div class="col">{{ location_id }}</div>
                                 </div>
                             </div>
-                            <div class="col-6 sku-col">
+                            <div class="col-1">
+                                <div class="row">
+                                    <div class="col">{{ shelve_location }}</div>
+                                </div>
+                            </div>
+                            <div class="col-3 sku-col">
                                 <div>
                                     {{ sku }}
                                 </div>
                             </div>
-                            <div class="col-3">
-                                <div class="row">
-                                    <div class="col">{{ quantity }}</div>
+                            <div class="col-4 text-left row-product-name">
+                                <div>
+                                    {{ name }}
                                 </div>
                             </div>
-                        </div>
-                        <div class="row justify-content-center row-product-name">
-                            <div class="col text-center">{{ name }}</div>
+                            <div class="col-3">
+                                <div class="row">
+                                    <div class="col">{{ quantity_to_pick }}</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
 </template>
 
 <script>
@@ -38,11 +45,11 @@
 
     export default {
         created() {
-            this.location_id = this.stock.location_id;
-            this.sku = this.product.sku;
-            this.quantity = this.stock.quantity;
-            this.name = this.product.name;
-            this.quantity_reserved = this.stock.quantity_reserved;
+            this.location_id = this.picklistItem.location_id;
+            this.shelve_location = this.picklistItem.shelve_location;
+            this.sku = this.picklistItem.product.sku;
+            this.name = this.picklistItem.product.name;
+            this.quantity_to_pick = this.picklistItem.quantity_reserved;
         },
 
         mounted() {
@@ -58,8 +65,8 @@
             swiper.on('transitionEnd', function () {
                 if (this.activeIndex === 0) {
                     self.$emit('transitionEnd', {
-                        id: self.stock.id,
-                        quantity: self.quantity_reserved,
+                        id: self.picklistItem.id,
+                        quantity_picked: self.quantity_to_pick,
                     });
                     this.destroy();
                     self.$el.parentNode.removeChild(self.$el);
@@ -68,12 +75,12 @@
         },
 
         props: {
-            product: Object,
-            stock: Object,
+            picklistItem: Object,
         },
 
         data: () => ({
             location_id: null,
+            shelve_location: null,
             sku: null,
             quantity: null,
             name: null,
@@ -86,7 +93,7 @@
 
         computed: {
             elID() {
-                return `picklist-item-${this.stock.id}`;
+                return `picklist-item-${this.picklistItem.id}`;
             }
         }
     }
