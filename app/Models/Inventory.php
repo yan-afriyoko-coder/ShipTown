@@ -8,6 +8,7 @@ class Inventory extends Model
 {
     protected $fillable = [
         'location_id',
+        'shelve_location',
         'product_id',
         'quantity',
         'quantity_reserved'
