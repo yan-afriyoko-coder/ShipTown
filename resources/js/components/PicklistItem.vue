@@ -6,14 +6,24 @@
                 <div class="row mb-3">
                     <div class="col">
                         <div class="row text-center">
-                            <div class="col-3">
+                            <div class="col-1">
                                 <div class="row">
                                     <div class="col">{{ location_id }}</div>
                                 </div>
                             </div>
-                            <div class="col-6 sku-col">
+                            <div class="col-1">
+                                <div class="row">
+                                    <div class="col">{{ shelve_location }}</div>
+                                </div>
+                            </div>
+                            <div class="col-3 sku-col">
                                 <div>
                                     {{ sku }}
+                                </div>
+                            </div>
+                            <div class="col-4 text-left row-product-name">
+                                <div>
+                                    {{ name }}
                                 </div>
                             </div>
                             <div class="col-3">
@@ -22,14 +32,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row justify-content-center row-product-name">
-                            <div class="col text-center">{{ name }}</div>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
 </template>
 
 <script>
@@ -39,6 +46,7 @@
     export default {
         created() {
             this.location_id = this.stock.location_id;
+            this.shelve_location = this.stock.shelve_location;
             this.sku = this.product.sku;
             this.quantity = this.stock.quantity;
             this.name = this.product.name;
