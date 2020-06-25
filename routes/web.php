@@ -46,20 +46,6 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::get('processImports', function () {
-
-    $batches = \App\Models\RmsapiProductImport::query()
-        ->whereNull('when_processed')->distinct()->get('batch_uuid');
-
-
-    foreach ($batches as $batch) {
-        \App\Jobs\Rmsapi\ProcessImportedProductsJob::dispatch(
-            \Ramsey\Uuid\Uuid::fromString($batch->batch_uuid)
-        );
-    }
-
-});
-
 Route::get('invites/{token}', 'InvitesController@accept')->name('accept');
 Route::post('invites/{token}', 'InvitesController@process');
 
