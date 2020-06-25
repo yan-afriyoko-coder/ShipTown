@@ -16,11 +16,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 
-Route::middleware('auth:api')->group(function() {
-    Route::view('/', 'welcome');
-});
-
 Route::middleware('auth')->group(function () {
+
+    Route::redirect('/', 'dashboard');
 
     Route::view('/dashboard', 'dashboard')
         ->name('dashboard');
@@ -43,9 +41,15 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::get('invites/{token}', 'InvitesController@accept')->name('accept');
+// Routes to allow invite other emails
+Route::get('invites/{token}', 'InvitesController@accept')
+    ->name('accept');
+
 Route::post('invites/{token}', 'InvitesController@process');
 
+
+// you can register only first user
+// then he should invite others
 try {
     Auth::routes(['register' => ! User::query()->exists()]);
 } catch (\Exception $exception)
