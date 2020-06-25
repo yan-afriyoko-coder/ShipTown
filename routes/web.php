@@ -41,9 +41,6 @@ Route::middleware('auth')->group(function () {
         ->name('users')
         ->middleware('can:manage users');
 
-    Route::get("import/orders/from/api2cart",
-        "ImportController@importOrdersFromApi2cart");
-
 });
 
 Route::get('invites/{token}', 'InvitesController@accept')->name('accept');
