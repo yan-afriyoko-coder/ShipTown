@@ -29,15 +29,18 @@ Route::middleware('auth')->group(function () {
     Route::view('/products', 'products')
         ->name('products');
 
-    Route::view('/missing', 'missing')
-        ->name('missing');
-
     Route::view('/picklist', 'picklist')
         ->name('picklist');
 
     Route::view('/users', 'users')
         ->name('users')
         ->middleware('can:manage users');
+
+
+    // below everything is hidden from top navigation menu
+    // but still available as direct link
+    Route::view('/missing', 'missing')
+        ->name('missing');
 
 });
 

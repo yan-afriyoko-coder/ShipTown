@@ -11,7 +11,7 @@
     <meta name="user-id" content="{{ Auth::user()->id }}">
     @endauth
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>PM @yield('title')</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>

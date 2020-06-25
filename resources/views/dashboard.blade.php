@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title','Dashboard')
+
 @section('content')
 <div class="container dashboard-widgets">
     <div class="row row-cols-sm-2 mb-2">
