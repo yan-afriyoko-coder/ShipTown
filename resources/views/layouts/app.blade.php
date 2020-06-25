@@ -30,7 +30,9 @@
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     PM
+                    @yield('title')
                 </a>
+
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -43,9 +45,6 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('products') }}">{{ __('Products') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('missing') }}">{{ __('Missing') }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('picklist') }}">{{ __('Picklist') }}</a>
