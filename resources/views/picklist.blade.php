@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Picklist')
+@section('title', __('Picklist'))
 
 @section('content')
 <div class="container">
