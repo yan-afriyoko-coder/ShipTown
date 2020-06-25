@@ -19,9 +19,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:api')->group(function() {
-    Route::get('sync', "SyncController@index");
 
-    Route::post('company/configuration', "CompanyController@storeConfiguration");
+    Route::resource('widgets', 'WidgetsController');
 
     Route::get('products', 'ProductsController@index');
     Route::post('products', 'ProductsController@store');
@@ -34,20 +33,26 @@ Route::middleware('auth:api')->group(function() {
     Route::post('orders', 'OrdersController@store');
     Route::delete('orders/{order_number}', 'OrdersController@destroy');
 
+    Route::get('picklist', 'PicklistController@index');
+    Route::post('picklist/{inventory}', 'PicklistController@store');
+
+    Route::resource('users', 'UsersController')
+        ->middleware('can:manage users');
+
+    Route::get('roles', 'RolesController@index')
+        ->middleware('can:list roles');
+
+    Route::post('company/configuration', "CompanyController@storeConfiguration");
+
     Route::resource("rms_api_configuration", "RmsapiConnectionController");
 
     Route::resource("api2cart_configuration", "Api2cartConnectionController");
 
-    Route::resource('widgets', 'WidgetsController');
+    Route::get('sync', "SyncController@index");
 
     Route::post('invites', 'InvitesController@store');
 
-    Route::resource('users', 'UsersController')->middleware('can:manage users');
 
-    Route::get('roles', 'RolesController@index')->middleware('can:list roles');
-
-    Route::get('picklist', 'PicklistController@index');
-    Route::post('picklist/{inventory}', 'PicklistController@store');
 });
 
 
