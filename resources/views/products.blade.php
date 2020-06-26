@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', __('Products'))
+
 @section('content')
 <div class="container">
     @if (session('status'))
@@ -9,11 +11,11 @@
                 {{ session('status') }}
             </div>
         </div>
-    </div>    
+    </div>
     @endif
     <div class="row justify-content-center">
-        <div class="col-lg-12">            
-            <products-table></products-table>        
+        <div class="col-lg-12">
+            <products-table></products-table>
         </div>
     </div>
 </div>

@@ -16,38 +16,43 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 
-Route::middleware('auth:api')->group(function() {
-    Route::view('/', 'welcome');
-});
-
 Route::middleware('auth')->group(function () {
-    Route::view('/dashboard', 'dashboard')->name('dashboard');
-    Route::view('/settings', 'settings')->name('settings');
-    Route::view('/products', 'products')->name('products');
-    Route::view('/missing', 'missing')->name('missing');
-    Route::view('/picklist', 'picklist')->name('picklist');
-    Route::view('/users', 'users')->name('users')->middleware('can:manage users');
 
-    Route::get("import/orders/from/api2cart", "ImportController@importOrdersFromApi2cart");
+    Route::redirect('/', 'dashboard');
+
+    Route::view('/dashboard', 'dashboard')
+        ->name('dashboard');
+
+    Route::view('/settings', 'settings')
+        ->name('settings');
+
+    Route::view('/products', 'products')
+        ->name('products');
+
+    Route::view('/picklist', 'picklist')
+        ->name('picklist');
+
+    Route::view('/users', 'users')
+        ->name('users')
+        ->middleware('can:manage users');
+
+
+    // below everything is hidden from top navigation menu
+    // but still available as direct link
+    Route::view('/missing', 'missing')
+        ->name('missing');
+
 });
 
-Route::get('processImports', function () {
+// Routes to allow invite other emails
+Route::get('invites/{token}', 'InvitesController@accept')
+    ->name('accept');
 
-    $batches = \App\Models\RmsapiProductImport::query()
-        ->whereNull('when_processed')->distinct()->get('batch_uuid');
-
-
-    foreach ($batches as $batch) {
-        \App\Jobs\Rmsapi\ProcessImportedProductsJob::dispatch(
-            \Ramsey\Uuid\Uuid::fromString($batch->batch_uuid)
-        );
-    }
-
-});
-
-Route::get('invites/{token}', 'InvitesController@accept')->name('accept');
 Route::post('invites/{token}', 'InvitesController@process');
 
+
+// you can register only first user
+// then he should invite others
 try {
     Auth::routes(['register' => ! User::query()->exists()]);
 } catch (\Exception $exception)

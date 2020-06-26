@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Http\Resources;
+
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class PicklistResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function toArray($request)
+    {
+        return [
+            "product_id" => $this->product_id,
+            "location_id" => $this->location_id,
+            "shelve_location" => $this->shelve_location,
+            "quantity_to_pick" => $this->quantity_to_pick,
+            "created_at" => $this->created_at,
+            "updated_at" => $this->updated_at,
+            "product" => new ProductResource($this->whenLoaded('product')),
+        ];
+    }
+}

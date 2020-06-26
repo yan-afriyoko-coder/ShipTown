@@ -11,7 +11,7 @@
     <meta name="user-id" content="{{ Auth::user()->id }}">
     @endauth
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>PM @yield('title')</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -30,7 +30,9 @@
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     PM
+                    @yield('title')
                 </a>
+
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -39,13 +41,13 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ route('dashboard') }}">|</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('products') }}">{{ __('Products') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('missing') }}">{{ __('Missing') }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('picklist') }}">{{ __('Picklist') }}</a>
