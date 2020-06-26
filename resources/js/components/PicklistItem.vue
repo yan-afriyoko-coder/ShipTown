@@ -49,7 +49,7 @@
             this.shelve_location = this.picklistItem.shelve_location;
             this.sku = this.picklistItem.product.sku;
             this.name = this.picklistItem.product.name;
-            this.quantity_to_pick = this.picklistItem.quantity_reserved;
+            this.quantity_to_pick = this.picklistItem.quantity_to_pick;
         },
 
         mounted() {
@@ -81,10 +81,7 @@
         data: () => ({
             location_id: null,
             shelve_location: null,
-            sku: null,
-            quantity: null,
-            name: null,
-            quantity_reserved: null,
+            quantity_to_pick: null,
         }),
 
         methods: {

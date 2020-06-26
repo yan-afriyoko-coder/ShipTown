@@ -33,8 +33,8 @@ Route::middleware('auth:api')->group(function() {
     Route::post('orders', 'OrdersController@store');
     Route::delete('orders/{order_number}', 'OrdersController@destroy');
 
-    Route::get('picklist', 'PicklistController@index');
-    Route::post('picklist/{inventory}', 'PicklistController@store');
+    Route::get('picklist', 'Api\PicklistController@index');
+    Route::post('picklist/{picklist}', 'Api\PicklistController@store');
 
     Route::resource('users', 'UsersController')
         ->middleware('can:manage users');
