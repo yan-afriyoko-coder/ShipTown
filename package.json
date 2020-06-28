@@ -31,6 +31,7 @@
     "bootstrap-vue": "^2.14.0",
     "handsontable": "^7.3.0",
     "laravel-vue-pagination": "^2.3.1",
+    "quagga": "^0.12.1",
     "swiper": "^5.4.5",
     "vee-validate": "^3.3.0",
     "vue-loading-overlay": "^3.3.2",
