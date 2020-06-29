@@ -1,11 +1,14 @@
 <template>
     <div>
+        <div v-if="showScanner" class="overlay" @click.prevent="stopScanner">
+            <div id="interactive" class="viewport overlay-content"></div>
+        </div>
         <div class="row mb-2">
             <div class="col-10">
                 <input ref="search" @focus="handleSearchFocus" class="form-control" @keyup.enter="handleSearchEnter" v-model="query" placeholder="Scan picked product" />
             </div>
             <div class="col">
-                <input class="form-control" placeholder="A12" />
+                <button type="button" class="btn btn-secondary" @click.prevent="initScanner" href="#"><font-awesome-icon icon="barcode"></font-awesome-icon></button>
             </div>
         </div>
         <div class="container">
@@ -26,6 +29,8 @@
 </template>
 
 <script>
+    import Quagga from 'quagga';
+
     import loadingOverlay from '../mixins/loading-overlay';
     import PicklistItem from './PicklistItem';
 
@@ -95,6 +100,47 @@
                 axios.post(`/api/picklist/${id}`, { quantity_picked }).then(({ data }) => {
                     this.$snotify.success(`${quantity_picked} items picked.`);
                 });
+            },
+
+            initScanner(e) {
+                this.showScanner = true;
+                this.$nextTick(() => {
+                    Quagga.init({
+                        decoder : {
+                            readers : ["code_128_reader"]
+                        },
+                        inputStream: {
+                            name: "Live",
+                            type: "LiveStream",
+                            area: { // defines rectangle of the detection/localization area
+                                top: "0%",    // top offset
+                                right: "0%",  // right offset
+                                left: "0%",   // left offset
+                                bottom: "0%"  // bottom offset
+                            },
+                            singleChannel: false // true: only the red color-channel is read
+                        }
+                    }, function(err) {
+                        if (err) {
+                            console.log(err);
+                            //return
+                        }
+                        console.log("Initialization finished. Ready to start");
+                        Quagga.start();
+                    });
+
+                    
+                    Quagga.onDetected((data) => {
+                        this.query = data.codeResult.code;
+                        this.loadProductList(1).then(this.handleSearchFocus);
+                        this.stopScanner();
+                    })
+                });
+            },
+
+            stopScanner() {
+                this.showScanner = false;
+                Quagga.stop();
             }
         },
 
@@ -107,7 +153,41 @@
                 total: 0,
                 page: 1,
                 last_page: 1,
+                showScanner: false,
             };
         },
     }
 </script>
+
+<style>
+.overlay {
+  height: 100%;
+  width: 100%;
+  position: fixed; /* Stay in place */
+  z-index: 2; /* Sit on top */
+  left: 0;
+  top: 0;
+  background-color: rgb(0,0,0); /* Black fallback color */
+  background-color: rgba(0,0,0, 0.9); /* Black w/opacity */
+  overflow-x: hidden; /* Disable horizontal scroll */
+  transition: 0.5s; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
+}
+
+/* Position the content inside the overlay */
+#interactive video {
+  position: fixed;
+  top: 10%; /* 25% from the top */
+  width: 100%; /* 100% width */  
+  margin-top: 30px; /* 30px top margin to avoid conflict with the close button on smaller screens */
+}
+
+/* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
+@media screen and (max-height: 450px) {
+  .overlay a {font-size: 20px}
+  .overlay .closebtn {
+    font-size: 40px;
+    top: 15px;
+    right: 35px;
+  }
+}
+</style>
