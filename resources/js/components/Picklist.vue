@@ -107,7 +107,17 @@
                 this.$nextTick(() => {
                     Quagga.init({
                         decoder : {
-                            readers : ["code_128_reader"]
+                            readers : [
+                                "code_39_reader",
+                                "ean_reader",
+                                "code_128_reader",
+                            ],
+                            debug: {
+                                drawBoundingBox: false,
+                                showFrequency: false,
+                                drawScanline: false,
+                                showPattern: false
+                            }
                         },
                         inputStream: {
                             name: "Live",
@@ -129,7 +139,7 @@
                         Quagga.start();
                     });
 
-                    
+
                     Quagga.onDetected((data) => {
                         this.query = data.codeResult.code;
                         this.loadProductList(1).then(this.handleSearchFocus);
@@ -177,7 +187,7 @@
 #interactive video {
   position: fixed;
   top: 10%; /* 25% from the top */
-  width: 100%; /* 100% width */  
+  width: 100%; /* 100% width */
   margin-top: 30px; /* 30px top margin to avoid conflict with the close button on smaller screens */
 }
 
