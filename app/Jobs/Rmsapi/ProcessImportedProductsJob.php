@@ -64,7 +64,8 @@ class ProcessImportedProductsJob implements ShouldQueue
                 'location_id' => $connection->location_id
             ], [
                 'quantity' => $importedProduct->raw_import['quantity_on_hand'],
-                'quantity_reserved' => $importedProduct->raw_import['quantity_committed']
+                'quantity_reserved' => $importedProduct->raw_import['quantity_committed'],
+                'shelve_location' => $importedProduct->raw_import['sub_description_1'],
             ]);
 
             $importedProduct->update([
