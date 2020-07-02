@@ -67,13 +67,6 @@ class ProcessImportedOrderJob implements ShouldQueue
                 'sku' => $rawOrderProduct['model']
             ])->first()->getKey();
 
-            $order->orderProducts()->save($orderProduct);
-
-            $orderProductOptionMap = array_map(function ($o) {
-                return new OrderProductOption($o);
-            }, $orderProductData['options']);
-
-            $orderProduct->options()->saveMany($orderProductOptionMap);
         }
 
         $this->orderImport->when_processed = now();
