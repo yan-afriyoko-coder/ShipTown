@@ -63,7 +63,6 @@ class ProcessImportedOrderJob implements ShouldQueue
             $orderProduct->fill($orderProductData->except(['options', 'product_id'])->toArray());
 
             $orderProduct->product_id = Product::where([
-                'name' => $rawOrderProduct['name'],
                 'sku' => $rawOrderProduct['model']
             ])->first()->getKey();
 
