@@ -13,7 +13,7 @@ class OrdersSeeder extends Seeder
      */
     public function run()
     {
-        factory(Order::class,1000)
+        factory(Order::class,50)
             ->create()->each(function ($order) {
                 $orderProducts = factory(OrderProduct::class, rand(1,20))->make();
 
