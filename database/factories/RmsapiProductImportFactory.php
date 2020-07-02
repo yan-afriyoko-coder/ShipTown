@@ -6,6 +6,7 @@ use App\Model;
 use App\Models\RmsapiConnection;
 use App\Models\RmsapiProductImport;
 use Faker\Generator as Faker;
+use Illuminate\Support\Str;
 
 $factory->define(RmsapiProductImport::class, function (Faker $faker) {
 
@@ -47,7 +48,8 @@ $factory->define(RmsapiProductImport::class, function (Faker $faker) {
            "sub_description_3":"",
            "quantity_available":'.$quantity_available.',
            "quantity_committed":'.$quantity_committed.',
-           "quantity_discount_id":0
+           "quantity_discount_id":0,
+           "rmsmobile_shelve_location":"'.Str::upper($faker->randomLetter).$faker->numberBetween(0,9).'"
         }
     ')
     ];
