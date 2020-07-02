@@ -13,9 +13,7 @@ class PicklistController extends Controller
     public function index(Request $request)
     {
         return Picklist::query()
-            ->where('location_id','=','WWW')
             ->where('quantity_to_pick','>',0)
-            ->where('shelve_location','>','B12')
             ->orderBy('shelve_location')
             ->with('product')
             ->paginate(50);
