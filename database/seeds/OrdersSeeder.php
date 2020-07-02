@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Order;
+use App\Models\OrderProduct;
 use Illuminate\Database\Seeder;
 
 class OrdersSeeder extends Seeder
@@ -11,7 +13,11 @@ class OrdersSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Models\Order::class,1000)
-            ->create();
+        factory(Order::class,1000)
+            ->create()->each(function ($order) {
+                $orderProducts = factory(OrderProduct::class, rand(1,20))->make();
+
+                $order->orderProducts()->saveMany($orderProducts);
+            });
     }
 }
