@@ -59,21 +59,21 @@ class ProcessImportedOrderJob implements ShouldQueue
 
         foreach ($this->orderImport['raw_import']['order_products'] as $rawOrderProduct) {
             $orderProductData = Collection::make($rawOrderProduct);
+
             $orderProduct = new OrderProduct();
-            $orderProduct->fill($orderProductData->except(['options', 'product_id'])->toArray());
+            $orderProduct->fill([
+                'model' => $orderProductData['model'],
+                'name' => $orderProductData['name'],
+                'quantity' => $orderProductData['quantity'],
+                'price' => $orderProductData['price'],
+            ]);
 
             $orderProduct->product_id = Product::where([
-                'name' => $rawOrderProduct['name'],
                 'sku' => $rawOrderProduct['model']
             ])->first()->getKey();
 
             $order->orderProducts()->save($orderProduct);
 
-            $orderProductOptionMap = array_map(function ($o) {
-                return new OrderProductOption($o);
-            }, $orderProductData['options']);
-
-            $orderProduct->options()->saveMany($orderProductOptionMap);
         }
 
         $this->orderImport->when_processed = now();
