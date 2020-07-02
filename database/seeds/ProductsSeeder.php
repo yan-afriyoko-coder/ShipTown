@@ -13,9 +13,9 @@ class ProductsSeeder extends Seeder
     {
         factory(\App\Models\Product::class)->create(['sku' => '123456']);
 
-        factory(\App\Models\Product::class, 500)->create();
+        factory(\App\Models\Product::class, 50)->create();
 
-        factory(\App\Models\Product::class, 50)->create([
+        factory(\App\Models\Product::class, 10)->create([
             "quantity" => 50,
             "quantity_reserved" => 50
         ]);
