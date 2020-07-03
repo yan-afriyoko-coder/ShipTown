@@ -27,7 +27,7 @@ class PicklistController extends Controller
             ->with('inventory')
             ->orderBy('pick_location_inventory.shelve_location');
 
-        return $query->paginate(50);
+        return $query->paginate(200);
     }
 
     public function store(StoreRequest $request, Picklist $picklist)
