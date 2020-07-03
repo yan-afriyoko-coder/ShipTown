@@ -5,7 +5,7 @@
                 <input ref="search" @focus="handleSearchFocus" class="form-control" @keyup.enter="handleSearchEnter" v-model="query" placeholder="Search for products..." />
             </div>
         </div>
-        <div class="container">        
+        <div class="container">
             <div v-if="total == 0 && !isLoading" class="row" >
                 <div class="col">
                     <div class="alert alert-info" role="alert">
@@ -14,22 +14,72 @@
                 </div>
             </div>
             <template v-else class="row">
+                <div class="row mb-3">
+                    <div class="col">
+                        <div class="row text-center">
+                            <div class="col-3">
+                                <div class="row header-row">
+                                    <div class="col">SKU</div>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div class="row header-row">
+                                    <div class="col">NAME</div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="row header-row">
+                                    <div class="col">QTY</div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="row header-row">
+                                    <div class="col">ON ORDER</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <template v-for="product in products">
-                    <Product v-for="stock in product.inventory" :product="product" :stock="stock" :key="stock.id" />
+                    <div class="row mb-3">
+                        <div class="col">
+                            <div class="row text-center">
+                                <div class="col-3">
+                                    <div class="row">
+                                        <div>{{ product.sku }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-5">
+                                    <div class="row">
+                                        <div>{{ product.name }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="row">
+                                        <div>n/a</div>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="row">
+                                        <div>n/a</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </template>
             </template>
         </div>
-    </div>    
+    </div>
 </template>
 
 <script>
     import loadingOverlay from '../mixins/loading-overlay';
-    import Product from './Product';
 
     export default {
         mixins: [loadingOverlay],
 
-        components: { Product },
+        components: {  },
 
         created() {
             this.loadProductList(this.page);
@@ -44,7 +94,7 @@
             loadProductList: function(page) {
                 return new Promise((resolve, reject) => {
                     this.showLoading();
-                    axios.get('/api/inventory', {
+                    axios.get('/api/products', {
                         params: {
                             page: page,
                             q: this.query,
@@ -102,3 +152,32 @@
         },
     }
 </script>
+
+<style lang="scss" scoped>
+    .col {
+        background-color: #ffffff;
+    }
+
+    .header-row > div, .col {
+        border: 1px solid #76777838;
+    }
+
+    .header-row > div {
+        background-color: #76777838;
+    }
+
+    .row-product-name .col {
+        padding: 10px;
+    }
+
+    .sku-col {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
