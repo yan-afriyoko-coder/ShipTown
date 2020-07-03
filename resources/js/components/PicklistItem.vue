@@ -7,11 +7,11 @@
                     <div class="col p-2 pl-3">
                         <div class="row text-left">
                             <div class="col-md-8">
-                                <div class="text-primary h3">{{ name }}</div>
+                                <div class="text-primary h4">{{ name }}</div>
                                 <div class="text-secondary h5">sku: <span class="font-weight-bold"> {{ sku }}</span></div>
                             </div>
                             <div class="col-md-4">
-                                <div class="row text-center">
+                                <div class="row pt-1 mt-1 text-center border-top">
                                     <div class="col-6">
                                         <div class=""></div>
                                         <div class="text-secondary h6 text-left">order: <span class="font-weight-bold"> - </span></div>
@@ -52,8 +52,11 @@
             // Initialize Swiper
             const swiper = new Swiper('#' + this.elID, {
                 initialSlide: 1,
-                resistanceRatio: 0,
-                speed: 150
+                resistanceRatio: 2,
+                speed: 150,
+
+                shortSwipes: false,
+
             });
 
             // Event will be fired after transition
