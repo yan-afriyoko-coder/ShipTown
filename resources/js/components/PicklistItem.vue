@@ -14,7 +14,7 @@
                                 <div class="row text-center">
                                     <div class="col-6">
                                         <div class=""></div>
-                                        <div class="text-secondary h6 text-left">order: <span class="font-weight-bold"> 10961504</span></div>
+                                        <div class="text-secondary h6 text-left">order: <span class="font-weight-bold"> - </span></div>
                                     </div>
                                     <div class="col-3">
                                         <div>To Pick</div>
