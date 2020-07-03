@@ -3,7 +3,7 @@
         <div class="swiper-wrapper">
             <div class="swiper-slide error"></div>
             <div class="swiper-slide">
-                <div class="row mb-2">
+                <div class="row mb-3 ml-1 mr-1">
                     <div class="col p-2 pl-3">
                         <div class="row text-left">
                             <div class="col-md-8">
