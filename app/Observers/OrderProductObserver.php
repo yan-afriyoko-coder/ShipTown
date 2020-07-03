@@ -18,7 +18,6 @@ class OrderProductObserver
         Picklist::query()->create([
             'product_id' => $orderProduct->product_id,
             'location_id' => 'WWW',
-            'shelve_location' => 'A0',
             'quantity_to_pick' => $orderProduct->quantity,
         ]);
     }
