@@ -46,7 +46,7 @@
     export default {
         created() {
             this.location_id = this.picklistItem.location_id;
-            this.shelve_location = this.picklistItem.inventory[100] ? this.picklistItem.inventory[100].shelve_location : '';
+            this.shelve_location = this.picklistItem.shelve_location;
             this.sku = this.picklistItem.product.sku;
             this.name = this.picklistItem.product.name;
             this.quantity_to_pick = this.picklistItem.quantity_to_pick;
