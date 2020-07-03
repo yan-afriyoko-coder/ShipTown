@@ -36,7 +36,6 @@ class PicklistRoutesTest extends TestCase
                     "id",
                     "product_id",
                     "location_id",
-                    "shelve_location",
                     "quantity_to_pick",
                     "product",
                     "inventory",

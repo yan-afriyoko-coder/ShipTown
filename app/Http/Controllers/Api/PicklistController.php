@@ -14,7 +14,7 @@ class PicklistController extends Controller
     {
         return Picklist::query()
             ->where('quantity_to_pick','>',0)
-            ->orderBy('shelve_location')
+//            ->orderBy('shelve_location')
             ->with('product')
             ->with('inventory')
             ->paginate(50);
