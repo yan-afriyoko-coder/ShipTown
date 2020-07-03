@@ -52,11 +52,8 @@
             // Initialize Swiper
             const swiper = new Swiper('#' + this.elID, {
                 initialSlide: 1,
-                resistanceRatio: 2,
-                speed: 150,
-
-                shortSwipes: false,
-
+                resistanceRatio: 0,
+                speed: 150
             });
 
             // Event will be fired after transition
