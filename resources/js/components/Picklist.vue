@@ -3,14 +3,14 @@
         <div v-if="showScanner" class="overlay" @click.prevent="stopScanner">
             <div id="interactive" class="viewport overlay-content"></div>
         </div>
-        <div class="row mb-2">
-            <div class="col-10">
-                <input ref="search" @focus="handleSearchFocus" class="form-control" @keyup.enter="handleSearchEnter" v-model="query" placeholder="Scan picked product" />
-            </div>
-            <div class="col">
-                <button type="button" class="btn btn-secondary" @click.prevent="initScanner" href="#"><font-awesome-icon icon="barcode"></font-awesome-icon></button>
-            </div>
-        </div>
+<!--        <div class="row mb-2">-->
+<!--            <div class="col-10">-->
+<!--                <input ref="search" @focus="handleSearchFocus" class="form-control" @keyup.enter="handleSearchEnter" v-model="query" placeholder="Scan picked product" />-->
+<!--            </div>-->
+<!--            <div class="col">-->
+<!--                <button type="button" class="btn btn-secondary" @click.prevent="initScanner" href="#"><font-awesome-icon icon="barcode"></font-awesome-icon></button>-->
+<!--            </div>-->
+<!--        </div>-->
         <div class="container">
             <div v-if="total == 0 && !isLoading" class="row" >
                 <div class="col">
