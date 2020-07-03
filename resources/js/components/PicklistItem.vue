@@ -3,32 +3,27 @@
         <div class="swiper-wrapper">
             <div class="swiper-slide error"></div>
             <div class="swiper-slide">
-                <div class="row mb-3">
-                    <div class="col">
-                        <div class="row text-center">
-                            <div class="col-1">
-                                <div class="row">
-                                    <div class="col">{{ location_id }}</div>
-                                </div>
+                <div class="row mb-2">
+                    <div class="col p-2 pl-3">
+                        <div class="row text-left">
+                            <div class="col-md-8">
+                                <div class="text-primary h3">{{ name }}</div>
+                                <div class="text-secondary h5">sku: <span class="font-weight-bold"> {{ sku }}</span></div>
                             </div>
-                            <div class="col-1">
-                                <div class="row">
-                                    <div class="col">{{ shelve_location }}</div>
-                                </div>
-                            </div>
-                            <div class="col-3 sku-col">
-                                <div>
-                                    {{ sku }}
-                                </div>
-                            </div>
-                            <div class="col-5 text-left row-product-name">
-                                <div>
-                                    {{ name }}
-                                </div>
-                            </div>
-                            <div class="col-2">
-                                <div class="row">
-                                    <div class="col">{{ quantity_to_pick }}</div>
+                            <div class="col-md-4">
+                                <div class="row text-center">
+                                    <div class="col-6">
+                                        <div class=""></div>
+                                        <div class="text-secondary h5 text-left">order: <span class="font-weight-bold"> 10961504</span></div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div>To Pick</div>
+                                        <div class="h3">{{ quantity_to_pick }}</div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="">Shelf</div>
+                                        <div class="h3">{{ shelve_location }}</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -49,7 +44,7 @@
             this.shelve_location = this.picklistItem.shelve_location;
             this.sku = this.picklistItem.product.sku;
             this.name = this.picklistItem.product.name;
-            this.quantity_to_pick = this.picklistItem.quantity_to_pick;
+            this.quantity_to_pick = Math.ceil(this.picklistItem.quantity_to_pick);
         },
 
         mounted() {
@@ -107,15 +102,5 @@
 
     .header-row > div {
         background-color: #76777838;
-    }
-
-    .row-product-name .col {
-        padding: 10px;
-    }
-
-    .sku-col {
-        display: flex;
-        justify-content: center;
-        align-items: center;
     }
 </style>
