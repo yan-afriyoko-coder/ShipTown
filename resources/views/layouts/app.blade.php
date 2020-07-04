@@ -13,8 +13,8 @@
 
     <title>PM @yield('title')</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <!-- Scripts -->    
+    <script src="{{ asset('js/app.js') }}" defer></script>    
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -22,6 +22,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <link rel="manifest" href="/manifest.json">
 </head>
 <body>
     <div id="app">

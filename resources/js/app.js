@@ -6,6 +6,7 @@
 
 require('./bootstrap');
 
+require('./registerServiceWorker');
 window.Vue = require('vue');
 
 import Loading from 'vue-loading-overlay';
