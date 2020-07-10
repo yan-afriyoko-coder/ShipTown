@@ -5,7 +5,7 @@ namespace App\Observers;
 use App\Models\OrderProduct;
 use App\Models\Picklist;
 
-class OrderProductObserver
+class AddToPicklistWhenOrderCreated
 {
     /**
      * Handle the order product "created" event.
