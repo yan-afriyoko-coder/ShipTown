@@ -41,7 +41,7 @@
 
     export default {
         created() {
-            this.product_sku = "------";
+            this.product_sku = this.picklistItem.product ? this.picklistItem.product.sku : '';
             this.location_id = this.picklistItem.location_id;
             this.shelve_location = this.picklistItem.shelve_location;
             this.sku_ordered = this.picklistItem.sku_ordered;
