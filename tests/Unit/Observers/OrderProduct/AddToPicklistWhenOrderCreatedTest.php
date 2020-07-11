@@ -18,17 +18,20 @@ class AddToPicklistWhenOrderCreatedTest extends TestCase
      *
      * @return void
      */
-    public function testExample()
+    public function test_if_all_products_are_added_to_picklist()
     {
+        // clean up database
         Order::query()->delete();
         OrderProduct::query()->delete();
         Picklist::query()->delete();
 
+        // make sure everything is empty
         $this->assertEquals(0, Order::query()->count());
         $this->assertEquals(0, OrderProduct::query()->count());
         $this->assertEquals(0, Picklist::query()->count());
 
-        $order = factory(Order::class,1)
+        // create new order
+        factory(Order::class,1)
             ->create()
             ->each(function ($order) {
                 $orderProducts = factory(OrderProduct::class, rand(1,20))->make();
@@ -36,6 +39,7 @@ class AddToPicklistWhenOrderCreatedTest extends TestCase
                 $order->orderProducts()->saveMany($orderProducts);
             });
 
+        // check if all quantities are added to picklist
         $this->assertEquals(
             Picklist::query()->sum('quantity_to_pick'),
             Order::query()->first()->orderProducts()->sum('quantity'),

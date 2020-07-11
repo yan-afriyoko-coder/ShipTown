@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Observers;
+namespace App\Observers\OrderProduct;
 
 use App\Models\OrderProduct;
 use App\Models\Picklist;

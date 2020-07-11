@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Models\OrderProduct;
-use App\Observers\AddToPicklistWhenOrderCreated;
+use App\Observers\OrderProduct\AddToPicklistWhenOrderCreated;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Queue\Events\JobProcessed;
