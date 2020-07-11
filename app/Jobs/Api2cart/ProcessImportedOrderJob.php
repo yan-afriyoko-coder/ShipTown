@@ -68,9 +68,11 @@ class ProcessImportedOrderJob implements ShouldQueue
                 'price' => $orderProductData['price'],
             ]);
 
-            $orderProduct->product_id = Product::where([
+            $product = Product::where([
                 'sku' => $rawOrderProduct['model']
-            ])->first()->getKey();
+            ])->first();
+
+            $orderProduct->product_id = $product ? $product->getKey() : null;
 
             $order->orderProducts()->save($orderProduct);
 

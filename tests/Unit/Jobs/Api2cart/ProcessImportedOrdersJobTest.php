@@ -39,8 +39,8 @@ class ProcessImportedOrdersJobTest extends TestCase
         // Check if the order_products were saved and the relationship is working;
         $this->assertNotEmpty($order->orderProducts);
         $this->assertEquals($order->getKey(), $order->orderProducts[0]->order->getKey());
-        
-        
-        $this->assertEquals('Bag', $order->orderProducts[0]->product->name);
+
+
+        $this->assertEquals('Bag', $order->orderProducts[0]->name_ordered);
     }
 }
