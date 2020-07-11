@@ -47,7 +47,7 @@ class UpdateProductIdForeignKeyOnPicklistTable extends Migration
 
         Schema::table('picklists', function (Blueprint $table) {
             $table->unsignedBigInteger('product_id')
-                ->nullable(false)
+                ->nullable(true)
                 ->change();
 
             $table->foreign('product_id')
