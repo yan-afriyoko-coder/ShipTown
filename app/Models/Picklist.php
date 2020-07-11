@@ -17,6 +17,10 @@ class Picklist extends Model
         'quantity_to_pick',
     ];
 
+    public static function addPick($params) {
+        return self::query()->create($params);
+    }
+
     public function product()
     {
         return $this->belongsTo(Product::class);
