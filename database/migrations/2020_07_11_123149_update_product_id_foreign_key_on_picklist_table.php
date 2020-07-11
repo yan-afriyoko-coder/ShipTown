@@ -39,10 +39,18 @@ class UpdateProductIdForeignKeyOnPicklistTable extends Migration
      */
     public function down()
     {
-        Schema::table('picklists', function (Blueprint $table) {
-            $table->dropForeign(['product_id']);
-            $table->dropIndex(config('database.connections.mysql.prefix').'picklists_product_id_foreign');
-        });
+        try {
+
+            Schema::table('picklists', function (Blueprint $table) {
+                $table->dropForeign(['product_id']);
+                $table->dropIndex(config('database.connections.mysql.prefix').'picklists_product_id_foreign');
+            });
+
+        } catch (Exception $exception) {
+            // we let it continue and just try to complete further actions
+            // so we don't have to handle this error
+            // run without try catch during debugging
+        }
 
 
         Schema::table('picklists', function (Blueprint $table) {
