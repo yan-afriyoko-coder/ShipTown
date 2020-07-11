@@ -18,8 +18,8 @@ class AddToPicklistWhenOrderCreated
         Picklist::query()->create([
             'product_id' => $orderProduct->product_id,
             'location_id' => 'WWW',
-            'sku_ordered' => $orderProduct->model,
-            'name_ordered' => $orderProduct->name,
+            'sku_ordered' => $orderProduct->sku_ordered,
+            'name_ordered' => $orderProduct->name_ordered,
             'quantity_to_pick' => $orderProduct->quantity,
         ]);
     }

@@ -12,9 +12,8 @@ $factory->define(OrderProduct::class, function (Faker $faker) {
 
     return [
         'product_id' => $product->id,
-        'model' => $product->sku,
-        'name' => $product->name,
-
+        'sku_ordered' => $product->sku,
+        'name_ordered' => $product->name,
         'quantity' => rand(1,50),
         'price' => $product->price,
     ];

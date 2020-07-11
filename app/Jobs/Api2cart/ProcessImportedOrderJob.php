@@ -62,8 +62,8 @@ class ProcessImportedOrderJob implements ShouldQueue
 
             $orderProduct = new OrderProduct();
             $orderProduct->fill([
-                'model' => $orderProductData['model'],
-                'name' => $orderProductData['name'],
+                'sku_ordered' => $orderProductData['model'],
+                'name_ordered' => $orderProductData['name'],
                 'quantity' => $orderProductData['quantity'],
                 'price' => $orderProductData['price'],
             ]);
