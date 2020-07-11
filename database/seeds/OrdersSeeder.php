@@ -30,7 +30,7 @@ class OrdersSeeder extends Seeder
 
                         $suffix = Arr::random(['-blue', '-red', '-green', '-xl', '-small-orange']);
 
-                        $orderProduct['product_id'] = 0;
+                        $orderProduct['product_id'] = null;
                         $orderProduct['sku_ordered'] = $orderProduct['sku_ordered'] . $suffix;
                         $orderProduct['name_ordered'] = $orderProduct['name_ordered'] . $suffix;
 

@@ -33,4 +33,8 @@ class Order extends Model
     {
         return $this->hasMany(OrderProduct::class);
     }
+
+    public function scopeActive($query) {
+        return $query->where('status_code', '=', 'processing');
+    }
 }
