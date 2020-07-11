@@ -5,7 +5,6 @@ namespace Tests\Unit\Observers;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Picklist;
-use App\Observers\AddToPicklistWhenOrderCreated;
 use Sentry\Event;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
