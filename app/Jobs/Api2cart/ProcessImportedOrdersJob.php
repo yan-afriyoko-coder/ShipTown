@@ -43,10 +43,7 @@ class ProcessImportedOrdersJob implements ShouldQueue
             ->get();
 
         foreach ($ordersCollection as $order) {
-            \App\Jobs\ChainedJobWrapper::withChain([
-                (new ImportProductsJob($order)), // Make sure products are imported first
-                (new ProcessImportedOrderJob($order))
-            ])->dispatch();
+            ProcessImportedOrderJob::dispatch($order);
         }
 
         // finalize
