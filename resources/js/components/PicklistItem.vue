@@ -7,8 +7,9 @@
                     <div class="col p-2 pl-3">
                         <div class="row text-left">
                             <div class="col-md-8">
-                                <div class="text-primary h4">{{ name }}</div>
-                                <div class="text-secondary h5">sku: <span class="font-weight-bold"> {{ sku }}</span></div>
+                                <div class="text-primary h4">{{ name_ordered }}</div>
+                                <div class="text-secondary h5">sku: <span class="font-weight-bold"> {{ sku_ordered }} </span></div>
+                                <div class="text-secondary h5">product: <span class="font-weight-bold"> {{ product_sku }} </span></div>
                             </div>
                             <div class="col-md-4">
                                 <div class="row pt-1 mt-1 text-center border-top">
@@ -40,10 +41,11 @@
 
     export default {
         created() {
+            this.product_sku = "------";
             this.location_id = this.picklistItem.location_id;
             this.shelve_location = this.picklistItem.shelve_location;
-            this.sku = this.picklistItem.product.sku;
-            this.name = this.picklistItem.product.name;
+            this.sku_ordered = this.picklistItem.sku_ordered;
+            this.name_ordered = this.picklistItem.name_ordered;
             this.quantity_to_pick = Math.ceil(this.picklistItem.quantity_to_pick);
         },
 

@@ -36,6 +36,8 @@ class PicklistRoutesTest extends TestCase
                     "id",
                     "product_id",
                     "location_id",
+                    "sku_ordered",
+                    "name_ordered",
                     "quantity_to_pick",
                     "product",
                     "inventory",

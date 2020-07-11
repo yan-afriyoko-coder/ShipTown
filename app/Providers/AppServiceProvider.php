@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Models\OrderProduct;
-use App\Observers\OrderProductObserver;
+use App\Observers\OrderProduct\AddToPicklistWhenOrderCreated;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Queue\Events\JobProcessed;
@@ -38,6 +38,6 @@ class AppServiceProvider extends ServiceProvider
             logger('Job processed '.$event->job->resolveName());
         });
 
-        OrderProduct::observe(OrderProductObserver::class);
+        OrderProduct::observe(AddToPicklistWhenOrderCreated::class);
     }
 }

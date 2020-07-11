@@ -12,6 +12,8 @@ class Picklist extends Model
     protected $fillable = [
         'product_id',
         'location_id',
+        'sku_ordered',
+        'name_ordered',
         'quantity_to_pick',
     ];
 
