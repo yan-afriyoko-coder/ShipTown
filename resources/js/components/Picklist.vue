@@ -21,7 +21,7 @@
             </div>
             <template v-else class="row">
                 <template v-for="picklistItem in picklist">
-                    <picklist-item :product="picklistItem.product" :picklistItem="picklistItem" :key="picklistItem.id" @transitionEnd="pick" />
+                    <picklist-item :picklistItem="picklistItem" :key="picklistItem.id" @transitionEnd="pick" />
                 </template>
             </template>
         </div>
