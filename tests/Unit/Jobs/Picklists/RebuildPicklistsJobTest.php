@@ -17,10 +17,7 @@ class RebuildPicklistsJobTest extends TestCase
      */
     public function test_if_all_order_products_are_added_to_picklists()
     {
+        $this->expectNotToPerformAssertions();
         RebuildPicklistsJob::dispatchNow();
-
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
     }
 }
