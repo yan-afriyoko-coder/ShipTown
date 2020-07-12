@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Jobs\ExtractSkuAndProductIdJob;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -14,7 +15,14 @@ class RunExtractSkuProductIdJob extends Migration
      */
     public function up()
     {
-        ExtractSkuAndProductIdJob::dispatch();
+        if (RmsapiProductImport::query()
+            ->whereNotNull('when_processed')
+            ->whereNull('sku')
+            ->exists())
+        {
+            ExtractSkuAndProductIdJob::dispatch();
+        };
+
     }
 
     /**

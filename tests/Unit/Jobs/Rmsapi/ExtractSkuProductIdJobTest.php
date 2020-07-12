@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Jobs\Rmsapi;
 
+use App\Jobs\Rmsapi\ProcessImportedProductsJob;
 use App\Modules\Rmsapi\src\Jobs\ExtractSkuAndProductIdJob;
 use App\Models\Product;
 use App\Models\RmsapiProductImport;
@@ -19,12 +20,20 @@ class ExtractSkuProductIdJobTest extends TestCase
     public function test_if_all_sku_are_populated()
     {
         // prepare
+        RmsapiProductImport::query()->delete();
+
         factory(RmsapiProductImport::class, 5)->create([
             'sku' => null,
             'product_id' => null,
-            'when_processed' => now(),
+            'when_processed' => null,
         ]);
 
+        ProcessImportedProductsJob::dispatchNow();
+
+        RmsapiProductImport::query()->update([
+            'sku' => null,
+            'product_id' => null,
+        ]);
 
         // do
         ExtractSkuAndProductIdJob::dispatchNow();

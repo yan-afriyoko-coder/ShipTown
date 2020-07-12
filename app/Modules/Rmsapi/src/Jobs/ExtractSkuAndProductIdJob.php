@@ -39,10 +39,12 @@ class ExtractSkuAndProductIdJob implements ShouldQueue
 
         foreach ($productImports as $importedProduct ) {
 
-            $importedProduct['sku'] = $importedProduct['raw_import']['item_code'];
-            $importedProduct['product_id'] = Product::query()
+            $product = Product::query()
                 ->where('sku','=', $importedProduct['raw_import']['item_code'])
-                ->first()->getKey();
+                ->first();
+
+            $importedProduct['sku'] = $importedProduct['raw_import']['item_code'];
+            $importedProduct['product_id'] = $product ? $product->getKey() : null;
 
             $importedProduct->save();
         }
