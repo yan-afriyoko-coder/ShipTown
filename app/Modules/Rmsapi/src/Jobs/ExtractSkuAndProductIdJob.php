@@ -34,7 +34,7 @@ class ExtractSkuAndProductIdJob implements ShouldQueue
         $productImports = RmsapiProductImport::query()
             ->whereNotNull('when_processed')
             ->whereNull('sku')
-            ->limit(10)
+            ->limit(50)
             ->get();
 
         foreach ($productImports as $importedProduct ) {
