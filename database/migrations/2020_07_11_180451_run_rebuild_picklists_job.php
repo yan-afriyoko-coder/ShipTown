@@ -13,7 +13,8 @@ class RunRebuildPicklistsJob extends Migration
      */
     public function up()
     {
-        \App\Jobs\Picklists\RebuildPicklistsJob::dispatch();
+        //commented out as this was once off
+        //\App\Jobs\Picklists\RebuildPicklistsJob::dispatch();
     }
 
     /**
