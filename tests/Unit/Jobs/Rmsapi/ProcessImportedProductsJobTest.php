@@ -20,35 +20,41 @@ class ProcessImportedProductsJobTest extends TestCase
 
         $importData = factory(RmsapiProductImport::class)->create();
 
-
         // act
         $job = new ProcessImportedProductsJob();
 
         $job->handle();
 
 
-        // checks
-
-        // check if all imports were processed and when_processed updated
-        $unprocessedOrdersExists = RmsapiProductImport::query()
-            ->whereNull('when_processed')
-            ->exists();
-
-        $this->assertFalse($unprocessedOrdersExists, 'Some products still not processed');
-
-        // check product creation
-        $product = Product::query()->where('sku','=', $importData->raw_import['item_code'])->first('id');
+        // get product
+        $product = Product::query()
+            ->where('sku','=', $importData->raw_import['item_code'])
+            ->first('id');
 
         $this->assertNotEmpty($product, 'Product does not exists');
 
-        // check inventory update
-        $inventoryUpdated = Inventory::query()
+        $this->assertFalse(
+            RmsapiProductImport::query()->whereNull('when_processed')->exists(),
+            'when_processed is not updated'
+        );
+
+        $this->assertFalse(
+            RmsapiProductImport::query()->whereNull('sku')->exists(),
+            'sku column is not populated'
+        );
+
+        $this->assertFalse(
+            RmsapiProductImport::query()->whereNull('product_id')->exists(),
+            'product_id column is not populated'
+        );
+
+        $wasInventoryUpdated = Inventory::query()
             ->where('product_id','=', $product->id)
             ->where('quantity','=', $importData->raw_import['quantity_on_hand'])
             ->where('quantity_reserved','=', $importData->raw_import['quantity_committed'])
             ->exists();
 
-        $this->assertTrue($inventoryUpdated, 'Inventory not updated correctly');
+        $this->assertTrue($wasInventoryUpdated, 'Inventory not updated correctly');
 
     }
 }

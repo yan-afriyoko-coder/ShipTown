@@ -10,6 +10,8 @@ class RmsapiProductImport extends Model
         'connection_id',
         'batch_uuid',
         'when_processed',
+        'product_id',
+        'sku',
         'raw_import'
     ];
 

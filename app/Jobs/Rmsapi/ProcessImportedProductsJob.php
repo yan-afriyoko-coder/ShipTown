@@ -69,7 +69,9 @@ class ProcessImportedProductsJob implements ShouldQueue
             ]);
 
             $importedProduct->update([
-                'when_processed' => now()
+                'when_processed' => now(),
+                'product_id' => $product->id,
+                'sku' => $attributes['sku']
             ]);
 
         }
