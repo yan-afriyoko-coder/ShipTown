@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Jobs\Rmsapi;
 
+use App\Models\Product;
 use App\Models\RmsapiProductImport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -21,6 +22,21 @@ class ExtractSkuProductIdJobTest extends TestCase
             'product_id' => null,
             'when_processed' => now(),
         ]);
+
+        $productImports = RmsapiProductImport::query()
+            ->whereNotNull('when_processed')
+            ->whereNull('sku')
+            ->get();
+
+        foreach ($productImports as $importedProduct ) {
+
+            $importedProduct['sku'] = $importedProduct['raw_import']['item_code'];
+            $importedProduct['product_id'] = Product::query()
+                ->where('sku','=', $importedProduct['raw_import']['item_code'])
+                ->first()->getKey();
+
+            $importedProduct->save();
+        }
 
         $this->assertFalse(
             RmsapiProductImport::query()
