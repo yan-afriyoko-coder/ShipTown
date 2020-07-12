@@ -15,6 +15,8 @@ class Picklist extends Model
         'sku_ordered',
         'name_ordered',
         'quantity_to_pick',
+        'quantity_picked',
+        'picked_at',
     ];
 
     public static function addPick($params) {
