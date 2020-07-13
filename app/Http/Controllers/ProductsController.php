@@ -21,8 +21,9 @@ class ProductsController extends Controller
             ->when($request->has('sort'), function ($query) use ($request) {
                 return $query
                     ->orderBy($request->get('sort'), $request->get('order', 'asc'));
-            });
-            
+            })
+            ->with('inventory');
+
         return $products->paginate(100);
     }
 

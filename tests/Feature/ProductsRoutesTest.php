@@ -62,7 +62,8 @@ class ProductsRoutesTest extends TestCase
                     "sale_price_end_date",
                     "quantity",
                     "quantity_reserved",
-                    "quantity_available"
+                    "quantity_available",
+                    "inventory"
                 ]
             ],
             "total",
