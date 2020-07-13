@@ -64,6 +64,7 @@
                     self.$emit('transitionEnd', {
                         id: self.picklistItem.id,
                         quantity_picked: self.quantity_to_pick,
+                        shelve_location: self.shelve_location
                     });
                     this.destroy();
                     self.$el.parentNode.removeChild(self.$el);

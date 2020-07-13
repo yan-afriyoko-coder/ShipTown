@@ -26,7 +26,11 @@ class PicklistController extends Controller
             ->with('product')
             ->with('inventory')
             ->orderBy('pick_location_inventory.shelve_location')
-            ->orderBy('picklists.sku_ordered');
+            ->orderBy('picklists.sku_ordered')
+            ->when($request->has('q') && ( ! empty($request->get('q'))),
+                function ($query) use ($request) {
+                    return $query->where('pick_location_inventory.shelve_location', '>=', $request->get('q'));
+                });
 
         return $query->paginate(20);
     }
