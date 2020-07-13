@@ -31,8 +31,9 @@
                                 <div class="row header-row">
                                     <div class="col-3 text-left">Location</div>
                                     <div class="col-3 text-left">In Stock</div>
-                                    <div class="col-3 text-left">Reserved</div>
-                                    <div class="col-3 text-left">Available</div>
+                                    <div class="col-2 text-left">Reserved</div>
+                                    <div class="col-2 text-left">Available</div>
+                                    <div class="col-2 text-left">Shelf</div>
                                 </div>
                             </div>
                         </div>
@@ -56,8 +57,9 @@
                                         <div class="row" v-for="warehouse_inventory in product.inventory">
                                             <div class="col-3">{{ warehouse_inventory.location_id }}</div>
                                             <div class="col-3">{{ warehouse_inventory.quantity }}</div>
-                                            <div class="col-3">{{ warehouse_inventory.quantity_reserved }}</div>
-                                            <div class="col-3">{{ warehouse_inventory.quantity - warehouse_inventory.quantity_reserved }}</div>
+                                            <div class="col-2">{{ warehouse_inventory.quantity_reserved }}</div>
+                                            <div class="col-2">{{ warehouse_inventory.quantity - warehouse_inventory.quantity_reserved }}</div>
+                                            <div class="col-2">{{ warehouse_inventory.shelve_location }}</div>
                                         </div>
                                 </div>
                             </div>
