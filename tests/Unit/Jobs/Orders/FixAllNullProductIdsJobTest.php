@@ -2,14 +2,14 @@
 
 namespace Tests\Unit\Jobs\Orders;
 
-use App\Jobs\Orders\CheckOrderProductsAndFillProductIdsJob;
+use App\Jobs\Orders\FixAllNullProductIdsJob;
 use App\Models\OrderProduct;
 use App\Models\Product;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class CheckOrderProductsAndFillProductIdsTest extends TestCase
+class FixAllNullProductIdsJobTest extends TestCase
 {
     /**
      * A basic feature test example.
@@ -31,7 +31,8 @@ class CheckOrderProductsAndFillProductIdsTest extends TestCase
 
 
         // act
-        CheckOrderProductsAndFillProductIdsJob::dispatchNow();
+        FixAllNullProductIdsJob::dispatchNow();
+
 
         // assert
         $this->assertFalse(
