@@ -3,6 +3,7 @@
 namespace App\Jobs\Orders;
 
 use App\Models\OrderProduct;
+use App\Models\Product;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -31,5 +32,17 @@ class CheckOrderProductsAndFillProductIdsJob implements ShouldQueue
     public function handle()
     {
         $entries = OrderProduct::query()->whereNull('product_id')->get();
+
+        foreach ($entries as $orderProduct) {
+            $product = Product::findBySKU($orderProduct['sku_ordered']);
+
+            if (is_null($product)) {
+                // early exit
+                continue;
+            }
+
+            $orderProduct->product_id = $product->getKey();
+            $orderProduct->save();
+        };
     }
 }

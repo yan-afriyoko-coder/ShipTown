@@ -3,6 +3,8 @@
 namespace Tests\Unit\Jobs\Orders;
 
 use App\Jobs\Orders\CheckOrderProductsAndFillProductIdsJob;
+use App\Models\OrderProduct;
+use App\Models\Product;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -16,8 +18,25 @@ class CheckOrderProductsAndFillProductIdsTest extends TestCase
      */
     public function test_if_runs_without_exceptions()
     {
-        $this->expectNotToPerformAssertions();
+        // prepare
+        OrderProduct::query()->delete();
 
+        factory(Product::class, 10)->create();
+
+        factory(OrderProduct::class, 10)->create();
+
+        OrderProduct::query()->update([
+            'product_id' => null
+        ]);
+
+
+        // act
         CheckOrderProductsAndFillProductIdsJob::dispatchNow();
+
+        // assert
+        $this->assertFalse(
+            OrderProduct::query()->whereNull('product_id')->exists(),
+            'Null product_id still exists'
+        );
     }
 }

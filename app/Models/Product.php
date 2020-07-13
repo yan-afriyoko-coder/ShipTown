@@ -59,4 +59,9 @@ class Product extends Model
         return $this->hasMany(Inventory::class)
             ->keyBy('location_id');
     }
+
+    public static function findBySKU(string $sku)
+    {
+        return static::query()->where('sku', '=', $sku)->first();
+    }
 }
