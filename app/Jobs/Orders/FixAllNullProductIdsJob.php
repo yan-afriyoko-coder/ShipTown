@@ -9,6 +9,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\DB;
 
 class FixAllNullProductIdsJob implements ShouldQueue
 {
@@ -31,18 +32,19 @@ class FixAllNullProductIdsJob implements ShouldQueue
      */
     public function handle()
     {
-        $entries = OrderProduct::query()->whereNull('product_id')->get();
+        $prefix = config('database.connections.mysql.prefix');
 
-        foreach ($entries as $orderProduct) {
-            $product = Product::findBySKU($orderProduct['sku_ordered']);
+        DB::statement('
+            UPDATE `'.$prefix.'order_products`
 
-            if (is_null($product)) {
-                // early exit
-                continue;
-            }
+            LEFT JOIN `'.$prefix.'products`
+                ON `'.$prefix.'products`.`sku` = `'.$prefix.'order_products`.`sku_ordered`
 
-            $orderProduct->product_id = $product->getKey();
-            $orderProduct->save();
-        };
+            SET `'.$prefix.'order_products`.`product_id` =`'.$prefix.'products`.`id`
+
+            WHERE
+                `'.$prefix.'order_products`.`product_id` IS NULL
+                AND `'.$prefix.'products`.`id` IS NOT NULL
+        ');
     }
 }
