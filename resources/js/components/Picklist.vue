@@ -157,7 +157,7 @@
 
         data: function() {
             return {
-                query: null,
+                query: 'A0',
                 sort: 'sku',
                 order: 'asc',
                 picklist: [],
