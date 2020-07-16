@@ -3,7 +3,10 @@
 namespace Tests\Feature;
 
 use App\Events\OrderCreatedEvent;
+use App\Listeners\AddToPicklistOnOrderCreatedEvent;
 use App\Models\Order;
+use App\Models\OrderProduct;
+use App\Models\Picklist;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -18,11 +21,28 @@ class OrderCreatedEventTest extends TestCase
      */
     public function testExample()
     {
-//        Event::fake();
+        // clean up database
+        Order::query()->delete();
+        OrderProduct::query()->delete();
+        Picklist::query()->delete();
 
-        OrderCreatedEvent::dispatch(new Order());
+        // make sure everything is empty
+        $this->assertEquals(0, Order::query()->count());
+        $this->assertEquals(0, OrderProduct::query()->count());
+        $this->assertEquals(0, Picklist::query()->count());
 
-//        Event::assertDispatched(OrderCreatedEvent::class);
+        $order = factory(Order::class)->create();
+        $order->orderProducts()->saveMany(factory(OrderProduct::class, 10)->make());
+
+
+        // act
+        OrderCreatedEvent::dispatch($order);
+
+        // check if all quantities are added to picklist
+        $this->assertEquals(
+            Picklist::query()->sum('quantity_to_pick'),
+            Order::query()->first()->orderProducts()->sum('quantity'),
+        );
 
     }
 }
