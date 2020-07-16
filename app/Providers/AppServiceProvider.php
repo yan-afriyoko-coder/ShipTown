@@ -37,7 +37,5 @@ class AppServiceProvider extends ServiceProvider
         Queue::after(function (JobProcessed $event) {
             logger('Job processed '.$event->job->resolveName());
         });
-
-        OrderProduct::observe(AddToPicklistWhenOrderCreated::class);
     }
 }
