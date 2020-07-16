@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Api2cart;
 
+use App\Events\OrderCreatedEvent;
 use App\Models\Api2cartOrderImports;
 use App\Models\Order;
 use App\Models\Product;
@@ -48,7 +49,9 @@ class ProcessImportedOrderJob implements ShouldQueue
     {
         $attributes = $this->getAttributes($this->orderImport['raw_import']);
 
-        $this->updateOrCreateOrder($attributes);
+        $order = $this->updateOrCreateOrder($attributes);
+
+        OrderCreatedEvent::dispatch($order);
 
         // finalize
         $this->finishedSuccessfully = true;
@@ -111,8 +114,9 @@ class ProcessImportedOrderJob implements ShouldQueue
 
     /**
      * @param $attributes
+     * @return Order
      */
-    private function updateOrCreateOrder($attributes): void
+    private function updateOrCreateOrder($attributes): Order
     {
         $order = Order::updateOrCreate(
             [
@@ -146,5 +150,7 @@ class ProcessImportedOrderJob implements ShouldQueue
 
         $this->orderImport->when_processed = now();
         $this->orderImport->save();
+
+        return $order;
     }
 }
