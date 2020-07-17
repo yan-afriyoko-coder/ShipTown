@@ -19,7 +19,7 @@ class AddToPicklistsListenerTest extends TestCase
      *
      * @return void
      */
-    public function testExample()
+    public function test_if_picklist_is_populated()
     {
         Event::fake();
 
