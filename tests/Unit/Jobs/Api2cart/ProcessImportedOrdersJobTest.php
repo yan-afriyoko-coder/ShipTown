@@ -6,6 +6,7 @@ use App\Jobs\Api2cart\ProcessImportedOrdersJob;
 use App\Models\Api2cartOrderImports;
 use App\Models\Order;
 
+use App\Models\OrderProduct;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -20,6 +21,9 @@ class ProcessImportedOrdersJobTest extends TestCase
 
     public function test_if_processes_correctly() {
         // Test for clean data
+        OrderProduct::query()->delete();
+        Order::query()->delete();
+
         $this->assertEquals(0, \App\Models\Order::count());
 
         $orderImport = factory(Api2cartOrderImports::class)->create();
