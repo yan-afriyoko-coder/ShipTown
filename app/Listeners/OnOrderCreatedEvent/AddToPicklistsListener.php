@@ -7,7 +7,7 @@ use App\Models\Picklist;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class AddToPicklists
+class AddToPicklistsListener
 {
     /**
      * Create the event listener.
