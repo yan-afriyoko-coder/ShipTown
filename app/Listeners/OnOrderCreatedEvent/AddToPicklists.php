@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Listeners\OnOrderCreatedEvent;
 
 use App\Events\OrderCreatedEvent;
 use App\Models\Picklist;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class AddToPicklistOnOrderCreatedEvent
+class AddToPicklists
 {
     /**
      * Create the event listener.

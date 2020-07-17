@@ -3,11 +3,9 @@
 namespace Tests\Feature;
 
 use App\Events\OrderCreatedEvent;
-use App\Listeners\AddToPicklistOnOrderCreatedEvent;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Picklist;
-use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
