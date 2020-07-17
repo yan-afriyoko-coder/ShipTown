@@ -1,23 +1,23 @@
 <?php
 
-namespace Tests\Unit\Observers;
+namespace Tests\Feature;
 
+use App\Events\OrderCreatedEvent;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Picklist;
-use Sentry\Event;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class AddToPicklistWhenOrderCreatedTest extends TestCase
+class OrderCreatedEventTest extends TestCase
 {
     /**
      * A basic feature test example.
      *
      * @return void
      */
-    public function test_if_all_products_are_added_to_picklist()
+    public function testExample()
     {
         // clean up database
         Order::query()->delete();
@@ -29,14 +29,12 @@ class AddToPicklistWhenOrderCreatedTest extends TestCase
         $this->assertEquals(0, OrderProduct::query()->count());
         $this->assertEquals(0, Picklist::query()->count());
 
-        // create new order
-        factory(Order::class,1)
-            ->create()
-            ->each(function ($order) {
-                $orderProducts = factory(OrderProduct::class, rand(1,20))->make();
+        $order = factory(Order::class)->create();
+        $order->orderProducts()->saveMany(factory(OrderProduct::class, 10)->make());
 
-                $order->orderProducts()->saveMany($orderProducts);
-            });
+
+        // act
+        OrderCreatedEvent::dispatch($order);
 
         // check if all quantities are added to picklist
         $this->assertEquals(

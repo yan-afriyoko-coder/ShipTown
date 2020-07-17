@@ -3,6 +3,7 @@
 namespace Tests\Unit\Jobs\Orders;
 
 use App\Jobs\Orders\FixAllNullProductIdsJob;
+use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
 use Tests\TestCase;
@@ -23,7 +24,11 @@ class FixAllNullProductIdsJobTest extends TestCase
 
         factory(Product::class, 10)->create();
 
-        factory(OrderProduct::class, 10)->create();
+        $order = factory(Order::class)->create();
+
+        $order->orderProducts()->saveMany(
+            factory(OrderProduct::class, 10)->make()
+        );
 
         OrderProduct::query()->update([
             'product_id' => null

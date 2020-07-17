@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Api2cart;
 
+use App\Events\OrderCreatedEvent;
 use App\Models\Api2cartOrderImports;
 use App\Models\Order;
 use App\Models\Product;
@@ -48,38 +49,9 @@ class ProcessImportedOrderJob implements ShouldQueue
     {
         $attributes = $this->getAttributes($this->orderImport['raw_import']);
 
-        $order = Order::updateOrCreate(
-            [
-                "order_number" => $this->orderImport['raw_import']['id'],
-            ],
-            $attributes
-        );
+        $order = $this->updateOrCreateOrder($attributes);
 
-        $order->orderProducts()->delete();
-
-        foreach ($this->orderImport['raw_import']['order_products'] as $rawOrderProduct) {
-            $orderProductData = Collection::make($rawOrderProduct);
-
-            $orderProduct = new OrderProduct();
-            $orderProduct->fill([
-                'sku_ordered' => $orderProductData['model'],
-                'name_ordered' => $orderProductData['name'],
-                'quantity' => $orderProductData['quantity'],
-                'price' => $orderProductData['price'],
-            ]);
-
-            $product = Product::where([
-                'sku' => $rawOrderProduct['model']
-            ])->first();
-
-            $orderProduct->product_id = $product ? $product->getKey() : null;
-
-            $order->orderProducts()->save($orderProduct);
-
-        }
-
-        $this->orderImport->when_processed = now();
-        $this->orderImport->save();
+        OrderCreatedEvent::dispatch($order);
 
         // finalize
         $this->finishedSuccessfully = true;
@@ -138,5 +110,47 @@ class ProcessImportedOrderJob implements ShouldQueue
         }
 
         return $result;
+    }
+
+    /**
+     * @param $attributes
+     * @return Order
+     */
+    private function updateOrCreateOrder($attributes): Order
+    {
+        $order = Order::updateOrCreate(
+            [
+                "order_number" => $this->orderImport['raw_import']['id'],
+            ],
+            $attributes
+        );
+
+        $order->orderProducts()->delete();
+
+        foreach ($this->orderImport['raw_import']['order_products'] as $rawOrderProduct) {
+            $orderProductData = Collection::make($rawOrderProduct);
+
+            $orderProduct = new OrderProduct();
+            $orderProduct->fill([
+                'sku_ordered' => $orderProductData['model'],
+                'name_ordered' => $orderProductData['name'],
+                'quantity' => $orderProductData['quantity'],
+                'price' => $orderProductData['price'],
+            ]);
+
+            $product = Product::where([
+                'sku' => $rawOrderProduct['model']
+            ])->first();
+
+            $orderProduct->product_id = $product ? $product->getKey() : null;
+
+            $order->orderProducts()->save($orderProduct);
+
+        }
+
+        $this->orderImport->when_processed = now();
+        $this->orderImport->save();
+
+        return $order;
     }
 }
