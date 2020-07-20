@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Events\OrderStatusChangedEvent;
 use App\Models\Order;
 
 class OrderObserver
@@ -25,7 +26,9 @@ class OrderObserver
      */
     public function updated(Order $order)
     {
-        //
+        if ($order['status_code'] !== $order->getOriginal('status_code')) {
+            OrderStatusChangedEvent::dispatch($order);
+        }
     }
 
     /**
