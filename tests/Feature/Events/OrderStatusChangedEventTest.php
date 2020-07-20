@@ -22,7 +22,9 @@ class OrderStatusChangedEventTest extends TestCase
         // prepare
         Event::fake();
         $observer = new OrderObserver();
-        $order = factory(Order::class)->create();
+        $order = factory(Order::class)->create([
+            'status_code' => 'picking'
+        ]);
 
         // act
         $order->status_code = 'test';
