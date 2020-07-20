@@ -39,6 +39,7 @@ class FixAllNullProductIdsJob implements ShouldQueue
 
             LEFT JOIN `'.$prefix.'products`
                 ON `'.$prefix.'products`.`sku` = `'.$prefix.'order_products`.`sku_ordered`
+                OR `'.$prefix.'products`.`sku` = LEFT(`'.$prefix.'order_products`.`sku_ordered`,6)
 
             SET `'.$prefix.'order_products`.`product_id` =`'.$prefix.'products`.`id`
 
@@ -52,6 +53,7 @@ class FixAllNullProductIdsJob implements ShouldQueue
 
             LEFT JOIN `'.$prefix.'products`
                 ON `'.$prefix.'products`.`sku` = `'.$prefix.'picklists`.`sku_ordered`
+                OR `'.$prefix.'products`.`sku` = LEFT(`'.$prefix.'picklists`.`sku_ordered`,6)
 
             SET `'.$prefix.'picklists`.`product_id` =`'.$prefix.'products`.`id`
 
@@ -59,5 +61,9 @@ class FixAllNullProductIdsJob implements ShouldQueue
                 `'.$prefix.'picklists`.`product_id` IS NULL
                 AND `'.$prefix.'products`.`id` IS NOT NULL
         ');
+
+        // todo
+        // OR `'.$prefix.'products`.`sku` = LEFT(`'.$prefix.'picklists`.`sku_ordered`,6)
+        // that should
     }
 }
