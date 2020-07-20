@@ -19,7 +19,7 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         OrderCreatedEvent::class => [
-            \App\Listeners\OnOrderCreatedEvent\AddToPicklistsListener::class,
+            \App\Listeners\OnOrderStatusChangedEvent\AddToPicklistsListener::class,
         ],
     ];
 

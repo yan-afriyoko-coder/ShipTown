@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit\Listeners;
 
 use App\Events\OrderCreatedEvent;
-use App\Listeners\OnOrderCreatedEvent\AddToPicklistsListener;
+use App\Listeners\OnOrderStatusChangedEvent\AddToPicklistsListener;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Picklist;

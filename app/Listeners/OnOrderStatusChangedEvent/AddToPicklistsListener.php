@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listeners\OnOrderCreatedEvent;
+namespace App\Listeners\OnOrderStatusChangedEvent;
 
 use App\Events\OrderCreatedEvent;
 use App\Models\Picklist;
@@ -27,7 +27,7 @@ class AddToPicklistsListener
      */
     public function handle(OrderCreatedEvent $event)
     {
-        if($event->order->wasRecentlyCreated) {
+        if ($event->order->status_code = 'picking') {
 
             foreach ($event->order->orderProducts()->get() as $orderProduct) {
                 Picklist::query()->create([
@@ -40,5 +40,5 @@ class AddToPicklistsListener
             }
 
         }
-    }
+   }
 }
