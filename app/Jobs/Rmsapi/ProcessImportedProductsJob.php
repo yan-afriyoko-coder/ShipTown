@@ -65,7 +65,7 @@ class ProcessImportedProductsJob implements ShouldQueue
             ], [
                 'quantity' => $importedProduct->raw_import['quantity_on_hand'],
                 'quantity_reserved' => $importedProduct->raw_import['quantity_committed'],
-                'shelve_location' => $importedProduct->raw_import['sub_description_1'],
+                'shelve_location' => Arr::has($importedProduct->raw_import, 'rmsmobile_shelve_location') ? $importedProduct->raw_import['rmsmobile_shelve_location'] : '',
             ]);
 
             $importedProduct->update([
