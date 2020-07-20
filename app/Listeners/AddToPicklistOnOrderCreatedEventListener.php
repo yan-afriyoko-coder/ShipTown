@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Listeners\OnOrderStatusChangedEvent;
+namespace App\Listeners;
 
 use App\Events\OrderCreatedEvent;
 use App\Models\Picklist;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class AddToPicklistsListener
+class AddToPicklistOnOrderCreatedEventListener
 {
     /**
      * Create the event listener.
@@ -22,12 +22,12 @@ class AddToPicklistsListener
     /**
      * Handle the event.
      *
-     * @param  OrderCreatedEvent  $event
+     * @param OrderCreatedEvent $event
      * @return void
      */
     public function handle(OrderCreatedEvent $event)
     {
-        if ($event->order->status_code = 'picking') {
+        if ($event->order->status_code == 'picking') {
 
             foreach ($event->order->orderProducts()->get() as $orderProduct) {
                 Picklist::query()->create([
@@ -40,5 +40,5 @@ class AddToPicklistsListener
             }
 
         }
-   }
+    }
 }

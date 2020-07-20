@@ -3,7 +3,8 @@
 namespace Tests\Unit\Listeners;
 
 use App\Events\OrderCreatedEvent;
-use App\Listeners\OnOrderStatusChangedEvent\AddToPicklistsListener;
+use App\Listeners\AddToPicklistOnOrderCreatedEventListener;
+use App\Listeners\AddToPicklistsListenerOnOrderStatusChangedEvent;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Picklist;
@@ -27,13 +28,15 @@ class AddToPicklistsListenerTest extends TestCase
         OrderProduct::query()->delete();
         Order::query()->delete();
 
-        $order = factory(Order::class)->create();
+        $order = factory(Order::class)->create([
+            'status_code' => 'picking'
+        ]);
 
         $order->orderProducts()->saveMany(
             factory(OrderProduct::class, 10)->make()
         );
 
-        $listener = new AddToPicklistsListener();
+        $listener = new AddToPicklistOnOrderCreatedEventListener();
 
         $listener->handle(new OrderCreatedEvent($order));
 

@@ -29,7 +29,10 @@ class OrderCreatedEventTest extends TestCase
         $this->assertEquals(0, OrderProduct::query()->count());
         $this->assertEquals(0, Picklist::query()->count());
 
-        $order = factory(Order::class)->create();
+        $order = factory(Order::class)->create([
+            'status_code' => 'picking'
+        ]);
+
         $order->orderProducts()->saveMany(factory(OrderProduct::class, 10)->make());
 
 

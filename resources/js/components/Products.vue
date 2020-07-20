@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="row mb-2 no-gutters">
+        <div class="row no-gutters mb-3 ml-1 mr-1">
             <div class="col">
                 <input ref="search" @focus="handleSearchFocus" class="form-control" @keyup.enter="handleSearchEnter" v-model="query" placeholder="Search for products..." />
             </div>
