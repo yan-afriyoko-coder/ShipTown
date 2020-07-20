@@ -27,7 +27,7 @@ class AddToPicklistsListener
      */
     public function handle(OrderCreatedEvent $event)
     {
-        if ($event->order->status_code = 'picking') {
+        if ($event->order->status_code == 'picking') {
 
             foreach ($event->order->orderProducts()->get() as $orderProduct) {
                 Picklist::query()->create([
