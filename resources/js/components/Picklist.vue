@@ -3,7 +3,7 @@
         <div v-if="showScanner" class="overlay" @click.prevent="stopScanner">
             <div id="interactive" class="viewport overlay-content"></div>
         </div>
-        <div class="row mb-2">
+        <div class="row mb-3 ml-1 mr-1">
             <div class="col-12">
                 <input ref="search" @focus="handleSearchFocus" class="form-control" @keyup.enter="handleSearchEnter" v-model="query" placeholder="Scan current shelf location" />
             </div>
