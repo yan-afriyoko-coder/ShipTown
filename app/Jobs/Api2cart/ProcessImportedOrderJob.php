@@ -3,6 +3,7 @@
 namespace App\Jobs\Api2cart;
 
 use App\Events\OrderCreatedEvent;
+use App\Events\OrderStatusChangedEvent;
 use App\Models\Api2cartOrderImports;
 use App\Models\Order;
 use App\Models\Product;
@@ -52,6 +53,7 @@ class ProcessImportedOrderJob implements ShouldQueue
         $order = $this->updateOrCreateOrder($attributes);
 
         OrderCreatedEvent::dispatch($order);
+        OrderStatusChangedEvent::dispatch($order);
 
         // finalize
         $this->finishedSuccessfully = true;
