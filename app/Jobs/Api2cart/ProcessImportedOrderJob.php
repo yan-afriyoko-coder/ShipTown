@@ -17,7 +17,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Collection;
-use Psy\Util\Str;
+use Illuminate\Support\Str;
 
 class ProcessImportedOrderJob implements ShouldQueue
 {
@@ -143,7 +143,9 @@ class ProcessImportedOrderJob implements ShouldQueue
 
             $product = Product::query()
                 ->where(['sku' => $rawOrderProduct['model']])
-                ->orWhere(['sku' => \Illuminate\Support\Str::substr($rawOrderProduct['model'], 0, 6)])
+                ->orWhere([
+                    'sku' => Str::substr($rawOrderProduct['model'], 0, 6)
+                ])
                 ->first();
 
             $orderProduct->product_id = $product ? $product->getKey() : null;
