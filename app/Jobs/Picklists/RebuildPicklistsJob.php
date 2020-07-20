@@ -38,7 +38,8 @@ class RebuildPicklistsJob implements ShouldQueue
             ->delete();
 
         $activeOrders = collect(
-            Order::active()
+            Order::query()
+                ->where(['status_code' => 'picking'])
                 ->orderBy('order_placed_at')
                 ->get()
         );
