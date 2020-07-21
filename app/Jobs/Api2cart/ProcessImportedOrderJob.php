@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\OrderProduct;
 use App\Models\OrderProductOption;
+use App\Services\OrderService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -121,38 +122,26 @@ class ProcessImportedOrderJob implements ShouldQueue
      */
     private function updateOrCreateOrder($attributes): Order
     {
-        $order = Order::updateOrCreate(
-            [
-                "order_number" => $this->orderImport['raw_import']['id'],
-            ],
-            $attributes
-        );
-
-        $order->orderProducts()->delete();
+        $orderData = [
+            'order_number' => $this->orderImport['raw_import']['id'],
+            'order_products' => [],
+            'raw_import' => $this->orderImport['raw_import'],
+        ];
 
         foreach ($this->orderImport['raw_import']['order_products'] as $rawOrderProduct) {
+
             $orderProductData = Collection::make($rawOrderProduct);
 
-            $orderProduct = new OrderProduct();
-            $orderProduct->fill([
-                'sku_ordered' => $orderProductData['model'],
+            $orderData['order_products'][] = [
+                'sku' => null,
+                'sku_ordered' => $rawOrderProduct['model'],
                 'name_ordered' => $orderProductData['name'],
                 'quantity' => $orderProductData['quantity'],
                 'price' => $orderProductData['price'],
-            ]);
-
-            $product = Product::query()
-                ->where(['sku' => $rawOrderProduct['model']])
-                ->orWhere([
-                    'sku' => Str::substr($rawOrderProduct['model'], 0, 6)
-                ])
-                ->first();
-
-            $orderProduct->product_id = $product ? $product->getKey() : null;
-
-            $order->orderProducts()->save($orderProduct);
-
+            ] ;
         }
+
+        $order = OrderService::updateOrCreate($orderData);
 
         $this->orderImport->when_processed = now();
         $this->orderImport->save();
