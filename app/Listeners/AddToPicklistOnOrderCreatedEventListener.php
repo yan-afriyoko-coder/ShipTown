@@ -31,6 +31,8 @@ class AddToPicklistOnOrderCreatedEventListener
 
             foreach ($event->order->orderProducts()->get() as $orderProduct) {
                 Picklist::query()->create([
+                    'order_id' => $event->order->getKey(),
+                    'order_product_id' => $orderProduct->getKey(),
                     'product_id' => $orderProduct->product_id,
                     'location_id' => 'WWW',
                     'sku_ordered' => $orderProduct->sku_ordered,
