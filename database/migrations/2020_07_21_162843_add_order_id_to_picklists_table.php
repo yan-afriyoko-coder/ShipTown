@@ -16,14 +16,14 @@ class AddOrderIdToPicklistsTable extends Migration
         \App\Models\Picklist::query()->delete();
 
         Schema::table('picklists', function (Blueprint $table) {
-            $table->bigInteger('orders_id')
+            $table->bigInteger('order_id')
                 ->unsigned()
                 ->nullable(true)
                 ->after('id');
         });
 
         Schema::table('picklists', function (Blueprint $table) {
-            $table->foreign('orders_id')
+            $table->foreign('order_id')
                 ->on('orders')
                 ->references('id')
                 ->onDelete('SET NULL');
@@ -38,13 +38,13 @@ class AddOrderIdToPicklistsTable extends Migration
     public function down()
     {
         Schema::table('picklists', function (Blueprint $table) {
-            $table->dropForeign(['orders_id']);
-            $table->dropIndex(config('database.connections.mysql.prefix').'picklists_orders_id_foreign');
+            $table->dropForeign(['order_id']);
+            $table->dropIndex(config('database.connections.mysql.prefix').'picklists_order_id_foreign');
 
         });
 
         Schema::table('picklists', function (Blueprint $table) {
-            $table->dropColumn('orders_id');
+            $table->dropColumn('order_id');
         });
     }
 }
