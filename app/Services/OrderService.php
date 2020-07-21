@@ -1,0 +1,58 @@
+<?php
+
+
+namespace App\Services;
+
+
+use App\Models\Order;
+use App\Models\OrderProduct;
+use App\Models\Product;
+use Illuminate\Support\Str;
+
+class OrderService
+{
+    public static function updateOrCreate(array $data)
+    {
+        $order = Order::query()
+            ->updateOrCreate(
+                ["order_number" => $data['order_number']],
+                $data
+            );
+
+        $order->orderProducts()->delete();
+
+        foreach ($data['order_products'] as $rawOrderProduct) {
+
+            $orderProduct = OrderProduct::onlyTrashed()
+                ->where([
+                    'order_id' => $order->id,
+                    'sku_ordered' => $rawOrderProduct['sku_ordered'],
+                    'quantity' => $rawOrderProduct['quantity'],
+                    'price' => $rawOrderProduct['price'],
+                ])
+                ->first();
+
+            if($orderProduct) {
+                $orderProduct->restore();
+                continue;
+            }
+
+            $orderProduct = new OrderProduct();
+            $orderProduct->fill($rawOrderProduct);
+
+            $product = Product::query()
+                ->where(['sku' => $rawOrderProduct['sku_ordered']])
+                ->orWhere([
+                    'sku' => Str::substr($rawOrderProduct['sku_ordered'], 0, 6)
+                ])
+                ->first();
+
+            $orderProduct->product_id = $product ? $product->getKey() : null;
+
+            $order->orderProducts()->save($orderProduct);
+
+        }
+
+        return $order;
+    }
+}
