@@ -54,8 +54,6 @@ class ProcessImportedOrderJob implements ShouldQueue
 
         $order = $this->updateOrCreateOrder($attributes);
 
-        OrderCreatedEvent::dispatch($order);
-        OrderStatusChangedEvent::dispatch($order);
 
         // finalize
         $this->finishedSuccessfully = true;
