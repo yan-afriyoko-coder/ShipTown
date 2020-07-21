@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\Picklist;
 use App\Observers\OrderObserver;
 use App\Observers\OrderProductObserver;
+use App\Observers\PicklistsObserver;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Queue\Events\JobProcessed;
@@ -42,6 +44,6 @@ class AppServiceProvider extends ServiceProvider
 
         Order::observe(OrderObserver::class);
         OrderProduct::observe(OrderProductObserver::class);
-
+        Picklist::observe(PicklistsObserver::class);
     }
 }
