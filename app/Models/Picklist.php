@@ -10,6 +10,8 @@ class Picklist extends Model
     use HasManyKeyByRelationship;
 
     protected $fillable = [
+        'order_id',
+        'order_product_id',
         'product_id',
         'location_id',
         'sku_ordered',
