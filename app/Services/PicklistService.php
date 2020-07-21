@@ -29,7 +29,7 @@ class PicklistService
                 'location_id' => 'WWW',
                 'sku_ordered' => $orderProduct['sku_ordered'],
                 'name_ordered' => $orderProduct['name_ordered'],
-                'quantity_to_pick' => $orderProduct['quantity'],
+                'quantity_requested' => $orderProduct['quantity'],
             ]);
         }
     }

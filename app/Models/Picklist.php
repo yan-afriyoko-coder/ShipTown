@@ -16,7 +16,7 @@ class Picklist extends Model
         'location_id',
         'sku_ordered',
         'name_ordered',
-        'quantity_to_pick',
+        'quantity_requested',
         'quantity_picked',
         'picked_at',
     ];

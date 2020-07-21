@@ -41,7 +41,7 @@ class OrderCreatedEventTest extends TestCase
 
         // check if all quantities are added to picklist
         $this->assertEquals(
-            Picklist::query()->sum('quantity_to_pick'),
+            Picklist::query()->sum('quantity_requested'),
             Order::query()->first()->orderProducts()->sum('quantity'),
         );
 

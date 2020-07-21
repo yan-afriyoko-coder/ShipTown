@@ -41,7 +41,7 @@ class AddToPicklistsListenerTest extends TestCase
         $listener->handle(new OrderCreatedEvent($order));
 
         $this->assertEquals(
-            Picklist::query()->sum('quantity_to_pick'),
+            Picklist::query()->sum('quantity_requested'),
             OrderProduct::query()->sum('quantity')
         );
     }

@@ -22,7 +22,7 @@ class PicklistController extends Controller
                 $join->on('pick_location_inventory.product_id', '=', 'picklists.product_id');
                 $join->on('pick_location_inventory.location_id', '=', DB::raw(100));
             })
-            ->where('quantity_to_pick','>',0)
+            ->where('quantity_requested','>',0)
             ->with('product')
             ->with('inventory')
             ->orderBy('pick_location_inventory.shelve_location')
@@ -38,7 +38,6 @@ class PicklistController extends Controller
     public function store(StoreRequest $request, Picklist $picklist)
     {
         $picklist->update([
-            'quantity_to_pick' => $picklist->quantity_to_pick - $request->input('quantity_picked'),
             'quantity_picked' => $picklist->quantity_picked + $request->input('quantity_picked'),
             'picked_at' => now()
         ]);

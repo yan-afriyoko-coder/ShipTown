@@ -17,6 +17,6 @@ $factory->define(Picklist::class, function (Faker $faker) {
         'location_id' => 'WWW',
         'sku_ordered' => $product->sku,
         'name_ordered' => $product->name,
-        'quantity_to_pick' => $faker->numberBetween(0,30)
+        'quantity_requested' => $faker->numberBetween(0,30)
     ];
 });

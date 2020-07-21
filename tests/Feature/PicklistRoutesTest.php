@@ -38,7 +38,7 @@ class PicklistRoutesTest extends TestCase
                     "location_id",
                     "sku_ordered",
                     "name_ordered",
-                    "quantity_to_pick",
+                    "quantity_requested",
                     "product",
                     "inventory",
                 ]
@@ -61,13 +61,13 @@ class PicklistRoutesTest extends TestCase
         $picklist = factory(Picklist::class)->create();
 
         $response = $this->json('POST', 'api/picklist/'.$picklist->id, [
-            'quantity_picked' => $picklist->quantity_to_pick
+            'quantity_picked' => $picklist->quantity_requested
         ]);
 
         $response->assertStatus(200);
 
         $this->assertFalse(
-            Picklist::query()->where('quantity_to_pick', '>', 0)
+            Picklist::query()->whereRaw('quantity_requested <> quantity_picked')
                 ->exists()
         );
 
