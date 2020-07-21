@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Arr;
 
+/**
+ * @property string status_code
+ */
 class Order extends Model
 {
     protected $fillable = [
@@ -29,6 +32,9 @@ class Order extends Model
         'raw_import' => '{}',
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany | OrderProduct
+     */
     public function orderProducts()
     {
         return $this->hasMany(OrderProduct::class);
