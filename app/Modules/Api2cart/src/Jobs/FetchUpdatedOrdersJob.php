@@ -2,7 +2,6 @@
 
 namespace App\Modules\Api2cart\src\Jobs;
 
-use App\Jobs\Api2cart\ProcessImportedOrdersJob;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Orders;
@@ -49,8 +48,6 @@ class FetchUpdatedOrdersJob implements ShouldQueue
     public function handle()
     {
         $this->importOrders($this->api2cartConnection);
-
-        ProcessImportedOrdersJob::dispatch();
 
         // finalize
         $this->finishedSuccessfully = true;

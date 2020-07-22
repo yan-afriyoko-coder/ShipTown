@@ -2,7 +2,7 @@
 
 namespace Tests\External\Api2cart;
 
-use App\Jobs\Api2cart\ProcessImportedOrdersJob;
+use App\Jobs\Api2cart\ProcessApi2cartImportedOrderJob;
 use App\Modules\Api2cart\src\Jobs\FetchUpdatedOrdersJob;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Illuminate\Support\Facades\Bus;
@@ -13,6 +13,8 @@ class FetchUpdatedOrdersJobTest extends TestCase
 {
     public function test_if_job_runs_without_exceptions()
     {
+        $this->expectNotToPerformAssertions();
+
         Bus::fake();
         Event::fake();
 
@@ -32,7 +34,5 @@ class FetchUpdatedOrdersJobTest extends TestCase
         $job = new FetchUpdatedOrdersJob($api2cartConnection);
 
         $job->handle();
-
-        Bus::assertDispatched(ProcessImportedOrdersJob::class);
     }
 }
