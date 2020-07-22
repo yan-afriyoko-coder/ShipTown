@@ -19,7 +19,7 @@
                                     </div>
                                     <div class="col-3">
                                         <div>To Pick</div>
-                                        <div class="h3">{{ quantity_to_pick }}</div>
+                                        <div class="h3">{{ quantity_requested }}</div>
                                     </div>
                                     <div class="col-3">
                                         <div class="">Shelf</div>
@@ -46,7 +46,7 @@
             this.shelve_location = this.picklistItem.shelve_location;
             this.sku_ordered = this.picklistItem.sku_ordered;
             this.name_ordered = this.picklistItem.name_ordered;
-            this.quantity_to_pick = Math.ceil(this.picklistItem.quantity_to_pick);
+            this.quantity_requested = Math.ceil(this.picklistItem.quantity_requested);
         },
 
         mounted() {
@@ -63,7 +63,7 @@
                 if (this.activeIndex === 0) {
                     self.$emit('transitionEnd', {
                         id: self.picklistItem.id,
-                        quantity_picked: self.quantity_to_pick,
+                        quantity_picked: self.quantity_requested,
                         shelve_location: self.shelve_location
                     });
                     this.destroy();
@@ -79,7 +79,7 @@
         data: () => ({
             location_id: null,
             shelve_location: null,
-            quantity_to_pick: null,
+            quantity_requested: null,
         }),
 
         methods: {
