@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Api2cart;
+namespace App\Modules\Api2cart\src\Jobs;
 
 use App\Models\Api2cartConnection;
 use Illuminate\Bus\Queueable;
