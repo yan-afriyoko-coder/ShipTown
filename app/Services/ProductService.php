@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Managers;
+namespace App\Services;
 
 use App\Models\Product;
 use Illuminate\Support\Facades\Log;

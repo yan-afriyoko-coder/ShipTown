@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\EventTypes;
-use App\Managers\ProductService;
+use App\Services\ProductService;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Arr;

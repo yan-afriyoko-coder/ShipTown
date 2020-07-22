@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Managers\ProductService;
+use App\Services\ProductService;
 use App\User;
 use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
@@ -11,7 +11,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ProductManagerTest extends TestCase
+class ProductServiceTest extends TestCase
 {
     /**
      * A basic feature test example.

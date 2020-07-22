@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Managers\ProductService;
+use App\Services\ProductService;
 use App\Models\Product;
 use App\User;
 use Illuminate\Support\Collection;
