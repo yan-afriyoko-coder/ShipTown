@@ -18,11 +18,11 @@ class PicklistController extends Controller
                 'picklists.*',
                 'pick_location_inventory.shelve_location'
             ])
+            ->whereNull('picked_at')
             ->leftJoin('inventory as pick_location_inventory', function ($join) {
                 $join->on('pick_location_inventory.product_id', '=', 'picklists.product_id');
                 $join->on('pick_location_inventory.location_id', '=', DB::raw(100));
             })
-            ->where('quantity_requested','>',0)
             ->with('product')
             ->with('inventory')
             ->orderBy('pick_location_inventory.shelve_location')
