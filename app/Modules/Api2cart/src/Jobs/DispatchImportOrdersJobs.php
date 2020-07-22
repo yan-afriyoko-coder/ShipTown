@@ -2,7 +2,7 @@
 
 namespace App\Modules\Api2cart\src\Jobs;
 
-use App\Models\Api2cartConnection;
+use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -31,7 +31,7 @@ class  DispatchImportOrdersJobs implements ShouldQueue
     public function handle()
     {
         foreach (Api2cartConnection::all() as $api2cartConnection) {
-            ImportOrdersJob::dispatch($api2cartConnection);
+            FetchUpdatedOrdersJob::dispatch($api2cartConnection);
         }
     }
 }

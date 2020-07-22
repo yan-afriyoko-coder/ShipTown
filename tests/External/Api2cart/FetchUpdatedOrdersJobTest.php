@@ -3,13 +3,13 @@
 namespace Tests\External\Api2cart;
 
 use App\Jobs\Api2cart\ProcessImportedOrdersJob;
-use App\Modules\Api2cart\src\Jobs\ImportOrdersJob;
+use App\Modules\Api2cart\src\Jobs\FetchUpdatedOrdersJob;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
-class ImportOrdersJobTest extends TestCase
+class FetchUpdatedOrdersJobTest extends TestCase
 {
     public function test_if_job_runs_without_exceptions()
     {
@@ -29,7 +29,7 @@ class ImportOrdersJobTest extends TestCase
 
         $api2cartConnection->save();
 
-        $job = new ImportOrdersJob($api2cartConnection);
+        $job = new FetchUpdatedOrdersJob($api2cartConnection);
 
         $job->handle();
 
