@@ -38,7 +38,7 @@ class ProcessImportedOrdersJob implements ShouldQueue
             ->get();
 
         foreach ($ordersCollection as $order) {
-            ProcessImportedOrderJob::dispatch($order);
+            ProcessApi2cartImportedOrderJob::dispatch($order);
         }
     }
 }

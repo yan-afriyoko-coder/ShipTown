@@ -3,7 +3,7 @@
 namespace Tests\Unit\Jobs\Api2cart;
 
 use App\Events\OrderCreatedEvent;
-use App\Jobs\Api2cart\ProcessImportedOrderJob;
+use App\Jobs\Api2cart\ProcessApi2cartImportedOrderJob;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
@@ -23,7 +23,7 @@ class ProcessImportedOrderJobTest extends TestCase
 
         $importedOrder = factory(Api2cartOrderImports::class)->create();
 
-        ProcessImportedOrderJob::dispatch($importedOrder);
+        ProcessApi2cartImportedOrderJob::dispatch($importedOrder);
 
         Event::assertDispatched(OrderCreatedEvent::class);
     }
