@@ -2,7 +2,7 @@
 
 namespace Tests\External\Api2cart;
 
-use App\Jobs\Api2cart\ImportOrdersJob;
+use App\Modules\Api2cart\src\Jobs\ImportOrdersJob;
 use App\Jobs\Api2cart\ProcessImportedOrdersJob;
 use App\Models\Api2cartConnection;
 use Illuminate\Support\Facades\Bus;
