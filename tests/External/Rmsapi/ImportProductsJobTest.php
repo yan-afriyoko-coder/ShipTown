@@ -2,7 +2,7 @@
 
 namespace Tests\External\Rmsapi;
 
-use App\Jobs\Rmsapi\ImportProductsJob;
+use App\Modules\Rmsapi\src\Jobs\ImportProductsJob;
 use App\Jobs\Rmsapi\ProcessImportedProductsJob;
 use App\Models\RmsapiConnection;
 use App\Models\RmsapiProductImport;

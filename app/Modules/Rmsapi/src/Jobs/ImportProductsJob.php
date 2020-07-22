@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Jobs\Rmsapi;
+namespace App\Modules\Rmsapi\src\Jobs;
 
+use App\Jobs\Rmsapi\ProcessImportedProductsJob;
 use App\Models\RmsapiConnection;
 use App\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Client as RmsapiClient;

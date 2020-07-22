@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Jobs\Rmsapi\ImportProductsJob;
+use App\Modules\Rmsapi\src\Jobs\ImportProductsJob;
 use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
 use App\User;
 use Illuminate\Support\Facades\Bus;

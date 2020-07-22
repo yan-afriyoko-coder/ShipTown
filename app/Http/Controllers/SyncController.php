@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
-use App\Jobs\Rmsapi\ImportProductsJob;
+use App\Modules\Rmsapi\src\Jobs\ImportProductsJob;
 use App\Models\RmsapiConnection;
 use Illuminate\Http\Request;
 

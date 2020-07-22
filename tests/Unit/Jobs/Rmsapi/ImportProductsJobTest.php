@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Jobs\Rmsapi;
 
-use App\Jobs\Rmsapi\ImportProductsJob;
+use App\Modules\Rmsapi\src\Jobs\ImportProductsJob;
 use App\Models\RmsapiConnection;
 use App\Models\RmsapiProductImport;
 use Tests\TestCase;
