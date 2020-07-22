@@ -7,10 +7,10 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Class ProductManager
+ * Class ProductService
  * @package App\Managers
  */
-class ProductManager
+class ProductService
 {
     /**
      * @param string $sku
