@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Jobs\FetchUpdatedProductsJob;
 use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
 use App\User;
@@ -21,6 +22,8 @@ class SyncControllerTest extends TestCase
     public function test_if_dispatches_jobs()
     {
         Bus::fake();
+
+        factory(RmsapiConnection::class)->create();
 
         Passport::actingAs(
             factory(User::class)->create()
