@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use App\Jobs\Api2cart\ProcessImportedOrdersJob;
-use App\Models\Api2cartOrderImports;
+use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use App\Models\Order;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;

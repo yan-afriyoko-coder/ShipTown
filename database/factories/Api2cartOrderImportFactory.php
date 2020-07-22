@@ -2,9 +2,10 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use Faker\Generator as Faker;
 
-$factory->define(\App\Models\Api2cartOrderImports::class, function (Faker $faker) {
+$factory->define(Api2cartOrderImports::class, function (Faker $faker) {
     return [
         'raw_import' => json_decode('
         {

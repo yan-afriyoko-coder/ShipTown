@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Managers\ProductManager;
+use App\Services\ProductService;
 use App\Models\Product;
 use App\User;
 use Illuminate\Support\Collection;
@@ -23,7 +23,7 @@ class ProductModelTest extends TestCase
 
         // reserve 1 more than actually in stock
         // so quantity_available < 0
-        ProductManager::reserve(
+        ProductService::reserve(
             "0123456",
             $product_before->quantity + 1,
             "ProductModeTest reservation"
@@ -43,7 +43,7 @@ class ProductModelTest extends TestCase
     {
         $product_before = Product::firstOrCreate(["sku" => '0123456']);
 
-        ProductManager::reserve(
+        ProductService::reserve(
             "0123456",
             5,
             "ProductModeTest reservation"

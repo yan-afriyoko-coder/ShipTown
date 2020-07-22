@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Managers\ProductManager;
+use App\Services\ProductService;
 use App\User;
 use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
@@ -11,7 +11,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ProductManagerTest extends TestCase
+class ProductServiceTest extends TestCase
 {
     /**
      * A basic feature test example.
@@ -35,7 +35,7 @@ class ProductManagerTest extends TestCase
         $product_before = json_decode($product_before, true);
 
 
-        ProductManager::reserve(ModelSample::PRODUCT['sku'], $quantity_to_reserve, 'Reservation test');
+        ProductService::reserve(ModelSample::PRODUCT['sku'], $quantity_to_reserve, 'Reservation test');
 
 
         $product_after = $this->json('POST', 'api/products', ModelSample::PRODUCT)
@@ -71,7 +71,7 @@ class ProductManagerTest extends TestCase
         $product_before = json_decode($product_before, true);
 
 
-        ProductManager::release(ModelSample::PRODUCT['sku'], $quantity_to_release, 'Reservation test');
+        ProductService::release(ModelSample::PRODUCT['sku'], $quantity_to_release, 'Reservation test');
 
 
         $product_after = $this->json('POST', 'api/products', ModelSample::PRODUCT)

@@ -2,7 +2,7 @@
 
 namespace Tests\External\Rmsapi;
 
-use App\Jobs\Rmsapi\ImportProductsJob;
+use App\Modules\Rmsapi\src\Jobs\FetchUpdatedProductsJob;
 use App\Jobs\Rmsapi\ProcessImportedProductsJob;
 use App\Models\RmsapiConnection;
 use App\Models\RmsapiProductImport;
@@ -31,7 +31,7 @@ class ImportProductsJobTest extends TestCase
 
         $connection = factory(RmsapiConnection::class)->create();
 
-        $job = new ImportProductsJob($connection->id);
+        $job = new FetchUpdatedProductsJob($connection->id);
 
         $job->handle();
 

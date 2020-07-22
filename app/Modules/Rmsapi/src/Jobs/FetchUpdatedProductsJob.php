@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Jobs\Rmsapi;
+namespace App\Modules\Rmsapi\src\Jobs;
 
+use App\Jobs\Rmsapi\ProcessImportedProductsJob;
 use App\Models\RmsapiConnection;
 use App\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Client as RmsapiClient;
@@ -13,7 +14,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Collection;
 use Ramsey\Uuid\Uuid;
 
-class ImportProductsJob implements ShouldQueue
+class FetchUpdatedProductsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -37,7 +38,6 @@ class ImportProductsJob implements ShouldQueue
     {
         $this->rmsapiConnectionId = $rmsapiConnectionId;
         $this->batch_uuid = Uuid::uuid4();
-        logger('Job Rmsapi\ImportProductsJob dispatched');
     }
 
     /**
@@ -71,7 +71,7 @@ class ImportProductsJob implements ShouldQueue
         ProcessImportedProductsJob::dispatch($this->batch_uuid);
 
         if(isset($response->asArray()['next_page_url'])) {
-            ImportProductsJob::dispatchNow($this->rmsapiConnectionId);
+            FetchUpdatedProductsJob::dispatchNow($this->rmsapiConnectionId);
         }
 
     }

@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\EventTypes;
-use App\Managers\ProductManager;
+use App\Services\ProductService;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Arr;
@@ -57,7 +57,7 @@ class UpdateQuantityReserved
     {
         foreach ($order['products'] as $product) {
 
-            ProductManager::reserve(
+            ProductService::reserve(
                 $product["sku"],
                 $product['quantity'],
                 "Order " . $order['order_number']
@@ -77,7 +77,7 @@ class UpdateQuantityReserved
 
         foreach ($order['products'] as $product) {
 
-            ProductManager::release(
+            ProductService::release(
                 $product["sku"],
                 $product['quantity'],
                 "Order " . $order['order_number']

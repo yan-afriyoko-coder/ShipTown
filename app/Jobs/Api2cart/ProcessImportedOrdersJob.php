@@ -2,7 +2,7 @@
 
 namespace App\Jobs\Api2cart;
 
-use App\Models\Api2cartOrderImports;
+use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -14,10 +14,6 @@ class ProcessImportedOrdersJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /**
-     * @var bool
-     */
-    public $finishedSuccessfully;
 
     /**
      * Create a new job instance.
@@ -25,8 +21,7 @@ class ProcessImportedOrdersJob implements ShouldQueue
      */
     public function __construct()
     {
-        $this->finishedSuccessfully = false;
-        logger('Job Api2cart\ProcessImportedOrders dispatched');
+        //
     }
 
     /**
@@ -43,10 +38,7 @@ class ProcessImportedOrdersJob implements ShouldQueue
             ->get();
 
         foreach ($ordersCollection as $order) {
-            ProcessImportedOrderJob::dispatch($order);
+            ProcessApi2cartImportedOrderJob::dispatch($order);
         }
-
-        // finalize
-        $this->finishedSuccessfully = true;
     }
 }

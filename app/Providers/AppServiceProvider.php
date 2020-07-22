@@ -43,7 +43,6 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Order::observe(OrderObserver::class);
-        OrderProduct::observe(OrderProductObserver::class);
         Picklist::observe(PicklistsObserver::class);
     }
 }

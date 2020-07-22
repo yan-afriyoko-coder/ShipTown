@@ -4,7 +4,7 @@ namespace App\Jobs\Api2cart;
 
 use App\Events\OrderCreatedEvent;
 use App\Events\OrderStatusChangedEvent;
-use App\Models\Api2cartOrderImports;
+use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\OrderProduct;
@@ -20,14 +20,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
-class ProcessImportedOrderJob implements ShouldQueue
+class ProcessApi2cartImportedOrderJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    /**
-     * @var bool
-     */
-    public $finishedSuccessfully;
 
     private $orderImport = null;
 
@@ -37,9 +32,7 @@ class ProcessImportedOrderJob implements ShouldQueue
      */
     public function __construct(Api2cartOrderImports $orderImport)
     {
-        $this->finishedSuccessfully = false;
         $this->orderImport = $orderImport;
-        logger('Job Api2cart\ProcessImportedOrder dispatched');
     }
 
     /**
@@ -52,11 +45,7 @@ class ProcessImportedOrderJob implements ShouldQueue
     {
         $attributes = $this->getAttributes($this->orderImport['raw_import']);
 
-        $order = $this->updateOrCreateOrder($attributes);
-
-
-        // finalize
-        $this->finishedSuccessfully = true;
+        $this->updateOrCreateOrder($attributes);
     }
 
     /**

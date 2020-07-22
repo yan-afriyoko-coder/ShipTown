@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Jobs\Api2cart;
+namespace App\Modules\Api2cart\src\Jobs;
 
-use App\Models\Api2cartOrderImports;
-use App\Models\Api2cartConnection;
+use App\Jobs\Api2cart\ProcessImportedOrdersJob;
+use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
+use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Orders;
 use Carbon\Carbon;
 use Exception;
@@ -14,7 +15,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Arr;
 
-class ImportOrdersJob implements ShouldQueue
+class FetchUpdatedOrdersJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Api2cartConnection;
+use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Http\Requests\StoreApi2cartConnectionRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
 
