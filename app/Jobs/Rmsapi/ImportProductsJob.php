@@ -37,7 +37,6 @@ class ImportProductsJob implements ShouldQueue
     {
         $this->rmsapiConnectionId = $rmsapiConnectionId;
         $this->batch_uuid = Uuid::uuid4();
-        logger('Job Rmsapi\ImportProductsJob dispatched');
     }
 
     /**
