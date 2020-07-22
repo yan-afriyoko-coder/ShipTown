@@ -14,10 +14,6 @@ class ProcessImportedOrdersJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /**
-     * @var bool
-     */
-    public $finishedSuccessfully;
 
     /**
      * Create a new job instance.
@@ -25,8 +21,7 @@ class ProcessImportedOrdersJob implements ShouldQueue
      */
     public function __construct()
     {
-        $this->finishedSuccessfully = false;
-        logger('Job Api2cart\ProcessImportedOrders dispatched');
+        //
     }
 
     /**
@@ -45,8 +40,5 @@ class ProcessImportedOrdersJob implements ShouldQueue
         foreach ($ordersCollection as $order) {
             ProcessImportedOrderJob::dispatch($order);
         }
-
-        // finalize
-        $this->finishedSuccessfully = true;
     }
 }
