@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
-use App\Modules\Rmsapi\src\Jobs\ImportProductsJob;
+use App\Modules\Rmsapi\src\Jobs\FetchUpdatedProductsJob;
 use App\Models\RmsapiConnection;
 use Illuminate\Http\Request;
 
@@ -22,7 +22,7 @@ class SyncController extends Controller
 
         // import RMSAPI products
         foreach (RmsapiConnection::all() as $rmsapiConnection) {
-            ImportProductsJob::dispatch($rmsapiConnection->id);
+            FetchUpdatedProductsJob::dispatch($rmsapiConnection->id);
         }
 
         return $this->respond_OK_200('Sync jobs dispatched');

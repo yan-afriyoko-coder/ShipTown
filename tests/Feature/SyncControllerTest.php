@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Modules\Rmsapi\src\Jobs\ImportProductsJob;
+use App\Modules\Rmsapi\src\Jobs\FetchUpdatedProductsJob;
 use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
 use App\User;
 use Illuminate\Support\Facades\Bus;
@@ -29,6 +29,6 @@ class SyncControllerTest extends TestCase
         $response = $this->get('/api/sync');
 
         Bus::assertDispatched(DispatchImportOrdersJobs::class);
-        Bus::assertDispatched(ImportProductsJob::class);
+        Bus::assertDispatched(FetchUpdatedProductsJob::class);
     }
 }
