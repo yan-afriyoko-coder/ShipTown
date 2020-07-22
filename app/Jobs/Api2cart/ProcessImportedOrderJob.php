@@ -24,11 +24,6 @@ class ProcessImportedOrderJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /**
-     * @var bool
-     */
-    public $finishedSuccessfully;
-
     private $orderImport = null;
 
     /**
@@ -37,9 +32,7 @@ class ProcessImportedOrderJob implements ShouldQueue
      */
     public function __construct(Api2cartOrderImports $orderImport)
     {
-        $this->finishedSuccessfully = false;
         $this->orderImport = $orderImport;
-        logger('Job Api2cart\ProcessImportedOrder dispatched');
     }
 
     /**
@@ -52,11 +45,7 @@ class ProcessImportedOrderJob implements ShouldQueue
     {
         $attributes = $this->getAttributes($this->orderImport['raw_import']);
 
-        $order = $this->updateOrCreateOrder($attributes);
-
-
-        // finalize
-        $this->finishedSuccessfully = true;
+        $this->updateOrCreateOrder($attributes);
     }
 
     /**
