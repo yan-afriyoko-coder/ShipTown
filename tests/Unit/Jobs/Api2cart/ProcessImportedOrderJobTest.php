@@ -4,7 +4,7 @@ namespace Tests\Unit\Jobs\Api2cart;
 
 use App\Events\OrderCreatedEvent;
 use App\Jobs\Api2cart\ProcessImportedOrderJob;
-use App\Models\Api2cartOrderImports;
+use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;

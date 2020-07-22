@@ -4,7 +4,7 @@ namespace App\Jobs\Api2cart;
 
 use App\Events\OrderCreatedEvent;
 use App\Events\OrderStatusChangedEvent;
-use App\Models\Api2cartOrderImports;
+use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\OrderProduct;

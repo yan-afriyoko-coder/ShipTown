@@ -2,7 +2,8 @@
 
 namespace App\Modules\Api2cart\src\Jobs;
 
-use App\Models\Api2cartOrderImports;
+use App\Jobs\Api2cart\ProcessImportedOrdersJob;
+use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use App\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Orders;
 use Carbon\Carbon;
