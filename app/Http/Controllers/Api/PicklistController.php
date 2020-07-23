@@ -38,6 +38,7 @@ class PicklistController extends Controller
     public function store(StoreRequest $request, Picklist $picklist)
     {
         $picklist->update([
+            'picker_user_id' => $request->user()->id,
             'quantity_picked' => $picklist->quantity_picked + $request->input('quantity_picked'),
             'picked_at' => now()
         ]);
