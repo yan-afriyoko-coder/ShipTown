@@ -37,6 +37,8 @@ class ProcessApi2cartImportedOrderJobTest extends TestCase
             ])
             ->first();
 
+        $importedOrder = $importedOrder->refresh();
+
         $this->assertNotNull($order, 'Order does not exist in database');
         $this->assertNotNull($order->status_code, 'Status code missing');
 
