@@ -109,14 +109,16 @@ class ProcessApi2cartImportedOrderJob implements ShouldQueue
      */
     private function updateOrCreateOrder(): Order
     {
+        $rawImport = $this->orderImport['raw_import'];
+
         $orderData = [
-            'order_number' => $this->orderImport['raw_import']['id'],
+            'order_number' => $rawImport['id'],
             'order_products' => [],
-            'status_code' => $this->orderImport['raw_import']['status']['id'],
-            'raw_import' => $this->orderImport['raw_import']
+            'status_code' => $rawImport['status']['id'],
+            'raw_import' => $rawImport
         ];
 
-        foreach ($this->orderImport['raw_import']['order_products'] as $rawOrderProduct) {
+        foreach ($rawImport['order_products'] as $rawOrderProduct) {
 
             $orderProductData = Collection::make($rawOrderProduct);
 
