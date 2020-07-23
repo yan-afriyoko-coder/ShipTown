@@ -43,9 +43,9 @@ class ProcessApi2cartImportedOrderJob implements ShouldQueue
      */
     public function handle()
     {
-        $attributes = $this->getAttributes($this->orderImport['raw_import']);
+//        $attributes = $this->getAttributes($this->orderImport['raw_import']);
 
-        $this->updateOrCreateOrder($attributes);
+        $this->updateOrCreateOrder();
     }
 
     /**
@@ -107,12 +107,13 @@ class ProcessApi2cartImportedOrderJob implements ShouldQueue
      * @param $attributes
      * @return Order
      */
-    private function updateOrCreateOrder($attributes): Order
+    private function updateOrCreateOrder(): Order
     {
         $orderData = [
             'order_number' => $this->orderImport['raw_import']['id'],
             'order_products' => [],
-            'raw_import' => $this->orderImport['raw_import'],
+            'status_code' => $this->orderImport['raw_import']['status']['id'],
+            'raw_import' => $this->orderImport['raw_import']
         ];
 
         foreach ($this->orderImport['raw_import']['order_products'] as $rawOrderProduct) {
