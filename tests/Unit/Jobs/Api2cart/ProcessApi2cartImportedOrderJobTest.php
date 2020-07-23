@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Jobs\Api2cart;
 
-use App\Events\OrderCreatedEvent;
 use App\Jobs\Api2cart\ProcessApi2cartImportedOrderJob;
 use App\Models\Order;
 use App\Models\OrderProduct;
@@ -12,7 +11,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ProcessImportedOrderJobTest extends TestCase
+class ProcessApi2cartImportedOrderJobTest extends TestCase
 {
     /**
      * A basic feature test example.
