@@ -29,15 +29,15 @@ class ProcessApi2cartImportedOrderJobTest extends TestCase
 
         $importedOrder = factory(Api2cartOrderImports::class)->create();
 
+        // act
         ProcessApi2cartImportedOrderJob::dispatch($importedOrder);
 
-        $order = Order::query()
-            ->where([
-                'order_number' => $importedOrder['raw_import']['id']
-            ])
-            ->first();
-
+        // test
+        $order = Order::query()->first();
         $importedOrder = $importedOrder->refresh();
+
+        $this->assertNotNull($importedOrder->order_number, 'Order not populated on order_imports table');
+
 
         $this->assertNotNull($order, 'Order does not exist in database');
         $this->assertNotNull($order->status_code, 'Status code missing');
