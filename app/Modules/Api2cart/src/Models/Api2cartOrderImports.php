@@ -9,7 +9,9 @@ class Api2cartOrderImports extends Model
     protected $table = 'api2cart_order_imports';
 
     protected $fillable = [
-        'raw_import'
+        'when_processed',
+        'order_number',
+        'raw_import',
     ];
 
     protected $casts = [

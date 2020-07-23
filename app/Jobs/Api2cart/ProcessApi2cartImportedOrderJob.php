@@ -19,6 +19,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use test\Mockery\HasUnknownClassAsTypeHintOnMethod;
 
 class ProcessApi2cartImportedOrderJob implements ShouldQueue
 {
@@ -43,9 +44,12 @@ class ProcessApi2cartImportedOrderJob implements ShouldQueue
      */
     public function handle()
     {
-        $attributes = $this->getAttributes($this->orderImport['raw_import']);
+        $this->updateOrCreateOrder();
 
-        $this->updateOrCreateOrder($attributes);
+        $this->orderImport->update([
+            'order_number' => $this->orderImport['raw_import']['id'],
+            'when_processed' => now(),
+        ]);
     }
 
     /**
@@ -107,15 +111,18 @@ class ProcessApi2cartImportedOrderJob implements ShouldQueue
      * @param $attributes
      * @return Order
      */
-    private function updateOrCreateOrder($attributes): Order
+    private function updateOrCreateOrder(): Order
     {
+        $rawImport = $this->orderImport['raw_import'];
+
         $orderData = [
-            'order_number' => $this->orderImport['raw_import']['id'],
+            'order_number' => $rawImport['id'],
             'order_products' => [],
-            'raw_import' => $this->orderImport['raw_import'],
+            'status_code' => $rawImport['status']['id'],
+            'raw_import' => $rawImport
         ];
 
-        foreach ($this->orderImport['raw_import']['order_products'] as $rawOrderProduct) {
+        foreach ($rawImport['order_products'] as $rawOrderProduct) {
 
             $orderProductData = Collection::make($rawOrderProduct);
 
@@ -129,9 +136,6 @@ class ProcessApi2cartImportedOrderJob implements ShouldQueue
         }
 
         $order = OrderService::updateOrCreate($orderData);
-
-        $this->orderImport->when_processed = now();
-        $this->orderImport->save();
 
         return $order;
     }
