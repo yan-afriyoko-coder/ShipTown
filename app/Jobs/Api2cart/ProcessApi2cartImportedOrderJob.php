@@ -19,6 +19,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use test\Mockery\HasUnknownClassAsTypeHintOnMethod;
 
 class ProcessApi2cartImportedOrderJob implements ShouldQueue
 {
@@ -43,9 +44,12 @@ class ProcessApi2cartImportedOrderJob implements ShouldQueue
      */
     public function handle()
     {
-//        $attributes = $this->getAttributes($this->orderImport['raw_import']);
-
         $this->updateOrCreateOrder();
+
+        $this->orderImport->update([
+            'order_number' => $this->orderImport['raw_import']['id'],
+            'when_processed' => now(),
+        ]);
     }
 
     /**
@@ -132,9 +136,6 @@ class ProcessApi2cartImportedOrderJob implements ShouldQueue
         }
 
         $order = OrderService::updateOrCreate($orderData);
-
-        $this->orderImport->when_processed = now();
-        $this->orderImport->save();
 
         return $order;
     }
