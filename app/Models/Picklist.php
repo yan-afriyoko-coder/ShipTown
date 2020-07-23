@@ -18,6 +18,7 @@ class Picklist extends Model
         'name_ordered',
         'quantity_requested',
         'quantity_picked',
+        'picker_user_id',
         'picked_at',
     ];
 
