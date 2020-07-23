@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddPickerUserIdToPicklistsTable extends Migration
+class AddPickerUserIdForeignKeyToPicklistsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,10 @@ class AddPickerUserIdToPicklistsTable extends Migration
     public function up()
     {
         Schema::table('picklists', function (Blueprint $table) {
-            $table->bigInteger('picker_user_id')
-                ->unsigned()
-                ->nullable(true)
-                ->after('quantity_picked');
+            $table->foreign('picker_user_id')
+                ->on('users')
+                ->references('id')
+                ->onDelete('SET NULL');
         });
     }
 
@@ -29,7 +29,8 @@ class AddPickerUserIdToPicklistsTable extends Migration
     public function down()
     {
         Schema::table('picklists', function (Blueprint $table) {
-            $table->dropColumn('picker_user_id');
+            $table->dropForeign(['picker_user_id']);
+            $table->dropIndex(config('database.connections.mysql.prefix').'picklists_picker_user_id_foreign');
         });
     }
 }
