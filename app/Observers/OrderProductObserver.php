@@ -14,7 +14,7 @@ class OrderProductObserver
      */
     public function created(OrderProduct $orderProduct)
     {
-        //
+        $orderProduct->order()->increment('products_count', $orderProduct['quantity']);
     }
 
     /**
@@ -25,7 +25,9 @@ class OrderProductObserver
      */
     public function updated(OrderProduct $orderProduct)
     {
-        //
+        $quantity_delta = $orderProduct['quantity'] - $orderProduct->getOriginal('quantity');
+
+        $orderProduct->order()->increment('products_count', $quantity_delta);
     }
 
     /**
@@ -36,7 +38,7 @@ class OrderProductObserver
      */
     public function deleted(OrderProduct $orderProduct)
     {
-        //
+        $orderProduct->order()->decrement('products_count', $orderProduct['quantity']);
     }
 
     /**
@@ -47,7 +49,7 @@ class OrderProductObserver
      */
     public function restored(OrderProduct $orderProduct)
     {
-        //
+        $orderProduct->order()->increment('products_count', $orderProduct['quantity']);
     }
 
     /**
@@ -58,6 +60,6 @@ class OrderProductObserver
      */
     public function forceDeleted(OrderProduct $orderProduct)
     {
-        //
+        $orderProduct->order()->decrement('products_count', $orderProduct['quantity']);
     }
 }
