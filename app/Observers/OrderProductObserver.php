@@ -14,7 +14,7 @@ class OrderProductObserver
      */
     public function created(OrderProduct $orderProduct)
     {
-        $orderProduct->order()->increment('products_count', $orderProduct['quantity']);
+        $orderProduct->order()->increment('total_quantity_ordered', $orderProduct['quantity_ordered']);
     }
 
     /**
@@ -25,9 +25,9 @@ class OrderProductObserver
      */
     public function updated(OrderProduct $orderProduct)
     {
-        $quantity_delta = $orderProduct['quantity'] - $orderProduct->getOriginal('quantity');
+        $quantity_delta = $orderProduct['quantity_ordered'] - $orderProduct->getOriginal('quantity_ordered');
 
-        $orderProduct->order()->increment('products_count', $quantity_delta);
+        $orderProduct->order()->increment('total_quantity_ordered', $quantity_delta);
     }
 
     /**
@@ -38,7 +38,7 @@ class OrderProductObserver
      */
     public function deleted(OrderProduct $orderProduct)
     {
-        $orderProduct->order()->decrement('products_count', $orderProduct['quantity']);
+        $orderProduct->order()->decrement('total_quantity_ordered', $orderProduct['quantity_ordered']);
     }
 
     /**
@@ -49,7 +49,7 @@ class OrderProductObserver
      */
     public function restored(OrderProduct $orderProduct)
     {
-        $orderProduct->order()->increment('products_count', $orderProduct['quantity']);
+        $orderProduct->order()->increment('total_quantity_ordered', $orderProduct['quantity_ordered']);
     }
 
     /**
@@ -60,6 +60,6 @@ class OrderProductObserver
      */
     public function forceDeleted(OrderProduct $orderProduct)
     {
-        $orderProduct->order()->decrement('products_count', $orderProduct['quantity']);
+        $orderProduct->order()->decrement('total_quantity_ordered', $orderProduct['quantity_ordered']);
     }
 }

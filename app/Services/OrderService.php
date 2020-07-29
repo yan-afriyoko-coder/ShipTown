@@ -29,7 +29,7 @@ class OrderService
                 ->where([
                     'order_id' => $order->id,
                     'sku_ordered' => $rawOrderProduct['sku_ordered'],
-                    'quantity' => $rawOrderProduct['quantity'],
+                    'quantity_ordered' => $rawOrderProduct['quantity_ordered'],
                     'price' => $rawOrderProduct['price'],
                 ])
                 ->first();
