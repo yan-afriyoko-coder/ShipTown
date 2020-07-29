@@ -101,7 +101,7 @@ class ProcessApi2cartImportedOrderJob implements ShouldQueue
         $result['products_count'] = 0;
 
         foreach ($order['order_products'] as $product) {
-            $result['products_count'] += $product['quantity'];
+            $result['products_count'] += $product['quantity_ordered'];
         }
 
         return $result;
@@ -130,7 +130,7 @@ class ProcessApi2cartImportedOrderJob implements ShouldQueue
                 'sku' => null,
                 'sku_ordered' => $rawOrderProduct['model'],
                 'name_ordered' => $orderProductData['name'],
-                'quantity' => $orderProductData['quantity'],
+                'quantity_ordered' => $orderProductData['quantity'],
                 'price' => $orderProductData['price'],
             ] ;
         }

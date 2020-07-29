@@ -13,7 +13,7 @@ class OrderProduct extends Model
         'sku_ordered',
         'name_ordered',
         'price',
-        'quantity',
+        'quantity_ordered',
     ];
 
     public static function boot()

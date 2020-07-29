@@ -42,7 +42,7 @@ class AddToPicklistsListenerTest extends TestCase
 
         $this->assertEquals(
             Picklist::query()->sum('quantity_requested'),
-            OrderProduct::query()->sum('quantity')
+            OrderProduct::query()->sum('quantity_ordered')
         );
     }
 }
