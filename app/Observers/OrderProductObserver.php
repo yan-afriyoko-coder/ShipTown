@@ -15,6 +15,7 @@ class OrderProductObserver
     public function created(OrderProduct $orderProduct)
     {
         $orderProduct->order()->increment('total_quantity_ordered', $orderProduct['quantity_ordered']);
+        $orderProduct->order()->increment('product_line_count');
     }
 
     /**
@@ -39,6 +40,7 @@ class OrderProductObserver
     public function deleted(OrderProduct $orderProduct)
     {
         $orderProduct->order()->decrement('total_quantity_ordered', $orderProduct['quantity_ordered']);
+        $orderProduct->order()->decrement('product_line_count');
     }
 
     /**
@@ -50,6 +52,7 @@ class OrderProductObserver
     public function restored(OrderProduct $orderProduct)
     {
         $orderProduct->order()->increment('total_quantity_ordered', $orderProduct['quantity_ordered']);
+        $orderProduct->order()->increment('product_line_count');
     }
 
     /**
@@ -61,5 +64,6 @@ class OrderProductObserver
     public function forceDeleted(OrderProduct $orderProduct)
     {
         $orderProduct->order()->decrement('total_quantity_ordered', $orderProduct['quantity_ordered']);
+        $orderProduct->order()->decrement('product_line_count');
     }
 }

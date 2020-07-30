@@ -16,7 +16,8 @@ class AddProductsLinesCountToOrdersTable extends Migration
         Schema::table('orders', function (Blueprint $table) {
             $table->integer('product_line_count')
                 ->after('order_closed_at')
-                ->nullable(true);
+                ->default(0)
+                ->nullable(false);
         });
     }
 
