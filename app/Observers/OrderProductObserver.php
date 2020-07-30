@@ -27,6 +27,7 @@ class OrderProductObserver
     public function updated(OrderProduct $orderProduct)
     {
         $quantity_delta = $orderProduct['quantity_ordered'] - $orderProduct->getOriginal('quantity_ordered');
+        $orderProduct->order()->increment('total_quantity_ordered', $quantity_delta);
     }
 
     /**
