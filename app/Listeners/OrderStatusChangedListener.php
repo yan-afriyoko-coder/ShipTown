@@ -29,7 +29,7 @@ class OrderStatusChangedListener
     public function handle(OrderStatusChangedEvent $event)
     {
         if ($event->order->status_code == 'picking') {
-            PicklistService::fromOrderProduct(
+            PicklistService::addOrderProductPick(
                 $event->order->orderProducts()->get()->toArray()
             );
         }

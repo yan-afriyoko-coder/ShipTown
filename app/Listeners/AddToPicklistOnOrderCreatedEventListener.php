@@ -29,7 +29,7 @@ class AddToPicklistOnOrderCreatedEventListener
     public function handle(OrderCreatedEvent $event)
     {
         if ($event->order->status_code == 'picking') {
-            PicklistService::fromOrderProduct(
+            PicklistService::addOrderProductPick(
                 $event->order->orderProducts()->get()->toArray()
             );
         }

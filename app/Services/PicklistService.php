@@ -18,7 +18,7 @@ class PicklistService
      * @param OrderProduct|array $orderProduct
      * @return void
      */
-    public static function fromOrderProduct($orderProduct)
+    public static function addOrderProductPick($orderProduct)
     {
         foreach (Arr::wrap($orderProduct) as $orderProduct) {
             Picklist::updateOrCreate([

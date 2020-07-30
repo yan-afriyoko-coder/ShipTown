@@ -39,7 +39,7 @@ class RemoveFromPicklistListenerTest extends TestCase
             factory(OrderProduct::class, 10)->make()
         );
 
-        PicklistService::fromOrderProduct(
+        PicklistService::addOrderProductPick(
             $order->orderProducts()->get()->toArray()
         );
 
