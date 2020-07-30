@@ -3,17 +3,19 @@
 namespace Tests\Unit\Listeners;
 
 use App\Events\OrderCreatedEvent;
+use App\Events\OrderStatusChangedEvent;
 use App\Listeners\AddToPicklistOnOrderCreatedEventListener;
 use App\Listeners\OrderStatusChangedListener;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Picklist;
+use App\Services\PicklistService;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class AddToPicklistsListenerTest extends TestCase
+class RemoveFromPicklistListenerTest extends TestCase
 {
     /**
      * A basic feature test example.
@@ -22,6 +24,7 @@ class AddToPicklistsListenerTest extends TestCase
      */
     public function test_if_picklist_is_populated()
     {
+        // prepare
         Event::fake();
 
         Picklist::query()->delete();
@@ -36,13 +39,23 @@ class AddToPicklistsListenerTest extends TestCase
             factory(OrderProduct::class, 10)->make()
         );
 
-        $listener = new AddToPicklistOnOrderCreatedEventListener();
+        PicklistService::addOrderProductPick(
+            $order->orderProducts()->get()->toArray()
+        );
 
-        $listener->handle(new OrderCreatedEvent($order));
+        $order->update(['status_code' => 'processing']);
 
+        // act
+        (new OrderStatusChangedListener())
+            ->handle(new OrderStatusChangedEvent($order));
+
+        // assert
         $this->assertEquals(
-            Picklist::query()->sum('quantity_requested'),
-            OrderProduct::query()->sum('quantity_ordered')
+            0,
+            Picklist::query()
+                ->whereNull('picked_at')
+                ->whereNull('deleted_at')
+                ->sum('quantity_requested')
         );
     }
 }

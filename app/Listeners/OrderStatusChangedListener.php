@@ -8,7 +8,7 @@ use App\Services\PicklistService;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class AddToPicklistsListenerOnOrderStatusChangedEvent
+class OrderStatusChangedListener
 {
     /**
      * Create the event listener.
@@ -29,7 +29,13 @@ class AddToPicklistsListenerOnOrderStatusChangedEvent
     public function handle(OrderStatusChangedEvent $event)
     {
         if ($event->order->status_code == 'picking') {
-            PicklistService::fromOrderProduct(
+            PicklistService::addOrderProductPick(
+                $event->order->orderProducts()->get()->toArray()
+            );
+        }
+
+        if($event->order->status_code !== 'picking') {
+            PicklistService::removeOrderProductPick(
                 $event->order->orderProducts()->get()->toArray()
             );
         }

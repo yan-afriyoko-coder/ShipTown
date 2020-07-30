@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Picklist extends Model
 {
+    use SoftDeletes;
     use HasManyKeyByRelationship;
 
     protected $fillable = [

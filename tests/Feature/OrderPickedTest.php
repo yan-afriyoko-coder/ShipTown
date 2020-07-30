@@ -32,7 +32,7 @@ class OrderPickedTest extends TestCase
 
         $order->orderProducts()->saveMany($orderProducts);
 
-        PicklistService::fromOrderProduct($order->orderProducts()->get()->toArray());
+        PicklistService::addOrderProductPick($order->orderProducts()->get()->toArray());
 
         foreach (Picklist::all() as $picklist) {
             $picklist->quantity_picked = $picklist->quantity_requested;

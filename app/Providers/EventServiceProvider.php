@@ -24,7 +24,7 @@ class EventServiceProvider extends ServiceProvider
             AddToPicklistOnOrderCreatedEventListener::class,
         ],
         OrderStatusChangedEvent::class => [
-            \App\Listeners\AddToPicklistsListenerOnOrderStatusChangedEvent::class,
+            \App\Listeners\OrderStatusChangedListener::class,
         ],
     ];
 
