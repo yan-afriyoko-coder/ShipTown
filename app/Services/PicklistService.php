@@ -16,7 +16,7 @@ class PicklistService
 {
     /**
      * @param OrderProduct|array $orderProduct
-     * @return Picklist
+     * @return void
      */
     public static function fromOrderProduct($orderProduct)
     {
@@ -31,6 +31,21 @@ class PicklistService
                 'name_ordered' => $orderProduct['name_ordered'],
                 'quantity_requested' => $orderProduct['quantity_ordered'],
             ]);
+        }
+    }
+
+    /**
+     *
+     * @param OrderProduct|array $orderProduct
+     * @return void
+     */
+    public static function removeOrderProductPick($orderProduct)
+    {
+        foreach (Arr::wrap($orderProduct) as $orderProduct) {
+            Picklist::query()
+                ->where('order_product_id', '=', $orderProduct['id'])
+                ->whereNull('picked_at')
+                ->delete();
         }
     }
 }

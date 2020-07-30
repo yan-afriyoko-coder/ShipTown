@@ -33,5 +33,11 @@ class OrderStatusChangedListener
                 $event->order->orderProducts()->get()->toArray()
             );
         }
+
+        if($event->order->status_code !== 'picking') {
+            PicklistService::removeOrderProductPick(
+                $event->order->orderProducts()->get()->toArray()
+            );
+        }
    }
 }
