@@ -4,7 +4,7 @@ namespace Tests\Unit\Listeners;
 
 use App\Events\OrderCreatedEvent;
 use App\Listeners\AddToPicklistOnOrderCreatedEventListener;
-use App\Listeners\AddToPicklistsListenerOnOrderStatusChangedEvent;
+use App\Listeners\OrderStatusChangedListener;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Picklist;

@@ -8,7 +8,7 @@ use App\Services\PicklistService;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class AddToPicklistsListenerOnOrderStatusChangedEvent
+class OrderStatusChangedListener
 {
     /**
      * Create the event listener.
