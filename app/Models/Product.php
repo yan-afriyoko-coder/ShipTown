@@ -2,10 +2,22 @@
 
 namespace App\Models;
 ;
+
+use DateTime;
 use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * @property string sku
+ * @property string name
+ * @property double price
+ * @property double sale_price
+ * @property DateTime sale_price_start_date
+ * @property DateTime sale_price_end_date
+ * @property double quantity
+ * @property double quantity_reserved
+ */
 class Product extends Model
 {
     use Notifiable, HasManyKeyByRelationship;
