@@ -29,7 +29,7 @@ class PicklistSeeder extends Seeder
                 return $picklistEntry->save();
             });
 
-        collect(factory(Picklist::class, 2)->make())
+        collect(factory(Picklist::class, 10)->make())
             ->map(function ($picklistEntry) {
 
                 $suffix = Arr::random(['-blue', '-red', '-green', '-xl', '-small-orange']);

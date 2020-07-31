@@ -117,7 +117,7 @@
             pick({ id, quantity_picked, shelve_location }) {
                 axios.post(`/api/picklist/${id}`, { quantity_picked }).then(({ data }) => {
                     this.$snotify.success(`${quantity_picked} items picked.`);
-                    this.query = shelve_location;
+                    this.currentLocation = shelve_location;
                 });
             },
 
