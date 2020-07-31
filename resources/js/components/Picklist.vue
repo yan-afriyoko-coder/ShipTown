@@ -5,7 +5,7 @@
         </div>
         <div class="row mb-3 ml-1 mr-1">
             <div class="col-10">
-                <input ref="search" @focus="handleSearchFocus" class="form-control" @keyup.enter="handleSearchEnter" v-model="query" placeholder="Scan sku or barcode" />
+                <input ref="barcode" @focus="onBarcodeFocused" class="form-control" @keyup.enter="pickBarcode" v-model="barcode" placeholder="Scan sku or barcode" />
             </div>
             <div class="col-2">
                 <input ref="currentLocation" @focus="handleCurrentLocationFocus" class="form-control" @keyup.enter="handleCurrentLocationEnter" v-model="currentLocation" placeholder="Scan current shelf location" />
@@ -47,7 +47,7 @@
         },
 
         mounted() {
-            this.$refs.search.focus();
+            this.$refs.barcode.focus();
             this.scroll();
         },
 
@@ -64,7 +64,6 @@
                     axios.get('/api/picklist', {
                         params: {
                             page: page,
-                            q: this.query,
                             currentLocation: this.currentLocation,
                             sort: this.sort,
                             order: this.order,
@@ -84,7 +83,7 @@
 
             handleCurrentLocationEnter(e) {
                 this.loadProductList(1)
-                    .then(this.handleSearchFocus);
+                    .then(this.onBarcodeFocused);
             },
 
             handleCurrentLocationFocus(e) {
@@ -95,13 +94,11 @@
 
             handleSearchEnter(e) {
                 this.loadProductList(1)
-                    .then(this.handleSearchFocus);
+                    .then(this.onBarcodeFocused);
             },
 
-            handleSearchFocus() {
-                if (this.query) {
-                    setTimeout(() => { document.execCommand('selectall', null, false); });
-                }
+            onBarcodeFocused() {
+                setTimeout(() => { document.execCommand('selectall', null, false); });
             },
 
             scroll (person) {
@@ -119,6 +116,22 @@
                     this.$snotify.success(`${quantity_picked} items picked.`);
                     this.currentLocation = shelve_location;
                 });
+            },
+
+            pickBarcode: function (e) {
+
+                var $pickedItems = this.picklist.filter(function (item) use (this.barcode) {
+                    return item.sku_ordered === this.barcode
+                })
+
+                console.log($pickedItems);
+
+
+
+                // axios.post(`/api/picklist/pick/${id}`, { quantity_picked }).then(({ data }) => {
+                //     this.$snotify.success(`${quantity_picked} items picked.`);
+                //     this.currentLocation = shelve_location;
+                // });
             },
 
             initScanner(e) {
@@ -161,7 +174,7 @@
 
                     Quagga.onDetected((data) => {
                         this.query = data.codeResult.code;
-                        this.loadProductList(1).then(this.handleSearchFocus);
+                        this.loadProductList(1).then(this.onBarcodeFocused);
                         this.stopScanner();
                     })
                 });
@@ -175,7 +188,7 @@
 
         data: function() {
             return {
-                query: '',
+                barcode: '',
                 currentLocation: '',
                 sort: 'sku',
                 order: 'asc',
