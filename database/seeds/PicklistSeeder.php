@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Picklist;
+use App\Models\Product;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
 
@@ -13,10 +14,10 @@ class PicklistSeeder extends Seeder
      */
     public function run()
     {
-        factory(Picklist::class, 20)
+        factory(Picklist::class, 2)
             ->create();
 
-        collect(factory(Picklist::class, 10)->make())
+        collect(factory(Picklist::class, 2)->make())
             ->map(function ($picklistEntry) {
 
                 $suffix = Arr::random(['-blue', '-red', '-green', '-xl', '-small-orange']);
@@ -27,6 +28,21 @@ class PicklistSeeder extends Seeder
 
                 return $picklistEntry->save();
             });
+
+        collect(factory(Picklist::class, 2)->make())
+            ->map(function ($picklistEntry) {
+
+                $suffix = Arr::random(['-blue', '-red', '-green', '-xl', '-small-orange']);
+
+                $product = Product::query()->inRandomOrder()->first();
+                $picklistEntry['product_id'] = $product->getKey();
+                $picklistEntry['sku_ordered'] = $product->sku . $suffix;
+                $picklistEntry['name_ordered'] = $picklistEntry['name_ordered'] . $suffix;
+
+                return $picklistEntry->save();
+            });
+
+
 
     }
 }
