@@ -14,6 +14,13 @@ class PicklistSeeder extends Seeder
      */
     public function run()
     {
+        factory(Picklist::class, 1)
+            ->create([
+                'sku_ordered' => '45',
+                'name_ordered' => 'Test Item',
+                'product_id' => null
+            ]);
+
         factory(Picklist::class, 2)
             ->create();
 
