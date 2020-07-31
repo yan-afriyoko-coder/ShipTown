@@ -4,8 +4,11 @@
             <div id="interactive" class="viewport overlay-content"></div>
         </div>
         <div class="row mb-3 ml-1 mr-1">
-            <div class="col-12">
-                <input ref="search" @focus="handleSearchFocus" class="form-control" @keyup.enter="handleSearchEnter" v-model="query" placeholder="Scan current shelf location" />
+            <div class="col-10">
+                <input ref="search" @focus="handleSearchFocus" class="form-control" @keyup.enter="handleSearchEnter" v-model="query" placeholder="Scan sku or barcode" />
+            </div>
+            <div class="col-2">
+                <input ref="currentLocation" @focus="handleCurrentLocationFocus" class="form-control" @keyup.enter="handleCurrentLocationEnter" v-model="currentLocation" placeholder="Scan current shelf location" />
             </div>
 <!--            <div class="col">-->
 <!--                <button type="button" class="btn btn-secondary" @click.prevent="initScanner" href="#"><font-awesome-icon icon="barcode"></font-awesome-icon></button>-->
@@ -50,12 +53,19 @@
 
         methods: {
             loadProductList: function(page) {
+
+                this.picklist = [];
+                this.page = 1;
+                this.last_page = 1;
+                this.total = 0;
+
                 return new Promise((resolve, reject) => {
                     this.showLoading();
                     axios.get('/api/picklist', {
                         params: {
                             page: page,
                             q: this.query,
+                            currentLocation: this.currentLocation,
                             sort: this.sort,
                             order: this.order,
                         }
@@ -72,12 +82,20 @@
                 });
             },
 
+            handleCurrentLocationEnter(e) {
+                this.loadProductList(1)
+                    .then(this.handleSearchFocus);
+            },
+
+            handleCurrentLocationFocus(e) {
+                if (this.currentLocation) {
+                    setTimeout(() => { document.execCommand('selectall', null, false); });
+                }
+            },
+
             handleSearchEnter(e) {
-                this.picklist = [];
-                this.page = 1;
-                this.last_page = 1;
-                this.total = 0;
-                this.loadProductList(1).then(this.handleSearchFocus);
+                this.loadProductList(1)
+                    .then(this.handleSearchFocus);
             },
 
             handleSearchFocus() {
@@ -157,7 +175,8 @@
 
         data: function() {
             return {
-                query: 'A0',
+                query: '',
+                currentLocation: '',
                 sort: 'sku',
                 order: 'asc',
                 picklist: [],
