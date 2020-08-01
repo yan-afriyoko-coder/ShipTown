@@ -16,7 +16,7 @@ class ProductsController extends Controller
     {
         $query = Product::query();
 
-        if($request->has('q')) {
+        if($request->has('q') && $request->get('q')) {
 
             $product = ProductService::find($request->get('q'));
 

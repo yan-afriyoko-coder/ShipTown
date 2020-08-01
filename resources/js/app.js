@@ -85,7 +85,7 @@ Vue.component(
 
 Vue.component(
     'products-table',
-    require('./components/Products.vue').default
+    require('./components/Products/List.vue').default
 );
 
 Vue.component(
