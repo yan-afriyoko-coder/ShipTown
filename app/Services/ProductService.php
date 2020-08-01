@@ -27,10 +27,10 @@ class ProductService
 
     public static function findByAlias(string $alias)
     {
-        $alias = ProductAlias::query()->where(['alias' => $alias])->with('product')->first();
+        $productAlias = ProductAlias::query()->where(['alias' => $alias])->with('product')->first();
 
-        if($alias) {
-            return $alias->product()->first();
+        if($productAlias) {
+            return $productAlias->product()->first();
         }
 
         return null;

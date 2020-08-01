@@ -12,6 +12,37 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProductsRoutesTest extends TestCase
 {
+    public function test_if_product_found_using_alias()
+    {
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        $response = $this->get('api/products?q=45');
+
+        $response->assertSuccessful();
+
+        $response->assertJsonStructure([
+            "current_page",
+            "data" => [
+                "*" => [
+                    "sku",
+                    "name",
+                    "price",
+                    "sale_price",
+                    "sale_price_start_date",
+                    "sale_price_end_date",
+                    "quantity",
+                    "quantity_reserved",
+                    "quantity_available",
+                    "inventory"
+                ]
+            ],
+            "total",
+        ]);
+
+        $response->dump();
+    }
     /**
      * @return void
      */
