@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             RmsapiConnectionSeeder::class,
             RmsapiProductImportSeeder::class,
             PicklistSeeder::class,
+            ProductAliasSeeder::class,
         ]);
 
     }
