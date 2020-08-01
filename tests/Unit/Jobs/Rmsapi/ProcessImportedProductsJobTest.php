@@ -15,8 +15,8 @@ class ProcessImportedProductsJobTest extends TestCase
     {
         // prepare
         RmsapiProductImport::query()->delete();
-        Product::query()->delete();
-        Inventory::query()->delete();
+        Product::query()->forceDelete();
+        Inventory::query()->forceDelete();
 
         $importData = factory(RmsapiProductImport::class)->create();
 

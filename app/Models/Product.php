@@ -6,6 +6,7 @@ namespace App\Models;
 use DateTime;
 use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
 /**
@@ -20,6 +21,7 @@ use Illuminate\Notifications\Notifiable;
  */
 class Product extends Model
 {
+    use SoftDeletes;
     use Notifiable, HasManyKeyByRelationship;
 
     protected $fillable = [
