@@ -4,6 +4,7 @@
 namespace App\Services;
 
 use App\Models\Product;
+use App\Models\ProductAlias;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -12,6 +13,18 @@ use Illuminate\Support\Facades\Log;
  */
 class ProductService
 {
+
+    public static function findByAlias(string $alias)
+    {
+        $alias = ProductAlias::query()->where(['alias' => $alias])->with('product')->first();
+
+        if($alias) {
+            return $alias->product()->first();
+        }
+
+        return null;
+    }
+
     /**
      * @param string $sku
      * @param float $quantity

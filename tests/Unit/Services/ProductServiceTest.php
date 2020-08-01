@@ -1,18 +1,28 @@
 <?php
 
-namespace Tests\Feature;
 
+namespace Tests\Unit\Services;
+
+use App\Models\Product;
+use App\Models\ProductAlias;
 use App\Services\ProductService;
 use App\User;
 use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
 use Tests\ModelSample;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProductServiceTest extends TestCase
 {
+    public function test_findByAlias()
+    {
+        $alias = factory(ProductAlias::class)->create();
+
+        $this->assertNotNull(
+            ProductService::findByAlias($alias->alias)
+        );
+    }
+
     /**
      * A basic feature test example.
      *
