@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProductsRequest;
 use App\Models\Order;
 use App\Models\Product;
 use App\Services\ProductService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -16,6 +17,12 @@ class ProductsController extends Controller
         $query = Product::query();
 
         if($request->has('q')) {
+            $product = ProductService::find($request->get('q'));
+
+            if ($product) {
+                return response($product);
+            }
+
             $query->where('sku', 'like', '%' . $request->get('q') . '%')
                 ->orWhere('name', 'like', '%' . $request->get('q') . '%');
         }

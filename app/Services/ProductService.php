@@ -14,6 +14,17 @@ use Illuminate\Support\Facades\Log;
 class ProductService
 {
 
+    public static function find(string $skuOrAlias)
+    {
+        $product = Product::findBySKU($skuOrAlias);
+
+        if($product) {
+            return $product;
+        }
+
+        return self::findByAlias($skuOrAlias);
+    }
+
     public static function findByAlias(string $alias)
     {
         $alias = ProductAlias::query()->where(['alias' => $alias])->with('product')->first();
