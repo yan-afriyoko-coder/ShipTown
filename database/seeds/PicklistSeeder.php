@@ -14,12 +14,13 @@ class PicklistSeeder extends Seeder
      */
     public function run()
     {
-//        factory(Picklist::class, 1)
-//            ->create([
-//                'sku_ordered' => '45',
-//                'name_ordered' => 'Test Item',
-//                'product_id' => null
-//            ]);
+        factory(Picklist::class, 1)->create(['sku_ordered' => '0001']);
+        factory(Picklist::class, 1)->create(['sku_ordered' => '0002']);
+        factory(Picklist::class, 1)->create(['sku_ordered' => '0003']);
+        factory(Picklist::class, 1)->create(['sku_ordered' => '0004']);
+        factory(Picklist::class, 1)->create(['sku_ordered' => '0005']);
+        factory(Picklist::class, 1)->create(['sku_ordered' => '0006']);
+        factory(Picklist::class, 1)->create(['sku_ordered' => '0007']);
 //
 //        collect(factory(Picklist::class, 1)->make())
 //            ->map(function ($picklistEntry) {
