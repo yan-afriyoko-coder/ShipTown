@@ -58,14 +58,12 @@
                 speed: 150
             });
 
+            let pickedItem = this.picklistItem;
+
             // Event will be fired after transition
             swiper.on('transitionEnd', function () {
                 if (this.activeIndex === 0) {
-                    self.$emit('transitionEnd', {
-                        id: self.picklistItem.id,
-                        quantity_picked: self.quantity_requested,
-                        shelve_location: self.shelve_location
-                    });
+                    self.$emit('transitionEnd', pickedItem);
                     this.destroy();
                     self.$el.parentNode.removeChild(self.$el);
                 }

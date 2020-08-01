@@ -32,7 +32,7 @@ class PicklistController extends Controller
                     return $query->where('pick_location_inventory.shelve_location', '>=', $request->get('currentLocation'));
                 });
 
-        return $query->paginate(20);
+        return $query->paginate(3);
     }
 
     public function store(StoreRequest $request, Picklist $picklist)

@@ -5,10 +5,10 @@
         </div>
         <div class="row mb-3 ml-1 mr-1">
             <div class="col-10">
-                <input ref="barcode" @focus="onBarcodeFocused" class="form-control" @keyup.enter="pickBarcode" v-model="barcode" placeholder="Scan sku or barcode" />
+                <input ref="barcode" @focus="selectAll" class="form-control" @keyup.enter="pickBarcode" v-model="barcode" placeholder="Scan sku or barcode" />
             </div>
             <div class="col-2">
-                <input ref="currentLocation" @focus="handleCurrentLocationFocus" class="form-control" @keyup.enter="handleCurrentLocationEnter" v-model="currentLocation" placeholder="Scan current shelf location" />
+                <input ref="currentLocation" @focus="selectAll" class="form-control" @keyup.enter="handleCurrentLocationEnter" v-model="currentLocation" placeholder="Scan current shelf location" />
             </div>
 <!--            <div class="col">-->
 <!--                <button type="button" class="btn btn-secondary" @click.prevent="initScanner" href="#"><font-awesome-icon icon="barcode"></font-awesome-icon></button>-->
@@ -83,21 +83,20 @@
 
             handleCurrentLocationEnter(e) {
                 this.loadProductList(1)
-                    .then(this.onBarcodeFocused);
+                    .then(this.focusBarcodeAndSelectAll);
             },
 
-            handleCurrentLocationFocus(e) {
-                if (this.currentLocation) {
-                    setTimeout(() => { document.execCommand('selectall', null, false); });
-                }
+            focusBarcodeAndSelectAll(e) {
+                this.$refs.barcode.focus();
+                // this.selectAll();
             },
 
             handleSearchEnter(e) {
                 this.loadProductList(1)
-                    .then(this.onBarcodeFocused);
+                    .then(this.selectAll);
             },
 
-            onBarcodeFocused() {
+            selectAll() {
                 setTimeout(() => { document.execCommand('selectall', null, false); });
             },
 
@@ -111,27 +110,52 @@
                 };
             },
 
-            pick({ id, quantity_picked, shelve_location }) {
-                axios.post(`/api/picklist/${id}`, { quantity_picked }).then(({ data }) => {
-                    this.$snotify.success(`${quantity_picked} items picked.`);
-                    this.currentLocation = shelve_location;
-                });
+            pick(pickedItem) {
+                this.postPick(pickedItem);
+            },
+
+            postPick(pickedItem) {
+                axios.post(`/api/picklist/${pickedItem.id}`, {'quantity_picked': pickedItem.quantity_requested})
+                    .then(({ data }) => {
+                        this.currentLocation = pickedItem.shelve_location;
+                        this.picklist.splice(this.picklist.indexOf(pickedItem), 1);
+                        this.$snotify.success(`Items picked.`);
+                        if(this.picklist.length === 0) {
+                            this.loadProductList(1);
+                        }
+                    })
+                    .catch( data  => {
+                        this.$snotify.error(`Items not picked.`);
+                    });
             },
 
             pickBarcode: function (e) {
 
-                var $pickedItems = this.picklist.filter(function (item) use (this.barcode) {
-                    return item.sku_ordered === this.barcode
-                })
+                let pickedItem;
+                let barcode = this.barcode;
 
-                console.log($pickedItems);
+                if(barcode === '') {
+                    return;
+                }
+                //
 
+                for (let element of this.picklist) {
+                    if(element.sku_ordered === barcode) {
+                        pickedItem = element;
+                        break;
+                    }
+                }
 
+                if (typeof pickedItem == 'undefined') {
+                    this.$snotify.error(`"${barcode}" not found!`);
+                    this.selectAll();
+                    return;
+                }
 
-                // axios.post(`/api/picklist/pick/${id}`, { quantity_picked }).then(({ data }) => {
-                //     this.$snotify.success(`${quantity_picked} items picked.`);
-                //     this.currentLocation = shelve_location;
-                // });
+                this.postPick(pickedItem);
+
+                this.selectAll();
+
             },
 
             initScanner(e) {
@@ -174,7 +198,7 @@
 
                     Quagga.onDetected((data) => {
                         this.query = data.codeResult.code;
-                        this.loadProductList(1).then(this.onBarcodeFocused);
+                        this.loadProductList(1).then(this.selectAll);
                         this.stopScanner();
                     })
                 });
