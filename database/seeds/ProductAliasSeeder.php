@@ -20,11 +20,13 @@ class ProductAliasSeeder extends Seeder
         factory(ProductAlias::class, 10)->create();
 
 
-        $product = factory(Product::class)->make([
-            'sku' => '0001'
-        ]);
+        $product = Product::query()->where(['sku' => '0001'])->first();
 
-        $product = Product::query()->firstOrCreate(['sku' => $product->sku], $product->toArray());
+        if(!$product) {
+            $product = factory(Product::class)->create([
+                'sku' => '0001'
+            ]);
+        }
 
         ProductAlias::query()->firstOrCreate([
             'alias' => $product->sku.'-alias'
