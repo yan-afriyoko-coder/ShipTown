@@ -40,8 +40,6 @@ class ProductsRoutesTest extends TestCase
             ],
             "total",
         ]);
-
-        $response->dump();
     }
     /**
      * @return void
