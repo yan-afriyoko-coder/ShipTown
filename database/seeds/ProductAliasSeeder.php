@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Product;
 use App\Models\ProductAlias;
 use Illuminate\Database\Seeder;
 
@@ -17,5 +18,19 @@ class ProductAliasSeeder extends Seeder
         }
 
         factory(ProductAlias::class, 10)->create();
+
+
+        $product = factory(Product::class)->make([
+            'sku' => '0001'
+        ]);
+
+        $product = Product::query()->firstOrCreate(['sku' => $product->sku], $product->toArray());
+
+        ProductAlias::query()->firstOrCreate([
+            'alias' => $product->sku.'-alias'
+        ], [
+            'product_id' => $product->getKey()
+        ]);
+
     }
 }
