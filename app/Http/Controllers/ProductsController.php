@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProductsRequest;
 use App\Models\Order;
 use App\Models\Product;
+use App\Services\ProductService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -12,19 +14,28 @@ class ProductsController extends Controller
 {
     public function index(Request $request)
     {
-        $products = Product::query()
-            ->when($request->has('q'), function ($query) use ($request) {
-                return $query
-                    ->where('sku', 'like', '%' . $request->get('q') . '%')
-                    ->orWhere('name', 'like', '%' . $request->get('q') . '%');
-            })
-            ->when($request->has('sort'), function ($query) use ($request) {
-                return $query
-                    ->orderBy($request->get('sort'), $request->get('order', 'asc'));
-            })
-            ->with('inventory');
+        $query = Product::query();
 
-        return $products->paginate(100);
+        if($request->has('q')) {
+
+            $product = ProductService::find($request->get('q'));
+
+            if ($product) {
+                $query->whereKey($product->getKey());
+            } else {
+                $query->where('sku', 'like', '%' . $request->get('q') . '%')
+                    ->orWhere('name', 'like', '%' . $request->get('q') . '%');
+            }
+
+        }
+
+        if($request->has('sort') ){
+            $query->orderBy($request->get('sort'), $request->get('order', 'asc'));
+        }
+
+        $query->with('inventory');
+
+        return $query->paginate(100);
     }
 
     public function store(StoreProductsRequest $request)
