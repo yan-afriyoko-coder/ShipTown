@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\RmsapiConnection;
+use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Illuminate\Support\Arr;
 
@@ -18,25 +19,17 @@ class ProductObserver
      */
     public function created(Product $product)
     {
-        $rmsapi_locations_ids = RmsapiConnection::all('location_id')
-            ->map(function ($connection) use ($product){
+        $warehouse_ids = Warehouse::all('id')
+            ->map(function ($warehouse) use ($product){
                 return [
+                    'warehouse_id' => $warehouse->getKey(),
                     'product_id' => $product->getKey(),
-                    'location_id' => $connection->location_id
+                    'location_id' => $warehouse->getKey(),
                 ];
             });
 
-        $api2cart_location_ids = Api2cartConnection::all('location_id')
-            ->map(function ($connection) use ($product){
-                return [
-                    'product_id' => $product->getKey(),
-                    'location_id' => $connection->location_id
-                ];
-            });
 
-        $insert_data = $rmsapi_locations_ids->merge($api2cart_location_ids);
-
-        Inventory::query()->insert($insert_data->toArray());
+        Inventory::query()->insert($warehouse_ids->toArray());
     }
 
     /**
