@@ -13,12 +13,9 @@ class ProductAliasSeeder extends Seeder
      */
     public function run()
     {
-        if(!ProductAlias::query()->where(['alias' => '45'])->exists()) {
-            factory(ProductAlias::class)->create(['alias'    => '45']);
-        }
-
         factory(ProductAlias::class, 10)->create();
 
+        $this->generateDemoAliases(['45', '3276000690573']);
 
         $product = Product::query()->where(['sku' => '0001'])->first();
 
@@ -34,5 +31,14 @@ class ProductAliasSeeder extends Seeder
             'product_id' => $product->getKey()
         ]);
 
+    }
+
+    private function generateDemoAliases(array $aliasList): void
+    {
+        foreach ($aliasList as $alias) {
+            if (!ProductAlias::query()->where(['alias' => $alias])->exists()) {
+                factory(ProductAlias::class)->create(['alias' => $alias]);
+            }
+        }
     }
 }
