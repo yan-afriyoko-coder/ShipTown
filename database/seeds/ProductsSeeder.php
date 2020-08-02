@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Product;
 use Illuminate\Database\Seeder;
 
 class ProductsSeeder extends Seeder
@@ -11,11 +12,13 @@ class ProductsSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Models\Product::class)->create(['sku' => '123456']);
+        if(!Product::query()->where('sku','=','123456')->exists()) {
+            factory(Product::class)->create(['sku' => '123456']);
+        }
 
-        factory(\App\Models\Product::class, 50)->create();
+        factory(Product::class, 50)->create();
 
-        factory(\App\Models\Product::class, 10)->create([
+        factory(Product::class, 10)->create([
             "quantity" => 50,
             "quantity_reserved" => 50
         ]);
