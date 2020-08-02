@@ -5,10 +5,20 @@
         </div>
         <div class="row mb-3 ml-1 mr-1">
             <div class="col-10">
-                <input ref="barcode" @focus="selectAll" class="form-control" @keyup.enter="pickBarcode" v-model="barcode" placeholder="Scan sku or barcode" />
+                <input ref="barcode"
+                       class="form-control"
+                       v-model="barcode"
+                       @focus="selectAll"
+                       @keyup.enter="pickBarcode"
+                       placeholder="Scan sku or barcode" />
             </div>
             <div class="col-2">
-                <input ref="currentLocation" @focus="selectAll" class="form-control" @keyup.enter="handleCurrentLocationEnter" v-model="currentLocation" placeholder="Scan current shelf location" />
+                <input ref="currentLocation"
+                       v-model="currentLocation"
+                       class="form-control"
+                       @focus="selectAll"
+                       @keyup.enter="loadProducts"
+                       placeholder="Scan current shelf location" />
             </div>
 <!--            <div class="col">-->
 <!--                <button type="button" class="btn btn-secondary" @click.prevent="initScanner" href="#"><font-awesome-icon icon="barcode"></font-awesome-icon></button>-->
@@ -24,7 +34,9 @@
             </div>
             <template v-else class="row">
                 <template v-for="picklistItem in picklist">
-                    <picklist-item :picklistItem="picklistItem" :key="picklistItem.id" @transitionEnd="pick" />
+                    <picklist-item :picklistItem="picklistItem"
+                                   :key="picklistItem.id"
+                                   @transitionEnd="pickProduct" />
                 </template>
             </template>
         </div>
@@ -34,7 +46,7 @@
 <script>
     import Quagga from 'quagga';
 
-    import loadingOverlay from '../mixins/loading-overlay';
+    import loadingOverlay from '../../mixins/loading-overlay';
     import PicklistItem from './PicklistItem';
 
     export default {
@@ -43,7 +55,7 @@
         components: { 'picklist-item': PicklistItem },
 
         created() {
-            this.loadProductList(this.page);
+            this.getProductList(this.page);
         },
 
         mounted() {
@@ -52,7 +64,37 @@
         },
 
         methods: {
-            loadProductList: function(page) {
+
+            pickBarcode: function (e) {
+
+                let pickedItem;
+                let barcode = this.barcode;
+
+                if(barcode === '') {
+                    return;
+                }
+                //
+
+                for (let element of this.picklist) {
+                    if(element.sku_ordered === barcode) {
+                        pickedItem = element;
+                        break;
+                    }
+                }
+
+                if (typeof pickedItem == 'undefined') {
+                    this.$snotify.error(`"${barcode}" not found!`);
+                    this.selectAll();
+                    return;
+                }
+
+                this.pickProduct(pickedItem);
+
+                this.selectAll();
+
+            },
+
+            getProductList: function(page) {
 
                 this.picklist = [];
                 this.page = 1;
@@ -81,19 +123,9 @@
                 });
             },
 
-            handleCurrentLocationEnter(e) {
-                this.loadProductList(1)
+            loadProducts(e) {
+                this.getProductList(1)
                     .then(this.focusBarcodeAndSelectAll);
-            },
-
-            focusBarcodeAndSelectAll(e) {
-                this.$refs.barcode.focus();
-                // this.selectAll();
-            },
-
-            handleSearchEnter(e) {
-                this.loadProductList(1)
-                    .then(this.selectAll);
             },
 
             selectAll() {
@@ -105,22 +137,18 @@
                     let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
 
                     if (bottomOfWindow && this.last_page > this.page) {
-                        this.loadProductList(++this.page);
+                        this.getProductList(++this.page);
                     }
                 };
             },
 
-            pick(pickedItem) {
-                this.postPick(pickedItem);
-            },
-
-            postPick(pickedItem) {
+            pickProduct(pickedItem) {
                 axios.post(`/api/picklist/${pickedItem.id}`, {'quantity_picked': pickedItem.quantity_requested})
                     .then(({ data }) => {
                         this.currentLocation = pickedItem.shelve_location;
                         let itemIndex = this.picklist.indexOf(pickedItem);
                         this.picklist.splice(itemIndex, 1);
-                        this.$snotify.confirm('', 'Items picked', {
+                        this.$snotify.confirm('', pickedItem.quantity_requested+' x '+pickedItem.sku_ordered +' picked', {
                             timeout: 5000,
                             pauseOnHover: true,
                             buttons: [
@@ -130,7 +158,7 @@
                                         this.$snotify.remove(toast.id);
                                         axios.post(`/api/picklist/${pickedItem.id}`, {'quantity_picked': pickedItem.quantity_requested * -1 })
                                             .then(() => {
-                                                this.$snotify.success('Items unpicked.');
+                                                this.$snotify.warning('Action reverted');
                                                 this.picklist.splice(itemIndex, 0, pickedItem);
                                             });
                                     }
@@ -138,7 +166,7 @@
                             ]
                         });
                         if(this.picklist.length === 0) {
-                            this.loadProductList(1);
+                            this.getProductList(1);
                         }
                     })
                     .catch( data  => {
@@ -146,34 +174,6 @@
                     });
             },
 
-            pickBarcode: function (e) {
-
-                let pickedItem;
-                let barcode = this.barcode;
-
-                if(barcode === '') {
-                    return;
-                }
-                //
-
-                for (let element of this.picklist) {
-                    if(element.sku_ordered === barcode) {
-                        pickedItem = element;
-                        break;
-                    }
-                }
-
-                if (typeof pickedItem == 'undefined') {
-                    this.$snotify.error(`"${barcode}" not found!`);
-                    this.selectAll();
-                    return;
-                }
-
-                this.postPick(pickedItem);
-
-                this.selectAll();
-
-            },
 
             initScanner(e) {
                 this.showScanner = true;
@@ -215,7 +215,7 @@
 
                     Quagga.onDetected((data) => {
                         this.query = data.codeResult.code;
-                        this.loadProductList(1).then(this.selectAll);
+                        this.getProductList(1).then(this.selectAll);
                         this.stopScanner();
                     })
                 });

@@ -100,7 +100,7 @@ Vue.component(
 
 Vue.component(
     'picklist-table',
-    require('./components/Picklist.vue').default
+    require('./components/Picklist/List.vue').default
 );
 
 Vue.component(
