@@ -9,17 +9,17 @@
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-3 font-weight-bold">Location</div>
-                        <div class="col-3 font-weight-bold">In Stock</div>
-                        <div class="col-2 font-weight-bold">Reserved</div>
-                        <div class="col-2 font-weight-bold">Available</div>
-                        <div class="col-2 font-weight-bold">Shelf</div>
+                        <div class="col-3 font-weight-bold text-right">In Stock</div>
+                        <div class="col-2 font-weight-bold text-right">Reserved</div>
+                        <div class="col-2 font-weight-bold text-right">Available</div>
+                        <div class="col-2 font-weight-bold text-right">Shelf</div>
                     </div>
                     <div class="row" v-for="warehouse_inventory in product.inventory">
                         <div class="col-3">{{ warehouse_inventory.location_id }}</div>
-                        <div class="col-3">{{ warehouse_inventory.quantity }}</div>
-                        <div class="col-2">{{ warehouse_inventory.quantity_reserved }}</div>
-                        <div class="col-2">{{ warehouse_inventory.quantity - warehouse_inventory.quantity_reserved }}</div>
-                        <div class="col-2">{{ warehouse_inventory.shelve_location }}</div>
+                        <div class="col-3 text-right">{{ warehouse_inventory.quantity | numberFormat }}</div>
+                        <div class="col-2 text-right">{{ warehouse_inventory.quantity_reserved | numberFormat }}</div>
+                        <div class="col-2 text-right">{{ warehouse_inventory.quantity - warehouse_inventory.quantity_reserved | numberFormat }}</div>
+                        <div class="col-2 text-right">{{ warehouse_inventory.shelve_location }}</div>
                     </div>
                 </div>
             </div>
@@ -33,6 +33,18 @@
 
         props: {
             product: Object,
+        },
+
+        filters: {
+            numberFormat: (x) => {
+                x = parseInt(x).toString();
+
+                if (x == '0') return '-';
+
+                var pattern = /(-?\d+)(\d{3})/;
+                while (pattern.test(x)) x = x.replace(pattern, "$1 $2");
+                return x;
+            }
         }
     }
 </script>
