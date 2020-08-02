@@ -118,8 +118,25 @@
                 axios.post(`/api/picklist/${pickedItem.id}`, {'quantity_picked': pickedItem.quantity_requested})
                     .then(({ data }) => {
                         this.currentLocation = pickedItem.shelve_location;
-                        this.picklist.splice(this.picklist.indexOf(pickedItem), 1);
-                        this.$snotify.success(`Items picked.`);
+                        let itemIndex = this.picklist.indexOf(pickedItem);
+                        this.picklist.splice(itemIndex, 1);
+                        this.$snotify.confirm('', 'Items picked', {
+                            timeout: 5000,
+                            pauseOnHover: true,
+                            buttons: [
+                                {
+                                    text: 'Undo',
+                                    action: (toast) => {
+                                        this.$snotify.remove(toast.id);
+                                        axios.post(`/api/picklist/${pickedItem.id}`, {'quantity_picked': pickedItem.quantity_requested * -1 })
+                                            .then(() => {
+                                                this.$snotify.success('Items unpicked.');
+                                                this.picklist.splice(itemIndex, 0, pickedItem);
+                                            });
+                                    }
+                                }
+                            ]
+                        });
                         if(this.picklist.length === 0) {
                             this.loadProductList(1);
                         }

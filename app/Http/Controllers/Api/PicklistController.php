@@ -40,7 +40,7 @@ class PicklistController extends Controller
         $picklist->update([
             'picker_user_id' => $request->user()->id,
             'quantity_picked' => $picklist->quantity_picked + $request->input('quantity_picked'),
-            'picked_at' => now()
+            'picked_at' => $request->input('quantity_picked') > 0 ? now() : null, // On undo, set picked_at to null
         ]);
 
         return new PicklistResource($picklist);
