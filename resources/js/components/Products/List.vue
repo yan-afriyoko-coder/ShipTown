@@ -2,7 +2,8 @@
     <div>
         <div class="row no-gutters mb-3 ml-1 mr-1">
             <div class="col">
-                <input ref="search" @focus="handleSearchFocus" class="form-control" @keyup.enter="handleSearchEnter" v-model="query" placeholder="Search for products..." />
+                <input ref="search" @focus="doSelectAll" class="form-control" @keyup.enter="loadProducts"
+                       v-model="query" placeholder="Search for products..." />
             </div>
         </div>
         <div class="container">
@@ -15,7 +16,7 @@
             </div>
             <template v-else class="row">
                 <template v-for="product in products">
-                    <product :product="product"/>
+                    <product-card :product="product"/>
                 </template>
             </template>
         </div>
@@ -29,10 +30,10 @@
     export default {
         mixins: [loadingOverlay],
 
-        components: { 'product': ProductCard },
+        components: { 'product-card': ProductCard },
 
         created() {
-            this.loadProductList(this.page);
+            this.getProductList(this.page);
         },
 
         mounted() {
@@ -41,7 +42,13 @@
         },
 
         methods: {
-            loadProductList: function(page) {
+            getProductList: function(page) {
+
+                this.products = [];
+                this.page = page;
+                this.last_page = 1;
+                this.total = 0;
+
                 return new Promise((resolve, reject) => {
                     this.showLoading();
                     axios.get('/api/products', {
@@ -64,15 +71,12 @@
                 });
             },
 
-            handleSearchEnter(e) {
-                this.products = [];
-                this.page = 1;
-                this.last_page = 1;
-                this.total = 0;
-                this.loadProductList(1).then(this.handleSearchFocus);
+            loadProducts(e) {
+                this.getProductList(1)
+                    .then(this.doSelectAll);
             },
 
-            handleSearchFocus() {
+            doSelectAll() {
                 if (this.query) {
                     setTimeout(() => { document.execCommand('selectall', null, false); });
                 }
@@ -83,7 +87,7 @@
                     let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
 
                     if (bottomOfWindow && this.last_page > this.page) {
-                        this.loadProductList(++this.page);
+                        this.getProductList(++this.page);
                     }
                 };
             },
