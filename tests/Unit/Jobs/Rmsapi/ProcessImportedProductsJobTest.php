@@ -27,26 +27,18 @@ class ProcessImportedProductsJobTest extends TestCase
 
 
         // get product
-        $product = Product::query()
-            ->where('sku','=', $importData->raw_import['item_code'])
-            ->first('id');
+        $product = Product::query()->where(['sku' => $importData->raw_import['item_code']])->first('id');
 
         $this->assertNotEmpty($product, 'Product does not exists');
 
-        $this->assertFalse(
-            RmsapiProductImport::query()->whereNull('when_processed')->exists(),
-            'when_processed is not updated'
-        );
+        $exists = RmsapiProductImport::query()->whereNull('when_processed')->exists();
+        $this->assertFalse($exists,'when_processed is not updated');
 
-        $this->assertFalse(
-            RmsapiProductImport::query()->whereNull('sku')->exists(),
-            'sku column is not populated'
-        );
+        $exists = RmsapiProductImport::query()->whereNull('sku')->exists();
+        $this->assertFalse($exists,'sku column is not populated');
 
-        $this->assertFalse(
-            RmsapiProductImport::query()->whereNull('product_id')->exists(),
-            'product_id column is not populated'
-        );
+        $exists = RmsapiProductImport::query()->whereNull('product_id')->exists();
+        $this->assertFalse($exists,'product_id column is not populated');
 
         $wasInventoryUpdated = Inventory::query()
             ->where('product_id','=', $product->id)
