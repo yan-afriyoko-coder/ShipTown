@@ -4,6 +4,7 @@ namespace App\Jobs\Rmsapi;
 
 use App\Models\Inventory;
 use App\Models\Product;
+use App\Models\ProductAlias;
 use App\Models\RmsapiConnection;
 use App\Models\RmsapiProductImport;
 use Illuminate\Bus\Queueable;
@@ -41,28 +42,64 @@ class ProcessImportedProductsJob implements ShouldQueue
                 return $query->where('batch_uuid', '=', $this->batch_uuid);
             })
             ->whereNull('when_processed')
-            ->orderBy('id')
+            ->orderBy('id', 'asc')
             ->get();
 
         foreach ($imports as $importedProduct) {
-            $this->importProduct($importedProduct);
+            $this->import($importedProduct);
         }
     }
 
     /**
      * @param RmsapiProductImport $importedProduct
      */
-    private function importProduct(RmsapiProductImport $importedProduct): void
+    private function import(RmsapiProductImport $importedProduct): void
     {
         $attributes = [
             "sku" => $importedProduct->raw_import['item_code'],
             "name" => $importedProduct->raw_import['description']
         ];
 
-        $product = Product::query()->updateOrCreate([
+        $product = Product::updateOrCreate([
             "sku" => $attributes['sku']
         ], $attributes);
 
+        $this->importAliases($importedProduct, $product);
+
+        $this->importInventory($importedProduct, $product);
+
+        $importedProduct->update([
+            'when_processed' => now(),
+            'product_id' => $product->id,
+            'sku' => $attributes['sku']
+        ]);
+    }
+
+    /**
+     * @param RmsapiProductImport $importedProduct
+     * @param $product
+     */
+    private function importAliases(RmsapiProductImport $importedProduct, Product $product): void
+    {
+        if ( ! Arr::has($importedProduct->raw_import, 'aliases')) {
+            return;
+        }
+
+        foreach ($importedProduct->raw_import['aliases'] as $alias) {
+            ProductAlias::query()->updateOrCreate(
+                array('alias'       => $alias['alias']),
+                array('product_id'  => $product->id)
+            );
+        }
+
+    }
+
+    /**
+     * @param RmsapiProductImport $importedProduct
+     * @param $product
+     */
+    private function importInventory(RmsapiProductImport $importedProduct, $product): void
+    {
         $connection = RmsapiConnection::query()->find($importedProduct->connection_id);
 
         $inventory = Inventory::query()->updateOrCreate([
@@ -72,12 +109,6 @@ class ProcessImportedProductsJob implements ShouldQueue
             'quantity' => $importedProduct->raw_import['quantity_on_hand'],
             'quantity_reserved' => $importedProduct->raw_import['quantity_committed'],
             'shelve_location' => Arr::has($importedProduct->raw_import, 'rmsmobile_shelve_location') ? $importedProduct->raw_import['rmsmobile_shelve_location'] : '',
-        ]);
-
-        $importedProduct->update([
-            'when_processed' => now(),
-            'product_id' => $product->id,
-            'sku' => $attributes['sku']
         ]);
     }
 }

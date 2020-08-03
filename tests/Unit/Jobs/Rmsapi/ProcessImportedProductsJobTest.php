@@ -21,6 +21,12 @@ class ProcessImportedProductsJobTest extends TestCase
 
         $importData = factory(RmsapiProductImport::class)->create();
 
+        // act
+        $job = new ProcessImportedProductsJob();
+
+        $job->handle();
+
+        // assert
         $this->assertTrue(ProductAlias::query()->exists(), 'Product aliases were not imported');
     }
 

@@ -4,6 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Crypt;
+use phpseclib\Math\BigInteger;
+
+/**
+ * @property BigInteger id
+ * @property BigInteger location_id
+ */
 
 class RmsapiConnection extends Model
 {
