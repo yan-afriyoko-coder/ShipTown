@@ -37,10 +37,10 @@ class ProcessImportedProductsJob implements ShouldQueue
     public function handle()
     {
         $imports = RmsapiProductImport::query()
-            ->whereNull('when_processed')
             ->when(isset($this->batch_uuid), function ($query) {
                 return $query->where('batch_uuid', '=', $this->batch_uuid);
             })
+            ->whereNull('when_processed')
             ->orderBy('id')
             ->get();
 
