@@ -8,8 +8,10 @@ use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
+use phpseclib\Math\BigInteger;
 
 /**
+ * @property BigInteger id
  * @property string sku
  * @property string name
  * @property double price
@@ -18,6 +20,7 @@ use Illuminate\Notifications\Notifiable;
  * @property DateTime sale_price_end_date
  * @property double quantity
  * @property double quantity_reserved
+ * @method static updateOrCreate(array $array, array $attributes)
  */
 class Product extends Model
 {

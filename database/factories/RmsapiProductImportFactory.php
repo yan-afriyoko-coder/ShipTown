@@ -49,7 +49,19 @@ $factory->define(RmsapiProductImport::class, function (Faker $faker) {
            "quantity_available":'.$quantity_available.',
            "quantity_committed":'.$quantity_committed.',
            "quantity_discount_id":0,
-           "rmsmobile_shelve_location":"'.Str::upper($faker->randomLetter).$faker->numberBetween(0,9).'"
+           "rmsmobile_shelve_location":"'.Str::upper($faker->randomLetter).$faker->numberBetween(0,9).'",
+           "aliases": [
+                {
+                    "id": 1,
+                    "alias": "'.(string) $faker->unique()->randomNumber(6).'-alias",
+                    "item_id": 1
+                },
+                {
+                    "id": 2,
+                    "alias": "'.(string) $faker->unique()->randomNumber(6).'-alias",
+                    "item_id": 1
+                }
+           ]
         }
     ')
     ];

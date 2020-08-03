@@ -3,7 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use phpseclib\Math\BigInteger;
 
+/**
+ * @property array raw_import
+ * @property BigInteger connection_id
+ */
 class RmsapiProductImport extends Model
 {
     protected $fillable = [

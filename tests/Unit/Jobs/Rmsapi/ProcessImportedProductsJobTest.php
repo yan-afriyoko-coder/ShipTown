@@ -5,12 +5,31 @@ namespace Tests\Unit\Jobs\Rmsapi;
 use App\Jobs\Rmsapi\ProcessImportedProductsJob;
 use App\Models\Inventory;
 use App\Models\Product;
+use App\Models\ProductAlias;
 use App\Models\RmsapiProductImport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 
 class ProcessImportedProductsJobTest extends TestCase
 {
+    public function test_if_imports_aliases()
+    {
+        // prepare
+        RmsapiProductImport::query()->delete();
+        Product::query()->forceDelete();
+        ProductAlias::query()->forceDelete();
+
+        $importData = factory(RmsapiProductImport::class)->create();
+
+        // act
+        $job = new ProcessImportedProductsJob();
+
+        $job->handle();
+
+        // assert
+        $this->assertTrue(ProductAlias::query()->exists(), 'Product aliases were not imported');
+    }
+
     public function test_if_processes_correctly()
     {
         // prepare
@@ -27,26 +46,18 @@ class ProcessImportedProductsJobTest extends TestCase
 
 
         // get product
-        $product = Product::query()
-            ->where('sku','=', $importData->raw_import['item_code'])
-            ->first('id');
+        $product = Product::query()->where(['sku' => $importData->raw_import['item_code']])->first('id');
 
         $this->assertNotEmpty($product, 'Product does not exists');
 
-        $this->assertFalse(
-            RmsapiProductImport::query()->whereNull('when_processed')->exists(),
-            'when_processed is not updated'
-        );
+        $exists = RmsapiProductImport::query()->whereNull('when_processed')->exists();
+        $this->assertFalse($exists,'when_processed is not updated');
 
-        $this->assertFalse(
-            RmsapiProductImport::query()->whereNull('sku')->exists(),
-            'sku column is not populated'
-        );
+        $exists = RmsapiProductImport::query()->whereNull('sku')->exists();
+        $this->assertFalse($exists,'sku column is not populated');
 
-        $this->assertFalse(
-            RmsapiProductImport::query()->whereNull('product_id')->exists(),
-            'product_id column is not populated'
-        );
+        $exists = RmsapiProductImport::query()->whereNull('product_id')->exists();
+        $this->assertFalse($exists,'product_id column is not populated');
 
         $wasInventoryUpdated = Inventory::query()
             ->where('product_id','=', $product->id)

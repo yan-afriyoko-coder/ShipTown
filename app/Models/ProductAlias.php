@@ -8,6 +8,11 @@ class ProductAlias extends Model
 {
     protected $table = 'products_aliases';
 
+    protected $fillable = [
+        'product_id',
+        'alias'
+    ];
+
     public function product()
     {
         return $this->belongsTo(Product::class);
