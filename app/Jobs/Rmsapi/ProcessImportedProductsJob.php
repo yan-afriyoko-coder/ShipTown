@@ -26,7 +26,6 @@ class ProcessImportedProductsJob implements ShouldQueue
      */
     public function __construct(Uuid $batch_uuid = null)
     {
-        //
         $this->batch_uuid = $batch_uuid;
     }
 
@@ -46,33 +45,39 @@ class ProcessImportedProductsJob implements ShouldQueue
             ->get();
 
         foreach ($imports as $importedProduct) {
-
-            $attributes = [
-                "sku" => $importedProduct->raw_import['item_code'],
-                "name" => $importedProduct->raw_import['description']
-            ];
-
-            $product = Product::query()->updateOrCreate([
-                "sku" => $attributes['sku']
-            ], $attributes);
-
-            $connection = RmsapiConnection::query()->find($importedProduct->connection_id);
-
-            $inventory = Inventory::query()->updateOrCreate([
-                'product_id' => $product->id,
-                'location_id' => $connection->location_id
-            ], [
-                'quantity' => $importedProduct->raw_import['quantity_on_hand'],
-                'quantity_reserved' => $importedProduct->raw_import['quantity_committed'],
-                'shelve_location' => Arr::has($importedProduct->raw_import, 'rmsmobile_shelve_location') ? $importedProduct->raw_import['rmsmobile_shelve_location'] : '',
-            ]);
-
-            $importedProduct->update([
-                'when_processed' => now(),
-                'product_id' => $product->id,
-                'sku' => $attributes['sku']
-            ]);
-
+            $this->importProduct($importedProduct);
         }
+    }
+
+    /**
+     * @param RmsapiProductImport $importedProduct
+     */
+    private function importProduct(RmsapiProductImport $importedProduct): void
+    {
+        $attributes = [
+            "sku" => $importedProduct->raw_import['item_code'],
+            "name" => $importedProduct->raw_import['description']
+        ];
+
+        $product = Product::query()->updateOrCreate([
+            "sku" => $attributes['sku']
+        ], $attributes);
+
+        $connection = RmsapiConnection::query()->find($importedProduct->connection_id);
+
+        $inventory = Inventory::query()->updateOrCreate([
+            'product_id' => $product->id,
+            'location_id' => $connection->location_id
+        ], [
+            'quantity' => $importedProduct->raw_import['quantity_on_hand'],
+            'quantity_reserved' => $importedProduct->raw_import['quantity_committed'],
+            'shelve_location' => Arr::has($importedProduct->raw_import, 'rmsmobile_shelve_location') ? $importedProduct->raw_import['rmsmobile_shelve_location'] : '',
+        ]);
+
+        $importedProduct->update([
+            'when_processed' => now(),
+            'product_id' => $product->id,
+            'sku' => $attributes['sku']
+        ]);
     }
 }
