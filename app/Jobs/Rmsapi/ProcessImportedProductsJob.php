@@ -77,7 +77,7 @@ class ProcessImportedProductsJob implements ShouldQueue
 
     /**
      * @param RmsapiProductImport $importedProduct
-     * @param $product
+     * @param Product $product
      */
     private function importAliases(RmsapiProductImport $importedProduct, Product $product): void
     {
@@ -96,9 +96,9 @@ class ProcessImportedProductsJob implements ShouldQueue
 
     /**
      * @param RmsapiProductImport $importedProduct
-     * @param $product
+     * @param Product $product
      */
-    private function importInventory(RmsapiProductImport $importedProduct, $product): void
+    private function importInventory(RmsapiProductImport $importedProduct, Product $product): void
     {
         $connection = RmsapiConnection::query()->find($importedProduct->connection_id);
 
