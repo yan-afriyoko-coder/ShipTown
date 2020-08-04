@@ -6,6 +6,7 @@ use App\Jobs\Orders\FixAllNullProductIdsJob;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,6 +20,8 @@ class FixAllNullProductIdsJobTest extends TestCase
      */
     public function test_if_runs_without_exceptions()
     {
+        Event::fake();
+
         // prepare
         OrderProduct::query()->delete();
 
