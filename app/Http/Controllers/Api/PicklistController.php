@@ -14,10 +14,10 @@ class PicklistController extends Controller
     public function index(Request $request)
     {
         $query = Picklist::query()
-            ->select([
-                'picklists.*',
-                'pick_location_inventory.shelve_location'
-            ])
+//            ->select([
+//                'picklists.*',
+//                'pick_location_inventory.shelve_location'
+//            ])
             ->whereNull('picked_at')
             ->leftJoin('inventory as pick_location_inventory', function ($join) {
                 $join->on('pick_location_inventory.product_id', '=', 'picklists.product_id');
