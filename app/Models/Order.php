@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\PicklistService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Arr;

@@ -13,6 +13,13 @@ use Illuminate\Support\Str;
 
 class OrderService
 {
+    public static function addToPicklist(Order $order)
+    {
+        foreach ($order->orderProducts()->get() as $orderProduct) {
+            PicklistService::addOrderProductPick($orderProduct);
+        }
+    }
+
     public static function updateOrCreate(array $data)
     {
         $order = Order::query()

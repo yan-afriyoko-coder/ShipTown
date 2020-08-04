@@ -15,7 +15,7 @@
                                 <div class="row pt-1 mt-1 text-center border-top">
                                     <div class="col-6">
                                         <div class=""></div>
-                                        <div class="text-secondary h6 text-left">order: <span class="font-weight-bold"> - </span></div>
+                                        <div class="text-secondary h6 text-left">order: <span class="font-weight-bold"> -{{ picklistItem.order.order_number }} </span></div>
                                     </div>
                                     <div class="col-3">
                                         <div>To Pick</div>

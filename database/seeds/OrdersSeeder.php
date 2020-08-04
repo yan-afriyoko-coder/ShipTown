@@ -15,17 +15,18 @@ class OrdersSeeder extends Seeder
     public function run()
     {
         factory(Order::class,10)
-            ->create()->each(function ($order) {
+            ->create()
+            ->each(function (Order $order) {
                 $orderProducts = factory(OrderProduct::class, rand(1,20))->make();
 
                 $order->orderProducts()->saveMany($orderProducts);
             });
 
         // we fabricate few orders with SKU not present in database
-        factory(Order::class,5)
-            ->create()->each(function ($order) {
-
-                $orderProducts = collect(factory(OrderProduct::class, rand(1,20))->make())
+        factory(Order::class,1)
+            ->create()
+            ->each(function (Order $order) {
+                $orderProducts = collect(factory(OrderProduct::class,2)->make())
                     ->map(function ($orderProduct) {
 
                         $suffix = Arr::random(['-blue', '-red', '-green', '-xl', '-small-orange']);
@@ -38,7 +39,6 @@ class OrdersSeeder extends Seeder
                     });
 
                 $order->orderProducts()->saveMany($orderProducts);
-
             });
 
     }
