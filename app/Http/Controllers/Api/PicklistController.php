@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Picklist\StoreRequest;
 use App\Http\Resources\PicklistResource;
 use App\Models\Picklist;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -13,25 +15,30 @@ class PicklistController extends Controller
 {
     public function index(Request $request)
     {
+        $inventory_location_id = 100;
+
         $query = Picklist::query()
-//            ->select([
-//                'picklists.*',
-//                'pick_location_inventory.shelve_location'
-//            ])
-            ->whereNull('picked_at')
-            ->leftJoin('inventory as pick_location_inventory', function ($join) {
+            ->select([
+                'picklists.*',
+                'pick_location_inventory.shelve_location'
+            ])
+            ->leftJoin('inventory as pick_location_inventory', function ($join) use ($inventory_location_id) {
                 $join->on('pick_location_inventory.product_id', '=', 'picklists.product_id');
-                $join->on('pick_location_inventory.location_id', '=', DB::raw(100));
+                $join->on('pick_location_inventory.location_id', '=', DB::raw($inventory_location_id));
             })
             ->with('product')
-            ->with('inventory')
+            ->with(['inventory' => function(HasMany $query) use ($inventory_location_id){
+                $query->where('location_id', '=', $inventory_location_id);
+                }])
             ->with('order')
-            ->orderBy('pick_location_inventory.shelve_location')
-            ->orderBy('picklists.sku_ordered')
+            ->whereNull('picked_at')
             ->when($request->has('currentLocation') && ( ! empty($request->get('currentLocation'))),
                 function ($query) use ($request) {
                     return $query->where('pick_location_inventory.shelve_location', '>=', $request->get('currentLocation'));
-                });
+                })
+
+            ->orderBy('pick_location_inventory.shelve_location')
+            ->orderBy('picklists.sku_ordered');
 
         return $query->paginate(3);
     }
