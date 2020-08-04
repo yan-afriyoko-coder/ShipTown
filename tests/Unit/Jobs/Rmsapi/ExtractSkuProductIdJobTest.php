@@ -7,6 +7,7 @@ use App\Models\Inventory;
 use App\Modules\Rmsapi\src\Jobs\ExtractSkuAndProductIdJob;
 use App\Models\Product;
 use App\Models\RmsapiProductImport;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -20,6 +21,8 @@ class ExtractSkuProductIdJobTest extends TestCase
      */
     public function test_if_all_sku_are_populated()
     {
+        Event::fake();
+
         // prepare
         Product::query()->forceDelete();
         Inventory::query()->delete();

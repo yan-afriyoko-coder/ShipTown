@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\OrderCreatedEvent;
+use App\Models\Order;
 use App\Models\Picklist;
 use App\Services\PicklistService;
 use Illuminate\Queue\InteractsWithQueue;
@@ -28,9 +29,17 @@ class AddToPicklistOnOrderCreatedEventListener
      */
     public function handle(OrderCreatedEvent $event)
     {
-        if ($event->order->status_code == 'picking') {
+        $this->addToPicklist($event->order);
+    }
+
+    /**
+     * @param Order $order
+     */
+    public function addToPicklist(Order $order): void
+    {
+        if ($order->status_code == 'picking') {
             PicklistService::addOrderProductPick(
-                $event->order->orderProducts()->get()->toArray()
+                $order->orderProducts()->get()->toArray()
             );
         }
     }

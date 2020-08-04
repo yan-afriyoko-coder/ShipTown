@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Picklist;
 use App\User;
 use Doctrine\DBAL\Driver\IBMDB2\DB2Connection;
+use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -19,6 +20,8 @@ class PicklistRoutesTest extends TestCase
      */
     public function test_get_route()
     {
+        Event::fake();
+
         Passport::actingAs(
             factory(User::class)->create()
         );
@@ -50,6 +53,7 @@ class PicklistRoutesTest extends TestCase
 
     public function test_if_quantity_picked_is_deducted_from_quantity_to_pick()
     {
+        Event::fake();
 
         Passport::actingAs(
             factory(User::class)->create()

@@ -7,6 +7,7 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductAlias;
 use App\Models\RmsapiProductImport;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 
@@ -14,6 +15,8 @@ class ProcessImportedProductsJobTest extends TestCase
 {
     public function test_if_imports_aliases()
     {
+        Event::fake();
+
         // prepare
         RmsapiProductImport::query()->delete();
         Product::query()->forceDelete();
@@ -32,6 +35,8 @@ class ProcessImportedProductsJobTest extends TestCase
 
     public function test_if_processes_correctly()
     {
+        Event::fake();
+
         // prepare
         RmsapiProductImport::query()->delete();
         Product::query()->forceDelete();
