@@ -29,6 +29,9 @@ class PicklistRoutesTest extends TestCase
         factory(Picklist::class)->create();
 
         $response = $this->json('GET', 'api/picklist');
+        dd(
+        $response->json()
+    );
 
         $response->assertStatus(200);
 

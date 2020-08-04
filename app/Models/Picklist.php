@@ -33,6 +33,11 @@ class Picklist extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+
     public function inventory()
     {
         return $this->hasMany(

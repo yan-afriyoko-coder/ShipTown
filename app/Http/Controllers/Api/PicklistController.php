@@ -25,6 +25,7 @@ class PicklistController extends Controller
             })
             ->with('product')
             ->with('inventory')
+            ->with('order')
             ->orderBy('pick_location_inventory.shelve_location')
             ->orderBy('picklists.sku_ordered')
             ->when($request->has('currentLocation') && ( ! empty($request->get('currentLocation'))),
