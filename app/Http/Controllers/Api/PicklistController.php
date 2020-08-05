@@ -19,6 +19,7 @@ class PicklistController extends Controller
         $inventory_location_id = 100;
         $single_line_orders_only = $request->get('single_line_orders_only', false);
         $currentLocation = $request->get('currentLocation', null);
+        $per_page = $request->get('per_page', 3);
 
         $query = Picklist::query()
             ->select([
@@ -52,7 +53,7 @@ class PicklistController extends Controller
             ->orderBy('pick_location_inventory.shelve_location')
             ->orderBy('picklists.sku_ordered');
 
-        return $query->paginate(3);
+        return $query->paginate($per_page);
     }
 
     public function store(StoreRequest $request, Picklist $picklist)

@@ -125,8 +125,6 @@
                 this.last_page = 1;
                 this.total = 0;
 
-                console.log(this.$router.currentRoute.query);
-
                 return new Promise((resolve, reject) => {
                     this.showLoading();
                     axios.get('/api/picklist', {
@@ -136,6 +134,7 @@
                             sort: this.sort,
                             order: this.order,
                             single_line_orders_only: this.$router.currentRoute.query.single_line_orders_only,
+                            per_page: this.$router.currentRoute.query.per_page,
                         }
                     }).then(({ data }) => {
                         this.picklist = this.picklist.concat(data.data);
