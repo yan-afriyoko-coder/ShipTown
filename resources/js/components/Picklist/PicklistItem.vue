@@ -15,7 +15,8 @@
                                 <div class="row pt-1 mt-1 text-center border-top">
                                     <div class="col-6">
                                         <div class=""></div>
-                                        <div class="text-secondary h6 text-left">order: <span class="font-weight-bold"> -{{ picklistItem.order.order_number }} </span></div>
+                                        <div class="text-secondary h6 text-left">order: <span class="font-weight-bold"> {{ order_number }} </span></div>
+                                        <div class="text-secondary h6 text-left">lines: <span class="font-weight-bold"> {{ order_product_line_count }} </span></div>
                                     </div>
                                     <div class="col-3">
                                         <div>To Pick</div>
@@ -41,6 +42,8 @@
 
     export default {
         created() {
+            this.order_number = this.picklistItem.order.order_number;
+            this.order_product_line_count = this.picklistItem.order.product_line_count;
             this.product_sku = this.picklistItem.product ? this.picklistItem.product.sku : '';
             this.location_id = this.picklistItem.location_id;
             this.shelve_location = this.picklistItem.shelve_location;
