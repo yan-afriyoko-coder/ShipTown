@@ -16,10 +16,12 @@ class PicklistController extends Controller
 {
     public function index(Request $request)
     {
+
         $inventory_location_id = 100;
-        $single_line_orders_only = $request->get('single_line_orders_only', false);
+        $single_line_orders_only = $request->get('single_line_orders_only', 'false') === 'true';
         $currentLocation = $request->get('currentLocation', null);
         $per_page = $request->get('per_page', 3);
+
 
         $query = Picklist::query()
             ->select([
@@ -39,7 +41,7 @@ class PicklistController extends Controller
                     $query->where('location_id', '=', $inventory_location_id);
                 },
             ])
-            ->when($currentLocation,
+            ->when(isset($currentLocation),
                 function (Builder $query) use ($currentLocation) {
                     return $query->where('pick_location_inventory.shelve_location', '>=', $currentLocation);
                 })
