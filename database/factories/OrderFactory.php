@@ -21,7 +21,7 @@ $factory->define(Order::class, function (Faker $faker) {
         'order_number' => (string) (10000000 + $faker->unique()->randomNumber(7)),
         'order_placed_at' => $order_placed_at,
         'order_closed_at' => $order_closed_at,
-        'product_line_count' => $faker->randomNumber(1),
+        'product_line_count' => $faker->numberBetween(1,4),
         'total_quantity_ordered' => $faker->randomNumber(2),
         'status_code' => $status_code,
     ];

@@ -37,9 +37,12 @@ class PicklistController extends Controller
                     return $query->where('pick_location_inventory.shelve_location', '>=', $request->get('currentLocation'));
                 })
 
-            ->whereHas('order', function ($query) {
-                return $query->where('product_line_count', '=', 1);
+            ->when($request->get('single_line_orders_only', false), function ($query) {
+                return $query->whereHas('order', function ($query) {
+                    return $query->where('product_line_count', '=', 1);
+                });
             })
+
             ->orderBy('pick_location_inventory.shelve_location')
             ->orderBy('picklists.sku_ordered');
 
