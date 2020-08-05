@@ -9,9 +9,9 @@
                     </div>
                 </div>
                 <div class="modal-body" style="margin: 0 auto 0;">
-                    <form method="POST" action="gago" @submit.prevent="handleSubmit">
+                    <form method="POST" @submit.prevent="handleSubmit">
                         <div class="form-group form-check">
-                            <input v-model="config.single_line_orders_only" type="checkbox" class="form-check-input" />
+                            <input v-model="params.single_line_orders_only" type="checkbox" class="form-check-input" />
                             <label class="form-check-label" >Show single line orders only</label>
                         </div>
                     </form>
@@ -30,26 +30,18 @@
 export default {
 
     props: {
-        config: Object,
+        params: Object,
     },
 
     computed: {
         helpText() {
-            let text = 'APT - Average Processing Time<br>' +
-                        '<br>' +
-                        'This is the average time difference between time when order has been placed' +
-                        'and time when status was first changed to something different that "processsing" <br>' +
-                        '<br>' +
-                        'Only orders with one of the following statuses are taken into calculations:<br><ul>';
-
-            text += '</ul>';
-            return text;
+            return 'Single line orders are orders with only single product ordered.';
         }
     },
 
     methods: {
         handleSubmit() {
-            this.$emit('btnSaveClicked', this.config);
+            this.$emit('btnSaveClicked', this.params);
 
             $(this.$el).modal('hide');
         }

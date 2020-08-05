@@ -28,7 +28,7 @@
 <!--            </div>-->
         </div>
         <div class="container">
-            <div v-if="total == 0 && !isLoading" class="row" >
+            <div v-if="picklist.length === 0 && !isLoading" class="row" >
                 <div class="col">
                     <div class="alert alert-info" role="alert">
                         No products found.
@@ -45,7 +45,7 @@
         </div>
 
         <!--     Modal -->
-        <picklist-configuration-modal :config="config" id='picklistConfigurationModal' @btnSaveClicked="onConfigChange" />
+        <picklist-configuration-modal :params="params" id='picklistConfigurationModal' @btnSaveClicked="onConfigChange" />
 
     </div>
 
@@ -67,7 +67,7 @@
         routes: [
             {
                 path: '/picklist',
-                name: 'picklist',
+                // name: 'picklist',
                 // component: Home
             },
         ],
@@ -83,44 +83,35 @@
 
         router: Router,
 
-        watch: {
-            currentLocation: function() {
-                // let l = this.currentLocation;
-                // history.pushState({},null,'/picklist?currentLocation='+ l);
-            },
-        },
-
         data: function() {
             return {
-                config: {
+                params: {
                     single_line_orders_only: false,
                 },
                 barcode: '',
                 currentLocation: '',
-                sort: 'sku',
-                order: 'asc',
                 picklist: [],
-                total: 0,
-                page: 1,
-                last_page: 1,
                 showScanner: false,
             };
         },
 
         created() {
-            this.getProductList(this.page);
+            this.getProductList();
         },
 
+
         mounted() {
-            this.$refs.barcode.focus()
-            this.scroll();
+            this.focusBarcodeAndSelectAll();
+            // this.scroll();
         },
 
         methods: {
 
-            onConfigChange: function(config) {
-                console.log(config);
+            focusBarcodeAndSelectAll() {
+                this.$refs.barcode.focus();
+            },
 
+            onConfigChange: function(config) {
                 this.loadProducts();
             },
 
@@ -132,7 +123,6 @@
                 if(barcode === '') {
                     return;
                 }
-                //
 
                 for (let element of this.picklist) {
                     if(element.sku_ordered === barcode) {
@@ -155,40 +145,32 @@
 
             getPicklistParams: function() {
 
-                let $params = {
-                    page: 1,
-                    currentLocation: this.currentLocation,
-                    sort: this.sort,
-                    order: this.order,
-                    // single_line_orders_only: this.$router.currentRoute.query.single_line_orders_only,
-                    single_line_orders_only: this.config.single_line_orders_only,
-                    per_page: this.$router.currentRoute.query.per_page,
-                };
+                // let $params = {
+                //     page: 1,
+                //     currentLocation: this.currentLocation,
+                //     sort: this.sort,
+                //     order: this.order,
+                //     // single_line_orders_only: this.$router.currentRoute.query.single_line_orders_only,
+                //     single_line_orders_only: this.config.single_line_orders_only,
+                //     per_page: this.$router.currentRoute.query.per_page,
+                // };
 
                 history.pushState({},null,'/picklist?'+
                     'currentLocation='+ this.currentLocation
                 );
 
-                return $params;
+                return this.params;
             },
 
             getProductList: function(page) {
 
                 const params = this.getPicklistParams();
-                console.log(params);
-
-                this.picklist = [];
-                this.page = 1;
-                this.last_page = 1;
-                this.total = 0;
 
                 return new Promise((resolve, reject) => {
                     this.showLoading();
                     axios.get('/api/picklist', {params: params})
                         .then(({ data }) => {
                             this.picklist = data.data;
-                            this.total = data.total;
-                            this.last_page = data.last_page;
                             resolve(data);
                         })
                         .catch(reject)
@@ -207,15 +189,15 @@
                 setTimeout(() => { document.execCommand('selectall', null, false); });
             },
 
-            scroll (person) {
-                window.onscroll = () => {
-                    let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
-
-                    if (bottomOfWindow && this.last_page > this.page) {
-                        this.getProductList(++this.page);
-                    }
-                };
-            },
+            // scroll (person) {
+            //     window.onscroll = () => {
+            //         let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
+            //
+            //         if (bottomOfWindow && this.last_page > this.page) {
+            //             this.getProductList(++this.page);
+            //         }
+            //     };
+            // },
 
             pickProduct(pickedItem) {
                 axios.post(`/api/picklist/${pickedItem.id}`, {'quantity_picked': pickedItem.quantity_requested})
@@ -248,7 +230,6 @@
                         this.$snotify.error(`Items not picked.`);
                     });
             },
-
 
             initScanner(e) {
                 this.showScanner = true;
