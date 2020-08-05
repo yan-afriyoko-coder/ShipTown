@@ -4,7 +4,7 @@
             <div id="interactive" class="viewport overlay-content"></div>
         </div>
         <div class="row mb-3 ml-1 mr-1">
-            <div class="col-10">
+            <div class="col-9">
                 <input ref="barcode"
                        class="form-control"
                        v-model="barcode"
@@ -19,6 +19,9 @@
                        @focus="selectAll"
                        @keyup.enter="loadProducts"
                        placeholder="Scan current shelf location" />
+            </div>
+            <div class="col-1">
+                <a style="cursor:pointer;" data-toggle="modal" data-target="#picklistConfigurationModal"><font-awesome-icon icon="cog"></font-awesome-icon></a>
             </div>
 <!--            <div class="col">-->
 <!--                <button type="button" class="btn btn-secondary" @click.prevent="initScanner" href="#"><font-awesome-icon icon="barcode"></font-awesome-icon></button>-->
@@ -118,6 +121,24 @@
 
             },
 
+            getPicklistParams: function() {
+
+                let $params = {
+                    page: 1,
+                    currentLocation: this.currentLocation,
+                    sort: this.sort,
+                    order: this.order,
+                    single_line_orders_only: this.$router.currentRoute.query.single_line_orders_only,
+                    per_page: this.$router.currentRoute.query.per_page,
+                };
+
+                history.pushState({},null,'/picklist?currentLocation='+ this.currentLocation);
+
+
+                return $params;
+
+            },
+
             getProductList: function(page) {
 
                 this.picklist = [];
@@ -128,14 +149,7 @@
                 return new Promise((resolve, reject) => {
                     this.showLoading();
                     axios.get('/api/picklist', {
-                        params: {
-                            page: page,
-                            currentLocation: this.currentLocation,
-                            sort: this.sort,
-                            order: this.order,
-                            single_line_orders_only: this.$router.currentRoute.query.single_line_orders_only,
-                            per_page: this.$router.currentRoute.query.per_page,
-                        }
+                        params: this.getPicklistParams()
                     }).then(({ data }) => {
                         this.picklist = this.picklist.concat(data.data);
                         this.total = data.total;
