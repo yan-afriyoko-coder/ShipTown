@@ -19,9 +19,5 @@
         </div>
     </div>
 </div>
-
-<!-- Modal -->
-<picklist-configuration-modal id='picklistConfigurationModal'></picklist-configuration-modal>
-
 @endsection
 

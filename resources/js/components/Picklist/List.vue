@@ -43,7 +43,12 @@
                 </template>
             </template>
         </div>
+
+        <!--     Modal -->
+        <picklist-configuration-modal :config="config" id='picklistConfigurationModal' @btnSaveClicked="onConfigChange" />
+
     </div>
+
 </template>
 
 <script>
@@ -51,6 +56,7 @@
 
     import loadingOverlay from '../../mixins/loading-overlay';
     import PicklistItem from './PicklistItem';
+    import PicklistConfigurationModal from './ConfigurationModal.vue';
 
     import VueRouter from 'vue-router';
 
@@ -70,7 +76,10 @@
     export default {
         mixins: [loadingOverlay],
 
-        components: { 'picklist-item': PicklistItem },
+        components: {
+            'picklist-item': PicklistItem,
+            'picklist-configuration-modal': PicklistConfigurationModal,
+        },
 
         router: Router,
 
@@ -79,6 +88,23 @@
                 // let l = this.currentLocation;
                 // history.pushState({},null,'/picklist?currentLocation='+ l);
             },
+        },
+
+        data: function() {
+            return {
+                config: {
+                    single_line_orders_only: false,
+                },
+                barcode: '',
+                currentLocation: '',
+                sort: 'sku',
+                order: 'asc',
+                picklist: [],
+                total: 0,
+                page: 1,
+                last_page: 1,
+                showScanner: false,
+            };
         },
 
         created() {
@@ -91,6 +117,12 @@
         },
 
         methods: {
+
+            onConfigChange: function(config) {
+                console.log(config);
+
+                this.loadProducts();
+            },
 
             pickBarcode: function (e) {
 
@@ -128,18 +160,22 @@
                     currentLocation: this.currentLocation,
                     sort: this.sort,
                     order: this.order,
-                    single_line_orders_only: this.$router.currentRoute.query.single_line_orders_only,
+                    // single_line_orders_only: this.$router.currentRoute.query.single_line_orders_only,
+                    single_line_orders_only: this.config.single_line_orders_only,
                     per_page: this.$router.currentRoute.query.per_page,
                 };
 
-                history.pushState({},null,'/picklist?currentLocation='+ this.currentLocation);
-
+                history.pushState({},null,'/picklist?'+
+                    'currentLocation='+ this.currentLocation
+                );
 
                 return $params;
-
             },
 
             getProductList: function(page) {
+
+                const params = this.getPicklistParams();
+                console.log(params);
 
                 this.picklist = [];
                 this.page = 1;
@@ -148,18 +184,17 @@
 
                 return new Promise((resolve, reject) => {
                     this.showLoading();
-                    axios.get('/api/picklist', {
-                        params: this.getPicklistParams()
-                    }).then(({ data }) => {
-                        this.picklist = this.picklist.concat(data.data);
-                        this.total = data.total;
-                        this.last_page = data.last_page;
-                        resolve(data);
-                    })
-                    .catch(reject)
-                    .then(() => {
-                        this.hideLoading();
-                    });
+                    axios.get('/api/picklist', {params: params})
+                        .then(({ data }) => {
+                            this.picklist = data.data;
+                            this.total = data.total;
+                            this.last_page = data.last_page;
+                            resolve(data);
+                        })
+                        .catch(reject)
+                        .then(() => {
+                            this.hideLoading();
+                        });
                 });
             },
 
@@ -267,19 +302,7 @@
             }
         },
 
-        data: function() {
-            return {
-                barcode: '',
-                currentLocation: '',
-                sort: 'sku',
-                order: 'asc',
-                picklist: [],
-                total: 0,
-                page: 1,
-                last_page: 1,
-                showScanner: false,
-            };
-        },
+
     }
 </script>
 
