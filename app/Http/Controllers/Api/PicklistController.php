@@ -8,6 +8,7 @@ use App\Http\Resources\PicklistResource;
 use App\Models\Picklist;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -16,32 +17,37 @@ class PicklistController extends Controller
     public function index(Request $request)
     {
         $inventory_location_id = 100;
+        $single_line_orders_only = $request->get('single_line_orders_only', false);
+        $currentLocation = $request->get('currentLocation', null);
 
         $query = Picklist::query()
             ->select([
                 'picklists.*',
                 'pick_location_inventory.shelve_location'
             ])
-            ->leftJoin('inventory as pick_location_inventory', function ($join) use ($inventory_location_id) {
-                $join->on('pick_location_inventory.product_id', '=', 'picklists.product_id');
-                $join->on('pick_location_inventory.location_id', '=', DB::raw($inventory_location_id));
-            })
-            ->with('product')
-            ->with(['inventory' => function(HasMany $query) use ($inventory_location_id){
-                $query->where('location_id', '=', $inventory_location_id);
-                }])
-            ->with('order')
             ->whereNull('picked_at')
-            ->when($request->has('currentLocation') && ( ! empty($request->get('currentLocation'))),
-                function ($query) use ($request) {
-                    return $query->where('pick_location_inventory.shelve_location', '>=', $request->get('currentLocation'));
+            ->leftJoin('inventory as pick_location_inventory',
+                function (JoinClause $join) use ($inventory_location_id) {
+                    $join->on('pick_location_inventory.product_id', '=', 'picklists.product_id');
+                    $join->on('pick_location_inventory.location_id', '=', DB::raw($inventory_location_id));
                 })
-
-            ->when($request->get('single_line_orders_only', false), function ($query) {
-                return $query->whereHas('order', function ($query) {
-                    return $query->where('product_line_count', '=', 1);
-                });
-            })
+            ->with([
+                'product',
+                'order',
+                'inventory' => function(HasMany $query) use ($inventory_location_id) {
+                    $query->where('location_id', '=', $inventory_location_id);
+                },
+            ])
+            ->when($currentLocation,
+                function (Builder $query) use ($currentLocation) {
+                    return $query->where('pick_location_inventory.shelve_location', '>=', $currentLocation);
+                })
+            ->when($single_line_orders_only,
+                function (Builder $query) {
+                    return $query->whereHas('order', function (Builder $query) {
+                        return $query->where('product_line_count', '=', 1);
+                    });
+                })
 
             ->orderBy('pick_location_inventory.shelve_location')
             ->orderBy('picklists.sku_ordered');
