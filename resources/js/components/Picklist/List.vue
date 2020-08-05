@@ -49,17 +49,41 @@
     import loadingOverlay from '../../mixins/loading-overlay';
     import PicklistItem from './PicklistItem';
 
+    import VueRouter from 'vue-router';
+
+    Vue.use(VueRouter);
+
+    const Router = new VueRouter({
+        mode: 'history',
+        routes: [
+            {
+                path: '/picklist',
+                name: 'picklist',
+                // component: Home
+            },
+        ],
+    });
+
     export default {
         mixins: [loadingOverlay],
 
         components: { 'picklist-item': PicklistItem },
+
+        router: Router,
+
+        watch: {
+            currentLocation: function() {
+                // let l = this.currentLocation;
+                // history.pushState({},null,'/picklist?currentLocation='+ l);
+            },
+        },
 
         created() {
             this.getProductList(this.page);
         },
 
         mounted() {
-            this.$refs.barcode.focus();
+            this.$refs.barcode.focus()
             this.scroll();
         },
 
@@ -101,6 +125,8 @@
                 this.last_page = 1;
                 this.total = 0;
 
+                console.log(this.$router.currentRoute.query);
+
                 return new Promise((resolve, reject) => {
                     this.showLoading();
                     axios.get('/api/picklist', {
@@ -109,6 +135,7 @@
                             currentLocation: this.currentLocation,
                             sort: this.sort,
                             order: this.order,
+                            single_line_orders_only: this.$router.currentRoute.query.single_line_orders_only,
                         }
                     }).then(({ data }) => {
                         this.picklist = this.picklist.concat(data.data);

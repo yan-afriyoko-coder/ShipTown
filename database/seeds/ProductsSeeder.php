@@ -12,17 +12,17 @@ class ProductsSeeder extends Seeder
      */
     public function run()
     {
-        if(!Product::query()->where('sku','=','123456')->exists()) {
-            factory(Product::class)->create(['sku' => '123456']);
-        }
+        $this->createProductWithSKUs(['123456']);
 
         factory(Product::class, 50)->create();
+    }
 
-        factory(Product::class, 10)->create([
-            "quantity" => 50,
-            "quantity_reserved" => 50
-        ]);
-
-
+    private function createProductWithSKUs(array $skuList): void
+    {
+        foreach ($skuList as $sku) {
+            if (!Product::query()->where('sku', '=', $sku)->exists()) {
+                factory(Product::class)->create(['sku' => $sku]);
+            }
+        }
     }
 }

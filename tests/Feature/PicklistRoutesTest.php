@@ -44,6 +44,7 @@ class PicklistRoutesTest extends TestCase
                     "quantity_requested",
                     "product",
                     "inventory",
+                    "order",
                 ]
             ],
             "total",

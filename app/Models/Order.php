@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Services\PicklistService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Arr;
 
 /**
+ * @property integer product_line_count
+ * @property integer total_quantity_ordered
  * @property string status_code
  */
 class Order extends Model
