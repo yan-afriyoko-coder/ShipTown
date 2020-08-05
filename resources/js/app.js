@@ -104,6 +104,11 @@ Vue.component(
 );
 
 Vue.component(
+    'picklist-configuration-modal',
+    require('./components/Picklist/ConfigurationModal.vue').default
+);
+
+Vue.component(
     'apt-configuration-modal',
     require('./components/Widgets/APT/ConfigurationModal.vue').default
 );
