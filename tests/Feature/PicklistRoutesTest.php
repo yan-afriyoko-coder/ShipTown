@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Picklist;
+use App\Models\Product;
 use App\User;
 use Doctrine\DBAL\Driver\IBMDB2\DB2Connection;
 use Illuminate\Support\Facades\Event;
@@ -26,6 +27,7 @@ class PicklistRoutesTest extends TestCase
             factory(User::class)->create()
         );
 
+        factory(Product::class)->create();
         factory(Picklist::class)->create();
 
         $response = $this->json('GET', 'api/picklist');
