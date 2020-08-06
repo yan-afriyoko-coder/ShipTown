@@ -5,20 +5,16 @@
         </div>
         <div class="row mb-3 ml-1 mr-1">
             <div class="col-9">
-                <input ref="barcode"
-                       class="form-control"
+                <input ref="barcode" class="form-control" placeholder="Scan sku or barcode"
                        v-model="barcode"
                        @focus="simulateSelectAll"
-                       @keyup.enter="pickBarcode"
-                       placeholder="Scan sku or barcode" />
+                       @keyup.enter="pickBarcode(barcode)"/>
             </div>
             <div class="col-2">
-                <input ref="currentLocation"
+                <input ref="currentLocation" class="form-control" placeholder="Scan current shelf location"
                        v-model="picklistFilters.currentLocation"
-                       class="form-control"
                        @focus="simulateSelectAll"
-                       @keyup.enter="updateUrlAndReloadProducts"
-                       placeholder="Scan current shelf location" />
+                       @keyup.enter="updateUrlAndReloadProducts"/>
             </div>
             <div class="col-1">
                 <a style="cursor:pointer;" data-toggle="modal" data-target="#picklistConfigurationModal"><font-awesome-icon icon="cog"></font-awesome-icon></a>
@@ -45,7 +41,9 @@
         </div>
 
         <!--     Modal -->
-        <picklist-configuration-modal :picklistFilters="picklistFilters" id='picklistConfigurationModal' @btnSaveClicked="onConfigChange" />
+        <picklist-configuration-modal :picklistFilters="picklistFilters"
+                                      id='picklistConfigurationModal'
+                                      @btnSaveClicked="onConfigChange" />
 
     </div>
 
@@ -64,13 +62,6 @@
 
     const Router = new VueRouter({
         mode: 'history',
-        routes: [
-            {
-                path: '/picklist',
-                // name: 'picklist',
-                // component: Home
-            },
-        ],
     });
 
     export default {
@@ -96,11 +87,6 @@
             };
         },
 
-        mounted() {
-            this.updateUrlAndReloadProducts();
-            this.setFocusOnBarcodeInput();
-        },
-
         watch: {
             picklistFilters: {
                 handler() {
@@ -108,6 +94,12 @@
                 },
                 deep:true
             }
+        },
+
+        mounted() {
+            this.updateUrlAndReloadProducts();
+            this.setFocusOnBarcodeInput();
+            this.simulateSelectAll();
         },
 
         methods: {
@@ -139,7 +131,7 @@
                     .then(({ data }) => {
                         this.picklistFilters.currentLocation = pickedItem.shelve_location;
                         this.picklist.splice(this.picklist.indexOf(pickedItem), 1);
-                        this.displayNotification(pickedItem);
+                        this.displayPickedNotification(pickedItem);
                         if(this.picklist.length === 0) {
                             this.updateUrlAndReloadProducts();
                         }
@@ -149,7 +141,7 @@
                     });
             },
 
-            displayNotification: function (pickedItem) {
+            displayPickedNotification: function (pickedItem) {
                 let itemIndex = this.picklist.indexOf(pickedItem);
                 const msg =  pickedItem.quantity_requested + ' x ' + pickedItem.sku_ordered + ' picked';
                 this.$snotify.confirm('', msg, {
@@ -171,32 +163,19 @@
                 });
             },
 
-            pickBarcode: function () {
-
-                let pickedItem;
-                let barcode = this.barcode;
-
+            pickBarcode: function (barcode) {
                 if(barcode === '') {
                     return;
                 }
 
                 for (let element of this.picklist) {
                     if(element.sku_ordered === barcode) {
-                        pickedItem = element;
-                        break;
+                        this.pickProduct(element);
+                        return;
                     }
                 }
 
-                if (typeof pickedItem == 'undefined') {
-                    this.$snotify.error(`"${barcode}" not found!`);
-                    this.simulateSelectAll();
-                    return;
-                }
-
-                this.pickProduct(pickedItem);
-
-                this.simulateSelectAll();
-
+                this.$snotify.error(`"${barcode}" not found on picklist!`);
             },
 
             onConfigChange: function(config) {
