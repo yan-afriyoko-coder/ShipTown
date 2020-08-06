@@ -125,9 +125,7 @@
 
             pickProduct(pickedItem) {
 
-                axios.post(`/api/picklist/${pickedItem.id}`,
-                    {'quantity_picked': pickedItem.quantity_requested})
-
+                this.postPick(pickedItem.id, pickedItem.quantity_requested)
                     .then(({ data }) => {
                         this.picklistFilters.currentLocation = pickedItem.shelve_location;
                         this.picklist.splice(this.picklist.indexOf(pickedItem), 1);
@@ -141,6 +139,12 @@
                     });
             },
 
+            postPick(id, quantity) {
+                return axios.post(`/api/picklist/${id}`, {
+                    'quantity_picked': quantity
+                });
+            },
+
             displayPickedNotification: function (pickedItem) {
                 let itemIndex = this.picklist.indexOf(pickedItem);
                 const msg =  pickedItem.quantity_requested + ' x ' + pickedItem.sku_ordered + ' picked';
@@ -152,7 +156,7 @@
                             text: 'Undo',
                             action: (toast) => {
                                 this.$snotify.remove(toast.id);
-                                axios.post(`/api/picklist/${pickedItem.id}`, {'quantity_picked': pickedItem.quantity_requested * -1})
+                                this.postPick(pickedItem.id, pickedItem.quantity_requested * -1)
                                     .then(() => {
                                         this.$snotify.warning('Action reverted');
                                         this.picklist.splice(itemIndex, 0, pickedItem);
