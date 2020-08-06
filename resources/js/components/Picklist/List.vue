@@ -180,6 +180,9 @@
                 }
 
                 this.$snotify.error(`"${barcode}" not found on picklist!`);
+
+                this.setFocusOnBarcodeInput();
+                this.simulateSelectAll();
             },
 
             onConfigChange: function(config) {
