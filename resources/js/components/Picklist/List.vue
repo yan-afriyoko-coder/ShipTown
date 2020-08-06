@@ -78,6 +78,7 @@
             const $urlParameters = this.$router.currentRoute.query;
             return {
                 picklistFilters: {
+                    include: 'product.aliases',
                     single_line_orders_only: this.setDefaultVal($urlParameters.single_line_orders, false),
                     currentLocation: this.setDefaultVal($urlParameters.currentLocation,  ''),
                 },
@@ -167,22 +168,49 @@
                 });
             },
 
+            findPickItem: function (barcode) {
+                for (let element of this.picklist) {
+
+                    if(element.sku_ordered === barcode) {
+                        return element;
+                    }
+
+                    if(typeof element.product === 'undefined'){
+                        continue;
+                    }
+
+                    if(element.product.sku === barcode) {
+                        return element;
+                    }
+
+                    if(typeof element.product.aliases === 'undefined') {
+                        continue;
+                    }
+
+                    for(let alias of element.product.aliases) {
+                        if(alias.alias === barcode){
+                            return element;
+                        }
+                    }
+
+
+                }
+                return null;
+            },
+
             pickBarcode: function (barcode) {
                 if(barcode === '') {
                     return;
                 }
 
-                for (let element of this.picklist) {
-                    if(element.sku_ordered === barcode) {
-                        this.pickProduct(element);
-                        return;
-                    }
+                let pickItem = this.findPickItem(barcode);
+
+                if(pickItem) {
+                    this.pickProduct(pickItem);
+                    return;
                 }
 
                 this.$snotify.error(`"${barcode}" not found on picklist!`);
-
-                this.setFocusOnBarcodeInput();
-                this.simulateSelectAll();
             },
 
             onConfigChange: function(config) {
