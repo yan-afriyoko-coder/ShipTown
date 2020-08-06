@@ -8,33 +8,40 @@ use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ProductsController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::query();
+        $fields = ['id','sku', 'name', 'price'];
 
-        if($request->has('q') && $request->get('q')) {
+        $query = QueryBuilder::for(Product::class)
+            ->allowedFilters($fields)
+            ->allowedSorts($fields);
 
-            $product = ProductService::find($request->get('q'));
-
-            if ($product) {
-                $query->whereKey($product->getKey());
-            } else {
-                $query->where('sku', 'like', '%' . $request->get('q') . '%')
-                    ->orWhere('name', 'like', '%' . $request->get('q') . '%');
-            }
-
-        }
-
-        if($request->has('sort') ){
-            $query->orderBy($request->get('sort'), $request->get('order', 'asc'));
-        }
-
+//        $query = Product::query();
+//
+//        if($request->has('q') && $request->get('q')) {
+//
+//            $product = ProductService::find($request->get('q'));
+//
+//            if ($product) {
+//                $query->whereKey($product->getKey());
+//            } else {
+//                $query->where('sku', 'like', '%' . $request->get('q') . '%')
+//                    ->orWhere('name', 'like', '%' . $request->get('q') . '%');
+//            }
+//
+//        }
+//
+//        if($request->has('sort') ){
+//            $query->orderBy($request->get('sort'), $request->get('order', 'asc'));
+//        }
+//
         $query->with('inventory');
 
-        return $query->paginate(100);
+        return $query->paginate(100)->appends($request->query());
     }
 
     public function store(StoreProductsRequest $request)
