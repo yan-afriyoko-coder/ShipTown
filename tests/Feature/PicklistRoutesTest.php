@@ -47,6 +47,7 @@ class PicklistRoutesTest extends TestCase
                     "product",
                     "inventory",
                     "order",
+                    "aliases",
                 ]
             ],
             "total",

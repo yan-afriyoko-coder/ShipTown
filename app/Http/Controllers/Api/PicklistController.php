@@ -22,7 +22,6 @@ class PicklistController extends Controller
         $currentLocation = $request->get('currentLocation', null);
         $per_page = $request->get('per_page', 3);
 
-
         $query = Picklist::query()
             ->select([
                 'picklists.*',
@@ -37,6 +36,7 @@ class PicklistController extends Controller
             ->with([
                 'product',
                 'order',
+//                'aliases',
                 'inventory' => function(HasMany $query) use ($inventory_location_id) {
                     $query->where('location_id', '=', $inventory_location_id);
                 },
