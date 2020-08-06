@@ -175,7 +175,7 @@
                         return element;
                     }
 
-                    if(typeof element.product === 'undefined'){
+                    if(element.product === null){
                         continue;
                     }
 
