@@ -7,7 +7,9 @@ use App\Http\Requests\StoreProductsRequest;
 use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class ProductsController extends Controller
@@ -17,9 +19,12 @@ class ProductsController extends Controller
         $fields = ['id','sku', 'name', 'price'];
 
         $query = QueryBuilder::for(Product::class)
-            ->allowedFilters($fields)
+            ->allowedFilters(array_merge(
+                    $fields,
+                    [AllowedFilter::scope('sku_or_alias')]
+                ))
             ->allowedSorts($fields)
-            ->allowedIncludes('inventory');
+            ->allowedIncludes('inventory', 'aliases');
 
 
         if($request->has('q') && $request->get('q')) {

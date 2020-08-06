@@ -5,6 +5,7 @@ namespace App\Models;
 
 use DateTime;
 use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -77,8 +78,27 @@ class Product extends Model
             ->keyBy('location_id');
     }
 
+    public function aliases()
+    {
+        return $this->hasMany(ProductAlias::class);
+    }
+
     public static function findBySKU(string $sku)
     {
         return static::query()->where('sku', '=', $sku)->first();
+    }
+
+
+
+    /**
+     * @param Builder $query
+     * @param string $skuOrAlias
+     * @return Builder
+     */
+    public function scopeSkuOrAlias(Builder $query, string $skuOrAlias)
+    {
+        return $query->whereHas('aliases', function (Builder $query) use ($skuOrAlias) {
+            return $query->where('alias', 'like', '%'.$skuOrAlias.'%');
+        });
     }
 }
