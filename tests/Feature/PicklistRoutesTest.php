@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Picklist;
 use App\Models\Product;
+use App\Models\ProductAlias;
 use App\User;
 use Doctrine\DBAL\Driver\IBMDB2\DB2Connection;
 use Illuminate\Support\Facades\Event;
@@ -27,10 +28,17 @@ class PicklistRoutesTest extends TestCase
             factory(User::class)->create()
         );
 
-        factory(Product::class)->create();
-        factory(Picklist::class)->create();
+        $product = factory(Product::class)->create();
 
-        $response = $this->json('GET', 'api/picklist');
+        factory(ProductAlias::class)->create([
+            'product_id' => $product->getKey()
+        ]);
+
+        factory(Picklist::class)->create([
+            'product_id' => $product->getKey()
+        ]);
+
+        $response = $this->json('GET', 'api/picklist?include=product.aliases');
 
         $response->assertStatus(200);
 
@@ -44,7 +52,9 @@ class PicklistRoutesTest extends TestCase
                     "sku_ordered",
                     "name_ordered",
                     "quantity_requested",
-                    "product",
+                    "product" => [
+                        'aliases'
+                    ],
                     "inventory",
                     "order",
                 ]

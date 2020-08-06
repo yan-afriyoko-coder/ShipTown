@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class PicklistController extends Controller
 {
@@ -22,8 +23,8 @@ class PicklistController extends Controller
         $currentLocation = $request->get('currentLocation', null);
         $per_page = $request->get('per_page', 3);
 
-
-        $query = Picklist::query()
+        $query = QueryBuilder::for(Picklist::class)
+            ->allowedIncludes('product.aliases')
             ->select([
                 'picklists.*',
                 'pick_location_inventory.shelve_location'
@@ -37,6 +38,7 @@ class PicklistController extends Controller
             ->with([
                 'product',
                 'order',
+//                'product.aliases',
                 'inventory' => function(HasMany $query) use ($inventory_location_id) {
                     $query->where('location_id', '=', $inventory_location_id);
                 },
@@ -54,6 +56,8 @@ class PicklistController extends Controller
 
             ->orderBy('pick_location_inventory.shelve_location')
             ->orderBy('picklists.sku_ordered');
+
+//        dd($query->get()->toArray());
 
         return $query->paginate($per_page);
     }
