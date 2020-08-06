@@ -22,6 +22,14 @@ class OrdersSeeder extends Seeder
                 $order->orderProducts()->saveMany($orderProducts);
             });
 
+        factory(Order::class,2)
+            ->create()
+            ->each(function (Order $order) {
+                $orderProducts = factory(OrderProduct::class, 1)->make();
+
+                $order->orderProducts()->saveMany($orderProducts);
+            });
+
         // we fabricate few orders with SKU not present in database
         factory(Order::class,1)
             ->create()
