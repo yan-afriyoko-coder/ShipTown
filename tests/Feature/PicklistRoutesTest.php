@@ -38,7 +38,7 @@ class PicklistRoutesTest extends TestCase
             'product_id' => $product->getKey()
         ]);
 
-        $response = $this->json('GET', 'api/picklist');
+        $response = $this->json('GET', 'api/picklist?include=product.aliases');
 
         $response->assertStatus(200);
 
