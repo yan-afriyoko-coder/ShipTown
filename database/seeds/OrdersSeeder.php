@@ -26,7 +26,7 @@ class OrdersSeeder extends Seeder
         factory(Order::class,1)
             ->create()
             ->each(function (Order $order) {
-                $orderProducts = collect(factory(OrderProduct::class,2)->make())
+                $orderProducts = collect(factory(OrderProduct::class,1)->make())
                     ->map(function ($orderProduct) {
 
                         $suffix = Arr::random(['-blue', '-red', '-green', '-xl', '-small-orange']);

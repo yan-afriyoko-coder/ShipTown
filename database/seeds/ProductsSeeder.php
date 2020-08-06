@@ -14,7 +14,6 @@ class ProductsSeeder extends Seeder
     public function run()
     {
         $this->createSkuWithAliases([
-            '123456',
             '01',
             '02',
             '03',
