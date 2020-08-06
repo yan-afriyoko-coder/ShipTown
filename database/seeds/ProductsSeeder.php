@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Product;
+use App\Models\ProductAlias;
 use Illuminate\Database\Seeder;
 
 class ProductsSeeder extends Seeder
@@ -12,16 +13,31 @@ class ProductsSeeder extends Seeder
      */
     public function run()
     {
-        $this->createProductWithSKUs(['123456']);
-
-        factory(Product::class, 50)->create();
+        $this->createSkuWithAliases([
+            '123456',
+            '01',
+            '02',
+            '03',
+            '04',
+            '05',
+            '06',
+            '06',
+        ]);
     }
 
-    private function createProductWithSKUs(array $skuList): void
+    private function createSkuWithAliases(array $skuList): void
     {
         foreach ($skuList as $sku) {
             if (!Product::query()->where('sku', '=', $sku)->exists()) {
-                factory(Product::class)->create(['sku' => $sku]);
+                $product = factory(Product::class)->create(['sku' => $sku]);
+                factory(ProductAlias::class)->create([
+                    'product_id' => $product->getKey(),
+                    'alias' => $product->sku.'-alias'
+                ]);
+                factory(ProductAlias::class)->create([
+                    'product_id' => $product->getKey(),
+                    'alias' => $product->sku.'a'
+                ]);
             }
         }
     }
