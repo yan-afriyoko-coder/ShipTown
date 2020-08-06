@@ -18,28 +18,27 @@ class ProductsController extends Controller
 
         $query = QueryBuilder::for(Product::class)
             ->allowedFilters($fields)
-            ->allowedSorts($fields);
+            ->allowedSorts($fields)
+            ->allowedIncludes('inventory');
 
-//        $query = Product::query();
-//
-//        if($request->has('q') && $request->get('q')) {
-//
-//            $product = ProductService::find($request->get('q'));
-//
-//            if ($product) {
-//                $query->whereKey($product->getKey());
-//            } else {
-//                $query->where('sku', 'like', '%' . $request->get('q') . '%')
-//                    ->orWhere('name', 'like', '%' . $request->get('q') . '%');
-//            }
-//
-//        }
-//
-//        if($request->has('sort') ){
-//            $query->orderBy($request->get('sort'), $request->get('order', 'asc'));
-//        }
-//
-        $query->with('inventory');
+
+        if($request->has('q') && $request->get('q')) {
+
+            $product = ProductService::find($request->get('q'));
+
+            if ($product) {
+                $query->whereKey($product->getKey());
+            } else {
+                $query->where('sku', 'like', '%' . $request->get('q') . '%')
+                    ->orWhere('name', 'like', '%' . $request->get('q') . '%');
+            }
+
+        }
+
+        if($request->has('sort') ){
+            $query->orderBy($request->get('sort'), $request->get('order', 'asc'));
+        }
+
 
         return $query->paginate(100)->appends($request->query());
     }

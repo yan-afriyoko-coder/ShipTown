@@ -34,8 +34,7 @@ class ProductsTest extends TestCase
                     "sale_price_end_date",
                     "quantity",
                     "quantity_reserved",
-                    "quantity_available",
-                    "inventory"
+                    "quantity_available"
                 ]
             ],
             "total",
@@ -91,8 +90,7 @@ class ProductsTest extends TestCase
                     "sale_price_end_date",
                     "quantity",
                     "quantity_reserved",
-                    "quantity_available",
-                    "inventory"
+                    "quantity_available"
                 ]
             ],
             "total",
