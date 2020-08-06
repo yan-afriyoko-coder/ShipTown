@@ -128,7 +128,7 @@
 
                 this.postPick(pickedItem.id, pickedItem.quantity_requested)
                     .then(({ data }) => {
-                        this.picklistFilters.currentLocation = pickedItem.shelve_location;
+                        this.picklistFilters.currentLocation = this.setDefaultVal(pickedItem.shelve_location, '');
                         this.picklist.splice(this.picklist.indexOf(pickedItem), 1);
                         this.displayPickedNotification(pickedItem);
                         if(this.picklist.length === 0) {
@@ -175,7 +175,7 @@
                         return element;
                     }
 
-                    if(typeof element.product === 'undefined'){
+                    if(element.product === null){
                         continue;
                     }
 
