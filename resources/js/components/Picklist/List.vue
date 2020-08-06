@@ -5,20 +5,16 @@
         </div>
         <div class="row mb-3 ml-1 mr-1">
             <div class="col-9">
-                <input ref="barcode"
-                       class="form-control"
+                <input ref="barcode" class="form-control" placeholder="Scan sku or barcode"
                        v-model="barcode"
-                       @focus="selectAll"
-                       @keyup.enter="pickBarcode"
-                       placeholder="Scan sku or barcode" />
+                       @focus="simulateSelectAll"
+                       @keyup.enter="pickBarcode(barcode)"/>
             </div>
             <div class="col-2">
-                <input ref="currentLocation"
-                       v-model="currentLocation"
-                       class="form-control"
-                       @focus="selectAll"
-                       @keyup.enter="loadProducts"
-                       placeholder="Scan current shelf location" />
+                <input ref="currentLocation" class="form-control" placeholder="Scan current shelf location"
+                       v-model="picklistFilters.currentLocation"
+                       @focus="simulateSelectAll"
+                       @keyup.enter="updateUrlAndReloadProducts"/>
             </div>
             <div class="col-1">
                 <a style="cursor:pointer;" data-toggle="modal" data-target="#picklistConfigurationModal"><font-awesome-icon icon="cog"></font-awesome-icon></a>
@@ -45,7 +41,9 @@
         </div>
 
         <!--     Modal -->
-        <picklist-configuration-modal :params="params" id='picklistConfigurationModal' @btnSaveClicked="onConfigChange" />
+        <picklist-configuration-modal :picklistFilters="picklistFilters"
+                                      id='picklistConfigurationModal'
+                                      @btnSaveClicked="onConfigChange" />
 
     </div>
 
@@ -64,16 +62,11 @@
 
     const Router = new VueRouter({
         mode: 'history',
-        routes: [
-            {
-                path: '/picklist',
-                // name: 'picklist',
-                // component: Home
-            },
-        ],
     });
 
     export default {
+        router: Router,
+
         mixins: [loadingOverlay],
 
         components: {
@@ -81,154 +74,138 @@
             'picklist-configuration-modal': PicklistConfigurationModal,
         },
 
-        router: Router,
-
         data: function() {
+            const $urlParameters = this.$router.currentRoute.query;
             return {
-                params: {
-                    single_line_orders_only: false,
+                picklistFilters: {
+                    single_line_orders_only: this.setDefaultVal($urlParameters.single_line_orders, false),
+                    currentLocation: this.setDefaultVal($urlParameters.currentLocation,  ''),
                 },
                 barcode: '',
-                currentLocation: '',
                 picklist: [],
                 showScanner: false,
             };
         },
 
-        created() {
-            this.getProductList();
+        watch: {
+            picklistFilters: {
+                handler() {
+                    this.updateUrl();
+                },
+                deep:true
+            }
         },
 
-
         mounted() {
-            this.focusBarcodeAndSelectAll();
-            // this.scroll();
+            this.updateUrlAndReloadProducts();
+            this.setFocusOnBarcodeInput();
+            this.simulateSelectAll();
         },
 
         methods: {
-
-            focusBarcodeAndSelectAll() {
-                this.$refs.barcode.focus();
-            },
-
-            onConfigChange: function(config) {
-                this.loadProducts();
-            },
-
-            pickBarcode: function (e) {
-
-                let pickedItem;
-                let barcode = this.barcode;
-
-                if(barcode === '') {
-                    return;
-                }
-
-                for (let element of this.picklist) {
-                    if(element.sku_ordered === barcode) {
-                        pickedItem = element;
-                        break;
-                    }
-                }
-
-                if (typeof pickedItem == 'undefined') {
-                    this.$snotify.error(`"${barcode}" not found!`);
-                    this.selectAll();
-                    return;
-                }
-
-                this.pickProduct(pickedItem);
-
-                this.selectAll();
-
-            },
-
-            getPicklistParams: function() {
-
-                // let $params = {
-                //     page: 1,
-                //     currentLocation: this.currentLocation,
-                //     sort: this.sort,
-                //     order: this.order,
-                //     // single_line_orders_only: this.$router.currentRoute.query.single_line_orders_only,
-                //     single_line_orders_only: this.config.single_line_orders_only,
-                //     per_page: this.$router.currentRoute.query.per_page,
-                // };
-
-                history.pushState({},null,'/picklist?'+
-                    'currentLocation='+ this.currentLocation
-                );
-
-                return this.params;
-            },
-
-            getProductList: function(page) {
-
-                const params = this.getPicklistParams();
-
+            fetchPicklist: function() {
                 return new Promise((resolve, reject) => {
+
                     this.showLoading();
-                    axios.get('/api/picklist', {params: params})
+
+                    axios.get('/api/picklist', {params: this.picklistFilters})
+
                         .then(({ data }) => {
                             this.picklist = data.data;
                             resolve(data);
                         })
+
                         .catch(reject)
+
                         .then(() => {
                             this.hideLoading();
                         });
                 });
             },
 
-            loadProducts(e) {
-                this.getProductList(1)
-                    .then(this.focusBarcodeAndSelectAll);
-            },
-
-            selectAll() {
-                setTimeout(() => { document.execCommand('selectall', null, false); });
-            },
-
-            // scroll (person) {
-            //     window.onscroll = () => {
-            //         let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
-            //
-            //         if (bottomOfWindow && this.last_page > this.page) {
-            //             this.getProductList(++this.page);
-            //         }
-            //     };
-            // },
-
             pickProduct(pickedItem) {
-                axios.post(`/api/picklist/${pickedItem.id}`, {'quantity_picked': pickedItem.quantity_requested})
+
+                this.postPick(pickedItem.id, pickedItem.quantity_requested)
                     .then(({ data }) => {
-                        this.currentLocation = pickedItem.shelve_location;
-                        let itemIndex = this.picklist.indexOf(pickedItem);
-                        this.picklist.splice(itemIndex, 1);
-                        this.$snotify.confirm('', pickedItem.quantity_requested+' x '+pickedItem.sku_ordered +' picked', {
-                            timeout: 5000,
-                            pauseOnHover: true,
-                            buttons: [
-                                {
-                                    text: 'Undo',
-                                    action: (toast) => {
-                                        this.$snotify.remove(toast.id);
-                                        axios.post(`/api/picklist/${pickedItem.id}`, {'quantity_picked': pickedItem.quantity_requested * -1 })
-                                            .then(() => {
-                                                this.$snotify.warning('Action reverted');
-                                                this.picklist.splice(itemIndex, 0, pickedItem);
-                                            });
-                                    }
-                                }
-                            ]
-                        });
+                        this.picklistFilters.currentLocation = pickedItem.shelve_location;
+                        this.picklist.splice(this.picklist.indexOf(pickedItem), 1);
+                        this.displayPickedNotification(pickedItem);
                         if(this.picklist.length === 0) {
-                            this.getProductList(1);
+                            this.updateUrlAndReloadProducts();
                         }
                     })
                     .catch( data  => {
                         this.$snotify.error(`Items not picked.`);
                     });
+            },
+
+            postPick(id, quantity) {
+                return axios.post(`/api/picklist/${id}`, {
+                    'quantity_picked': quantity
+                });
+            },
+
+            displayPickedNotification: function (pickedItem) {
+                let itemIndex = this.picklist.indexOf(pickedItem);
+                const msg =  pickedItem.quantity_requested + ' x ' + pickedItem.sku_ordered + ' picked';
+                this.$snotify.confirm('', msg, {
+                    timeout: 5000,
+                    pauseOnHover: true,
+                    buttons: [
+                        {
+                            text: 'Undo',
+                            action: (toast) => {
+                                this.$snotify.remove(toast.id);
+                                this.postPick(pickedItem.id, pickedItem.quantity_requested * -1)
+                                    .then(() => {
+                                        this.$snotify.warning('Action reverted');
+                                        this.picklist.splice(itemIndex, 0, pickedItem);
+                                    });
+                            }
+                        }
+                    ]
+                });
+            },
+
+            pickBarcode: function (barcode) {
+                if(barcode === '') {
+                    return;
+                }
+
+                for (let element of this.picklist) {
+                    if(element.sku_ordered === barcode) {
+                        this.pickProduct(element);
+                        return;
+                    }
+                }
+
+                this.$snotify.error(`"${barcode}" not found on picklist!`);
+            },
+
+            onConfigChange: function(config) {
+                this.updateUrlAndReloadProducts();
+                this.setFocusOnBarcodeInput();
+                this.simulateSelectAll();
+            },
+
+            updateUrlAndReloadProducts() {
+                this.updateUrl();
+                return this.fetchPicklist();
+            },
+
+            updateUrl: function() {
+                history.pushState({},null,'/picklist?'
+                    +'single_line_orders='+this.picklistFilters.single_line_orders_only
+                    +'&currentLocation='+ this.picklistFilters.currentLocation
+                );
+            },
+
+            setFocusOnBarcodeInput() {
+                this.$refs.barcode.focus();
+            },
+
+            simulateSelectAll() {
+                setTimeout(() => { document.execCommand('selectall', null, false); });
             },
 
             initScanner(e) {
@@ -271,7 +248,7 @@
 
                     Quagga.onDetected((data) => {
                         this.query = data.codeResult.code;
-                        this.getProductList(1).then(this.selectAll);
+                        this.updateUrlAndReloadProducts();
                         this.stopScanner();
                     })
                 });
@@ -280,7 +257,12 @@
             stopScanner() {
                 this.showScanner = false;
                 Quagga.stop();
-            }
+            },
+
+            setDefaultVal: function (value, defaultValue){
+                return (value === undefined) || (value === null) ? defaultValue : value;
+            },
+
         },
 
 

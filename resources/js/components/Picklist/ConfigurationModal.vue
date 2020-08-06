@@ -11,14 +11,14 @@
                 <div class="modal-body" style="margin: 0 auto 0;">
                     <form method="POST" @submit.prevent="handleSubmit">
                         <div class="form-group form-check">
-                            <input v-model="params.single_line_orders_only" type="checkbox" class="form-check-input" />
+                            <input v-model="picklistFilters.single_line_orders_only" type="checkbox" class="form-check-input" />
                             <label class="form-check-label" >Show single line orders only</label>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" @click.prevent="handleSubmit" class="btn btn-primary">Save</button>
+<!--                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>-->
+                    <button type="button" @click.prevent="handleSubmit" class="btn btn-primary">OK</button>
                 </div>
             </div>
         </div>
@@ -30,7 +30,7 @@
 export default {
 
     props: {
-        params: Object,
+        picklistFilters: Object,
     },
 
     computed: {
@@ -41,7 +41,7 @@ export default {
 
     methods: {
         handleSubmit() {
-            this.$emit('btnSaveClicked', this.params);
+            this.$emit('btnSaveClicked', this.picklistFilters);
 
             $(this.$el).modal('hide');
         }
