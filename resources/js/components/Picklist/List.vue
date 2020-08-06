@@ -207,10 +207,14 @@
 
                 if(pickItem) {
                     this.pickProduct(pickItem);
+                    this.setFocusOnBarcodeInput();
+                    this.simulateSelectAll();
                     return;
                 }
 
                 this.$snotify.error(`"${barcode}" not found on picklist!`);
+                this.setFocusOnBarcodeInput();
+                this.simulateSelectAll();
             },
 
             onConfigChange: function(config) {
