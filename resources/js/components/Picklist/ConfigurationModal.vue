@@ -11,7 +11,7 @@
                 <div class="modal-body" style="margin: 0 auto 0;">
                     <form method="POST" @submit.prevent="handleSubmit">
                         <div class="form-group form-check">
-                            <input v-model="params.single_line_orders_only" type="checkbox" class="form-check-input" />
+                            <input v-model="picklistFilters.single_line_orders_only" type="checkbox" class="form-check-input" />
                             <label class="form-check-label" >Show single line orders only</label>
                         </div>
                     </form>
@@ -30,7 +30,7 @@
 export default {
 
     props: {
-        params: Object,
+        picklistFilters: Object,
     },
 
     computed: {
@@ -41,7 +41,7 @@ export default {
 
     methods: {
         handleSubmit() {
-            this.$emit('btnSaveClicked', this.params);
+            this.$emit('btnSaveClicked', this.picklistFilters);
 
             $(this.$el).modal('hide');
         }
