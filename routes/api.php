@@ -22,9 +22,9 @@ Route::middleware('auth:api')->group(function() {
 
     Route::resource('widgets', 'WidgetsController');
 
-    Route::get('products', 'ProductsController@index');
-    Route::post('products', 'ProductsController@store');
-    Route::get('products/{sku}/sync', 'ProductsController@publish');
+    Route::get('products', 'Api\ProductsController@index');
+    Route::post('products', 'Api\ProductsController@store');
+    Route::get('products/{sku}/sync', 'Api\ProductsController@publish');
 
     Route::get("inventory", "InventoryController@index");
     Route::post("inventory", "InventoryController@store");

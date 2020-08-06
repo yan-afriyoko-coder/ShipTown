@@ -57,6 +57,7 @@
                             q: this.query,
                             sort: this.sort,
                             order: this.order,
+                            include: 'inventory'
                         }
                     }).then(({ data }) => {
                         this.products = this.products.concat(data.data);
