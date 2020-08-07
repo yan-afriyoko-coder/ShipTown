@@ -32,6 +32,6 @@ class RecalculateOrderProductLineCountJobTest extends TestCase
 
         $order = $order->refresh();
 
-        $this->assertTrue($orderProductsCount, $order->product_line_count);
+        $this->assertEquals($orderProductsCount, $order->product_line_count);
     }
 }
