@@ -39,6 +39,9 @@ Route::middleware('auth')->group(function () {
     Route::get('run/maintenance', function () {
         // this route should be moved to api and invoked trough button in settings
         // it should be done by 01/09/2020
+
+        \App\Jobs\Orders\RecalculateOrderProductLineCountJob::dispatch();
+
         return 'Maintenance jobs dispatched';
     });
 
