@@ -27,6 +27,7 @@ class RecalculateOrderProductLineCountJobTest extends TestCase
         );
 
         $order->product_line_count = $order->product_line_count + rand();
+        $order->save();
 
         RecalculateOrderProductLineCountJob::dispatchNow();
 

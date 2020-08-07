@@ -35,7 +35,11 @@ class RecalculateOrderProductLineCountJob implements ShouldQueue
         DB::statement('
             UPDATE `'.$prefix.'orders`
 
-            SET `'.$prefix.'orders`.`product_line_count` = 0
+            SET `'.$prefix.'orders`.`product_line_count` = (
+                SELECT count(*)
+                FROM `'.$prefix.'order_products`
+                WHERE `'.$prefix.'order_products`.`order_id` = `'.$prefix.'orders`.`id`
+            )
         ');
     }
 }
