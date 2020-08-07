@@ -30,20 +30,12 @@ class RecalculateOrderProductLineCountJob implements ShouldQueue
      */
     public function handle()
     {
-//        $prefix = config('database.connections.mysql.prefix');
-//
-//        DB::statement('
-//            UPDATE `'.$prefix.'orders`
-//
-//            LEFT JOIN `'.$prefix.'products`
-//                ON `'.$prefix.'products`.`sku` = `'.$prefix.'order_products`.`sku_ordered`
-//                OR `'.$prefix.'products`.`sku` = LEFT(`'.$prefix.'order_products`.`sku_ordered`,6)
-//
-//            SET `'.$prefix.'order_products`.`product_id` =`'.$prefix.'products`.`id`
-//
-//            WHERE
-//                `'.$prefix.'order_products`.`product_id` IS NULL
-//                AND `'.$prefix.'products`.`id` IS NOT NULL
-//        ');
+        $prefix = config('database.connections.mysql.prefix');
+
+        DB::statement('
+            UPDATE `'.$prefix.'orders`
+
+            SET `'.$prefix.'orders`.`product_line_count` = 0
+        ');
     }
 }
