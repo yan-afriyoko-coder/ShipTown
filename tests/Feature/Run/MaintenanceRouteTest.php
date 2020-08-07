@@ -4,6 +4,7 @@ namespace Tests\Feature\Run;
 
 use App\Jobs\Orders\RecalculateOrderProductLineCountJob;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Bus;
 use Laravel\Passport\Passport;
 use Mockery\Generator\StringManipulation\Pass\Pass;
@@ -13,6 +14,16 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class MaintenanceRouteTest extends TestCase
 {
+    public function test_if_route_is_available_after_august()
+    {
+        $this->assertTrue(
+            Carbon::today()
+                ->isBefore(
+                    Carbon::createFromDate(2020,9,01)
+                )
+        );
+    }
+
     public function test_get_route()
     {
         Bus::fake();
