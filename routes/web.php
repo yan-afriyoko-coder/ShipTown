@@ -36,6 +36,11 @@ Route::middleware('auth')->group(function () {
         ->name('users')
         ->middleware('can:manage users');
 
+    Route::get('run/maintenance', function () {
+        // this route should be moved to api and invoked trough button in settings
+        // it should be done by 01/09/2020
+        return 'Maintenance jobs dispatched';
+    });
 
     // below everything is hidden from top navigation menu
     // but still available as direct link
