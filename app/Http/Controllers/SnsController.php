@@ -24,7 +24,10 @@ class SnsController extends Controller
      */
     public function __construct($topicName)
     {
-        $this->awsSnsClient = \AWS::createClient('sns');
+        if (empty(config('aws.user_code')) === false) {
+            $this->awsSnsClient = \AWS::createClient('sns');
+        };
+
         $this->topicName = $topicName;
     }
 
@@ -73,6 +76,11 @@ class SnsController extends Controller
      * @return bool
      */
     function publish(string $message){
+
+        if(is_null($this->awsSnsClient)) {
+            return false;
+        }
+
         $notification = [
             'TargetArn' => $this->getTopicArn(),
             'Message'   => $message,
