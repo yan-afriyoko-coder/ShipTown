@@ -2,8 +2,11 @@
 
 namespace App\Observers;
 
+use Illuminate\Support\Carbon;
+
 use App\Models\Order;
 use App\Models\Picklist;
+use App\Notifications\PicklistProductMissing;
 
 class PicklistsObserver
 {
@@ -32,6 +35,14 @@ class PicklistsObserver
             ->exists())
         {
             Order::query()->where(['id' => $picklist->order_id])->update(['is_picked' => true]);
+        }
+
+        if ($picklist->productMissing()) {
+            $user = $picklist->user;
+
+            if ($user) {
+                $user->notifyAt(new PicklistProductMissing($picklist), Carbon::->addMinutes(5));
+            }
         }
     }
 
