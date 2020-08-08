@@ -21,6 +21,7 @@ class PicklistResource extends JsonResource
             "quantity_requested" => $this->quantity_requested,
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,
+            "picked_at" => $this->picked_at,
             "product" => new ProductResource($this->whenLoaded('product')),
         ];
     }
