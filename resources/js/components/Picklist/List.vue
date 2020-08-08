@@ -35,7 +35,8 @@
                 <template v-for="picklistItem in picklist">
                     <picklist-item :picklistItem="picklistItem"
                                    :key="picklistItem.id"
-                                   @transitionEnd="pickProduct" />
+                                   @swipeRight="pickProductWithQuantity"
+                                   @swipeLeft="pickProductWithoutQuantity" />
                 </template>
             </template>
         </div>
@@ -123,10 +124,13 @@
                         });
                 });
             },
+            
+            pickProduct(pickedItem, quantity = null) {
+                if (quantity == null) {
+                    quantity = pickedItem.quantity_requested
+                }
 
-            pickProduct(pickedItem) {
-
-                this.postPick(pickedItem.id, pickedItem.quantity_requested)
+                this.postPick(pickedItem.id, quantity)
                     .then(({ data }) => {
                         this.picklistFilters.currentLocation = this.setDefaultVal(pickedItem.shelve_location, '');
                         this.picklist.splice(this.picklist.indexOf(pickedItem), 1);
@@ -138,6 +142,14 @@
                     .catch( data  => {
                         this.$snotify.error(`Items not picked.`);
                     });
+            },
+
+            pickProductWithoutQuantity(pickedItem) {
+                return this.pickProduct(pickedItem, 0);
+            },
+
+            pickProductWithQuantity(pickedItem) {
+                return this.pickProduct(pickedItem);
             },
 
             postPick(id, quantity) {
@@ -206,7 +218,7 @@
                 let pickItem = this.findPickItem(barcode);
 
                 if(pickItem) {
-                    this.pickProduct(pickItem);
+                    this.pickProductWithQuantity(pickItem);
                     this.setFocusOnBarcodeInput();
                     this.simulateSelectAll();
                     return;

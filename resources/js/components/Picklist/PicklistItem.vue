@@ -1,7 +1,7 @@
 <template>
     <div :id="elID" lass="swiper-container">
         <div class="swiper-wrapper">
-            <div class="swiper-slide error"></div>
+            <div class="swiper-slide error"></div>            
             <div class="swiper-slide">
                 <div class="row mb-3 ml-1 mr-1">
                     <div class="col p-2 pl-3">
@@ -32,6 +32,7 @@
                     </div>
                 </div>
             </div>
+            <div class="swiper-slide"></div>
         </div>
     </div>
 </template>
@@ -66,7 +67,11 @@
             // Event will be fired after transition
             swiper.on('transitionEnd', function () {
                 if (this.activeIndex === 0) {
-                    self.$emit('transitionEnd', pickedItem);
+                    self.$emit('swipeRight', pickedItem);
+                    this.destroy();
+                    self.$el.parentNode.removeChild(self.$el);
+                } else if (this.activeIndex === 2) {
+                    self.$emit('swipeLeft', pickedItem);
                     this.destroy();
                     self.$el.parentNode.removeChild(self.$el);
                 }
