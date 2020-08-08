@@ -57,8 +57,6 @@ class PicklistController extends Controller
             ->orderBy('pick_location_inventory.shelve_location')
             ->orderBy('picklists.sku_ordered');
 
-//        dd($query->get()->toArray());
-
         return $query->paginate($per_page);
     }
 

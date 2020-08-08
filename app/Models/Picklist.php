@@ -46,4 +46,14 @@ class Picklist extends Model
             'product_id'
         )->keyBy('location_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(\App\User::class, 'picker_user_id');
+    }
+
+    public function productMissing()
+    {
+        return $this->quantity_picked == 0 && $this->picked_at != null;
+    }
 }
