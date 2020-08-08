@@ -35,7 +35,8 @@
                 <template v-for="picklistItem in picklist">
                     <picklist-item :picklistItem="picklistItem"
                                    :key="picklistItem.id"
-                                   @transitionEnd="pickProduct" />
+                                   @swipeRight="pickProductWithQuantity"
+                                   @swipeLeft="pickProductWithoutQuantity" />
                 </template>
             </template>
         </div>
@@ -123,14 +124,17 @@
                         });
                 });
             },
+            
+            pickProduct(pickedItem, quantity = null) {
+                if (quantity == null) {
+                    quantity = pickedItem.quantity_requested
+                }
 
-            pickProduct(pickedItem) {
-
-                this.postPick(pickedItem.id, pickedItem.quantity_requested)
+                this.postPick(pickedItem.id, quantity)
                     .then(({ data }) => {
                         this.picklistFilters.currentLocation = this.setDefaultVal(pickedItem.shelve_location, '');
                         this.picklist.splice(this.picklist.indexOf(pickedItem), 1);
-                        this.displayPickedNotification(pickedItem);
+                        this.displayPickedNotification(pickedItem, quantity);
                         if(this.picklist.length === 0) {
                             this.updateUrlAndReloadProducts();
                         }
@@ -140,13 +144,22 @@
                     });
             },
 
-            postPick(id, quantity) {
+            pickProductWithoutQuantity(pickedItem) {
+                return this.pickProduct(pickedItem, 0);
+            },
+
+            pickProductWithQuantity(pickedItem) {
+                return this.pickProduct(pickedItem);
+            },
+
+            postPick(id, quantity, undo = false) {
                 return axios.post(`/api/picklist/${id}`, {
-                    'quantity_picked': quantity
+                    'quantity_picked': quantity,
+                    undo
                 });
             },
 
-            displayPickedNotification: function (pickedItem) {
+            displayPickedNotification: function (pickedItem, quantity) {
                 let itemIndex = this.picklist.indexOf(pickedItem);
                 const msg =  pickedItem.quantity_requested + ' x ' + pickedItem.sku_ordered + ' picked';
                 this.$snotify.confirm('', msg, {
@@ -157,7 +170,7 @@
                             text: 'Undo',
                             action: (toast) => {
                                 this.$snotify.remove(toast.id);
-                                this.postPick(pickedItem.id, pickedItem.quantity_requested * -1)
+                                this.postPick(pickedItem.id, (quantity == 0) ? 0 : quantity * -1, true)
                                     .then(() => {
                                         this.$snotify.warning('Action reverted');
                                         this.picklist.splice(itemIndex, 0, pickedItem);
@@ -206,7 +219,7 @@
                 let pickItem = this.findPickItem(barcode);
 
                 if(pickItem) {
-                    this.pickProduct(pickItem);
+                    this.pickProductWithQuantity(pickItem);
                     this.setFocusOnBarcodeInput();
                     this.simulateSelectAll();
                     return;
