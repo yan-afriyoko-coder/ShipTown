@@ -53,6 +53,7 @@
 <script>
     import Quagga from 'quagga';
 
+    import beep from '../../mixins/beep';
     import loadingOverlay from '../../mixins/loading-overlay';
     import PicklistItem from './PicklistItem';
     import PicklistConfigurationModal from './ConfigurationModal.vue';
@@ -68,7 +69,7 @@
     export default {
         router: Router,
 
-        mixins: [loadingOverlay],
+        mixins: [loadingOverlay, beep],
 
         components: {
             'picklist-item': PicklistItem,
@@ -138,9 +139,13 @@
                         if(this.picklist.length === 0) {
                             this.updateUrlAndReloadProducts();
                         }
+
+                        this.beep();
                     })
                     .catch( data  => {
                         this.$snotify.error(`Items not picked.`);
+                        this.beep();
+                        setTimeout(this.beep, 300);
                     });
             },
 

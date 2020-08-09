@@ -41,7 +41,7 @@ class PicklistsObserver
             $user = $picklist->user;
 
             if ($user) {
-                $user->notifyAt(new PicklistProductMissing($picklist), Carbon::addMinutes(5));
+                $user->notifyAt(new PicklistProductMissing($picklist), Carbon::now()->addMinutes(5));
             }
         }
     }
