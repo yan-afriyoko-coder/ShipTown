@@ -6,7 +6,7 @@ use Illuminate\Support\Carbon;
 
 use App\Models\Order;
 use App\Models\Picklist;
-use App\Notifications\PicklistProductMissing;
+use App\Notifications\SkippedPickNotification;
 
 class PicklistsObserver
 {
@@ -41,7 +41,7 @@ class PicklistsObserver
             $user = $picklist->user;
 
             if ($user) {
-                $user->notifyAt(new PicklistProductMissing($picklist), Carbon::now()->addMinutes(5));
+                $user->notifyAt(new SkippedPickNotification($picklist), Carbon::now()->addMinutes(2));
             }
         }
     }

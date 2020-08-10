@@ -9,7 +9,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 
 use App\Models\Picklist;
 
-class PicklistProductMissing extends Notification
+class SkippedPickNotification extends Notification
 {
     use Queueable;
 
@@ -30,7 +30,7 @@ class PicklistProductMissing extends Notification
      *
      * @param  mixed  $notifiable
      * @return array
-     */
+     */pa
     public function via($notifiable)
     {
         return ['mail'];
@@ -45,9 +45,11 @@ class PicklistProductMissing extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject('Product Missing - ' . $this->picklist->order->order_number . ' - ' . $this->picklist->sku_ordered)
-                    ->greeting('Product Missing')
-                    ->line('Product ' . $this->picklist->sku_ordered . ', ' . $this->picklist->order->order_number . ', ' . $this->picklist->quantity_requested);
+            ->subject('Pick skipped - ' . $this->picklist->sku_ordered)
+            ->greeting('This pick was skipped, please act on it')
+            ->line('Order #: '. $this->picklist->order->order_number)
+            ->line('SKU: ' . $this->picklist->sku_ordered)
+            ->line('Quantity: ' . $this->picklist->quantity_requested);
     }
 
     /**
