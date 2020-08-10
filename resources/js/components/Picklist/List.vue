@@ -35,8 +35,8 @@
                 <template v-for="picklistItem in picklist">
                     <picklist-item :picklistItem="picklistItem"
                                    :key="picklistItem.id"
-                                   @swipeRight="pickProductWithQuantity"
-                                   @swipeLeft="pickProductWithoutQuantity" />
+                                   @swipeRight="pickAll"
+                                   @swipeLeft="skipPick" />
                 </template>
             </template>
         </div>
@@ -81,8 +81,8 @@
             return {
                 picklistFilters: {
                     include: 'product.aliases',
-                    single_line_orders_only: this.setDefaultVal($urlParameters.single_line_orders, false),
-                    currentLocation: this.setDefaultVal($urlParameters.currentLocation,  ''),
+                    single_line_orders_only: this.getValueOrDefault($urlParameters.single_line_orders, false),
+                    currentLocation: this.getValueOrDefault($urlParameters.currentLocation,  ''),
                 },
                 barcode: '',
                 picklist: [],
@@ -96,7 +96,14 @@
                     this.updateUrl();
                 },
                 deep:true
-            }
+            },
+            picklist: {
+                handler() {
+                    if (this.picklist.length === 0) {
+                        this.updateUrlAndReloadProducts();
+                    }
+                }
+            },
         },
 
         mounted() {
@@ -114,7 +121,9 @@
                     axios.get('/api/picklist', {params: this.picklistFilters})
 
                         .then(({ data }) => {
-                            this.picklist = data.data;
+                            if(data.data.length > 0) {
+                                this.picklist = data.data;
+                            }
                             resolve(data);
                         })
 
@@ -125,41 +134,41 @@
                         });
                 });
             },
-            
-            pickProduct(pickedItem, quantity = null) {
-                if (quantity == null) {
-                    quantity = pickedItem.quantity_requested
-                }
 
-                this.postPick(pickedItem.id, quantity)
-                    .then(({ data }) => {
-                        this.picklistFilters.currentLocation = this.setDefaultVal(pickedItem.shelve_location, '');
+            skipPick(pickedItem) {
+                return this.updatePick(pickedItem.id, 0)
+                    .then( response => {
+                        this.picklistFilters.currentLocation = this.getValueOrDefault(pickedItem.shelve_location, '');
                         this.picklist.splice(this.picklist.indexOf(pickedItem), 1);
-                        this.displayPickedNotification(pickedItem, quantity);
-                        if(this.picklist.length === 0) {
-                            this.updateUrlAndReloadProducts();
-                        }
-
-                        this.beep();
+                        this.displaySkippedNotification(pickedItem);
+                        this.warningBeep();
                     })
-                    .catch( data  => {
-                        this.$snotify.error(`Items not picked.`);
-                        this.beep();
-                        setTimeout(this.beep, 300);
+                    .catch( error  => {
+                        console.log(error.response);
+                        this.picklist.splice(this.picklist.indexOf(pickedItem), 0, pickedItem);
+                        this.$snotify.error('Not skipped (Error '+ error.response.status+')');
+                        this.errorBeep();
                     });
             },
 
-            pickProductWithoutQuantity(pickedItem) {
-                return this.pickProduct(pickedItem, 0);
+            pickAll(pickedItem) {
+                return this.updatePick(pickedItem.id, pickedItem.quantity_requested)
+                    .then( response => {
+                        this.picklistFilters.currentLocation = this.getValueOrDefault(pickedItem.shelve_location, '');
+                        this.picklist.splice(this.picklist.indexOf(pickedItem), 1);
+                        this.displayPickedNotification(pickedItem, pickedItem.quantity_requested);
+                        this.beep();
+                    })
+                    .catch( error  => {
+                        this.picklist.splice(this.picklist.indexOf(pickedItem), 0, pickedItem);
+                        this.$snotify.error('Items not picked (Error '+ error.response.status+')');
+                        this.errorBeep();
+                    });
             },
 
-            pickProductWithQuantity(pickedItem) {
-                return this.pickProduct(pickedItem);
-            },
-
-            postPick(id, quantity, undo = false) {
-                return axios.post(`/api/picklist/${id}`, {
-                    'quantity_picked': quantity,
+            updatePick(pickId, quantityPicked, undo = false) {
+                return axios.post(`/api/picklist/${pickId}`, {
+                    'quantity_picked': quantityPicked,
                     undo
                 });
             },
@@ -175,7 +184,29 @@
                             text: 'Undo',
                             action: (toast) => {
                                 this.$snotify.remove(toast.id);
-                                this.postPick(pickedItem.id, (quantity == 0) ? 0 : quantity * -1, true)
+                                this.updatePick(pickedItem.id, (quantity == 0) ? 0 : quantity * -1, true)
+                                    .then(() => {
+                                        this.$snotify.warning('Action reverted');
+                                        this.picklist.splice(itemIndex, 0, pickedItem);
+                                    });
+                            }
+                        }
+                    ]
+                });
+            },
+
+            displaySkippedNotification: function (pickedItem) {
+                let itemIndex = this.picklist.indexOf(pickedItem);
+                const msg = 'Pick skipped';
+                this.$snotify.warning('', msg, {
+                    timeout: 5000,
+                    pauseOnHover: true,
+                    buttons: [
+                        {
+                            text: 'Undo',
+                            action: (toast) => {
+                                this.$snotify.remove(toast.id);
+                                this.updatePick(pickedItem.id, 0,true)
                                     .then(() => {
                                         this.$snotify.warning('Action reverted');
                                         this.picklist.splice(itemIndex, 0, pickedItem);
@@ -224,7 +255,7 @@
                 let pickItem = this.findPickItem(barcode);
 
                 if(pickItem) {
-                    this.pickProductWithQuantity(pickItem);
+                    this.pickAll(pickItem);
                     this.setFocusOnBarcodeInput();
                     this.simulateSelectAll();
                     return;
@@ -312,7 +343,7 @@
                 Quagga.stop();
             },
 
-            setDefaultVal: function (value, defaultValue){
+            getValueOrDefault: function (value, defaultValue){
                 return (value === undefined) || (value === null) ? defaultValue : value;
             },
 
