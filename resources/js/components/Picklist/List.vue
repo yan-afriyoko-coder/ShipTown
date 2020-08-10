@@ -96,7 +96,14 @@
                     this.updateUrl();
                 },
                 deep:true
-            }
+            },
+            picklist: {
+                handler() {
+                    if (this.picklist.length === 0) {
+                        this.updateUrlAndReloadProducts();
+                    }
+                }
+            },
         },
 
         mounted() {
@@ -114,7 +121,9 @@
                     axios.get('/api/picklist', {params: this.picklistFilters})
 
                         .then(({ data }) => {
-                            this.picklist = data.data;
+                            if(data.data.length > 0) {
+                                this.picklist = data.data;
+                            }
                             resolve(data);
                         })
 
@@ -132,10 +141,6 @@
                         this.picklistFilters.currentLocation = this.setDefaultVal(pickedItem.shelve_location, '');
                         this.picklist.splice(this.picklist.indexOf(pickedItem), 1);
                         this.displayPickedNotification(pickedItem, quantity);
-                        if(this.picklist.length === 0) {
-                            this.updateUrlAndReloadProducts();
-                        }
-
                         this.beep();
                     })
                     .catch( data  => {
