@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @property float quantity_picked
  * @property DateTime|null picked_at
+ * @property Order|null order
  */
 class Picklist extends Model
 {

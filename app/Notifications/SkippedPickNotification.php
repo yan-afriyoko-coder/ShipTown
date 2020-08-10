@@ -30,7 +30,7 @@ class SkippedPickNotification extends Notification
      *
      * @param  mixed  $notifiable
      * @return array
-     */pa
+     */
     public function via($notifiable)
     {
         return ['mail'];
@@ -44,12 +44,17 @@ class SkippedPickNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
+        $notification = (new MailMessage)
             ->subject('Pick skipped - ' . $this->picklist->sku_ordered)
             ->greeting('This pick was skipped, please act on it')
-            ->line('Order #: '. $this->picklist->order->order_number)
             ->line('SKU: ' . $this->picklist->sku_ordered)
             ->line('Quantity: ' . $this->picklist->quantity_requested);
+
+        if($this->picklist->order) {
+            $notification->line('Order #: '. $this->picklist->order->order_number);
+        }
+
+        return $notification;
     }
 
     /**
