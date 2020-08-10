@@ -68,6 +68,6 @@ class PicklistProductMissing extends Notification
      * This serves to catch cases when the pick is undid.
      */
     public function shouldInterrupt($notifiable) {
-        return !$this->picklist->productMissing();
+        return !$this->picklist->wasPickSkipped();
     }
 }

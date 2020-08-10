@@ -37,7 +37,7 @@ class PicklistsObserver
             Order::query()->where(['id' => $picklist->order_id])->update(['is_picked' => true]);
         }
 
-        if ($picklist->productMissing()) {
+        if ($picklist->wasPickSkipped()) {
             $user = $picklist->user;
 
             if ($user) {

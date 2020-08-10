@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
+use DateTime;
 use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property float quantity_picked
+ * @property DateTime|null picked_at
+ */
 class Picklist extends Model
 {
     use SoftDeletes;
@@ -52,7 +57,7 @@ class Picklist extends Model
         return $this->belongsTo(\App\User::class, 'picker_user_id');
     }
 
-    public function productMissing()
+    public function wasPickSkipped()
     {
         return $this->quantity_picked == 0 && $this->picked_at != null;
     }
