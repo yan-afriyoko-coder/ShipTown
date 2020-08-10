@@ -35,8 +35,8 @@
                 <template v-for="picklistItem in picklist">
                     <picklist-item :picklistItem="picklistItem"
                                    :key="picklistItem.id"
-                                   @swipeRight="pickProductWithQuantity"
-                                   @swipeLeft="pickProductWithoutQuantity" />
+                                   @swipeRight="pickAll"
+                                   @swipeLeft="skipPick" />
                 </template>
             </template>
         </div>
@@ -125,12 +125,8 @@
                         });
                 });
             },
-            
-            pickProduct(pickedItem, quantity = null) {
-                if (quantity == null) {
-                    quantity = pickedItem.quantity_requested
-                }
 
+            pickProduct(pickedItem, quantity) {
                 this.postPick(pickedItem.id, quantity)
                     .then(({ data }) => {
                         this.picklistFilters.currentLocation = this.setDefaultVal(pickedItem.shelve_location, '');
@@ -149,12 +145,12 @@
                     });
             },
 
-            pickProductWithoutQuantity(pickedItem) {
+            skipPick(pickedItem) {
                 return this.pickProduct(pickedItem, 0);
             },
 
-            pickProductWithQuantity(pickedItem) {
-                return this.pickProduct(pickedItem);
+            pickAll(pickedItem) {
+                return this.pickProduct(pickedItem, pickedItem.quantity_requested);
             },
 
             postPick(id, quantity, undo = false) {
@@ -224,7 +220,7 @@
                 let pickItem = this.findPickItem(barcode);
 
                 if(pickItem) {
-                    this.pickProductWithQuantity(pickItem);
+                    this.pickAll(pickItem);
                     this.setFocusOnBarcodeInput();
                     this.simulateSelectAll();
                     return;
