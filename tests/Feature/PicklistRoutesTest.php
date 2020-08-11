@@ -78,7 +78,8 @@ class PicklistRoutesTest extends TestCase
         $picklist = factory(Picklist::class)->create();
 
         $response = $this->json('POST', 'api/picklist/'.$picklist->id, [
-            'quantity_picked' => $picklist->quantity_requested
+            'quantity_picked' => $picklist->quantity_requested,
+            'is_picked' => true,
         ]);
 
         $response->assertStatus(200);

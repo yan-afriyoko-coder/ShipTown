@@ -31,7 +31,7 @@ class SkippedPickTest extends TestCase
 
         $response = $this->postJson('api/picklist/'.$pick->id, [
             "quantity_picked" => 0,
-            "undo" => false,
+            "is_picked" => true,
         ]);
 
         $response->assertStatus(200);

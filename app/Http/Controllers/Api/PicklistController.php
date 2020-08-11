@@ -62,11 +62,12 @@ class PicklistController extends Controller
 
     public function store(StoreRequest $request, Picklist $picklist)
     {
-        $picklist->update([
-            'picker_user_id' => $request->user()->id,
-            'quantity_picked' => $picklist->quantity_picked + $request->input('quantity_picked'),
-            'picked_at' => $request->input('undo') ? null : now(), // On undo, set picked_at to null
-        ]);
+        $attributes = array_merge(
+            $request->validated(),
+            ['picker_user_id' => $request->user()->id]
+        );
+
+        $picklist->update($attributes);
 
         return new PicklistResource($picklist);
     }

@@ -6,6 +6,7 @@ use DateTime;
 use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use phpDocumentor\Reflection\Types\Boolean;
 
 /**
  * @property float quantity_picked
@@ -28,10 +29,25 @@ class Picklist extends Model
         'quantity_picked',
         'picker_user_id',
         'picked_at',
+        'is_picked',
+    ];
+
+    protected $appends = [
+        'is_picked'
     ];
 
     public static function addPick($params) {
         return self::query()->create($params);
+    }
+
+    public function getIsPickedAttribute()
+    {
+        return $this->picked_at !== null;
+    }
+
+    public function setIsPickedAttribute($value)
+    {
+        $this->picked_at = $value ? now() : null;
     }
 
     public function product()
