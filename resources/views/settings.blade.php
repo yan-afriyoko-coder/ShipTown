@@ -34,6 +34,9 @@
 
                     <rmsapi-configuration></rmsapi-configuration>
                     <br />
+
+                    <printnode-configuration></printnode-configuration>
+                    <br />
                 </div>
             </div>
         </div>
