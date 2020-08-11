@@ -84,6 +84,7 @@
                     single_line_orders_only: this.getValueOrDefault($urlParameters.single_line_orders, false),
                     currentLocation: this.getValueOrDefault($urlParameters.currentLocation,  ''),
                     inventory_location_id: this.getValueOrDefault($urlParameters.inventory_location_id,  100),
+                    in_stock: this.getValueOrDefault($urlParameters.in_stock,  true),
                 },
                 barcode: '',
                 picklist: [],
@@ -282,6 +283,7 @@
                     +'single_line_orders='+this.picklistFilters.single_line_orders_only
                     +'&currentLocation='+ this.picklistFilters.currentLocation
                     +'&inventory_location_id='+ this.picklistFilters.inventory_location_id
+                    +'&in_stock='+ this.picklistFilters.in_stock
                 );
             },
 
