@@ -18,7 +18,7 @@ class PicklistController extends Controller
     public function index(Request $request)
     {
         $inventory_location_id = $request->get('inventory_location_id', 100);
-        $in_stock = $request->get('in_stock', true);
+        $in_stock_only = $request->get('in_stock_only', true);
         $single_line_orders_only = $request->get('single_line_orders_only', 'false') === 'true';
         $currentLocation = $request->get('currentLocation', null);
         $per_page = $request->get('per_page', 3);
@@ -50,8 +50,8 @@ class PicklistController extends Controller
                     $query->where('location_id', '=', $inventory_location_id);
                 },
             ])
-            ->when(isset($in_stock),
-                function (Builder $query) use ($in_stock) {
+            ->when(isset($in_stock_only),
+                function (Builder $query) {
                     return $query->where('pick_location_inventory.quantity', '>', 0);
                 })
             ->when(isset($currentLocation),
