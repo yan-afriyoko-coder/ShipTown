@@ -1,7 +1,7 @@
 <template>
     <div :id="elID" lass="swiper-container">
         <div class="swiper-wrapper">
-            <div class="swiper-slide error"></div>            
+            <div class="swiper-slide error"></div>
             <div class="swiper-slide">
                 <div class="row mb-3 ml-1 mr-1">
                     <div class="col p-2 pl-3">
@@ -26,6 +26,14 @@
                                         <div class="">Shelf</div>
                                         <div class="h3">{{ shelve_location }}</div>
                                     </div>
+                                    <div class="col-3">
+                                        <div class="">Stock</div>
+                                        <div class="h3">{{ pick_location_inventory_quantity }}</div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="">Location</div>
+                                        <div class="h3">{{ pick_location_inventory_location_id }}</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -47,10 +55,12 @@
             this.order_product_line_count = this.picklistItem.order.product_line_count;
             this.product_sku = this.picklistItem.product ? this.picklistItem.product.sku : '';
             this.location_id = this.picklistItem.location_id;
-            this.shelve_location = this.picklistItem.shelve_location;
+            this.shelve_location = this.picklistItem.pick_location_inventory_shelve_location;
             this.sku_ordered = this.picklistItem.sku_ordered;
             this.name_ordered = this.picklistItem.name_ordered;
             this.quantity_requested = Math.ceil(this.picklistItem.quantity_requested);
+            this.pick_location_inventory_quantity = Math.ceil(this.picklistItem.pick_location_inventory_quantity);
+            this.pick_location_inventory_location_id = this.picklistItem.pick_location_inventory_location_id;
         },
 
         mounted() {

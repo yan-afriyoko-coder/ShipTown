@@ -17,17 +17,22 @@ class PicklistController extends Controller
 {
     public function index(Request $request)
     {
-
-        $inventory_location_id = 100;
+        $inventory_location_id = $request->get('inventory_location_id', 100);
         $single_line_orders_only = $request->get('single_line_orders_only', 'false') === 'true';
         $currentLocation = $request->get('currentLocation', null);
         $per_page = $request->get('per_page', 3);
 
         $query = QueryBuilder::for(Picklist::class)
-            ->allowedIncludes('product.aliases')
+            ->allowedIncludes([
+                'product',
+                'product.aliases',
+                'order',
+            ])
             ->select([
                 'picklists.*',
-                'pick_location_inventory.shelve_location'
+                'pick_location_inventory.quantity as pick_location_inventory_quantity',
+                'pick_location_inventory.shelve_location as pick_location_inventory_shelve_location',
+                'pick_location_inventory.location_id as pick_location_inventory_location_id',
             ])
             ->whereNull('picked_at')
             ->leftJoin('inventory as pick_location_inventory',
@@ -36,9 +41,6 @@ class PicklistController extends Controller
                     $join->on('pick_location_inventory.location_id', '=', DB::raw($inventory_location_id));
                 })
             ->with([
-                'product',
-                'order',
-//                'product.aliases',
                 'inventory' => function(HasMany $query) use ($inventory_location_id) {
                     $query->where('location_id', '=', $inventory_location_id);
                 },

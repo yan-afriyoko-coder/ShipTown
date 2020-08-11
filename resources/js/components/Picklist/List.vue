@@ -80,9 +80,10 @@
             const $urlParameters = this.$router.currentRoute.query;
             return {
                 picklistFilters: {
-                    include: 'product.aliases',
+                    include: 'product.aliases,product,order',
                     single_line_orders_only: this.getValueOrDefault($urlParameters.single_line_orders, false),
                     currentLocation: this.getValueOrDefault($urlParameters.currentLocation,  ''),
+                    inventory_location_id: this.getValueOrDefault($urlParameters.inventory_location_id,  100),
                 },
                 barcode: '',
                 picklist: [],
@@ -280,6 +281,7 @@
                 history.pushState({},null,'/picklist?'
                     +'single_line_orders='+this.picklistFilters.single_line_orders_only
                     +'&currentLocation='+ this.picklistFilters.currentLocation
+                    +'&inventory_location_id='+ this.picklistFilters.inventory_location_id
                 );
             },
 
