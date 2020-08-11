@@ -51,10 +51,10 @@
 </template>
 
 <script>
-    import Quagga from 'quagga';
-
     import beep from '../../mixins/beep';
     import loadingOverlay from '../../mixins/loading-overlay';
+    import quagga from '../../mixins/quagga-scanner';
+
     import PicklistItem from './PicklistItem';
     import PicklistConfigurationModal from './ConfigurationModal.vue';
 
@@ -69,7 +69,7 @@
     export default {
         router: Router,
 
-        mixins: [loadingOverlay, beep],
+        mixins: [loadingOverlay, beep, quagga],
 
         components: {
             'picklist-item': PicklistItem,
@@ -136,46 +136,54 @@
             },
 
             skipPick(pickedItem) {
-                return this.updatePick(pickedItem.id, 0)
+                this.picklist.splice(this.picklist.indexOf(pickedItem), 1);
+
+                return this.updatePick(pickedItem.id, 0, true)
                     .then( response => {
                         this.picklistFilters.currentLocation = this.getValueOrDefault(pickedItem.shelve_location, '');
-                        this.picklist.splice(this.picklist.indexOf(pickedItem), 1);
                         this.displaySkippedNotification(pickedItem);
                         this.warningBeep();
                     })
                     .catch( error  => {
-                        console.log(error.response);
-                        this.picklist.splice(this.picklist.indexOf(pickedItem), 0, pickedItem);
+                        this.picklist.unshift(pickedItem);
                         this.$snotify.error('Not skipped (Error '+ error.response.status+')');
                         this.errorBeep();
                     });
             },
 
             pickAll(pickedItem) {
-                return this.updatePick(pickedItem.id, pickedItem.quantity_requested)
+                this.picklist.splice(this.picklist.indexOf(pickedItem), 1);
+
+                return this.updatePick(pickedItem.id, pickedItem.quantity_requested, true)
                     .then( response => {
                         this.picklistFilters.currentLocation = this.getValueOrDefault(pickedItem.shelve_location, '');
-                        this.picklist.splice(this.picklist.indexOf(pickedItem), 1);
                         this.displayPickedNotification(pickedItem, pickedItem.quantity_requested);
                         this.beep();
                     })
                     .catch( error  => {
-                        this.picklist.splice(this.picklist.indexOf(pickedItem), 0, pickedItem);
+                        this.picklist.unshift(pickedItem);
                         this.$snotify.error('Items not picked (Error '+ error.response.status+')');
                         this.errorBeep();
                     });
             },
 
-            updatePick(pickId, quantityPicked, undo = false) {
+            updatePick(pickId, quantityPicked, isPicked) {
                 return axios.post(`/api/picklist/${pickId}`, {
                     'quantity_picked': quantityPicked,
-                    undo
+                    'is_picked': isPicked
                 });
             },
 
+            resetPick(pick) {
+                this.updatePick(pick.id, 0, false)
+                    .then(() => {
+                        this.$snotify.warning('Action reverted');
+                        this.picklist.unshift(pick);
+                    });
+            },
+
             displayPickedNotification: function (pickedItem, quantity) {
-                let itemIndex = this.picklist.indexOf(pickedItem);
-                const msg =  pickedItem.quantity_requested + ' x ' + pickedItem.sku_ordered + ' picked';
+                const msg =  quantity + ' x ' + pickedItem.sku_ordered + ' picked';
                 this.$snotify.confirm('', msg, {
                     timeout: 5000,
                     pauseOnHover: true,
@@ -184,11 +192,7 @@
                             text: 'Undo',
                             action: (toast) => {
                                 this.$snotify.remove(toast.id);
-                                this.updatePick(pickedItem.id, (quantity == 0) ? 0 : quantity * -1, true)
-                                    .then(() => {
-                                        this.$snotify.warning('Action reverted');
-                                        this.picklist.splice(itemIndex, 0, pickedItem);
-                                    });
+                                this.resetPick(pickedItem);
                             }
                         }
                     ]
@@ -196,7 +200,6 @@
             },
 
             displaySkippedNotification: function (pickedItem) {
-                let itemIndex = this.picklist.indexOf(pickedItem);
                 const msg = 'Pick skipped';
                 this.$snotify.warning('', msg, {
                     timeout: 5000,
@@ -206,11 +209,7 @@
                             text: 'Undo',
                             action: (toast) => {
                                 this.$snotify.remove(toast.id);
-                                this.updatePick(pickedItem.id, 0,true)
-                                    .then(() => {
-                                        this.$snotify.warning('Action reverted');
-                                        this.picklist.splice(itemIndex, 0, pickedItem);
-                                    });
+                                this.resetPick(pickedItem);
                             }
                         }
                     ]
@@ -290,57 +289,6 @@
 
             simulateSelectAll() {
                 setTimeout(() => { document.execCommand('selectall', null, false); });
-            },
-
-            initScanner(e) {
-                this.showScanner = true;
-                this.$nextTick(() => {
-                    Quagga.init({
-                        decoder : {
-                            readers : [
-                                "code_39_reader",
-                                "ean_reader",
-                                "code_128_reader",
-                            ],
-                            debug: {
-                                drawBoundingBox: false,
-                                showFrequency: false,
-                                drawScanline: false,
-                                showPattern: false
-                            }
-                        },
-                        inputStream: {
-                            name: "Live",
-                            type: "LiveStream",
-                            area: { // defines rectangle of the detection/localization area
-                                top: "0%",    // top offset
-                                right: "0%",  // right offset
-                                left: "0%",   // left offset
-                                bottom: "0%"  // bottom offset
-                            },
-                            singleChannel: false // true: only the red color-channel is read
-                        }
-                    }, function(err) {
-                        if (err) {
-                            console.log(err);
-                            //return
-                        }
-                        console.log("Initialization finished. Ready to start");
-                        Quagga.start();
-                    });
-
-
-                    Quagga.onDetected((data) => {
-                        this.query = data.codeResult.code;
-                        this.updateUrlAndReloadProducts();
-                        this.stopScanner();
-                    })
-                });
-            },
-
-            stopScanner() {
-                this.showScanner = false;
-                Quagga.stop();
             },
 
             getValueOrDefault: function (value, defaultValue){
