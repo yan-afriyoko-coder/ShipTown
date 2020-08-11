@@ -80,9 +80,11 @@
             const $urlParameters = this.$router.currentRoute.query;
             return {
                 picklistFilters: {
-                    include: 'product.aliases',
+                    include: 'product.aliases,product,order',
                     single_line_orders_only: this.getValueOrDefault($urlParameters.single_line_orders, false),
                     currentLocation: this.getValueOrDefault($urlParameters.currentLocation,  ''),
+                    inventory_location_id: this.getValueOrDefault($urlParameters.inventory_location_id,  100),
+                    in_stock_only: this.getValueOrDefault($urlParameters.in_stock_only,  true),
                 },
                 barcode: '',
                 picklist: [],
@@ -99,7 +101,7 @@
             },
             picklist: {
                 handler() {
-                    if (this.picklist.length === 0) {
+                    if ((this.picklist.length === 0) && (!this.isLoading) ){
                         this.updateUrlAndReloadProducts();
                     }
                 }
@@ -113,10 +115,21 @@
         },
 
         methods: {
+            updateUrl: function() {
+                history.pushState({},null,'/picklist?'
+                    +'single_line_orders='+this.picklistFilters.single_line_orders_only
+                    +'&currentLocation='+ this.picklistFilters.currentLocation
+                    +'&inventory_location_id='+ this.picklistFilters.inventory_location_id
+                    +'&in_stock_only='+ this.picklistFilters.in_stock_only
+                );
+            },
+
             fetchPicklist: function() {
                 return new Promise((resolve, reject) => {
 
                     this.showLoading();
+
+                    this.picklist = [];
 
                     axios.get('/api/picklist', {params: this.picklistFilters})
 
@@ -274,13 +287,6 @@
             updateUrlAndReloadProducts() {
                 this.updateUrl();
                 return this.fetchPicklist();
-            },
-
-            updateUrl: function() {
-                history.pushState({},null,'/picklist?'
-                    +'single_line_orders='+this.picklistFilters.single_line_orders_only
-                    +'&currentLocation='+ this.picklistFilters.currentLocation
-                );
             },
 
             setFocusOnBarcodeInput() {

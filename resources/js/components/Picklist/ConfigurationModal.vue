@@ -14,6 +14,14 @@
                             <input v-model="picklistFilters.single_line_orders_only" type="checkbox" class="form-check-input" />
                             <label class="form-check-label" >Show single line orders only</label>
                         </div>
+                        <div class="form-group form-check">
+                            <input v-model="picklistFilters.in_stock_only" type="checkbox" class="form-check-input" />
+                            <label class="form-check-label" >In stock only</label>
+                        </div>
+                        <div class="form-group form-check">
+                            <input v-model="picklistFilters.inventory_location_id" type="number" class="form-check-input" />
+                            <label class="form-check-label" >Inventory Location ID</label>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
