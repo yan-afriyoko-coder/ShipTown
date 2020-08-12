@@ -18,7 +18,7 @@ class AddPacklistTable extends Migration
             $table->bigInteger('order_id')->unsigned()->nullable(true);
             $table->bigInteger('order_product_id')->unsigned()->nullable(true);
             $table->bigInteger('product_id')->unsigned()->nullable(true);
-            $table->string('location_id');
+            $table->string('location_id')->default('');
             $table->string('sku_ordered')->default('');
             $table->string('name_ordered')->default('');
             $table->decimal('quantity_requested')->default(0);
@@ -58,6 +58,6 @@ class AddPacklistTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('packlist');
+        Schema::dropIfExists('packlists');
     }
 }
