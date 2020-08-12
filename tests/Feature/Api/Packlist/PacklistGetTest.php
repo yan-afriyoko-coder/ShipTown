@@ -26,6 +26,10 @@ class PacklistGetTest extends TestCase
             "data" => [
                 "*" => [
                     "id",
+                    "order_number",
+                    "order_placed_at",
+                    "product_line_count",
+                    "total_quantity_ordered"
                 ]
             ],
             "total",

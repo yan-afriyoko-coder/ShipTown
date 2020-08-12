@@ -4,7 +4,10 @@
             <div id="interactive" class="viewport overlay-content"></div>
         </div>
         <div class="row mb-3 ml-1 mr-1">
-            <div>Order #: 123456</div>
+            <div class="col-3">Order #: <strong>{{ order === null ? '' : order.order_number}}</strong></div>
+            <div class="col-3">Date:<strong>{{ order === null ? '' : order.order_placed_at}}</strong></div>
+            <div class="col-3">Lines #: <strong>{{ order === null ? '' : order.product_line_count}}</strong></div>
+            <div class="col-3">Quantity #: <strong>{{ order === null ? '' : order.total_quantity_ordered}}</strong></div>
         </div>
         <div class="row mb-3 ml-1 mr-1">
             <div class="col-9">
@@ -92,6 +95,7 @@
                 barcode: '',
                 picklist: [],
                 showScanner: false,
+                order: null,
             };
         },
 
@@ -102,13 +106,12 @@
                 },
                 deep:true
             },
-            picklist: {
+            order: {
                 handler() {
-                    if ((this.picklist.length === 0) && (!this.isLoading) ){
-                        this.updateUrlAndReloadProducts();
-                    }
+                    console.log(this.order);
                 }
-            },
+            }
+
         },
 
         mounted() {
@@ -128,17 +131,18 @@
             },
 
             fetchPicklist: function() {
+                console.log('Fetching order');
                 return new Promise((resolve, reject) => {
 
                     this.showLoading();
 
-                    this.picklist = [];
+                    this.order = [];
 
                     axios.get('/api/packlist', {params: this.picklistFilters})
 
                         .then(({ data }) => {
                             if(data.data.length > 0) {
-                                this.picklist = data.data;
+                                this.order = data.data[0];
                             }
                             resolve(data);
                         })
