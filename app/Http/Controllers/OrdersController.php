@@ -8,12 +8,21 @@ use App\Http\Requests\StoreOrderRequest;
 use App\Managers\Config;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class OrdersController extends Controller
 {
 
-    public function index() {
-        return Order::all();
+    public function index(Request $request)
+    {
+        $query = QueryBuilder::for(Order::class)
+            ->allowedFilters([
+                'order_number',
+                'is_picked'
+            ]);
+
+        return $query->paginate(10);
     }
 
     public function store(StoreOrderRequest $request)

@@ -13,6 +13,13 @@ use Illuminate\Support\Str;
 
 class OrderService
 {
+    public static function addToPacklist(Order $order)
+    {
+        foreach ($order->orderProducts()->get() as $orderProduct) {
+            PacklistService::addOrderProductPick($orderProduct);
+        }
+    }
+
     public static function addToPicklist(Order $order)
     {
         foreach ($order->orderProducts()->get() as $orderProduct) {

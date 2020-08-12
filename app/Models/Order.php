@@ -34,6 +34,11 @@ class Order extends Model
         'raw_import' => '{}',
     ];
 
+    public function scopePacklist($query, $inventory_id)
+    {
+        return $this->hasOne(Packlist::class)->test(100);
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany | OrderProduct
      */

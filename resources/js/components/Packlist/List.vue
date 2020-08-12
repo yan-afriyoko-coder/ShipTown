@@ -30,7 +30,7 @@
 <!--            </div>-->
         </div>
         <div class="container">
-            <div v-if="picklist.length === 0 && !isLoading" class="row" >
+            <div v-if="packlist !== null && packlist.length === 0 && !isLoading" class="row" >
                 <div class="col">
                     <div class="alert alert-info" role="alert">
                         No products found.
@@ -38,7 +38,7 @@
                 </div>
             </div>
             <template v-else class="row">
-                <template v-for="picklistItem in picklist">
+                <template v-for="picklistItem in packlist">
                     <packlist-entry :picklistItem="picklistItem"
                                    :key="picklistItem.id"
                                    @swipeRight="pickAll"
@@ -86,16 +86,16 @@
             const $urlParameters = this.$router.currentRoute.query;
             return {
                 picklistFilters: {
-                    include: 'product.aliases,product,order',
+                    include: 'packlist',
                     single_line_orders_only: this.getValueOrDefault($urlParameters.single_line_orders, false),
                     currentLocation: this.getValueOrDefault($urlParameters.currentLocation,  ''),
                     inventory_location_id: this.getValueOrDefault($urlParameters.inventory_location_id,  100),
                     in_stock_only: this.getValueOrDefault($urlParameters.in_stock_only,  true),
                 },
-                barcode: '',
-                picklist: [],
-                showScanner: false,
                 order: null,
+                packlist: [],
+                barcode: '',
+                showScanner: false,
             };
         },
 
@@ -106,11 +106,11 @@
                 },
                 deep:true
             },
-            order: {
-                handler() {
-                    console.log(this.order);
+            order() {
+                if(this.order !== null) {
+                    this.loadPacklist();
                 }
-            }
+            },
 
         },
 
@@ -125,38 +125,64 @@
                 history.pushState({},null,'/packlist?'
                     // +'single_line_orders='+this.picklistFilters.single_line_orders_only
                     // +'&currentLocation='+ this.picklistFilters.currentLocation
-                    // +'&inventory_location_id='+ this.picklistFilters.inventory_location_id
+                    +'&inventory_location_id='+ this.picklistFilters.inventory_location_id
                     // +'&in_stock_only='+ this.picklistFilters.in_stock_only
                 );
             },
 
-            fetchPicklist: function() {
+            loadOrder: function() {
                 console.log('Fetching order');
-                return new Promise((resolve, reject) => {
+                this.showLoading();
 
+                this.order = null;
+                this.packlist = [];
+
+                axios.get('/api/orders', {
+                    params: {
+                        'filter[is_picked]': true
+                    }})
+                    .then(({ data }) => {
+                        if(data.total > 0) {
+                            this.order = data.data[0];
+                        }
+                        this.hideLoading();
+                    })
+                    .catch( error => {
+                        this.$snotify.error('Error occurred while loading packlist');
+                        this.hideLoading();
+                    })
+
+
+            },
+
+            loadPacklist: function() {
+                console.log('Fetching packlist');
+                this.packlist = [];
+                if(!this.isLoading) {
                     this.showLoading();
+                }
 
-                    this.order = [];
+                axios.get('/api/packlist', {
+                    params: {
+                        'include': 'product',
+                        'filter[order_id]': this.order.id
+                    }})
+                    .then(({ data }) => {
+                        if(data.total > 0) {
+                            this.packlist = data.data;
+                        }
+                        this.hideLoading();
+                    })
+                    .catch( error => {
+                        this.$snotify.error('Error occurred while loading packlist');
+                        this.hideLoading();
+                    })
 
-                    axios.get('/api/packlist', {params: this.picklistFilters})
 
-                        .then(({ data }) => {
-                            if(data.data.length > 0) {
-                                this.order = data.data[0];
-                            }
-                            resolve(data);
-                        })
-
-                        .catch(reject)
-
-                        .then(() => {
-                            this.hideLoading();
-                        });
-                });
             },
 
             skipPick(pickedItem) {
-                this.picklist.splice(this.picklist.indexOf(pickedItem), 1);
+                this.packlist.splice(this.packlist.indexOf(pickedItem), 1);
 
                 return this.updatePick(pickedItem.id, 0, true)
                     .then( response => {
@@ -165,14 +191,14 @@
                         this.warningBeep();
                     })
                     .catch( error  => {
-                        this.picklist.unshift(pickedItem);
+                        this.packlist.unshift(pickedItem);
                         this.$snotify.error('Not skipped (Error '+ error.response.status+')');
                         this.errorBeep();
                     });
             },
 
             pickAll(pickedItem) {
-                this.picklist.splice(this.picklist.indexOf(pickedItem), 1);
+                this.packlist.splice(this.packlist.indexOf(pickedItem), 1);
 
                 return this.updatePick(pickedItem.id, pickedItem.quantity_requested, true)
                     .then( response => {
@@ -181,16 +207,16 @@
                         this.beep();
                     })
                     .catch( error  => {
-                        this.picklist.unshift(pickedItem);
+                        this.packlist.unshift(pickedItem);
                         this.$snotify.error('Items not picked (Error '+ error.response.status+')');
                         this.errorBeep();
                     });
             },
 
             updatePick(pickId, quantityPicked, isPicked) {
-                return axios.post(`/api/picklist/${pickId}`, {
-                    'quantity_picked': quantityPicked,
-                    'is_picked': isPicked
+                return axios.post(`/api/packlist/${pickId}`, {
+                    'quantity_packed': quantityPicked,
+                    'is_packed': isPicked
                 });
             },
 
@@ -198,7 +224,7 @@
                 this.updatePick(pick.id, 0, false)
                     .then(() => {
                         this.$snotify.warning('Action reverted');
-                        this.picklist.unshift(pick);
+                        this.packlist.unshift(pick);
                     });
             },
 
@@ -237,7 +263,7 @@
             },
 
             findPickItem: function (barcode) {
-                for (let element of this.picklist) {
+                for (let element of this.packlist) {
 
                     if(element.sku_ordered === barcode) {
                         return element;
@@ -293,7 +319,8 @@
 
             updateUrlAndReloadProducts() {
                 this.updateUrl();
-                return this.fetchPicklist();
+                this.loadOrder();
+                // return this.fetchPicklist();
             },
 
             setFocusOnBarcodeInput() {
