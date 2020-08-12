@@ -98,6 +98,8 @@ Vue.component(
     require('./components/RMSApiConfiguration.vue').default
 );
 
+// Picklist
+
 Vue.component(
     'picklist-table',
     require('./components/Picklist/List.vue').default
@@ -106,6 +108,23 @@ Vue.component(
 Vue.component(
     'picklist-configuration-modal',
     require('./components/Picklist/ConfigurationModal.vue').default
+);
+
+// Packlist
+
+Vue.component(
+    'packlist-configuration-modal',
+    require('./components/Packlist/ConfigurationModal.vue').default
+);
+
+Vue.component(
+    'packlist-table',
+    require('./components/Packlist/List.vue').default
+);
+
+Vue.component(
+    'packlist-table-entry',
+    require('./components/Packlist/PacklistEntry.vue').default
 );
 
 Vue.component(
