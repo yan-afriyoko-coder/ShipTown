@@ -86,7 +86,7 @@
             const $urlParameters = this.$router.currentRoute.query;
             return {
                 picklistFilters: {
-                    include: 'product.aliases,product,order',
+                    include: 'packlist',
                     single_line_orders_only: this.getValueOrDefault($urlParameters.single_line_orders, false),
                     currentLocation: this.getValueOrDefault($urlParameters.currentLocation,  ''),
                     inventory_location_id: this.getValueOrDefault($urlParameters.inventory_location_id,  100),
@@ -132,27 +132,22 @@
 
             fetchPicklist: function() {
                 console.log('Fetching order');
-                return new Promise((resolve, reject) => {
+                this.order = [];
+                this.showLoading();
 
-                    this.showLoading();
+                axios.get('/api/packlist', {params: this.picklistFilters})
+                    .then(({ data }) => {
+                        if(data.data.length > 0) {
+                            this.order = data.data[0];
+                        }
+                        this.hideLoading();
+                    })
+                    .catch( error => {
+                        this.$snotify.error('Error occurred while loading packlist');
+                        this.hideLoading();
+                    })
 
-                    this.order = [];
 
-                    axios.get('/api/packlist', {params: this.picklistFilters})
-
-                        .then(({ data }) => {
-                            if(data.data.length > 0) {
-                                this.order = data.data[0];
-                            }
-                            resolve(data);
-                        })
-
-                        .catch(reject)
-
-                        .then(() => {
-                            this.hideLoading();
-                        });
-                });
             },
 
             skipPick(pickedItem) {

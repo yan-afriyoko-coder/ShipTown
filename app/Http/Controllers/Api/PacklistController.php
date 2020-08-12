@@ -11,7 +11,9 @@ class PacklistController extends Controller
 {
     public function index(Request $request)
     {
-        $query = QueryBuilder::for(Order::class);
+        $query = QueryBuilder::for(Order::class)
+            ->allowedIncludes('packlist')
+            ->where('is_picked','=', true);
 
         return $query->paginate(1);
     }

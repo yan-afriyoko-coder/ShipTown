@@ -34,6 +34,11 @@ class Order extends Model
         'raw_import' => '{}',
     ];
 
+    public function packlist()
+    {
+        return $this->hasMany(Packlist::class);
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany | OrderProduct
      */

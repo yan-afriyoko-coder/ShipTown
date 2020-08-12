@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api\Packlist;
 
+use App\Models\Order;
 use App\User;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
@@ -10,6 +11,35 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PacklistGetTest extends TestCase
 {
+    /**
+     * @return void
+     */
+    public function test_if_can_include_packlist()
+    {
+        factory(Order::class)->create();
+
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        $response = $this->get('api/packlist?include=packlist');
+
+//        dd($response->json());
+
+        $this->assertGreaterThan(0, $response->json('total'));
+
+        $response->assertJsonStructure([
+            "current_page",
+            "data" => [
+                "*" => [
+                    "packlist" => []
+                ]
+            ],
+            "total",
+        ]);
+
+    }
+
     /**
      * @return void
      */
