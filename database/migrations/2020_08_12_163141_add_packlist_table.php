@@ -32,22 +32,22 @@ class AddPacklistTable extends Migration
             $table->foreign('order_id')
                 ->on('orders')
                 ->references('id')
-                ->onDelete('cascade');
+                ->onDelete('SET NULL');
 
             $table->foreign('order_product_id')
                 ->on('order_products')
                 ->references('id')
-                ->onDelete('cascade');
+                ->onDelete('SET NULL');
 
             $table->foreign('product_id')
                 ->on('products')
                 ->references('id')
-                ->onDelete('cascade');
+                ->onDelete('SET NULL');
 
             $table->foreign('packer_user_id')
                 ->on('users')
                 ->references('id')
-                ->onDelete('cascade');
+                ->onDelete('SET NULL');
         });
     }
 
