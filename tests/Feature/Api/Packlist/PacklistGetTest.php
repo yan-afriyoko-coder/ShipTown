@@ -14,35 +14,6 @@ class PacklistGetTest extends TestCase
     /**
      * @return void
      */
-    public function test_if_can_include_packlist()
-    {
-        factory(Order::class)->create();
-
-        Passport::actingAs(
-            factory(User::class)->create()
-        );
-
-        $response = $this->get('api/packlist?include=packlist');
-
-//        dd($response->json());
-
-        $this->assertGreaterThan(0, $response->json('total'));
-
-        $response->assertJsonStructure([
-            "current_page",
-            "data" => [
-                "*" => [
-                    "packlist" => []
-                ]
-            ],
-            "total",
-        ]);
-
-    }
-
-    /**
-     * @return void
-     */
     public function test_if_required_fields_are_returned()
     {
         Passport::actingAs(
@@ -56,10 +27,7 @@ class PacklistGetTest extends TestCase
             "data" => [
                 "*" => [
                     "id",
-                    "order_number",
-                    "order_placed_at",
-                    "product_line_count",
-                    "total_quantity_ordered"
+                    "order_id",
                 ]
             ],
             "total",

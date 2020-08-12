@@ -34,9 +34,9 @@ class Order extends Model
         'raw_import' => '{}',
     ];
 
-    public function packlist()
+    public function scopePacklist($query, $inventory_id)
     {
-        return $this->hasMany(Packlist::class);
+        return $this->hasOne(Packlist::class)->test(100);
     }
 
     /**

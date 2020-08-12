@@ -22,10 +22,10 @@
                                         <div>To Pick</div>
                                         <div class="h3">{{ picklistItem.quantity_requested }}</div>
                                     </div>
-<!--                                    <div class="col-3">-->
-<!--                                        <div class="">Shelf</div>-->
-<!--                                        <div class="h3">{{ shelve_location }}</div>-->
-<!--                                    </div>-->
+                                    <div class="col-3">
+                                        <div class="">Shelf</div>
+                                        <div class="h3">{{ picklistItem['inventory_source_shelf_location'] }}</div>
+                                    </div>
 <!--                                    <div class="col-3">-->
 <!--                                        <div class="">Stock</div>-->
 <!--                                        <div class="h3">{{ pick_location_inventory_quantity }}</div>-->

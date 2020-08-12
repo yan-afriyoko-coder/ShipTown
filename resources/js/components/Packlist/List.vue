@@ -30,7 +30,7 @@
 <!--            </div>-->
         </div>
         <div class="container">
-            <div v-if="packlist.length === 0 && !isLoading" class="row" >
+            <div v-if="packlist !== null && packlist.length === 0 && !isLoading" class="row" >
                 <div class="col">
                     <div class="alert alert-info" role="alert">
                         No products found.
@@ -92,10 +92,10 @@
                     inventory_location_id: this.getValueOrDefault($urlParameters.inventory_location_id,  100),
                     in_stock_only: this.getValueOrDefault($urlParameters.in_stock_only,  true),
                 },
-                barcode: '',
-                packlist: [],
-                showScanner: false,
                 order: null,
+                packlist: [],
+                barcode: '',
+                showScanner: false,
             };
         },
 
@@ -106,11 +106,11 @@
                 },
                 deep:true
             },
-            order: {
-                handler() {
-                    console.log(this.order);
+            order() {
+                if(this.order !== null) {
+                    this.loadPacklist();
                 }
-            }
+            },
 
         },
 
@@ -125,21 +125,51 @@
                 history.pushState({},null,'/packlist?'
                     // +'single_line_orders='+this.picklistFilters.single_line_orders_only
                     // +'&currentLocation='+ this.picklistFilters.currentLocation
-                    // +'&inventory_location_id='+ this.picklistFilters.inventory_location_id
+                    +'&inventory_location_id='+ this.picklistFilters.inventory_location_id
                     // +'&in_stock_only='+ this.picklistFilters.in_stock_only
                 );
             },
 
-            fetchPicklist: function() {
+            loadOrder: function() {
                 console.log('Fetching order');
-                this.order = [];
                 this.showLoading();
 
-                axios.get('/api/packlist', {params: this.picklistFilters})
+                this.order = null;
+                this.packlist = [];
+
+                axios.get('/api/orders', {
+                    params: {
+                        'filter[is_picked]': true
+                    }})
                     .then(({ data }) => {
-                        if(data.data.length > 0) {
+                        if(data.total > 0) {
                             this.order = data.data[0];
-                            this.packlist = this.order.packlist;
+                        }
+                        this.hideLoading();
+                    })
+                    .catch( error => {
+                        this.$snotify.error('Error occurred while loading packlist');
+                        this.hideLoading();
+                    })
+
+
+            },
+
+            loadPacklist: function() {
+                console.log('Fetching packlist');
+                this.packlist = [];
+                if(!this.isLoading) {
+                    this.showLoading();
+                }
+
+                axios.get('/api/packlist', {
+                    params: {
+                        'include': 'product',
+                        'filter[order_id]': this.order.id
+                    }})
+                    .then(({ data }) => {
+                        if(data.total > 0) {
+                            this.packlist = data.data;
                         }
                         this.hideLoading();
                     })
@@ -184,9 +214,9 @@
             },
 
             updatePick(pickId, quantityPicked, isPicked) {
-                return axios.post(`/api/picklist/${pickId}`, {
-                    'quantity_picked': quantityPicked,
-                    'is_picked': isPicked
+                return axios.post(`/api/packlist/${pickId}`, {
+                    'quantity_packed': quantityPicked,
+                    'is_packed': isPicked
                 });
             },
 
@@ -289,7 +319,8 @@
 
             updateUrlAndReloadProducts() {
                 this.updateUrl();
-                return this.fetchPicklist();
+                this.loadOrder();
+                // return this.fetchPicklist();
             },
 
             setFocusOnBarcodeInput() {
