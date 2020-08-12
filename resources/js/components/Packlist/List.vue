@@ -30,7 +30,7 @@
 <!--            </div>-->
         </div>
         <div class="container">
-            <div v-if="picklist.length === 0 && !isLoading" class="row" >
+            <div v-if="packlist.length === 0 && !isLoading" class="row" >
                 <div class="col">
                     <div class="alert alert-info" role="alert">
                         No products found.
@@ -38,7 +38,7 @@
                 </div>
             </div>
             <template v-else class="row">
-                <template v-for="picklistItem in picklist">
+                <template v-for="picklistItem in packlist">
                     <packlist-entry :picklistItem="picklistItem"
                                    :key="picklistItem.id"
                                    @swipeRight="pickAll"
@@ -93,7 +93,7 @@
                     in_stock_only: this.getValueOrDefault($urlParameters.in_stock_only,  true),
                 },
                 barcode: '',
-                picklist: [],
+                packlist: [],
                 showScanner: false,
                 order: null,
             };
@@ -139,6 +139,7 @@
                     .then(({ data }) => {
                         if(data.data.length > 0) {
                             this.order = data.data[0];
+                            this.packlist = this.order.packlist;
                         }
                         this.hideLoading();
                     })
@@ -151,7 +152,7 @@
             },
 
             skipPick(pickedItem) {
-                this.picklist.splice(this.picklist.indexOf(pickedItem), 1);
+                this.packlist.splice(this.packlist.indexOf(pickedItem), 1);
 
                 return this.updatePick(pickedItem.id, 0, true)
                     .then( response => {
@@ -160,14 +161,14 @@
                         this.warningBeep();
                     })
                     .catch( error  => {
-                        this.picklist.unshift(pickedItem);
+                        this.packlist.unshift(pickedItem);
                         this.$snotify.error('Not skipped (Error '+ error.response.status+')');
                         this.errorBeep();
                     });
             },
 
             pickAll(pickedItem) {
-                this.picklist.splice(this.picklist.indexOf(pickedItem), 1);
+                this.packlist.splice(this.packlist.indexOf(pickedItem), 1);
 
                 return this.updatePick(pickedItem.id, pickedItem.quantity_requested, true)
                     .then( response => {
@@ -176,7 +177,7 @@
                         this.beep();
                     })
                     .catch( error  => {
-                        this.picklist.unshift(pickedItem);
+                        this.packlist.unshift(pickedItem);
                         this.$snotify.error('Items not picked (Error '+ error.response.status+')');
                         this.errorBeep();
                     });
@@ -193,7 +194,7 @@
                 this.updatePick(pick.id, 0, false)
                     .then(() => {
                         this.$snotify.warning('Action reverted');
-                        this.picklist.unshift(pick);
+                        this.packlist.unshift(pick);
                     });
             },
 
@@ -232,7 +233,7 @@
             },
 
             findPickItem: function (barcode) {
-                for (let element of this.picklist) {
+                for (let element of this.packlist) {
 
                     if(element.sku_ordered === barcode) {
                         return element;

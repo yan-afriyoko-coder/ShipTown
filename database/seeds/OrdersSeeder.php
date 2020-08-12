@@ -14,7 +14,7 @@ class OrdersSeeder extends Seeder
      */
     public function run()
     {
-        factory(Order::class,2)
+        factory(Order::class,20)
             ->create()
             ->each(function (Order $order) {
                 $orderProducts = factory(OrderProduct::class, rand(1,3))->make();

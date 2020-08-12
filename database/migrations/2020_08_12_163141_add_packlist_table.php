@@ -15,9 +15,9 @@ class AddPacklistTable extends Migration
     {
         Schema::create('packlists', function (Blueprint $table) {
             $table->bigIncrements('id')->unsigned();
-            $table->bigInteger('order_id')->unsigned();
-            $table->bigInteger('order_product_id')->unsigned();
-            $table->bigInteger('product_id')->unsigned();
+            $table->bigInteger('order_id')->unsigned()->nullable(true);
+            $table->bigInteger('order_product_id')->unsigned()->nullable(true);
+            $table->bigInteger('product_id')->unsigned()->nullable(true);
             $table->string('location_id');
             $table->string('sku_ordered')->default('');
             $table->string('name_ordered')->default('');
@@ -25,6 +25,8 @@ class AddPacklistTable extends Migration
             $table->decimal('quantity_packed')->default(0);
             $table->bigInteger('packer_user_id')->unsigned()->nullable(true);
             $table->timestamp('packed_at')->nullable(true);
+
+            $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('order_id')
