@@ -32,6 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::view('/picklist', 'picklist')
         ->name('picklist');
 
+
     Route::view('/users', 'users')
         ->name('users')
         ->middleware('can:manage users');
@@ -49,6 +50,9 @@ Route::middleware('auth')->group(function () {
     // but still available as direct link
     Route::view('/missing', 'missing')
         ->name('missing');
+
+    Route::view('/packlist', 'packlist')
+        ->name('packlist');
 
 });
 
