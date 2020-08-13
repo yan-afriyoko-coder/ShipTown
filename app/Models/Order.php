@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Services\PicklistService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Arr;
 
@@ -11,6 +12,8 @@ use Illuminate\Support\Arr;
  * @property integer product_line_count
  * @property integer total_quantity_ordered
  * @property string status_code
+ * @property \Illuminate\Support\Carbon|null packed_at
+ * @property \Illuminate\Support\Carbon|null picked_at
  */
 class Order extends Model
 {
@@ -33,6 +36,43 @@ class Order extends Model
     protected $attributes = [
         'raw_import' => '{}',
     ];
+
+    protected $appends = [
+        'is_picked',
+        'is_packed',
+    ];
+
+    public function scopeIsPicked($query, $value)
+    {
+        return $query->whereNull('picked_at', 'and', $value);
+    }
+
+
+    public function scopeIsPacked($query, $value)
+    {
+        return $query->whereNull('packed_at', 'and', $value);
+    }
+
+    public function getIsPackedAttribute()
+    {
+        return $this->packed_at !== null;
+    }
+
+    public function setIsPackedAttribute($value)
+    {
+        $this->packed_at = $value ? now() : null;
+    }
+
+    public function getIsPickedAttribute()
+    {
+        return $this->picked_at !== null;
+    }
+
+    public function setIsPickedAttribute($value)
+    {
+        $this->picked_at = $value ? now() : null;
+    }
+
 
     public function scopePacklist($query, $inventory_id)
     {

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
@@ -12,6 +13,60 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class OrdersRoutesTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_is_picked_filter_false()
+    {
+        Order::query()->delete();
+
+        factory(Order::class)->create([
+            'picked_at' => now()
+        ]);
+
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        $response = $this->get('api/orders?filter[is_picked]=false');
+
+        $response->assertJsonStructure([
+            "current_page",
+            "data" => [
+                "*" => [
+                    "id",
+                ]
+            ],
+            "total",
+        ]);
+
+        $this->assertEquals(0, $response->json('total'));
+    }
+
+    public function test_is_picked_filter_true()
+    {
+        Order::query()->delete();
+
+        factory(Order::class)->create([
+            'picked_at' => now()
+        ]);
+
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        $response = $this->get('api/orders?filter[is_picked]=true');
+
+        $response->assertJsonStructure([
+            "current_page",
+            "data" => [
+                "*" => [
+                    "id",
+                ]
+            ],
+            "total",
+        ]);
+
+        $this->assertEquals(1, $response->json('total'));
+    }
 
     public function test_orders_get_route() {
 
