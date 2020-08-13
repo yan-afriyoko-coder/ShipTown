@@ -37,7 +37,7 @@ Route::middleware('auth:api')->group(function() {
     Route::post('picklist/{picklist}', 'Api\PicklistController@store');
 
     Route::get('packlist', 'Api\PacklistController@index');
-//    Route::post('packlist/{packlist}', 'Api\PacklistController@store');
+    Route::post('packlist/{packlist}', 'Api\PacklistController@store');
 
     Route::resource('users', 'UsersController')
         ->middleware('can:manage users');

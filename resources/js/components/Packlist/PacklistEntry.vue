@@ -3,7 +3,7 @@
         <div class="swiper-wrapper">
             <div class="swiper-slide error"></div>
             <div class="swiper-slide">
-                <div class="row mb-3 ml-1 mr-1">
+                <div class="row mb-3 ml-1 mr-1" :class=" picklistItem['is_packed'] ? 'packed' : '' ">
                     <div class="col p-2 pl-3">
                         <div class="row text-left">
                             <div class="col-md-8">
@@ -26,10 +26,10 @@
                                         <div class="">Shelf</div>
                                         <div class="h3">{{ picklistItem['inventory_source_shelf_location'] }}</div>
                                     </div>
-<!--                                    <div class="col-3">-->
-<!--                                        <div class="">Stock</div>-->
-<!--                                        <div class="h3">{{ pick_location_inventory_quantity }}</div>-->
-<!--                                    </div>-->
+                                    <div class="col-3">
+                                        <div class="">Is Packed</div>
+                                        <div class="h3">{{ picklistItem['is_packed'] }}</div>
+                                    </div>
 <!--                                    <div class="col-3">-->
 <!--                                        <div class="">Location</div>-->
 <!--                                        <div class="h3">{{ pick_location_inventory_location_id }}</div>-->
@@ -121,5 +121,9 @@
 
     .header-row > div {
         background-color: #76777838;
+    }
+
+    .packed > div {
+        background-color: #f8fafc;
     }
 </style>

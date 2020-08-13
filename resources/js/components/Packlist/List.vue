@@ -44,6 +44,12 @@
                                    @swipeRight="pickAll"
                                    @swipeLeft="skipPick" />
                 </template>
+                <template v-for="picklistItem in packedlist">
+                    <packlist-entry :picklistItem="picklistItem"
+                                   :key="picklistItem.id"
+                                   @swipeRight="pickAll"
+                                   @swipeLeft="skipPick" />
+                </template>
             </template>
         </div>
 
@@ -94,6 +100,7 @@
                 },
                 order: null,
                 packlist: [],
+                packedlist: [],
                 barcode: '',
                 showScanner: false,
             };
@@ -202,6 +209,8 @@
 
                 return this.updatePick(pickedItem.id, pickedItem.quantity_requested, true)
                     .then( response => {
+                        pickedItem.is_packed = true;
+                        this.packedlist.unshift(pickedItem);
                         this.picklistFilters.currentLocation = this.getValueOrDefault(pickedItem.shelve_location, '');
                         this.displayPickedNotification(pickedItem, pickedItem.quantity_requested);
                         this.beep();

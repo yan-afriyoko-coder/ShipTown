@@ -9,10 +9,30 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * Class Packlist
+ * @property \Illuminate\Support\Carbon|null packed_at
  * @package App\Models
  */
 class Packlist extends Model
 {
+
+    protected $fillable = [
+        'order_id',
+        'order_product_id',
+        'product_id',
+        'location_id',
+        'sku_ordered',
+        'name_ordered',
+        'quantity_requested',
+        'quantity_packed',
+        'packer_user_id',
+        'packed_at',
+        'is_packed',
+    ];
+
+    protected $appends = [
+        'is_packed'
+    ];
+
     /**
      * @param Builder $query
      * @param int $inventory_location_id
@@ -32,6 +52,16 @@ class Packlist extends Model
         return $query->joinSub($source_inventory,'inventory_source', function ($join) {
             $join->on('packlists.product_id','=','inventory_source_product_id');
         });
+    }
+
+    public function getIsPackedAttribute()
+    {
+        return $this->packed_at !== null;
+    }
+
+    public function setIsPackedAttribute($value)
+    {
+        $this->packed_at = $value ? now() : null;
     }
 
     public function product()
