@@ -146,7 +146,8 @@
 
                 axios.get('/api/orders', {
                     params: {
-                        'filter[is_picked]': true
+                        'filter[is_picked]': true,
+                        'filter[is_packed]': false
                     }})
                     .then(({ data }) => {
                         if(data.total > 0) {

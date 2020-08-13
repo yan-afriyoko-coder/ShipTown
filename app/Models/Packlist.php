@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 /**
  * Class Packlist
  * @property \Illuminate\Support\Carbon|null packed_at
+ * @property int order_id
  * @package App\Models
  */
 class Packlist extends Model
