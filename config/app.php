@@ -191,6 +191,7 @@ return [
         Aws\Laravel\AwsServiceProvider::class,
         Sentry\Laravel\ServiceProvider::class,
 
+        App\Providers\PrintServiceProvider::class,
     ],
 
     /*

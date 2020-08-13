@@ -26,7 +26,12 @@ class UsersController extends Controller
 
     public function update(UpdateRequest $request, User $user)
     {
-        $user->update(['name' => $request->name]);
+        $user->name = $request->name;
+
+        if ($request->has('printer_id')) {
+            $user->printer_id = $request->printer_id;
+        }
+
         $user->save();
         // Allow changing of role if the current user has permissions and not editing self.
         if ($request->user()->can('manage users') && $request->user()->id != $user->id) {

@@ -18,6 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user()->id;
 });
 
+Route::middleware('auth:api')->get('/user/me', function (Request $request) {
+    return new \App\Http\Resources\UserResource($request->user());
+});
+
 Route::middleware('auth:api')->group(function() {
 
     Route::resource('widgets', 'WidgetsController');
@@ -46,6 +50,9 @@ Route::middleware('auth:api')->group(function() {
     Route::resource("api2cart_configuration", "Api2cartConnectionController");
 
     Route::get('sync', "SyncController@index");
+
+    Route::get('printers', 'Api\PrintersController@index');
+    Route::put('printers/use/{printerId}', 'Api\PrintersController@use');
 
     Route::post('invites', 'InvitesController@store');
 

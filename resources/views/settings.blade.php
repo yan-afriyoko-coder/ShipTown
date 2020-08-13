@@ -37,6 +37,8 @@
 
                     <printnode-configuration></printnode-configuration>
                     <br />
+
+                    <printer-configuration></printer-configuration>
                 </div>
             </div>
         </div>

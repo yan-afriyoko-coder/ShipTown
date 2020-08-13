@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6b6a891efa826e20467a3766bb5b1024",
+    "content-hash": "262e616fef8b800f09201967719f53d9",
     "packages": [
         {
             "name": "arrilot/laravel-widgets",
@@ -3123,6 +3123,48 @@
                 }
             ],
             "time": "2020-07-08T09:08:33+00:00"
+        },
+        {
+            "name": "printnode/printnode-php",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PrintNode/PrintNode-PHP.git",
+                "reference": "960acabca3c0d976bbd92bf0d6490a1fe5df7496"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PrintNode/PrintNode-PHP/zipball/960acabca3c0d976bbd92bf0d6490a1fe5df7496",
+                "reference": "960acabca3c0d976bbd92bf0d6490a1fe5df7496",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PrintNode\\": "src/PrintNode"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Contributors",
+                    "email": "support@printnode.com",
+                    "homepage": "https://www.printnode.com"
+                }
+            ],
+            "description": "Connect any printer to your application with PrintNode Client and easy to use JSON API",
+            "homepage": "https://github.com/PrintNode/PrintNode-PHP",
+            "keywords": [
+                "PrintNode",
+                "api",
+                "php",
+                "printing"
+            ],
+            "time": "2017-05-17T21:26:48+00:00"
         },
         {
             "name": "psr/container",
@@ -6876,6 +6918,40 @@
             "time": "2020-07-09T08:09:16+00:00"
         },
         {
+            "name": "infernobass7/laravel-print-node",
+            "version": "v0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/infernobass7/laravel-print-node.git",
+                "reference": "1ddd61f40402adcbaf8305863a661505a9071ca9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/infernobass7/laravel-print-node/zipball/1ddd61f40402adcbaf8305863a661505a9071ca9",
+                "reference": "1ddd61f40402adcbaf8305863a661505a9071ca9",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.2",
+                "printnode/printnode-php": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Infernobass7\\PrintNode": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Michael Deck",
+                    "email": "michael.e.deck@outlook.com"
+                }
+            ],
+            "description": "Print using PrintNode in Laravel. http://www.printnode.com",
+            "time": "2017-04-27T13:57:20+00:00"
+        },
+        {
             "name": "laravel/dusk",
             "version": "v5.11.0",
             "source": {
@@ -8909,7 +8985,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "printnode/printnode-php": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
