@@ -3,7 +3,7 @@
         <div class="swiper-wrapper">
             <div class="swiper-slide error"></div>
             <div class="swiper-slide">
-                <div class="row mb-3 ml-1 mr-1" :class=" picklistItem['is_packed'] ? 'packed' : '' ">
+                <div class="row mb-3 ml-1 mr-1" :class=" picklistItem['is_packed'] ? 'disabled' : '' ">
                     <div class="col p-2 pl-3">
                         <div class="row text-left">
                             <div class="col-md-8">
@@ -123,7 +123,7 @@
         background-color: #76777838;
     }
 
-    .packed > div {
-        background-color: #f8fafc;
+    .disabled > div {
+        opacity: 0.5;
     }
 </style>
