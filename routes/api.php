@@ -39,12 +39,6 @@ Route::middleware('auth:api')->group(function() {
     Route::get('packlist', 'Api\PacklistController@index');
     Route::post('packlist/{packlist}', 'Api\PacklistController@store');
 
-    Route::resource('users', 'UsersController')
-        ->middleware('can:manage users');
-
-    Route::get('roles', 'RolesController@index')
-        ->middleware('can:list roles');
-
     Route::post('company/configuration', "CompanyController@storeConfiguration");
 
     Route::resource("rms_api_configuration", "RmsapiConnectionController");
@@ -55,7 +49,14 @@ Route::middleware('auth:api')->group(function() {
 
     Route::post('invites', 'InvitesController@store');
 
+    // Routes for users with the admin role only
+    Route::group(['middleware' => ['role:admin']], function () {
+        Route::resource('users', 'UsersController')
+        ->middleware('can:manage users');
 
+        Route::get('roles', 'RolesController@index')
+            ->middleware('can:list roles');        
+    });
 });
 
 

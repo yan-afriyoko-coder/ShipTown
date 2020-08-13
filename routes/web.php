@@ -32,11 +32,6 @@ Route::middleware('auth')->group(function () {
     Route::view('/picklist', 'picklist')
         ->name('picklist');
 
-
-    Route::view('/users', 'users')
-        ->name('users')
-        ->middleware('can:manage users');
-
     Route::get('run/maintenance', function () {
         // this route should be moved to api and invoked trough button in settings
         // it should be done by 01/09/2020
@@ -54,6 +49,10 @@ Route::middleware('auth')->group(function () {
     Route::view('/packlist', 'packlist')
         ->name('packlist');
 
+    Route::group(['middleware' => ['role:admin']], function() {
+        Route::view('/users', 'users')
+            ->name('users');
+    });
 });
 
 // Routes to allow invite other emails
