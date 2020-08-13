@@ -9,6 +9,7 @@ use App\Managers\Config;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Request;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class OrdersController extends Controller
@@ -19,7 +20,8 @@ class OrdersController extends Controller
         $query = QueryBuilder::for(Order::class)
             ->allowedFilters([
                 'order_number',
-                'is_picked'
+                AllowedFilter::scope('is_picked'),
+                AllowedFilter::scope('is_packed'),
             ]);
 
         return $query->paginate(10);
