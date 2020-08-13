@@ -38,15 +38,15 @@
                 </div>
             </div>
             <template v-else class="row">
-                <template v-for="picklistItem in packlist">
-                    <packlist-entry :picklistItem="picklistItem"
-                                   :key="picklistItem.id"
+                <template v-for="record in packlist">
+                    <packlist-entry :picklistItem="record"
+                                   :key="record.id"
                                    @swipeRight="pickAll"
                                    @swipeLeft="skipPick" />
                 </template>
-                <template v-for="picklistItem in packedlist">
-                    <packlist-entry :picklistItem="picklistItem"
-                                   :key="picklistItem.id"
+                <template v-for="record in packed">
+                    <packlist-entry :picklistItem="record"
+                                   :key="record.id"
                                    @swipeRight="pickAll"
                                    @swipeLeft="skipPick" />
                 </template>
@@ -100,7 +100,7 @@
                 },
                 order: null,
                 packlist: [],
-                packedlist: [],
+                packed: [],
                 barcode: '',
                 showScanner: false,
             };
@@ -118,6 +118,13 @@
                     this.loadPacklist();
                 }
             },
+            packlist: {
+                handler() {
+                    if(!this.isLoading && this.packlist.length === 0) {
+                        this.loadOrder();
+                    }
+                }
+            }
 
         },
 
@@ -177,7 +184,14 @@
                     }})
                     .then(({ data }) => {
                         if(data.total > 0) {
-                            this.packlist = data.data;
+                            data.data.forEach(element => {
+                                console.log(element.is_packed);
+                                if(element.is_packed === true) {
+                                    this.packed.unshift(element);
+                                } else {
+                                    this.packlist.unshift(element);
+                                }
+                            });
                         }
                         this.hideLoading();
                     })
@@ -190,7 +204,7 @@
             },
 
             skipPick(pickedItem) {
-                this.packlist.splice(this.packlist.indexOf(pickedItem), 1);
+                this.packed.splice(this.packlist.indexOf(pickedItem), 1);
 
                 return this.updatePick(pickedItem.id, 0, true)
                     .then( response => {
@@ -206,18 +220,18 @@
             },
 
             pickAll(pickedItem) {
-                this.packlist.splice(this.packlist.indexOf(pickedItem), 1);
 
                 return this.updatePick(pickedItem.id, pickedItem.quantity_requested, true)
                     .then( response => {
                         pickedItem.is_packed = true;
-                        this.packedlist.unshift(pickedItem);
+                        this.packlist.splice(this.packlist.indexOf(pickedItem), 1);
+                        this.packed.unshift(pickedItem);
                         this.picklistFilters.currentLocation = this.getValueOrDefault(pickedItem.shelve_location, '');
                         this.displayPickedNotification(pickedItem, pickedItem.quantity_requested);
                         this.beep();
                     })
                     .catch( error  => {
-                        this.packlist.unshift(pickedItem);
+                        this.packlist.unshift(pickedItem,1,pickedItem);
                         this.$snotify.error('Items not picked (Error '+ error.response.status+')');
                         this.errorBeep();
                     });
