@@ -26,45 +26,40 @@ Route::middleware('auth:api')->group(function() {
 
     Route::resource('widgets', 'WidgetsController');
 
-    Route::get('products', 'Api\ProductsController@index');
-    Route::post('products', 'Api\ProductsController@store');
-    Route::get('products/{sku}/sync', 'Api\ProductsController@publish');
+    Route::get('products'           ,'Api\ProductsController@index');
+    Route::post('products'          ,'Api\ProductsController@store');
+    Route::get('products/{sku}/sync','Api\ProductsController@publish');
 
-    Route::get("inventory", "InventoryController@index");
-    Route::post("inventory", "InventoryController@store");
+    Route::get("inventory"  , "InventoryController@index");
+    Route::post("inventory" , "InventoryController@store");
 
-    Route::get('orders', 'OrdersController@index');
-    Route::post('orders', 'OrdersController@store');
-    Route::delete('orders/{order_number}', 'OrdersController@destroy');
+    Route::get('orders'                     , 'OrdersController@index');
+    Route::post('orders'                    , 'OrdersController@store');
+    Route::delete('orders/{order_number}'   , 'OrdersController@destroy');
 
-    Route::get('picklist', 'Api\PicklistController@index');
-    Route::post('picklist/{picklist}', 'Api\PicklistController@store');
+    Route::get('picklist'               , 'Api\PicklistController@index');
+    Route::post('picklist/{picklist}'   , 'Api\PicklistController@store');
 
-    Route::get('packlist', 'Api\PacklistController@index');
-    Route::post('packlist/{packlist}', 'Api\PacklistController@store');
+    Route::get('packlist'               , 'Api\PacklistController@index');
+    Route::post('packlist/{packlist}'   , 'Api\PacklistController@store');
 
-    Route::post('company/configuration', "CompanyController@storeConfiguration");
+    Route::post('company/configuration' , "CompanyController@storeConfiguration");
 
-    Route::resource("rms_api_configuration", "RmsapiConnectionController");
-
-    Route::resource("api2cart_configuration", "Api2cartConnectionController");
+    Route::resource("rms_api_configuration"     , "RmsapiConnectionController");
+    Route::resource("api2cart_configuration"    , "Api2cartConnectionController");
 
     Route::get('sync', "SyncController@index");
 
-    Route::get('printers', 'Api\PrintersController@index');
-    Route::put('printers/use/{printerId}', 'Api\PrintersController@use');
+    Route::get('printers'                   , 'Api\PrintersController@index');
+    Route::put('printers/use/{printerId}'   , 'Api\PrintersController@use');
 
     Route::post('invites', 'InvitesController@store');
 
     // Routes for users with the admin role only
     Route::group(['middleware' => ['role:admin']], function () {
-        Route::resource('users', 'UsersController')
-            ->middleware('can:manage users');
-
-        Route::get('roles', 'RolesController@index')
-            ->middleware('can:list roles');
-
-        Route::resource('configuration', 'ConfigurationsController');
+        Route::resource('users'           , 'UsersController')->middleware('can:manage users');
+        Route::get('roles'                  , 'RolesController@index')->middleware('can:list roles');
+        Route::resource('configuration'   , 'ConfigurationsController');
     });
 });
 
