@@ -13,6 +13,7 @@
         "arrilot/laravel-widgets": "^3.13",
         "aws/aws-sdk-php-laravel": "^3.3",
         "doctrine/dbal": "2.9.*",
+        "dompdf/dompdf": "^0.8.5",
         "fideloper/proxy": "^4.0",
         "hulkur/laravel-hasmany-keyby": "^1.1",
         "laravel/framework": "5.8.*",
