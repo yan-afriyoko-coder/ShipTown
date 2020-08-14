@@ -1,9 +1,11 @@
 <template>
-    <div :id="elID" lass="swiper-container">
+    <div :id="getElementId" class="swiper-container mb-3">
         <div class="swiper-wrapper">
+
             <div class="swiper-slide error"></div>
+
             <div class="swiper-slide">
-                <div class="row mb-3 ml-1 mr-1" :class=" picklistItem['is_packed'] ? 'disabled' : '' ">
+                <div class="row ml-1 mr-1" :class=" picklistItem['is_packed'] ? 'disabled' : '' ">
                     <div class="col p-2 pl-3">
                         <div class="row text-left">
                             <div class="col-md-8">
@@ -40,7 +42,9 @@
                     </div>
                 </div>
             </div>
+
             <div class="swiper-slide"></div>
+
         </div>
     </div>
 </template>
@@ -50,63 +54,46 @@
     import { Swiper } from 'swiper/js/swiper.esm.js';
 
     export default {
-        created() {
-            // this.order_number = this.picklistItem.order.order_number;
-            // this.order_product_line_count = this.picklistItem.order.product_line_count;
-            // this.product_sku = this.picklistItem.product ? this.picklistItem.product.sku : '';
-            // this.location_id = this.picklistItem.location_id;
-            // this.shelve_location = this.picklistItem.pick_location_inventory_shelve_location;
-            // this.sku_ordered = this.picklistItem.sku_ordered;
-            // this.name_ordered = this.picklistItem.name_ordered;
-            // this.quantity_requested = Math.ceil(this.picklistItem.quantity_requested);
-            // this.pick_location_inventory_quantity = Math.ceil(this.picklistItem.pick_location_inventory_quantity);
-            // this.pick_location_inventory_location_id = this.picklistItem.pick_location_inventory_location_id;
-        },
-
         mounted() {
+
             const self = this;
             // Initialize Swiper
-            const swiper = new Swiper('#' + this.elID, {
+            const swiper = new Swiper('#' + this.getElementId, {
                 initialSlide: 1,
                 resistanceRatio: 0,
                 speed: 150
             });
 
-            let pickedItem = this.picklistItem;
+            const pickedItem = this.picklistItem;
 
             // Event will be fired after transition
-            swiper.on('transitionEnd', function () {
+            swiper.on('transitionEnd', function() {
                 if (this.activeIndex === 0) {
+                    this.slideTo(1,0,false);
                     self.$emit('swipeRight', pickedItem);
-                    this.destroy();
-                    self.$el.parentNode.removeChild(self.$el);
+                    console.log(self.$el);
+                    console.log(self.$el.parentNode);
+                    // this.destroy();
+                    // self.$el.parentNode.removeChild(self.$el);
                 } else if (this.activeIndex === 2) {
                     self.$emit('swipeLeft', pickedItem);
                     this.destroy();
                     self.$el.parentNode.removeChild(self.$el);
                 }
             });
+
         },
 
         props: {
             picklistItem: Object,
         },
 
-        data: () => ({
-            location_id: null,
-            shelve_location: null,
-            quantity_requested: null,
-        }),
-
-        methods: {
-
-        },
-
         computed: {
-            elID() {
+            getElementId() {
                 return `picklist-item-${this.picklistItem.id}`;
             }
-        }
+        },
+
     }
 </script>
 
@@ -125,5 +112,13 @@
 
     .disabled > div {
         opacity: 0.5;
+    }
+
+    .swiper-container {
+        overflow: hidden;
+    }
+
+    .swiper-slide {
+        height: auto;
     }
 </style>
