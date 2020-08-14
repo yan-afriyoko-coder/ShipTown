@@ -114,6 +114,7 @@
                 deep:true
             },
             order() {
+                console.log(this.order);
                 if(this.order !== null) {
                     this.loadPacklist();
                 }
@@ -145,11 +146,11 @@
             },
 
             loadOrder: function() {
-                console.log('Fetching order');
                 this.showLoading();
 
                 this.order = null;
                 this.packlist = [];
+                this.packed = [];
 
                 axios.get('/api/orders', {
                     params: {
@@ -157,9 +158,11 @@
                         'filter[is_packed]': false
                     }})
                     .then(({ data }) => {
-                        if(data.total > 0) {
-                            this.order = data.data[0];
+                        if(data.total === 0) {
+                            return;
                         }
+
+                        this.order = data.data[0];
                         this.hideLoading();
                     })
                     .catch( error => {
@@ -171,11 +174,13 @@
             },
 
             loadPacklist: function() {
-                console.log('Fetching packlist');
-                this.packlist = [];
+
                 if(!this.isLoading) {
                     this.showLoading();
                 }
+
+                this.packlist = [];
+                this.packed = [];
 
                 axios.get('/api/packlist', {
                     params: {
@@ -183,16 +188,22 @@
                         'filter[order_id]': this.order.id
                     }})
                     .then(({ data }) => {
-                        if(data.total > 0) {
-                            data.data.forEach(element => {
-                                console.log(element.is_packed);
-                                if(element.is_packed === true) {
-                                    this.packed.unshift(element);
-                                } else {
-                                    this.packlist.unshift(element);
-                                }
-                            });
+
+                        if(data.total === 0) {
+                            this.hideLoading();
+                            return;
                         }
+
+                        data.data.forEach(element => {
+                            if(element.is_packed === true) {
+                                this.packed.push(element);
+                                // this.packed.unshift(element);
+                            } else {
+                                this.packlist.push(element);
+                                // this.packlist.unshift(element);
+                            }
+                        });
+
                         this.hideLoading();
                     })
                     .catch( error => {
@@ -220,7 +231,6 @@
             },
 
             pickAll(pickedItem) {
-
                 return this.updatePick(pickedItem.id, pickedItem.quantity_requested, true)
                     .then( response => {
                         pickedItem.is_packed = true;
@@ -344,7 +354,6 @@
             updateUrlAndReloadProducts() {
                 this.updateUrl();
                 this.loadOrder();
-                // return this.fetchPicklist();
             },
 
             setFocusOnBarcodeInput() {
