@@ -26,7 +26,8 @@ class UpdateRequest extends FormRequest
     {
         return [
             'email' => ['sometimes', 'required', 'string', 'email', 'max:255', 'unique:users'],
-            'role_id' => ['sometimes', 'exists:roles,id']
+            'role_id' => ['sometimes', 'exists:roles,id'],
+            'printer_id' => ['sometimes'],
         ];
     }
 }
