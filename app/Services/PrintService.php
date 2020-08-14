@@ -17,7 +17,7 @@ class PrintService
     public function __construct()
     {
         try {
-            $configuration = Configuration::where('key', env('PRINTNODE_CONFIG_KEY_NAME'))->first();
+            $configuration = Configuration::where('key', config('printnode.config_key_name'))->first();
         } catch (Exception $exception) {
             $configuration = null;
         };
