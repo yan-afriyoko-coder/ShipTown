@@ -16,7 +16,7 @@ class PrintService
     }
 
     /**
-     * @return Array
+     * @return \PrintNode\Printer[]
      */
     public function getPrinters()
     {
