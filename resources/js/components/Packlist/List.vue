@@ -3,56 +3,68 @@
         <div v-if="showScanner" class="overlay" @click.prevent="stopScanner">
             <div id="interactive" class="viewport overlay-content"></div>
         </div>
-        <div class="row mb-3 ml-1 mr-1">
-            <div class="col-3">Order #: <strong>{{ order === null ? '' : order.order_number}}</strong></div>
-            <div class="col-3">Date:<strong>{{ order === null ? '' : order.order_placed_at}}</strong></div>
-            <div class="col-3">Lines #: <strong>{{ order === null ? '' : order.product_line_count}}</strong></div>
-            <div class="col-3">Quantity #: <strong>{{ order === null ? '' : order.total_quantity_ordered}}</strong></div>
-        </div>
-        <div class="row mb-3 ml-1 mr-1">
-            <div class="col-9">
-                <input ref="barcode" class="form-control" placeholder="Scan sku or barcode"
-                       v-model="barcode"
-                       @focus="simulateSelectAll"
-                       @keyup.enter="pickBarcode(barcode)"/>
-            </div>
-            <div class="col-2">
-                <input ref="currentLocation" class="form-control" placeholder="Scan current shelf location"
-                       v-model="picklistFilters.currentLocation"
-                       @focus="simulateSelectAll"
-                       @keyup.enter="updateUrlAndReloadProducts"/>
-            </div>
-            <div class="col-1">
-                <a style="cursor:pointer;" data-toggle="modal" data-target="#picklistConfigurationModal"><font-awesome-icon icon="cog"></font-awesome-icon></a>
-            </div>
-<!--            <div class="col">-->
-<!--                <button type="button" class="btn btn-secondary" @click.prevent="initScanner" href="#"><font-awesome-icon icon="barcode"></font-awesome-icon></button>-->
-<!--            </div>-->
-        </div>
-        <div class="container">
-            <div v-if="packlist !== null && packlist.length === 0 && !isLoading" class="row" >
-                <div class="col">
-                    <div class="alert alert-info" role="alert">
-                        No products found.
-                    </div>
+
+        <div v-if="order === null && !isLoading" class="row" >
+            <div class="col">
+                <div class="warning alert-warning" role="alert">
+                    No orders ready for packing
                 </div>
             </div>
-            <template v-else class="row">
-                <template v-for="record in packlist">
-                    <packlist-entry :picklistItem="record"
-                                   :key="record.id"
-                                   @swipeRight="pickAll"
-                                   @swipeLeft="skipPick" />
-                </template>
-                <template v-for="record in packed">
-                    <packlist-entry :picklistItem="record"
-                                   :key="record.id"
-                                   @swipeRight="pickAll"
-                                   @swipeLeft="skipPick" />
-                </template>
-            </template>
         </div>
 
+        <div v-if="order !== null && !isLoading">
+            <div class="row mb-3 ml-1 mr-1">
+                <div class="col-3">Order #: <strong>{{ order === null ? '' : order.order_number}}</strong></div>
+                <div class="col-3">Date:<strong>{{ order === null ? '' : order.order_placed_at}}</strong></div>
+                <div class="col-3">Lines #: <strong>{{ order === null ? '' : order.product_line_count}}</strong></div>
+                <div class="col-3">Quantity #: <strong>{{ order === null ? '' : order.total_quantity_ordered}}</strong></div>
+            </div>
+            <div class="row mb-3 ml-1 mr-1">
+                <div class="col-9">
+                    <input ref="barcode" class="form-control" placeholder="Scan sku or barcode"
+                           v-model="barcode"
+                           @focus="simulateSelectAll"
+                           @keyup.enter="pickBarcode(barcode)"/>
+                </div>
+                <div class="col-2">
+                    <input ref="currentLocation" class="form-control" placeholder="Scan current shelf location"
+                           v-model="picklistFilters.currentLocation"
+                           @focus="simulateSelectAll"
+                           @keyup.enter="updateUrlAndReloadProducts"/>
+                </div>
+                <div class="col-1">
+                    <a style="cursor:pointer;" data-toggle="modal" data-target="#picklistConfigurationModal"><font-awesome-icon icon="cog"></font-awesome-icon></a>
+                </div>
+    <!--            <div class="col">-->
+    <!--                <button type="button" class="btn btn-secondary" @click.prevent="initScanner" href="#"><font-awesome-icon icon="barcode"></font-awesome-icon></button>-->
+    <!--            </div>-->
+            </div>
+            <div class="container">
+
+                <div v-if="packlist.length === 0 && packed.length === 0" class="row" >
+                    <div class="col">
+                        <div class="alert alert-info" role="alert">
+                            No products found.
+                        </div>
+                    </div>
+                </div>
+
+                <template v-else class="row">
+                    <template v-for="record in packlist">
+                        <packlist-entry :picklistItem="record"
+                                       :key="record.id"
+                                       @swipeRight="pickAll"
+                                       @swipeLeft="skipPick" />
+                    </template>
+                    <template v-for="record in packed">
+                        <packed-entry :picklistItem="record"
+                                       :key="record.id"
+                                       @swipeRight="pickAll"
+                                       @swipeLeft="skipPick" />
+                    </template>
+                </template>
+            </div>
+        </div>
         <!--     Modal -->
         <packlist-configuration-modal :picklistFilters="picklistFilters"
                                       id='picklistConfigurationModal'
@@ -85,6 +97,7 @@
 
         components: {
             'packlist-entry': PacklistEntry,
+            'packed-entry': PacklistEntry,
             'picklist-configuration-modal': PicklistConfigurationModal,
         },
 
@@ -114,18 +127,12 @@
                 deep:true
             },
             order() {
-                if(this.order !== null) {
-                    this.loadPacklist();
+                if(this.order === null) {
+                    return;
                 }
-            },
-            packlist: {
-                handler() {
-                    if(!this.isLoading && this.packlist.length === 0) {
-                        this.loadOrder();
-                    }
-                }
-            }
 
+                this.loadPacklist();
+            },
         },
 
         mounted() {
@@ -145,21 +152,25 @@
             },
 
             loadOrder: function() {
-                console.log('Fetching order');
                 this.showLoading();
 
                 this.order = null;
                 this.packlist = [];
+                this.packed = [];
 
                 axios.get('/api/orders', {
-                    params: {
-                        'filter[is_picked]': true,
-                        'filter[is_packed]': false
-                    }})
-                    .then(({ data }) => {
-                        if(data.total > 0) {
-                            this.order = data.data[0];
+                        params: {
+                            'filter[is_picked]': true,
+                            'filter[is_packed]': false
                         }
+                    })
+                    .then(({ data }) => {
+                        if(data.total === 0) {
+                            this.hideLoading();
+                            return;
+                        }
+
+                        this.order = data.data[0];
                         this.hideLoading();
                     })
                     .catch( error => {
@@ -171,11 +182,13 @@
             },
 
             loadPacklist: function() {
-                console.log('Fetching packlist');
-                this.packlist = [];
+
                 if(!this.isLoading) {
                     this.showLoading();
                 }
+
+                this.packlist = [];
+                this.packed = [];
 
                 axios.get('/api/packlist', {
                     params: {
@@ -183,16 +196,20 @@
                         'filter[order_id]': this.order.id
                     }})
                     .then(({ data }) => {
-                        if(data.total > 0) {
-                            data.data.forEach(element => {
-                                console.log(element.is_packed);
-                                if(element.is_packed === true) {
-                                    this.packed.unshift(element);
-                                } else {
-                                    this.packlist.unshift(element);
-                                }
-                            });
+
+                        if(data.total === 0) {
+                            this.hideLoading();
+                            return;
                         }
+
+                        data.data.forEach(element => {
+                            if(element.is_packed === true) {
+                                this.packed.push(element);
+                            } else {
+                                this.packlist.push(element);
+                            }
+                        });
+
                         this.hideLoading();
                     })
                     .catch( error => {
@@ -204,7 +221,7 @@
             },
 
             skipPick(pickedItem) {
-                this.packed.splice(this.packlist.indexOf(pickedItem), 1);
+                this.packlist.splice(this.packlist.indexOf(pickedItem), 1);
 
                 return this.updatePick(pickedItem.id, 0, true)
                     .then( response => {
@@ -220,18 +237,22 @@
             },
 
             pickAll(pickedItem) {
+                // for visual effect we remove it straight away from UI
+                // we will add it back in catch
+                this.packlist.splice(this.packlist.indexOf(pickedItem), 1);
 
                 return this.updatePick(pickedItem.id, pickedItem.quantity_requested, true)
                     .then( response => {
                         pickedItem.is_packed = true;
-                        this.packlist.splice(this.packlist.indexOf(pickedItem), 1);
                         this.packed.unshift(pickedItem);
                         this.picklistFilters.currentLocation = this.getValueOrDefault(pickedItem.shelve_location, '');
                         this.displayPickedNotification(pickedItem, pickedItem.quantity_requested);
                         this.beep();
                     })
                     .catch( error  => {
-                        this.packlist.unshift(pickedItem,1,pickedItem);
+                        pickedItem.is_packed = false;
+                        this.packlist.unshift(pickedItem,0,pickedItem);
+                        this.packed.splice(this.packed.indexOf(pickedItem), 1);
                         this.$snotify.error('Items not picked (Error '+ error.response.status+')');
                         this.errorBeep();
                     });
@@ -344,7 +365,6 @@
             updateUrlAndReloadProducts() {
                 this.updateUrl();
                 this.loadOrder();
-                // return this.fetchPicklist();
             },
 
             setFocusOnBarcodeInput() {

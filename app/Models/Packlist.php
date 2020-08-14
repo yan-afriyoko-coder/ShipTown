@@ -50,7 +50,7 @@ class Packlist extends Model
             ->where(['location_id'=>$inventory_location_id])
             ->toBase();
 
-        return $query->joinSub($source_inventory,'inventory_source', function ($join) {
+        return $query->leftJoinSub($source_inventory,'inventory_source', function ($join) {
             $join->on('packlists.product_id','=','inventory_source_product_id');
         });
     }
