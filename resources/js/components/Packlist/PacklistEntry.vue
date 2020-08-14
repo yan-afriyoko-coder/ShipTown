@@ -11,7 +11,7 @@
                             <div class="col-md-8">
                                 <div class="text-primary h4">{{ picklistItem.name_ordered }}</div>
                                 <div class="text-secondary h5">sku: <span class="font-weight-bold"> {{ picklistItem.sku_ordered }} </span></div>
-                                <div class="text-secondary h5">product: <span class="font-weight-bold"> {{ picklistItem.product_sku }} </span></div>
+                                <div class="text-secondary h5">product: <span class="font-weight-bold"> {{ picklistItem.product['sku'] }} </span></div>
                             </div>
                             <div class="col-md-4">
                                 <div class="row pt-1 mt-1 text-center border-top">
