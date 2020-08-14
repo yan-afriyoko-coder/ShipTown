@@ -4,12 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
-use PrintNode\ApiKey;
-use PrintNode\Credentials;
-use PrintNode\Request;
 
 use App\Services\PrintService;
-use App\Models\Configuration;
 
 class PrintServiceProvider extends ServiceProvider
 {
