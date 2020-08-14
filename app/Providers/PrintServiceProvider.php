@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use PrintNode\ApiKey;
+use PrintNode\Credentials;
+use PrintNode\Request;
 
 use App\Services\PrintService;
 use App\Models\Configuration;
@@ -12,17 +15,26 @@ class PrintServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->singleton(PrintService::class, function ($app) {
-            $service = new PrintService();
-            $configuration = Configuration::where('key', env('PRINTNODE_CONFIG_KEY_NAME'))->first();
+        $this->app->bind(Request::class, function ($app) {
+            $configuration = null;
+
+            if (Schema::hasTable('configurations')) {
+                $configuration = Configuration::where('key', env('PRINTNODE_CONFIG_KEY_NAME'))->first();
+            }
+            
+            $credentials = new Credentials();
 
             if ($configuration) {
-                $service->setApiKey($configuration->value);
+                $credentials->setApiKey($configuration->value);
             } else {
-                $service->setApiKey(null);
+                $credentials->setApiKey(null);
             }
 
-            return $service;
+            return new Request($credentials);
+        });
+
+        $this->app->bind(PrintService::class, function ($app) {
+            return new PrintService(app(Request::class));
         });
     }
 }
