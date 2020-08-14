@@ -2,7 +2,7 @@
     <div :id="getElementId" class="swiper-container mb-3">
         <div class="swiper-wrapper">
 
-            <div class="swiper-slide error"></div>
+            <div class="swiper-slide bg-success"></div>
 
             <div class="swiper-slide">
                 <div class="row ml-1 mr-1" :class=" picklistItem['is_packed'] ? 'disabled' : '' ">
@@ -43,7 +43,7 @@
                 </div>
             </div>
 
-            <div class="swiper-slide"></div>
+            <div class="swiper-slide bg-warning"></div>
 
         </div>
     </div>
@@ -55,7 +55,6 @@
 
     export default {
         mounted() {
-
             const self = this;
             // Initialize Swiper
             const swiper = new Swiper('#' + this.getElementId, {
@@ -68,19 +67,17 @@
 
             // Event will be fired after transition
             swiper.on('transitionEnd', function() {
+
                 if (this.activeIndex === 0) {
-                    this.slideTo(1,0,false);
                     self.$emit('swipeRight', pickedItem);
-                    console.log(self.$el);
-                    console.log(self.$el.parentNode);
-                    // this.destroy();
-                    // self.$el.parentNode.removeChild(self.$el);
+
                 } else if (this.activeIndex === 2) {
                     self.$emit('swipeLeft', pickedItem);
-                    this.destroy();
-                    self.$el.parentNode.removeChild(self.$el);
                 }
+
+                this.slideTo(1,0,false);
             });
+
 
         },
 
