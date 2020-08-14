@@ -2,36 +2,17 @@
 
 namespace App\Services;
 
-use App\Models\Configuration;
-use Exception;
-use PrintNode\Credentials;
 use PrintNode\PrintJob;
 use PrintNode\Request;
 use PrintNode\Response;
-use PrintNode\ApiKey;
 
 class PrintService
 {
-    private $credentials = null;
+    private $request;
 
-    public function __construct()
+    public function __construct(Request $request)
     {
-        try {
-            $configuration = Configuration::where('key', config('printnode.config_key_name'))->first();
-        } catch (Exception $exception) {
-            $configuration = null;
-        };
-
-        if ($configuration) {
-            $this->setApiKey($configuration->value);
-        } else {
-            $this->setApiKey(null);
-        }
-    }
-
-    public function setApiKey($key)
-    {
-        $this->credentials = (new Credentials)->setApiKey($key);
+        $this->request = $request;
     }
 
     /**
@@ -39,7 +20,7 @@ class PrintService
      */
     public function getPrinters()
     {
-        return $this->request()->getPrinters();
+        return $this->request->getPrinters();
     }
 
     /**
@@ -79,11 +60,6 @@ class PrintService
         $printJob->source = env('APP_NAME');
         $printJob->title = $title;
 
-        return $this->request()->post($printJob);
-    }
-
-    private function request()
-    {
-        return new Request($this->credentials);
+        return $this->request->post($printJob);
     }
 }

@@ -25,7 +25,7 @@ class PrintersController extends Controller
 
             return new ResourceCollection(collect($printers));
         } catch (\Exception $e) {
-            return response()->json([],422);
+            return response()->json([], 422);
         }
     }
 
