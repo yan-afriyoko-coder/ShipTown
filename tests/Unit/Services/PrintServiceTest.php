@@ -1,6 +1,5 @@
 <?php
 
-use Mockery;
 use PrintNode\PrintJob;
 use PrintNode\Request;
 
