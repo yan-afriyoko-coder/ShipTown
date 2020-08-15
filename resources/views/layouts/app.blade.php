@@ -13,8 +13,8 @@
 
     <title>PM @yield('title')</title>
 
-    <!-- Scripts -->    
-    <script src="{{ asset('js/app.js') }}" defer></script>    
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -53,6 +53,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('picklist') }}">{{ __('Picklist') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('packlist') }}">{{ __('Packlist') }}</a>
                         </li>
                     </ul>
 

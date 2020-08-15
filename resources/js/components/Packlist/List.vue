@@ -14,14 +14,27 @@
 
         <div v-if="order !== null && !isLoading">
             <div class="row mb-3 ml-1 mr-1">
-                <div class="col-3">Order #: <strong>{{ order === null ? '' : order.order_number}}</strong></div>
-                <div class="col-3">Date:<strong>{{ order === null ? '' : order.order_placed_at}}</strong></div>
-                <div class="col-3">Lines #: <strong>{{ order === null ? '' : order.product_line_count}}</strong></div>
-                <div class="col-3">Quantity #: <strong>{{ order === null ? '' : order.total_quantity_ordered}}</strong></div>
+                <div class="col-3">
+                    <div>Order #: </div>
+                    <div class="font-weight-bold">{{ order === null ? '' : order.order_number}}</div>
+                </div>
+                <div class="col-3">
+                    <div>Date:</div>
+                    <div class="font-weight-bold">{{ order === null ? '' : ( formatDateMMMDD(order['order_placed_at']) ) }}</div>
+                </div>
+                <div class="col-3">
+                    <div>Lines #:</div>
+                    <div class="font-weight-bold">{{ order === null ? '' : order.product_line_count}}</div>
+                </div>
+                <div class="col-3">
+                    <div>Quantity #:</div>
+                    <div class="font-weight-bold">{{ order === null ? '' : order.total_quantity_ordered}}</div>
+                </div>
             </div>
             <div class="row mb-3 ml-1 mr-1">
                 <div class="col-9">
                     <input ref="barcode" class="form-control" placeholder="Scan sku or barcode"
+                           v-observe-visibility="barcodeVisibilityChanged"
                            v-model="barcode"
                            @focus="simulateSelectAll"
                            @keyup.enter="pickBarcode(barcode)"/>
@@ -82,6 +95,8 @@
     import PacklistEntry from './PacklistEntry';
     import PicklistConfigurationModal from './ConfigurationModal.vue';
 
+    import moment from 'moment';
+    import VueObserveVisibility from 'vue-observe-visibility';
     import VueRouter from 'vue-router';
 
     Vue.use(VueRouter);
@@ -142,6 +157,14 @@
         },
 
         methods: {
+            barcodeVisibilityChanged: function() {
+                this.setFocusOnBarcodeInput();
+                this.simulateSelectAll();
+            },
+
+            formatDateMMMDD: (value) => {
+                return moment(String(value)).format('MMM DD');
+            },
             updateUrl: function() {
                 history.pushState({},null,'/packlist?'
                     // +'single_line_orders='+this.picklistFilters.single_line_orders_only
@@ -275,9 +298,10 @@
 
             displayPickedNotification: function (pickedItem, quantity) {
                 const msg =  quantity + ' x ' + pickedItem.sku_ordered + ' picked';
-                this.$snotify.confirm('', msg, {
+                this.$snotify.confirm(msg, {
                     timeout: 5000,
                     pauseOnHover: true,
+                    showProgressBar: false,
                     buttons: [
                         {
                             text: 'Undo',
@@ -292,9 +316,10 @@
 
             displaySkippedNotification: function (pickedItem) {
                 const msg = 'Pick skipped';
-                this.$snotify.warning('', msg, {
+                this.$snotify.warning(msg, {
                     timeout: 5000,
                     pauseOnHover: true,
+                    showProgressBar: false,
                     buttons: [
                         {
                             text: 'Undo',
