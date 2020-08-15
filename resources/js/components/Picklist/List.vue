@@ -197,7 +197,7 @@
 
             displayPickedNotification: function (pickedItem, quantity) {
                 const msg =  quantity + ' x ' + pickedItem.sku_ordered + ' picked';
-                this.$snotify.confirm('', msg, {
+                this.$snotify.confirm(msg, {
                     timeout: 5000,
                     pauseOnHover: true,
                     buttons: [

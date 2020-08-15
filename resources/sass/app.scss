@@ -11,8 +11,8 @@
 // Handsontable
 @import '~handsontable/dist/handsontable.full.css';
 
-@import "~vue-snotify/styles/material";
-
+@import "~vue-snotify/styles/dark";
+ 
 .dashboard-widgets {
     &> .row > .col > .card {
         height: 100%;
@@ -32,4 +32,10 @@
         align-items: center;
         text-align: center;
     }
+}
+
+// Snotify
+
+.snotifyToast__inner {
+    min-height: 45px    ;
 }

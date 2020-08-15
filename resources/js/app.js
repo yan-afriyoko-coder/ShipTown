@@ -30,7 +30,11 @@ Vue.use(require('vue-moment'));
 // Install BootstrapVue
 Vue.use(BootstrapVue);
 Vue.use(VueTippy);
-Vue.use(Snotify);
+Vue.use(Snotify, {
+    toast: {
+        position: "centerBottom"
+    }
+});
 
 /**
  * The following block of code may be used to automatically register your
