@@ -16,21 +16,16 @@
                             <div class="col-md-4">
                                 <div class="row pt-1 mt-1 text-center border-top">
                                     <div class="col-6">
-                                        <div class=""></div>
-<!--                                        <div class="text-secondary h6 text-left">order: <span class="font-weight-bold"> {{ order_number }} </span></div>-->
-<!--                                        <div class="text-secondary h6 text-left">lines: <span class="font-weight-bold"> {{ order_product_line_count }} </span></div>-->
+                                        <div class="">Is Packed</div>
+                                        <div class="h3">{{ picklistItem['is_packed'] }}</div>
                                     </div>
                                     <div class="col-3">
                                         <div>To Pick</div>
-                                        <div class="h3">{{ picklistItem.quantity_requested }}</div>
+                                        <div class="h3">{{ Math.ceil(picklistItem.quantity_requested) }}</div>
                                     </div>
                                     <div class="col-3">
                                         <div class="">Shelf</div>
                                         <div class="h3">{{ picklistItem['inventory_source_shelf_location'] }}</div>
-                                    </div>
-                                    <div class="col-3">
-                                        <div class="">Is Packed</div>
-                                        <div class="h3">{{ picklistItem['is_packed'] }}</div>
                                     </div>
 <!--                                    <div class="col-3">-->
 <!--                                        <div class="">Location</div>-->
