@@ -198,9 +198,10 @@
             displayPickedNotification: function (pickedItem, quantity) {
                 const msg =  quantity + ' x ' + pickedItem.sku_ordered + ' picked';
                 this.$snotify.confirm(msg, {
-                    showProgressBar: false,
                     timeout: 5000,
+                    showProgressBar: false,
                     pauseOnHover: true,
+                    icon: false,
                     buttons: [
                         {
                             text: 'Undo',
@@ -215,9 +216,11 @@
 
             displaySkippedNotification: function (pickedItem) {
                 const msg = 'Pick skipped';
-                this.$snotify.warning('', msg, {
+                this.$snotify.warning(msg, {
                     timeout: 5000,
+                    showProgressBar: false,
                     pauseOnHover: true,
+                    icon: false,
                     buttons: [
                         {
                             text: 'Undo',

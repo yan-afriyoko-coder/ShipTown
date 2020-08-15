@@ -23,7 +23,7 @@ library.add(faQuestionCircle);
 library.add(faUserEdit);
 library.add(faBarcode);
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 Vue.use(Loading);
 Vue.use(require('vue-moment'));
@@ -31,6 +31,9 @@ Vue.use(require('vue-moment'));
 Vue.use(BootstrapVue);
 Vue.use(VueTippy);
 Vue.use(Snotify, {
+    global: {
+        newOnTop: false,
+    },
     toast: {
         position: "centerBottom"
     }

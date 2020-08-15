@@ -17,22 +17,15 @@
                                         <div class=""></div>
                                         <div class="text-secondary h6 text-left">order: <span class="font-weight-bold"> {{ order_number }} </span></div>
                                         <div class="text-secondary h6 text-left">lines: <span class="font-weight-bold"> {{ order_product_line_count }} </span></div>
+                                        <div class="text-secondary h6 text-left">stock: <span class="font-weight-bold"> {{ pick_location_inventory_quantity }} </span></div>
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-2">
                                         <div>To Pick</div>
                                         <div class="h3">{{ quantity_requested }}</div>
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-4">
                                         <div class="">Shelf</div>
                                         <div class="h3">{{ shelve_location }}</div>
-                                    </div>
-                                    <div class="col-3">
-                                        <div class="">Stock</div>
-                                        <div class="h3">{{ pick_location_inventory_quantity }}</div>
-                                    </div>
-                                    <div class="col-3">
-                                        <div class="">Location</div>
-                                        <div class="h3">{{ pick_location_inventory_location_id }}</div>
                                     </div>
                                 </div>
                             </div>
