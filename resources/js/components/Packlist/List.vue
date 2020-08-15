@@ -1,8 +1,5 @@
 <template>
     <div>
-        <div v-if="showScanner" class="overlay" @click.prevent="stopScanner">
-            <div id="interactive" class="viewport overlay-content"></div>
-        </div>
 
         <div v-if="order === null && !isLoading" class="row" >
             <div class="col">
@@ -13,45 +10,22 @@
         </div>
 
         <div v-if="order !== null && !isLoading">
+
+            <order-details :order="order" />
+
             <div class="row mb-3 ml-1 mr-1">
-                <div class="col-3">
-                    <div>Order #: </div>
-                    <div class="font-weight-bold">{{ order === null ? '' : order.order_number}}</div>
+                <div class="col-11">
+                    <barcode-input-field />
                 </div>
-                <div class="col-3">
-                    <div>Date:</div>
-                    <div class="font-weight-bold">{{ order === null ? '' : ( formatDateMMMDD(order['order_placed_at']) ) }}</div>
-                </div>
-                <div class="col-3">
-                    <div>Lines #:</div>
-                    <div class="font-weight-bold">{{ order === null ? '' : order.product_line_count}}</div>
-                </div>
-                <div class="col-3">
-                    <div>Quantity #:</div>
-                    <div class="font-weight-bold">{{ order === null ? '' : order.total_quantity_ordered}}</div>
-                </div>
-            </div>
-            <div class="row mb-3 ml-1 mr-1">
-                <div class="col-9">
-                    <input ref="barcode" class="form-control" placeholder="Scan sku or barcode"
-                           v-observe-visibility="barcodeVisibilityChanged"
-                           v-model="barcode"
-                           @focus="simulateSelectAll"
-                           @keyup.enter="pickBarcode(barcode)"/>
-                </div>
-                <div class="col-2">
-                    <input ref="currentLocation" class="form-control" placeholder="Scan current shelf location"
-                           v-model="picklistFilters.currentLocation"
-                           @focus="simulateSelectAll"
-                           @keyup.enter="updateUrlAndReloadProducts"/>
-                </div>
+
                 <div class="col-1">
                     <a style="cursor:pointer;" data-toggle="modal" data-target="#picklistConfigurationModal"><font-awesome-icon icon="cog"></font-awesome-icon></a>
                 </div>
-    <!--            <div class="col">-->
-    <!--                <button type="button" class="btn btn-secondary" @click.prevent="initScanner" href="#"><font-awesome-icon icon="barcode"></font-awesome-icon></button>-->
-    <!--            </div>-->
+                <!--            <div class="col">-->
+                <!--                <button type="button" class="btn btn-secondary" @click.prevent="initScanner" href="#"><font-awesome-icon icon="barcode"></font-awesome-icon></button>-->
+                <!--            </div>-->
             </div>
+
             <div class="container">
 
                 <div v-if="packlist.length === 0 && packed.length === 0" class="row" >
@@ -63,25 +37,22 @@
                 </div>
 
                 <template v-else class="row">
+
                     <template v-for="record in packlist">
-                        <packlist-entry :picklistItem="record"
-                                       :key="record.id"
-                                       @swipeRight="pickAll"
-                                       @swipeLeft="skipPick" />
+                        <packlist-entry :picklistItem="record" :key="record.id"  @swipeRight="pickAll" @swipeLeft="skipPick" />
                     </template>
+
                     <template v-for="record in packed">
-                        <packed-entry :picklistItem="record"
-                                       :key="record.id"
-                                       @swipeRight="pickAll"
-                                       @swipeLeft="skipPick" />
+                        <packed-entry :picklistItem="record" :key="record.id" @swipeLeft="resetPick" />
                     </template>
+
                 </template>
+
             </div>
         </div>
+
         <!--     Modal -->
-        <packlist-configuration-modal :picklistFilters="picklistFilters"
-                                      id='picklistConfigurationModal'
-                                      @btnSaveClicked="onConfigChange" />
+        <filters-modal id='picklistConfigurationModal' @btnSaveClicked="onConfigChange" />
 
     </div>
 
@@ -90,57 +61,34 @@
 <script>
     import beep from '../../mixins/beep';
     import loadingOverlay from '../../mixins/loading-overlay';
-    import quagga from '../../mixins/quagga-scanner';
 
-    import PacklistEntry from './PacklistEntry';
-    import PicklistConfigurationModal from './ConfigurationModal.vue';
+    import PacklistEntry from './mixins/PacklistEntry';
+    import PackedEntry from './mixins/PackedEntry';
 
-    import moment from 'moment';
-    import VueObserveVisibility from 'vue-observe-visibility';
-    import VueRouter from 'vue-router';
-
-    Vue.use(VueRouter);
-
-    const Router = new VueRouter({
-        mode: 'history',
-    });
+    import OrderDetails from "./mixins/OrderDetails";
+    import BarcodeInputField from "./mixins/BarcodeInputField";
+    import FiltersModal from "./mixins/FiltersModal";
 
     export default {
-        router: Router,
-
-        mixins: [loadingOverlay, beep, quagga],
+        mixins: [loadingOverlay, beep],
 
         components: {
-            'packlist-entry': PacklistEntry,
-            'packed-entry': PacklistEntry,
-            'picklist-configuration-modal': PicklistConfigurationModal,
+            PacklistEntry,
+            FiltersModal,
+            BarcodeInputField,
+            OrderDetails,
+            PackedEntry,
         },
 
         data: function() {
-            const $urlParameters = this.$router.currentRoute.query;
             return {
-                picklistFilters: {
-                    include: 'packlist',
-                    single_line_orders_only: this.getValueOrDefault($urlParameters.single_line_orders, false),
-                    currentLocation: this.getValueOrDefault($urlParameters.currentLocation,  ''),
-                    inventory_location_id: this.getValueOrDefault($urlParameters.inventory_location_id,  100),
-                    in_stock_only: this.getValueOrDefault($urlParameters.in_stock_only,  true),
-                },
                 order: null,
                 packlist: [],
                 packed: [],
-                barcode: '',
-                showScanner: false,
             };
         },
 
         watch: {
-            picklistFilters: {
-                handler() {
-                    this.updateUrl();
-                },
-                deep:true
-            },
             order() {
                 if(this.order === null) {
                     return;
@@ -152,27 +100,10 @@
 
         mounted() {
             this.updateUrlAndReloadProducts();
-            this.setFocusOnBarcodeInput();
-            this.simulateSelectAll();
         },
 
         methods: {
-            barcodeVisibilityChanged: function() {
-                this.setFocusOnBarcodeInput();
-                this.simulateSelectAll();
-            },
 
-            formatDateMMMDD: (value) => {
-                return moment(String(value)).format('MMM DD');
-            },
-            updateUrl: function() {
-                history.pushState({},null,'/packlist?'
-                    // +'single_line_orders='+this.picklistFilters.single_line_orders_only
-                    // +'&currentLocation='+ this.picklistFilters.currentLocation
-                    +'&inventory_location_id='+ this.picklistFilters.inventory_location_id
-                    // +'&in_stock_only='+ this.picklistFilters.in_stock_only
-                );
-            },
 
             loadOrder: function() {
                 this.showLoading();
@@ -243,13 +174,37 @@
 
             },
 
+            resetPick(pickedItem) {
+                // for visual effect we remove it straight away from UI
+                // we will add it back in catch
+                this.packed.splice(this.packed.indexOf(pickedItem), 1);
+
+                return this.updatePick(pickedItem.id, 0, false)
+                    .then( response => {
+                        pickedItem.is_packed = !pickedItem.is_packed;
+                        pickedItem.quantity_packed = 0;
+                        this.packlist.unshift(pickedItem);
+                        this.displayWarningNotification(pickedItem, 'Reverted');
+                        this.warningBeep();
+                    })
+                    .catch( error  => {
+                        this.packed.unshift(pickedItem);
+                        this.$snotify.error('Not skipped (Error '+ error.response.status +')');
+                        this.errorBeep();
+                    });
+            },
+
             skipPick(pickedItem) {
+                // for visual effect we remove it straight away from UI
+                // we will add it back in catch
                 this.packlist.splice(this.packlist.indexOf(pickedItem), 1);
 
                 return this.updatePick(pickedItem.id, 0, true)
                     .then( response => {
-                        this.picklistFilters.currentLocation = this.getValueOrDefault(pickedItem.shelve_location, '');
-                        this.displaySkippedNotification(pickedItem);
+                        pickedItem.is_packed = !pickedItem.is_packed;
+                        this.packed.unshift(pickedItem);
+                        pickedItem.quantity_packed = 0;
+                        this.displayWarningNotification(pickedItem, 'Skipped');
                         this.warningBeep();
                     })
                     .catch( error  => {
@@ -268,7 +223,7 @@
                     .then( response => {
                         pickedItem.is_packed = true;
                         this.packed.unshift(pickedItem);
-                        this.picklistFilters.currentLocation = this.getValueOrDefault(pickedItem.shelve_location, '');
+                        pickedItem.quantity_packed = pickedItem.quantity_requested;
                         this.displayPickedNotification(pickedItem, pickedItem.quantity_requested);
                         this.beep();
                     })
@@ -288,20 +243,13 @@
                 });
             },
 
-            resetPick(pick) {
-                this.updatePick(pick.id, 0, false)
-                    .then(() => {
-                        this.$snotify.warning('Action reverted');
-                        this.packlist.unshift(pick);
-                    });
-            },
-
             displayPickedNotification: function (pickedItem, quantity) {
                 const msg =  quantity + ' x ' + pickedItem.sku_ordered + ' picked';
                 this.$snotify.confirm(msg, {
                     timeout: 5000,
                     pauseOnHover: true,
                     showProgressBar: false,
+                    icon: false,
                     buttons: [
                         {
                             text: 'Undo',
@@ -314,12 +262,12 @@
                 });
             },
 
-            displaySkippedNotification: function (pickedItem) {
-                const msg = 'Pick skipped';
+            displayWarningNotification: function (pickedItem, msg) {
                 this.$snotify.warning(msg, {
                     timeout: 5000,
                     pauseOnHover: true,
                     showProgressBar: false,
+                    icon: false,
                     buttons: [
                         {
                             text: 'Undo',
@@ -382,22 +330,11 @@
             },
 
             onConfigChange: function(config) {
-                this.updateUrlAndReloadProducts();
-                this.setFocusOnBarcodeInput();
-                this.simulateSelectAll();
-            },
-
-            updateUrlAndReloadProducts() {
-                this.updateUrl();
                 this.loadOrder();
             },
 
-            setFocusOnBarcodeInput() {
-                this.$refs.barcode.focus();
-            },
-
-            simulateSelectAll() {
-                setTimeout(() => { document.execCommand('selectall', null, false); });
+            updateUrlAndReloadProducts() {
+                this.loadOrder();
             },
 
             getValueOrDefault: function (value, defaultValue){
@@ -411,34 +348,5 @@
 </script>
 
 <style>
-.overlay {
-  height: 100%;
-  width: 100%;
-  position: fixed; /* Stay in place */
-  z-index: 2; /* Sit on top */
-  left: 0;
-  top: 0;
-  background-color: rgb(0,0,0); /* Black fallback color */
-  background-color: rgba(0,0,0, 0.9); /* Black w/opacity */
-  overflow-x: hidden; /* Disable horizontal scroll */
-  transition: 0.5s; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
-}
 
-/* Position the content inside the overlay */
-#interactive video {
-  position: fixed;
-  top: 10%; /* 25% from the top */
-  width: 100%; /* 100% width */
-  margin-top: 30px; /* 30px top margin to avoid conflict with the close button on smaller screens */
-}
-
-/* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
-@media screen and (max-height: 450px) {
-  .overlay a {font-size: 20px}
-  .overlay .closebtn {
-    font-size: 40px;
-    top: 15px;
-    right: 35px;
-  }
-}
 </style>

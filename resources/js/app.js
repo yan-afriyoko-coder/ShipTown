@@ -41,24 +41,24 @@ Vue.use(Snotify, {
 
 /**
  * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
+ * Vue mixins. It will recursively scan this directory for the Vue
+ * mixins and automatically register them with their "basename".
  *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
+ * Eg. ./mixins/ExampleComponent.vue -> <example-mixins></example-mixins>
  */
 
 // const files = require.context('./', true, /\.vue$/i);
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
+// files.keys().map(key => Vue.mixins(key.split('/').pop().split('.')[0], files(key).default));
 
 /**
- * Third Party components
+ * Third Party mixins
  */
 Vue.component('pagination', require('laravel-vue-pagination'));
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component("tippy", TippyComponent);
 
 /**
- * Application components
+ * Application mixins
  */
 Vue.component(
     'passport-clients',
@@ -121,7 +121,7 @@ Vue.component(
 
 Vue.component(
     'packlist-configuration-modal',
-    require('./components/Packlist/ConfigurationModal.vue').default
+    require('./components/Packlist/mixins/FiltersModal.vue').default
 );
 
 Vue.component(
@@ -131,7 +131,7 @@ Vue.component(
 
 Vue.component(
     'packlist-table-entry',
-    require('./components/Packlist/PacklistEntry.vue').default
+    require('./components/Packlist/mixins/PacklistEntry.vue').default
 );
 
 Vue.component(
@@ -156,7 +156,7 @@ Vue.component(
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
+ * the page. Then, you may begin adding mixins to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 

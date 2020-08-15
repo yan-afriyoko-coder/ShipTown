@@ -213,7 +213,7 @@
 <script>
     export default {
         /*
-         * The component's data.
+         * The mixins's data.
          */
         data() {
             return {
@@ -234,14 +234,14 @@
         },
 
         /**
-         * Prepare the component (Vue 1.x).
+         * Prepare the mixins (Vue 1.x).
          */
         ready() {
             this.prepareComponent();
         },
 
         /**
-         * Prepare the component (Vue 2.x).
+         * Prepare the mixins (Vue 2.x).
          */
         mounted() {
             this.prepareComponent();
@@ -249,7 +249,7 @@
 
         methods: {
             /**
-             * Prepare the component.
+             * Prepare the mixins.
              */
             prepareComponent() {
                 this.getClients();
