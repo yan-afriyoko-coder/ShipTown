@@ -1,5 +1,5 @@
 <template>
-    <div class="row mb-3 ml-1 mr-1">
+    <div class="row">
         <div class="col-3">
             <div>Order #: </div>
             <div class="font-weight-bold">{{ order['order_number'] }}</div>

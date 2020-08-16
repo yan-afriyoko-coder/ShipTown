@@ -1,6 +1,8 @@
 <template>
     <div>
 
+        <filters-modal @btnSaveClicked="onConfigChange" />
+
         <div v-if="order === null && !isLoading" class="row" >
             <div class="col">
                 <div class="warning alert-warning" role="alert">
@@ -11,48 +13,52 @@
 
         <div v-if="order !== null && !isLoading">
 
-            <order-details :order="order" />
-
-            <div class="row mb-3 ml-1 mr-1">
-                <div class="col-11">
-                    <barcode-input-field />
+            <div class="row mb-3">
+                <div class="col">
+                    <order-details :order="order" />
                 </div>
-
-                <div class="col-1">
-                    <a style="cursor:pointer;" data-toggle="modal" data-target="#picklistConfigurationModal"><font-awesome-icon icon="cog"></font-awesome-icon></a>
-                </div>
-                <!--            <div class="col">-->
-                <!--                <button type="button" class="btn btn-secondary" @click.prevent="initScanner" href="#"><font-awesome-icon icon="barcode"></font-awesome-icon></button>-->
-                <!--            </div>-->
             </div>
 
-            <div class="container">
+            <div class="row mb-3">
+                <div class="col-11">
+                    <barcode-input-field @barcodeScanned="packBarcode"/>
+                </div>
+                <div class="col-1">
+                    <a style="cursor:pointer;" data-toggle="modal" data-target="#filterConfigurationModal">
+                        <font-awesome-icon icon="cog"></font-awesome-icon>
+                    </a>
+                </div>
+            </div>
 
-                <div v-if="packlist.length === 0 && packed.length === 0" class="row" >
-                    <div class="col">
-                        <div class="alert alert-info" role="alert">
-                            No products found.
-                        </div>
+            <div v-if="packlist.length === 0 && packed.length === 0" class="row" >
+                <div class="col">
+                    <div class="alert alert-info" role="alert">
+                        No products found.
                     </div>
                 </div>
+            </div>
 
-                <template v-else class="row">
+            <template v-else class="row">
 
-                    <template v-for="record in packlist">
-                        <packlist-entry :picklistItem="record" :key="record.id"  @swipeRight="pickAll" @swipeLeft="skipPick" />
-                    </template>
-
-                    <template v-for="record in packed">
-                        <packed-entry :picklistItem="record" :key="record.id" @swipeLeft="resetPick" />
-                    </template>
-
+                <template v-for="record in packlist">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <packlist-entry :picklistItem="record" :key="record.id"  @swipeRight="pickAll" @swipeLeft="skipPick" />
+                        </div>
+                    </div>
                 </template>
 
-            </div>
-        </div>
+                <template v-for="record in packed">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <packed-entry :picklistItem="record" :key="record.id" @swipeLeft="resetPick" />
+                        </div>
+                    </div>
+                </template>
 
-        <!--     Modal -->
-        <filters-modal id='picklistConfigurationModal' @btnSaveClicked="onConfigChange" />
+            </template>
+
+        </div>
 
     </div>
 
@@ -68,9 +74,10 @@
     import OrderDetails from "./mixins/OrderDetails";
     import BarcodeInputField from "./mixins/BarcodeInputField";
     import FiltersModal from "./mixins/FiltersModal";
+    import url from "../../mixins/url";
 
     export default {
-        mixins: [loadingOverlay, beep],
+        mixins: [loadingOverlay, beep, url],
 
         components: {
             PacklistEntry,
@@ -114,8 +121,9 @@
 
                 axios.get('/api/orders', {
                         params: {
+                            'filter[order_number]': this.getUrlParameter('order_number'),
                             'filter[is_picked]': true,
-                            'filter[is_packed]': false
+                            'filter[is_packed]': false,
                         }
                     })
                     .then(({ data }) => {
@@ -146,7 +154,7 @@
 
                 axios.get('/api/packlist', {
                     params: {
-                        'include': 'product',
+                        'include': 'product,product.aliases',
                         'filter[order_id]': this.order.id
                     }})
                     .then(({ data }) => {
@@ -280,7 +288,7 @@
                 });
             },
 
-            findPickItem: function (barcode) {
+            findEntry: function (barcode) {
                 for (let element of this.packlist) {
 
                     if(element.sku_ordered === barcode) {
@@ -310,23 +318,24 @@
                 return null;
             },
 
-            pickBarcode: function (barcode) {
+            packBarcode: function (barcode) {
                 if(barcode === '') {
                     return;
                 }
 
-                let pickItem = this.findPickItem(barcode);
+                let pickItem = this.findEntry(barcode);
 
                 if(pickItem) {
                     this.pickAll(pickItem);
-                    this.setFocusOnBarcodeInput();
-                    this.simulateSelectAll();
                     return;
                 }
 
-                this.$snotify.error(`"${barcode}" not found on picklist!`);
-                this.setFocusOnBarcodeInput();
-                this.simulateSelectAll();
+                this.$snotify.error(`"${barcode}" not found on packlist!`, {
+                    timeout: 1500,
+                    showProgressBar: false,
+                    icon: false,
+                });
+                this.errorBeep();
             },
 
             onConfigChange: function(config) {
@@ -347,6 +356,6 @@
     }
 </script>
 
-<style>
+<style lang="scss">
 
 </style>

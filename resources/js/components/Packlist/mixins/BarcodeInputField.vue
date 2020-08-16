@@ -4,7 +4,7 @@
                v-observe-visibility="barcodeVisibilityChanged"
                v-model="barcode"
                @focus="simulateSelectAll"
-               @keyup.enter="pickBarcode(barcode)"/>
+               @keyup.enter="barcodeScanned(barcode)"/>
     </div>
 </template>
 
@@ -22,6 +22,12 @@
         },
 
         methods: {
+            barcodeScanned(barcode) {
+                this.$emit('barcodeScanned', barcode);
+                this.setFocusOnBarcodeInput();
+                this.simulateSelectAll();
+            },
+
             barcodeVisibilityChanged: function() {
                 this.setFocusOnBarcodeInput();
                 this.simulateSelectAll();
