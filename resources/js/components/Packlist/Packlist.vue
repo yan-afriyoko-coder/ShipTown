@@ -11,13 +11,13 @@
 
         <div v-if="order !== null && !isLoading">
 
-            <div class="row">
+            <div class="row mb-3">
                 <div class="col">
                     <order-details :order="order" />
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row mb-3">
                 <div class="col-11">
                     <barcode-input-field @barcodeScanned="packBarcode"/>
                 </div>
@@ -26,32 +26,35 @@
                 </div>
             </div>
 
-            <div class="container">
-
-                <div v-if="packlist.length === 0 && packed.length === 0" class="row" >
-                    <div class="col">
-                        <div class="alert alert-info" role="alert">
-                            No products found.
-                        </div>
+            <div v-if="packlist.length === 0 && packed.length === 0" class="row" >
+                <div class="col">
+                    <div class="alert alert-info" role="alert">
+                        No products found.
                     </div>
                 </div>
+            </div>
 
-                <template v-else class="row">
+            <template v-else class="row">
 
-                    <template v-for="record in packlist">
-                        <packlist-entry :picklistItem="record" :key="record.id"  @swipeRight="pickAll" @swipeLeft="skipPick" />
-                    </template>
-
-                    <template v-for="record in packed">
-                        <packed-entry :picklistItem="record" :key="record.id" @swipeLeft="resetPick" />
-                    </template>
-
+                <template v-for="record in packlist">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <packlist-entry :picklistItem="record" :key="record.id"  @swipeRight="pickAll" @swipeLeft="skipPick" />
+                        </div>
+                    </div>
                 </template>
 
-            </div>
+                <template v-for="record in packed">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <packed-entry :picklistItem="record" :key="record.id" @swipeLeft="resetPick" />
+                        </div>
+                    </div>
+                </template>
+
+            </template>
+
         </div>
-
-
     </div>
 
 </template>
@@ -341,6 +344,6 @@
     }
 </script>
 
-<style>
+<style lang="scss">
 
 </style>
