@@ -21,6 +21,7 @@ class PacklistController extends Controller
                 AllowedFilter::exact('order_id'),
                 AllowedFilter::exact('is_picked'),
                 AllowedFilter::exact('is_packed'),
+                AllowedFilter::exact('order.order_number'),
             ])
             ->allowedIncludes([
                 'product',

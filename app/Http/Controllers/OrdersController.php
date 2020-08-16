@@ -19,7 +19,7 @@ class OrdersController extends Controller
     {
         $query = QueryBuilder::for(Order::class)
             ->allowedFilters([
-                'order_number',
+                AllowedFilter::exact('order_number')->ignore([null,'null']),
                 AllowedFilter::scope('is_picked'),
                 AllowedFilter::scope('is_packed'),
             ]);

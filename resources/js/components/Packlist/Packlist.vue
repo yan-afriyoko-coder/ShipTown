@@ -1,6 +1,8 @@
 <template>
     <div>
 
+        <filters-modal @btnSaveClicked="onConfigChange" />
+
         <div v-if="order === null && !isLoading" class="row" >
             <div class="col">
                 <div class="warning alert-warning" role="alert">
@@ -22,7 +24,9 @@
                     <barcode-input-field @barcodeScanned="packBarcode"/>
                 </div>
                 <div class="col-1">
-                    <filters-modal @btnSaveClicked="onConfigChange" />
+                    <a style="cursor:pointer;" data-toggle="modal" data-target="#filterConfigurationModal">
+                        <font-awesome-icon icon="cog"></font-awesome-icon>
+                    </a>
                 </div>
             </div>
 
@@ -55,6 +59,7 @@
             </template>
 
         </div>
+
     </div>
 
 </template>
@@ -69,9 +74,10 @@
     import OrderDetails from "./mixins/OrderDetails";
     import BarcodeInputField from "./mixins/BarcodeInputField";
     import FiltersModal from "./mixins/FiltersModal";
+    import url from "../../mixins/url";
 
     export default {
-        mixins: [loadingOverlay, beep],
+        mixins: [loadingOverlay, beep, url],
 
         components: {
             PacklistEntry,
@@ -115,8 +121,9 @@
 
                 axios.get('/api/orders', {
                         params: {
+                            'filter[order_number]': this.getUrlParameter('order_number'),
                             'filter[is_picked]': true,
-                            'filter[is_packed]': false
+                            'filter[is_packed]': false,
                         }
                     })
                     .then(({ data }) => {

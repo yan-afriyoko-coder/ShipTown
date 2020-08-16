@@ -1,13 +1,7 @@
 <template>
-    <div>
-
-        <a style="cursor:pointer;" data-toggle="modal" data-target="#filterConfigurationModal">
-            <font-awesome-icon icon="cog"></font-awesome-icon>
-        </a>
-
         <div class="modal fade widget-configuration-modal"  id="filterConfigurationModal" tabindex="-1" role="dialog" aria-labelledby="picklistConfigurationModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div ref="loadingContainer" class="modal-content">
+                <div ref="loadingContainer2" class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Picklist</h5>
                         <div class="widget-tools-container">
@@ -16,17 +10,21 @@
                     </div>
                     <div class="modal-body" style="margin: 0 auto 0;">
                         <form method="POST" @submit.prevent="handleSubmit">
+<!--                            <div class="form-group form-check">-->
+<!--                                <input v-model="filters.single_line_orders_only" type="checkbox" class="form-check-input" />-->
+<!--                                <label class="form-check-label" >Show single line orders only</label>-->
+<!--                            </div>-->
+<!--                            <div class="form-group form-check">-->
+<!--                                <input v-model="filters.in_stock_only" type="chec kbox" class="form-check-input" />-->
+<!--                                <label class="form-check-label" >In stock only</label>-->
+<!--                            </div>-->
                             <div class="form-group form-check">
-                                <input v-model="filters.single_line_orders_only" type="checkbox" class="form-check-input" />
-                                <label class="form-check-label" >Show single line orders only</label>
-                            </div>
-                            <div class="form-group form-check">
-                                <input v-model="filters.in_stock_only" type="checkbox" class="form-check-input" />
-                                <label class="form-check-label" >In stock only</label>
-                            </div>
-                            <div class="form-group form-check">
-                                <input v-model="filters.inventory_location_id" type="number" class="form-check-input" />
-                                <label class="form-check-label" >Inventory Location ID</label>
+                                <div>Order Number: </div>
+                                <div>
+                                    <label>
+                                        <input v-model="filters['order_number']" type="number" class="form-check-input" />
+                                    </label>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -37,34 +35,21 @@
                 </div>
             </div>
         </div>
-
-    </div>
 </template>
 
 <script>
-    import VueRouter from "vue-router";
-
-    Vue.use(VueRouter);
-
-    const Router = new VueRouter({
-        mode: 'history',
-    });
+    import url from "../../../mixins/url";
 
     export default {
         name: 'FiltersModal',
 
-        router: Router,
+        mixins: [url],
 
         data: function() {
-            const $urlParameters = this.$router.currentRoute.query;
-
             return {
                 filters: {
-                    include: 'packlist',
-                    single_line_orders_only: this.getValueOrDefault($urlParameters.single_line_orders, false),
-                    currentLocation: this.getValueOrDefault($urlParameters.currentLocation,  ''),
-                    inventory_location_id: this.getValueOrDefault($urlParameters.inventory_location_id,  100),
-                    in_stock_only: this.getValueOrDefault($urlParameters.in_stock_only,  true),
+                    order_number: this.getUrlParameter('order_number',  null),
+                    inventory_location_id: this.getUrlParameter('inventory_location_id',  100),
                 }
             }
         },
@@ -76,25 +61,14 @@
         },
 
         methods: {
-            updateUrl: function() {
-                history.pushState({},null,'/packlist?'
-                    // +'single_line_orders='+this.picklistFilters.single_line_orders_only
-                    // +'&currentLocation='+ this.picklistFilters.currentLocation
-                    +'&inventory_location_id='+ this.filters.inventory_location_id
-                    // +'&in_stock_only='+ this.picklistFilters.in_stock_only
-                );
-            },
-
             getValueOrDefault: function (value, defaultValue){
                 return (value === undefined) || (value === null) ? defaultValue : value;
             },
 
             handleSubmit() {
-
-                this.updateUrl();
-                this.$emit('btnSaveClicked', this.filters);
-
+                this.updateUrl(this.filters);
                 $(this.$el).modal('hide');
+                this.$emit('btnSaveClicked', this.filters);
             }
         }
     }
