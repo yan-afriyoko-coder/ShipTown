@@ -147,7 +147,7 @@
 
                 axios.get('/api/packlist', {
                     params: {
-                        'include': 'product',
+                        'include': 'product,product.aliases',
                         'filter[order_id]': this.order.id
                     }})
                     .then(({ data }) => {
@@ -323,7 +323,12 @@
                     return;
                 }
 
-                this.$snotify.error(`"${barcode}" not found on picklist!`);
+                this.$snotify.error(`"${barcode}" not found on packlist!`, {
+                    timeout: 1500,
+                    showProgressBar: false,
+                    icon: false,
+                });
+                this.errorBeep();
             },
 
             onConfigChange: function(config) {

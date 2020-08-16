@@ -24,6 +24,7 @@ class PacklistController extends Controller
             ])
             ->allowedIncludes([
                 'product',
+                'product.aliases',
                 'user',
                 'order'
             ])
