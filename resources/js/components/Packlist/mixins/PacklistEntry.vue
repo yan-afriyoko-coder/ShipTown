@@ -1,5 +1,5 @@
 <template>
-    <div :id="getElementId" class="swiper-container mb-3">
+    <div :id="getElementId" class="swiper-container">
         <div class="swiper-wrapper">
 
             <div class="swiper-slide bg-success"></div>

@@ -11,19 +11,19 @@
 
         <div v-if="order !== null && !isLoading">
 
-            <order-details :order="order" />
+            <div class="row">
+                <div class="col">
+                    <order-details :order="order" />
+                </div>
+            </div>
 
-            <div class="row mb-3 ml-1 mr-1">
+            <div class="row">
                 <div class="col-11">
-                    <barcode-input-field />
+                    <barcode-input-field @barcodeScanned="packBarcode"/>
                 </div>
-
                 <div class="col-1">
-                    <a style="cursor:pointer;" data-toggle="modal" data-target="#picklistConfigurationModal"><font-awesome-icon icon="cog"></font-awesome-icon></a>
+                    <filters-modal @btnSaveClicked="onConfigChange" />
                 </div>
-                <!--            <div class="col">-->
-                <!--                <button type="button" class="btn btn-secondary" @click.prevent="initScanner" href="#"><font-awesome-icon icon="barcode"></font-awesome-icon></button>-->
-                <!--            </div>-->
             </div>
 
             <div class="container">
@@ -51,8 +51,6 @@
             </div>
         </div>
 
-        <!--     Modal -->
-        <filters-modal id='picklistConfigurationModal' @btnSaveClicked="onConfigChange" />
 
     </div>
 
@@ -280,7 +278,7 @@
                 });
             },
 
-            findPickItem: function (barcode) {
+            findEntry: function (barcode) {
                 for (let element of this.packlist) {
 
                     if(element.sku_ordered === barcode) {
@@ -310,23 +308,19 @@
                 return null;
             },
 
-            pickBarcode: function (barcode) {
+            packBarcode: function (barcode) {
                 if(barcode === '') {
                     return;
                 }
 
-                let pickItem = this.findPickItem(barcode);
+                let pickItem = this.findEntry(barcode);
 
                 if(pickItem) {
                     this.pickAll(pickItem);
-                    this.setFocusOnBarcodeInput();
-                    this.simulateSelectAll();
                     return;
                 }
 
                 this.$snotify.error(`"${barcode}" not found on picklist!`);
-                this.setFocusOnBarcodeInput();
-                this.simulateSelectAll();
             },
 
             onConfigChange: function(config) {

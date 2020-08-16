@@ -126,7 +126,7 @@ Vue.component(
 
 Vue.component(
     'packlist-table',
-    require('./components/Packlist/List.vue').default
+    require('./components/Packlist/Packlist.vue').default
 );
 
 Vue.component(
