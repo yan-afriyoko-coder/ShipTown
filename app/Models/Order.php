@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Services\PicklistService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -87,16 +89,19 @@ class Order extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany | OrderProduct
+     * @return HasMany | OrderProduct
      */
     public function orderProducts()
     {
         return $this->hasMany(OrderProduct::class);
     }
 
+    /**
+     * @return BelongsTo | OrderAddress
+     */
     public function shippingAddress()
     {
-        return $this->hasOne(OrderAddress::class);
+        return $this->belongsTo(OrderAddress::class);
     }
 
 }

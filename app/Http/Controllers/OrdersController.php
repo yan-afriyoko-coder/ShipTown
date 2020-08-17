@@ -22,7 +22,8 @@ class OrdersController extends Controller
                 AllowedFilter::exact('order_number')->ignore([null,'null']),
                 AllowedFilter::scope('is_picked'),
                 AllowedFilter::scope('is_packed'),
-            ]);
+            ])
+            ->allowedIncludes('shipping_address');
 
         return $query->paginate(10);
     }
