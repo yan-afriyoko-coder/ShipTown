@@ -5,20 +5,24 @@ namespace App\Models;
 use App\Services\PicklistService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Arr;
+use phpseclib\Math\BigInteger;
 
 /**
+ * @property BigInteger shipping_address_id
  * @property integer product_line_count
  * @property integer total_quantity_ordered
  * @property string status_code
- * @property \Illuminate\Support\Carbon|null packed_at
- * @property \Illuminate\Support\Carbon|null picked_at
+ * @property Carbon|null packed_at
+ * @property Carbon|null picked_at
  */
 class Order extends Model
 {
     protected $fillable = [
         'order_number',
+        'shipping_address_id',
         'order_placed_at',
         'order_closed_at',
         'status_code',
@@ -73,10 +77,13 @@ class Order extends Model
         $this->picked_at = $value ? now() : null;
     }
 
-
     public function scopePacklist($query, $inventory_id)
     {
         return $this->hasOne(Packlist::class)->test(100);
+    }
+
+    public function scopeActive($query) {
+        return $query->where('status_code', '=', 'processing');
     }
 
     /**
@@ -87,7 +94,9 @@ class Order extends Model
         return $this->hasMany(OrderProduct::class);
     }
 
-    public function scopeActive($query) {
-        return $query->where('status_code', '=', 'processing');
+    public function shippingAddress()
+    {
+        return $this->hasOne(OrderAddress::class);
     }
+
 }

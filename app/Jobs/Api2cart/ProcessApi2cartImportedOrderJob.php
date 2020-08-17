@@ -4,6 +4,7 @@ namespace App\Jobs\Api2cart;
 
 use App\Events\OrderCreatedEvent;
 use App\Events\OrderStatusChangedEvent;
+use App\Models\OrderAddress;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use App\Models\Order;
 use App\Models\Product;
@@ -29,7 +30,7 @@ class ProcessApi2cartImportedOrderJob implements ShouldQueue
 
     /**
      * Create a new job instance.
-     *
+     * @param Api2cartOrderImports $orderImport
      */
     public function __construct(Api2cartOrderImports $orderImport)
     {
@@ -113,10 +114,14 @@ class ProcessApi2cartImportedOrderJob implements ShouldQueue
      */
     private function updateOrCreateOrder(): Order
     {
+        $shipping_address = new OrderAddress($this->orderImport->extractShippingAddressAttributes());
+        $shipping_address->save();
+
         $rawImport = $this->orderImport['raw_import'];
 
         $orderData = [
             'order_number' => $rawImport['id'],
+            'shipping_address_id' => $shipping_address->id,
             'order_products' => [],
             'status_code' => $rawImport['status']['id'],
             'raw_import' => $rawImport
@@ -135,8 +140,6 @@ class ProcessApi2cartImportedOrderJob implements ShouldQueue
             ] ;
         }
 
-        $order = OrderService::updateOrCreate($orderData);
-
-        return $order;
+        return OrderService::updateOrCreate($orderData);
     }
 }
