@@ -27,10 +27,13 @@ class OrderService
         }
     }
 
+    /**
+     * @param array $data
+     * @return Order
+     */
     public static function updateOrCreate(array $data)
     {
-        $order = Order::query()
-            ->updateOrCreate(
+        $order = Order::updateOrCreate(
                 ["order_number" => $data['order_number']],
                 $data
             );

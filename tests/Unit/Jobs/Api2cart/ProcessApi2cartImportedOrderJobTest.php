@@ -40,5 +40,6 @@ class ProcessApi2cartImportedOrderJobTest extends TestCase
 
         $this->assertNotNull($order, 'Order does not exist in database');
         $this->assertNotNull($order->status_code, 'Status code missing');
+        $this->assertNotNull($order->shipping_address_id, 'Shipping address missing');
     }
 }

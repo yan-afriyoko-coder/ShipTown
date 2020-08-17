@@ -38,6 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::view('/picklist', 'picklist')->name('picklist');
     Route::view('/packlist', 'packlist')->name('packlist');
 
+    Route::get('/orders/{order_number}/address_label.pdf', 'Pdf\OrderAddressLabelController@index');
+
     Route::group(['middleware' => ['role:admin']], function() {
         Route::view('/users', 'users')->name('users');
         Route::view('/settings', 'settings')->name('settings');
