@@ -106,26 +106,27 @@
         },
 
         mounted() {
-            this.updateUrlAndReloadProducts();
+            this.loadOrder();
         },
 
         methods: {
 
 
             loadOrder: function() {
+
+                const params = {
+                    'filter[order_number]': this.getUrlParameter('order_number'),
+                    'filter[is_picked]': true,
+                    'filter[is_packed]': false,
+                };
+
                 this.showLoading();
 
                 this.order = null;
                 this.packlist = [];
                 this.packed = [];
 
-                axios.get('/api/orders', {
-                        params: {
-                            'filter[order_number]': this.getUrlParameter('order_number'),
-                            'filter[is_picked]': true,
-                            'filter[is_packed]': false,
-                        }
-                    })
+                axios.get('/api/orders', {params: params})
                     .then(({ data }) => {
                         if(data.total === 0) {
                             this.hideLoading();
@@ -339,10 +340,6 @@
             },
 
             onConfigChange: function(config) {
-                this.loadOrder();
-            },
-
-            updateUrlAndReloadProducts() {
                 this.loadOrder();
             },
 
