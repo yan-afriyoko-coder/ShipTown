@@ -192,6 +192,7 @@ return [
         Sentry\Laravel\ServiceProvider::class,
 
         App\Providers\PrintServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -244,6 +245,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'AWS' => Aws\Laravel\AwsFacade::class,
         'Sentry' => Sentry\Laravel\Facade::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
 
     ],
 
