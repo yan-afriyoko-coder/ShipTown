@@ -2,6 +2,7 @@
 
 namespace App\Modules\Api2cart\src\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -76,4 +77,25 @@ class Api2cartOrderImports extends Model
 
         return $result;
     }
+
+    /**
+     * @param array $order
+     * @param bool $chronological
+     * @return Collection
+     */
+    public function extractStatusHistory(array $order, bool $chronological = true)
+    {
+        $statuses = Collection::make($order['status']['history']);
+
+        if($chronological) {
+            $statuses = $statuses->sort(function ($a, $b) {
+                $a_time = Carbon::make($a['modified_time']['value']);
+                $b_time = Carbon::make($b['modified_time']['value']);
+                return $a_time > $b_time;
+            });
+        }
+
+        return $statuses;
+    }
+
 }
