@@ -6,6 +6,7 @@ use App\Models\Order;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Milon\Barcode\DNS1D;
 
 /**
  * Class AddressLabel
@@ -20,6 +21,7 @@ class OrderAddressLabelController extends PdfBaseController
      */
     public function index(Request $request, $order_number)
     {
+
         $order = Order::query()
             ->where(['order_number' => $order_number])
             ->with('shippingAddress')

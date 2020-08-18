@@ -26,7 +26,7 @@
     <link rel="manifest" href="/manifest.json">
 </head>
 
-<body>
+<body class="m-0">
     @yield('content')
 </body>
 </html>
