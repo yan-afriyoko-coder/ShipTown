@@ -22,6 +22,7 @@ class OrderAddressLabelController extends PdfBaseController
     {
         $order = Order::query()
             ->where(['order_number' => $order_number])
+            ->with('shippingAddress')
             ->firstOrFail();
 
         $filename   = $order_number . '.pdf"';
