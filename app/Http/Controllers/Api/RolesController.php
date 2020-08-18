@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use Spatie\Permission\Models\Role;
@@ -11,10 +12,6 @@ class RolesController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            return new ResourceCollection(Role::all());
-        } else {
-
-        }
+        return new ResourceCollection(Role::all());
     }
 }
