@@ -39,12 +39,7 @@ class OrderService
             , $attributes
         );
 
-        $shipping_address = OrderAddress::query()->findOrNew($order->shipping_id ?: 0);
-        $shipping_address->fill($attributes['shipping_address']);
-        $shipping_address->save();
-        $order->shippingAddress()->associate($shipping_address);
-
-        $order->save();
+        self::updateOrCreateShippingAddress($order, $attributes['shipping_address']);
 
         $order->orderProducts()->delete();
 
@@ -84,6 +79,23 @@ class OrderService
 
         OrderCreatedEvent::dispatch($order);
         OrderStatusChangedEvent::dispatch($order);
+
+        return $order;
+    }
+
+    /**
+     * @param array $shippingAddressAttributes
+     * @param $order
+     * @return Order
+     */
+    public static function updateOrCreateShippingAddress(Order $order, array $shippingAddressAttributes): Order
+    {
+        $shipping_address = OrderAddress::query()->findOrNew($order->shipping_address_id ?: 0);
+        $shipping_address->fill($shippingAddressAttributes);
+        $shipping_address->save();
+        $order->shippingAddress()->associate($shipping_address);
+
+        $order->save();
 
         return $order;
     }
