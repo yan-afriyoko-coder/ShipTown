@@ -1,15 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreInventoryRequest;
-use App\Http\Resources\InventoryResource;
-use App\Http\Resources\InventoryResourceCollection;
-use App\Http\Resources\ProductResource;
 use App\Models\Inventory;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Session\Store;
 
 class InventoryController extends Controller
 {

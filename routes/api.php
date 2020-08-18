@@ -30,8 +30,8 @@ Route::middleware('auth:api')->group(function() {
     Route::post('products'           ,'Api\ProductsController@store');
     Route::get('products/{sku}/sync' ,'Api\ProductsController@publish');
 
-    Route::get("inventory"  , "InventoryController@index");
-    Route::post("inventory" , "InventoryController@store");
+    Route::get("inventory"  , "Api\InventoryController@index");
+    Route::post("inventory" , "Api\InventoryController@store");
 
     Route::get('orders'                     , 'OrdersController@index');
     Route::post('orders'                    , 'OrdersController@store');
