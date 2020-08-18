@@ -2,7 +2,9 @@
 
 namespace App\Modules\Api2cart\src\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use function PHPUnit\Framework\isNull;
 
@@ -54,4 +56,46 @@ class Api2cartOrderImports extends Model
             'region'        => $this->raw_import['shipping_address']['region'],
         ]);
     }
+
+    /**
+     * @return array
+     */
+    public function extractOrderProducts(): array
+    {
+        $result = [];
+
+        foreach ($this->raw_import['order_products'] as $rawOrderProduct) {
+
+            $result[] = [
+                'sku'               => null,
+                'sku_ordered'       => $rawOrderProduct['model'],
+                'name_ordered'      => $rawOrderProduct['name'],
+                'quantity_ordered'  => $rawOrderProduct['quantity'],
+                'price'             => $rawOrderProduct['price'],
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array $order
+     * @param bool $chronological
+     * @return Collection
+     */
+    public function extractStatusHistory(array $order, bool $chronological = true)
+    {
+        $statuses = Collection::make($order['status']['history']);
+
+        if($chronological) {
+            $statuses = $statuses->sort(function ($a, $b) {
+                $a_time = Carbon::make($a['modified_time']['value']);
+                $b_time = Carbon::make($b['modified_time']['value']);
+                return $a_time > $b_time;
+            });
+        }
+
+        return $statuses;
+    }
+
 }

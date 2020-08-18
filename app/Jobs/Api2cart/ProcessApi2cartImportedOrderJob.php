@@ -45,101 +45,20 @@ class ProcessApi2cartImportedOrderJob implements ShouldQueue
      */
     public function handle()
     {
-        $this->updateOrCreateOrder();
+        $orderAttributes = [
+            'order_number'          => $this->orderImport->raw_import['id'],
+            'status_code'           => $this->orderImport->raw_import['status']['id'],
+            'order_products'        => $this->orderImport->extractOrderProducts(),
+            'shipping_address'      => $this->orderImport->extractShippingAddressAttributes(),
+            'raw_import'            => $this->orderImport->raw_import,
+        ];
+
+        $order = OrderService::updateOrCreate($orderAttributes);
 
         $this->orderImport->update([
-            'order_number' => $this->orderImport['raw_import']['id'],
+            'order_number' => $order->order_number,
             'when_processed' => now(),
         ]);
     }
 
-    /**
-     * @param array $order
-     * @return Collection
-     */
-    public function getChronologicalStatusHistory(array $order){
-        return Collection::make($order['status']['history'])
-            ->sort(function ($a, $b) {
-                $a_time = Carbon::make($a['modified_time']['value']);
-                $b_time = Carbon::make($b['modified_time']['value']);
-                return $a_time > $b_time;
-            });
-    }
-
-    /**
-     * @param $order
-     * @return mixed
-     */
-    private function getAttributes($order)
-    {
-        $result = [];
-        $result['raw_import'] = $order;
-        $result['order_number'] = $order['id'];
-
-        $result['order_placed_at'] = Carbon::createFromFormat(
-            $order['create_at']['format'],
-            $order['create_at']['value']
-        );
-
-        $result['status_code'] = $order['status']['id'];
-
-        $statuses = $this->getChronologicalStatusHistory($order);
-
-        foreach ($statuses as $status) {
-            if ($status['id'] !== 'processing') {
-
-                $time = $status['modified_time'];
-
-                if (!is_null($time['value'])) {
-                    $result['order_closed_at'] = Carbon::createFromFormat($time['format'], $time['value']);
-                    break;
-                }
-
-            }
-        }
-
-
-        $result['products_count'] = 0;
-
-        foreach ($order['order_products'] as $product) {
-            $result['products_count'] += $product['quantity_ordered'];
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param $attributes
-     * @return Order
-     */
-    private function updateOrCreateOrder(): Order
-    {
-        $shipping_address = new OrderAddress($this->orderImport->extractShippingAddressAttributes());
-        $shipping_address->save();
-
-        $rawImport = $this->orderImport['raw_import'];
-
-        $orderData = [
-            'order_number' => $rawImport['id'],
-            'shipping_address_id' => $shipping_address->id,
-            'order_products' => [],
-            'status_code' => $rawImport['status']['id'],
-            'raw_import' => $rawImport
-        ];
-
-        foreach ($rawImport['order_products'] as $rawOrderProduct) {
-
-            $orderProductData = Collection::make($rawOrderProduct);
-
-            $orderData['order_products'][] = [
-                'sku' => null,
-                'sku_ordered' => $rawOrderProduct['model'],
-                'name_ordered' => $orderProductData['name'],
-                'quantity_ordered' => $orderProductData['quantity'],
-                'price' => $orderProductData['price'],
-            ] ;
-        }
-
-        return OrderService::updateOrCreate($orderData);
-    }
 }

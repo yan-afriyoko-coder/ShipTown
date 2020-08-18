@@ -27,4 +27,8 @@ class OrderAddress extends Model
         'website',
         'region',
     ];
+
+    public function order() {
+        return $this->hasOne(Order::class);
+    }
 }

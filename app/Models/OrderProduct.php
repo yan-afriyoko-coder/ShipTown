@@ -4,7 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use phpseclib\Math\BigInteger;
 
+/**
+ * @property BigInteger|null product_id
+ */
 class OrderProduct extends Model
 {
     use SoftDeletes;

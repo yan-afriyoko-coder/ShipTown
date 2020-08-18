@@ -13,12 +13,17 @@ use Illuminate\Support\Arr;
 use phpseclib\Math\BigInteger;
 
 /**
+ * @property BigInteger id
  * @property BigInteger shipping_address_id
+ * @property string order_number
+ * @property string status_code
  * @property integer product_line_count
  * @property integer total_quantity_ordered
- * @property string status_code
- * @property Carbon|null packed_at
  * @property Carbon|null picked_at
+ * @property Carbon|null packed_at
+ * @property Carbon|null deleted_at
+ * @property Carbon|null updated_at
+ * @property Carbon|null created_at
  */
 class Order extends Model
 {
