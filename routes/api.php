@@ -26,9 +26,9 @@ Route::middleware('auth:api')->group(function() {
 
     Route::resource('widgets', 'WidgetsController');
 
-    Route::get('products'           ,'Api\ProductsController@index');
-    Route::post('products'          ,'Api\ProductsController@store');
-    Route::get('products/{sku}/sync','Api\ProductsController@publish');
+    Route::get('products'            ,'Api\ProductsController@index');
+    Route::post('products'           ,'Api\ProductsController@store');
+    Route::get('products/{sku}/sync' ,'Api\ProductsController@publish');
 
     Route::get("inventory"  , "InventoryController@index");
     Route::post("inventory" , "InventoryController@store");
@@ -36,6 +36,8 @@ Route::middleware('auth:api')->group(function() {
     Route::get('orders'                     , 'OrdersController@index');
     Route::post('orders'                    , 'OrdersController@store');
     Route::delete('orders/{order_number}'   , 'OrdersController@destroy');
+
+    Route::put('print/order/{order_number}/{view}', 'Api\PrintOrderController@store');
 
     Route::get('picklist'               , 'Api\PicklistController@index');
     Route::post('picklist/{picklist}'   , 'Api\PicklistController@store');
