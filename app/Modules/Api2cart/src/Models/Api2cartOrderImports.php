@@ -3,6 +3,7 @@
 namespace App\Modules\Api2cart\src\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use function PHPUnit\Framework\isNull;
 
@@ -53,5 +54,26 @@ class Api2cartOrderImports extends Model
             'website'       => $this->raw_import['shipping_address']['website'],
             'region'        => $this->raw_import['shipping_address']['region'],
         ]);
+    }
+
+    /**
+     * @return array
+     */
+    public function extractOrderProducts(): array
+    {
+        $result = [];
+
+        foreach ($this->raw_import['order_products'] as $rawOrderProduct) {
+
+            $result[] = [
+                'sku'               => null,
+                'sku_ordered'       => $rawOrderProduct['model'],
+                'name_ordered'      => $rawOrderProduct['name'],
+                'quantity_ordered'  => $rawOrderProduct['quantity'],
+                'price'             => $rawOrderProduct['price'],
+            ];
+        }
+
+        return $result;
     }
 }

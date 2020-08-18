@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Events\OrderCreatedEvent;
 use App\Events\OrderStatusChangedEvent;
 use App\Models\Order;
+use App\Models\OrderAddress;
 use App\Models\OrderProduct;
 use App\Models\Product;
 use Illuminate\Support\Str;
@@ -28,19 +29,26 @@ class OrderService
     }
 
     /**
-     * @param array $data
+     * @param array $attributes
      * @return Order
      */
-    public static function updateOrCreate(array $data)
+    public static function updateOrCreate(array $attributes)
     {
-        $order = Order::updateOrCreate(
-                ["order_number" => $data['order_number']],
-                $data
-            );
+        $order = Order::firstOrNew(
+            ["order_number" => $attributes['order_number']]
+            , $attributes
+        );
+
+        $shipping_address = OrderAddress::query()->findOrNew($order->shipping_id ?: 0);
+        $shipping_address->fill($attributes['shipping_address']);
+        $shipping_address->save();
+        $order->shippingAddress()->associate($shipping_address);
+
+        $order->save();
 
         $order->orderProducts()->delete();
 
-        foreach ($data['order_products'] as $rawOrderProduct) {
+        foreach ($attributes['order_products'] as $rawOrderProduct) {
 
             $orderProduct = OrderProduct::onlyTrashed()
                 ->where([
@@ -59,10 +67,12 @@ class OrderService
             $orderProduct = new OrderProduct();
             $orderProduct->fill($rawOrderProduct);
 
+            $extracted_sku = Str::substr($rawOrderProduct['sku_ordered'], 0, 6);
+
             $product = Product::query()
-                ->where(['sku' => $rawOrderProduct['sku_ordered']])
-                ->orWhere([
-                    'sku' => Str::substr($rawOrderProduct['sku_ordered'], 0, 6)
+                ->whereIn('sku', [
+                    $rawOrderProduct['sku_ordered'],
+                    $extracted_sku
                 ])
                 ->first();
 

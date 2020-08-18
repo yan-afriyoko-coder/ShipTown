@@ -57,7 +57,8 @@ class ProcessApi2cartImportedOrderJob implements ShouldQueue
      * @param array $order
      * @return Collection
      */
-    public function getChronologicalStatusHistory(array $order){
+    public function getChronologicalStatusHistory(array $order)
+    {
         return Collection::make($order['status']['history'])
             ->sort(function ($a, $b) {
                 $a_time = Carbon::make($a['modified_time']['value']);
@@ -109,37 +110,19 @@ class ProcessApi2cartImportedOrderJob implements ShouldQueue
     }
 
     /**
-     * @param $attributes
      * @return Order
      */
     private function updateOrCreateOrder(): Order
     {
-        $shipping_address = new OrderAddress($this->orderImport->extractShippingAddressAttributes());
-        $shipping_address->save();
-
-        $rawImport = $this->orderImport['raw_import'];
-
-        $orderData = [
-            'order_number' => $rawImport['id'],
-            'shipping_address_id' => $shipping_address->id,
-            'order_products' => [],
-            'status_code' => $rawImport['status']['id'],
-            'raw_import' => $rawImport
+        $orderAttributes = [
+            'order_number'          => $this->orderImport->raw_import['id'],
+            'status_code'           => $this->orderImport->raw_import['status']['id'],
+            'shipping_address'      => $this->orderImport->extractShippingAddressAttributes(),
+            'order_products'        => $this->orderImport->extractOrderProducts(),
+            'raw_import'            => $this->orderImport->raw_import,
         ];
 
-        foreach ($rawImport['order_products'] as $rawOrderProduct) {
-
-            $orderProductData = Collection::make($rawOrderProduct);
-
-            $orderData['order_products'][] = [
-                'sku' => null,
-                'sku_ordered' => $rawOrderProduct['model'],
-                'name_ordered' => $orderProductData['name'],
-                'quantity_ordered' => $orderProductData['quantity'],
-                'price' => $orderProductData['price'],
-            ] ;
-        }
-
-        return OrderService::updateOrCreate($orderData);
+        return OrderService::updateOrCreate($orderAttributes);
     }
+
 }
