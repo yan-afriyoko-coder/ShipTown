@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderProduct;
 use App\Models\Product;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class OrderService
@@ -36,7 +37,7 @@ class OrderService
     {
         $order = Order::firstOrNew(
             ["order_number" => $attributes['order_number']]
-            , $attributes
+            , Arr::only($attributes, ['status_code'])
         );
 
         self::updateOrCreateShippingAddress($order, $attributes['shipping_address']);

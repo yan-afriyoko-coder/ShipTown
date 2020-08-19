@@ -67,7 +67,7 @@ class Api2cartOrderImports extends Model
         foreach ($this->raw_import['order_products'] as $rawOrderProduct) {
 
             $result[] = [
-                'sku'               => null,
+//                'sku'               => null,
                 'sku_ordered'       => $rawOrderProduct['model'],
                 'name_ordered'      => $rawOrderProduct['name'],
                 'quantity_ordered'  => $rawOrderProduct['quantity'],
