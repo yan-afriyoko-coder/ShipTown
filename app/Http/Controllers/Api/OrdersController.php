@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Events\EventTypes;
-use App\Http\Requests\DeleteOrderRequest;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrderRequest;
-use App\Managers\Config;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Request;

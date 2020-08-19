@@ -8,7 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 use App\Models\Configuration;
 
-class ConfigurationController extends Controller
+class ConfigurationsController extends Controller
 {
     public function store(Request $request)
     {
