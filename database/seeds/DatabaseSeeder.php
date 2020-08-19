@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             PicklistSeeder::class,
             PacklistSeeder::class,
             ProductAliasSeeder::class,
+            SingleLineOrderPicklistSeeder::class,
         ]);
 
     }
