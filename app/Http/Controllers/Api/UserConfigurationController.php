@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\UserConfiguration;
 use Illuminate\Http\Request;
 
@@ -20,7 +21,7 @@ class UserConfigurationController extends Controller
     {
         $data = [
             "config" => $request->getContent()
-        ];
+    ];
 
         $config = UserConfiguration::query()->updateOrCreate([], $data);
 

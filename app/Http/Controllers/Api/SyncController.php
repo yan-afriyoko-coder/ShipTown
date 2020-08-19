@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Models\RmsapiConnection;
 use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
 use App\Modules\Rmsapi\src\Jobs\FetchUpdatedProductsJob;
-use App\Models\RmsapiConnection;
-use Illuminate\Http\Request;
 
 /**
  * Class SyncController

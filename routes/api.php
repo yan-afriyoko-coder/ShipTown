@@ -44,22 +44,22 @@ Route::middleware('auth:api')->group(function() {
     Route::get('packlist'                           ,'Api\PacklistController@index');
     Route::post('packlist/{packlist}'               ,'Api\PacklistController@store');
 
-    Route::get('sync'                               ,"SyncController@index");
+    Route::get('sync'                               ,"Api\SyncController@index");
 
     Route::get('printers'                           ,'Api\PrintersController@index');
     Route::put('printers/use/{printerId}'           ,'Api\PrintersController@use');
 
     Route::post('invites'                           ,'InvitesController@store');
 
-    Route::resource('widgets'                     ,'WidgetsController');
-    Route::resource("rms_api_configuration"       ,"RmsapiConnectionController");
-    Route::resource("api2cart_configuration"      ,"Api2cartConnectionController");
+    Route::resource('widgets'                     ,'Api\WidgetsController');
+    Route::resource("rms_api_configuration"       ,"Api\RmsapiConnectionController");
+    Route::resource("api2cart_configuration"      ,"Api\Api2cartConnectionController");
 
     // Routes for users with the admin role only
     Route::group(['middleware' => ['role:admin']], function () {
-        Route::get('roles'                  , 'Api\RolesController@index')->middleware('can:list roles');
-        Route::resource('users'           , 'UsersController')->middleware('can:manage users');
-        Route::resource('configuration'   , 'Api\ConfigurationsController');
+        Route::get('roles'                  ,'Api\RolesController@index')->middleware('can:list roles');
+        Route::resource('users'           ,'UsersController')->middleware('can:manage users');
+        Route::resource('configuration'   ,'Api\ConfigurationsController');
     });
 });
 

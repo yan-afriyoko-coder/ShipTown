@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
-
-use App\Models\Widget;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreWidgetRequest;
 use App\Http\Requests\UpdateWidgetRequest;
+use App\Models\Widget;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class WidgetsController extends Controller
 {
     /**
      * @param StoreWidgetRequest $request
+     * @return JsonResource
      */
     public function store(StoreWidgetRequest $request)
     {
@@ -26,6 +26,7 @@ class WidgetsController extends Controller
     /**
      * @param UpdateWidgetRequest $request
      * @param Widget $widget
+     * @return JsonResource
      */
     public function update(UpdateWidgetRequest $request, Widget $widget)
     {
@@ -33,5 +34,5 @@ class WidgetsController extends Controller
         $widget->save();
 
         return new JsonResource($widget);
-    }    
+    }
 }

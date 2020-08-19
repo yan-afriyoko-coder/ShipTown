@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Models\RmsapiConnection;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreConfigurationRmsApiRequest;
 use App\Http\Resources\RmsapiConnectionResource;
+use App\Models\RmsapiConnection;
 
 class RmsapiConnectionController extends Controller
 {

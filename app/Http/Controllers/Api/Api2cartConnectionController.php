@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Modules\Api2cart\src\Models\Api2cartConnection;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreApi2cartConnectionRequest;
+use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class Api2cartConnectionController extends Controller
