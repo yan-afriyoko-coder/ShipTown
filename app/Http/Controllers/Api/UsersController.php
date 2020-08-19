@@ -1,22 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-
-use App\User;
-use App\Http\Resources\UserResource;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\UpdateRequest;
+use App\Http\Resources\UserResource;
+use App\User;
+use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            return UserResource::collection(User::all());
-        } else {
-
-        }
+        return UserResource::collection(User::all());
     }
 
     public function show(User $user)
