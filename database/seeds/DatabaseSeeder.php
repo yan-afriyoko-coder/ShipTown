@@ -12,8 +12,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \Illuminate\Support\Facades\Event::fake();
-
         // create demo user
         if(User::query()
             ->where('email','=','demo@products.management')

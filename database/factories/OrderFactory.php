@@ -23,8 +23,6 @@ $factory->define(Order::class, function (Faker $faker) {
         'shipping_address_id' => factory(OrderAddress::class)->create()->id,
         'order_placed_at' => $order_placed_at,
         'order_closed_at' => $order_closed_at,
-        'product_line_count' => 0,
-        'total_quantity_ordered' => 0,
         'status_code' => $status_code,
     ];
 
