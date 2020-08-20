@@ -14,7 +14,7 @@ class OrderAddressLabelTest extends TestCase
     /**
      * @return void
      */
-    public function test_if_authorized_route_works()
+    public function testIfAuthorizedRouteWorks()
     {
         Passport::actingAs(
             factory(User::class)->create()
@@ -23,8 +23,6 @@ class OrderAddressLabelTest extends TestCase
         $order = factory(Order::class)->create();
 
         $response = $this->get('pdf/orders/'.$order->order_number.'/address_label');
-
-//        $response->assertStatus(200);
     }
 
 
@@ -33,7 +31,7 @@ class OrderAddressLabelTest extends TestCase
      *
      * @return void
      */
-    public function test_if_route_is_protected()
+    public function testIfRouteIsProtected()
     {
         $response = $this->get('pdf/orders/123/address_label');
 

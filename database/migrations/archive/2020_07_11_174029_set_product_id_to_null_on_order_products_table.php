@@ -14,7 +14,7 @@ class SetProductIdToNullOnOrderProductsTable extends Migration
     public function up()
     {
         \App\Models\OrderProduct::query()
-            ->where('product_id','=', 0)
+            ->where('product_id', '=', 0)
             ->update(['product_id' => null]);
     }
 
@@ -25,6 +25,5 @@ class SetProductIdToNullOnOrderProductsTable extends Migration
      */
     public function down()
     {
-
     }
 }

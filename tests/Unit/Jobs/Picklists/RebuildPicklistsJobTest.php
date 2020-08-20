@@ -15,7 +15,7 @@ class RebuildPicklistsJobTest extends TestCase
      *
      * @return void
      */
-    public function test_if_all_order_products_are_added_to_picklists()
+    public function testIfAllOrderProductsAreAddedToPicklists()
     {
         $this->expectNotToPerformAssertions();
         RebuildPicklistsJob::dispatchNow();

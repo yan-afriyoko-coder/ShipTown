@@ -18,12 +18,12 @@ class UpdateQuantityReserved
      */
     public function subscribe($events)
     {
-//        $events->listen('eloquent.created: App\Models\Order', 'App\Listeners\UpdateQuantityReserved@on_order_created');
-//        $events->listen('eloquent.updated: App\Models\Order', 'App\Listeners\UpdateQuantityReserved@on_order_updated');
-//        $events->listen('eloquent.deleted: App\Models\Order', 'App\Listeners\UpdateQuantityReserved@on_order_deleted');
+// $events->listen('eloquent.created: App\Models\Order', 'App\Listeners\UpdateQuantityReserved@onOrderCreated');
+// $events->listen('eloquent.updated: App\Models\Order', 'App\Listeners\UpdateQuantityReserved@onOrderUpdated');
+// $events->listen('eloquent.deleted: App\Models\Order', 'App\Listeners\UpdateQuantityReserved@onOrderDeleted');
     }
 
-    public function on_order_updated(Order $order)
+    public function onOrderUpdated(Order $order)
     {
         $order_old = json_decode($order->getOriginal()['order_as_json'], true);
 
@@ -34,7 +34,7 @@ class UpdateQuantityReserved
         $this->reserveQuantities($order_new);
     }
 
-    public function on_order_created(Order $order)
+    public function onOrderCreated(Order $order)
     {
         $order = $order->order_as_json;
 
@@ -42,12 +42,11 @@ class UpdateQuantityReserved
     }
 
 
-    public function on_order_deleted(Order $order)
+    public function onOrderDeleted(Order $order)
     {
         $order = $order->order_as_json;
 
         $this->releaseQuantities($order);
-
     }
 
     /**
@@ -56,13 +55,11 @@ class UpdateQuantityReserved
     private function reserveQuantities($order): void
     {
         foreach ($order['products'] as $product) {
-
             ProductService::reserve(
                 $product["sku"],
                 $product['quantity'],
                 "Order " . $order['order_number']
             );
-
         }
     }
 
@@ -71,18 +68,16 @@ class UpdateQuantityReserved
      */
     private function releaseQuantities($order): void
     {
-        if(!Arr::has($order, 'products')) {
+        if (!Arr::has($order, 'products')) {
             return;
         }
 
         foreach ($order['products'] as $product) {
-
             ProductService::release(
                 $product["sku"],
                 $product['quantity'],
                 "Order " . $order['order_number']
             );
-
         }
     }
 }

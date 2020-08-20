@@ -19,7 +19,6 @@ class AddForeingKeyToRmsapiProductImports extends Migration
                 ->on('products')
                 ->references('id')
                 ->onDelete('SET NULL');
-
         });
     }
 

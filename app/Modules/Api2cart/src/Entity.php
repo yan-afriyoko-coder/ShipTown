@@ -3,13 +3,12 @@
 
 namespace App\Modules\Api2cart\src;
 
-
 class Entity
 {
     /**
      * @var Client
      */
-    private $_client;
+    private $client;
 
     /**
      * Entity constructor.
@@ -18,7 +17,7 @@ class Entity
      */
     public function __construct(string $store_key, bool $exceptions = true)
     {
-        $this->_client = new Client($store_key, $exceptions);
+        $this->client = new Client($store_key, $exceptions);
     }
 
     /**
@@ -26,6 +25,6 @@ class Entity
      */
     public function client()
     {
-        return $this->_client;
+        return $this->client;
     }
 }

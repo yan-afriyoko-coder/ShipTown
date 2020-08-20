@@ -50,7 +50,8 @@ class User extends Authenticatable
     /**
      * Sends a new print job request to the service from a PDF source.
      *
-     * @param string $title A title to give the print job. This is the name which will appear in the operating system's print queue.
+     * @param string $title A title to give the print job.
+     *   This is the name which will appear in the operating system's print queue.
      * @param string $content The path to the pdf file, a pdf string
      *
      * @return Response

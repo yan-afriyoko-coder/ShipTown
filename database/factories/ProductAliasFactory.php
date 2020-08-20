@@ -8,7 +8,7 @@ use Faker\Generator as Faker;
 $factory->define(ProductAlias::class, function (Faker $faker) {
     $product = \App\Models\Product::query()->inRandomOrder()->first();
 
-    if(empty($product)) {
+    if (empty($product)) {
         $product = factory(\App\Models\Product::class)->create();
     }
 

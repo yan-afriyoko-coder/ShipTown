@@ -26,7 +26,6 @@ class CreateInventoryTable extends Migration
                 ->references('id')
                 ->on('products')
                 ->onDelete('cascade');
-
         });
     }
 

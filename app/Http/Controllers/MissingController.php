@@ -35,6 +35,6 @@ class MissingController extends Controller
 
         $product->save();
 
-        $this->respond_OK_200();
+        $this->respondOK200();
     }
 }

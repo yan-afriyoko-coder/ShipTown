@@ -26,14 +26,12 @@ class ProductAliasSeeder extends Seeder
     private function createAliases(array $aliasList): void
     {
         foreach ($aliasList as $alias) {
-
             $aliasExists = ProductAlias::query()->where(['alias' => $alias])->exists();
 
-            if ( ! $aliasExists) {
+            if (! $aliasExists) {
                 factory(ProductAlias::class)
                     ->create(['alias' => $alias]);
             }
-
         }
     }
 }

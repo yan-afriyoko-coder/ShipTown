@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests\Unit\Services;
+
 use PrintNode\PrintJob;
 use PrintNode\Request;
 
@@ -8,7 +10,7 @@ use Tests\TestCase;
 
 class PrintServiceTest extends TestCase
 {
-    public function test_calls_get_printer()
+    public function testCallsGetPrinter()
     {
         // Mock the Printode\Request instance so that it doesn't actuall send out API requests.
         // We only want to test the implementation of our own service, and not their library.
@@ -23,7 +25,7 @@ class PrintServiceTest extends TestCase
     /**
      * Tests that when we send the correct parameters to the POST PrintJob call using the API client.
      */
-    public function test_can_send_new_print_job()
+    public function testCanSendNewPrintJob()
     {
         $faker = \Faker\Factory::create();
 
@@ -35,14 +37,15 @@ class PrintServiceTest extends TestCase
         // We only want to test the implementation of our own service, and not their library.
         $this->mock(Request::class, function ($mock) use ($printer, $content, $title) {
             $mock->shouldReceive('post')->once()->with(
-                \Mockery::on(function($printJob) use ($printer, $content, $title) {
-                    return $printJob->printer == $printer                        
-                        && $printJob->content == base64_encode($content) // Check that the content is base64 encoded before sending
+                \Mockery::on(function ($printJob) use ($printer, $content, $title) {
+                    return $printJob->printer == $printer
+                        // Check that the content is base64 encoded before sending
+                        && $printJob->content == base64_encode($content)
                         && $printJob->title == $title;
                 })
             );
         });
-    
+
         // Call the method to trigger the mock tests
         app(PrintService::class)->newPdfPrintJob($printer, $title, $content);
     }

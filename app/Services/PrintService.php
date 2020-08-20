@@ -27,14 +27,15 @@ class PrintService
      * Sends a new print job request to the service from a PDF source.
      *
      * @param int|string $printerId The id of the printer you wish to print to.
-     * @param string $title A title to give the print job. This is the name which will appear in the operating system's print queue.
+     * @param string $title A title to give the print job.
+     *  This is the name which will appear in the operating system's print queue.
      * @param string $content The path to the pdf file, a pdf string
      *
      * @return Response
      */
     public function newPdfPrintJob($printerId, $title, $content)
     {
-        if (@is_file($content)) { // if file exists and is a file and not a directory, suppress errors
+        if (@is_file($content)) { // if file exists and is a file and not a directory
             $content = file_get_contents($content);
         }
 
@@ -45,9 +46,12 @@ class PrintService
      * Sends a new print job request to the service.
      *
      * @param int|string $printerId The id of the printer you wish to print to.
-     * @param string $title A title to give the print job. This is the name which will appear in the operating system's print queue.
-     * @param string $content If contentType is pdf_uri or raw_uri, this should be the URI from which the document you wish to print can be downloaded.
-     *                        If contentType is pdf_base64 or raw_base64, this should be the base64-encoding of the document you wish to print.
+     * @param string $title A title to give the print job.
+     *  This is the name which will appear in the operating system's print queue.
+     * @param string $content If contentType is pdf_uri or raw_uri,
+     *  this should be the URI from which the document you wish to print can be downloaded.
+     *  If contentType is pdf_base64 or raw_base64, this should be the
+     *  base64-encoding of the document you wish to print.
      *
      * @return Response
      */

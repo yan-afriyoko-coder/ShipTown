@@ -8,7 +8,7 @@ use App\Models\RmsapiConnection;
 
 class RmsapiConnectionTest extends TestCase
 {
-    public function test_encrypts_password()
+    public function testEncryptsPassword()
     {
         $config = new RmsapiConnection();
         $config->password = 'foo';

@@ -18,7 +18,7 @@ class ProductService
     {
         $product = Product::findBySKU($skuOrAlias);
 
-        if($product) {
+        if ($product) {
             return $product;
         }
 
@@ -29,7 +29,7 @@ class ProductService
     {
         $productAlias = ProductAlias::query()->where(['alias' => $alias])->with('product')->first();
 
-        if($productAlias) {
+        if ($productAlias) {
             return $productAlias->product()->first();
         }
 
@@ -46,7 +46,7 @@ class ProductService
     {
         $aProduct = Product::query()->where(["sku" => $sku])->first();
 
-        if($aProduct) {
+        if ($aProduct) {
             $aProduct->increment("quantity_reserved", $quantity);
             return true;
         }
@@ -65,7 +65,7 @@ class ProductService
     {
         $aProduct = Product::query()->where(["sku" => $sku])->first();
 
-        if($aProduct) {
+        if ($aProduct) {
             $aProduct->decrement("quantity_reserved", $quantity);
             return true;
         }

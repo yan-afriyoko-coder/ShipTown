@@ -20,7 +20,7 @@ class UpdateProductMasterQuantityTest extends TestCase
      *
      * @return void
      */
-    public function test_if_quantity_updates_on_inventory_create()
+    public function testIfQuantityUpdatesOnInventoryCreate()
     {
         Event::fake();
 
@@ -29,7 +29,7 @@ class UpdateProductMasterQuantityTest extends TestCase
 
         $product = factory(Product::class)->create();
 
-        $quantity = rand(0,1000);
+        $quantity = rand(0, 1000);
 
         $quantity_expected = $product->quantity + $quantity;
 
@@ -50,7 +50,7 @@ class UpdateProductMasterQuantityTest extends TestCase
     /**
      *
      */
-    public function test_if_quantity_updates_on_inventory_delete()
+    public function testIfQuantityUpdatesOnInventoryDelete()
     {
         Event::fake();
 
@@ -83,7 +83,7 @@ class UpdateProductMasterQuantityTest extends TestCase
     /**
      *
      */
-    public function test_if_quantity_updates_on_inventory_update()
+    public function testIfQuantityUpdatesOnInventoryUpdate()
     {
         Event::fake();
 
@@ -101,7 +101,7 @@ class UpdateProductMasterQuantityTest extends TestCase
 
         $product = $product->fresh();
 
-        $quantity = rand(0,1000);
+        $quantity = rand(0, 1000);
 
         $quantity_expected = $product->quantity - $inventory->quantity + $quantity;
 

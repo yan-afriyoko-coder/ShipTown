@@ -27,7 +27,7 @@ class PdfOrderController extends PdfBaseController
             ->with('shippingAddress')
             ->firstOrFail();
 
-        if(!$order->shipping_address_id) {
+        if (!$order->shipping_address_id) {
             ImportShippingAddressJob::dispatchNow($order->id);
             $order = $order->refresh();
         }
@@ -37,5 +37,4 @@ class PdfOrderController extends PdfBaseController
 
         return $this->getPdfResponse($view, $data);
     }
-
 }

@@ -16,7 +16,8 @@ class SyncController extends Controller
     /**
      *
      */
-    public function index() {
+    public function index()
+    {
         // import API2CART orders
         DispatchImportOrdersJobs::dispatch();
 
@@ -25,6 +26,6 @@ class SyncController extends Controller
             FetchUpdatedProductsJob::dispatch($rmsapiConnection->id);
         }
 
-        return $this->respond_OK_200('Sync jobs dispatched');
+        return $this->respondOK200('Sync jobs dispatched');
     }
 }

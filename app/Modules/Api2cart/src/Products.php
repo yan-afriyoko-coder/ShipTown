@@ -39,17 +39,17 @@ class Products extends Entity
      * @param int|null $store_id
      * @return array|null
      */
-    static function getSimpleProductInfo(string $store_key, string $sku, int $store_id = null)
+    public static function getSimpleProductInfo(string $store_key, string $sku, int $store_id = null)
     {
         $product_id = Products::getSimpleProductID($store_key, $sku);
 
-        if(empty($product_id)) {
+        if (empty($product_id)) {
             return null;
         }
 
         $params = [
             "id" => $product_id,
-            "params" => implode(",",[
+            "params" => implode(",", [
                 "id",
                 "model",
                 "u_model",
@@ -62,13 +62,13 @@ class Products extends Entity
             ]),
         ];
 
-        if($store_id) {
+        if ($store_id) {
             $params["store_id"] = $store_id;
         }
 
-        $response =  Client::GET($store_key,'product.info.json', $params);
+        $response =  Client::GET($store_key, 'product.info.json', $params);
 
-        if($response->isNotSuccess()) {
+        if ($response->isNotSuccess()) {
             return null;
         }
 
@@ -79,11 +79,13 @@ class Products extends Entity
         $product["sku"]             = empty($product["u_sku"]) ? $product["u_model"] : $product["u_sku"];
         $product["model"]           = $product["u_model"];
 
-        $product["sprice_create"]   = empty($product["special_price"]["created_at"]) ? "1900-01-01 00:00:00" : $product["special_price"]["created_at"]["value"];
-        $product["sprice_create"] = Carbon::createFromTimeString( $product["sprice_create"])->format ("Y-m-d H:i:s");
+        $created_at = $product["special_price"]["created_at"];
+        $product["sprice_create"]   = empty($created_at) ? "1900-01-01 00:00:00" : $created_at["value"];
+        $product["sprice_create"] = Carbon::createFromTimeString($product["sprice_create"])->format("Y-m-d H:i:s");
 
-        $product["sprice_expire"]   = empty($product["special_price"]["expired_at"]) ? "1900-01-01 00:00:00" : $product["special_price"]["expired_at"]["value"];
-        $product["sprice_expire"] = Carbon::createFromTimeString( $product["sprice_expire"])->format ("Y-m-d H:i:s");
+        $expired_at = $product["special_price"]["expired_at"];
+        $product["sprice_expire"]   = empty($expired_at) ? "1900-01-01 00:00:00" : $expired_at["value"];
+        $product["sprice_expire"] = Carbon::createFromTimeString($product["sprice_expire"])->format("Y-m-d H:i:s");
 
         $product["special_price"]   = $product["special_price"]["value"];
 
@@ -96,11 +98,11 @@ class Products extends Entity
      * @param int|null $store_id
      * @return array|null
      */
-    static function getVariantInfo(string $store_key, string $sku, int $store_id = null)
+    public static function getVariantInfo(string $store_key, string $sku, int $store_id = null)
     {
         $variant_id = Products::getVariantID($store_key, $sku);
 
-        if(empty($variant_id)) {
+        if (empty($variant_id)) {
             return null;
         }
 
@@ -109,13 +111,13 @@ class Products extends Entity
             "params" => "force_all",
         ];
 
-        if($store_id) {
+        if ($store_id) {
             $params["store_id"] = $store_id;
         }
 
-        $response =  Client::GET($store_key,'product.variant.info.json', $params);
+        $response =  Client::GET($store_key, 'product.variant.info.json', $params);
 
-        if($response->isNotSuccess()) {
+        if ($response->isNotSuccess()) {
             return null;
         }
 
@@ -124,11 +126,14 @@ class Products extends Entity
         $variant['type']            = "variant";
         $variant["sku"]             = empty($variant["u_sku"]) ? $variant["u_model"] : $variant["u_sku"];
         $variant["model"]           = $variant["u_model"];
-        $variant["sprice_create"]   = empty($variant["special_price"]["created_at"]) ? "1900-01-01 00:00:00":$variant["special_price"]["created_at"]["value"];
-        $variant["sprice_create"] = Carbon::createFromTimeString( $variant["sprice_create"])->format ("Y-m-d H:i:s");
 
-        $variant["sprice_expire"]   = empty($variant["special_price"]["expired_at"]) ? "1900-01-01 00:00:00":$variant["special_price"]["expired_at"]["value"];
-        $variant["sprice_expire"] = Carbon::createFromTimeString( $variant["sprice_expire"])->format ("Y-m-d H:i:s");
+        $created_at = $variant["special_price"]["created_at"];
+        $variant["sprice_create"]   = empty($created_at) ? "1900-01-01 00:00:00":$created_at["value"];
+        $variant["sprice_create"] = Carbon::createFromTimeString($variant["sprice_create"])->format("Y-m-d H:i:s");
+
+        $expired_at = $variant["special_price"]["expired_at"];
+        $variant["sprice_expire"]   = empty($expired_at) ? "1900-01-01 00:00:00":$expired_at["value"];
+        $variant["sprice_expire"] = Carbon::createFromTimeString($variant["sprice_expire"])->format("Y-m-d H:i:s");
 
         $variant["special_price"]   = $variant["special_price"]["value"];
 
@@ -141,17 +146,17 @@ class Products extends Entity
      * @param int|null $store_id
      * @return array|null
      */
-    static function getProductInfo(string $store_key, string $sku, int $store_id = null)
+    public static function getProductInfo(string $store_key, string $sku, int $store_id = null)
     {
         $product = Products::getSimpleProductInfo($store_key, $sku, $store_id);
 
-        if($product) {
+        if ($product) {
             return $product;
         }
 
         $variant = Products::getVariantInfo($store_key, $sku, $store_id);
 
-        if($variant) {
+        if ($variant) {
             return $variant;
         }
 
@@ -163,23 +168,23 @@ class Products extends Entity
      * @param string $sku
      * @return int|null
      */
-    static function getSimpleProductID(string $store_key, string $sku)
+    public static function getSimpleProductID(string $store_key, string $sku)
     {
         $cache_key = $store_key."_".$sku."_product_id";
 
         $id = Cache::get($cache_key);
 
-        if($id) {
+        if ($id) {
             return $id;
         }
 
-        $response =  Client::GET($store_key,'product.find.json', [
+        $response =  Client::GET($store_key, 'product.find.json', [
             'find_where' => "model",
             'find_value' => $sku,
             'store_id' => 0
         ]);
 
-        if($response->isNotSuccess()) {
+        if ($response->isNotSuccess()) {
             return null;
         }
 
@@ -195,22 +200,22 @@ class Products extends Entity
      * @param string $sku
      * @return int|null
      */
-    static function getVariantID(string $store_key, string $sku)
+    public static function getVariantID(string $store_key, string $sku)
     {
         $cache_key = $store_key."_".$sku."_variant_id";
 
         $id = Cache::get($cache_key);
 
-        if($id) {
+        if ($id) {
             return $id;
         }
 
-        $response =  Client::GET($store_key,'product.child_item.find.json', [
+        $response =  Client::GET($store_key, 'product.child_item.find.json', [
             'find_where' => "sku",
             'find_value' => $sku
         ]);
 
-        if($response->isNotSuccess()) {
+        if ($response->isNotSuccess()) {
             return null;
         }
 
@@ -226,9 +231,9 @@ class Products extends Entity
      * @param int $product_id
      * @return RequestResponse
      */
-    static function deleteProduct(string $store_key, int $product_id)
+    public static function deleteProduct(string $store_key, int $product_id)
     {
-        return Client::DELETE($store_key,'product.delete.json', ['id' => $product_id]);
+        return Client::DELETE($store_key, 'product.delete.json', ['id' => $product_id]);
     }
 
     /**
@@ -237,7 +242,7 @@ class Products extends Entity
      * @return RequestResponse
      * @throws Exception
      */
-    static function createSimpleProduct(string $store_key, array $product_data)
+    public static function createSimpleProduct(string $store_key, array $product_data)
     {
         $fields = [
             "sku",
@@ -249,8 +254,7 @@ class Products extends Entity
 
         $product = Arr::only($product_data, $fields);
 
-        if(!Arr::has($product_data, "model"))
-        {
+        if (!Arr::has($product_data, "model")) {
             $product["model"] = $product_data["sku"];
         }
 
@@ -258,16 +262,15 @@ class Products extends Entity
         $product["available_for_view"] = false;
         $product["available_for_sale"] = false;
 
-        $response = Client::POST($store_key,'product.add.json', $product);
+        $response = Client::POST($store_key, 'product.add.json', $product);
 
-        if($response->isSuccess()) {
+        if ($response->isSuccess()) {
             Log::info('Product created', $product_data);
             return $response;
         }
 
         Log::error("product.add.json failed", $response->asArray());
         return $response;
-
     }
 
     /**
@@ -276,7 +279,7 @@ class Products extends Entity
      * @return RequestResponse
      * @throws Exception
      */
-    static function updateSimpleProduct(string $store_key, array $product_data)
+    public static function updateSimpleProduct(string $store_key, array $product_data)
     {
         $product = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
 
@@ -284,7 +287,7 @@ class Products extends Entity
 
         $response = Client::GET($store_key, 'product.update.json', $product);
 
-        if($response->isSuccess()) {
+        if ($response->isSuccess()) {
             info("Product updated", $product);
             return $response;
         }
@@ -307,7 +310,7 @@ class Products extends Entity
      * @return RequestResponse
      * @throws Exception
      */
-    static function assignStore(string $store_key, int $product_id, int $store_id)
+    public static function assignStore(string $store_key, int $product_id, int $store_id)
     {
         $data = [
             "product_id" => $product_id,
@@ -316,7 +319,7 @@ class Products extends Entity
 
         $response = Client::POST($store_key, 'product.store.assign.json', $data);
 
-        if($response->isSuccess()) {
+        if ($response->isSuccess()) {
             Log::info('Store assigned', $data);
             return $response;
         }
@@ -332,15 +335,15 @@ class Products extends Entity
      * @return RequestResponse
      * @throws Exception
      */
-    static function updateVariant(string $store_key, array $variant_data)
+    public static function updateVariant(string $store_key, array $variant_data)
     {
         $properties = Arr::only($variant_data, self::PRODUCT_ALLOWED_KEYS);
 
         $properties = Arr::except($properties, self::PRODUCT_DONT_UPDATE_KEYS);
 
-        $response = Client::GET($store_key,'product.variant.update.json', $properties);
+        $response = Client::GET($store_key, 'product.variant.update.json', $properties);
 
-        if($response->isSuccess()) {
+        if ($response->isSuccess()) {
             info("Variant updated", $properties);
             return $response;
         }
@@ -355,7 +358,7 @@ class Products extends Entity
      * @return RequestResponse
      * @throws Exception
      */
-    static function updateOrCreate(string $store_key, array $product_data)
+    public static function updateOrCreate(string $store_key, array $product_data)
     {
         $product = Products::getProductTypeAndId($store_key, $product_data['sku']);
 
@@ -372,8 +375,6 @@ class Products extends Entity
                 return Products::createSimpleProduct($store_key, $product_data);
                 break;
         }
-
-
     }
 
     /**
@@ -387,14 +388,13 @@ class Products extends Entity
 
         $cached_product = Cache::get($cache_key);
 
-        if($cached_product) {
+        if ($cached_product) {
             return $cached_product;
         }
 
         $product_id = Products::getSimpleProductID($store_key, $sku);
 
         if (!empty($product_id)) {
-
             $product = [
                 "type" => "product",
                 "id" => $product_id
@@ -408,7 +408,6 @@ class Products extends Entity
         $variant_id = Products::getVariantID($store_key, $sku);
 
         if (!empty($variant_id)) {
-
             $product = [
                 "type" => "variant",
                 "id" => $variant_id
@@ -417,14 +416,11 @@ class Products extends Entity
             Cache::put($cache_key, $product, 60 * 24 * 7);
 
             return $product;
-
         }
 
         return [
             "type" => null,
             "id" => null
         ];
-
     }
-
 }

@@ -8,13 +8,12 @@ use Tests\TestCase;
 
 class RmsapiConnectionTest extends TestCase
 {
-    public function test_if_fetches_products() {
-
+    public function testIfFetchesProducts()
+    {
         $connection = RmsapiConnection::first();
 
         $response = RmsapiClient::GET($connection, 'api/products');
 
         $this->assertTrue($response->isSuccess());
-
     }
 }

@@ -50,7 +50,7 @@ class SkippedPickNotification extends Notification
             ->line('SKU: ' . $this->picklist->sku_ordered)
             ->line('Quantity: ' . $this->picklist->quantity_requested);
 
-        if($this->picklist->order) {
+        if ($this->picklist->order) {
             $notification->line('Order #: '. $this->picklist->order->order_number);
         }
 
@@ -74,7 +74,8 @@ class SkippedPickNotification extends Notification
      * Prevents the notification from being sent if the product is no longer missing.
      * This serves to catch cases when the pick is undid.
      */
-    public function shouldInterrupt($notifiable) {
+    public function shouldInterrupt($notifiable)
+    {
         return !$this->picklist->wasPickSkipped();
     }
 }

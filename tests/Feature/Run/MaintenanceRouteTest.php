@@ -14,17 +14,17 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class MaintenanceRouteTest extends TestCase
 {
-    public function test_if_route_is_available_after_august()
+    public function testIfRouteIsAvailableAfterAugust()
     {
         $this->assertTrue(
             Carbon::today()
                 ->isBefore(
-                    Carbon::createFromDate(2020,9,01)
+                    Carbon::createFromDate(2020, 9, 01)
                 )
         );
     }
 
-    public function test_get_route()
+    public function testGetRoute()
     {
         Bus::fake();
 
@@ -45,7 +45,7 @@ class MaintenanceRouteTest extends TestCase
      *
      * @return void
      */
-    public function test_get_route_unauthenticated()
+    public function testGetRouteUnauthenticated()
     {
         $response = $this->get('/run/maintenance');
 

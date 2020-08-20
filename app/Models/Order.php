@@ -89,7 +89,8 @@ class Order extends Model
         return $this->hasOne(Packlist::class)->test(100);
     }
 
-    public function scopeActive($query) {
+    public function scopeActive($query)
+    {
         return $query->where('status_code', '=', 'processing');
     }
 
@@ -108,5 +109,4 @@ class Order extends Model
     {
         return $this->belongsTo(OrderAddress::class);
     }
-
 }

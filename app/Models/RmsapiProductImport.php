@@ -31,5 +31,4 @@ class RmsapiProductImport extends Model
     protected $attributes = [
         'raw_import' => '{}',
     ];
-
 }

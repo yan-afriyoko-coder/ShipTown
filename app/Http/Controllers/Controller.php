@@ -14,7 +14,8 @@ class Controller extends BaseController
     private $status_code = 200;
 
 
-    public function respond($message) {
+    public function respond($message)
+    {
         $response = response()->json(
             ["message" => $message],
             $this->getStatusCode()
@@ -23,12 +24,14 @@ class Controller extends BaseController
         $response->throwResponse();
     }
 
-    public function respond_OK_200 ($message = null) {
+    public function respondOK200($message = null)
+    {
         return $this->setStatusCode(200)
             ->respond($message);
     }
 
-    public function respond_NotFound($message = "Not Found!") {
+    public function respondNotFound($message = "Not Found!")
+    {
         return $this->setStatusCode(404)
             ->respond($message);
     }

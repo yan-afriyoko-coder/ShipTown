@@ -17,5 +17,4 @@ class Api2cartConnection extends Model
     ];
 
     protected $table = 'api2cart_connections';
-
 }

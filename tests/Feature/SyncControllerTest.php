@@ -19,7 +19,7 @@ class SyncControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_if_dispatches_jobs()
+    public function testIfDispatchesJobs()
     {
         Bus::fake();
 

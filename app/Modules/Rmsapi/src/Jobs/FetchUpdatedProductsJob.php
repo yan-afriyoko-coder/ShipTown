@@ -59,10 +59,11 @@ class FetchUpdatedProductsJob implements ShouldQueue
         $response = RmsapiClient::GET(
             $rmsapiConnection,
             'api/products',
-            $params);
+            $params
+        );
 
         // early exit if nothing new imported
-        if( empty($response->getResult()) ) {
+        if (empty($response->getResult())) {
             return;
         }
 
@@ -70,10 +71,9 @@ class FetchUpdatedProductsJob implements ShouldQueue
 
         ProcessImportedProductsJob::dispatch($this->batch_uuid);
 
-        if(isset($response->asArray()['next_page_url'])) {
+        if (isset($response->asArray()['next_page_url'])) {
             FetchUpdatedProductsJob::dispatchNow($this->rmsapiConnectionId);
         }
-
     }
 
     public function saveImportedProducts(array $productList)

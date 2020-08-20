@@ -13,8 +13,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // create demo user
-        if(User::query()
-            ->where('email','=','demo@products.management')
+        if (User::query()
+            ->where('email', '=', 'demo@products.management')
             ->doesntExist()) {
                 $user = factory(User::class, 1)
                     ->create(['email' => 'demo@products.management']);
@@ -33,6 +33,5 @@ class DatabaseSeeder extends Seeder
             ProductAliasSeeder::class,
             SingleLineOrderPicklistSeeder::class,
         ]);
-
     }
 }

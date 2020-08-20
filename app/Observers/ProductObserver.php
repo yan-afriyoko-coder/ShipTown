@@ -20,7 +20,7 @@ class ProductObserver
     public function created(Product $product)
     {
         $warehouse_ids = Warehouse::all('id')
-            ->map(function ($warehouse) use ($product){
+            ->map(function ($warehouse) use ($product) {
                 return [
                     'warehouse_id' => $warehouse->getKey(),
                     'product_id' => $product->getKey(),

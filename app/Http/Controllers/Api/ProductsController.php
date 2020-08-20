@@ -20,15 +20,14 @@ class ProductsController extends Controller
 
         $query = QueryBuilder::for(Product::class)
             ->allowedFilters(array_merge(
-                    $fields,
-                    [AllowedFilter::scope('sku_or_alias')]
-                ))
+                $fields,
+                [AllowedFilter::scope('sku_or_alias')]
+            ))
             ->allowedSorts($fields)
             ->allowedIncludes('inventory', 'aliases');
 
 
-        if($request->has('q') && $request->get('q')) {
-
+        if ($request->has('q') && $request->get('q')) {
             $product = ProductService::find($request->get('q'));
 
             if ($product) {
@@ -37,10 +36,9 @@ class ProductsController extends Controller
                 $query->where('sku', 'like', '%' . $request->get('q') . '%')
                     ->orWhere('name', 'like', '%' . $request->get('q') . '%');
             }
-
         }
 
-        if($request->has('sort') ){
+        if ($request->has('sort')) {
             $query->orderBy($request->get('sort'), $request->get('order', 'asc'));
         }
 
@@ -68,6 +66,6 @@ class ProductsController extends Controller
 
         $product->save();
 
-        $this->respond_OK_200();
+        $this->respondOK200();
     }
 }

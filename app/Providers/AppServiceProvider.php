@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if(empty(env('TENANT_NAME'))) {
+        if (empty(env('TENANT_NAME'))) {
             dd('TENANT_NAME not specified');
         }
     }

@@ -48,6 +48,5 @@ class OrderCreatedEventTest extends TestCase
             Picklist::query()->sum('quantity_requested'),
             Order::query()->first()->orderProducts()->sum('quantity_ordered'),
         );
-
     }
 }

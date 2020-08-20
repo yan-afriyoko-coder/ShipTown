@@ -22,7 +22,7 @@ class RemoveFromPicklistListenerTest extends TestCase
      *
      * @return void
      */
-    public function test_if_picklist_is_populated()
+    public function testIfPicklistIsPopulated()
     {
         // prepare
         Event::fake();

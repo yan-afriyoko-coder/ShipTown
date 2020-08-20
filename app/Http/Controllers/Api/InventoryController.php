@@ -13,15 +13,15 @@ class InventoryController extends Controller
     public function index(Request $request)
     {
         if ($request->get('per_page') == 'all') {
-            return Product::whereHas('inventory', function($query) {
+            return Product::whereHas('inventory', function ($query) {
                     $query->where('quantity_reserved', '>', 0);
-                })
+            })
                 ->get()
                 ->load('inventory');
         } else {
-            return Product::whereHas('inventory', function($query) {
+            return Product::whereHas('inventory', function ($query) {
                     $query->where('quantity_reserved', '>', 0);
-                })
+            })
                 ->when($request->has('q'), function ($query) use ($request) {
                     return $query
                         ->where('sku', 'like', '%' . $request->get('q') . '%')
@@ -30,7 +30,7 @@ class InventoryController extends Controller
                 ->when($request->has('sort'), function ($query) use ($request) {
                         return $query
                             ->orderBy($request->get('sort'), $request->get('order', 'asc'));
-                    })
+                })
                 ->with('inventory')
                 ->paginate(100);
         }
@@ -40,20 +40,22 @@ class InventoryController extends Controller
     {
         $product = Product::query()->where('sku', '=', $request->sku)->first();
 
-        if(!$product) {
-            return $this->respond_NotFound("SKU not found!");
+        if (!$product) {
+            return $this->respondNotFound("SKU not found!");
         }
 
         $update = $request->all();
 
         $update['product_id'] = $product->id;
 
-        $inventory = Inventory::updateOrCreate([
+        $inventory = Inventory::updateOrCreate(
+            [
             "product_id" => $update['product_id'],
             "location_id" => $update['location_id'],
-            ]
-        , $update);
+            ],
+            $update
+        );
 
-        return $this->respond_OK_200();
+        return $this->respondOK200();
     }
 }

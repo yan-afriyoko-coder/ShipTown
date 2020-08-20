@@ -22,7 +22,6 @@ class AddSkuDescriptionColumnsToPicklistTable extends Migration
             $table->string('name_ordered')
                 ->after('sku_ordered')
                 ->default(' ');
-
         });
     }
 

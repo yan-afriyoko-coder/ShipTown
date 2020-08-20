@@ -13,7 +13,7 @@ class Client
      * @param array $params
      * @return RequestResponse
      */
-    static function GET(string $store_key, string $uri, array $params)
+    public static function GET(string $store_key, string $uri, array $params)
     {
         $query = [
             'api_key' => self::getApiKey(),
@@ -44,7 +44,7 @@ class Client
      * @param array $data
      * @return RequestResponse
      */
-    static function POST(string $store_key, string $uri, array $data)
+    public static function POST(string $store_key, string $uri, array $data)
     {
         $query = [
             'api_key' => self::getApiKey(),
@@ -77,7 +77,7 @@ class Client
      * @param array $params
      * @return RequestResponse
      */
-    static function DELETE(string $store_key, string $uri, array $params)
+    public static function DELETE(string $store_key, string $uri, array $params)
     {
         $query = [
             'api_key' => self::getApiKey(),
@@ -91,7 +91,7 @@ class Client
         return new RequestResponse($response);
     }
 
-    static function getGuzzleClient()
+    public static function getGuzzleClient()
     {
         return new GuzzleClient([
             'base_uri' =>  'https://api.api2cart.com/v1.1/',
@@ -100,9 +100,8 @@ class Client
         ]);
     }
 
-    static function getApiKey()
+    public static function getApiKey()
     {
         return config('app.api2cart_api_key');
     }
-
 }

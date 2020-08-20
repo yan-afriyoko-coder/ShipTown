@@ -16,7 +16,7 @@ class ImportWarehousesAndUpdateLocationIds extends Migration
      */
     public function up()
     {
-        foreach(RmsapiConnection::all('location_id') as $connection) {
+        foreach (RmsapiConnection::all('location_id') as $connection) {
             $warehouse = \App\Models\Warehouse::query()->create([
                 'code' => $connection->location_id,
                 'name' => $connection->location_id
@@ -27,7 +27,7 @@ class ImportWarehousesAndUpdateLocationIds extends Migration
             ]);
 
             Inventory::query()
-                ->where('location_id','=',$connection->location_id)
+                ->where('location_id', '=', $connection->location_id)
                 ->update([
                     'warehouse_id' => $warehouse->getKey()
                 ]);
@@ -44,11 +44,10 @@ class ImportWarehousesAndUpdateLocationIds extends Migration
             ]);
 
             Inventory::query()
-                ->where('location_id','=',$connection->location_id)
+                ->where('location_id', '=', $connection->location_id)
                 ->update([
                     'location_id' => $warehouse->getKey()
                 ]);
-
         };
     }
 

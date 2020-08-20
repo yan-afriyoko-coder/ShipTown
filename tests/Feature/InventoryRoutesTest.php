@@ -14,14 +14,14 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class InventoryRoutesTest extends TestCase
 {
-    public function test_get_route_unauthorized()
+    public function testGetRouteUnauthorized()
     {
         $response = $this->get('/api/inventory');
 
         $response->assertStatus(302);
     }
 
-    public function test_get_route_authorized()
+    public function testGetRouteAuthorized()
     {
         Passport::actingAs(
             factory(User::class)->create()
@@ -35,14 +35,14 @@ class InventoryRoutesTest extends TestCase
     /**
      * @return void
      */
-    public function test_if_post_route_is_protected()
+    public function testIfPostRouteIsProtected()
     {
         $response = $this->post('api/inventory');
 
         $response->assertStatus(302);
     }
 
-    public function test_if_cant_post_without_data()
+    public function testIfCantPostWithoutData()
     {
         Passport::actingAs(
             factory(User::class)->create()
@@ -53,7 +53,7 @@ class InventoryRoutesTest extends TestCase
         $response->assertStatus(422);
     }
 
-    public function test_quantity_update()
+    public function testQuantityUpdate()
     {
         Event::fake();
 
@@ -76,5 +76,4 @@ class InventoryRoutesTest extends TestCase
 
         $response->assertStatus(200);
     }
-
 }

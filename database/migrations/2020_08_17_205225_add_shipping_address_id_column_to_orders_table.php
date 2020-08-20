@@ -24,7 +24,6 @@ class AddShippingAddressIdColumnToOrdersTable extends Migration
                 ->on('order_addresses')
                 ->references('id')
                 ->onDelete('SET NULL');
-
         });
     }
 

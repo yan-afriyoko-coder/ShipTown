@@ -15,14 +15,20 @@ class UpdateProductQuantity
      */
     public function subscribe($events)
     {
-        $events->listen('eloquent.created: App\Models\Inventory',
-            'App\Listeners\Inventory\UpdateProductQuantity@onCreated');
+        $events->listen(
+            'eloquent.created: App\Models\Inventory',
+            'App\Listeners\Inventory\UpdateProductQuantity@onCreated'
+        );
 
-        $events->listen('eloquent.updated: App\Models\Inventory',
-            'App\Listeners\Inventory\UpdateProductQuantity@onUpdated');
+        $events->listen(
+            'eloquent.updated: App\Models\Inventory',
+            'App\Listeners\Inventory\UpdateProductQuantity@onUpdated'
+        );
 
-        $events->listen('eloquent.deleted: App\Models\Inventory',
-            'App\Listeners\Inventory\UpdateProductQuantity@onDeleted');
+        $events->listen(
+            'eloquent.deleted: App\Models\Inventory',
+            'App\Listeners\Inventory\UpdateProductQuantity@onDeleted'
+        );
     }
 
     /**
@@ -31,7 +37,8 @@ class UpdateProductQuantity
     public function onCreated(Inventory $inventory)
     {
         $inventory->product()->increment(
-            'quantity', $inventory->quantity
+            'quantity',
+            $inventory->quantity
         );
     }
 
@@ -41,11 +48,13 @@ class UpdateProductQuantity
     public function onUpdated(Inventory $inventory)
     {
         $inventory->product()->decrement(
-            'quantity', $inventory->getOriginal()['quantity']
+            'quantity',
+            $inventory->getOriginal()['quantity']
         );
 
         $inventory->product()->increment(
-            'quantity', $inventory->quantity
+            'quantity',
+            $inventory->quantity
         );
     }
 
@@ -55,7 +64,8 @@ class UpdateProductQuantity
     public function onDeleted(Inventory $inventory)
     {
         $inventory->product()->decrement(
-            'quantity', $inventory->quantity
+            'quantity',
+            $inventory->quantity
         );
     }
 }

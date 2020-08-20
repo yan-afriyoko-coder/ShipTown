@@ -88,7 +88,7 @@ class FetchUpdatedOrdersJob implements ShouldQueue
             'count' => 100,
         ];
 
-        if(isset($connection->last_synced_modified_at)) {
+        if (isset($connection->last_synced_modified_at)) {
             $params = Arr::add($params, 'modified_from', $connection->last_synced_modified_at);
         }
 
@@ -113,14 +113,11 @@ class FetchUpdatedOrdersJob implements ShouldQueue
     private function saveOrders(Api2cartConnection $connection, array $ordersCollection): void
     {
         foreach ($ordersCollection as $order) {
-
             Api2cartOrderImports::query()->create([
                 'raw_import' => $order
             ]);
 
             $this->updateLastSyncedTimestamp($connection, $order);
-
         }
     }
-
 }

@@ -3,7 +3,6 @@
 
 namespace Tests;
 
-
 class ModelSample
 {
     const PRODUCT = [
@@ -45,5 +44,4 @@ class ModelSample
             ]
         ]
     ];
-
 }

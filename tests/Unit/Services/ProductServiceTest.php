@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Unit\Services;
 
 use App\Models\Product;
@@ -14,7 +13,7 @@ use Tests\TestCase;
 
 class ProductServiceTest extends TestCase
 {
-    public function test_findByAlias()
+    public function testFindByAlias()
     {
         $alias = factory(ProductAlias::class)->create();
 
@@ -28,7 +27,7 @@ class ProductServiceTest extends TestCase
      *
      * @return void
      */
-    public function test_if_reserves_correctly()
+    public function testIfReservesCorrectly()
     {
         Passport::actingAs(
             factory(User::class)->create()
@@ -64,7 +63,7 @@ class ProductServiceTest extends TestCase
      *
      * @return void
      */
-    public function test_if_releases_quantity_correctly()
+    public function testIfReleasesQuantityCorrectly()
     {
         Passport::actingAs(
             factory(User::class)->create()

@@ -40,7 +40,6 @@ class AddOrderIdToPicklistsTable extends Migration
         Schema::table('picklists', function (Blueprint $table) {
             $table->dropForeign(['order_id']);
             $table->dropIndex(config('database.connections.mysql.prefix').'picklists_order_id_foreign');
-
         });
 
         Schema::table('picklists', function (Blueprint $table) {

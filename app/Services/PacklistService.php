@@ -3,7 +3,6 @@
 
 namespace App\Services;
 
-
 use App\Models\OrderProduct;
 use App\Models\Packlist;
 use Illuminate\Support\Arr;
@@ -23,7 +22,7 @@ class PacklistService
         foreach (Arr::wrap($orderProduct) as $orderProduct) {
             Packlist::updateOrCreate([
                 'order_product_id' => $orderProduct['id']
-            ],[
+            ], [
                 'order_id' => $orderProduct['order_id'],
                 'product_id' => $orderProduct['product_id'],
                 'location_id' => 'WWW',

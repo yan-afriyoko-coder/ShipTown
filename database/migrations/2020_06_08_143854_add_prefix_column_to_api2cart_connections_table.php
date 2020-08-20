@@ -14,7 +14,7 @@ class AddPrefixColumnToApi2cartConnectionsTable extends Migration
     public function up()
     {
         Schema::table('api2cart_connections', function (Blueprint $table) {
-            $table->char('prefix',10)
+            $table->char('prefix', 10)
                 ->default('')
                 ->after('id');
         });
