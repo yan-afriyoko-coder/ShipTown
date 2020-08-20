@@ -169,7 +169,7 @@
 
                 return this.updatePick(pickedItem.id, pickedItem.quantity_requested, true)
                     .then( response => {
-                        this.picklistFilters.currentLocation = this.getValueOrDefault(pickedItem.shelve_location, '');
+                        this.picklistFilters.currentLocation = this.getValueOrDefault(pickedItem['pick_location_inventory_shelve_location'], '');
                         this.displayPickedNotification(pickedItem, pickedItem.quantity_requested);
                         this.beep();
                     })
