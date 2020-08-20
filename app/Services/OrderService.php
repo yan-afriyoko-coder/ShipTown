@@ -35,7 +35,7 @@ class OrderService
      */
     public static function updateOrCreate(array $attributes)
     {
-        $order = Order::firstOrNew(
+        $order = Order::updateOrCreate(
             ["order_number" => $attributes['order_number']]
             , Arr::only($attributes, ['status_code'])
         );
