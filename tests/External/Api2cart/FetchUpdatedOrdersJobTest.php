@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
-class FetchUpdatedOrder_sJobTest extends TestCase
+class FetchUpdatedOrdersJobTest extends TestCase
 {
     public function testIfJobRunsWithoutExceptions()
     {
