@@ -16,6 +16,7 @@
                         </div>
                     @endif
 
+                    @role('admin')
                     <passport-clients></passport-clients>
                     <br />
 
@@ -37,7 +38,7 @@
 
                     <printnode-configuration></printnode-configuration>
                     <br />
-
+                    @endrole
                     <printer-configuration></printer-configuration>
                 </div>
             </div>
