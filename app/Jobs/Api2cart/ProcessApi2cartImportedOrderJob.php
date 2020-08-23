@@ -60,5 +60,4 @@ class ProcessApi2cartImportedOrderJob implements ShouldQueue
             'when_processed' => now(),
         ]);
     }
-
 }

@@ -18,7 +18,7 @@ class FixAllNullProductIdsJobTest extends TestCase
      *
      * @return void
      */
-    public function test_if_runs_without_exceptions()
+    public function testIfRunsWithoutExceptions()
     {
         Event::fake();
 

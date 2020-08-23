@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProductsTest extends TestCase
 {
-    public function test_if_product_found_using_alias()
+    public function testIfProductFoundUsingAlias()
     {
         Passport::actingAs(
             factory(User::class)->create()
@@ -43,7 +43,7 @@ class ProductsTest extends TestCase
     /**
      * @return void
      */
-    public function test_get_products_route_authenticated()
+    public function testGetProductsRouteAuthenticated()
     {
         Event::fake();
 
@@ -56,7 +56,7 @@ class ProductsTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_get_products_route_unauthenticated()
+    public function testGetProductsRouteUnauthenticated()
     {
         $response = $this->get('/products');
 
@@ -64,7 +64,7 @@ class ProductsTest extends TestCase
     }
 
 
-    public function test_get_products_response_structure()
+    public function testGetProductsResponseStructure()
     {
         Passport::actingAs(
             factory(User::class)->make()
@@ -97,7 +97,7 @@ class ProductsTest extends TestCase
         ]);
     }
 
-    public function test_if_products_sync_returns_404_when_product_not_found()
+    public function testIfProductsSyncReturns404WhenProductNotFound()
     {
         Passport::actingAs(
             factory(User::class)->make()
@@ -108,16 +108,15 @@ class ProductsTest extends TestCase
         $response->assertNotFound();
     }
 
-    public function test_products_sync_route_unauthenticated()
+    public function testProductsSyncRouteUnauthenticated()
     {
         $response = $this->get('api/products/0/sync');
 
         // assert route is protected
         $response->assertStatus(302);
-
     }
 
-    public function test_product_sync_route_authenticated()
+    public function testProductSyncRouteAuthenticated()
     {
         Event::fake();
 

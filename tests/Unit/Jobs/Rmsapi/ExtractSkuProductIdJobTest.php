@@ -19,7 +19,7 @@ class ExtractSkuProductIdJobTest extends TestCase
      *
      * @return void
      */
-    public function test_if_all_sku_are_populated()
+    public function testIfAllSkuArePopulated()
     {
         Event::fake();
 
@@ -52,7 +52,6 @@ class ExtractSkuProductIdJobTest extends TestCase
                 ->whereNotNull('when_processed')
                 ->whereNull('sku')
                 ->exists(),
-
             'sku column is not populated'
         );
 
@@ -63,6 +62,5 @@ class ExtractSkuProductIdJobTest extends TestCase
                 ->exists(),
             'product_id column is not populated'
         );
-
     }
 }

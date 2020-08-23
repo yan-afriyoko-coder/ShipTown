@@ -12,11 +12,11 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProductLinesCountTest extends TestCase
 {
-    public function test_if_product_line_count_is_populated_correctly()
+    public function testIfProductLineCountIsPopulatedCorrectly()
     {
         $order = factory(Order::class)->create();
 
-        $orderProductCount = rand(1,5);
+        $orderProductCount = rand(1, 5);
 
         $order->orderProducts()->saveMany(
             factory(OrderProduct::class, $orderProductCount)->make()

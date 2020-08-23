@@ -15,7 +15,7 @@ use Illuminate\Support\Arr;
 
 class ProductModelTest extends TestCase
 {
-    public function test_if_quantity_available_below_0_not_allowed()
+    public function testIfQuantityAvailableBelow0NotAllowed()
     {
         Event::fake();
 
@@ -39,7 +39,7 @@ class ProductModelTest extends TestCase
      *
      * @return void
      */
-    public function test_if_reserves_correctly()
+    public function testIfReservesCorrectly()
     {
         $product_before = Product::firstOrCreate(["sku" => '0123456']);
 

@@ -14,7 +14,7 @@ class SingleLineOrderPicklistSeeder extends Seeder
      */
     public function run()
     {
-        $orders = factory(Order::class,5)
+        $orders = factory(Order::class, 5)
             ->create(['status_code' => 'processing'])
             ->each(function (Order $order) {
                 $orderProducts = factory(OrderProduct::class, 1)->make();

@@ -56,7 +56,7 @@ class RequestResponse
      */
     public function isSuccess()
     {
-        return ($this->response->getStatusCode() == 200) && ($this->isReturnCode_OK());
+        return ($this->response->getStatusCode() == 200) && ($this->isReturnCodeOK());
     }
 
     /**
@@ -111,7 +111,7 @@ class RequestResponse
     /**
      * @return bool
      */
-    public function isReturnCode_OK()
+    public function isReturnCodeOK()
     {
         return $this->isReturnCode(self::RETURN_CODE_OK);
     }
@@ -119,7 +119,7 @@ class RequestResponse
     /**
      * @return bool
      */
-    public function isReturnCode_ModelNotFound()
+    public function isReturnCodeModelNotFound()
     {
         return $this->isReturnCode(self::RETURN_CODE_MODEL_NOT_FOUND);
     }
@@ -127,7 +127,7 @@ class RequestResponse
     /**
      * @return bool
      */
-    public function isReturnCode_ProductSkuMustBeUnique()
+    public function isReturnCodeProductSkuMustBeUnique()
     {
         return $this->isReturnCode(self::RETURN_CODE_PRODUCT_SKU_MUST_BE_UNIQUE);
     }

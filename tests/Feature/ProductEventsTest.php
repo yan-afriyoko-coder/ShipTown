@@ -11,7 +11,7 @@ use Tests\TestCase;
 
 class ProductEventsTest extends TestCase
 {
-    CONST REQUIRED_FIELDS = [
+    const REQUIRED_FIELDS = [
         "sku",
         "name",
         "price",
@@ -26,7 +26,7 @@ class ProductEventsTest extends TestCase
     /**
      * Test ProductCreatedEvent
      */
-    public function test_if_ProductCreatedEvent_is_dispatched_with_required_fields()
+    public function testIfProductCreatedEventIsDispatchedWithRequiredFields()
     {
         Passport::actingAs(
             factory(User::class)->create()
@@ -54,14 +54,13 @@ class ProductEventsTest extends TestCase
         Event::assertDispatched('eloquent.created: App\Models\Product', function ($event, Product $product) {
             return Arr::has($product->toArray(), self::REQUIRED_FIELDS);
         });
-
     }
 
 
     /**
      * Test ProductCreatedEvent
      */
-    public function test_if_ProductUpdatedEvent_is_dispatched_with_required_fields()
+    public function testIfProductUpdatedEventIsDispatchedWithRequiredFields()
     {
         Passport::actingAs(
             factory(User::class)->create()
@@ -87,6 +86,5 @@ class ProductEventsTest extends TestCase
         Event::assertDispatched('eloquent.updated: App\Models\Product', function ($event, Product $product) {
             return Arr::has($product->toArray(), self::REQUIRED_FIELDS);
         });
-
     }
 }

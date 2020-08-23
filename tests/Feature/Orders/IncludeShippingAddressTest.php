@@ -15,7 +15,7 @@ class IncludeShippingAddressTest extends TestCase
     /**
      * @return void
      */
-    public function test_if_can_include_shipping_address()
+    public function testIfCanIncludeShippingAddress()
     {
         Passport::actingAs(
             factory(User::class)->create()
@@ -27,16 +27,15 @@ class IncludeShippingAddressTest extends TestCase
             'shipping_address_id' => $address->id
         ]);
 
-//        dd($order);
-
-        $response = $this->get('/api/orders?'.
+        $response = $this->get(
+            '/api/orders?'.
             "filter[order_number]=".$order->order_number.
-            "&include=shipping_address"
-            ,[]);
+            "&include=shipping_address",
+            []
+        );
 
         $this->assertEquals(1, $response->json('total'));
 
-//        dd($response->json());
         $response->assertJsonStructure([
             "data" => [
                 '*' => [
@@ -44,7 +43,5 @@ class IncludeShippingAddressTest extends TestCase
                 ]
             ]
         ]);
-
     }
-
 }

@@ -36,7 +36,7 @@ class ImportShippingAddressJob implements ShouldQueue
     {
         $order = Order::find($this->order_id);
 
-        if(!$order) {
+        if (!$order) {
             return;
         }
 

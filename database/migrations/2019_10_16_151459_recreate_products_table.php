@@ -20,8 +20,8 @@ class RecreateProductsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('sku', 20);
             $table->string('name', 100)->default('');
-            $table->decimal('price', 8,2)->default(0);
-            $table->decimal('sale_price', 8,2)->default(0);
+            $table->decimal('price', 8, 2)->default(0);
+            $table->decimal('sale_price', 8, 2)->default(0);
             $table->date('sale_price_start_date')->default('1899-01-01');
             $table->date('sale_price_end_date')->default('1899-01-01');
             $table->decimal('quantity')->default(0);

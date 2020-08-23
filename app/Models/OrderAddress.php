@@ -28,7 +28,8 @@ class OrderAddress extends Model
         'region',
     ];
 
-    public function order() {
+    public function order()
+    {
         return $this->hasOne(Order::class);
     }
 }

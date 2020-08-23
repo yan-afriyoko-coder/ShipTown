@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models;
-;
 
 use DateTime;
 use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;

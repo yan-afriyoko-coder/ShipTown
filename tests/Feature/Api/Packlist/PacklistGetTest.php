@@ -14,7 +14,7 @@ class PacklistGetTest extends TestCase
     /**
      * @return void
      */
-    public function test_if_required_fields_are_returned()
+    public function testIfRequiredFieldsAreReturned()
     {
         Passport::actingAs(
             factory(User::class)->create()
@@ -32,13 +32,12 @@ class PacklistGetTest extends TestCase
             ],
             "total",
         ]);
-
     }
 
     /**
      * @return void
      */
-    public function test_basic_get()
+    public function testBasicGet()
     {
         Passport::actingAs(
             factory(User::class)->create()
@@ -52,7 +51,7 @@ class PacklistGetTest extends TestCase
     /**
      * @return void
      */
-    public function test_if_unauthorized_if_not_logged_in()
+    public function testIfUnauthorizedIfNotLoggedIn()
     {
         $response = $this->get('api/packlist');
 

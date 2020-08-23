@@ -14,7 +14,7 @@ $factory->define(Order::class, function (Faker $faker) {
 
     $order_placed_at = $faker->dateTimeBetween('-1 year');
 
-    if($status_code !== 'processing') {
+    if ($status_code !== 'processing') {
         $order_closed_at = $faker->dateTimeBetween($order_placed_at);
     }
 
@@ -25,5 +25,4 @@ $factory->define(Order::class, function (Faker $faker) {
         'order_closed_at' => $order_closed_at,
         'status_code' => $status_code,
     ];
-
 });

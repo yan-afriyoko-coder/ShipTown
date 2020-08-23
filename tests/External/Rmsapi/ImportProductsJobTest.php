@@ -20,7 +20,7 @@ class ImportProductsJobTest extends TestCase
      * @return void
      * @throws \Exception
      */
-    public function test_if_job_runs()
+    public function testIfJobRuns()
     {
         Bus::fake();
         Event::fake();
@@ -37,7 +37,5 @@ class ImportProductsJobTest extends TestCase
 
         $this->assertTrue(RmsapiProductImport::query()->exists(), 'No imports have been made');
         Bus::assertDispatched(ProcessImportedProductsJob::class);
-
     }
-
 }

@@ -23,12 +23,12 @@ class PublishSnsNotifications
      */
     public function subscribe($events)
     {
-        $events->listen('eloquent.created: App\Models\Order','App\Listeners\PublishSnsNotifications@orderCreated');
-        $events->listen('eloquent.updated: App\Models\Order','App\Listeners\PublishSnsNotifications@orderUpdated');
+        $events->listen('eloquent.created: App\Models\Order', 'App\Listeners\PublishSnsNotifications@orderCreated');
+        $events->listen('eloquent.updated: App\Models\Order', 'App\Listeners\PublishSnsNotifications@orderUpdated');
 
         //products
-        $events->listen('eloquent.created: App\Models\Product','App\Listeners\PublishSnsNotifications@productCreated');
-        $events->listen('eloquent.updated: App\Models\Product','App\Listeners\PublishSnsNotifications@productUpdated');
+        $events->listen('eloquent.created: App\Models\Product', 'App\Listeners\PublishSnsNotifications@productCreated');
+        $events->listen('eloquent.updated: App\Models\Product', 'App\Listeners\PublishSnsNotifications@productUpdated');
     }
 
     /**
@@ -52,7 +52,7 @@ class PublishSnsNotifications
      */
     public function productCreated(Product $product)
     {
-        $this->publishMessageArray($product->toArray(),'products_events');
+        $this->publishMessageArray($product->toArray(), 'products_events');
     }
 
     /**
@@ -60,7 +60,7 @@ class PublishSnsNotifications
      */
     public function productUpdated(Product $product)
     {
-        $this->publishMessageArray($product->toArray(),'products_events');
+        $this->publishMessageArray($product->toArray(), 'products_events');
     }
 
     /**
@@ -73,5 +73,4 @@ class PublishSnsNotifications
 
         $snsTopic->publish(json_encode($data));
     }
-
 }

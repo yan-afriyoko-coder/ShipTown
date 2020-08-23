@@ -79,6 +79,8 @@ class Apt extends BaseWidget
 
     private function selectedStatuses()
     {
-        return array_filter($this->config, function ($isSelected) { return $isSelected === true; });
+        return array_filter($this->config, function ($isSelected) {
+            return $isSelected === true;
+        });
     }
 }

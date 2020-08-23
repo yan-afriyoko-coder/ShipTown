@@ -13,7 +13,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 
 class ProcessImportedProductsJobTest extends TestCase
 {
-    public function test_if_imports_aliases()
+    public function testIfImportsAliases()
     {
         Event::fake();
 
@@ -33,7 +33,7 @@ class ProcessImportedProductsJobTest extends TestCase
         $this->assertTrue(ProductAlias::query()->exists(), 'Product aliases were not imported');
     }
 
-    public function test_if_processes_correctly()
+    public function testIfProcessesCorrectly()
     {
         Event::fake();
 
@@ -56,21 +56,20 @@ class ProcessImportedProductsJobTest extends TestCase
         $this->assertNotEmpty($product, 'Product does not exists');
 
         $exists = RmsapiProductImport::query()->whereNull('when_processed')->exists();
-        $this->assertFalse($exists,'when_processed is not updated');
+        $this->assertFalse($exists, 'when_processed is not updated');
 
         $exists = RmsapiProductImport::query()->whereNull('sku')->exists();
-        $this->assertFalse($exists,'sku column is not populated');
+        $this->assertFalse($exists, 'sku column is not populated');
 
         $exists = RmsapiProductImport::query()->whereNull('product_id')->exists();
-        $this->assertFalse($exists,'product_id column is not populated');
+        $this->assertFalse($exists, 'product_id column is not populated');
 
         $wasInventoryUpdated = Inventory::query()
-            ->where('product_id','=', $product->id)
-            ->where('quantity','=', $importData->raw_import['quantity_on_hand'])
-            ->where('quantity_reserved','=', $importData->raw_import['quantity_committed'])
+            ->where('product_id', '=', $product->id)
+            ->where('quantity', '=', $importData->raw_import['quantity_on_hand'])
+            ->where('quantity_reserved', '=', $importData->raw_import['quantity_committed'])
             ->exists();
 
         $this->assertTrue($wasInventoryUpdated, 'Inventory not updated correctly');
-
     }
 }

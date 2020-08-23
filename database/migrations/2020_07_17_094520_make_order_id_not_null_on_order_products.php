@@ -14,7 +14,7 @@ class MakeOrderIdNotNullOnOrderProducts extends Migration
     public function up()
     {
         Schema::table('order_products', function (Blueprint $table) {
-          $table->bigInteger('order_id')
+            $table->bigInteger('order_id')
               ->unsigned()
               ->nullable(false)
               ->change();

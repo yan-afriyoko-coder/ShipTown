@@ -16,7 +16,6 @@ class AddUniqueKeyToProductsTable extends Migration
         Schema::table('products', function (Blueprint $table) {
             $table->string('sku')->unique()->change();
         });
-
     }
 
     /**

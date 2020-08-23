@@ -36,7 +36,8 @@ class Picklist extends Model
         'is_picked'
     ];
 
-    public static function addPick($params) {
+    public static function addPick($params)
+    {
         return self::query()->create($params);
     }
 

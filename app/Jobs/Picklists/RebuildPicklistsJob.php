@@ -34,7 +34,7 @@ class RebuildPicklistsJob implements ShouldQueue
     {
         // delete all picklists
         Picklist::query()
-            ->where('quantity_picked','=',0)
+            ->where('quantity_picked', '=', 0)
             ->delete();
 
         $activeOrders = collect(
@@ -62,9 +62,6 @@ class RebuildPicklistsJob implements ShouldQueue
                     'quantity_picked' =>    0,
                 ]);
             });
-
         });
-
-
     }
 }

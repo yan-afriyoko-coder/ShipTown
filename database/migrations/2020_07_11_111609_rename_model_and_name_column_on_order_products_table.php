@@ -14,8 +14,8 @@ class RenameModelAndNameColumnOnOrderProductsTable extends Migration
     public function up()
     {
         Schema::table('order_products', function (Blueprint $table) {
-           $table->renameColumn('model', 'sku_ordered');
-           $table->renameColumn('name', 'name_ordered');
+            $table->renameColumn('model', 'sku_ordered');
+            $table->renameColumn('name', 'name_ordered');
         });
     }
 
@@ -27,7 +27,7 @@ class RenameModelAndNameColumnOnOrderProductsTable extends Migration
     public function down()
     {
         Schema::table('order_products', function (Blueprint $table) {
-            $table->renameColumn('sku_ordered','model');
+            $table->renameColumn('sku_ordered', 'model');
             $table->renameColumn('name_ordered', 'name');
         });
     }

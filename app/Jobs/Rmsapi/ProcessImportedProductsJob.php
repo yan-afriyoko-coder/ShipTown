@@ -81,7 +81,7 @@ class ProcessImportedProductsJob implements ShouldQueue
      */
     private function importAliases(RmsapiProductImport $importedProduct, Product $product): void
     {
-        if ( ! Arr::has($importedProduct->raw_import, 'aliases')) {
+        if (! Arr::has($importedProduct->raw_import, 'aliases')) {
             return;
         }
 
@@ -91,7 +91,6 @@ class ProcessImportedProductsJob implements ShouldQueue
                 array('product_id'  => $product->id)
             );
         }
-
     }
 
     /**
@@ -108,7 +107,7 @@ class ProcessImportedProductsJob implements ShouldQueue
         ], [
             'quantity' => $importedProduct->raw_import['quantity_on_hand'],
             'quantity_reserved' => $importedProduct->raw_import['quantity_committed'],
-            'shelve_location' => Arr::has($importedProduct->raw_import, 'rmsmobile_shelve_location') ? $importedProduct->raw_import['rmsmobile_shelve_location'] : '',
+            'shelve_location' => Arr::get($importedProduct->raw_import, 'rmsmobile_shelve_location'),
         ]);
     }
 }

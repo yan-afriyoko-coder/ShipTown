@@ -17,7 +17,7 @@ class OrderStatusChangedEventTest extends TestCase
      *
      * @return void
      */
-    public function test_if_event_is_dispatched_when_status_changed()
+    public function testIfEventIsDispatchedWhenStatusChanged()
     {
         // prepare
         Event::fake();

@@ -75,5 +75,4 @@ class RequestResponse
     {
         return $this->asArray()["data"];
     }
-
 }

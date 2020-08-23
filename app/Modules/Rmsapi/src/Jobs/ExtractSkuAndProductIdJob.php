@@ -37,10 +37,9 @@ class ExtractSkuAndProductIdJob implements ShouldQueue
             ->limit(200)
             ->get();
 
-        foreach ($productImports as $importedProduct ) {
-
+        foreach ($productImports as $importedProduct) {
             $product = Product::query()
-                ->where('sku','=', $importedProduct['raw_import']['item_code'])
+                ->where('sku', '=', $importedProduct['raw_import']['item_code'])
                 ->first();
 
             $importedProduct['sku'] = $importedProduct['raw_import']['item_code'];
@@ -51,9 +50,8 @@ class ExtractSkuAndProductIdJob implements ShouldQueue
 
         // using recurrence to dispatch next batch
         // if we processed some records in this batch, there might be more
-        if(count($productImports) > 0) {
+        if (count($productImports) > 0) {
             self::dispatch();
         };
-
     }
 }

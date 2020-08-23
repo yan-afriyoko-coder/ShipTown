@@ -24,7 +24,8 @@ class TestPrint extends Command
      *
      * @var string
      */
-    protected $description = 'Make a test print using the default user\'s (user ID = 1) preferred printer. Setup printers via the UI before using this command.';
+    protected $description = 'Make a test print using the default user\'s (user ID = 1) preferred printer. 
+        Setup printers via the UI before using this command.';
 
     /**
      * Create a new command instance.

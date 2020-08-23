@@ -16,11 +16,11 @@ class RecalculateOrderProductLineCountJobTest extends TestCase
      *
      * @return void
      */
-    public function test_if_updates_correctly()
+    public function testIfUpdatesCorrectly()
     {
         $order = factory(Order::class)->create();
 
-        $orderProductsCount = rand(1,5);
+        $orderProductsCount = rand(1, 5);
 
         $order->orderProducts()->saveMany(
             factory(OrderProduct::class, $orderProductsCount)->make()

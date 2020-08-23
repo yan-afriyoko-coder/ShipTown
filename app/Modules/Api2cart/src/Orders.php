@@ -3,7 +3,6 @@
 
 namespace App\Modules\Api2cart\src;
 
-
 use Exception;
 use Illuminate\Support\Facades\Log;
 use function Psy\debug;
@@ -24,8 +23,8 @@ class Orders extends Entity
     {
         $response = Client::GET($store_key, 'order.list.json', $params);
 
-        if($response->isSuccess()) {
-            logger('Fetched orders',[
+        if ($response->isSuccess()) {
+            logger('Fetched orders', [
                 'source' => 'API2CART',
                 'count' => $response->getResult()['orders_count'],
             ]);

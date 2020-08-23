@@ -18,11 +18,9 @@ class RunExtractSkuProductIdJob extends Migration
         if (RmsapiProductImport::query()
             ->whereNotNull('when_processed')
             ->whereNull('sku')
-            ->exists())
-        {
+            ->exists()) {
             ExtractSkuAndProductIdJob::dispatch();
         };
-
     }
 
     /**

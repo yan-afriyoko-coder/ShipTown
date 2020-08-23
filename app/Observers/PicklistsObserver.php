@@ -29,11 +29,10 @@ class PicklistsObserver
      */
     public function updated(Picklist $picklist)
     {
-        if( ! Picklist::query()
+        if (! Picklist::query()
             ->where(['order_id' => $picklist->order_id])
             ->whereNull('picked_at')
-            ->exists())
-        {
+            ->exists()) {
             Order::query()->where(['id' => $picklist->order_id])->update(['is_picked' => true]);
         }
 

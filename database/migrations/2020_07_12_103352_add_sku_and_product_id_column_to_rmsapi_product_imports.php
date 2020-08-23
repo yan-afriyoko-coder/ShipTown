@@ -22,7 +22,6 @@ class AddSkuAndProductIdColumnToRmsapiProductImports extends Migration
             $table->string('sku')
                 ->after('product_id')
                 ->nullable(true);
-
         });
     }
 

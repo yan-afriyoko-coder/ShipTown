@@ -3,7 +3,6 @@
 
 namespace App\Services;
 
-
 use App\Events\OrderCreatedEvent;
 use App\Events\OrderStatusChangedEvent;
 use App\Models\Order;
@@ -45,7 +44,6 @@ class OrderService
         $order->orderProducts()->delete();
 
         foreach ($attributes['order_products'] as $rawOrderProduct) {
-
             $orderProduct = OrderProduct::onlyTrashed()
                 ->where([
                     'order_id' => $order->id,
@@ -55,7 +53,7 @@ class OrderService
                 ])
                 ->first();
 
-            if($orderProduct) {
+            if ($orderProduct) {
                 $orderProduct->restore();
                 continue;
             }
@@ -75,7 +73,6 @@ class OrderService
             $orderProduct->product_id = $product ? $product->getKey() : null;
 
             $order->orderProducts()->save($orderProduct);
-
         }
 
         OrderCreatedEvent::dispatch($order);

@@ -17,28 +17,23 @@ class RefillProductsCountColumn extends Migration
         \Illuminate\Support\Facades\Event::fake();
 
         \App\Models\Order::query()
-            ->where('products_count','=',0)
+            ->where('products_count', '=', 0)
             ->chunk(500, function ($orders) {
 
-            foreach($orders as $order) {
+                foreach ($orders as $order) {
+                    $order['products_count'] = 0;
 
-                $order['products_count'] = 0;
-
-                if (! empty($order['raw_import'])) {
-                    if (Arr::has($order['raw_import'], 'order_products')) {
-
-                        foreach ($order['raw_import']['order_products'] as $product) {
-                            $order['products_count'] += $product['quantity'];
+                    if (! empty($order['raw_import'])) {
+                        if (Arr::has($order['raw_import'], 'order_products')) {
+                            foreach ($order['raw_import']['order_products'] as $product) {
+                                $order['products_count'] += $product['quantity'];
+                            }
                         }
-
                     }
-                }
 
-                $order->save();
-
-            };
-
-        });
+                    $order->save();
+                };
+            });
     }
 
     /**

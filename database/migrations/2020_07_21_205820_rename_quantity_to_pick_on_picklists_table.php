@@ -14,7 +14,7 @@ class RenameQuantityToPickOnPicklistsTable extends Migration
     public function up()
     {
         Schema::table('picklists', function (Blueprint $table) {
-            $table->renameColumn('quantity_to_pick','quantity_requested');
+            $table->renameColumn('quantity_to_pick', 'quantity_requested');
         });
     }
 

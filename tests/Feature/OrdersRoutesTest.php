@@ -14,7 +14,7 @@ class OrdersRoutesTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_is_picked_filter_false()
+    public function testIsPickedFilterFalse()
     {
         Order::query()->delete();
 
@@ -41,7 +41,7 @@ class OrdersRoutesTest extends TestCase
         $this->assertEquals(0, $response->json('total'));
     }
 
-    public function test_is_picked_filter_true()
+    public function testIsPickedFilterTrue()
     {
         Order::query()->delete();
 
@@ -68,8 +68,8 @@ class OrdersRoutesTest extends TestCase
         $this->assertEquals(1, $response->json('total'));
     }
 
-    public function test_orders_get_route() {
-
+    public function testOrdersGetRoute()
+    {
         Event::fake();
 
         Passport::actingAs(
@@ -78,11 +78,10 @@ class OrdersRoutesTest extends TestCase
 
         $this->json('GET', 'api/orders')
             ->assertStatus(200);
-
     }
 
-    public function test_orders_create_and_delete_routes_for_authenticated_user () {
-
+    public function testOrdersCreateAndDeleteRoutesForAuthenticatedUser()
+    {
         Event::fake();
 
         $data = [
@@ -119,11 +118,10 @@ class OrdersRoutesTest extends TestCase
         $this->assertDatabaseMissing('orders', [
             'order_number' => $data['order_number']
         ]);
-
     }
 
-    public function test_orders_route_for_unauthenticated_user () {
-
+    public function testOrdersRouteForUnauthenticatedUser()
+    {
         $data = [
             'orderID'      => '001241',
             "products" => [
@@ -143,11 +141,10 @@ class OrdersRoutesTest extends TestCase
 
         $this->json('POST', 'api/orders', [$data])
             ->assertStatus(401);
-
     }
 
-    public function test_if_missing_order_number_is_not_allowed() {
-
+    public function testIfMissingOrderNumberIsNotAllowed()
+    {
         $data = [
             //'order_number'      => '001241',
             "products" => [
@@ -172,10 +169,10 @@ class OrdersRoutesTest extends TestCase
 
         $this->json('POST', 'api/orders', $data)
             ->assertStatus(422);
-
     }
 
-    public function test_if_missing_products_section_is_not_allowed() {
+    public function testIfMissingProductsSectionIsNotAllowed()
+    {
 
         $data = [
             'order_number'      => '001241',
@@ -191,8 +188,8 @@ class OrdersRoutesTest extends TestCase
             ->assertJsonValidationErrors(['products']);
     }
 
-    public function test_correct_products_sections() {
-
+    public function testCorrectProductsSections()
+    {
         $data = [
             'order_number'      => '001241',
             "products" => [
@@ -239,7 +236,7 @@ class OrdersRoutesTest extends TestCase
 //
 //    }
 
-    public function test_if_quantities_are_released_when_order_deleted()
+    public function testIfQuantitiesAreReleasedWhenOrderDeleted()
     {
         Event::fake();
 
@@ -267,5 +264,4 @@ class OrdersRoutesTest extends TestCase
 
         $this->assertEquals($product_after->quantity_reserved, $product_before->quantity_reserved);
     }
-
 }

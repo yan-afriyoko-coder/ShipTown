@@ -65,7 +65,6 @@ class Api2cartOrderImports extends Model
         $result = [];
 
         foreach ($this->raw_import['order_products'] as $rawOrderProduct) {
-
             $result[] = [
 //                'sku'               => null,
                 'sku_ordered'       => $rawOrderProduct['model'],
@@ -87,7 +86,7 @@ class Api2cartOrderImports extends Model
     {
         $statuses = Collection::make($order['status']['history']);
 
-        if($chronological) {
+        if ($chronological) {
             $statuses = $statuses->sort(function ($a, $b) {
                 $a_time = Carbon::make($a['modified_time']['value']);
                 $b_time = Carbon::make($b['modified_time']['value']);
@@ -97,5 +96,4 @@ class Api2cartOrderImports extends Model
 
         return $statuses;
     }
-
 }

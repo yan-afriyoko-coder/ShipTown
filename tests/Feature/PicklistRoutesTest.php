@@ -20,7 +20,7 @@ class PicklistRoutesTest extends TestCase
      *
      * @return void
      */
-    public function test_get_route()
+    public function testGetRoute()
     {
         Event::fake();
 
@@ -61,10 +61,9 @@ class PicklistRoutesTest extends TestCase
             ],
             "total",
         ]);
-
     }
 
-    public function test_if_quantity_picked_is_deducted_from_quantity_to_pick()
+    public function testIfQuantityPickedIsDeductedFromQuantityToPick()
     {
         Event::fake();
 
@@ -88,6 +87,5 @@ class PicklistRoutesTest extends TestCase
             Picklist::query()->whereRaw('quantity_requested <> quantity_picked')
                 ->exists()
         );
-
     }
 }

@@ -26,11 +26,10 @@ class PacklistsObserver
      */
     public function updated(Packlist $packlist)
     {
-        if( ! Packlist::query()
+        if (! Packlist::query()
             ->where(['order_id' => $packlist->order_id])
             ->whereNull('packed_at')
-            ->exists())
-        {
+            ->exists()) {
             Order::query()->where(['id' => $packlist->order_id])->update(['packed_at' => now()]);
         }
     }

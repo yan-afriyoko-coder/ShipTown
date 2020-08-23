@@ -15,7 +15,7 @@ class DelereOrderAsJsonColumnFromOrdersTable extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->dropColumn('order_as_json');
-            $table->renameColumn('original_json','raw_import');
+            $table->renameColumn('original_json', 'raw_import');
         });
     }
 

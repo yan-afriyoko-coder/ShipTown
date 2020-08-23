@@ -40,14 +40,12 @@ class OrdersController extends Controller
     {
         try {
             $order = Order::query()->where('order_number', $order_number)->firstOrFail();
-        }
-        catch (ModelNotFoundException $e)
-        {
-            return $this->respond_NotFound();
+        } catch (ModelNotFoundException $e) {
+            return $this->respondNotFound();
         }
 
-       $order->delete();
+        $order->delete();
 
-       return $this->respond_OK_200();
+        return $this->respondOK200();
     }
 }

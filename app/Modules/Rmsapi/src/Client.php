@@ -18,7 +18,7 @@ class Client
      * @param array $query
      * @return RequestResponse
      */
-    static function GET(RmsapiConnection $connection, string $uri, array $query = [])
+    public static function GET(RmsapiConnection $connection, string $uri, array $query = [])
     {
         $response = new RequestResponse(
             self::getGuzzleClient($connection)->get($uri, ['query' => $query])
@@ -42,7 +42,7 @@ class Client
      * @param array $data
      * @return RequestResponse
      */
-    static function POST(RmsapiConnection $connection, string $uri, array $data)
+    public static function POST(RmsapiConnection $connection, string $uri, array $data)
     {
         $response = new RequestResponse(
             self::getGuzzleClient($connection)->post($uri, [
@@ -68,7 +68,7 @@ class Client
      * @param array $query
      * @return RequestResponse
      */
-    static function DELETE(RmsapiConnection $connection, string $uri, array $query)
+    public static function DELETE(RmsapiConnection $connection, string $uri, array $query)
     {
         $response =  self::getGuzzleClient($connection)->delete($uri, ['query' => $query]);
 
@@ -79,7 +79,7 @@ class Client
      * @param RmsapiConnection $connection
      * @return GuzzleClient
      */
-    static function getGuzzleClient(RmsapiConnection $connection)
+    public static function getGuzzleClient(RmsapiConnection $connection)
     {
         return new GuzzleClient([
             'base_uri' => $connection->url,
@@ -91,5 +91,4 @@ class Client
             ]
         ]);
     }
-
 }

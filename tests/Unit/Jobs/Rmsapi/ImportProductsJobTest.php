@@ -16,7 +16,7 @@ class ImportProductsJobTest extends TestCase
      * @return void
      * @throws \Exception
      */
-    public function test_batch_saving()
+    public function testBatchSaving()
     {
 
         // cleanup data
@@ -25,7 +25,7 @@ class ImportProductsJobTest extends TestCase
 
         // prepare defaults
         $rmsapiConnection = factory(RmsapiConnection::class)->create();
-        $productCount = random_int(10,100);
+        $productCount = random_int(10, 100);
         $products = factory(RmsapiProductImport::class, $productCount)->make();
 
         $productsCollection = collect($products)
@@ -54,6 +54,5 @@ class ImportProductsJobTest extends TestCase
             $productsCollection->last()['db_change_stamp'],
             'products_last_timestamp not updated correctly'
         );
-
     }
 }

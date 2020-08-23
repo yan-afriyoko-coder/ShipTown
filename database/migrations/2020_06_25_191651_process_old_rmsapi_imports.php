@@ -15,7 +15,7 @@ class ProcessOldRmsapiImports extends Migration
     {
         $batches = \App\Models\RmsapiProductImport::query()
             ->whereNull('when_processed')
-            ->whereDate('created_at', '<' , \Carbon\Carbon::today()->subDays(7))
+            ->whereDate('created_at', '<', \Carbon\Carbon::today()->subDays(7))
             ->distinct()
             ->get('batch_uuid');
 

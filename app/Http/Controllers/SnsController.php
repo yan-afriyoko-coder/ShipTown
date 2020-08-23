@@ -40,7 +40,6 @@ class SnsController extends Controller
             $this->awsSnsClient->createTopic([
                 'Name' => $this->getFullTopicName()
             ]);
-
         } catch (AwsException $e) {
             $this->lastException = $e;
             Log::critical("Could not create SNS topic", ["code" => $e->getStatusCode(), "message" => $e->getMessage()]);
@@ -54,7 +53,8 @@ class SnsController extends Controller
      * @param string $subscription_url
      * @return bool
      */
-    public function subscribeToTopic(string $subscription_url) {
+    public function subscribeToTopic(string $subscription_url)
+    {
         try {
             $this->awsSnsClient->subscribe([
                 'Protocol' => 'https',
@@ -62,9 +62,11 @@ class SnsController extends Controller
                 'ReturnSubscriptionArn' => true,
                 'TopicArn' => $this->getTopicArn(),
             ]);
-
         } catch (AwsException $e) {
-            Log::critical("Could not subscribe to SNS topic", ["code" => $e->getStatusCode(), "message" => $e->getMessage()]);
+            Log::critical(
+                "Could not subscribe to SNS topic",
+                ["code" => $e->getStatusCode(), "message" => $e->getMessage()]
+            );
             return false;
         }
 
@@ -75,9 +77,10 @@ class SnsController extends Controller
      * @param string $message
      * @return bool
      */
-    function publish(string $message){
+    public function publish(string $message)
+    {
 
-        if(is_null($this->awsSnsClient)) {
+        if (is_null($this->awsSnsClient)) {
             return false;
         }
 
@@ -89,7 +92,6 @@ class SnsController extends Controller
         logger("Publishing SNS message", $notification);
 
         try {
-
             $result = $this->awsSnsClient->publish($notification);
 
             logger("SNS message published", [
@@ -99,11 +101,8 @@ class SnsController extends Controller
             ]);
 
             return true;
-
         } catch (AwsException $e) {
-
-            switch ($e->getStatusCode())
-            {
+            switch ($e->getStatusCode()) {
                 case 404:
                     $this->createTopic();
                     $this->publish($message);
@@ -115,29 +114,25 @@ class SnsController extends Controller
                         "message" => $notification
                     ]);
             }
-
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error("Could not publish SNS message", [
                 "code" => $e->getCode(),
                 "return_message" => $e->getMessage(),
                 "message" => $notification
             ]);
         }
-
-
     }
 
     /**
      * @return bool
      */
-    public function deleteTopic() {
+    public function deleteTopic()
+    {
 
         try {
             $this->awsSnsClient->deleteTopic([
                 'TopicArn' => $this->getTopicArn()
             ]);
-
         } catch (AwsException $e) {
             Log::critical("Could not delete SNS topic", ["code" => $e->getStatusCode(), "message" => $e->getMessage()]);
             return false;
@@ -163,7 +158,7 @@ class SnsController extends Controller
      */
     private function getTopicArn(): string
     {
-        return implode(":",[
+        return implode(":", [
             "arn",
             "aws",
             "sns",

@@ -12,8 +12,8 @@ $factory->define(RmsapiProductImport::class, function (Faker $faker) {
 
     $connection = factory(RmsapiConnection::class)->create();
 
-    $quantity_on_hand = random_int(0,1000);
-    $quantity_committed = random_int(0,$quantity_on_hand);
+    $quantity_on_hand = random_int(0, 1000);
+    $quantity_committed = random_int(0, $quantity_on_hand);
     $quantity_available = $quantity_on_hand - $quantity_committed;
 
     return [
@@ -21,7 +21,7 @@ $factory->define(RmsapiProductImport::class, function (Faker $faker) {
         'raw_import' => json_decode('{
            "id":1,
            "cost":110.34,
-           "price":'.(random_int(1,100000) / 100).',
+           "price":'.(random_int(1, 100000) / 100).',
            "active":1,
            "item_id":1,
            "price_a":0,
@@ -31,7 +31,7 @@ $factory->define(RmsapiProductImport::class, function (Faker $faker) {
            "sale_price":0,
            "category_id":9,
            "description":"R/C Glider",
-           "is_web_item":'.random_int(0,1).',
+           "is_web_item":'.random_int(0, 1).',
            "supplier_id":2,
            "date_created":"2003-06-03 17:17:23",
            "department_id":5,
@@ -39,7 +39,7 @@ $factory->define(RmsapiProductImport::class, function (Faker $faker) {
            "restock_level":0,
            "sale_end_date":null,
            "food_stampable":0,
-           "db_change_stamp":'.random_int(1000,100000).',
+           "db_change_stamp":'.random_int(1000, 100000).',
            "sale_start_date":null,
            "quantity_on_hand":'.$quantity_on_hand.',
            "quantity_on_order":0,
@@ -49,7 +49,7 @@ $factory->define(RmsapiProductImport::class, function (Faker $faker) {
            "quantity_available":'.$quantity_available.',
            "quantity_committed":'.$quantity_committed.',
            "quantity_discount_id":0,
-           "rmsmobile_shelve_location":"'.Str::upper($faker->randomLetter).$faker->numberBetween(0,9).'",
+           "rmsmobile_shelve_location":"'.Str::upper($faker->randomLetter).$faker->numberBetween(0, 9).'",
            "aliases": [
                 {
                     "id": 1,
