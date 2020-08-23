@@ -31,6 +31,9 @@
                                 <a @click.prevent="onEditClick(user.id)">
                                     <font-awesome-icon icon="user-edit"></font-awesome-icon>
                                 </a>
+                                <a @click.prevent="onDeleteClick(user.id)">
+                                    <font-awesome-icon icon="user-minus"></font-awesome-icon>
+                                </a>
                             </td>
                         </tr>
                     </tbody>
@@ -52,6 +55,8 @@
 </template>
 
 <script>
+import { find } from 'lodash';
+
 import Invite from './Invite';
 import Edit from './Edit';
 
@@ -99,6 +104,23 @@ export default {
         onEditClick(id) {
             this.selectedId = id;
             this.$refs.editModal.show();
+        },
+
+        onDeleteClick(id) {
+            this.$bvModal.msgBoxConfirm('Deactivate this user?')
+                .then(value => {
+                    if (value === true) {
+                        axios.delete(`/api/users/${id}`).then(() => {
+                            this.$snotify.success('User deactivated.');
+                            let index = find(this.users, ['id', id]);
+                            
+                            this.users = this.users.splice(index, 1);
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         }
     }
 }
