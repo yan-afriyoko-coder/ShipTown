@@ -39,12 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::view('/packlist', 'packlist')->name('packlist');
 
     Route::get('pdf/orders/{order_number}/{template}'      , 'PdfOrderController@show');
-
-    Route::group(['middleware' => ['role:admin']], function() {
-        Route::view('/users', 'users')->name('users');
-        Route::view('/settings', 'settings')->name('settings');
-    });
-
+    Route::view('/settings', 'settings')->name('settings');    
 
     // below everything is hidden from top navigation menu but still available as direct link
     Route::view('/missing', 'missing')->name('missing');
@@ -55,6 +50,9 @@ Route::middleware('auth')->group(function () {
         return 'Maintenance jobs dispatched';
     });
 
+    Route::group(['middleware' => ['role:admin']], function() {
+        Route::view('/users', 'users')->name('users');
+    });
 });
 
 
