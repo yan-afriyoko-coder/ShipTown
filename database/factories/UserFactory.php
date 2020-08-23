@@ -25,3 +25,10 @@ $factory->define(User::class, function (Faker $faker) {
         'remember_token' => Str::random(10),
     ];
 });
+
+// Add a dummy state so we can assign the role on a callback
+$factory->state(User::class, 'admin', []);
+
+$factory->afterCreatingState(App\User::class, 'admin', function ($user, $faker) {
+    $user->assignRole('admin');
+});
