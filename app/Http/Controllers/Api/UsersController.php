@@ -40,6 +40,6 @@ class UsersController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return $this->respond_OK_200('ok');
+        return $this->respondOK200('ok');
     }
 }
