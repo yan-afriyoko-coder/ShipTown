@@ -19,6 +19,7 @@ class PicklistController extends Controller
     public function index(Request $request)
     {
         $query = QueryBuilder::for(Picklist::class)
+            ->whereNull('picked_at')
             ->allowedIncludes([
                 'product',
                 'product.aliases',
@@ -35,10 +36,9 @@ class PicklistController extends Controller
             ->allowedSorts([
                 'inventory_source_shelf_location',
                 'picklists.sku_ordered'
-            ])
-            ->whereNull('picked_at');
+            ]);
 
-        $per_page = $request->get('per_page', 30);
+        $per_page = $request->get('per_page', 3);
 
         return $query->paginate($per_page);
     }
