@@ -12,9 +12,9 @@
             </div>
             <div class="col-2">
                 <input ref="currentLocation" class="form-control" placeholder="Scan current shelf location"
-                       v-model="picklistFilters.currentLocation"
+                       v-model="picklistFilters['filter[start_from_shelf]']"
                        @focus="simulateSelectAll"
-                       @keyup.enter="updateUrlAndReloadProducts"/>
+                       @keyup.enter="reloadProducts"/>
             </div>
             <div class="col-1">
                 <a style="cursor:pointer;" data-toggle="modal" data-target="#picklistConfigurationModal"><font-awesome-icon icon="cog"></font-awesome-icon></a>
@@ -58,18 +58,10 @@
     import PicklistItem from './PicklistItem';
     import PicklistConfigurationModal from './ConfigurationModal.vue';
 
-    import VueRouter from 'vue-router';
-
-    Vue.use(VueRouter);
-
-    const Router = new VueRouter({
-        mode: 'history',
-    });
+    import url from "../../mixins/url";
 
     export default {
-        router: Router,
-
-        mixins: [loadingOverlay, beep, quagga],
+        mixins: [loadingOverlay, beep, quagga, url],
 
         components: {
             'picklist-item': PicklistItem,
@@ -77,14 +69,14 @@
         },
 
         data: function() {
-            const $urlParameters = this.$router.currentRoute.query;
             return {
                 picklistFilters: {
+                    'filter[in_stock_only]': this.getUrlFilter('in_stock_only',  true),
+                    'filter[start_from_shelf]': this.getUrlFilter('start_from_shelf',  ''),
+                    'filter[single_line_orders_only]': this.getUrlFilter('single_line_orders_only',  false),
+                    'filter[inventory_source_location_id]': this.getUrlFilter('inventory_source_location_id',  100),
                     include: 'product.aliases,product,order',
-                    single_line_orders_only: this.getValueOrDefault($urlParameters.single_line_orders, false),
-                    currentLocation: this.getValueOrDefault($urlParameters.currentLocation,  ''),
-                    inventory_location_id: this.getValueOrDefault($urlParameters.inventory_location_id,  100),
-                    in_stock_only: this.getValueOrDefault($urlParameters.in_stock_only,  true),
+                    sort: 'inventory_source_shelf_location',
                 },
                 barcode: '',
                 picklist: [],
@@ -95,34 +87,27 @@
         watch: {
             picklistFilters: {
                 handler() {
-                    this.updateUrl();
+                    this.updateUrl(this.picklistFilters);
                 },
                 deep:true
             },
             picklist: {
                 handler() {
                     if ((this.picklist.length === 0) && (!this.isLoading) ){
-                        this.updateUrlAndReloadProducts();
+                        this.reloadProducts();
                     }
                 }
             },
         },
 
         mounted() {
-            this.updateUrlAndReloadProducts();
+            this.updateUrl(this.picklistFilters);
+            this.reloadProducts();
             this.setFocusOnBarcodeInput();
             this.simulateSelectAll();
         },
 
         methods: {
-            updateUrl: function() {
-                history.pushState({},null,'/picklist?'
-                    +'single_line_orders='+this.picklistFilters.single_line_orders_only
-                    +'&currentLocation='+ this.picklistFilters.currentLocation
-                    +'&inventory_location_id='+ this.picklistFilters.inventory_location_id
-                    +'&in_stock_only='+ this.picklistFilters.in_stock_only
-                );
-            },
 
             fetchPicklist: function() {
                 return new Promise((resolve, reject) => {
@@ -153,7 +138,7 @@
 
                 return this.updatePick(pickedItem.id, 0, true)
                     .then( response => {
-                        this.picklistFilters.currentLocation = this.getValueOrDefault(pickedItem.shelve_location, '');
+                        this.picklistFilters['filter[start_from_shelf]'] = this.getValueOrDefault(pickedItem['inventory_source_shelf_location'], '');
                         this.displaySkippedNotification(pickedItem);
                         this.warningBeep();
                     })
@@ -167,10 +152,10 @@
             pickAll(pickedItem) {
                 this.picklist.splice(this.picklist.indexOf(pickedItem), 1);
 
-                return this.updatePick(pickedItem.id, pickedItem.quantity_requested, true)
+                return this.updatePick(pickedItem['id'], pickedItem['quantity_requested'], true)
                     .then( response => {
-                        this.picklistFilters.currentLocation = this.getValueOrDefault(pickedItem['pick_location_inventory_shelve_location'], '');
-                        this.displayPickedNotification(pickedItem, pickedItem.quantity_requested);
+                        this.picklistFilters['filter[start_from_shelf]'] = this.getValueOrDefault(pickedItem['inventory_source_shelf_location'], '');
+                        this.displayPickedNotification(pickedItem, pickedItem['quantity_requested']);
                         this.beep();
                     })
                     .catch( error  => {
@@ -196,7 +181,7 @@
             },
 
             displayPickedNotification: function (pickedItem, quantity) {
-                const msg =  quantity + ' x ' + pickedItem.sku_ordered + ' picked';
+                const msg =  Math.ceil(quantity) + ' x ' + pickedItem['sku_ordered'] + ' picked';
                 this.$snotify.confirm(msg, {
                     timeout: 5000,
                     showProgressBar: false,
@@ -283,13 +268,12 @@
             },
 
             onConfigChange: function(config) {
-                this.updateUrlAndReloadProducts();
+                this.reloadProducts();
                 this.setFocusOnBarcodeInput();
                 this.simulateSelectAll();
             },
 
-            updateUrlAndReloadProducts() {
-                this.updateUrl();
+            reloadProducts() {
                 return this.fetchPicklist();
             },
 
