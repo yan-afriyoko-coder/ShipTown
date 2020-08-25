@@ -1,7 +1,13 @@
 <template>
     <div>
 
-        <filters-modal @btnSaveClicked="onConfigChange" />
+        <filters-modal ref="filtersModal" @btnSaveClicked="onConfigChange">
+            <template v-slot:actions="slotScopes">
+                <button type="button" class="btn btn-info" @click.prevent="handlePrint(slotScopes.filters.order_number)">
+                    Print Label
+                </button>
+            </template>
+        </filters-modal>
 
         <div v-if="order === null && !isLoading" class="row" >
             <div class="col">
@@ -347,6 +353,20 @@
                 return (value === undefined) || (value === null) ? defaultValue : value;
             },
 
+            handlePrint: function(orderNumber) {
+                axios.put(`api/print/order/${orderNumber}/address_label`).then(() => {
+                    this.$snotify.success('Label sent for printing.');
+                    this.$refs.filtersModal.hide();
+                }).catch((error) => {
+                    let errorMsg = 'Error occurred while printing label.';
+
+                    if (error.response.status === 404) {
+                        errorMsg = `Order #${orderNumber} not found.`;
+                    }
+
+                    this.$snotify.error(errorMsg);
+                });
+            }
         },
 
 
