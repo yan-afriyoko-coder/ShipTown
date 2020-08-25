@@ -3,8 +3,8 @@
 
         <filters-modal ref="filtersModal" @btnSaveClicked="onConfigChange">
             <template v-slot:actions="slotScopes">
-                <button type="button" class="btn btn-info" @click.prevent="handlePrint(slotScopes.filters.order_number)">
-                    Print Label
+                <button type="button" class="btn btn-info" @click.prevent="printAddressLabel">
+                    Print Address Label
                 </button>
             </template>
         </filters-modal>
@@ -353,19 +353,23 @@
                 return (value === undefined) || (value === null) ? defaultValue : value;
             },
 
-            handlePrint: function(orderNumber) {
-                axios.put(`api/print/order/${orderNumber}/address_label`).then(() => {
-                    this.$snotify.success('Label sent for printing.');
-                    this.$refs.filtersModal.hide();
-                }).catch((error) => {
-                    let errorMsg = 'Error occurred while printing label.';
+            printAddressLabel: function() {
+                let orderNumber = this.order['order_number'];
 
-                    if (error.response.status === 404) {
-                        errorMsg = `Order #${orderNumber} not found.`;
-                    }
+                this.$refs.filtersModal.hide();
 
-                    this.$snotify.error(errorMsg);
-                });
+                axios.put(`api/print/order/${orderNumber}/address_label`)
+                    .then(() => {
+                        this.$snotify.success('Printing address label');
+                    }).catch((error) => {
+                        let errorMsg = 'Error occurred while sending print job';
+
+                        if (error.response.status === 404) {
+                            errorMsg = `Order #${orderNumber} not found.`;
+                        }
+
+                        this.$snotify.error(errorMsg);
+                    });
             }
         },
 

@@ -68,6 +68,7 @@
 
             handleSubmit() {
                 this.updateUrl(this.filters);
+                this.hide();
                 this.$emit('btnSaveClicked', this.filters);
             },
 
