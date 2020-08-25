@@ -29,6 +29,7 @@
                         </form>
                     </div>
                     <div class="modal-footer">
+                        <slot name="actions" v-bind:filters="filters"></slot>
     <!--                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>-->
                         <button type="button" @click.prevent="handleSubmit" class="btn btn-primary">OK</button>
                     </div>
@@ -67,8 +68,11 @@
 
             handleSubmit() {
                 this.updateUrl(this.filters);
-                $(this.$el).modal('hide');
                 this.$emit('btnSaveClicked', this.filters);
+            },
+
+            hide() {
+                $(this.$el).modal('hide');
             }
         }
     }
