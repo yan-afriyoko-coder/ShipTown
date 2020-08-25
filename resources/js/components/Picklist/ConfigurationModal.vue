@@ -11,15 +11,15 @@
                 <div class="modal-body" style="margin: 0 auto 0;">
                     <form method="POST" @submit.prevent="handleSubmit">
                         <div class="form-group form-check">
-                            <input v-model="picklistFilters.single_line_orders_only" type="checkbox" class="form-check-input" />
+                            <input v-model="picklistFilters['filter[single_line_orders_only]']" type="checkbox" class="form-check-input" />
                             <label class="form-check-label" >Show single line orders only</label>
                         </div>
                         <div class="form-group form-check">
-                            <input v-model="picklistFilters.in_stock_only" type="checkbox" class="form-check-input" />
+                            <input v-model="picklistFilters['filter[in_stock_only]']" type="checkbox" class="form-check-input" />
                             <label class="form-check-label" >In stock only</label>
                         </div>
                         <div class="form-group form-check">
-                            <input v-model="picklistFilters.inventory_location_id" type="number" class="form-check-input" />
+                            <input v-model="picklistFilters['filter[inventory_source_location_id]']" type="number" class="form-check-input" />
                             <label class="form-check-label" >Inventory Location ID</label>
                         </div>
                     </form>
@@ -34,11 +34,22 @@
 </template>
 
 <script>
-
+import url from "../../mixins/url";
 export default {
+
+    mixins: [url],
 
     props: {
         picklistFilters: Object,
+    },
+
+    watch: {
+        picklistFilters: {
+            handler() {
+                // this.updateUrl(this.picklistFilters)
+            },
+            deep: true
+        }
     },
 
     computed: {

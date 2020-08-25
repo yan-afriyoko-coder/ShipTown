@@ -6,6 +6,7 @@ use DateTime;
 use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder;
 use phpDocumentor\Reflection\Types\Boolean;
 
 /**
@@ -35,6 +36,67 @@ class Picklist extends Model
     protected $appends = [
         'is_picked'
     ];
+
+    /**
+     * @param Builder $query
+     * @param int $inventory_location_id
+     * @return Builder
+     */
+    public function scopeInventorySource($query, $inventory_location_id)
+    {
+        $source_inventory = Inventory::query()
+            ->select([
+                'shelve_location as inventory_source_shelf_location',
+                'quantity as inventory_source_quantity',
+                'product_id as inventory_source_product_id',
+            ])
+            ->where(['location_id'=>$inventory_location_id])
+            ->toBase();
+
+        return $query->leftJoinSub($source_inventory, 'inventory_source', function ($join) {
+            $join->on('picklists.product_id', '=', 'inventory_source_product_id');
+        });
+    }
+
+    /**
+     * @param Builder $query
+     * @param boolean $in_stock_only
+     * @return mixed
+     */
+    public function scopeInStockOnly($query, $in_stock_only)
+    {
+        if (!$in_stock_only) {
+            return $query;
+        }
+
+        return $query->where('inventory_source.inventory_source_quantity', '>', 0);
+    }
+
+    /**
+     * @param Builder $query
+     * @param string $currentLocation
+     * @return Builder
+     */
+    public function scopeMinimumShelfLocation($query, $currentLocation)
+    {
+        return $query->where('inventory_source.inventory_source_shelf_location', '>=', $currentLocation);
+    }
+
+    /**
+     * @param Builder $query
+     * @param boolean $value
+     * @return mixed
+     */
+    public function scopeWhereIsSingleLineOrder($query, $value)
+    {
+        if (!$value) {
+            return $query;
+        }
+
+        return $query->whereHas('order', function ($query) {
+            return $query->where('product_line_count', '=', 1);
+        });
+    }
 
     public static function addPick($params)
     {
