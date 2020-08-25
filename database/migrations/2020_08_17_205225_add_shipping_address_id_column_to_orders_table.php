@@ -35,6 +35,7 @@ class AddShippingAddressIdColumnToOrdersTable extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
+            $table->dropForeign(['shipping_address_id']);
             $table->dropColumn('shipping_address_id');
         });
     }
