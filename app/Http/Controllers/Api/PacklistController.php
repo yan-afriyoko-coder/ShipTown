@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\Packlist\StoreRequest;
-use App\Http\Resources\PacklistResource;
-use App\Models\Packlist;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Packlist\StoreRequest;
+use App\Http\Resources\PacklistResource;
+use App\Services\OrderService;
+use App\Services\PacklistService;
+use App\Models\Packlist;
 
 class PacklistController extends Controller
 {
@@ -42,6 +45,12 @@ class PacklistController extends Controller
         );
 
         $packlist->update($attributes);
+
+        if ($packlist->order->isPacked) {
+            // Print address label
+            $pdf = OrderService::getOrderPdf($packlist->order->order_number, 'address_label');
+            $request->user()->newPdfPrintJob('test', $pdf);
+        }
 
         return new PacklistResource($packlist);
     }

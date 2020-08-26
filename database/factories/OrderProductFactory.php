@@ -2,15 +2,16 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Model;
+use App\Models\Product;
+use App\Models\Order;
 use App\Models\OrderProduct;
 use Faker\Generator as Faker;
 
 $factory->define(OrderProduct::class, function (Faker $faker) {
-
-    $product = \App\Models\Product::query()->inRandomOrder()->first();
+    $product = factory(Product::class)->create();
 
     return [
+        'order_id' => factory(Order::class)->create()->id,
         'product_id' => $product->getKey(),
         'sku_ordered' => $product->sku,
         'name_ordered' => $product->name,
