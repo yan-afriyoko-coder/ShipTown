@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Models\Pick;
 use App\Models\PickRequest;
 use App\Services\PicklistService;
@@ -14,6 +15,32 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PicksTest extends TestCase
 {
+    public function testIfSumsUpCorrectly()
+    {
+        OrderProduct::query()->forceDelete();
+        Order::query()->forceDelete();
+        PickRequest::query()->forceDelete();
+        Pick::query()->forceDelete();
+
+        $orders = factory(Order::class, rand(1, 5))
+            ->with('orderProducts', rand(1, 5))
+            ->create(['status_code' => 'processing']);
+
+        foreach ($orders as $order) {
+            $order->update(['status_code' => 'picking']);
+        }
+
+        $this->assertEquals(
+            OrderProduct::query()->sum('quantity_ordered'),
+            PickRequest::query()->sum('quantity_required')
+        );
+
+        $this->assertEquals(
+            PickRequest::query()->sum('quantity_required'),
+            Pick::query()->sum('quantity_required')
+        );
+    }
+
     public function testIfCreatesPicsWhenStatusChange()
     {
         PickRequest::query()->forceDelete();
