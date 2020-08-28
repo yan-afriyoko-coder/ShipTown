@@ -42,18 +42,6 @@
         props: {
             order: Object,
         },
-
-        filters: {
-            numberFormat: (x) => {
-                x = parseInt(x).toString();
-
-                if (x == '0') return '-';
-
-                var pattern = /(-?\d+)(\d{3})/;
-                while (pattern.test(x)) x = x.replace(pattern, "$1 $2");
-                return x;
-            }
-        }
     }
 </script>
 
