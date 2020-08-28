@@ -13,10 +13,10 @@ class PicksTest extends TestCase
      *
      * @return void
      */
-    public function test_get()
+    public function testGetUnauthenticated()
     {
         $response = $this->get('/api/picks');
 
-        $response->assertStatus(200);
+        $response->assertStatus(302);
     }
 }
