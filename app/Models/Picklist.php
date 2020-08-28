@@ -23,7 +23,6 @@ class Picklist extends Model
         'order_id',
         'order_product_id',
         'product_id',
-        'location_id',
         'sku_ordered',
         'name_ordered',
         'quantity_requested',
