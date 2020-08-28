@@ -8,7 +8,12 @@ use Faker\Generator as Faker;
 
 $factory->define(OrderProduct::class, function (Faker $faker) {
 
-    $product = \App\Models\Product::query()->inRandomOrder()->first();
+    $product = \App\Models\Product::query()
+        ->inRandomOrder()
+        ->firstOrCreate(
+            [],
+            factory(\App\Models\Product::class)->make()->getAttributes()
+        );
 
     return [
         'product_id' => $product->getKey(),

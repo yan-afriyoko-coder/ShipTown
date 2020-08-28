@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Events\OrderCreatedEvent;
 use App\Events\OrderStatusChangedEvent;
 use App\Listeners\AddToPicklistOnOrderCreatedEventListener;
+use App\Listeners\OrderStatusChangedEvent\CreatePickRequestsListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -25,6 +26,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         OrderStatusChangedEvent::class => [
             \App\Listeners\OrderStatusChangedListener::class,
+            CreatePickRequestsListener::class,
         ],
     ];
 
