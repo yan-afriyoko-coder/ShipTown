@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::view('/products', 'products')->name('products');
     Route::view('/picklist', 'picklist')->name('picklist');
     Route::view('/packlist', 'packlist')->name('packlist');
+    Route::view('/orders', 'orders')->name('orders');
 
     Route::get('pdf/orders/{order_number}/{template}'      , 'PdfOrderController@show');
     Route::view('/settings', 'settings')->name('settings');    

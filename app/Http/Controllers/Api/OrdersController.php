@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -22,6 +22,10 @@ class OrdersController extends Controller
                 AllowedFilter::scope('is_packed'),
             ])
             ->allowedIncludes('shipping_address');
+
+        if ($request->has('q') && $request->get('q')) {
+            $query->where('order_number', 'like', '%' . $request->get('q') . '%');
+        }
 
         return $query->paginate(10);
     }

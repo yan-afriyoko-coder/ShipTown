@@ -264,4 +264,17 @@ class OrdersRoutesTest extends TestCase
 
         $this->assertEquals($product_after->quantity_reserved, $product_before->quantity_reserved);
     }
+
+    public function testOrdersPage()
+    {
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        $order = factory(Order::class)->create();
+
+        $this->get('/orders')
+            ->assertSee('<orders-table></orders-table>')
+            ->assertOk();
+    }
 }

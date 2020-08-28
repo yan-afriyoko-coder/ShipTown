@@ -97,6 +97,11 @@ Vue.component(
 );
 
 Vue.component(
+    'orders-table',
+    require('./components/Orders/List.vue').default
+);
+
+Vue.component(
     'api2cart-configuration',
     require('./components/Api2CartConfiguration.vue').default
 );
