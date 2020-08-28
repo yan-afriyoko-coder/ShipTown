@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Pick extends Model
@@ -12,4 +13,12 @@ class Pick extends Model
         'name_ordered',
         'quantity_required'
     ];
+
+    public function pick(User $picker)
+    {
+        $this->update([
+            'picker_user_id' => $picker->getKey(),
+            'picked_at' => now()
+        ]);
+    }
 }

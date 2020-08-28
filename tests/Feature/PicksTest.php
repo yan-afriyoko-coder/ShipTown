@@ -9,12 +9,45 @@ use App\Models\PickRequest;
 use App\Services\PicklistService;
 use App\User;
 use Laravel\Passport\Passport;
+use Mockery\Generator\StringManipulation\Pass\Pass;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PicksTest extends TestCase
 {
+    public function testPickModelPickMethod()
+    {
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        PickRequest::query()->forceDelete();
+        Pick::query()->forceDelete();
+
+        $order = factory(Order::class)
+            ->with('orderProducts')
+            ->create(['status_code' => 'processing'])
+            ->update(['status_code' => 'picking']);
+
+        $response = $this->get('/api/picks');
+
+        $this->assertEquals(1, $response->json('total'));
+
+        $pick = $response->json()['data'][0];
+
+        $response = $this->putJson("/api/picks/".$pick['id'], [
+            'quantity_picked' => $pick['quantity_required']
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertTrue(
+            Pick::query()->exists(),
+            'No picks added to picklist'
+        );
+    }
+
     public function testIfSumsUpCorrectly()
     {
         OrderProduct::query()->forceDelete();
