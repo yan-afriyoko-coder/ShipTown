@@ -25,7 +25,6 @@ class PicklistService
             ], [
                 'order_id' => $orderProduct['order_id'],
                 'product_id' => $orderProduct['product_id'],
-                'location_id' => 'WWW',
                 'sku_ordered' => $orderProduct['sku_ordered'],
                 'name_ordered' => $orderProduct['name_ordered'],
                 'quantity_requested' => $orderProduct['quantity_ordered'],
