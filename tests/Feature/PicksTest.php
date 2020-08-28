@@ -14,12 +14,30 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PicksTest extends TestCase
 {
+    public function testIfCreatesPicsWhenStatusChange()
+    {
+        PickRequest::query()->forceDelete();
+        Pick::query()->forceDelete();
+
+        $order = factory(Order::class)
+            ->with('orderProducts')
+            ->create(['status_code' => 'processing']);
+
+        $order->update(['status_code' => 'picking']);
+
+        $this->assertTrue(
+            Pick::query()->exists(),
+            'No picks added to picklist'
+        );
+    }
+
     /**
      *
      */
     public function testIfCreatesPicsRequestsWhenStatusChange()
     {
         PickRequest::query()->forceDelete();
+        Pick::query()->forceDelete();
 
         $order = factory(Order::class)
             ->with('orderProducts')

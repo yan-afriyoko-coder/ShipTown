@@ -8,6 +8,9 @@ use phpseclib\Math\BigInteger;
 
 /**
  * @property BigInteger|null product_id
+ * @property string|null sku_ordered
+ * @property string|null name_ordered
+ * @property float quantity_ordered
  */
 class OrderProduct extends Model
 {
