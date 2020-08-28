@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Events\PickRequestCreatedEvent;
 use App\Models\Pick;
 use App\Models\PickRequest;
 
@@ -15,19 +16,7 @@ class PickRequestObserver
      */
     public function created(PickRequest $pickRequest)
     {
-        $orderProduct = $pickRequest->orderProduct()->first();
-
-        $pick = Pick::firstOrCreate([
-            'product_id' => $orderProduct->product_id,
-            'sku_ordered' => $orderProduct->sku_ordered,
-            'name_ordered' => $orderProduct->name_ordered,
-        ], [
-            'quantity_required' => 0
-        ]);
-
-        $pick->increment('quantity_required', $orderProduct->quantity_ordered);
-
-        $pickRequest->update(['pick_id' => $pick->getKey()]);
+        PickRequestCreatedEvent::dispatch($pickRequest);
     }
 
     /**
