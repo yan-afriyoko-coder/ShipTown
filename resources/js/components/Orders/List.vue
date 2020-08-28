@@ -15,6 +15,38 @@
                 </div>
             </div>
             <template v-else class="row">
+                <div class="row mb-0 ml-1 mr-1">
+                    <div class="col p-0 pl-3">
+                        <div class="row text-left">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <div class="font-weight-bold text-nowrap">Order #</div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="font-weight-bold text-right text-nowrap">Status</div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="font-weight-bold text-right text-nowrap">Date Placed</div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="font-weight-bold text-right text-nowrap">Line Count</div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="font-weight-bold text-right text-nowrap">Total Quantity</div>
+                                    </div>
+                                    <div class="col-1">
+                                        <div class="font-weight-bold text-right text-nowrap">Picked</div>
+                                    </div>
+                                    <div class="col-1">
+                                        <div class="font-weight-bold text-right text-nowrap">Packed</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <template v-for="order in orders">
                     <order-card :order="order"/>
                 </template>
@@ -53,6 +85,7 @@
                     this.showLoading();
                     axios.get('/api/orders', {
                         params: {
+                            per_page: 50,
                             page: page,
                             q: this.query,
                             sort: this.sort,

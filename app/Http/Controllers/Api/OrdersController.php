@@ -27,7 +27,9 @@ class OrdersController extends Controller
             $query->where('order_number', 'like', '%' . $request->get('q') . '%');
         }
 
-        return $query->paginate(10);
+        $per_page = $request->get('per_page', 10);
+
+        return $query->paginate($per_page);
     }
 
     public function store(StoreOrderRequest $request)
