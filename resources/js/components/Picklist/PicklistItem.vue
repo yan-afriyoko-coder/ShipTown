@@ -1,9 +1,11 @@
 <template>
     <div :id="elID" class="swiper-container mb-3">
         <div class="swiper-wrapper">
-
-            <div class="swiper-slide error bg-success"></div>
-
+            <div class="swiper-slide error bg-success text-right">
+                <div class="swipe-action-container swipe-action-container--right">
+                    <div>Pick</div>
+                </div>
+            </div>
             <div class="swiper-slide">
                 <div class="row ml-1 mr-1">
                     <div class="col p-2 pl-3">
@@ -35,9 +37,11 @@
                     </div>
                 </div>
             </div>
-
-            <div class="swiper-slide bg-warning"></div>
-
+            <div class="swiper-slide bg-warning">
+                <div class="swipe-action-container swipe-action-container--left">
+                    <div>Skip</div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
