@@ -21,7 +21,7 @@ class CreatePicksTable extends Migration
             $table->string('name_ordered');
             $table->decimal('quantity_required');
             $table->bigInteger('picker_user_id')->unsigned()->nullable(true);
-            $table->timestamp('picked_at');
+            $table->timestamp('picked_at')->nullable(true);
 
             $table->softDeletes();
 

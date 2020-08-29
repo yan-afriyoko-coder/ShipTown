@@ -6,16 +6,43 @@ use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Pick;
 use App\Models\PickRequest;
-use App\Services\PicklistService;
 use App\User;
 use Laravel\Passport\Passport;
-use Mockery\Generator\StringManipulation\Pass\Pass;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PicksTest extends TestCase
 {
+    public function testIfQuantityPickedSumsUp()
+    {
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        OrderProduct::query()->forceDelete();
+        Order::query()->forceDelete();
+        PickRequest::query()->forceDelete();
+        Pick::query()->forceDelete();
+
+        $order = factory(Order::class)
+            ->with('orderProducts')
+            ->create(['status_code' => 'processing'])
+            ->update(['status_code' => 'picking']);
+
+
+        $pick = Pick::query()->first();
+
+        $response = $this->putJson("/api/picks/".$pick['id'], [
+            'quantity_picked' => $pick['quantity_required']
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertEquals(
+            PickRequest::query()->sum('quantity_picked'),
+            Pick::query()->sum('quantity_required')
+        );
+    }
+
     public function testPickModelPickMethod()
     {
         Passport::actingAs(
@@ -41,11 +68,6 @@ class PicksTest extends TestCase
         ]);
 
         $response->assertStatus(200);
-
-        $this->assertTrue(
-            Pick::query()->exists(),
-            'No picks added to picklist'
-        );
     }
 
     public function testIfSumsUpCorrectly()

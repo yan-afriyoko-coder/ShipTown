@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class PickRequestUpdateRequest extends FormRequest
 {
@@ -24,7 +26,7 @@ class PickRequestUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'quantity_picked' => 'required|numeric'
+            'quantity_picked' => [ 'required', 'numeric'],
         ];
     }
 }

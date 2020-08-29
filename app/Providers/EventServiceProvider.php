@@ -4,10 +4,12 @@ namespace App\Providers;
 
 use App\Events\OrderCreatedEvent;
 use App\Events\OrderStatusChangedEvent;
+use App\Events\PickPickedEvent;
 use App\Events\PickRequestCreatedEvent;
 use App\Listeners\AddToPicklistOnOrderCreatedEventListener;
 use App\Listeners\OrderStatusChangedEvent\CreatePickRequestsListener;
 use App\Listeners\OrderStatusChangedListener;
+use App\Listeners\PickPickedEvent\MarkOrderProductsAsPickedListener;
 use App\Listeners\PickRequestCreatedEvent\AddQuantityToPicklistListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -33,6 +35,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         PickRequestCreatedEvent::class => [
             AddQuantityToPicklistListener::class
+        ],
+        PickPickedEvent::class => [
+            MarkOrderProductsAsPickedListener::class
         ]
     ];
 

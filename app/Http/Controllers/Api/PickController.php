@@ -67,7 +67,11 @@ class PickController extends Controller
      */
     public function update(PickRequestUpdateRequest $request, Pick $pick)
     {
-        return new JsonResource([]);
+        $picker = $request->user();
+
+        $pick->pick($picker);
+
+        return new JsonResource($pick);
     }
 
     /**
