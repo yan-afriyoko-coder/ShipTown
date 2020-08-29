@@ -45,7 +45,7 @@ export default {
                 })
         },
 
-        pickQuantity(pick, quantity) {
+        pickPick(pick, quantity) {
             return axios.put('/api/picks/' + pick['id'], {
                 'quantity_picked': quantity
             });
@@ -57,13 +57,34 @@ export default {
 
         pickAll(pick) {
             this.removeFromPicklist(pick);
-            this.pickQuantity(pick, pick['quantity_required']);
+            this.pickPick(pick, pick['quantity_required'])
+                .then( () => {
+                    this.displayPickedNotification(pick, pick['quantity_required']);
+                });
         },
 
         pickPartial(pick) {
             console.log('pickPartial',pick);
-        }
+        },
 
+        displayPickedNotification: function (pick, quantity) {
+            const msg =  Math.ceil(quantity) + ' x ' + pick['sku_ordered'] + ' picked';
+            this.$snotify.confirm(msg, {
+                timeout: 5000,
+                showProgressBar: false,
+                pauseOnHover: true,
+                icon: false,
+                buttons: [
+                    {
+                        text: 'Undo',
+                        action: (toast) => {
+                            this.$snotify.remove(toast.id);
+                            this.pickPick(pick,0);
+                        }
+                    }
+                ]
+            });
+        },
     },
 }
 </script>
