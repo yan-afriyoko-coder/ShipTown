@@ -21,7 +21,7 @@ class Pick extends Model
         'picked_at'
     ];
 
-    public function pick(User $picker)
+    public function pickBy(User $picker)
     {
         $this->update([
             'picker_user_id' => $picker->getKey(),
