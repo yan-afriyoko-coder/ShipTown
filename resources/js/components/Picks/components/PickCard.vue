@@ -18,7 +18,7 @@
 <!--                                    <div class="text-secondary h5">product: <span class="font-weight-bold"> {{ product_sku }} </span></div>-->
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="row pt-1 mt-1 text-center border-top">
+                                    <div class="row text-center">
                                         <div class="col-6">
                                             <div class=""></div>
 <!--                                            <div class="text-secondary h6 text-left">order: <span class="font-weight-bold"> {{ pick['order']['order_number'] }} </span></div>-->
@@ -27,7 +27,7 @@
                                         </div>
                                         <div class="col-2">
                                             <div>To Pick</div>
-<!--                                            <div class="h3">{{ quantity_requested_integer }}</div>-->
+                                            <div class="h3">{{ Math.ceil(pick['quantity_required']) }}</div>
                                         </div>
                                         <div class="col-4">
                                             <div class="">Shelf</div>
@@ -60,37 +60,47 @@ export default {
 
     props: {
         pick: Object,
+
     },
 
-
-    mounted() {
-
-        const swiper = new Swiper('#' + this.pickCardId, {
-            initialSlide: 1,
-            resistanceRatio: 0,
-            speed: 150
-        });
-
-        const self = this;
-        let pick = this.pick;
-
-        swiper.on('transitionEnd', function () {
-
-            if (this.activeIndex === 0) {
-                self.$emit('swipeRight', pick);
-            } else if (this.activeIndex === 2) {
-                self.$emit('swipeLeft', pick);
-            }
-
-            this.slideTo(1,0,false);
-
-        });
+    data() {
+        return {
+            swiper: null,
+        }
     },
 
     computed: {
         pickCardId() {
             return `pick-card-${this.pick['id']}`;
         }
+    },
+
+    mounted() {
+        this.swiper = new Swiper('#' + this.pickCardId, {
+            initialSlide: 1,
+            resistanceRatio: 0,
+            speed: 150
+        });
+
+        this.swiper.on('transitionEnd', this.transitionEnd);
+    },
+
+    methods: {
+        transitionEnd() {
+            if (this.swiper.activeIndex === 1) {
+                return;
+            }
+
+            if (this.swiper.activeIndex === 0) {
+                this.$emit('swipeRight', this.pick);
+            }
+
+            if (this.swiper.activeIndex === 2) {
+                this.$emit('swipeLeft', this.pick);
+            }
+
+            this.swiper.slideTo(1,0,false);
+        },
     }
 
 }

@@ -39,10 +39,16 @@ export default {
 
     methods: {
         loadPicks() {
-            axios.get('/api/picks', {})
+            return axios.get('/api/picks', {})
                 .then( ({data}) => {
                     this.picklist = data.data;
                 })
+        },
+
+        pickQuantity(pick, quantity) {
+            return axios.put('/api/picks/' + pick['id'], {
+                'quantity_picked': quantity
+            });
         },
 
         removeFromPicklist: function (pick) {
@@ -50,8 +56,8 @@ export default {
         },
 
         pickAll(pick) {
-            console.log('pickAll', pick);
             this.removeFromPicklist(pick);
+            this.pickQuantity(pick, pick['quantity_required']);
         },
 
         pickPartial(pick) {
