@@ -20,6 +20,17 @@ export default {
         this.loadPicks();
     },
 
+    watch: {
+        picklist: {
+            handler() {
+                if (this.picklist.length === 0) {
+                    this.loadPicks();
+                }
+            },
+            deep: true
+        }
+    },
+
     data: function() {
         return {
             picklist: [],
@@ -47,7 +58,7 @@ export default {
             console.log('pickPartial',pick);
         }
 
-    }
+    },
 }
 </script>
 
