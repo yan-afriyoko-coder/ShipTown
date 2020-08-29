@@ -160,6 +160,13 @@ Vue.component(
     require('./components/Printers/Configuration.vue').default
 );
 
+
+
+Vue.component(
+    'picks-table',
+    require('./components/Picks/PicksTable.vue').default
+);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding mixins to this application
