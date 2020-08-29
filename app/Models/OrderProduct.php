@@ -23,23 +23,9 @@ class OrderProduct extends Model
         'quantity_ordered',
     ];
 
-    public static function boot()
-    {
-        parent::boot();
-
-        static::deleting(function ($orderProduct) {
-            $orderProduct->options->delete();
-        });
-    }
-
     public function order()
     {
         return $this->belongsTo(Order::class);
-    }
-
-    public function options()
-    {
-        return $this->hasMany(OrderProductOption::class);
     }
 
     public function product()
