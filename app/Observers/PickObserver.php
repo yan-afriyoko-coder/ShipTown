@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Events\PickPickedEvent;
+use App\Events\PickQuantityRequiredChangedEvent;
 use App\Events\PickUnpickedEvent;
 use App\Models\Pick;
 
@@ -32,6 +33,8 @@ class PickObserver
     public function updated(Pick $pick)
     {
         $this->dispatchPickedEvents($pick);
+
+        $this->dispatchQuantityRequiredChangedEvent($pick);
     }
 
     /**
@@ -78,6 +81,16 @@ class PickObserver
             } else {
                 PickUnpickedEvent::dispatch($pick);
             }
+        }
+    }
+
+    /**
+     * @param Pick $pick
+     */
+    private function dispatchQuantityRequiredChangedEvent(Pick $pick): void
+    {
+        if ($pick->isAttributeValueChanged('quantity_required')) {
+            PickQuantityRequiredChangedEvent::dispatch($pick);
         }
     }
 }

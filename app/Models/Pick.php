@@ -53,7 +53,7 @@ class Pick extends Model
      */
     public function pick(User $picker, float $quantity_picked)
     {
-        if ($quantity_picked === 0) {
+        if ($quantity_picked == 0) {
             $this->update([
                 'picker_user_id' => null,
                 'picked_at' => null
@@ -63,6 +63,7 @@ class Pick extends Model
         }
 
         $this->update([
+            'quantity_required' => $quantity_picked,
             'picker_user_id' => $picker->getKey(),
             'picked_at' => now()
         ]);

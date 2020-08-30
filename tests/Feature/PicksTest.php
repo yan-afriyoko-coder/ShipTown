@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Events\PickPickedEvent;
+use App\Events\PickQuantityRequiredChangedEvent;
 use App\Events\PickUnpickedEvent;
 use App\Models\Order;
 use App\Models\OrderProduct;
@@ -15,6 +16,18 @@ use Tests\TestCase;
 
 class PicksTest extends TestCase
 {
+
+    public function testIfPickQuantityChangedEventDispatched()
+    {
+        Event::fake([PickQuantityRequiredChangedEvent::class]);
+
+        $user = factory(User::class)->create();
+        $pick = factory(Pick::class)->create();
+
+        $pick->pick($user, $pick->quantity_required - 1);
+
+        Event::assertDispatched(PickQuantityRequiredChangedEvent::class);
+    }
 
     public function testIfQuantityPickedSumsUpWhenUnpicked()
     {
@@ -45,8 +58,8 @@ class PicksTest extends TestCase
         $response->assertStatus(200);
 
         $pick = $pick->refresh();
-        $this->assertNull($pick->picker_user_id);
-        $this->assertNull($pick->picket_at);
+        $this->assertNull($pick->picker_user_id, 'User not set null');
+        $this->assertNull($pick->picket_at, 'Picked_at is not set null');
 
         $this->assertEquals(
             0,
