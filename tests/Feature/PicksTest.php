@@ -2,16 +2,81 @@
 
 namespace Tests\Feature;
 
+use App\Events\PickPickedEvent;
+use App\Events\PickUnpickedEvent;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Pick;
 use App\Models\PickRequest;
 use App\User;
+use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class PicksTest extends TestCase
 {
+
+    public function testIfQuantityPickedSumsUpWhenUnpicked()
+    {
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        OrderProduct::query()->forceDelete();
+        Order::query()->forceDelete();
+        PickRequest::query()->forceDelete();
+        Pick::query()->forceDelete();
+
+        $order = factory(Order::class)
+            ->with('orderProducts')
+            ->create(['status_code' => 'processing'])
+            ->update(['status_code' => 'picking']);
+
+        $pick = Pick::query()->first();
+
+        $response = $this->putJson("/api/picks/".$pick['id'], [
+            'quantity_picked' => $pick['quantity_required']
+        ]);
+
+        $response = $this->putJson("/api/picks/".$pick['id'], [
+            'quantity_picked' => 0
+        ]);
+
+        $response->assertStatus(200);
+
+        $pick = $pick->refresh();
+        $this->assertNull($pick->picker_user_id);
+        $this->assertNull($pick->picket_at);
+
+        $this->assertEquals(
+            0,
+            PickRequest::query()->sum('quantity_picked')
+        );
+    }
+
+    public function testIdDispatchedUnpickPickedEvent()
+    {
+        Event::fake([PickUnpickedEvent::class]);
+        $user = factory(User::class)->create();
+        $pick = factory(Pick::class)->create();
+
+        $pick->pick($user, $pick->quantity_required);
+        $pick->pick($user, 0);
+
+        Event::assertDispatched(PickUnpickedEvent::class);
+    }
+
+    public function testIdDispatchedPickPickedEvent()
+    {
+        Event::fake([PickPickedEvent::class]);
+        $user = factory(User::class)->create();
+        $pick = factory(Pick::class)->create();
+
+        $pick->pick($user, $pick->quantity_required);
+
+        Event::assertDispatched(PickPickedEvent::class);
+    }
+
     public function testIfQuantityPickedSumsUp()
     {
         Passport::actingAs(

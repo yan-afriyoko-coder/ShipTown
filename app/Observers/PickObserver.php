@@ -3,8 +3,13 @@
 namespace App\Observers;
 
 use App\Events\PickPickedEvent;
+use App\Events\PickUnpickedEvent;
 use App\Models\Pick;
 
+/**
+ * Class PickObserver
+ * @package App\Observers
+ */
 class PickObserver
 {
     /**
@@ -26,9 +31,7 @@ class PickObserver
      */
     public function updated(Pick $pick)
     {
-        if ($pick->wasJustPicked()) {
-            PickPickedEvent::dispatch($pick);
-        }
+        $this->dispatchPickedEvents($pick);
     }
 
     /**
@@ -62,5 +65,19 @@ class PickObserver
     public function forceDeleted(Pick $pick)
     {
         //
+    }
+
+    /**
+     * @param Pick $pick
+     */
+    private function dispatchPickedEvents(Pick $pick): void
+    {
+        if ($pick->isAttributeValueChanged('picked_at')) {
+            if ($pick->is_picked) {
+                PickPickedEvent::dispatch($pick);
+            } else {
+                PickUnpickedEvent::dispatch($pick);
+            }
+        }
     }
 }

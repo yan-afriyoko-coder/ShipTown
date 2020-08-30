@@ -8,24 +8,32 @@
 
 <script>
 import PickCard from "./components/PickCard.vue";
+import loadingOverlay from '../../mixins/loading-overlay';
 
 export default {
     name: "PicksTable",
+
+    mixins: [loadingOverlay],
 
     components: {
         'pick-card': PickCard
     },
 
     mounted() {
-        this.loadPicks();
+        this.reloadPicks();
     },
 
     watch: {
         picklist: {
             handler() {
+                 if (this.isLoading) {
+                     return;
+                 }
+
                 if (this.picklist.length === 0) {
-                    this.loadPicks();
+                    this.reloadPicks();
                 }
+
             },
             deep: true
         }
@@ -38,16 +46,27 @@ export default {
     },
 
     methods: {
-        loadPicks() {
+        reloadPicks() {
+            this.showLoading();
+            this.picklist = [];
             return axios.get('/api/picks', {})
                 .then( ({data}) => {
                     this.picklist = data.data;
                 })
+                .catch( error => {
+                    this.$snotify.error('Action failed (Http code  '+ error.response.status+')');
+                })
+                .then( () => {
+                        this.hideLoading();
+                });
         },
 
-        pickPick(pick, quantity) {
+        postPickUpdate(pick, quantity_picked) {
             return axios.put('/api/picks/' + pick['id'], {
-                'quantity_picked': quantity
+                    'quantity_picked': quantity_picked
+            })
+            .catch( error => {
+                this.$snotify.error('Action failed (Http code  '+ error.response.status+')');
             });
         },
 
@@ -57,14 +76,14 @@ export default {
 
         pickAll(pick) {
             this.removeFromPicklist(pick);
-            this.pickPick(pick, pick['quantity_required'])
+            this.postPickUpdate(pick, pick['quantity_required'])
                 .then( () => {
                     this.displayPickedNotification(pick, pick['quantity_required']);
                 });
         },
 
         pickPartial(pick) {
-            console.log('pickPartial',pick);
+            console.log('pickPartial', pick);
         },
 
         displayPickedNotification: function (pick, quantity) {
@@ -79,7 +98,10 @@ export default {
                         text: 'Undo',
                         action: (toast) => {
                             this.$snotify.remove(toast.id);
-                            this.pickPick(pick,0);
+                            this.postPickUpdate(pick,0)
+                                .then( () => {
+                                    this.reloadPicks();
+                                });
                         }
                     }
                 ]

@@ -48,7 +48,7 @@ class PickController extends Controller
     {
         $picker = $request->user();
 
-        $pick->pickBy($picker);
+        $pick->pick($picker, $request->get('quantity_picked'));
 
         return new JsonResource($pick);
     }

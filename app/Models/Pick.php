@@ -10,9 +10,13 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * @property DateTime|null picked_at
+ * @property bool is_picked
  */
 class Pick extends Model
 {
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'product_id',
         'sku_ordered',
@@ -22,30 +26,59 @@ class Pick extends Model
         'picked_at'
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::addGlobalScope('notPickedOnly', function ($builder) {
-            $builder->whereNull('picked_at');
-        });
-    }
-
-    public function scopePicked(Builder $query)
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeWhereNotPicked(Builder $query)
     {
         return $query->whereNull('picked_at');
     }
 
-    public function pickBy(User $picker)
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeWherePicked(Builder $query)
     {
+        return $query->whereNotNull('picked_at');
+    }
+
+    /**
+     * @param User $picker
+     * @param float $quantity_picked
+     */
+    public function pick(User $picker, float $quantity_picked)
+    {
+        if ($quantity_picked === 0) {
+            $this->update([
+                'picker_user_id' => null,
+                'picked_at' => null
+            ]);
+
+            return;
+        }
+
         $this->update([
             'picker_user_id' => $picker->getKey(),
             'picked_at' => now()
         ]);
     }
 
-    public function wasJustPicked()
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function isAttributeValueChanged($name)
     {
-        return isset($this->picked_at) && $this->getOriginal('picked_at') === null;
+        return $this->getAttribute($name) != $this->getOriginal($name);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsPickedAttribute()
+    {
+        return $this->picked_at != null;
     }
 }
