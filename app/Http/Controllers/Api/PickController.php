@@ -25,7 +25,7 @@ class PickController extends Controller
     {
         $pick = QueryBuilder::for(Pick::class)
             ->allowedFilters(
-                AllowedFilter::scope('not_picked', 'whereNotPicked')
+                AllowedFilter::scope('not_picked_only', 'whereNotPicked')
             );
 
         $per_page = $request->get('per_page', 3);

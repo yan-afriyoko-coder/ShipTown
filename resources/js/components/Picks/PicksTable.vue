@@ -42,7 +42,7 @@ export default {
     data: function() {
         return {
             filters: {
-                'filter[not_picked]': true,
+                'filter[not_picked_only]': true,
             },
             picklist: [],
         };
