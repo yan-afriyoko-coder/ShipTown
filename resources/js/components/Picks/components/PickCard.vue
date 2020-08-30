@@ -25,9 +25,9 @@
 <!--                                            <div class="text-secondary h6 text-left">lines: <span class="font-weight-bold"> {{ pick['order']['product_line_count'] }} </span></div>-->
 <!--                                            <div class="text-secondary h6 text-left">stock: <span class="font-weight-bold"> {{ Math.ceil(picklistItem['inventory_source_quantity']) }} </span></div>-->
                                         </div>
-                                        <div class="col-2">
+                                        <div class="col-2" v-bind:class="{ 'bg-warning': Math.ceil(pick['quantity_required']) > 1 }">
                                             <div>To Pick</div>
-                                            <div class="h3">{{ Math.ceil(pick['quantity_required']) }}</div>
+                                            <div class="h3 red">{{ Math.ceil(pick['quantity_required']) }}</div>
                                         </div>
                                         <div class="col-4">
                                             <div class="">Shelf</div>
