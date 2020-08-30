@@ -36,6 +36,12 @@ class Controller extends BaseController
             ->respond($message);
     }
 
+    public function respondBadRequest($message = "Bad request")
+    {
+        return $this->setStatusCode(400)
+            ->respond($message);
+    }
+
     public function setStatusCode($code)
     {
         $this->status_code = $code;

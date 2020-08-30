@@ -8,6 +8,9 @@ use phpseclib\Math\BigInteger;
 
 /**
  * @property BigInteger|null product_id
+ * @property string|null sku_ordered
+ * @property string|null name_ordered
+ * @property float quantity_ordered
  */
 class OrderProduct extends Model
 {
@@ -20,23 +23,9 @@ class OrderProduct extends Model
         'quantity_ordered',
     ];
 
-    public static function boot()
-    {
-        parent::boot();
-
-        static::deleting(function ($orderProduct) {
-            $orderProduct->options->delete();
-        });
-    }
-
     public function order()
     {
         return $this->belongsTo(Order::class);
-    }
-
-    public function options()
-    {
-        return $this->hasMany(OrderProductOption::class);
     }
 
     public function product()
