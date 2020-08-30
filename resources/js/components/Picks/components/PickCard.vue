@@ -15,7 +15,7 @@
                                 <div class="col-md-8">
                                     <div class="text-primary h4">{{ pick['name_ordered'] }}</div>
                                     <div class="text-secondary h5">sku: <span class="font-weight-bold"> {{ pick['sku_ordered'] }} </span></div>
-<!--                                    <div class="text-secondary h5">product: <span class="font-weight-bold"> {{ product_sku }} </span></div>-->
+                                    <div class="text-secondary h5">product: <span class="font-weight-bold"> {{ product_sku }} </span></div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="row text-center">
@@ -73,6 +73,11 @@ export default {
         pickCardId() {
             return `pick-card-${this.pick['id']}`;
         }
+    },
+
+    created() {
+        this.product_sku = this.pick['product'] ? this.pick['product']['sku'] : '';
+        this.quantity_requested_integer = Math.ceil(this.pick['quantity_requested']);
     },
 
     mounted() {

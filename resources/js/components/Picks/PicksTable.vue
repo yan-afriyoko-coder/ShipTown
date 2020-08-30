@@ -42,7 +42,8 @@ export default {
     data: function() {
         return {
             filters: {
-                'filter[not_picked_only]': true,
+                include: 'product',
+                'filter[not_picked_only]': true
             },
             picklist: [],
         };
