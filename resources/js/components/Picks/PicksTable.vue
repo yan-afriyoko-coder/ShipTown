@@ -98,9 +98,12 @@ export default {
                         text: 'Undo',
                         action: (toast) => {
                             this.$snotify.remove(toast.id);
+                            this.showLoading();
                             this.postPickUpdate(pick,0)
                                 .then( () => {
-                                    this.reloadPicks();
+                                    this.reloadPicks().then(() => {
+                                        this.hideLoading();
+                                    });
                                 });
                         }
                     }
