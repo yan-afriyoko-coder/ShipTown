@@ -1,7 +1,7 @@
 <template>
     <div>
         <template v-for="pick in picklist">
-            <pick-card :pick="pick" @swipeRight="pickAll" @swipeLeft="pickPartial"/>
+            <pick-card :pick="pick" @swipeRight="pickAll" @swipeLeft="partialPickSwiped"/>
         </template>
     </div>
 </template>
@@ -82,8 +82,96 @@ export default {
                 });
         },
 
-        pickPartial(pick) {
-            console.log('pickPartial', pick);
+        deletePick: function (pick) {
+            axios.delete('/api/picks/' + pick['id'])
+                .then(() => {
+                    this.$snotify.warning('Pick deleted');
+                })
+                .catch( error => {
+                    this.$snotify.error('Action failed (Http code  '+ error.response.status+')');
+                })
+                .then(() => {
+                    this.reloadPicks();
+                })
+        },
+
+        makePartialPick: function (pick, toast) {
+            this.removeFromPicklist(pick);
+            this.postPickUpdate(pick, toast.value)
+                .then(() => {
+                    this.displayPickedNotification(pick, pick['quantity_required']);
+                    this.reloadPicks();
+                });
+        },
+
+        partialPickSwiped(pick) {
+            this.$snotify.prompt('Partial pick', {
+                placeholder: 'Enter quantity picked:',
+                position: 'centerCenter',
+                icon: false,
+                buttons: [
+                    {
+                        text: 'Delete Pick',
+                        action: (toast) => {
+                            this.$snotify.remove(toast.id)
+                            this.deletePick(pick);
+                        }
+                    },
+                    {
+                        text: 'Pick',
+                        action: (toast) => {
+
+                            if ( isNaN(toast.value) || (toast.value <= 0) || (toast.value > pick['quantity_required'])) {
+                                toast.valid = false;
+                                return false;
+                            }
+
+                            this.$snotify.remove(toast.id);
+                            this.makePartialPick(pick, toast);
+                        }
+                    },
+                    {
+                        text: 'Cancel',
+                        action: (toast) => {
+                            this.$snotify.remove(toast.id)
+                        }
+                    },
+                ],
+            });
+        },
+
+        partialPick(pickedItem) {
+            this.$snotify.prompt('Partial pick', {
+                placeholder: 'Enter quantity picked:',
+                position: 'centerCenter',
+                icon: false,
+                buttons: [
+                    {
+                        text: 'Pick',
+                        action: (toast) => {
+                            if ( isNaN(toast.value) || (toast.value <= 0)) {
+                                toast.valid = false;
+                                return false;
+                            }
+                            this.picklist.splice(this.picklist.indexOf(pickedItem), 1);
+                            this.$snotify.remove(toast.id);
+                            this.pick(pickedItem, toast.value)
+                                .then(() => {
+
+                                    this.picklist = [];
+                                });
+
+                        }
+                    },
+                    {
+                        text: 'Cancel',
+                        action: (toast) => {
+                            // this.picklist.unshift(pickedItem);
+                            this.$snotify.remove(toast.id) // default
+                        }
+                    },
+                ],
+            });
         },
 
         undoPick(pick) {

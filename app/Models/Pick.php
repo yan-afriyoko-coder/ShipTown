@@ -5,6 +5,7 @@ namespace App\Models;
 use App\User;
 use DateTime;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\DB;
  */
 class Pick extends Model
 {
+    use SoftDeletes;
+
     /**
      * @var string[]
      */

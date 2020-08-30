@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PickRequestUpdateRequest;
 use App\Models\Pick;
+use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -57,10 +58,17 @@ class PickController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Pick $pick
-     * @return Response
+     * @return JsonResource
+     * @throws Exception
      */
     public function destroy(Pick $pick)
     {
-        //
+        if ($pick->is_picked) {
+            $this->respondBadRequest('Already picked, cannot delete');
+        }
+
+        $pick->delete();
+
+        return new JsonResource($pick);
     }
 }
