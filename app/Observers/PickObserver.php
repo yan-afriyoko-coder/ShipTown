@@ -32,9 +32,8 @@ class PickObserver
      */
     public function updated(Pick $pick)
     {
-        $this->dispatchPickedEvents($pick);
-
         $this->dispatchQuantityRequiredChangedEvent($pick);
+        $this->dispatchPickedEvents($pick);
     }
 
     /**

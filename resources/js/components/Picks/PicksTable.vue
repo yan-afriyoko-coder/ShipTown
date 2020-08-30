@@ -120,8 +120,7 @@ export default {
                     {
                         text: 'Pick',
                         action: (toast) => {
-
-                            if ( isNaN(toast.value) || (toast.value <= 0) || (toast.value > pick['quantity_required'])) {
+                            if ( isNaN(toast.value) || (toast.value <= 0) || (toast.value > Number(pick['quantity_required'])) ) {
                                 toast.valid = false;
                                 return false;
                             }

@@ -16,6 +16,65 @@ use Tests\TestCase;
 
 class PicksTest extends TestCase
 {
+    public function testIfPickRequestsAreRedistributedWhenQuantityRequiredChanged()
+    {
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        OrderProduct::query()->forceDelete();
+        Order::query()->forceDelete();
+        PickRequest::query()->forceDelete();
+        Pick::query()->forceDelete();
+
+        $orders = factory(Order::class, rand(2, 5))
+            ->with('orderProducts', rand(2, 5))
+            ->create(['status_code' => 'processing']);
+
+        foreach ($orders as $order) {
+            $order->update(['status_code' => 'picking']);
+        }
+
+        $pick = Pick::query()->first();
+
+        $response = $this->putJson("/api/picks/".$pick['id'], [
+            'quantity_picked' => $pick['quantity_required'] - rand(1, $pick['quantity_required']-1)
+        ]);
+
+        $response->assertStatus(200);
+
+        $pick = $pick->refresh();
+
+        $this->assertEquals(
+            PickRequest::query()->sum('quantity_required'),
+            Pick::query()->sum('quantity_required')
+        );
+    }
+
+    public function testPickRequestSplit()
+    {
+        OrderProduct::query()->forceDelete();
+        Order::query()->forceDelete();
+        PickRequest::query()->forceDelete();
+        Pick::query()->forceDelete();
+
+        $order = factory(Order::class)
+            ->with('orderProducts')
+            ->create(['status_code' => 'processing'])
+            ->update(['status_code' => 'picking']);
+
+        $pickRequest = PickRequest::query()->first();
+
+        $original_quantity = $pickRequest->quantity_required;
+
+
+        $pickRequest->extractToNewPick(1);
+
+        $this->assertEquals(
+            $original_quantity,
+            PickRequest::query()->sum('quantity_required')
+        );
+    }
 
     public function testIfPickQuantityChangedEventDispatched()
     {

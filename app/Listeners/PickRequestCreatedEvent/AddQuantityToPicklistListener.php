@@ -26,6 +26,8 @@ class AddQuantityToPicklistListener
      */
     public function handle(PickRequestCreatedEvent $event)
     {
-        PicklistService::addToPicklist($event->getPickRequest());
+        if ($event->getPickRequest()->pick_id === null) {
+            PicklistService::addToPicklist($event->getPickRequest());
+        }
     }
 }

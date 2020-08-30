@@ -36,6 +36,20 @@ class PicklistService
     }
 
     /**
+     * @param PickRequest $pickRequest
+     */
+    public static function removeFromPicklist(PickRequest $pickRequest)
+    {
+        $orderProduct = $pickRequest->orderProduct()->first();
+
+        $pick = $pickRequest->pick();
+
+        $pick->decrement('quantity_required', $orderProduct->quantity_ordered);
+
+        $pickRequest->update(['pick_id' => null]);
+    }
+
+    /**
      * @param OrderProduct|array $orderProduct
      * @return void
      */

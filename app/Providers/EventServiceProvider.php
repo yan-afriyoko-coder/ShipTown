@@ -5,14 +5,17 @@ namespace App\Providers;
 use App\Events\OrderCreatedEvent;
 use App\Events\OrderStatusChangedEvent;
 use App\Events\PickPickedEvent;
+use App\Events\PickQuantityRequiredChangedEvent;
 use App\Events\PickRequestCreatedEvent;
 use App\Events\PickUnpickedEvent;
 use App\Listeners\AddToPicklistOnOrderCreatedEventListener;
 use App\Listeners\OrderStatusChangedEvent\CreatePickRequestsListener;
 use App\Listeners\OrderStatusChangedListener;
 use App\Listeners\PickPickedEvent\FillPickRequestsPickedQuantityListener;
+use App\Listeners\PickQuantityRequiredChangedEvent\MovePickRequestToNewPickListener;
 use App\Listeners\PickRequestCreatedEvent\AddQuantityToPicklistListener;
 use App\Listeners\PickUnpickedEvent\ClearPickRequestsQuantityPickedListener;
+use App\Models\Pick;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -48,6 +51,9 @@ class EventServiceProvider extends ServiceProvider
         PickUnpickedEvent::class => [
             ClearPickRequestsQuantityPickedListener::class
         ],
+        PickQuantityRequiredChangedEvent::class => [
+            MovePickRequestToNewPickListener::class
+        ]
     ];
 
     /**

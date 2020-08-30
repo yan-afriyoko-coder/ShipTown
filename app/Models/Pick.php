@@ -10,6 +10,7 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
 /**
+ * @property float quantity_required
  * @property DateTime|null picked_at
  * @property bool is_picked
  */
@@ -62,8 +63,12 @@ class Pick extends Model
             return;
         }
 
+        // we do it in 2 separate calls so Picked & QuantityRequiredChanged event are dispatched correctly
         $this->update([
-            'quantity_required' => $quantity_picked,
+            'quantity_required' => $quantity_picked
+        ]);
+
+        $this->update([
             'picker_user_id' => $picker->getKey(),
             'picked_at' => now()
         ]);
