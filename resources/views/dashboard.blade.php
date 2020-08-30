@@ -10,7 +10,9 @@
     </div>
     <div class="row row-cols-sm-2 mb-2">
         <div class="col">@widget('PickCounts')</div>
-        <div class="col"></div>
+        @role('admin')
+        <div class="col">@widget('UserPickCounts')</div>
+        @endrole
     </div>
     <div class="row">
         <div class="col">@widget('StatusOrderCount')</div>
