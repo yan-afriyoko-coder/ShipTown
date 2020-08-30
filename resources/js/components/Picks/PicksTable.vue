@@ -86,6 +86,18 @@ export default {
             console.log('pickPartial', pick);
         },
 
+        undoPick(pick) {
+            this.showLoading();
+            this.postPickUpdate(pick,0)
+                .then( () => {
+                    this.reloadPicks()
+                        .then(() => {
+                            this.hideLoading();
+                            this.$snotify.warning('Action reverted');
+                        });
+                });
+        },
+
         displayPickedNotification: function (pick, quantity) {
             const msg =  Math.ceil(quantity) + ' x ' + pick['sku_ordered'] + ' picked';
             this.$snotify.confirm(msg, {
@@ -98,13 +110,7 @@ export default {
                         text: 'Undo',
                         action: (toast) => {
                             this.$snotify.remove(toast.id);
-                            this.showLoading();
-                            this.postPickUpdate(pick,0)
-                                .then( () => {
-                                    this.reloadPicks().then(() => {
-                                        this.hideLoading();
-                                    });
-                                });
+                            this.undoPick(pick)
                         }
                     }
                 ]
