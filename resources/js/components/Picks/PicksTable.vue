@@ -41,6 +41,9 @@ export default {
 
     data: function() {
         return {
+            filters: {
+                'filter[not_picked]': true,
+            },
             picklist: [],
         };
     },
@@ -49,7 +52,7 @@ export default {
         reloadPicks() {
             this.showLoading();
             this.picklist = [];
-            return axios.get('/api/picks', {})
+            return axios.get('/api/picks', {params:  this.filters})
                 .then( ({data}) => {
                     this.picklist = data.data;
                 })

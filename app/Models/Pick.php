@@ -31,10 +31,10 @@ class Pick extends Model
     ];
 
     /**
-     * @param Builder $query
+     * @param $query
      * @return Builder
      */
-    public function scopeWhereNotPicked(Builder $query)
+    public function scopeWhereNotPicked($query)
     {
         return $query->whereNull('picked_at');
     }

@@ -10,6 +10,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class PickController extends Controller
@@ -22,9 +23,14 @@ class PickController extends Controller
      */
     public function index(Request $request)
     {
-        $pick = QueryBuilder::for(Pick::class);
+        $pick = QueryBuilder::for(Pick::class)
+            ->allowedFilters(
+                AllowedFilter::scope('not_picked', 'whereNotPicked')
+            );
 
-        return $pick->paginate()->appends($request->query());
+        $per_page = $request->get('per_page', 3);
+
+        return $pick->paginate($per_page)->appends($request->query());
     }
 
     /**
