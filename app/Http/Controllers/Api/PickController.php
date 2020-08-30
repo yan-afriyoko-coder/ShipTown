@@ -24,9 +24,10 @@ class PickController extends Controller
     public function index(Request $request)
     {
         $pick = QueryBuilder::for(Pick::class)
-            ->allowedFilters(
-                AllowedFilter::scope('not_picked_only', 'whereNotPicked')
-            )
+            ->allowedFilters([
+                AllowedFilter::scope('not_picked_only', 'whereNotPicked'),
+                AllowedFilter::scope('inventory_source_id', 'addInventorySource')->default(100)
+            ])
             ->allowedIncludes(
                 'product'
             );

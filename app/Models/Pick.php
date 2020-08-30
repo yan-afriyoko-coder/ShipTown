@@ -41,6 +41,27 @@ class Pick extends Model
     }
 
     /**
+     * @param Builder $query
+     * @param int $inventory_location_id
+     * @return Builder
+     */
+    public function scopeAddInventorySource($query, $inventory_location_id)
+    {
+        $source_inventory = Inventory::query()
+            ->select([
+                'shelve_location as inventory_source_shelf_location',
+                'quantity as inventory_source_quantity',
+                'product_id as inventory_source_product_id',
+            ])
+            ->where(['location_id'=>$inventory_location_id])
+            ->toBase();
+
+        return $query->leftJoinSub($source_inventory, 'inventory_source', function ($join) {
+            $join->on('picks.product_id', '=', 'inventory_source_product_id');
+        });
+    }
+
+    /**
      * @param $query
      * @return Builder
      */

@@ -43,7 +43,8 @@ export default {
         return {
             filters: {
                 include: 'product',
-                'filter[not_picked_only]': true
+                'filter[not_picked_only]': true,
+                'filter[inventory_source_id]': 100,
             },
             picklist: [],
         };
