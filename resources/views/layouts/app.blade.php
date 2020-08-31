@@ -54,12 +54,21 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('picklist') }}">{{ __('Picklist') }}</a>
                         </li>
+
+
+
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('packlist') }}">{{ __('Packlist') }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('orders') }}">{{ __('Orders') }}</a>
                         </li>
+
+                        <a class="dropdown-item" href="{{ route('picklistNew') }}">
+                            {{ __('DO NOT USE') }}
+                        </a>
+
+
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -84,10 +93,6 @@
                                         <a class="dropdown-item" href="{{ route('users') }}">
                                             {{ __('Users') }}
                                         </a>
-
-                                        <a class="dropdown-item" href="{{ route('picklistNew') }}">
-                                            {{ __('Picklist New') }}
-                                        </a>
                                     @endcan
 
                                     <!-- Logout -->
@@ -110,7 +115,7 @@
         </nav>
         @endauth
 
-        <main class="py-4">
+        <main class="py-4 pl-1 pr-2">
             @yield('content')
         </main>
 

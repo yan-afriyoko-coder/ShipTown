@@ -9,19 +9,22 @@
         </div>
         <div v-else>
             <div class="row mb-3">
-                <div class="col-8 pl-1 pr-1">
-                    <barcode-input-field @barcodeScanned="pickByBarcode"/>
-                </div>
-                <div class="col-3 pr-2">
-                    <div class="">
-                        <input ref="current_location" class="form-control" placeholder="Current shelf"
-                               v-model="current_shelf_location"
-                               @keyup.enter="reloadPicks()"/>
+                <div class="col-8">
+                    <div class="pl-1 pr-1">
+                        <barcode-input-field @barcodeScanned="pickByBarcode"/>
                     </div>
-
                 </div>
-                <div class="col-1">
-                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#picklistConfigurationModal" href="#"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+                <div class="col-4">
+                    <div class="row">
+                        <div class="col-8">
+                            <input ref="current_location" class="form-control" placeholder="Current shelf"
+                                   v-model="current_shelf_location"
+                                   @keyup.enter="reloadPicks()"/>
+                        </div>
+                        <div class="col-4">
+                            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#picklistConfigurationModal" href="#"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div>
