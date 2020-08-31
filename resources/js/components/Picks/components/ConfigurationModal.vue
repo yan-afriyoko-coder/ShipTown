@@ -19,8 +19,8 @@
 <!--                            <label class="form-check-label" >In stock only</label>-->
 <!--                        </div>-->
                         <div class="form-group form-check">
+                            <div>Inventory Location ID</div>
                             <input v-model="urlFilters['inventory_source_location_id']" type="number" class="form-check-input" />
-                            <label class="form-check-label" >Inventory Location ID</label>
                         </div>
                     </form>
                 </div>

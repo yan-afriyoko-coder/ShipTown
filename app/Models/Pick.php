@@ -5,14 +5,18 @@ namespace App\Models;
 use App\User;
 use DateTime;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
 /**
+ * @property string sku_ordered
+ * @property string name_ordered
  * @property float quantity_required
  * @property DateTime|null picked_at
  * @property bool is_picked
+ * @property User user
  */
 class Pick extends Model
 {
@@ -30,14 +34,20 @@ class Pick extends Model
         'picked_at'
     ];
 
+    /**
+     * @return BelongsTo
+     */
     public function product()
     {
         return $this->belongsTo(Product::class);
     }
 
-    public function order()
+    /**
+     * @return BelongsTo
+     */
+    public function user()
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(User::class, 'picker_user_id');
     }
 
     /**

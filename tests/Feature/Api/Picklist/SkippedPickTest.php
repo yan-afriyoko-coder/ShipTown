@@ -3,7 +3,7 @@
 namespace Tests\Feature\Api\Picklist;
 
 use App\Models\Picklist;
-use App\Notifications\SkippedPickNotification;
+use App\Notifications\SkippedPicklistNotification;
 use App\User;
 use Illuminate\Support\Facades\Notification;
 use Laravel\Passport\Passport;

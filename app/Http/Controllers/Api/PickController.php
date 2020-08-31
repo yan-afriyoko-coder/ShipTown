@@ -73,15 +73,18 @@ class PickController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param Request $request
      * @param Pick $pick
      * @return JsonResource
      * @throws Exception
      */
-    public function destroy(Pick $pick)
+    public function destroy(Request $request, Pick $pick)
     {
         if ($pick->is_picked) {
             $this->respondBadRequest('Already picked, cannot delete');
         }
+
+        $pick->update(['picker_user_id' => $request->user()->getKey()]);
 
         $pick->delete();
 

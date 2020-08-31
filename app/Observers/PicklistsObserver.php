@@ -6,7 +6,7 @@ use Illuminate\Support\Carbon;
 
 use App\Models\Order;
 use App\Models\Picklist;
-use App\Notifications\SkippedPickNotification;
+use App\Notifications\SkippedPicklistNotification;
 
 class PicklistsObserver
 {
@@ -40,7 +40,7 @@ class PicklistsObserver
             $user = $picklist->user;
 
             if ($user) {
-                $user->notifyAt(new SkippedPickNotification($picklist), Carbon::now()->addMinutes(2));
+                $user->notifyAt(new SkippedPicklistNotification($picklist), Carbon::now()->addMinutes(2));
             }
         }
     }
