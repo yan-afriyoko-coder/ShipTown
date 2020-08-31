@@ -1,22 +1,32 @@
 <template>
     <div>
-        <div class="row mb-3">
-            <div class="col-8 pl-1 pr-1">
-                <barcode-input-field @barcodeScanned="pickByBarcode"/>
-            </div>
-            <div class="col-4 pr-2">
-                <div class="">
-                    <input ref="current_location" class="form-control" placeholder="Current shelf"
-                           v-model="current_shelf_location"
-                           @keyup.enter="reloadPicks()"/>
+        <div v-if="picklist.length === 0 && !isLoading" class="row" >
+            <div class="col">
+                <div class="alert alert-info" role="alert">
+                    No picks found
                 </div>
-
             </div>
         </div>
-        <div>
-            <template v-for="pick in picklist">
-                <pick-card :pick="pick" @swipeRight="pickAll" @swipeLeft="partialPickSwiped"/>
-            </template>
+        <div v-else>
+            <div class="row mb-3">
+                <div class="col-8 pl-1 pr-1">
+                    <barcode-input-field @barcodeScanned="pickByBarcode"/>
+                </div>
+                <div class="col-4 pr-2">
+                    <div class="">
+                        <input ref="current_location" class="form-control" placeholder="Current shelf"
+                               v-model="current_shelf_location"
+                               @keyup.enter="reloadPicks()"/>
+                    </div>
+
+                </div>
+            </div>
+            <div>
+                <template v-for="pick in picklist">
+                    <pick-card :pick="pick" @swipeRight="pickAll" @swipeLeft="partialPickSwiped"/>
+                </template>
+            </div>
+
         </div>
     </div>
 </template>
@@ -86,6 +96,7 @@ export default {
             }
 
             this.$snotify.error(`"${barcode}" not found on picklist!`);
+            this.errorBeep();
             this.setFocusOnBarcodeInput();
             this.simulateSelectAll();
         },
@@ -183,10 +194,10 @@ export default {
                 })
         },
 
-        makePartialPick: function (pick, toast) {
-            this.postPickUpdate(pick, toast.value)
+        makePartialPick: function (pick, quantity) {
+            this.postPickUpdate(pick, quantity)
                 .then(() => {
-                    this.displayPickedNotification(pick, pick['quantity_required']);
+                    this.displayPickedNotification(pick, quantity);
                     this.beep();
                     this.removeFromPicklist(pick);
                     this.reloadPicks();
@@ -215,7 +226,7 @@ export default {
                             }
 
                             this.$snotify.remove(toast.id);
-                            this.makePartialPick(pick, toast);
+                            this.makePartialPick(pick, toast.value);
                         }
                     },
                     {
