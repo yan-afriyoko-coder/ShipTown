@@ -21,7 +21,7 @@
                                    v-model="current_shelf_location"
                                    @keyup.enter="reloadPicks()"/>
                         </div>
-                        <div class="col-5">
+                        <div class="col-5 ml-0 pl-0">
                             <button type="button" class="btn btn-light" data-toggle="modal" data-target="#picklistConfigurationModal" href="#"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
                         </div>
                     </div>
