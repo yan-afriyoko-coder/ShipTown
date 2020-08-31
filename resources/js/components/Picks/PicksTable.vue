@@ -16,12 +16,12 @@
                 </div>
                 <div class="col-4">
                     <div class="row">
-                        <div class="col-8">
+                        <div class="col-7">
                             <input ref="current_location" class="form-control" placeholder="Current shelf"
                                    v-model="current_shelf_location"
                                    @keyup.enter="reloadPicks()"/>
                         </div>
-                        <div class="col-4">
+                        <div class="col-5">
                             <button type="button" class="btn btn-light" data-toggle="modal" data-target="#picklistConfigurationModal" href="#"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
                         </div>
                     </div>
