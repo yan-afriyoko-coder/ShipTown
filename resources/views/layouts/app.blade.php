@@ -81,9 +81,13 @@
 
                                     <!-- users -->
                                     @can('manage users')
-                                    <a class="dropdown-item" href="{{ route('users') }}">
-                                        {{ __('Users') }}
-                                    </a>
+                                        <a class="dropdown-item" href="{{ route('users') }}">
+                                            {{ __('Users') }}
+                                        </a>
+
+                                        <a class="dropdown-item" href="{{ route('picklistNew') }}">
+                                            {{ __('Picklist New') }}
+                                        </a>
                                     @endcan
 
                                     <!-- Logout -->
