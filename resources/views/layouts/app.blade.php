@@ -64,10 +64,6 @@
                             <a class="nav-link" href="{{ route('orders') }}">{{ __('Orders') }}</a>
                         </li>
 
-                        <a class="dropdown-item" href="{{ route('picklistNew') }}">
-                            {{ __('DO NOT USE') }}
-                        </a>
-
 
                     </ul>
 
@@ -82,6 +78,10 @@
 
                                 <!-- Menu Items END -->
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+
+                                    <a class="dropdown-item" href="{{ route('picklistNew') }}">
+                                        {{ __('New Picklist') }}
+                                    </a>
 
                                     <!-- Settings -->
                                     <a class="dropdown-item" href="{{ route('settings') }}">

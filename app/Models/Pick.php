@@ -52,6 +52,20 @@ class Pick extends Model
 
     /**
      * @param Builder $query
+     * @param boolean $in_stock_only
+     * @return mixed
+     */
+    public function scopeInStockOnly($query, $in_stock_only)
+    {
+        if (!$in_stock_only) {
+            return $query;
+        }
+
+        return $query->where('inventory_source.inventory_source_quantity', '>', 0);
+    }
+
+    /**
+     * @param Builder $query
      * @param string $currentLocation
      * @return Builder
      */

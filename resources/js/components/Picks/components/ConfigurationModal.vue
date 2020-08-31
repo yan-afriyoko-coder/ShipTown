@@ -14,12 +14,12 @@
 <!--                            <input v-model="picklistFilters['filter[single_line_orders_only]']" type="checkbox" class="form-check-input" />-->
 <!--                            <label class="form-check-label" >Show single line orders only</label>-->
 <!--                        </div>-->
-<!--                        <div class="form-group form-check">-->
-<!--                            <input v-model="picklistFilters['filter[in_stock_only]']" type="checkbox" class="form-check-input" />-->
-<!--                            <label class="form-check-label" >In stock only</label>-->
-<!--                        </div>-->
                         <div class="form-group form-check">
-                            <div>Inventory Location ID</div>
+                            <input v-model="urlFilters['in_stock_only']" type="checkbox" class="form-check-input" />
+                            <label class="form-check-label" >In stock only</label>
+                        </div>
+                        <div class="form-group form-check">
+                        <div>Inventory Location ID</div>
                             <input v-model="urlFilters['inventory_source_location_id']" type="number" class="form-check-input" />
                         </div>
                     </form>
@@ -47,7 +47,11 @@ export default {
     data() {
         return {
             urlFilters: {
-                'inventory_source_location_id': this.getUrlFilter('inventory_source_location_id', 100)
+                'inventory_source_location_id':
+                    this.getUrlFilter('inventory_source_location_id', 100),
+
+                'in_stock_only':
+                    this.getUrlFilter('in_stock_only', true)
             }
         }
     },
@@ -69,7 +73,10 @@ export default {
 
     methods: {
         handleSubmit() {
-            this.setUrlFilter('inventory_source_location_id', this.urlFilters['inventory_source_location_id'])
+            for (let urlFilter in this.urlFilters) {
+                this.setUrlFilter(urlFilter, this.urlFilters[urlFilter]);
+            }
+            // this.updateUrl(this.urlFilters);
             this.$emit('btnSaveClicked');
 
             $(this.$el).modal('hide');

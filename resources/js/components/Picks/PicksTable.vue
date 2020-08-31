@@ -144,6 +144,7 @@ export default {
                 include: 'product,product.aliases',
                 sort: 'inventory_source_shelf_location',
                 per_page: 3,
+                'filter[in_stock_only]': this.getUrlFilter('in_stock_only', true),
                 'filter[not_picked_only]': true,
                 'filter[inventory_source_location_id]': this.getUrlFilter('inventory_source_location_id'),
                 'filter[current_shelf_location]': this.getUrlFilter('current_shelf_location'),

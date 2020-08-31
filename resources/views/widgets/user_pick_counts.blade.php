@@ -12,9 +12,14 @@
     <div class="card-body">
         <h4 class="card-title">7 days picks count per user</h4>
         @foreach ($count_per_user as $count)
-        <h2 class="card-text">
-            <strong>{{ $count['name'] }} : {{ $count['total'] }}</strong>
-        </h2>
+            <div class="row">
+                <div class="col-4 offset-2 text-left">
+                    {{ $count['name'] }}
+                </div>
+                <div class="col-4 text-right">
+                    {{ $count['total'] }}
+                </div>
+            </div>
         @endforeach
     </div>
 </div>
