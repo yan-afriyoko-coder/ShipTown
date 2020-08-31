@@ -160,12 +160,12 @@ export default {
         },
 
         pickAll(pick) {
-            this.removeFromPicklist(pick);
             this.current_shelf_location = pick['inventory_source_shelf_location'];
             this.postPickUpdate(pick, pick['quantity_required'])
                 .then( () => {
                     this.displayPickedNotification(pick, pick['quantity_required']);
                     this.beep();
+                    this.removeFromPicklist(pick);
                 });
         },
 
@@ -184,11 +184,11 @@ export default {
         },
 
         makePartialPick: function (pick, toast) {
-            this.removeFromPicklist(pick);
             this.postPickUpdate(pick, toast.value)
                 .then(() => {
                     this.displayPickedNotification(pick, pick['quantity_required']);
                     this.beep();
+                    this.removeFromPicklist(pick);
                     this.reloadPicks();
                 });
         },

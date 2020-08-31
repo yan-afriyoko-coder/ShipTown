@@ -49,7 +49,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('invites', 'InvitesController@store');
 
-    Route::apiResource('picks', 'Api\PickController');
+    Route::apiResource('picks', 'Api\PickController')->except('store');
 
     Route::resource('widgets', 'Api\WidgetsController');
     Route::resource("rms_api_configuration", "Api\RmsapiConnectionController");
