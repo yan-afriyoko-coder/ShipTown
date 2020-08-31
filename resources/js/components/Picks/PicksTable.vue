@@ -5,12 +5,11 @@
                 <barcode-input-field @barcodeScanned="pickByBarcode"/>
             </div>
             <div class="col-4 pr-2">
-
-                <label>
-                    <input ref="current_location" class="form-control" placeholder="Scan sku or barcode"
+                <div class="">
+                    <input ref="current_location" class="form-control" placeholder="Current shelf"
                            v-model="current_shelf_location"
                            @keyup.enter="reloadPicks()"/>
-                </label>
+                </div>
 
             </div>
         </div>
