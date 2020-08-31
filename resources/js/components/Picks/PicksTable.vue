@@ -1,5 +1,26 @@
 <template>
     <div>
+
+        <div class="row mb-3">
+            <div class="col-8">
+                <div class="pl-1 pr-1">
+                    <barcode-input-field @barcodeScanned="pickByBarcode"/>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="row">
+                    <div class="col-7">
+                        <input ref="current_location" class="form-control" placeholder="Current shelf"
+                               v-model="current_shelf_location"
+                               @keyup.enter="reloadPicks()"/>
+                    </div>
+                    <div class="col-5 ml-0 pl-0">
+                        <button type="button" class="btn btn-light" data-toggle="modal" data-target="#picklistConfigurationModal" href="#"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div v-if="picklist.length === 0 && !isLoading" class="row" >
             <div class="col">
                 <div class="alert alert-info" role="alert">
@@ -7,32 +28,11 @@
                 </div>
             </div>
         </div>
-        <div v-else>
-            <div class="row mb-3">
-                <div class="col-8">
-                    <div class="pl-1 pr-1">
-                        <barcode-input-field @barcodeScanned="pickByBarcode"/>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="row">
-                        <div class="col-7">
-                            <input ref="current_location" class="form-control" placeholder="Current shelf"
-                                   v-model="current_shelf_location"
-                                   @keyup.enter="reloadPicks()"/>
-                        </div>
-                        <div class="col-5 ml-0 pl-0">
-                            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#picklistConfigurationModal" href="#"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <template v-for="pick in picklist">
-                    <pick-card :pick="pick" @swipeRight="pickAll" @swipeLeft="partialPickSwiped"/>
-                </template>
-            </div>
 
+        <div v-else>
+            <template v-for="pick in picklist">
+                <pick-card :pick="pick" @swipeRight="pickAll" @swipeLeft="partialPickSwiped"/>
+            </template>
         </div>
 
         <!--     Modal -->
