@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Packlist;
@@ -10,6 +11,7 @@ use App\Models\Picklist;
 use App\Models\PickRequest;
 use App\Models\Product;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
+use App\Observers\InventoryObserver;
 use App\Observers\Modules\Api2cart\Api2cartOrderImportsObserver;
 use App\Observers\OrderObserver;
 use App\Observers\OrderProductObserver;
@@ -62,6 +64,8 @@ class AppServiceProvider extends ServiceProvider
 
         Picklist::observe(PicklistsObserver::class);
         Packlist::observe(PacklistsObserver::class);
+
+        Inventory::observe(InventoryObserver::class);
 
         // Modules
         Api2cartOrderImports::observe(Api2cartOrderImportsObserver::class);

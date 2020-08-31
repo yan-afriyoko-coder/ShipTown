@@ -2,12 +2,18 @@
 
 namespace App\Providers;
 
+use App\Events\Inventory\CreatedEvent as Inventory_CreatedEvent_Alias;
+use App\Events\Inventory\DeletedEvent;
+use App\Events\Inventory\UpdatedEvent;
 use App\Events\OrderCreatedEvent;
 use App\Events\OrderStatusChangedEvent;
 use App\Events\PickPickedEvent;
-use App\Events\PickQuantityRequiredChangedEvent;
-use App\Events\PickRequestCreatedEvent;
+use App\Events\PickQuantityRequiredChangedEvent as PickQuantity_RequiredChangedEvent_Alias;
+use App\Events\PickRequestCreatedEvent as PickRequest_CreatedEvent_Alias;
 use App\Events\PickUnpickedEvent;
+use App\Listeners\Inventory\Created\AddToProductTotalQuantityListener;
+use App\Listeners\Inventory\Deleted\DeductFromProductTotalQuantityListener;
+use App\Listeners\Inventory\Updated\UpdateProductTotalQuantityListener;
 use App\Listeners\Order\Created\AddToOldPicklistListener as AddToOldPicklistListener_OnOrderCreated;
 use App\Listeners\Order\StatusChanged\AddToOldPicklistListener as AddToOldPicklistListener_OnStatusChanged;
 use App\Listeners\Order\StatusChanged\CreatePickRequestsListener;
@@ -49,20 +55,33 @@ class EventServiceProvider extends ServiceProvider
 
         // Pick
         PickPickedEvent::class => [
-            FillPickRequestsPickedQuantityListener::class
+            FillPickRequestsPickedQuantityListener::class,
         ],
 
         PickUnpickedEvent::class => [
-            ClearPickRequestsQuantityPickedListener::class
+            ClearPickRequestsQuantityPickedListener::class,
         ],
 
-        PickQuantityRequiredChangedEvent::class => [
-            MovePickRequestToNewPickListener::class
+        PickQuantity_RequiredChangedEvent_Alias::class => [
+            MovePickRequestToNewPickListener::class,
         ],
 
         // PickRequest
-        PickRequestCreatedEvent::class => [
-            AddQuantityToPicklistListener::class
+        PickRequest_CreatedEvent_Alias::class => [
+            AddQuantityToPicklistListener::class,
+        ],
+
+        // Inventory
+        Inventory_CreatedEvent_Alias::class => [
+            AddToProductTotalQuantityListener::class,
+        ],
+
+        UpdatedEvent::class => [
+            UpdateProductTotalQuantityListener::class,
+        ],
+
+        DeletedEvent::class => [
+            DeductFromProductTotalQuantityListener::class,
         ],
 
         // Other
@@ -76,7 +95,6 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $subscribe = [
         \App\Listeners\PublishSnsNotifications::class,
-        \App\Listeners\Inventory\UpdateProductQuantity::class,
     ];
 
     /**

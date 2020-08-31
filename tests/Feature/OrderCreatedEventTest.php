@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Events\OrderCreatedEvent;
 use App\Listeners\AddToPicklistOnOrderCreatedEventListener;
+use App\Listeners\Order\Created\AddToOldPicklistListener;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Picklist;
@@ -40,7 +41,7 @@ class OrderCreatedEventTest extends TestCase
         $order->orderProducts()->saveMany(factory(OrderProduct::class, 10)->make());
 
         // act
-        $listener = new AddToPicklistOnOrderCreatedEventListener();
+        $listener = new AddToOldPicklistListener();
         $listener->addToPicklist($order);
 
         // check if all quantities are added to picklist

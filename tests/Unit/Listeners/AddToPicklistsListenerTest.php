@@ -4,6 +4,7 @@ namespace Tests\Unit\Listeners;
 
 use App\Events\OrderCreatedEvent;
 use App\Listeners\AddToPicklistOnOrderCreatedEventListener;
+use App\Listeners\Order\Created\AddToOldPicklistListener;
 use App\Listeners\OrderStatusChangedListener;
 use App\Models\Order;
 use App\Models\OrderProduct;
@@ -36,7 +37,7 @@ class AddToPicklistsListenerTest extends TestCase
             factory(OrderProduct::class, 10)->make()
         );
 
-        $listener = new AddToPicklistOnOrderCreatedEventListener();
+        $listener = new AddToOldPicklistListener();
 
         $listener->handle(new OrderCreatedEvent($order));
 

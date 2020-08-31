@@ -5,6 +5,7 @@ namespace Tests\Unit\Listeners;
 use App\Events\OrderCreatedEvent;
 use App\Events\OrderStatusChangedEvent;
 use App\Listeners\AddToPicklistOnOrderCreatedEventListener;
+use App\Listeners\Order\StatusChanged\AddToOldPicklistListener;
 use App\Listeners\OrderStatusChangedListener;
 use App\Models\Order;
 use App\Models\OrderProduct;
@@ -46,7 +47,7 @@ class RemoveFromPicklistListenerTest extends TestCase
         $order->update(['status_code' => 'processing']);
 
         // act
-        (new OrderStatusChangedListener())
+        (new AddToOldPicklistListener())
             ->handle(new OrderStatusChangedEvent($order));
 
         // assert
