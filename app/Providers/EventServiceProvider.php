@@ -31,10 +31,13 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
+
+        // App
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
 
+        // Order
         OrderCreatedEvent::class => [
             AddToOldPicklistListener_OnOrderCreated::class,
         ],
@@ -44,10 +47,7 @@ class EventServiceProvider extends ServiceProvider
             CreatePickRequestsListener::class,
         ],
 
-        PickRequestCreatedEvent::class => [
-            AddQuantityToPicklistListener::class
-        ],
-
+        // Pick
         PickPickedEvent::class => [
             FillPickRequestsPickedQuantityListener::class
         ],
@@ -58,7 +58,15 @@ class EventServiceProvider extends ServiceProvider
 
         PickQuantityRequiredChangedEvent::class => [
             MovePickRequestToNewPickListener::class
-        ]
+        ],
+
+        // PickRequest
+        PickRequestCreatedEvent::class => [
+            AddQuantityToPicklistListener::class
+        ],
+
+        // Other
+
     ];
 
     /**
@@ -68,7 +76,6 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $subscribe = [
         \App\Listeners\PublishSnsNotifications::class,
-        \App\Listeners\UpdateQuantityReserved::class,
         \App\Listeners\Inventory\UpdateProductQuantity::class,
     ];
 
