@@ -18,6 +18,7 @@
             return {
                 currentLocation: '',
                 barcode: '',
+                placeholder: 'Scan sku 2or barcode'
             }
         },
 

@@ -18,6 +18,15 @@
         router: Router,
 
         methods: {
+            getUrlFilterOrSet: function(name, defaultValue) {
+                let value = this.getUrlFilter(name);
+            },
+
+            setUrlFilter: function(name, defaultValue = null) {
+                const $fullFilterName = 'filter['+name+']';
+                return this.setUrlParameter($fullFilterName, defaultValue);
+            },
+
             getUrlFilter: function(name, defaultValue = null) {
                 const $fullFilterName = 'filter['+name+']';
                 return this.getUrlParameter($fullFilterName, defaultValue);

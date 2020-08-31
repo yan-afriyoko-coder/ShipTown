@@ -1,26 +1,48 @@
 <template>
     <div>
-        <template v-for="pick in picklist">
-            <pick-card :pick="pick" @swipeRight="pickAll" @swipeLeft="partialPickSwiped"/>
-        </template>
+        <div class="row mb-3">
+            <div class="col-8 pl-1 pr-1">
+                <barcode-input-field @barcodeScanned="pickByBarcode"/>
+            </div>
+            <div class="col-4 pr-2">
+
+                <label>
+                    <input ref="current_location" class="form-control" placeholder="Scan sku or barcode"
+                           v-model="current_shelf_location"
+                           @keyup.enter="reloadPicks()"/>
+                </label>
+
+            </div>
+        </div>
+        <div>
+            <template v-for="pick in picklist">
+                <pick-card :pick="pick" @swipeRight="pickAll" @swipeLeft="partialPickSwiped"/>
+            </template>
+        </div>
     </div>
 </template>
 
 <script>
 import PickCard from "./components/PickCard.vue";
 import loadingOverlay from '../../mixins/loading-overlay';
+import BarcodeInputField from "../SharedComponents/BarcodeInputField";
+
+import url from "../../mixins/url";
+import beep from "../../mixins/beep";
 
 export default {
     name: "PicksTable",
 
-    mixins: [loadingOverlay],
+    mixins: [loadingOverlay, url, beep],
 
     components: {
-        'pick-card': PickCard
+        'pick-card': PickCard,
+        'barcode-input-field': BarcodeInputField,
     },
 
     mounted() {
         this.reloadPicks();
+        this.setUrlFilter('inventory_source_id', 100);
     },
 
     watch: {
@@ -36,25 +58,84 @@ export default {
 
             },
             deep: true
+        },
+        current_shelf_location() {
+            this.setUrlFilter('current_shelf_location', this.current_shelf_location);
         }
     },
 
     data: function() {
         return {
-            filters: {
-                include: 'product',
-                'filter[not_picked_only]': true,
-                'filter[inventory_source_id]': 100,
-            },
             picklist: [],
+            current_shelf_location: ''
         };
     },
 
     methods: {
+        pickByBarcode(barcode) {
+            if(barcode === '') {
+                return;
+            }
+
+            let pickItem = this.findPickItem(barcode);
+
+            if(pickItem) {
+                this.pickAll(pickItem);
+                this.setFocusOnBarcodeInput();
+                this.simulateSelectAll();
+                return;
+            }
+
+            this.$snotify.error(`"${barcode}" not found on picklist!`);
+            this.setFocusOnBarcodeInput();
+            this.simulateSelectAll();
+        },
+
+        findPickItem: function (barcode) {
+            for (let element of this.picklist) {
+
+                if(element['sku_ordered'] === barcode) {
+                    return element;
+                }
+
+                if(element['product'] === null){
+                    continue;
+                }
+
+                if(element['product']['sku'] === barcode) {
+                    return element;
+                }
+
+                if(typeof element['product']['aliases'] === 'undefined') {
+                    continue;
+                }
+
+                for(let alias of element['product']['aliases']) {
+                    if(alias['alias'] === barcode){
+                        return element;
+                    }
+                }
+
+
+            }
+            return null;
+        },
+
         reloadPicks() {
+            const params = {
+                include: 'product,product.aliases',
+                sort: 'inventory_source_shelf_location',
+                per_page: 3,
+                'filter[not_picked_only]': true,
+                'filter[inventory_source_id]': this.getUrlFilter('inventory_source_id'),
+                'filter[current_shelf_location]': this.getUrlFilter('current_shelf_location'),
+            };
+
             this.showLoading();
+
             this.picklist = [];
-            return axios.get('/api/picks', {params:  this.filters})
+
+            return axios.get('/api/picks', {params:  params})
                 .then( ({data}) => {
                     this.picklist = data.data;
                 })
@@ -81,9 +162,11 @@ export default {
 
         pickAll(pick) {
             this.removeFromPicklist(pick);
+            this.current_shelf_location = pick['inventory_source_shelf_location'];
             this.postPickUpdate(pick, pick['quantity_required'])
                 .then( () => {
                     this.displayPickedNotification(pick, pick['quantity_required']);
+                    this.beep();
                 });
         },
 
@@ -91,6 +174,7 @@ export default {
             axios.delete('/api/picks/' + pick['id'])
                 .then(() => {
                     this.$snotify.warning('Pick deleted');
+                    this.warningBeep();
                 })
                 .catch( error => {
                     this.$snotify.error('Action failed (Http code  '+ error.response.status+')');
@@ -105,6 +189,7 @@ export default {
             this.postPickUpdate(pick, toast.value)
                 .then(() => {
                     this.displayPickedNotification(pick, pick['quantity_required']);
+                    this.beep();
                     this.reloadPicks();
                 });
         },
@@ -186,6 +271,7 @@ export default {
                         .then(() => {
                             this.hideLoading();
                             this.$snotify.warning('Action reverted');
+                            this.warningBeep();
                         });
                 });
         },

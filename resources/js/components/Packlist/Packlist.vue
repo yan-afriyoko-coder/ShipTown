@@ -78,7 +78,7 @@
     import PackedEntry from './mixins/PackedEntry';
 
     import OrderDetails from "./mixins/OrderDetails";
-    import BarcodeInputField from "./mixins/BarcodeInputField";
+    import BarcodeInputField from "../SharedComponents/BarcodeInputField";
     import FiltersModal from "./mixins/FiltersModal";
     import url from "../../mixins/url";
 
