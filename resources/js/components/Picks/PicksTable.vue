@@ -143,7 +143,7 @@ export default {
             const params = {
                 include: 'product,product.aliases',
                 sort: 'inventory_source_shelf_location',
-                per_page: 3,
+                per_page: this.getUrlParameter('per_page', true),
                 'filter[in_stock_only]': this.getUrlFilter('in_stock_only', true),
                 'filter[not_picked_only]': true,
                 'filter[inventory_source_location_id]': this.getUrlFilter('inventory_source_location_id'),
