@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Events\Inventory\CreatedEvent as Inventory_CreatedEvent_Alias;
 use App\Events\Inventory\DeletedEvent;
 use App\Events\Inventory\UpdatedEvent;
+use App\Events\Order\CreatedEvent as Order_CreatedEvent_Alias;
+use App\Events\Order\StatusChangedEvent as Order_StatusChangedEvent_Alias;
 use App\Events\OrderCreatedEvent;
 use App\Events\OrderStatusChangedEvent;
 use App\Events\PickPickedEvent;
@@ -17,6 +19,7 @@ use App\Listeners\Inventory\Updated\UpdateProductTotalQuantityListener;
 use App\Listeners\Order\Created\AddToOldPicklistListener as AddToOldPicklistListener_OnOrderCreated;
 use App\Listeners\Order\StatusChanged\AddToOldPicklistListener as AddToOldPicklistListener_OnStatusChanged;
 use App\Listeners\Order\StatusChanged\CreatePickRequestsListener;
+use App\Listeners\Order\StatusChanged\RemoveFromOldPicklistListener;
 use App\Listeners\Pick\Picked\FillPickRequestsPickedQuantityListener;
 use App\Listeners\Pick\QuantityRequiredChanged\MovePickRequestToNewPickListener;
 use App\Listeners\Pick\Unpicked\ClearPickRequestsQuantityPickedListener;
@@ -44,12 +47,13 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         // Order
-        OrderCreatedEvent::class => [
+        Order_CreatedEvent_Alias::class => [
             AddToOldPicklistListener_OnOrderCreated::class,
         ],
 
-        OrderStatusChangedEvent::class => [
+        Order_StatusChangedEvent_Alias::class => [
             AddToOldPicklistListener_OnStatusChanged::class,
+            RemoveFromOldPicklistListener::class,
             CreatePickRequestsListener::class,
         ],
 

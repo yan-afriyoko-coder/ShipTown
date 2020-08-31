@@ -3,8 +3,8 @@
 
 namespace App\Services;
 
-use App\Events\OrderCreatedEvent;
-use App\Events\OrderStatusChangedEvent;
+use App\Events\Order\CreatedEvent;
+use App\Events\Order\StatusChangedEvent;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderProduct;
@@ -75,8 +75,8 @@ class OrderService
             $order->orderProducts()->save($orderProduct);
         }
 
-        OrderCreatedEvent::dispatch($order);
-        OrderStatusChangedEvent::dispatch($order);
+        CreatedEvent::dispatch($order);
+        StatusChangedEvent::dispatch($order);
 
         return $order;
     }

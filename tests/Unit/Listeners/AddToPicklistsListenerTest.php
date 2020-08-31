@@ -2,17 +2,13 @@
 
 namespace Tests\Unit\Listeners;
 
-use App\Events\OrderCreatedEvent;
-use App\Listeners\AddToPicklistOnOrderCreatedEventListener;
+use App\Events\Order\CreatedEvent;
 use App\Listeners\Order\Created\AddToOldPicklistListener;
-use App\Listeners\OrderStatusChangedListener;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Picklist;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AddToPicklistsListenerTest extends TestCase
 {
@@ -39,7 +35,7 @@ class AddToPicklistsListenerTest extends TestCase
 
         $listener = new AddToOldPicklistListener();
 
-        $listener->handle(new OrderCreatedEvent($order));
+        $listener->handle(new CreatedEvent($order));
 
         $this->assertEquals(
             Picklist::query()->sum('quantity_requested'),

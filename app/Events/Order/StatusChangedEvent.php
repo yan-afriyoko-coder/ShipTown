@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Order;
 
 use App\Models\Order;
 use Illuminate\Broadcasting\Channel;
@@ -9,7 +9,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class OrderStatusChangedEvent
+class StatusChangedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 

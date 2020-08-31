@@ -2,12 +2,9 @@
 
 namespace App\Listeners\Order\Created;
 
-use App\Events\OrderCreatedEvent;
+use App\Events\Order\CreatedEvent;
 use App\Models\Order;
-use App\Models\Picklist;
 use App\Services\PicklistService;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class AddToOldPicklistListener
 {
@@ -24,10 +21,10 @@ class AddToOldPicklistListener
     /**
      * Handle the event.
      *
-     * @param OrderCreatedEvent $event
+     * @param CreatedEvent $event
      * @return void
      */
-    public function handle(OrderCreatedEvent $event)
+    public function handle(CreatedEvent $event)
     {
         $this->addToPicklist($event->order);
     }
@@ -37,7 +34,7 @@ class AddToOldPicklistListener
      */
     public function addToPicklist(Order $order): void
     {
-        if ($order->status_code == 'picking') {
+        if ($order->status_code === 'picking') {
             PicklistService::addOrderProductPick(
                 $order->orderProducts()->get()->toArray()
             );

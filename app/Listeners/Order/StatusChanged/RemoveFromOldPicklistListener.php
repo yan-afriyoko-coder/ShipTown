@@ -5,7 +5,7 @@ namespace App\Listeners\Order\StatusChanged;
 use App\Events\Order\StatusChangedEvent;
 use App\Services\PicklistService;
 
-class AddToOldPicklistListener
+class RemoveFromOldPicklistListener
 {
     /**
      * Create the event listener.
@@ -25,8 +25,8 @@ class AddToOldPicklistListener
      */
     public function handle(StatusChangedEvent $event)
     {
-        if ($event->order->status_code == 'picking') {
-            PicklistService::addOrderProductPick(
+        if ($event->order->status_code !== 'picking') {
+            PicklistService::removeOrderProductPick(
                 $event->order->orderProducts()->get()->toArray()
             );
         }

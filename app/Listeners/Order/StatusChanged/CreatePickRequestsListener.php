@@ -2,7 +2,7 @@
 
 namespace App\Listeners\Order\StatusChanged;
 
-use App\Events\OrderStatusChangedEvent;
+use App\Events\Order\StatusChangedEvent;
 use App\Models\PickRequest;
 
 class CreatePickRequestsListener
@@ -20,10 +20,10 @@ class CreatePickRequestsListener
     /**
      * Handle the event.
      *
-     * @param  OrderStatusChangedEvent $event
+     * @param StatusChangedEvent $event
      * @return void
      */
-    public function handle(OrderStatusChangedEvent $event)
+    public function handle(StatusChangedEvent $event)
     {
         if ($event->isStatusCode('picking')) {
             $orderProducts = $event->getOrder()->orderProducts()->get();

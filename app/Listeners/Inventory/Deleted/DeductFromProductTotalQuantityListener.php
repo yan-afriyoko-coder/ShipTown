@@ -2,7 +2,7 @@
 
 namespace App\Listeners\Inventory\Deleted;
 
-use App\Events\Inventory\UpdatedEvent;
+use App\Events\Inventory\DeletedEvent;
 
 class DeductFromProductTotalQuantityListener
 {
@@ -19,10 +19,10 @@ class DeductFromProductTotalQuantityListener
     /**
      * Handle the event.
      *
-     * @param UpdatedEvent $event
+     * @param DeletedEvent $event
      * @return void
      */
-    public function handle(UpdatedEvent $event)
+    public function handle(DeletedEvent $event)
     {
         $event->getInventory()->product()->decrement(
             'quantity',

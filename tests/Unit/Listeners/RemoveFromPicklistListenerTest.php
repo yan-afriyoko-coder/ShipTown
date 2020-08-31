@@ -2,19 +2,15 @@
 
 namespace Tests\Unit\Listeners;
 
-use App\Events\OrderCreatedEvent;
-use App\Events\OrderStatusChangedEvent;
-use App\Listeners\AddToPicklistOnOrderCreatedEventListener;
+use App\Events\Order\StatusChangedEvent;
 use App\Listeners\Order\StatusChanged\AddToOldPicklistListener;
-use App\Listeners\OrderStatusChangedListener;
+use App\Listeners\Order\StatusChanged\RemoveFromOldPicklistListener;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Picklist;
 use App\Services\PicklistService;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RemoveFromPicklistListenerTest extends TestCase
 {
@@ -48,7 +44,10 @@ class RemoveFromPicklistListenerTest extends TestCase
 
         // act
         (new AddToOldPicklistListener())
-            ->handle(new OrderStatusChangedEvent($order));
+            ->handle(new StatusChangedEvent($order));
+
+        (new RemoveFromOldPicklistListener())
+            ->handle(new StatusChangedEvent($order));
 
         // assert
         $this->assertEquals(
