@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listeners\PickRequestCreatedEvent;
+namespace App\Listeners\PickRequest\Created;
 
 use App\Events\PickRequestCreatedEvent;
 use App\Models\Pick;

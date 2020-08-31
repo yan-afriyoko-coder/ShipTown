@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Listeners\PickUnpickedEvent;
+namespace App\Listeners\Pick\Picked;
 
+use App\Events\PickPickedEvent;
 use App\Models\PickRequest;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\DB;
 
-class ClearPickRequestsQuantityPickedListener
+class FillPickRequestsPickedQuantityListener
 {
     /**
      * Create the event listener.
@@ -22,13 +23,13 @@ class ClearPickRequestsQuantityPickedListener
     /**
      * Handle the event.
      *
-     * @param  object  $event
+     * @param PickPickedEvent $event
      * @return void
      */
-    public function handle($event)
+    public function handle(PickPickedEvent $event)
     {
         PickRequest::query()
             ->where(['pick_id' => $event->getPick()->getKey()])
-            ->update(['quantity_picked' => 0]);
+            ->update(['quantity_picked' => DB::raw('quantity_required')]);
     }
 }

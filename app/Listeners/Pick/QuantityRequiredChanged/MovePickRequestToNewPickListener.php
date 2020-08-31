@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listeners\PickQuantityRequiredChangedEvent;
+namespace App\Listeners\Pick\QuantityRequiredChanged;
 
 use App\Events\PickQuantityRequiredChangedEvent;
 use App\Models\PickRequest;

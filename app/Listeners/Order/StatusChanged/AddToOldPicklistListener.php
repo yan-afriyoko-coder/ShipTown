@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Listeners\Order\StatusChanged;
 
 use App\Events\OrderStatusChangedEvent;
 use App\Models\Picklist;
@@ -8,7 +8,7 @@ use App\Services\PicklistService;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class OrderStatusChangedListener
+class AddToOldPicklistListener
 {
     /**
      * Create the event listener.

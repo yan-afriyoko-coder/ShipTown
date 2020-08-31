@@ -8,14 +8,13 @@ use App\Events\PickPickedEvent;
 use App\Events\PickQuantityRequiredChangedEvent;
 use App\Events\PickRequestCreatedEvent;
 use App\Events\PickUnpickedEvent;
-use App\Listeners\AddToPicklistOnOrderCreatedEventListener;
-use App\Listeners\OrderStatusChangedEvent\CreatePickRequestsListener;
-use App\Listeners\OrderStatusChangedListener;
-use App\Listeners\PickPickedEvent\FillPickRequestsPickedQuantityListener;
-use App\Listeners\PickQuantityRequiredChangedEvent\MovePickRequestToNewPickListener;
-use App\Listeners\PickRequestCreatedEvent\AddQuantityToPicklistListener;
-use App\Listeners\PickUnpickedEvent\ClearPickRequestsQuantityPickedListener;
-use App\Models\Pick;
+use App\Listeners\Order\Created\AddToOldPicklistListener as AddToOldPicklistListener_OnOrderCreated;
+use App\Listeners\Order\StatusChanged\AddToOldPicklistListener as AddToOldPicklistListener_OnStatusChanged;
+use App\Listeners\Order\StatusChanged\CreatePickRequestsListener;
+use App\Listeners\Pick\Picked\FillPickRequestsPickedQuantityListener;
+use App\Listeners\Pick\QuantityRequiredChanged\MovePickRequestToNewPickListener;
+use App\Listeners\Pick\Unpicked\ClearPickRequestsQuantityPickedListener;
+use App\Listeners\PickRequest\Created\AddQuantityToPicklistListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -35,22 +34,28 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+
         OrderCreatedEvent::class => [
-            AddToPicklistOnOrderCreatedEventListener::class,
+            AddToOldPicklistListener_OnOrderCreated::class,
         ],
+
         OrderStatusChangedEvent::class => [
-            OrderStatusChangedListener::class,
+            AddToOldPicklistListener_OnStatusChanged::class,
             CreatePickRequestsListener::class,
         ],
+
         PickRequestCreatedEvent::class => [
             AddQuantityToPicklistListener::class
         ],
+
         PickPickedEvent::class => [
             FillPickRequestsPickedQuantityListener::class
         ],
+
         PickUnpickedEvent::class => [
             ClearPickRequestsQuantityPickedListener::class
         ],
+
         PickQuantityRequiredChangedEvent::class => [
             MovePickRequestToNewPickListener::class
         ]

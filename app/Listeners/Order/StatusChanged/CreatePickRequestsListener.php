@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listeners\OrderStatusChangedEvent;
+namespace App\Listeners\Order\StatusChanged;
 
 use App\Events\OrderStatusChangedEvent;
 use App\Models\PickRequest;
