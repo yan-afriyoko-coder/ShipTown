@@ -27,7 +27,7 @@
                                         </div>
                                         <div class="col-2" v-bind:class="{ 'bg-warning': Math.ceil(pick['quantity_required']) > 1 }">
                                             <div>To Pick</div>
-                                            <div class="h3 red">{{ Math.ceil(pick['quantity_required']) }}</div>
+                                            <div class="h3 red">{{ this.quantity_requested_integer }}</div>
                                         </div>
                                         <div class="col-4">
                                             <div class="">Shelf</div>
@@ -61,7 +61,6 @@ export default {
 
     props: {
         pick: Object,
-
     },
 
     data() {
@@ -73,12 +72,13 @@ export default {
     computed: {
         pickCardId() {
             return `pick-card-${this.pick['id']}`;
-        }
-    },
-
-    created() {
-        this.product_sku = this.pick['product'] ? this.pick['product']['sku'] : '';
-        this.quantity_requested_integer = Math.ceil(this.pick['quantity_requested']);
+        },
+        quantity_requested_integer() {
+            return Math.ceil(this.pick['quantity_required']);
+        },
+        product_sku() {
+            return  this.pick['product'] ? this.pick['product']['sku'] : '';
+        },
     },
 
     mounted() {

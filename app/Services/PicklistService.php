@@ -26,6 +26,7 @@ class PicklistService
             'product_id' => $orderProduct->product_id,
             'sku_ordered' => $orderProduct->sku_ordered,
             'name_ordered' => $orderProduct->name_ordered,
+            'picked_at' => null,
         ], [
             'quantity_required' => 0
         ]);

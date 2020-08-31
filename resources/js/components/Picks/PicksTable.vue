@@ -99,15 +99,11 @@ export default {
 
             if(pickItem) {
                 this.pickAll(pickItem);
-                this.setFocusOnBarcodeInput();
-                this.simulateSelectAll();
                 return;
             }
 
             this.$snotify.error(`"${barcode}" not found on picklist!`);
             this.errorBeep();
-            this.setFocusOnBarcodeInput();
-            this.simulateSelectAll();
         },
 
         findPickItem: function (barcode) {
