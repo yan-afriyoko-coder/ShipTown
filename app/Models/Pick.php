@@ -42,6 +42,16 @@ class Pick extends Model
 
     /**
      * @param Builder $query
+     * @param string $currentLocation
+     * @return Builder
+     */
+    public function scopeMinimumShelfLocation($query, $currentLocation)
+    {
+        return $query->where('inventory_source.inventory_source_shelf_location', '>=', $currentLocation);
+    }
+
+    /**
+     * @param Builder $query
      * @param int $inventory_location_id
      * @return Builder
      */
