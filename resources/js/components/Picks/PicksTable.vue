@@ -12,13 +12,16 @@
                 <div class="col-8 pl-1 pr-1">
                     <barcode-input-field @barcodeScanned="pickByBarcode"/>
                 </div>
-                <div class="col-4 pr-2">
+                <div class="col-3 pr-2">
                     <div class="">
                         <input ref="current_location" class="form-control" placeholder="Current shelf"
                                v-model="current_shelf_location"
                                @keyup.enter="reloadPicks()"/>
                     </div>
 
+                </div>
+                <div class="col-1">
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#picklistConfigurationModal" href="#"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
                 </div>
             </div>
             <div>
@@ -28,6 +31,10 @@
             </div>
 
         </div>
+
+        <!--     Modal -->
+        <picklist-configuration-modal id='picklistConfigurationModal' @btnSaveClicked="reloadPicks" />
+
     </div>
 </template>
 
@@ -35,6 +42,7 @@
 import PickCard from "./components/PickCard.vue";
 import loadingOverlay from '../../mixins/loading-overlay';
 import BarcodeInputField from "../SharedComponents/BarcodeInputField";
+import PicklistConfigurationModalNew from './components/ConfigurationModal.vue';
 
 import url from "../../mixins/url";
 import beep from "../../mixins/beep";
@@ -47,11 +55,12 @@ export default {
     components: {
         'pick-card': PickCard,
         'barcode-input-field': BarcodeInputField,
+        'picklist-configuration-modal': PicklistConfigurationModalNew   ,
     },
 
     mounted() {
         this.reloadPicks();
-        this.setUrlFilter('inventory_source_id', 100);
+        this.setUrlFilter('inventory_source_location_id', 100);
     },
 
     watch: {
@@ -137,7 +146,7 @@ export default {
                 sort: 'inventory_source_shelf_location',
                 per_page: 3,
                 'filter[not_picked_only]': true,
-                'filter[inventory_source_id]': this.getUrlFilter('inventory_source_id'),
+                'filter[inventory_source_location_id]': this.getUrlFilter('inventory_source_location_id'),
                 'filter[current_shelf_location]': this.getUrlFilter('current_shelf_location'),
             };
 

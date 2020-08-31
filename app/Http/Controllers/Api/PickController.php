@@ -26,7 +26,7 @@ class PickController extends Controller
         $pick = QueryBuilder::for(Pick::class)
             ->allowedFilters([
                 AllowedFilter::scope('not_picked_only', 'whereNotPicked'),
-                AllowedFilter::scope('inventory_source_id', 'addInventorySource')->default(100),
+                AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->default(100),
                 AllowedFilter::scope('current_shelf_location', 'MinimumShelfLocation'),
             ])
             ->allowedIncludes([
