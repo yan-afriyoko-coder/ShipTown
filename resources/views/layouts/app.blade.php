@@ -54,17 +54,12 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('picklist') }}">{{ __('Picklist') }}</a>
                         </li>
-
-
-
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('packlist') }}">{{ __('Packlist') }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('orders') }}">{{ __('Orders') }}</a>
                         </li>
-
-
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -79,8 +74,8 @@
                                 <!-- Menu Items END -->
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 
-                                    <a class="dropdown-item" href="{{ route('picklistNew') }}">
-                                        {{ __('New Picklist') }}
+                                    <a class="dropdown-item" href="{{ route('picklistOld') }}">
+                                        {{ __('Old Picklist') }}
                                     </a>
 
                                     <!-- Settings -->

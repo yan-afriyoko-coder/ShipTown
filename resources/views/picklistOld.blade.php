@@ -15,7 +15,7 @@
     @endif
     <div class="row justify-content-center">
         <div class="col-lg-12">
-            <picks-table></picks-table>
+            <picklist-table></picklist-table>
         </div>
     </div>
 </div>

@@ -33,9 +33,12 @@ Route::middleware('auth')->group(function () {
     Route::redirect('/', 'dashboard');
     Route::view('/dashboard', 'dashboard')->name('dashboard');
     Route::view('/products', 'products')->name('products');
+
     Route::view('/picklist', 'picklist')->name('picklist');
+    Route::view('/picklist/old', 'picklistOld')->name('picklistOld');
+
     Route::view('/packlist', 'packlist')->name('packlist');
-    Route::view('/picklist/new', 'picklistNew')->name('picklistNew');
+
     Route::view('/orders', 'orders')->name('orders');
 
     Route::get('pdf/orders/{order_number}/{template}', 'PdfOrderController@show');
