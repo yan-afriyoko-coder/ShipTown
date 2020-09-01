@@ -163,6 +163,7 @@ export default {
                 })
                 .then( () => {
                         this.hideLoading();
+                        this.setFocusOnBarcodeInput();
                 });
         },
 
@@ -192,7 +193,10 @@ export default {
         deletePick: function (pick) {
             axios.delete('/api/picks/' + pick['id'])
                 .then(() => {
-                    this.$snotify.warning('Pick deleted');
+                    this.$snotify.warning('Pick deleted', {
+                        timeout: 1500,
+                        icon: false,
+                    });
                     this.warningBeep();
                 })
                 .catch( error => {
@@ -289,7 +293,10 @@ export default {
                     this.reloadPicks()
                         .then(() => {
                             this.hideLoading();
-                            this.$snotify.warning('Action reverted');
+                            this.$snotify.warning('Action reverted', {
+                                timeout: 1500,
+                                icon: false,
+                            });
                             this.warningBeep();
                         });
                 });

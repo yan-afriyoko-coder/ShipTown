@@ -1,7 +1,7 @@
 <template>
     <div>
         <input ref="barcode" class="form-control" placeholder="Scan sku or barcode"
-               v-observe-visibility="barcodeVisibilityChanged"
+               v-observe-visibility="setFocusOnBarcodeInput"
                v-model="barcode"
                @focus="simulateSelectAll"
                @keyup.enter="barcodeScanned(barcode)"/>
@@ -26,16 +26,15 @@
             barcodeScanned(barcode) {
                 this.$emit('barcodeScanned', barcode);
                 this.setFocusOnBarcodeInput();
-                this.simulateSelectAll();
-            },
-
-            barcodeVisibilityChanged: function() {
-                this.setFocusOnBarcodeInput();
-                this.simulateSelectAll();
             },
 
             setFocusOnBarcodeInput() {
+                if (this.$refs.barcode === document.activeElement) {
+                    return;
+                }
+
                 this.$refs.barcode.focus();
+                this.simulateSelectAll();
             },
 
             simulateSelectAll() {
