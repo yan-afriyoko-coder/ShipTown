@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Events\PickRequest\DeletedEvent;
 use App\Events\PickRequestCreatedEvent;
 use App\Models\Pick;
 use App\Models\PickRequest;
@@ -38,7 +39,7 @@ class PickRequestObserver
      */
     public function deleted(PickRequest $pickRequest)
     {
-        //
+        DeletedEvent::dispatch($pickRequest);
     }
 
     /**

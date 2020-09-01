@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use phpseclib\Math\BigInteger;
 
 /**
@@ -14,6 +15,8 @@ use phpseclib\Math\BigInteger;
  */
 class PickRequest extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'order_product_id',
         'quantity_required',

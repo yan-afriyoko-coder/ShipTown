@@ -26,7 +26,7 @@ class AddToOldPicklistListener
     public function handle(StatusChangedEvent $event)
     {
         if ($event->order->status_code == 'picking') {
-            PicklistService::addOrderProductPick(
+            PicklistService::addOrderProductToOldPicklist(
                 $event->order->orderProducts()->get()->toArray()
             );
         }

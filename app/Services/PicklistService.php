@@ -36,25 +36,12 @@ class PicklistService
         $pickRequest->update(['pick_id' => $pick->getKey()]);
     }
 
-    /**
-     * @param PickRequest $pickRequest
-     */
-    public static function removeFromPicklist(PickRequest $pickRequest)
-    {
-        $orderProduct = $pickRequest->orderProduct()->first();
-
-        $pick = $pickRequest->pick();
-
-        $pick->decrement('quantity_required', $orderProduct->quantity_ordered);
-
-        $pickRequest->update(['pick_id' => null]);
-    }
 
     /**
      * @param OrderProduct|array $orderProduct
      * @return void
      */
-    public static function addOrderProductPick($orderProduct)
+    public static function addOrderProductToOldPicklist($orderProduct)
     {
         foreach (Arr::wrap($orderProduct) as $orderProduct) {
             Picklist::updateOrCreate([
@@ -74,7 +61,7 @@ class PicklistService
      * @param OrderProduct|array $orderProduct
      * @return void
      */
-    public static function removeOrderProductPick($orderProduct)
+    public static function removeOrderProductFromOldPicklist($orderProduct)
     {
         foreach (Arr::wrap($orderProduct) as $orderProduct) {
             Picklist::query()

@@ -62,12 +62,21 @@ class StatusChangedEvent
     }
 
     /**
-     * @param $expected
+     * @param $name
      * @return bool
      */
-    public function wasStatusCode($expected)
+    public function isNotStatusCode($name)
     {
-        return $this->getOldStatusCode() === $expected;
+        return !$this->isStatusCode($name);
+    }
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function wasStatusCode($name)
+    {
+        return $this->getOldStatusCode() === $name;
     }
 
     /**

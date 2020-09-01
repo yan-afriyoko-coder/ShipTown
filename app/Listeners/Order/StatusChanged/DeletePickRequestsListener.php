@@ -5,7 +5,7 @@ namespace App\Listeners\Order\StatusChanged;
 use App\Events\Order\StatusChangedEvent;
 use App\Models\PickRequest;
 
-class CreatePickRequestsListener
+class DeletePickRequestsListener
 {
     /**
      * Create the event listener.
@@ -25,24 +25,30 @@ class CreatePickRequestsListener
      */
     public function handle(StatusChangedEvent $event)
     {
-        if ($event->isStatusCode('picking')) {
-            $this->createPickRequests($event);
+        if ($event->isNotStatusCode('picking')) {
+            $this->deletePickRequests($event);
         }
     }
 
     /**
      * @param StatusChangedEvent $event
      */
-    private function createPickRequests(StatusChangedEvent $event): void
+    private function deletePickRequests(StatusChangedEvent $event): void
     {
         $orderProducts = $event->getOrder()->orderProducts()->get();
 
         foreach ($orderProducts as $orderProduct) {
-            PickRequest::updateOrCreate([
-                'order_product_id' => $orderProduct->getKey(),
-            ], [
-                'quantity_required' => $orderProduct->quantity_ordered
-            ]);
+            $pickRequests = PickRequest::query()
+                ->where([
+                    'order_product_id' => $orderProduct->getKey(),
+                    'quantity_picked' => 0,
+                ])
+                ->whereNull('deleted_at')
+                ->get();
+
+            foreach ($pickRequests as $pickRequest) {
+                $pickRequest->delete();
+            }
         }
     }
 }

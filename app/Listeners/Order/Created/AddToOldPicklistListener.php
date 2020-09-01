@@ -35,7 +35,7 @@ class AddToOldPicklistListener
     public function addToPicklist(Order $order): void
     {
         if ($order->status_code === 'picking') {
-            PicklistService::addOrderProductPick(
+            PicklistService::addOrderProductToOldPicklist(
                 $order->orderProducts()->get()->toArray()
             );
         }

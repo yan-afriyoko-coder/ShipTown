@@ -26,7 +26,7 @@ class RemoveFromOldPicklistListener
     public function handle(StatusChangedEvent $event)
     {
         if ($event->order->status_code !== 'picking') {
-            PicklistService::removeOrderProductPick(
+            PicklistService::removeOrderProductFromOldPicklist(
                 $event->order->orderProducts()->get()->toArray()
             );
         }

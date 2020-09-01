@@ -15,7 +15,10 @@ class OrderObserver
      */
     public function created(Order $order)
     {
-        //
+        // we will not dispatch CreatedEvent here
+        // please user OrderService method
+        // CreatedEvent should be dispatched
+        // after created OrderProducts etc
     }
 
     /**

@@ -24,7 +24,7 @@ class OrderService
     public static function addToPicklist(Order $order)
     {
         foreach ($order->orderProducts()->get() as $orderProduct) {
-            PicklistService::addOrderProductPick($orderProduct);
+            PicklistService::addOrderProductToOldPicklist($orderProduct);
         }
     }
 
@@ -36,7 +36,7 @@ class OrderService
     {
         $order = Order::updateOrCreate(
             ["order_number" => $attributes['order_number']],
-            Arr::only($attributes, ['status_code', 'raw_import'])
+            Arr::only($attributes, ['raw_import'])
         );
 
         self::updateOrCreateShippingAddress($order, $attributes['shipping_address']);
@@ -76,7 +76,10 @@ class OrderService
         }
 
         CreatedEvent::dispatch($order);
-        StatusChangedEvent::dispatch($order);
+
+        if (Arr::has($attributes, 'status_code')) {
+            $order->update(['status_code' => $attributes['status_code']]);
+        }
 
         return $order;
     }
