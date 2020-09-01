@@ -25,7 +25,7 @@ class PickController extends Controller
     {
         $pick = QueryBuilder::for(Pick::class)
             ->allowedFilters([
-                AllowedFilter::scope('in_stock_only', 'whereNotPicked'),
+                AllowedFilter::scope('in_stock_only', 'whereInStock'),
                 AllowedFilter::scope('not_picked_only', 'whereNotPicked'),
                 AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->default(100),
                 AllowedFilter::scope('current_shelf_location', 'MinimumShelfLocation'),
@@ -36,7 +36,7 @@ class PickController extends Controller
             ])
             ->allowedSorts([
                 'inventory_source_shelf_location',
-                'picklists.sku_ordered'
+                'sku_ordered'
             ]);
 
         $per_page = $request->get('per_page', 3);

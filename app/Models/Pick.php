@@ -52,12 +52,12 @@ class Pick extends Model
 
     /**
      * @param Builder $query
-     * @param boolean $in_stock_only
+     * @param boolean $in_stock
      * @return mixed
      */
-    public function scopeInStockOnly($query, $in_stock_only)
+    public function scopeWhereInStock($query, $in_stock)
     {
-        if (!$in_stock_only) {
+        if (!$in_stock) {
             return $query;
         }
 

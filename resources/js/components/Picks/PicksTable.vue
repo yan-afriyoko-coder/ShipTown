@@ -142,7 +142,7 @@ export default {
         reloadPicks() {
             const params = {
                 include: 'product,product.aliases',
-                sort: 'inventory_source_shelf_location',
+                sort: 'inventory_source_shelf_location,sku_ordered',
                 per_page: this.getUrlParameter('per_page', 3),
                 'filter[in_stock_only]': this.getUrlFilter('in_stock_only', true),
                 'filter[not_picked_only]': true,
