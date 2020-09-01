@@ -10,7 +10,8 @@
 </div>
 <div class="card text-center">
     <div class="card-body">
-        <h4 class="card-title">7 days picks count per user</h4>
+        <h4 class="card-title text-left">Picks per user</h4>
+        <h6 class="card-title text-left">Last 7 days</h6>
         @foreach ($count_per_user as $count)
             <div class="row">
                 <div class="col-4 offset-2 text-left">
