@@ -26,9 +26,10 @@
 <script>
     import loadingOverlay from '../../mixins/loading-overlay';
     import ProductCard from "./ProductCard";
+    import url from "../../mixins/url";
 
     export default {
-        mixins: [loadingOverlay],
+        mixins: [loadingOverlay, url],
 
         components: { 'product-card': ProductCard },
 
@@ -44,6 +45,14 @@
         methods: {
             getProductList: function(page) {
 
+                const params = {
+                        page: page,
+                        q: this.getUrlFilter('query'),
+                        sort: this.sort,
+                        order: this.order,
+                        include: 'inventory'
+                }
+
                 this.products = [];
                 this.page = page;
                 this.last_page = 1;
@@ -51,28 +60,22 @@
 
                 return new Promise((resolve, reject) => {
                     this.showLoading();
-                    axios.get('/api/products', {
-                        params: {
-                            page: page,
-                            q: this.query,
-                            sort: this.sort,
-                            order: this.order,
-                            include: 'inventory'
-                        }
-                    }).then(({ data }) => {
-                        this.products = this.products.concat(data.data);
-                        this.total = data.total;
-                        this.last_page = data.last_page;
-                        resolve(data);
-                    })
-                    .catch(reject)
-                    .then(() => {
-                        this.hideLoading();
-                    });
+                    axios.get('/api/products', {params: params})
+                        .then(({ data }) => {
+                            this.products = this.products.concat(data.data);
+                            this.total = data.total;
+                            this.last_page = data.last_page;
+                            resolve(data);
+                        })
+                        .catch(reject)
+                        .then(() => {
+                            this.hideLoading();
+                        });
                 });
             },
 
             loadProducts(e) {
+                this.setUrlFilter('query', this.query);
                 this.getProductList(1)
                     .then(this.doSelectAll);
             },
