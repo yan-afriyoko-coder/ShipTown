@@ -47,7 +47,12 @@ Route::middleware('auth')->group(function () {
     // below everything is hidden from top navigation menu but still available as direct link
     Route::view('/missing', 'missing')->name('missing');
 
-    // this route should be moved to api and invoked trough button in settings, deadline01/09/2020
+    // Routes for reports
+    Route::group(['prefix' => 'reports'], function () {
+        Route::view('picks', 'reports/picks_report')->name('picks_report');
+    });
+
+    // this route should be moved to api and invoked trough button in settings, deadline 01/09/2020
     Route::get('run/maintenance', function () {
         \App\Jobs\Orders\RecalculateOrderProductLineCountJob::dispatch();
         return 'Maintenance jobs dispatched';
