@@ -46,14 +46,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Queue::before(function (JobProcessing $event) {
-            logger('Job starting '.$event->job->resolveName());
-        });
-
-        Queue::after(function (JobProcessed $event) {
-            logger('Job processed '.$event->job->resolveName());
-        });
-
         // Core Models
         Product::observe(ProductObserver::class);
         Order::observe(OrderObserver::class);
