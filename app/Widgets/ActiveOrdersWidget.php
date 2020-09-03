@@ -7,7 +7,7 @@ use Arrilot\Widgets\AbstractWidget;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class StatusOrderCount extends AbstractWidget
+class ActiveOrdersWidget extends AbstractWidget
 {
     /**
      * The configuration array.
@@ -22,16 +22,22 @@ class StatusOrderCount extends AbstractWidget
      */
     public function run()
     {
-        $status_order_counts = Order::query()
-            ->whereDate('order_placed_at', '>', Carbon::now()->subDays(30))
-            ->whereNotIn('status_code', ['picking', 'processing', 'holded'])
+        $order_status_counts = Order::query()
+            ->whereIn('status_code', ['picking', 'processing', 'holded'])
             ->groupBy(['status_code'])
             ->select('status_code', DB::raw('count(*) as order_count'))
             ->get();
 
-        return view('widgets.status_order_count', [
+        $total_count = 0;
+
+        foreach ($order_status_counts as $order_status) {
+            $total_count += $order_status['order_count'];
+        }
+
+        return view('widgets.active_orders_widget', [
             'config' => $this->config,
-            'status_order_counts' => $status_order_counts
+            'order_status_counts' => $order_status_counts,
+            'total_count' => $total_count,
         ]);
     }
 }

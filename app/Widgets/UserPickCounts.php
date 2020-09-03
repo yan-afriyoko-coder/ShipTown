@@ -31,9 +31,16 @@ class UserPickCounts extends AbstractWidget
             ->groupBy(['picker_user_id'])
             ->get();
 
+        $total_count = 0;
+
+        foreach ($count_per_user as $count) {
+            $total_count += $count['total'];
+        }
+
         return view('widgets.user_pick_counts', [
             'config' => $this->config,
             'count_per_user' => $count_per_user,
+            'total_count' => $total_count,
         ]);
     }
 }
