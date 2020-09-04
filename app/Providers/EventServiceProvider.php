@@ -2,14 +2,8 @@
 
 namespace App\Providers;
 
-use App\Events\Inventory\CreatedEvent as Inventory_CreatedEvent_Alias;
-use App\Events\Inventory\DeletedEvent;
-use App\Events\Inventory\UpdatedEvent;
-use App\Events\Order\CreatedEvent as Order_CreatedEvent_Alias;
-use App\Events\Order\StatusChangedEvent as Order_StatusChangedEvent_Alias;
 use App\Events\PickPickedEvent;
 use App\Events\PickQuantityRequiredChangedEvent as PickQuantity_RequiredChangedEvent_Alias;
-use App\Events\PickRequest\DeletedEvent as PickRequest_DeletedEvent_Alias;
 use App\Events\PickRequestCreatedEvent as PickRequest_CreatedEvent_Alias;
 use App\Events\PickUnpickedEvent;
 use App\Listeners\Inventory\Created\AddToProductTotalQuantityListener;
@@ -45,8 +39,17 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
 
+        // Product
+        \App\Events\Product\CreatedEvent::class => [
+            \App\Listeners\Product\Created\PublishSnsNotificationListener::class,
+        ],
+
+        \App\Events\Product\UpdatedEvent::class => [
+            \App\Listeners\Product\Updated\PublishSnsNotificationListener::class
+        ],
+
         // Order
-        Order_CreatedEvent_Alias::class => [
+        \App\Events\Order\CreatedEvent::class => [
 //            AddToOldPicklistListener_OnOrderCreated::class,
             PublishSnsNotificationListener::class
         ],
@@ -55,7 +58,7 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\Order\Updated\PublishSnsNotificationListener::class
         ],
 
-        Order_StatusChangedEvent_Alias::class => [
+        \App\Events\Order\StatusChangedEvent::class => [
 //            AddToOldPicklistListener_OnStatusChanged::class,
 //            RemoveFromOldPicklistListener::class,
             CreatePickRequestsListener::class,
@@ -80,22 +83,23 @@ class EventServiceProvider extends ServiceProvider
             AddQuantityToPicklistListener::class,
         ],
 
-        PickRequest_DeletedEvent_Alias::class => [
+        \App\Events\PickRequest\DeletedEvent::class => [
             RemoveQuantityFromPicklistListener::class
         ],
 
         // Inventory
-        Inventory_CreatedEvent_Alias::class => [
+        \App\Events\Inventory\CreatedEvent::class => [
             AddToProductTotalQuantityListener::class,
         ],
 
-        UpdatedEvent::class => [
+        \App\Events\Inventory\UpdatedEvent::class => [
             UpdateProductTotalQuantityListener::class,
         ],
 
-        DeletedEvent::class => [
+        \App\Events\Inventory\DeletedEvent::class => [
             DeductFromProductTotalQuantityListener::class,
         ],
+
 
         // Other
 
