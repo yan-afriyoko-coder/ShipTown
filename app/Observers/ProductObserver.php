@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Events\Product\CreatedEvent;
 use App\Events\Product\UpdatedEvent;
 use App\Models\Inventory;
 use App\Models\Product;
@@ -29,8 +30,9 @@ class ProductObserver
                 ];
             });
 
-
         Inventory::query()->insert($warehouse_ids->toArray());
+
+        CreatedEvent::dispatch($product);
     }
 
     /**
