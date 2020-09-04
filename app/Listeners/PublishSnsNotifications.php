@@ -25,21 +25,12 @@ class PublishSnsNotifications
     {
         //products
         $events->listen('eloquent.created: App\Models\Product', 'App\Listeners\PublishSnsNotifications@productCreated');
-        $events->listen('eloquent.updated: App\Models\Product', 'App\Listeners\PublishSnsNotifications@productUpdated');
     }
 
     /**
      * @param Product $product
      */
     public function productCreated(Product $product)
-    {
-        $this->publishMessageArray($product->toArray(), 'products_events');
-    }
-
-    /**
-     * @param Product $product
-     */
-    public function productUpdated(Product $product)
     {
         $this->publishMessageArray($product->toArray(), 'products_events');
     }
