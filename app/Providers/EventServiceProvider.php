@@ -15,6 +15,7 @@ use App\Events\PickUnpickedEvent;
 use App\Listeners\Inventory\Created\AddToProductTotalQuantityListener;
 use App\Listeners\Inventory\Deleted\DeductFromProductTotalQuantityListener;
 use App\Listeners\Inventory\Updated\UpdateProductTotalQuantityListener;
+use App\Listeners\Order\Created\PublishSnsNotificationListener;
 use App\Listeners\Order\StatusChanged\CreatePickRequestsListener;
 use App\Listeners\Order\StatusChanged\DeletePickRequestsListener;
 use App\Listeners\Pick\Picked\FillPickRequestsPickedQuantityListener;
@@ -47,6 +48,7 @@ class EventServiceProvider extends ServiceProvider
         // Order
         Order_CreatedEvent_Alias::class => [
 //            AddToOldPicklistListener_OnOrderCreated::class,
+            PublishSnsNotificationListener::class
         ],
 
         Order_StatusChangedEvent_Alias::class => [
