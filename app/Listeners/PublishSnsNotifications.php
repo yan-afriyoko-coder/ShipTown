@@ -23,19 +23,9 @@ class PublishSnsNotifications
      */
     public function subscribe($events)
     {
-        $events->listen('eloquent.updated: App\Models\Order', 'App\Listeners\PublishSnsNotifications@orderUpdated');
-
         //products
         $events->listen('eloquent.created: App\Models\Product', 'App\Listeners\PublishSnsNotifications@productCreated');
         $events->listen('eloquent.updated: App\Models\Product', 'App\Listeners\PublishSnsNotifications@productUpdated');
-    }
-
-    /**
-     * @param Order $order
-     */
-    public function orderUpdated(Order $order)
-    {
-        $this->publishMessageArray($order->toArray(), "orders_events");
     }
 
     /**

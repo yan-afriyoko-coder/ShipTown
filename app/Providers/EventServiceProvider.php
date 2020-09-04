@@ -51,6 +51,10 @@ class EventServiceProvider extends ServiceProvider
             PublishSnsNotificationListener::class
         ],
 
+        \App\Events\Order\UpdatedEvent::class => [
+            \App\Listeners\Order\Updated\PublishSnsNotificationListener::class
+        ],
+
         Order_StatusChangedEvent_Alias::class => [
 //            AddToOldPicklistListener_OnStatusChanged::class,
 //            RemoveFromOldPicklistListener::class,
