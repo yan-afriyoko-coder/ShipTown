@@ -3,9 +3,7 @@
 namespace App\Listeners\Order\Created;
 
 use App\Events\Order\CreatedEvent;
-use App\Http\Controllers\SnsController;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Jobs\Sns\PublishSnsNotificationJob;
 
 class PublishSnsNotificationListener
 {
@@ -27,8 +25,9 @@ class PublishSnsNotificationListener
      */
     public function handle(CreatedEvent $event)
     {
-        $snsTopic = new SnsController('orders_events');
-
-        $snsTopic->publish(json_encode($event->getOrder()->toArray()));
+        PublishSnsNotificationJob::dispatch(
+            'orders_events',
+            $event->getOrder()->toJson()
+        );
     }
 }
