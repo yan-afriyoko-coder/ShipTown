@@ -32,7 +32,7 @@ class MaintenanceRouteTest extends TestCase
             factory(User::class)->create()
         );
 
-        $response = $this->get('/run/maintenance');
+        $response = $this->get('/api/run/maintenance');
 
         Bus::assertDispatched(
             RecalculateOrderProductLineCountJob::class
@@ -47,7 +47,7 @@ class MaintenanceRouteTest extends TestCase
      */
     public function testGetRouteUnauthenticated()
     {
-        $response = $this->get('/run/maintenance');
+        $response = $this->get('/api/run/maintenance');
 
         $response->assertStatus(302);
     }
