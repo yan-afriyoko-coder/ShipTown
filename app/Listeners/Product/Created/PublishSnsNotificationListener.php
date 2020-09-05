@@ -2,7 +2,7 @@
 
 namespace App\Listeners\Product\Created;
 
-use App\Events\Product\UpdatedEvent;
+use App\Events\Product\CreatedEvent;
 use App\Jobs\Sns\PublishSnsNotificationJob;
 
 class PublishSnsNotificationListener
@@ -20,10 +20,10 @@ class PublishSnsNotificationListener
     /**
      * Handle the event.
      *
-     * @param UpdatedEvent $event
+     * @param CreatedEvent $event
      * @return void
      */
-    public function handle(UpdatedEvent $event)
+    public function handle(CreatedEvent $event)
     {
         PublishSnsNotificationJob::dispatch(
             'products_events',
