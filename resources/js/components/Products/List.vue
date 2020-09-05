@@ -48,8 +48,7 @@
                 const params = {
                         page: page,
                         q: this.getUrlFilter('query'),
-                        sort: this.sort,
-                        order: this.order,
+                        sort: '-quantity',
                         include: 'inventory'
                 }
 

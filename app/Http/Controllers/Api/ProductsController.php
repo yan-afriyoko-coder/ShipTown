@@ -28,7 +28,8 @@ class ProductsController extends Controller
                 'id',
                 'sku',
                 'name',
-                'price'
+                'price',
+                'quantity'
             ])
             ->allowedIncludes([
                 'inventory',
