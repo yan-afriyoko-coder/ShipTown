@@ -149,6 +149,7 @@
                         }
 
                         this.order = data.data[0];
+                        this.packlist = this.order['order_products'];
                         console.log(this.order);
                         this.hideLoading();
                     })
