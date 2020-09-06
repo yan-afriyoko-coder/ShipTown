@@ -121,9 +121,10 @@
             loadOrder: function() {
 
                 const params = {
-                    'filter[order_number]': this.getUrlParameter('order_number'),
-                    'filter[is_picked]': true,
+                    'filter[order_number]': this.getUrlParameter('order_number', null),
+                    'filter[is_picked]': this.getUrlParameter('is_picked', null),
                     'filter[is_packed]': false,
+                    'per_page': 1,
                 };
 
                 this.showLoading();

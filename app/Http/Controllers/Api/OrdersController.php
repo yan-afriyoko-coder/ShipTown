@@ -18,10 +18,12 @@ class OrdersController extends Controller
         $query = QueryBuilder::for(Order::class)
             ->allowedFilters([
                 AllowedFilter::exact('order_number')->ignore([null,'null']),
-                AllowedFilter::scope('is_picked'),
-                AllowedFilter::scope('is_packed'),
+                AllowedFilter::scope('is_picked')->ignore([null,'null']),
+                AllowedFilter::scope('is_packed')->ignore([null,'null']),
             ])
-            ->allowedIncludes('shipping_address');
+            ->allowedIncludes([
+                'shipping_address'
+            ]);
 
         if ($request->has('q') && $request->get('q')) {
             $query->where('order_number', 'like', '%' . $request->get('q') . '%');
