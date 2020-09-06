@@ -29,6 +29,7 @@ class OrdersController extends Controller
                 'shipping_address',
                 'order_products',
                 'order_products.product',
+                'order_products.product.aliases',
             ]);
 
         if ($request->has('q') && $request->get('q')) {
