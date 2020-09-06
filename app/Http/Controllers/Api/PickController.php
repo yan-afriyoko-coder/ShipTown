@@ -23,7 +23,7 @@ class PickController extends Controller
      */
     public function index(Request $request)
     {
-        $pick = QueryBuilder::for(Pick::class)
+        $pick = QueryBuilder::for(Pick::whereHasQuantityRequired())
             ->allowedFilters([
                 AllowedFilter::scope('in_stock_only', 'whereInStock'),
                 AllowedFilter::scope('not_picked_only', 'whereNotPicked'),

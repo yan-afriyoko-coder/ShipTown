@@ -22,7 +22,8 @@ class ProductsController extends Controller
                 'sku',
                 'name',
                 'price',
-                AllowedFilter::scope('sku_or_alias')
+                AllowedFilter::scope('sku_or_alias'),
+                AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->default(100),
             ])
             ->allowedSorts([
                 'id',

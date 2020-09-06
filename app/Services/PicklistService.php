@@ -8,6 +8,7 @@ use App\Models\Pick;
 use App\Models\Picklist;
 use App\Models\PickRequest;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class PicklistService

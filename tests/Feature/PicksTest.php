@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Pick;
 use App\Models\PickRequest;
+use App\Models\Product;
 use App\User;
 use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
@@ -26,6 +27,8 @@ class PicksTest extends TestCase
         Order::query()->forceDelete();
         PickRequest::query()->forceDelete();
         Pick::query()->forceDelete();
+
+        factory(Product::class, [])->create();
 
         $orders = factory(Order::class, rand(2, 5))
             ->with('orderProducts', rand(2, 5))
