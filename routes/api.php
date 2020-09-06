@@ -50,7 +50,6 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('invites', 'InvitesController@store');
 
-    Route::apiResource('orders/products', 'Api\OrderProductController');
     Route::apiResource('picks', 'Api\PickController')->except('store');
 
     Route::resource('widgets', 'Api\WidgetsController');

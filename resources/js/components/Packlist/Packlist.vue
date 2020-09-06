@@ -3,6 +3,9 @@
 
         <filters-modal ref="filtersModal" @btnSaveClicked="onConfigChange">
             <template v-slot:actions="slotScopes">
+                <button type="button" class="btn btn-info" @click.prevent="markAsPacked">
+                    Mark as Packed
+                </button>
                 <button type="button" class="btn btn-info" @click.prevent="printAddressLabel">
                     Print Address Label
                 </button>
@@ -116,7 +119,11 @@
         },
 
         methods: {
-
+            markAsPacked: function () {
+                axios.put('api/orders/' + this.order['id'], {
+                    'is_packed': true,
+                });
+            },
 
             loadOrder: function() {
 
