@@ -17,9 +17,9 @@ class OrdersController extends Controller
     {
         $query = QueryBuilder::for(Order::class)
             ->allowedFilters([
-                AllowedFilter::exact('order_number')->ignore([null,'null']),
-                AllowedFilter::scope('is_picked')->ignore([null,'null']),
-                AllowedFilter::scope('is_packed')->ignore([null,'null']),
+                AllowedFilter::exact('order_number'),
+                AllowedFilter::scope('is_picked'),
+                AllowedFilter::scope('is_packed'),
             ])
             ->allowedIncludes([
                 'shipping_address'

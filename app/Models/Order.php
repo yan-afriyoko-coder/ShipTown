@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Services\PicklistService;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -20,6 +21,9 @@ use phpseclib\Math\BigInteger;
  * @property integer product_line_count
  * @property integer total_quantity_ordered
  * @property Carbon|null picked_at
+ * @method  self isPicked(bool $expected)
+ * @method  self whereIsPicked()
+ * @method  self whereIsNotPicked()
  * @property Carbon|null packed_at
  * @property Carbon|null deleted_at
  * @property Carbon|null updated_at
@@ -53,11 +57,37 @@ class Order extends Model
         'is_packed',
     ];
 
-    public function scopeIsPicked($query, $value)
+    /**
+     * @param $query
+     * @param bool $expected
+     * @return self
+     */
+    public function scopeIsPicked($query, bool $expected)
     {
-        return $query->whereNull('picked_at', 'and', $value);
+        if ($expected === true) {
+            return $query->whereIsPicked();
+        }
+
+        return $query->whereIsNotPicked();
     }
 
+    /**
+     * @param $query
+     * @return self
+     */
+    public function scopeWhereIsPicked($query)
+    {
+        return $query->whereNotNull('picked_at');
+    }
+
+    /**
+     * @param $query
+     * @return self
+     */
+    public function scopeWhereIsNotPicked($query)
+    {
+        return $query->whereNull('picked_at');
+    }
 
     public function scopeIsPacked($query, $value)
     {
