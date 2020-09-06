@@ -2,7 +2,11 @@
     <div :id="getElementId" class="swiper-container">
         <div class="swiper-wrapper">
 
-            <div class="swiper-slide bg-success"></div>
+            <div class="swiper-slide error bg-success text-right">
+                <div class="swipe-action-container swipe-action-container--right">
+                    <div>PACKED</div>
+                </div>
+            </div>
 
             <div class="swiper-slide">
                 <div class="row ml-1 mr-1">
@@ -12,7 +16,7 @@
                 </div>
             </div>
 
-            <div class="swiper-slide bg-warning" ></div>
+<!--            <div class="swiper-slide bg-warning" ></div>-->
 
         </div>
     </div>

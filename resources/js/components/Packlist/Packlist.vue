@@ -49,7 +49,7 @@
                 <template v-for="record in packlist">
                     <div class="row mb-3">
                         <div class="col">
-                            <packlist-entry :picklistItem="record" :key="record.id"  @swipeRight="pickAll" @swipeLeft="skipPick" />
+                            <packlist-entry :picklistItem="record" :key="record.id"  @swipeRight="pickAll" />
                         </div>
                     </div>
                 </template>
@@ -160,10 +160,47 @@
                 this.packlist = [];
                 this.packed = [];
 
+                axios.get('/api/orders/products', {
+                    params: {
+                        'filter[order_id]': this.order.id,
+                        'include': 'product,product.aliases',
+                        'per_page': 999,
+                    }})
+
+                    .then(({ data }) => {
+
+                        if(data.total === 0) {
+                            this.hideLoading();
+                            return;
+                        }
+
+                        data.data.forEach(element => {
+                            this.packlist.push(element);
+                        });
+
+                        this.hideLoading();
+                    })
+                    .catch( error => {
+                        this.$snotify.error('Error occurred while loading packlist');
+                        this.hideLoading();
+                    })
+
+
+            },
+
+            loadPacklistOld: function() {
+
+                if(!this.isLoading) {
+                    this.showLoading();
+                }
+
+                this.packlist = [];
+                this.packed = [];
+
                 axios.get('/api/packlist', {
                     params: {
+                        'filter[order_id]': this.order.id,
                         'include': 'product,product.aliases',
-                        'filter[order_id]': this.order.id
                     }})
                     .then(({ data }) => {
 
@@ -231,6 +268,11 @@
             },
 
             pickAll(pickedItem) {
+                this.packlist.splice(this.packlist.indexOf(pickedItem), 1);
+                this.packed.unshift(pickedItem);
+            }
+
+            ,pickAllOld(pickedItem) {
                 // for visual effect we remove it straight away from UI
                 // we will add it back in catch
                 this.packlist.splice(this.packlist.indexOf(pickedItem), 1);
