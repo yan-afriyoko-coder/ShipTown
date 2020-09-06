@@ -99,7 +99,7 @@
         data: function() {
             return {
                 order: null,
-                packlist: [],
+                packlist: null,
                 packed: [],
             };
         },
@@ -112,6 +112,18 @@
 
                 this.loadPacklist();
             },
+            packlist() {
+                if(this.order === null) {
+                    return;
+                }
+
+                if(this.packlist.length === 0) {
+                    this.markAsPacked()
+                        .then(() => {
+                            this.loadOrder();
+                        });
+                }
+            }
         },
 
         mounted() {
@@ -120,9 +132,9 @@
 
         methods: {
             markAsPacked: function () {
-                axios.put('api/orders/' + this.order['id'], {
-                    'is_packed': true,
-                });
+               return  axios.put('api/orders/' + this.order['id'], {
+                        'is_packed': true,
+                    })
             },
 
             loadOrder: function() {
