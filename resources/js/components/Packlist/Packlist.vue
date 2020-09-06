@@ -3,9 +3,6 @@
 
         <filters-modal ref="filtersModal" @btnSaveClicked="onConfigChange">
             <template v-slot:actions="slotScopes">
-                <button type="button" class="btn btn-info" @click.prevent="markAsPacked">
-                    Mark as Packed
-                </button>
                 <button type="button" class="btn btn-info" @click.prevent="printAddressLabel">
                     Print Address Label
                 </button>
@@ -255,6 +252,7 @@
                 pickedItem.quantity_packed = 0;
                 this.packed.splice(this.packed.indexOf(pickedItem), 1);
                 this.packlist.unshift(pickedItem);
+                this.warningBeep();
             },
 
             skipPick(pickedItem) {
@@ -280,6 +278,7 @@
             pickAll(pickedItem) {
                 this.packlist.splice(this.packlist.indexOf(pickedItem), 1);
                 this.packed.unshift(pickedItem);
+                this.beep();
             }
 
             ,pickAllOld(pickedItem) {
