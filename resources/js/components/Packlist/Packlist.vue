@@ -125,6 +125,7 @@
                     'filter[is_picked]': this.getUrlParameter('is_picked', null),
                     'filter[is_packed]': false,
                     'per_page': 1,
+                    'include': 'order_products',
                 };
 
                 this.showLoading();
@@ -141,6 +142,7 @@
                         }
 
                         this.order = data.data[0];
+                        console.log(this.order);
                         this.hideLoading();
                     })
                     .catch( error => {

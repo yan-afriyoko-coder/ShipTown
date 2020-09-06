@@ -24,7 +24,8 @@ class OrdersController extends Controller
                 AllowedFilter::scope('is_packed'),
             ])
             ->allowedIncludes([
-                'shipping_address'
+                'shipping_address',
+                'order_products',
             ]);
 
         if ($request->has('q') && $request->get('q')) {
