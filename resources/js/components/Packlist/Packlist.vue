@@ -1,6 +1,8 @@
 <template>
     <div>
 
+        <set-shipping-number-modal ref="shippingNumberModal" @shippingNumberUpdated="packAndShip"></set-shipping-number-modal>
+
         <filters-modal ref="filtersModal" @btnSaveClicked="onConfigChange">
             <template v-slot:actions="slotScopes">
                 <button type="button" class="btn btn-info" @click.prevent="printAddressLabel">
@@ -31,6 +33,9 @@
                 </div>
                 <div class="col-1">
                     <a style="cursor:pointer;" data-toggle="modal" data-target="#filterConfigurationModal">
+                        <font-awesome-icon icon="cog"></font-awesome-icon>
+                    </a>
+                    <a style="cursor:pointer;" data-toggle="modal" data-target="#shippingNumberModal">
                         <font-awesome-icon icon="cog"></font-awesome-icon>
                     </a>
                 </div>
@@ -81,6 +86,7 @@
     import BarcodeInputField from "../SharedComponents/BarcodeInputField";
     import FiltersModal from "./mixins/FiltersModal";
     import url from "../../mixins/url";
+    import SetShippingNumberModal from "./mixins/SetShippingNumberModal";
 
     export default {
         mixins: [loadingOverlay, beep, url],
@@ -91,6 +97,7 @@
             BarcodeInputField,
             OrderDetails,
             PackedEntry,
+            SetShippingNumberModal,
         },
 
         data: function() {
@@ -115,10 +122,7 @@
                 }
 
                 if(this.packlist.length === 0) {
-                    this.markAsPacked()
-                        .then(() => {
-                            this.loadOrder();
-                        });
+                    $(shippingNumberModal).modal('show');
                 }
             }
         },
@@ -128,6 +132,16 @@
         },
 
         methods: {
+            packAndShip(shipping_number) {
+                return  axios.put('api/orders/' + this.order['id'], {
+                        'shipping_number': shipping_number,
+                        'is_packed': true,
+                    })
+                    .then(() => {
+                        this.loadOrder();
+                    });
+            },
+
             markAsPacked: function () {
                return  axios.put('api/orders/' + this.order['id'], {
                         'is_packed': true,

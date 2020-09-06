@@ -24,6 +24,7 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
+            'shipping_number' => ['sometimes'],
             'is_packed' => ['sometimes','boolean']
         ];
     }
