@@ -4,22 +4,19 @@
 
 use App\Model;
 use App\Models\OrderProduct;
+use App\Models\Product;
 use Faker\Generator as Faker;
+use Illuminate\Support\Arr;
 
 $factory->define(OrderProduct::class, function (Faker $faker) {
 
-    $product = \App\Models\Product::query()
-        ->inRandomOrder()
-        ->firstOrCreate(
-            [],
-            factory(\App\Models\Product::class)->make()->getAttributes()
-        );
+    $product = Product::query()->inRandomOrder()->first();
 
     return [
         'product_id' => $product->getKey(),
         'sku_ordered' => $product->sku,
         'name_ordered' => $product->name,
-        'quantity_ordered' => rand(1, 10),
+        'quantity_ordered' => Arr::random([1,1,1,1,2,2,3,3,]) * Arr::random([1,1,1,1,1,1,1,1,2,3]),
         'price' => $product->price,
     ];
 });

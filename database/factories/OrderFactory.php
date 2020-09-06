@@ -12,14 +12,14 @@ $factory->define(Order::class, function (Faker $faker) {
 
     $status_code = $faker->randomElement(['complete','processing','cancelled']);
 
-    $order_placed_at = $faker->dateTimeBetween('-1 year');
+    $order_placed_at = $faker->dateTimeBetween('-5 months');
 
     if ($status_code !== 'processing') {
         $order_closed_at = $faker->dateTimeBetween($order_placed_at);
     }
 
     return [
-        'order_number' => (string) (10000000 + $faker->unique()->randomNumber(7)),
+        'order_number' => (string) (10000000 + $faker->unique()->randomNumber(5)),
         'shipping_address_id' => factory(OrderAddress::class)->create()->id,
         'order_placed_at' => $order_placed_at,
         'order_closed_at' => $order_closed_at,

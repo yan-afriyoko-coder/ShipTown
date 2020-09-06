@@ -251,23 +251,10 @@
             },
 
             resetPick(pickedItem) {
-                // for visual effect we remove it straight away from UI
-                // we will add it back in catch
+                pickedItem.is_packed = !pickedItem.is_packed;
+                pickedItem.quantity_packed = 0;
                 this.packed.splice(this.packed.indexOf(pickedItem), 1);
-
-                return this.updatePick(pickedItem.id, 0, false)
-                    .then( response => {
-                        pickedItem.is_packed = !pickedItem.is_packed;
-                        pickedItem.quantity_packed = 0;
-                        this.packlist.unshift(pickedItem);
-                        this.displayWarningNotification(pickedItem, 'Reverted');
-                        this.warningBeep();
-                    })
-                    .catch( error  => {
-                        this.packed.unshift(pickedItem);
-                        this.$snotify.error('Not skipped (Error '+ error.response.status +')');
-                        this.errorBeep();
-                    });
+                this.packlist.unshift(pickedItem);
             },
 
             skipPick(pickedItem) {
