@@ -26,6 +26,7 @@
             barcodeScanned(barcode) {
                 this.$emit('barcodeScanned', barcode);
                 this.setFocusOnBarcodeInput();
+                this.simulateSelectAll();
             },
 
             setFocusOnBarcodeInput() {

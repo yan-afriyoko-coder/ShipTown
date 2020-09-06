@@ -355,7 +355,11 @@
                         return element;
                     }
 
-                    if(element.product === null){
+                    if(typeof element.product === 'undefined' ){
+                        continue;
+                    }
+
+                    if(element.product === null ){
                         continue;
                     }
 
