@@ -34,6 +34,7 @@ class Order extends Model
     protected $fillable = [
         'order_number',
         'shipping_address_id',
+        'is_packed',
         'order_placed_at',
         'order_closed_at',
         'status_code',

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Order\UpdateRequest;
 use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -48,6 +49,23 @@ class OrdersController extends Controller
         return response()->json($order, 200);
     }
 
+    /**
+     * @param UpdateRequest $request
+     * @param Order $order
+     * @return JsonResource
+     */
+    public function update(UpdateRequest $request, Order $order)
+    {
+        $order->update($request->validated());
+
+        return new JsonResource($order);
+    }
+
+    public function show(Request $request, Order $order)
+    {
+        return new JsonResource($order);
+    }
+
     public function destroy($order_number)
     {
         try {
@@ -59,10 +77,5 @@ class OrdersController extends Controller
         $order->delete();
 
         return $this->respondOK200();
-    }
-
-    public function show(Request $request, Order $order)
-    {
-        return new JsonResource($order);
     }
 }
