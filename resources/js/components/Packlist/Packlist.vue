@@ -143,6 +143,7 @@
                     'filter[order_number]': this.getUrlParameter('order_number', null),
                     'filter[is_picked]': this.getUrlParameter('is_picked', null),
                     'filter[is_packed]': false,
+                    'filter[status]': 'picking',
                     'per_page': 1,
                     'include': 'order_products',
                 };
