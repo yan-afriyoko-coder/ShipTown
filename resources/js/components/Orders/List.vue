@@ -58,9 +58,10 @@
 <script>
     import loadingOverlay from '../../mixins/loading-overlay';
     import OrderCard from "./OrderCard";
+    import url from "../../mixins/url";
 
     export default {
-        mixins: [loadingOverlay],
+        mixins: [loadingOverlay, url],
 
         components: { 'order-card': OrderCard },
 
@@ -76,6 +77,15 @@
         methods: {
             getOrderList: function(page) {
 
+                const params = {
+                    'filter[status]': this.getUrlParameter('status'),
+                    per_page: 50,
+                    page: page,
+                    q: this.query,
+                    sort: this.sort,
+                    order: this.order,
+                };
+
                 this.orders = [];
                 this.page = page;
                 this.last_page = 1;
@@ -84,13 +94,7 @@
                 return new Promise((resolve, reject) => {
                     this.showLoading();
                     axios.get('/api/orders', {
-                        params: {
-                            per_page: 50,
-                            page: page,
-                            q: this.query,
-                            sort: this.sort,
-                            order: this.order,
-                        }
+                        params: params
                     }).then(({ data }) => {
                         this.orders = this.orders.concat(data.data);
                         this.total = data.total;

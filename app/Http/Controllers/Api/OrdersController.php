@@ -17,6 +17,8 @@ class OrdersController extends Controller
     {
         $query = QueryBuilder::for(Order::class)
             ->allowedFilters([
+                'status_code',
+                AllowedFilter::partial('status', 'status_code'),
                 AllowedFilter::exact('order_number'),
                 AllowedFilter::scope('is_picked'),
                 AllowedFilter::scope('is_packed'),
