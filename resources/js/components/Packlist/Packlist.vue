@@ -3,6 +3,9 @@
 
         <filters-modal ref="filtersModal" @btnSaveClicked="onConfigChange">
             <template v-slot:actions="slotScopes">
+                <button type="button" class="btn btn-info" @click.prevent="markAsPacked">
+                    Mark as Packed
+                </button>
                 <button type="button" class="btn btn-info" @click.prevent="printAddressLabel">
                     Print Address Label
                 </button>
@@ -49,7 +52,7 @@
                 <template v-for="record in packlist">
                     <div class="row mb-3">
                         <div class="col">
-                            <packlist-entry :picklistItem="record" :key="record.id"  @swipeRight="pickAll" @swipeLeft="skipPick" />
+                            <packlist-entry :picklistItem="record" :key="record.id"  @swipeRight="pickAll" />
                         </div>
                     </div>
                 </template>
@@ -96,7 +99,7 @@
         data: function() {
             return {
                 order: null,
-                packlist: [],
+                packlist: null,
                 packed: [],
             };
         },
@@ -109,6 +112,18 @@
 
                 this.loadPacklist();
             },
+            packlist() {
+                if(this.order === null) {
+                    return;
+                }
+
+                if(this.packlist.length === 0) {
+                    this.markAsPacked()
+                        .then(() => {
+                            this.loadOrder();
+                        });
+                }
+            }
         },
 
         mounted() {
@@ -116,7 +131,11 @@
         },
 
         methods: {
-
+            markAsPacked: function () {
+               return  axios.put('api/orders/' + this.order['id'], {
+                        'is_packed': true,
+                    })
+            },
 
             loadOrder: function() {
 
@@ -125,6 +144,7 @@
                     'filter[is_picked]': this.getUrlParameter('is_picked', null),
                     'filter[is_packed]': false,
                     'per_page': 1,
+                    'include': 'order_products',
                 };
 
                 this.showLoading();
@@ -141,6 +161,8 @@
                         }
 
                         this.order = data.data[0];
+                        this.packlist = this.order['order_products'];
+                        console.log(this.order);
                         this.hideLoading();
                     })
                     .catch( error => {
@@ -152,6 +174,43 @@
             },
 
             loadPacklist: function() {
+                //
+                // if(!this.isLoading) {
+                //     this.showLoading();
+                // }
+                //
+                // this.packlist = [];
+                // this.packed = [];
+                //
+                // axios.get('/api/orders/products', {
+                //     params: {
+                //         'filter[order_id]': this.order.id,
+                //         'include': 'product,product.aliases',
+                //         'per_page': 999,
+                //     }})
+                //
+                //     .then(({ data }) => {
+                //
+                //         if(data.total === 0) {
+                //             this.hideLoading();
+                //             return;
+                //         }
+                //
+                //         data.data.forEach(element => {
+                //             this.packlist.push(element);
+                //         });
+                //
+                //         this.hideLoading();
+                //     })
+                //     .catch( error => {
+                //         this.$snotify.error('Error occurred while loading packlist');
+                //         this.hideLoading();
+                //     })
+                //
+
+            },
+
+            loadPacklistOld: function() {
 
                 if(!this.isLoading) {
                     this.showLoading();
@@ -162,8 +221,8 @@
 
                 axios.get('/api/packlist', {
                     params: {
+                        'filter[order_id]': this.order.id,
                         'include': 'product,product.aliases',
-                        'filter[order_id]': this.order.id
                     }})
                     .then(({ data }) => {
 
@@ -231,6 +290,11 @@
             },
 
             pickAll(pickedItem) {
+                this.packlist.splice(this.packlist.indexOf(pickedItem), 1);
+                this.packed.unshift(pickedItem);
+            }
+
+            ,pickAllOld(pickedItem) {
                 // for visual effect we remove it straight away from UI
                 // we will add it back in catch
                 this.packlist.splice(this.packlist.indexOf(pickedItem), 1);

@@ -20,9 +20,6 @@
                                 <div class="col-md-4">
                                     <div class="row text-center">
                                         <div class="col-6">
-<!--                                            <div class=""></div>-->
-<!--                                            <div class="text-secondary h6 text-left">order: <span class="font-weight-bold"> {{ pick['order']['order_number'] }} </span></div>-->
-<!--                                            <div class="text-secondary h6 text-left">lines: <span class="font-weight-bold"> {{ pick['order']['product_line_count'] }} </span></div>-->
                                             <div class="text-secondary h6 text-left">stock: <span class="font-weight-bold"> {{ Math.ceil(pick['inventory_source_quantity']) }} </span></div>
                                         </div>
                                         <div class="col-2" v-bind:class="{ 'bg-warning': Math.ceil(pick['quantity_required']) > 1 }">
@@ -31,7 +28,6 @@
                                         </div>
                                         <div class="col-4">
                                             <div class="">Shelf</div>
-<!--                                            <div class="h3">AA</div>-->
                                             <div class="h3">{{ pick['inventory_source_shelf_location'] }}</div>
                                         </div>
                                     </div>

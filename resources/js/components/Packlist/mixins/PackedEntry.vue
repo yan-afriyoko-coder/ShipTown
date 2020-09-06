@@ -10,7 +10,11 @@
                 </div>
             </div>
 
-            <div class="swiper-slide bg-warning" ></div>
+            <div class="swiper-slide bg-warning">
+                <div class="swipe-action-container swipe-action-container--left text-black-50 font-weight-bold">
+                    <div>RESTORE</div>
+                </div>
+            </div>
 
         </div>
     </div>
