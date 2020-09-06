@@ -30,9 +30,10 @@ Route::middleware('auth:api')->group(function () {
     Route::get("inventory", "Api\InventoryController@index");
     Route::post("inventory", "Api\InventoryController@store");
 
-    Route::get('orders', 'Api\OrdersController@index');
-    Route::post('orders', 'Api\OrdersController@store');
-    Route::delete('orders/{order_number}', 'Api\OrdersController@destroy');
+//    Route::get('orders', 'Api\OrdersController@index');
+//    Route::post('orders', 'Api\OrdersController@store');
+//    Route::delete('orders/{order_number}', 'Api\OrdersController@destroy');
+    Route::apiResource('orders', 'Api\OrdersController');
 
     Route::put('print/order/{order_number}/{view}', 'Api\PrintOrderController@store');
 

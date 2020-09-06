@@ -7,6 +7,7 @@ use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -58,5 +59,10 @@ class OrdersController extends Controller
         $order->delete();
 
         return $this->respondOK200();
+    }
+
+    public function show(Request $request, Order $order)
+    {
+        return new JsonResource($order);
     }
 }
