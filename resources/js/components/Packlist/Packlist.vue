@@ -142,7 +142,7 @@
                     'filter[is_packed]': false,
                     'filter[status]': 'picking',
                     'per_page': 1,
-                    'include': 'order_products',
+                    'include': 'order_products,order_products.product',
                 };
 
                 this.showLoading();

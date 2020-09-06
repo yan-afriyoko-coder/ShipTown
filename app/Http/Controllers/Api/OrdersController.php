@@ -28,6 +28,7 @@ class OrdersController extends Controller
             ->allowedIncludes([
                 'shipping_address',
                 'order_products',
+                'order_products.product',
             ]);
 
         if ($request->has('q') && $request->get('q')) {
