@@ -20,7 +20,7 @@
                         <div class="row text-left">
                             <div class="col-md-12">
                                 <div class="row">
-                                    <div class="col-2">
+                                    <div class="col-1">
                                         <div class="font-weight-bold text-nowrap">Order #</div>
                                     </div>
                                     <div class="col-2">
@@ -32,7 +32,7 @@
                                     <div class="col-2">
                                         <div class="font-weight-bold text-right text-nowrap">Line Count</div>
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-1">
                                         <div class="font-weight-bold text-right text-nowrap">Total Quantity</div>
                                     </div>
                                     <div class="col-1">
@@ -40,6 +40,9 @@
                                     </div>
                                     <div class="col-1">
                                         <div class="font-weight-bold text-right text-nowrap">Packed</div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="font-weight-bold text-right text-nowrap">Shipping No</div>
                                     </div>
                                 </div>
                             </div>
@@ -79,11 +82,10 @@
 
                 const params = {
                     'filter[status]': this.getUrlParameter('status'),
-                    sort: 'updated_at',
+                    sort: '-updated_at',
                     per_page: 50,
                     page: page,
                     q: this.query,
-                    order: this.order,
                 };
 
                 this.orders = [];

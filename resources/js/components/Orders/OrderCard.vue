@@ -4,7 +4,7 @@
             <div class="row text-left">
                 <div class="col-md-12">
                     <div class="row">
-                        <div class="col-2">
+                        <div class="col-1">
 <!--                            <div class="font-weight-bold text-nowrap">Order #</div>-->
                             <div class="text-nowrap">{{ order['order_number'] }}</div>
                         </div>
@@ -20,7 +20,7 @@
 <!--                            <div class="font-weight-bold text-right text-nowrap">Line Count</div>-->
                             <div class="text-right text-nowrap">{{ order['product_line_count'] }}</div>
                         </div>
-                        <div class="col-2">
+                        <div class="col-1">
 <!--                            <div class="font-weight-bold text-right text-nowrap">Total Quantity</div>-->
                             <div class="text-right text-nowrap">{{ order['total_quantity_ordered'] }}</div>
                         </div>
@@ -31,6 +31,10 @@
                         <div class="col-1">
 <!--                            <div class="font-weight-bold text-right text-nowrap">Packed</div>-->
                             <div class="text-right text-nowrap">{{ order['is_packed'] }}</div>
+                        </div>
+                        <div class="col-2">
+<!--                            <div class="font-weight-bold text-right text-nowrap">Packed</div>-->
+                            <div class="text-right text-nowrap">{{ order['shipping_number'] }}</div>
                         </div>
                     </div>
                 </div>
