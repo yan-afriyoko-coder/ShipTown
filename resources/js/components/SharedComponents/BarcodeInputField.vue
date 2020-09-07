@@ -30,11 +30,16 @@
             },
 
             setFocusOnBarcodeInput() {
+
                 if (this.$refs.barcode === document.activeElement) {
                     return;
                 }
+                this.$refs.barcode.readOnly = true;
 
                 this.$refs.barcode.focus();
+
+                this.$refs.barcode.readOnly = false;
+
                 this.simulateSelectAll();
             },
 
