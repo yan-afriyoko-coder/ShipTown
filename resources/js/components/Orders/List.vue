@@ -81,9 +81,9 @@
             getOrderList: function(page) {
 
                 const params = {
-                    'filter[status]': this.getUrlParameter('status'),
-                    sort: '-updated_at',
-                    per_page: 50,
+                    'filter[status]': this.getUrlParameter('status', null),
+                    'sort': this.getUrlParameter('sort','-updated_at'),
+                    'per_page': this.getUrlParameter('per_page',50),
                     page: page,
                     q: this.query,
                 };

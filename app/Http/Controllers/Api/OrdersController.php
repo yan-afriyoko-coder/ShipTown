@@ -33,7 +33,6 @@ class OrdersController extends Controller
                 'order_products.product.aliases',
             ])
             ->allowedSorts([
-                'sku',
                 'updated_at'
             ]);
 
