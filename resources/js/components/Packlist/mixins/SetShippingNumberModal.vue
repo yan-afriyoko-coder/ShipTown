@@ -53,7 +53,9 @@ export default {
         },
 
         setFocus() {
+            this.$refs.shipping_number.readOnly = true;
             this.$refs.shipping_number.focus();
+            this.$refs.shipping_number.readOnly = false;
         },
 
         setShippingNumber() {
