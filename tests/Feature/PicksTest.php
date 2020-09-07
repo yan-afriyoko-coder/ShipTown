@@ -30,11 +30,13 @@ class PicksTest extends TestCase
 
         factory(Product::class)->create();
 
-        $order = factory(Order::class)
+        $orders = factory(Order::class, 2)
             ->with('orderProducts', 2)
             ->create();
 
-        $order->update(['status_code' => 'picking']);
+        foreach ($orders as $order) {
+            $order->update(['status_code' => 'picking']);
+        }
 
         $picks = Pick::query()->whereNull('picked_at')->get();
 

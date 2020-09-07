@@ -39,6 +39,7 @@ class RecalculatePickedAtForPickingOrders implements ShouldQueue
                 (
                     SELECT max(`'.$prefix.'order_products`.updated_at)
                     FROM `'.$prefix.'order_products`
+                    WHERE `'.$prefix.'order_products`.order_id = `'.$prefix.'orders`.id
                     GROUP BY `'.$prefix.'order_products`.order_id
                     HAVING
                       SUM(`'.$prefix.'order_products`.quantity_ordered - `'.$prefix.'order_products`.quantity_picked) = 0
