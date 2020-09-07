@@ -15,8 +15,7 @@
                                 <input ref="shipping_number" class="form-control" placeholder="Scan shipping number"
                                        v-observe-visibility="focusOnInput"
                                        v-model="shipping_number"
-                                       @focus="simulateSelectAll"
-                                       @keyup.enter="setShippingNumber"/>
+                                       @focus="simulateSelectAll"/>
                             </div>
                         </form>
                     </div>
@@ -49,14 +48,6 @@ export default {
     },
 
     methods: {
-        show() {
-            console.log('show');
-        },
-
-        showShippingNumberModal() {
-            $(shippingNumberModal).modal('show');
-        },
-
         focusOnInput() {
             setTimeout(() => { this.setFocus() }, 500);
         },
@@ -67,7 +58,9 @@ export default {
 
         setShippingNumber() {
             this.hide();
-            this.$emit('shippingNumberUpdated', this.shipping_number);
+            const shipping_number = this.shipping_number;
+            this.$emit('shippingNumberUpdated', shipping_number);
+            this.shipping_number = '';
         },
 
         simulateSelectAll() {

@@ -132,6 +132,7 @@
 
         methods: {
             packAndShip(shipping_number) {
+                console.log('packAndShip');
                 return  axios.put('api/orders/' + this.order['id'], {
                         'shipping_number': shipping_number,
                         'is_packed': true,
@@ -142,9 +143,10 @@
             },
 
             markAsPacked: function () {
-               return  axios.put('api/orders/' + this.order['id'], {
+                console.log('markAsPacked');
+                return  axios.put('api/orders/' + this.order['id'], {
                         'is_packed': true,
-                    })
+                })
             },
 
             loadOrder: function() {
@@ -215,26 +217,6 @@
                 this.packed.splice(this.packed.indexOf(pickedItem), 1);
                 this.packlist.unshift(pickedItem);
                 this.warningBeep();
-            },
-
-            skipPick(pickedItem) {
-                // for visual effect we remove it straight away from UI
-                // we will add it back in catch
-                this.packlist.splice(this.packlist.indexOf(pickedItem), 1);
-
-                return this.updatePick(pickedItem.id, 0, true)
-                    .then( response => {
-                        pickedItem.is_packed = !pickedItem.is_packed;
-                        this.packed.unshift(pickedItem);
-                        pickedItem.quantity_packed = 0;
-                        this.displayWarningNotification(pickedItem, 'Skipped');
-                        this.warningBeep();
-                    })
-                    .catch( error  => {
-                        this.packlist.unshift(pickedItem);
-                        this.$snotify.error('Not skipped (Error '+ error.response.status+')');
-                        this.errorBeep();
-                    });
             },
 
             pickAll(pickedItem) {
