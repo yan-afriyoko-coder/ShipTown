@@ -331,7 +331,10 @@
 
                 axios.put(`api/print/order/${orderNumber}/address_label`)
                     .then(() => {
-                        this.$snotify.success('Printing address label');
+                        this.$snotify.success('Address label printed', {
+                            timeout: 1000,
+                            icon: false,
+                        });
                     }).catch((error) => {
                         let errorMsg = 'Error occurred while sending print job';
 
