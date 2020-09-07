@@ -58,8 +58,11 @@ export default {
         },
 
         focusOnInput() {
+            setTimeout(() => { this.setFocus() }, 500);
+        },
+
+        setFocus() {
             this.$refs.shipping_number.focus();
-            this.simulateSelectAll();
         },
 
         setShippingNumber() {

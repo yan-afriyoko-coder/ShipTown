@@ -127,10 +127,7 @@
         },
 
         mounted() {
-            this.loadOrder()
-                .then(() => {
-                    // this.loadPacklist();
-                });
+            this.loadOrder();
         },
 
         methods: {
@@ -169,16 +166,15 @@
 
                 return axios.get('/api/orders', {params: params})
                     .then(({ data }) => {
-                        if(data.total === 0) {
-                            this.hideLoading();
-                            return;
+                        if(data.total > 0) {
+                            this.order = data.data[0];
                         }
-
-                        this.order = data.data[0];
-                        this.hideLoading();
                     })
                     .catch( error => {
-                        this.$snotify.error('Error occurred while loading packlist');
+                        this.$snotify.error('Error occurred while loading order');
+
+                    })
+                    .then(() => {
                         this.hideLoading();
                     })
 
@@ -187,76 +183,30 @@
 
             loadPacklist: function() {
 
-                if(!this.isLoading) {
-                    this.showLoading();
-                }
+                this.showLoading();
 
                 // this.packlist = [];
                 this.packed = [];
 
-                axios.get('/api/order/products', {
-                    params: {
-                        'filter[order_id]': this.order.id,
-                        'include': 'product,product.aliases',
-                        'per_page': 999,
-                    }})
+                const params = {
+                    'filter[order_id]': this.order.id,
+                    'include': 'product,product.aliases',
+                    'per_page': 999,
+                };
 
+                axios.get('/api/order/products', {params: params})
                     .then(({ data }) => {
-
-                        if(data.total === 0) {
-                            this.hideLoading();
-                            return;
+                        if(data.total > 0) {
+                            this.packlist = data.data;
                         }
-
-                        this.packlist = data.data;
-
-                        this.hideLoading();
                     })
                     .catch( error => {
                         this.$snotify.error('Error occurred while loading packlist');
-                        this.hideLoading();
+
                     })
-
-
-            },
-
-            loadPacklistOld: function() {
-
-                if(!this.isLoading) {
-                    this.showLoading();
-                }
-
-                this.packlist = [];
-                this.packed = [];
-
-                axios.get('/api/packlist', {
-                    params: {
-                        'filter[order_id]': this.order.id,
-                        'include': 'product,product.aliases',
-                    }})
-                    .then(({ data }) => {
-
-                        if(data.total === 0) {
-                            this.hideLoading();
-                            return;
-                        }
-
-                        data.data.forEach(element => {
-                            if(element.is_packed === true) {
-                                this.packed.push(element);
-                            } else {
-                                this.packlist.push(element);
-                            }
-                        });
-
+                    .then(() => {
                         this.hideLoading();
-                    })
-                    .catch( error => {
-                        this.$snotify.error('Error occurred while loading packlist');
-                        this.hideLoading();
-                    })
-
-
+                    });
             },
 
             resetPick(pickedItem) {
@@ -291,35 +241,6 @@
                 this.packlist.splice(this.packlist.indexOf(pickedItem), 1);
                 this.packed.unshift(pickedItem);
                 this.beep();
-            }
-
-            ,pickAllOld(pickedItem) {
-                // for visual effect we remove it straight away from UI
-                // we will add it back in catch
-                this.packlist.splice(this.packlist.indexOf(pickedItem), 1);
-
-                return this.updatePick(pickedItem.id, pickedItem.quantity_requested, true)
-                    .then( response => {
-                        pickedItem.is_packed = true;
-                        this.packed.unshift(pickedItem);
-                        pickedItem.quantity_packed = pickedItem.quantity_requested;
-                        this.displayPickedNotification(pickedItem, pickedItem.quantity_requested);
-                        this.beep();
-                    })
-                    .catch( error  => {
-                        pickedItem.is_packed = false;
-                        this.packlist.unshift(pickedItem,0,pickedItem);
-                        this.packed.splice(this.packed.indexOf(pickedItem), 1);
-                        this.$snotify.error('Items not picked (Error '+ error.response.status+')');
-                        this.errorBeep();
-                    });
-            },
-
-            updatePick(pickId, quantityPicked, isPicked) {
-                return axios.post(`/api/packlist/${pickId}`, {
-                    'quantity_packed': quantityPicked,
-                    'is_packed': isPicked
-                });
             },
 
             displayPickedNotification: function (pickedItem, quantity) {

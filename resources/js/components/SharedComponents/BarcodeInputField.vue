@@ -34,8 +34,8 @@
                     return;
                 }
 
-                this.$refs.barcode.focus();
-                this.simulateSelectAll();
+                // this.$refs.barcode.focus();
+                // this.simulateSelectAll();
             },
 
             simulateSelectAll() {
