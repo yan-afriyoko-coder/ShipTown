@@ -79,10 +79,10 @@
 
                 const params = {
                     'filter[status]': this.getUrlParameter('status'),
+                    sort: 'updated_at',
                     per_page: 50,
                     page: page,
                     q: this.query,
-                    sort: this.sort,
                     order: this.order,
                 };
 

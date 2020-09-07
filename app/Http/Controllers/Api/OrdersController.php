@@ -20,6 +20,7 @@ class OrdersController extends Controller
         $query = QueryBuilder::for(Order::class)
             ->allowedFilters([
                 'status_code',
+                'shipping_number',
                 AllowedFilter::partial('status', 'status_code'),
                 AllowedFilter::exact('order_number'),
                 AllowedFilter::scope('is_picked'),
@@ -30,6 +31,10 @@ class OrdersController extends Controller
                 'order_products',
                 'order_products.product',
                 'order_products.product.aliases',
+            ])
+            ->allowedSorts([
+                'sku',
+                'updated_at'
             ]);
 
         if ($request->has('q') && $request->get('q')) {
