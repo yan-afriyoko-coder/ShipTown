@@ -88,7 +88,7 @@
                     q: this.query,
                 };
 
-                this.orders = [];
+                // this.orders = [];
                 this.page = page;
                 this.last_page = 1;
                 this.total = 0;
@@ -111,6 +111,7 @@
             },
 
             loadOrders(e) {
+                this.orders = [];
                 this.getOrderList(1)
                     .then(this.doSelectAll);
             },
