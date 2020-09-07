@@ -17,6 +17,32 @@ use Tests\TestCase;
 
 class PicksTest extends TestCase
 {
+    public function testIfOrderProductQuantityPickedIsPopulated()
+    {
+        Order::query()->forceDelete();
+        OrderProduct::query()->forceDelete();
+        PickRequest::query()->forceDelete();
+        Pick::query()->forceDelete();
+
+        $user = factory(User::class)->create();
+
+        factory(Product::class)->create();
+
+        $order = factory(Order::class)
+            ->with('orderProducts')
+            ->create();
+
+        $order->update(['status_code' => 'picking']);
+
+        $pick = Pick::query()->whereNull('picked_at')->first();
+
+        $pick->pick($user, $pick->quantity_required);
+
+        $this->assertFalse(
+            OrderProduct::query()->whereRaw('quantity_ordered <> quantity_picked')->exists()
+        );
+    }
+
     public function testIfPickRequestsAreRedistributedWhenQuantityRequiredChanged()
     {
         Passport::actingAs(

@@ -28,8 +28,12 @@ class FillPickRequestsPickedQuantityListener
      */
     public function handle(PickPickedEvent $event)
     {
-        PickRequest::query()
+        $pickRequests = PickRequest::query()
             ->where(['pick_id' => $event->getPick()->getKey()])
-            ->update(['quantity_picked' => DB::raw('quantity_required')]);
+            ->get();
+
+        foreach ($pickRequests as $pickRequest) {
+            $pickRequest->update(['quantity_picked' => $pickRequest->quantity_required]);
+        }
     }
 }

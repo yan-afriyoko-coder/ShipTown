@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Events\PickRequest\DeletedEvent;
 use App\Events\PickRequestCreatedEvent;
-use App\Models\Pick;
 use App\Models\PickRequest;
 
 class PickRequestObserver
@@ -28,7 +27,11 @@ class PickRequestObserver
      */
     public function updated(PickRequest $pickRequest)
     {
-        //
+        $delta = $pickRequest->getAttribute('quantity_picked') - $pickRequest->getOriginal('quantity_picked');
+
+        if ($delta != 0) {
+            $pickRequest->orderProduct()->increment('quantity_picked', $delta);
+        }
     }
 
     /**
