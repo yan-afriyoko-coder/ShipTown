@@ -66,7 +66,7 @@ Route::middleware('auth:api')->group(function () {
 
     // this route should be moved to api and invoked trough button in settings, deadline 10/09/2020
     Route::get('run/maintenance', function () {
-        \App\Jobs\Orders\RecalculateOrderProductLineCountJob::dispatch();
+        \App\Jobs\Maintenance\RecalculateOrderProductLineCountJob::dispatch();
         \App\Jobs\Maintenance\RecalculateProductQuantityJob::dispatch();
         \App\Jobs\Maintenance\RecalculateProductQuantityReservedJob::dispatch();
         \App\Jobs\Maintenance\RecalculateOrderProductQuantityPicked::dispatch();

@@ -2,15 +2,12 @@
 
 namespace Tests\Feature\Run;
 
-use App\Jobs\Orders\RecalculateOrderProductLineCountJob;
+use App\Jobs\Maintenance\RecalculateOrderProductLineCountJob;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Bus;
 use Laravel\Passport\Passport;
-use Mockery\Generator\StringManipulation\Pass\Pass;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class MaintenanceRouteTest extends TestCase
 {

@@ -45,5 +45,7 @@ class RecalculateOrderProductQuantityPicked implements ShouldQueue
                 0
             )
         ');
+
+        info('Recalculated order products quantity picked');
     }
 }

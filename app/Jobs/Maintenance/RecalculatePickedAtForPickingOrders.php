@@ -49,5 +49,7 @@ class RecalculatePickedAtForPickingOrders implements ShouldQueue
             AND `'.$prefix.'orders`.picked_at IS NULL
 
         ');
+
+        info('Recalculated "picking" orders picked_at');
     }
 }

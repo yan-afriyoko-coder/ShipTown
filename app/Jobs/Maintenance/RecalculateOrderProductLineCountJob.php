@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Jobs\Orders;
+namespace App\Jobs\Maintenance;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
 class RecalculateOrderProductLineCountJob implements ShouldQueue
@@ -41,5 +41,7 @@ class RecalculateOrderProductLineCountJob implements ShouldQueue
                 WHERE `'.$prefix.'order_products`.`order_id` = `'.$prefix.'orders`.`id`
             )
         ');
+
+        info('Recalculated order products product line count');
     }
 }

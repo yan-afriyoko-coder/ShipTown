@@ -44,5 +44,7 @@ class RecalculateProductQuantityReservedJob implements ShouldQueue
                 0
             )
         ');
+
+        info('Recalculated products total quantity reserved');
     }
 }
