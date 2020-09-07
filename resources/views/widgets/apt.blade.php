@@ -17,18 +17,33 @@
         </tippy>
     </template>
 </div>
-<div class="card text-center">
-    <div class="card-body">
-        <h4 class="card-title">30 DAY APT</h4>
-        <h6 class="card-title"></h6>
-        <h2 class="card-text"><strong>{{ $apt_string }}</strong></h2>
+
+
+<div>
+{{--    <h4 class="card-title text-center">30 DAY APT</h4>--}}
+    <h6 class="card-title text-center"></h6>
+    <div class="row">
+        <div class="col-8 offset-2">
+            <table class="table table-borderless">
+                <thead>
+                <tr>
+                    <th scope="col">30 Day APT</th>
+                    <th scope="col" class="text-right">{{ $apt_string }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
+
+
 <!-- Modal -->
-<apt-configuration-modal 
+<apt-configuration-modal
     id='aptConfigurationModal'
-    name='apt' 
+    name='apt'
     :statuses='@json($statuses)'
     :widget-config='@json($config)'
     @if($widget_id)
