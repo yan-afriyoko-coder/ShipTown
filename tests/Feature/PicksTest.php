@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Events\PickPickedEvent;
 use App\Events\PickQuantityRequiredChangedEvent;
 use App\Events\PickUnpickedEvent;
+use App\Jobs\Maintenance\RecalculateOrderProductQuantityPicked;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Pick;
@@ -17,6 +18,39 @@ use Tests\TestCase;
 
 class PicksTest extends TestCase
 {
+    public function testRecalculateOrderProductQuantityPicked()
+    {
+        Order::query()->forceDelete();
+        OrderProduct::query()->forceDelete();
+        PickRequest::query()->forceDelete();
+        Pick::query()->forceDelete();
+
+        $user = factory(User::class)->create();
+
+        factory(Product::class)->create();
+
+        $order = factory(Order::class)
+            ->with('orderProducts', 2)
+            ->create();
+
+        $order->update(['status_code' => 'picking']);
+
+        $picks = Pick::query()->whereNull('picked_at')->get();
+
+        foreach ($picks as $pick) {
+            $pick->pick($user, $pick->quantity_required);
+        }
+
+        // this will not fire events
+        OrderProduct::query()->update(['quantity_picked' => 0]);
+
+        RecalculateOrderProductQuantityPicked::dispatch();
+
+        $this->assertFalse(
+            OrderProduct::query()->whereRaw('quantity_ordered <> quantity_picked')->exists()
+        );
+    }
+
     public function testIfOrderPickedAtIsUpdated()
     {
         Order::query()->forceDelete();

@@ -69,6 +69,7 @@ Route::middleware('auth:api')->group(function () {
         \App\Jobs\Orders\RecalculateOrderProductLineCountJob::dispatch();
         \App\Jobs\Maintenance\RecalculateProductQuantityJob::dispatch();
         \App\Jobs\Maintenance\RecalculateProductQuantityReservedJob::dispatch();
+        \App\Jobs\Maintenance\RecalculateOrderProductQuantityPicked::dispatch();
         return 'Maintenance jobs dispatched';
     });
 });
