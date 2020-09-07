@@ -10,30 +10,18 @@
                 </div>
                 <div class="modal-body" style="margin: 0 auto 0;">
                     <form method="POST" @submit.prevent="setShippingNumber">
-                        <!--                            <div class="form-group form-check">-->
-                        <!--                                <input v-model="filters.single_line_orders_only" type="checkbox" class="form-check-input" />-->
-                        <!--                                <label class="form-check-label" >Show single line orders only</label>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="form-group form-check">-->
-                        <!--                                <input v-model="filters.in_stock_only" type="chec kbox" class="form-check-input" />-->
-                        <!--                                <label class="form-check-label" >In stock only</label>-->
-                        <!--                            </div>-->
                         <div class="form-group form-check">
                             <label>
                                 <input ref="shipping_number" class="form-control" placeholder="Scan shipping number"
-                                       v-observe-visibility="simulateSelectAll"
+                                       v-observe-visibility="focusOnInput"
                                        v-model="shipping_number"
                                        @focus="simulateSelectAll"
                                        @keyup.enter="setShippingNumber"/>
-
-                                <!--<input v-model="shipping_number" type="number" class="form-check-input" />-->
                             </label>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer text-center">
-<!--                    <slot name="actions" v-bind:filters="filters"></slot>-->
-<!--                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>-->
                     <button type="button" @click.prevent="setShippingNumber" class="btn btn-primary">Pack & Ship</button>
                 </div>
             </div>
@@ -42,6 +30,9 @@
 </template>
 
 <script>
+
+import VueObserveVisibilityPlugin from 'vue-observe-visibility';
+
 export default {
     name: "SetShippingNumberModal",
 
@@ -58,6 +49,10 @@ export default {
     },
 
     methods: {
+        show() {
+            console.log('show');
+        },
+
         showShippingNumberModal() {
             $(shippingNumberModal).modal('show');
         },

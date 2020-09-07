@@ -35,9 +35,6 @@
                     <a style="cursor:pointer;" data-toggle="modal" data-target="#filterConfigurationModal">
                         <font-awesome-icon icon="cog"></font-awesome-icon>
                     </a>
-                    <a style="cursor:pointer;" data-toggle="modal" data-target="#shippingNumberModal">
-                        <font-awesome-icon icon="cog"></font-awesome-icon>
-                    </a>
                 </div>
             </div>
 
@@ -105,6 +102,7 @@
                 order: null,
                 packlist: null,
                 packed: [],
+                modalTest: false,
             };
         },
 
