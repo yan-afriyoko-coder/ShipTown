@@ -7,6 +7,7 @@ use App\Models\OrderProduct;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderProductController extends Controller
@@ -21,7 +22,8 @@ class OrderProductController extends Controller
     {
         $query = QueryBuilder::for(OrderProduct::class)
             ->allowedFilters([
-                'order_id'
+                'order_id',
+                AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->default(100),
             ])
             ->allowedIncludes([
                 'product',
