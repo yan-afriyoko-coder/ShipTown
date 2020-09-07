@@ -31,10 +31,8 @@
                 <div class="col-11">
                     <barcode-input-field @barcodeScanned="packBarcode"/>
                 </div>
-                <div class="col-1">
-                    <a style="cursor:pointer;" data-toggle="modal" data-target="#filterConfigurationModal">
-                        <font-awesome-icon icon="cog"></font-awesome-icon>
-                    </a>
+                <div class="col-1 ml-0 pl-0">
+                    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#filterConfigurationModal" href="#"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
                 </div>
             </div>
 
@@ -173,8 +171,7 @@
                         }
                     })
                     .catch( error => {
-                        this.$snotify.error('Error occurred while loading order');
-
+                        this.$snotify.error('Error occurred while loading order', {icon: false});
                     })
                     .then(() => {
                         this.hideLoading();
@@ -203,7 +200,7 @@
                         }
                     })
                     .catch( error => {
-                        this.$snotify.error('Error occurred while loading packlist');
+                        this.$snotify.error('Error occurred while loading packlist', {icon: false});
 
                     })
                     .then(() => {
@@ -342,7 +339,9 @@
                             errorMsg = `Order #${orderNumber} not found.`;
                         }
 
-                        this.$snotify.error(errorMsg);
+                        this.$snotify.error(errorMsg, {
+                            icon: false
+                        });
                     });
             }
         },
