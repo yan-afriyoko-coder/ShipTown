@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Services\PicklistService;
+use App\User;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -142,5 +143,13 @@ class Order extends Model
     public function shippingAddress()
     {
         return $this->belongsTo(OrderAddress::class);
+    }
+
+    /**
+     * @return BelongsTo | User
+     */
+    public function packer()
+    {
+        return $this->belongsTo(User::class, 'packer_user_id');
     }
 }

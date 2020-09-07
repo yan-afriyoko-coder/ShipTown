@@ -32,6 +32,7 @@ class OrdersController extends Controller
                 'order_products',
                 'order_products.product',
                 'order_products.product.aliases',
+                'packer',
             ])
             ->allowedSorts([
                 'updated_at'

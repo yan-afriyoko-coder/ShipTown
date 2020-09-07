@@ -19,30 +19,33 @@
                     <div class="col p-0 pl-3">
                         <div class="row text-left">
                             <div class="col-md-12">
-                                <div class="row">
+                                <div class="row font-weight-bold">
                                     <div class="col-1">
-                                        <div class="font-weight-bold text-nowrap">Order #</div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="font-weight-bold text-right text-nowrap">Status</div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="font-weight-bold text-right text-nowrap">Date Placed</div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="font-weight-bold text-right text-nowrap">Line Count</div>
+                                        <div class=" text-nowrap">Order #</div>
                                     </div>
                                     <div class="col-1">
-                                        <div class="font-weight-bold text-right text-nowrap">Total Quantity</div>
-                                    </div>
-                                    <div class="col-1">
-                                        <div class="font-weight-bold text-right text-nowrap">Picked</div>
-                                    </div>
-                                    <div class="col-1">
-                                        <div class="font-weight-bold text-right text-nowrap">Packed</div>
+                                        <div class="text-nowrap">Status</div>
                                     </div>
                                     <div class="col-2">
-                                        <div class="font-weight-bold text-right text-nowrap">Shipping No</div>
+                                        <div class="text-nowrap">Date Placed</div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="text-center text-nowrap">Line Count</div>
+                                    </div>
+                                    <div class="col-1">
+                                        <div class="text-center text-nowrap">Total Quantity</div>
+                                    </div>
+                                    <div class="col-1">
+                                        <div class="text-center text-nowrap">Picked</div>
+                                    </div>
+                                    <div class="col-1">
+                                        <div class="text-center text-nowrap">Packed</div>
+                                    </div>
+                                    <div class="col-1">
+                                        <div class="text-nowrap">Packer</div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="text-right text-nowrap">Shipping No</div>
                                     </div>
                                 </div>
                             </div>
@@ -84,6 +87,7 @@
                     'filter[status]': this.getUrlParameter('status', null),
                     'sort': this.getUrlParameter('sort','-updated_at'),
                     'per_page': this.getUrlParameter('per_page',50),
+                    'include': 'packer',
                     page: page,
                     q: this.query,
                 };

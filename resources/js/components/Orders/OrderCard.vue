@@ -8,32 +8,35 @@
 <!--                            <div class="font-weight-bold text-nowrap">Order #</div>-->
                             <div class="text-nowrap">{{ order['order_number'] }}</div>
                         </div>
-                        <div class="col-2">
+                        <div class="col-1">
 <!--                            <div class="font-weight-bold text-nowrap">Status</div>-->
-                            <div class="text-right text-nowrap">{{ order['status_code'] }}</div>
+                            <div class="text-nowrap">{{ order['status_code'] }}</div>
                         </div>
                         <div class="col-2">
 <!--                            <div class="font-weight-bold text-right text-nowrap">Date Placed</div>-->
-                            <div class="text-right text-nowrap">{{ order['order_placed_at'] | moment('MMM DD') }}</div>
+                            <div class="text-nowrap">{{ order['order_placed_at'] | moment('MM/DD H:mm') }}</div>
                         </div>
                         <div class="col-2">
 <!--                            <div class="font-weight-bold text-right text-nowrap">Line Count</div>-->
-                            <div class="text-right text-nowrap">{{ order['product_line_count'] }}</div>
+                            <div class="text-center text-nowrap">{{ order['product_line_count'] }}</div>
                         </div>
                         <div class="col-1">
 <!--                            <div class="font-weight-bold text-right text-nowrap">Total Quantity</div>-->
-                            <div class="text-right text-nowrap">{{ order['total_quantity_ordered'] }}</div>
+                            <div class="text-center text-nowrap">{{ order['total_quantity_ordered'] }}</div>
                         </div>
                         <div class="col-1">
 <!--                            <div class="font-weight-bold text-right text-nowrap">Picked</div>-->
-                            <div class="text-right text-nowrap">{{ order['is_picked'] }}</div>
+                            <div class="text-center text-nowrap">{{ order['picked_at'] | moment('MM/DD H:mm') }}</div>
                         </div>
                         <div class="col-1">
 <!--                            <div class="font-weight-bold text-right text-nowrap">Packed</div>-->
-                            <div class="text-right text-nowrap">{{ order['is_packed'] }}</div>
+                            <div class="text-center text-nowrap">{{ order['packed_at'] | moment('MM/DD H:mm') }}</div>
+                        </div>
+                        <div class="col-1">
+<!--                            <div class="font-weight-bold text-right text-nowrap">Packed</div>-->
+                            <div class="text-left text-nowrap">{{ order['packer'] ? order['packer']['name'] : '' }}</div>
                         </div>
                         <div class="col-2">
-<!--                            <div class="font-weight-bold text-right text-nowrap">Packed</div>-->
                             <div class="text-right text-nowrap">{{ order['shipping_number'] }}</div>
                         </div>
                     </div>
