@@ -40,6 +40,7 @@ class Order extends Model
         'order_placed_at',
         'order_closed_at',
         'status_code',
+        'packer_user_id',
         'raw_import'
     ];
 

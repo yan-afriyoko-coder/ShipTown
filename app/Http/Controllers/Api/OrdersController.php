@@ -9,6 +9,7 @@ use App\Models\Order;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Arr;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -62,7 +63,13 @@ class OrdersController extends Controller
      */
     public function update(UpdateRequest $request, Order $order)
     {
-        $order->update($request->validated());
+        $updates = $request->validated();
+
+        if ($request->has('is_packed')) {
+            $updates = Arr::add($updates, 'packer_user_id', $request->user()->getKey());
+        }
+
+        $order->update($updates);
 
         return new JsonResource($order);
     }
