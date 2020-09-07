@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Events\PickPickedEvent;
 use App\Events\PickQuantityRequiredChangedEvent;
 use App\Events\PickUnpickedEvent;
+use App\Jobs\Maintenance\RecalculateOrderProductQuantityPicked;
 use App\Jobs\Maintenance\RecalculatePickedAtForPickingOrders;
 use App\Models\Order;
 use App\Models\OrderProduct;
@@ -77,7 +78,7 @@ class PicksTest extends TestCase
         // this will not fire events
         OrderProduct::query()->update(['quantity_picked' => 0]);
 
-        RecalculatePickedAtForPickingOrders::dispatch();
+        RecalculateOrderProductQuantityPicked::dispatch();
 
         $this->assertFalse(
             OrderProduct::query()->whereRaw('quantity_ordered <> quantity_picked')->exists()
