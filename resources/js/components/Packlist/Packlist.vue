@@ -120,6 +120,7 @@
                 }
 
                 if(this.packlist.length === 0) {
+                    this.printAddressLabel();
                     $(shippingNumberModal).modal('show');
                 }
             }
