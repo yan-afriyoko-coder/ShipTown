@@ -35,10 +35,13 @@ class RecalculateProductQuantityReservedJob implements ShouldQueue
         DB::statement('
             UPDATE `'.$prefix.'products`
 
-            SET `'.$prefix.'products`.`quantity_reserved` = (
-                SELECT sum(quantity_reserved)
-                FROM `'.$prefix.'inventory`
-                WHERE `'.$prefix.'inventory`.`product_id` = `'.$prefix.'products`.`id`
+            SET `'.$prefix.'products`.`quantity_reserved` = IFNULL(
+                (
+                    SELECT sum(`'.$prefix.'inventory`.`quantity_reserved`)
+                    FROM `'.$prefix.'inventory`
+                    WHERE `'.$prefix.'inventory`.`product_id` = `'.$prefix.'products`.`id`
+                ),
+                0
             )
         ');
     }
