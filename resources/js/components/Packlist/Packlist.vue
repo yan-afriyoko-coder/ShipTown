@@ -126,7 +126,10 @@
         },
 
         mounted() {
-            this.loadOrder();
+            this.loadOrder()
+                .then(() => {
+                    // this.loadPacklist();
+                });
         },
 
         methods: {
@@ -163,7 +166,7 @@
                 this.packlist = [];
                 this.packed = [];
 
-                axios.get('/api/orders', {params: params})
+                return axios.get('/api/orders', {params: params})
                     .then(({ data }) => {
                         if(data.total === 0) {
                             this.hideLoading();
@@ -171,8 +174,6 @@
                         }
 
                         this.order = data.data[0];
-                        this.packlist = this.order['order_products'];
-                        console.log(this.order);
                         this.hideLoading();
                     })
                     .catch( error => {
@@ -184,39 +185,37 @@
             },
 
             loadPacklist: function() {
-                //
-                // if(!this.isLoading) {
-                //     this.showLoading();
-                // }
-                //
+
+                if(!this.isLoading) {
+                    this.showLoading();
+                }
+
                 // this.packlist = [];
-                // this.packed = [];
-                //
-                // axios.get('/api/orders/products', {
-                //     params: {
-                //         'filter[order_id]': this.order.id,
-                //         'include': 'product,product.aliases',
-                //         'per_page': 999,
-                //     }})
-                //
-                //     .then(({ data }) => {
-                //
-                //         if(data.total === 0) {
-                //             this.hideLoading();
-                //             return;
-                //         }
-                //
-                //         data.data.forEach(element => {
-                //             this.packlist.push(element);
-                //         });
-                //
-                //         this.hideLoading();
-                //     })
-                //     .catch( error => {
-                //         this.$snotify.error('Error occurred while loading packlist');
-                //         this.hideLoading();
-                //     })
-                //
+                this.packed = [];
+
+                axios.get('/api/order/products', {
+                    params: {
+                        'filter[order_id]': this.order.id,
+                        'include': 'product,product.aliases',
+                        'per_page': 999,
+                    }})
+
+                    .then(({ data }) => {
+
+                        if(data.total === 0) {
+                            this.hideLoading();
+                            return;
+                        }
+
+                        this.packlist = data.data;
+
+                        this.hideLoading();
+                    })
+                    .catch( error => {
+                        this.$snotify.error('Error occurred while loading packlist');
+                        this.hideLoading();
+                    })
+
 
             },
 

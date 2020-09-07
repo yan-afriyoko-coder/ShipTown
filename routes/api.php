@@ -34,6 +34,7 @@ Route::middleware('auth:api')->group(function () {
 //    Route::post('orders', 'Api\OrdersController@store');
 //    Route::delete('orders/{order_number}', 'Api\OrdersController@destroy');
     Route::apiResource('orders', 'Api\OrdersController');
+    Route::apiResource('order/products', 'Api\OrderProductController');
 
     Route::put('print/order/{order_number}/{view}', 'Api\PrintOrderController@store');
 

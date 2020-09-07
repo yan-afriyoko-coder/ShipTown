@@ -36,7 +36,7 @@ class OrdersSeeder extends Seeder
 //        factory(Order::class, 2)
 //            ->create()
 //            ->each(function (Order $order) {
-//                $orderProducts = factory(OrderProduct::class, 1)->make();
+//                $orderProducts = factory(OrderProductController::class, 1)->make();
 //
 //                $order->orderProducts()->saveMany($orderProducts);
 //            });
@@ -45,7 +45,7 @@ class OrdersSeeder extends Seeder
 //        factory(Order::class, 1)
 //            ->create()
 //            ->each(function (Order $order) {
-//                $orderProducts = collect(factory(OrderProduct::class, 1)->make())
+//                $orderProducts = collect(factory(OrderProductController::class, 1)->make())
 //                    ->map(function ($orderProduct) {
 //
 //                        $suffix = Arr::random(['-blue', '-red', '-green', '-xl', '-small-orange']);

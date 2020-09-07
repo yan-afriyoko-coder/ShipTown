@@ -11,8 +11,10 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    /**
+     * @var int
+     */
     private $status_code = 200;
-
 
     public function respond($message)
     {
@@ -21,7 +23,13 @@ class Controller extends BaseController
             $this->getStatusCode()
         );
 
-        $response->throwResponse();
+        return $response->throwResponse();
+    }
+
+    public function respondNotAllowed405($message = 'Method not allowed')
+    {
+        return $this->setStatusCode(405)
+            ->respond($message);
     }
 
     public function respondOK200($message = null)
