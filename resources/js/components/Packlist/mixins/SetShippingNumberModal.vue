@@ -8,18 +8,18 @@
                         <font-awesome-icon icon="question-circle" :content="helpText" v-tippy></font-awesome-icon>
                     </div>
                 </div>
-                <div class="modal-body" style="margin: 0 auto 0;">
-                    <form method="POST" @submit.prevent="setShippingNumber">
-                        <div class="form-group form-check">
-                            <label>
+                <div class="modal-body row">
+                    <div class="col m-0 p-0">
+                        <form class="m-0 p-0" method="POST" @submit.prevent="setShippingNumber">
+                            <div class="form-group form-check m-0 p-0">
                                 <input ref="shipping_number" class="form-control" placeholder="Scan shipping number"
                                        v-observe-visibility="focusOnInput"
                                        v-model="shipping_number"
                                        @focus="simulateSelectAll"
                                        @keyup.enter="setShippingNumber"/>
-                            </label>
-                        </div>
-                    </form>
+                            </div>
+                        </form>
+                    </div>
                 </div>
                 <div class="modal-footer text-center">
                     <button type="button" @click.prevent="setShippingNumber" class="btn btn-primary">Pack & Ship</button>
