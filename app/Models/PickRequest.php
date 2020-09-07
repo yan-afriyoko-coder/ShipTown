@@ -11,6 +11,7 @@ use phpseclib\Math\BigInteger;
  * Class PickRequest
  * @property BigInteger pick_id
  * @property float quantity_required
+ * @property float quantity_picked
  * @package App\Models
  */
 class PickRequest extends Model

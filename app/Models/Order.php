@@ -33,6 +33,7 @@ class Order extends Model
 {
     protected $fillable = [
         'order_number',
+        'picked_at',
         'shipping_number',
         'shipping_address_id',
         'is_packed',

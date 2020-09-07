@@ -17,6 +17,34 @@ use Tests\TestCase;
 
 class PicksTest extends TestCase
 {
+    public function testIfOrderPickedAtIsUpdated()
+    {
+        Order::query()->forceDelete();
+        OrderProduct::query()->forceDelete();
+        PickRequest::query()->forceDelete();
+        Pick::query()->forceDelete();
+
+        $user = factory(User::class)->create();
+
+        factory(Product::class)->create();
+
+        $order = factory(Order::class)
+            ->with('orderProducts', 2)
+            ->create();
+
+        $order->update(['status_code' => 'picking']);
+
+        $picks = Pick::query()->whereNull('picked_at')->get();
+
+        foreach ($picks as $pick) {
+            $pick->pick($user, $pick->quantity_required);
+        }
+
+        $this->assertTrue(
+            Order::query()->whereNotNull('picked_at')->exists()
+        );
+    }
+
     public function testIfOrderProductQuantityPickedIsPopulated()
     {
         Order::query()->forceDelete();

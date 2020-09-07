@@ -30,7 +30,8 @@ class PickRequestObserver
         $delta = $pickRequest->getAttribute('quantity_picked') - $pickRequest->getOriginal('quantity_picked');
 
         if ($delta != 0) {
-            $pickRequest->orderProduct()->increment('quantity_picked', $delta);
+            $orderProduct = $pickRequest->orderProduct()->first();
+            $orderProduct->update(['quantity_picked' => $orderProduct->quantity_picked + $delta]);
         }
     }
 

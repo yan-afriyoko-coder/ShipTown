@@ -8,10 +8,12 @@ use Illuminate\Database\Query\Builder;
 use phpseclib\Math\BigInteger;
 
 /**
+ * @property BigInteger order_id
  * @property BigInteger|null product_id
  * @property string|null sku_ordered
  * @property string|null name_ordered
  * @property float quantity_ordered
+ * @property float quantity_picked
  */
 class OrderProduct extends Model
 {
@@ -22,6 +24,7 @@ class OrderProduct extends Model
         'name_ordered',
         'price',
         'quantity_ordered',
+        'quantity_picked',
     ];
 
     /**
