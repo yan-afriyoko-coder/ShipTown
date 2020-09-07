@@ -19,7 +19,14 @@ class OrderProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query = QueryBuilder::for(OrderProduct::class);
+        $query = QueryBuilder::for(OrderProduct::class)
+            ->allowedFilters([
+                'order_id'
+            ])
+            ->allowedIncludes([
+                'product',
+                'product.aliases',
+            ]);
 
         $per_page = $request->get('per_page', 10);
 
