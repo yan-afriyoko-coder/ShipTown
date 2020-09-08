@@ -28,7 +28,6 @@ class DatabaseSeeder extends Seeder
             Api2CartOrderImportSeeder::class,
             RmsapiConnectionSeeder::class,
             RmsapiProductImportSeeder::class,
-            PicklistSeeder::class,
             PacklistSeeder::class,
             ProductAliasSeeder::class,
             SingleLineOrderPicklistSeeder::class,
