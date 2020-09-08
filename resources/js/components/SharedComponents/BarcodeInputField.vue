@@ -34,10 +34,12 @@
                 if (this.$refs.barcode === document.activeElement) {
                     return;
                 }
+
+                // we using readOnly field here to prevent
+                // on-screen keyboard showing up
+                // on phones and tablets
                 this.$refs.barcode.readOnly = true;
-
                 this.$refs.barcode.focus();
-
                 this.$refs.barcode.readOnly = false;
 
                 this.simulateSelectAll();

@@ -53,6 +53,9 @@ export default {
         },
 
         setFocus() {
+            // we using readOnly field here to prevent
+            // on-screen keyboard showing up
+            // on phones and tablets
             this.$refs.shipping_number.readOnly = true;
             this.$refs.shipping_number.focus();
             this.$refs.shipping_number.readOnly = false;
@@ -60,8 +63,7 @@ export default {
 
         setShippingNumber() {
             this.hide();
-            const shipping_number = this.shipping_number;
-            this.$emit('shippingNumberUpdated', shipping_number);
+            this.$emit('shippingNumberUpdated', this.shipping_number);
             this.shipping_number = '';
         },
 
