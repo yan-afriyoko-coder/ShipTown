@@ -36,39 +36,4 @@ class PicklistService
 
         $pickRequest->update(['pick_id' => $pick->getKey()]);
     }
-
-
-    /**
-     * @param OrderProduct|array $orderProduct
-     * @return void
-     */
-    public static function addOrderProductToOldPicklist($orderProduct)
-    {
-        foreach (Arr::wrap($orderProduct) as $orderProduct) {
-            Picklist::updateOrCreate([
-                'order_product_id' => $orderProduct['id']
-            ], [
-                'order_id' => $orderProduct['order_id'],
-                'product_id' => $orderProduct['product_id'],
-                'sku_ordered' => $orderProduct['sku_ordered'],
-                'name_ordered' => $orderProduct['name_ordered'],
-                'quantity_requested' => $orderProduct['quantity_ordered'],
-            ]);
-        }
-    }
-
-    /**
-     *
-     * @param OrderProduct|array $orderProduct
-     * @return void
-     */
-    public static function removeOrderProductFromOldPicklist($orderProduct)
-    {
-        foreach (Arr::wrap($orderProduct) as $orderProduct) {
-            Picklist::query()
-                ->where('order_product_id', '=', $orderProduct['id'])
-                ->whereNull('picked_at')
-                ->delete();
-        }
-    }
 }

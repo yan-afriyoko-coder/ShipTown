@@ -55,4 +55,8 @@ Route::middleware('auth')->group(function () {
     Route::group(['middleware' => ['role:admin']], function () {
         Route::view('/users', 'users')->name('users');
     });
+
+    Route::get('/test', function () {
+        \App\Jobs\Maintenance\MakeSureOrdersAreOnPicklist::dispatch();
+    });
 });

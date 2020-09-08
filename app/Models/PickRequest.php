@@ -19,6 +19,7 @@ class PickRequest extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'order_id',
         'order_product_id',
         'quantity_required',
         'quantity_picked',

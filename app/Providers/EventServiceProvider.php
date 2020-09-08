@@ -50,7 +50,6 @@ class EventServiceProvider extends ServiceProvider
 
         // Order
         \App\Events\Order\CreatedEvent::class => [
-//            AddToOldPicklistListener_OnOrderCreated::class,
             PublishSnsNotificationListener::class
         ],
 
@@ -59,8 +58,6 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         \App\Events\Order\StatusChangedEvent::class => [
-//            AddToOldPicklistListener_OnStatusChanged::class,
-//            RemoveFromOldPicklistListener::class,
             CreatePickRequestsListener::class,
             DeletePickRequestsListener::class,
         ],

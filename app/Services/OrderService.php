@@ -8,24 +8,32 @@ use App\Events\Order\StatusChangedEvent;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderProduct;
+use App\Models\PickRequest;
 use App\Models\Product;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class OrderService
 {
-    public static function addToPacklist(Order $order)
+    /**
+     * @param Order $order
+     */
+    public static function createPickRequests(Order $order): void
     {
-        foreach ($order->orderProducts()->get() as $orderProduct) {
-            PacklistService::addOrderProductPick($orderProduct);
-        }
-    }
+        $orderProducts = $order->orderProducts()->get();
 
-    public static function addToPicklist(Order $order)
-    {
-        foreach ($order->orderProducts()->get() as $orderProduct) {
-            PicklistService::addOrderProductToOldPicklist($orderProduct);
+        foreach ($orderProducts as $orderProduct) {
+            PickRequest::updateOrCreate([
+                'order_product_id' => $orderProduct->getKey(),
+            ], [
+                'order_id' => $order->id,
+                'quantity_required' => $orderProduct->quantity_ordered,
+            ]);
         }
+
+        info('Pick requests created', [
+            'order_number' => $order->order_number
+        ]);
     }
 
     /**
