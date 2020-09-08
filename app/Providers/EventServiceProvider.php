@@ -6,8 +6,11 @@ use App\Events\PickPickedEvent;
 use App\Events\PickQuantityRequiredChangedEvent as PickQuantity_RequiredChangedEvent_Alias;
 use App\Events\PickRequestCreatedEvent as PickRequest_CreatedEvent_Alias;
 use App\Events\PickUnpickedEvent;
+use App\Listeners\Inventory\Created\AddToProductsQuantityReservedListener;
 use App\Listeners\Inventory\Created\AddToProductTotalQuantityListener;
+use App\Listeners\Inventory\Deleted\DeductFromProductsQuantityReservedListener;
 use App\Listeners\Inventory\Deleted\DeductFromProductTotalQuantityListener;
+use App\Listeners\Inventory\Updated\UpdateProductsQuantityReservedListener;
 use App\Listeners\Inventory\Updated\UpdateProductTotalQuantityListener;
 use App\Listeners\Order\Created\PublishSnsNotificationListener;
 use App\Listeners\Order\StatusChanged\CreatePickRequestsListener;
@@ -87,14 +90,17 @@ class EventServiceProvider extends ServiceProvider
         // Inventory
         \App\Events\Inventory\CreatedEvent::class => [
             AddToProductTotalQuantityListener::class,
+            AddToProductsQuantityReservedListener::class,
         ],
 
         \App\Events\Inventory\UpdatedEvent::class => [
             UpdateProductTotalQuantityListener::class,
+            UpdateProductsQuantityReservedListener::class
         ],
 
         \App\Events\Inventory\DeletedEvent::class => [
             DeductFromProductTotalQuantityListener::class,
+            DeductFromProductsQuantityReservedListener::class
         ],
 
 
