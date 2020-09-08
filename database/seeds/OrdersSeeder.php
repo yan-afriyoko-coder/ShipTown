@@ -33,6 +33,24 @@ class OrdersSeeder extends Seeder
                 'status_code' => 'holded'
             ]);
 
+        factory(Order::class, rand(30,50))
+            ->with('orderProducts', rand(1,4))
+            ->create([
+                'status_code' => 'canceled'
+            ]);
+
+        factory(Order::class, rand(60,80))
+            ->with('orderProducts', rand(1,4))
+            ->create([
+                'status_code' => 'complete'
+            ]);
+
+        factory(Order::class, rand(20,50))
+            ->with('orderProducts', rand(1,4))
+            ->create([
+                'status_code' => 'completed_imported_to_rms'
+            ]);
+
 //        factory(Order::class, 2)
 //            ->create()
 //            ->each(function (Order $order) {
