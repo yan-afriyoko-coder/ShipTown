@@ -34,7 +34,7 @@
         components: { 'product-card': ProductCard },
 
         created() {
-            this.getProductList(this.page);
+            this.getProductList(1);
         },
 
         mounted() {
@@ -52,7 +52,6 @@
                         include: 'inventory'
                 }
 
-                this.products = [];
                 this.page = page;
                 this.last_page = 1;
                 this.total = 0;
@@ -74,6 +73,7 @@
             },
 
             loadProducts(e) {
+                this.products = [];
                 this.setUrlFilter('query', this.query);
                 this.getProductList(1)
                     .then(this.doSelectAll);
