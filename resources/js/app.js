@@ -111,20 +111,6 @@ Vue.component(
     require('./components/RMSApiConfiguration.vue').default
 );
 
-// Picklist
-
-Vue.component(
-    'picklist-table',
-    require('./components/Picklist/List.vue').default
-);
-
-Vue.component(
-    'picklist-configuration-modal',
-    require('./components/Picklist/ConfigurationModal.vue').default
-);
-
-// Packlist
-
 Vue.component(
     'packlist-configuration-modal',
     require('./components/Packlist/mixins/FiltersModal.vue').default
@@ -159,8 +145,6 @@ Vue.component(
     'printer-configuration',
     require('./components/Printers/Configuration.vue').default
 );
-
-
 
 Vue.component(
     'picks-table',
