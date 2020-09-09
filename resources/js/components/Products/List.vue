@@ -2,8 +2,8 @@
     <div>
         <div class="row no-gutters mb-3 ml-1 mr-1">
             <div class="col">
-                <input ref="search" @focus="doSelectAll" class="form-control" @keyup.enter="loadProducts"
-                       v-model="query" placeholder="Search for products..." />
+                <input ref="search" @focus="doSelectAll" class="form-control" @keyup.enter="doSearch"
+                       v-model="filters['search']" placeholder="Search for products..." />
             </div>
         </div>
         <div class="container">
@@ -33,6 +33,17 @@
 
         components: { 'product-card': ProductCard },
 
+        data: function() {
+            return {
+                filters: {
+                },
+                products: [],
+                total: 0,
+                page: 1,
+                last_page: 1,
+            };
+        },
+
         created() {
             this.getProductList(1);
         },
@@ -43,13 +54,27 @@
         },
 
         methods: {
-            getProductList: function(page) {
+            doSearch: function() {
+                this.products = [];
+                this.updateUrl(this.filters);
 
+                this.$refs.search.readOnly = true;
+                this.$refs.search.focus();
+                this.$refs.search.readOnly = false;
+
+                setTimeout(() => { document.execCommand('selectall', null, false); });
+
+                this.getProductList(1);
+            },
+
+            getProductList: function(page) {
                 const params = {
-                        page: page,
-                        q: this.getUrlFilter('query'),
-                        sort: '-quantity',
-                        include: 'inventory'
+                    page: page,
+                    'filter[sku]': this.getUrlParameter('sku'),
+                    'filter[search]': this.getUrlParameter('search'),
+                    q: this.getUrlFilter('query'),
+                    sort: '-quantity',
+                    include: 'inventory'
                 }
 
                 this.page = page;
@@ -96,17 +121,6 @@
             },
         },
 
-        data: function() {
-            return {
-                query: null,
-                sort: 'sku',
-                order: 'asc',
-                products: [],
-                total: 0,
-                page: 1,
-                last_page: 1,
-            };
-        },
     }
 </script>
 

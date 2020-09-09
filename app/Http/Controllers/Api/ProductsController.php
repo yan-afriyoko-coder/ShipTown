@@ -18,10 +18,13 @@ class ProductsController extends Controller
     {
         $query = QueryBuilder::for(Product::class)
             ->allowedFilters([
-                'id',
-                'sku',
-                'name',
-                'price',
+                AllowedFilter::exact('id'),
+                AllowedFilter::exact('sku'),
+                AllowedFilter::exact('name'),
+                AllowedFilter::exact('price'),
+
+                AllowedFilter::scope('q', 'whereHasText'), // to be removed, left for backwards compatibility only text should be used
+                AllowedFilter::scope('search', 'whereHasText'),
                 AllowedFilter::scope('sku_or_alias'),
                 AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->default(100),
             ])
@@ -36,11 +39,6 @@ class ProductsController extends Controller
                 'inventory',
                 'aliases'
             ]);
-
-        if ($request->has('q') && $request->get('q')) {
-            $query->where('sku', 'like', '%' . $request->get('q') . '%')
-                ->orWhere('name', 'like', '%' . $request->get('q') . '%');
-        }
 
         return $query->paginate(100)->appends($request->query());
     }

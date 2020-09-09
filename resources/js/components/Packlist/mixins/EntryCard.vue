@@ -3,7 +3,7 @@
         <div class="col-md-8">
             <div class="text-primary h4">{{ entry['name_ordered'] }}</div>
             <div class="text-secondary h5">sku ordered: <span class="font-weight-bold"> {{ entry['sku_ordered'] }} </span></div>
-            <div class="text-secondary h5">product: <span class="font-weight-bold"> <a target="_blank" :href="'/products?filter[query]=' + productSku ">{{ productSku }}</a> </span></div>
+            <div class="text-secondary h5">product: <span class="font-weight-bold"> <a target="_blank" :href="productUrl">{{ productSku }}</a> </span></div>
 
         </div>
         <div class="col-md-4">
@@ -32,6 +32,9 @@
             productSku() {
                return this.entry['product'] ? this.entry['product']['sku'] : '';
             },
+            productUrl() {
+                return '/products?sku=' + this.productSku;
+            }
         }
     }
 </script>

@@ -46,7 +46,9 @@
                 let url = this.$router.currentRoute.path + '?';
 
                 for (let element in params) {
-                   url += element +'=' + params[element] + '&';
+                    if( params[element] != null) {
+                        url += element +'=' + params[element] + '&';
+                    }
                 }
 
                 this.$router.push(url);

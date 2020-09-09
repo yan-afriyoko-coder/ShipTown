@@ -21,6 +21,7 @@ use phpseclib\Math\BigInteger;
  * @property double quantity
  * @property double quantity_reserved
  * @method static updateOrCreate(array $array, array $attributes)
+ * @method static whereHasText(string $text)
  */
 class Product extends Model
 {
@@ -59,6 +60,20 @@ class Product extends Model
         'sale_price_start_date',
         'sale_price_end_date'
     ];
+
+    /**
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param string $text
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopeWhereHasText($query, $text)
+    {
+        return $query->where('sku', 'like', '%' . $text . '%')
+            ->orWhere('name', 'like', '%' . $text . '%')
+            ->orWhereHas('aliases', function (Builder $query) use ($text) {
+                    return $query->where('alias', '=', $text);
+            });
+    }
 
     /**
      * @param \Illuminate\Database\Query\Builder $query
