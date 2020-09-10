@@ -13,6 +13,7 @@
         "arrilot/laravel-widgets": "^3.13",
         "aws/aws-sdk-php-laravel": "^3.3",
         "barryvdh/laravel-dompdf": "^0.8.6",
+        "barryvdh/laravel-ide-helper": "^2.8",
         "doctrine/dbal": "2.9.*",
         "dompdf/dompdf": "^0.8.5",
         "fideloper/proxy": "^4.0",
