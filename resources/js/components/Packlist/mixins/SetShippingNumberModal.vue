@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div class="modal-footer text-center">
-                    <button type="button" @click.prevent="setShippingNumber" class="btn btn-primary">Pack & Ship</button>
+                    <button type="button" @click.prevent="setShippingNumber" class="btn btn-primary">OK</button>
                 </div>
             </div>
         </div>
