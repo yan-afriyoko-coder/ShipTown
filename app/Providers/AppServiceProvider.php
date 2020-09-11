@@ -54,7 +54,6 @@ class AppServiceProvider extends ServiceProvider
         Pick::observe(PickObserver::class);
         PickRequest::observe(PickRequestObserver::class);
 
-        Picklist::observe(PicklistsObserver::class);
         Packlist::observe(PacklistsObserver::class);
 
         Inventory::observe(InventoryObserver::class);
