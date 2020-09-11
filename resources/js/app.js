@@ -136,7 +136,7 @@ Vue.component(
 
 Vue.component(
     'user-table',
-    require('./components/Users/List.vue').default
+    require('./components/UsersPage.vue').default
 );
 
 Vue.component(
@@ -151,7 +151,7 @@ Vue.component(
 
 Vue.component(
     'picks-table',
-    require('./components/Picks/PicksTable.vue').default
+    require('./components/PicklistPage.vue').default
 );
 
 /**

@@ -46,10 +46,10 @@
         </div>
         <!-- The modals -->
         <b-modal id="invite-modal" title="Invite User" @ok="handleInviteOk">
-            <invite-modal ref="inviteForm"></invite-modal>   
+            <invite-modal ref="inviteForm"></invite-modal>
         </b-modal>
         <b-modal ref="editModal" id="edit-modal" title="Edit User" @ok="handleEditOk">
-            <edit-modal v-if="selectedId" :id="selectedId" :roles="roles" ref="editForm"></edit-modal>   
+            <edit-modal v-if="selectedId" :id="selectedId" :roles="roles" ref="editForm"></edit-modal>
         </b-modal>
     </div>
 </template>
@@ -57,8 +57,8 @@
 <script>
 import { find } from 'lodash';
 
-import Invite from './Invite';
-import Edit from './Edit';
+import Invite from './Users/Invite';
+import Edit from './Users/Edit';
 
 export default {
     components: {
@@ -113,7 +113,7 @@ export default {
                         axios.delete(`/api/users/${id}`).then(() => {
                             this.$snotify.success('User deactivated.');
                             let index = find(this.users, ['id', id]);
-                            
+
                             this.users = this.users.splice(index, 1);
                         });
                     }

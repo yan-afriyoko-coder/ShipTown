@@ -42,13 +42,13 @@
 </template>
 
 <script>
-import PickCard from "./components/PickCard.vue";
-import loadingOverlay from '../../mixins/loading-overlay';
-import BarcodeInputField from "../SharedComponents/BarcodeInputField";
-import PicklistConfigurationModalNew from './components/ConfigurationModal.vue';
+import PickCard from "./Picks/PickCard.vue";
+import loadingOverlay from '../mixins/loading-overlay';
+import BarcodeInputField from "./SharedComponents/BarcodeInputField";
+import PicklistConfigurationModalNew from './Picks/ConfigurationModal.vue';
 
-import url from "../../mixins/url";
-import beep from "../../mixins/beep";
+import url from "../mixins/url";
+import beep from "../mixins/beep";
 
 export default {
     name: "PicksTable",

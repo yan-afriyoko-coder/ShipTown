@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import url from "../../../mixins/url";
+import url from "../../mixins/url";
 
 export default {
 
