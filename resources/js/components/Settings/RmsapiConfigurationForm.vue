@@ -32,7 +32,7 @@
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label" for="username">Username</label>
                 <div class="col-sm-9">
-                    <ValidationProvider vid="username" name="username" v-slot="{ errors }">
+                    <ValidationProvider vi  d="username" name="username" v-slot="{ errors }">
                         <input v-model="username" :class="{
                             'form-control': true,
                             'is-invalid': errors.length > 0,
@@ -64,7 +64,7 @@
 <script>
     import { ValidationObserver, ValidationProvider } from 'vee-validate';
 
-    import Loading from '../mixins/loading-overlay';
+    import Loading from '../../mixins/loading-overlay';
 
     export default {
         components: {

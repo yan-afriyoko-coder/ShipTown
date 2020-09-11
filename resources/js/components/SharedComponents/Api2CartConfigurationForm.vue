@@ -46,7 +46,7 @@
                         </div>
                     </ValidationProvider>
                 </div>
-            </div>            
+            </div>
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label" for="bridge_api_key">API Key</label>
                 <div class="col-sm-9">
@@ -68,7 +68,7 @@
 <script>
     import { ValidationObserver, ValidationProvider } from 'vee-validate';
 
-    import Loading from '../mixins/loading-overlay';
+    import Loading from '../../mixins/loading-overlay';
 
     export default {
         components: {

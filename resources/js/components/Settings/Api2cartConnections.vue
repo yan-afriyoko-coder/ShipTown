@@ -4,9 +4,9 @@
             <div class="card-header">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span>
-                        RMS API Connections
+                        API2Cart Connections
                     </span>
-                    <a tabindex="-1" class="action-link" v-b-modal.connection-modal>
+                    <a tabindex="-1" class="action-link" v-b-modal.api2cart-connection-modal>
                         Create New Connection
                     </a>
                 </div>
@@ -18,7 +18,7 @@
                         <tr>
                             <th>Location ID</th>
                             <th>URL</th>
-                            <th>Username</th>
+                            <th>Store Type</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -26,7 +26,7 @@
                         <tr v-for="(configuration, i) in configurations" :key="i">
                             <td>{{ configuration.location_id }}</td>
                             <td>{{ configuration.url }}</td>
-                            <td>{{ configuration.username }}</td>
+                            <td>{{ configuration.type | capitalize }}</td>
                             <td>
                                 <a @click="handleDelete(configuration.id, i)" class="action-link text-danger">Delete</a>
                             </td>
@@ -35,14 +35,14 @@
                 </table>
 
                 <p v-else class="mb-0">
-                    You have not created any RMS API connections.
+                    You have not created any API2Cart connections.
                 </p>
             </div>
         </div>
 
         <!-- The modal -->
-        <b-modal ref="formModal" id="connection-modal" title="Configure Connection" @ok="handleModalOk">
-            <rms-api-configuration-form ref="form" @saved="handleSaved" />
+        <b-modal ref="formModal" id="api2cart-connection-modal" title="Configure Connection" @ok="handleModalOk">
+            <api-configuration-form ref="form" @saved="handleSaved" />
         </b-modal>
     </div>
 </template>
@@ -50,13 +50,13 @@
 <script>
     import { BModal, VBModal, BButton } from 'bootstrap-vue';
 
-    import RMSApiConfigurationForm from './RMSApiConfigurationForm';
+    import Api2CartConfigurationForm from '../SharedComponents/Api2CartConfigurationForm';
 
     export default {
         components: {
             'b-modal': BModal,
             'b-button': BButton,
-            'rms-api-configuration-form': RMSApiConfigurationForm,
+            'api-configuration-form': Api2CartConfigurationForm,
         },
 
         directives: {
@@ -77,11 +77,8 @@
                 this.getConfiguration();
             },
 
-            /**
-             * Get all of the personal access tokens for the user.
-             */
             getConfiguration() {
-                axios.get('/api/rms_api_configuration')
+                axios.get('/api/api2cart_configuration')
                     .then(({ data }) => {
                         this.configurations = data.data;
                     });
@@ -101,9 +98,17 @@
             },
 
             handleDelete(id, index) {
-                axios.delete(`/api/rms_api_configuration/${id}`).then(() => {
+                axios.delete(`/api/api2cart_configuration/${id}`).then(() => {
                     Vue.delete(this.configurations, index);
                 });
+            }
+        },
+
+        filters: {
+            capitalize: function (value) {
+                if (!value) return ''
+                value = value.toString()
+                return value.charAt(0).toUpperCase() + value.slice(1)
             }
         }
     }

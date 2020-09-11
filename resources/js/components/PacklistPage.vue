@@ -74,17 +74,17 @@
 </template>
 
 <script>
-    import beep from '../../mixins/beep';
-    import loadingOverlay from '../../mixins/loading-overlay';
+    import beep from '../mixins/beep';
+    import loadingOverlay from '../mixins/loading-overlay';
 
-    import PacklistEntry from './mixins/PacklistEntry';
-    import PackedEntry from './mixins/PackedEntry';
+    import PacklistEntry from './Packlist/PacklistEntry';
+    import PackedEntry from './Packlist/PackedEntry';
 
-    import OrderDetails from "./mixins/OrderDetails";
-    import BarcodeInputField from "../SharedComponents/BarcodeInputField";
-    import FiltersModal from "./mixins/FiltersModal";
-    import url from "../../mixins/url";
-    import SetShippingNumberModal from "./mixins/SetShippingNumberModal";
+    import OrderDetails from "./Packlist/OrderDetails";
+    import BarcodeInputField from "./SharedComponents/BarcodeInputField";
+    import FiltersModal from "./Packlist/FiltersModal";
+    import url from "../mixins/url";
+    import SetShippingNumberModal from "./Packlist/ShippingNumberModal";
 
     export default {
         mixins: [loadingOverlay, beep, url],

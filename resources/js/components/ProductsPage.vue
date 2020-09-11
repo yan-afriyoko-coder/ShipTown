@@ -24,9 +24,9 @@
 </template>
 
 <script>
-    import loadingOverlay from '../../mixins/loading-overlay';
-    import ProductCard from "./ProductCard";
-    import url from "../../mixins/url";
+    import loadingOverlay from '../mixins/loading-overlay';
+    import ProductCard from "./Products/ProductCard";
+    import url from "../mixins/url";
 
     export default {
         mixins: [loadingOverlay, url],
