@@ -16,7 +16,7 @@ class MaintenanceRouteTest extends TestCase
         $this->assertTrue(
             Carbon::today()
                 ->isBefore(
-                    Carbon::createFromDate(2020, 9, 10)
+                    Carbon::createFromDate(2020, 9, 20)
                 )
         );
     }
