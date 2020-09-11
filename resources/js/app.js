@@ -36,7 +36,10 @@ Vue.use(Snotify, {
         newOnTop: false,
     },
     toast: {
-        position: "centerBottom"
+        position: "centerBottom",
+        icon: false,
+        showProgressBar: false,
+        timeout: 1000,
     }
 });
 

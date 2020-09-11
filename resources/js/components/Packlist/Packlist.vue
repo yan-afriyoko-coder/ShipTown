@@ -5,7 +5,7 @@
 
         <filters-modal ref="filtersModal" @btnSaveClicked="onConfigChange">
             <template v-slot:actions="slotScopes">
-                <button type="button" class="btn btn-info" @click.prevent="addShippingNumber">
+                <button type="button" class="btn btn-info" @click.prevent="displayShippingNumberModal">
                     Add Shipping Number
                 </button>
                 <button type="button" class="btn btn-info" @click.prevent="printAddressLabel">
@@ -121,8 +121,7 @@
                 }
 
                 if(this.packlist.length === 0) {
-                    this.printAddressLabel();
-                    $(shippingNumberModal).modal('show');
+                    this.displayShippingNumberModal();
                 }
             }
         },
@@ -132,17 +131,34 @@
         },
 
         methods: {
-            addShippingNumber(shipping_number) {
-                return  axios.post('api/order/shipments', {
-                    'order_id': this.order['id'],
-                    'shipping_number': shipping_number,
-                });
+            displayShippingNumberModal() {
+                this.$refs.filtersModal.hide();
+                $(shippingNumberModal).modal('show');
             },
 
-            packAndShip(shipping_number) {
-                console.log('packAndShip');
-                return  axios.put('api/orders/' + this.order['id'], {
+            notificationError: function (message) {
+                this.$snotify.error(message, {timeout: 5000});
+                this.errorBeep();
+            },
+
+            addShippingNumber(shipping_number) {
+                axios.post('api/order/shipments', {
+                        'order_id': this.order['id'],
                         'shipping_number': shipping_number,
+                    })
+                    .then(() => {
+                        this.$snotify.success('Shipping number saved');
+                        if(this.packlist.length === 0) {
+                            this.packAndShip();
+                        }
+                    })
+                    .catch( error => {
+                        this.notificationError('Error saving shipping number, try again');
+                    })
+            },
+
+            packAndShip() {
+                return axios.put('api/orders/' + this.order['id'], {
                         'is_packed': true,
                     })
                     .then(() => {
@@ -181,7 +197,7 @@
                         }
                     })
                     .catch( error => {
-                        this.$snotify.error('Error occurred while loading order', {icon: false});
+                        this.notificationError('Error occurred while loading order');
                     })
                     .then(() => {
                         this.hideLoading();
@@ -211,7 +227,7 @@
                         }
                     })
                     .catch( error => {
-                        this.$snotify.error('Error occurred while loading packlist', {icon: false});
+                        this.notificationError('Error occurred while loading packlist');
 
                     })
                     .then(() => {
@@ -239,7 +255,6 @@
                     timeout: 5000,
                     pauseOnHover: true,
                     showProgressBar: false,
-                    icon: false,
                     buttons: [
                         {
                             text: 'Undo',
@@ -316,12 +331,7 @@
                     return;
                 }
 
-                this.$snotify.error(`"${barcode}" not found on packlist!`, {
-                    timeout: 1500,
-                    showProgressBar: false,
-                    icon: false,
-                });
-                this.errorBeep();
+                this.notificationError(`"${barcode}" not found on packlist!`);
             },
 
             onConfigChange: function(config) {
@@ -350,9 +360,7 @@
                             errorMsg = `Order #${orderNumber} not found.`;
                         }
 
-                        this.$snotify.error(errorMsg, {
-                            icon: false
-                        });
+                        this.notificationError(errorMsg);
                     });
             }
         },

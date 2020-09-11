@@ -16,7 +16,7 @@ class CreateOrderShipmentsTable extends Migration
         Schema::create('order_shipments', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('order_id')->unsigned();
-            $table->bigInteger('shipping_number')->unsigned();
+            $table->string('shipping_number')->nullable(false);
             $table->timestamps();
 
             $table->foreign('order_id')->references('id')->on('orders');
