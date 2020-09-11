@@ -19,7 +19,10 @@ class CreateOrderShipmentsTable extends Migration
             $table->string('shipping_number')->nullable(false);
             $table->timestamps();
 
-            $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('order_id')
+                ->references('id')
+                ->on('orders')
+                ->onDelete('CASCADE');
         });
     }
 
