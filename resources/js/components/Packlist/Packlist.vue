@@ -1,7 +1,7 @@
 <template>
     <div>
 
-        <set-shipping-number-modal ref="shippingNumberModal" @shippingNumberUpdated="packAndShip"></set-shipping-number-modal>
+        <set-shipping-number-modal ref="shippingNumberModal" @shippingNumberUpdated="addShippingNumber"></set-shipping-number-modal>
 
         <filters-modal ref="filtersModal" @btnSaveClicked="onConfigChange">
             <template v-slot:actions="slotScopes">
@@ -132,10 +132,10 @@
         },
 
         methods: {
-            addShippingNumber() {
-                return  axios.put('api/order/' + this.order['id'], {
+            addShippingNumber(shipping_number) {
+                return  axios.post('api/order/shipments', {
+                    'order_id': this.order['id'],
                     'shipping_number': shipping_number,
-                    'is_packed': true,
                 });
             },
 

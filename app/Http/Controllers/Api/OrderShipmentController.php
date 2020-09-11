@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\OrderShipmentStoreRequest;
+use App\Http\Resources\OrderShipmentResource;
 use App\Models\OrderShipment;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Response;
-use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderShipmentController extends Controller
@@ -37,12 +37,18 @@ class OrderShipmentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     * @return JsonResponse
+     * @param OrderShipmentStoreRequest $request
+     * @return OrderShipmentResource
      */
-    public function store(Request $request)
+    public function store(OrderShipmentStoreRequest $request)
     {
-        return $this->getResponse(405, 'Method not allowed');
+        $shipment = new OrderShipment();
+
+        $shipment->fill($request->validated());
+
+        $shipment->save();
+
+        return new OrderShipmentResource($shipment);
     }
 
     /**
