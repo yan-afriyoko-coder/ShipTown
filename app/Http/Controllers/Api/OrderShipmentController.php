@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\OrderShipment;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderShipmentController extends Controller
 {
@@ -14,11 +17,21 @@ class OrderShipmentController extends Controller
      * Display a listing of the resource.
      *
      * @param Request $request
-     * @return JsonResponse
+     * @return LengthAwarePaginator
      */
     public function index(Request $request)
     {
-        return $this->getResponse(405, 'Method not allowed');
+        $pick = QueryBuilder::for(OrderShipment::class)
+            ->allowedFilters([
+            ])
+            ->allowedIncludes([
+            ])
+            ->allowedSorts([
+            ]);
+
+        $per_page = $request->get('per_page', 10);
+
+        return $pick->paginate($per_page)->appends($request->query());
     }
 
     /**
