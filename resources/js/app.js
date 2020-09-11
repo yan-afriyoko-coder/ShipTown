@@ -81,17 +81,17 @@ Vue.component(
 
 Vue.component(
     'create-topic',
-    require('./components/CreateTopic.vue').default
+    require('./components/misc/CreateTopic.vue').default
 );
 
 Vue.component(
     'subscribe-topic',
-    require('./components/SubscribeTopic.vue').default
+    require('./components/misc/SubscribeTopic.vue').default
 );
 
 Vue.component(
     'missing-table',
-    require('./components/Missing.vue').default
+    require('./components/misc/Missing.vue').default
 );
 
 Vue.component(
@@ -106,12 +106,12 @@ Vue.component(
 
 Vue.component(
     'api2cart-configuration',
-    require('./components/Api2CartConfiguration.vue').default
+    require('./components/Settings/Api2CartConfiguration.vue').default
 );
 
 Vue.component(
     'rmsapi-configuration',
-    require('./components/RMSApiConfiguration.vue').default
+    require('./components/Settings/RMSApiConfiguration.vue').default
 );
 
 Vue.component(

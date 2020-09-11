@@ -50,7 +50,7 @@
 <script>
     import { BModal, VBModal, BButton } from 'bootstrap-vue';
 
-    import Api2CartConfigurationForm from './Api2CartConfigurationForm';
+    import Api2CartConfigurationForm from '../SharedComponents/Api2CartConfigurationForm';
 
     export default {
         components: {

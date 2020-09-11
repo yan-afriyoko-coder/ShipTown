@@ -68,7 +68,7 @@
 <script>
     import { HotTable } from '@handsontable/vue';
 
-    import loadingOverlay from '../mixins/loading-overlay';
+    import loadingOverlay from '../../mixins/loading-overlay';
 
     export default {
         mixins: [loadingOverlay],
