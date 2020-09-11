@@ -3,7 +3,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div ref="loadingContainer2" class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Picklist</h5>
+                        <h5 class="modal-title">Settings: Packlist</h5>
                         <div class="widget-tools-container">
                             <font-awesome-icon icon="question-circle" :content="helpText" v-tippy></font-awesome-icon>
                         </div>
