@@ -5,6 +5,9 @@
 
         <filters-modal ref="filtersModal" @btnSaveClicked="onConfigChange">
             <template v-slot:actions="slotScopes">
+                <button type="button" class="btn btn-info" @click.prevent="addShippingNumber">
+                    Add Shipping Number
+                </button>
                 <button type="button" class="btn btn-info" @click.prevent="printAddressLabel">
                     Print Address Label
                 </button>
@@ -129,6 +132,13 @@
         },
 
         methods: {
+            addShippingNumber() {
+                return  axios.put('api/order/' + this.order['id'], {
+                    'shipping_number': shipping_number,
+                    'is_packed': true,
+                });
+            },
+
             packAndShip(shipping_number) {
                 console.log('packAndShip');
                 return  axios.put('api/orders/' + this.order['id'], {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -15,6 +16,21 @@ class Controller extends BaseController
      * @var int
      */
     private $status_code = 200;
+
+    /**
+     * @param $status_code
+     * @param $message
+     * @return JsonResponse
+     */
+    public function getResponse($status_code, $message)
+    {
+        return response()->json(
+            [
+                "message" => $message
+            ],
+            $status_code
+        );
+    }
 
     public function respond($message)
     {
