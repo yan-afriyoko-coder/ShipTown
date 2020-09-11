@@ -42,6 +42,12 @@
                 this.updateUrl(this.$router.currentRoute.query);
             },
 
+            updateUrlParameters(params) {
+                for (let parameter in params) {
+                    this.setUrlParameter(parameter, params[parameter]);
+                }
+            },
+
             updateUrl: function(params) {
                 let url = this.$router.currentRoute.path + '?';
 

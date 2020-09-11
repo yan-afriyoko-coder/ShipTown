@@ -188,6 +188,7 @@
                 this.packed = [];
 
                 const params = {
+                    'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id', null),
                     'filter[order_id]': this.order.id,
                     'include': 'product,product.aliases',
                     'per_page': 999,

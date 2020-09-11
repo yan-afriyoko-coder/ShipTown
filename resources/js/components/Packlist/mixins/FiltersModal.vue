@@ -19,6 +19,14 @@
 <!--                                <label class="form-check-label" >In stock only</label>-->
 <!--                            </div>-->
                             <div class="form-group form-check">
+                                <div>Inventory Location ID</div>
+                                <div>
+                                    <label>
+                                        <input v-model="filters['inventory_source_location_id']" type="number" class="form-check-input" />
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group form-check">
                                 <div>Order Number: </div>
                                 <div>
                                     <label>
@@ -50,7 +58,7 @@
             return {
                 filters: {
                     order_number: this.getUrlParameter('order_number',  null),
-                    inventory_location_id: this.getUrlParameter('inventory_location_id',  100),
+                    inventory_source_location_id: this.getUrlParameter('inventory_source_location_id',  100),
                 }
             }
         },
@@ -67,7 +75,7 @@
             },
 
             handleSubmit() {
-                this.updateUrl(this.filters);
+                this.updateUrlParameters(this.filters);
                 this.hide();
                 this.$emit('btnSaveClicked', this.filters);
             },
