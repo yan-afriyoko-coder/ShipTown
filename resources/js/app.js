@@ -116,17 +116,17 @@ Vue.component(
 
 Vue.component(
     'packlist-configuration-modal',
-    require('./components/Packlist/mixins/FiltersModal.vue').default
+    require('./components/Packlist/FiltersModal.vue').default
 );
 
 Vue.component(
     'packlist-table',
-    require('./components/Packlist/Packlist.vue').default
+    require('./components/PacklistPage.vue').default
 );
 
 Vue.component(
     'packlist-table-entry',
-    require('./components/Packlist/mixins/PacklistEntry.vue').default
+    require('./components/Packlist/PacklistEntry.vue').default
 );
 
 Vue.component(
