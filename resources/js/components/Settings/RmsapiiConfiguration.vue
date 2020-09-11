@@ -50,7 +50,7 @@
 <script>
     import { BModal, VBModal, BButton } from 'bootstrap-vue';
 
-    import RMSApiConfigurationForm from './RMSApiConfigurationForm';
+    import RMSApiConfigurationForm from './RmsapiConfigurationForm';
 
     export default {
         components: {
