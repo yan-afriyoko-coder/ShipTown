@@ -23,9 +23,17 @@ class ActiveOrdersWidget extends AbstractWidget
     public function run()
     {
         $order_status_counts = Order::query()
-            ->whereIn('status_code', ['picking', 'processing', 'holded'])
+            ->select(['status_code', DB::raw('count(*) as order_count')])
+            ->whereIn('status_code', [
+                'processing',
+                'picking',
+                'packing',
+                'packing_warehouse',
+                'unshipped',
+                'partially_shipped',
+                'holded',
+            ])
             ->groupBy(['status_code'])
-            ->select('status_code', DB::raw('count(*) as order_count'))
             ->get();
 
         $total_count = 0;
