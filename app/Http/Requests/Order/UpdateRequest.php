@@ -25,6 +25,7 @@ class UpdateRequest extends FormRequest
     {
         return [
             'shipping_number' => ['sometimes'],
+            'packer_user_id' => ['sometimes', 'integer', 'exists:orders,id'],
             'is_packed' => ['sometimes','boolean']
         ];
     }

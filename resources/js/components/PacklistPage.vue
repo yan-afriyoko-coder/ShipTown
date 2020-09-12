@@ -100,6 +100,7 @@
 
         data: function() {
             return {
+                user: null,
                 order: null,
                 packlist: null,
                 packed: [],
@@ -127,13 +128,23 @@
         },
 
         mounted() {
-            this.loadOrder();
+            this.loadUser()
+                .then(() => {
+                    this.loadOrder();
+                });
         },
 
         methods: {
+            loadUser() {
+                return axios.get('api/user/me')
+                    .then(({data}) => {
+                        this.user = (data.data);
+                    })
+            },
+
             displayShippingNumberModal() {
                 this.$refs.filtersModal.hide();
-                $(shippingNumberModal).modal('show');
+                $('#shippingNumberModal').modal();
             },
 
             notificationError: function (message) {
@@ -167,23 +178,12 @@
             },
 
             markAsPacked: function () {
-                console.log('markAsPacked');
                 return  axios.put('api/orders/' + this.order['id'], {
                         'is_packed': true,
                 })
             },
 
-            loadOrder: function() {
-
-                const params = {
-                    'filter[order_number]': this.getUrlParameter('order_number', null),
-                    'filter[is_picked]': this.getUrlParameter('is_picked', null),
-                    'filter[is_packed]': false,
-                    'filter[status]': 'picking',
-                    'per_page': 1,
-                    'include': 'order_products,order_products.product,order_products.product.aliases',
-                };
-
+            loadNextOrderToPack: function (params) {
                 this.showLoading();
 
                 this.order = null;
@@ -191,23 +191,44 @@
                 this.packed = [];
 
                 return axios.get('/api/orders', {params: params})
-                    .then(({ data }) => {
-                        if(data.total > 0) {
+                    .then(({data}) => {
+                        if (data.total > 0) {
                             this.order = data.data[0];
+
+                            return axios.put('api/orders/' + this.order['id'], {
+                                    'packer_user_id': this.user['id'],
+                                });
                         }
                     })
-                    .catch( error => {
+                    .catch(error => {
                         this.notificationError('Error occurred while loading order');
                     })
                     .then(() => {
                         this.hideLoading();
                     })
+            },
 
+            loadOrder: function() {
+                const params = {
+                    'filter[order_number]': this.getUrlParameter('order_number', null),
+                    'filter[is_picked]': this.getUrlParameter('is_picked', null),
+                    'filter[is_packed]': false,
+                    'filter[status]': 'picking',
+                    'filter[packer_user_id]': this.user['id'],
+                    'per_page': 1,
+                    'include': 'order_products,order_products.product,order_products.product.aliases',
+                };
 
+                this.loadNextOrderToPack(params)
+                    .then(() => {
+                        if (this.order === null) {
+                            Vue.delete(params, "filter[packer_user_id]");
+                            this.loadNextOrderToPack(params);
+                        }
+                    })
             },
 
             loadPacklist: function() {
-
                 this.showLoading();
 
                 // this.packlist = [];

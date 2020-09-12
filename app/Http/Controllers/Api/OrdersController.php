@@ -20,12 +20,14 @@ class OrdersController extends Controller
     {
         $query = QueryBuilder::for(Order::class)
             ->allowedFilters([
-                'status_code',
-                'shipping_number',
-                AllowedFilter::partial('status', 'status_code'),
+                AllowedFilter::exact('status', 'status_code'),
+
                 AllowedFilter::exact('order_number'),
+                AllowedFilter::exact('packer_user_id'),
+
                 AllowedFilter::scope('is_picked'),
                 AllowedFilter::scope('is_packed'),
+                AllowedFilter::scope('is_packing'),
             ])
             ->allowedIncludes([
                 'shipping_address',

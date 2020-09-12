@@ -80,6 +80,19 @@ class Order extends Model
      * @param $query
      * @return self
      */
+    public function scopeIsPacking($query, $is_packing)
+    {
+        if ($is_packing) {
+            return $query->whereNotNull('packer_user_id');
+        }
+
+        return $query->whereNull('packer_user_id');
+    }
+
+    /**
+     * @param $query
+     * @return self
+     */
     public function scopeWhereIsPicked($query)
     {
         return $query->whereNotNull('picked_at');
