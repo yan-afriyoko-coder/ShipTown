@@ -39,10 +39,10 @@
                                         <div class="text-center text-nowrap">Picked</div>
                                     </div>
                                     <div class="col-1">
-                                        <div class="text-center text-nowrap">Packed</div>
+                                        <div class="text-nowrap">Packer</div>
                                     </div>
                                     <div class="col-1">
-                                        <div class="text-nowrap">Packer</div>
+                                        <div class="text-center text-nowrap">Packed At</div>
                                     </div>
                                     <div class="col-2">
                                         <div class="text-right text-nowrap">Shipping No</div>
