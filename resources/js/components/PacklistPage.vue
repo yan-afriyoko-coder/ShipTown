@@ -114,7 +114,7 @@
                     return;
                 }
 
-                this.loadPacklist();
+                this.loadProducts();
             },
             packlist() {
                 if(this.order === null) {
@@ -183,30 +183,7 @@
                 })
             },
 
-            loadNextOrderToPack: function (params) {
-                this.showLoading();
 
-                this.order = null;
-                this.packlist = [];
-                this.packed = [];
-
-                return axios.get('/api/orders', {params: params})
-                    .then(({data}) => {
-                        if (data.total > 0) {
-                            this.order = data.data[0];
-
-                            return axios.put('api/orders/' + this.order['id'], {
-                                    'packer_user_id': this.user['id'],
-                                });
-                        }
-                    })
-                    .catch(error => {
-                        this.notificationError('Error occurred while loading order');
-                    })
-                    .then(() => {
-                        this.hideLoading();
-                    })
-            },
 
             loadOrder: function() {
                 const params = {
@@ -215,6 +192,7 @@
                     'filter[is_packed]': false,
                     'filter[status]': 'picking',
                     'filter[packer_user_id]': this.user['id'],
+                    'sort': 'product_line_count,total_quantity_ordered,order_placed_at',
                     'per_page': 1,
                     'include': 'order_products,order_products.product,order_products.product.aliases',
                 };
@@ -228,7 +206,32 @@
                     })
             },
 
-            loadPacklist: function() {
+            loadNextOrderToPack: function (params) {
+                this.showLoading();
+
+                this.order = null;
+                this.packlist = [];
+                this.packed = [];
+
+                return axios.get('/api/orders', {params: params})
+                    .then(({data}) => {
+                        if (data.total > 0) {
+                            this.order = data.data[0];
+
+                            return axios.put('api/orders/' + this.order['id'], {
+                                'packer_user_id': this.user['id'],
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        this.notificationError('Error occurred while loading order');
+                    })
+                    .then(() => {
+                        this.hideLoading();
+                    })
+            },
+
+            loadProducts: function() {
                 this.showLoading();
 
                 // this.packlist = [];

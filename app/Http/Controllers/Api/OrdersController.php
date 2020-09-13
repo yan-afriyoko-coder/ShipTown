@@ -38,7 +38,10 @@ class OrdersController extends Controller
                 'packer',
             ])
             ->allowedSorts([
-                'updated_at'
+                'updated_at',
+                'product_line_count',
+                'total_quantity_ordered',
+                'order_placed_at',
             ]);
 
         if ($request->has('q') && $request->get('q')) {
