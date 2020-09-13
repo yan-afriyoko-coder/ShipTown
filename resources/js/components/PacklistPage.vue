@@ -188,7 +188,7 @@
             loadOrder: function() {
                 const params = {
                     'filter[order_number]': this.getUrlParameter('order_number', null),
-                    'filter[is_picked]': this.getUrlParameter('is_picked', null),
+                    'filter[is_picked]': this.getUrlParameter('is_picked', true),
                     'filter[is_packed]': false,
                     'filter[status]': 'picking',
                     'filter[packer_user_id]': this.user['id'],
