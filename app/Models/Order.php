@@ -165,4 +165,12 @@ class Order extends Model
     {
         return $this->belongsTo(User::class, 'packer_user_id');
     }
+
+    /**
+     * @return HasMany | OrderShipment
+     */
+    public function orderShipments()
+    {
+        return $this->hasMany(OrderShipment::class);
+    }
 }

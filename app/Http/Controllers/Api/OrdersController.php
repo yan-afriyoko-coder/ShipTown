@@ -31,6 +31,7 @@ class OrdersController extends Controller
             ])
             ->allowedIncludes([
                 'shipping_address',
+                'order_shipments',
                 'order_products',
                 'order_products.product',
                 'order_products.product.aliases',

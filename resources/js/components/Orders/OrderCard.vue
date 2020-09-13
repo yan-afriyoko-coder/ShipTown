@@ -29,7 +29,11 @@
                             <div class="text-center text-nowrap">{{ order['packed_at'] | moment('MM/DD H:mm') }}</div>
                         </div>
                         <div class="col-2">
-                            <div class="text-right text-nowrap">{{ order['shipping_number'] }}</div>
+                            <div class="text-right text-nowrap">
+                                <template v-for="shipment in order['order_shipments']">
+                                    <div>{{ shipment['shipping_number'] }}</div>
+                                </template>
+                            </div>
                         </div>
                     </div>
                 </div>

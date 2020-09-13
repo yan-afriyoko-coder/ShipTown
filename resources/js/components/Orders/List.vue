@@ -87,7 +87,7 @@
                     'filter[status]': this.getUrlParameter('status', null),
                     'sort': this.getUrlParameter('sort','-updated_at'),
                     'per_page': this.getUrlParameter('per_page',50),
-                    'include': 'packer',
+                    'include': 'packer,order_shipments',
                     page: page,
                     q: this.query,
                 };
@@ -102,6 +102,7 @@
                     axios.get('/api/orders', {
                         params: params
                     }).then(({ data }) => {
+                        console.log(data.data);
                         this.orders = this.orders.concat(data.data);
                         this.total = data.total;
                         this.last_page = data.last_page;

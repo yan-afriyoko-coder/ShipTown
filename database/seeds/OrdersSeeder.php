@@ -41,12 +41,14 @@ class OrdersSeeder extends Seeder
 
         factory(Order::class, rand(60,80))
             ->with('orderProducts', rand(1,4))
+            ->with('orderShipments', rand(1,2))
             ->create([
                 'status_code' => 'complete'
             ]);
 
         factory(Order::class, rand(20,50))
             ->with('orderProducts', rand(1,4))
+            ->with('orderShipments', rand(1,2))
             ->create([
                 'status_code' => 'completed_imported_to_rms'
             ]);
