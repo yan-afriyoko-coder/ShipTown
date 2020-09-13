@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class Controller extends BaseController
 {
@@ -16,6 +19,19 @@ class Controller extends BaseController
      * @var int
      */
     private $status_code = 200;
+
+    /**
+     * @param Request $request
+     * @param QueryBuilder $query
+     * @param int $defaultPerPage
+     * @return LengthAwarePaginator
+     */
+    public function getPerPageAndPaginate(Request $request, QueryBuilder $query, $defaultPerPage = 10): LengthAwarePaginator
+    {
+        $per_page = $request->get('per_page', $defaultPerPage);
+
+        return $query->paginate($per_page)->appends($request->query());
+    }
 
     /**
      * @param $status_code

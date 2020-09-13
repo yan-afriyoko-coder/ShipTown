@@ -12,9 +12,44 @@ use App\Models\PickRequest;
 use App\Models\Product;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderService
 {
+    /**
+     * @return QueryBuilder
+     */
+    public static function getSpatieQueryBuilder(): QueryBuilder
+    {
+        return QueryBuilder::for(Order::class)
+            ->allowedFilters([
+                AllowedFilter::partial('q', 'order_number'),
+
+                AllowedFilter::exact('status', 'status_code'),
+                AllowedFilter::exact('order_number'),
+                AllowedFilter::exact('packer_user_id'),
+
+                AllowedFilter::scope('is_picked'),
+                AllowedFilter::scope('is_packed'),
+                AllowedFilter::scope('is_packing'),
+            ])
+            ->allowedIncludes([
+                'shipping_address',
+                'order_shipments',
+                'order_products',
+                'order_products.product',
+                'order_products.product.aliases',
+                'packer',
+            ])
+            ->allowedSorts([
+                'updated_at',
+                'product_line_count',
+                'total_quantity_ordered',
+                'order_placed_at',
+            ]);
+    }
+
     /**
      * @param Order $order
      */

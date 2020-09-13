@@ -6,53 +6,37 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\UpdateRequest;
 use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
+use App\Services\OrderService;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
+/**
+ * Class OrdersController
+ * @package App\Http\Controllers\Api
+ */
 class OrdersController extends Controller
 {
-
+    /**
+     * @param Request $request
+     * @return LengthAwarePaginator
+     */
     public function index(Request $request)
     {
-        $query = QueryBuilder::for(Order::class)
-            ->allowedFilters([
-                AllowedFilter::exact('status', 'status_code'),
+        $query = OrderService::getSpatieQueryBuilder();
 
-                AllowedFilter::exact('order_number'),
-                AllowedFilter::exact('packer_user_id'),
-
-                AllowedFilter::scope('is_picked'),
-                AllowedFilter::scope('is_packed'),
-                AllowedFilter::scope('is_packing'),
-            ])
-            ->allowedIncludes([
-                'shipping_address',
-                'order_shipments',
-                'order_products',
-                'order_products.product',
-                'order_products.product.aliases',
-                'packer',
-            ])
-            ->allowedSorts([
-                'updated_at',
-                'product_line_count',
-                'total_quantity_ordered',
-                'order_placed_at',
-            ]);
-
-        if ($request->has('q') && $request->get('q')) {
-            $query->where('order_number', 'like', '%' . $request->get('q') . '%');
-        }
-
-        $per_page = $request->get('per_page', 10);
-
-        return $query->paginate($per_page);
+        return $this->getPerPageAndPaginate($request, $query, 10);
     }
 
+    /**
+     * @param StoreOrderRequest $request
+     * @return JsonResponse
+     */
     public function store(StoreOrderRequest $request)
     {
         $order = Order::query()->updateOrCreate(
@@ -81,11 +65,20 @@ class OrdersController extends Controller
         return new JsonResource($order);
     }
 
+    /**
+     * @param Request $request
+     * @param Order $order
+     * @return JsonResource
+     */
     public function show(Request $request, Order $order)
     {
         return new JsonResource($order);
     }
 
+    /**
+     * @param $order_number
+     * @throws \Exception
+     */
     public function destroy($order_number)
     {
         try {
