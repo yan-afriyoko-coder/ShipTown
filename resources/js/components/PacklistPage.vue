@@ -16,9 +16,12 @@
 
         <div v-if="order === null && !isLoading" class="row" >
             <div class="col">
-                <div class="warning alert-warning" role="alert">
-                    No orders ready for packing
-                </div>
+<!--                <div class="warning alert-warning" role="alert">-->
+<!--                    No orders ready for packing-->
+<!--                </div>-->
+                <button type="button"  class="btn-info" @click.prevent="startPacking">
+                    Start Packing
+                </button>
             </div>
         </div>
 
@@ -42,7 +45,7 @@
             <div v-if="packlist.length === 0 && packed.length === 0" class="row" >
                 <div class="col">
                     <div class="alert alert-info" role="alert">
-                        No products found.
+                        Loading product list ...
                     </div>
                 </div>
             </div>
@@ -127,14 +130,15 @@
             }
         },
 
-        mounted() {
-            this.loadUser()
-                .then(() => {
-                    this.loadOrder();
-                });
-        },
-
         methods: {
+
+            startPacking() {
+                this.loadUser()
+                    .then(() => {
+                        this.loadOrder();
+                    });
+            },
+
             loadUser() {
                 return axios.get('api/user/me')
                     .then(({data}) => {
@@ -187,14 +191,17 @@
 
             loadOrder: function() {
                 const params = {
-                    'filter[order_number]': this.getUrlParameter('order_number', null),
-                    'filter[is_picked]': this.getUrlParameter('is_picked', true),
-                    'filter[is_packed]': false,
-                    'filter[status]': 'picking',
-                    'filter[packer_user_id]': this.user['id'],
-                    'sort': 'product_line_count,total_quantity_ordered,order_placed_at',
                     'per_page': 1,
-                    'include': 'order_products,order_products.product,order_products.product.aliases',
+                    'include': 'order_products'+
+                        ',order_products.product'+
+                        ',order_products.product.aliases',
+                    'filter[status]': 'picking',
+                    'filter[is_packed]': false,
+                    'filter[packer_user_id]': this.user['id'],
+
+                    'filter[order_number]'  : this.getUrlParameter('order_number', null),
+                    'filter[is_picked]'     : this.getUrlParameter('is_picked', true),
+                    'sort'                  : this.getUrlParameter('sort'),
                 };
 
                 this.loadNextOrderToPack(params)
