@@ -57,6 +57,10 @@ class OrdersController extends Controller
         $updates = $request->validated();
 
         if ($request->has('is_packed')) {
+            if ($order->packer_user_id != $request->user()->getKey()) {
+                $this->respondNotAllowed405('Order is being packed by another user');
+            }
+
             $updates = Arr::add($updates, 'packer_user_id', $request->user()->getKey());
         }
 
