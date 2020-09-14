@@ -190,37 +190,46 @@
 
             loadOrder: function() {
                 let params = {
+                    'filter[is_packed]'     : false,
+
+                    'filter[status]'        : this.getUrlParameter('status','picking'),
+                    'sort'                  : this.getUrlParameter('sort'),
+
+
                     'per_page': 1,
                     'include': 'order_products'+
                         ',order_products.product'+
                         ',order_products.product.aliases',
-                    'filter[is_packed]'     : false,
-                    'filter[packer_user_id]': this.user['id'],
-
-                    'filter[status]'        : this.getUrlParameter('status','picking'),
-                    'filter[order_number]'  : this.getUrlParameter('order_number', null),
-                    'filter[is_picked]'     : this.getUrlParameter('is_picked', true),
-                    'sort'                  : this.getUrlParameter('sort'),
                 };
 
+                if( this.getUrlParameter('order_number', null) === null) {
+                    params['filter[is_picked]']      = this.getUrlParameter('is_picked', true);
+                    params['filter[packer_user_id]'] = this.user['id'];
+                } else {
+                    params['filter[order_number]']   = this.getUrlParameter('order_number', null);
+                }
 
 
                 this.loadNextOrderToPack(params)
                     .then(() => {
                         if (this.order === null) {
                             let updatedParams = {
+                                'filter[is_packed]'     : false,
+                                'filter[has_packer]'    : false,
+
+                                'filter[is_picked]'     : this.getUrlParameter('is_picked', true),
+                                'filter[status]'        : this.getUrlParameter('status','picking'),
+                                'filter[order_number]'  : this.getUrlParameter('order_number', null),
+                                'sort'                  : this.getUrlParameter('sort'),
+
                                 'per_page': 1,
                                 'include': 'order_products'+
                                     ',order_products.product'+
                                     ',order_products.product.aliases',
-                                'filter[is_packed]'     : false,
-                                'filter[has_packer]'    : false,
-
-                                'filter[status]'        : this.getUrlParameter('status','picking'),
-                                'filter[order_number]'  : this.getUrlParameter('order_number', null),
-                                'filter[is_picked]'     : this.getUrlParameter('is_picked', true),
-                                'sort'                  : this.getUrlParameter('sort'),
                             };
+
+                            if( this.getUrlParameter('order_number', null) != null) {
+                             }
 
                             this.loadNextOrderToPack(updatedParams);
                         }

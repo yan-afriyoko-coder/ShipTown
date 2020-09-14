@@ -32,6 +32,8 @@
                                     <label>
                                         <input v-model="filters['order_number']" type="number" class="form-check-input" />
                                     </label>
+
+                                    <button type="button" @keyup.enter="pickOrder" @click.prevent="pickOrder" class="btn btn-primary">Pick Order</button>
                                 </div>
                             </div>
                         </form>
@@ -70,6 +72,12 @@
         },
 
         methods: {
+            pickOrder() {
+                this.updateUrl(this.filters);
+                this.hide();
+                this.$emit('btnSaveClicked', this.filters);
+            },
+
             getValueOrDefault: function (value, defaultValue){
                 return (value === undefined) || (value === null) ? defaultValue : value;
             },
