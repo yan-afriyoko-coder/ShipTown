@@ -33,6 +33,8 @@ class OrderService
                 AllowedFilter::scope('is_picked'),
                 AllowedFilter::scope('is_packed'),
                 AllowedFilter::scope('is_packing'),
+
+                AllowedFilter::scope('has_packer'),
             ])
             ->allowedIncludes([
                 'shipping_address',

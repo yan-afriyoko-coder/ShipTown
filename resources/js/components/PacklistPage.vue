@@ -134,7 +134,7 @@
 
             startPacking() {
                 this.loadUser()
-                    .then(() => {
+                    .then(response => {
                         this.loadOrder();
                     });
             },
@@ -190,13 +190,14 @@
 
 
             loadOrder: function() {
-                const params = {
+                let params = {
                     'per_page': 1,
                     'include': 'order_products'+
                         ',order_products.product'+
                         ',order_products.product.aliases',
                     'filter[status]': 'picking',
                     'filter[is_packed]': false,
+
                     'filter[packer_user_id]': this.user['id'],
 
                     'filter[order_number]'  : this.getUrlParameter('order_number', null),
@@ -204,16 +205,34 @@
                     'sort'                  : this.getUrlParameter('sort'),
                 };
 
+
+
                 this.loadNextOrderToPack(params)
                     .then(() => {
                         if (this.order === null) {
-                            Vue.delete(params, "filter[packer_user_id]");
-                            this.loadNextOrderToPack(params);
+                            let updatedParams = {
+                                'per_page': 1,
+                                'include': 'order_products'+
+                                    ',order_products.product'+
+                                    ',order_products.product.aliases',
+                                'filter[status]': 'picking',
+                                'filter[is_packed]': false,
+
+                                'filter[has_packer]': false,
+
+                                'filter[order_number]'  : this.getUrlParameter('order_number', null),
+                                'filter[is_picked]'     : this.getUrlParameter('is_picked', true),
+                                'sort'                  : this.getUrlParameter('sort'),
+                            };
+
+                            this.loadNextOrderToPack(updatedParams);
                         }
                     })
             },
 
             loadNextOrderToPack: function (params) {
+                console.log(params);
+
                 this.showLoading();
 
                 this.order = null;

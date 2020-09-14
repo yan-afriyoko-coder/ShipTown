@@ -67,6 +67,20 @@ class Order extends Model
      * @param bool $expected
      * @return self
      */
+    public function scopeHasPacker($query, bool $expected)
+    {
+        if ($expected === false) {
+            return $query->whereNull('packer_user_id');
+        }
+
+        return $query->whereNotNull('packer_user_id');
+    }
+
+    /**
+     * @param $query
+     * @param bool $expected
+     * @return self
+     */
     public function scopeIsPicked($query, bool $expected)
     {
         if ($expected === true) {
