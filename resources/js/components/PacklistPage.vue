@@ -164,6 +164,7 @@
                     .then(() => {
                         this.$snotify.success('Shipping number saved');
                         if(this.packlist.length === 0) {
+                            this.printAddressLabel();
                             this.packAndShip();
                         }
                     })
@@ -186,8 +187,6 @@
                         'is_packed': true,
                 })
             },
-
-
 
             loadOrder: function() {
                 let params = {
