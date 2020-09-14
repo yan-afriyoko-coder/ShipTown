@@ -35,10 +35,13 @@ class RecalculateOrderTotalQuantityOrderedJob implements ShouldQueue
         DB::statement('
             UPDATE `'.$prefix.'orders`
 
-            SET `'.$prefix.'orders`.`total_quantity_ordered` = (
-                SELECT sum(quantity_ordered)
-                FROM `'.$prefix.'order_products`
-                WHERE `'.$prefix.'order_products`.`order_id` = `'.$prefix.'orders`.`id`
+            SET `'.$prefix.'orders`.`total_quantity_ordered` = IFNULL(
+                (
+                    SELECT sum(`'.$prefix.'order_products`.`quantity_ordered`)
+                    FROM `'.$prefix.'order_products`
+                    WHERE `'.$prefix.'order_products`.`order_id` = `'.$prefix.'orders`.`id`
+                ),
+                0
             )
         ');
 
