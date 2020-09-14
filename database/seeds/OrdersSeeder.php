@@ -27,6 +27,12 @@ class OrdersSeeder extends Seeder
                 'status_code' => 'picking'
             ]);
 
+        factory(Order::class, rand(10, 20))
+            ->with('orderProducts', rand(1,4))
+            ->create([
+                'status_code' => 'packing_warehouse'
+            ]);
+
         factory(Order::class, rand(20,50))
             ->with('orderProducts', rand(1,4))
             ->create([

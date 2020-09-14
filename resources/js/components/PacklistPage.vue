@@ -195,11 +195,10 @@
                     'include': 'order_products'+
                         ',order_products.product'+
                         ',order_products.product.aliases',
-                    'filter[status]': 'picking',
-                    'filter[is_packed]': false,
-
+                    'filter[is_packed]'     : false,
                     'filter[packer_user_id]': this.user['id'],
 
+                    'filter[status]'        : this.getUrlParameter('status','picking'),
                     'filter[order_number]'  : this.getUrlParameter('order_number', null),
                     'filter[is_picked]'     : this.getUrlParameter('is_picked', true),
                     'sort'                  : this.getUrlParameter('sort'),
@@ -215,11 +214,10 @@
                                 'include': 'order_products'+
                                     ',order_products.product'+
                                     ',order_products.product.aliases',
-                                'filter[status]': 'picking',
-                                'filter[is_packed]': false,
+                                'filter[is_packed]'     : false,
+                                'filter[has_packer]'    : false,
 
-                                'filter[has_packer]': false,
-
+                                'filter[status]'        : this.getUrlParameter('status','picking'),
                                 'filter[order_number]'  : this.getUrlParameter('order_number', null),
                                 'filter[is_picked]'     : this.getUrlParameter('is_picked', true),
                                 'sort'                  : this.getUrlParameter('sort'),
