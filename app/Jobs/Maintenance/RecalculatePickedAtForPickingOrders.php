@@ -35,7 +35,15 @@ class RecalculatePickedAtForPickingOrders implements ShouldQueue
         DB::statement('
             UPDATE `'.$prefix.'orders`
 
-            SET `'.$prefix.'orders`.`picked_at` = current_timestamp()
+            SET `'.$prefix.'orders`.`picked_at` =
+                (
+                    SELECT max(`'.$prefix.'order_products`.updated_at)
+                    FROM `'.$prefix.'order_products`
+                    WHERE `'.$prefix.'order_products`.order_id = `'.$prefix.'orders`.id
+                    GROUP BY `'.$prefix.'order_products`.order_id
+                    HAVING
+                      SUM(`'.$prefix.'order_products`.quantity_ordered - `'.$prefix.'order_products`.quantity_picked) = 0
+                )
 
             WHERE `'.$prefix.'orders`.status_code = "picking"
             AND `'.$prefix.'orders`.picked_at IS NULL

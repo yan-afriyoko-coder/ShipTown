@@ -24,7 +24,9 @@ class PacklistPostTest extends TestCase
         Passport::actingAs(
             factory(User::class)->create()
         );
-        $orderProduct = factory(OrderProduct::class)->create();
+        $orderProduct = factory(OrderProduct::class)->create([
+            'order_id' => factory(Order::class)->create()->id
+        ]);
         $order = $orderProduct->order;
         OrderService::createPickRequests($order);
         $this->addToPacklist($order);
@@ -61,7 +63,9 @@ class PacklistPostTest extends TestCase
         Passport::actingAs(
             factory(User::class)->create()
         );
-        $orderProduct = factory(OrderProduct::class)->create();
+        $orderProduct = factory(OrderProduct::class)->create([
+            'order_id' => factory(Order::class)->create()->id
+        ]);
         $order = $orderProduct->order;
         OrderService::createPickRequests($order);
         $this->addToPacklist($order);
