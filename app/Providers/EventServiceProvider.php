@@ -15,6 +15,7 @@ use App\Listeners\Inventory\Updated\UpdateProductTotalQuantityListener;
 use App\Listeners\Order\Created\PublishSnsNotificationListener;
 use App\Listeners\Order\StatusChanged\CreatePickRequestsListener;
 use App\Listeners\Order\StatusChanged\DeletePickRequestsListener;
+use App\Listeners\Order\StatusChanged\PackingWarehouseRule;
 use App\Listeners\Pick\Picked\FillPickRequestsPickedQuantityListener;
 use App\Listeners\Pick\QuantityRequiredChanged\MovePickRequestToNewPickListener;
 use App\Listeners\Pick\Unpicked\ClearPickRequestsQuantityPickedListener;
@@ -23,6 +24,7 @@ use App\Listeners\PickRequest\Deleted\RemoveQuantityFromPicklistListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use PHP_CodeSniffer\Standards\Generic\Sniffs\Commenting\TodoSniff;
 
 /**
  * Class EventServiceProvider
@@ -63,6 +65,10 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\Order\StatusChangedEvent::class => [
             CreatePickRequestsListener::class,
             DeletePickRequestsListener::class,
+
+            // custom client rule
+            // todo move it to some custom logic which can be modified (when x if y do z)
+            PackingWarehouseRule::class,
         ],
 
         // Pick

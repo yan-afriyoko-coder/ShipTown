@@ -24,6 +24,16 @@ class OrderService
      * @param $sourceLocationId
      * @return bool
      */
+    public static function canNotFulfill(Order $order, $sourceLocationId = null)
+    {
+        return !self::canFulfill($order, $sourceLocationId);
+    }
+
+    /**
+     * @param Order $order
+     * @param $sourceLocationId
+     * @return bool
+     */
     public static function canFulfill(Order $order, $sourceLocationId = null)
     {
         $products = $order->orderProducts()->get();
