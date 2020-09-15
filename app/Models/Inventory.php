@@ -4,6 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property float quantity
+ * @property float quantity_reserved
+ */
 class Inventory extends Model
 {
     protected $fillable = [

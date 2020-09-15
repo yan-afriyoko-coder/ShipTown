@@ -36,7 +36,10 @@ Vue.use(Snotify, {
         newOnTop: false,
     },
     toast: {
-        position: "centerBottom"
+        position: "centerBottom",
+        icon: false,
+        showProgressBar: false,
+        timeout: 1000,
     }
 });
 
@@ -63,37 +66,37 @@ Vue.component("tippy", TippyComponent);
  */
 Vue.component(
     'passport-clients',
-    require('./components/passport/Clients.vue').default
+    require('./components/Settings/OauthClients.vue').default
 );
 
 Vue.component(
     'passport-authorized-clients',
-    require('./components/passport/AuthorizedClients.vue').default
+    require('./components/Settings/AuthorizedClients.vue').default
 );
 
 Vue.component(
     'passport-personal-access-tokens',
-    require('./components/passport/PersonalAccessTokens.vue').default
+    require('./components/Settings/PersonalAccessTokens.vue').default
 );
 
 Vue.component(
     'create-topic',
-    require('./components/CreateTopic.vue').default
+    require('./components/misc/CreateTopic.vue').default
 );
 
 Vue.component(
     'subscribe-topic',
-    require('./components/SubscribeTopic.vue').default
+    require('./components/misc/SubscribeTopic.vue').default
 );
 
 Vue.component(
     'missing-table',
-    require('./components/Missing.vue').default
+    require('./components/misc/Missing.vue').default
 );
 
 Vue.component(
     'products-table',
-    require('./components/Products/List.vue').default
+    require('./components/ProductsPage.vue').default
 );
 
 Vue.component(
@@ -103,41 +106,27 @@ Vue.component(
 
 Vue.component(
     'api2cart-configuration',
-    require('./components/Api2CartConfiguration.vue').default
+    require('./components/Settings/Api2cartConnections.vue').default
 );
 
 Vue.component(
     'rmsapi-configuration',
-    require('./components/RMSApiConfiguration.vue').default
+    require('./components/Settings/RmsapiiConfiguration.vue').default
 );
-
-// Picklist
-
-Vue.component(
-    'picklist-table',
-    require('./components/Picklist/List.vue').default
-);
-
-Vue.component(
-    'picklist-configuration-modal',
-    require('./components/Picklist/ConfigurationModal.vue').default
-);
-
-// Packlist
 
 Vue.component(
     'packlist-configuration-modal',
-    require('./components/Packlist/mixins/FiltersModal.vue').default
+    require('./components/Packlist/FiltersModal.vue').default
 );
 
 Vue.component(
     'packlist-table',
-    require('./components/Packlist/Packlist.vue').default
+    require('./components/PacklistPage.vue').default
 );
 
 Vue.component(
     'packlist-table-entry',
-    require('./components/Packlist/mixins/PacklistEntry.vue').default
+    require('./components/Packlist/PacklistEntry.vue').default
 );
 
 Vue.component(
@@ -147,17 +136,22 @@ Vue.component(
 
 Vue.component(
     'user-table',
-    require('./components/Users/List.vue').default
+    require('./components/UsersPage.vue').default
 );
 
 Vue.component(
     'printnode-configuration',
-    require('./components/Configuration/PrintNode.vue').default
+    require('./components/Settings/PrintNode.vue').default
 );
 
 Vue.component(
     'printer-configuration',
-    require('./components/Printers/Configuration.vue').default
+    require('./components/Settings/PrintersConfiguration.vue').default
+);
+
+Vue.component(
+    'picks-table',
+    require('./components/PicklistPage.vue').default
 );
 
 /**

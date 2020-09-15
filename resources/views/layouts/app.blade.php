@@ -54,13 +54,35 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('picklist') }}">{{ __('Picklist') }}</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('packlist') }}">{{ __('Packlist') }}</a>
+
+                        <li class="nav-item dropdown">
+                            <!-- User dropdown menu -->
+                            <a id="navbarDropdown3" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                {{ __('Packlist') }}<span class="caret"></span>
+                            </a>
+
+                            <!-- Menu Items END -->
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('packlist') . '?status=picking&is_packed=false&is_picked=true&sort=product_line_count,total_quantity_ordered,order_placed_at&packer_user_id='. Auth::user()->id}}">{{ __('Status: picking') }}</a>
+                                <a class="dropdown-item" href="{{ route('packlist') . '?status=packing_warehouse&is_picked=false&is_packed=false&sort=product_line_count,total_quantity_ordered,order_placed_at&packer_user_id='. Auth::user()->id}}">{{ __('Status: packing_warehouse') }}</a>
+                                <a class="dropdown-item" href="{{ route('packlist') . '?status=picking&is_packed=false&is_picked=false&sort=product_line_count,total_quantity_ordered,order_placed_at&packer_user_id='. Auth::user()->id}}">{{ __('Single Line Orders') }}</a>
+                            </div>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('orders') }}">{{ __('Orders') }}</a>
+
+                        <li class="nav-item dropdown">
+                            <!-- User dropdown menu -->
+                            <a id="navbarDropdown3" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                {{ __('Reports') }}<span class="caret"></span>
+                            </a>
+
+                            <!-- Menu Items END -->
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('picks_report') }}">{{ __('Picks') }}</a>
+                                <a class="dropdown-item" href="{{ route('orders') }}">{{ __('Orders') }}</a>
+                            </div>
                         </li>
                     </ul>
+
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -73,7 +95,6 @@
 
                                 <!-- Menu Items END -->
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-
                                     <!-- Settings -->
                                     <a class="dropdown-item" href="{{ route('settings') }}">
                                         {{ __('Settings') }}
@@ -81,9 +102,9 @@
 
                                     <!-- users -->
                                     @can('manage users')
-                                    <a class="dropdown-item" href="{{ route('users') }}">
-                                        {{ __('Users') }}
-                                    </a>
+                                        <a class="dropdown-item" href="{{ route('users') }}">
+                                            {{ __('Users') }}
+                                        </a>
                                     @endcan
 
                                     <!-- Logout -->
@@ -106,9 +127,10 @@
         </nav>
         @endauth
 
-        <main class="py-4">
+        <main class="py-4 pl-1 pr-2">
             @yield('content')
         </main>
+
         <vue-snotify></vue-snotify>
     </div>
 </body>

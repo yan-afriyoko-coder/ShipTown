@@ -3,29 +3,74 @@
 
 namespace App\Services;
 
-use App\Events\OrderCreatedEvent;
-use App\Events\OrderStatusChangedEvent;
+use App\Events\Order\CreatedEvent;
+use App\Events\Order\StatusChangedEvent;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderProduct;
+use App\Models\PickRequest;
 use App\Models\Product;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderService
 {
-    public static function addToPacklist(Order $order)
+    /**
+     * @return QueryBuilder
+     */
+    public static function getSpatieQueryBuilder(): QueryBuilder
     {
-        foreach ($order->orderProducts()->get() as $orderProduct) {
-            PacklistService::addOrderProductPick($orderProduct);
-        }
+        return QueryBuilder::for(Order::class)
+            ->allowedFilters([
+                AllowedFilter::partial('q', 'order_number'),
+
+                AllowedFilter::exact('status', 'status_code'),
+                AllowedFilter::exact('order_number'),
+                AllowedFilter::exact('packer_user_id'),
+
+                AllowedFilter::scope('is_picked'),
+                AllowedFilter::scope('is_packed'),
+                AllowedFilter::scope('is_packing'),
+
+                AllowedFilter::scope('has_packer'),
+            ])
+            ->allowedIncludes([
+                'shipping_address',
+                'order_shipments',
+                'order_products',
+                'order_products.product',
+                'order_products.product.aliases',
+                'packer',
+            ])
+            ->allowedSorts([
+                'updated_at',
+                'product_line_count',
+                'total_quantity_ordered',
+                'order_placed_at',
+            ]);
     }
 
-    public static function addToPicklist(Order $order)
+    /**
+     * @param Order $order
+     */
+    public static function createPickRequests(Order $order): void
     {
-        foreach ($order->orderProducts()->get() as $orderProduct) {
-            PicklistService::addOrderProductPick($orderProduct);
+        $orderProducts = $order->orderProducts()->get();
+
+        foreach ($orderProducts as $orderProduct) {
+            PickRequest::updateOrCreate([
+                'order_product_id' => $orderProduct->getKey(),
+            ], [
+                'order_id' => $order->id,
+                'quantity_required' => $orderProduct->quantity_ordered,
+            ]);
         }
+
+        info('Pick requests created', [
+            'order_number' => $order->order_number
+        ]);
     }
 
     /**
@@ -75,8 +120,7 @@ class OrderService
             $order->orderProducts()->save($orderProduct);
         }
 
-        OrderCreatedEvent::dispatch($order);
-        OrderStatusChangedEvent::dispatch($order);
+        CreatedEvent::dispatch($order);
 
         return $order;
     }

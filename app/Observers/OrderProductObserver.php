@@ -2,7 +2,10 @@
 
 namespace App\Observers;
 
+use App\Models\Order;
 use App\Models\OrderProduct;
+use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Expr\Match_;
 
 class OrderProductObserver
 {
@@ -28,6 +31,15 @@ class OrderProductObserver
     {
         $quantity_delta = $orderProduct['quantity_ordered'] - $orderProduct->getOriginal('quantity_ordered');
         $orderProduct->order()->increment('total_quantity_ordered', $quantity_delta);
+
+        $orderHasMoreToPick = OrderProduct::query()
+            ->whereRaw('quantity_ordered <> quantity_picked')
+            ->where(['order_id' => $orderProduct->order_id])
+            ->exists();
+
+        if ($orderHasMoreToPick === false) {
+            $orderProduct->order()->update(['picked_at' => now()]);
+        }
     }
 
     /**

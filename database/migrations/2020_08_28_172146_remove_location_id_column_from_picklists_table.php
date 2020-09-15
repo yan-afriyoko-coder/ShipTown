@@ -26,7 +26,7 @@ class RemoveLocationIdColumnFromPicklistsTable extends Migration
     public function down()
     {
         Schema::table('picklists', function (Blueprint $table) {
-            //
+            $table->string('location_id')->default('');
         });
     }
 }

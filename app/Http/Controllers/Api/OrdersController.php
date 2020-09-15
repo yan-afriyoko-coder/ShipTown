@@ -3,35 +3,40 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Order\UpdateRequest;
 use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
+use App\Services\OrderService;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Arr;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
+/**
+ * Class OrdersController
+ * @package App\Http\Controllers\Api
+ */
 class OrdersController extends Controller
 {
-
+    /**
+     * @param Request $request
+     * @return LengthAwarePaginator
+     */
     public function index(Request $request)
     {
-        $query = QueryBuilder::for(Order::class)
-            ->allowedFilters([
-                AllowedFilter::exact('order_number')->ignore([null,'null']),
-                AllowedFilter::scope('is_picked'),
-                AllowedFilter::scope('is_packed'),
-            ])
-            ->allowedIncludes('shipping_address');
+        $query = OrderService::getSpatieQueryBuilder();
 
-        if ($request->has('q') && $request->get('q')) {
-            $query->where('order_number', 'like', '%' . $request->get('q') . '%');
-        }
-
-        $per_page = $request->get('per_page', 10);
-
-        return $query->paginate($per_page);
+        return $this->getPerPageAndPaginate($request, $query, 10);
     }
 
+    /**
+     * @param StoreOrderRequest $request
+     * @return JsonResponse
+     */
     public function store(StoreOrderRequest $request)
     {
         $order = Order::query()->updateOrCreate(
@@ -42,6 +47,42 @@ class OrdersController extends Controller
         return response()->json($order, 200);
     }
 
+    /**
+     * @param UpdateRequest $request
+     * @param Order $order
+     * @return JsonResource
+     */
+    public function update(UpdateRequest $request, Order $order)
+    {
+        $updates = $request->validated();
+
+        if ($request->has('is_packed')) {
+            if ($order->packer_user_id != $request->user()->getKey()) {
+                $this->respondNotAllowed405('Order is being packed by another user');
+            }
+
+            $updates = Arr::add($updates, 'packer_user_id', $request->user()->getKey());
+        }
+
+        $order->update($updates);
+
+        return new JsonResource($order);
+    }
+
+    /**
+     * @param Request $request
+     * @param Order $order
+     * @return JsonResource
+     */
+    public function show(Request $request, Order $order)
+    {
+        return new JsonResource($order);
+    }
+
+    /**
+     * @param $order_number
+     * @throws \Exception
+     */
     public function destroy($order_number)
     {
         try {

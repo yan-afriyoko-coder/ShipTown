@@ -12,21 +12,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class OrderAddressLabelTest extends TestCase
 {
     /**
-     * @return void
-     */
-    public function testIfAuthorizedRouteWorks()
-    {
-        Passport::actingAs(
-            factory(User::class)->create()
-        );
-
-        $order = factory(Order::class)->create();
-
-        $response = $this->get('pdf/orders/'.$order->order_number.'/address_label');
-    }
-
-
-    /**
      * A basic feature test example.
      *
      * @return void

@@ -19,27 +19,33 @@
                     <div class="col p-0 pl-3">
                         <div class="row text-left">
                             <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-2">
-                                        <div class="font-weight-bold text-nowrap">Order #</div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="font-weight-bold text-right text-nowrap">Status</div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="font-weight-bold text-right text-nowrap">Date Placed</div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="font-weight-bold text-right text-nowrap">Line Count</div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="font-weight-bold text-right text-nowrap">Total Quantity</div>
+                                <div class="row font-weight-bold">
+                                    <div class="col-1">
+                                        <div class=" text-nowrap">Order #</div>
                                     </div>
                                     <div class="col-1">
-                                        <div class="font-weight-bold text-right text-nowrap">Picked</div>
+                                        <div class="text-nowrap">Status</div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="text-nowrap">Date Placed</div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="text-center text-nowrap">Line Count</div>
                                     </div>
                                     <div class="col-1">
-                                        <div class="font-weight-bold text-right text-nowrap">Packed</div>
+                                        <div class="text-center text-nowrap">Total Quantity</div>
+                                    </div>
+                                    <div class="col-1">
+                                        <div class="text-center text-nowrap">Picked</div>
+                                    </div>
+                                    <div class="col-1">
+                                        <div class="text-nowrap">Packer</div>
+                                    </div>
+                                    <div class="col-1">
+                                        <div class="text-center text-nowrap">Packed At</div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="text-right text-nowrap">Shipping No</div>
                                     </div>
                                 </div>
                             </div>
@@ -58,9 +64,10 @@
 <script>
     import loadingOverlay from '../../mixins/loading-overlay';
     import OrderCard from "./OrderCard";
+    import url from "../../mixins/url";
 
     export default {
-        mixins: [loadingOverlay],
+        mixins: [loadingOverlay, url],
 
         components: { 'order-card': OrderCard },
 
@@ -76,7 +83,16 @@
         methods: {
             getOrderList: function(page) {
 
-                this.orders = [];
+                const params = {
+                    'filter[status]': this.getUrlParameter('status', null),
+                    'sort': this.getUrlParameter('sort','-updated_at'),
+                    'per_page': this.getUrlParameter('per_page',50),
+                    'include': 'packer,order_shipments',
+                    page: page,
+                    q: this.query,
+                };
+
+                // this.orders = [];
                 this.page = page;
                 this.last_page = 1;
                 this.total = 0;
@@ -84,14 +100,9 @@
                 return new Promise((resolve, reject) => {
                     this.showLoading();
                     axios.get('/api/orders', {
-                        params: {
-                            per_page: 50,
-                            page: page,
-                            q: this.query,
-                            sort: this.sort,
-                            order: this.order,
-                        }
+                        params: params
                     }).then(({ data }) => {
+                        console.log(data.data);
                         this.orders = this.orders.concat(data.data);
                         this.total = data.total;
                         this.last_page = data.last_page;
@@ -105,6 +116,7 @@
             },
 
             loadOrders(e) {
+                this.orders = [];
                 this.getOrderList(1)
                     .then(this.doSelectAll);
             },

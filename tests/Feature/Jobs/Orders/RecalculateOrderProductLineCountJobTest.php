@@ -2,12 +2,10 @@
 
 namespace Tests\Feature\Jobs\Orders;
 
-use App\Jobs\Orders\RecalculateOrderProductLineCountJob;
+use App\Jobs\Maintenance\RecalculateOrderProductLineCountJob;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RecalculateOrderProductLineCountJobTest extends TestCase
 {

@@ -15,39 +15,75 @@ class OrdersSeeder extends Seeder
      */
     public function run()
     {
-        factory(Order::class, 20)
-            ->create()
-            ->each(function (Order $order) {
-                $orderProducts = factory(OrderProduct::class, rand(5, 10))->make();
+        factory(Order::class, rand(180, 250))
+            ->with('orderProducts', rand(1,4))
+            ->create([
+                'status_code' => 'processing'
+            ]);
 
-                $order->orderProducts()->saveMany($orderProducts);
-            });
+        factory(Order::class, rand(280, 350))
+            ->with('orderProducts', rand(1,4))
+            ->create([
+                'status_code' => 'picking'
+            ]);
 
-        factory(Order::class, 2)
-            ->create()
-            ->each(function (Order $order) {
-                $orderProducts = factory(OrderProduct::class, 1)->make();
+        factory(Order::class, rand(10, 20))
+            ->with('orderProducts', rand(1,4))
+            ->create([
+                'status_code' => 'packing_warehouse'
+            ]);
 
-                $order->orderProducts()->saveMany($orderProducts);
-            });
+        factory(Order::class, rand(20,50))
+            ->with('orderProducts', rand(1,4))
+            ->create([
+                'status_code' => 'holded'
+            ]);
 
-        // we fabricate few orders with SKU not present in database
-        factory(Order::class, 1)
-            ->create()
-            ->each(function (Order $order) {
-                $orderProducts = collect(factory(OrderProduct::class, 1)->make())
-                    ->map(function ($orderProduct) {
+        factory(Order::class, rand(30,50))
+            ->with('orderProducts', rand(1,4))
+            ->create([
+                'status_code' => 'canceled'
+            ]);
 
-                        $suffix = Arr::random(['-blue', '-red', '-green', '-xl', '-small-orange']);
+        factory(Order::class, rand(60,80))
+            ->with('orderProducts', rand(1,4))
+            ->with('orderShipments', rand(1,2))
+            ->create([
+                'status_code' => 'complete'
+            ]);
 
-                        $orderProduct['product_id'] = null;
-                        $orderProduct['sku_ordered'] = $orderProduct['sku_ordered'] . $suffix;
-                        $orderProduct['name_ordered'] = $orderProduct['name_ordered'] . $suffix;
+        factory(Order::class, rand(20,50))
+            ->with('orderProducts', rand(1,4))
+            ->with('orderShipments', rand(1,2))
+            ->create([
+                'status_code' => 'completed_imported_to_rms'
+            ]);
 
-                        return $orderProduct;
-                    });
-
-                $order->orderProducts()->saveMany($orderProducts);
-            });
+//        factory(Order::class, 2)
+//            ->create()
+//            ->each(function (Order $order) {
+//                $orderProducts = factory(OrderProductController::class, 1)->make();
+//
+//                $order->orderProducts()->saveMany($orderProducts);
+//            });
+//
+//        // we fabricate few orders with SKU not present in database
+//        factory(Order::class, 1)
+//            ->create()
+//            ->each(function (Order $order) {
+//                $orderProducts = collect(factory(OrderProductController::class, 1)->make())
+//                    ->map(function ($orderProduct) {
+//
+//                        $suffix = Arr::random(['-blue', '-red', '-green', '-xl', '-small-orange']);
+//
+//                        $orderProduct['product_id'] = null;
+//                        $orderProduct['sku_ordered'] = $orderProduct['sku_ordered'] . $suffix;
+//                        $orderProduct['name_ordered'] = $orderProduct['name_ordered'] . $suffix;
+//
+//                        return $orderProduct;
+//                    });
+//
+//                $order->orderProducts()->saveMany($orderProducts);
+//            });
     }
 }

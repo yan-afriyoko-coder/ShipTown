@@ -12,8 +12,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class OrdersRoutesTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function testIsPickedFilterFalse()
     {
         Order::query()->delete();

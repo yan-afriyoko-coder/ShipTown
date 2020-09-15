@@ -19,3 +19,5 @@ docker-compose.yml
 /.docker
 Dockerfile
 Makefile
+_ide_helper.php
+_ide_helper_models.php

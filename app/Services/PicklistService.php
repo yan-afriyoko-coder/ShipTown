@@ -4,8 +4,11 @@
 namespace App\Services;
 
 use App\Models\OrderProduct;
+use App\Models\Pick;
 use App\Models\Picklist;
+use App\Models\PickRequest;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class PicklistService
@@ -14,36 +17,23 @@ use Illuminate\Support\Arr;
 class PicklistService
 {
     /**
-     * @param OrderProduct|array $orderProduct
-     * @return void
+     * @param PickRequest $pickRequest
      */
-    public static function addOrderProductPick($orderProduct)
+    public static function addToPicklist(PickRequest $pickRequest)
     {
-        foreach (Arr::wrap($orderProduct) as $orderProduct) {
-            Picklist::updateOrCreate([
-                'order_product_id' => $orderProduct['id']
-            ], [
-                'order_id' => $orderProduct['order_id'],
-                'product_id' => $orderProduct['product_id'],
-                'sku_ordered' => $orderProduct['sku_ordered'],
-                'name_ordered' => $orderProduct['name_ordered'],
-                'quantity_requested' => $orderProduct['quantity_ordered'],
-            ]);
-        }
-    }
+        $orderProduct = $pickRequest->orderProduct()->first();
 
-    /**
-     *
-     * @param OrderProduct|array $orderProduct
-     * @return void
-     */
-    public static function removeOrderProductPick($orderProduct)
-    {
-        foreach (Arr::wrap($orderProduct) as $orderProduct) {
-            Picklist::query()
-                ->where('order_product_id', '=', $orderProduct['id'])
-                ->whereNull('picked_at')
-                ->delete();
-        }
+        $pick = Pick::firstOrCreate([
+            'product_id' => $orderProduct->product_id,
+            'sku_ordered' => $orderProduct->sku_ordered,
+            'name_ordered' => $orderProduct->name_ordered,
+            'picked_at' => null,
+        ], [
+            'quantity_required' => 0
+        ]);
+
+        $pick->increment('quantity_required', $orderProduct->quantity_ordered);
+
+        $pickRequest->update(['pick_id' => $pick->getKey()]);
     }
 }
