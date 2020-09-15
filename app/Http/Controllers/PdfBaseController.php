@@ -9,18 +9,15 @@ use Illuminate\Http\Response;
 class PdfBaseController extends Controller
 {
     /**
-     * @param string $view
-     * @param array $data
+     * @param string $pdfString
      * @return ResponseFactory|Response
      */
-    public function getPdfResponse(string $view, array $data)
+    public function getPdfResponse(string $pdfString)
     {
         $headers = [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline',
         ];
-
-        $pdfString = PdfService::fromView($view, $data);
 
         return response($pdfString, 200, $headers);
     }
