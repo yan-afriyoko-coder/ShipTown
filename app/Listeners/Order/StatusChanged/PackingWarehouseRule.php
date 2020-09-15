@@ -38,7 +38,7 @@ class PackingWarehouseRule
         }
 
         // todo change hardcoded status_code
-//        $event->getOrder()->update(['status_code' => 'packing_warehouse']);
+        $event->getOrder()->update(['status_code' => 'packing_warehouse']);
 
         // Log event
         info(
