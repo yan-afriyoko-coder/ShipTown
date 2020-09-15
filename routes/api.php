@@ -45,7 +45,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('packlist', 'Api\PacklistController@index');
     Route::post('packlist/{packlist}', 'Api\PacklistController@store');
 
-    Route::get('sync', "Api\SyncController@index");
 
     Route::get('printers', 'Api\PrintersController@index');
     Route::put('printers/use/{printerId}', 'Api\PrintersController@use');
@@ -65,7 +64,8 @@ Route::middleware('auth:api')->group(function () {
         Route::resource('configuration', 'Api\ConfigurationsController');
     });
 
-    // this route should be moved to api and invoked trough button in settings, deadline 10/09/2020
+
+    Route::get('sync', "Api\SyncController@index");
     Route::get('run/maintenance', function () {
         \App\Jobs\Maintenance\RecalculateOrderProductLineCountJob::dispatch();
         \App\Jobs\Maintenance\RecalculateOrderTotalQuantityOrderedJob::dispatch();

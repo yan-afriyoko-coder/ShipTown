@@ -154,6 +154,11 @@ Vue.component(
     require('./components/PicklistPage.vue').default
 );
 
+Vue.component(
+    'settings-page',
+    require('./components/SettingsPage').default
+)
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding mixins to this application

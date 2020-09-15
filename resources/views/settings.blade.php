@@ -16,6 +16,8 @@
                         </div>
                     @endif
 
+                    <settings-page></settings-page>
+
                     @role('admin')
                     <passport-clients></passport-clients>
                     <br />
