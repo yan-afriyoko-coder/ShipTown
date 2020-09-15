@@ -28,27 +28,23 @@ class PackingWarehouseRule
     public function handle(StatusChangedEvent $event)
     {
         // todo change hardcoded
-        if ($event->isNotStatusCode('picking')) {
+        $expectedStatusCode = 'picking';
+        $sourceLocationId = 99;
+        $newStatusCode = 'packing_warehouse';
+
+        if ($event->isNotStatusCode($expectedStatusCode)) {
             return;
         }
-
-        // todo change hardcoded sourceLocationId
-        $sourceLocationId = 99;
 
         if (OrderService::canNotFulfill($event->getOrder(), $sourceLocationId)) {
-            logger('We cannot fulfill full order', [
-                'order_number' => $event->getOrder()->order_number,
-                'source_location_id' => $sourceLocationId,
-            ]);
             return;
         }
 
-        // todo change hardcoded status_code
-        $event->getOrder()->update(['status_code' => 'packing_warehouse']);
+        $event->getOrder()->update(['status_code' => $newStatusCode]);
 
         // Log event
         info(
-            'Can fulfill from warehouse, set status to packing_warehouse',
+            'PackingWarehouseRule: set status to packing_warehouse',
             [
                 'order_number' => $event->getOrder()->order_number,
                 'source_location_id' => $sourceLocationId,
