@@ -33,7 +33,13 @@ class PackingWarehouseRule
         }
 
         // todo change hardcoded sourceLocationId
-        if (OrderService::canNotFulfill($event->getOrder(), 99)) {
+        $sourceLocationId = 99;
+
+        if (OrderService::canNotFulfill($event->getOrder(), $sourceLocationId)) {
+            logger('We cannot fulfill full order', [
+                'order_number' => $event->getOrder()->order_number,
+                'source_location_id' => $sourceLocationId,
+            ]);
             return;
         }
 
@@ -42,8 +48,11 @@ class PackingWarehouseRule
 
         // Log event
         info(
-            'Order can be fulfilled from warehouse, changing status to packing_warehouse >> only testing, not actually changed',
-            ['order_number' => $event->getOrder()->order_number]
+            'Can fulfill from warehouse, set status to packing_warehouse',
+            [
+                'order_number' => $event->getOrder()->order_number,
+                'source_location_id' => $sourceLocationId,
+            ]
         );
     }
 }
