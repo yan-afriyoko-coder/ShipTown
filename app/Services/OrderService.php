@@ -87,7 +87,6 @@ class OrderService
             ]);
         }
 
-
         logger('Pick requests created', [
             'order_number' => $order->order_number
         ]);
