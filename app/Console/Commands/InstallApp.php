@@ -42,6 +42,8 @@ class InstallApp extends Command
         $this->migrate();
 
         $this->passportKey();
+
+        $this->setupAdminRole();
     }
 
     private function keyGenerate(): void
@@ -69,5 +71,11 @@ class InstallApp extends Command
     {
         $this->info('php artisan passport:keys');
         $this->call('passport:keys', []);
+    }
+
+    private function setupAdminRole(): void
+    {
+        $this->info('php artisan app:setup-roles');
+        $this->call('app:setup-roles');
     }
 }

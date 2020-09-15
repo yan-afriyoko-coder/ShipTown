@@ -165,6 +165,14 @@ class Order extends Model
     }
 
     /**
+     * @return HasMany | Packlist
+     */
+    public function packlist()
+    {
+        return $this->hasMany(Packlist::class);
+    }
+
+    /**
      * @return BelongsTo | OrderAddress
      */
     public function shippingAddress()

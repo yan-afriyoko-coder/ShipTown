@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Events\Order\CreatedEvent;
 use App\Events\Order\StatusChangedEvent;
+use App\Jobs\Api2cart\ImportShippingAddressJob;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderProduct;
@@ -17,6 +18,24 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderService
 {
+    public static function getOrderPdf($order_number, $template)
+    {
+        $order = Order::query()
+            ->where(['order_number' => $order_number])
+            ->with('shippingAddress')
+            ->firstOrFail();
+
+        if (!$order->shipping_address_id) {
+            ImportShippingAddressJob::dispatchNow($order->id);
+            $order = $order->refresh();
+        }
+
+        $view = 'pdf/orders/'. $template;
+        $data = $order->toArray();
+
+        return PdfService::fromView($view, $data);
+    }
+
     /**
      * @return QueryBuilder
      */

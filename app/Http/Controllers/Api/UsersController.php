@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Users\DeleteRequest;
 use App\Http\Requests\Users\UpdateRequest;
 use App\Http\Resources\UserResource;
 use App\User;
@@ -18,6 +19,11 @@ class UsersController extends Controller
     public function show(User $user)
     {
         return new UserResource($user);
+    }
+
+    public function me(Request $request)
+    {
+        return $this->show($request->user());
     }
 
     public function update(UpdateRequest $request, User $user)
@@ -37,7 +43,7 @@ class UsersController extends Controller
         return new UserResource($user);
     }
 
-    public function destroy(User $user)
+    public function destroy(DeleteRequest $request, User $user)
     {
         $user->delete();
         return $this->respondOK200('ok');

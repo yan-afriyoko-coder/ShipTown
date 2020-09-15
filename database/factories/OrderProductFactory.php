@@ -2,14 +2,13 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Model;
+use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
 use Faker\Generator as Faker;
 use Illuminate\Support\Arr;
 
 $factory->define(OrderProduct::class, function (Faker $faker) {
-
     $product = Product::query()->inRandomOrder()->first();
 
     return [
