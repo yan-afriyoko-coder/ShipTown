@@ -47,23 +47,5 @@ class FixAllNullProductIdsJob implements ShouldQueue
                 `'.$prefix.'order_products`.`product_id` IS NULL
                 AND `'.$prefix.'products`.`id` IS NOT NULL
         ');
-
-        DB::statement('
-            UPDATE `'.$prefix.'picklists`
-
-            LEFT JOIN `'.$prefix.'products`
-                ON `'.$prefix.'products`.`sku` = `'.$prefix.'picklists`.`sku_ordered`
-                OR `'.$prefix.'products`.`sku` = LEFT(`'.$prefix.'picklists`.`sku_ordered`,6)
-
-            SET `'.$prefix.'picklists`.`product_id` =`'.$prefix.'products`.`id`
-
-            WHERE
-                `'.$prefix.'picklists`.`product_id` IS NULL
-                AND `'.$prefix.'products`.`id` IS NOT NULL
-        ');
-
-        // todo
-        // OR `'.$prefix.'products`.`sku` = LEFT(`'.$prefix.'picklists`.`sku_ordered`,6)
-        // that should
     }
 }

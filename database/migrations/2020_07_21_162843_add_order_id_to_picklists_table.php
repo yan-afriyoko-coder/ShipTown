@@ -13,8 +13,6 @@ class AddOrderIdToPicklistsTable extends Migration
      */
     public function up()
     {
-        \App\Models\Picklist::query()->delete();
-
         Schema::table('picklists', function (Blueprint $table) {
             $table->bigInteger('order_id')
                 ->unsigned()

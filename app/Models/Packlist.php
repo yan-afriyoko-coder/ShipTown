@@ -4,12 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Query\JoinClause;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 /**
  * Class Packlist
- * @property \Illuminate\Support\Carbon|null packed_at
+ * @property Carbon|null packed_at
  * @property int order_id
  * @package App\Models
  */

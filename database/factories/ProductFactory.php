@@ -13,7 +13,5 @@ $factory->define(Product::class, function (Faker $faker) {
         'sale_price' => $faker->randomFloat(2, 0, 1000),
         'sale_price_start_date' => $faker->dateTimeBetween('-1 year', '+5 months'),
         'sale_price_end_date' => $faker->dateTimeBetween('-1 month', '+1 year'),
-        'quantity' => $faker->randomFloat(2, 0, 10000),
-        'quantity_reserved' => $faker->randomFloat(2, 0, 10000),
     ];
 });

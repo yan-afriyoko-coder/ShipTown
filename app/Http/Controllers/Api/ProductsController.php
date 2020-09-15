@@ -16,32 +16,29 @@ class ProductsController extends Controller
 {
     public function index(Request $request)
     {
-        $fields = ['id','sku', 'name', 'price'];
-
         $query = QueryBuilder::for(Product::class)
-            ->allowedFilters(array_merge(
-                $fields,
-                [AllowedFilter::scope('sku_or_alias')]
-            ))
-            ->allowedSorts($fields)
-            ->allowedIncludes('inventory', 'aliases');
+            ->allowedFilters([
+                AllowedFilter::exact('id'),
+                AllowedFilter::exact('sku'),
+                AllowedFilter::exact('name'),
+                AllowedFilter::exact('price'),
 
-
-        if ($request->has('q') && $request->get('q')) {
-            $product = ProductService::find($request->get('q'));
-
-            if ($product) {
-                $query->whereKey($product->getKey());
-            } else {
-                $query->where('sku', 'like', '%' . $request->get('q') . '%')
-                    ->orWhere('name', 'like', '%' . $request->get('q') . '%');
-            }
-        }
-
-        if ($request->has('sort')) {
-            $query->orderBy($request->get('sort'), $request->get('order', 'asc'));
-        }
-
+                AllowedFilter::scope('q', 'whereHasText'), // to be removed, left for backwards compatibility only text should be used
+                AllowedFilter::scope('search', 'whereHasText'),
+                AllowedFilter::scope('sku_or_alias'),
+                AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->default(100),
+            ])
+            ->allowedSorts([
+                'id',
+                'sku',
+                'name',
+                'price',
+                'quantity'
+            ])
+            ->allowedIncludes([
+                'inventory',
+                'aliases'
+            ]);
 
         return $query->paginate(100)->appends($request->query());
     }

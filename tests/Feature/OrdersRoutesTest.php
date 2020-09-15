@@ -12,8 +12,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class OrdersRoutesTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function testIsPickedFilterFalse()
     {
         Order::query()->delete();
@@ -263,5 +261,18 @@ class OrdersRoutesTest extends TestCase
         $product_after = $product_before->fresh();
 
         $this->assertEquals($product_after->quantity_reserved, $product_before->quantity_reserved);
+    }
+
+    public function testOrdersPage()
+    {
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        $order = factory(Order::class)->create();
+
+        $this->get('/orders')
+            ->assertSee('<orders-table></orders-table>')
+            ->assertOk();
     }
 }

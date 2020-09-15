@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\Api\Packlist;
 
+use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Services\OrderService;
 use App\Services\PrintService;
+use App\Services\PacklistService;
 use App\User;
 use Laravel\Passport\Passport;
 use PrintNode\Request;
@@ -24,7 +26,8 @@ class PacklistPostTest extends TestCase
         );
         $orderProduct = factory(OrderProduct::class)->create();
         $order = $orderProduct->order;
-        OrderService::addToPacklist($order);        
+        OrderService::createPickRequests($order);
+        $this->addToPacklist($order);
 
         foreach ($order->packlist as $packlist) {
             $packlist->is_packed = true;
@@ -60,7 +63,8 @@ class PacklistPostTest extends TestCase
         );
         $orderProduct = factory(OrderProduct::class)->create();
         $order = $orderProduct->order;
-        OrderService::addToPacklist($order);        
+        OrderService::createPickRequests($order);
+        $this->addToPacklist($order);
 
         // Ensures that the print job is created when the order is packed
         $this->mock(PrintService::class, function ($mock) {
@@ -73,5 +77,13 @@ class PacklistPostTest extends TestCase
         ]);
 
         $response->assertStatus(200);
-    }    
+    }
+
+    private function addToPacklist(Order $order)
+    {
+        foreach ($order->orderProducts()->get() as $orderProduct) {
+            $orderProducts = $order->orderProducts()->get();
+            PacklistService::addOrderProductPick($orderProduct);
+        }
+    }
 }

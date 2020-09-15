@@ -2,13 +2,11 @@
 
 namespace Tests\Feature\Events;
 
-use App\Events\OrderStatusChangedEvent;
+use App\Events\Order\StatusChangedEvent;
 use App\Models\Order;
 use App\Observers\OrderObserver;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class OrderStatusChangedEventTest extends TestCase
 {
@@ -31,6 +29,6 @@ class OrderStatusChangedEventTest extends TestCase
         $observer->updated($order);
 
 //         assert
-        Event::assertDispatched(OrderStatusChangedEvent::class);
+        Event::assertDispatched(StatusChangedEvent::class);
     }
 }

@@ -2,20 +2,21 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Models\Product;
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\Product;
 use Faker\Generator as Faker;
+use Illuminate\Support\Arr;
 
 $factory->define(OrderProduct::class, function (Faker $faker) {
-    $product = factory(Product::class)->create();
+    $product = Product::query()->inRandomOrder()->first();
 
     return [
         'order_id' => factory(Order::class)->create()->id,
         'product_id' => $product->getKey(),
         'sku_ordered' => $product->sku,
         'name_ordered' => $product->name,
-        'quantity_ordered' => rand(1, 10),
+        'quantity_ordered' => Arr::random([1,1,1,1,2,2,3,3,]) * Arr::random([1,1,1,1,1,1,1,1,2,3]),
         'price' => $product->price,
     ];
 });

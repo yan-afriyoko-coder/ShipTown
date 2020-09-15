@@ -22,6 +22,8 @@ class ProductsSeeder extends Seeder
             '06',
             '06',
         ]);
+
+        factory(Product::class, 500)->create();
     }
 
     private function createSkuWithAliases(array $skuList): void

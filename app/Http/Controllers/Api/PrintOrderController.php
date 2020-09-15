@@ -11,7 +11,9 @@ class PrintOrderController extends PdfOrderController
     {
         $pdf = parent::show($request, $order_number, $template);
 
-        $response = $request->user()->newPdfPrintJob('test', $pdf);
+        $job_name = $template . '_' . $order_number . '_by_' . $request->user()->id;
+
+        $response = $request->user()->newPdfPrintJob($job_name, $pdf);
 
         return response(
             $response->getContent(),

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Services\PicklistService;
+use App\User;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -20,6 +22,9 @@ use phpseclib\Math\BigInteger;
  * @property integer product_line_count
  * @property integer total_quantity_ordered
  * @property Carbon|null picked_at
+ * @method  self isPicked(bool $expected)
+ * @method  self whereIsPicked()
+ * @method  self whereIsNotPicked()
  * @property Carbon|null packed_at
  * @property Carbon|null deleted_at
  * @property Carbon|null updated_at
@@ -29,10 +34,14 @@ class Order extends Model
 {
     protected $fillable = [
         'order_number',
+        'picked_at',
+        'shipping_number',
         'shipping_address_id',
+        'is_packed',
         'order_placed_at',
         'order_closed_at',
         'status_code',
+        'packer_user_id',
         'raw_import'
     ];
 
@@ -53,11 +62,64 @@ class Order extends Model
         'is_packed',
     ];
 
-    public function scopeIsPicked($query, $value)
+    /**
+     * @param $query
+     * @param bool $expected
+     * @return self
+     */
+    public function scopeHasPacker($query, bool $expected)
     {
-        return $query->whereNull('picked_at', 'and', $value);
+        if ($expected === false) {
+            return $query->whereNull('packer_user_id');
+        }
+
+        return $query->whereNotNull('packer_user_id');
     }
 
+    /**
+     * @param $query
+     * @param bool $expected
+     * @return self
+     */
+    public function scopeIsPicked($query, bool $expected)
+    {
+        if ($expected === true) {
+            return $query->whereIsPicked();
+        }
+
+        return $query->whereIsNotPicked();
+    }
+
+    /**
+     * @param $query
+     * @return self
+     */
+    public function scopeIsPacking($query, $is_packing)
+    {
+        if ($is_packing) {
+            return $query->whereNotNull('packer_user_id');
+        }
+
+        return $query->whereNull('packer_user_id');
+    }
+
+    /**
+     * @param $query
+     * @return self
+     */
+    public function scopeWhereIsPicked($query)
+    {
+        return $query->whereNotNull('picked_at');
+    }
+
+    /**
+     * @param $query
+     * @return self
+     */
+    public function scopeWhereIsNotPicked($query)
+    {
+        return $query->whereNull('picked_at');
+    }
 
     public function scopeIsPacked($query, $value)
     {
@@ -116,5 +178,21 @@ class Order extends Model
     public function shippingAddress()
     {
         return $this->belongsTo(OrderAddress::class);
+    }
+
+    /**
+     * @return BelongsTo | User
+     */
+    public function packer()
+    {
+        return $this->belongsTo(User::class, 'packer_user_id');
+    }
+
+    /**
+     * @return HasMany | OrderShipment
+     */
+    public function orderShipments()
+    {
+        return $this->hasMany(OrderShipment::class);
     }
 }

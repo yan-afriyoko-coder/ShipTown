@@ -2,7 +2,8 @@
 
 namespace App\Observers;
 
-use App\Events\OrderStatusChangedEvent;
+use App\Events\Order\StatusChangedEvent;
+use App\Events\Order\UpdatedEvent;
 use App\Models\Order;
 
 class OrderObserver
@@ -15,7 +16,10 @@ class OrderObserver
      */
     public function created(Order $order)
     {
-        //
+        // we will not dispatch CreatedEvent here
+        // please user OrderService method
+        // CreatedEvent should be dispatched
+        // after created OrderProducts etc
     }
 
     /**
@@ -26,8 +30,10 @@ class OrderObserver
      */
     public function updated(Order $order)
     {
+        UpdatedEvent::dispatch($order);
+
         if ($order['status_code'] !== $order->getOriginal('status_code')) {
-            OrderStatusChangedEvent::dispatch($order);
+            StatusChangedEvent::dispatch($order);
         }
     }
 

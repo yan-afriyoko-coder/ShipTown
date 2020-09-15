@@ -22,11 +22,19 @@ class StatusOrderCount extends AbstractWidget
      */
     public function run()
     {
-        //
         $status_order_counts = Order::query()
             ->whereDate('order_placed_at', '>', Carbon::now()->subDays(30))
-            ->groupBy('status_code')
-            ->select('status_code', DB::raw('count(*) as order_count'))
+            ->whereNotIn('status_code', [
+                'processing',
+                'picking',
+                'packing',
+                'packing_warehouse',
+                'unshipped',
+                'partially_shipped',
+                'holded',
+            ])
+            ->groupBy(['status_code'])
+            ->select(['status_code', DB::raw('count(*) as order_count')])
             ->get();
 
         return view('widgets.status_order_count', [
