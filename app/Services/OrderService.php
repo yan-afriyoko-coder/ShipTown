@@ -6,6 +6,7 @@ namespace App\Services;
 use App\Events\Order\CreatedEvent;
 use App\Events\Order\StatusChangedEvent;
 use App\Jobs\Api2cart\ImportShippingAddressJob;
+use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderProduct;
@@ -18,7 +19,38 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderService
 {
-    public static function getOrderPdf($order_number, $template)
+    /**
+     * @param Order $order
+     * @param $sourceLocationId
+     * @return bool
+     */
+    public static function canFulfill(Order $order, $sourceLocationId = null)
+    {
+        $products = $order->orderProducts()->get();
+
+        foreach ($products as $product) {
+            $inventory = Inventory::where('product_id', $product->product_id)
+                ->where('location_id', $sourceLocationId)
+                ->first();
+
+            if (!$inventory) {
+                return false;
+            }
+
+            if ($inventory->quantity_available < $product->quantity_ordered) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param $order_number
+     * @param $template_name
+     * @return string
+     */
+    public static function getOrderPdf(string $order_number, $template_name)
     {
         $order = Order::query()
             ->where(['order_number' => $order_number])
@@ -30,7 +62,7 @@ class OrderService
             $order = $order->refresh();
         }
 
-        $view = 'pdf/orders/'. $template;
+        $view = 'pdf/orders/'. $template_name;
         $data = $order->toArray();
 
         return PdfService::fromView($view, $data);

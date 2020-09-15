@@ -25,6 +25,11 @@ class Inventory extends Model
         "quantity_available"
     ];
 
+    protected $attributes = [
+        'quantity' => 0,
+        'quantity_reserved' => 0,
+    ];
+
     public function getQuantityAvailableAttribute()
     {
         $quantity_available = $this->quantity - $this->quantity_reserved;
