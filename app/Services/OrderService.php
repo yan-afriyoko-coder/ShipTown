@@ -87,7 +87,8 @@ class OrderService
             ]);
         }
 
-        debug('Pick requests created', [
+
+        logger('Pick requests created', [
             'order_number' => $order->order_number
         ]);
     }
