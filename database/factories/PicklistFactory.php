@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 
 $factory->define(Picklist::class, function (Faker $faker) {
 
-    $product = Product::query()->inRandomOrder()->first();
+    $product = factory(Product::class)->create();
 
     return [
         'product_id' => $product->getKey(),
