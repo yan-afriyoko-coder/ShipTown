@@ -71,6 +71,11 @@ class FetchUpdatedProductsJob implements ShouldQueue
 
         ProcessImportedProductsJob::dispatch($this->batch_uuid);
 
+        info('Imported RMSAPI products', [
+            'location_id' => $rmsapiConnection->location_id,
+            'count' => $response->asArray()['total'],
+        ]);
+
         if (isset($response->asArray()['next_page_url'])) {
             FetchUpdatedProductsJob::dispatchNow($this->rmsapiConnectionId);
         }

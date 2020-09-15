@@ -16,44 +16,44 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PacklistPostTest extends TestCase
 {
-    /**
-     * @return void
-     */
-    public function testPrintsAddressLabelWhenOrderPacked()
-    {
-        Passport::actingAs(
-            factory(User::class)->create()
-        );
-        $orderProduct = factory(OrderProduct::class)->create([
-            'order_id' => factory(Order::class)->create()->id
-        ]);
-        $order = $orderProduct->order;
-        OrderService::createPickRequests($order);
-        $this->addToPacklist($order);
-
-        foreach ($order->packlist as $packlist) {
-            $packlist->is_packed = true;
-            $packlist->packed_at = now();
-            $packlist->save();
-        }
-
-        // Set the last packlist item as 'unpacked' so we can test
-        $packlist->is_packed = false;
-        $packlist->packed_at = null;
-        $packlist->save();
-
-        // Ensures that the print job is created when the order is packed
-        $this->mock(PrintService::class, function ($mock) {
-            $mock->shouldReceive('newPdfPrintJob')->once();
-        });
-
-        $response = $this->postJson('api/packlist/' . $packlist->getKey(), [
-            'is_packed' => true,
-            'quantity_packed' => $packlist->quantity_requested
-        ]);
-
-        $response->assertStatus(200);
-    }
+//    /**
+//     * @return void
+//     */
+//    public function testPrintsAddressLabelWhenOrderPacked()
+//    {
+//        Passport::actingAs(
+//            factory(User::class)->create()
+//        );
+//        $orderProduct = factory(OrderProduct::class)->create([
+//            'order_id' => factory(Order::class)->create()->id
+//        ]);
+//        $order = $orderProduct->order;
+//        OrderService::createPickRequests($order);
+//        $this->addToPacklist($order);
+//
+//        foreach ($order->packlist as $packlist) {
+//            $packlist->is_packed = true;
+//            $packlist->packed_at = now();
+//            $packlist->save();
+//        }
+//
+//        // Set the last packlist item as 'unpacked' so we can test
+//        $packlist->is_packed = false;
+//        $packlist->packed_at = null;
+//        $packlist->save();
+//
+//        // Ensures that the print job is created when the order is packed
+//        $this->mock(PrintService::class, function ($mock) {
+//            $mock->shouldReceive('newPdfPrintJob')->once();
+//        });
+//
+//        $response = $this->postJson('api/packlist/' . $packlist->getKey(), [
+//            'is_packed' => true,
+//            'quantity_packed' => $packlist->quantity_requested
+//        ]);
+//
+//        $response->assertStatus(200);
+//    }
 
     /**
      * @return void
