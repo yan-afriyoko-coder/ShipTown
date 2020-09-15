@@ -23,6 +23,18 @@ class UsersTest extends TestCase
         $this->assertNull(User::find($user->id));
     }
 
+    // Tests that users cannot delete themselves
+    public function testUserDestroysSelf()
+    {
+        $user = \factory(User::class)->states('admin')->create();
+        Passport::actingAs($user);
+
+        $response = $this->delete("api/users/$user->id");
+
+        $response->assertForbidden();
+        $this->assertNotNull(User::find($user->id));
+    }
+
     // Tests that only admins are able to delete other users
     public function testUserDestroyAsNonadminUser()
     {

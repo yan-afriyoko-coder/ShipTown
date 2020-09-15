@@ -31,7 +31,7 @@
                                 <a @click.prevent="onEditClick(user.id)">
                                     <font-awesome-icon icon="user-edit"></font-awesome-icon>
                                 </a>
-                                <a @click.prevent="onDeleteClick(user.id)">
+                                <a v-if="isNotSelf(user.id)" @click.prevent="onDeleteClick(user.id)">
                                     <font-awesome-icon icon="user-minus"></font-awesome-icon>
                                 </a>
                             </td>
@@ -66,12 +66,19 @@ export default {
         'edit-modal': Edit,
     },
 
+    created() {
+        axios.get('/api/users/me').then(({ data }) => {
+            this.currentUser = data.data;
+        })
+    },
+
     mounted() {
         this.loadUsers();
         this.loadRoles();
     },
 
     data: () => ({
+        currentUser: {},
         users: [],
         roles: [],
         selectedId: null,
@@ -121,6 +128,12 @@ export default {
                 .catch(err => {
                     console.log(err);
                 });
+        }
+    },
+
+    computed: {
+        isNotSelf() {
+            return (id) => this.currentUser.id != id;
         }
     }
 }
