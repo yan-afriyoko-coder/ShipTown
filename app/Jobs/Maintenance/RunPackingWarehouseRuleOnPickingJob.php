@@ -39,5 +39,7 @@ class RunPackingWarehouseRuleOnPickingJob implements ShouldQueue
         foreach ($orders as $order) {
             $rule->checkStatusAndUpdate($order);
         }
+
+        info('Ran PackingWarehouseRule on "picking" orders ');
     }
 }
