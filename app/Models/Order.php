@@ -42,7 +42,9 @@ class Order extends Model
         'order_closed_at',
         'status_code',
         'packer_user_id',
-        'raw_import'
+        'raw_import',
+        'total',
+        'total_paid',
     ];
 
     protected $casts = [

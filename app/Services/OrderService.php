@@ -142,7 +142,7 @@ class OrderService
     {
         $order = Order::updateOrCreate(
             ["order_number" => $attributes['order_number']],
-            Arr::only($attributes, ['status_code', 'raw_import'])
+            Arr::only($attributes, ['status_code', 'total', 'total_paid', 'raw_import'])
         );
 
         self::updateOrCreateShippingAddress($order, $attributes['shipping_address']);
