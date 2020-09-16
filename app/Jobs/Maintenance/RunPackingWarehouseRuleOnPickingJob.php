@@ -31,7 +31,7 @@ class RunPackingWarehouseRuleOnPickingJob implements ShouldQueue
      */
     public function handle()
     {
-        $orders = Order::where('status_code', 'picking')
+        $orders = Order::where('status_code', 'paid')
             ->get();
 
         $rule = new PackingWarehouseRule();

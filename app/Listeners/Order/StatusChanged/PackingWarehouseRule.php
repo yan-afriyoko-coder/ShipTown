@@ -29,7 +29,7 @@ class PackingWarehouseRule
     public function handle(StatusChangedEvent $event)
     {
         // todo change hardcoded
-        $expectedStatusCode = 'picking';
+        $expectedStatusCode = 'paid';
 
         if ($event->isNotStatusCode($expectedStatusCode)) {
             return;
