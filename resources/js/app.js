@@ -4,6 +4,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+
 require('./bootstrap');
 
 require('./registerServiceWorker');
@@ -14,6 +15,7 @@ import 'vue-loading-overlay/dist/vue-loading.css';
 import { BootstrapVue } from 'bootstrap-vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCog, faQuestionCircle, faUserEdit, faBarcode, faUserMinus } from '@fortawesome/free-solid-svg-icons';
+import { faYoutube } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VueTippy, { TippyComponent } from "vue-tippy";
 import Snotify from 'vue-snotify';
@@ -23,6 +25,7 @@ library.add(faQuestionCircle);
 library.add(faUserEdit);
 library.add(faUserMinus);
 library.add(faBarcode);
+library.add(faYoutube);
 
 Vue.config.productionTip = false;
 

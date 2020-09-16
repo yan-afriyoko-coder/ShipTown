@@ -113,6 +113,10 @@
                                         </a>
                                     @endcan
 
+                                    <a class="dropdown-item" href="https://www.youtube.com/channel/UCl04S5dRXop1ZdZsOqY3OnA" target="_blank">
+                                        {{ __('YouTube') }}
+                                    </a>
+
                                     <!-- Logout -->
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
