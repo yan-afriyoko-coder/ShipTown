@@ -15,47 +15,46 @@
                 </div>
             </div>
             <template v-else class="row">
+
+
+
+
                 <div class="row mb-0 ml-1 mr-1">
                     <div class="col p-0 pl-3">
                         <div class="row text-left">
                             <div class="col-md-12">
-                                <div class="row font-weight-bold">
-                                    <div class="col-1">
-                                        <div class=" text-nowrap">Order #</div>
-                                    </div>
-                                    <div class="col-1">
-                                        <div class="text-nowrap">Status</div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="text-nowrap">Date Placed</div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="text-center text-nowrap">Line Count</div>
-                                    </div>
-                                    <div class="col-1">
-                                        <div class="text-center text-nowrap">Total Quantity</div>
-                                    </div>
-                                    <div class="col-1">
-                                        <div class="text-center text-nowrap">Picked</div>
-                                    </div>
-                                    <div class="col-1">
-                                        <div class="text-nowrap">Packer</div>
-                                    </div>
-                                    <div class="col-1">
-                                        <div class="text-center text-nowrap">Packed At</div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="text-right text-nowrap">Shipping No</div>
-                                    </div>
-                                </div>
+
+                                <table>
+                                    <thead>
+                                        <tr class="font-weight-bold h5">
+                                            <th class="text-nowrap pr-5">Order #</th>
+                                            <th class="text-nowrap pr-8">StatusCode</th>
+                                            <th class="text-nowrap pl-2 pr-8">Total</th>
+                                            <th class="text-nowrap pl-3">Total Paid</th>
+                                            <th class="text-center pl-3 text-nowrap">Line Count</th>
+                                            <th class="text-center pl-3 text-nowrap">Total Quantity</th>
+                                            <th class="text-nowrap pl-3">Date Placed</th>
+                                            <th class="text-center pl-3 text-nowrap">Picked</th>
+                                            <th class="text-center text-nowrap">Packed At</th>
+                                            <th class="text-nowrap">Packer</th>
+                                            <th class="text-right text-nowrap">Shipping No</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <template v-for="order in orders">
+                                            <order-card :order="order"/>
+                                        </template>
+                                    </tbody>
+                                </table>
+
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <template v-for="order in orders">
-                    <order-card :order="order"/>
-                </template>
+
+
             </template>
         </div>
     </div>
