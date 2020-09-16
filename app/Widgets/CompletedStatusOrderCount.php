@@ -3,11 +3,12 @@
 namespace App\Widgets;
 
 use App\Models\Order;
+use App\Models\OrderStatus;
 use Arrilot\Widgets\AbstractWidget;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class StatusOrderCount extends AbstractWidget
+class CompletedStatusOrderCount extends AbstractWidget
 {
     /**
      * The configuration array.
@@ -24,15 +25,7 @@ class StatusOrderCount extends AbstractWidget
     {
         $status_order_counts = Order::query()
             ->whereDate('order_placed_at', '>', Carbon::now()->subDays(30))
-            ->whereNotIn('status_code', [
-                'processing',
-                'picking',
-                'packing',
-                'packing_warehouse',
-                'unshipped',
-                'partially_shipped',
-                'holded',
-            ])
+            ->whereNotIn('status_code', OrderStatus::getActiveStatusCodesList())
             ->groupBy(['status_code'])
             ->select(['status_code', DB::raw('count(*) as order_count')])
             ->get();

@@ -3,6 +3,7 @@
 namespace App\Widgets;
 
 use App\Models\Order;
+use App\Models\OrderStatus;
 use Arrilot\Widgets\AbstractWidget;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -24,15 +25,7 @@ class ActiveOrdersWidget extends AbstractWidget
     {
         $order_status_counts = Order::query()
             ->select(['status_code', DB::raw('count(*) as order_count')])
-            ->whereIn('status_code', [
-                'processing',
-                'picking',
-                'packing',
-                'packing_warehouse',
-                'unshipped',
-                'partially_shipped',
-                'holded',
-            ])
+            ->whereIn('status_code', OrderStatus::getActiveStatusCodesList())
             ->groupBy(['status_code'])
             ->get();
 

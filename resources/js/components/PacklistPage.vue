@@ -5,6 +5,9 @@
 
         <filters-modal ref="filtersModal" @btnSaveClicked="onConfigChange">
             <template v-slot:actions="slotScopes">
+                <button type="button" class="btn btn-info" @click.prevent="changeStatus('missing_item')">
+                    missing_item
+                </button>
                 <button type="button" class="btn btn-info" @click.prevent="displayShippingNumberModal">
                     Add Shipping Number
                 </button>
@@ -131,6 +134,21 @@
         },
 
         methods: {
+            changeStatus(code) {
+                this.$refs.filtersModal.hide();
+                return axios.put('/api/orders/' + this.order['id'], {
+                        'status_code': code
+                    })
+                    .then(() => {
+                        this.$snotify.success('Status changed')
+                    })
+                    .catch(() => {
+                        this.$snotify.error('Error when changing status');
+                    })
+                    .finally(() => {
+                        this.startPacking()
+                    });
+            },
 
             startPacking() {
                 this.loadUser()
