@@ -76,6 +76,7 @@ Route::middleware('auth:api')->group(function () {
         \App\Jobs\Maintenance\RecalculateOrderProductQuantityPicked::dispatch();
         \App\Jobs\Maintenance\RecalculatePickedAtForPickingOrders::dispatch();
         \App\Jobs\Maintenance\MakeSureOrdersAreOnPicklist::dispatch();
+        \App\Jobs\Maintenance\RunPackingWarehouseRuleOnPickingJob::dispatch();
         return 'Maintenance jobs dispatched';
     });
 });
