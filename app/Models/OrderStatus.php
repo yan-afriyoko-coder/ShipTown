@@ -12,6 +12,9 @@ class OrderStatus extends Model
         'picking',
         'packing',
         'packing_warehouse',
+    ];
+
+    public static $toFollowStatusList = [
         'unshipped',
         'partially_shipped',
         'holded',
@@ -21,5 +24,9 @@ class OrderStatus extends Model
     public static function getActiveStatusCodesList()
     {
         return self::$activeOrderStatusList;
+    }
+    public static function getToFollowStatusList()
+    {
+        return self::$toFollowStatusList;
     }
 }

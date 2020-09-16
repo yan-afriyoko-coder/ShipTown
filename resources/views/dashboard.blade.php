@@ -19,6 +19,12 @@
 
                     <div class="row">
                         <div class="col">
+                            <div class="">@widget('ToFollowStatusOrderCountWidget')</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
                             <div class="">@widget('CompletedStatusOrderCount')</div>
                         </div>
                     </div>
