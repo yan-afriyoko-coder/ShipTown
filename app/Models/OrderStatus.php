@@ -8,6 +8,7 @@ class OrderStatus extends Model
 {
     public static $activeOrderStatusList = [
         'processing',
+        'paid',
         'picking',
         'packing',
         'packing_warehouse',
