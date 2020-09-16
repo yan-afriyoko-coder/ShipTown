@@ -24,7 +24,6 @@ use App\Listeners\PickRequest\Deleted\RemoveQuantityFromPicklistListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use PHP_CodeSniffer\Standards\Generic\Sniffs\Commenting\TodoSniff;
 
 /**
  * Class EventServiceProvider
@@ -59,7 +58,8 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         \App\Events\Order\UpdatedEvent::class => [
-            \App\Listeners\Order\Updated\PublishSnsNotificationListener::class
+            \App\Listeners\Order\Updated\PublishSnsNotificationListener::class,
+            \App\Listeners\Order\Updated\CheckAndMarkPaidListener::class,
         ],
 
         \App\Events\Order\StatusChangedEvent::class => [

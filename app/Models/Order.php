@@ -2,27 +2,25 @@
 
 namespace App\Models;
 
-use App\Services\PicklistService;
 use App\User;
-use Doctrine\DBAL\Query\QueryBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Arr;
 use phpseclib\Math\BigInteger;
 
 /**
  * @property BigInteger id
  * @property BigInteger shipping_address_id
+ * @property double total
+ * @property double total_paid
  * @property string order_number
  * @property string status_code
  * @property integer product_line_count
  * @property integer total_quantity_ordered
  * @property Carbon|null picked_at
  * @method  self isPicked(bool $expected)
+ * @property-read boolean isPaid
  * @method  self whereIsPicked()
  * @method  self whereIsNotPicked()
  * @property Carbon|null packed_at
@@ -63,6 +61,29 @@ class Order extends Model
         'is_picked',
         'is_packed',
     ];
+
+    public function getIsPaidAttribute()
+    {
+        return $this->total === $this->total_paid;
+    }
+
+    /**
+     * @param $expected
+     * @return bool
+     */
+    public function isNotStatusCode($expected)
+    {
+        return !$this->isStatusCode($expected);
+    }
+
+    /**
+     * @param $expected
+     * @return bool
+     */
+    public function isStatusCode($expected)
+    {
+        return $this->getAttribute('status_code') === $expected;
+    }
 
     /**
      * @param $query

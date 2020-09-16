@@ -58,7 +58,7 @@ class StatusChangedEvent
      */
     public function isStatusCode($expected)
     {
-        return $this->getNewStatusCode() === $expected;
+        return $this->getOrder()->isStatusCode($expected);
     }
 
     /**
