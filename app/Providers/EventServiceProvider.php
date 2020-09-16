@@ -16,6 +16,7 @@ use App\Listeners\Order\Created\PublishSnsNotificationListener;
 use App\Listeners\Order\StatusChanged\CreatePickRequestsListener;
 use App\Listeners\Order\StatusChanged\DeletePickRequestsListener;
 use App\Listeners\Order\StatusChanged\PackingWarehouseRule;
+use App\Listeners\Order\Updated\ChangeToPackingWebStatusListener;
 use App\Listeners\Pick\Picked\FillPickRequestsPickedQuantityListener;
 use App\Listeners\Pick\QuantityRequiredChanged\MovePickRequestToNewPickListener;
 use App\Listeners\Pick\Unpicked\ClearPickRequestsQuantityPickedListener;
@@ -60,6 +61,7 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\Order\UpdatedEvent::class => [
             \App\Listeners\Order\Updated\PublishSnsNotificationListener::class,
             \App\Listeners\Order\Updated\CheckAndMarkPaidListener::class,
+            \App\Listeners\Order\Updated\ChangeToPackingWebStatusListener::class,
         ],
 
         \App\Events\Order\StatusChangedEvent::class => [
