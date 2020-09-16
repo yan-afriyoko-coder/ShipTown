@@ -8,7 +8,7 @@ return [
      * ie democompany_orders_events
      */
 
-    'sns_topic_prefix' => env('DB_TABLE_PREFIX',''),
+    'sns_topic_prefix' => env('DB_TABLE_PREFIX', ''),
 
     /*
      * API2CART application API key
@@ -187,6 +187,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
+        App\Providers\TelescopeServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Aws\Laravel\AwsServiceProvider::class,
         Sentry\Laravel\ServiceProvider::class,
