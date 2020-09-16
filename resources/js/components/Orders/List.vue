@@ -26,7 +26,7 @@
 
                                 <table>
                                     <thead>
-                                        <tr class="font-weight-bold h5">
+                                        <tr class="font-weight-bold h6">
                                             <th class="text-nowrap pr-5">Order #</th>
                                             <th class="text-nowrap pr-8">StatusCode</th>
                                             <th class="text-nowrap pl-2 pr-8">Total</th>
