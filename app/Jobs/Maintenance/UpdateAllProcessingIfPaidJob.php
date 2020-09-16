@@ -34,7 +34,7 @@ class UpdateAllProcessingIfPaidJob implements ShouldQueue
         $orders = Order::whereStatusCode('processing')->get();
 
         foreach ($orders as $order) {
-            SetStatusPaidIfPaidJob::dispatch($orders);
+            SetStatusPaidIfPaidJob::dispatch($order);
         }
     }
 }
