@@ -19,7 +19,7 @@
 
                     <div class="row">
                         <div class="col">
-                            <div class="">@widget('StatusOrderCount')</div>
+                            <div class="">@widget('CompletedStatusOrderCount')</div>
                         </div>
                     </div>
 
