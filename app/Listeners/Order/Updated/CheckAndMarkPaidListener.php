@@ -3,9 +3,7 @@
 namespace App\Listeners\Order\Updated;
 
 use App\Events\Order\UpdatedEvent;
-use App\Models\Order;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Jobs\Orders\SetStatusPaidIfPaidJob;
 
 class CheckAndMarkPaidListener
 {
@@ -31,17 +29,6 @@ class CheckAndMarkPaidListener
             return;
         }
 
-        $this->checkAndMarkPaid($event->getOrder());
-    }
-
-    /**
-     * @param Order $order
-     */
-    public function checkAndMarkPaid(Order $order): void
-    {
-        if ($order->isPaid) {
-            $order->update(['status_code' => 'paid']);
-            info('CheckAndMarkPaid: set status to paid', ['order_number' => $order->order_number]);
-        }
+        SetStatusPaidIfPaidJob::dispatch($event->getOrder());
     }
 }
