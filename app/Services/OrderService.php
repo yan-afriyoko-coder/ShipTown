@@ -41,6 +41,7 @@ class OrderService
         foreach ($products as $product) {
             $inventory = Inventory::where('product_id', $product->product_id)
                 ->where('location_id', $sourceLocationId)
+                ->where('quantity', '>=', $product->quantity_ordered)
                 ->first();
 
             if (!$inventory) {
