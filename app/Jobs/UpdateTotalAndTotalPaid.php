@@ -40,6 +40,8 @@ class UpdateTotalAndTotalPaid implements ShouldQueue
                     'total'         => $orderImport->raw_import['total']['total'] ?? 0,
                     'total_paid'    => $this->orderImport->raw_import['total']['total_paid'] ?? 0,
                 ]);
+
+                info('UpdateTotalAndTotalPaid: updated totals', ['order_number' => $order->order_number]);
             }
         }
     }
