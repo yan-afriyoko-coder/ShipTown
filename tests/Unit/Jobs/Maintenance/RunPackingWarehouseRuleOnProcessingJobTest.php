@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Maintenance;
+namespace Tests\Unit\Jobs\Maintenance;
 
 use App\Jobs\Maintenance\RunPackingWarehouseRuleOnPaidOrdersJob;
 use Tests\TestCase;
