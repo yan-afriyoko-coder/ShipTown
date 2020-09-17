@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use phpseclib\Math\BigInteger;
 
@@ -83,6 +84,27 @@ class Order extends Model
     public function isStatusCode($expected)
     {
         return $this->getAttribute('status_code') === $expected;
+    }
+
+
+    /**
+     * @param array $statusCodes
+     * @return bool
+     */
+    public function isStatusCodeNotIn(array $statusCodes)
+    {
+        return !$this->isStatusCodeIn($statusCodes);
+    }
+
+    /**
+     * @param array $statusCodes
+     * @return bool
+     */
+    public function isStatusCodeIn(array $statusCodes)
+    {
+        $statusCode = $this->getAttribute('status_code');
+
+        return array_search($statusCode, $statusCodes) > -1;
     }
 
     /**
