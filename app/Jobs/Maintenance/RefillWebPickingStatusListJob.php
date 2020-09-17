@@ -13,6 +13,8 @@ class RefillWebPickingStatusListJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    private $maxCountAllowed;
+
     /**
      * Create a new job instance.
      *
@@ -20,7 +22,7 @@ class RefillWebPickingStatusListJob implements ShouldQueue
      */
     public function __construct()
     {
-        //
+        $this->maxCountAllowed = 50;
     }
 
     /**
@@ -32,14 +34,13 @@ class RefillWebPickingStatusListJob implements ShouldQueue
     {
         $currentPickingCount = Order::whereStatusCode('picking')->count();
 
-        $maxCountAllowed = 100;
-
-        if ($maxCountAllowed < $currentPickingCount) {
+        if ($this->maxCountAllowed < $currentPickingCount) {
             return;
         }
 
         $ordersToPick = Order::whereStatusCode('paid')
-            ->limit($maxCountAllowed - $currentPickingCount)
+            ->orderBy('created_at')
+            ->limit($this->maxCountAllowed - $currentPickingCount)
             ->get();
 
         foreach ($ordersToPick as $order) {
