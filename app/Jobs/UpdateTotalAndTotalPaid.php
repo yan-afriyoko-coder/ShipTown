@@ -45,6 +45,6 @@ class UpdateTotalAndTotalPaid implements ShouldQueue
             }
         }
 
-        info('UpdateTotalAndTotalPaid: ran successfully');
+        info('UpdateTotalAndTotalPaid: ran successfully', ["count" => $orders->count()]);
     }
 }
