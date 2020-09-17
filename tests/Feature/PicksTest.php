@@ -46,7 +46,7 @@ class PicksTest extends TestCase
 
         // this will not fire events
         Order::withoutEvents(function () {
-            Order::query()->update(['picked_at' => null]);
+            Order::query()->update(['status_code' =>'picking', 'picked_at' => null]);
         });
 
         RecalculatePickedAtForPickingOrders::dispatch();

@@ -10,7 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class RunPackingWarehouseRuleOnPickingJob implements ShouldQueue
+class RunPackingWarehouseRuleOnPaidOrdersJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -40,6 +40,6 @@ class RunPackingWarehouseRuleOnPickingJob implements ShouldQueue
             $rule->checkStatusAndUpdate($order);
         }
 
-        info('Ran PackingWarehouseRule on "picking" orders ');
+        info('Ran PackingWarehouseRule on "paid" orders ');
     }
 }

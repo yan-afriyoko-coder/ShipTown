@@ -76,7 +76,7 @@ Route::middleware('auth:api')->group(function () {
         \App\Jobs\Maintenance\RecalculateOrderProductQuantityPicked::dispatch();
         \App\Jobs\Maintenance\RecalculatePickedAtForPickingOrders::dispatch();
         \App\Jobs\Maintenance\MakeSureOrdersAreOnPicklist::dispatch();
-        \App\Jobs\Maintenance\RunPackingWarehouseRuleOnPickingJob::dispatch();
+        \App\Jobs\Maintenance\RunPackingWarehouseRuleOnPaidOrdersJob::dispatch();
         \App\Jobs\Maintenance\UpdateAllProcessingIfPaidJob::dispatch();
         \App\Jobs\Maintenance\RefillWebPickingStatusListJob::dispatch();
         \App\Jobs\UpdateTotalAndTotalPaid::dispatch();

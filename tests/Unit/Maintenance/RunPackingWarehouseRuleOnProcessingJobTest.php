@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Maintenance;
 
-use App\Jobs\Maintenance\RunPackingWarehouseRuleOnPickingJob;
+use App\Jobs\Maintenance\RunPackingWarehouseRuleOnPaidOrdersJob;
 use Tests\TestCase;
 
 class RunPackingWarehouseRuleOnProcessingJobTest extends TestCase
@@ -16,7 +16,7 @@ class RunPackingWarehouseRuleOnProcessingJobTest extends TestCase
     {
         $this->doesNotPerformAssertions();
 
-        $job = new RunPackingWarehouseRuleOnPickingJob();
+        $job = new RunPackingWarehouseRuleOnPaidOrdersJob();
         $job->handle();
     }
 }
