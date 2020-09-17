@@ -2,12 +2,10 @@
 
 namespace Tests\Unit\Jobs\Maintenance;
 
-use App\Jobs\UpdateTotalAndTotalPaid;
+use App\Jobs\Maintenance\Archive\UpdateTotalAndTotalPaid;
 use App\Models\Order;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UpdtetotalAndTotalPaidJobTest extends TestCase
 {
