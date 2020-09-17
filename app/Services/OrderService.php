@@ -152,13 +152,14 @@ class OrderService
         };
 
         $updateAttributes = collect($attributes)
-            ->only(['total', 'total_paid', 'raw_import'])#
-            ->when(isset($attributes['status_code']), function (Collection $collection) use ($attributes) {
-                return $collection->add($attributes['status_code']);
-            })
-            ->toArray();
+            ->only(['total', 'total_paid', 'raw_import']);
 
-        $order->update($updateAttributes);
+        if (isset($attributes['status_code'])) {
+            $updateAttributes["status_code"] = $attributes['status_code'];
+        }
+
+        $array = $updateAttributes->toArray();
+        $order->update($array);
 
         self::updateOrCreateShippingAddress($order, $attributes['shipping_address']);
 
