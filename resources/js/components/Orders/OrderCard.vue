@@ -15,6 +15,12 @@
                 <div>{{ shipment['shipping_number'] }}</div>
             </template>
         </td>
+        <td class="text-left text-nowrap">
+            <template v-for="order_product in order['order_products']">
+                <div><strong>{{ order_product['quantity_ordered'] }}</strong> x {{ order_product['name_ordered'] }}</div>
+                <div>{{ order_product['sku_ordered'] }}</div>
+            </template>
+        </td>
     </tr>
 </template>
 

@@ -37,7 +37,8 @@
                                             <th class="text-center pl-3 text-nowrap">Picked</th>
                                             <th class="text-center text-nowrap">Packed At</th>
                                             <th class="text-nowrap">Packer</th>
-                                            <th class="text-right text-nowrap">Shipping No</th>
+                                            <th class="text-nowrap">Shipping No</th>
+                                            <th class="text-nowrap">Products</th>
                                         </tr>
                                     </thead>
 
@@ -86,7 +87,7 @@
                     'filter[status]': this.getUrlParameter('status', null),
                     'sort': this.getUrlParameter('sort','-updated_at'),
                     'per_page': this.getUrlParameter('per_page',50),
-                    'include': 'packer,order_shipments',
+                    'include': 'packer,order_shipments,order_products',
                     page: page,
                     q: this.query,
                 };
