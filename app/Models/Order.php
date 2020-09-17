@@ -65,7 +65,7 @@ class Order extends Model
 
     public function getIsPaidAttribute()
     {
-        return $this->total === $this->total_paid;
+        return ($this->total > 0) && ($this->total === $this->total_paid);
     }
 
     /**
