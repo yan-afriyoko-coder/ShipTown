@@ -102,8 +102,8 @@ $factory->define(Api2cartOrderImports::class, function (Faker $faker) {
               }
            ],
            "status":{
-              "id":"5",
-              "name":"Complete",
+              "id":"complete",
+              "name":"Processing",
               "history":[
                  {
                     "id":"5",

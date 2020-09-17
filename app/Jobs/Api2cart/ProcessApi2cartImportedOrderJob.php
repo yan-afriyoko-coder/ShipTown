@@ -18,6 +18,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use test\Mockery\HasUnknownClassAsTypeHintOnMethod;
@@ -54,6 +55,10 @@ class ProcessApi2cartImportedOrderJob implements ShouldQueue
             'shipping_address'      => $this->orderImport->extractShippingAddressAttributes(),
             'raw_import'            => $this->orderImport->raw_import,
         ];
+
+        if ($orderAttributes['status_code'] === 'processing') {
+            $orderAttributes = Arr::except($orderAttributes, ['status_code']);
+        }
 
         $order = OrderService::updateOrCreate($orderAttributes);
 

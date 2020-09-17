@@ -13,6 +13,7 @@ use App\Models\OrderProduct;
 use App\Models\PickRequest;
 use App\Models\Product;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -146,11 +147,18 @@ class OrderService
         if (is_null($order)) {
             $order = Order::create([
                 "order_number" => $attributes['order_number'],
-                "status_code" => $attributes['order_number'],
+                "status_code" => $attributes['status_code'] ?? 'processing',
             ]);
         };
 
-        $order->update(Arr::only($attributes, ['total', 'total_paid', 'raw_import']));
+        $updateAttributes = collect($attributes)
+            ->only(['total', 'total_paid', 'raw_import'])#
+            ->when(isset($attributes['status_code']), function (Collection $collection) use ($attributes) {
+                return $collection->add($attributes['status_code']);
+            })
+            ->toArray();
+
+        $order->update($updateAttributes);
 
         self::updateOrCreateShippingAddress($order, $attributes['shipping_address']);
 
