@@ -31,7 +31,7 @@ class UpdateTotalAndTotalPaid implements ShouldQueue
      */
     public function handle()
     {
-        $orders = Order::where(['total' => 0])->limit(100)->latest()->get();
+        $orders = Order::where(['total' => 0])->limit(500)->latest()->get();
 
         foreach ($orders as $order) {
             $orderImport = Api2cartOrderImports::where(['order_number' => $order->order_number])->latest()->first();
