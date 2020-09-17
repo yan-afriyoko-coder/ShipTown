@@ -79,6 +79,7 @@ Route::middleware('auth:api')->group(function () {
         \App\Jobs\Maintenance\RunPackingWarehouseRuleOnPickingJob::dispatch();
         \App\Jobs\Maintenance\UpdateAllProcessingIfPaidJob::dispatch();
         \App\Jobs\Maintenance\RefillWebPickingStatusListJob::dispatch();
+        \App\Jobs\UpdateTotalAndTotalPaid::dispatch();
         return 'Maintenance jobs dispatched';
     });
 });
