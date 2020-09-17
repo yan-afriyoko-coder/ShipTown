@@ -196,8 +196,8 @@ class OrderService
         $shipping_address = OrderAddress::query()->findOrNew($order->shipping_address_id ?: 0);
         $shipping_address->fill($shippingAddressAttributes);
         $shipping_address->save();
-        $order->shippingAddress()->associate($shipping_address);
 
+        $order->shippingAddress()->associate($shipping_address);
         $order->save();
 
         return $order;
