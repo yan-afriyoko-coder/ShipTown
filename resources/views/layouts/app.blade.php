@@ -63,15 +63,15 @@
 
                             <!-- Menu Items END -->
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('packlist') . '?status=picking&is_packed=false&is_picked=true&sort=product_line_count,total_quantity_ordered,order_placed_at&packer_user_id='. Auth::user()->id}}">
-                                    {{ __('Status: picking') }}
+                                <a class="dropdown-item" href="{{ route('packlist') . '?status=packing_web&is_packed=false&is_picked=true&sort=product_line_count,total_quantity_ordered,order_placed_at&packer_user_id='. Auth::user()->id}}">
+                                    {{ __('Status: packing_web') }}
                                 </a>
                                 <a class="dropdown-item" href="{{ route('packlist') . '?status=packing_warehouse&is_picked=false&is_packed=false&sort=product_line_count,total_quantity_ordered,order_placed_at&packer_user_id='. Auth::user()->id}}">
                                     {{ __('Status: packing_warehouse') }}
                                 </a>
-                                <a class="dropdown-item" href="{{ route('packlist') . '?status=picking&is_packed=false&is_picked=false&sort=product_line_count,total_quantity_ordered,order_placed_at&packer_user_id='. Auth::user()->id}}">
-                                    {{ __('Single Line Orders') }}
-                                </a>
+{{--                                <a class="dropdown-item" href="{{ route('packlist') . '?status=picking&is_packed=false&is_picked=false&sort=product_line_count,total_quantity_ordered,order_placed_at&packer_user_id='. Auth::user()->id}}">--}}
+{{--                                    {{ __('Single Line Orders') }}--}}
+{{--                                </a>--}}
                             </div>
                         </li>
 
