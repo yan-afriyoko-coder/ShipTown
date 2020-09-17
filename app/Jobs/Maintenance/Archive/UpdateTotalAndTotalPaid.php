@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Maintenance\Archive;
 
 use App\Models\Order;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 class UpdateTotalAndTotalPaid implements ShouldQueue
 {
