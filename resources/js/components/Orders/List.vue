@@ -24,7 +24,7 @@
                         <div class="row text-left">
                             <div class="col-md-12">
 
-                                <table>
+                                <table class="align-text-top">
                                     <thead>
                                         <tr class="font-weight-bold h6">
                                             <th class="text-nowrap pr-5">Order #</th>
