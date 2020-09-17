@@ -15,16 +15,28 @@ class OrdersSeeder extends Seeder
      */
     public function run()
     {
-        factory(Order::class, rand(180, 250))
+        factory(Order::class, rand(10, 30))
             ->with('orderProducts', rand(1,4))
             ->create([
                 'status_code' => 'processing'
             ]);
 
-        factory(Order::class, rand(280, 350))
+        factory(Order::class, rand(10, 30))
+            ->with('orderProducts', rand(1,4))
+            ->create([
+                'status_code' => 'paid'
+            ]);
+
+        factory(Order::class, rand(60, 100))
             ->with('orderProducts', rand(1,4))
             ->create([
                 'status_code' => 'picking'
+            ]);
+
+        factory(Order::class, rand(10, 20))
+            ->with('orderProducts', rand(1,4))
+            ->create([
+                'status_code' => 'packing_web'
             ]);
 
         factory(Order::class, rand(10, 20))
@@ -57,6 +69,20 @@ class OrdersSeeder extends Seeder
             ->with('orderShipments', rand(1,2))
             ->create([
                 'status_code' => 'completed_imported_to_rms'
+            ]);
+
+        factory(Order::class, rand(20,50))
+            ->with('orderProducts', rand(1,4))
+            ->with('orderShipments', rand(1,2))
+            ->create([
+                'status_code' => 'partially_shipped'
+            ]);
+
+        factory(Order::class, rand(20,50))
+            ->with('orderProducts', rand(1,4))
+            ->with('orderShipments', rand(1,2))
+            ->create([
+                'status_code' => 'unshipped'
             ]);
 
 //        factory(Order::class, 2)

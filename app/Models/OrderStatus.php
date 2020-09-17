@@ -10,8 +10,12 @@ class OrderStatus extends Model
         'processing',
         'paid',
         'picking',
+        'picking_web',
+        'picking_warehouse',
         'packing',
+        'packing_web',
         'packing_warehouse',
+        'ready'
     ];
 
     public static $toFollowStatusList = [

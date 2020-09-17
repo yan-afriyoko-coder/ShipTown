@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderStatus;
 use Arrilot\Widgets\AbstractWidget;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class CompletedStatusOrderCount extends AbstractWidget
@@ -23,9 +24,14 @@ class CompletedStatusOrderCount extends AbstractWidget
      */
     public function run()
     {
+        $orderStatusesToExclude = array_merge(
+            OrderStatus::getActiveStatusCodesList(),
+            OrderStatus::getToFollowStatusList()
+        );
+
         $status_order_counts = Order::query()
             ->whereDate('order_placed_at', '>', Carbon::now()->subDays(30))
-            ->whereNotIn('status_code', OrderStatus::getActiveStatusCodesList())
+            ->whereNotIn('status_code', $orderStatusesToExclude)
             ->groupBy(['status_code'])
             ->select(['status_code', DB::raw('count(*) as order_count')])
             ->get();
