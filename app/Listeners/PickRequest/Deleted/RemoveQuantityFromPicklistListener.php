@@ -2,10 +2,8 @@
 
 namespace App\Listeners\PickRequest\Deleted;
 
-use App\Services\PicklistService;
+use App\Events\PickRequest\DeletedEvent;
 use App\Services\PickRequestService;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class RemoveQuantityFromPicklistListener
 {
@@ -22,11 +20,13 @@ class RemoveQuantityFromPicklistListener
     /**
      * Handle the event.
      *
-     * @param  object  $event
+     * @param DeletedEvent $event
      * @return void
      */
-    public function handle($event)
+    public function handle(DeletedEvent $event)
     {
+        $event->getPickRequest()->orderProduct()->first()->order()->first()->update(['status_code' => 'missing_item']);
+
         if ($event->getPickRequest()->pick_id === null) {
             return;
         }

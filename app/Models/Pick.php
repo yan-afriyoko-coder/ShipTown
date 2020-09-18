@@ -6,6 +6,7 @@ use App\User;
 use DateTime;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
@@ -159,5 +160,13 @@ class Pick extends Model
     public function getIsPickedAttribute()
     {
         return $this->picked_at != null;
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function pickRequests()
+    {
+        return $this->hasMany(PickRequest::class, 'pick_id');
     }
 }

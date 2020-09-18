@@ -6,6 +6,7 @@ use App\Events\PickPickedEvent;
 use App\Events\PickQuantityRequiredChangedEvent;
 use App\Events\PickUnpickedEvent;
 use App\Models\Pick;
+use App\Models\PickRequest;
 use App\Notifications\PickDeletedNotification;
 use App\Notifications\SkippedPicklistNotification;
 use Illuminate\Support\Carbon;
@@ -51,6 +52,12 @@ class PickObserver
 
         if ($user) {
             $user->notifyAt(new PickDeletedNotification($pick), Carbon::now()->addMinutes(2));
+        }
+
+        $pickRequests = $pick->pickRequests()->get();
+
+        foreach ($pickRequests as $pickRequest) {
+            $pickRequest->delete();
         }
     }
 
