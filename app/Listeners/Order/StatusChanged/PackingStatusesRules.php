@@ -44,17 +44,30 @@ class PackingStatusesRules
     public function checkStatusAndUpdate(Order $order): void
     {
         // todo change hardcoded
-        $sourceLocationId = 99;
-        $newStatusCode = 'packing_warehouse';
-
-        if (OrderService::canFulfill($order, $sourceLocationId)) {
-            $this->updateStatusWithLog($order, $newStatusCode, $sourceLocationId);
-
+        if (OrderService::canFulfill($order, 99)) {
+            $this->updateStatusWithLog(
+                $order,
+                'packing_warehouse',
+                'Can fulfill from warehouse 99'
+            );
             return;
         }
 
         if (OrderService::canNotFulfill($order)) {
-            $this->updateStatusWithLog($order, 'auto_missing_item', 0);
+            $this->updateStatusWithLog(
+                $order,
+                'auto_missing_item',
+                'Order is missing one or more items'
+            );
+            return;
+        }
+
+        if (OrderService::canNotFulfill($order, 100)) {
+            $this->updateStatusWithLog(
+                $order,
+                'picking',
+                'We cannot fulfill from web only, has warehouse items, add to picking right away'
+            );
             return;
         }
     }
@@ -62,9 +75,9 @@ class PackingStatusesRules
     /**
      * @param Order $order
      * @param string $newStatusCode
-     * @param int $sourceLocationId
+     * @param string $msg
      */
-    private function updateStatusWithLog(Order $order, string $newStatusCode, int $sourceLocationId): void
+    private function updateStatusWithLog(Order $order, string $newStatusCode, string $msg): void
     {
         $order->update(['status_code' => $newStatusCode]);
 
@@ -74,7 +87,7 @@ class PackingStatusesRules
             [
                 'order_number' => $order->order_number,
                 'nwe_status_code' => $newStatusCode,
-                'source_location_id' => $sourceLocationId,
+                'msg' => $msg,
             ]
         );
     }
