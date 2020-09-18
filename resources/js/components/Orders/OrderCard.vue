@@ -17,8 +17,12 @@
         </td>
         <td class="text-nowrap">
             <template v-for="order_product in order['order_products']">
-                <div><strong>{{ order_product['quantity_ordered'] }}</strong> x {{ order_product['name_ordered'] }}</div>
-                <div><a target="_blank" :href="'/products?sku=' + order_product['sku_ordered'] ">{{ order_product['sku_ordered'] }}</a></div>
+                <div class="mb-2">
+                    <div>{{ order_product['name_ordered'] }}</div>
+                    <div><a target="_blank" :href="'/products?sku=' + order_product['sku_ordered'] ">{{ order_product['sku_ordered'] }}</a></div>
+                    <div>ordered: {{ order_product['quantity_ordered'] }}</div>
+                    <div>picked: {{ order_product['quantity_picked'] }}</div>
+                </div>
             </template>
         </td>
     </tr>
