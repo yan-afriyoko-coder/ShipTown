@@ -22,6 +22,6 @@ class RefillWebPickingStatusListJobTest extends TestCase
 
         RefillWebPickingStatusListJob::dispatch();
 
-        $this->assertEquals(50, Order::whereStatusCode('picking')->count());
+        $this->assertEquals(150, Order::whereStatusCode('picking')->count());
     }
 }
