@@ -54,7 +54,7 @@ class PackingStatusesRules
         }
 
         if (OrderService::canNotFulfill($order)) {
-            $this->updateStatusWithLog($order, 'auto_missing_item', 'all');
+            $this->updateStatusWithLog($order, 'auto_missing_item', 0);
             return;
         }
     }
