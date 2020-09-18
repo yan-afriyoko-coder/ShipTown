@@ -17,14 +17,18 @@
             </template>
         </filters-modal>
 
+
         <div v-if="order === null && !isLoading" class="row" >
             <div class="col">
-<!--                <div class="warning alert-warning" role="alert">-->
-<!--                    No orders ready for packing-->
-<!--                </div>-->
-                <button type="button"  class="btn-info" @click.prevent="startPacking">
-                    Start Packing
-                </button>
+                <div class="text-nowrap">
+                    <barcode-input-field @barcodeScanned="packOrder" :placeholder="'Scan order number'"/>
+                </div>
+                <hr>
+                <div class="text-center mt-3">
+                    <button type="button"  class="btn-info" @click.prevent="startPacking">
+                        Start Packing
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -33,6 +37,14 @@
             <div class="row mb-3">
                 <div class="col">
                     <order-details :order="order" />
+                </div>
+            </div>
+
+            <div v-if="order['is_packed']" class="row" >
+                <div class="col">
+                    <div class="alert alert-danger" role="alert">
+                        Order already packed...
+                    </div>
                 </div>
             </div>
 
@@ -106,12 +118,17 @@
 
         data: function() {
             return {
+                placeholder: 'test',
                 user: null,
                 order: null,
                 packlist: null,
                 packed: [],
                 modalTest: false,
             };
+        },
+
+        mounted() {
+            this.loadUser();
         },
 
         watch: {
@@ -136,6 +153,18 @@
         },
 
         methods: {
+            packOrder(orderNumber) {
+                const params = {
+                    'filter[order_number]': orderNumber
+                };
+
+                this.updateUrl({
+                    'order_number': orderNumber
+                });
+
+                this.loadNextOrderToPack(params)
+            },
+
             changeStatus(code) {
                 this.$refs.filtersModal.hide();
                 return axios.put('/api/orders/' + this.order['id'], {
@@ -267,8 +296,6 @@
             },
 
             loadNextOrderToPack: function (params) {
-                console.log(params);
-
                 this.showLoading();
 
                 this.order = null;
@@ -280,12 +307,15 @@
                         if (data.total > 0) {
                             this.order = data.data[0];
 
-                            return axios.put('api/orders/' + this.order['id'], {
-                                'packer_user_id': this.user['id'],
-                            });
+                            if (this.order['is_packed'] === false) {
+                                return axios.put('api/orders/' + this.order['id'], {
+                                    'packer_user_id': this.user['id'],
+                                });
+                            }
                         }
                     })
-                    .catch(error => {
+                    .catch((error) => {
+                        console.log(error);
                         this.notificationError('Error occurred while loading order');
                     })
                     .then(() => {
@@ -309,7 +339,11 @@
                 axios.get('/api/order/products', {params: params})
                     .then(({ data }) => {
                         if(data.total > 0) {
-                            this.packlist = data.data;
+                            if(this.order['is_packed']) {
+                                this.packed = data.data;
+                            } else {
+                                this.packlist = data.data;
+                            }
                         }
                     })
                     .catch( error => {

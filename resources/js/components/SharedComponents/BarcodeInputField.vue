@@ -1,6 +1,6 @@
 <template>
     <div>
-        <input ref="barcode" class="form-control" placeholder="Scan sku or barcode"
+        <input ref="barcode" class="form-control" :placeholder="placeholder"
                v-observe-visibility="setFocusOnBarcodeInput"
                v-model="barcode"
                @focus="simulateSelectAll"
@@ -14,11 +14,14 @@
     export default {
         name: "BarcodeInputField",
 
+        props: {
+            placeholder: '',
+        },
+
         data: function() {
             return {
                 currentLocation: '',
                 barcode: '',
-                placeholder: 'Scan sku 2or barcode'
             }
         },
 
