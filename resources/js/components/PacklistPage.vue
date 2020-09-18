@@ -128,6 +128,8 @@
                 }
 
                 if(this.packlist.length === 0) {
+                    this.markAsPacked();
+                    this.printAddressLabel();
                     this.displayShippingNumberModal();
                 }
             }
@@ -182,8 +184,6 @@
                     .then(() => {
                         this.$snotify.success('Shipping number saved');
                         if(this.packlist.length === 0) {
-                            this.printAddressLabel();
-                            this.markAsPacked();
                             this.order = null;
                             this.loadOrder();
                         }
