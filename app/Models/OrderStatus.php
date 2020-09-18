@@ -23,6 +23,7 @@ class OrderStatus extends Model
         'partially_shipped',
         'holded',
         'missing_item',
+        'auto_missing_item',
     ];
 
     public static function getActiveStatusCodesList()

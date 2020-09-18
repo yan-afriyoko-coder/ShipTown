@@ -14,6 +14,43 @@ class OrderServiceTest extends TestCase
      *
      * @return void
      */
+    public function testNullLocationId()
+    {
+        $order = factory(Order::class)
+            ->with('orderProducts')
+            ->create();
+
+        $orderProduct = $order->orderProducts()->first();
+
+        Inventory::query()->updateOrCreate([
+            'product_id' => $orderProduct->product_id,
+            'location_id' => 100
+        ], [
+            'quantity' => 0
+        ]);
+
+        $this->assertFalse(OrderService::canFulfill($order));
+        $this->assertTrue(OrderService::canNotFulfill($order));
+
+        Inventory::query()->updateOrCreate([
+            'product_id' => $orderProduct->product_id,
+            'location_id' => 100
+        ], [
+            'quantity' => $orderProduct->quantity_ordered
+        ]);
+
+        $this->assertTrue(OrderService::canFulfill($order));
+        $this->assertFalse(OrderService::canNotFulfill($order));
+
+        $this->assertTrue(OrderService::canFulfill($order, 100));
+        $this->assertFalse(OrderService::canFulfill($order, 99));
+    }
+
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
     public function testFailedCanFulfill()
     {
         $locationId = rand(1, 100);

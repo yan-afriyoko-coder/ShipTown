@@ -15,7 +15,7 @@ use App\Listeners\Inventory\Updated\UpdateProductTotalQuantityListener;
 use App\Listeners\Order\Created\PublishSnsNotificationListener;
 use App\Listeners\Order\StatusChanged\CreatePickRequestsListener;
 use App\Listeners\Order\StatusChanged\DeletePickRequestsListener;
-use App\Listeners\Order\StatusChanged\PackingWarehouseRule;
+use App\Listeners\Order\StatusChanged\PackingStatusesRules;
 use App\Listeners\Order\Updated\ChangeToPackingWebStatusListener;
 use App\Listeners\Pick\Picked\FillPickRequestsPickedQuantityListener;
 use App\Listeners\Pick\QuantityRequiredChanged\MovePickRequestToNewPickListener;
@@ -71,7 +71,7 @@ class EventServiceProvider extends ServiceProvider
 
             // custom client rule
             // todo move it to some custom logic which can be modified (when x if y do z)
-            PackingWarehouseRule::class,
+            PackingStatusesRules::class,
         ],
 
         // Pick

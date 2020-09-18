@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Orders;
 
-use App\Listeners\Order\StatusChanged\PackingWarehouseRule;
+use App\Listeners\Order\StatusChanged\PackingStatusesRules;
 use App\Models\Order;
 use App\Services\PrintService;
 use Illuminate\Support\Facades\Bus;
@@ -22,7 +22,7 @@ class PackingWarehouseRuleTest extends TestCase
     public function testExample()
     {
         // We want to make sure this listener gets called when
-        $this->mock(PackingWarehouseRule::class, function ($mock) {
+        $this->mock(PackingStatusesRules::class, function ($mock) {
             $mock->shouldReceive('handle')->once();
         });
 

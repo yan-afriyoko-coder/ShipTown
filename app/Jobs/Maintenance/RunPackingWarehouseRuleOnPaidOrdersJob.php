@@ -2,7 +2,7 @@
 
 namespace App\Jobs\Maintenance;
 
-use App\Listeners\Order\StatusChanged\PackingWarehouseRule;
+use App\Listeners\Order\StatusChanged\PackingStatusesRules;
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -34,12 +34,12 @@ class RunPackingWarehouseRuleOnPaidOrdersJob implements ShouldQueue
         $orders = Order::where('status_code', 'paid')
             ->get();
 
-        $rule = new PackingWarehouseRule();
+        $rule = new PackingStatusesRules();
 
         foreach ($orders as $order) {
             $rule->checkStatusAndUpdate($order);
         }
 
-        info('Ran PackingWarehouseRule on "paid" orders ');
+        info('Ran PackingStatusesRules on "paid" orders ');
     }
 }

@@ -8,7 +8,7 @@ use App\Services\OrderService;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class PackingWarehouseRule
+class PackingStatusesRules
 {
     /**
      * Create the event listener.
@@ -47,17 +47,33 @@ class PackingWarehouseRule
         $sourceLocationId = 99;
         $newStatusCode = 'packing_warehouse';
 
-        if (OrderService::canNotFulfill($order, $sourceLocationId)) {
+        if (OrderService::canFulfill($order, $sourceLocationId)) {
+            $this->updateStatusWithLog($order, $newStatusCode, $sourceLocationId);
+
             return;
         }
 
+        if (OrderService::canNotFulfill($order)) {
+            $this->updateStatusWithLog($order, 'auto_missing_item', 'all');
+            return;
+        }
+    }
+
+    /**
+     * @param Order $order
+     * @param string $newStatusCode
+     * @param int $sourceLocationId
+     */
+    private function updateStatusWithLog(Order $order, string $newStatusCode, int $sourceLocationId): void
+    {
         $order->update(['status_code' => $newStatusCode]);
 
         // Log event
         info(
-            'PackingWarehouseRule: set status to packing_warehouse',
+            'PackingStatusesRules: set status to:',
             [
                 'order_number' => $order->order_number,
+                'nwe_status_code' => $newStatusCode,
                 'source_location_id' => $sourceLocationId,
             ]
         );

@@ -40,16 +40,19 @@ class OrderService
         $products = $order->orderProducts()->get();
 
         foreach ($products as $product) {
-            $inventory = Inventory::where('product_id', $product->product_id)
-                ->where('location_id', $sourceLocationId)
-                ->where('quantity', '>=', $product->quantity_ordered)
-                ->first();
+            $query = Inventory::where('product_id', $product->product_id);
 
-            if (!$inventory) {
+            if ($sourceLocationId) {
+                $query->where('location_id', $sourceLocationId);
+            }
+
+            $quantity_available = $query->sum(\DB::raw('(quantity - quantity_reserved)'));
+
+            if (!$quantity_available) {
                 return false;
             }
 
-            if ($inventory->quantity_available < $product->quantity_ordered) {
+            if ($quantity_available < $product->quantity_ordered) {
                 return false;
             }
         }
