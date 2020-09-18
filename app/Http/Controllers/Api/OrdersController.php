@@ -60,6 +60,7 @@ class OrdersController extends Controller
             Order::query()
                 ->whereNull('packed_at')
                 ->where(['packer_user_id' => $request->get('packer_user_id')])
+                ->whereKeyNot($order->getKey())
                 ->update(['packer_user_id' => null]);
         }
 
