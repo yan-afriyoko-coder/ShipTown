@@ -56,6 +56,13 @@ class OrdersController extends Controller
     {
         $updates = $request->validated();
 
+        if ($request->has('packer_user_id')) {
+            Order::query()
+                ->whereNull('packed_at')
+                ->where(['packer_user_id' => $request->get('packer_user_id')])
+                ->update(['packer_user_id' => null]);
+        }
+
         if ($request->has('is_packed')) {
             if ($order->is_packed) {
                 $this->respondNotAllowed405('Order already packed!');
