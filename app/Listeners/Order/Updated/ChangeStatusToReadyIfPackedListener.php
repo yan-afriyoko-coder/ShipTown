@@ -27,6 +27,10 @@ class ChangeStatusToReadyIfPackedListener
      */
     public function handle(UpdatedEvent $event)
     {
+        if ($event->getOrder()->status_code === 'ready') {
+            return;
+        }
+
         if ($event->getOrder()->isStatusCodeNotIn(OrderStatus::getActiveStatusCodesList())) {
             return;
         }

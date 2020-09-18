@@ -64,7 +64,7 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\Order\Updated\ChangeToPackingWebStatusListener::class,
             \App\Listeners\Order\Updated\ChangeStatusToReadyIfPackedListener::class,
         ],
-
+//
         \App\Events\Order\StatusChangedEvent::class => [
             CreatePickRequestsListener::class,
             DeletePickRequestsListener::class,

@@ -206,7 +206,16 @@
             markAsPacked: function () {
                 return  axios.put('api/orders/' + this.order['id'], {
                         'is_packed': true,
-                })
+                    })
+                    .catch((error) => {
+                    let errorMsg = 'Error'+error.response.message;
+
+                    // if (error.response.status === 404) {
+                    //     errorMsg = `Order #${orderNumber} not found.`;
+                    // }
+
+                    this.notificationError(errorMsg);
+                });
             },
 
             loadOrder: function() {
