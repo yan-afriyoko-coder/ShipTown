@@ -24,6 +24,7 @@ class OrderStatus extends Model
         'holded',
         'missing_item',
         'auto_missing_item',
+        'for_later'
     ];
 
     public static function getActiveStatusCodesList()
