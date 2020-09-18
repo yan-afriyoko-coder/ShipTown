@@ -26,17 +26,19 @@ class OrderServiceTest extends TestCase
             'product_id' => $orderProduct->product_id,
             'location_id' => 100
         ], [
-            'quantity' => 0
+            'quantity' => 0,
+            'quantity_reserved' => 0,
         ]);
 
-        $this->assertFalse(OrderService::canFulfill($order));
-        $this->assertTrue(OrderService::canNotFulfill($order));
+        $this->assertFalse(OrderService::canFulfill($order), 'Should not be able to fulfill, no stock');
+        $this->assertTrue(OrderService::canNotFulfill($order), 'Should not be able to fulfill, no stock');
 
         Inventory::query()->updateOrCreate([
             'product_id' => $orderProduct->product_id,
             'location_id' => 100
         ], [
-            'quantity' => $orderProduct->quantity_ordered
+            'quantity' => $orderProduct->quantity_ordered,
+            'quantity_reserved' => 0,
         ]);
 
         $this->assertTrue(OrderService::canFulfill($order));
