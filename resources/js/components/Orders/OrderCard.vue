@@ -19,7 +19,7 @@
             <template v-for="order_product in order['order_products']">
                 <div class="mb-2">
                     <div>{{ order_product['name_ordered'] }}</div>
-                    <div><a target="_blank" :href="'/products?sku=' + order_product['sku_ordered'] ">{{ order_product['sku_ordered'] }}</a></div>
+                    <div><a target="_blank" :href="getProductLink(order_product)">{{ order_product['sku_ordered'] }}</a></div>
                     <div>ordered: {{ order_product['quantity_ordered'] }}</div>
                     <div>picked: {{ order_product['quantity_picked'] }}</div>
                     <div>inventory: {{ getProductQuantity(order_product) }}</div>
@@ -37,6 +37,10 @@
             order: Object,
         },
         methods: {
+            getProductLink(orderProduct) {
+                const searchTerm = orderProduct['product'] ? orderProduct['product']['sku'] : orderProduct['sku_ordered'];
+                return '/products?search=' + searchTerm;
+            },
             getProductQuantity(orderProduct) {
                 return orderProduct['product'] ? orderProduct['product']['quantity'] : '-';
             },
