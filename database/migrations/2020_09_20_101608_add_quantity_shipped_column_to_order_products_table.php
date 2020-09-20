@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
-
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-class AddQuantityShippedColumnToOrderProductsTable extends Controller
+class AddQuantityShippedColumnToOrderProductsTable extends Migration
 {
     /**
      * Run the migrations.
