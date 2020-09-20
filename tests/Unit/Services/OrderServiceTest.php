@@ -4,6 +4,7 @@ namespace Tests\Unit\Services;
 
 use App\Models\Inventory;
 use App\Models\Order;
+use App\Models\Product;
 use App\Services\OrderService;
 use Tests\TestCase;
 
@@ -16,6 +17,12 @@ class OrderServiceTest extends TestCase
      */
     public function testNullLocationId()
     {
+        Order::query()->forceDelete();
+        Product::query()->forceDelete();
+        Inventory::query()->forceDelete();
+
+        factory(Product::class)->create();
+
         $order = factory(Order::class)
             ->with('orderProducts')
             ->create();
@@ -30,8 +37,10 @@ class OrderServiceTest extends TestCase
             'quantity_reserved' => 0,
         ]);
 
-        $this->assertFalse(OrderService::canFulfill($order), 'Should not be able to fulfill, no stock');
-        $this->assertTrue(OrderService::canNotFulfill($order), 'Should not be able to fulfill, no stock');
+        $canFulfill = OrderService::canFulfill($order);
+
+        $this->assertFalse($canFulfill, 'Should not be able to fulfill, no stock (canFulfill)');
+        $this->assertTrue(OrderService::canNotFulfill($order), 'Should not be able to fulfill, no stock (canNotFulfill)');
 
         Inventory::query()->updateOrCreate([
             'product_id' => $orderProduct->product_id,
