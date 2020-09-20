@@ -49,7 +49,9 @@
         },
 
         mounted() {
+            this.filters['search'] = this.getUrlParameter('search', null);
             this.$refs.search.focus();
+            setTimeout(() => { document.execCommand('selectall', null, false); });
             this.scroll();
         },
 
