@@ -87,7 +87,7 @@
                     'filter[status]': this.getUrlParameter('status', null),
                     'sort': this.getUrlParameter('sort','-updated_at'),
                     'per_page': this.getUrlParameter('per_page',50),
-                    'include': 'packer,order_shipments,order_products',
+                    'include': 'packer,order_shipments,order_products,order_products.product',
                     page: page,
                     q: this.query,
                 };

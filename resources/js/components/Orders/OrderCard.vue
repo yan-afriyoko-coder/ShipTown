@@ -22,6 +22,7 @@
                     <div><a target="_blank" :href="'/products?sku=' + order_product['sku_ordered'] ">{{ order_product['sku_ordered'] }}</a></div>
                     <div>ordered: {{ order_product['quantity_ordered'] }}</div>
                     <div>picked: {{ order_product['quantity_picked'] }}</div>
+                    <div>inventory: {{ getProductQuantity(order_product) }}</div>
                 </div>
             </template>
         </td>
@@ -35,6 +36,11 @@
         props: {
             order: Object,
         },
+        methods: {
+            getProductQuantity(orderProduct) {
+                return orderProduct['product'] ? orderProduct['product']['quantity'] : '-';
+            },
+        }
     }
 </script>
 
