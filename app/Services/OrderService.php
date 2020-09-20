@@ -52,7 +52,7 @@ class OrderService
                 return false;
             }
 
-            if ($quantity_available < $product->quantity_ordered) {
+            if ((double) $quantity_available < (double) $product->quantity_ordered) {
                 return false;
             }
         }
