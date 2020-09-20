@@ -22,7 +22,7 @@
                     <div><a target="_blank" :href="getProductLink(order_product)">{{ order_product['sku_ordered'] }}</a></div>
                     <div>ordered: {{ order_product['quantity_ordered'] }}</div>
                     <div>picked: {{ order_product['quantity_picked'] }}</div>
-                    <div v-bind:class="{ 'bg-warning': getProductQuantity(order_product) <= order_product['quantity_ordered'] }">inventory: {{ getProductQuantity(order_product) }}</div>
+                    <div v-bind:class="{ 'bg-warning': getProductQuantity(order_product) < order_product['quantity_ordered'] }">inventory: {{ getProductQuantity(order_product) }}</div>
                 </div>
             </template>
         </td>

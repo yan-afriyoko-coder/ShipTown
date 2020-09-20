@@ -25,7 +25,7 @@ class RemoveQuantityFromPicklistListener
      */
     public function handle(DeletedEvent $event)
     {
-        $event->getPickRequest()->orderProduct()->first()->order()->first()->update(['status_code' => 'missing_item']);
+//        $event->getPickRequest()->orderProduct()->first()->order()->first()->update(['status_code' => 'missing_item']);
 
         if ($event->getPickRequest()->pick_id === null) {
             return;
