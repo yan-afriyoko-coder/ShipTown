@@ -22,7 +22,7 @@
                     <div><a target="_blank" :href="getProductLink(order_product)">{{ order_product['sku_ordered'] }}</a></div>
                     <div>ordered: {{ order_product['quantity_ordered'] }}</div>
                     <div>picked: {{ order_product['quantity_picked'] }}</div>
-                    <div v-bind:class="{ 'bg-warning': getProductQuantity(order_product) < order_product['quantity_ordered'] }">inventory: {{ getProductQuantity(order_product) }}</div>
+                    <div v-bind:class="{ 'bg-warning': ifHasEnoughStock(order_product) }">inventory: {{ getProductQuantity(order_product) }}</div>
                 </div>
             </template>
         </td>
@@ -42,8 +42,11 @@
                 return '/products?search=' + searchTerm;
             },
             getProductQuantity(orderProduct) {
-                return orderProduct['product'] ? orderProduct['product']['quantity'] : '-1';
+                return orderProduct['product'] ? Number(orderProduct['product']['quantity']) : -1;
             },
+            ifHasEnoughStock(orderProduct) {
+                return this.getProductQuantity(orderProduct) < Number(orderProduct['quantity_ordered']);
+            }
         }
     }
 </script>
