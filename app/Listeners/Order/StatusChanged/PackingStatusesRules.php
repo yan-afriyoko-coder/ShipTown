@@ -28,14 +28,9 @@ class PackingStatusesRules
      */
     public function handle(StatusChangedEvent $event)
     {
-        // todo change hardcoded
-        $expectedStatusCode = 'paid';
-
-        if ($event->isNotStatusCode($expectedStatusCode)) {
-            return;
+        if ($event->isStatusCode('paid')) {
+            $this->checkStatusAndUpdate($event->getOrder());
         }
-
-        $this->checkStatusAndUpdate($event->getOrder());
     }
 
     /**
@@ -53,14 +48,14 @@ class PackingStatusesRules
             return;
         }
 
-        if (OrderService::canNotFulfill($order)) {
-            $this->updateStatusWithLog(
-                $order,
-                'auto_missing_item',
-                'Order is missing one or more items'
-            );
-            return;
-        }
+//        if (OrderService::canNotFulfill($order)) {
+//            $this->updateStatusWithLog(
+//                $order,
+//                'auto_missing_item',
+//                'Order is missing one or more items'
+//            );
+//            return;
+//        }
 
         if (OrderService::canNotFulfill($order, 100)) {
             $this->updateStatusWithLog(
