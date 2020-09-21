@@ -25,6 +25,10 @@
             }
         },
 
+        mounted() {
+            setTimeout(() => { this.setFocusOnBarcodeInput() }, 500);
+        },
+
         methods: {
             barcodeScanned(barcode) {
                 this.$emit('barcodeScanned', barcode);

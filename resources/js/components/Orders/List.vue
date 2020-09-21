@@ -1,9 +1,12 @@
 <template>
     <div>
         <div class="row no-gutters mb-3 ml-1 mr-1">
+<!--            <div class="col">-->
+<!--                <input ref="search" @focus="doSelectAll" class="form-control" @keyup.enter="searchText"-->
+<!--                       v-model="query" placeholder="Search for orders..." />-->
+<!--            </div>-->
             <div class="col">
-                <input ref="search" @focus="doSelectAll" class="form-control" @keyup.enter="loadOrders"
-                       v-model="query" placeholder="Search for orders..." />
+                <barcode-input-field @barcodeScanned="searchText" :placeholder="'Scan order number and click enter'"/>
             </div>
         </div>
         <div class="container">
@@ -15,9 +18,6 @@
                 </div>
             </div>
             <template v-else class="row">
-
-
-
 
                 <div class="row mb-0 ml-1 mr-1">
                     <div class="col p-0 pl-3">
@@ -54,8 +54,6 @@
                     </div>
                 </div>
 
-
-
             </template>
         </div>
     </div>
@@ -65,26 +63,36 @@
     import loadingOverlay from '../../mixins/loading-overlay';
     import OrderCard from "./OrderCard";
     import url from "../../mixins/url";
+    import BarcodeInputField from "../SharedComponents/BarcodeInputField";
 
     export default {
         mixins: [loadingOverlay, url],
 
-        components: { 'order-card': OrderCard },
+        components: {
+            'order-card': OrderCard,
+            'barcode-input-field': BarcodeInputField,
+        },
 
         created() {
             this.getOrderList(this.page);
         },
 
         mounted() {
-            this.$refs.search.focus();
+            // this.$refs.search.focus();
             this.scroll();
         },
 
         methods: {
+            searchText(text) {
+                this.setUrlParameter('search', text);
+                this.loadOrders();
+            },
+
             getOrderList: function(page) {
 
                 const params = {
                     'filter[status]': this.getUrlParameter('status', null),
+                    'filter[order_number]': this.getUrlParameter('search', ''),
                     'sort': this.getUrlParameter('sort','-updated_at'),
                     'per_page': this.getUrlParameter('per_page',50),
                     'include': 'packer,order_shipments,order_products,order_products.product',
