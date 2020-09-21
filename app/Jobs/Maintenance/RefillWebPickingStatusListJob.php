@@ -22,7 +22,7 @@ class RefillWebPickingStatusListJob implements ShouldQueue
      */
     public function __construct()
     {
-        $this->maxDailyAllowed = 150;
+        $this->maxDailyAllowed = 100;
     }
 
     /**
