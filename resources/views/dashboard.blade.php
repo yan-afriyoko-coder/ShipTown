@@ -42,6 +42,12 @@
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col">
+                            <div class="">@widget('PacksStatisticsWidget')</div>
+                        </div>
+                    </div>
+
                     @endrole
 
                 </div>
