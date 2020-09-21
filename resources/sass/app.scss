@@ -12,6 +12,9 @@
 @import '~handsontable/dist/handsontable.full.css';
 
 @import "~vue-snotify/styles/material";
+.card-default {
+    margin-bottom: 10px;
+}
 
 .dashboard-widgets {
     &> .row > .col > .card {
