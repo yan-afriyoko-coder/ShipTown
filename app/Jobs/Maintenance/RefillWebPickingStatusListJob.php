@@ -2,7 +2,9 @@
 
 namespace App\Jobs\Maintenance;
 
+use App\Models\Configuration;
 use App\Models\Order;
+use App\Services\AutoPilot;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -22,7 +24,7 @@ class RefillWebPickingStatusListJob implements ShouldQueue
      */
     public function __construct()
     {
-        $this->maxDailyAllowed = 100;
+        $this->maxDailyAllowed = AutoPilot::getAutoPilotPackingDailyMax();
     }
 
     /**

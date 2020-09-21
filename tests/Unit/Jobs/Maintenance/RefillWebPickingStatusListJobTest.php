@@ -4,6 +4,7 @@ namespace Tests\Unit\Jobs\Maintenance;
 
 use App\Jobs\Maintenance\RefillWebPickingStatusListJob;
 use App\Models\Order;
+use App\Services\AutoPilot;
 use Tests\TestCase;
 
 class RefillWebPickingStatusListJobTest extends TestCase
@@ -22,6 +23,9 @@ class RefillWebPickingStatusListJobTest extends TestCase
 
         RefillWebPickingStatusListJob::dispatch();
 
-        $this->assertEquals(150, Order::whereStatusCode('picking')->count());
+        $this->assertEquals(
+            AutoPilot::getAutoPilotPackingDailyMax(),
+            Order::whereStatusCode('picking')->count()
+        );
     }
 }
