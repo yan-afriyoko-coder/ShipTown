@@ -1,7 +1,7 @@
 <template>
 
 <!--  <div :id="pickCardId" class="swiper-container mb-3">-->
-  <div class="swiper-container mb-3">
+  <div class="swiper-container mb-1">
     <div class="swiper-wrapper">
 
 <!--      <div class="swiper-slide error bg-success text-right">-->
@@ -19,20 +19,23 @@
                 <div class="text-primary h4">#{{ order['order_number'] }}</div>
               </div>
               <div class="col-6">
-                <div class="text-secondary h6 text-right"><span class="font-weight-bold"> 2 days </span></div>
+<!--                <div class="text-secondary h6 text-right"><span class="font-weight-bold"> 2 days </span></div>-->
               </div>
             </div>
 
             <div class="row text-left">
               <div class="col-6">
+                <div class="text-secondary h6">date:</div>
+                <div class="text-secondary h6"><span class="font-weight-bold"> {{ order['order_placed_at'] | moment('MM/DD H:mm') }} </span></div>
                 <div class="text-secondary h6">picked: <span class="font-weight-bold"> {{ order['picked_at'] | moment('MM/DD H:mm') }} </span></div>
                 <div class="text-secondary h6">packed: <span class="font-weight-bold"> {{ order['packed_at'] | moment('MM/DD H:mm') }} </span></div>
                 <div class="text-secondary h6">total: <span class="font-weight-bold"> {{ order['total'] }} </span></div>
                 <div class="text-secondary h6">paid: <span class="font-weight-bold"> {{ order['total_paid'] }} </span></div>
-                <div class="text-secondary h6">date: <span class="font-weight-bold"> {{ order['order_placed_at'] | moment('MM/DD H:mm') }} </span></div>
               </div>
               <div class="col-6">
-                <div class="text-secondary h6">status: <span class="font-weight-bold"> {{ order['status_code'] }} </span></div>
+                <div class="text-secondary h6">status:</div>
+                <div class="text-secondary h6"><span class="font-weight-bold"> {{ order['status_code'] }} </span></div>
+                <div class="text-secondary h6"><span class="font-weight-bold"> &nbsp </span></div>
                 <div class="text-secondary h6"><span class="font-weight-bold"> {{ order['packer'] ? order['packer']['name'] : '&nbsp' }} </span></div>
                 <div class="text-secondary h6">lines:<span class="font-weight-bold"> {{ order['product_line_count'] }} </span></div>
                 <div class="text-secondary h6">quantity: <span class="font-weight-bold"> {{ order['total_quantity_ordered'] }} </span></div>
@@ -56,25 +59,25 @@
               <hr>
 
               <template v-for="order_product in order['order_products']">
-                <div class="row text-left">
+                <div class="row text-left mb-2">
                   <div class="col-6">
-                    <div class="">{{ order_product['name_ordered'] }}</div>
+                    <div class="small">{{ order_product['name_ordered'] }}</div>
                     <!--                  <div class="text-secondary">sku: <span class="font-weight-bold"> {{ order_product['sku_ordered'] }} </span></div>-->
-                    <div class="text-secondary">product: <span class="font-weight-bold"> <a target="_blank" :href="getProductLink(order_product)">{{ order_product['sku_ordered'] }}</a> </span></div>
+                    <div class="small"><a target="_blank" :href="getProductLink(order_product)">{{ order_product['sku_ordered'] }}</a></div>
                   </div>
                   <div class="col-6">
                     <div class="row text-center">
                       <div class="col-4">
-                        <div class="text-secondary">ordered</div>
-                        <div class="h3">{{ Math.ceil(order_product['quantity_ordered']) }}</div>
+                        <div class="small">ordered</div>
+                        <div class="h4">{{ Math.ceil(order_product['quantity_ordered']) }}</div>
                       </div>
                       <div class="col-4">
-                        <div class="">picked</div>
-                        <div class="h3">-</div>
+                        <div class="small">picked</div>
+                        <div class="h4">-</div>
                       </div>
                       <div class="col-4" v-bind:class="{ 'bg-warning': ifHasEnoughStock(order_product) }">
-                        <div>inventory</div>
-                        <div class="h3 red">{{ getProductQuantity(order_product) }}</div>
+                        <div class="small">inventory</div>
+                        <div class="h3">{{ getProductQuantity(order_product) }}</div>
                       </div>
                     </div>
                   </div>
@@ -157,13 +160,14 @@
 </script>
 
 <style scoped>
+
+.header-row > div, .col {
+  border: 1px solid #76777838;
+}
+
     .col {
         background-color: #ffffff;
-        border: 0px solid #76777838;
+        border: 1px solid #76777838;
     }
 
-    tr {
-        border: 1px solid #76777838;
-        border-bottom: 15px solid #ffffff;
-    }
 </style>
