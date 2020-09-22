@@ -45,7 +45,13 @@
         },
 
         created() {
-            this.getProductList(1);
+            const params = {
+                page: 1,
+                sort: 'quantity',
+                include: 'inventory'
+            }
+
+            return this.getProducts(1, params);
         },
 
         mounted() {
@@ -69,16 +75,7 @@
                 this.getProductList(1);
             },
 
-            getProductList: function(page) {
-                const params = {
-                    page: page,
-                    'filter[sku]': this.getUrlParameter('sku'),
-                    'filter[search]': this.getUrlParameter('search'),
-                    q: this.getUrlFilter('query'),
-                    sort: '-quantity',
-                    include: 'inventory'
-                }
-
+            getProducts: function (page, params) {
                 this.page = page;
                 this.last_page = 1;
                 this.total = 0;
@@ -86,7 +83,7 @@
                 return new Promise((resolve, reject) => {
                     this.showLoading();
                     axios.get('/api/products', {params: params})
-                        .then(({ data }) => {
+                        .then(({data}) => {
                             this.products = this.products.concat(data.data);
                             this.total = data.total;
                             this.last_page = data.last_page;
@@ -97,6 +94,19 @@
                             this.hideLoading();
                         });
                 });
+            },
+
+            getProductList: function(page) {
+                const params = {
+                    page: page,
+                    'filter[sku]': this.getUrlParameter('sku'),
+                    'filter[search]': this.getUrlParameter('search'),
+                    q: this.getUrlFilter('query'),
+                    sort: '-quantity',
+                    include: 'inventory'
+                }
+
+                return this.getProducts(page, params);
             },
 
             loadProducts(e) {
