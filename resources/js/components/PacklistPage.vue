@@ -279,9 +279,7 @@
                                 'filter[is_packed]'     : false,
                                 'filter[has_packer]'    : false,
 
-                                'filter[is_picked]'     : this.getUrlParameter('is_picked', true),
                                 'filter[status]'        : this.getUrlParameter('status','picking'),
-                                'filter[order_number]'  : this.getUrlParameter('order_number', null),
                                 'sort'                  : this.getUrlParameter('sort'),
 
                                 'per_page': 1,
@@ -290,8 +288,13 @@
                                     ',order_products.product.aliases',
                             };
 
+                            if( this.getUrlParameter('is_picked', null) != null) {
+                                params['filter[is_picked]'] = this.getUrlParameter('is_picked');
+                            }
+
                             if( this.getUrlParameter('order_number', null) != null) {
-                             }
+                                params['filter[order_number]'] = this.getUrlParameter('order_number');
+                            }
 
                             this.loadNextOrderToPack(updatedParams);
                         }

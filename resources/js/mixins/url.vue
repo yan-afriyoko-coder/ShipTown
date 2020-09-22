@@ -60,8 +60,12 @@
                 this.$router.push(url);
             },
 
+            isSet: function (value) {
+              return (value === undefined) || (value === null);
+            },
+
             getValueOrDefault: function (value, defaultValue){
-                return (value === undefined) || (value === null) ? defaultValue : value;
+                  return this.isSet(value) ? defaultValue : value;
             },
         }
     }
