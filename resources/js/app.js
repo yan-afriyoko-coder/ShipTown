@@ -104,7 +104,7 @@ Vue.component(
 
 Vue.component(
     'orders-table',
-    require('./components/Orders/List.vue').default
+    require('./components/OrdersPage.vue').default
 );
 
 Vue.component(

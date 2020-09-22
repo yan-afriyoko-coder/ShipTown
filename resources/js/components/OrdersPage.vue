@@ -1,69 +1,62 @@
 <template>
     <div>
         <div class="row no-gutters mb-3 ml-1 mr-1">
-<!--            <div class="col">-->
-<!--                <input ref="search" @focus="doSelectAll" class="form-control" @keyup.enter="searchText"-->
-<!--                       v-model="query" placeholder="Search for orders..." />-->
-<!--            </div>-->
             <div class="col">
-                <barcode-input-field @barcodeScanned="searchText" :placeholder="'Scan order number and click enter'"/>
+                <barcode-input-field :placeholder="'Scan order number and click enter'" @barcodeScanned="searchText" />
             </div>
         </div>
+
         <div class="container">
-            <div v-if="total == 0 && !isLoading" class="row" >
+
+            <div v-if="total === 0 && !isLoading" class="row" >
                 <div class="col">
                     <div class="alert alert-info" role="alert">
                         No orders found.
                     </div>
                 </div>
             </div>
+
             <template v-else class="row">
+                <div class="col">
 
-                <div class="row mb-0 ml-1 mr-1">
-                    <div class="col p-0 pl-3">
-                        <div class="row text-left">
-                            <div class="col-md-12">
+<!--                    <table class="align-text-top">-->
+<!--                        <thead>-->
+<!--                            <tr class="font-weight-bold h6">-->
+<!--                                <th class="text-nowrap pr-5">Order #</th>-->
+<!--                                <th class="text-nowrap pr-8">StatusCode</th>-->
+<!--                                <th class="text-nowrap pl-2 pr-8">Total</th>-->
+<!--                                <th class="text-nowrap pl-3">Total Paid</th>-->
+<!--                                <th class="text-center pl-3 text-nowrap">Line Count</th>-->
+<!--                                <th class="text-center pl-3 text-nowrap">Total Quantity</th>-->
+<!--                                <th class="text-nowrap pl-3">Date Placed</th>-->
+<!--                                <th class="text-center pl-3 text-nowrap">Picked</th>-->
+<!--                                <th class="text-center text-nowrap">Packed At</th>-->
+<!--                                <th class="text-nowrap">Packer</th>-->
+<!--                                <th class="text-nowrap">Shipping No</th>-->
+<!--                                <th class="text-nowrap">Products</th>-->
+<!--                            </tr>-->
+<!--                        </thead>-->
 
-                                <table class="align-text-top">
-                                    <thead>
-                                        <tr class="font-weight-bold h6">
-                                            <th class="text-nowrap pr-5">Order #</th>
-                                            <th class="text-nowrap pr-8">StatusCode</th>
-                                            <th class="text-nowrap pl-2 pr-8">Total</th>
-                                            <th class="text-nowrap pl-3">Total Paid</th>
-                                            <th class="text-center pl-3 text-nowrap">Line Count</th>
-                                            <th class="text-center pl-3 text-nowrap">Total Quantity</th>
-                                            <th class="text-nowrap pl-3">Date Placed</th>
-                                            <th class="text-center pl-3 text-nowrap">Picked</th>
-                                            <th class="text-center text-nowrap">Packed At</th>
-                                            <th class="text-nowrap">Packer</th>
-                                            <th class="text-nowrap">Shipping No</th>
-                                            <th class="text-nowrap">Products</th>
-                                        </tr>
-                                    </thead>
+<!--                        <tbody>-->
+<!--                        </tbody>-->
+<!--                    </table>-->
 
-                                    <tbody>
-                                        <template v-for="order in orders">
-                                            <order-card :order="order"/>
-                                        </template>
-                                    </tbody>
-                                </table>
 
-                            </div>
-                        </div>
-                    </div>
+                    <template v-for="order in orders">
+                        <order-card :order="order"/>
+                    </template>
+
                 </div>
-
             </template>
         </div>
     </div>
 </template>
 
 <script>
-    import loadingOverlay from '../../mixins/loading-overlay';
-    import OrderCard from "./OrderCard";
-    import url from "../../mixins/url";
-    import BarcodeInputField from "../SharedComponents/BarcodeInputField";
+    import loadingOverlay from '../mixins/loading-overlay';
+    import OrderCard from "./Orders/OrderCard";
+    import url from "../mixins/url";
+    import BarcodeInputField from "./SharedComponents/BarcodeInputField";
 
     export default {
         mixins: [loadingOverlay, url],
@@ -110,7 +103,6 @@
                     axios.get('/api/orders', {
                         params: params
                     }).then(({ data }) => {
-                        console.log(data.data);
                         this.orders = this.orders.concat(data.data);
                         this.total = data.total;
                         this.last_page = data.last_page;
