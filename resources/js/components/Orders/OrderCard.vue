@@ -10,7 +10,7 @@
 <!--        </div>-->
 <!--      </div>-->
 
-      <div class="swiper-slide" @click="showHideProducts">
+      <div class="swiper-slide">
         <div class="row ml-1 mr-1">
           <div class="col p-2 pl-3">
 
@@ -23,7 +23,7 @@
               </div>
             </div>
 
-            <div class="row text-left">
+            <div class="row text-left" @click="showHideProducts">
               <div class="col-6">
                 <div class="text-secondary h6">date:</div>
                 <div class="text-secondary h6"><span class="font-weight-bold"> {{ order['order_placed_at'] | moment('MM/DD H:mm') }} </span></div>
@@ -73,11 +73,11 @@
                       </div>
                       <div class="col-4">
                         <div class="small">picked</div>
-                        <div class="h4">-</div>
+                        <div class="h4">{{ (Number(order_product['quantity_picked']) > 0) ? Number(order_product['quantity_picked']) : '-' }}</div>
                       </div>
                       <div class="col-4" v-bind:class="{ 'bg-warning': ifHasEnoughStock(order_product) }">
                         <div class="small">inventory</div>
-                        <div class="h3">{{ getProductQuantity(order_product) }}</div>
+                        <div class="h4">{{ getProductQuantity(order_product) }}</div>
                       </div>
                     </div>
                   </div>
