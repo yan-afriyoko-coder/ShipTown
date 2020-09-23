@@ -45,13 +45,7 @@
         },
 
         created() {
-            const params = {
-                page: 1,
-                sort: 'quantity',
-                include: 'inventory'
-            }
-
-            return this.getProducts(1, params);
+            return this.loadProducts();
         },
 
         mounted() {
