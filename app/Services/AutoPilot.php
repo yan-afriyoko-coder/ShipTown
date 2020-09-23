@@ -8,11 +8,16 @@ use App\Models\Configuration;
 class AutoPilot
 {
     /**
-     * @return Configuration|\Illuminate\Database\Eloquent\Model|int|object
+     * @return int
      */
     public static function getAutoPilotPackingDailyMax()
     {
-        return Configuration::where('key', config('autopilot.config_key_name'))
-                ->first('value') ?? 100;
+        $config = Configuration::firstOrCreate([
+                'key' => config('autopilot.config_key_name')
+            ], [
+                'value' => 100
+            ]);
+
+        return (int) $config->value;
     }
 }

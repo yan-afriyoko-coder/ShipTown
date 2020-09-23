@@ -5,10 +5,22 @@ namespace Tests\Unit\Jobs\Maintenance;
 use App\Jobs\Maintenance\RefillWebPickingStatusListJob;
 use App\Models\Order;
 use App\Services\AutoPilot;
+use App\User;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class RefillWebPickingStatusListJobTest extends TestCase
 {
+    public function testIfJobIsDispatchedDuringMaintenance()
+    {
+        $this->expectsJobs(RefillWebPickingStatusListJob::class);
+
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        $response = $this->get('/api/run/maintenance');
+    }
     /**
      * A basic feature test example.
      *
