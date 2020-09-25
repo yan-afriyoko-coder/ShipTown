@@ -15,7 +15,8 @@ class OrderStatus extends Model
         'packing',
         'packing_web',
         'packing_warehouse',
-        'ready'
+        'ready',
+        'for_later',
     ];
 
     public static $toFollowStatusList = [
@@ -24,7 +25,6 @@ class OrderStatus extends Model
         'holded',
         'missing_item',
         'auto_missing_item',
-        'for_later'
     ];
 
     public static function getActiveStatusCodesList()
