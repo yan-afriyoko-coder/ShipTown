@@ -4,7 +4,7 @@
 
             <div class="swiper-slide error bg-success text-right">
                 <div class="swipe-action-container swipe-action-container--right">
-                    <div>PACKED</div>
+                    <div>SHIP THEM ALL</div>
                 </div>
             </div>
 

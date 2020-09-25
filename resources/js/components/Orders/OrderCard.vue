@@ -58,59 +58,40 @@
               <hr>
 
               <template v-for="order_product in order['order_products']">
-                <div class="row text-left mb-2">
-                  <div class="col">
-                    <div class="small">
-                        {{ order_product['name_ordered'] }}
-                    </div>
-                    <div class="small">
-                        <a target="_blank" :href="getProductLink(order_product)">
-                            {{ order_product['sku_ordered'] }}
-                        </a>
-                    </div>
-                  </div>
-                </div>
-                <div class="row text-left mb-2 quantities_boxes">
-                  <div class="col-lg-6 offset-lg-6">
-                    <div class="row text-center">
-                      <div class="col-3">
-                        <div class="small">
-                            ordered
-                        </div>
-                        <div class="h4">
-                            {{ Math.ceil(order_product['quantity_ordered']) }}
-                        </div>
-                      </div>
-                      <div class="col-3">
-                        <div class="small">
-                            picked
-                        </div>
-                        <div class="h4">
-                            {{ dashIfZero(Number(order_product['quantity_picked']))  }}
-                        </div>
-                      </div>
-                      <div class="col-3">
-                        <div class="small">
-                            shipped
-                        </div>
-                        <div class="h4">
-                            {{ dashIfZero(Number(order_product['quantity_shipped']))  }}
-                        </div>
-                      </div>
-                      <div class="col-3" v-bind:class="{ 'bg-warning': ifHasEnoughStock(order_product) }">
-                        <div class="small">
-                            inventory
-                        </div>
-                        <div class="h4">
-                            {{ dashIfZero(getProductQuantity(order_product)) }}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </template>
-            </div>
 
+                <div class="row text-left mb-2">
+
+                    <div class="col-lg-6">
+                        <div class="small">{{ order_product['name_ordered'] }}</div>
+                        <div class="small"><a target="_blank" :href="getProductLink(order_product)">{{ order_product['sku_ordered'] }}</a></div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="row text-center">
+                            <div class="col-3">
+                                <div class="small">ordered</div>
+                                <div class="h3">{{ Math.ceil(order_product['quantity_ordered']) }}</div>
+                            </div>
+                            <div class="col-3">
+                                <div class="small">picked</div>
+                                <div class="h3">{{ dashIfZero(Number(order_product['quantity_picked'])) }}</div>
+                            </div>
+                            <div class="col-3">
+                                <div class="small">shipped</div>
+                                <div class="h3">{{ dashIfZero(Number(order_product['quantity_shipped']))  }}</div>
+                            </div>
+                            <div class="col-3" v-bind:class="{ 'bg-warning': ifHasEnoughStock(order_product) }">
+                                <div class="small">inventory</div>
+                                <div class="h3">{{ dashIfZero(getProductQuantity(order_product)) }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+              </template>
+
+            </div>
           </div>
         </div>
       </div>
@@ -139,6 +120,7 @@
               showProducts: false
             }
         },
+
         methods: {
             dashIfZero(value) {
                 return value === 0 ? '-' : value;
