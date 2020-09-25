@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\OrderProducts\UpdateRequest;
+use App\Http\Resources\OrderProductResource;
 use App\Models\OrderProduct;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
@@ -39,44 +41,48 @@ class OrderProductController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return Response
+     * @return void
      */
     public function store(Request $request)
     {
-        $this->respondNotAllowed405();
+        return $this->respondNotAllowed405();
     }
 
     /**
      * Display the specified resource.
      *
      * @param  OrderProduct  $orderProduct
-     * @return Response
+     * @return void
      */
     public function show(OrderProduct $orderProduct)
     {
-        $this->respondNotAllowed405();
+        return $this->respondNotAllowed405();
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param  OrderProduct  $orderProduct
-     * @return Response
+     * @param UpdateRequest $request
+     * @param $id
+     * @return OrderProductResource
      */
-    public function update(Request $request, OrderProduct $orderProduct)
+    public function update(UpdateRequest $request, $id)
     {
-        $this->respondNotAllowed405();
+        $orderProduct = OrderProduct::findOrFail($id);
+
+        $orderProduct->update($request->validated());
+
+        return new OrderProductResource($orderProduct);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  OrderProduct  $orderProduct
-     * @return Response
+     * @return void
      */
     public function destroy(OrderProduct $orderProduct)
     {
-        $this->respondNotAllowed405();
+        return $this->respondNotAllowed405();
     }
 }

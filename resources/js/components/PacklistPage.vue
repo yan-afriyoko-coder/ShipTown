@@ -372,6 +372,11 @@
             pickAll(pickedItem) {
                 this.packlist.splice(this.packlist.indexOf(pickedItem), 1);
                 this.packed.unshift(pickedItem);
+
+                axios.put('/api/order/products/' + pickedItem['id'], {
+                    'quantity_shipped': pickedItem['quantity_ordered']
+                });
+
                 this.beep();
             },
 
