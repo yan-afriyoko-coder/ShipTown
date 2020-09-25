@@ -345,11 +345,29 @@
                 axios.get('/api/order/products', {params: params})
                     .then(({ data }) => {
                         if(data.total > 0) {
-                            if(this.order['is_packed']) {
-                                this.packed = data.data;
-                            } else {
-                                this.packlist = data.data;
-                            }
+                            console.log(data.data)
+                            // this.packlist = data.data;
+
+                            this.packed = data.data.filter(
+                                orderProduct => Number(orderProduct['quantity_shipped']) >= Number(orderProduct['quantity_ordered'])
+                            );
+
+                            this.packlist = data.data.filter(
+                                orderProduct => Number(orderProduct['quantity_shipped']) < Number(orderProduct['quantity_ordered'])
+                            );
+
+                            // console.log(orderProduct);
+                            // console.log(isAllShipped);
+
+                            // for (let orderProduct in this.packlist) {
+                            //     this.packed.unshift(orderProduct);
+                            // }
+
+                            // if (isAllShipped) {
+                            //     this.packed = orderProduct;
+                            // } else {
+                            //     this.packlist = orderProduct;
+                            // }
                         }
                     })
                     .catch( error => {
@@ -371,11 +389,14 @@
 
             pickAll(pickedItem) {
                 this.packlist.splice(this.packlist.indexOf(pickedItem), 1);
-                this.packed.unshift(pickedItem);
+                // this.packed.unshift(pickedItem);
 
                 axios.put('/api/order/products/' + pickedItem['id'], {
-                    'quantity_shipped': pickedItem['quantity_ordered']
-                });
+                    'quantity_shipped': pickedItem['quantity_ordered'] - pickedItem['quantity_shipped']
+                    })
+                    .then(({data}) => {
+                        this.packed.unshift(data.data);
+                    });
 
                 this.beep();
             },
