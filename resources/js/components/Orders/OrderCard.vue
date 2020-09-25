@@ -11,7 +11,7 @@
 <!--      </div>-->
 
       <div class="swiper-slide">
-        <div class="row ml-1 mr-1">
+        <div class="row ml-1 mr-1 card">
           <div class="col p-2 pl-3">
 
             <div class="row text-left">
