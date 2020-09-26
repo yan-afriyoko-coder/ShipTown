@@ -3,6 +3,9 @@
         <div class="swiper-wrapper">
 
             <div class="swiper-slide">
+            </div>
+
+            <div class="swiper-slide">
                 <div class="row ml-1 mr-1 disabled">
                     <div class="col p-2 pl-3">
                         <entry-card :entry="picklistItem"/>
@@ -12,7 +15,7 @@
 
             <div class="swiper-slide bg-warning">
                 <div class="swipe-action-container swipe-action-container--left text-black-50 font-weight-bold">
-                    <div>RESTORE</div>
+                    <div>SHIP PARTIAL</div>
                 </div>
             </div>
 
@@ -35,19 +38,30 @@
         },
 
         mounted() {
+            const swipedRightIndex = 0;
+            const swipedLeftIndex = 2;
+
             const self = this;
             const pickedItem = this.picklistItem;
 
             // Initialize Swiper
             const swiper = new Swiper('#' + this.getElementId, {
-                initialSlide: 0,
+                initialSlide: 1,
                 resistanceRatio: 0,
                 speed: 150
             });
 
             // Event will be fired after transition
             swiper.on('transitionEnd', function() {
+
+                if (this.activeIndex === swipedLeftIndex) {
                     self.$emit('swipeLeft', pickedItem);
+
+                } else if (this.activeIndex === swipedRightIndex) {
+                    self.$emit('swipeRight', pickedItem);
+                }
+
+                this.slideTo(1,0,false);
             });
 
         },

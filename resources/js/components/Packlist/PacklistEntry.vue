@@ -16,8 +16,11 @@
                 </div>
             </div>
 
-<!--            <div class="swiper-slide bg-warning" ></div>-->
-
+            <div class="swiper-slide bg-warning">
+                <div class="swipe-action-container swipe-action-container--left text-black-50 font-weight-bold">
+                    <div>SHIP PARTIAL</div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -29,11 +32,17 @@
 
     export default {
         name: 'PacklistEntry',
+
         components: {EntryCard},
+
+        props: {
+            picklistItem: Object,
+        },
+
         mounted() {
 
-            const swipedLeftIndex = 0;
-            const swipedRightIndex = 2;
+            const swipedRightIndex = 0;
+            const swipedLeftIndex = 2;
 
             const self = this;
             const pickedItem = this.picklistItem;
@@ -50,20 +59,16 @@
             swiper.on('transitionEnd', function() {
 
                 if (this.activeIndex === swipedLeftIndex) {
-                    self.$emit('swipeRight', pickedItem);
+                    self.$emit('swipeLeft', pickedItem);
 
                 } else if (this.activeIndex === swipedRightIndex) {
-                    self.$emit('swipeLeft', pickedItem);
+                    self.$emit('swipeRight', pickedItem);
                 }
 
                 this.slideTo(1,0,false);
             });
 
 
-        },
-
-        props: {
-            picklistItem: Object,
         },
 
         computed: {
