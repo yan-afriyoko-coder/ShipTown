@@ -73,7 +73,7 @@
                 <template v-for="record in packlist">
                     <div class="row mb-3">
                         <div class="col">
-                            <packlist-entry :picklistItem="record" :key="record.id"  @swipeRight="pickAll" />
+                            <packlist-entry :picklistItem="record" :key="record.id" @swipeRight="shipAll" @swipeLeft="shipPartialSwiped"/>
                         </div>
                     </div>
                 </template>
@@ -81,7 +81,7 @@
                 <template v-for="record in packed">
                     <div class="row mb-3">
                         <div class="col">
-                            <packed-entry :picklistItem="record" :key="record.id" @swipeLeft="resetPick" />
+                            <packed-entry :picklistItem="record" :key="record.id" @swipeLeft="shipPartialSwiped" />
                         </div>
                     </div>
                 </template>
@@ -148,6 +148,7 @@
                 }
 
                 if(this.packlist.length === 0) {
+                    this.order['is_packed'] = true;
                     this.markAsPacked();
                     this.printAddressLabel();
                     this.displayShippingNumberModal();
@@ -156,6 +157,42 @@
         },
 
         methods: {
+            shipPartialSwiped(orderProduct) {
+                this.$snotify.prompt('Partial shipment', {
+                    placeholder: 'Enter quantity to ship:',
+                    position: 'centerCenter',
+                    icon: false,
+                    buttons: [
+                        {
+                            text: 'Ship',
+                            action: (toast) => {
+
+                                const maxQuantityAllowed = orderProduct['quantity_ordered'] - orderProduct['quantity_shipped'];
+                                const minQuantityAllowed = -1 * orderProduct['quantity_shipped'];
+
+                                if (
+                                    isNaN(toast.value)
+                                    || (toast.value > Number(maxQuantityAllowed))
+                                    || (toast.value < Number(minQuantityAllowed))
+                                ) {
+                                    toast.valid = false;
+                                    return false;
+                                }
+
+                                this.$snotify.remove(toast.id);
+                                this.setQuantityShipped(orderProduct, Number(orderProduct['quantity_shipped']) + Number(toast.value));
+                            }
+                        },
+                        {
+                            text: 'Cancel',
+                            action: (toast) => {
+                                this.$snotify.remove(toast.id)
+                            }
+                        },
+                    ],
+                });
+            },
+
             packOrder(orderNumber) {
                 const params = {
                     'filter[order_number]': orderNumber
@@ -345,11 +382,16 @@
                 axios.get('/api/order/products', {params: params})
                     .then(({ data }) => {
                         if(data.total > 0) {
-                            if(this.order['is_packed']) {
-                                this.packed = data.data;
-                            } else {
-                                this.packlist = data.data;
-                            }
+                            console.log(data.data)
+                            // this.packlist = data.data;
+
+                            this.packed = data.data.filter(
+                                orderProduct => Number(orderProduct['quantity_shipped']) >= Number(orderProduct['quantity_ordered'])
+                            );
+
+                            this.packlist = data.data.filter(
+                                orderProduct => Number(orderProduct['quantity_shipped']) < Number(orderProduct['quantity_ordered'])
+                            );
                         }
                     })
                     .catch( error => {
@@ -369,10 +411,41 @@
                 this.warningBeep();
             },
 
-            pickAll(pickedItem) {
-                this.packlist.splice(this.packlist.indexOf(pickedItem), 1);
-                this.packed.unshift(pickedItem);
-                this.beep();
+            addToLists: function (orderProduct) {
+                if (Number(orderProduct['quantity_ordered']) > Number(orderProduct['quantity_shipped'])) {
+                    this.packlist.unshift(orderProduct);
+                } else {
+                    this.packed.unshift(orderProduct);
+                }
+            },
+
+            removeFromLists: function (orderProduct) {
+                if (this.packlist.indexOf(orderProduct) > -1) {
+                    this.packlist.splice(this.packlist.indexOf(orderProduct), 1);
+                } else {
+                    this.packed.splice(this.packed.indexOf(orderProduct), 1);
+                }
+            },
+
+            setQuantityShipped(orderProduct, quantity) {
+                this.removeFromLists(orderProduct);
+
+                axios.put('/api/order/products/' + orderProduct['id'], {
+                    'quantity_shipped': quantity
+                })
+                    .then(({data}) => {
+                        this.addToLists(data.data);
+                        this.beep();
+                    })
+                    .catch((error) => {
+                        this.addToLists(orderProduct);
+                        this.$snotify.error('Error occurred when saving quantity shipped')
+                        this.errorBeep();
+                    });
+            },
+
+            shipAll(pickedItem) {
+                this.setQuantityShipped(pickedItem, pickedItem['quantity_ordered']);
             },
 
             displayPickedNotification: function (pickedItem, quantity) {
@@ -453,7 +526,7 @@
                 let pickItem = this.findEntry(barcode);
 
                 if(pickItem) {
-                    this.pickAll(pickItem);
+                    this.shipAll(pickItem);
                     return;
                 }
 
@@ -480,7 +553,7 @@
                             icon: false,
                         });
                     }).catch((error) => {
-                        let errorMsg = 'Error occurred while sending print job';
+                        let errorMsg = 'Error occurred when printing label';
 
                         if (error.response.status === 404) {
                             errorMsg = `Order #${orderNumber} not found.`;

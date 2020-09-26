@@ -4,6 +4,9 @@ function getValueOrDefault(value, defaultValue){
 
 export default {
     methods: {
+        dashIfZero(value) {
+            return value === 0 ? '-' : value;
+        },
         getValueOrDefault,
     }
 }
