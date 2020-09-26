@@ -10,14 +10,6 @@
                     </div>
                     <div class="modal-body" style="margin: 0 auto 0;">
                         <form method="POST" @submit.prevent="handleSubmit">
-<!--                            <div class="form-group form-check">-->
-<!--                                <input v-model="filters.single_line_orders_only" type="checkbox" class="form-check-input" />-->
-<!--                                <label class="form-check-label" >Show single line orders only</label>-->
-<!--                            </div>-->
-<!--                            <div class="form-group form-check">-->
-<!--                                <input v-model="filters.in_stock_only" type="chec kbox" class="form-check-input" />-->
-<!--                                <label class="form-check-label" >In stock only</label>-->
-<!--                            </div>-->
                             <div class="form-group form-check">
                                 <div>Inventory Location ID</div>
                                 <div>
@@ -26,21 +18,10 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="form-group form-check">
-                                <div>Order Number: </div>
-                                <div>
-                                    <label>
-                                        <input v-model="filters['order_number']" type="number" class="form-check-input" />
-                                    </label>
-
-                                    <button type="button" @keyup.enter="pickOrder" @click.prevent="pickOrder" class="btn btn-primary">Pick Order</button>
-                                </div>
-                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
                         <slot name="actions" v-bind:filters="filters"></slot>
-    <!--                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>-->
                         <button type="button" @click.prevent="handleSubmit" class="btn btn-primary">OK</button>
                     </div>
                 </div>
@@ -72,12 +53,6 @@
         },
 
         methods: {
-            pickOrder() {
-                this.updateUrl(this.filters);
-                this.hide();
-                this.$emit('btnSaveClicked', this.filters);
-            },
-
             getValueOrDefault: function (value, defaultValue){
                 return (value === undefined) || (value === null) ? defaultValue : value;
             },

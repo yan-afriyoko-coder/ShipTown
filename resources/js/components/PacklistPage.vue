@@ -5,6 +5,9 @@
 
         <filters-modal ref="filtersModal" @btnSaveClicked="onConfigChange">
             <template v-slot:actions="slotScopes">
+                <button type="button" class="btn btn-info" @click.prevent="changeStatus('partially_shipped')">
+                    partially_shipped
+                </button>
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('for_later')">
                     for_later
                 </button>
