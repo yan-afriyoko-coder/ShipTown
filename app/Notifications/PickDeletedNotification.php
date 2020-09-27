@@ -45,6 +45,7 @@ class PickDeletedNotification extends Notification
         return (new MailMessage)
             ->subject('Pick deleted - ' . $this->pick->sku_ordered)
             ->greeting('This pick was deleted, some orders might not be picked')
+            ->line('<a href="/products?search='.$this->pick->sku_ordered.'">SKU: ' . $this->pick->sku_ordered.'</a>')
             ->line('SKU: ' . $this->pick->sku_ordered)
             ->line('Name: ' . $this->pick->name_ordered)
             ->line('Quantity: ' . $this->pick->quantity_required);
