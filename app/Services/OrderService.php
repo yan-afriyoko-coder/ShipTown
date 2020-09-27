@@ -148,87 +148,14 @@ class OrderService
      */
     public static function updateOrCreate(array $orderAttributes)
     {
-        // update or create order
         $order = Order::updateOrCreate(
             ['order_number' => $orderAttributes['order_number']],
             $orderAttributes
         );
 
-        // update or create shipping address
-        $shipping_address = $order->shippingAddress()->updateOrCreate(
-            ['id' => $order->shipping_address_id],
-            $orderAttributes['shipping_address']
-        );
+        self::updateOrCreateShippingAddress($order, $orderAttributes['shipping_address']);
 
-        $order->update(['shipping_address_id' => $shipping_address->getKey()]);
-
-        // update or create products
-        $orderProductIdsToKeep = [];
-
-        foreach ($orderAttributes['order_products'] as $orderProductAttributes) {
-            $orderProduct = OrderProduct::where(['order_id' => $order->getKey()])
-                ->whereNotIn('id', $orderProductIdsToKeep)
-                ->updateOrCreate(
-                    // attributes
-                    collect($orderProductAttributes)
-                        ->only([
-                            'sku_ordered',
-                            'name_ordered',
-                            'quantity_ordered',
-                            'price',
-                        ])
-                        ->toArray(),
-                    // values
-                    [
-                        'order_id' => $order->getKey(),
-                    ]
-                );
-
-            $orderProductIdsToKeep[] = $orderProduct->getKey();
-        }
-
-        OrderProduct::where(['order_id' => $order->id])
-            ->whereNotIn('id', $orderProductIdsToKeep)
-            ->delete();
-
-
-
-
-
-
-//        $order->orderProducts()->delete();
-//
-//        foreach ($attributes['order_products'] as $rawOrderProduct) {
-//            $orderProduct = OrderProduct::onlyTrashed()
-//                ->where([
-//                    'order_id' => $order->id,
-//                    'sku_ordered' => $rawOrderProduct['sku_ordered'],
-//                    'quantity_ordered' => $rawOrderProduct['quantity_ordered'],
-//                    'price' => $rawOrderProduct['price'],
-//                ])
-//                ->first();
-//
-//            if ($orderProduct) {
-//                $orderProduct->restore();
-//                continue;
-//            }
-//
-//            $orderProduct = new OrderProduct();
-//            $orderProduct->fill($rawOrderProduct);
-//
-//            $extracted_sku = Str::substr($rawOrderProduct['sku_ordered'], 0, 6);
-//
-//            $product = Product::query()
-//                ->whereIn('sku', [
-//                    $rawOrderProduct['sku_ordered'],
-//                    $extracted_sku
-//                ])
-//                ->first();
-//
-//            $orderProduct->product_id = $product ? $product->getKey() : null;
-//
-//            $order->orderProducts()->save($orderProduct);
-//        }
+        $order = self::syncOrderProducts($orderAttributes['order_products'], $order);
 
         CreatedEvent::dispatch($order);
 
@@ -250,5 +177,65 @@ class OrderService
         $order->save();
 
         return $order;
+    }
+
+    /**
+     * @param array $orderProductAttributes
+     * @return BigInteger|null
+     */
+    private static function getProductId(array $orderProductAttributes)
+    {
+        $product = ProductService::find($orderProductAttributes['sku_ordered']);
+        if ($product) {
+            return  $product->id;
+        }
+
+        $extractedSku = Str::substr($orderProductAttributes['sku_ordered'], 0, 6);
+        $product = ProductService::find($extractedSku);
+        if ($product) {
+            return  $product->id;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param $order_products
+     * @param Order $order
+     * @return Order
+     * @throws \Exception
+     */
+    private static function syncOrderProducts($order_products, Order $order): Order
+    {
+        $orderProductIdsToKeep = [];
+
+        foreach ($order_products as $orderProductAttributes) {
+            $orderProduct = OrderProduct::where(['order_id' => $order->getKey()])
+                ->whereNotIn('id', $orderProductIdsToKeep)
+                ->updateOrCreate(
+                // attributes
+                    collect($orderProductAttributes)
+                        ->only([
+                            'sku_ordered',
+                            'name_ordered',
+                            'quantity_ordered',
+                            'price',
+                        ])
+                        ->toArray(),
+                    // values
+                    [
+                        'order_id' => $order->getKey(),
+                        'product_id' => self::getProductId($orderProductAttributes),
+                    ]
+                );
+
+            $orderProductIdsToKeep[] = $orderProduct->getKey();
+        }
+
+        OrderProduct::where(['order_id' => $order->id])
+            ->whereNotIn('id', $orderProductIdsToKeep)
+            ->delete();
+
+        return $order->refresh();
     }
 }
