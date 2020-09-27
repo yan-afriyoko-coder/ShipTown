@@ -251,46 +251,4 @@ class OrderService
 
         return $order;
     }
-
-    /**
-     * @param array $attributes
-     * @return Order
-     */
-    private static function createOrder(array $attributes)
-    {
-        $order = Order::create([
-            "order_number" => $attributes['order_number'],
-            "status_code" => $attributes['status_code'] ?? 'processing',
-        ]);
-
-        foreach ($attributes['order_products'] as $orderProductAttributes) {
-            $orderProduct = new OrderProduct($orderProductAttributes);
-
-            $order->orderProducts()->save($orderProduct);
-
-            $orderProduct->update([
-                'product_id' => self::findProductId($orderProductAttributes['sku_ordered'])
-            ]);
-        }
-
-        return $order;
-    }
-
-    /**
-     * @param string $sku
-     * @return BigInteger|null
-     */
-    private static function findProductId(string $sku)
-    {
-        $extracted_sku = Str::substr($sku, 0, 6);
-
-        $product = Product::query()
-            ->whereIn('sku', [
-                $sku,
-                $extracted_sku
-            ])
-            ->first();
-
-        return $product ? $product->getKey() : null;
-    }
 }
