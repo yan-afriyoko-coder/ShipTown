@@ -40,7 +40,7 @@
                        <div>
                            <hr>
                            <div class="row text-left mb-2">
-                               <div class="col-4">
+                               <div class="col-6">
                                    <div class="h5">
                                        <a target="_blank" :href="getProductLink(orderProduct)">
                                            #{{ orderProduct['order']['order_number']}}
@@ -50,23 +50,19 @@
                                        {{ orderProduct['order']['status_code']}}
                                    </div>
                                </div>
-                               <div class="col-8">
+                               <div class="col-6">
                                    <div class="row text-center">
-                                       <div class="col-3">
+                                       <div class="col-4">
                                            <div class="small">ordered</div>
                                            <div class="h3">{{ Math.ceil(orderProduct['quantity_ordered']) }}</div>
                                        </div>
-                                       <div class="col-3">
+                                       <div class="col-4">
                                            <div class="small">picked</div>
                                            <div class="h3">{{ dashIfZero(Number(orderProduct['quantity_picked'])) }}</div>
                                        </div>
-                                       <div class="col-3">
+                                       <div class="col-4">
                                            <div class="small">shipped</div>
                                            <div class="h3">{{ dashIfZero(Number(orderProduct['quantity_shipped']))  }}</div>
-                                       </div>
-                                       <div class="col-3" v-bind:class="{ 'bg-warning': ifHasEnoughStock(orderProduct) }">
-                                           <div class="small">inventory</div>
-                                           <div class="h3">{{ dashIfZero(getProductQuantity(orderProduct)) }}</div>
                                        </div>
                                    </div>
                                </div>
