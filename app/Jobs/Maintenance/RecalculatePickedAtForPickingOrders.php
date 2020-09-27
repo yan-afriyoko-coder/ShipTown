@@ -51,6 +51,16 @@ class RecalculatePickedAtForPickingOrders implements ShouldQueue
 
         ');
 
+        DB::statement('
+            UPDATE `'.$prefix.'orders`
+
+            SET
+                `'.$prefix.'orders`.status_code = "packing_web"
+
+            WHERE `'.$prefix.'orders`.status_code = "picking"
+            AND `'.$prefix.'orders`.picked_at IS NOT NULL
+        ');
+
         info('Recalculated "picking" orders picked_at');
     }
 }
