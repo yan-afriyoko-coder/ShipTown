@@ -55,6 +55,7 @@ class Order extends Model
     // as this is then not populated
     // correctly to events
     protected $attributes = [
+        'status_code' => 'processing',
         'raw_import' => '{}',
     ];
 
