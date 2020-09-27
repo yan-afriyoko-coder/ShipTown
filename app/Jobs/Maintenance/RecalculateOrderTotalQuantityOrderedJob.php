@@ -40,6 +40,7 @@ class RecalculateOrderTotalQuantityOrderedJob implements ShouldQueue
                     SELECT sum(`'.$prefix.'order_products`.`quantity_ordered`)
                     FROM `'.$prefix.'order_products`
                     WHERE `'.$prefix.'order_products`.`order_id` = `'.$prefix.'orders`.`id`
+                        AND `'.$prefix.'order_products`.`deleted_at` IS NULL
                 ),
                 0
             )

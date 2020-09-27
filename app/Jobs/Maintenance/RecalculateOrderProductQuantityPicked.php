@@ -41,6 +41,7 @@ class RecalculateOrderProductQuantityPicked implements ShouldQueue
                     FROM `'.$prefix.'pick_requests`
                     WHERE
                         `'.$prefix.'pick_requests`.`order_product_id` = `'.$prefix.'order_products`.`id`
+                        AND `'.$prefix.'pick_requests`.`deleted_at` IS NULL
                 ),
                 0
             )

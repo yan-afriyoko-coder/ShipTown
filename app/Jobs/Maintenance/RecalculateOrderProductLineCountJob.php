@@ -39,6 +39,7 @@ class RecalculateOrderProductLineCountJob implements ShouldQueue
                 SELECT count(*)
                 FROM `'.$prefix.'order_products`
                 WHERE `'.$prefix.'order_products`.`order_id` = `'.$prefix.'orders`.`id`
+                AND `'.$prefix.'order_products`.`deleted_at` IS NULL
             )
         ');
 

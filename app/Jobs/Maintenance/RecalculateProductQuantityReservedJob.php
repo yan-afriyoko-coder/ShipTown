@@ -40,6 +40,7 @@ class RecalculateProductQuantityReservedJob implements ShouldQueue
                     SELECT sum(`'.$prefix.'inventory`.`quantity_reserved`)
                     FROM `'.$prefix.'inventory`
                     WHERE `'.$prefix.'inventory`.`product_id` = `'.$prefix.'products`.`id`
+                        AND `'.$prefix.'inventory`.`deleted_at` IS NULL
                 ),
                 0
             )
