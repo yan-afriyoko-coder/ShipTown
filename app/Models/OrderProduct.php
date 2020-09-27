@@ -20,6 +20,8 @@ class OrderProduct extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'order_id',
+        'product_id',
         'sku_ordered',
         'name_ordered',
         'price',
