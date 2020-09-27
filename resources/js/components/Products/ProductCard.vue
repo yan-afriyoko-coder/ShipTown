@@ -8,11 +8,11 @@
                 </div>
                 <div class="col-md-6">
                     <div class="row">
-                        <div class="col-3 font-weight-bold">Location</div>
-                        <div class="col-3 font-weight-bold text-right">In Stock</div>
-                        <div class="col-2 font-weight-bold text-right">Reserved</div>
-                        <div class="col-2 font-weight-bold text-right">Available</div>
-                        <div class="col-2 font-weight-bold text-right">Shelf</div>
+                        <div class="col-3 small font-weight-bold">Location</div>
+                        <div class="col-3 small font-weight-bold text-right">In Stock</div>
+                        <div class="col-2 small font-weight-bold text-right">Reserved</div>
+                        <div class="col-2 small font-weight-bold text-right">Available</div>
+                        <div class="col-2 small font-weight-bold text-right">Shelf</div>
                     </div>
                     <div class="row" v-for="warehouse_inventory in product.inventory">
                         <div class="col-3">{{ warehouse_inventory.location_id }}</div>
@@ -27,7 +27,7 @@
                         <div class="col-2 text-right font-weight-bold">{{ product.quantity_reserved | numberFormat }}</div>
                         <div class="col-2 text-right font-weight-bold">{{ product.quantity - product.quantity_reserved | numberFormat }}</div>
 <!--                        <div class="col-2"></div>-->
-                        <div class="col-2 text-center text-primary h2">
+                        <div class="col-2 text-right text-primary h2 mb-0 pr-2 ">
                             +
                         </div>
                     </div>
