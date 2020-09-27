@@ -18,6 +18,8 @@ class SyncController extends Controller
      */
     public function index()
     {
+        info('Dispatching sync jobs');
+
         // import API2CART orders
         DispatchImportOrdersJobs::dispatch();
 

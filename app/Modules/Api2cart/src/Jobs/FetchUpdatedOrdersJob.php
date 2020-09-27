@@ -100,6 +100,8 @@ class FetchUpdatedOrdersJob implements ShouldQueue
 
         $this->saveOrders($connection, $orders);
 
+        info('Imported Api2cart orders', ['count' => count($orders)]);
+
         // for better performance and no long blocking jobs
         // recursively dispatch another import job
         // if there might be still some more to import
