@@ -24,12 +24,17 @@ class OrderProductController extends Controller
     {
         $query = QueryBuilder::for(OrderProduct::class)
             ->allowedFilters([
+                'product_id',
                 'order_id',
                 AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->default(100),
             ])
             ->allowedIncludes([
+                'order',
                 'product',
                 'product.aliases',
+            ])
+            ->allowedSorts([
+                'id',
             ]);
 
         $per_page = $request->get('per_page', 10);
