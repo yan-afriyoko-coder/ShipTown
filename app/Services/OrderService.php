@@ -12,9 +12,11 @@ use App\Models\OrderAddress;
 use App\Models\OrderProduct;
 use App\Models\PickRequest;
 use App\Models\Product;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use phpseclib\Math\BigInteger;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -141,65 +143,92 @@ class OrderService
     }
 
     /**
-     * @param array $attributes
+     * @param array $orderAttributes
      * @return Order
      */
-    public static function updateOrCreate(array $attributes)
+    public static function updateOrCreate(array $orderAttributes)
     {
-        $order = Order::where(['order_number' => $attributes['order_number']])->first();
+        // update or create order
+        $order = Order::updateOrCreate(
+            ['order_number' => $orderAttributes['order_number']],
+            $orderAttributes
+        );
 
-        if (is_null($order)) {
-            $order = Order::create([
-                "order_number" => $attributes['order_number'],
-                "status_code" => $attributes['status_code'] ?? 'processing',
-            ]);
-        };
+        // update or create shipping address
+        $shipping_address = $order->shippingAddress()->updateOrCreate(
+            ['id' => $order->shipping_address_id],
+            $orderAttributes['shipping_address']
+        );
 
-        $updateAttributes = collect($attributes)
-            ->only(['total', 'total_paid', 'raw_import']);
+        $order->update(['shipping_address_id' => $shipping_address->getKey()]);
 
-        if (isset($attributes['status_code'])) {
-            $updateAttributes["status_code"] = $attributes['status_code'];
+        // update or create products
+        $orderProductIdsToKeep = [];
+
+        foreach ($orderAttributes['order_products'] as $orderProductAttributes) {
+            $orderProduct = OrderProduct::where(['order_id' => $order->getKey()])
+                ->whereNotIn('id', $orderProductIdsToKeep)
+                ->updateOrCreate(
+                    // attributes
+                    collect($orderProductAttributes)
+                        ->only([
+                            'sku_ordered',
+                            'name_ordered',
+                            'quantity_ordered',
+                            'price',
+                        ])
+                        ->toArray(),
+                    // values
+                    [
+                        'order_id' => $order->getKey(),
+                    ]
+                );
+
+            $orderProductIdsToKeep[] = $orderProduct->getKey();
         }
 
-        $array = $updateAttributes->toArray();
-        $order->update($array);
+        OrderProduct::where(['order_id' => $order->id])
+            ->whereNotIn('id', $orderProductIdsToKeep)
+            ->delete();
 
-        self::updateOrCreateShippingAddress($order, $attributes['shipping_address']);
 
-        $order->orderProducts()->delete();
 
-        foreach ($attributes['order_products'] as $rawOrderProduct) {
-            $orderProduct = OrderProduct::onlyTrashed()
-                ->where([
-                    'order_id' => $order->id,
-                    'sku_ordered' => $rawOrderProduct['sku_ordered'],
-                    'quantity_ordered' => $rawOrderProduct['quantity_ordered'],
-                    'price' => $rawOrderProduct['price'],
-                ])
-                ->first();
 
-            if ($orderProduct) {
-                $orderProduct->restore();
-                continue;
-            }
 
-            $orderProduct = new OrderProduct();
-            $orderProduct->fill($rawOrderProduct);
 
-            $extracted_sku = Str::substr($rawOrderProduct['sku_ordered'], 0, 6);
-
-            $product = Product::query()
-                ->whereIn('sku', [
-                    $rawOrderProduct['sku_ordered'],
-                    $extracted_sku
-                ])
-                ->first();
-
-            $orderProduct->product_id = $product ? $product->getKey() : null;
-
-            $order->orderProducts()->save($orderProduct);
-        }
+//        $order->orderProducts()->delete();
+//
+//        foreach ($attributes['order_products'] as $rawOrderProduct) {
+//            $orderProduct = OrderProduct::onlyTrashed()
+//                ->where([
+//                    'order_id' => $order->id,
+//                    'sku_ordered' => $rawOrderProduct['sku_ordered'],
+//                    'quantity_ordered' => $rawOrderProduct['quantity_ordered'],
+//                    'price' => $rawOrderProduct['price'],
+//                ])
+//                ->first();
+//
+//            if ($orderProduct) {
+//                $orderProduct->restore();
+//                continue;
+//            }
+//
+//            $orderProduct = new OrderProduct();
+//            $orderProduct->fill($rawOrderProduct);
+//
+//            $extracted_sku = Str::substr($rawOrderProduct['sku_ordered'], 0, 6);
+//
+//            $product = Product::query()
+//                ->whereIn('sku', [
+//                    $rawOrderProduct['sku_ordered'],
+//                    $extracted_sku
+//                ])
+//                ->first();
+//
+//            $orderProduct->product_id = $product ? $product->getKey() : null;
+//
+//            $order->orderProducts()->save($orderProduct);
+//        }
 
         CreatedEvent::dispatch($order);
 
@@ -221,5 +250,47 @@ class OrderService
         $order->save();
 
         return $order;
+    }
+
+    /**
+     * @param array $attributes
+     * @return Order
+     */
+    private static function createOrder(array $attributes)
+    {
+        $order = Order::create([
+            "order_number" => $attributes['order_number'],
+            "status_code" => $attributes['status_code'] ?? 'processing',
+        ]);
+
+        foreach ($attributes['order_products'] as $orderProductAttributes) {
+            $orderProduct = new OrderProduct($orderProductAttributes);
+
+            $order->orderProducts()->save($orderProduct);
+
+            $orderProduct->update([
+                'product_id' => self::findProductId($orderProductAttributes['sku_ordered'])
+            ]);
+        }
+
+        return $order;
+    }
+
+    /**
+     * @param string $sku
+     * @return BigInteger|null
+     */
+    private static function findProductId(string $sku)
+    {
+        $extracted_sku = Str::substr($sku, 0, 6);
+
+        $product = Product::query()
+            ->whereIn('sku', [
+                $sku,
+                $extracted_sku
+            ])
+            ->first();
+
+        return $product ? $product->getKey() : null;
     }
 }
