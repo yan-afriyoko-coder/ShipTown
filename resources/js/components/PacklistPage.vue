@@ -134,7 +134,13 @@
         },
 
         mounted() {
-            this.loadUser();
+            this.loadUser().then(() => {
+                const order_number = this.getUrlParameter('order_number', null);
+                console.log(order_number);
+                if( order_number != null) {
+                    this.packOrder(order_number);
+                }
+            });
         },
 
         watch: {
