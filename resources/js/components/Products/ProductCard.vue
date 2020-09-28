@@ -7,26 +7,26 @@
                     <div class="text-secondary h5">sku: <span class="font-weight-bold"> {{ product.sku }} </span></div>
                 </div>
                 <div class="col-md-6">
-                    <div class="row">
-                        <div class="col-2 small font-weight-bold">Location</div>
-                        <div class="col-2 d-none d-md-block small font-weight-bold text-right">In Stock</div>
-                        <div class="col-3 col-md-2 small font-weight-bold text-right">Reserved</div>
-                        <div class="col-3 small font-weight-bold text-right">Available</div>
-                        <div class="col-4 col-md-3 small font-weight-bold text-right">Shelf</div>
+                    <div class="row small font-weight-bold text-right">
+                        <div class="col-2 text-left">Location</div>
+                        <div class="col-2 d-none d-md-block ">In Stock</div>
+                        <div class="col-3 col-md-2">Reserved</div>
+                        <div class="col-3">Available</div>
+                        <div class="col-4 col-md-3">Shelf</div>
                     </div>
-                    <div class="row" v-for="warehouse_inventory in product.inventory">
-                        <div class="col-2">{{ warehouse_inventory.location_id }}</div>
-                        <div class="col-2 d-none d-md-block text-right">{{ warehouse_inventory.quantity | numberFormat }}</div>
-                        <div class="col-3 col-md-2 text-right">{{ warehouse_inventory.quantity_reserved | numberFormat }}</div>
-                        <div class="col-3 text-right">{{ warehouse_inventory.quantity - warehouse_inventory.quantity_reserved | numberFormat }}</div>
-                        <div class="col-4 col-md-3 text-right">{{ warehouse_inventory.shelve_location }}</div>
+                    <div class="row text-right" v-for="warehouse_inventory in product.inventory">
+                        <div class="col-2 text-left">{{ warehouse_inventory.location_id }}</div>
+                        <div class="col-2 d-none d-md-block ">{{ warehouse_inventory.quantity | numberFormat }}</div>
+                        <div class="col-3 col-md-2">{{ warehouse_inventory.quantity_reserved | numberFormat }}</div>
+                        <div class="col-3">{{ warehouse_inventory.quantity - warehouse_inventory.quantity_reserved | numberFormat }}</div>
+                        <div class="col-4 col-md-3">{{ warehouse_inventory.shelve_location }}</div>
                     </div>
-                    <div class="row">
+                    <div class="row text-right font-weight-bold">
                         <div class="col-2"></div>
-                        <div class="col-2 d-none d-md-block text-right font-weight-bold">{{ product.quantity | numberFormat }}</div>
-                        <div class="col-3 col-md-2 text-right font-weight-bold">{{ product.quantity_reserved | numberFormat }}</div>
-                        <div class="col-3 text-right font-weight-bold">{{ product.quantity - product.quantity_reserved | numberFormat }}</div>
-                        <div class="col-4 col-md-3 text-right text-primary h2 mb-0 pr-2 ">
+                        <div class="col-2 d-none d-md-block ">{{ product.quantity | numberFormat }}</div>
+                        <div class="col-3 col-md-2">{{ product.quantity_reserved | numberFormat }}</div>
+                        <div class="col-3">{{ product.quantity - product.quantity_reserved | numberFormat }}</div>
+                        <div class="col-4 col-md-3 text-primary h2 mb-0 pr-2 ">
                             +
                         </div>
                     </div>
