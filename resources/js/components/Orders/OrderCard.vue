@@ -18,7 +18,8 @@
               <div class="col-6">
                 <div class="text-primary h4">#{{ order['order_number'] }}</div>
               </div>
-              <div class="col-6">
+              <div class="col-6 text-right">
+                  <div class=""><a target="_blank" :href="'/packlist?order_number=' + order['order_number'] ">OPEN ORDER</a></div>
               </div>
             </div>
 
@@ -55,46 +56,38 @@
 
 
             <div v-if="showProducts">
-              <hr>
 
-                <div class="row text-left mb-2">
-                    <div class="col-12">
-                        <div class=""><a target="_blank" :href="'/packlist?order_number=' + order['order_number'] ">OPEN ORDER</a></div>
-                    </div>
-
-                    <hr>
-                </div>
 
               <template v-for="order_product in order['order_products']">
+                  <hr>
+                    <div class="row text-left mb-2">
+                        <div class="col-lg-6">
+                            <div class="small">{{ order_product['name_ordered'] }}</div>
+                            <div class="small"><a target="_blank" :href="getProductLink(order_product)">{{ order_product['sku_ordered'] }}</a></div>
+                        </div>
 
-                <div class="row text-left mb-2">
-                    <div class="col-lg-6">
-                        <div class="small">{{ order_product['name_ordered'] }}</div>
-                        <div class="small"><a target="_blank" :href="getProductLink(order_product)">{{ order_product['sku_ordered'] }}</a></div>
-                    </div>
-
-                    <div class="col-lg-6">
-                        <div class="row text-center">
-                            <div class="col-3">
-                                <div class="small">ordered</div>
-                                <div class="h3">{{ Math.ceil(order_product['quantity_ordered']) }}</div>
-                            </div>
-                            <div class="col-3">
-                                <div class="small">picked</div>
-                                <div class="h3">{{ dashIfZero(Number(order_product['quantity_picked'])) }}</div>
-                            </div>
-                            <div class="col-3">
-                                <div class="small">shipped</div>
-                                <div class="h3">{{ dashIfZero(Number(order_product['quantity_shipped']))  }}</div>
-                            </div>
-                            <div class="col-3" v-bind:class="{ 'bg-warning': ifHasEnoughStock(order_product) }">
-                                <div class="small">inventory</div>
-                                <div class="h3">{{ dashIfZero(getProductQuantity(order_product)) }}</div>
+                        <div class="col-lg-6">
+                            <div class="row text-center">
+                                <div class="col-3">
+                                    <div class="small">ordered</div>
+                                    <div class="h3">{{ Math.ceil(order_product['quantity_ordered']) }}</div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="small">picked</div>
+                                    <div class="h3">{{ dashIfZero(Number(order_product['quantity_picked'])) }}</div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="small">shipped</div>
+                                    <div class="h3">{{ dashIfZero(Number(order_product['quantity_shipped']))  }}</div>
+                                </div>
+                                <div class="col-3" v-bind:class="{ 'bg-warning': ifHasEnoughStock(order_product) }">
+                                    <div class="small">inventory</div>
+                                    <div class="h3">{{ dashIfZero(getProductQuantity(order_product)) }}</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                </div>
+                    </div>
 
               </template>
 
