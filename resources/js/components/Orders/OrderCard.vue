@@ -57,10 +57,17 @@
             <div v-if="showProducts">
               <hr>
 
+                <div class="row text-left mb-2">
+                    <div class="col-12">
+                        <div class=""><a target="_blank" :href="'/packlist?order_number=' + order['order_number'] ">OPEN ORDER</a></div>
+                    </div>
+
+                    <hr>
+                </div>
+
               <template v-for="order_product in order['order_products']">
 
                 <div class="row text-left mb-2">
-
                     <div class="col-lg-6">
                         <div class="small">{{ order_product['name_ordered'] }}</div>
                         <div class="small"><a target="_blank" :href="getProductLink(order_product)">{{ order_product['sku_ordered'] }}</a></div>

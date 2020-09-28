@@ -14,6 +14,10 @@
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('missing_item')">
                     missing_item
                 </button>
+                <button type="button" class="btn btn-info" @click.prevent="changeStatus('picking')">
+                    picking
+                </button>
+                <hr>
                 <button type="button" class="btn btn-info" @click.prevent="displayShippingNumberModal">
                     Add Shipping Number
                 </button>
