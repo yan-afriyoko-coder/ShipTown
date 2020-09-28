@@ -10,7 +10,7 @@
                     <div class="row">
                         <div class="col-2 small font-weight-bold">Location</div>
                         <div class="col-2 small font-weight-bold text-right">In Stock</div>
-                        <div class="col-2 small font-weight-bold text-right">Reserved</div>
+                        <div class="col-2 small font-weight-bold text-right">Rsvd</div>
                         <div class="col-3 small font-weight-bold text-right">Available</div>
                         <div class="col-3 small font-weight-bold text-right">Shelf</div>
                     </div>
