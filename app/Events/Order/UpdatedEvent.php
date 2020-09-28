@@ -35,7 +35,7 @@ class UpdatedEvent
      */
     public function getOrder()
     {
-        return $this->order;
+        return $this->order->load('orderProducts');
     }
 
     /**
