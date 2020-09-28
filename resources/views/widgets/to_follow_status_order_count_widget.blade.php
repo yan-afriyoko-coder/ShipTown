@@ -21,7 +21,7 @@
                 <tbody>
                 @foreach ($order_status_counts as $order_status)
                     <tr>
-                        <td><a href="/orders?status={{$order_status->status_code }}" target="_blank">{{$order_status->status_code }}</a></td>
+                        <td><a href="/orders?sort=order_placed_at&status={{$order_status->status_code }}" target="_blank">{{$order_status->status_code }}</a></td>
                         <td class="text-right">{{ $order_status->order_count }}</td>
                     </tr>
                 @endforeach
