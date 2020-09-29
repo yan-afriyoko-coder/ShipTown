@@ -15,7 +15,7 @@ class AutoPilotTest extends TestCase
     public function testExample()
     {
         $this->assertEquals(
-            100,
+            50,
             AutoPilot::getAutoPilotPackingDailyMax()
         );
     }
