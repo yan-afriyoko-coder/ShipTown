@@ -34,7 +34,7 @@ class RefillWebPickingStatusListJob implements ShouldQueue
      */
     public function handle()
     {
-        $currentOrdersInProcessCount = Order::whereIn('status_code', ['picking', 'ready', 'packing_web'])->count();
+        $currentOrdersInProcessCount = Order::whereIn('status_code', ['picking', 'packing_web'])->count();
 
         logger('Refilling "picking" status', [
             'max_daily_allowed' => $this->maxDailyAllowed,

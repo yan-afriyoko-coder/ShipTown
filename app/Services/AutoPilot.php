@@ -15,7 +15,7 @@ class AutoPilot
         $config = Configuration::firstOrCreate([
                 'key' => config('autopilot.config_key_name')
             ], [
-                'value' => 100
+                'value' => 50
             ]);
 
         return (int) $config->value;
