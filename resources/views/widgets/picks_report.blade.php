@@ -33,7 +33,8 @@
         @foreach ($picks as $pick)
             <div class="row">
                 <div class="col-2 text-left">
-                    {{  \Carbon\Carbon::parse($pick['picked_at'])->format('M d, H:i') }}
+                    {{  \Carbon\Carbon::parse($pick['picked_at'] ?? $pick['deleted_at'])->format('M d, H:i') }}
+                    {{ $pick['deleted_at'] ? ' - DELETED' : '' }}
                 </div>
                 <div class="col-2 text-left">
                     {{ $pick['sku_ordered'] }}
