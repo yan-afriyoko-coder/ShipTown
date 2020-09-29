@@ -24,7 +24,7 @@ class PicksReport extends AbstractWidget
             ->whereNotNull('picked_at')
             ->orWhereNotNull('deleted_at')
             ->orderByDesc('updated_at')
-            ->limit(150)
+            ->limit(250)
             ->with('User')
             ->get();
 
