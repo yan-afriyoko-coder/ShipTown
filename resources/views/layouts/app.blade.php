@@ -66,7 +66,7 @@
                                 <a class="dropdown-item" href="{{ route('packlist') . '?status=packing_web&is_packed=false&is_picked=true&sort=order_placed_at,product_line_count,total_quantity_ordered&packer_user_id='. Auth::user()->id}}">
                                     {{ __('Status: packing_web') }}
                                 </a>
-                                <a class="dropdown-item" href="{{ route('packlist') . '?status=packing_warehouse&is_packed=false&sort=product_line_count,total_quantity_ordered,order_placed_at&packer_user_id='. Auth::user()->id}}">
+                                <a class="dropdown-item" href="{{ route('packlist') . '?status=packing_warehouse&&inventory_source_location_id=99&is_packed=false&sort=product_line_count,total_quantity_ordered,order_placed_at&packer_user_id='. Auth::user()->id}}">
                                     {{ __('Status: packing_warehouse') }}
                                 </a>
 {{--                                <a class="dropdown-item" href="{{ route('packlist') . '?status=picking&is_packed=false&is_picked=false&sort=product_line_count,total_quantity_ordered,order_placed_at&packer_user_id='. Auth::user()->id}}">--}}
