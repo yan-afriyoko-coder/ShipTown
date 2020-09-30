@@ -8,6 +8,7 @@ use App\Models\OrderAddress;
 use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Services\OrderService;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class OrderServiceTest extends TestCase
@@ -88,6 +89,11 @@ class OrderServiceTest extends TestCase
 
     public function testStatusCodeUpdate()
     {
+        // some automations listening to event might
+        // automatically change status
+        // this way we disable it
+        Event::fake();
+
         $orderFake = factory(Order::class)->make();
 
         OrderAddress::query()->forceDelete();
