@@ -27,21 +27,22 @@
             </template>
         </filters-modal>
 
-        <div v-if="order !== null && !isLoading">
 
-            <div class="row" >
-                <div class="col">
-                    <div class="text-nowrap">
-                        <barcode-input-field @barcodeScanned="packOrder" :placeholder="'Scan order number and click enter'"/>
-                    </div>
-                    <hr>
-                    <div class="text-center mt-3">
-                        <button type="button"  class="btn-info" @click.prevent="startPacking">
-                            Start AutoPilot Packing
-                        </button>
-                    </div>
+        <div v-if="order === null && !isLoading" class="row" >
+            <div class="col">
+                <div class="text-nowrap">
+                    <barcode-input-field @barcodeScanned="packOrder" :placeholder="'Scan order number and click enter'"/>
+                </div>
+                <hr>
+                <div class="text-center mt-3">
+                    <button type="button"  class="btn-info" @click.prevent="startPacking">
+                        Start AutoPilot Packing
+                    </button>
                 </div>
             </div>
+        </div>
+
+        <div v-if="order !== null && !isLoading">
 
             <div class="row mb-3">
                 <div class="col">
