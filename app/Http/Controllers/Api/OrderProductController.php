@@ -24,8 +24,8 @@ class OrderProductController extends Controller
     {
         $query = QueryBuilder::for(OrderProduct::class)
             ->allowedFilters([
-                'product_id',
-                'order_id',
+                AllowedFilter::exact('product_id'),
+                AllowedFilter::exact('order_id'),
                 AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->default(100),
             ])
             ->allowedIncludes([

@@ -11,7 +11,7 @@
             </div>
 
             <div class="card-body">
-                <div>Packing Daily Max</div>
+                <div>Max Refill Batch Size (packing + packing_web)</div>
                 <input ref="barcode" class="form-control" type="number" :placeholder="''"
                        v-model="value"/>
 
@@ -42,6 +42,7 @@ export default {
     methods: {
         saveAutoPilotTuningSettings() {
             if (this.value) {
+                this.btnSaveAutoPilotTuningSettings = ! this.btnSaveAutoPilotTuningSettings;
                 axios.post(`api/configuration`, {
                     key: process.env.MIX_PACKING_DAILY_MAX_CONFIG_KEY_NAME,
                     value: this.value,
