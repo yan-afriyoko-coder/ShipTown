@@ -36,7 +36,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::put('print/order/{order_number}/{view}', 'Api\PrintOrderController@store');
 
-    Route::get('packlist', 'Api\PacklistController@index');
+    Route::get('pack/order', 'Api\PackOrderController@index');
     Route::post('packlist/{packlist}', 'Api\PacklistController@store');
 
 

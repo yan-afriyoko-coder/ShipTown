@@ -27,6 +27,21 @@
             </template>
         </filters-modal>
 
+        <div class="row" >
+            <div class="col">
+                <div>
+                    This order is already opened by someone else.
+                </div>
+                <div>
+                    Be careful
+                </div>
+                <div class="text-center mt-3">
+                    <button type="button"  class="btn-danger" @click.prevent="startPacking">
+                        Take over the order
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <div v-if="order === null && !isLoading" class="row" >
             <div class="col">
@@ -138,13 +153,14 @@
         },
 
         mounted() {
-            this.loadUser().then(() => {
-                const order_number = this.getUrlParameter('order_number', null);
-                console.log(order_number);
-                if( order_number != null) {
-                    this.packOrder(order_number);
-                }
-            });
+            this.loadUser()
+                .then(() => {
+                    const order_number = this.getUrlParameter('order_number', null);
+                    console.log(order_number);
+                    if( order_number != null) {
+                        this.packOrder(order_number);
+                    }
+                });
         },
 
         watch: {
@@ -170,6 +186,14 @@
         },
 
         methods: {
+            startPacking() {
+                this.loadUser()
+                    .then(response => {
+                        this.loadOrder();
+                    });
+            },
+
+
             shipPartialSwiped(orderProduct) {
                 this.$snotify.prompt('Partial shipment', {
                     placeholder: 'Enter quantity to ship:',
@@ -231,13 +255,6 @@
                     })
                     .finally(() => {
                         this.startPacking()
-                    });
-            },
-
-            startPacking() {
-                this.loadUser()
-                    .then(response => {
-                        this.loadOrder();
                     });
             },
 
