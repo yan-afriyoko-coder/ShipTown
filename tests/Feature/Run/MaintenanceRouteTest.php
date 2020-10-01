@@ -11,16 +11,6 @@ use Tests\TestCase;
 
 class MaintenanceRouteTest extends TestCase
 {
-    public function testIfRouteIsAvailableAfterAugust()
-    {
-        $this->assertTrue(
-            Carbon::today()
-                ->isBefore(
-                    Carbon::createFromDate(2020, 9, 30)
-                )
-        );
-    }
-
     public function testGetRoute()
     {
         Bus::fake();

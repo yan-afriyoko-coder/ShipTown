@@ -27,13 +27,16 @@
             </template>
         </filters-modal>
 
+        <div v-if="showMultipackerWarning" class="row" >
+            <div class="col">
+                <div class="alert-danger">
+                    This order is already opened by someone else. Be careful
+                </div>
+            </div>
+        </div>
 
         <div v-if="order === null && !isLoading" class="row" >
             <div class="col">
-                <div class="text-nowrap">
-                    <barcode-input-field @barcodeScanned="packOrder" :placeholder="'Scan order number and click enter'"/>
-                </div>
-                <hr>
                 <div class="text-center mt-3">
                     <button type="button"  class="btn-info" @click.prevent="startPacking">
                         Start AutoPilot Packing
@@ -134,17 +137,19 @@
                 packlist: null,
                 packed: [],
                 modalTest: false,
+                showMultipackerWarning: false,
             };
         },
 
         mounted() {
-            this.loadUser().then(() => {
-                const order_number = this.getUrlParameter('order_number', null);
-                console.log(order_number);
-                if( order_number != null) {
-                    this.packOrder(order_number);
-                }
-            });
+            this.loadUser()
+                .then(() => {
+                    const order_number = this.getUrlParameter('order_number', null);
+                    console.log(order_number);
+                    if( order_number != null) {
+                        this.packOrder(order_number);
+                    }
+                });
         },
 
         watch: {
@@ -170,6 +175,79 @@
         },
 
         methods: {
+            startPacking() {
+                let params = {}
+                if( this.getUrlParameter('order_number') != null) {
+                   params = {
+                       'filter[order_number]': this.getUrlParameter('order_number')
+                   };
+                } else {
+                   params = {
+                        'filter[status]': this.getUrlParameter('status','picking'),
+                        'sort': this.getUrlParameter('sort'),
+                        'per_page': 1,
+                        'include':'order_products'+
+                            ',order_products.product'+
+                            ',order_products.product.aliases',
+                    };
+                }
+
+                axios.get('/api/packlist/order', {params: params})
+                    .then(({data}) => {
+                        this.packOrder(data.data['order_number'])
+                    })
+                    .catch((error) => {
+                        let msg = 'Error occurred loading order';
+                        if (error.response.status === 404) {
+                            msg = "No orders available with specified filters"
+                        }
+                        this.$snotify.error(msg);
+                        this.errorBeep();
+                    })
+            },
+
+            packOrder(orderNumber) {
+                const params = {
+                    'filter[order_number]': orderNumber
+                };
+
+                this.loadNextOrderToPack(params)
+            },
+
+            loadNextOrderToPack: function (params) {
+                this.showLoading();
+
+                this.order = null;
+                this.packlist = [];
+                this.packed = [];
+
+                return axios.get('/api/orders', {params: params})
+                    .then(({data}) => {
+                        if (data.total > 0) {
+                            this.order = data.data[0];
+
+                            if ((this.order['packer_user_id'] !== null) && (this.order['packer_user_id'] !== this.user['id'])) {
+                                this.showMultipackerWarning = true;
+                            }
+
+                            if ((this.order['is_packed'] === false) && (this.order['packer_user_id'] === null)) {
+                                return axios.put('api/orders/' + this.order['id'], {
+                                    'packer_user_id': this.user['id'],
+                                });
+                            }
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        this.notificationError('Error occurred while loading order');
+                    })
+                    .then(() => {
+                        this.hideLoading();
+                    })
+            },
+
+
+
             shipPartialSwiped(orderProduct) {
                 this.$snotify.prompt('Partial shipment', {
                     placeholder: 'Enter quantity to ship:',
@@ -206,18 +284,6 @@
                 });
             },
 
-            packOrder(orderNumber) {
-                const params = {
-                    'filter[order_number]': orderNumber
-                };
-
-                this.updateUrl({
-                    'order_number': orderNumber
-                });
-
-                this.loadNextOrderToPack(params)
-            },
-
             changeStatus(code) {
                 this.$refs.filtersModal.hide();
                 return axios.put('/api/orders/' + this.order['id'], {
@@ -231,13 +297,6 @@
                     })
                     .finally(() => {
                         this.startPacking()
-                    });
-            },
-
-            startPacking() {
-                this.loadUser()
-                    .then(response => {
-                        this.loadOrder();
                     });
             },
 
@@ -348,34 +407,6 @@
 
                             this.loadNextOrderToPack(updatedParams);
                         }
-                    })
-            },
-
-            loadNextOrderToPack: function (params) {
-                this.showLoading();
-
-                this.order = null;
-                this.packlist = [];
-                this.packed = [];
-
-                return axios.get('/api/orders', {params: params})
-                    .then(({data}) => {
-                        if (data.total > 0) {
-                            this.order = data.data[0];
-
-                            if (this.order['is_packed'] === false) {
-                                return axios.put('api/orders/' + this.order['id'], {
-                                    'packer_user_id': this.user['id'],
-                                });
-                            }
-                        }
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                        this.notificationError('Error occurred while loading order');
-                    })
-                    .then(() => {
-                        this.hideLoading();
                     })
             },
 
