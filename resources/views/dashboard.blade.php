@@ -48,6 +48,13 @@
                         </div>
                     </div>
 
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="">@widget('NewOrdersCounts')</div>
+                        </div>
+                    </div>
+
                     @endrole
 
                 </div>
