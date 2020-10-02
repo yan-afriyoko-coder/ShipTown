@@ -34,14 +34,16 @@ class NewOrdersCounts extends AbstractWidget
             ->select(['status_code', DB::raw('count(*) as order_count')])
             ->get();
 
-//        return view('widgets.status_order_count', [
-//            'config' => $this->config,
-//            'status_order_counts' => $status_order_counts
-//        ]);
+        $total_count = 0;
+
+        foreach ($orders_counts as $order_status) {
+            $total_count += $order_status['order_count'];
+        }
 
         return view('widgets.new_orders_counts', [
             'config' => $this->config,
-            'new_order_counts' => $orders_counts
+            'new_order_counts' => $orders_counts,
+            'total_count' => $total_count,
         ]);
     }
 }

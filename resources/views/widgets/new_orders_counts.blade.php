@@ -16,7 +16,7 @@
                 <thead>
                 <tr>
                     <th scope="col">Status</th>
-                    <th scope="col" class="text-right">Count</th>
+                    <th scope="col" class="text-right">{{ $total_count }}</th>
                 </tr>
                 </thead>
                 <tbody>
