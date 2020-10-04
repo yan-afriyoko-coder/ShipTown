@@ -10,6 +10,13 @@
             <div class="card">
                 <div class="card-body">
 
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="">@widget('OrdersByAgeWidget')</div>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col">
                             <div class="">@widget('ActiveOrdersWidget')</div>
