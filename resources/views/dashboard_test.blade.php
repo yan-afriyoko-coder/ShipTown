@@ -10,6 +10,13 @@
             <div class="card">
                 <div class="card-body">
 
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="">@widget('OrdersByAgeWidget')</div>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col">
                             <div class="">@widget('ActiveOrdersWidget')</div>
@@ -33,27 +40,26 @@
                             <div class="">@widget('apt')</div>
                         </div>
                     </div>
-
                     @role('admin')
 
-                        <div class="row">
-                            <div class="col">
-                                <div class="">@widget('UserPickCounts')</div>
-                            </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="">@widget('UserPickCounts')</div>
                         </div>
+                    </div>
 
-                        <div class="row">
-                            <div class="col">
-                                <div class="">@widget('PacksStatisticsWidget')</div>
-                            </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="">@widget('PacksStatisticsWidget')</div>
                         </div>
+                    </div>
 
 
-                        <div class="row">
-                            <div class="col">
-                                <div class="">@widget('NewOrdersCounts')</div>
-                            </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="">@widget('NewOrdersCounts')</div>
                         </div>
+                    </div>
 
                     @endrole
 

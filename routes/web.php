@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::redirect('/', 'dashboard');
 
     Route::view('/dashboard', 'dashboard')->name('dashboard');
+    Route::view('/dashboard_test', 'dashboard_test')->name('dashboard_test');
     Route::view('/products', 'products')->name('products');
     Route::view('/picklist', 'picklist')->name('picklist');
     Route::view('/packlist', 'packlist')->name('packlist');
