@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class OrderStatus extends Model
 {
     public static $activeOrderStatusList = [
-        'processing',
         'paid',
         'picking',
         'picking_web',
@@ -15,11 +14,12 @@ class OrderStatus extends Model
         'packing',
         'packing_web',
         'packing_warehouse',
-        'ready',
         'for_later',
     ];
 
     public static $toFollowStatusList = [
+        'processing',
+        'ready',
         'unshipped',
         'partially_shipped',
         'holded',
