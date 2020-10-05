@@ -36,6 +36,7 @@ class UpdateClosedAtIfNullJob implements ShouldQueue
         Order::whereNull('order_closed_at')
             ->whereIn('status_code', OrderStatus::getCompletedStatusCodeList())
             ->limit(500)
+            ->latest()
             ->get()
             ->each(function (Order $order) {
                 $orderImport = Api2cartOrderImports::where(['order_number' => $order->order_number])
@@ -45,7 +46,7 @@ class UpdateClosedAtIfNullJob implements ShouldQueue
                 foreach ($orderImport->extractStatusHistory() as $status) {
                     if (OrderStatus::isComplete($status['id'])) {
                         $order->update(['order_closed_at' => Carbon::make($status['modified_time']['value'])]);
-                        continue;
+                        break;
                     }
                 }
             });
