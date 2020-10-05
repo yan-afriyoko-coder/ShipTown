@@ -11,9 +11,9 @@ class OrderObserver
 {
     public function saving(Order $order)
     {
-//        if (OrderStatus::isComplete($order->status_code) && ($order->order_closed_at === null)) {
-//            $order->order_closed_at = now();
-//        }
+        if (OrderStatus::isComplete($order->status_code) && ($order->order_closed_at === null)) {
+            $order->order_closed_at = now();
+        }
     }
 
     /**

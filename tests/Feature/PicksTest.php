@@ -116,19 +116,20 @@ class PicksTest extends TestCase
 
         $order->update(['status_code' => 'picking']);
 
+
         $picks = Pick::query()->whereNull('picked_at')->get();
 
         foreach ($picks as $pick) {
             $pick->pick($user, $pick->quantity_required);
         }
 
-        $exists = Order::query()->whereNotNull('picked_at')->exists();
+        $exists = Order::query()->whereNull('picked_at')->exists();
 
         if ($exists) {
             dd(3, $order->toArray());
         }
 
-        $this->assertTrue(
+        $this->assertNotTrue(
             $exists
         );
     }
