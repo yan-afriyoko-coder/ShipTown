@@ -4,18 +4,19 @@
 
 use App\Models\Order;
 use App\Models\OrderAddress;
+use App\Models\OrderStatus;
 use Faker\Generator as Faker;
 
 $factory->define(Order::class, function (Faker $faker) {
 
     $order_closed_at = null;
 
-    $status_code = $faker->randomElement(['complete','processing','cancelled']);
+    $status_code = $faker->randomElement(['complete','processing','cancelled','on_hold']);
 
     $order_placed_at = $faker->dateTimeBetween('-5 months');
 
-    if ($status_code !== 'processing') {
-        $order_closed_at = $faker->dateTimeBetween($order_placed_at);
+    if (OrderStatus::isActive($status_code)) {
+        $order_closed_at = $faker->dateTimeBetween($order_placed_at, now());
     }
 
     return [

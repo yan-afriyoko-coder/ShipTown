@@ -5,9 +5,17 @@ namespace App\Observers;
 use App\Events\Order\StatusChangedEvent;
 use App\Events\Order\UpdatedEvent;
 use App\Models\Order;
+use App\Models\OrderStatus;
 
 class OrderObserver
 {
+    public function saving(Order $order)
+    {
+        if (OrderStatus::isComplete($order->status_code) && ($order->order_closed_at === null)) {
+            $order->order_closed_at = now();
+        }
+    }
+
     /**
      * Handle the order "created" event.
      *
