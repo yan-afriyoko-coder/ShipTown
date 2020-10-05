@@ -19,7 +19,6 @@ class OrderStatus extends Model
 
     public static $toFollowStatusList = [
         'processing',
-        'ready',
         'unshipped',
         'partially_shipped',
         'holded',
@@ -33,7 +32,8 @@ class OrderStatus extends Model
         'canceled',
         'closed',
         'complete',
-        'complete_imported_to_rms'
+        'complete_imported_to_rms',
+        'ready'
     ];
 
     public static function getActiveStatusCodesList()
