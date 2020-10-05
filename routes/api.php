@@ -74,6 +74,7 @@ Route::middleware('auth:api')->group(function () {
         \App\Jobs\Maintenance\UpdateAllProcessingIfPaidJob::dispatch();
         \App\Jobs\Maintenance\RefillWebPickingStatusListJob::dispatch();
         \App\Jobs\Maintenance\ClearOrderPackerAssignmentJob::dispatch();
+        \App\Jobs\Maintenance\UpdateClosedAtIfNullJob::dispatch();
         return 'Maintenance jobs dispatched';
     });
 });

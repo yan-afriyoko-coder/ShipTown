@@ -13,10 +13,6 @@ use App\Listeners\Inventory\Deleted\DeductFromProductTotalQuantityListener;
 use App\Listeners\Inventory\Updated\UpdateProductsQuantityReservedListener;
 use App\Listeners\Inventory\Updated\UpdateProductTotalQuantityListener;
 use App\Listeners\Order\Created\PublishSnsNotificationListener;
-use App\Listeners\Order\StatusChanged\CreatePickRequestsListener;
-use App\Listeners\Order\StatusChanged\DeletePickRequestsListener;
-use App\Listeners\Order\StatusChanged\PackingStatusesRules;
-use App\Listeners\Order\Updated\ChangeToPackingWebStatusListener;
 use App\Listeners\Pick\Picked\FillPickRequestsPickedQuantityListener;
 use App\Listeners\Pick\QuantityRequiredChanged\MovePickRequestToNewPickListener;
 use App\Listeners\Pick\Unpicked\ClearPickRequestsQuantityPickedListener;
@@ -66,12 +62,13 @@ class EventServiceProvider extends ServiceProvider
         ],
 //
         \App\Events\Order\StatusChangedEvent::class => [
-            CreatePickRequestsListener::class,
-            DeletePickRequestsListener::class,
+            \App\Listeners\Order\StatusChanged\CreatePickRequestsListener::class,
+            \App\Listeners\Order\StatusChanged\DeletePickRequestsListener::class,
+            \App\Listeners\Order\StatusChanged\UpdateClosedAt::class,
 
             // custom client rule
             // todo move it to some custom logic which can be modified (when x if y do z)
-            PackingStatusesRules::class,
+            \App\Listeners\Order\StatusChanged\PackingStatusesRules::class,
         ],
 
         // Pick

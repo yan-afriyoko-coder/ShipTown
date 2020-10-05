@@ -24,6 +24,8 @@ class UpdateOrderClosedAtTest extends TestCase
             'status_code' => 'blue'
         ]);
 
+        $order->update(['status_code' => 'black']);
+
         $this->assertNull($order->order_closed_at);
     }
 
@@ -37,9 +39,9 @@ class UpdateOrderClosedAtTest extends TestCase
         RmsapiProductImport::query()->forceDelete();
         Order::query()->forceDelete();
 
-        $order = factory(Order::class)->create([
-            'status_code' => 'complete'
-        ]);
+        $order = factory(Order::class)->create(['status_code' => 'test']);
+
+        $order->update(['status_code' => 'complete']);
 
         $this->assertNotNull($order->order_closed_at);
     }

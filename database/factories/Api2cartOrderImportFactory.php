@@ -19,7 +19,7 @@ $factory->define(Api2cartOrderImports::class, function (Faker $faker) {
               "last_name":"Smith"
            },
            "create_at":{
-              "value":"2015-11-26T09:25:31+0000",
+              "value":"2015-11-26T08:25:31+0000",
               "format":"Y-m-d\\\\TH:i:sO"
            },
            "currency":{
@@ -103,10 +103,20 @@ $factory->define(Api2cartOrderImports::class, function (Faker $faker) {
            ],
            "status":{
               "id":"complete",
-              "name":"Processing",
+              "name":"Complete",
               "history":[
                  {
-                    "id":"5",
+                    "id":"processing",
+                    "name":"Processing",
+                    "modified_time":{
+                       "value":"2015-11-26T08:25:31+0000",
+                       "format":"Y-m-d\\\\TH:i:sO"
+                    },
+                    "notify":true,
+                    "comment":"Complete"
+                 },
+                 {
+                    "id":"complete",
                     "name":"Complete",
                     "modified_time":{
                        "value":"2015-11-26T09:25:31+0000",

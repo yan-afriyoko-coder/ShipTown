@@ -82,9 +82,9 @@ class Api2cartOrderImports extends Model
      * @param bool $chronological
      * @return Collection
      */
-    public function extractStatusHistory(array $order, bool $chronological = true)
+    public function extractStatusHistory(array $order = null, bool $chronological = true)
     {
-        $statuses = Collection::make($order['status']['history']);
+        $statuses = Collection::make($this['raw_import']['status']['history']);
 
         if ($chronological) {
             $statuses = $statuses->sort(function ($a, $b) {
