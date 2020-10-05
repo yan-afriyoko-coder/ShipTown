@@ -51,9 +51,13 @@ class PicksTest extends TestCase
 
         RecalculatePickedAtForPickingOrders::dispatch();
 
-        $this->assertFalse(
-            Order::query()->whereNull('picked_at')->exists()
-        );
+        $nullExists = Order::query()->whereNull('picked_at')->exists();
+
+        if ($nullExists) {
+            dd(1, $orders->toArray());
+        }
+
+        $this->assertFalse($nullExists);
     }
 
     public function testRecalculateOrderProductQuantityPicked()
@@ -84,8 +88,14 @@ class PicksTest extends TestCase
 
         RecalculateOrderProductQuantityPicked::dispatch();
 
+        $exists = OrderProduct::query()->whereRaw('quantity_ordered <> quantity_picked')->exists();
+
+        if ($exists) {
+            dd(2, $order->toArray());
+        }
+
         $this->assertFalse(
-            OrderProduct::query()->whereRaw('quantity_ordered <> quantity_picked')->exists()
+            $exists
         );
     }
 
@@ -112,8 +122,14 @@ class PicksTest extends TestCase
             $pick->pick($user, $pick->quantity_required);
         }
 
+        $exists = Order::query()->whereNotNull('picked_at')->exists();
+
+        if ($exists) {
+            dd(3, $order->toArray());
+        }
+
         $this->assertTrue(
-            Order::query()->whereNotNull('picked_at')->exists()
+            $exists
         );
     }
 
