@@ -34,6 +34,8 @@ class OrderProductController extends Controller
                 'product.aliases',
             ])
             ->allowedSorts([
+                'inventory_source_shelf_location',
+                'sku_ordered',
                 'id',
             ]);
 

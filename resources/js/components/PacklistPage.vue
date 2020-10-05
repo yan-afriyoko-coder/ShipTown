@@ -419,6 +419,7 @@
                 const params = {
                     'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id', null),
                     'filter[order_id]': this.order.id,
+                    'sort': 'inventory_source_shelf_location,sku_ordered',
                     'include': 'product,product.aliases',
                     'per_page': 999,
                 };
