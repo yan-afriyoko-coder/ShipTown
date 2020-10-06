@@ -14,7 +14,7 @@
             <table class="table table-borderless">
                 <thead>
                 <tr>
-                    <th scope="col">Orders To Follow</th>
+                    <th scope="col">Orders To Follow Up</th>
                     <th scope="col" class="text-right">{{ $total_count }}</th>
                 </tr>
                 </thead>
