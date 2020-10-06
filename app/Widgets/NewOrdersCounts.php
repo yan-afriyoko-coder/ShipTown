@@ -22,23 +22,21 @@ class NewOrdersCounts extends AbstractWidget
      */
     public function run()
     {
-//        $orderStatusesToExclude = array_merge(
-//            OrderStatus::getActiveStatusCodesList(),
-//            OrderStatus::getToFollowStatusList()
-//        );
-
         $orders_counts = Order::query()
+            ->select([
+                DB::raw('date(order_placed_at) as date_placed_at'),
+                DB::raw('count(*) as order_count')
+            ])
             ->whereDate('order_placed_at', '>', Carbon::now()->subDays(7))
-//            ->whereNotIn('status_code', $orderStatusesToExclude)
-            ->groupBy(['status_code'])
-            ->select(['status_code', DB::raw('count(*) as order_count')])
+            ->groupBy([
+                DB::raw('date(order_placed_at)')
+            ])
+            ->orderByDesc('date_placed_at')
             ->get();
 
-        $total_count = 0;
-
-        foreach ($orders_counts as $order_status) {
-            $total_count += $order_status['order_count'];
-        }
+        $total_count = $orders_counts->sum(function ($day) {
+            return $day['order_count'];
+        });
 
         return view('widgets.new_orders_counts', [
             'config' => $this->config,

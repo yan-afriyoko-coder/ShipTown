@@ -21,12 +21,10 @@
                 </thead>
                 <tbody>
                 @foreach ($new_order_counts as $status)
-{{--                    @if (! in_array($status->status_code, ['picking','processing','holded']))--}}
-                        <tr>
-                            <td>{{ $status->status_code }}</td>
-                            <td class="text-right">{{ $status->order_count }}</td>
-                        </tr>
-{{--                    @endif--}}
+                    <tr>
+                        <td>{{ $status->date_placed_at }}</td>
+                        <td class="text-right">{{ $status->order_count }}</td>
+                    </tr>
                 @endforeach
                 </tbody>
             </table>
