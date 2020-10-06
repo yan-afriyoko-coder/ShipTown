@@ -1,11 +1,11 @@
-<div class="widget-tools-container">
-    <font-awesome-icon icon="question-circle" name="status-help-icon-completed-orders-by-date"></font-awesome-icon>
-    <template>
-        <tippy to="status-help-icon-completed-orders-by-date" arrow>
-            <p>This is the number of orders with a given status</p>
-        </tippy>
-    </template>
-</div>
+{{--<div class="widget-tools-container">--}}
+{{--    <font-awesome-icon icon="question-circle" name="status-help-icon-completed-orders-by-date"></font-awesome-icon>--}}
+{{--    <template>--}}
+{{--        <tippy to="status-help-icon-completed-orders-by-date" arrow>--}}
+{{--            <p>This is the number of orders with a given status</p>--}}
+{{--        </tippy>--}}
+{{--    </template>--}}
+{{--</div>--}}
 
 <div>
 {{--    <h4 class="card-title text-center">COM ORDERS</h4>--}}
