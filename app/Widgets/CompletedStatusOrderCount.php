@@ -36,9 +36,14 @@ class CompletedStatusOrderCount extends AbstractWidget
             ->select(['status_code', DB::raw('count(*) as order_count')])
             ->get();
 
+        $total_count = $status_order_counts->sum(function ($day) {
+            return $day['order_count'];
+        });
+
         return view('widgets.completed_orders_counts', [
             'config' => $this->config,
-            'status_order_counts' => $status_order_counts
+            'status_order_counts' => $status_order_counts,
+            'total_count' => $total_count,
         ]);
     }
 }

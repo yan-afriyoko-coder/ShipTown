@@ -24,24 +24,28 @@ class OrdersByAgeWidget extends AbstractWidget
      */
     public function run()
     {
-        $visitorTraffic = Order::select([
+        $orders_counts = Order::select([
                 DB::raw('Date(order_placed_at) as date'),
                 DB::raw('count(*) as order_count')
             ])
             ->whereIn('status_code', OrderStatus::getActiveStatusCodesList())
-            ->groupBy(DB::raw('Date(order_placed_at)'))
+            ->groupBy(DB::raw('date(order_placed_at)'))
             ->orderBy('date', 'ASC')
             ->get();
 
+        $total_count = $orders_counts->sum(function ($day) {
+            return $day['order_count'];
+        });
 
         return view('widgets.orders_by_age_widget', [
             'config' => $this->config,
-            'orders_per_days_age' => $visitorTraffic->map(function ($var) {
+            'orders_per_days_age' => $orders_counts->map(function ($var) {
                 return [
                     'days_age' => Carbon::make($var->date)->diffInDays(),
                     'order_count' => $var->order_count
                 ];
-            })
+            }),
+            'total_count' => $total_count,
         ]);
     }
 }

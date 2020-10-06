@@ -1,20 +1,20 @@
-<div class="widget-tools-container">
-    <font-awesome-icon icon="question-circle" name="status-help-icon-to-follow-orders-widget"></font-awesome-icon>
-    <template>
-        <tippy to="status-help-icon-to-follow-orders-widget" arrow>
-            <p>This is the number of orders with a given status</p>
-        </tippy>
-    </template>
-</div>
+{{--<div class="widget-tools-container">--}}
+{{--    <font-awesome-icon icon="question-circle" name="status-help-icon-to-follow-orders-widget"></font-awesome-icon>--}}
+{{--    <template>--}}
+{{--        <tippy to="status-help-icon-to-follow-orders-widget" arrow>--}}
+{{--            <p>This is the number of orders with a given status</p>--}}
+{{--        </tippy>--}}
+{{--    </template>--}}
+{{--</div>--}}
 
 <div>
-    <h4 class="card-title text-center">ORDERS TO FOLLOW</h4>
+{{--    <h4 class="card-title text-center">ORDERS TO FOLLOW</h4>--}}
     <div class="row">
         <div class="col-8 offset-2">
             <table class="table table-borderless">
                 <thead>
                 <tr>
-                    <th scope="col">Status</th>
+                    <th scope="col">Orders To Follow</th>
                     <th scope="col" class="text-right">{{ $total_count }}</th>
                 </tr>
                 </thead>

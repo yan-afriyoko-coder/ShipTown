@@ -13,6 +13,13 @@
 
                     <div class="row">
                         <div class="col">
+                            <h4 class="card-title text-center">PACKING STATISTICS</h4>
+{{--                            <h6 class="card-title text-center">LAST 7 DAYS</h6>--}}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
                             <div class="">@widget('OrdersByAgeWidget')</div>
                         </div>
                     </div>
