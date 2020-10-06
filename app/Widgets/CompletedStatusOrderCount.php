@@ -30,7 +30,7 @@ class CompletedStatusOrderCount extends AbstractWidget
         );
 
         $status_order_counts = Order::query()
-            ->whereDate('order_placed_at', '>', Carbon::now()->subDays(30))
+            ->whereDate('order_placed_at', '>', Carbon::now()->subDays(7))
             ->whereNotIn('status_code', $orderStatusesToExclude)
             ->groupBy(['status_code'])
             ->select(['status_code', DB::raw('count(*) as order_count')])
