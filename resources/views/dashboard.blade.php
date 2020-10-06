@@ -62,6 +62,12 @@
                             </div>
                         </div>
 
+                        <div class="row">
+                            <div class="col">
+                                <div class="">@widget('CompletedOrdersCountByDateWidget')</div>
+                            </div>
+                        </div>
+
                     @endrole
 
                 </div>
