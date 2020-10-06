@@ -1,7 +1,7 @@
 <table class="table table-borderless">
     <thead>
     <tr>
-        <th scope="col">Product - Picked In Last 7 Days</th>
+        <th scope="col">Products Picked In Last 7 Days</th>
         <th scope="col" class="text-right">{{ $total_count }}</th>
     </tr>
     </thead>
