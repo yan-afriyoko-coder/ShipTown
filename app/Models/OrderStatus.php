@@ -32,7 +32,7 @@ class OrderStatus extends Model
         'canceled',
         'closed',
         'complete',
-        'complete_imported_to_rms',
+        'completed_imported_to_rms',
         'ready'
     ];
 
