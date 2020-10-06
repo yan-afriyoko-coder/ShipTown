@@ -6,7 +6,6 @@ use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use phpseclib\Math\BigInteger;
 
@@ -240,5 +239,12 @@ class Order extends Model
     public function orderShipments()
     {
         return $this->hasMany(OrderShipment::class);
+    }
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function stats()
+    {
+        return $this->hasOne(OrderStats::class);
     }
 }

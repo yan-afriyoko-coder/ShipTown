@@ -106,6 +106,7 @@ class OrderService
                 AllowedFilter::scope('has_packer'),
             ])
             ->allowedIncludes([
+                'stats',
                 'shipping_address',
                 'order_shipments',
                 'order_products',
