@@ -21,12 +21,10 @@
                 </thead>
                 <tbody>
                 @foreach ($status_order_counts as $status)
-                    @if (! in_array($status->status_code, ['picking','processing','holded']))
                         <tr>
-                            <td>{{ $status->status_code }}</td>
+                            <td><a href="/orders?sort=order_placed_at&status={{$status->status_code }}">{{$status->status_code }}</a></td>
                             <td class="text-right">{{ $status->order_count }}</td>
                         </tr>
-                    @endif
                 @endforeach
                 </tbody>
             </table>

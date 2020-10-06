@@ -36,7 +36,7 @@ class CompletedStatusOrderCount extends AbstractWidget
             ->select(['status_code', DB::raw('count(*) as order_count')])
             ->get();
 
-        return view('widgets.status_order_count', [
+        return view('widgets.completed_orders_counts', [
             'config' => $this->config,
             'status_order_counts' => $status_order_counts
         ]);
