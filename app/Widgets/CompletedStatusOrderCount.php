@@ -24,16 +24,11 @@ class CompletedStatusOrderCount extends AbstractWidget
      */
     public function run()
     {
-        $orderStatusesToExclude = array_merge(
-            OrderStatus::getActiveStatusCodesList(),
-            OrderStatus::getToFollowStatusList()
-        );
-
         $status_order_counts = Order::query()
-            ->whereDate('order_placed_at', '>', Carbon::now()->subDays(7))
-            ->whereNotIn('status_code', $orderStatusesToExclude)
-            ->groupBy(['status_code'])
             ->select(['status_code', DB::raw('count(*) as order_count')])
+            ->whereIn('status_code', OrderStatus::getCompletedStatusCodeList())
+            ->whereDate('order_closed_at', '>', Carbon::now()->subDays(7))
+            ->groupBy(['status_code'])
             ->get();
 
         $total_count = $status_order_counts->sum(function ($day) {

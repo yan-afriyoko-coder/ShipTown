@@ -1,7 +1,7 @@
 <table class="table table-borderless">
     <thead>
     <tr>
-        <th scope="col">Active Orders</th>
+        <th scope="col">Orders - Active</th>
         <th scope="col" class="text-right">{{ $total_count }}</th>
     </tr>
     </thead>

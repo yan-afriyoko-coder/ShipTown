@@ -1,7 +1,7 @@
 <table class="table table-borderless">
     <thead>
     <tr>
-        <th scope="col">New Orders</th>
+        <th scope="col">Orders - Placed In Last 7 Days</th>
         <th scope="col" class="text-right">{{ $total_count }}</th>
     </tr>
     </thead>

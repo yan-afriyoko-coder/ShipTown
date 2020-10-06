@@ -119,6 +119,7 @@ class OrderService
                 'product_line_count',
                 'total_quantity_ordered',
                 'order_placed_at',
+                'order_closed_at',
             ]);
     }
 

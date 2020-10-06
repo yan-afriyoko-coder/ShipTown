@@ -2,7 +2,7 @@
 <table class="table table-borderless">
     <thead>
     <tr>
-        <th scope="col">Orders To Follow Up</th>
+        <th scope="col">Orders - For Follow Up</th>
         <th scope="col" class="text-right">{{ $total_count }}</th>
     </tr>
     </thead>

@@ -1,7 +1,7 @@
 <table class="table table-borderless">
     <thead>
     <tr>
-        <th scope="col">Order by age (all days)</th>
+        <th scope="col">Active Orders By Age</th>
         <th scope="col" class="text-right">{{ $total_count }}</th>
     </tr>
     </thead>
