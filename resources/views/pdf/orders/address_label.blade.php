@@ -14,8 +14,8 @@
 
     <style>
         @page {
-            size: 101mm 76mm;
-            margin: 7mm;
+            size: 101.6mm 76.2mm;
+            margin: 3mm;
         }
     </style>
 @endsection
