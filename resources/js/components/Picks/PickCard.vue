@@ -82,8 +82,8 @@ export default {
             initialSlide: 1,
             shortSwipes: false,
             longSwipes: true,
-            longSwipesRatio: 0.35,
-            longSwipesMs: 200,
+            longSwipesRatio: 0.30,
+            longSwipesMs: 150,
             resistanceRatio: 0,
             speed: 150
         });
