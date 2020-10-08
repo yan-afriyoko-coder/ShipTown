@@ -25,6 +25,7 @@ class PacklistOrderController extends Controller
 
         $updated = Order::where(['id' => $order->id])
             ->where(['updated_at' => $order->updated_at])
+            ->whereNull('packer_user_id')
             ->update(['packer_user_id' => $request->user()->getKey()]);
 
         if (!$updated) {
