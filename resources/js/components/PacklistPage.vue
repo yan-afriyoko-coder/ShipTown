@@ -23,7 +23,7 @@
 
         <div v-if="order === null && !isLoading" class="row" >
             <div class="col text-center mt-3">
-                <button type="button"  class="btn-info" @click.prevent="startPacking">
+                <button type="button"  class="btn-info" @click.prevent="fetchFromAutoPilot">
                     Start AutoPilot Packing
                 </button>
             </div>
@@ -125,20 +125,17 @@
             mounted() {
                 this.loadUser()
                     .then(() => {
-                        const order_number = this.getUrlParameter('order_number', null);
-                        if( order_number != null) {
-                            this.packOrder(order_number);
+                        if (this.getUrlParameter('order_number') != null) {
+                            this.loadOrder(this.getUrlParameter('order_number'));
                         }
                     });
             },
 
             watch: {
                 order() {
-                    if(this.order === null) {
-                        return;
+                    if(this.order) {
+                        this.loadProducts();
                     }
-
-                    this.loadProducts();
                 },
                 packlist() {
                     if(this.order === null) {
@@ -155,26 +152,18 @@
             },
 
             methods: {
-                startPacking() {
+                fetchFromAutoPilot() {
                     let params = {}
+
                     if( this.getUrlParameter('order_number') != null) {
-                        params = {
-                            'filter[order_number]': this.getUrlParameter('order_number')
-                        };
+                        params = {'filter[order_number]': this.getUrlParameter('order_number')};
                     } else {
-                        params = {
-                            'filter[status]': this.getUrlParameter('status','picking'),
-                            'sort': this.getUrlParameter('sort'),
-                            'per_page': 1,
-                            'include':'order_products'+
-                                ',order_products.product'+
-                                ',order_products.product.aliases',
-                        };
+                        params = {'filter[status]': this.getUrlParameter('status','picking')};
                     }
 
                     axios.get('/api/packlist/order', {params: params})
                         .then(({data}) => {
-                            this.packOrder(data.data['order_number'])
+                            this.loadOrder(data.data['order_number'])
                         })
                         .catch((error) => {
                             let msg = 'Error occurred loading order';
@@ -186,43 +175,62 @@
                         })
                 },
 
-                packOrder(orderNumber) {
-                    const params = {
-                        'filter[order_number]': orderNumber
-                    };
-
-                    this.loadNextOrderToPack(params)
-                },
-
-                loadNextOrderToPack: function (params) {
+                loadOrder: function (orderNumber) {
                     this.showLoading();
 
                     this.order = null;
                     this.packlist = [];
                     this.packed = [];
 
+                    const params = {
+                        'filter[order_number]': orderNumber
+                    };
+
                     return axios.get('/api/orders', {params: params})
                         .then(({data}) => {
-                            if (data.total > 0) {
-                                this.order = data.data[0];
-
-                                if ((this.order['is_packed'] === false) && (this.order['packer_user_id'] === null)) {
-                                    return axios.put('api/orders/' + this.order['id'], {
-                                        'packer_user_id': this.user['id'],
-                                    });
-                                }
-                            }
+                                this.order = data.total > 0 ? data.data[0] : null;
                         })
                         .catch((error) => {
-                            console.log(error);
                             this.notificationError('Error occurred while loading order');
                         })
-                        .then(() => {
+                        .finally(() => {
                             this.hideLoading();
                         })
                 },
 
+                loadProducts: function() {
+                    this.showLoading();
 
+                    this.packed = [];
+
+                    const params = {
+                        'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id', null),
+                        'filter[order_id]': this.order.id,
+                        'sort': 'inventory_source_shelf_location,sku_ordered',
+                        'include': 'product,product.aliases',
+                        'per_page': 999,
+                    };
+
+                    axios.get('/api/order/products', {params: params})
+                        .then(({ data }) => {
+                            if(data.total > 0) {
+                                this.packed = data.data.filter(
+                                    orderProduct => Number(orderProduct['quantity_shipped']) >= Number(orderProduct['quantity_ordered'])
+                                );
+
+                                this.packlist = data.data.filter(
+                                    orderProduct => Number(orderProduct['quantity_shipped']) < Number(orderProduct['quantity_ordered'])
+                                );
+                            }
+                        })
+                        .catch( error => {
+                            this.notificationError('Error occurred while loading packlist');
+
+                        })
+                        .finally(() => {
+                            this.hideLoading();
+                        });
+                },
 
                 shipPartialSwiped(orderProduct) {
                     this.$snotify.prompt('Partial shipment', {
@@ -272,7 +280,7 @@
                             this.$snotify.error('Error when changing status');
                         })
                         .finally(() => {
-                            this.startPacking()
+                            this.fetchFromAutoPilot()
                         });
                 },
 
@@ -302,7 +310,7 @@
                             this.$snotify.success('Shipping number saved');
                             if(this.packlist.length === 0) {
                                 this.order = null;
-                                this.loadOrder();
+                                this.fetchFromAutoPilot();
                             }
                         })
                         .catch( error => {
@@ -315,8 +323,8 @@
                         'is_packed': true,
                     })
                         .then(() => {
-                            this.order = null;
-                            this.loadOrder();
+                            this.order = null
+                            this.fetchFromAutoPilot();
                         });
                 },
 
@@ -333,103 +341,6 @@
 
                             this.notificationError(errorMsg);
                         });
-                },
-
-                loadOrder: function() {
-                    let params = {
-                        'filter[is_packed]'     : false,
-
-                        'filter[status]'        : this.getUrlParameter('status','picking'),
-                        'sort'                  : this.getUrlParameter('sort'),
-
-
-                        'per_page': 1,
-                        'include': 'order_products'+
-                            ',order_products.product'+
-                            ',order_products.product.aliases',
-                    };
-
-                    if( this.getUrlParameter('order_number', null) === null) {
-                        params['filter[is_picked]']      = this.getUrlParameter('is_picked', true);
-                        params['filter[packer_user_id]'] = this.user['id'];
-                    } else {
-                        params['filter[order_number]']   = this.getUrlParameter('order_number', null);
-                    }
-
-
-                    this.loadNextOrderToPack(params)
-                        .then(() => {
-                            if (this.order === null) {
-                                let updatedParams = {
-                                    'filter[is_packed]'     : false,
-                                    'filter[has_packer]'    : false,
-
-                                    'filter[status]'        : this.getUrlParameter('status','picking'),
-                                    'sort'                  : this.getUrlParameter('sort'),
-
-                                    'per_page': 1,
-                                    'include': 'order_products'+
-                                        ',order_products.product'+
-                                        ',order_products.product.aliases',
-                                };
-
-                                if( this.getUrlParameter('is_picked', null) != null) {
-                                    params['filter[is_picked]'] = this.getUrlParameter('is_picked');
-                                }
-
-                                if( this.getUrlParameter('order_number', null) != null) {
-                                    params['filter[order_number]'] = this.getUrlParameter('order_number');
-                                }
-
-                                this.loadNextOrderToPack(updatedParams);
-                            }
-                        })
-                },
-
-                loadProducts: function() {
-                    this.showLoading();
-
-                    // this.packlist = [];
-                    this.packed = [];
-
-                    const params = {
-                        'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id', null),
-                        'filter[order_id]': this.order.id,
-                        'sort': 'inventory_source_shelf_location,sku_ordered',
-                        'include': 'product,product.aliases',
-                        'per_page': 999,
-                    };
-
-                    axios.get('/api/order/products', {params: params})
-                        .then(({ data }) => {
-                            if(data.total > 0) {
-                                console.log(data.data)
-                                // this.packlist = data.data;
-
-                                this.packed = data.data.filter(
-                                    orderProduct => Number(orderProduct['quantity_shipped']) >= Number(orderProduct['quantity_ordered'])
-                                );
-
-                                this.packlist = data.data.filter(
-                                    orderProduct => Number(orderProduct['quantity_shipped']) < Number(orderProduct['quantity_ordered'])
-                                );
-                            }
-                        })
-                        .catch( error => {
-                            this.notificationError('Error occurred while loading packlist');
-
-                        })
-                        .then(() => {
-                            this.hideLoading();
-                        });
-                },
-
-                resetPick(pickedItem) {
-                    pickedItem.is_packed = !pickedItem.is_packed;
-                    pickedItem.quantity_packed = 0;
-                    this.packed.splice(this.packed.indexOf(pickedItem), 1);
-                    this.packlist.unshift(pickedItem);
-                    this.warningBeep();
                 },
 
                 addToLists: function (orderProduct) {
@@ -519,7 +430,7 @@
                 },
 
                 onConfigChange: function(config) {
-                    this.loadOrder();
+                    this.fetchFromAutoPilot();
                 },
 
                 getValueOrDefault: function (value, defaultValue){

@@ -20,7 +20,11 @@ class PacklistOrderController extends Controller
         $order = OrderService::getSpatieQueryBuilder()
             ->whereNull('packed_at')
             ->whereNull('packer_user_id')
-            ->firstOrFail();
+            ->first();
+
+        if (!$order) {
+            return $this->respondNotFound();
+        }
 
         $wasUpdated = Order::where(['id' => $order->id])
             ->where(['updated_at' => $order->updated_at])
