@@ -80,6 +80,10 @@ export default {
     mounted() {
         this.swiper = new Swiper('#' + this.pickCardId, {
             initialSlide: 1,
+            shortSwipes: false,
+            longSwipes: true,
+            longSwipesRatio: 0.5,
+            longSwipesMs: 200,
             resistanceRatio: 0,
             speed: 150
         });
