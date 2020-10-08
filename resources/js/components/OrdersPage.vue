@@ -5,9 +5,7 @@
                 <barcode-input-field :placeholder="'Scan order number and click enter'" @barcodeScanned="searchText" />
             </div>
         </div>
-
         <div class="container">
-
             <div v-if="total === 0 && !isLoading" class="row" >
                 <div class="col">
                     <div class="alert alert-info" role="alert">
@@ -15,37 +13,11 @@
                     </div>
                 </div>
             </div>
-
             <template v-else class="row">
                 <div class="col">
-
-<!--                    <table class="align-text-top">-->
-<!--                        <thead>-->
-<!--                            <tr class="font-weight-bold h6">-->
-<!--                                <th class="text-nowrap pr-5">Order #</th>-->
-<!--                                <th class="text-nowrap pr-8">StatusCode</th>-->
-<!--                                <th class="text-nowrap pl-2 pr-8">Total</th>-->
-<!--                                <th class="text-nowrap pl-3">Total Paid</th>-->
-<!--                                <th class="text-center pl-3 text-nowrap">Line Count</th>-->
-<!--                                <th class="text-center pl-3 text-nowrap">Total Quantity</th>-->
-<!--                                <th class="text-nowrap pl-3">Date Placed</th>-->
-<!--                                <th class="text-center pl-3 text-nowrap">Picked</th>-->
-<!--                                <th class="text-center text-nowrap">Packed At</th>-->
-<!--                                <th class="text-nowrap">Packer</th>-->
-<!--                                <th class="text-nowrap">Shipping No</th>-->
-<!--                                <th class="text-nowrap">Products</th>-->
-<!--                            </tr>-->
-<!--                        </thead>-->
-
-<!--                        <tbody>-->
-<!--                        </tbody>-->
-<!--                    </table>-->
-
-
                     <template v-for="order in orders">
                         <order-card :order="order"/>
                     </template>
-
                 </div>
             </template>
         </div>
@@ -129,7 +101,7 @@
 
             scroll (person) {
                 window.onscroll = () => {
-                    let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
+                    let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight >= document.documentElement.offsetHeight;
 
                     if (bottomOfWindow && this.last_page > this.page) {
                         this.getOrderList(++this.page);
