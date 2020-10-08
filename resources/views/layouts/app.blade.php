@@ -63,10 +63,10 @@
 
                             <!-- Menu Items END -->
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('packlist') . '?status=packing_web&is_picked=true&sort=order_placed_at,product_line_count,total_quantity_ordered'. Auth::user()->id}}">
+                                <a class="dropdown-item" href="{{ route('packlist') . '?status=packing_web&is_picked=true&sort=order_placed_at,product_line_count,total_quantity_ordered'}}">
                                     {{ __('Status: packing_web') }}
                                 </a>
-                                <a class="dropdown-item" href="{{ route('packlist') . '?status=packing_warehouse&&inventory_source_location_id=99&sort=product_line_count,total_quantity_ordered,order_placed_at'. Auth::user()->id}}">
+                                <a class="dropdown-item" href="{{ route('packlist') . '?status=packing_warehouse&&inventory_source_location_id=99&sort=product_line_count,total_quantity_ordered,order_placed_at'}}">
                                     {{ __('Status: packing_warehouse') }}
                                 </a>
                             </div>
