@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
 use App\Services\OrderService;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -12,7 +11,7 @@ use Illuminate\Http\Response;
  * Class AddressLabel
  * @package App\Http\Controllers\Orders
  */
-class PdfOrderController extends PdfBaseController
+class PdfOrderController extends Controller
 {
     /**
      * @param Request $request

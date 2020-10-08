@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -91,5 +93,19 @@ class Controller extends BaseController
     public function getStatusCode()
     {
         return $this->status_code;
+    }
+
+    /**
+     * @param string $pdfString
+     * @return ResponseFactory|Response
+     */
+    public function getPdfResponse(string $pdfString)
+    {
+        $headers = [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline',
+        ];
+
+        return response($pdfString, 200, $headers);
     }
 }
