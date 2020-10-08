@@ -26,17 +26,17 @@ class PacklistOrderController extends Controller
             return $this->respondNotFound();
         }
 
-        $wasUpdated = Order::where(['id' => $order->id])
+        $wasReserved = Order::where(['id' => $order->id])
             ->where(['updated_at' => $order->updated_at])
             ->whereNull('packer_user_id')
             ->update(['packer_user_id' => $request->user()->getKey()]);
 
-        if (!$wasUpdated) {
+        if (!$wasReserved) {
             return $this->respondBadRequest('Order could not be reserved, try again');
         }
 
-        Order::where(['packer_user_id' => $request->user()->getKey()])
-            ->whereKeyNot($order->id)
+        Order::whereKeyNot($order->id)
+            ->where(['packer_user_id' => $request->user()->getKey()])
             ->whereNull('packed_at')
             ->update(['packer_user_id' => null]);
 
