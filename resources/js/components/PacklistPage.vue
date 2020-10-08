@@ -114,7 +114,6 @@
 
             data: function() {
                 return {
-                    placeholder: 'test',
                     user: null,
                     order: null,
                     packlist: null,
