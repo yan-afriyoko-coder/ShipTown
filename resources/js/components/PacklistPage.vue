@@ -558,12 +558,9 @@
 
                     return (this.order['packer_user_id'] !== this.user['id']);
                 }
-        }
-
-
+            }
         }
     </script>
-</template>
 
 
 <style lang="scss">
