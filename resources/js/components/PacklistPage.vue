@@ -5,43 +5,27 @@
 
         <filters-modal ref="filtersModal" @btnSaveClicked="onConfigChange">
             <template v-slot:actions="slotScopes">
-                <button type="button" class="btn btn-info" @click.prevent="changeStatus('partially_shipped')">
-                    partially_shipped
-                </button>
-                <button type="button" class="btn btn-info" @click.prevent="changeStatus('for_later')">
-                    for_later
-                </button>
-                <button type="button" class="btn btn-info" @click.prevent="changeStatus('missing_item')">
-                    missing_item
-                </button>
-                <button type="button" class="btn btn-info" @click.prevent="changeStatus('picking')">
-                    picking
-                </button>
+                <button type="button" class="btn btn-info" @click.prevent="changeStatus('partially_shipped')">partially_shipped</button>
+                <button type="button" class="btn btn-info" @click.prevent="changeStatus('for_later')">for_later</button>
+                <button type="button" class="btn btn-info" @click.prevent="changeStatus('missing_item')">missing_item</button>
+                <button type="button" class="btn btn-info" @click.prevent="changeStatus('picking')">picking</button>
                 <hr>
-                <button type="button" class="btn btn-info" @click.prevent="displayShippingNumberModal">
-                    Add Shipping Number
-                </button>
-                <button type="button" class="btn btn-info" @click.prevent="printAddressLabel">
-                    Print Address Label
-                </button>
+                <button type="button" class="btn btn-info" @click.prevent="displayShippingNumberModal">Add Shipping Number</button>
+                <button type="button" class="btn btn-info" @click.prevent="printAddressLabel">Print Address Label</button>
             </template>
         </filters-modal>
 
         <div v-if="showMultipackerWarning" class="row" >
-            <div class="col">
-                <div class="alert-danger">
+            <div class="col alert-danger">
                     This order is already opened by someone else. Be careful
-                </div>
             </div>
         </div>
 
         <div v-if="order === null && !isLoading" class="row" >
-            <div class="col">
-                <div class="text-center mt-3">
-                    <button type="button"  class="btn-info" @click.prevent="startPacking">
-                        Start AutoPilot Packing
-                    </button>
-                </div>
+            <div class="col text-center mt-3">
+                <button type="button"  class="btn-info" @click.prevent="startPacking">
+                    Start AutoPilot Packing
+                </button>
             </div>
         </div>
 
@@ -491,42 +475,6 @@
 
             shipAll(pickedItem) {
                 this.setQuantityShipped(pickedItem, pickedItem['quantity_ordered']);
-            },
-
-            displayPickedNotification: function (pickedItem, quantity) {
-                const msg =  quantity + ' x ' + pickedItem.sku_ordered + ' picked';
-                this.$snotify.confirm(msg, {
-                    timeout: 5000,
-                    pauseOnHover: true,
-                    showProgressBar: false,
-                    buttons: [
-                        {
-                            text: 'Undo',
-                            action: (toast) => {
-                                this.$snotify.remove(toast.id);
-                                this.resetPick(pickedItem);
-                            }
-                        }
-                    ]
-                });
-            },
-
-            displayWarningNotification: function (pickedItem, msg) {
-                this.$snotify.warning(msg, {
-                    timeout: 5000,
-                    pauseOnHover: true,
-                    showProgressBar: false,
-                    icon: false,
-                    buttons: [
-                        {
-                            text: 'Undo',
-                            action: (toast) => {
-                                this.$snotify.remove(toast.id);
-                                this.resetPick(pickedItem);
-                            }
-                        }
-                    ]
-                });
             },
 
             findEntry: function (barcode) {
