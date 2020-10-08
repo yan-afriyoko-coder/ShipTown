@@ -17,18 +17,17 @@ class PacklistOrderController extends Controller
 {
     public function index(Request $request)
     {
-        $query = OrderService::getSpatieQueryBuilder()
+        $order = OrderService::getSpatieQueryBuilder()
             ->whereNull('packed_at')
-            ->whereNull('packer_user_id');
+            ->whereNull('packer_user_id')
+            ->firstOrFail();
 
-        $order = $query->firstOrFail();
-
-        $updated = Order::where(['id' => $order->id])
+        $wasUpdated = Order::where(['id' => $order->id])
             ->where(['updated_at' => $order->updated_at])
             ->whereNull('packer_user_id')
             ->update(['packer_user_id' => $request->user()->getKey()]);
 
-        if (!$updated) {
+        if (!$wasUpdated) {
             return $this->respondBadRequest('Order could not be reserved, try again');
         }
 
