@@ -62,8 +62,10 @@ export default {
     },
 
     mounted() {
+        if(this.getUrlParameter('inventory_source_location_id') === null) {
+            this.setUrlParameter('inventory_source_location_id', 100);
+        }
         this.reloadPicks();
-        this.setUrlFilter('inventory_source_location_id', 100);
     },
 
     watch: {
@@ -146,7 +148,7 @@ export default {
                 per_page: this.getUrlParameter('per_page', 3),
                 'filter[in_stock_only]': this.getUrlFilter('in_stock_only', true),
                 'filter[not_picked_only]': true,
-                'filter[inventory_source_location_id]': this.getUrlFilter('inventory_source_location_id'),
+                'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id'),
                 'filter[current_shelf_location]': this.getUrlFilter('current_shelf_location'),
             };
 

@@ -48,7 +48,7 @@ export default {
         return {
             urlFilters: {
                 'inventory_source_location_id':
-                    this.getUrlFilter('inventory_source_location_id', 100),
+                    this.getUrlParameter('inventory_source_location_id', 100),
 
                 'in_stock_only':
                     this.getUrlFilter('in_stock_only', true)
