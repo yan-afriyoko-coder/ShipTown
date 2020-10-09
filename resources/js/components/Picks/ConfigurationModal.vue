@@ -10,10 +10,6 @@
                 </div>
                 <div class="modal-body" style="margin: 0 auto 0;">
                     <form method="POST" @submit.prevent="handleSubmit">
-<!--                        <div class="form-group form-check">-->
-<!--                            <input v-model="picklistFilters['filter[single_line_orders_only]']" type="checkbox" class="form-check-input" />-->
-<!--                            <label class="form-check-label" >Show single line orders only</label>-->
-<!--                        </div>-->
                         <div class="form-group form-check">
                             <input v-model="urlFilters['in_stock_only']" type="checkbox" class="form-check-input" />
                             <label class="form-check-label" >In stock only</label>
@@ -74,7 +70,8 @@ export default {
     methods: {
         handleSubmit() {
             for (let urlFilter in this.urlFilters) {
-                this.setUrlFilter(urlFilter, this.urlFilters[urlFilter]);
+                this.setUrlParameter(urlFilter, this.urlFilters[urlFilter])
+                // this.setUrlFilter(urlFilter, this.urlFilters[urlFilter]);
             }
             // this.updateUrl(this.urlFilters);
             this.$emit('btnSaveClicked');
