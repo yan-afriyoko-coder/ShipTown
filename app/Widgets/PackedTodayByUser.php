@@ -28,6 +28,7 @@ class PackedTodayByUser extends AbstractWidget
             ->whereDate('packed_at', '>=', $startingDate)
             ->leftJoin('users', 'packer_user_id', '=', 'users.id')
             ->groupBy(['packer_user_id'])
+            ->orderByDesc('total')
             ->get();
 
         $total_count = 0;
