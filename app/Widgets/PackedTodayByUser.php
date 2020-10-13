@@ -25,7 +25,7 @@ class PackedTodayByUser extends AbstractWidget
 
         $count_per_user = Order::query()
             ->select(['packer_user_id', \DB::raw('count(*) as total'), 'users.name'])
-            ->whereDate('packed_at', '>', $startingDate)
+            ->whereDate('packed_at', '>=', $startingDate)
             ->leftJoin('users', 'packer_user_id', '=', 'users.id')
             ->groupBy(['packer_user_id'])
             ->get();
