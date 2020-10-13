@@ -18,6 +18,12 @@
 
                 <div class="row">
                     <div class="col-md-8 offset-md-2">
+                        <div class="">@widget('PackedTodayByUser')</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8 offset-md-2">
                         <div class="">@widget('OrdersByAgeWidget')</div>
                     </div>
                 </div>
