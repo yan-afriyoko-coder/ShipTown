@@ -158,7 +158,10 @@
                     if( this.getUrlParameter('order_number') != null) {
                         params = {'filter[order_number]': this.getUrlParameter('order_number')};
                     } else {
-                        params = {'filter[status]': this.getUrlParameter('status','picking')};
+                        params = {
+                            'filter[status]': this.getUrlParameter('status','picking'),
+                            'sort': this.getUrlParameter('sort', 'order_placed_at'),
+                        };
                     }
 
                     axios.get('/api/packlist/order', {params: params})

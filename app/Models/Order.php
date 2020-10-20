@@ -6,7 +6,9 @@ use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use phpseclib\Math\BigInteger;
 
 /**
@@ -62,6 +64,31 @@ class Order extends Model
         'is_picked',
         'is_packed',
     ];
+
+    /**
+     * @param Builder $query
+     * @param int $inventory_location_id
+     * @return Builder
+     */
+    public function scopeAddInventorySource($query, $inventory_location_id)
+    {
+        $source_inventory = OrderProduct::query()
+            ->select([
+                'order_id as order_id',
+                DB::raw('min(shelve_location) as min_shelf_location'),
+                DB::raw('max(shelve_location) as max_shelf_location'),
+            ])
+            ->leftJoin('inventory', function ($join) use ($inventory_location_id) {
+                $join->on('order_products.product_id', '=', 'inventory.product_id');
+                $join->on('inventory.location_id', '=', DB::raw($inventory_location_id));
+            })
+            ->groupBy('order_products.order_id')
+            ->toBase();
+
+        return $query->leftJoinSub($source_inventory, 'inventory_source', function ($join) {
+            $join->on('orders.id', '=', 'inventory_source.order_id');
+        });
+    }
 
     public function getIsPaidAttribute()
     {

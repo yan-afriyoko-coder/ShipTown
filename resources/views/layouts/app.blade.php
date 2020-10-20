@@ -69,7 +69,7 @@
                                 <a class="dropdown-item" href="{{ route('packlist') . '?status=packing_warehouse&&inventory_source_location_id=99&sort=product_line_count,total_quantity_ordered,order_placed_at'}}">
                                     {{ __('Status: packing_warehouse') }}
                                 </a>
-                                <a class="dropdown-item" href="{{ route('packlist') . '?status=single_line_orders&sort=order_placed_at'}}">
+                                <a class="dropdown-item" href="{{ route('packlist') . '?status=single_line_orders&sort=min_shelf_location'}}">
                                     {{ __('Status: single_line_orders') }}
                                 </a>
                             </div>

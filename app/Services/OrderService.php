@@ -104,6 +104,8 @@ class OrderService
                 AllowedFilter::scope('is_packing'),
 
                 AllowedFilter::scope('has_packer'),
+
+                AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->default(100),
             ])
             ->allowedIncludes([
                 'stats',
@@ -120,6 +122,7 @@ class OrderService
                 'total_quantity_ordered',
                 'order_placed_at',
                 'order_closed_at',
+                'min_shelf_location',
             ]);
     }
 
