@@ -15,6 +15,7 @@ class OrderStatus extends Model
         'packing_web',
         'packing_warehouse',
         'for_later',
+        'single_line_orders',
     ];
 
     public static $toFollowStatusList = [
