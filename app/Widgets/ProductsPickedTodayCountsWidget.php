@@ -3,11 +3,10 @@
 namespace App\Widgets;
 
 use App\Models\Pick;
-use App\Models\Picklist;
 use Arrilot\Widgets\AbstractWidget;
 use Carbon\Carbon;
 
-class UserPickCounts extends AbstractWidget
+class ProductsPickedTodayCountsWidget extends AbstractWidget
 {
     /**
      * The configuration array.
@@ -22,11 +21,11 @@ class UserPickCounts extends AbstractWidget
      */
     public function run()
     {
-        $startingDate = Carbon::now()->subDays(7);
+        $startingDate = Carbon::today();
 
         $count_per_user = Pick::query()
             ->select(['picker_user_id', \DB::raw('count(*) as total'), 'users.name'])
-            ->whereDate('picked_at', '>', $startingDate)
+            ->whereDate('picked_at', '>=', $startingDate)
             ->leftJoin('users', 'picker_user_id', '=', 'users.id')
             ->groupBy(['picker_user_id'])
             ->get();
