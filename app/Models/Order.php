@@ -10,6 +10,7 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use phpseclib\Math\BigInteger;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @property BigInteger id
@@ -32,6 +33,8 @@ use phpseclib\Math\BigInteger;
  */
 class Order extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'order_number',
         'picked_at',
@@ -45,6 +48,11 @@ class Order extends Model
         'raw_import',
         'total',
         'total_paid',
+    ];
+
+    protected static $logAttributes = [
+        'status_code',
+        'packer_user_id'
     ];
 
     protected $casts = [
