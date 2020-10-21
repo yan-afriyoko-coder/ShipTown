@@ -43,7 +43,7 @@ class OrderShipmentController extends Controller
     public function store(OrderShipmentStoreRequest $request)
     {
         $shipment = new OrderShipment($request->validated());
-
+        $shipment->user()->associate($request->user());
         $shipment->save();
 
         return new OrderShipmentResource($shipment);
