@@ -14,9 +14,10 @@ class RunPackingWarehouseRuleOnProcessingJobTest extends TestCase
      */
     public function testIfRunsWithoutExceptions()
     {
-        $this->doesNotPerformAssertions();
-
         $job = new RunPackingWarehouseRuleOnPaidOrdersJob();
         $job->handle();
+
+        // we just want to make sure it does not throw any errors
+        $this->assertTrue(true);
     }
 }
