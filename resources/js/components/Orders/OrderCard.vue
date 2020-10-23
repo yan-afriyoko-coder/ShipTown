@@ -16,17 +16,18 @@
 
             <div class="row text-left">
               <div class="col-6">
-                <div class="text-primary h4">#{{ order['order_number'] }}</div>
+                <div class="text-secondary h4">#{{ order['order_number'] }}</div>
               </div>
               <div class="col-6 text-right">
-                  <div class=""><a target="_blank" :href="'/packlist?order_number=' + order['order_number'] ">OPEN ORDER</a></div>
+                  <div class="btn-link " @click.prevent="showHideProducts">ADD COMMENT</div>
+                  <div class="nav-link"><a target="_blank" :href="'/packlist?order_number=' + order['order_number'] ">OPEN ORDER</a></div>
               </div>
             </div>
 
             <div class="row text-left" @click="showHideProducts">
               <div class="col-6">
                 <div class="text-secondary h6">date:</div>
-                <div class="text-secondary h6"><span class="font-weight-bold"> {{ order['order_placed_at'] | moment('MM/DD H:mm') }} </span></div>
+                <div class="text-secondary h6 font-weight-bold">{{ order['order_placed_at'] | moment('MM/DD H:mm') }}</div>
                 <div class="text-secondary h6">picked: <span class="font-weight-bold"> {{ order['picked_at'] | moment('MM/DD H:mm') }} </span></div>
                 <div class="text-secondary h6">packed: <span class="font-weight-bold"> {{ order['packed_at'] | moment('MM/DD H:mm') }} </span></div>
                 <div class="text-secondary h6">total: <span class="font-weight-bold"> {{ order['total'] }} </span></div>
@@ -34,7 +35,7 @@
               </div>
               <div class="col-6">
                 <div class="text-secondary h6">status:</div>
-                <div class="text-secondary h6"><span class="font-weight-bold"> {{ order['status_code'] }} </span></div>
+                <div class="text-secondary h6 font-weight-bold">{{ order['status_code'] }}</div>
                 <div class="text-secondary h6"><span class="font-weight-bold"> &nbsp </span></div>
                 <div class="text-secondary h6"><span class="font-weight-bold"> {{ order['packer'] ? order['packer']['name'] : '&nbsp' }} </span></div>
                 <div class="text-secondary h6">lines:<span class="font-weight-bold"> {{ order['product_line_count'] }} </span></div>
@@ -54,12 +55,29 @@
               </div>
             </div>
 
+            <hr>
+              <div>
+                <input v-model="input_comment" ref="comment" class="form-control" @keyup.enter="addComment"/>
+              </div>
+
+            <template v-for="order_comment in order['order_comments']">
+                <div class="row mb-2">
+                  <div class="col">
+                      {{ order_comment['user']['name'] }}: {{ order_comment['comment'] }}
+
+                      {{ order_comment }}
+                  </div>
+                </div>
+            </template>
 
             <div v-if="showProducts">
 
 
               <template v-for="order_product in order['order_products']">
+
+
                   <hr>
+
                     <div class="row text-left mb-2">
                         <div class="col-lg-6">
                             <div class="small">{{ order_product['name_ordered'] }}</div>
@@ -117,11 +135,27 @@
 
         data: function () {
             return {
-              showProducts: false
+                input_comment: '',
+                showProducts: false
             }
         },
 
         methods: {
+            addComment() {
+                const newComment = {
+                    "order_id": this.order['id'],
+                    "comment": this.input_comment
+                }
+                axios.post('/api/order/comments', newComment)
+                    .then(({data}) => {
+                        this.input_comment = '';
+
+                        console.log(this.order);
+                        console.log(data);
+                        this.order['comments'] = data['data'][0];
+
+                    })
+            },
             dashIfZero(value) {
                 return value === 0 ? '-' : value;
             },

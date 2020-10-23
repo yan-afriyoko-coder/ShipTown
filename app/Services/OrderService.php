@@ -115,6 +115,8 @@ class OrderService
                 'order_products.product',
                 'order_products.product.aliases',
                 'packer',
+                'order_comments',
+                'order_comments.user',
             ])
             ->allowedSorts([
                 'updated_at',
