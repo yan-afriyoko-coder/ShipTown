@@ -55,22 +55,22 @@
               </div>
             </div>
 
-            <hr>
-              <div>
-                <input v-model="input_comment" ref="comment" class="form-control" @keyup.enter="addComment"/>
-              </div>
-
-            <template v-for="order_comment in order['order_comments']">
-                <div class="row mb-2">
-                  <div class="col">
-                      {{ order_comment['user']['name'] }}: {{ order_comment['comment'] }}
-
-                      {{ order_comment }}
-                  </div>
-                </div>
-            </template>
 
             <div v-if="showProducts">
+
+                <hr>
+
+                <div class="row mb-2">
+                    <input v-model="input_comment" class="form-control" placeholder="Add comment here"@keyup.enter="addComment"/>
+                </div>
+
+                <template v-for="order_comment in order['order_comments']">
+                    <div class="row mb-2">
+                        <div class="col">
+                            <b>{{ order_comment['user']['name'] }}: </b>{{ order_comment['comment'] }}
+                        </div>
+                    </div>
+                </template>
 
 
               <template v-for="order_product in order['order_products']">
@@ -142,18 +142,13 @@
 
         methods: {
             addComment() {
-                const newComment = {
-                    "order_id": this.order['id'],
-                    "comment": this.input_comment
-                }
-                axios.post('/api/order/comments', newComment)
+                axios.post('/api/order/comments', {
+                        "order_id": this.order['id'],
+                        "comment": this.input_comment
+                    })
                     .then(({data}) => {
+                        this.order['order_comments'].unshift(data['data'][0]);
                         this.input_comment = '';
-
-                        console.log(this.order);
-                        console.log(data);
-                        this.order['comments'] = data['data'][0];
-
                     })
             },
             dashIfZero(value) {
