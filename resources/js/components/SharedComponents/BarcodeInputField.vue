@@ -1,7 +1,6 @@
 <template>
     <div>
         <input ref="barcode" class="form-control" :placeholder="placeholder"
-               v-observe-visibility="setFocusOnBarcodeInput"
                v-model="barcode"
                @focus="simulateSelectAll"
                @keyup.enter="barcodeScanned(barcode)"/>

@@ -55,12 +55,12 @@
             </div>
 
 
-            <div v-if="showProducts">
+            <div v-if="showOrderDetails">
 
                 <hr>
 
                 <div class="row mb-2">
-                    <input v-model="input_comment" class="form-control" placeholder="Add comment here"@keyup.enter="addComment"/>
+                    <input v-model="input_comment" class="form-control" placeholder="Add comment here" @keypress.enter="addComment"/>
                 </div>
 
                 <template v-for="order_comment in order['order_comments']">
@@ -135,7 +135,7 @@
         data: function () {
             return {
                 input_comment: '',
-                showProducts: false
+                showOrderDetails: false
             }
         },
 
@@ -154,7 +154,7 @@
                 return value === 0 ? '-' : value;
             },
             showHideProducts() {
-              this.showProducts = ! this.showProducts;
+              this.showOrderDetails = ! this.showOrderDetails;
             },
             getProductLink(orderProduct) {
                 const searchTerm = orderProduct['product'] ? orderProduct['product']['sku'] : orderProduct['sku_ordered'];
