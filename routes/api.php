@@ -33,6 +33,7 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('orders', 'Api\OrdersController');
     Route::apiResource('order/products', 'Api\OrderProductController');
     Route::apiResource('order/shipments', 'Api\OrderShipmentController');
+    Route::apiResource('order/comments', 'Api\OrderCommentController')->only(['store']);
 
     Route::put('print/order/{order_number}/{view}', 'Api\PrintOrderController@store');
 
