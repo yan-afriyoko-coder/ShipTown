@@ -14,6 +14,11 @@ class OrderCommentResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            "order_id" => $this->order_id,
+            "user_id" => $this->user_id,
+            "comment" => $this->comment,
+            "user" => new ProductResource($this->whenLoaded('user')),
+        ];
     }
 }
