@@ -19,7 +19,6 @@
                 <div class="text-secondary h4">#{{ order['order_number'] }}</div>
               </div>
               <div class="col-6 text-right">
-                  <div class="btn-link " @click.prevent="showHideProducts">ADD COMMENT</div>
                   <div class="nav-link"><a target="_blank" :href="'/packlist?order_number=' + order['order_number'] ">OPEN ORDER</a></div>
               </div>
             </div>
