@@ -31,6 +31,16 @@
 
         <div v-if="order !== null && !isLoading">
 
+            <template v-for="order_comment in order['order_comments']">
+                <div class="row mb-2">
+                    <div class="col">
+                        <b>{{ order_comment['user']['name'] }}: </b>{{ order_comment['comment'] }}
+                    </div>
+                </div>
+            </template>
+
+            <hr>
+
             <div class="row mb-3">
                 <div class="col">
                     <order-details :order="order" />
@@ -186,7 +196,8 @@
                     this.packed = [];
 
                     const params = {
-                        'filter[order_number]': orderNumber
+                        'filter[order_number]': orderNumber,
+                        'include': 'order_comments,order_comments.user',
                     };
 
                     return axios.get('/api/orders', {params: params})
