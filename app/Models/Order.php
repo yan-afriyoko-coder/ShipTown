@@ -273,7 +273,7 @@ class Order extends Model
      */
     public function orderShipments()
     {
-        return $this->hasMany(OrderShipment::class);
+        return $this->hasMany(OrderShipment::class)->latest();
     }
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
@@ -281,5 +281,13 @@ class Order extends Model
     public function stats()
     {
         return $this->hasOne(OrderStats::class);
+    }
+
+    /**
+     * @return HasMany | OrderComment
+     */
+    public function orderComments()
+    {
+        return $this->hasMany(OrderComment::class)->latest();
     }
 }
