@@ -29,8 +29,16 @@ class OrderCommentsTest extends TestCase
 
         $response = $this->post('/api/order/comments', $data);
 
-        $response->assertStatus(201);
+        $response->assertStatus(200);
 
-        $this->assertDatabaseHas('order_comments', $data);
+        $response->assertJsonStructure([
+            'data' => [
+                '*' => [
+                    'order_id',
+                    'user_id',
+                    'comment',
+                ]
+            ],
+        ]);
     }
 }

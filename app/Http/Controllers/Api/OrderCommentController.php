@@ -15,6 +15,6 @@ class OrderCommentController extends Controller
         $shipment->user()->associate($request->user());
         $shipment->save();
 
-        return new OrderCommentResource($shipment);
+        return OrderCommentResource::collection(collect([$shipment]));
     }
 }
