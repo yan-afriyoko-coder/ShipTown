@@ -25,11 +25,14 @@ class RemoveQuantityFromPicklistListener
      */
     public function handle(DeletedEvent $event)
     {
-//        $event->getPickRequest()->orderProduct()->first()->order()->first()->update(['status_code' => 'missing_item']);
-
         if ($event->getPickRequest()->pick_id === null) {
             return;
         }
+
+        $event->getPickRequest()
+            ->orderProduct()
+            ->first()
+            ->update(['quantity_not_picked' => $event->getPickRequest()->quantity_required]);
 
         PickRequestService::removeFromPicklist($event->getPickRequest());
     }

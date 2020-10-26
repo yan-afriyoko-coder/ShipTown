@@ -27,6 +27,7 @@ class OrderProduct extends Model
         'price',
         'quantity_ordered',
         'quantity_picked',
+        'quantity_not_picked',
         'quantity_shipped',
     ];
 
