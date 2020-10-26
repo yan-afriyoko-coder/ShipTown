@@ -11,7 +11,7 @@
 <!--      </div>-->
 
       <div class="swiper-slide">
-        <div class="row ml-1 mr-1 card">
+        <div class="row ml-1 mr-1 card" >
           <div class="col p-2 pl-3">
 
             <div class="row text-left">
@@ -19,11 +19,11 @@
                 <div class="text-secondary h4">#{{ order['order_number'] }}</div>
               </div>
               <div class="col-6 text-right">
-                  <div class="nav-link"><a target="_blank" :href="'/packlist?order_number=' + order['order_number'] ">OPEN ORDER</a></div>
+                  <div class=""><a target="_blank" :href="'/packlist?order_number=' + order['order_number'] ">OPEN ORDER</a></div>
               </div>
             </div>
 
-            <div class="row text-left" @click="showHideProducts">
+            <div class="row" @click="showHideProducts">
               <div class="col-6">
                 <div class="text-secondary h6">date:</div>
                 <div class="text-secondary h6 font-weight-bold">{{ order['order_placed_at'] | moment('MM/DD H:mm') }}</div>
@@ -39,21 +39,25 @@
                 <div class="text-secondary h6"><span class="font-weight-bold"> {{ order['packer'] ? order['packer']['name'] : '&nbsp' }} </span></div>
                 <div class="text-secondary h6">lines:<span class="font-weight-bold"> {{ order['product_line_count'] }} </span></div>
                 <div class="text-secondary h6">quantity: <span class="font-weight-bold"> {{ order['total_quantity_ordered'] }} </span></div>
-
-                <div class="row">
-                  <div class="col-10">
-                    <template v-for="shipment in order['order_shipments']">
-                      <div class="text-secondary h6"><span class="font-weight-bold">{{ shipment['shipping_number'] }}</span></div>
-                    </template>
-                  </div>
-                  <div class="col-2 text-center text-primary h1">
-                      +
-                  </div>
-                </div>
-
               </div>
             </div>
 
+            <div class="row" @click="showHideProducts" v-if="order['order_comments'].length > 0 ">
+              <div class="col">
+                <b>{{ order['order_comments'][0]['user']['name'] }}: </b>{{ order['order_comments'][0]['comment'] }}
+              </div>
+            </div>
+
+            <div class="row" @click="showHideProducts">
+              <div class="col-11">
+                  <template v-for="shipment in order['order_shipments']">
+                      <div class="text-secondary h6"><span class="font-weight-bold">{{ shipment['shipping_number'] }}</span></div>
+                  </template>
+              </div>
+              <div class="col-1 text-center text-primary h1">
+                  +
+              </div>
+            </div>
 
             <div v-if="showOrderDetails">
 
