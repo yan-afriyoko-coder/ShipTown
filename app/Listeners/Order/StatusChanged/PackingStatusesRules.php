@@ -38,33 +38,33 @@ class PackingStatusesRules
      */
     public function checkStatusAndUpdate(Order $order): void
     {
-        // todo change hardcoded
-        if (OrderService::canFulfill($order, 99)) {
-            $this->updateStatusWithLog(
-                $order,
-                'packing_warehouse',
-                'Can fulfill from warehouse 99'
-            );
-            return;
-        }
-
-//        if (OrderService::canNotFulfill($order)) {
+//        // todo change hardcoded
+//        if (OrderService::canFulfill($order, 99)) {
 //            $this->updateStatusWithLog(
 //                $order,
-//                'auto_missing_item',
-//                'Order is missing one or more items'
+//                'packing_warehouse',
+//                'Can fulfill from warehouse 99'
 //            );
 //            return;
 //        }
-
-        if (OrderService::canNotFulfill($order, 100)) {
-            $this->updateStatusWithLog(
-                $order,
-                'picking',
-                'We cannot fulfill from web only, has warehouse items, add to picking right away'
-            );
-            return;
-        }
+//
+////        if (OrderService::canNotFulfill($order)) {
+////            $this->updateStatusWithLog(
+////                $order,
+////                'auto_missing_item',
+////                'Order is missing one or more items'
+////            );
+////            return;
+////        }
+//
+//        if (OrderService::canNotFulfill($order, 100)) {
+//            $this->updateStatusWithLog(
+//                $order,
+//                'picking',
+//                'We cannot fulfill from web only, has warehouse items, add to picking right away'
+//            );
+//            return;
+//        }
     }
 
     /**
