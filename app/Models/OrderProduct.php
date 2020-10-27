@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use phpseclib\Math\BigInteger;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @property BigInteger order_id
@@ -18,6 +19,13 @@ use phpseclib\Math\BigInteger;
 class OrderProduct extends Model
 {
     use SoftDeletes;
+    use LogsActivity;
+
+    protected static $logAttributes = [
+        'quantity_picked',
+        'quantity_not_picked',
+        'quantity_shipped',
+    ];
 
     protected $fillable = [
         'order_id',
