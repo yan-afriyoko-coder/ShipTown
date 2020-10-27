@@ -49,19 +49,19 @@ class RefillPickingMissingStockJob implements ShouldQueue
             return;
         }
 
-        Order::whereStatusCode('paid')
+        $orders = Order::whereStatusCode('paid')
             ->orderBy('created_at')
-            ->get()
-            ->each(function ($order) use ($currentOrdersInProcessCount) {
-                if (OrderService::canNotFulfill($order, 100)) {
-                    $order->update(['status_code' => 'picking']);
-                    info('RefillPickingMissingStockJob: updated status to picking', ['order_number' => $order->order_number]);
-                    $currentOrdersInProcessCount++;
-                    if ($currentOrdersInProcessCount > $this->maxDailyAllowed) {
-                        return false;
-                    }
-                }
-                return true;
-            });
+            ->get();
+
+        foreach ($orders as $order) {
+            if (OrderService::canNotFulfill($order, 100)) {
+                $order->update(['status_code' => 'picking']);
+                $currentOrdersInProcessCount++;
+                info('RefillPickingMissingStockJob: updated status to picking', ['order_number' => $order->order_number]);
+            }
+            if ($currentOrdersInProcessCount > $this->maxDailyAllowed) {
+                break;
+            }
+        }
     }
 }

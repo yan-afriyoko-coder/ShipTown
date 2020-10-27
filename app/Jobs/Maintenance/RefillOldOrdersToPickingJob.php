@@ -46,18 +46,22 @@ class RefillOldOrdersToPickingJob implements ShouldQueue
             return;
         }
 
-        Order::whereStatusCode('paid')
+        $orders = Order::whereStatusCode('paid')
             ->where('order_placed_at', '<', Carbon::now()->subDays(9))
             ->orderBy('created_at')
             ->limit($this->maxDailyAllowed - $currentOrdersInProcessCount)
-            ->get()->each(function ($order) use ($currentOrdersInProcessCount) {
+            ->get();
+
+
+        foreach ($orders as $order) {
+            if (OrderService::canNotFulfill($order, 100)) {
                 $order->update(['status_code' => 'picking']);
-                info('RefillOldOrdersToPickingJob: updated status to picking', ['order_number' => $order->order_number]);
                 $currentOrdersInProcessCount++;
-                if ($currentOrdersInProcessCount > $this->maxDailyAllowed) {
-                    return false;
-                }
-                return true;
-            });
+                info('RefillOldOrdersToPickingJob: updated status to picking', ['order_number' => $order->order_number]);
+            }
+            if ($currentOrdersInProcessCount > $this->maxDailyAllowed) {
+                break;
+            }
+        }
     }
 }
