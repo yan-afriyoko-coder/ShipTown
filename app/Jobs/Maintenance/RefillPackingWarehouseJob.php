@@ -9,6 +9,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Spatie\Activitylog\ActivityLogger;
 
 class RefillPackingWarehouseJob implements ShouldQueue
 {
@@ -34,11 +35,7 @@ class RefillPackingWarehouseJob implements ShouldQueue
         Order::where('status_code', 'paid')
             ->get()->each(function ($order) {
                 if (OrderService::canFulfill($order, 99)) {
-                    $this->updateStatusWithLog(
-                        $order,
-                        'packing_warehouse',
-                        'Can fulfill from warehouse 99'
-                    );
+                    $order->update(['status_code' => 'packing_warehouse']);
                 }
             });
     }
