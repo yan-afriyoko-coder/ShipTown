@@ -94,8 +94,16 @@
                                     <div class="h3">{{ Math.ceil(order_product['quantity_ordered']) }}</div>
                                 </div>
                                 <div class="col-3">
-                                    <div class="small">picked</div>
-                                    <div class="h3">{{ dashIfZero(Number(order_product['quantity_picked'])) }}</div>
+                                    <div class="row">
+                                        <div class="col" v-bind:class="{ 'col-6': Number(order_product['quantity_not_picked']) > 0}">
+                                            <div class="small">picked</div>
+                                            <div class="h3">{{ dashIfZero(Number(order_product['quantity_picked'])) }}</div>
+                                        </div>
+                                        <div class="col-6 bg-warning" v-if="Number(order_product['quantity_not_picked']) > 0">
+                                            <div class="small">skipped</div>
+                                            <div class="h3">{{ dashIfZero(Number(order_product['quantity_not_picked'])) }}</div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-3">
                                     <div class="small">shipped</div>
@@ -170,7 +178,7 @@
             ifHasEnoughStock(orderProduct) {
                 return this.getProductQuantity(orderProduct) < Number(orderProduct['quantity_ordered']);
             }
-        }
+        },
     }
 </script>
 
