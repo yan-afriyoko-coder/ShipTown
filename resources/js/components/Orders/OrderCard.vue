@@ -89,7 +89,7 @@
 
                         <div class="col-lg-6">
                             <div class="row text-center">
-                                <div class="col-3">
+                                <div class="col-2">
                                     <div class="small">ordered</div>
                                     <div class="h3">{{ Math.ceil(order_product['quantity_ordered']) }}</div>
                                 </div>
@@ -105,7 +105,7 @@
                                     <div class="small">shipped</div>
                                     <div class="h3">{{ dashIfZero(Number(order_product['quantity_shipped']))  }}</div>
                                 </div>
-                                <div class="col-3" v-bind:class="{ 'bg-warning': ifHasEnoughStock(order_product) }">
+                                <div class="col-4" v-bind:class="{ 'bg-warning': ifHasEnoughStock(order_product) }">
                                     <div class="small">inventory</div>
                                     <div class="h3">{{ dashIfZero(getProductQuantity(order_product)) }}</div>
                                 </div>
