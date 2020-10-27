@@ -93,19 +93,15 @@
                                     <div class="small">ordered</div>
                                     <div class="h3">{{ Math.ceil(order_product['quantity_ordered']) }}</div>
                                 </div>
-                                <div class="col-3">
-                                    <div class="row">
-                                        <div class="col" v-bind:class="{ 'col-6': Number(order_product['quantity_not_picked']) > 0}">
-                                            <div class="small">picked</div>
-                                            <div class="h3">{{ dashIfZero(Number(order_product['quantity_picked'])) }}</div>
-                                        </div>
-                                        <div class="col-6 bg-warning" v-if="Number(order_product['quantity_not_picked']) > 0">
-                                            <div class="small">skipped</div>
-                                            <div class="h3">{{ dashIfZero(Number(order_product['quantity_not_picked'])) }}</div>
-                                        </div>
-                                    </div>
+                                <div class="col-2">
+                                    <div class="small">picked</div>
+                                    <div class="h3">{{ dashIfZero(Number(order_product['quantity_picked'])) }}</div>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-2">
+                                    <div class="small">skipped</div>
+                                    <div class="h3">{{ dashIfZero(Number(order_product['quantity_not_picked'])) }}</div>
+                                </div>
+                                <div class="col-2">
                                     <div class="small">shipped</div>
                                     <div class="h3">{{ dashIfZero(Number(order_product['quantity_shipped']))  }}</div>
                                 </div>
@@ -152,6 +148,9 @@
         },
 
         methods: {
+            hasSkippedPick(orderProduct) {
+                return Number(orderProduct['quantity_not_picked']) > 0;
+            },
             addComment() {
                 axios.post('/api/order/comments', {
                         "order_id": this.order['id'],
