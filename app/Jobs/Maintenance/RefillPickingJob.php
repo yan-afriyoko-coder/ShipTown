@@ -11,7 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class RefillWebPickingStatusListJob implements ShouldQueue
+class RefillPickingJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -45,14 +45,12 @@ class RefillWebPickingStatusListJob implements ShouldQueue
             return;
         }
 
-        $ordersToPick = Order::whereStatusCode('paid')
+        Order::whereStatusCode('paid')
             ->orderBy('created_at')
             ->limit($this->maxDailyAllowed - $currentOrdersInProcessCount)
-            ->get();
-
-        foreach ($ordersToPick as $order) {
-            $order->update(['status_code' => 'picking']);
-            info('RefillWebPickingStatusListJob: updated status to picking', ['order_number' => $order->order_number]);
-        }
+            ->get()->each(function ($order) {
+                $order->update(['status_code' => 'picking']);
+                info('RefillWebPickingStatusListJob: updated status to picking', ['order_number' => $order->order_number]);
+            });
     }
 }
