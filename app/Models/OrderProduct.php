@@ -22,6 +22,7 @@ class OrderProduct extends Model
     use LogsActivity;
 
     protected static $logAttributes = [
+        'quantity_ordered',
         'quantity_picked',
         'quantity_not_picked',
         'quantity_shipped',
