@@ -30,7 +30,26 @@
         </div>
 
         <div v-if="order !== null && !isLoading">
-
+            <template v-if="user['id'] === 14">
+                <vue-countdown-timer
+                    :start-time="(new Date).getTime()"
+                    :end-time="endAt"
+                    :interval="1000"
+                    :start-label="''"
+                    :end-label="''"
+                    label-position="begin"
+                    :end-text="'Event ended!'"
+                    :day-txt="'days'"
+                    :hour-txt="'hours'"
+                    :minutes-txt="'minutes'"
+                    :seconds-txt="'seconds'"
+                    showDay="false"
+                    >
+                    <template slot="countdown" slot-scope="scope">
+                        <span>{{ Number(scope.props.minutes)}}:{{scope.props.seconds}}</span>
+                    </template>
+                </vue-countdown-timer>
+            </template>
             <template v-for="order_comment in order['order_comments']">
                 <div class="row mb-2">
                     <div class="col">
@@ -129,6 +148,8 @@
                     packlist: null,
                     packed: [],
                     modalTest: false,
+                    startAt:  (new Date).getTime(),
+                    endAt:  this.startAt + 1000 * 60 * 7
                 };
             },
 
@@ -162,6 +183,10 @@
             },
 
             methods: {
+                resetTimer() {
+                    this.startAt = (new Date).getTime();
+                    this.endAt =  this.startAt + 1000 * 60 * 7;
+                },
                 fetchFromAutoPilot() {
                     let params = {}
 
@@ -202,6 +227,7 @@
 
                     return axios.get('/api/orders', {params: params})
                         .then(({data}) => {
+                                this.resetTimer();
                                 this.order = data.total > 0 ? data.data[0] : null;
                         })
                         .catch((error) => {

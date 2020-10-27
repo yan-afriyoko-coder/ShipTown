@@ -19,6 +19,7 @@ import { faYoutube } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VueTippy, { TippyComponent } from "vue-tippy";
 import Snotify from 'vue-snotify';
+import VueCountdownTimer from 'vuejs-countdown-timer';
 
 library.add(faCog);
 library.add(faQuestionCircle);
@@ -26,8 +27,9 @@ library.add(faUserEdit);
 library.add(faUserMinus);
 library.add(faBarcode);
 library.add(faYoutube);
-
 Vue.config.productionTip = false;
+
+Vue.use(VueCountdownTimer);
 
 Vue.use(Loading);
 Vue.use(require('vue-moment'));
