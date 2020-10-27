@@ -38,7 +38,7 @@ class RefillPickingMissingStockJob implements ShouldQueue
      */
     public function handle()
     {
-        $currentOrdersInProcessCount = Order::whereIn('status_code', ['picking', 'packing_web'])->count();
+        $currentOrdersInProcessCount = Order::whereIn('status_code', ['picking'])->count();
 
         logger('Refilling "picking" status (warehouse stock)', [
             'currently_in_process' => $currentOrdersInProcessCount,
