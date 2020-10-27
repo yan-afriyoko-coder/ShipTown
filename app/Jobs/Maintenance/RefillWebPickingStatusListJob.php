@@ -24,7 +24,7 @@ class RefillWebPickingStatusListJob implements ShouldQueue
      */
     public function __construct()
     {
-        $this->maxDailyAllowed = AutoPilot::getAutoPilotPackingDailyMax();
+        $this->maxDailyAllowed = AutoPilot::getBatchSize();
     }
 
     /**

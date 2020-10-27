@@ -36,7 +36,7 @@ class RefillWebPickingStatusListJobTest extends TestCase
         RefillWebPickingStatusListJob::dispatch();
 
         $this->assertEquals(
-            AutoPilot::getAutoPilotPackingDailyMax(),
+            AutoPilot::getBatchSize(),
             Order::whereStatusCode('picking')->count()
         );
     }

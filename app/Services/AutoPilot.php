@@ -10,7 +10,7 @@ class AutoPilot
     /**
      * @return int
      */
-    public static function getAutoPilotPackingDailyMax()
+    public static function getBatchSize()
     {
         $config = Configuration::firstOrCreate([
                 'key' => config('autopilot.config_key_name')
