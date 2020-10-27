@@ -55,12 +55,13 @@ class RefillPickingMissingStockJob implements ShouldQueue
             ->each(function ($order) use ($currentOrdersInProcessCount) {
                 if (OrderService::canNotFulfill($order, 100)) {
                     $order->update(['status_code' => 'picking']);
-                    info('RefillWebPickingStatusListJob: updated status to picking', ['order_number' => $order->order_number]);
+                    info('RefillPickingMissingStockJob: updated status to picking', ['order_number' => $order->order_number]);
                     $currentOrdersInProcessCount++;
                     if ($currentOrdersInProcessCount > $this->maxDailyAllowed) {
-                        return;
+                        return false;
                     }
                 }
+                return true;
             });
     }
 }

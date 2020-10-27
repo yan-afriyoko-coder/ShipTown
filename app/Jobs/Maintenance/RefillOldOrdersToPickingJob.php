@@ -52,11 +52,12 @@ class RefillOldOrdersToPickingJob implements ShouldQueue
             ->limit($this->maxDailyAllowed - $currentOrdersInProcessCount)
             ->get()->each(function ($order) use ($currentOrdersInProcessCount) {
                 $order->update(['status_code' => 'picking']);
-                info('RefillWebPickingStatusListJob: updated status to picking', ['order_number' => $order->order_number]);
+                info('RefillOldOrdersToPickingJob: updated status to picking', ['order_number' => $order->order_number]);
                 $currentOrdersInProcessCount++;
                 if ($currentOrdersInProcessCount > $this->maxDailyAllowed) {
-                    return;
+                    return false;
                 }
+                return true;
             });
     }
 }
