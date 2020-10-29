@@ -23,16 +23,17 @@ Route::middleware('auth:api')->get('/user/me', function (Request $request) {
 });
 
 Route::middleware('auth:api')->group(function () {
-    Route::get('products', 'Api\ProductsController@index');
-    Route::post('products', 'Api\ProductsController@store');
-    Route::get('products/{sku}/sync', 'Api\ProductsController@publish');
 
+    Route::get('users/me', 'Api\UsersController@me');
+
+    Route::apiResource('products', 'Api\ProductsController')->only(['index','store']);
     Route::apiResource('inventory', 'Api\InventoryController')->only(['index','store']);
     Route::apiResource('orders', 'Api\OrdersController');
     Route::apiResource('order/products', 'Api\OrderProductController');
     Route::apiResource('order/shipments', 'Api\OrderShipmentController');
     Route::apiResource('order/comments', 'Api\OrderCommentController')->only(['store']);
 
+    Route::get('products/{sku}/sync', 'Api\ProductsController@publish');
     Route::put('print/order/{order_number}/{view}', 'Api\PrintOrderController@store');
 
     Route::get('packlist/order', 'Api\PacklistOrderController@index');
@@ -50,7 +51,6 @@ Route::middleware('auth:api')->group(function () {
     Route::resource("rms_api_configuration", "Api\RmsapiConnectionController");
     Route::resource("api2cart_configuration", "Api\Api2cartConnectionController");
 
-    Route::get('users/me', 'Api\UsersController@me');
 
     // Routes for users with the admin role only
     Route::group(['middleware' => ['role:admin']], function () {
