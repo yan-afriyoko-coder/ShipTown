@@ -78,9 +78,10 @@ Route::middleware('auth:api')->group(function () {
         \App\Jobs\Maintenance\SingleLineOrdersJob::dispatch();
 
         if (\App\Models\Order::where(['status_code' => 'picking'])->count() === 0) {
-            \App\Jobs\Maintenance\RefillOldOrdersToPickingJob::dispatch();
-            \App\Jobs\Maintenance\RefillPickingMissingStockJob::dispatch();
-            \App\Jobs\Maintenance\RefillPickingJob::dispatch();
+            \App\Jobs\Maintenance\RefillOldOrdersToPickingJob::withChain([
+                \App\Jobs\Maintenance\RefillPickingMissingStockJob::dispatch(),
+                \App\Jobs\Maintenance\RefillPickingJob::dispatch(),
+            ])->dispatch();
         }
 
         \App\Jobs\Maintenance\MakeSureOrdersAreOnPicklist::dispatch();
