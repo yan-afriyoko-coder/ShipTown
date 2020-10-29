@@ -61,8 +61,6 @@
 
             <div v-if="showOrderDetails">
 
-                <hr>
-
                 <div class="row mb-2">
                     <input v-model="input_comment" class="form-control" placeholder="Add comment here" @keypress.enter="addComment"/>
                 </div>
@@ -115,6 +113,18 @@
                     </div>
 
               </template>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-12">
+                        <template v-for="activity in order['activities']">
+                            <div class="text-secondary h6">
+                                <b>{{ activity['causer']['name'] }}</b> {{ activity['description'] }} {{ activity['changes'] }}
+                            </div>
+                        </template>
+                    </div>
+                </div>
 
             </div>
           </div>

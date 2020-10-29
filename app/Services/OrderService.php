@@ -109,6 +109,7 @@ class OrderService
             ])
             ->allowedIncludes([
                 'activities',
+                'activities.causer',
                 'stats',
                 'shipping_address',
                 'order_shipments',

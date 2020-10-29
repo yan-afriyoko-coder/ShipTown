@@ -23,6 +23,7 @@ class ActivityResource extends JsonResource
             "causer_id"     => $this->causer_id,
             "causer_type"   => $this->causer_type,
             "properties"    => $this->properties,
+            "causer"        => new UserResource($this->whenLoaded('causer')),
             "changes"       => isset($this->properties['old'])
                 ? array_diff($this->properties['old'], $this->properties['attributes'])
                 : $this->properties['attributes'],

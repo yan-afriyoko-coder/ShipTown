@@ -60,7 +60,7 @@
                     'filter[order_number]': this.getUrlParameter('search', ''),
                     'sort': this.getUrlParameter('sort','-updated_at'),
                     'per_page': this.getUrlParameter('per_page',50),
-                    'include': 'packer,order_shipments,order_products,order_products.product,order_comments,order_comments.user',
+                    'include': 'activities,activities.causer,packer,order_shipments,order_products,order_products.product,order_comments,order_comments.user',
                     page: page,
                     q: this.query,
                 };
