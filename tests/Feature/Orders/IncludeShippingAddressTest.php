@@ -30,11 +30,11 @@ class IncludeShippingAddressTest extends TestCase
         $response = $this->get(
             '/api/orders?'.
             "filter[order_number]=".$order->order_number.
-            "&include=shipping_address",
+            "&include=shipping_address,activities",
             []
         );
 
-        $this->assertEquals(1, $response->json('total'));
+        $response->assertStatus(200);
 
         $response->assertJsonStructure([
             "data" => [

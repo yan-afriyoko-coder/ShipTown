@@ -14,6 +14,7 @@ class OrderResource extends JsonResource
      */
     public function toArray($request)
     {
+//        dd($this);
         return [
             "id" => $this->id,
             "order_number" => $this->order_number,
@@ -38,13 +39,13 @@ class OrderResource extends JsonResource
             "is_picked" => $this->is_picked,
             "is_packed" => $this->is_packed,
 
-            "activities" => new ActivityResource($this->whenLoaded('activities')),
+            "activities" => ActivityResource::collection($this->whenLoaded('activities')),
             "stats" => new JsonResource($this->whenLoaded('stats')),
-            "shipping_address" => new JsonResource($this->whenLoaded('shipping_address')),
-            "order_shipments" => new JsonResource($this->whenLoaded('order_shipments')),
-            "order_products" => new JsonResource($this->whenLoaded('order_products')),
+            "shipping_address" => new JsonResource($this->whenLoaded('shippingAddress')),
+            "order_shipments" => new JsonResource($this->whenLoaded('orderShipments')),
+            "order_products" => new JsonResource($this->whenLoaded('orderProducts')),
             "packer" => new UserResource($this->whenLoaded('packer')),
-            "order_comments" => new JsonResource($this->whenLoaded('order_comments')),
+            "order_comments" => new JsonResource($this->whenLoaded('orderComments')),
         ];
     }
 }
