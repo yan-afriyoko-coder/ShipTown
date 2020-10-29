@@ -27,9 +27,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('products', 'Api\ProductsController@store');
     Route::get('products/{sku}/sync', 'Api\ProductsController@publish');
 
-    Route::get("inventory", "Api\InventoryController@index");
-    Route::post("inventory", "Api\InventoryController@store");
-
+    Route::apiResource('inventory', 'Api\InventoryController')->only(['index','store']);
     Route::apiResource('orders', 'Api\OrdersController');
     Route::apiResource('order/products', 'Api\OrderProductController');
     Route::apiResource('order/shipments', 'Api\OrderShipmentController');
