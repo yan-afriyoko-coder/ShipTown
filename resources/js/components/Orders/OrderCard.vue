@@ -120,7 +120,7 @@
                     <div class="col-12">
                         <template v-for="activity in order['activities']">
                             <div class="text-secondary h6">
-                                <b>{{ activity['causer']['name'] }}</b> {{ activity['description'] }} {{ activity['changes'] }}
+                                <b>{{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }}</b> {{ activity['description'] }} {{ activity['changes'] }}
                             </div>
                         </template>
                     </div>
