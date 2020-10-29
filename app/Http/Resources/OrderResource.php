@@ -37,8 +37,14 @@ class OrderResource extends JsonResource
             "max_shelf_location" => $this->max_shelf_location,
             "is_picked" => $this->is_picked,
             "is_packed" => $this->is_packed,
+
+            "activities" => new ActivityResource($this->whenLoaded('activities')),
+            "stats" => new JsonResource($this->whenLoaded('stats')),
+            "shipping_address" => new JsonResource($this->whenLoaded('shipping_address')),
+            "order_shipments" => new JsonResource($this->whenLoaded('order_shipments')),
+            "order_products" => new JsonResource($this->whenLoaded('order_products')),
             "packer" => new UserResource($this->whenLoaded('packer')),
-            "activities" => ActivityResource::collection($this->whenLoaded('activities')),
+            "order_comments" => new JsonResource($this->whenLoaded('order_comments')),
         ];
     }
 }
