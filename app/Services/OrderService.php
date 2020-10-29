@@ -108,6 +108,7 @@ class OrderService
                 AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->default(100),
             ])
             ->allowedIncludes([
+                'activities',
                 'stats',
                 'shipping_address',
                 'order_shipments',

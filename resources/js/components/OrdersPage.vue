@@ -76,8 +76,8 @@
                         params: params
                     }).then(({ data }) => {
                         this.orders = this.orders.concat(data.data);
-                        this.total = data.total;
-                        this.last_page = data.last_page;
+                        this.total = data.meta.total;
+                        this.last_page = data.meta.last_page;
                         resolve(data);
                     })
                     .catch(reject)

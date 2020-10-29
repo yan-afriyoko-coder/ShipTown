@@ -228,7 +228,7 @@
                     return axios.get('/api/orders', {params: params})
                         .then(({data}) => {
                                 this.resetTimer();
-                                this.order = data.total > 0 ? data.data[0] : null;
+                                this.order = data.meta.total > 0 ? data.data[0] : null;
                         })
                         .catch((error) => {
                             this.notificationError('Error occurred while loading order');
