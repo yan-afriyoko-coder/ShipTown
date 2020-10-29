@@ -27,16 +27,16 @@ class OrdersRoutesTest extends TestCase
         $response = $this->get('api/orders?filter[is_picked]=false');
 
         $response->assertJsonStructure([
-            "current_page",
             "data" => [
                 "*" => [
                     "id",
                 ]
             ],
-            "total",
+            "links",
+            "meta",
         ]);
 
-        $this->assertEquals(0, $response->json('total'));
+        $this->assertEquals(0, $response->json('meta.total'));
     }
 
     public function testIsPickedFilterTrue()
@@ -54,16 +54,16 @@ class OrdersRoutesTest extends TestCase
         $response = $this->get('api/orders?filter[is_picked]=true');
 
         $response->assertJsonStructure([
-            "current_page",
             "data" => [
                 "*" => [
                     "id",
                 ]
             ],
-            "total",
+            "links",
+            "meta",
         ]);
 
-        $this->assertEquals(1, $response->json('total'));
+        $this->assertEquals(1, $response->json('meta.total'));
     }
 
     public function testOrdersGetRoute()
@@ -205,34 +205,6 @@ class OrdersRoutesTest extends TestCase
             ->assertJsonValidationErrors(['products.0.quantity'])
             ->assertJsonValidationErrors(['products.0.price']);
     }
-
-//    public function test_if_quantities_are_reserved_when_new_order_created() {
-//
-//        $order = [
-//            'order_number'      => '001241',
-//            "products" => [
-//                [
-//                    'sku'       => '0123456',
-//                    'quantity'  => 2,
-//                    'price'     => 4,
-//                ]
-//            ]
-//        ];
-//
-//        Passport::actingAs(
-//            factory(User::class)->create()
-//        );
-//
-//        $product_before = Product::firstOrCreate(["sku" => '0123456']);
-//
-//        $this->json('POST', 'api/orders', $order)
-//            ->assertStatus(200);
-//
-//        $product_after = $product_before->fresh();
-//
-//        $this->assertEquals($product_after->quantity_reserved, $product_before->quantity_reserved + 2);
-//
-//    }
 
     public function testIfQuantitiesAreReleasedWhenOrderDeleted()
     {
