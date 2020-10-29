@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\UpdateRequest;
 use App\Http\Requests\StoreOrderRequest;
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Services\OrderService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -24,13 +26,13 @@ class OrdersController extends Controller
 {
     /**
      * @param Request $request
-     * @return LengthAwarePaginator
+     * @return AnonymousResourceCollection
      */
     public function index(Request $request)
     {
         $query = OrderService::getSpatieQueryBuilder();
 
-        return $this->getPerPageAndPaginate($request, $query, 10);
+        return OrderResource::collection($this->getPerPageAndPaginate($request, $query, 10));
     }
 
     /**
