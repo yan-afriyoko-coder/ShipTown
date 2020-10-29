@@ -24,7 +24,7 @@ Route::middleware('auth:api')->get('/user/me', function (Request $request) {
 
 Route::middleware('auth:api')->group(function () {
 
-    Route::get('users/me', 'Api\UsersController@me');
+    Route::apiResource('users/me', 'Api\UserMeController')->only(['index']);
 
     Route::apiResource('products', 'Api\ProductsController')->only(['index','store']);
     Route::apiResource('inventory', 'Api\InventoryController')->only(['index','store']);
@@ -32,18 +32,15 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('order/products', 'Api\OrderProductController');
     Route::apiResource('order/shipments', 'Api\OrderShipmentController');
     Route::apiResource('order/comments', 'Api\OrderCommentController')->only(['store']);
+    Route::apiResource('packlist/order', 'Api\PacklistOrderController')->only(['index']);
+    // todo Route::apiResource('picklist', 'Api\PicklistOrderController')->only(['index']);
 
-    Route::get('products/{sku}/sync', 'Api\ProductsController@publish');
+    Route::apiResource('settings/printers', 'Api\PrintersController@index')->only(['index']);
+    Route::apiResource('settings/widgets', 'Api\WidgetsController');
+    Route::apiResource('settings/modules/rms_api/connections', "Api\RmsapiConnectionController");
+    Route::apiResource('settings/modules/api2cart/connections', "Api\Api2cartConnectionController");
+
     Route::put('print/order/{order_number}/{view}', 'Api\PrintOrderController@store');
-
-    Route::get('packlist/order', 'Api\PacklistOrderController@index');
-    Route::post('packlist/{packlist}', 'Api\PacklistController@store');
-
-
-    Route::get('printers', 'Api\PrintersController@index');
-    Route::put('printers/use/{printerId}', 'Api\PrintersController@use');
-
-    Route::post('invites', 'InvitesController@store');
 
     Route::apiResource('picks', 'Api\PickController')->except('store');
 
@@ -51,9 +48,9 @@ Route::middleware('auth:api')->group(function () {
     Route::resource("rms_api_configuration", "Api\RmsapiConnectionController");
     Route::resource("api2cart_configuration", "Api\Api2cartConnectionController");
 
-
     // Routes for users with the admin role only
     Route::group(['middleware' => ['role:admin']], function () {
+        Route::post('invites', 'InvitesController@store');
         Route::get('roles', 'Api\RolesController@index')->middleware('can:list roles');
         Route::resource('users', 'Api\UsersController')->middleware('can:manage users');
         Route::resource('configuration', 'Api\ConfigurationsController');
@@ -88,4 +85,9 @@ Route::middleware('auth:api')->group(function () {
         \App\Jobs\Maintenance\UpdateClosedAtIfNullJob::dispatch();
         return 'Maintenance jobs dispatched';
     });
+
+    // to remove
+    Route::apiResource('printers', 'Api\PrintersController@index')->only(['index']);
+    Route::get('products/{sku}/sync', 'Api\ProductsController@publish');
+    Route::put('printers/use/{printerId}', 'Api\PrintersController@use');
 });
