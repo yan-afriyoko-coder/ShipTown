@@ -15,75 +15,91 @@ class OrdersSeeder extends Seeder
      */
     public function run()
     {
-        factory(Order::class, rand(10, 30))
-            ->with('orderProducts', rand(1,4))
-            ->create([
-                'status_code' => 'processing'
-            ]);
+        $count = rand(400,600);
 
-        factory(Order::class, rand(10, 30))
-            ->with('orderProducts', rand(1,4))
-            ->create([
-                'status_code' => 'paid'
-            ]);
+        do {
+            factory(Order::class)
+                ->with('orderProducts', rand(1,4))
+                ->create([
+                    'order_placed_at' => \Carbon\Carbon::now()->subDays(rand(0,7)),
+                    'status_code' => 'paid'
+                ]);
 
-        factory(Order::class, rand(60, 100))
-            ->with('orderProducts', rand(1,4))
-            ->create([
-                'status_code' => 'picking'
-            ]);
+            $count--;
+        } while ($count > 0);
 
-        factory(Order::class, rand(10, 20))
-            ->with('orderProducts', rand(1,4))
-            ->create([
-                'status_code' => 'packing_web'
-            ]);
+//        factory(Order::class, rand(10, 30))
+//            ->with('orderProducts', rand(1,4))
+//            ->create([
+//                'status_code' => 'processing'
+//            ]);
+//
+//        factory(Order::class, rand(10, 30))
+//            ->with('orderProducts', rand(1,4))
+//            ->create([
+//                'status_code' => 'paid'
+//            ]);
+//
+//        factory(Order::class, rand(60, 100))
+//            ->with('orderProducts', rand(1,4))
+//            ->create([
+//                'status_code' => 'picking'
+//            ]);
+//
+//        factory(Order::class, rand(10, 20))
+//            ->with('orderProducts', rand(1,4))
+//            ->create([
+//                'status_code' => 'packing_web'
+//            ]);
+//
+//        factory(Order::class, rand(10, 20))
+//            ->with('orderProducts', rand(1,4))
+//            ->create([
+//                'status_code' => 'packing_warehouse'
+//            ]);
+//
+//        factory(Order::class, rand(20,50))
+//            ->with('orderProducts', rand(1,4))
+//            ->create([
+//                'status_code' => 'holded'
+//            ]);
+//
+//        factory(Order::class, rand(30,50))
+//            ->with('orderProducts', rand(1,4))
+//            ->create([
+//                'status_code' => 'canceled'
+//            ]);
+//
+//        factory(Order::class, rand(60,80))
+//            ->with('orderProducts', rand(1,4))
+//            ->with('orderShipments', rand(1,2))
+//            ->create([
+//                'status_code' => 'complete'
+//            ]);
+//
+//        factory(Order::class, rand(20,50))
+//            ->with('orderProducts', rand(1,4))
+//            ->with('orderShipments', rand(1,2))
+//            ->create([
+//                'status_code' => 'completed_imported_to_rms'
+//            ]);
+//
+//        factory(Order::class, rand(20,50))
+//            ->with('orderProducts', rand(1,4))
+//            ->with('orderShipments', rand(1,2))
+//            ->create([
+//                'status_code' => 'partially_shipped'
+//            ]);
+//
+//        factory(Order::class, rand(20,50))
+//            ->with('orderProducts', rand(1,4))
+//            ->with('orderShipments', rand(1,2))
+//            ->create([
+//                'status_code' => 'unshipped'
+//            ]);
 
-        factory(Order::class, rand(10, 20))
-            ->with('orderProducts', rand(1,4))
-            ->create([
-                'status_code' => 'packing_warehouse'
-            ]);
 
-        factory(Order::class, rand(20,50))
-            ->with('orderProducts', rand(1,4))
-            ->create([
-                'status_code' => 'holded'
-            ]);
 
-        factory(Order::class, rand(30,50))
-            ->with('orderProducts', rand(1,4))
-            ->create([
-                'status_code' => 'canceled'
-            ]);
-
-        factory(Order::class, rand(60,80))
-            ->with('orderProducts', rand(1,4))
-            ->with('orderShipments', rand(1,2))
-            ->create([
-                'status_code' => 'complete'
-            ]);
-
-        factory(Order::class, rand(20,50))
-            ->with('orderProducts', rand(1,4))
-            ->with('orderShipments', rand(1,2))
-            ->create([
-                'status_code' => 'completed_imported_to_rms'
-            ]);
-
-        factory(Order::class, rand(20,50))
-            ->with('orderProducts', rand(1,4))
-            ->with('orderShipments', rand(1,2))
-            ->create([
-                'status_code' => 'partially_shipped'
-            ]);
-
-        factory(Order::class, rand(20,50))
-            ->with('orderProducts', rand(1,4))
-            ->with('orderShipments', rand(1,2))
-            ->create([
-                'status_code' => 'unshipped'
-            ]);
 
 //        factory(Order::class, 2)
 //            ->create()
