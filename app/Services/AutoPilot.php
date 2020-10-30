@@ -20,4 +20,15 @@ class AutoPilot
 
         return (int) $config->value;
     }
+
+    public static function getMaxOrderAgeAllowed()
+    {
+        $config = Configuration::firstOrCreate([
+            'key' => config('autopilot.key_names.max_order_age_allowed')
+        ], [
+            'value' => 5
+        ]);
+
+        return (int) $config->value;
+    }
 }

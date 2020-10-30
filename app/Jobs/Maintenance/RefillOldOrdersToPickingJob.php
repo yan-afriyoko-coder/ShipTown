@@ -47,7 +47,7 @@ class RefillOldOrdersToPickingJob implements ShouldQueue
         }
 
         $orders = Order::whereStatusCode('paid')
-            ->where('order_placed_at', '<', Carbon::now()->subDays(7))
+            ->where('order_placed_at', '<', Carbon::now()->subDays(AutoPilot::getMaxOrderAgeAllowed()))
             ->orderBy('created_at')
             ->limit($this->maxDailyAllowed - $currentOrdersInProcessCount)
             ->get();
