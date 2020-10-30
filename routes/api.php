@@ -35,7 +35,7 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('packlist/order', 'Api\PacklistOrderController')->only(['index']);
     // todo Route::apiResource('picklist', 'Api\PicklistOrderController')->only(['index']);
 
-    Route::apiResource('settings/printers', 'Api\PrintersController@index')->only(['index']);
+    Route::apiResource('settings/printers', 'Api\PrintersController')->only(['index']);
     Route::apiResource('settings/widgets', 'Api\WidgetsController');
     Route::apiResource('settings/modules/rms_api/connections', "Api\RmsapiConnectionController");
     Route::apiResource('settings/modules/api2cart/connections', "Api\Api2cartConnectionController");
@@ -64,7 +64,6 @@ Route::middleware('auth:api')->group(function () {
     });
 
     // to remove
-    Route::apiResource('printers', 'Api\PrintersController@index')->only(['index']);
     Route::get('products/{sku}/sync', 'Api\ProductsController@publish');
     Route::put('printers/use/{printerId}', 'Api\PrintersController@use');
 });
