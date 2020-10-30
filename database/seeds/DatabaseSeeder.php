@@ -33,13 +33,16 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ProductsSeeder::class,
             InventorySeeder::class,
-            OrdersSeeder::class,
-            Api2CartOrderImportSeeder::class,
-            RmsapiConnectionSeeder::class,
-            RmsapiProductImportSeeder::class,
-            ProductAliasSeeder::class,
-
-            PicksSeeder::class
+//            OrdersSeeder::class,
+//            Api2CartOrderImportSeeder::class,
+//            RmsapiConnectionSeeder::class,
+//            RmsapiProductImportSeeder::class,
+//            ProductAliasSeeder::class,
+//
+//            PicksSeeder::class
         ]);
+
+        \App\Jobs\RunMaintenanceJob::dispatchNow();
+
     }
 }
