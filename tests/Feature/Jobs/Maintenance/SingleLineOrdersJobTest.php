@@ -11,21 +11,6 @@ use Tests\TestCase;
 
 class SingleLineOrdersJobTest extends TestCase
 {
-    public function testIfJobIsDispatched()
-    {
-        Bus::fake();
-
-        Passport::actingAs(
-            factory(User::class)->create()
-        );
-
-        $response = $this->get('/api/run/maintenance');
-
-        $response->assertStatus(200);
-
-        Bus::assertDispatched(SingleLineOrdersJob::class);
-    }
-
     /**
      * A basic feature test example.
      *

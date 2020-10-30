@@ -59,7 +59,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('sync', "Api\SyncController@index");
     Route::get('run/maintenance', function () {
-        \App\Jobs\RunMaintenanceJob::dispatch();
+        \App\Jobs\RunMaintenanceJobs::dispatch();
         return 'Maintenance jobs dispatched';
     });
 

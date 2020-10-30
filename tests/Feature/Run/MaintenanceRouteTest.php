@@ -3,6 +3,7 @@
 namespace Tests\Feature\Run;
 
 use App\Jobs\Maintenance\RecalculateOrderProductLineCountJob;
+use App\Jobs\RunMaintenanceJobs;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Bus;
@@ -22,7 +23,7 @@ class MaintenanceRouteTest extends TestCase
         $response = $this->get('/api/run/maintenance');
 
         Bus::assertDispatched(
-            RecalculateOrderProductLineCountJob::class
+            RunMaintenanceJobs::class
         );
 
         $response->assertStatus(200);

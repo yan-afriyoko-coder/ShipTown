@@ -12,21 +12,6 @@ use Tests\TestCase;
 
 class ClearOrderPackerAssignmentJobTest extends TestCase
 {
-    public function testIfJobIsDispatchedDuringMaintenance()
-    {
-        Bus::fake();
-
-        Passport::actingAs(
-            factory(User::class)->create()
-        );
-
-        $response = $this->get('/api/run/maintenance');
-
-        $response->assertStatus(200);
-
-        Bus::assertDispatched(ClearOrderPackerAssignmentJob::class);
-    }
-
     public function testIfDoesNotUpdateLessThan12HoursOfInactivity()
     {
         // prepare

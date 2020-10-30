@@ -11,16 +11,6 @@ use Tests\TestCase;
 
 class RefillWebPickingStatusListJobTest extends TestCase
 {
-    public function testIfJobIsDispatchedDuringMaintenance()
-    {
-        $this->expectsJobs(RefillPickingJob::class);
-
-        Passport::actingAs(
-            factory(User::class)->create()
-        );
-
-        $response = $this->get('/api/run/maintenance');
-    }
     /**
      * A basic feature test example.
      *

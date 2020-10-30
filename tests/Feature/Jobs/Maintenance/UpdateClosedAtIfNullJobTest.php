@@ -14,21 +14,6 @@ use Tests\TestCase;
 
 class UpdateClosedAtIfNullJobTest extends TestCase
 {
-    public function testIfJobIsDispatchedDuringMaintenance()
-    {
-        Bus::fake();
-
-        Passport::actingAs(
-            factory(User::class)->create()
-        );
-
-        $response = $this->get('/api/run/maintenance');
-
-        $response->assertStatus(200);
-
-        Bus::assertDispatched(UpdateClosedAtIfNullJob::class);
-    }
-
     /**
      * A basic feature test example.
      *

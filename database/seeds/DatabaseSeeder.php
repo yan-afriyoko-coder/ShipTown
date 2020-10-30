@@ -43,7 +43,7 @@ class DatabaseSeeder extends Seeder
 //            PicksSeeder::class
         ]);
 
-        \App\Jobs\RunMaintenanceJob::dispatchNow();
+        \App\Jobs\RunMaintenanceJobs::dispatchNow();
 
     }
 }
