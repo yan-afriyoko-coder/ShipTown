@@ -59,25 +59,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('sync', "Api\SyncController@index");
     Route::get('run/maintenance', function () {
-        \App\Jobs\Maintenance\RecalculateOrderProductLineCountJob::dispatch();
-        \App\Jobs\Maintenance\RecalculateOrderTotalQuantityOrderedJob::dispatch();
-        \App\Jobs\Maintenance\RecalculateProductQuantityJob::dispatch();
-        \App\Jobs\Maintenance\RecalculateProductQuantityReservedJob::dispatch();
-        \App\Jobs\Maintenance\RecalculateOrderProductQuantityPicked::dispatch();
-        \App\Jobs\Maintenance\RecalculatePickedAtForPickingOrders::dispatch();
-
-
-        \App\Jobs\Maintenance\UpdateAllProcessingIfPaidJob::dispatch();
-
-        \App\Jobs\Maintenance\RefillPackingWarehouseJob::dispatch();
-        \App\Jobs\Maintenance\SingleLineOrdersJob::dispatch();
-
-        \App\Jobs\Maintenance\RefillPickingJob::dispatch();
-
-        \App\Jobs\Maintenance\MakeSureOrdersAreOnPicklist::dispatch();
-        \App\Jobs\Maintenance\RunPackingWarehouseRuleOnPaidOrdersJob::dispatch();
-        \App\Jobs\Maintenance\ClearOrderPackerAssignmentJob::dispatch();
-        \App\Jobs\Maintenance\UpdateClosedAtIfNullJob::dispatch();
+        \App\Jobs\RunMaintenanceJob::dispatch();
         return 'Maintenance jobs dispatched';
     });
 
