@@ -26,7 +26,7 @@ class AutoPilot
         $config = Configuration::firstOrCreate([
             'key' => config('autopilot.key_names.max_order_age_allowed')
         ], [
-            'value' => 6
+            'value' => 5
         ]);
 
         return (int) $config->value;
