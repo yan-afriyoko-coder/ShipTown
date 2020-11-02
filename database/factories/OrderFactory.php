@@ -20,7 +20,7 @@ $factory->define(Order::class, function (Faker $faker) {
     }
 
     return [
-        'order_number' => (string) (10000000 + $faker->unique()->randomNumber(5)),
+        'order_number' => (string) (10000000 + $faker->unique()->randomNumber(7)),
         'shipping_address_id' => factory(OrderAddress::class)->create()->id,
         'order_placed_at' => $order_placed_at,
         'order_closed_at' => $order_closed_at,

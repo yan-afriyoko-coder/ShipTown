@@ -73,6 +73,11 @@ class Order extends Model
         'is_packed',
     ];
 
+    public function scopeWhereActive($query)
+    {
+        return $query->whereIn('status_code', OrderStatus::getActiveStatusCodesList());
+    }
+
     /**
      * @param Builder $query
      * @param int $inventory_location_id
