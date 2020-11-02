@@ -27,6 +27,14 @@
             <td>periods to zero</td>
             <td class="text-right">{{ $data['periods_to_zero'] }}</td>
         </tr>
+        <tr>
+            <td>avg_per_staff_per_day</td>
+            <td class="text-right">{{ $data['avg_per_staff_per_day'] }}</td>
+        </tr>
+        <tr>
+            <td>staff_days_to_zero</td>
+            <td class="text-right">{{ $data['staff_days_to_zero'] }}</td>
+        </tr>
 {{--    @endforeach--}}
     </tbody>
 </table>

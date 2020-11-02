@@ -57,6 +57,10 @@ class TimeToZeroWidget extends AbstractWidget
 
         $data['periods_to_zero'] = $data['active_orders_count'] / $data['balance'];
 
+        $data['avg_per_staff_per_day'] = $data['orders_closed_count'] / $data['staff_days_used'];
+
+        $data['staff_days_to_zero'] = $data['active_orders_count'] / $data['avg_per_staff_per_day'];
+
         return view('widgets.time_to_zero_widget', [
             'config' => $this->config,
             'data' => $data
