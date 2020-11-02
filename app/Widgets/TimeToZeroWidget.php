@@ -52,7 +52,6 @@ class TimeToZeroWidget extends AbstractWidget
                 ]),
                 'staff_count_daily'
             )
-            ->where('packers_count', '>', 10)
             ->sum('packers_count');
 
         $data['periods_to_zero'] = round($data['active_orders_count'] / $data['balance'], 1);
