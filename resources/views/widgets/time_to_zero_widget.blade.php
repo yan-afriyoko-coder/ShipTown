@@ -32,7 +32,7 @@
             <td class="text-right">{{ $data['staff_days_required_for_balance_0'] }}</td>
         </tr>
         <tr>
-            <td>Extra Staff Required to clear in 5 days</td>
+            <td>Extra Staff Required To Clear in 5 days</td>
             <td class="text-right">{{ $data['staff_required_to_clear_in_5days'] }}</td>
         </tr>
         <tr>
