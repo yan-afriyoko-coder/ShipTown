@@ -43,7 +43,7 @@ class TimeToZeroWidget extends AbstractWidget
                 Order::query()
                 ->select([
                     DB::raw('Date(order_placed_at) as date'),
-                    DB::raw('count(distinct(packer_user_id)) as total'),
+                    DB::raw('count(distinct(packer_user_id)) as packers_count'),
                 ])
                 ->where('order_closed_at', '>', $startDate)
                 ->whereNotNull('packer_user_id')
@@ -52,7 +52,8 @@ class TimeToZeroWidget extends AbstractWidget
                 ]),
                 'staff_count_daily'
             )
-            ->sum('total');
+            ->where('packers_count', '>', 10)
+            ->sum('packers_count');
 
         $data['periods_to_zero'] = $data['active_orders_count'] / $data['balance'];
 
