@@ -1,12 +1,11 @@
 <table class="table table-borderless">
     <thead>
     <tr>
-        <th scope="col">Time To Zero</th>
+        <th scope="col">Performance Dashboard</th>
         <th scope="col" class="text-right"></th>
     </tr>
     </thead>
     <tbody>
-{{--    @foreach ($count_per_user as $count)--}}
         <tr>
             <td>Orders Placed</td>
             <td class="text-right">{{ $data['orders_placed_count'] }}</td>
@@ -43,6 +42,5 @@
             <td>Staff Working Day Value</td>
             <td class="text-right">€ {{ $data['staff_working_day_value'] }}</td>
         </tr>
-{{--    @endforeach--}}
     </tbody>
 </table>
