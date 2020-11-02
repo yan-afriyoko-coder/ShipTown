@@ -26,6 +26,9 @@ class TimeToZeroWidget extends AbstractWidget
 
         $startDate = DB::raw('adddate(now(), -7)');
 
+        $data['average_order_total'] = Order::where('order_placed_at', '>', $startDate)
+            ->average('total');
+
         $data['orders_placed_count'] = Order::where('order_placed_at', '>', $startDate)
             ->count();
 
@@ -61,6 +64,8 @@ class TimeToZeroWidget extends AbstractWidget
         $data['staff_days_required_for_balance_0'] = round($data['orders_placed_count'] / $data['avg_per_staff_per_day'] / 5, 1);
 
         $data['staff_required_to_clear_in_5days'] = round($data['active_orders_count'] / $data['avg_per_staff_per_day'] / 5, 1);
+
+        $data['staff_working_day_value'] = round($data['avg_per_staff_per_day'] * $data['average_order_total'], 0);
 
         return view('widgets.time_to_zero_widget', [
             'config' => $this->config,

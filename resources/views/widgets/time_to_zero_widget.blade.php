@@ -39,6 +39,14 @@
             <td>Extra Staff Required to clear in 5 days</td>
             <td class="text-right">{{ $data['staff_required_to_clear_in_5days'] }}</td>
         </tr>
+        <tr>
+            <td>Average Order Total</td>
+            <td class="text-right">{{ $data['average_order_total'] }}</td>
+        </tr>
+        <tr>
+            <td>Staff Working Day Value</td>
+            <td class="text-right">{{ $data['staff_working_day_value'] }}</td>
+        </tr>
 {{--    @endforeach--}}
     </tbody>
 </table>
