@@ -42,7 +42,7 @@ class TimeToZeroWidget extends AbstractWidget
             ->fromSub(
                 Order::query()
                 ->select([
-                    DB::raw('Date(order_placed_at) as date'),
+                    DB::raw('Date(order_closed_at) as date'),
                     DB::raw('count(distinct(packer_user_id)) as packers_count'),
                 ])
                 ->where('order_closed_at', '>', $startDate)
