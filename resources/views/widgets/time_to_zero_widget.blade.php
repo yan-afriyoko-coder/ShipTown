@@ -24,10 +24,6 @@
             <td class="text-right">{{ $data['active_orders_count'] }}</td>
         </tr>
         <tr>
-            <td>Periods to Zero</td>
-            <td class="text-right">{{ $data['periods_to_zero'] > 0 ? $data['periods_to_zero'] : '-' }}</td>
-        </tr>
-        <tr>
             <td>Average Orders Completed Per Staff Per Day</td>
             <td class="text-right">{{ $data['avg_per_staff_per_day'] }}</td>
         </tr>
