@@ -41,11 +41,11 @@
         </tr>
         <tr>
             <td>Average Order Total</td>
-            <td class="text-right">{{ $data['average_order_total'] }}</td>
+            <td class="text-right">€ {{ round($data['average_order_total'],1) }}</td>
         </tr>
         <tr>
             <td>Staff Working Day Value</td>
-            <td class="text-right">{{ $data['staff_working_day_value'] }}</td>
+            <td class="text-right">€ {{ $data['staff_working_day_value'] }}</td>
         </tr>
 {{--    @endforeach--}}
     </tbody>
