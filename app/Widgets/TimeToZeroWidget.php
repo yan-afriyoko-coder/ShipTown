@@ -54,11 +54,13 @@ class TimeToZeroWidget extends AbstractWidget
             )
             ->sum('packers_count');
 
-        $data['periods_to_zero'] = round($data['active_orders_count'] / $data['balance'], 1);
+        $data['periods_to_zero'] =  round($data['active_orders_count'] / $data['balance'], 1);
 
         $data['avg_per_staff_per_day'] = round($data['orders_closed_count'] / $data['staff_days_used'], 1);
 
-        $data['staff_days_to_zero'] = round($data['active_orders_count'] / $data['avg_per_staff_per_day'], 1);
+        $data['staff_days_required_for_balance_0'] = round($data['orders_placed_count'] / $data['avg_per_staff_per_day'] / 5, 1);
+
+        $data['staff_required_to_clear_in_5days'] = round($data['active_orders_count'] / $data['avg_per_staff_per_day'] / 5, 1);
 
         return view('widgets.time_to_zero_widget', [
             'config' => $this->config,

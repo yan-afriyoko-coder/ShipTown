@@ -15,25 +15,29 @@
             <td>Orders Completed</td>
             <td class="text-right">{{ $data['orders_closed_count'] }}</td>
         </tr>
-        <tr>
-            <td>Balance</td>
+        <tr class="font-weight-bold">
+            <td>Period Balance</td>
             <td class="text-right">{{ $data['balance'] }}</td>
         </tr>
         <tr>
-            <td>active_orders_count</td>
+            <td>Active Orders Count</td>
             <td class="text-right">{{ $data['active_orders_count'] }}</td>
         </tr>
         <tr>
-            <td>periods to zero</td>
-            <td class="text-right">{{ $data['periods_to_zero'] }}</td>
+            <td>Periods to Zero</td>
+            <td class="text-right">{{ $data['periods_to_zero'] > 0 ? $data['periods_to_zero'] : '-' }}</td>
         </tr>
         <tr>
-            <td>avg_per_staff_per_day</td>
+            <td>Average Orders Completed Per Staff Per Day</td>
             <td class="text-right">{{ $data['avg_per_staff_per_day'] }}</td>
         </tr>
         <tr>
-            <td>staff_days_to_zero</td>
-            <td class="text-right">{{ $data['staff_days_to_zero'] }}</td>
+            <td>Daily Staff Required To Keep Up</td>
+            <td class="text-right">{{ $data['staff_days_required_for_balance_0'] }}</td>
+        </tr>
+        <tr>
+            <td>Extra Staff Required to clear in 5 days</td>
+            <td class="text-right">{{ $data['staff_required_to_clear_in_5days'] }}</td>
         </tr>
 {{--    @endforeach--}}
     </tbody>
