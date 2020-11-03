@@ -4,6 +4,8 @@ namespace Tests\Unit\Jobs\Maintenance;
 
 use App\Jobs\RefillStatusesJob;
 use App\Models\Order;
+use App\Models\OrderProduct;
+use App\Models\Product;
 use App\Services\AutoPilot;
 use Tests\TestCase;
 
@@ -16,7 +18,11 @@ class RefillWebPickingStatusListJobTest extends TestCase
      */
     public function testExample()
     {
+        Product::query()->forceDelete();
+        OrderProduct::query()->forceDelete();
         Order::query()->forceDelete();
+
+        factory(Product::class, 30)->create();
 
         factory(Order::class, 150)
             ->with('orderProducts', 2)
