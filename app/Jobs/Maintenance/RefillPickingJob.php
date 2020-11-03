@@ -31,7 +31,7 @@ class RefillPickingJob implements ShouldQueue
      */
     public function handle()
     {
-        \App\Jobs\Maintenance\UpdateAllProcessingIfPaidJob::dispatchNow();
+        \App\Jobs\Maintenance\RefillPaidJob::dispatchNow();
         \App\Jobs\Maintenance\RefillPackingWarehouseJob::dispatchNow();
         \App\Jobs\Maintenance\SingleLineOrdersJob::dispatchNow();
 
