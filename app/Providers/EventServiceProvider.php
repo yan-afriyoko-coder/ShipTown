@@ -65,10 +65,6 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\Order\StatusChanged\CreatePickRequestsListener::class,
             \App\Listeners\Order\StatusChanged\DeletePickRequestsListener::class,
             \App\Listeners\Order\StatusChanged\UpdateClosedAt::class,
-
-            // custom client rule
-            // todo move it to some custom logic which can be modified (when x if y do z)
-            \App\Listeners\Order\StatusChanged\PackingStatusesRules::class,
         ],
 
         // Pick
