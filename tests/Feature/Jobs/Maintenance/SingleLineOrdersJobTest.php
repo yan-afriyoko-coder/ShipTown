@@ -2,11 +2,8 @@
 
 namespace Tests\Feature\Jobs\Maintenance;
 
-use App\Jobs\Maintenance\RefillSingleLineOrdersJob;
+use App\Jobs\Refill\RefillSingleLineOrdersJob;
 use App\Models\Order;
-use App\User;
-use Illuminate\Support\Facades\Bus;
-use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class SingleLineOrdersJobTest extends TestCase

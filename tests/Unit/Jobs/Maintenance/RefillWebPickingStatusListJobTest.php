@@ -2,11 +2,9 @@
 
 namespace Tests\Unit\Jobs\Maintenance;
 
-use App\Jobs\Maintenance\RefillPickingJob;
+use App\Jobs\RefillStatusesJob;
 use App\Models\Order;
 use App\Services\AutoPilot;
-use App\User;
-use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class RefillWebPickingStatusListJobTest extends TestCase
@@ -23,9 +21,8 @@ class RefillWebPickingStatusListJobTest extends TestCase
         factory(Order::class, 150)
             ->with('orderProducts', 2)
             ->create(['status_code' => 'paid']);
-//        factory(Order::class, rand(20, 50))->create(['status_code' => 'picking']);
 
-        RefillPickingJob::dispatchNow();
+        RefillStatusesJob::dispatchNow();
 
         $this->assertEquals(
             AutoPilot::getBatchSize(),
