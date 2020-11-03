@@ -59,7 +59,7 @@ class RefillPickingMissingStockJob implements ShouldQueue
                 $currentOrdersInProcessCount++;
                 info('RefillPickingMissingStockJob: updated status to picking', ['order_number' => $order->order_number]);
             }
-            if ($currentOrdersInProcessCount > $this->maxDailyAllowed) {
+            if ($currentOrdersInProcessCount >= $this->maxDailyAllowed) {
                 break;
             }
         }

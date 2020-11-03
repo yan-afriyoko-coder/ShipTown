@@ -36,16 +36,10 @@ class RunMaintenanceJobs implements ShouldQueue
         \App\Jobs\Maintenance\RecalculateOrderProductQuantityPicked::dispatch();
         \App\Jobs\Maintenance\RecalculatePickedAtForPickingOrders::dispatch();
 
-
-        \App\Jobs\Maintenance\UpdateAllProcessingIfPaidJob::dispatch();
-
-        \App\Jobs\Maintenance\RefillPackingWarehouseJob::dispatch();
-        \App\Jobs\Maintenance\SingleLineOrdersJob::dispatch();
-
         \App\Jobs\Maintenance\RefillPickingJob::dispatch();
 
         \App\Jobs\Maintenance\MakeSureOrdersAreOnPicklist::dispatch();
-        \App\Jobs\Maintenance\RunPackingWarehouseRuleOnPaidOrdersJob::dispatch();
+//        \App\Jobs\Maintenance\RunPackingWarehouseRuleOnPaidOrdersJob::dispatch();
         \App\Jobs\Maintenance\ClearOrderPackerAssignmentJob::dispatch();
         \App\Jobs\Maintenance\UpdateClosedAtIfNullJob::dispatch();
     }
