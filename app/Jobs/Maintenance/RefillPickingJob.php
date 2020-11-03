@@ -3,7 +3,6 @@
 namespace App\Jobs\Maintenance;
 
 use App\Models\Order;
-use App\Services\AutoPilot;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -33,7 +32,7 @@ class RefillPickingJob implements ShouldQueue
     {
         \App\Jobs\Maintenance\RefillPaidJob::dispatchNow();
         \App\Jobs\Maintenance\RefillPackingWarehouseJob::dispatchNow();
-        \App\Jobs\Maintenance\SingleLineOrdersJob::dispatchNow();
+        \App\Jobs\Maintenance\RefillSingleLineOrdersJob::dispatchNow();
 
         if (Order::where(['status_code' => 'picking'])->count() > 0) {
             return;

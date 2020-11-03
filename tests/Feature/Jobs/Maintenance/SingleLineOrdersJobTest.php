@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Jobs\Maintenance;
 
-use App\Jobs\Maintenance\SingleLineOrdersJob;
+use App\Jobs\Maintenance\RefillSingleLineOrdersJob;
 use App\Models\Order;
 use App\User;
 use Illuminate\Support\Facades\Bus;
@@ -24,7 +24,7 @@ class SingleLineOrdersJobTest extends TestCase
             ->with('orderProducts')
             ->create(['status_code' => 'paid']);
 
-        SingleLineOrdersJob::dispatchNow();
+        RefillSingleLineOrdersJob::dispatchNow();
 
         $this->assertDatabaseMissing('orders', [
             'status_code' => 'paid',
