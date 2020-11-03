@@ -40,7 +40,7 @@ class RefillPickingByOldestJob implements ShouldQueue
             'currently_in_process' => $currentOrdersInProcessCount,
         ]);
 
-        if ($this->maxDailyAllowed < $currentOrdersInProcessCount) {
+        if ($this->maxDailyAllowed <= $currentOrdersInProcessCount) {
             return;
         }
 

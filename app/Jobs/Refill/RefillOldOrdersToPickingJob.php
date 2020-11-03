@@ -42,7 +42,7 @@ class RefillOldOrdersToPickingJob implements ShouldQueue
             'max_daily_allowed' => $this->maxDailyAllowed,
         ]);
 
-        if ($currentOrdersInProcessCount > $this->maxDailyAllowed) {
+        if ($currentOrdersInProcessCount >= $this->maxDailyAllowed) {
             return;
         }
 
