@@ -34,13 +34,13 @@
             <td>Extra Staff Required To Clear in 5 days</td>
             <td class="text-right">{{ $data['staff_required_to_clear_in_5days'] }}</td>
         </tr>
-        <tr>
-            <td>Average Order Total</td>
-            <td class="text-right">€ {{ round($data['average_order_total'],1) }}</td>
-        </tr>
-        <tr>
-            <td>Staff Working Day Value</td>
-            <td class="text-right">€ {{ $data['staff_working_day_value'] }}</td>
-        </tr>
+{{--        <tr>--}}
+{{--            <td>Average Order Total</td>--}}
+{{--            <td class="text-right">€ {{ round($data['average_order_total'],1) }}</td>--}}
+{{--        </tr>--}}
+{{--        <tr>--}}
+{{--            <td>Staff Working Day Value</td>--}}
+{{--            <td class="text-right">€ {{ $data['staff_working_day_value'] }}</td>--}}
+{{--        </tr>--}}
     </tbody>
 </table>
