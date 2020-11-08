@@ -17,6 +17,8 @@ class RefillOldOrdersToPickingJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $maxDailyAllowed;
+    private $currentOrdersInProcessCount;
+    private $ordersRequiredCount;
 
     /**
      * Create a new job instance.
@@ -26,6 +28,16 @@ class RefillOldOrdersToPickingJob implements ShouldQueue
     public function __construct()
     {
         $this->maxDailyAllowed = AutoPilot::getMaxOrderAgeAllowed();
+
+        $this->currentOrdersInProcessCount = Order::whereIn('status_code', ['picking'])->count();
+
+        $this->ordersRequiredCount = $this->maxDailyAllowed - $this->currentOrdersInProcessCount;
+
+        logger('Refilling "picking" status (old orders)', [
+            'currently_in_process' => $this->currentOrdersInProcessCount,
+            'max_daily_allowed' => $this->maxDailyAllowed,
+            'ordersRequiredCount' => $this->ordersRequiredCount,
+        ]);
     }
 
     /**
@@ -35,28 +47,20 @@ class RefillOldOrdersToPickingJob implements ShouldQueue
      */
     public function handle()
     {
-        $currentOrdersInProcessCount = Order::whereIn('status_code', ['picking'])->count();
-
-        logger('Refilling "picking" status (old orders)', [
-            'currently_in_process' => $currentOrdersInProcessCount,
-            'max_daily_allowed' => $this->maxDailyAllowed,
-        ]);
-
-        $orderRequiredCount = $this->maxDailyAllowed - $currentOrdersInProcessCount;
-
-        if ($orderRequiredCount <= 0) {
+        if ($this->ordersRequiredCount <= 0) {
             return;
         }
 
         $orders = Order::whereStatusCode('paid')
             ->where('order_placed_at', '<', Carbon::now()->subDays(AutoPilot::getMaxOrderAgeAllowed()))
             ->orderBy('created_at')
-            ->limit($orderRequiredCount)
+            ->limit($this->ordersRequiredCount)
             ->get();
 
         foreach ($orders as $order) {
+            activity()->performedOn($order)
+                ->log('Outdated order, status_code => "picking"');
             $order->update(['status_code' => 'picking']);
-            info('RefillOldOrdersToPickingJob: updated status to picking', ['order_number' => $order->order_number]);
         }
     }
 }
