@@ -25,7 +25,7 @@ class RefillOldOrdersToPickingJob implements ShouldQueue
      */
     public function __construct()
     {
-        $this->maxDailyAllowed = AutoPilot::getBatchSize();
+        $this->maxDailyAllowed = AutoPilot::getMaxOrderAgeAllowed();
     }
 
     /**
@@ -42,26 +42,21 @@ class RefillOldOrdersToPickingJob implements ShouldQueue
             'max_daily_allowed' => $this->maxDailyAllowed,
         ]);
 
-        if ($currentOrdersInProcessCount >= $this->maxDailyAllowed) {
+        $orderRequiredCount = $this->maxDailyAllowed - $currentOrdersInProcessCount;
+
+        if ($orderRequiredCount <= 0) {
             return;
         }
 
         $orders = Order::whereStatusCode('paid')
             ->where('order_placed_at', '<', Carbon::now()->subDays(AutoPilot::getMaxOrderAgeAllowed()))
             ->orderBy('created_at')
-            ->limit($this->maxDailyAllowed - $currentOrdersInProcessCount)
+            ->limit($orderRequiredCount)
             ->get();
 
-
         foreach ($orders as $order) {
-            if (OrderService::canNotFulfill($order, 100)) {
-                $order->update(['status_code' => 'picking']);
-                $currentOrdersInProcessCount++;
-                info('RefillOldOrdersToPickingJob: updated status to picking', ['order_number' => $order->order_number]);
-            }
-            if ($currentOrdersInProcessCount >= $this->maxDailyAllowed) {
-                break;
-            }
+            $order->update(['status_code' => 'picking']);
+            info('RefillOldOrdersToPickingJob: updated status to picking', ['order_number' => $order->order_number]);
         }
     }
 }
