@@ -16,7 +16,7 @@ class RefillOldOrdersToPickingJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $maxDailyAllowed;
+    private $maxBatchSize;
     private $currentOrdersInProcessCount;
     private $ordersRequiredCount;
 
@@ -27,15 +27,15 @@ class RefillOldOrdersToPickingJob implements ShouldQueue
      */
     public function __construct()
     {
-        $this->maxDailyAllowed = AutoPilot::getMaxOrderAgeAllowed();
+        $this->maxBatchSize = AutoPilot::getBatchSize();
 
         $this->currentOrdersInProcessCount = Order::whereIn('status_code', ['picking'])->count();
 
-        $this->ordersRequiredCount = $this->maxDailyAllowed - $this->currentOrdersInProcessCount;
+        $this->ordersRequiredCount = $this->maxBatchSize - $this->currentOrdersInProcessCount;
 
         info('Refilling "picking" status (old orders)', [
             'currently_in_process' => $this->currentOrdersInProcessCount,
-            'max_daily_allowed' => $this->maxDailyAllowed,
+            'max_daily_allowed' => $this->maxBatchSize,
             'ordersRequiredCount' => $this->ordersRequiredCount,
         ]);
     }
