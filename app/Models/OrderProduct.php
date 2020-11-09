@@ -57,6 +57,8 @@ class OrderProduct extends Model
                 AllowedFilter::exact('product_id'),
                 AllowedFilter::exact('order_id'),
 
+                AllowedFilter::scope('current_shelf_location', 'MinimumShelfLocation'),
+
             ])
             ->allowedIncludes([
                 'order',
@@ -68,6 +70,16 @@ class OrderProduct extends Model
                 'sku_ordered',
                 'id',
             ]);
+    }
+
+    /**
+     * @param Builder $query
+     * @param string $currentLocation
+     * @return Builder
+     */
+    public function scopeMinimumShelfLocation($query, $currentLocation)
+    {
+        return $query->where('inventory_source.inventory_source_shelf_location', '>=', $currentLocation);
     }
 
     /**
