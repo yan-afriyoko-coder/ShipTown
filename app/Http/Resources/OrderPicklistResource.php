@@ -17,7 +17,8 @@ class OrderPicklistResource extends JsonResource
         return [
             'name_ordered' => $this->name_ordered,
             'sku_ordered' => $this->sku_ordered,
-            'quantity_required' => 999,
+            'total_quantity_to_pick' => $this->total_quantity_to_pick,
+            'quantity_required' => $this->total_quantity_to_pick,
             'inventory_source_quantity' => $this->inventory_source_quantity,
             'inventory_source_shelf_location' => $this->inventory_source_shelf_location,
             'product' => new ProductResource($this->whenLoaded('product'))

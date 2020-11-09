@@ -13,11 +13,14 @@ class OrderPicklistController extends Controller
     public function index(Request $request)
     {
         $query = OrderProduct::getSpatieQueryBuilder()
+            ->where('order_products.quantity_to_pick', '>', 0)
             ->select([
+                'product_id',
                 'name_ordered',
                 'sku_ordered',
+                DB::raw("sum(`quantity_to_pick`) as total_quantity_to_pick"),
+                DB::raw("max(`inventory_source_quantity`) as inventory_source_quantity"),
                 'inventory_source_shelf_location',
-                'product_id',
             ])
             ->groupBy([
                 'name_ordered',
