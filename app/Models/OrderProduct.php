@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use phpseclib\Math\BigInteger;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 /**
  * @property BigInteger order_id
@@ -39,6 +41,48 @@ class OrderProduct extends Model
         'quantity_not_picked',
         'quantity_shipped',
     ];
+
+    /**
+     * @return QueryBuilder
+     */
+    public static function getSpatieQueryBuilder(): QueryBuilder
+    {
+        return QueryBuilder::for(OrderProduct::class)
+            ->allowedFilters([
+                AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->default(100),
+                AllowedFilter::scope('in_stock_only', 'whereInStock'),
+
+                AllowedFilter::scope('not_picked_only', 'whereNotPicked'),
+
+                AllowedFilter::exact('product_id'),
+                AllowedFilter::exact('order_id'),
+
+            ])
+            ->allowedIncludes([
+                'order',
+                'product',
+                'product.aliases',
+            ])
+            ->allowedSorts([
+                'inventory_source_shelf_location',
+                'sku_ordered',
+                'id',
+            ]);
+    }
+
+    /**
+     * @param Builder $query
+     * @param boolean $in_stock
+     * @return mixed
+     */
+    public function scopeWhereInStock($query, $in_stock)
+    {
+        if (!$in_stock) {
+            return $query;
+        }
+
+        return $query->where('inventory_source.inventory_source_quantity', '>', 0);
+    }
 
     /**
      * @param Builder $query

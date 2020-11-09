@@ -147,7 +147,6 @@ export default {
                 sort: 'inventory_source_shelf_location,sku_ordered',
                 per_page: this.getUrlParameter('per_page', 3),
                 'filter[in_stock_only]': this.getUrlFilter('in_stock_only', true),
-                'filter[not_picked_only]': true,
                 'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id'),
                 'filter[current_shelf_location]': this.getUrlFilter('current_shelf_location'),
             };
@@ -156,7 +155,7 @@ export default {
 
             this.picklist = [];
 
-            return axios.get('/api/picks', {params:  params})
+            return axios.get('/api/order/picklist', {params:  params})
                 .then( ({data}) => {
                     this.picklist = data.data;
                 })
