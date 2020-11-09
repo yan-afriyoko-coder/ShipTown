@@ -33,7 +33,7 @@ class RefillOldOrdersToPickingJob implements ShouldQueue
 
         $this->ordersRequiredCount = $this->maxDailyAllowed - $this->currentOrdersInProcessCount;
 
-        logger('Refilling "picking" status (old orders)', [
+        info('Refilling "picking" status (old orders)', [
             'currently_in_process' => $this->currentOrdersInProcessCount,
             'max_daily_allowed' => $this->maxDailyAllowed,
             'ordersRequiredCount' => $this->ordersRequiredCount,
