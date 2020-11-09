@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Product;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderPicklistResource extends JsonResource
@@ -15,7 +16,12 @@ class OrderPicklistResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'sku_ordered' => $this->sku_ordered
+            'name_ordered' => $this->name_ordered,
+            'sku_ordered' => $this->sku_ordered,
+            'inventory_source_quantity' => $this->inventory_source_quantity,
+            'inventory_source_shelf_location' => $this->inventory_source_shelf_location,
+            'quantity_required' => 999,
+            'product' => new ProductResource($this->whenLoaded('product'))
         ];
     }
 }
