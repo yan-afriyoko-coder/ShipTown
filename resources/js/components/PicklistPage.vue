@@ -83,7 +83,7 @@ export default {
             deep: true
         },
         current_shelf_location() {
-            this.setUrlFilter('current_shelf_location', this.current_shelf_location);
+            this.setUrlParameter('current_shelf_location', this.current_shelf_location)
         }
     },
 
@@ -148,7 +148,7 @@ export default {
                 per_page: this.getUrlParameter('per_page', 3),
                 'filter[in_stock_only]': this.getUrlFilter('in_stock_only', true),
                 'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id'),
-                'filter[current_shelf_location]': this.getUrlFilter('current_shelf_location'),
+                'filter[current_shelf_location]': this.getUrlParameter('current_shelf_location'),
             };
 
             this.showLoading();
