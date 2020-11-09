@@ -31,7 +31,7 @@
 
         <div v-else>
             <template v-for="pick in picklist">
-                <pick-card :pick="pick" @swipeRight="pickAll" @swipeLeft="partialPickSwiped"/>
+                <pick-card :pick="pick" :id="`pick-card-${ picklist.indexOf(pick)}`" @swipeRight="pickAll" @swipeLeft="partialPickSwiped"/>
             </template>
         </div>
 

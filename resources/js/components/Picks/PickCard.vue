@@ -1,5 +1,5 @@
 <template>
-        <div :id="pickCardId" class="swiper-container mb-3">
+        <div class="swiper-container mb-3">
             <div class="swiper-wrapper">
 
                 <div class="swiper-slide error bg-success text-right">
@@ -66,9 +66,6 @@ export default {
     },
 
     computed: {
-        pickCardId() {
-            return `pick-card-${this.pick['id']}`;
-        },
         quantity_requested_integer() {
             return Math.ceil(this.pick['quantity_required']);
         },
@@ -78,7 +75,7 @@ export default {
     },
 
     mounted() {
-        this.swiper = new Swiper('#' + this.pickCardId, {
+        this.swiper = new Swiper('#' + this.$attrs.id, {
             initialSlide: 1,
             shortSwipes: false,
             longSwipes: true,
