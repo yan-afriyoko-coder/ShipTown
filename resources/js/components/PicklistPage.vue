@@ -169,8 +169,9 @@ export default {
         },
 
         postPickUpdate(pick, quantity_picked) {
-            return axios.put('/api/picks/' + pick['id'], {
-                    'quantity_picked': quantity_picked
+            return axios.post('/api/order/picklist', {
+                    'pick': pick,
+                    'quantity_picked': quantity_picked,
             })
             .catch( error => {
                 this.$snotify.error('Action failed (Http code  '+ error.response.status+')');

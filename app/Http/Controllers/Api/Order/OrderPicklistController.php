@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Order;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\OrderPicklist\StoreRequest;
 use App\Http\Resources\OrderPicklistResource;
 use App\Models\OrderProduct;
 use Illuminate\Http\Request;
@@ -30,5 +31,13 @@ class OrderPicklistController extends Controller
             ]);
 
         return OrderPicklistResource::collection($this->getPerPageAndPaginate($request, $query, 10));
+    }
+
+    public function store(StoreRequest $request)
+    {
+        $orders = OrderProduct::where($request->only(['name_ordered','sku_orderedp']))
+            ->get();
+
+        dd($orders);
     }
 }
