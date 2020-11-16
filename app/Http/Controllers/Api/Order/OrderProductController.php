@@ -8,6 +8,7 @@ use App\Http\Resources\OrderProductResource;
 use App\Models\OrderProduct;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -18,7 +19,7 @@ class OrderProductController extends Controller
      * Display a listing of the resource.
      *
      * @param Request $request
-     * @return LengthAwarePaginator
+     * @return AnonymousResourceCollection
      */
     public function index(Request $request)
     {
@@ -39,9 +40,7 @@ class OrderProductController extends Controller
                 'id',
             ]);
 
-        $per_page = $request->get('per_page', 10);
-
-        return $query->paginate($per_page)->appends($request->query());
+        return OrderProductResource::collection($this->getPerPageAndPaginate($request, $query));
     }
 
     /**
