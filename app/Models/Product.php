@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use phpseclib\Math\BigInteger;
+use Psr\Log\LoggerAwareTrait;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @property BigInteger id
@@ -26,6 +28,7 @@ use phpseclib\Math\BigInteger;
 class Product extends Model
 {
     use SoftDeletes;
+    use LogsActivity;
     use Notifiable, HasManyKeyByRelationship;
 
     protected $fillable = [
