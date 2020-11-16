@@ -43,6 +43,6 @@ class ProductsTest extends TestCase
             ]
         ]);
 
-        dd($response->json());
+//        dd($response->json());
     }
 }
