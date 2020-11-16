@@ -32,7 +32,7 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('orders', 'Api\OrdersController');
     Route::apiResource('order/products', 'Api\Order\OrderProductController')->only(['index','update']);
     Route::apiResource('order/shipments', 'Api\Order\OrderShipmentController')->only(['index', 'store']);
-    Route::apiResource('order/comments', 'Api\OrderCommentController')->only(['store']);
+    Route::apiResource('order/comments', 'Api\Order\OrderCommentController')->only(['store']);
     Route::apiResource('packlist/order', 'Api\PacklistOrderController')->only(['index']);
     // todo Route::apiResource('picklist', 'Api\PicklistOrderController')->only(['index']);
 
