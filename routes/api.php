@@ -25,6 +25,7 @@ Route::middleware('auth:api')->get('/user/me', function (Request $request) {
 Route::middleware('auth:api')->group(function () {
 
     Route::apiResource('users/me', 'Api\UserMeController')->only(['index']);
+    Route::apiResource('logs', 'Api\LogController')->only(['index']);
 
     Route::apiResource('products', 'Api\ProductsController')->only(['index','store']);
     Route::apiResource('inventory', 'Api\InventoryController')->only(['index','store']);
