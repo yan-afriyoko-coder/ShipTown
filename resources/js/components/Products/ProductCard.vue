@@ -110,7 +110,6 @@
 
         methods: {
             toggle() {
-                console.log('togling');
                 this.showOrders = !this.showOrders;
 
                 if (this.showOrders) {
@@ -127,7 +126,6 @@
 
                 axios.get('/api/order/products', {params: params})
                     .then(({data}) => {
-                        console.log(data.data);
                         this.orderProducts = data.data
                     });
             },
