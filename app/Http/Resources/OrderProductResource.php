@@ -23,6 +23,9 @@ class OrderProductResource extends JsonResource
             'quantity_ordered' => $this->quantity_ordered,
             'quantity_picked' => $this->quantity_picked,
             'quantity_shipped' => $this->quantity_shipped,
+            'inventory_source_location_id' => $this->inventory_source_location_id,
+            'inventory_source_shelf_location' => $this->inventory_source_shelf_location,
+            'inventory_source_quantity' => $this->inventory_source_quantity,
             'order' => new OrderResource($this->whenLoaded('order')),
             'product' => new ProductResource($this->whenLoaded('product')),
         ];
