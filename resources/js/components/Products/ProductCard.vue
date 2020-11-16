@@ -51,6 +51,7 @@
                                        <a target="_blank" :href="getProductLink(orderProduct)">
                                            #{{ orderProduct['order']['order_number']}}
                                        </a>
+                                       - {{orderProduct['order']['order_placed_at']}}
                                    </div>
                                    <div class="">
                                        {{ orderProduct['order']['status_code']}}
