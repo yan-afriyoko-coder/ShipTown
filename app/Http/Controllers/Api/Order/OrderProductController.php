@@ -45,28 +45,6 @@ class OrderProductController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return void
-     */
-    public function store(Request $request)
-    {
-        return $this->respondNotAllowed405();
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  OrderProduct  $orderProduct
-     * @return void
-     */
-    public function show(OrderProduct $orderProduct)
-    {
-        return $this->respondNotAllowed405();
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param UpdateRequest $request
@@ -80,16 +58,5 @@ class OrderProductController extends Controller
         $orderProduct->update($request->validated());
 
         return new OrderProductResource($orderProduct);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  OrderProduct  $orderProduct
-     * @return void
-     */
-    public function destroy(OrderProduct $orderProduct)
-    {
-        return $this->respondNotAllowed405();
     }
 }

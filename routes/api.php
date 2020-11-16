@@ -29,7 +29,7 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('products', 'Api\ProductsController')->only(['index','store']);
     Route::apiResource('inventory', 'Api\InventoryController')->only(['index','store']);
     Route::apiResource('orders', 'Api\OrdersController');
-    Route::apiResource('order/products', 'Api\Order\OrderProductController');
+    Route::apiResource('order/products', 'Api\Order\OrderProductController')->only(['index','update']);
     Route::apiResource('order/shipments', 'Api\OrderShipmentController');
     Route::apiResource('order/comments', 'Api\OrderCommentController')->only(['store']);
     Route::apiResource('packlist/order', 'Api\PacklistOrderController')->only(['index']);
