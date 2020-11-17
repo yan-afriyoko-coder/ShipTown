@@ -16,7 +16,10 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property string|null sku_ordered
  * @property string|null name_ordered
  * @property float quantity_ordered
+ * @property float quantity_to_pick
  * @property float quantity_picked
+ * @property float quantity_not_picked
+ * @property float quantity_shipped
  */
 class OrderProduct extends Model
 {
@@ -41,6 +44,16 @@ class OrderProduct extends Model
         'quantity_not_picked',
         'quantity_shipped',
     ];
+
+    /**
+     * @param array $options
+     * @return bool
+     */
+    public function save(array $options = [])
+    {
+        $this->quantity_to_pick = $this->quantity_ordered - $this->quantity_picked - $this->quantity_not_picked;
+        return parent::save($options);
+    }
 
     /**
      * @return QueryBuilder
