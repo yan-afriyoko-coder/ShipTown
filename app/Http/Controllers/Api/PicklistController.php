@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Order;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderPicklist\StoreRequest;
@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
 
-class OrderPicklistController extends Controller
+class PicklistController extends Controller
 {
     public function index(Request $request)
     {
