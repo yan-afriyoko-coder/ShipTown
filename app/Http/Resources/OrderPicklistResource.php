@@ -21,7 +21,8 @@ class OrderPicklistResource extends JsonResource
             'quantity_required' => (double) $this->total_quantity_to_pick,
             'inventory_source_quantity' => (double) $this->inventory_source_quantity,
             'inventory_source_shelf_location' => $this->inventory_source_shelf_location,
-            'product' => new ProductResource($this->whenLoaded('product'))
+            'product' => new ProductResource($this->whenLoaded('product')),
+            'order_product_ids' => explode(',',$this->order_product_ids),
         ];
     }
 }
