@@ -15,6 +15,7 @@ class PicklistController extends Controller
     public function index(Request $request)
     {
         $query = OrderProduct::getSpatieQueryBuilder()
+            ->where('quantity_to_pick', '>', 0)
             ->select([
                 'product_id',
                 'name_ordered',
