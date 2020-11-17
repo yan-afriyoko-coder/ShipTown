@@ -36,9 +36,28 @@ class PicklistController extends Controller
 
     public function store(StoreRequest $request)
     {
-        $orders = OrderProduct::where($request->only(['name_ordered','sku_ordered']))
+        $totalQuantityPicked = $request->get('quantity_picked');
+
+        $orderProducts = OrderProduct::whereIn('id', $request->get('order_product_ids'))
+            ->orderBy('order_id')
             ->get();
 
-        return JsonResource::collection($orders);
+        foreach ($orderProducts as $orderProduct) {
+            $quantity = $totalQuantityPicked < $orderProduct->quantity_to_pick
+                ? $totalQuantityPicked
+                : $orderProduct->quantity_to_pick;
+
+            $orderProduct->update([
+                'quantity_picked' => $orderProduct->quantity_picked + $quantity,
+            ]);
+
+            $totalQuantityPicked = $totalQuantityPicked - $quantity;
+
+            if ($totalQuantityPicked <= 0) {
+                continue;
+            }
+        }
+
+        return JsonResource::collection($orderProducts);
     }
 }
