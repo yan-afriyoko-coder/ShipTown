@@ -24,8 +24,9 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'sku_ordered' => 'sometimes',
-            'name_ordered' => 'sometimes',
+            'quantity_picked' => 'required|numeric',
+            'order_product_ids' => 'required|array',
+            'order_product_ids.*' => 'numeric',
         ];
     }
 }

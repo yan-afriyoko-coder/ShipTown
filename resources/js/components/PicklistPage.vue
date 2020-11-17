@@ -155,7 +155,7 @@ export default {
 
             this.picklist = [];
 
-            return axios.get('/api/order/picklist', {params:  params})
+            return axios.get('/api/picklist', {params:  params})
                 .then( ({data}) => {
                     this.picklist = data.data;
                 })
@@ -169,9 +169,9 @@ export default {
         },
 
         postPickUpdate(pick, quantity_picked) {
-            return axios.post('/api/order/picklist', {
-                    'pick': pick,
+            return axios.post('/api/picklist', {
                     'quantity_picked': quantity_picked,
+                    'order_product_ids': pick['order_product_ids'],
             })
             .catch( error => {
                 this.$snotify.error('Action failed (Http code  '+ error.response.status+')');
