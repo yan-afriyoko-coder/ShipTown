@@ -42,7 +42,7 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('settings/printers', 'Api\PrintersController')->only(['index']);
     Route::apiResource('settings/widgets', 'Api\WidgetsController');
     Route::apiResource('settings/modules/rms_api/connections', "Api\Settings\Module\Rmsapi\RmsapiConnectionController");
-    Route::apiResource('settings/modules/api2cart/connections', "Api\Api2cartConnectionController");
+    Route::apiResource('settings/modules/api2cart/connections', "Api\Settings\Module\Api2cart\Api2cartConnectionController");
 
     Route::put('print/order/{order_number}/{view}', 'Api\PrintOrderController@store');
 
@@ -50,7 +50,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::resource('widgets', 'Api\WidgetsController');
     Route::resource("rms_api_configuration", "Api\Settings\Module\Rmsapi\RmsapiConnectionController");
-    Route::resource("api2cart_configuration", "Api\Api2cartConnectionController");
+    Route::resource("api2cart_configuration", "Api\Settings\Module\Api2cart\Api2cartConnectionController");
 
     // Routes for users with the admin role only
     Route::group(['middleware' => ['role:admin']], function () {
