@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Settings;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -8,7 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 use App\Models\Configuration;
 
-class ConfigurationsController extends Controller
+class ConfigurationController extends Controller
 {
     public function store(Request $request)
     {
