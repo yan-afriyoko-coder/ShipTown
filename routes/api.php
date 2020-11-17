@@ -53,7 +53,7 @@ Route::middleware('auth:api')->group(function () {
     Route::group(['middleware' => ['role:admin']], function () {
         Route::post('invites', 'InvitesController@store');
         Route::get('roles', 'Api\RolesController@index')->middleware('can:list roles');
-        Route::resource('users', 'Api\UsersController')->middleware('can:manage users');
+        Route::resource('users', 'Api\Settings\UsersController')->middleware('can:manage users');
         Route::resource('configuration', 'Api\Settings\ConfigurationController');
     });
 
