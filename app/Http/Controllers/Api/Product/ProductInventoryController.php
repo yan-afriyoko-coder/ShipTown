@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Product;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreInventoryRequest;
@@ -8,7 +8,7 @@ use App\Models\Inventory;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
-class InventoryController extends Controller
+class ProductInventoryController extends Controller
 {
     public function index(Request $request)
     {

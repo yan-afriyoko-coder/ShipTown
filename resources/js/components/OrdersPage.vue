@@ -57,7 +57,8 @@
 
                 const params = {
                     'filter[status]': this.getUrlParameter('status', null),
-                    'filter[order_number]': this.getUrlParameter('search', ''),
+                    // 'filter[order_number]': this.getUrlParameter('search', ''),
+                    'filter[search]': this.getUrlParameter('search', ''),
                     'sort': this.getUrlParameter('sort','-updated_at'),
                     'per_page': this.getUrlParameter('per_page',50),
                     'include': 'activities,activities.causer,packer,order_shipments,order_products,order_products.product,order_comments,order_comments.user',

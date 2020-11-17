@@ -73,6 +73,20 @@ class Order extends Model
         'is_packed',
     ];
 
+    /**
+     * @param $query
+     * @param $text
+     * @return Builder
+     */
+    public function scopeWhereHasText($query, $text)
+    {
+        return $query->where('order_number', 'like', '%' . $text . '%')
+            ->orWhere('status_code', '=', $text)
+            ->orWhereHas('orderShipments', function ($query) use ($text) {
+                return $query->where('shipping_number', 'like', '%'. $text . '%');
+            });
+    }
+
     public function scopeWhereActive($query)
     {
         return $query->whereIn('status_code', OrderStatus::getActiveStatusCodesList());

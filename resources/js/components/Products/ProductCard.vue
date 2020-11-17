@@ -35,7 +35,14 @@
             <div class="row" v-if="showOrders">
                 <div class="col">
 
-                    <template v-for="orderProduct in orderProducts">
+                    <div class="row">
+                        <ul class="nav nav-tabs">
+                            <li><a href="#" @click.prevent="currentTab = 'recentOrders'" >Recent Orders</a></li>
+                            <li><a href="#" @click.prevent="currentTab = 'productLog'" >Product Log</a></li>
+                        </ul>
+                    </div>
+
+                    <template v-if="currentTab === 'recentOrders'" v-for="orderProduct in orderProducts">
                        <div>
                            <hr>
                            <div class="row text-left mb-2">
@@ -44,6 +51,7 @@
                                        <a target="_blank" :href="getProductLink(orderProduct)">
                                            #{{ orderProduct['order']['order_number']}}
                                        </a>
+                                       - {{orderProduct['order']['order_placed_at']}}
                                    </div>
                                    <div class="">
                                        {{ orderProduct['order']['status_code']}}
@@ -69,6 +77,12 @@
                        </div>
                     </template>
 
+                    <div class="row" v-if="currentTab === 'productLog'">
+                        <template>
+
+                        </template>
+                    </div>
+
                 </div>
             </div>
 
@@ -91,8 +105,10 @@
 
         data: function() {
             return {
+                currentTab: 'recentOrders',
                 showOrders: false,
                 orderProducts: null,
+                productLogs: null,
             };
         },
 
@@ -110,11 +126,11 @@
 
         methods: {
             toggle() {
-                console.log('togling');
                 this.showOrders = !this.showOrders;
 
                 if (this.showOrders) {
                     this.loadOrders();
+                    this.loadProductLogs();
                 }
             },
 
@@ -127,8 +143,19 @@
 
                 axios.get('/api/order/products', {params: params})
                     .then(({data}) => {
-                        console.log(data.data);
                         this.orderProducts = data.data
+                    });
+            },
+            loadProductLogs: function () {
+                const params = {
+                    'filter[subject_type]': 'App\\Models\\Product',
+                    'filter[subject_id]': this.product['id'],
+                    // 'sort': '-id',
+                }
+
+                axios.get('/api/logs', {params: params})
+                    .then(({data}) => {
+                        this.productLogs = data.data
                     });
             },
             dashIfZero(value) {
@@ -151,5 +178,7 @@
 </script>
 
 <style scoped>
-
+li {
+    margin-right: 5px;
+}
 </style>

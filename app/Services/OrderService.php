@@ -93,7 +93,7 @@ class OrderService
         return QueryBuilder::for(Order::class)
             ->allowedFilters([
                 AllowedFilter::partial('q', 'order_number'),
-                AllowedFilter::partial('search', 'order_number'),
+                AllowedFilter::scope('search', 'whereHasText')->ignore([null, '']),
 
                 AllowedFilter::exact('status', 'status_code'),
                 AllowedFilter::exact('order_number')->ignore([null, '']),

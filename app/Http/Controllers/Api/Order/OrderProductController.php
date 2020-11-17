@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Order;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderProducts\UpdateRequest;
@@ -8,6 +8,7 @@ use App\Http\Resources\OrderProductResource;
 use App\Models\OrderProduct;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -18,37 +19,13 @@ class OrderProductController extends Controller
      * Display a listing of the resource.
      *
      * @param Request $request
-     * @return LengthAwarePaginator
+     * @return AnonymousResourceCollection
      */
     public function index(Request $request)
     {
         $query = OrderProduct::getSpatieQueryBuilder();
 
-        $per_page = $request->get('per_page', 10);
-
-        return $query->paginate($per_page)->appends($request->query());
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return void
-     */
-    public function store(Request $request)
-    {
-        return $this->respondNotAllowed405();
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  OrderProduct  $orderProduct
-     * @return void
-     */
-    public function show(OrderProduct $orderProduct)
-    {
-        return $this->respondNotAllowed405();
+        return OrderProductResource::collection($this->getPerPageAndPaginate($request, $query));
     }
 
     /**
@@ -65,16 +42,5 @@ class OrderProductController extends Controller
         $orderProduct->update($request->validated());
 
         return new OrderProductResource($orderProduct);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  OrderProduct  $orderProduct
-     * @return void
-     */
-    public function destroy(OrderProduct $orderProduct)
-    {
-        return $this->respondNotAllowed405();
     }
 }

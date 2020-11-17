@@ -253,7 +253,7 @@
 
                     axios.get('/api/order/products', {params: params})
                         .then(({ data }) => {
-                            if(data.total > 0) {
+                            if(data.meta.total > 0) {
                                 this.packed = data.data.filter(
                                     orderProduct => Number(orderProduct['quantity_shipped']) >= Number(orderProduct['quantity_ordered'])
                                 );

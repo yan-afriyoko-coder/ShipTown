@@ -28,7 +28,11 @@ class ProductResource extends JsonResource
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,
             "quantity_available" => $this->quantity_available,
+            'inventory_source_location_id' => $this->inventory_source_location_id,
+            'inventory_source_shelf_location' => $this->inventory_source_shelf_location,
+            'inventory_source_quantity' => $this->inventory_source_quantity,
             "inventory" => InventoryResource::collection($this->whenLoaded('inventory')),
+            "aliases" => ProductAliasResource::collection($this->whenLoaded('aliases')),
         ];
     }
 }

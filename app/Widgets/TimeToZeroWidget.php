@@ -57,11 +57,11 @@ class TimeToZeroWidget extends AbstractWidget
             )
             ->sum('packers_count');
 
-        $data['avg_per_staff_per_day'] = round($data['orders_closed_count'] / $data['staff_days_used'], 1);
+        $data['avg_per_staff_per_day'] = round($data['staff_days_used'] ?? $data['orders_closed_count'] / $data['staff_days_used'], 1);
 
-        $data['staff_days_required_for_balance_0'] = round($data['orders_placed_count'] / $data['avg_per_staff_per_day'] / 5, 1);
+        $data['staff_days_required_for_balance_0'] = round($data['avg_per_staff_per_day'] ?? $data['orders_placed_count'] / $data['avg_per_staff_per_day'] / 5, 1);
 
-        $data['staff_required_to_clear_in_5days'] = round($data['active_orders_count'] / $data['avg_per_staff_per_day'] / 5, 1);
+        $data['staff_required_to_clear_in_5days'] = round($data['avg_per_staff_per_day'] ?? $data['active_orders_count'] / $data['avg_per_staff_per_day'] / 5, 1);
 
         $data['staff_working_day_value'] = round($data['avg_per_staff_per_day'] * $data['average_order_total'], 0);
 

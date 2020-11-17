@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Settings;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
+use App\Services\PrintService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-use App\Http\Resources\UserResource;
-use App\Services\PrintService;
-
-class PrintersController extends Controller
+class PrinterController extends Controller
 {
     private $printService;
 

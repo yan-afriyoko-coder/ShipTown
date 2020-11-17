@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Order;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderShipmentStoreRequest;
 use App\Http\Resources\OrderShipmentResource;
 use App\Models\OrderShipment;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -47,39 +46,5 @@ class OrderShipmentController extends Controller
         $shipment->save();
 
         return new OrderShipmentResource($shipment);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param OrderShipment $orderShipment
-     * @return JsonResponse
-     */
-    public function show(OrderShipment $orderShipment)
-    {
-        return $this->getResponse(405, 'Method not allowed');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param OrderShipment $orderShipment
-     * @return JsonResponse
-     */
-    public function update(Request $request, OrderShipment $orderShipment)
-    {
-        return $this->getResponse(405, 'Method not allowed');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param OrderShipment $orderShipment
-     * @return JsonResponse
-     */
-    public function destroy(OrderShipment $orderShipment)
-    {
-        return $this->getResponse(405, 'Method not allowed');
     }
 }
