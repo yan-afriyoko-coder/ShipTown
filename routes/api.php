@@ -29,11 +29,13 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResource('products', 'Api\ProductsController')->only(['index','store']);
     Route::apiResource('product/aliases', 'Api\Product\ProductAliasController')->only(['index']);
-    Route::apiResource('inventory', 'Api\InventoryController')->only(['index','store']);
+    Route::apiResource('product/inventory', 'Api\Product\ProductInventoryController')->only(['index','store']);
+
     Route::apiResource('orders', 'Api\OrdersController');
     Route::apiResource('order/products', 'Api\Order\OrderProductController')->only(['index','update']);
     Route::apiResource('order/shipments', 'Api\Order\OrderShipmentController')->only(['index', 'store']);
     Route::apiResource('order/comments', 'Api\Order\OrderCommentController')->only(['store']);
+
     Route::apiResource('packlist/order', 'Api\PacklistOrderController')->only(['index']);
     // todo Route::apiResource('picklist', 'Api\PicklistOrderController')->only(['index']);
 
@@ -66,6 +68,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
     // to remove
+    Route::apiResource('inventory', 'Api\Product\InventoryController')->only(['index','store']);
     Route::get('products/{sku}/sync', 'Api\ProductsController@publish');
     Route::put('printers/use/{printerId}', 'Api\PrintersController@use');
 });
