@@ -29,6 +29,8 @@ class RunMaintenanceJobs implements ShouldQueue
      */
     public function handle()
     {
+        \App\Jobs\Orders\EnsureCorrectQuantityToPick::dispatch();
+
         \App\Jobs\Maintenance\RecalculateOrderProductLineCountJob::dispatch();
         \App\Jobs\Maintenance\RecalculateOrderTotalQuantityOrderedJob::dispatch();
         \App\Jobs\Maintenance\RecalculateProductQuantityJob::dispatch();
