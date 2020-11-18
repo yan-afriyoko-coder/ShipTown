@@ -64,7 +64,7 @@
                                     {{ __('Status: picking') }}
                                 </a>
                                 <a class="dropdown-item" href="{{ route('picklist') . '?order.status_code=paid,picking&inventory_source_location_id=99'}}">
-                                    {{ __('Status: paid') }}
+                                    {{ __('Status: paid,picking') }}
                                 </a>
                             </div>
                         </li>
