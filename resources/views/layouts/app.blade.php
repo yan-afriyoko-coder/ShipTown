@@ -52,7 +52,7 @@
                             <a class="nav-link" href="{{ route('products') }}">{{ __('Products') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('picklist') }}">{{ __('Picklist') }}</a>
+                            <a class="nav-link" href="{{ route('picklist') . '?order.status_code=picking'}}">{{ __('Picklist') }}</a>
                         </li>
 
                         <li class="nav-item dropdown">
