@@ -71,7 +71,7 @@ class OrderProduct extends Model
                 AllowedFilter::exact('order_id'),
 
                 AllowedFilter::scope('current_shelf_location', 'MinimumShelfLocation'),
-
+                AllowedFilter::exact('order.status_code')->ignore(''),
             ])
             ->allowedIncludes([
                 'order',

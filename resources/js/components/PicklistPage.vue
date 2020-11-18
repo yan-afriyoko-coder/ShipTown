@@ -149,6 +149,7 @@ export default {
                 'filter[in_stock_only]': this.getUrlFilter('in_stock_only', true),
                 'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id'),
                 'filter[current_shelf_location]': this.getUrlParameter('current_shelf_location'),
+                'filter[order.status_code]': this.getUrlParameter('order.status_code'),
             };
 
             this.showLoading();
