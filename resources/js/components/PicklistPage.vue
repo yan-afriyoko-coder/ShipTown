@@ -31,7 +31,7 @@
 
         <div v-else>
             <template v-for="pick in picklist">
-                <pick-card :pick="pick" @swipeRight="pickAll" @swipeLeft="partialPickSwiped"/>
+                <pick-card :pick="pick" :id="`pick-card-${ picklist.indexOf(pick)}`" @swipeRight="pickAll" @swipeLeft="partialPickSwiped"/>
             </template>
         </div>
 
@@ -83,7 +83,7 @@ export default {
             deep: true
         },
         current_shelf_location() {
-            this.setUrlFilter('current_shelf_location', this.current_shelf_location);
+            this.setUrlParameter('current_shelf_location', this.current_shelf_location)
         }
     },
 
@@ -147,16 +147,16 @@ export default {
                 sort: 'inventory_source_shelf_location,sku_ordered',
                 per_page: this.getUrlParameter('per_page', 3),
                 'filter[in_stock_only]': this.getUrlFilter('in_stock_only', true),
-                'filter[not_picked_only]': true,
                 'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id'),
-                'filter[current_shelf_location]': this.getUrlFilter('current_shelf_location'),
+                'filter[current_shelf_location]': this.getUrlParameter('current_shelf_location'),
+                'filter[order.status_code]': this.getUrlParameter('order.status_code'),
             };
 
             this.showLoading();
 
             this.picklist = [];
 
-            return axios.get('/api/picks', {params:  params})
+            return axios.get('/api/picklist', {params:  params})
                 .then( ({data}) => {
                     this.picklist = data.data;
                 })
@@ -170,8 +170,9 @@ export default {
         },
 
         postPickUpdate(pick, quantity_picked) {
-            return axios.put('/api/picks/' + pick['id'], {
-                    'quantity_picked': quantity_picked
+            return axios.post('/api/picklist', {
+                    'quantity_picked': quantity_picked,
+                    'order_product_ids': pick['order_product_ids'],
             })
             .catch( error => {
                 this.$snotify.error('Action failed (Http code  '+ error.response.status+')');

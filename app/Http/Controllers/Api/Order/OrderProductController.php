@@ -23,22 +23,7 @@ class OrderProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query = QueryBuilder::for(OrderProduct::class)
-            ->allowedFilters([
-                AllowedFilter::exact('product_id'),
-                AllowedFilter::exact('order_id'),
-                AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->default(100),
-            ])
-            ->allowedIncludes([
-                'order',
-                'product',
-                'product.aliases',
-            ])
-            ->allowedSorts([
-                'inventory_source_shelf_location',
-                'sku_ordered',
-                'id',
-            ]);
+        $query = OrderProduct::getSpatieQueryBuilder();
 
         return OrderProductResource::collection($this->getPerPageAndPaginate($request, $query));
     }

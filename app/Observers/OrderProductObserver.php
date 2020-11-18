@@ -33,7 +33,7 @@ class OrderProductObserver
         $orderProduct->order()->increment('total_quantity_ordered', $quantity_delta);
 
         $orderHasMoreToPick = OrderProduct::query()
-            ->whereRaw('quantity_ordered <> quantity_picked')
+            ->where('quantity_to_pick', '>', 0)
             ->where(['order_id' => $orderProduct->order_id])
             ->exists();
 

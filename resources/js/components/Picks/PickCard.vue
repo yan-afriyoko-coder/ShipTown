@@ -1,5 +1,5 @@
 <template>
-        <div :id="pickCardId" class="swiper-container mb-3">
+        <div class="swiper-container mb-3">
             <div class="swiper-wrapper">
 
                 <div class="swiper-slide error bg-success text-right">
@@ -22,7 +22,7 @@
                                         <div class="col-6">
                                             <div class="text-secondary h6 text-left">stock: <span class="font-weight-bold"> {{ Math.ceil(pick['inventory_source_quantity']) }} </span></div>
                                         </div>
-                                        <div class="col-2" v-bind:class="{ 'bg-warning': Math.ceil(pick['quantity_required']) > 1 }">
+                                        <div class="col-2" v-bind:class="{ 'bg-warning': Math.ceil(pick['total_quantity_to_pick']) > 1 }">
                                             <div>To Pick</div>
                                             <div class="h3 red">{{ this.quantity_requested_integer }}</div>
                                         </div>
@@ -66,11 +66,8 @@ export default {
     },
 
     computed: {
-        pickCardId() {
-            return `pick-card-${this.pick['id']}`;
-        },
         quantity_requested_integer() {
-            return Math.ceil(this.pick['quantity_required']);
+            return Math.ceil(this.pick['total_quantity_to_pick']);
         },
         product_sku() {
             return  this.pick['product'] ? this.pick['product']['sku'] : '';
@@ -78,7 +75,7 @@ export default {
     },
 
     mounted() {
-        this.swiper = new Swiper('#' + this.pickCardId, {
+        this.swiper = new Swiper('#' + this.$attrs.id, {
             initialSlide: 1,
             shortSwipes: false,
             longSwipes: true,

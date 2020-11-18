@@ -51,8 +51,22 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('products') }}">{{ __('Products') }}</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('picklist') }}">{{ __('Picklist') }}</a>
+
+                        <li class="nav-item dropdown">
+                            <!-- User dropdown menu -->
+                            <a id="navbarDropdown3" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                {{ __('Picklist') }}<span class="caret"></span>
+                            </a>
+
+                            <!-- Menu Items END -->
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('picklist') . '?order.status_code=picking&inventory_source_location_id=100'}}">
+                                    {{ __('Status: picking') }}
+                                </a>
+                                <a class="dropdown-item" href="{{ route('picklist') . '?order.status_code=paid&inventory_source_location_id=99'}}">
+                                    {{ __('Status: paid') }}
+                                </a>
+                            </div>
                         </li>
 
                         <li class="nav-item dropdown">
