@@ -28,9 +28,13 @@ class Pick extends Model
      * @var string[]
      */
     protected $fillable = [
+        'user_id',
         'product_id',
         'sku_ordered',
         'name_ordered',
+        'quantity_picked',
+        'quantity_skipped_picking',
+
         'quantity_required',
         'picker_user_id',
         'picked_at'

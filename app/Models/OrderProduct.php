@@ -42,6 +42,7 @@ class OrderProduct extends Model
         'price',
         'quantity_ordered',
         'quantity_picked',
+        'quantity_skipped_picking',
         'quantity_not_picked',
         'quantity_shipped',
     ];
@@ -52,7 +53,7 @@ class OrderProduct extends Model
      */
     public function save(array $options = [])
     {
-        $this->quantity_to_pick = $this->quantity_ordered - $this->quantity_picked - $this->quantity_not_picked;
+        $this->quantity_to_pick = $this->quantity_ordered - $this->quantity_picked - $this->quantity_skipped_picking - $this->quantity_not_picked;
         return parent::save($options);
     }
 
