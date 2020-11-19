@@ -61,10 +61,10 @@
                             <!-- Menu Items END -->
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('picklist') . '?order.status_code=picking&inventory_source_location_id=100'}}">
-                                    {{ __('Status: picking') }}
+                                    {{ __('Web: picking') }}
                                 </a>
                                 <a class="dropdown-item" href="{{ route('picklist') . '?order.status_code=paid,picking&inventory_source_location_id=99'}}">
-                                    {{ __('Status: paid,picking') }}
+                                    {{ __('Warehouse: paid,picking') }}
                                 </a>
                             </div>
                         </li>
