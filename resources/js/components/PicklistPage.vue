@@ -31,7 +31,11 @@
 
         <div v-else>
             <template v-for="pick in picklist">
-                <pick-card :pick="pick" :id="`pick-card-${ picklist.indexOf(pick)}`" @swipeRight="pickAll" @swipeLeft="partialPickSwiped"/>
+                <pick-card
+                    :pick="pick"
+                    :id="`pick-card-${ picklist.indexOf(pick)}`"
+                    @swipeRight="pickAll"
+                    @swipeLeft="partialPickSwiped"/>
             </template>
         </div>
 
@@ -169,6 +173,17 @@ export default {
                 });
         },
 
+        postPick(pick, quantity_picked, quantity_skipped_picking) {
+            return axios.post('/api/picklist/picks', {
+                    'quantity_picked': quantity_picked,
+                    'quantity_skipped_picking': quantity_skipped_picking,
+                    'order_product_ids': pick['order_product_ids'],
+            })
+            .catch( error => {
+                this.$snotify.error('Action failed (Http code  '+ error.response.status +')');
+            });
+        },
+
         postPickUpdate(pick, quantity_picked) {
             return axios.post('/api/picklist/picks', {
                     'quantity_picked': quantity_picked,
@@ -185,7 +200,7 @@ export default {
 
         pickAll(pick) {
             this.current_shelf_location = pick['inventory_source_shelf_location'];
-            this.postPickUpdate(pick, pick['quantity_required'])
+            this.postPick(pick, pick['quantity_required'], 0)
                 .then( () => {
                     this.displayPickedNotification(pick, pick['quantity_required']);
                     this.beep();
@@ -194,19 +209,13 @@ export default {
         },
 
         deletePick: function (pick) {
-            axios.post('/api/picklist/picks', {
-                    'quantity_skipped_picking': pick['quantity_required'],
-                    'order_product_ids': pick['order_product_ids'],
-            })
+            this.postPick(pick, 0, pick['quantity_required'])
                 .then(() => {
                     this.$snotify.warning('Pick deleted', {
                         timeout: 1500,
                         icon: false,
                     });
                     this.warningBeep();
-                })
-                .catch( error => {
-                    this.$snotify.error('Action failed (Http code  '+ error.response.status+')');
                 })
                 .then(() => {
                     this.reloadPicks();
@@ -292,9 +301,9 @@ export default {
             });
         },
 
-        undoPick(pick) {
+        undoPick(pick, quantity) {
             this.showLoading();
-            this.postPickUpdate(pick,0)
+            this.postPickUpdate(pick, -quantity)
                 .then( () => {
                     this.reloadPicks()
                         .then(() => {
@@ -320,7 +329,7 @@ export default {
                         text: 'Undo',
                         action: (toast) => {
                             this.$snotify.remove(toast.id);
-                            this.undoPick(pick)
+                            this.undoPick(pick, quantity)
                         }
                     }
                 ]
