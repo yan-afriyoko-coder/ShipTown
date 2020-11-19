@@ -75,9 +75,7 @@ export default {
     watch: {
         picklist: {
             handler() {
-                 if (this.isLoading) {
-                     return;
-                 }
+                 if (this.isLoading) return;
 
                 if (this.picklist.length === 0) {
                     this.reloadPicks();
@@ -146,19 +144,18 @@ export default {
         },
 
         reloadPicks() {
+            this.showLoading();
+
+            this.picklist = [];
             const params = {
-                include: 'product,product.aliases',
-                sort: 'inventory_source_shelf_location,sku_ordered',
-                per_page: this.getUrlParameter('per_page', 3),
+                'include': 'product,product.aliases',
+                'sort': 'inventory_source_shelf_location,sku_ordered',
+                'per_page': this.getUrlParameter('per_page', 3),
                 'filter[in_stock_only]': this.getUrlFilter('in_stock_only', true),
                 'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id'),
                 'filter[current_shelf_location]': this.getUrlParameter('current_shelf_location'),
                 'filter[order.status_code]': this.getUrlParameter('order.status_code'),
             };
-
-            this.showLoading();
-
-            this.picklist = [];
 
             return axios.get('/api/picklist', {params:  params})
                 .then( ({data}) => {
@@ -178,20 +175,20 @@ export default {
                     'quantity_picked': quantity_picked,
                     'quantity_skipped_picking': quantity_skipped_picking,
                     'order_product_ids': pick['order_product_ids'],
-            })
-            .catch( error => {
-                this.$snotify.error('Action failed (Http code  '+ error.response.status +')');
-            });
+                })
+                .catch( error => {
+                    this.$snotify.error('Action failed (Http code  '+ error.response.status +')');
+                });
         },
 
         postPickUpdate(pick, quantity_picked) {
             return axios.post('/api/picklist/picks', {
                     'quantity_picked': quantity_picked,
                     'order_product_ids': pick['order_product_ids'],
-            })
-            .catch( error => {
-                this.$snotify.error('Action failed (Http code  '+ error.response.status+')');
-            });
+                })
+                .catch( error => {
+                    this.$snotify.error('Action failed (Http code  '+ error.response.status+')');
+                });
         },
 
         removeFromPicklist: function (pick) {
