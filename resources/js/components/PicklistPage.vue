@@ -170,7 +170,7 @@ export default {
         },
 
         postPickUpdate(pick, quantity_picked) {
-            return axios.post('/api/picklist', {
+            return axios.post('/api/picklist/picks', {
                     'quantity_picked': quantity_picked,
                     'order_product_ids': pick['order_product_ids'],
             })
@@ -194,7 +194,10 @@ export default {
         },
 
         deletePick: function (pick) {
-            axios.delete('/api/picks/' + pick['id'])
+            axios.post('/api/picklist/picks', {
+                    'quantity_skipped_picking': pick['quantity_required'],
+                    'order_product_ids': pick['order_product_ids'],
+            })
                 .then(() => {
                     this.$snotify.warning('Pick deleted', {
                         timeout: 1500,

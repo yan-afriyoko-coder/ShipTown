@@ -3,12 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\OrderPicklist\StoreRequest;
 use App\Http\Resources\OrderPicklistResource;
 use App\Models\OrderProduct;
-use App\Models\Pick;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
 
 class PicklistController extends Controller
@@ -34,42 +31,5 @@ class PicklistController extends Controller
             ]);
 
         return OrderPicklistResource::collection($this->getPerPageAndPaginate($request, $query, 10));
-    }
-
-    public function store(StoreRequest $request)
-    {
-        $totalQuantityPicked = $request->get('quantity_picked');
-
-        $orderProducts = OrderProduct::whereIn('id', $request->get('order_product_ids'))
-            ->orderBy('order_id')
-            ->get();
-
-        foreach ($orderProducts as $orderProduct) {
-            $quantity = $totalQuantityPicked < $orderProduct->quantity_to_pick
-                ? $totalQuantityPicked
-                : $orderProduct->quantity_to_pick;
-
-            $orderProduct->update([
-                'quantity_picked' => $orderProduct->quantity_picked + $quantity,
-            ]);
-
-            $totalQuantityPicked = $totalQuantityPicked - $quantity;
-
-            if ($totalQuantityPicked <= 0) {
-                continue;
-            }
-        }
-
-        $first = $orderProduct->first();
-
-        Pick::create([
-            'sku_ordered' => $first['sku_ordered'],
-            'name_ordered' => $first['name_ordered'],
-            'quantity_required' =>  $request->get('quantity_picked'),
-            'picker_user_id' => request()->user()->getKey(),
-            'picked_at' => now()
-        ]);
-
-        return JsonResource::collection($orderProducts);
     }
 }
