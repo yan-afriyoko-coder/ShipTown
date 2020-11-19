@@ -59,16 +59,16 @@
         },
         {
             "name": "arrilot/laravel-widgets",
-            "version": "3.13.0",
+            "version": "3.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/arrilot/laravel-widgets.git",
-                "reference": "24297e9a7b1988808b782567892170cd421e6715"
+                "reference": "ae0e44ce625026ae71c6ab9259f89f13af227e37"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/arrilot/laravel-widgets/zipball/24297e9a7b1988808b782567892170cd421e6715",
-                "reference": "24297e9a7b1988808b782567892170cd421e6715",
+                "url": "https://api.github.com/repos/arrilot/laravel-widgets/zipball/ae0e44ce625026ae71c6ab9259f89f13af227e37",
+                "reference": "ae0e44ce625026ae71c6ab9259f89f13af227e37",
                 "shasum": ""
             },
             "require": {
@@ -117,7 +117,7 @@
                 "laravel",
                 "widgets"
             ],
-            "time": "2019-03-25T14:20:55+00:00"
+            "time": "2020-09-20T19:56:38+00:00"
         },
         {
             "name": "aws/aws-sdk-php",
@@ -1858,6 +1858,7 @@
                 "faker",
                 "fixtures"
             ],
+            "abandoned": true,
             "time": "2019-12-12T13:22:17+00:00"
         },
         {
