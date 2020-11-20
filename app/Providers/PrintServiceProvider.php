@@ -22,18 +22,19 @@ class PrintServiceProvider extends ServiceProvider
                 if (Schema::hasTable('configurations')) {
                     $configuration = Configuration::where('key', config('printnode.config_key_name'))->first();
                 }
-
-                $credentials = new Credentials();
-
-                if ($configuration) {
-                    $credentials->setApiKey($configuration->value);
-                } else {
-                    $credentials->setApiKey(null);
-                }
-
-                return new Request($credentials);
             } catch (Exception $e) {
+                $configuration = null;
             }
+
+            $credentials = new Credentials();
+
+            if ($configuration) {
+                $credentials->setApiKey($configuration->value);
+            } else {
+                $credentials->setApiKey(null);
+            }
+
+            return new Request($credentials);
         });
 
         $this->app->bind(PrintService::class, function ($app) {
