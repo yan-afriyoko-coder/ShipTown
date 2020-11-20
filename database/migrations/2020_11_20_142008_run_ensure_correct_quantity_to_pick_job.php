@@ -13,7 +13,7 @@ class RunEnsureCorrectQuantityToPickJob extends Migration
      */
     public function up()
     {
-        \App\Jobs\Orders\EnsureCorrectQuantityToPick::dispatchNow();
+        \App\Jobs\Orders\EnsureCorrectQuantityToPickJob::dispatchNow();
     }
 
     /**
