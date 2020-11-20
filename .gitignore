@@ -9,7 +9,7 @@
 /vendor
 /.idea
 /.idea/*
-.env
+.env.bck
 .env.testing
 .phpunit.result.cache
 Homestead.json

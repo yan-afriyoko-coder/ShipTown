@@ -6,14 +6,14 @@ use Illuminate\Console\Command;
 
 use App\User;
 
-class SetupRoles extends Command
+class SetEveryoneAdmin extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:setup-roles';
+    protected $signature = 'app:set-everyone-admin';
 
     /**
      * The console command description.
