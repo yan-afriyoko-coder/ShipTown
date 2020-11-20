@@ -31,10 +31,10 @@ class EnsureCorrectQuantityToPick implements ShouldQueue
     public function handle()
     {
         OrderProduct::query()
-            ->whereRaw('(quantity_ordered) <> (quantity_to_pick + quantity_picked + quantity_not_picked)')
+            ->whereRaw('(quantity_to_pick) <> (quantity_ordered - quantity_picked - quantity_skipped_picking)')
             ->each(function ($orderProduct) {
-                $orderProduct->update(['quantity_to_pick' => \DB::raw('quantity_ordered - quantity_picked - quantity_not_picked ')]);
-                activity()->performedOn($orderProduct)->log('Fixed quantity_to_pick');
+                activity()->performedOn($orderProduct)->log('Incorrect quantity to pick detected');
+                $orderProduct->update(['quantity_to_pick' => \DB::raw('quantity_ordered - quantity_picked - quantity_skipped_picking')]);
             });
     }
 }
