@@ -29,7 +29,8 @@
         "spatie/laravel-activitylog": "3.9.1",
         "spatie/laravel-permission": "^3.13",
         "spatie/laravel-query-builder": "^2.8",
-        "thomasjohnkane/snooze": "^1.0"
+        "thomasjohnkane/snooze": "^1.0",
+      "ext-http": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.3",

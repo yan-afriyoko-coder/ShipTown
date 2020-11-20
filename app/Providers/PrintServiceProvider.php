@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use http\Exception;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use PrintNode\Credentials;
@@ -17,19 +18,22 @@ class PrintServiceProvider extends ServiceProvider
         $this->app->bind(Request::class, function ($app) {
             $configuration = null;
 
-            if (Schema::hasTable('configurations')) {
-                $configuration = Configuration::where('key', config('printnode.config_key_name'))->first();
-            }
-            
-            $credentials = new Credentials();
+            try {
+                if (Schema::hasTable('configurations')) {
+                    $configuration = Configuration::where('key', config('printnode.config_key_name'))->first();
+                }
 
-            if ($configuration) {
-                $credentials->setApiKey($configuration->value);
-            } else {
-                $credentials->setApiKey(null);
-            }
+                $credentials = new Credentials();
 
-            return new Request($credentials);
+                if ($configuration) {
+                    $credentials->setApiKey($configuration->value);
+                } else {
+                    $credentials->setApiKey(null);
+                }
+
+                return new Request($credentials);
+            } catch (Exception $e) {
+            }
         });
 
         $this->app->bind(PrintService::class, function ($app) {
