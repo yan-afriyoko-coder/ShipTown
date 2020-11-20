@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use http\Exception;
+use Exception;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use PrintNode\Credentials;
