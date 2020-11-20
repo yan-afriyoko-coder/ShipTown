@@ -33,7 +33,7 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('orders', 'Api\OrdersController');
     Route::apiResource('order/products', 'Api\Order\OrderProductController');
     Route::apiResource('order/shipments', 'Api\Order\OrderShipmentController');
-    Route::apiResource('order/comments', 'Api\Order\OrderCommentController')->only(['store']);
+    Route::apiResource('order/comments', 'Api\Order\OrderCommentController')->only(['index', 'store']);
 
     Route::apiResource('picklist', 'Api\PicklistController')->only(['index']);
     Route::apiResource('picklist/picks', 'Api\Picklist\PicklistPickController')->only(['store']);
