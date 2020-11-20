@@ -14,6 +14,7 @@ class TransferQuantityNotPickedOnOrderProductsTable extends Migration
     public function up()
     {
         \App\Models\OrderProduct::where('quantity_not_picked', '>', 0)
+            ->where('quantity_picked', '=', 0)
             ->each(function ($orderProduct) {
                 $orderProduct->update([
                     'quantity_skipped_picking' => $orderProduct->quantity_not_picked
