@@ -39,6 +39,7 @@ class PicklistPickController extends Controller
 
         Pick::create([
             'user_id' => request()->user()->getKey(),
+            'product_id' => $first['product_id'],
             'sku_ordered' => $first['sku_ordered'],
             'name_ordered' => $first['name_ordered'],
             'quantity_picked' =>  $request->get('quantity_picked', 0),
