@@ -32,6 +32,8 @@ class EnsureCorrectQuantityToPickJob implements ShouldQueue
     {
         OrderProduct::query()
             ->whereRaw('(quantity_to_pick) <> (quantity_ordered - quantity_picked - quantity_skipped_picking)')
+            ->latest('updated_at')
+            ->limit(2000)
             ->each(function ($orderProduct) {
                 activity()->performedOn($orderProduct)->log('Incorrect quantity to pick detected');
                 $orderProduct->update(['quantity_to_pick' => \DB::raw('quantity_ordered - quantity_picked - quantity_skipped_picking')]);
