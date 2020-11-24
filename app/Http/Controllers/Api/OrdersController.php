@@ -32,7 +32,7 @@ class OrdersController extends Controller
     {
         $query = OrderService::getSpatieQueryBuilder();
 
-        return OrderResource::collection($this->getPerPageAndPaginate($request, $query, 10));
+        return OrderResource::collection($this->getPaginatedResult($query));
     }
 
     /**

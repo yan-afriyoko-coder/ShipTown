@@ -23,7 +23,7 @@ class PickController extends Controller
      */
     public function index(Request $request)
     {
-        $pick = QueryBuilder::for(Pick::whereHasQuantityRequired())
+        $query = QueryBuilder::for(Pick::whereHasQuantityRequired())
             ->allowedFilters([
                 AllowedFilter::scope('in_stock_only', 'whereInStock'),
                 AllowedFilter::scope('not_picked_only', 'whereNotPicked'),
@@ -39,9 +39,7 @@ class PickController extends Controller
                 'sku_ordered'
             ]);
 
-        $per_page = $request->get('per_page', 3);
-
-        return $pick->paginate($per_page)->appends($request->query());
+        return $this->getPaginatedResult($query, 3);
     }
 
     /**

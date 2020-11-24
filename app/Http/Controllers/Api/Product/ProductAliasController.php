@@ -31,6 +31,6 @@ class ProductAliasController extends Controller
             ->allowedSorts([
             ]);
 
-        return ProductAliasResource::collection($this->getPerPageAndPaginate($request, $query));
+        return ProductAliasResource::collection($this->getPaginatedResult($query));
     }
 }

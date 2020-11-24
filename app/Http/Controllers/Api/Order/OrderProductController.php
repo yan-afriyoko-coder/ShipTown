@@ -25,7 +25,7 @@ class OrderProductController extends Controller
     {
         $query = OrderProduct::getSpatieQueryBuilder();
 
-        return OrderProductResource::collection($this->getPerPageAndPaginate($request, $query));
+        return OrderProductResource::collection($this->getPaginatedResult($query));
     }
 
     /**

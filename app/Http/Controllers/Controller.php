@@ -23,16 +23,18 @@ class Controller extends BaseController
     private $status_code = 200;
 
     /**
-     * @param Request $request
      * @param QueryBuilder $query
      * @param int $defaultPerPage
      * @return LengthAwarePaginator
      */
-    public function getPerPageAndPaginate(Request $request, QueryBuilder $query, $defaultPerPage = 10): LengthAwarePaginator
+    public function getPaginatedResult(QueryBuilder $query, $defaultPerPage = 10): LengthAwarePaginator
     {
-        $per_page = $request->get('per_page', $defaultPerPage);
+        $perPage = request()->get('per_page', $defaultPerPage);
 
-        return $query->paginate($per_page)->appends($request->query());
+        $requestQuery = request()->query();
+
+        return $query->paginate($perPage)
+            ->appends($requestQuery);
     }
 
     /**

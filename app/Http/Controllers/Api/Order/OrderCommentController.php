@@ -22,7 +22,7 @@ class OrderCommentController extends Controller
      */
     public function index(Request $request)
     {
-        $pick = QueryBuilder::for(OrderShipment::class)
+        $query = QueryBuilder::for(OrderComment::class)
             ->allowedFilters([
             ])
             ->allowedIncludes([
@@ -30,9 +30,7 @@ class OrderCommentController extends Controller
             ->allowedSorts([
             ]);
 
-        $per_page = $request->get('per_page', 10);
-
-        return $pick->paginate($per_page)->appends($request->query());
+        return $this->getPaginatedResult($query);
     }
 
     public function store(OrderCommentStoreRequest $request)
