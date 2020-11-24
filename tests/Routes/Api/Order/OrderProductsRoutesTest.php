@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Routes\Api;
+namespace Tests\Routes\Api\Order;
 
 use Tests\Routes\AuthenticatedRoutesTestCase;
 

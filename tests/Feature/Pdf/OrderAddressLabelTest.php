@@ -1,13 +1,8 @@
 <?php
 
-namespace Tests\Feature\Orders;
+namespace Tests\Feature\Pdf;
 
-use App\Models\Order;
-use App\User;
-use Laravel\Passport\Passport;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class OrderAddressLabelTest extends TestCase
 {

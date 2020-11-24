@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Api\User;
+namespace App\Http\Controllers\Api\Settings\User;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class UserMeController extends Controller
 {
