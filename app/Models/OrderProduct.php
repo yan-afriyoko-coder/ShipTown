@@ -30,6 +30,7 @@ class OrderProduct extends Model
     protected static $logAttributes = [
         'quantity_ordered',
         'quantity_picked',
+        'quantity_skipped_picking',
         'quantity_not_picked',
         'quantity_shipped',
     ];
