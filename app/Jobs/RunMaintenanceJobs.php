@@ -40,7 +40,7 @@ class RunMaintenanceJobs implements ShouldQueue
 
         \App\Jobs\RefillStatusesJob::dispatch();
 
-        \App\Jobs\Maintenance\MakeSureOrdersAreOnPicklist::dispatch();
+//        \App\Jobs\Maintenance\MakeSureOrdersAreOnPicklist::dispatch();
 //        \App\Jobs\Maintenance\RunPackingWarehouseRuleOnPaidOrdersJob::dispatch();
         \App\Jobs\Maintenance\ClearOrderPackerAssignmentJob::dispatch();
         \App\Jobs\Maintenance\UpdateClosedAtIfNullJob::dispatch();
