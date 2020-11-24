@@ -18,6 +18,8 @@ class RecreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('order_number');
+            $table->string('status_code')->default('');
+            $table->double('total_quantity_ordered')->default(0);
             $table->json('raw_import');
             $table->softDeletes();
             $table->timestamps();
