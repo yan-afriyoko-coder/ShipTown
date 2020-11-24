@@ -35,9 +35,9 @@ class PicklistPickController extends Controller
             }
         }
 
-        $first = $orderProduct->first();
+        $first = $orderProducts->first();
 
-        Pick::create([
+        $pick = Pick::create([
             'user_id' => request()->user()->getKey(),
             'product_id' => $first['product_id'],
             'sku_ordered' => $first['sku_ordered'],
