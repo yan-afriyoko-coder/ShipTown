@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-
 use App\Http\Requests\Invites\ProcessRequest;
 use App\Http\Requests\Invites\StoreRequest;
 use App\Mail\InviteCreated;
 use App\Models\Invite;
 use App\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class InvitesController extends Controller
 {
@@ -20,13 +19,13 @@ class InvitesController extends Controller
             //generate a random string using Laravel's str_random helper
             $token = str_random();
         } while (Invite::where('token', $token)->first()); //check if the token already exists and if it does, try again
-    
+
         //create a new invite record
         $invite = Invite::create([
             'email' => $request->get('email'),
             'token' => $token
         ]);
-    
+
         // send the email
         Mail::to($request->get('email'))->queue(new InviteCreated($invite));
 

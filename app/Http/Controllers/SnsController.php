@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use Aws\Exception\AwsException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class SnsController extends Controller

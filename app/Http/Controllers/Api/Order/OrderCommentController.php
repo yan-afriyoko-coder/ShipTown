@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderCommentStoreRequest;
 use App\Http\Resources\OrderCommentResource;
 use App\Models\OrderComment;
-use App\Models\OrderShipment;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;

@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Api\Settings;
 
 use App\Http\Controllers\Controller;
+use App\Models\Configuration;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-
-use App\Models\Configuration;
 
 class ConfigurationController extends Controller
 {

@@ -6,12 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderProducts\UpdateRequest;
 use App\Http\Resources\OrderProductResource;
 use App\Models\OrderProduct;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Response;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderProductController extends Controller
 {
