@@ -43,10 +43,12 @@ class UpdateClosedAtIfNullJob implements ShouldQueue
                     ->latest()
                     ->first();
 
-                foreach ($orderImport->extractStatusHistory() as $status) {
-                    if (OrderStatus::isComplete($status['id'])) {
-                        $order->update(['order_closed_at' => Carbon::make($status['modified_time']['value'])]);
-                        break;
+                if ($orderImport) {
+                    foreach ($orderImport->extractStatusHistory() as $status) {
+                        if (OrderStatus::isComplete($status['id'])) {
+                            $order->update(['order_closed_at' => Carbon::make($status['modified_time']['value'])]);
+                            break;
+                        }
                     }
                 }
             });
