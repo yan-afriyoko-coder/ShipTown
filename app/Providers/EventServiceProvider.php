@@ -62,8 +62,6 @@ class EventServiceProvider extends ServiceProvider
         ],
 //
         \App\Events\Order\StatusChangedEvent::class => [
-            \App\Listeners\Order\StatusChanged\CreatePickRequestsListener::class,
-            \App\Listeners\Order\StatusChanged\DeletePickRequestsListener::class,
             \App\Listeners\Order\StatusChanged\UpdateClosedAt::class,
         ],
 

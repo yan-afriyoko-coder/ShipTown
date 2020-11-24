@@ -14,7 +14,6 @@
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Schema;
 
 // you can register only first user then he should invite others
 try {
@@ -52,9 +51,5 @@ Route::middleware('auth')->group(function () {
 
     Route::group(['middleware' => ['role:admin']], function () {
         Route::view('/users', 'users')->name('users');
-    });
-
-    Route::get('/test', function () {
-        \App\Jobs\Maintenance\MakeSureOrdersAreOnPicklist::dispatch();
     });
 });

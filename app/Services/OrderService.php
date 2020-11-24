@@ -131,27 +131,6 @@ class OrderService
     }
 
     /**
-     * @param Order $order
-     */
-    public static function createPickRequests(Order $order): void
-    {
-        $orderProducts = $order->orderProducts()->get();
-
-        foreach ($orderProducts as $orderProduct) {
-            PickRequest::updateOrCreate([
-                'order_product_id' => $orderProduct->getKey(),
-            ], [
-                'order_id' => $order->id,
-                'quantity_required' => $orderProduct->quantity_ordered,
-            ]);
-        }
-
-        logger('Pick requests created', [
-            'order_number' => $order->order_number
-        ]);
-    }
-
-    /**
      * @param array $orderAttributes
      * @return Order
      */
