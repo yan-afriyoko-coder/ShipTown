@@ -40,7 +40,7 @@ class ProductsController extends Controller
                 'aliases'
             ]);
 
-        return $query->paginate(100)->appends($request->query());
+        return $this->getPaginatedResult($query, 100);
     }
 
     public function store(StoreProductsRequest $request)

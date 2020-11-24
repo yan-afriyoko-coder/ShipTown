@@ -29,6 +29,6 @@ class LogController extends Controller
             ->allowedSorts([
             ]);
 
-        return $this->getPerPageAndPaginate($request, $query);
+        return $this->getPaginatedResult($query);
     }
 }

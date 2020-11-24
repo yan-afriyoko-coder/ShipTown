@@ -30,6 +30,6 @@ class PicklistController extends Controller
                 'inventory_source_shelf_location',
             ]);
 
-        return OrderPicklistResource::collection($this->getPerPageAndPaginate($request, $query, 10));
+        return OrderPicklistResource::collection($this->getPaginatedResult($query));
     }
 }

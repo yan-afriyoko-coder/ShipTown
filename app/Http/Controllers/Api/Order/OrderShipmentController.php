@@ -20,7 +20,7 @@ class OrderShipmentController extends Controller
      */
     public function index(Request $request)
     {
-        $pick = QueryBuilder::for(OrderShipment::class)
+        $query = QueryBuilder::for(OrderShipment::class)
             ->allowedFilters([
             ])
             ->allowedIncludes([
@@ -28,9 +28,7 @@ class OrderShipmentController extends Controller
             ->allowedSorts([
             ]);
 
-        $per_page = $request->get('per_page', 10);
-
-        return $pick->paginate($per_page)->appends($request->query());
+        return $this->getPaginatedResult($query);
     }
 
     /**
