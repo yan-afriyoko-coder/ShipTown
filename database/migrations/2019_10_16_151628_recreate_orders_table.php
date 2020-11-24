@@ -17,16 +17,10 @@ class RecreateOrdersTable extends Migration
 
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
             $table->string('order_number');
-            $table->json('order_as_json');
+            $table->json('raw_import');
             $table->softDeletes();
             $table->timestamps();
-
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade');
         });
     }
 

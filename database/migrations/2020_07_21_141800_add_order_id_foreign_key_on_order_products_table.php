@@ -15,10 +15,6 @@ class AddOrderIdForeignKeyOnOrderProductsTable extends Migration
      */
     public function up()
     {
-        App\Models\OrderProduct::withTrashed()
-            ->whereNotIn('order_id', Order::all('id'))
-            ->forceDelete();
-
         Schema::table('order_products', function (Blueprint $table) {
             $table->foreign('order_id')
                 ->on('orders')

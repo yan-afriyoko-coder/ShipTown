@@ -17,19 +17,16 @@ class RecreateProductsTable extends Migration
 
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
-            $table->string('sku', 20);
+            $table->string('sku', 50);
             $table->string('name', 100)->default('');
-            $table->decimal('price', 8, 2)->default(0);
-            $table->decimal('sale_price', 8, 2)->default(0);
+            $table->decimal('price', 10, 2)->default(0);
+            $table->decimal('sale_price', 10, 2)->default(0);
             $table->date('sale_price_start_date')->default('1899-01-01');
             $table->date('sale_price_end_date')->default('1899-01-01');
-            $table->decimal('quantity')->default(0);
-            $table->decimal('quantity_reserved')->default(0);
+            $table->decimal('quantity', 10, 2)->default(0);
+            $table->decimal('quantity_reserved', 10, 2)->default(0);
             $table->softDeletes();
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
