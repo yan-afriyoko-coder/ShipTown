@@ -12,6 +12,17 @@ class RunMaintenanceJobs implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    private $jobClassesToRun = [
+        \App\Jobs\Maintenance\RecalculateOrderProductLineCountJob::class,
+        \App\Jobs\Maintenance\RecalculateOrderTotalQuantityOrderedJob::class,
+        \App\Jobs\Maintenance\RecalculateProductQuantityJob::class,
+        \App\Jobs\Maintenance\RecalculateProductQuantityReservedJob::class,
+        \App\Jobs\Maintenance\RecalculatePickedAtForPickingOrders::class,
+        \App\Jobs\Maintenance\RecalculateOrdersReservedJob::class,
+        \App\Jobs\RefillStatusesJob::class,
+        \App\Jobs\Maintenance\ClearOrderPackerAssignmentJob::class,
+    ];
+
     /**
      * Create a new job instance.
      *
@@ -29,19 +40,20 @@ class RunMaintenanceJobs implements ShouldQueue
      */
     public function handle()
     {
+        foreach ($this->jobClassesToRun as $jobClass) {
+            dispatch(new $jobClass);
+        }
+
 //        \App\Jobs\Orders\EnsureCorrectQuantityToPickJob::dispatch();
-
-        \App\Jobs\Maintenance\RecalculateOrderProductLineCountJob::dispatch();
-        \App\Jobs\Maintenance\RecalculateOrderTotalQuantityOrderedJob::dispatch();
-        \App\Jobs\Maintenance\RecalculateProductQuantityJob::dispatch();
-        \App\Jobs\Maintenance\RecalculateProductQuantityReservedJob::dispatch();
-        \App\Jobs\Maintenance\RecalculatePickedAtForPickingOrders::dispatch();
-        \App\Jobs\Maintenance\RecalculateOrdersReservedJob::dispatch();
-
-        \App\Jobs\RefillStatusesJob::dispatch();
-
+//        \App\Jobs\Maintenance\RecalculateOrderProductLineCountJob::dispatch();
+//        \App\Jobs\Maintenance\RecalculateOrderTotalQuantityOrderedJob::dispatch();
+//        \App\Jobs\Maintenance\RecalculateProductQuantityJob::dispatch();
+//        \App\Jobs\Maintenance\RecalculateProductQuantityReservedJob::dispatch();
+//        \App\Jobs\Maintenance\RecalculatePickedAtForPickingOrders::dispatch();
+//        \App\Jobs\Maintenance\RecalculateOrdersReservedJob::dispatch();
+//        \App\Jobs\RefillStatusesJob::dispatch();
 //        \App\Jobs\Maintenance\RunPackingWarehouseRuleOnPaidOrdersJob::dispatch();
-        \App\Jobs\Maintenance\ClearOrderPackerAssignmentJob::dispatch();
+//        \App\Jobs\Maintenance\ClearOrderPackerAssignmentJob::dispatch();
 //        \App\Jobs\Maintenance\UpdateClosedAtIfNullJob::dispatch();
     }
 }
