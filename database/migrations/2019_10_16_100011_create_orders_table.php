@@ -43,7 +43,7 @@ class CreateOrdersTable extends Migration
             $table->foreign('packer_user_id')
                 ->references('id')
                 ->on('users')
-                ->onDelete('RESTRICT');
+                ->onDelete('SET NULL');
         });
     }
 

@@ -7,6 +7,7 @@ use App\Http\Requests\StoreInventoryRequest;
 use App\Models\Inventory;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductInventoryController extends Controller
 {
@@ -38,7 +39,8 @@ class ProductInventoryController extends Controller
 
     public function store(StoreInventoryRequest $request)
     {
-        $product = Product::firstOrFail(['sku' => $request->sku]);
+        $product = Product::where('sku', '=', $request->sku)
+            ->firstOrFail();
 
         $update = $request->all();
 
@@ -52,6 +54,6 @@ class ProductInventoryController extends Controller
             $update
         );
 
-        return $this->respondOK200();
+        return JsonResource::collection(collect([$inventory]));
     }
 }
