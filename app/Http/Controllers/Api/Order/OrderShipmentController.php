@@ -20,13 +20,7 @@ class OrderShipmentController extends Controller
      */
     public function index(Request $request)
     {
-        $query = QueryBuilder::for(OrderShipment::class)
-            ->allowedFilters([
-            ])
-            ->allowedIncludes([
-            ])
-            ->allowedSorts([
-            ]);
+        $query = OrderShipment::getSpatieQueryBuilder();
 
         return $this->getPaginatedResult($query);
     }

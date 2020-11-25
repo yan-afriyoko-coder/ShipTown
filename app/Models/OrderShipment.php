@@ -5,6 +5,7 @@ namespace App\Models;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\QueryBuilder\QueryBuilder;
 
 /**
  * Class OrderShipment
@@ -33,5 +34,19 @@ class OrderShipment extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    public static function getSpatieQueryBuilder(): QueryBuilder
+    {
+        return QueryBuilder::for(OrderShipment::class)
+            ->allowedFilters([
+            ])
+            ->allowedIncludes([
+            ])
+            ->allowedSorts([
+            ]);
     }
 }
