@@ -23,7 +23,7 @@ class ProductAlias extends Model
     /**
      * @return QueryBuilder
      */
-    private function getSpatieQueryBuilder(): QueryBuilder
+    public static function getSpatieQueryBuilder(): QueryBuilder
     {
         return QueryBuilder::for(ProductAlias::class)
             ->allowedFilters([
