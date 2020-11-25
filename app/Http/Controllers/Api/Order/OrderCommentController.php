@@ -8,7 +8,6 @@ use App\Http\Resources\OrderCommentResource;
 use App\Models\OrderComment;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderCommentController extends Controller
 {
@@ -21,13 +20,7 @@ class OrderCommentController extends Controller
      */
     public function index(Request $request)
     {
-        $query = QueryBuilder::for(OrderComment::class)
-            ->allowedFilters([
-            ])
-            ->allowedIncludes([
-            ])
-            ->allowedSorts([
-            ]);
+        $query = OrderComment::getSpatieQueryBuilder();
 
         return $this->getPaginatedResult($query);
     }
