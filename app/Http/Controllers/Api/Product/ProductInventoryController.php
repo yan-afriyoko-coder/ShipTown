@@ -38,11 +38,7 @@ class ProductInventoryController extends Controller
 
     public function store(StoreInventoryRequest $request)
     {
-        $product = Product::query()->where('sku', '=', $request->sku)->first();
-
-        if (!$product) {
-            return $this->respondNotFound("SKU not found!");
-        }
+        $product = Product::firstOrFail(['sku' => $request->sku]);
 
         $update = $request->all();
 
@@ -50,8 +46,8 @@ class ProductInventoryController extends Controller
 
         $inventory = Inventory::updateOrCreate(
             [
-            "product_id" => $update['product_id'],
-            "location_id" => $update['location_id'],
+                "product_id" => $update['product_id'],
+                "location_id" => $update['location_id'],
             ],
             $update
         );
