@@ -20,16 +20,7 @@ class ProductAliasController extends Controller
      */
     public function index(Request $request)
     {
-        $query = QueryBuilder::for(ProductAlias::class)
-            ->allowedFilters([
-                AllowedFilter::exact('id'),
-                AllowedFilter::exact('product_id'),
-                AllowedFilter::partial('alias'),
-            ])
-            ->allowedIncludes([
-            ])
-            ->allowedSorts([
-            ]);
+        $query = ProductAlias::getSpatieQueryBuilder();
 
         return ProductAliasResource::collection($this->getPaginatedResult($query));
     }

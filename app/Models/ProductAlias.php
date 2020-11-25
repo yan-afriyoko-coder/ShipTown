@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ProductAlias extends Model
 {
@@ -16,5 +18,22 @@ class ProductAlias extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    private function getSpatieQueryBuilder(): QueryBuilder
+    {
+        return QueryBuilder::for(ProductAlias::class)
+            ->allowedFilters([
+                AllowedFilter::exact('id'),
+                AllowedFilter::exact('product_id'),
+                AllowedFilter::partial('alias'),
+            ])
+            ->allowedIncludes([
+            ])
+            ->allowedSorts([
+            ]);
     }
 }
