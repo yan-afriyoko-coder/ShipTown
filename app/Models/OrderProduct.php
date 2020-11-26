@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use phpseclib\Math\BigInteger;
-use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -22,6 +21,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property float quantity_not_picked
  * @property float quantity_shipped
  */
+
 class OrderProduct extends Model
 {
     use SoftDeletes;
@@ -97,6 +97,18 @@ class OrderProduct extends Model
     public function scopeMinimumShelfLocation($query, $currentLocation)
     {
         return $query->where('inventory_source.inventory_source_shelf_location', '>=', $currentLocation);
+    }
+
+    /**
+     * @param Builder $query
+     * @param array $statusCodeArray
+     * @return Builder
+     */
+    public function scopeWhereStatusCodeIn($query, $statusCodeArray)
+    {
+        return $query->whereHas('order', function ($query) use ($statusCodeArray) {
+            $query->whereIn('status_code', $statusCodeArray);
+        });
     }
 
     /**
