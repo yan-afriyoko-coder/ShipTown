@@ -41,8 +41,8 @@ class RecalculateOrdersReservedJob implements ShouldQueue
         $expectedReservedQuantities = OrderProduct::whereStatusCodeIn(OrderStatus::getOpenStatuses())
             ->addSelect([
                 'order_products.product_id',
-                DB::raw('sum(quantity_to_ship) as total_quantity_to_ship'),
                 'inventory.quantity_reserved as quantity_reserved',
+                DB::raw('sum(quantity_to_ship) as total_quantity_to_ship'),
             ])
             ->leftJoin('inventory', function ($join) use ($locationId) {
                 $join->on('order_products.product_id', '=', 'inventory.product_id');
