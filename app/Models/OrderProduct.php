@@ -51,6 +51,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereProductId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityNotPicked($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityOrdered($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityOutstanding($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityPicked($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityShipped($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantitySkippedPicking($value)
@@ -61,6 +62,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static Builder|OrderProduct withTrashed()
  * @method static Builder|OrderProduct withoutTrashed()
  * @mixin Eloquent
+ * @property string $quantity_outstanding
  */
 class OrderProduct extends Model
 {
@@ -69,11 +71,12 @@ class OrderProduct extends Model
 
     protected static $logAttributes = [
         'quantity_ordered',
+        'quantity_shipped',
+        'quantity_outstanding',
         'quantity_to_pick',
         'quantity_picked',
         'quantity_skipped_picking',
         'quantity_not_picked',
-        'quantity_shipped',
     ];
 
     protected $fillable = [
@@ -96,6 +99,7 @@ class OrderProduct extends Model
     public function save(array $options = [])
     {
         $this->quantity_to_pick = $this->quantity_ordered - $this->quantity_picked - $this->quantity_skipped_picking;
+        $this->quantity_outstanding = $this->quantity_ordered - $this->quantity_shipped;
         return parent::save($options);
     }
 

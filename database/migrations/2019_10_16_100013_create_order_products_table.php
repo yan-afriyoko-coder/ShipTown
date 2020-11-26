@@ -25,11 +25,12 @@ class CreateOrderProductsTable extends Migration
             $table->string('name_ordered');
             $table->decimal('price', 15, 2)->default(0);
             $table->decimal('quantity_ordered', 10, 2)->default(0);
+            $table->decimal('quantity_outstanding', 10, 2)->default(0);
+            $table->decimal('quantity_shipped', 10, 2)->default(0);
             $table->decimal('quantity_to_pick', 10, 2)->default(0);
             $table->decimal('quantity_picked', 10, 2)->default(0);
             $table->decimal('quantity_skipped_picking', 10, 2)->default(0);
             $table->decimal('quantity_not_picked', 10, 2)->default(0);
-            $table->decimal('quantity_shipped', 10, 2)->default(0);
             $table->softDeletes();
             $table->timestamps();
 
