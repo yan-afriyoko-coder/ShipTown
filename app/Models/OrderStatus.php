@@ -75,6 +75,21 @@ class OrderStatus extends Model
         return self::$completedStatusCodeList;
     }
 
+    public static function getOpenStatuses()
+    {
+        return array_merge(
+            static::getActiveStatusCodesList(),
+            static::getToFollowStatusList()
+        );
+    }
+
+    public static function getClosedStatuses()
+    {
+        return array_merge(
+            static::getCompletedStatusCodeList()
+        );
+    }
+
     public static function isActive(string $status_code)
     {
         return array_search($status_code, self::getActiveStatusCodesList()) != false;

@@ -3,6 +3,8 @@
 namespace App\Jobs\Maintenance;
 
 use App\Models\Inventory;
+use App\Models\OrderProduct;
+use App\Models\OrderStatus;
 use App\Models\Product;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -36,39 +38,31 @@ class RecalculateOrdersReservedJob implements ShouldQueue
         $locationId = 999;
         $prefix = config('database.connections.mysql.prefix');
 
-        $productsWithIncorrectQuantity = DB::select('
-            SELECT
-              `'.$prefix.'products`.`id` as product_id,
-              IFNULL(`'.$prefix.'inventory`.`quantity_reserved`, 0) as actual_quantity_reserved,
-              (
-                SELECT
-                  SUM(`'.$prefix.'order_products`.`quantity_ordered` - quantity_shipped)
-                FROM `'.$prefix.'order_products`
-                WHERE `'.$prefix.'order_products`.`product_id` = `'.$prefix.'products`.`id`
-              ) as expected_quantity_reserved
+        $expectedReservedQuantities = OrderProduct::whereStatusCodeIn(OrderStatus::getOpenStatuses())
+            ->addSelect([
+                'order_products.product_id',
+                DB::raw('sum(quantity_to_ship) as total_quantity_to_ship'),
+                'inventory.quantity_reserved as quantity_reserved',
+            ])
+            ->leftJoin('inventory', function ($join) use ($locationId) {
+                $join->on('order_products.product_id', '=', 'inventory.product_id');
+                $join->on('inventory.location_id', '=', DB::raw($locationId));
+            })
+            ->groupBy(['order_products.product_id', 'inventory.quantity_reserved'])
+            ->limit(500);
 
-            FROM `'.$prefix.'products`
-            LEFT JOIN `'.$prefix.'inventory` ON
-              `'.$prefix.'inventory`.`product_id` = `'.$prefix.'products`.`id`
-              AND `'.$prefix.'inventory`.`location_id` = '.$locationId.'
+        $orderProducts = DB::query()->fromSub($expectedReservedQuantities, 'expected')
+            ->whereRaw('total_quantity_to_ship != ifnull(quantity_reserved, 0)')
+            ->get();
 
-            WHERE
-              (
-                SELECT
-                  SUM(quantity_ordered - quantity_shipped)
-                FROM `'.$prefix.'order_products`
-                WHERE `'.$prefix.'order_products`.`product_id` = `'.$prefix.'products`.`id`
-              ) <> IFNULL(`'.$prefix.'inventory`.`quantity_reserved`, 0)
-        ');
-
-        foreach ($productsWithIncorrectQuantity as $record) {
+        foreach ($orderProducts as $record) {
             activity()->on(Product::find($record->product_id))
                 ->log('Incorrect quantity on order detected');
             Inventory::query()->updateOrCreate([
                 'product_id' => $record->product_id,
                 'location_id' => $locationId,
             ], [
-                'quantity_reserved' => $record->expected_quantity_reserved
+                'quantity_reserved' => $record->total_quantity_to_ship
             ]);
         }
     }
