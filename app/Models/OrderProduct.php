@@ -23,11 +23,12 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property string $name_ordered
  * @property string $price
  * @property string $quantity_ordered
+ * @property string $quantity_shipped
+ * @property string $quantity_to_ship
  * @property string $quantity_to_pick
  * @property string $quantity_picked
  * @property string $quantity_skipped_picking
  * @property string $quantity_not_picked
- * @property string $quantity_shipped
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -51,7 +52,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereProductId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityNotPicked($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityOrdered($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityOutstanding($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityToShip($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityPicked($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityShipped($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantitySkippedPicking($value)
@@ -62,7 +63,6 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static Builder|OrderProduct withTrashed()
  * @method static Builder|OrderProduct withoutTrashed()
  * @mixin Eloquent
- * @property string $quantity_outstanding
  */
 class OrderProduct extends Model
 {
@@ -99,7 +99,7 @@ class OrderProduct extends Model
     public function save(array $options = [])
     {
         $this->quantity_to_pick = $this->quantity_ordered - $this->quantity_picked - $this->quantity_skipped_picking;
-        $this->quantity_outstanding = $this->quantity_ordered - $this->quantity_shipped;
+        $this->quantity_to_ship = $this->quantity_ordered - $this->quantity_shipped;
         return parent::save($options);
     }
 
