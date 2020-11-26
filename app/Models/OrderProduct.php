@@ -72,7 +72,7 @@ class OrderProduct extends Model
     protected static $logAttributes = [
         'quantity_ordered',
         'quantity_shipped',
-        'quantity_outstanding',
+        'quantity_to_ship',
         'quantity_to_pick',
         'quantity_picked',
         'quantity_skipped_picking',
@@ -98,8 +98,8 @@ class OrderProduct extends Model
      */
     public function save(array $options = [])
     {
-        $this->quantity_to_pick = $this->quantity_ordered - $this->quantity_picked - $this->quantity_skipped_picking;
         $this->quantity_to_ship = $this->quantity_ordered - $this->quantity_shipped;
+        $this->quantity_to_pick = $this->quantity_ordered - $this->quantity_picked - $this->quantity_skipped_picking;
         return parent::save($options);
     }
 
