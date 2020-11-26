@@ -2,26 +2,66 @@
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
-use phpseclib\Math\BigInteger;
+use Illuminate\Support\Carbon;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
- * @property BigInteger order_id
- * @property BigInteger|null product_id
- * @property string|null sku_ordered
- * @property string|null name_ordered
- * @property float quantity_ordered
- * @property float quantity_to_pick
- * @property float quantity_picked
- * @property float quantity_not_picked
- * @property float quantity_shipped
+ * App\Models\OrderProduct
+ *
+ * @property int $id
+ * @property int|null $order_id
+ * @property int|null $product_id
+ * @property string $sku_ordered
+ * @property string $name_ordered
+ * @property string $price
+ * @property string $quantity_ordered
+ * @property string $quantity_to_pick
+ * @property string $quantity_picked
+ * @property string $quantity_skipped_picking
+ * @property string $quantity_not_picked
+ * @property string $quantity_shipped
+ * @property Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection|Activity[] $activities
+ * @property-read int|null $activities_count
+ * @property-read Order|null $order
+ * @property-read Product|null $product
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct addInventorySource($inventory_location_id)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct minimumShelfLocation($currentLocation)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct newQuery()
+ * @method static Builder|OrderProduct onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct query()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereInStock($in_stock)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereNameOrdered($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityNotPicked($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityOrdered($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityPicked($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityShipped($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantitySkippedPicking($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityToPick($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereSkuOrdered($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereStatusCodeIn($statusCodeArray)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereUpdatedAt($value)
+ * @method static Builder|OrderProduct withTrashed()
+ * @method static Builder|OrderProduct withoutTrashed()
+ * @mixin Eloquent
  */
-
 class OrderProduct extends Model
 {
     use SoftDeletes;

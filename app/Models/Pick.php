@@ -4,21 +4,63 @@ namespace App\Models;
 
 use App\User;
 use DateTime;
+use Eloquent;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @property string sku_ordered
- * @property string name_ordered
- * @property float quantity_required
- * @property DateTime|null picked_at
- * @property bool is_picked
- * @property User user
- * @method static self whereHasQuantityRequired()
+ * App\Models\Pick
+ *
+ * @property int $id
+ * @property int|null $user_id
+ * @property int|null $product_id
+ * @property string $sku_ordered
+ * @property string $name_ordered
+ * @property string $quantity_picked
+ * @property string $quantity_skipped_picking
+ * @property string $quantity_required
+ * @property int|null $picker_user_id
+ * @property string|null $picked_at
+ * @property Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read bool $is_picked
+ * @property-read Collection|PickRequest[] $pickRequests
+ * @property-read int|null $pick_requests_count
+ * @property-read Product|null $product
+ * @property-read User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick addInventorySource($inventory_location_id)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick minimumShelfLocation($currentLocation)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick newQuery()
+ * @method static Builder|Pick onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick whereHasQuantityRequired()
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick whereInStock($in_stock)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick whereNameOrdered($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick whereNotPicked()
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick wherePicked()
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick wherePickedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick wherePickerUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick whereProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick whereQuantityPicked($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick whereQuantityRequired($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick whereQuantitySkippedPicking($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick whereSkuOrdered($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick whereUserId($value)
+ * @method static Builder|Pick withTrashed()
+ * @method static Builder|Pick withoutTrashed()
+ * @mixin Eloquent
  */
 class Pick extends Model
 {

@@ -2,12 +2,36 @@
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use phpseclib\Math\BigInteger;
+use Illuminate\Support\Carbon;
 
 /**
- * @property array raw_import
- * @property BigInteger connection_id
+ * App\Models\RmsapiProductImport
+ *
+ * @property int $id
+ * @property int $connection_id
+ * @property string|null $batch_uuid
+ * @property string|null $when_processed
+ * @property int|null $product_id
+ * @property string|null $sku
+ * @property array $raw_import
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @method static Builder|RmsapiProductImport newModelQuery()
+ * @method static Builder|RmsapiProductImport newQuery()
+ * @method static Builder|RmsapiProductImport query()
+ * @method static Builder|RmsapiProductImport whereBatchUuid($value)
+ * @method static Builder|RmsapiProductImport whereConnectionId($value)
+ * @method static Builder|RmsapiProductImport whereCreatedAt($value)
+ * @method static Builder|RmsapiProductImport whereId($value)
+ * @method static Builder|RmsapiProductImport whereProductId($value)
+ * @method static Builder|RmsapiProductImport whereRawImport($value)
+ * @method static Builder|RmsapiProductImport whereSku($value)
+ * @method static Builder|RmsapiProductImport whereUpdatedAt($value)
+ * @method static Builder|RmsapiProductImport whereWhenProcessed($value)
+ * @mixin Eloquent
  */
 class RmsapiProductImport extends Model
 {

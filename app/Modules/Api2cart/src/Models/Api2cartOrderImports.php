@@ -3,13 +3,34 @@
 namespace App\Modules\Api2cart\src\Models;
 
 use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use function PHPUnit\Framework\isNull;
 
 /**
- * @property array raw_import
+ * App\Modules\Api2cart\src\Models\Api2cartOrderImports
+ *
+ * @property int $id
+ * @property int|null $connection_id
+ * @property int|null $order_id
+ * @property string|null $when_processed
+ * @property string|null $order_number
+ * @property array $raw_import
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static Builder|Api2cartOrderImports newModelQuery()
+ * @method static Builder|Api2cartOrderImports newQuery()
+ * @method static Builder|Api2cartOrderImports query()
+ * @method static Builder|Api2cartOrderImports whereConnectionId($value)
+ * @method static Builder|Api2cartOrderImports whereCreatedAt($value)
+ * @method static Builder|Api2cartOrderImports whereId($value)
+ * @method static Builder|Api2cartOrderImports whereOrderId($value)
+ * @method static Builder|Api2cartOrderImports whereOrderNumber($value)
+ * @method static Builder|Api2cartOrderImports whereRawImport($value)
+ * @method static Builder|Api2cartOrderImports whereUpdatedAt($value)
+ * @method static Builder|Api2cartOrderImports whereWhenProcessed($value)
+ * @mixin Eloquent
  */
 class Api2cartOrderImports extends Model
 {

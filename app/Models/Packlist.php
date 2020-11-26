@@ -2,15 +2,24 @@
 
 namespace App\Models;
 
+use App\User;
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 
 /**
- * Class Packlist
- * @property Carbon|null packed_at
- * @property int order_id
- * @package App\Models
+ * App\Models\Packlist
+ *
+ * @property mixed $is_packed
+ * @property-read Order $order
+ * @property-read Product $product
+ * @property-read User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Packlist addInventorySource($inventory_location_id)
+ * @method static \Illuminate\Database\Eloquent\Builder|Packlist newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Packlist newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Packlist query()
+ * @mixin Eloquent
  */
 class Packlist extends Model
 {
@@ -76,6 +85,6 @@ class Packlist extends Model
 
     public function user()
     {
-        return $this->belongsTo(\App\User::class, 'picker_user_id');
+        return $this->belongsTo(User::class, 'picker_user_id');
     }
 }

@@ -3,33 +3,85 @@
 namespace App\Models;
 
 use App\User;
+use Eloquent;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use phpseclib\Math\BigInteger;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * @property BigInteger id
- * @property BigInteger shipping_address_id
- * @property double total
- * @property double total_paid
- * @property string order_number
- * @property string status_code
- * @property integer product_line_count
- * @property integer total_quantity_ordered
- * @property Carbon|null picked_at
- * @method  self isPicked(bool $expected)
- * @property-read boolean isPaid
- * @method  self whereIsPicked()
- * @method  self whereIsNotPicked()
- * @property Carbon|null packed_at
- * @property Carbon|null deleted_at
- * @property Carbon|null updated_at
- * @property Carbon|null created_at
+ * App\Models\Order
+ *
+ * @property int $id
+ * @property int|null $shipping_address_id
+ * @property string $order_number
+ * @property string $status_code
+ * @property string $total
+ * @property string $total_paid
+ * @property string|null $order_placed_at
+ * @property string|null $order_closed_at
+ * @property int $product_line_count
+ * @property string|null $picked_at
+ * @property string|null $packed_at
+ * @property int|null $packer_user_id
+ * @property string $total_quantity_ordered
+ * @property array $raw_import
+ * @property string|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection|Activity[] $activities
+ * @property-read int|null $activities_count
+ * @property mixed $is_packed
+ * @property-read mixed $is_paid
+ * @property mixed $is_picked
+ * @property-read Collection|OrderComment[] $orderComments
+ * @property-read int|null $order_comments_count
+ * @property-read Collection|OrderProduct[] $orderProducts
+ * @property-read int|null $order_products_count
+ * @property-read Collection|OrderShipment[] $orderShipments
+ * @property-read int|null $order_shipments_count
+ * @property-read User|null $packer
+ * @property-read Collection|Packlist[] $packlist
+ * @property-read int|null $packlist_count
+ * @property-read OrderAddress|null $shippingAddress
+ * @property-read OrderStats|null $stats
+ * @method static \Illuminate\Database\Eloquent\Builder|Order active()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order addInventorySource($inventory_location_id)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order hasPacker($expected)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order isPacked($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order isPacking($is_packing)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order isPicked($expected)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereActive()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereHasText($text)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereIsNotPicked()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereIsPicked()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderClosedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderPlacedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order wherePackedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order wherePackerUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order wherePickedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereProductLineCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereRawImport($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereShippingAddressId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereStatusCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereTotal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereTotalPaid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereTotalQuantityOrdered($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class Order extends Model
 {
@@ -245,11 +297,6 @@ class Order extends Model
         $this->picked_at = $value ? now() : null;
     }
 
-    public function scopePacklist($query, $inventory_id)
-    {
-        return $this->hasOne(Packlist::class)->test(100);
-    }
-
     public function scopeActive($query)
     {
         return $query->where('status_code', '=', 'processing');
@@ -295,7 +342,7 @@ class Order extends Model
         return $this->hasMany(OrderShipment::class)->latest();
     }
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
     public function stats()
     {

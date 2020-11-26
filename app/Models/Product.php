@@ -2,28 +2,65 @@
 
 namespace App\Models;
 
-use DateTime;
+use Eloquent;
 use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
-use phpseclib\Math\BigInteger;
-use Psr\Log\LoggerAwareTrait;
+use Illuminate\Support\Carbon;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * @property BigInteger id
- * @property string sku
- * @property string name
- * @property double price
- * @property double sale_price
- * @property DateTime sale_price_start_date
- * @property DateTime sale_price_end_date
- * @property double quantity
- * @property double quantity_reserved
- * @method static updateOrCreate(array $array, array $attributes)
- * @method static whereHasText(string $text)
+ * App\Models\Product
+ *
+ * @property int $id
+ * @property string $sku
+ * @property string $name
+ * @property string $price
+ * @property string $sale_price
+ * @property Carbon $sale_price_start_date
+ * @property Carbon $sale_price_end_date
+ * @property string $quantity
+ * @property string $quantity_reserved
+ * @property Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection|Activity[] $activities
+ * @property-read int|null $activities_count
+ * @property-read Collection|ProductAlias[] $aliases
+ * @property-read int|null $aliases_count
+ * @property-read mixed $quantity_available
+ * @property-read Collection|Inventory[] $inventory
+ * @property-read int|null $inventory_count
+ * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications
+ * @property-read int|null $notifications_count
+ * @method static Builder|Product addInventorySource($inventory_location_id)
+ * @method static Builder|Product newModelQuery()
+ * @method static Builder|Product newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Product onlyTrashed()
+ * @method static Builder|Product query()
+ * @method static Builder|Product skuOrAlias($skuOrAlias)
+ * @method static Builder|Product whereCreatedAt($value)
+ * @method static Builder|Product whereDeletedAt($value)
+ * @method static Builder|Product whereHasText($text)
+ * @method static Builder|Product whereId($value)
+ * @method static Builder|Product whereName($value)
+ * @method static Builder|Product wherePrice($value)
+ * @method static Builder|Product whereQuantity($value)
+ * @method static Builder|Product whereQuantityReserved($value)
+ * @method static Builder|Product whereSalePrice($value)
+ * @method static Builder|Product whereSalePriceEndDate($value)
+ * @method static Builder|Product whereSalePriceStartDate($value)
+ * @method static Builder|Product whereSku($value)
+ * @method static Builder|Product whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Product withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Product withoutTrashed()
+ * @mixin Eloquent
  */
 class Product extends Model
 {

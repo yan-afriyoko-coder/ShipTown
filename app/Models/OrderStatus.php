@@ -2,8 +2,31 @@
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
+/**
+ * App\Models\OrderStatus
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $code
+ * @property int $order_active
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @method static Builder|OrderStatus newModelQuery()
+ * @method static Builder|OrderStatus newQuery()
+ * @method static Builder|OrderStatus query()
+ * @method static Builder|OrderStatus whereCode($value)
+ * @method static Builder|OrderStatus whereCreatedAt($value)
+ * @method static Builder|OrderStatus whereId($value)
+ * @method static Builder|OrderStatus whereName($value)
+ * @method static Builder|OrderStatus whereOrderActive($value)
+ * @method static Builder|OrderStatus whereUpdatedAt($value)
+ * @mixin Eloquent
+ */
 class OrderStatus extends Model
 {
     public static $activeOrderStatusList = [

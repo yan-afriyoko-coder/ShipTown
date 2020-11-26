@@ -2,15 +2,36 @@
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Crypt;
-use phpseclib\Math\BigInteger;
 
 /**
- * @property BigInteger id
- * @property BigInteger location_id
+ * App\Models\RmsapiConnection
+ *
+ * @property int $id
+ * @property string $location_id
+ * @property string $url
+ * @property string $username
+ * @property string $password
+ * @property int $products_last_timestamp
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @method static Builder|RmsapiConnection newModelQuery()
+ * @method static Builder|RmsapiConnection newQuery()
+ * @method static Builder|RmsapiConnection query()
+ * @method static Builder|RmsapiConnection whereCreatedAt($value)
+ * @method static Builder|RmsapiConnection whereId($value)
+ * @method static Builder|RmsapiConnection whereLocationId($value)
+ * @method static Builder|RmsapiConnection wherePassword($value)
+ * @method static Builder|RmsapiConnection whereProductsLastTimestamp($value)
+ * @method static Builder|RmsapiConnection whereUpdatedAt($value)
+ * @method static Builder|RmsapiConnection whereUrl($value)
+ * @method static Builder|RmsapiConnection whereUsername($value)
+ * @mixin Eloquent
  */
-
 class RmsapiConnection extends Model
 {
     protected $fillable = [
