@@ -39,31 +39,13 @@ class RecalculateProductQuantityReservedJob implements ShouldQueue
      */
     public function handle()
     {
-//        $prefix = config('database.connections.mysql.prefix');
-//
-//        DB::statement('
-//            UPDATE `'.$prefix.'products`
-//
-//            SET `'.$prefix.'products`.`quantity_reserved` = IFNULL(
-//                (
-//                    SELECT sum(`'.$prefix.'inventory`.`quantity_reserved`)
-//                    FROM `'.$prefix.'inventory`
-//                    WHERE `'.$prefix.'inventory`.`product_id` = `'.$prefix.'products`.`id`
-//                        AND `'.$prefix.'inventory`.`deleted_at` IS NULL
-//                ),
-//                0
-//            )
-//        ');
-//
-//        info('Recalculated products total quantity reserved');
-
         $this->getProductsWithQuantityReservedErrorsQuery()
             // for performance purposes limit to 1000 products per job
             ->limit(1000)
             ->each(function ($product) {
-                activity()->on($product)->log('Incorrect quantity reserved detected');
+                activity()->on($product)->log('Incorrect quantity reserved detected, recalculating');
                 $product->update([
-                    'quantity' => $product->expected_inventory_quantity_reserved ?? 0
+                    'quantity_reserved' => $product->expected_inventory_quantity_reserved ?? 0
                 ]);
             });
     }
@@ -74,7 +56,7 @@ class RecalculateProductQuantityReservedJob implements ShouldQueue
     private function getProductsWithQuantityReservedErrorsQuery()
     {
         // select all products
-        // left join specified $locationId inventory to get actual quantity reserved
+        // left join inventory to get actual quantity reserved
         // left join expected quantities reserved sub query
         // select only where expected not matching actual
         return Product::query()
