@@ -37,7 +37,7 @@
 
                     <div class="row">
                         <ul class="nav nav-tabs">
-                            <li><a href="#" @click.prevent="currentTab = 'recentOrders'" >Recent Orders</a></li>
+                            <li><a href="#" @click.prevent="currentTab = 'recentOrders'" >Open Orders</a></li>
                             <li><a href="#" @click.prevent="currentTab = 'productLog'" >Product Log</a></li>
                         </ul>
                     </div>
@@ -51,7 +51,9 @@
                                        <a target="_blank" :href="getProductLink(orderProduct)">
                                            #{{ orderProduct['order']['order_number']}}
                                        </a>
-                                       - {{orderProduct['order']['order_placed_at']}}
+                                   </div>
+                                   <div >
+                                       {{ orderProduct['order']['order_placed_at'] | moment('MMM DD')  }}
                                    </div>
                                    <div class="">
                                        {{ orderProduct['order']['status_code']}}
@@ -137,7 +139,8 @@
             loadOrders: function () {
                 const params = {
                     'filter[product_id]': this.product['id'],
-                    'sort': '-id',
+                    'filter[has_stock_reserved]': true,
+                    'sort': 'id',
                     'include': 'order'
                 }
 
