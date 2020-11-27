@@ -45,13 +45,17 @@
                     <template v-if="currentTab === 'recentOrders'" v-for="orderProduct in orderProducts">
                        <div>
                            <hr>
-                           <div class="row text-left mb-2">
+                           <div class="row text-left mb-2 text-secondary">
                                <div class="col-6">
-                                   <div class="h5">
-                                       <a target="_blank" :href="getProductLink(orderProduct)">
-                                           #{{ orderProduct['order']['order_number']}}
-                                       </a>
-                                       - {{orderProduct['order']['order_placed_at']}}
+                                   <div>
+                                       <div class="h5">
+                                           <a target="_blank" :href="getProductLink(orderProduct)">
+                                               #{{ orderProduct['order']['order_number']}}
+                                           </a>
+                                       </div>
+                                       <div >
+                                           {{ orderProduct['order']['order_placed_at'] | moment('MMM DD')  }}
+                                       </div>
                                    </div>
                                    <div class="">
                                        {{ orderProduct['order']['status_code']}}
