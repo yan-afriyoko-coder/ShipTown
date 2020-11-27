@@ -137,7 +137,8 @@
             loadOrders: function () {
                 const params = {
                     'filter[product_id]': this.product['id'],
-                    'sort': '-id',
+                    'filter[has_stock_reserved]': true,
+                    'sort': 'id',
                     'include': 'order'
                 }
 

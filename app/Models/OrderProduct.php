@@ -119,6 +119,7 @@ class OrderProduct extends Model
     {
         return QueryBuilder::for(OrderProduct::class)
             ->allowedFilters([
+                AllowedFilter::scope('has_stock_reserved', 'whereHasStockReserved'),
                 AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->default(100),
                 AllowedFilter::scope('in_stock_only', 'whereInStock'),
 
@@ -150,6 +151,18 @@ class OrderProduct extends Model
     public function scopeMinimumShelfLocation($query, $currentLocation)
     {
         return $query->where('inventory_source.inventory_source_shelf_location', '>=', $currentLocation);
+    }
+
+    /**
+     * @param Builder $query
+     * @param array $statusCodeArray
+     * @return Builder
+     */
+    public function scopeWhereHasStockReserved($query, $statusCodeArray)
+    {
+        return $query->whereHas('order', function ($query) use ($statusCodeArray) {
+            $query->select(\DB::raw(1))->whereIn('status_code', OrderStatus::getOpenStatuses());
+        });
     }
 
     /**
