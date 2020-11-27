@@ -37,7 +37,7 @@
 
                     <div class="row">
                         <ul class="nav nav-tabs">
-                            <li><a href="#" @click.prevent="currentTab = 'recentOrders'" >Recent Orders</a></li>
+                            <li><a href="#" @click.prevent="currentTab = 'recentOrders'" >Open Orders</a></li>
                             <li><a href="#" @click.prevent="currentTab = 'productLog'" >Product Log</a></li>
                         </ul>
                     </div>
@@ -45,17 +45,15 @@
                     <template v-if="currentTab === 'recentOrders'" v-for="orderProduct in orderProducts">
                        <div>
                            <hr>
-                           <div class="row text-left mb-2 text-secondary">
+                           <div class="row text-left mb-2">
                                <div class="col-6">
-                                   <div>
-                                       <div class="h5">
-                                           <a target="_blank" :href="getProductLink(orderProduct)">
-                                               #{{ orderProduct['order']['order_number']}}
-                                           </a>
-                                       </div>
-                                       <div >
-                                           {{ orderProduct['order']['order_placed_at'] | moment('MMM DD')  }}
-                                       </div>
+                                   <div class="h5">
+                                       <a target="_blank" :href="getProductLink(orderProduct)">
+                                           #{{ orderProduct['order']['order_number']}}
+                                       </a>
+                                   </div>
+                                   <div >
+                                       {{ orderProduct['order']['order_placed_at'] | moment('MMM DD')  }}
                                    </div>
                                    <div class="">
                                        {{ orderProduct['order']['status_code']}}
