@@ -67,7 +67,7 @@ class RecalculateOrdersReservedJob implements ShouldQueue
                 'products.id'
             )
             ->where(DB::raw('IFNULL('.DB::getTablePrefix().'inventory.quantity_reserved, 0)'), '!=', DB::raw('IFNULL(`'.DB::getTablePrefix().'product_reserved_totals`.`total_quantity_to_ship`, 0)'))
-            ->limit(300)
+            ->limit(1000)
             ->get();
 
         foreach ($productQuantityReservedDifferences as $product) {
