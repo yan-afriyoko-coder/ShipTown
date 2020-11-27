@@ -23,7 +23,7 @@ class CreateOrderProductsTable extends Migration
             $table->unsignedBigInteger('product_id')->nullable();
             $table->string('sku_ordered');
             $table->string('name_ordered');
-            $table->decimal('price', 15, 2)->default(0);
+            $table->decimal('price', 10, 2)->default(0);
             $table->decimal('quantity_ordered', 10, 2)->default(0);
             $table->decimal('quantity_to_ship', 10, 2)->default(0);
             $table->decimal('quantity_shipped', 10, 2)->default(0);

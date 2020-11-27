@@ -18,6 +18,10 @@ class RecalculateOrdersReservedJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public function withPrefix($tableName)
+    {
+        return  config('database.connections.mysql.prefix').$tableName;
+    }
     /**
      * Create a new job instance.
      *
@@ -36,33 +40,43 @@ class RecalculateOrdersReservedJob implements ShouldQueue
     public function handle()
     {
         $locationId = 999;
-        $prefix = config('database.connections.mysql.prefix');
 
-        $expectedReservedQuantities = OrderProduct::whereStatusCodeIn(OrderStatus::getOpenStatuses())
+        $quantityToShipTotals = OrderProduct::whereStatusCodeIn(OrderStatus::getOpenStatuses())
             ->addSelect([
                 'order_products.product_id',
-                'inventory.quantity_reserved as quantity_reserved',
                 DB::raw('sum(quantity_to_ship) as total_quantity_to_ship'),
             ])
+            ->groupBy(['order_products.product_id']);
+
+        $productQuantityReservedDifferences = Product::query()
+            ->select([
+                'products.id',
+                DB::raw($locationId.' as location_id'),
+                DB::raw('ceil('.DB::getTablePrefix().'inventory.quantity_reserved) as quantity_reserved_actual'),
+                'product_reserved_totals.total_quantity_to_ship as quantity_reserved_expected',
+            ])
             ->leftJoin('inventory', function ($join) use ($locationId) {
-                $join->on('order_products.product_id', '=', 'inventory.product_id');
+                $join->on('inventory.product_id', '=', 'products.id');
                 $join->on('inventory.location_id', '=', DB::raw($locationId));
             })
-            ->groupBy(['order_products.product_id', 'inventory.quantity_reserved'])
-            ->limit(500);
-
-        $orderProducts = DB::query()->fromSub($expectedReservedQuantities, 'expected')
-            ->whereRaw('total_quantity_to_ship != ifnull(quantity_reserved, 0)')
+            ->leftJoinSub(
+                $quantityToShipTotals,
+                'product_reserved_totals',
+                'product_reserved_totals.product_id',
+                '=',
+                'products.id'
+            )
+            ->where(DB::raw('IFNULL('.DB::getTablePrefix().'inventory.quantity_reserved, 0)'), '!=', DB::raw('IFNULL(`'.DB::getTablePrefix().'product_reserved_totals`.`total_quantity_to_ship`, 0)'))
+            ->limit(300)
             ->get();
 
-        foreach ($orderProducts as $record) {
-            activity()->on(Product::find($record->product_id))
-                ->log('Incorrect quantity on order detected');
+        foreach ($productQuantityReservedDifferences as $product) {
+            activity()->on($product)->log('Incorrect quantity reserved detected');
             Inventory::query()->updateOrCreate([
-                'product_id' => $record->product_id,
+                'product_id' => $product->id,
                 'location_id' => $locationId,
             ], [
-                'quantity_reserved' => $record->total_quantity_to_ship
+                'quantity_reserved' => $product->quantity_reserved_expected ?? 0
             ]);
         }
     }

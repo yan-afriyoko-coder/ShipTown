@@ -23,8 +23,8 @@ class CreateInventoryTable extends Migration
             $table->unsignedBigInteger('product_id')->index();
             $table->unsignedBigInteger('location_id');
             $table->string('shelve_location')->default('');
-            $table->decimal('quantity')->default(0);
-            $table->decimal('quantity_reserved')->default(0);
+            $table->decimal('quantity', 10, 2)->default(0);
+            $table->decimal('quantity_reserved', 10, 2)->default(0);
             $table->softDeletes();
             $table->timestamps();
 

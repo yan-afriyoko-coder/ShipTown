@@ -92,6 +92,15 @@ class OrderProduct extends Model
         'quantity_shipped',
     ];
 
+    protected $casts = [
+        'price'=> 'float',
+        'quantity_ordered'=> 'float',
+        'quantity_picked'=> 'float',
+        'quantity_skipped_picking'=> 'float',
+        'quantity_not_picked'=> 'float',
+        'quantity_shipped'=> 'float',
+    ];
+
     /**
      * @param array $options
      * @return bool
@@ -151,7 +160,7 @@ class OrderProduct extends Model
     public function scopeWhereStatusCodeIn($query, $statusCodeArray)
     {
         return $query->whereHas('order', function ($query) use ($statusCodeArray) {
-            $query->whereIn('status_code', $statusCodeArray);
+            $query->select(\DB::raw(1))->whereIn('status_code', $statusCodeArray);
         });
     }
 

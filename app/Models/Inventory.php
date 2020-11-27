@@ -6,6 +6,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * App\Models\Inventory
@@ -39,6 +40,14 @@ use Illuminate\Support\Carbon;
  */
 class Inventory extends Model
 {
+    use LogsActivity;
+
+    protected static $logAttributes = [
+        'quantity',
+        'quantity_reserved',
+        'shelve_location',
+    ];
+
     protected $fillable = [
         'warehouse_id',
         'location_id',
@@ -57,6 +66,11 @@ class Inventory extends Model
     protected $attributes = [
         'quantity' => 0,
         'quantity_reserved' => 0,
+    ];
+
+    protected $casts = [
+        'quantity' => 'float',
+        'quantity_reserved' => 'float',
     ];
 
     public function getQuantityAvailableAttribute()

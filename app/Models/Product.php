@@ -101,6 +101,11 @@ class Product extends Model
         'sale_price_end_date'
     ];
 
+    protected $casts = [
+        "quantity" => 0,
+        'quantity_reserved' => 0
+    ];
+
     /**
      * @param \Illuminate\Database\Query\Builder $query
      * @param string $text

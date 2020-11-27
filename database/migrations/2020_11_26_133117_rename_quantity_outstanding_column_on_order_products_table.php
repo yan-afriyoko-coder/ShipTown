@@ -13,6 +13,10 @@ class RenameQuantityOutstandingColumnOnOrderProductsTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasColumn('order_products', 'quantity_to_ship')) {
+            return;
+        }
+
         Schema::table('order_products', function (Blueprint $table) {
             $table->renameColumn('quantity_outstanding', 'quantity_to_ship');
         });
