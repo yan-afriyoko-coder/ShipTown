@@ -56,25 +56,22 @@ class RecalculateProductQuantityReservedJob implements ShouldQueue
 //        ');
 //
 //        info('Recalculated products total quantity reserved');
-//
-//        $this->getQuantityReservedErrorsQuery()
-//            // for performance purposes limit to 1000 products per job
-//            ->limit(1000)
-//            ->each(function ($errorRecord) {
-//                activity()->on($errorRecord)->log('Incorrect quantity reserved detected');
-//                Inventory::query()->updateOrCreate([
-//                    'product_id' => $errorRecord->product_id,
-//                    'location_id' => $this->locationId,
-//                ], [
-//                    'quantity_reserved' => $errorRecord->quantity_reserved_expected ?? 0
-//                ]);
-//            });
+
+        $this->getProductsWithQuantityReservedErrorsQuery()
+            // for performance purposes limit to 1000 products per job
+            ->limit(1000)
+            ->each(function ($product) {
+                activity()->on($product)->log('Incorrect quantity reserved detected');
+                $product->update([
+                    'quantity' => $product->expected_inventory_quantity_reserved ?? 0
+                ]);
+            });
     }
 
     /**
      * @return Product|\Illuminate\Database\Eloquent\Builder|Builder
      */
-    private function getQuantityReservedErrorsQuery()
+    private function getProductsWithQuantityReservedErrorsQuery()
     {
         // select all products
         // left join specified $locationId inventory to get actual quantity reserved
@@ -82,11 +79,10 @@ class RecalculateProductQuantityReservedJob implements ShouldQueue
         // select only where expected not matching actual
         return Product::query()
             ->select([
+                'products.id',
                 'products.id as product_id',
-                'products.quantity as product_quantity',
-                'inventory_totals.total_quantity as inventory_quantity',
-                'products.quantity_reserved as product_quantity_reserved',
-                'inventory_totals.total_quantity_reserved as inventory_quantity_reserved',
+                'products.quantity_reserved as actual_product_quantity_reserved',
+                'inventory_totals.total_quantity_reserved as expected_inventory_quantity_reserved',
             ])
             ->leftJoinSub(
                 $this->getInventoryTotalsByProductIdQuery(),
@@ -96,9 +92,9 @@ class RecalculateProductQuantityReservedJob implements ShouldQueue
                 'products.id'
             )
             ->where(
-                DB::raw('IFNULL(' . DB::getTablePrefix() . 'inventory.quantity_reserved, 0)'),
+                DB::raw('IFNULL(' . DB::getTablePrefix() . 'products.quantity_reserved, 0)'),
                 '!=',
-                DB::raw('IFNULL(`' . DB::getTablePrefix() . 'product_reserved_totals`.`total_quantity_to_ship`, 0)')
+                DB::raw('IFNULL(`' . DB::getTablePrefix() . 'inventory_totals`.`total_quantity_reserved`, 0)')
             );
     }
 
@@ -110,8 +106,8 @@ class RecalculateProductQuantityReservedJob implements ShouldQueue
         return Inventory::query()
             ->select([
                 'product_id',
-                DB::raw('sum(quantity) as total_quantity'),
                 DB::raw('sum(quantity_reserved) as total_quantity_reserved')
-            ]);
+            ])
+            ->groupBy(['product_id']);
     }
 }
