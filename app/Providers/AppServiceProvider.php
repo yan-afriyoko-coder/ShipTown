@@ -36,15 +36,10 @@ class AppServiceProvider extends ServiceProvider
     {
         // Core Models
         Product::observe(ProductObserver::class);
+        Inventory::observe(InventoryObserver::class);
         Order::observe(OrderObserver::class);
         OrderProduct::observe(OrderProductObserver::class);
-
         Pick::observe(PickObserver::class);
-        PickRequest::observe(PickRequestObserver::class);
-
-        Packlist::observe(PacklistsObserver::class);
-
-        Inventory::observe(InventoryObserver::class);
 
         // Modules
         Api2cartOrderImports::observe(Api2cartOrderImportsObserver::class);
