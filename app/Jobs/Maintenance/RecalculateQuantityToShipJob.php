@@ -31,7 +31,7 @@ class RecalculateQuantityToShipJob implements ShouldQueue
      */
     public function handle()
     {
-        OrderProduct::whereStatusCodeIn(OrderStatus::getOpenStatuses())
+        OrderProduct::query()
             ->whereRaw('quantity_to_ship != quantity_ordered - quantity_shipped')
             ->latest()
             // for performance purposes limit to 1000 records per job
