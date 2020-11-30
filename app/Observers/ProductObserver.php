@@ -51,6 +51,7 @@ class ProductObserver
             if ($product->quantity_available <= 0) {
                 $connection = Api2cartConnection::query()->first();
                 if ($connection) {
+                    Log::debug('Disabling product', $product);
                     Products::updateOrCreate($connection->bridge_api_key, [
                         'sku' => $product->sku,
                         'quantity' => 0,
