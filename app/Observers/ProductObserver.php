@@ -9,7 +9,10 @@ use App\Models\Product;
 use App\Models\RmsapiConnection;
 use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
+use App\Modules\Api2cart\src\Products;
+use Exception;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 class ProductObserver
 {
@@ -40,9 +43,25 @@ class ProductObserver
      *
      * @param Product $product
      * @return void
+     * @throws Exception
      */
     public function updated(Product $product)
     {
+        try {
+            if ($product->quantity_available <= 0) {
+                $connection = Api2cartConnection::query()->first();
+                if ($connection) {
+                    Products::updateOrCreate($connection->bridge_api_key, [
+                        'sku' => $product->sku,
+                        'quantity' => 0,
+                        'in_stock' => false,
+                    ]);
+                }
+            }
+        } catch (Exception $exception) {
+            Log::warning('Could not disable product');
+        }
+
         UpdatedEvent::dispatch($product);
     }
 
