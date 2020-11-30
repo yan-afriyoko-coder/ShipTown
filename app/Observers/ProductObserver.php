@@ -52,6 +52,7 @@ class ProductObserver
                 $connection = Api2cartConnection::query()->first();
                 if ($connection) {
                     $product_data = [
+                        'product_id' => $product->getKey(),
                         'sku' => $product->sku,
                         'quantity' => 0,
                         'in_stock' => false,
