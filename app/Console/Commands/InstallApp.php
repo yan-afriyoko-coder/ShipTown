@@ -62,6 +62,7 @@ class InstallApp extends Command
             ]);
         } catch (\Exception $e) {
             $this->error('Could not migrate, please make sure DB connection is configured');
+            $this->error($e->getMessage());
         }
     }
 
