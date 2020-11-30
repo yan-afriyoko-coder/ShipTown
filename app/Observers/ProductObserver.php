@@ -57,7 +57,7 @@ class ProductObserver
                         'product_id' => $product->getKey(),
                         'sku' => $product->sku,
                         'quantity' => 0,
-                        'in_stock' => false,
+                        'in_stock' => "False",
                     ];
                     Log::debug('Disabling product', $product->toArray());
                     Products::update($connection->bridge_api_key, $product_data);
