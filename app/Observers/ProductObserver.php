@@ -47,6 +47,8 @@ class ProductObserver
      */
     public function updated(Product $product)
     {
+        UpdatedEvent::dispatch($product);
+
         try {
             if ($product->quantity_available <= 0) {
                 $connection = Api2cartConnection::query()->first();
@@ -57,15 +59,13 @@ class ProductObserver
                         'quantity' => 0,
                         'in_stock' => false,
                     ];
-                    Log::debug('Disabling product', $product_data);
+                    Log::debug('Disabling product', $product->toArray());
                     Products::updateOrCreate($connection->bridge_api_key, $product_data);
                 }
             }
         } catch (Exception $exception) {
             Log::warning('Could not disable product', $product);
         }
-
-        UpdatedEvent::dispatch($product);
     }
 
     /**
