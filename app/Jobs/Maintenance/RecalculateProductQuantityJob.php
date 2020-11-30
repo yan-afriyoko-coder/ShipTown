@@ -42,7 +42,8 @@ class RecalculateProductQuantityJob implements ShouldQueue
         $this->getProductsWithQuantityReservedErrorsQuery()
             // for performance purposes limit to 1000 products per job
             ->limit(1000)
-            ->each(function ($product) {
+            ->each(function ($errorRecord) {
+                $product = Product::find($errorRecord->product_id);
                 activity()->on($product)->log('Incorrect quantity detected, recalculating');
                 $product->update([
                     'quantity' => $product->expected_inventory_quantity ?? 0
