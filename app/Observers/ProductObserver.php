@@ -59,7 +59,7 @@ class ProductObserver
                 }
             }
         } catch (Exception $exception) {
-            Log::warning('Could not disable product');
+            Log::warning('Could not disable product', $product);
         }
 
         UpdatedEvent::dispatch($product);
