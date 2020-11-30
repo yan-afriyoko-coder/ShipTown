@@ -358,6 +358,31 @@ class Products extends Entity
      * @return RequestResponse
      * @throws Exception
      */
+    public static function update(string $store_key, array $product_data)
+    {
+        $product = Products::getProductTypeAndId($store_key, $product_data['sku']);
+
+        switch ($product["type"]) {
+            case "product":
+                $properties = array_merge($product_data, ['id' => $product["id"]]);
+                return Products::updateSimpleProduct($store_key, $properties);
+                break;
+            case "variant":
+                $properties = array_merge($product_data, ['id' => $product["id"]]);
+                return Products::updateVariant($store_key, $properties);
+                break;
+            default:
+                logger('Cannot update - SKU not found', $product_data['sku']);
+                break;
+        }
+    }
+
+    /**
+     * @param string $store_key
+     * @param array $product_data
+     * @return RequestResponse
+     * @throws Exception
+     */
     public static function updateOrCreate(string $store_key, array $product_data)
     {
         $product = Products::getProductTypeAndId($store_key, $product_data['sku']);

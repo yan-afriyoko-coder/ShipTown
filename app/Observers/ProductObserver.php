@@ -60,7 +60,7 @@ class ProductObserver
                         'in_stock' => false,
                     ];
                     Log::debug('Disabling product', $product->toArray());
-                    Products::updateOrCreate($connection->bridge_api_key, $product_data);
+                    Products::update($connection->bridge_api_key, $product_data);
                 }
             }
         } catch (Exception $exception) {
