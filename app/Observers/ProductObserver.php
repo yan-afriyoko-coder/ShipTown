@@ -51,12 +51,13 @@ class ProductObserver
             if ($product->quantity_available <= 0) {
                 $connection = Api2cartConnection::query()->first();
                 if ($connection) {
-                    Log::debug('Disabling product', $product);
-                    Products::updateOrCreate($connection->bridge_api_key, [
+                    $product_data = [
                         'sku' => $product->sku,
                         'quantity' => 0,
                         'in_stock' => false,
-                    ]);
+                    ];
+                    Log::debug('Disabling product', $product_data);
+                    Products::updateOrCreate($connection->bridge_api_key, $product_data);
                 }
             }
         } catch (Exception $exception) {
