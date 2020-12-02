@@ -48,7 +48,7 @@
                            <div class="row text-left mb-2">
                                <div class="col-6">
                                    <div class="h5">
-                                       <a target="_blank" :href="getProductLink(orderProduct)">
+                                       <a target="_blank" :href="getProductLink(orderProduct)">cd pr
                                            #{{ orderProduct['order']['order_number']}}
                                        </a>
                                    </div>
