@@ -3,11 +3,9 @@
 namespace Tests\External;
 
 use App\Http\Controllers\SnsController;
-use App\User as User;
+use App\User;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SnsControllerTest extends TestCase
 {

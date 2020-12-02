@@ -2,15 +2,13 @@
 
 namespace Tests\External\Rmsapi;
 
-use App\Modules\Rmsapi\src\Jobs\FetchUpdatedProductsJob;
-use App\Jobs\Rmsapi\ProcessImportedProductsJob;
+use App\Jobs\Modules\Rmsapi\ProcessImportedProductsJob;
 use App\Models\RmsapiConnection;
 use App\Models\RmsapiProductImport;
+use App\Modules\Rmsapi\src\Jobs\FetchUpdatedProductsJob;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ImportProductsJobTest extends TestCase
 {
