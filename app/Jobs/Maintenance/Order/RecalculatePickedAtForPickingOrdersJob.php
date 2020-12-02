@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Maintenance;
+namespace App\Jobs\Maintenance\Order;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -9,7 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
-class RecalculateOrderPickedAtForPickingOrders implements ShouldQueue
+class RecalculatePickedAtForPickingOrdersJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 

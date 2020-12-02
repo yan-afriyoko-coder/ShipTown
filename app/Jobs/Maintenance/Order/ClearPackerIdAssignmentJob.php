@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Maintenance;
+namespace App\Jobs\Maintenance\Order;
 
 use App\Models\Order;
 use Carbon\Carbon;
@@ -10,7 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ClearOrderPackerAssignmentJob implements ShouldQueue
+class ClearPackerIdAssignmentJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 

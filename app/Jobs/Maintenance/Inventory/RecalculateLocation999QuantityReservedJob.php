@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Maintenance;
+namespace App\Jobs\Maintenance\Inventory;
 
 use App\Models\Inventory;
 use App\Models\OrderProduct;

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Jobs\Orders;
 
-use App\Jobs\Maintenance\RecalculateOrderProductLineCountJob;
+use App\Jobs\Maintenance\Order\RecalculateOrderProductLineCountJob;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use Tests\TestCase;
