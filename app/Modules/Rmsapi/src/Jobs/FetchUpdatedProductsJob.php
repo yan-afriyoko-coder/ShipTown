@@ -12,6 +12,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 class FetchUpdatedProductsJob implements ShouldQueue
 {
@@ -20,10 +21,10 @@ class FetchUpdatedProductsJob implements ShouldQueue
     /**
      * @var RmsapiConnection
      */
-    private $rmsapiConnectionId = null;
+    private $rmsapiConnectionId;
 
     /**
-     * @var \Ramsey\Uuid\UuidInterface
+     * @var UuidInterface
      */
     public $batch_uuid;
 
