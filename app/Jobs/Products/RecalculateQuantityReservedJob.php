@@ -41,11 +41,11 @@ class RecalculateQuantityReservedJob implements ShouldQueue
         $this->getProductsWithQuantityReservedErrorsQuery()
             ->limit(100) // for performance purposes
             ->each(function ($errorRecord) {
-                $product = Product::find($errorRecord->product_id);
-                activity()->on($product)->log('Incorrect quantity reserved detected, recalculating');
-                $product->update([
-                    'quantity_reserved' => $product->expected_inventory_quantity_reserved ?? 0
-                ]);
+                Product::find($errorRecord->product_id)
+                    ->log('Incorrect quantity reserved detected, recalculating')
+                    ->update([
+                        'quantity_reserved' => $errorRecord->correct_inventory_quantity_reserved ?? 0
+                    ]);
             });
     }
 
@@ -63,7 +63,7 @@ class RecalculateQuantityReservedJob implements ShouldQueue
                 'products.id',
                 'products.id as product_id',
                 'products.quantity_reserved as actual_product_quantity_reserved',
-                'inventory_totals.total_quantity_reserved as expected_inventory_quantity_reserved',
+                'inventory_totals.total_quantity_reserved as correct_inventory_quantity_reserved',
             ])
             ->leftJoinSub(
                 $this->getInventoryTotalsByProductIdQuery(),

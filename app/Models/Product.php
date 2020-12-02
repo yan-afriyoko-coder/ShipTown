@@ -188,4 +188,10 @@ class Product extends Model
             return $query->where('alias', 'like', '%'.$skuOrAlias.'%');
         });
     }
+
+    public function log($message)
+    {
+        activity()->on($this)->log($message);
+        return $this;
+    }
 }
