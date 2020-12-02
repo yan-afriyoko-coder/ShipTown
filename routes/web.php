@@ -28,8 +28,17 @@ Route::post('invites/{token}', 'InvitesController@process');
 
 // Routes for authenticated users only
 Route::middleware('auth')->group(function () {
-
     Route::redirect('/', 'dashboard');
+
+    // Admin only routes
+    Route::group(['middleware' => ['role:admin']], function () {
+        Route::view('/users', 'users')->name('users');
+    });
+
+    // Reports routes
+    Route::group(['prefix' => 'reports'], function () {
+        Route::view('picks', 'reports/picks_report')->name('picks_report');
+    });
 
     Route::view('/dashboard', 'dashboard')->name('dashboard');
     Route::view('/dashboard_test', 'dashboard_test')->name('dashboard_test');
@@ -40,16 +49,4 @@ Route::middleware('auth')->group(function () {
     Route::view('/settings', 'settings')->name('settings');
 
     Route::get('pdf/orders/{order_number}/{template}', 'PdfOrderController@show');
-
-    // below everything is hidden from top navigation menu but still available as direct link
-    Route::view('/missing', 'missing')->name('missing');
-
-    // Routes for reports
-    Route::group(['prefix' => 'reports'], function () {
-        Route::view('picks', 'reports/picks_report')->name('picks_report');
-    });
-
-    Route::group(['middleware' => ['role:admin']], function () {
-        Route::view('/users', 'users')->name('users');
-    });
 });
