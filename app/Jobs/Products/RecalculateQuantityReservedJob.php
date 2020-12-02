@@ -47,6 +47,7 @@ class RecalculateQuantityReservedJob implements ShouldQueue
                         'quantity_reserved' => $errorRecord->correct_inventory_quantity_reserved ?? 0
                     ]);
             });
+        info('Successfully ran RecalculateQuantityReservedJob');
     }
 
     /**

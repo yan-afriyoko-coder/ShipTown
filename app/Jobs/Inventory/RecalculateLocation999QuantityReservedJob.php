@@ -13,6 +13,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use function GuzzleHttp\Promise\iter_for;
 
 class RecalculateLocation999QuantityReservedJob implements ShouldQueue
 {
@@ -52,6 +53,8 @@ class RecalculateLocation999QuantityReservedJob implements ShouldQueue
                     'quantity_reserved' => $errorRecord->quantity_reserved_expected ?? 0
                 ]);
             });
+
+        info('Successfully ran RecalculateLocation999QuantityReservedJob');
     }
 
     /**
