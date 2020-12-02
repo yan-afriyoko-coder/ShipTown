@@ -20,8 +20,8 @@ class RunMaintenanceJobs implements ShouldQueue
         \App\Jobs\Maintenance\Order\RecalculatePickedAtForPickingOrdersJob::class,
         \App\Jobs\Maintenance\Order\ClearPackerIdAssignmentJob::class,
         \App\Jobs\Maintenance\Inventory\RecalculateLocation999QuantityReservedJob::class,
-        \App\Jobs\Maintenance\RecalculateProductQuantityJob::class,
-        \App\Jobs\Maintenance\RecalculateProductQuantityReservedJob::class,
+        \App\Jobs\Maintenance\Product\RecalculateQuantityJob::class,
+        \App\Jobs\Maintenance\Product\RecalculateQuantityReservedJob::class,
         \App\Jobs\RefillStatusesJob::class,
     ];
 

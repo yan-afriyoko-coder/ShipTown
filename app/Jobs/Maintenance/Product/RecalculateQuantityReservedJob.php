@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Jobs\Maintenance;
+namespace App\Jobs\Maintenance\Product;
 
 use App\Models\Inventory;
 use App\Models\OrderProduct;
-use App\Models\OrderStatus;
 use App\Models\Product;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,7 +13,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
-class RecalculateProductQuantityReservedJob implements ShouldQueue
+class RecalculateQuantityReservedJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     /**
