@@ -2,16 +2,15 @@
 
 namespace App\Modules\Rmsapi\src\Jobs;
 
-use App\Jobs\Rmsapi\ProcessImportedProductsJob;
+use App\Jobs\Modules\Rmsapi\ProcessImportedProductsJob;
 use App\Models\RmsapiConnection;
 use App\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Client as RmsapiClient;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Support\Collection;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Ramsey\Uuid\Uuid;
 
 class FetchUpdatedProductsJob implements ShouldQueue
