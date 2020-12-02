@@ -13,16 +13,16 @@ class RunMaintenanceJobs implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $jobClassesToRun = [
-        \App\Jobs\Maintenance\Order\RecalculateOrderProductLineCountJob::class,
         \App\Jobs\Maintenance\OrderProduct\RecalculateQuantityToShipJob::class,
         \App\Jobs\Maintenance\OrderProduct\RecalculateQuantityToPickJob::class,
-        \App\Jobs\Maintenance\RecalculateOrderTotalQuantityOrderedJob::class,
+        \App\Jobs\Maintenance\Order\RecalculateOrderProductLineCountJob::class,
+        \App\Jobs\Maintenance\Order\RecalculateOrderTotalQuantityOrderedJob::class,
+        \App\Jobs\Maintenance\Order\RecalculatePickedAtForPickingOrdersJob::class,
+        \App\Jobs\Maintenance\Order\ClearPackerIdAssignmentJob::class,
+        \App\Jobs\Maintenance\Inventory\RecalculateLocation999QuantityReservedJob::class,
         \App\Jobs\Maintenance\RecalculateProductQuantityJob::class,
         \App\Jobs\Maintenance\RecalculateProductQuantityReservedJob::class,
-        \App\Jobs\Maintenance\Order\RecalculatePickedAtForPickingOrdersJob::class,
-        \App\Jobs\Maintenance\Inventory\RecalculateLocation999QuantityReservedJob::class,
         \App\Jobs\RefillStatusesJob::class,
-        \App\Jobs\Maintenance\Order\ClearPackerIdAssignmentJob::class,
     ];
 
     /**
