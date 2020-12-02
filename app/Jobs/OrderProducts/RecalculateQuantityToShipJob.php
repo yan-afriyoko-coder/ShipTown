@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Maintenance\OrderProduct;
+namespace App\Jobs\OrderProducts;
 
 use App\Models\OrderProduct;
 use Illuminate\Bus\Queueable;
@@ -9,7 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class RecalculateQuantityToPickJob implements ShouldQueue
+class RecalculateQuantityToShipJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -31,12 +31,13 @@ class RecalculateQuantityToPickJob implements ShouldQueue
     public function handle()
     {
         OrderProduct::query()
-            ->whereRaw('(quantity_to_pick) <> (quantity_ordered - quantity_picked - quantity_skipped_picking)')
-            ->latest('updated_at')
-            ->limit(2000)
+            ->whereRaw('quantity_to_ship != quantity_ordered - quantity_shipped')
+            ->latest()
+            // for performance purposes limit to 1000 records per job
+            ->limit(1000)
             ->each(function ($orderProduct) {
-                activity()->performedOn($orderProduct)->log('Incorrect quantity to pick detected');
-                $orderProduct->update(['quantity_to_pick' => \DB::raw('quantity_ordered - quantity_picked - quantity_skipped_picking')]);
+                activity()->on($orderProduct)->log('Incorrect quantity to ship detected');
+                $orderProduct->save();
             });
     }
 }

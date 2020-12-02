@@ -2,7 +2,7 @@
 
 namespace App\Observers\Modules\Api2cart;
 
-use App\Jobs\Api2cart\ProcessApi2cartImportedOrderJob;
+use App\Jobs\Modules\Api2cart\ProcessApi2cartImportedOrderJob;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 
 class Api2cartOrderImportsObserver

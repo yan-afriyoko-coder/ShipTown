@@ -2,14 +2,11 @@
 
 namespace Tests\Unit\Jobs\Api2cart;
 
-use App\Jobs\Api2cart\ImportShippingAddressJob;
+use App\Jobs\Modules\Api2cart\ImportShippingAddressJob;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
-use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ImportShippingAddressJobTest extends TestCase
 {

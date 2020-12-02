@@ -2,14 +2,13 @@
 
 namespace Tests\Unit\Jobs\Rmsapi;
 
-use App\Jobs\Rmsapi\ProcessImportedProductsJob;
+use App\Jobs\Modules\Rmsapi\ProcessImportedProductsJob;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductAlias;
 use App\Models\RmsapiProductImport;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 
 class ProcessImportedProductsJobTest extends TestCase
 {

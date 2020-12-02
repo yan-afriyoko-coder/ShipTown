@@ -13,15 +13,15 @@ class RunMaintenanceJobs implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $jobClassesToRun = [
-        \App\Jobs\Maintenance\OrderProduct\RecalculateQuantityToShipJob::class,
-        \App\Jobs\Maintenance\OrderProduct\RecalculateQuantityToPickJob::class,
-        \App\Jobs\Maintenance\Order\RecalculateProductLineCountJob::class,
-        \App\Jobs\Maintenance\Order\RecalculateTotalQuantityOrderedJob::class,
-        \App\Jobs\Maintenance\Order\RecalculatePickedAtForPickingOrdersJob::class,
-        \App\Jobs\Maintenance\Order\ClearPackerIdAssignmentJob::class,
-        \App\Jobs\Maintenance\Inventory\RecalculateLocation999QuantityReservedJob::class,
-        \App\Jobs\Maintenance\Product\RecalculateQuantityJob::class,
-        \App\Jobs\Maintenance\Product\RecalculateQuantityReservedJob::class,
+        \App\Jobs\OrderProducts\RecalculateQuantityToShipJob::class,
+        \App\Jobs\OrderProducts\RecalculateQuantityToPickJob::class,
+        \App\Jobs\Orders\RecalculateProductLineCountJob::class,
+        \App\Jobs\Orders\RecalculateTotalQuantityOrderedJob::class,
+        \App\Jobs\Orders\RecalculatePickedAtForPickingOrdersJob::class,
+        \App\Jobs\Orders\ClearPackerIdAssignmentJob::class,
+        \App\Jobs\Inventory\RecalculateLocation999QuantityReservedJob::class,
+        \App\Jobs\Products\RecalculateQuantityJob::class,
+        \App\Jobs\Products\RecalculateQuantityReservedJob::class,
         \App\Jobs\RefillStatusesJob::class,
     ];
 

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Jobs\Maintenance;
 
-use App\Jobs\Refill\RefillSingleLineOrdersJob;
+use App\Jobs\Orders\Refill\RefillSingleLineOrdersJob;
 use App\Models\Order;
 use Tests\TestCase;
 

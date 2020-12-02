@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Jobs\Refill;
+namespace App\Jobs\Orders\Refill;
 
 use App\Models\Order;
 use App\Services\AutoPilot;
-use App\Services\OrderService;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 class RefillOldOrdersToPickingJob implements ShouldQueue
 {

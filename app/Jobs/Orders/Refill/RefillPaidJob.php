@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Jobs\Refill;
+namespace App\Jobs\Orders\Refill;
 
+use App\Jobs\Orders\SetStatusPaidIfPaidJob;
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
-class RefillSingleLineOrdersJob implements ShouldQueue
+class RefillPaidJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -30,12 +31,10 @@ class RefillSingleLineOrdersJob implements ShouldQueue
      */
     public function handle()
     {
-        Order::where('status_code', 'paid')
-            ->where('product_line_count', 1)
-            ->get()->each(function ($order) {
-                $order->update([
-                    'status_code' => 'single_line_orders'
-                ]);
-            });
+        $orders = Order::whereStatusCode('processing')->get();
+
+        foreach ($orders as $order) {
+            SetStatusPaidIfPaidJob::dispatch($order);
+        }
     }
 }

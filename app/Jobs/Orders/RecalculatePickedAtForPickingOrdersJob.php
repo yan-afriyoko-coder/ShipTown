@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Maintenance\Order;
+namespace App\Jobs\Orders;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

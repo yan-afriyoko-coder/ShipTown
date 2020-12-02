@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Rmsapi;
+namespace App\Jobs\Modules\Rmsapi;
 
 use App\Models\Inventory;
 use App\Models\Product;
@@ -8,10 +8,10 @@ use App\Models\ProductAlias;
 use App\Models\RmsapiConnection;
 use App\Models\RmsapiProductImport;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
 use Ramsey\Uuid\Uuid;
 

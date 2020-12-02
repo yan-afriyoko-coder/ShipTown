@@ -30,16 +30,16 @@ class RefillStatusesJob implements ShouldQueue
      */
     public function handle()
     {
-        \App\Jobs\Refill\RefillPaidJob::dispatchNow();
-        \App\Jobs\Refill\RefillPackingWarehouseJob::dispatchNow();
-        \App\Jobs\Refill\RefillSingleLineOrdersJob::dispatchNow();
+        \App\Jobs\Orders\Refill\RefillPaidJob::dispatchNow();
+        \App\Jobs\Orders\Refill\RefillPackingWarehouseJob::dispatchNow();
+        \App\Jobs\Orders\Refill\RefillSingleLineOrdersJob::dispatchNow();
 
         if (Order::where(['status_code' => 'picking'])->count() > 0) {
             return;
         }
 
-        \App\Jobs\Refill\RefillOldOrdersToPickingJob::dispatchNow();
-        \App\Jobs\Refill\RefillPickingMissingStockJob::dispatchNow();
-        \App\Jobs\Refill\RefillPickingByOldestJob::dispatchNow();
+        \App\Jobs\Orders\Refill\RefillOldOrdersToPickingJob::dispatchNow();
+        \App\Jobs\Orders\Refill\RefillPickingMissingStockJob::dispatchNow();
+        \App\Jobs\Orders\Refill\RefillPickingByOldestJob::dispatchNow();
     }
 }

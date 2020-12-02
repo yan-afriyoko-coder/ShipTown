@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Maintenance\Order;
+namespace App\Jobs\Orders;
 
 use App\Models\Order;
 use Carbon\Carbon;

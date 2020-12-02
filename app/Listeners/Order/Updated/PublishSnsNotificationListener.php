@@ -3,7 +3,7 @@
 namespace App\Listeners\Order\Updated;
 
 use App\Events\Order\UpdatedEvent;
-use App\Jobs\Sns\PublishSnsNotificationJob;
+use App\Jobs\Modules\Sns\PublishSnsNotificationJob;
 
 class PublishSnsNotificationListener
 {

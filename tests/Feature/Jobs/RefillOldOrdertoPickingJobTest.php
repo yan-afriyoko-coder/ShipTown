@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Jobs;
 
-use App\Jobs\Refill\RefillOldOrdersToPickingJob;
+use App\Jobs\Orders\Refill\RefillOldOrdersToPickingJob;
 use App\Models\Order;
 use Carbon\Carbon;
 use Tests\TestCase;

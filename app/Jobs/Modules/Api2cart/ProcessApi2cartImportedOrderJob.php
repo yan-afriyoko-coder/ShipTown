@@ -1,27 +1,16 @@
 <?php
 
-namespace App\Jobs\Api2cart;
+namespace App\Jobs\Modules\Api2cart;
 
-use App\Events\OrderCreatedEvent;
-use App\Events\OrderStatusChangedEvent;
-use App\Models\OrderAddress;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
-use App\Models\Order;
-use App\Models\Product;
-use App\Models\OrderProduct;
-use App\Models\OrderProductOption;
 use App\Services\OrderService;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use test\Mockery\HasUnknownClassAsTypeHintOnMethod;
 
 class ProcessApi2cartImportedOrderJob implements ShouldQueue
 {

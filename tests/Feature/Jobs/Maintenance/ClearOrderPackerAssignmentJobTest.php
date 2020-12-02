@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Jobs\Maintenance;
 
-use App\Jobs\Maintenance\Order\ClearPackerIdAssignmentJob;
+use App\Jobs\Orders\ClearPackerIdAssignmentJob;
 use App\Models\Order;
 use App\User;
 use Carbon\Carbon;

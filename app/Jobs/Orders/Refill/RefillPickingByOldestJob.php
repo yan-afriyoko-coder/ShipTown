@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Refill;
+namespace App\Jobs\Orders\Refill;
 
 use App\Models\Order;
 use App\Services\AutoPilot;
