@@ -43,11 +43,11 @@ class RecalculateQuantityJob implements ShouldQueue
             // for performance purposes limit to 1000 products per job
             ->limit(1000)
             ->each(function ($errorRecord) {
-                $product = Product::find($errorRecord->product_id);
-                activity()->on($product)->log('Incorrect quantity detected, recalculating');
-                $product->update([
-                    'quantity' => $product->expected_inventory_quantity ?? 0
-                ]);
+                Product::find($errorRecord->product_id)
+                    ->log('Incorrect quantity detected, recalculating')
+                    ->update([
+                        'quantity' => $errorRecord->correct_inventory_quantity ?? 0
+                    ]);
             });
     }
 
@@ -65,7 +65,7 @@ class RecalculateQuantityJob implements ShouldQueue
                 'products.id',
                 'products.id as product_id',
                 'products.quantity as actual_product_quantity',
-                'inventory_totals.total_quantity as expected_inventory_quantity',
+                'inventory_totals.total_quantity as correct_inventory_quantity',
             ])
             ->leftJoinSub(
                 $this->getInventoryTotalsByProductIdQuery(),
