@@ -39,8 +39,7 @@ class RecalculateQuantityReservedJob implements ShouldQueue
     public function handle()
     {
         $this->getProductsWithQuantityReservedErrorsQuery()
-            // for performance purposes limit to 1000 products per job
-            ->limit(1000)
+            ->limit(100) // for performance purposes
             ->each(function ($errorRecord) {
                 $product = Product::find($errorRecord->product_id);
                 activity()->on($product)->log('Incorrect quantity reserved detected, recalculating');
