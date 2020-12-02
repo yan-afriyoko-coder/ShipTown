@@ -68,6 +68,11 @@ class Product extends Model
     use LogsActivity;
     use Notifiable, HasManyKeyByRelationship;
 
+    protected static $logAttributes = [
+        'quantity',
+        'quantity_reserved'
+    ];
+
     protected $fillable = [
         "sku",
         "name",
