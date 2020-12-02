@@ -30,6 +30,10 @@ Route::post('invites/{token}', 'InvitesController@process');
 Route::middleware('auth')->group(function () {
     Route::redirect('/', 'dashboard');
 
+    Route::get('/run/job/', function () {
+        \App\Jobs\Products\RecalculateQuantityReservedJob::dispatch();
+    });
+
     // Admin only routes
     Route::group(['middleware' => ['role:admin']], function () {
         Route::view('/users', 'users')->name('users');

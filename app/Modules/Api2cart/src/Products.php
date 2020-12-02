@@ -372,7 +372,7 @@ class Products extends Entity
                 return Products::updateVariant($store_key, $properties);
                 break;
             default:
-                logger('Cannot update - SKU not found', $product_data['sku']);
+                logger('Cannot update - SKU not found', [$product_data['sku']]);
                 break;
         }
     }
