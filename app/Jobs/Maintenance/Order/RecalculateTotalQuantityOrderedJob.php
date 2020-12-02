@@ -9,7 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
-class RecalculateOrderProductLineCountJob implements ShouldQueue
+class RecalculateTotalQuantityOrderedJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -35,14 +35,17 @@ class RecalculateOrderProductLineCountJob implements ShouldQueue
         DB::statement('
             UPDATE `'.$prefix.'orders`
 
-            SET `'.$prefix.'orders`.`product_line_count` = (
-                SELECT count(*)
-                FROM `'.$prefix.'order_products`
-                WHERE `'.$prefix.'order_products`.`order_id` = `'.$prefix.'orders`.`id`
-                AND `'.$prefix.'order_products`.`deleted_at` IS NULL
+            SET `'.$prefix.'orders`.`total_quantity_ordered` = IFNULL(
+                (
+                    SELECT sum(`'.$prefix.'order_products`.`quantity_ordered`)
+                    FROM `'.$prefix.'order_products`
+                    WHERE `'.$prefix.'order_products`.`order_id` = `'.$prefix.'orders`.`id`
+                        AND `'.$prefix.'order_products`.`deleted_at` IS NULL
+                ),
+                0
             )
         ');
 
-        info('Recalculated order products product line count');
+        info('Recalculated order total_quantity_ordered');
     }
 }

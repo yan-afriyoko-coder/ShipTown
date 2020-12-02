@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Jobs\Orders;
 
-use App\Jobs\Maintenance\Order\RecalculateOrderProductLineCountJob;
+use App\Jobs\Maintenance\Order\RecalculateProductLineCountJob;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use Tests\TestCase;
@@ -27,7 +27,7 @@ class RecalculateOrderProductLineCountJobTest extends TestCase
         $order->product_line_count = $order->product_line_count + rand();
         $order->save();
 
-        RecalculateOrderProductLineCountJob::dispatchNow();
+        RecalculateProductLineCountJob::dispatchNow();
 
         $order = $order->refresh();
 
