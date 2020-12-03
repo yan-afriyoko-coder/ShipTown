@@ -66,7 +66,7 @@ class ProcessImportedProductsJob implements ShouldQueue
 
 
         if ($importedProduct->raw_import['is_web_item']) {
-            $product->attachTags(['Available Online']);
+            $product->tags()->firstOrCreate(['name' => 'Available Online']);
         }
 
         $this->importAliases($importedProduct, $product);
