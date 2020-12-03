@@ -42,7 +42,7 @@ class ProcessImportedProductsJobTest extends TestCase
 
     public function testIfImportsAliases()
     {
-        Event::fake();
+//        Event::fake();
 
         // prepare
         RmsapiProductImport::query()->delete();
@@ -62,7 +62,7 @@ class ProcessImportedProductsJobTest extends TestCase
 
     public function testIfProcessesCorrectly()
     {
-        Event::fake();
+//        Event::fake();
 
         // prepare
         RmsapiProductImport::query()->delete();
