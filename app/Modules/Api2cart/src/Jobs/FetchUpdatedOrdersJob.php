@@ -92,7 +92,7 @@ class FetchUpdatedOrdersJob implements ShouldQueue
             $params = Arr::add(
                 $params,
                 'modified_from',
-                Carbon::make($connection->last_synced_modified_at)->subSecond()
+                Carbon::make($connection->last_synced_modified_at)->subSecond()->toString()
             );
         }
 
