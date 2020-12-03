@@ -13,7 +13,7 @@ class ProductsRoutesTest extends AuthenticatedRoutesTestCase
      */
     public function testGet()
     {
-        $response = $this->get('/api/products?' . 'include=inventory,aliases,tags');
+        $response = $this->get('/api/products?include=inventory,aliases,tags');
 
         $response->assertStatus(200);
 
