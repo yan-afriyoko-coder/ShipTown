@@ -8,10 +8,38 @@ use App\Models\Product;
 use App\Models\ProductAlias;
 use App\Models\RmsapiProductImport;
 use Illuminate\Support\Facades\Event;
+use Spatie\Tags\Tag;
 use Tests\TestCase;
 
 class ProcessImportedProductsJobTest extends TestCase
 {
+    public function testIfAddsAvailableOnlineTag()
+    {
+        // prepare
+        RmsapiProductImport::query()->delete();
+        Product::query()->forceDelete();
+        ProductAlias::query()->forceDelete();
+        Tag::query()->forceDelete();
+
+        $importData = factory(RmsapiProductImport::class)->create();
+
+        $raw_import = $importData->raw_import;
+        $raw_import['is_web_item'] = 1;
+        $importData->update(['raw_import' => $raw_import]);
+
+        // act
+        $job = new ProcessImportedProductsJob();
+
+        $job->handle();
+
+        // assert
+        $this->assertEquals(
+            Product::firstOrFail()->tags()->exists(),
+            $importData->raw_import['is_web_item'],
+            'Available Online tag not imported'
+        );
+    }
+
     public function testIfImportsAliases()
     {
         Event::fake();

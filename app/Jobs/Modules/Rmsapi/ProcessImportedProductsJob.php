@@ -64,6 +64,11 @@ class ProcessImportedProductsJob implements ShouldQueue
             "sku" => $attributes['sku']
         ], $attributes);
 
+
+        if ($importedProduct->raw_import['is_web_item']) {
+            $product->attachTags(['Available Online']);
+        }
+
         $this->importAliases($importedProduct, $product);
 
         $this->importInventory($importedProduct, $product);
