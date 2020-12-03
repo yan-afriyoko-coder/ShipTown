@@ -5,6 +5,11 @@
                 <div class="col-md-6">
                     <div class="text-primary h4">{{ product.name }}</div>
                     <div class="text-secondary h5">sku: <span class="font-weight-bold"> {{ product.sku }} </span></div>
+                    <div>
+                        <template v-for="tag in product.tags">
+                            <span class="badge"> {{ Object.values(tag.name)[0] }} </span>
+                        </template>
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <div class="row small font-weight-bold text-right">
@@ -14,13 +19,15 @@
                         <div class="col-3">Available</div>
                         <div class="col-4 col-md-3">Shelf</div>
                     </div>
-                    <div class="row text-right" v-for="warehouse_inventory in product.inventory">
-                        <div class="col-2 text-left">{{ warehouse_inventory.location_id }}</div>
-                        <div class="col-2 d-none d-md-block ">{{ warehouse_inventory.quantity | numberFormat }}</div>
-                        <div class="col-3 col-md-2">{{ warehouse_inventory.quantity_reserved | numberFormat }}</div>
-                        <div class="col-3">{{ warehouse_inventory.quantity - warehouse_inventory.quantity_reserved | numberFormat }}</div>
-                        <div class="col-4 col-md-3">{{ warehouse_inventory.shelve_location }}</div>
-                    </div>
+                    <template v-for="warehouse_inventory in product.inventory">
+                        <div class="row text-right" >
+                            <div class="col-2 text-left">{{ warehouse_inventory.location_id }}</div>
+                            <div class="col-2 d-none d-md-block ">{{ warehouse_inventory.quantity | numberFormat }}</div>
+                            <div class="col-3 col-md-2">{{ warehouse_inventory.quantity_reserved | numberFormat }}</div>
+                            <div class="col-3">{{ warehouse_inventory.quantity - warehouse_inventory.quantity_reserved | numberFormat }}</div>
+                            <div class="col-4 col-md-3">{{ warehouse_inventory.shelve_location }}</div>
+                        </div>
+                    </template>
                     <div class="row text-right font-weight-bold">
                         <div class="col-2"></div>
                         <div class="col-2 d-none d-md-block ">{{ product.quantity | numberFormat }}</div>
