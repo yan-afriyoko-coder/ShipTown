@@ -70,7 +70,7 @@ class FetchUpdatedOrdersJob implements ShouldQueue
         );
 
         $connection->update([
-            'last_synced_modified_at' => $lastTimeStamp->subSecond()
+            'last_synced_modified_at' => $lastTimeStamp
         ]);
     }
 
@@ -89,7 +89,11 @@ class FetchUpdatedOrdersJob implements ShouldQueue
         ];
 
         if (isset($connection->last_synced_modified_at)) {
-            $params = Arr::add($params, 'modified_from', $connection->last_synced_modified_at);
+            $params = Arr::add(
+                $params,
+                'modified_from',
+                Carbon::make($connection->last_synced_modified_at)->subSecond()
+            );
         }
 
         $orders = Orders::get($connection->bridge_api_key, $params);
