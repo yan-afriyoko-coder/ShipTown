@@ -70,7 +70,7 @@ class FetchUpdatedOrdersJob implements ShouldQueue
         );
 
         $connection->update([
-            'last_synced_modified_at' => $lastTimeStamp
+            'last_synced_modified_at' => $lastTimeStamp->addSecond()
         ]);
     }
 
