@@ -19,7 +19,7 @@ class ExtractSkuProductIdJobTest extends TestCase
      */
     public function testIfAllSkuArePopulated()
     {
-        Event::fake();
+//        Event::fake();
 
         // prepare
         Product::query()->forceDelete();
