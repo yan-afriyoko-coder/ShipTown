@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             UsersSeeder::class,
             ProductsSeeder::class,
             ProductAliasSeeder::class,
+            ProductTagsSeeder::class,
             InventorySeeder::class,
             OrdersSeeder::class,
             ClosedOrdersSeeder::class,

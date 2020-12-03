@@ -14,6 +14,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Tags\HasTags;
 
 /**
  * App\Models\Product
@@ -66,7 +67,7 @@ class Product extends Model
 {
     use SoftDeletes;
     use LogsActivity;
-    use Notifiable, HasManyKeyByRelationship;
+    use Notifiable, HasManyKeyByRelationship, HasTags;
 
     protected static $logAttributes = [
         'quantity',

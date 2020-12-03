@@ -29,6 +29,7 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('products', 'Api\ProductsController')->only(['index','store']);
     Route::apiResource('product/aliases', 'Api\Product\ProductAliasController')->only(['index']);
     Route::apiResource('product/inventory', 'Api\Product\ProductInventoryController')->only(['index','store']);
+    Route::apiResource('product/tags', 'Api\Product\ProductTagController')->only(['index','store']);
 
     Route::apiResource('orders', 'Api\OrdersController');
     Route::apiResource('order/products', 'Api\Order\OrderProductController');

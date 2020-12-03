@@ -35,7 +35,8 @@ class ProductsController extends Controller
             ])
             ->allowedIncludes([
                 'inventory',
-                'aliases'
+                'aliases',
+                'tags'
             ]);
 
         return $this->getPaginatedResult($query, 100);

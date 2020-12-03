@@ -7,7 +7,7 @@
             </div>
         </div>
         <div class="container">
-            <div v-if="total == 0 && !isLoading" class="row" >
+            <div v-if="total === 0 && !isLoading" class="row" >
                 <div class="col">
                     <div class="alert alert-info" role="alert">
                         No products found.
@@ -94,10 +94,10 @@
                 const params = {
                     page: page,
                     'filter[sku]': this.getUrlParameter('sku'),
-                    'filter[search]': this.getUrlParameter('search'),
+                    'filter[sear1ch]': this.getUrlParameter('search'),
                     q: this.getUrlFilter('query'),
                     sort: '-quantity',
-                    include: 'inventory'
+                    'include': 'inventory,tags'
                 }
 
                 return this.getProducts(page, params);
