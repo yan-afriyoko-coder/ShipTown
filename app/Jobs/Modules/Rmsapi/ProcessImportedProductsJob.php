@@ -7,12 +7,14 @@ use App\Models\Product;
 use App\Models\ProductAlias;
 use App\Models\RmsapiConnection;
 use App\Models\RmsapiProductImport;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
+use Log;
 use Ramsey\Uuid\Uuid;
 
 class ProcessImportedProductsJob implements ShouldQueue
@@ -66,7 +68,11 @@ class ProcessImportedProductsJob implements ShouldQueue
 
 
         if ($importedProduct->raw_import['is_web_item']) {
-            $product->attachTag('Available Online');
+            try {
+                $product->attachTag('Available Online');
+            } catch (Exception $exception) {
+                Log::warning('Could not attach Available Online tag');
+            }
         }
 
         $this->importAliases($importedProduct, $product);
