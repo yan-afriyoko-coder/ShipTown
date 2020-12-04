@@ -23,6 +23,7 @@ class RunMaintenanceJobs implements ShouldQueue
         \App\Jobs\Products\RecalculateQuantityJob::class,
         \App\Jobs\Products\RecalculateQuantityReservedJob::class,
         \App\Jobs\RefillStatusesJob::class,
+        \App\Jobs\SyncProductToApi2cart::class,
     ];
 
     /**

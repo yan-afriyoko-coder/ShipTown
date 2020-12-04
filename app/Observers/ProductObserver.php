@@ -49,6 +49,12 @@ class ProductObserver
     {
         UpdatedEvent::dispatch($product);
 
+        $product->attachTag('Not Synced');
+
+        if ($product->quantity_available <= 0) {
+            $product->attachTag('Out Of Stock');
+        }
+
         try {
             if ($product->quantity_available <= 0) {
                 $connection = Api2cartConnection::query()->first();

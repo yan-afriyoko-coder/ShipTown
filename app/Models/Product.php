@@ -15,6 +15,7 @@ use Illuminate\Support\Carbon;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Tags\HasTags;
+use Spatie\Tags\Tag;
 
 /**
  * App\Models\Product
@@ -28,6 +29,7 @@ use Spatie\Tags\HasTags;
  * @property Carbon $sale_price_end_date
  * @property string $quantity
  * @property string $quantity_reserved
+ * @property Collection|Tag[] $tags
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -40,10 +42,11 @@ use Spatie\Tags\HasTags;
  * @property-read int|null $inventory_count
  * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
+ * @property-read int|null $tags_count
  * @method static Builder|Product addInventorySource($inventory_location_id)
  * @method static Builder|Product newModelQuery()
  * @method static Builder|Product newQuery()
- * @method static \Illuminate\Database\Query\Builder|Product onlyTrashed()
+ * @method static Builder|Product onlyTrashed()
  * @method static Builder|Product query()
  * @method static Builder|Product skuOrAlias($skuOrAlias)
  * @method static Builder|Product whereCreatedAt($value)
@@ -59,8 +62,12 @@ use Spatie\Tags\HasTags;
  * @method static Builder|Product whereSalePriceStartDate($value)
  * @method static Builder|Product whereSku($value)
  * @method static Builder|Product whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|Product withTrashed()
- * @method static \Illuminate\Database\Query\Builder|Product withoutTrashed()
+ * @method static Builder|Product withTrashed()
+ * @method static Builder|Product withoutTrashed()
+ * @method static Builder|Product withAllTags($tags, $type = null)
+ * @method static Builder|Product withAllTagsOfAnyType($tags)
+ * @method static Builder|Product withAnyTags($tags, $type = null)
+ * @method static Builder|Product withAnyTagsOfAnyType($tags)
  * @mixin Eloquent
  */
 class Product extends Model
