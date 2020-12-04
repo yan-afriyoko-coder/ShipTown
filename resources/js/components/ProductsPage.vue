@@ -94,7 +94,7 @@
                 const params = {
                     page: page,
                     'filter[sku]': this.getUrlParameter('sku'),
-                    'filter[sear1ch]': this.getUrlParameter('search'),
+                    'filter[search]': this.getUrlParameter('search'),
                     q: this.getUrlFilter('query'),
                     sort: '-quantity',
                     'include': 'inventory,tags'
