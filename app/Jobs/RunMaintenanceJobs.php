@@ -43,11 +43,9 @@ class RunMaintenanceJobs implements ShouldQueue
      */
     public function handle()
     {
-        $jobs = [];
-
-        foreach ($this->jobClassesToRun as $jobClass) {
-            $jobs[] = new $jobClass;
-        }
+        $jobs = collect($this->jobClassesToRun)->map(function ($jobClass) {
+            return new $jobClass;
+        })->all();
 
         $this->chain($jobs);
     }
