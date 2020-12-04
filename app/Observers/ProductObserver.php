@@ -49,10 +49,18 @@ class ProductObserver
     {
         UpdatedEvent::dispatch($product);
 
-        $product->attachTag('Not Synced');
+        try {
+            $product->attachTag('Not Synced');
+        } catch (Exception $exception) {
+            $product->log("Could not assign 'Not Synced' tag");
+        }
 
         if ($product->quantity_available <= 0) {
-            $product->attachTag('Out Of Stock');
+            try {
+                $product->attachTag('Out Of Stock');
+            } catch (Exception $exception) {
+                $product->log("Could not assign 'Out Of Stock' tag");
+            }
         }
 
         try {
