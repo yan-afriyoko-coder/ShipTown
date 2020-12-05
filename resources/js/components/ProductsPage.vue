@@ -95,6 +95,7 @@
                     page: page,
                     'filter[sku]': this.getUrlParameter('sku'),
                     'filter[search]': this.getUrlParameter('search'),
+                    'filter[has_tags]': this.getUrlParameter('has_tags'),
                     q: this.getUrlFilter('query'),
                     sort: '-quantity',
                     'include': 'inventory,tags'
