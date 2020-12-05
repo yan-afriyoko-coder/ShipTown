@@ -55,6 +55,10 @@ class ProductObserver
             $product->attachTag('Out Of Stock');
         }
 
+        if ($product->quantity_available > 0) {
+            $product->detachTag('Out Of Stock');
+        }
+
         try {
             if ($product->quantity_available <= 0) {
                 $connection = Api2cartConnection::query()->first();
