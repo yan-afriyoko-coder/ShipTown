@@ -1,17 +1,17 @@
 <template>
     <div class="row card mb-3 ml-1 mr-1" >
         <div class="col p-2 pl-3">
-            <div class="row text-left" @click="toggle">
+            <div class="row text-left">
                 <div class="col-md-6">
                     <div class="text-primary h5">{{ product.name }}</div>
                     <div class="text-secondary h5">sku: <span class="font-weight-bold"> {{ product.sku }} </span></div>
                     <div>
                         <template v-for="tag in product.tags">
-                            <span class="badge"> {{ Object.values(tag.name)[0] }} </span>
+                            <a class="badge" :href="'products?has_tags=' + Object.values(tag.name)[0]"> {{ Object.values(tag.name)[0] }} </a>
                         </template>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" @click="toggle">
                     <div class="row small font-weight-bold text-right">
                         <div class="col-2 text-left">Location</div>
                         <div class="col-2 d-none d-md-block ">In Stock</div>
