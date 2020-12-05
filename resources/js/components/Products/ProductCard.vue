@@ -3,7 +3,7 @@
         <div class="col p-2 pl-3">
             <div class="row text-left" @click="toggle">
                 <div class="col-md-6">
-                    <div class="text-primary h4">{{ product.name }}</div>
+                    <div class="text-primary h5">{{ product.name }}</div>
                     <div class="text-secondary h5">sku: <span class="font-weight-bold"> {{ product.sku }} </span></div>
                     <div>
                         <template v-for="tag in product.tags">
@@ -44,18 +44,18 @@
 
                     <div class="row">
                         <ul class="nav nav-tabs">
-                            <li><a href="#" @click.prevent="currentTab = 'recentOrders'" >Open Orders</a></li>
-                            <li><a href="#" @click.prevent="currentTab = 'productLog'" >Product Log</a></li>
+                            <li><a href="#" @click.prevent="currentTab = 'pendingOrders'" >Pending Orders</a></li>
+                            <li><a href="#" @click.prevent="currentTab = 'activityLog'" >Activity Log</a></li>
                         </ul>
                     </div>
 
-                    <template v-if="currentTab === 'recentOrders'" v-for="orderProduct in orderProducts">
+                    <template v-if="currentTab === 'pendingOrders'" v-for="orderProduct in orderProducts">
                        <div>
                            <hr>
                            <div class="row text-left mb-2">
-                               <div class="col-6">
+                               <div class="col-5">
                                    <div class="h5">
-                                       <a target="_blank" :href="getProductLink(orderProduct)">cd pr
+                                       <a target="_blank" :href="getProductLink(orderProduct)">
                                            #{{ orderProduct['order']['order_number']}}
                                        </a>
                                    </div>
@@ -66,17 +66,21 @@
                                        {{ orderProduct['order']['status_code']}}
                                    </div>
                                </div>
-                               <div class="col-6">
+                               <div class="col-7">
                                    <div class="row text-center">
-                                       <div class="col-4">
+                                       <div class="col-3">
                                            <div class="small">ordered</div>
                                            <div class="h3">{{ Math.ceil(orderProduct['quantity_ordered']) }}</div>
                                        </div>
-                                       <div class="col-4">
+                                       <div class="col-3">
                                            <div class="small">picked</div>
                                            <div class="h3">{{ dashIfZero(Number(orderProduct['quantity_picked'])) }}</div>
                                        </div>
-                                       <div class="col-4">
+                                       <div class="col-3">
+                                           <div class="small">skipped</div>
+                                           <div class="h3">{{ dashIfZero(Number(orderProduct['quantity_skipped_picking'])) }}</div>
+                                       </div>
+                                       <div class="col-3">
                                            <div class="small">shipped</div>
                                            <div class="h3">{{ dashIfZero(Number(orderProduct['quantity_shipped']))  }}</div>
                                        </div>
@@ -86,11 +90,11 @@
                        </div>
                     </template>
 
-                    <div class="row" v-if="currentTab === 'productLog'">
-                        <template>
-
-                        </template>
-                    </div>
+                    <template  v-if="currentTab === 'activityLog'" v-for="activity in activityLog">
+                        <div class="row text-secondary h6">
+                            {{ activity['created_at'] | moment('MMM DD @ H:mm')  }} <b> {{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }}</b> {{ activity['description'] }} {{ activity['changes'] }}
+                        </div>
+                    </template>
 
                 </div>
             </div>
@@ -107,17 +111,27 @@
             product: Object,
         },
 
-
-        mounted() {
-
+        watch: {
+            currentTab() {
+                switch (this.currentTab) {
+                    case 'pendingOrders':
+                        this.loadOrders();
+                        break;
+                    case 'activityLog':
+                        this.loadActivityLog();
+                        break;
+                    default:
+                        break;
+                }
+            }
         },
 
         data: function() {
             return {
-                currentTab: 'recentOrders',
+                activityLog: null,
+                currentTab: '',
                 showOrders: false,
                 orderProducts: null,
-                productLogs: null,
             };
         },
 
@@ -137,9 +151,8 @@
             toggle() {
                 this.showOrders = !this.showOrders;
 
-                if (this.showOrders) {
-                    this.loadOrders();
-                    this.loadProductLogs();
+                if ((this.showOrders) && (this.currentTab === '')) {
+                    this.currentTab = 'pendingOrders';
                 }
             },
 
@@ -156,18 +169,21 @@
                         this.orderProducts = data.data
                     });
             },
-            loadProductLogs: function () {
+
+            loadActivityLog: function () {
                 const params = {
                     'filter[subject_type]': 'App\\Models\\Product',
                     'filter[subject_id]': this.product['id'],
-                    // 'sort': '-id',
+                    'sort': '-id',
+                    'include': 'causer'
                 }
 
                 axios.get('/api/logs', {params: params})
                     .then(({data}) => {
-                        this.productLogs = data.data
+                        this.activityLog = data.data
                     });
             },
+
             dashIfZero(value) {
                 return value === 0 ? '-' : value;
             },

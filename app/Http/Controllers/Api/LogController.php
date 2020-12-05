@@ -25,8 +25,10 @@ class LogController extends Controller
                 AllowedFilter::exact('subject_id'),
             ])
             ->allowedIncludes([
+                'causer'
             ])
             ->allowedSorts([
+                'id'
             ]);
 
         return $this->getPaginatedResult($query);
