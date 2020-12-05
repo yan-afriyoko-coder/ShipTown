@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Events\Product\TagAttachedEvent;
 use Eloquent;
+use Exception;
 use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -14,7 +16,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Tags\HasTags;
+use App\Traits\HasTagsTrait;
 use Spatie\Tags\Tag;
 
 /**
@@ -74,7 +76,7 @@ class Product extends Model
 {
     use SoftDeletes;
     use LogsActivity;
-    use Notifiable, HasManyKeyByRelationship, HasTags;
+    use Notifiable, HasManyKeyByRelationship, HasTagsTrait;
 
     protected static $logAttributes = [
         'quantity',

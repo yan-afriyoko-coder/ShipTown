@@ -45,8 +45,6 @@ class ProductsTest extends TestCase
      */
     public function testGetProductsRouteAuthenticated()
     {
-        Event::fake();
-
         Passport::actingAs(
             factory(User::class)->create()
         );

@@ -34,6 +34,12 @@ Route::middleware('auth')->group(function () {
         \App\Jobs\Products\RecalculateQuantityReservedJob::dispatch();
     });
 
+    Route::get('/test', function () {
+        $product = \App\Models\Product::firstOrNew([]);
+
+        $product->attachTag('test');
+    });
+
     // Admin only routes
     Route::group(['middleware' => ['role:admin']], function () {
         Route::view('/users', 'users')->name('users');

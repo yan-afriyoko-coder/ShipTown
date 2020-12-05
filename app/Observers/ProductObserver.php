@@ -6,12 +6,10 @@ use App\Events\Product\CreatedEvent;
 use App\Events\Product\UpdatedEvent;
 use App\Models\Inventory;
 use App\Models\Product;
-use App\Models\RmsapiConnection;
 use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Products;
 use Exception;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
 class ProductObserver
@@ -49,18 +47,10 @@ class ProductObserver
     {
         UpdatedEvent::dispatch($product);
 
-        try {
-            $product->attachTag('Not Synced');
-        } catch (Exception $exception) {
-            $product->log("Could not assign 'Not Synced' tag");
-        }
+        $product->attachTag('Not Synced');
 
         if ($product->quantity_available <= 0) {
-            try {
-                $product->attachTag('Out Of Stock');
-            } catch (Exception $exception) {
-                $product->log("Could not assign 'Out Of Stock' tag");
-            }
+            $product->attachTag('Out Of Stock');
         }
 
         try {
