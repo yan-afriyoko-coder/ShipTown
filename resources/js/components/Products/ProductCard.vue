@@ -3,7 +3,7 @@
         <div class="col p-2 pl-3">
             <div class="row text-left" @click="toggle">
                 <div class="col-md-6">
-                    <div class="text-primary h4">{{ product.name }}</div>
+                    <div class="text-primary h5">{{ product.name }}</div>
                     <div class="text-secondary h5">sku: <span class="font-weight-bold"> {{ product.sku }} </span></div>
                     <div>
                         <template v-for="tag in product.tags">
@@ -53,9 +53,9 @@
                        <div>
                            <hr>
                            <div class="row text-left mb-2">
-                               <div class="col-6">
+                               <div class="col-5">
                                    <div class="h5">
-                                       <a target="_blank" :href="getProductLink(orderProduct)">cd pr
+                                       <a target="_blank" :href="getProductLink(orderProduct)">
                                            #{{ orderProduct['order']['order_number']}}
                                        </a>
                                    </div>
@@ -66,17 +66,21 @@
                                        {{ orderProduct['order']['status_code']}}
                                    </div>
                                </div>
-                               <div class="col-6">
+                               <div class="col-7">
                                    <div class="row text-center">
-                                       <div class="col-4">
+                                       <div class="col-3">
                                            <div class="small">ordered</div>
                                            <div class="h3">{{ Math.ceil(orderProduct['quantity_ordered']) }}</div>
                                        </div>
-                                       <div class="col-4">
+                                       <div class="col-3">
                                            <div class="small">picked</div>
                                            <div class="h3">{{ dashIfZero(Number(orderProduct['quantity_picked'])) }}</div>
                                        </div>
-                                       <div class="col-4">
+                                       <div class="col-3">
+                                           <div class="small">skipped</div>
+                                           <div class="h3">{{ dashIfZero(Number(orderProduct['quantity_skipped_picking'])) }}</div>
+                                       </div>
+                                       <div class="col-3">
                                            <div class="small">shipped</div>
                                            <div class="h3">{{ dashIfZero(Number(orderProduct['quantity_shipped']))  }}</div>
                                        </div>

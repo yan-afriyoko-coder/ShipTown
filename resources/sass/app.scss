@@ -12,6 +12,16 @@
 @import '~handsontable/dist/handsontable.full.css';
 
 @import "~vue-snotify/styles/material";
+
+.badge {
+    margin-right: 5pt;
+    padding-top: 3pt;
+    padding-bottom: 3pt;
+    font-weight: normal;
+    border: darkgray 1px solid;
+    display: inline-block;
+}
+
 .card-default {
     margin-bottom: 10px;
 }
