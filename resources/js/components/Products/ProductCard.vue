@@ -44,12 +44,12 @@
 
                     <div class="row">
                         <ul class="nav nav-tabs">
-                            <li><a href="#" @click.prevent="currentTab = 'recentOrders'" >Open Orders</a></li>
-                            <li><a href="#" @click.prevent="currentTab = 'productLog'" >Product Log</a></li>
+                            <li><a href="#" @click.prevent="currentTab = 'pendingOrders'" >Pending Orders</a></li>
+                            <li><a href="#" @click.prevent="currentTab = 'activityLog'" >Activity Log</a></li>
                         </ul>
                     </div>
 
-                    <template v-if="currentTab === 'recentOrders'" v-for="orderProduct in orderProducts">
+                    <template v-if="currentTab === 'pendingOrders'" v-for="orderProduct in orderProducts">
                        <div>
                            <hr>
                            <div class="row text-left mb-2">
@@ -90,11 +90,11 @@
                        </div>
                     </template>
 
-                    <div class="row" v-if="currentTab === 'productLog'">
-                        <template>
-
-                        </template>
-                    </div>
+                    <template  v-if="currentTab === 'activityLog'" v-for="activity in activityLog">
+                        <div class="row text-secondary h6">
+                            {{ activity['created_at'] | moment('MMM DD @ H:mm')  }} <b> {{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }}</b> {{ activity['description'] }} {{ activity['changes'] }}
+                        </div>
+                    </template>
 
                 </div>
             </div>
@@ -111,17 +111,27 @@
             product: Object,
         },
 
-
-        mounted() {
-
+        watch: {
+            currentTab() {
+                switch (this.currentTab) {
+                    case 'pendingOrders':
+                        this.loadOrders();
+                        break;
+                    case 'activityLog':
+                        this.loadActivityLog();
+                        break;
+                    default:
+                        break;
+                }
+            }
         },
 
         data: function() {
             return {
-                currentTab: 'recentOrders',
+                activityLog: null,
+                currentTab: '',
                 showOrders: false,
                 orderProducts: null,
-                productLogs: null,
             };
         },
 
@@ -141,9 +151,8 @@
             toggle() {
                 this.showOrders = !this.showOrders;
 
-                if (this.showOrders) {
-                    this.loadOrders();
-                    this.loadProductLogs();
+                if ((this.showOrders) && (this.currentTab === '')) {
+                    this.currentTab = 'pendingOrders';
                 }
             },
 
@@ -160,18 +169,21 @@
                         this.orderProducts = data.data
                     });
             },
-            loadProductLogs: function () {
+
+            loadActivityLog: function () {
                 const params = {
                     'filter[subject_type]': 'App\\Models\\Product',
                     'filter[subject_id]': this.product['id'],
-                    // 'sort': '-id',
+                    'sort': '-id',
+                    'include': 'causer'
                 }
 
                 axios.get('/api/logs', {params: params})
                     .then(({data}) => {
-                        this.productLogs = data.data
+                        this.activityLog = data.data
                     });
             },
+
             dashIfZero(value) {
                 return value === 0 ? '-' : value;
             },
