@@ -73,12 +73,16 @@ class ProductObserver
                         'quantity' => 0,
                         'in_stock' => "False",
                     ];
-                    Log::debug('Disabling product', $product->toArray());
-                    Products::update($connection->bridge_api_key, $product_data);
+                    if (Products::update($connection->bridge_api_key, $product_data)->isSuccess()) {
+                        $product->log('Product quantity set to 0 on website');
+                    }
                 }
             }
         } catch (Exception $exception) {
-            Log::warning('Could not disable product', $product);
+            $product->log('Could not set quantity to 0 on website');
+            Log::error('Could not set product quantity to 0 on website', [
+                'message' => $exception->getMessage()
+            ]);
         }
     }
 
