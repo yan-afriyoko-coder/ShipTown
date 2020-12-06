@@ -14,26 +14,26 @@
                 <div class="col-md-6" @click="toggle">
                     <div class="row small font-weight-bold text-right">
                         <div class="col-2 text-left">Location</div>
-                        <div class="col-2 d-none d-md-block ">In Stock</div>
-                        <div class="col-3 col-md-2">Reserved</div>
+                        <div class="col-2 d-none d-sm-block ">In Stock</div>
+                        <div class="col-3 col-sm-2">Reserved</div>
                         <div class="col-3">Available</div>
-                        <div class="col-4 col-md-3">Shelf</div>
+                        <div class="col-4 col-sm-3">Shelf</div>
                     </div>
                     <template v-for="warehouse_inventory in product.inventory">
                         <div class="row text-right" >
                             <div class="col-2 text-left">{{ warehouse_inventory.location_id }}</div>
-                            <div class="col-2 d-none d-md-block ">{{ warehouse_inventory.quantity | numberFormat }}</div>
-                            <div class="col-3 col-md-2">{{ warehouse_inventory.quantity_reserved | numberFormat }}</div>
+                            <div class="col-2 d-none d-sm-block">{{ warehouse_inventory.quantity | numberFormat }}</div>
+                            <div class="col-3 col-sm-2">{{ warehouse_inventory.quantity_reserved | numberFormat }}</div>
                             <div class="col-3">{{ warehouse_inventory.quantity - warehouse_inventory.quantity_reserved | numberFormat }}</div>
-                            <div class="col-4 col-md-3">{{ warehouse_inventory.shelve_location }}</div>
+                            <div class="col-4 col-sm-3">{{ warehouse_inventory.shelve_location }}</div>
                         </div>
                     </template>
                     <div class="row text-right font-weight-bold">
                         <div class="col-2"></div>
-                        <div class="col-2 d-none d-md-block ">{{ product.quantity | numberFormat }}</div>
-                        <div class="col-3 col-md-2">{{ product.quantity_reserved | numberFormat }}</div>
+                        <div class="col-2 d-none d-sm-block ">{{ product.quantity | numberFormat }}</div>
+                        <div class="col-3 col-sm-2">{{ product.quantity_reserved | numberFormat }}</div>
                         <div class="col-3">{{ product.quantity - product.quantity_reserved | numberFormat }}</div>
-                        <div class="col-4 col-md-3 text-primary h2 mb-0 pr-2 ">
+                        <div class="col-4 col-sm-3 text-primary h2 mb-0 pr-2 ">
                             +
                         </div>
                     </div>
@@ -53,20 +53,20 @@
                        <div>
                            <hr>
                            <div class="row text-left mb-2">
-                               <div class="col-5">
-                                   <div class="h5">
+                               <div class="col-4">
+                                   <div>
                                        <a target="_blank" :href="getProductLink(orderProduct)">
                                            #{{ orderProduct['order']['order_number']}}
                                        </a>
                                    </div>
-                                   <div >
+                                   <div class="small">
                                        {{ orderProduct['order']['order_placed_at'] | moment('MMM DD')  }}
                                    </div>
-                                   <div class="">
+                                   <div class="small">
                                        {{ orderProduct['order']['status_code']}}
                                    </div>
                                </div>
-                               <div class="col-7">
+                               <div class="col-8">
                                    <div class="row text-center">
                                        <div class="col-3">
                                            <div class="small">ordered</div>
