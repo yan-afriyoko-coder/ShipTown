@@ -42,16 +42,28 @@
             <div class="row" v-if="showOrders">
                 <div class="col">
 
-                    <div class="row">
+                    <div class="row tabs-container">
                         <ul class="nav nav-tabs">
-                            <li><a href="#" @click.prevent="currentTab = 'pendingOrders'" >Pending Orders</a></li>
-                            <li><a href="#" @click.prevent="currentTab = 'activityLog'" >Activity Log</a></li>
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#tab-general" @click.prevent="currentTab = 'pendingOrders'" >Pending Orders</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#" @click.prevent="currentTab = 'activityLog'" >Activity Log</a></li>
                         </ul>
+                        <div class="tab-content">
+
+<!--                            @include('products.sections.modal.tabs.general')-->
+
+<!--                            @include('products.sections.modal.tabs.stock')-->
+
+<!--                            @include('products.sections.modal.tabs.onOrder')-->
+
+                        </div>
                     </div>
 
+                    <div>
+                        {{ statusMessage }}
+                    </div>
                     <template v-if="currentTab === 'pendingOrders'" v-for="orderProduct in orderProducts">
                        <div>
-                           <hr>
+<!--                           <hr>-->
                            <div class="row text-left mb-2">
                                <div class="col-4">
                                    <div>
@@ -87,6 +99,7 @@
                                    </div>
                                </div>
                            </div>
+                           <hr>
                        </div>
                     </template>
 
@@ -128,6 +141,7 @@
 
         data: function() {
             return {
+                statusMessage: 'No orders found',
                 activityLog: null,
                 currentTab: '',
                 showOrders: false,
@@ -157,6 +171,7 @@
             },
 
             loadOrders: function () {
+                this.statusMessage = 'Loading orders ...'
                 const params = {
                     'filter[product_id]': this.product['id'],
                     'filter[has_stock_reserved]': true,
@@ -166,7 +181,11 @@
 
                 axios.get('/api/order/products', {params: params})
                     .then(({data}) => {
-                        this.orderProducts = data.data
+                        this.statusMessage = '';
+                        this.orderProducts = data.data;
+                        if (this.orderProducts.length === 0) {
+                            this.statusMessage = 'No orders found';
+                        }
                     });
             },
 
