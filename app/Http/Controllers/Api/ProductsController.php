@@ -26,7 +26,8 @@ class ProductsController extends Controller
                 AllowedFilter::scope('sku_or_alias'),
                 AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->default(100),
 
-                AllowedFilter::scope('has_tags', 'withAllTags')
+                AllowedFilter::scope('has_tags', 'withAllTags'),
+                AllowedFilter::scope('without_tags', 'withoutAllTags'),
             ])
             ->allowedSorts([
                 'id',
