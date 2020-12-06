@@ -42,7 +42,7 @@
             <div class="row" v-if="showOrders">
                 <div class="col">
 
-                    <div class="row tabs-container mb-4">
+                    <div class="row tabs-container mb-2">
                         <ul class="nav nav-tabs">
                             <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#tab-general" @click.prevent="currentTab = 'pendingOrders'" >Pending Orders</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#" @click.prevent="currentTab = 'activityLog'" >Activity Log</a></li>
