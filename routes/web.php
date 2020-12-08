@@ -11,7 +11,10 @@
 |
 */
 
+use App\Models\Order;
+use App\Models\OrderShipment;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -34,12 +37,6 @@ Route::middleware('auth')->group(function () {
         \App\Jobs\Products\RecalculateQuantityReservedJob::dispatch();
     });
 
-    Route::get('/test', function () {
-        $product = \App\Models\Product::firstOrNew([]);
-
-        $product->attachTag('test');
-    });
-
     // Admin only routes
     Route::group(['middleware' => ['role:admin']], function () {
         Route::view('/users', 'users')->name('users');
@@ -59,4 +56,5 @@ Route::middleware('auth')->group(function () {
     Route::view('/settings', 'settings')->name('settings');
 
     Route::get('pdf/orders/{order_number}/{template}', 'PdfOrderController@show');
+    Route::get('/csv/order_shipments', 'Csv\OrderShipmentController@index')->name('order_shipments_as_csv');
 });

@@ -22,6 +22,7 @@
         "laravel/passport": "^7.3",
         "laravel/telescope": "2.1.7",
         "laravel/tinker": "^1.0",
+        "league/csv": "^9.6",
         "makeabledk/laravel-factory-enhanced": "^2.1",
         "milon/barcode": "^5.1",
         "printnode/printnode-php": "dev-master",
