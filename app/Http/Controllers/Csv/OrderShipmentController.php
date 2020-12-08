@@ -17,7 +17,6 @@ class OrderShipmentController extends Controller
         ])
             ->join('orders', 'orders.id', '=', 'order_shipments.order_id')
             ->whereDate('order_shipments.created_at', '=', Carbon::today())
-            ->limit(1)
             ->get();
 
         $csv = \League\Csv\Writer::createFromFileObject(new \SplTempFileObject);
