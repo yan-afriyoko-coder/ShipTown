@@ -16,7 +16,8 @@ class DailyJobsController extends Controller
     {
         Api2cartConnection::all()
             ->each(function (Api2cartConnection $connection) {
-                $connection->last_synced_modified_at = Carbon::createFromTimeString($connection)->subDay();
+                $connection->last_synced_modified_at = Carbon::createFromTimeString($connection->last_synced_modified_at)->subDay();
+                $connection->save();
             });
     }
 }
