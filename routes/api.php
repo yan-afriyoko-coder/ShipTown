@@ -24,6 +24,9 @@ Route::middleware('auth:api')->get('/user/me', function (Request $request) {
 
 Route::middleware('auth:api')->group(function () {
 
+    Route::apiResource('run/hourly/jobs', 'Api\Run\HourlyJobsController')->only('index');
+    Route::apiResource('run/daily/jobs', 'Api\Run\DailyJobsController')->only('index');
+
     Route::apiResource('logs', 'Api\LogController')->only(['index']);
 
     Route::apiResource('products', 'Api\ProductsController')->only(['index','store']);
