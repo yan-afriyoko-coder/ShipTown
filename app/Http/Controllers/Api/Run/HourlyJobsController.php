@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\Run;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\RunMaintenanceJobs;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Request;
 
 class HourlyJobsController extends Controller
@@ -12,6 +14,7 @@ class HourlyJobsController extends Controller
      */
     public function index(Request $request)
     {
-        //
+        RunMaintenanceJobs::dispatch();
+        return 'Jobs Dispatched';
     }
 }
