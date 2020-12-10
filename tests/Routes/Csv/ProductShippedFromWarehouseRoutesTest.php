@@ -19,7 +19,7 @@ class ProductShippedFromWarehouseRoutesTest extends TestCase
             factory(User::class)->create()
         );
 
-        $response = $this->get('/');
+        $response = $this->get('/csv/products/shipped');
 
         $response->assertStatus(200);
     }
