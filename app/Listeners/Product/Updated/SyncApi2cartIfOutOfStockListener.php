@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 
-class SyncApi2cartIfOutOfStock implements ShouldQueue
+class SyncApi2cartIfOutOfStockListener implements ShouldQueue
 {
     use InteractsWithQueue;
 
@@ -34,10 +34,13 @@ class SyncApi2cartIfOutOfStock implements ShouldQueue
     {
         $product = $event->getProduct();
 
+        if ($product->quantity_available > 0) {
+            return;
+        }
+
         try {
-            if ($product->quantity_available <= 0) {
-                $connection = Api2cartConnection::query()->first();
-                if ($connection) {
+            Api2cartConnection::all()
+                ->each(function ($connection) use ($product) {
                     $product_data = [
                         'product_id' => $product->getKey(),
                         'sku' => $product->sku,
@@ -47,8 +50,7 @@ class SyncApi2cartIfOutOfStock implements ShouldQueue
                     if (Products::update($connection->bridge_api_key, $product_data)->isSuccess()) {
                         $product->log('Product quantity set to 0 on website');
                     }
-                }
-            }
+                });
         } catch (Exception $exception) {
             $product->log('Could not set quantity to 0 on website');
             Log::error('Could not set product quantity to 0 on website', [

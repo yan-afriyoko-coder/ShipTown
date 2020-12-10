@@ -7,10 +7,7 @@ use App\Events\Product\UpdatedEvent;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Warehouse;
-use App\Modules\Api2cart\src\Models\Api2cartConnection;
-use App\Modules\Api2cart\src\Products;
 use Exception;
-use Illuminate\Support\Facades\Log;
 
 class ProductObserver
 {
