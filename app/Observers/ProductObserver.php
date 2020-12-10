@@ -46,30 +46,6 @@ class ProductObserver
     public function updated(Product $product)
     {
         UpdatedEvent::dispatch($product);
-
-
-
-        try {
-            if ($product->quantity_available <= 0) {
-                $connection = Api2cartConnection::query()->first();
-                if ($connection) {
-                    $product_data = [
-                        'product_id' => $product->getKey(),
-                        'sku' => $product->sku,
-                        'quantity' => 0,
-                        'in_stock' => "False",
-                    ];
-                    if (Products::update($connection->bridge_api_key, $product_data)->isSuccess()) {
-                        $product->log('Product quantity set to 0 on website');
-                    }
-                }
-            }
-        } catch (Exception $exception) {
-            $product->log('Could not set quantity to 0 on website');
-            Log::error('Could not set product quantity to 0 on website', [
-                'message' => $exception->getMessage()
-            ]);
-        }
     }
 
     /**
