@@ -17,8 +17,8 @@ class ProductsPickedInWarehouse extends Controller
         $query = Pick::select([
             'products.sku',
             'products.name',
-            \DB::raw('0'),
-            \DB::raw('0'),
+            \DB::raw('0 as qty_at_source'),
+            \DB::raw('0 as qty_at_destination'),
             'picks.quantity_picked',
         ])
             ->join('products', 'products.id', '=', 'picks.product_id')
