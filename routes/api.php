@@ -24,6 +24,8 @@ Route::middleware('auth:api')->get('/user/me', function (Request $request) {
 
 Route::middleware('auth:api')->group(function () {
 
+    Route::get('/csv/products/shipped', 'Csv\ProductsShippedFromWarehouseController@index');
+
     Route::put('print/order/{order_number}/{view}', 'Api\PrintOrderController@store');
 
     Route::apiResource('run/sync', 'Api\Run\SyncController')->only('index');
