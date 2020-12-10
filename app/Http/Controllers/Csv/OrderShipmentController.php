@@ -6,13 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\OrderShipment;
 use App\Traits\CsvFileResponse;
 use Carbon\Carbon;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Collection;
-use League\Csv\CannotInsertRecord;
-use League\Csv\Writer;
 
 class OrderShipmentController extends Controller
 {
