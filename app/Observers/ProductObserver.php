@@ -47,17 +47,7 @@ class ProductObserver
     {
         UpdatedEvent::dispatch($product);
 
-        if ($product->withAllTags(['Available Online'])) {
-            $product->attachTag('Not Synced');
-        }
 
-        if ($product->quantity_available <= 0) {
-            $product->attachTag('Out Of Stock');
-        }
-
-        if ($product->quantity_available > 0) {
-            $product->detachTag('Out Of Stock');
-        }
 
         try {
             if ($product->quantity_available <= 0) {
