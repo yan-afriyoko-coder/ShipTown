@@ -6,6 +6,7 @@ use App\Models\Product;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -13,7 +14,7 @@ use Illuminate\Queue\SerializesModels;
  * Class UpdatedEvent
  * @package App\Events\Product
  */
-class UpdatedEvent
+class UpdatedEvent implements ShouldQueue
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 

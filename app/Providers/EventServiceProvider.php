@@ -46,7 +46,9 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         \App\Events\Product\UpdatedEvent::class => [
-            \App\Listeners\Product\Updated\PublishSnsNotificationListener::class
+            \App\Listeners\Product\Updated\PublishSnsNotificationListener::class,
+            \App\Listeners\Product\Updated\AttachTagsListener::class,
+            \App\Listeners\Product\Updated\SyncApi2cartIfOutOfStockListener::class,
         ],
 
         // Order
