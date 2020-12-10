@@ -103,6 +103,7 @@
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('picks_report') }}">{{ __('Picks') }}</a>
                                 <a class="dropdown-item" href="{{ route('order_shipments_as_csv') }}" target="_blank">{{ __("Download Today's Order Shipments") }}</a>
+                                <a class="dropdown-item" href="{{ route('warehouse_picks.csv') }}" target="_blank">{{ __("Download Today's Warehouse Picks") }}</a>
                             </div>
                         </li>
                     </ul>

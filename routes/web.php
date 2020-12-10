@@ -57,4 +57,5 @@ Route::middleware('auth')->group(function () {
 
     Route::get('pdf/orders/{order_number}/{template}', 'PdfOrderController@show');
     Route::get('/csv/order_shipments', 'Csv\OrderShipmentController@index')->name('order_shipments_as_csv');
+    Route::get('/csv/products/picked', 'Csv\ProductsPickedInWarehouse@index')->name('warehouse_picks.csv');
 });
