@@ -7,6 +7,7 @@ use App\Models\Pick;
 use App\Traits\CsvFileResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ProductsPickedInWarehouse extends Controller
 {
@@ -14,15 +15,20 @@ class ProductsPickedInWarehouse extends Controller
 
     public function index(Request $request)
     {
-        $query = Pick::select([
-            'products.sku',
-            'products.name',
-            \DB::raw('0 as qty_at_source'),
-            \DB::raw('0 as qty_at_destination'),
-            'picks.quantity_picked',
-        ])
+        $query = QueryBuilder::for(Pick::class)
+            ->allowedFilters([
+                'user_id'
+            ])
+            ->select([
+                'products.sku',
+                'products.name',
+                \DB::raw('0 as qty_at_source'),
+                \DB::raw('0 as qty_at_destination'),
+                'picks.quantity_picked',
+            ])
             ->join('products', 'products.id', '=', 'picks.product_id')
             ->whereDate('picks.created_at', '=', Carbon::today())
+            ->where('user_id', '=', 8)
             ->where('quantity_picked', '>', 0);
 
         return $this->toCsvFileResponse($query->get(), 'warehouse_picks.csv');
