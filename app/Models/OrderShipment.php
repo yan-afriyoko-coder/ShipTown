@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
@@ -42,6 +43,10 @@ class OrderShipment extends Model
         'shipping_number',
     ];
 
+    protected $appends = [
+        'age_in_days'
+    ];
+
     /**
      * @return BelongsTo
      */
@@ -57,6 +62,16 @@ class OrderShipment extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function getAgeInDaysAttribute()
+    {
+        return Carbon::now()->ceilDay()->diffInDays($this->created_at);
+    }
+
+    public function scopeWhereAgeInDaysBetween($query, $ageInDaysFrom, $ageInDaysTo)
+    {
+        return $query->whereRaw("DATEDIFF(now(), `". $this->getConnection()->getTablePrefix() . $this->getTable()."`.`created_at`) BETWEEN $ageInDaysFrom AND $ageInDaysTo");
+    }
+
     /**
      * @return QueryBuilder
      */
@@ -64,8 +79,13 @@ class OrderShipment extends Model
     {
         return QueryBuilder::for(OrderShipment::class)
             ->allowedFilters([
+                AllowedFilter::scope('age_in_days_between', 'whereAgeInDaysBetween'),
+                'created_at',
+                'updated_at',
             ])
             ->allowedIncludes([
+                'order',
+                'user'
             ])
             ->allowedSorts([
             ]);
