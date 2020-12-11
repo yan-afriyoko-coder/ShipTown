@@ -7,45 +7,65 @@ use App\Http\Requests\Users\DeleteRequest;
 use App\Http\Requests\Users\UpdateRequest;
 use App\Http\Resources\UserResource;
 use App\User;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/**
+ * Class UsersController
+ * @package App\Http\Controllers\Api\Admin
+ */
 class UsersController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return AnonymousResourceCollection
+     */
     public function index(Request $request)
     {
-        return UserResource::collection(User::all());
+        $query = User::getSpatieQueryBuilder();
+
+        return UserResource::collection($this->getPaginatedResult($query));
     }
 
+    /**
+     * @param User $user
+     * @return UserResource
+     */
     public function show(User $user)
     {
         return new UserResource($user);
     }
 
-    public function me(Request $request)
-    {
-        return $this->show($request->user());
-    }
-
+    /**
+     * @param UpdateRequest $request
+     * @param User $user
+     * @return UserResource
+     */
     public function update(UpdateRequest $request, User $user)
     {
-        $user->name = $request->name;
+        $updateData = collect($request->validated());
 
-        if ($request->has('printer_id')) {
-            $user->printer_id = $request->printer_id;
+        // Not allowed to update your own role
+        if ($request->user()->id === $user->id) {
+            $updateData->forget('role_id');
         }
 
+        $user->fill($updateData->toArray());
         $user->save();
-        // Allow changing of role if the current user has permissions and not editing self.
-        if ($request->user()->can('manage users') && $request->user()->id != $user->id) {
-            $user->syncRoles($request->role_id);
-        }
 
         return new UserResource($user);
     }
 
+    /**
+     * @param DeleteRequest $request
+     * @param User $user
+     * @return UserResource
+     * @throws Exception
+     */
     public function destroy(DeleteRequest $request, User $user)
     {
         $user->delete();
-        return $this->respondOK200('ok');
+        return new UserResource($user);
     }
 }

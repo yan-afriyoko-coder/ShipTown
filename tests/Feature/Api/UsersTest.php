@@ -17,7 +17,7 @@ class UsersTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $response = $this->delete("api/users/$user->id");
+        $response = $this->delete("api/admin/users/$user->id");
 
         $response->assertOk();
         $this->assertNull(User::find($user->id));
@@ -29,7 +29,7 @@ class UsersTest extends TestCase
         $user = \factory(User::class)->states('admin')->create();
         Passport::actingAs($user);
 
-        $response = $this->delete("api/users/$user->id");
+        $response = $this->delete("api/admin/users/$user->id");
 
         $response->assertForbidden();
         $this->assertNotNull(User::find($user->id));
@@ -44,7 +44,7 @@ class UsersTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $response = $this->delete("api/users/$user->id");
+        $response = $this->delete("api/admin/users/$user->id");
 
         $response->assertForbidden();
         $this->assertNotNull(User::find($user->id));

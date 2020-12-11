@@ -25,9 +25,10 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
+            'name' => ['sometimes', 'required', 'string', 'email', 'max:255', 'unique:users'],
             'email' => ['sometimes', 'required', 'string', 'email', 'max:255', 'unique:users'],
             'role_id' => ['sometimes', 'exists:roles,id'],
-            'printer_id' => ['sometimes'],
+            'printer_id' => ['sometimes', 'numeric'],
         ];
     }
 }

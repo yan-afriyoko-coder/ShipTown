@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Order;
 use App\Services\PrintService;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection;
@@ -19,6 +20,8 @@ use PrintNode\Response;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
 
 /**
@@ -109,5 +112,20 @@ class User extends Authenticatable
     public function newPdfPrintJob($title, $content)
     {
         return app(PrintService::class)->newPdfPrintJob($this->printer_id, $title, $content);
+    }
+
+
+    /**
+     * @return QueryBuilder
+     */
+    public static function getSpatieQueryBuilder(): QueryBuilder
+    {
+        return QueryBuilder::for(User::class)
+            ->allowedFilters([
+            ])
+            ->allowedIncludes([
+            ])
+            ->allowedSorts([
+            ]);
     }
 }

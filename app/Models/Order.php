@@ -14,6 +14,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 /**
  * App\Models\Order
@@ -355,5 +357,50 @@ class Order extends Model
     public function orderComments()
     {
         return $this->hasMany(OrderComment::class)->latest();
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    public static function getSpatieQueryBuilder(): QueryBuilder
+    {
+        return QueryBuilder::for(Order::class)
+            ->allowedFilters([
+                AllowedFilter::partial('q', 'order_number'),
+                AllowedFilter::scope('search', 'whereHasText')->ignore([null, '']),
+
+                AllowedFilter::exact('status', 'status_code'),
+                AllowedFilter::exact('order_number')->ignore([null, '']),
+                AllowedFilter::exact('packer_user_id'),
+
+                AllowedFilter::scope('is_picked'),
+                AllowedFilter::scope('is_packed'),
+                AllowedFilter::scope('is_packing'),
+
+                AllowedFilter::scope('has_packer'),
+
+                AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->default(100),
+            ])
+            ->allowedIncludes([
+                'activities',
+                'activities.causer',
+                'stats',
+                'shipping_address',
+                'order_shipments',
+                'order_products',
+                'order_products.product',
+                'order_products.product.aliases',
+                'packer',
+                'order_comments',
+                'order_comments.user',
+            ])
+            ->allowedSorts([
+                'updated_at',
+                'product_line_count',
+                'total_quantity_ordered',
+                'order_placed_at',
+                'order_closed_at',
+                'min_shelf_location',
+            ]);
     }
 }
