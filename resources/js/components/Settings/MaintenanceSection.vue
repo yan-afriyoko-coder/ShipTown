@@ -43,7 +43,7 @@ export default {
         },
         runSync() {
             this.btnSyncEnabled = false;
-            axios.get('/api/sync')
+            axios.get('/api/run/sync')
                 .then(() => {
                         this.$snotify.success('Sync scheduled');
                     }

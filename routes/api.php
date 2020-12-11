@@ -66,7 +66,6 @@ Route::middleware('auth:api')->group(function () {
     });
 
     // to remove
-    Route::get('sync', "Api\Run\SyncController@index");
     Route::resource("rms_api_configuration", "Api\Settings\Module\Rmsapi\RmsapiConnectionController");
     Route::resource("api2cart_configuration", "Api\Settings\Module\Api2cart\Api2cartConnectionController");
     Route::apiResource('users/me', 'Api\Settings\User\UserMeController')->only(['index']);
