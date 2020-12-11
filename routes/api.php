@@ -67,7 +67,6 @@ Route::middleware('auth:api')->group(function () {
 
     // to remove
     Route::resource("rms_api_configuration", "Api\Settings\Module\Rmsapi\RmsapiConnectionController");
-    Route::resource("api2cart_configuration", "Api\Settings\Module\Api2cart\Api2cartConnectionController");
     Route::apiResource('users/me', 'Api\Settings\User\UserMeController')->only(['index']);
     Route::apiResource('inventory', 'Api\Product\ProductInventoryController')->only(['index','store']);
     Route::get('products/{sku}/sync', 'Api\ProductsController@publish');

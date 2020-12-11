@@ -92,7 +92,7 @@
         methods: {
             submit() {
                 this.showLoading();
-                axios.post('/api/api2cart_configuration', {
+                axios.post('/api/settings/modules/api2cart/connections', {
                     location_id: this.location_id,
                     url: this.url,
                     type: this.type,
@@ -104,7 +104,7 @@
                      // this.reset();
                 }).catch((error) => {
                     if (error.response) {
-                        if (error.response.status == 422) {
+                        if (error.response.status === 422) {
                             this.$refs.form.setErrors(error.response.data.errors);
                         }
                     }
