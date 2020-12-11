@@ -67,7 +67,7 @@ export default {
     },
 
     created() {
-        axios.get('/api/users/me').then(({ data }) => {
+        axios.get('/api/settings/user/me').then(({ data }) => {
             this.currentUser = data.data;
         })
     },
@@ -86,14 +86,14 @@ export default {
 
     methods: {
         loadUsers() {
-            axios.get('/api/users')
+            axios.get('/api/admin/users')
                 .then(({ data }) => {
                     this.users = data.data;
                 });
         },
 
         loadRoles() {
-            axios.get('/api/roles').then(({ data }) => {
+            axios.get('/api/admin/roles').then(({ data }) => {
                 this.roles = data.data;
             });
         },
@@ -117,7 +117,7 @@ export default {
             this.$bvModal.msgBoxConfirm('Deactivate this user?')
                 .then(value => {
                     if (value === true) {
-                        axios.delete(`/api/users/${id}`).then(() => {
+                        axios.delete(`/api/admin/users/${id}`).then(() => {
                             this.$snotify.success('User deactivated.');
                             let index = find(this.users, ['id', id]);
 

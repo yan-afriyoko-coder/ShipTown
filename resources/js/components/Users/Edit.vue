@@ -42,7 +42,7 @@ export default {
 
     mounted() {
         this.showLoading();
-        axios.get(`/api/users/${this.id}`).then(({ data }) => {
+        axios.get(`/api/admin/users/${this.id}`).then(({ data }) => {
             const user = data.data;
             this.name = user.name;
             this.roleId = user.role_id;
@@ -50,7 +50,7 @@ export default {
     },
 
     mixins: [Loading],
-    
+
     props: {
         id: Number,
         roles: Array
@@ -64,7 +64,7 @@ export default {
     methods: {
         submit() {
             this.showLoading();
-            axios.put(`/api/users/${this.id}`, {
+            axios.put(`/api/admin/users/${this.id}`, {
                 name: this.name,
                 role_id: this.roleId,
             }).then(({ data }) => {
@@ -72,7 +72,7 @@ export default {
                 this.$snotify.success('User updated.');
             }).catch((error) => {
                 if (error.response) {
-                    if (error.response.status == 422) {
+                    if (error.response.status === 422) {
                         this.$refs.form.setErrors(error.response.data.errors);
                     }
                 }
@@ -84,7 +84,7 @@ export default {
         isCurrentUser() {
             let token = document.head.querySelector('meta[name="user-id"]');
 
-            return parseInt(token.content) == this.id;
+            return parseInt(token.content) === this.id;
         }
     }
 }

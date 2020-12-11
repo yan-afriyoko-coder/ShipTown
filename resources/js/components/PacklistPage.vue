@@ -325,7 +325,7 @@
                 },
 
                 loadUser() {
-                    return axios.get('api/user/me')
+                    return axios.get('api/settings/user/me')
                         .then(({data}) => {
                             this.user = (data.data);
                         })
