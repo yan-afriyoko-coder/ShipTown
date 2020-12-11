@@ -30,7 +30,7 @@ class AttachTagsListener implements ShouldQueue
     {
         $product = $event->getProduct();
 
-        if ($product->withAllTags(['Available Online'])) {
+        if ($product->withAllTags(['Available Online'])->exists()) {
             $product->attachTag('Not Synced');
         }
 
