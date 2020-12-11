@@ -60,9 +60,9 @@ Route::middleware('auth:api')->group(function () {
     // Routes for users with the admin role only
     Route::group(['middleware' => ['role:admin']], function () {
         Route::apiResource('admin/users', 'Api\Admin\UsersController')->middleware('can:manage users');
-        Route::post('invites', 'InvitesController@store');
-        Route::get('roles', 'Api\RolesController@index')->middleware('can:list roles');
-        Route::resource('configuration', 'Api\Settings\ConfigurationController');
+        Route::apiResource('invites', 'InvitesController')->only(['store']);
+        Route::apiResource('roles', 'Api\RolesController')->only(['index'])->middleware('can:list roles');
+        Route::apiResource('configuration', 'Api\Settings\ConfigurationController');
     });
 
     // to remove
