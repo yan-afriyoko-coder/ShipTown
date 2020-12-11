@@ -66,7 +66,6 @@ Route::middleware('auth:api')->group(function () {
     });
 
     // to remove
-    Route::apiResource('users/me', 'Api\Settings\User\UserMeController')->only(['index']);
     Route::apiResource('inventory', 'Api\Product\ProductInventoryController')->only(['index','store']);
     Route::get('products/{sku}/sync', 'Api\ProductsController@publish');
     Route::put('printers/use/{printerId}', 'Api\Settings\PrinterController@use');
