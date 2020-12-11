@@ -87,7 +87,7 @@
         methods: {
             submit() {
                 this.showLoading();
-                axios.post('/api/rms_api_configuration', {
+                axios.post('/api/settings/modules/rms_api/connections', {
                     location_id: this.location_id,
                     url: this.url,
                     password: this.password,

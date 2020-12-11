@@ -81,7 +81,7 @@
              * Get all of the personal access tokens for the user.
              */
             getConfiguration() {
-                axios.get('/api/rms_api_configuration')
+                axios.get('/api/settings/modules/rms_api/connections')
                     .then(({ data }) => {
                         this.configurations = data.data;
                     });
@@ -101,7 +101,7 @@
             },
 
             handleDelete(id, index) {
-                axios.delete(`/api/rms_api_configuration/${id}`).then(() => {
+                axios.delete(`/api/settings/modules/rms_api/connections/${id}`).then(() => {
                     Vue.delete(this.configurations, index);
                 });
             }
