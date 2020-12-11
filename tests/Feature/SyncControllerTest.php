@@ -29,7 +29,7 @@ class SyncControllerTest extends TestCase
             factory(User::class)->create()
         );
 
-        $response = $this->get('/api/sync');
+        $response = $this->get('/api/run/sync');
 
         Bus::assertDispatched(DispatchImportOrdersJobs::class);
         Bus::assertDispatched(FetchUpdatedProductsJob::class);
