@@ -20,7 +20,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-if="error || (!error && printers.length == 0)">
+                        <tr v-if="error || (!error && printers.length === 0)">
                             <td colspan="4">No printers found.</td>
                         </tr>
                         <tr v-for="printer in printers" :key="printer.id" :class="{
@@ -42,15 +42,16 @@
 <script>
 export default {
     created() {
-        axios.get('api/user/me').then(({ data }) => {
-            this.defaultPrinter = data.data.printer_id;
-            axios.get('api/settings/printers').then(({ data }) => {
-                this.printers = data.data;
-            }).catch(e => {
-                this.error = true;
-                console.log(e);
+        axios.get('api/settings/user/me')
+            .then(({ data }) => {
+                this.defaultPrinter = data.data.printer_id;
+                axios.get('api/settings/printers')
+                    .then(({ data }) => {
+                        this.printers = data.data;
+                    }).catch(e => {
+                        this.error = true;
+                    });
             });
-        });
     },
 
     data: () => ({
@@ -61,13 +62,16 @@ export default {
 
     methods: {
         setDefault(printerId) {
-            axios.put(`api/printers/use/${printerId}`).then(({ data }) => {
-                this.defaultPrinter = data.data.printer_id;
-            });
+            axios.post('api/settings/user/me', {
+                    'printer_id': printerId
+                })
+                .then(({ data }) => {
+                    this.defaultPrinter = data.printer_id;
+                });
         },
 
         isDefaultPrinter(printerId) {
-            return printerId == this.defaultPrinter && this.defaultPrinter != null;
+            return printerId === this.defaultPrinter && this.defaultPrinter != null;
         }
     }
 }
