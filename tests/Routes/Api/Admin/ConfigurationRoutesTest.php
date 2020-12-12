@@ -14,6 +14,8 @@ class ConfigurationRoutesTest extends AuthenticatedRoutesTestCase
      */
     public function testStore()
     {
+        Configuration::query()->forceDelete();
+
         auth()->user()->assignRole('admin');
 
         $configuration = [
@@ -23,7 +25,7 @@ class ConfigurationRoutesTest extends AuthenticatedRoutesTestCase
 
         $response = $this->post('/api/configuration', $configuration);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
     }
 
     /**
