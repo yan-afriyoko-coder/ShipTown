@@ -2,10 +2,6 @@
 
 namespace App\Providers;
 
-use App\Events\PickPickedEvent;
-use App\Events\PickQuantityRequiredChangedEvent as PickQuantity_RequiredChangedEvent_Alias;
-use App\Events\PickRequestCreatedEvent as PickRequest_CreatedEvent_Alias;
-use App\Events\PickUnpickedEvent;
 use App\Listeners\Inventory\Created\AddToProductsQuantityReservedListener;
 use App\Listeners\Inventory\Created\AddToProductTotalQuantityListener;
 use App\Listeners\Inventory\Deleted\DeductFromProductsQuantityReservedListener;
@@ -13,11 +9,6 @@ use App\Listeners\Inventory\Deleted\DeductFromProductTotalQuantityListener;
 use App\Listeners\Inventory\Updated\UpdateProductsQuantityReservedListener;
 use App\Listeners\Inventory\Updated\UpdateProductTotalQuantityListener;
 use App\Listeners\Order\Created\PublishSnsNotificationListener;
-use App\Listeners\Pick\Picked\FillPickRequestsPickedQuantityListener;
-use App\Listeners\Pick\QuantityRequiredChanged\MovePickRequestToNewPickListener;
-use App\Listeners\Pick\Unpicked\ClearPickRequestsQuantityPickedListener;
-use App\Listeners\PickRequest\Created\AddQuantityToPicklistListener;
-use App\Listeners\PickRequest\Deleted\RemoveQuantityFromPicklistListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -62,31 +53,9 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\Order\Updated\ChangeToPackingWebStatusListener::class,
             \App\Listeners\Order\Updated\ChangeStatusToReadyIfPackedListener::class,
         ],
-//
+
         \App\Events\Order\StatusChangedEvent::class => [
             \App\Listeners\Order\StatusChanged\UpdateClosedAt::class,
-        ],
-
-        // Pick
-        PickPickedEvent::class => [
-            FillPickRequestsPickedQuantityListener::class,
-        ],
-
-        PickUnpickedEvent::class => [
-            ClearPickRequestsQuantityPickedListener::class,
-        ],
-
-        PickQuantity_RequiredChangedEvent_Alias::class => [
-            MovePickRequestToNewPickListener::class,
-        ],
-
-        // PickRequest
-        PickRequest_CreatedEvent_Alias::class => [
-            AddQuantityToPicklistListener::class,
-        ],
-
-        \App\Events\PickRequest\DeletedEvent::class => [
-            RemoveQuantityFromPicklistListener::class
         ],
 
         // Inventory

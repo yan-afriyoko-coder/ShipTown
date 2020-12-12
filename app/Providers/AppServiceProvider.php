@@ -39,7 +39,6 @@ class AppServiceProvider extends ServiceProvider
         Inventory::observe(InventoryObserver::class);
         Order::observe(OrderObserver::class);
         OrderProduct::observe(OrderProductObserver::class);
-        Pick::observe(PickObserver::class);
 
         // Modules
         Api2cartOrderImports::observe(Api2cartOrderImportsObserver::class);
