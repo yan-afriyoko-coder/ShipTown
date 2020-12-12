@@ -65,12 +65,6 @@ Route::middleware('auth:api')->group(function () {
     });
 
     // to remove
-    Route::apiResource('inventory', 'Api\Product\ProductInventoryController')->only(['index','store']);
-    Route::get('products/{sku}/sync', 'Api\ProductsController@publish');
     Route::put('printers/use/{printerId}', 'Api\Settings\PrinterController@use');
     Route::apiResource('widgets', 'Api\Settings\WidgetsController');
-    Route::get('run/maintenance', function () {
-        \App\Jobs\RunMaintenanceJobs::dispatch();
-        return 'Maintenance jobs dispatched';
-    });
 });

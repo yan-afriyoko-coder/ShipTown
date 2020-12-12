@@ -11,8 +11,9 @@
             </div>
 
             <div class="card-body">
-                <button :disabled="!btnMaintenanceJobsEnabled" @click.prevent="runMaintenanceJobs">Run Maintenance Jobs</button>
-                <button :disabled="!btnSyncEnabled" @click.prevent="runSync">Run Sync</button>
+                <button :disabled="!btnRunHourlyJobsEnabled" @click.prevent="runHourlyJobs">Run Hourly Jobs</button>
+                <button :disabled="!btnRunDailyJobsEnabled" @click.prevent="runDailyJobs">Run Daily Jobs</button>
+                <button :disabled="!btnRunSyncEnabled" @click.prevent="runSync">Run Sync</button>
             </div>
         </div>
 
@@ -24,32 +25,45 @@ export default {
     name: "MaintenanceSection",
     data: function () {
         return {
-            btnMaintenanceJobsEnabled: true,
-            btnSyncEnabled: true,
+            btnRunHourlyJobsEnabled: true,
+            btnRunDailyJobsEnabled: true,
+            btnRunSyncEnabled: true,
         }
     },
     methods: {
-        runMaintenanceJobs() {
-            this.btnMaintenanceJobsEnabled = false;
-            axios.get('/api/run/maintenance')
+        runHourlyJobs() {
+            this.btnRunHourlyJobsEnabled = false;
+            axios.get('/api/run/hourly/jobs')
                 .then(() => {
-                        this.$snotify.success('Jobs scheduled');
+                        this.$snotify.success('Job run requested');
                     }
                 )
                 .catch(() => {
-                        this.$snotify.error('Request failed');
+                        this.$snotify.error('Jub run request failed');
+                    }
+                );
+        },
+        runDailyJobs() {
+            this.btnRunDailyJobsEnabled = false;
+            axios.get('/api/run/daily/jobs')
+                .then(() => {
+                        this.$snotify.success('Job run requested');
+                    }
+                )
+                .catch(() => {
+                        this.$snotify.error('Jub run request failed');
                     }
                 );
         },
         runSync() {
-            this.btnSyncEnabled = false;
+            this.btnRunSyncEnabled = false;
             axios.get('/api/run/sync')
                 .then(() => {
-                        this.$snotify.success('Sync scheduled');
+                        this.$snotify.success('Sync requested');
                     }
                 )
                 .catch(() => {
-                        this.$snotify.error('Request failed');
+                        this.$snotify.error('Sync request failed');
                     }
                 );
         }

@@ -16,7 +16,7 @@ class InventoryRoutesTest extends TestCase
 {
     public function testGetRouteUnauthorized()
     {
-        $response = $this->get('/api/inventory');
+        $response = $this->get('/api/product/inventory');
 
         $response->assertStatus(302);
     }
@@ -27,7 +27,7 @@ class InventoryRoutesTest extends TestCase
             factory(User::class)->create()
         );
 
-        $response = $this->get('/api/inventory');
+        $response = $this->get('/api/product/inventory');
 
         $response->assertStatus(200);
     }
@@ -37,7 +37,7 @@ class InventoryRoutesTest extends TestCase
      */
     public function testIfPostRouteIsProtected()
     {
-        $response = $this->post('api/inventory');
+        $response = $this->post('api/product/inventory');
 
         $response->assertStatus(302);
     }
@@ -48,7 +48,7 @@ class InventoryRoutesTest extends TestCase
             factory(User::class)->create()
         );
 
-        $response = $this->postJson('/api/inventory', []);
+        $response = $this->postJson('/api/product/inventory', []);
 
         $response->assertStatus(422);
     }
@@ -72,7 +72,7 @@ class InventoryRoutesTest extends TestCase
             'quantity_reserved' => $inventory->quantity_reserved
         ];
 
-        $response = $this->postJson('/api/inventory', $update);
+        $response = $this->postJson('/api/product/inventory', $update);
 
         $response->assertStatus(200);
     }

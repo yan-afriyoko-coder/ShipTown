@@ -105,27 +105,4 @@ class ProductsTest extends TestCase
 
         $response->assertNotFound();
     }
-
-    public function testProductsSyncRouteUnauthenticated()
-    {
-        $response = $this->get('api/products/0/sync');
-
-        // assert route is protected
-        $response->assertStatus(302);
-    }
-
-    public function testProductSyncRouteAuthenticated()
-    {
-        Event::fake();
-
-        Passport::actingAs(
-            factory(User::class)->create()
-        );
-
-        $product = \factory(Product::class)->create();
-
-        $response = $this->get("api/products/$product->sku/sync");
-
-        $response->assertOk();
-    }
 }
