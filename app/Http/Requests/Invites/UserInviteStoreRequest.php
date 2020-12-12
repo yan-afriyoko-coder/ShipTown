@@ -4,7 +4,7 @@ namespace App\Http\Requests\Invites;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProcessRequest extends FormRequest
+class UserInviteStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class ProcessRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user()->can('invite users');
     }
 
     /**
@@ -24,8 +24,7 @@ class ProcessRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
         ];
     }
 }

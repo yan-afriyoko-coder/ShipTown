@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Users\DeleteRequest;
-use App\Http\Requests\Users\UpdateRequest;
+use App\Http\Requests\UserDeleteRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\User;
 use Exception;
@@ -38,11 +38,11 @@ class UserController extends Controller
     }
 
     /**
-     * @param UpdateRequest $request
+     * @param UserUpdateRequest $request
      * @param User $user
      * @return UserResource
      */
-    public function update(UpdateRequest $request, User $user)
+    public function update(UserUpdateRequest $request, User $user)
     {
         $updateData = collect($request->validated());
 
@@ -58,12 +58,12 @@ class UserController extends Controller
     }
 
     /**
-     * @param DeleteRequest $request
+     * @param UserDeleteRequest $request
      * @param User $user
      * @return UserResource
      * @throws Exception
      */
-    public function destroy(DeleteRequest $request, User $user)
+    public function destroy(UserDeleteRequest $request, User $user)
     {
         $user->delete();
         return new UserResource($user);

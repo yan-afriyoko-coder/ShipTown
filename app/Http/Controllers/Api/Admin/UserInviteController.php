@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Invites\ProcessRequest;
-use App\Http\Requests\Invites\StoreRequest;
+use App\Http\Requests\Invites\UserInviteProcessRequest;
+use App\Http\Requests\Invites\UserInviteStoreRequest;
 use App\Mail\InviteCreated;
 use App\Models\Invite;
 use App\User;
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Mail;
 
 class UserInviteController extends Controller
 {
-    public function store(StoreRequest $request)
+    public function store(UserInviteStoreRequest $request)
     {
         do {
             //generate a random string using Laravel's str_random helper
@@ -43,7 +43,7 @@ class UserInviteController extends Controller
         return view('invites.accept', $invite);
     }
 
-    public function process(ProcessRequest $request)
+    public function process(UserInviteProcessRequest $request)
     {
         // Look up the invite
         if (!$invite = Invite::where('token', $request->input('token'))->first()) {
