@@ -51,7 +51,4 @@ Route::middleware('auth:api')->group(function () {
         Route::apiResource('admin/user/roles', 'Api\Admin\UserRoleController')->only(['index'])->middleware('can:list roles');
         Route::apiResource('configuration', 'Api\Settings\ConfigurationController');
     });
-
-    // to remove
-    Route::apiResource('widgets', 'Api\Settings\WidgetsController');
 });

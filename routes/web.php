@@ -23,37 +23,27 @@ try {
 };
 
 // Routes to allow invite other emails
-Route::get('invites/{token}', 'Api/Admin/User/InvitesController@accept')->name('accept');
-Route::post('invites/{token}', 'Api/Admin/User/InvitesController@process');
+Route::get('invites/{token}', 'Api\Admin\UserInvitesController@accept')->name('accept');
+Route::post('invites/{token}', 'Api\Admin\UserInvitesController@process');
 
 // Routes for authenticated users only
 Route::middleware('auth')->group(function () {
     Route::redirect('/', 'dashboard');
+    Route::view('/dashboard', 'dashboard')->name('dashboard');
+    Route::view('/products', 'products')->name('products');
+    Route::view('/orders', 'orders')->name('orders');
+    Route::view('/picklist', 'picklist')->name('picklist');
+    Route::view('/packlist', 'packlist')->name('packlist');
+    Route::view('/reports/picks', 'reports/picks_report')->name('picks_report');
+    Route::view('/settings', 'settings')->name('settings');
 
-    Route::get('/run/job/', function () {
-        \App\Jobs\Products\RecalculateQuantityReservedJob::dispatch();
-    });
+    Route::get('/pdf/orders/{order_number}/{template}', 'PdfOrderController@show');
+    Route::get('/csv/order_shipments', 'Csv\OrderShipmentController@index')->name('order_shipments_as_csv');
+    Route::get('/csv/products/picked', 'Csv\ProductsPickedInWarehouse@index')->name('warehouse_picks.csv');
+    Route::get('/csv/products/shipped', 'Csv\ProductsShippedFromWarehouseController@index')->name('warehouse_shipped.csv');
 
     // Admin only routes
     Route::group(['middleware' => ['role:admin']], function () {
         Route::view('/users', 'users')->name('users');
     });
-
-    // Reports routes
-    Route::group(['prefix' => 'reports'], function () {
-        Route::view('picks', 'reports/picks_report')->name('picks_report');
-    });
-
-    Route::view('/dashboard', 'dashboard')->name('dashboard');
-    Route::view('/dashboard_test', 'dashboard_test')->name('dashboard_test');
-    Route::view('/products', 'products')->name('products');
-    Route::view('/picklist', 'picklist')->name('picklist');
-    Route::view('/packlist', 'packlist')->name('packlist');
-    Route::view('/orders', 'orders')->name('orders');
-    Route::view('/settings', 'settings')->name('settings');
-
-    Route::get('pdf/orders/{order_number}/{template}', 'PdfOrderController@show');
-    Route::get('/csv/order_shipments', 'Csv\OrderShipmentController@index')->name('order_shipments_as_csv');
-    Route::get('/csv/products/picked', 'Csv\ProductsPickedInWarehouse@index')->name('warehouse_picks.csv');
-    Route::get('/csv/products/shipped', 'Csv\ProductsShippedFromWarehouseController@index')->name('warehouse_shipped.csv');
 });
