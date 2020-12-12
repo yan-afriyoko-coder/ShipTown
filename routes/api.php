@@ -22,12 +22,12 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResource('logs', 'Api\LogController')->only(['index']);
 
-    Route::apiResource('products', 'Api\ProductsController')->only(['index','store']);
+    Route::apiResource('products', 'Api\ProductController')->only(['index','store']);
     Route::apiResource('product/aliases', 'Api\Product\ProductAliasController')->only(['index']);
     Route::apiResource('product/inventory', 'Api\Product\ProductInventoryController')->only(['index','store']);
     Route::apiResource('product/tags', 'Api\Product\ProductTagController')->only(['index','store']);
 
-    Route::apiResource('orders', 'Api\OrdersController');
+    Route::apiResource('orders', 'Api\OrderController');
     Route::apiResource('order/products', 'Api\Order\OrderProductController');
     Route::apiResource('order/shipments', 'Api\Order\OrderShipmentController');
     Route::apiResource('order/comments', 'Api\Order\OrderCommentController')->only(['index', 'store']);
@@ -41,7 +41,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResource('settings/user/me', 'Api\Settings\UserMeController')->only(['index','store']);
     Route::apiResource('settings/printers', 'Api\Settings\PrinterController')->only(['index']);
-    Route::apiResource('settings/widgets', 'Api\Settings\WidgetsController')->only(['store','update']);
+    Route::apiResource('settings/widgets', 'Api\Settings\WidgetController')->only(['store','update']);
     Route::apiResource('settings/modules/rms_api/connections', "Api\Settings\Module\Rmsapi\RmsapiConnectionController");
     Route::apiResource('settings/modules/api2cart/connections', "Api\Settings\Module\Api2cart\Api2cartConnectionController");
 

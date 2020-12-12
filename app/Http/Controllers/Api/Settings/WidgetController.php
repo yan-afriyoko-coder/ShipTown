@@ -8,7 +8,7 @@ use App\Http\Requests\UpdateWidgetRequest;
 use App\Models\Widget;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class WidgetsController extends Controller
+class WidgetController extends Controller
 {
     /**
      * @param StoreWidgetRequest $request

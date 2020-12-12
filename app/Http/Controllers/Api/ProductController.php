@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class ProductsController extends Controller
+class ProductController extends Controller
 {
     public function index(Request $request)
     {

@@ -19,7 +19,7 @@ use Illuminate\Support\Arr;
  * Class OrdersController
  * @package App\Http\Controllers\Api
  */
-class OrdersController extends Controller
+class OrderController extends Controller
 {
     /**
      * @param Request $request
