@@ -43,7 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/csv/products/shipped', 'Csv\ProductsShippedFromWarehouseController@index')->name('warehouse_shipped.csv');
 
     // Admin only routes
-    Route::group(['middleware' => ['role:admin']], function () {
+    Route::middleware('role:admin')->group(function () {
         Route::view('/users', 'users')->name('users');
     });
 });

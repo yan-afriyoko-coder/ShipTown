@@ -45,7 +45,7 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('settings/modules/api2cart/connections', "Api\Settings\Module\Api2cart\Api2cartConnectionController");
 
     // Routes for users with the admin role only
-    Route::group(['middleware' => ['role:admin']], function () {
+    Route::middleware('role:admin')->group(function () {
         Route::apiResource('admin/users', 'Api\Admin\UserController')->middleware('can:manage users');
         Route::apiResource('admin/user/invites', 'Api\Admin\UserInviteController')->only(['store']);
         Route::apiResource('admin/user/roles', 'Api\Admin\UserRoleController')->only(['index'])->middleware('can:list roles');
