@@ -13,19 +13,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user()->id;
-});
-
-Route::middleware('auth:api')->get('/user/me', function (Request $request) {
-    return new \App\Http\Resources\UserResource($request->user());
-});
-
 Route::middleware('auth:api')->group(function () {
-
-    Route::get('/csv/products/shipped', 'Csv\ProductsShippedFromWarehouseController@index');
-
     Route::put('print/order/{order_number}/{view}', 'Api\PrintOrderController@store');
 
     Route::apiResource('run/sync', 'Api\Run\SyncController')->only('index');
