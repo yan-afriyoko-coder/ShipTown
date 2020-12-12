@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Routes\Settings;
+namespace Tests\Routes\Api\Settings\Module\Printnode;
 
 use App\User;
 use Laravel\Passport\Passport;
@@ -19,7 +19,7 @@ class PrintersTest extends TestCase
             factory(User::class)->create()
         );
 
-        $response = $this->get('/api/settings/printers');
+        $response = $this->get('/api/settings/module/printnode/printers');
 
         $response->assertStatus(422);
     }

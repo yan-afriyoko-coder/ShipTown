@@ -50,6 +50,6 @@ Route::middleware('auth:api')->group(function () {
         Route::apiResource('admin/users', 'Api\Admin\UserController')->middleware('can:manage users');
         Route::apiResource('admin/user/invites', 'Api\Admin\UserInviteController')->only(['store']);
         Route::apiResource('admin/user/roles', 'Api\Admin\UserRoleController')->only(['index'])->middleware('can:list roles');
-        Route::apiResource('configuration', 'Api\Settings\ConfigurationController');
+        Route::apiResource('configuration', 'Api\Settings\ConfigurationController')->only(['store','show']);
     });
 });
