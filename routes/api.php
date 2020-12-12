@@ -34,13 +34,14 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResource('picklist', 'Api\PicklistController')->only(['index']);
     Route::apiResource('picklist/picks', 'Api\Picklist\PicklistPickController')->only(['store']);
-    Route::apiResource('picks', 'Api\PickController')->except('store');
 
+    // this should be called "order reservation"
+    // its job is to fetch next order and block it so no other user gets it again
     Route::apiResource('packlist/order', 'Api\PacklistOrderController')->only(['index']);
 
     Route::apiResource('settings/user/me', 'Api\Settings\UserMeController')->only(['index','store']);
     Route::apiResource('settings/printers', 'Api\Settings\PrinterController')->only(['index']);
-    Route::apiResource('settings/widgets', 'Api\Settings\WidgetsController');
+    Route::apiResource('settings/widgets', 'Api\Settings\WidgetsController')->only(['store','update']);
     Route::apiResource('settings/modules/rms_api/connections', "Api\Settings\Module\Rmsapi\RmsapiConnectionController");
     Route::apiResource('settings/modules/api2cart/connections', "Api\Settings\Module\Api2cart\Api2cartConnectionController");
 
