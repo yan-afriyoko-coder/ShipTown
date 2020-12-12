@@ -61,9 +61,9 @@ class InventoryRoutesTest extends TestCase
             factory(User::class)->create()
         );
 
-        $inventory = factory(Inventory::class)->make();
-
         $product = factory(Product::class)->create();
+
+        $inventory = factory(Inventory::class)->make();
 
         $update = [
             'sku' => $product->sku,

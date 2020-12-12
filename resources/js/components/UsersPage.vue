@@ -93,7 +93,7 @@ export default {
         },
 
         loadRoles() {
-            axios.get('/api/admin/roles').then(({ data }) => {
+            axios.get('/api/admin/user/roles').then(({ data }) => {
                 this.roles = data.data;
             });
         },
@@ -133,7 +133,7 @@ export default {
 
     computed: {
         isNotSelf() {
-            return (id) => this.currentUser.id != id;
+            return (id) => this.currentUser.id !== id;
         }
     }
 }

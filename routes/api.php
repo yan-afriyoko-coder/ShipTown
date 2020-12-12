@@ -52,16 +52,15 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResource('settings/user/me', 'Api\Settings\User\UserMeController')->only(['index']);
     Route::apiResource('settings/printers', 'Api\Settings\PrinterController')->only(['index']);
-    Route::apiResource('settings/widgets', 'Api\WidgetsController');
+    Route::apiResource('settings/widgets', 'Api\Settings\WidgetsController');
     Route::apiResource('settings/modules/rms_api/connections', "Api\Settings\Module\Rmsapi\RmsapiConnectionController");
     Route::apiResource('settings/modules/api2cart/connections', "Api\Settings\Module\Api2cart\Api2cartConnectionController");
-    Route::apiResource('settings/widgets', 'Api\Settings\WidgetsController');
 
     // Routes for users with the admin role only
     Route::group(['middleware' => ['role:admin']], function () {
         Route::apiResource('admin/users', 'Api\Admin\UsersController')->middleware('can:manage users');
-        Route::apiResource('invites', 'InvitesController')->only(['store']);
-        Route::apiResource('roles', 'Api\RolesController')->only(['index'])->middleware('can:list roles');
+        Route::apiResource('admin/user/invites', 'Api\Admin\User\InvitesController')->only(['store']);
+        Route::apiResource('admin/user/roles', 'Api\Admin\User\RolesController')->only(['index'])->middleware('can:list roles');
         Route::apiResource('configuration', 'Api\Settings\ConfigurationController');
     });
 

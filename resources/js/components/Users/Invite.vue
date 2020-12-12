@@ -30,7 +30,7 @@ export default {
     },
 
     mixins: [Loading],
-    
+
     data: () => ({
         email: null
     }),
@@ -38,7 +38,7 @@ export default {
     methods: {
         submit() {
             this.showLoading();
-            axios.post('/api/invites', {
+            axios.post('/api/admin/user/invites', {
                 email: this.email,
             }).then(({ data }) => {
                 this.$emit('saved');
@@ -46,7 +46,7 @@ export default {
                 this.reset();
             }).catch((error) => {
                 if (error.response) {
-                    if (error.response.status == 422) {
+                    if (error.response.status === 422) {
                         this.$refs.form.setErrors(error.response.data.errors);
                     }
                 }
@@ -56,6 +56,6 @@ export default {
         reset() {
             this.email = null;
         }
-    }    
+    }
 }
 </script>

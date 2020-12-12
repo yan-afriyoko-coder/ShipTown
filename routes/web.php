@@ -11,10 +11,7 @@
 |
 */
 
-use App\Models\Order;
-use App\Models\OrderShipment;
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -26,8 +23,8 @@ try {
 };
 
 // Routes to allow invite other emails
-Route::get('invites/{token}', 'InvitesController@accept')->name('accept');
-Route::post('invites/{token}', 'InvitesController@process');
+Route::get('invites/{token}', 'Api/Admin/User/InvitesController@accept')->name('accept');
+Route::post('invites/{token}', 'Api/Admin/User/InvitesController@process');
 
 // Routes for authenticated users only
 Route::middleware('auth')->group(function () {
