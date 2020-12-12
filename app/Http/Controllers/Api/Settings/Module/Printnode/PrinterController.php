@@ -1,22 +1,37 @@
 <?php
 
-namespace App\Http\Controllers\Api\Settings;
+namespace App\Http\Controllers\Api\Settings\Module\Printnode;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\UserResource;
 use App\Services\PrintService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
+/**
+ * Class PrinterController
+ * @package App\Http\Controllers\Api\Settings\Module\Printnode
+ */
 class PrinterController extends Controller
 {
+    /**
+     * @var PrintService
+     */
     private $printService;
 
+    /**
+     * PrinterController constructor.
+     * @param PrintService $printService
+     */
     public function __construct(PrintService $printService)
     {
         $this->printService = $printService;
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse|ResourceCollection
+     */
     public function index(Request $request)
     {
         try {
@@ -26,15 +41,5 @@ class PrinterController extends Controller
         } catch (\Exception $e) {
             return response()->json([], 422);
         }
-    }
-
-    public function use(Request $request, $printerId)
-    {
-        $user = $request->user();
-        $user->printer_id = $printerId;
-
-        $user->save();
-
-        return new UserResource($user);
     }
 }

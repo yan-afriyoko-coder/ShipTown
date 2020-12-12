@@ -45,7 +45,7 @@ export default {
         axios.get('api/settings/user/me')
             .then(({ data }) => {
                 this.defaultPrinter = data.data.printer_id;
-                axios.get('api/settings/printers')
+                axios.get('api/settings/modules/printnode/printers')
                     .then(({ data }) => {
                         this.printers = data.data;
                     }).catch(e => {

@@ -40,10 +40,10 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('packlist/order', 'Api\PacklistOrderController')->only(['index']);
 
     Route::apiResource('settings/user/me', 'Api\Settings\UserMeController')->only(['index','store']);
-    Route::apiResource('settings/printers', 'Api\Settings\PrinterController')->only(['index']);
     Route::apiResource('settings/widgets', 'Api\Settings\WidgetController')->only(['store','update']);
-    Route::apiResource('settings/modules/rms_api/connections', "Api\Settings\Module\Rmsapi\RmsapiConnectionController");
-    Route::apiResource('settings/modules/api2cart/connections', "Api\Settings\Module\Api2cart\Api2cartConnectionController");
+    Route::apiResource('settings/modules/rms_api/connections', "Api\Settings\Module\Rmsapi\RmsapiConnectionController")->except(['update']);
+    Route::apiResource('settings/modules/api2cart/connections', "Api\Settings\Module\Api2cart\Api2cartConnectionController")->except(['update']);
+    Route::apiResource('settings/modules/printnode/printers', 'Api\Settings\Module\Printnode\PrinterController')->only(['index']);
 
     // Routes for users with the admin role only
     Route::middleware('role:admin')->group(function () {
