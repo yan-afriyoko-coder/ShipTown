@@ -15,7 +15,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
  * Class UsersController
  * @package App\Http\Controllers\Api\Admin
  */
-class UsersController extends Controller
+class UserController extends Controller
 {
     /**
      * @param Request $request
