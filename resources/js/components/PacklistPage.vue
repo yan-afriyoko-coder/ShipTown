@@ -9,6 +9,7 @@
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('for_later')">for_later</button>
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('missing_item')">missing_item</button>
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('picking')">picking</button>
+                <button type="button" class="btn btn-info" @click.prevent="changeStatus('packing_warehouse')">picking</button>
                 <hr>
                 <button type="button" class="btn btn-info" @click.prevent="displayShippingNumberModal">Add Shipping Number</button>
                 <button type="button" class="btn btn-info" @click.prevent="printAddressLabel">Print Address Label</button>
