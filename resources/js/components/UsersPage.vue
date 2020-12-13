@@ -67,9 +67,10 @@ export default {
     },
 
     created() {
-        axios.get('/api/settings/user/me').then(({ data }) => {
-            this.currentUser = data.data;
-        })
+        axios.get('/api/settings/user/me')
+            .then(({ data }) => {
+                this.currentUser = data.data;
+            })
     },
 
     mounted() {
@@ -86,16 +87,17 @@ export default {
 
     methods: {
         loadUsers() {
-            axios.get('/api/admin/users')
+            axios.get('/api/admin/users?per_page=999')
                 .then(({ data }) => {
                     this.users = data.data;
                 });
         },
 
         loadRoles() {
-            axios.get('/api/admin/user/roles').then(({ data }) => {
-                this.roles = data.data;
-            });
+            axios.get('/api/admin/user/roles')
+                .then(({ data }) => {
+                    this.roles = data.data;
+                });
         },
 
         handleInviteOk(bvModalEvt) {
@@ -106,6 +108,7 @@ export default {
         handleEditOk(bvModalEvt) {
             bvModalEvt.preventDefault();
             this.$refs.editForm.submit();
+            this.$refs.editModal.hide();
         },
 
         onEditClick(id) {
