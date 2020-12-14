@@ -14,20 +14,20 @@
                             <div class="row text-left">
                                 <div class="col-md-8">
                                     <div class="text-primary h5">{{ pick['name_ordered'] }}</div>
-                                    <div class="text-secondary h5">sku: <span class="font-weight-bold"> {{ pick['sku_ordered'] }} </span></div>
-                                    <div class="text-secondary h5">product: <span class="font-weight-bold"> <a target="_blank" :href="'/products?sku=' + product_sku ">{{ product_sku }}</a> </span></div>
+                                    <div class="">sku: <span class="font-weight-bold"> {{ pick['sku_ordered'] }} </span></div>
+                                    <div class="text-secondary">product: <span class="font-weight-bold"> <a target="_blank" :href="'/products?sku=' + product_sku ">{{ product_sku }}</a> </span></div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="row text-center">
-                                        <div class="col-6">
-                                            <div class="text-secondary h6 text-left">stock: <span class="font-weight-bold"> {{ Math.ceil(pick['inventory_source_quantity']) }} </span></div>
+                                        <div class="col-6 text-left">
+                                            <div class="text-secondary">stock: <span class="font-weight-bold"> {{ Math.ceil(pick['inventory_source_quantity']) }} </span></div>
                                         </div>
                                         <div class="col-2" v-bind:class="{ 'bg-warning': Math.ceil(pick['total_quantity_to_pick']) > 1 }">
-                                            <div>To Pick</div>
+                                            <div class="small">to pick</div>
                                             <div class="h3 red">{{ this.quantity_requested_integer }}</div>
                                         </div>
                                         <div class="col-4">
-                                            <div class="">Shelf</div>
+                                            <div class="small">shelf</div>
                                             <div class="h3">{{ pick['inventory_source_shelf_location'] }}</div>
                                         </div>
                                     </div>
