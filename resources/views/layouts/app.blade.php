@@ -102,7 +102,8 @@
                             <!-- Menu Items END -->
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('picks_report') }}">{{ __('Picks') }}</a>
-                                <a class="dropdown-item" href="{{ route('order_shipments_as_csv') }}" target="_blank">{{ __("Download Today's Order Shipments") }}</a>
+                                <a class="dropdown-item" href="{{ route('ready_order_shipments_as_csv') }}" target="_blank">{{ __("Download Today's Ready Shipments") }}</a>
+                                <a class="dropdown-item" href="{{ route('partial_order_shipments_as_csv') }}" target="_blank">{{ __("Download Today's Partial Shipments") }}</a>
                                 <a class="dropdown-item" href="{{ route('warehouse_picks.csv').'?filter[user_id]=8' }}" target="_blank">{{ __("Download Today's Warehouse Picks") }}</a>
                                 <a class="dropdown-item" href="{{ route('warehouse_shipped.csv').'?filter[packer_user_id]=8' }}" target="_blank">{{ __("Download Today's Warehouse Shipped") }}</a>
                             </div>

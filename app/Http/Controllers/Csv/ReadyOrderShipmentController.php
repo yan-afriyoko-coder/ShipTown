@@ -8,19 +8,20 @@ use App\Traits\CsvFileResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class OrderShipmentController extends Controller
+class ReadyOrderShipmentController extends Controller
 {
     use CsvFileResponse;
 
     public function index(Request $request)
     {
         $query = OrderShipment::select([
-            'orders.order_number',
-            'order_shipments.shipping_number'
-        ])
+                'orders.order_number',
+                'order_shipments.shipping_number'
+            ])
             ->join('orders', 'orders.id', '=', 'order_shipments.order_id')
-            ->whereDate('order_shipments.created_at', '=', Carbon::today());
+            ->whereDate('order_shipments.created_at', '=', Carbon::today())
+            ->where('orders.status_code', '=', 'ready');
 
-        return $this->toCsvFileResponse($query->get(), 'order_shipments.csv');
+        return $this->toCsvFileResponse($query->get(), 'ready_order_shipments.csv');
     }
 }

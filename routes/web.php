@@ -38,7 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::view('/settings', 'settings')->name('settings');
 
     Route::get('/pdf/orders/{order_number}/{template}', 'PdfOrderController@show');
-    Route::get('/csv/order_shipments', 'Csv\OrderShipmentController@index')->name('order_shipments_as_csv');
+    Route::get('/csv/ready_order_shipments', 'Csv\ReadyOrderShipmentController@index')->name('ready_order_shipments_as_csv');
+    Route::get('/csv/order_shipments', 'Csv\PartialOrderShipmentController@index')->name('partial_order_shipments_as_csv');
     Route::get('/csv/products/picked', 'Csv\ProductsPickedInWarehouse@index')->name('warehouse_picks.csv');
     Route::get('/csv/products/shipped', 'Csv\ProductsShippedFromWarehouseController@index')->name('warehouse_shipped.csv');
 
