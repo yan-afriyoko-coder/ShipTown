@@ -21,7 +21,9 @@ class PartialOrderShipmentController extends Controller
             ])
             ->join('orders', 'orders.id', '=', 'order_shipments.order_id')
             ->whereDate('order_shipments.created_at', '=', Carbon::today())
-            ->where('orders.status_code', '<>', 'ready');
+            ->where('orders.status_code', '<>', 'ready')
+            ->orderBy('orders.status_code')
+            ->orderBy('order_shipments.created_at');
 
         return $this->toCsvFileResponse($query->get(), 'partial_order_shipments.csv');
     }
