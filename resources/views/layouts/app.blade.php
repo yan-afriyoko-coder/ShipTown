@@ -41,8 +41,8 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
+                    <ul class="navbar-nav mr-auto text-center text-md-left">
+                        <li class="nav-item d-none d-md-inline">
                             <a class="nav-link" href="{{ route('dashboard') }}">|</a>
                         </li>
                         <li class="nav-item">
@@ -59,7 +59,7 @@
                             </a>
 
                             <!-- Menu Items END -->
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <div class="dropdown-menu dropdown-menu-right text-center text-md-left" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('picklist') . '?order.status_code=picking&inventory_source_location_id=100'}}">
                                     {{ __('Web: picking') }}
                                 </a>
@@ -76,7 +76,7 @@
                             </a>
 
                             <!-- Menu Items END -->
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <div class="dropdown-menu dropdown-menu-right text-center text-md-right" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('packlist') . '?status=packing_web&is_picked=true&sort=order_placed_at,product_line_count,total_quantity_ordered'}}">
                                     {{ __('Status: packing_web') }}
                                 </a>
@@ -111,7 +111,7 @@
 
 
                     <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav ml-auto text-center text-md-left">
 
                             <li class="nav-item dropdown">
                                 <!-- User dropdown menu -->
@@ -120,7 +120,7 @@
                                 </a>
 
                                 <!-- Menu Items END -->
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-menu dropdown-menu-right text-center text-md-left" aria-labelledby="navbarDropdown">
                                     <!-- Settings -->
                                     <a class="dropdown-item" href="{{ route('settings') }}">
                                         {{ __('Settings') }}
