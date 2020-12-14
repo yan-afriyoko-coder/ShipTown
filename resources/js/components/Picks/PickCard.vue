@@ -2,29 +2,29 @@
         <div class="swiper-container mb-3">
             <div class="swiper-wrapper">
 
-                <div class="swiper-slide error bg-success text-right">
-                    <div class="swipe-action-container swipe-action-container--right">
+                <div class="swiper-slide error bg-success text-right rounded">
+                    <div class="swipe-action-container swipe-action-container--right rounded">
                         <div>PICK ALL</div>
                     </div>
                 </div>
 
                 <div class="swiper-slide">
                     <div class="row ml-1 mr-1">
-                        <div class="col p-2 pl-3">
-                            <div class="row text-left">
+                        <div class="col p-2 pl-3 rounded">
+                            <div class="row">
                                 <div class="col-md-8">
                                     <div class="text-primary h5">{{ pick['name_ordered'] }}</div>
-                                    <div class="">sku: <span class="font-weight-bold"> {{ pick['sku_ordered'] }} </span></div>
-                                    <div class="text-secondary">product: <span class="font-weight-bold"> <a target="_blank" :href="'/products?sku=' + product_sku ">{{ product_sku }}</a> </span></div>
+                                    <div>sku: <b> {{ pick['sku_ordered'] }} </b></div>
+                                    <div>product: <b> <a target="_blank" :href="'/products?sku=' + product_sku ">{{ product_sku }}</a></b></div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="row text-center">
                                         <div class="col-6 text-left">
-                                            <div class="text-secondary">stock: <span class="font-weight-bold"> {{ Math.ceil(pick['inventory_source_quantity']) }} </span></div>
+                                            <div>stock: <b> {{ Math.ceil(pick['inventory_source_quantity']) }} </b></div>
                                         </div>
                                         <div class="col-2" v-bind:class="{ 'bg-warning': Math.ceil(pick['total_quantity_to_pick']) > 1 }">
                                             <div class="small">to pick</div>
-                                            <div class="h3 red">{{ this.quantity_requested_integer }}</div>
+                                            <div class="h3">{{ this.quantity_requested_integer }}</div>
                                         </div>
                                         <div class="col-4">
                                             <div class="small">shelf</div>
@@ -37,7 +37,7 @@
                     </div>
                 </div>
 
-                <div class="swiper-slide bg-warning">
+                <div class="swiper-slide bg-warning rounded">
                     <div class="swipe-action-container swipe-action-container--left text-black-50 font-weight-bold">
                         <div>PARTIAL PICK</div>
                     </div>
