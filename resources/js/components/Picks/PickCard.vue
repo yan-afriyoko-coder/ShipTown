@@ -13,7 +13,7 @@
                         <div class="col p-2 pl-3">
                             <div class="row text-left">
                                 <div class="col-md-8">
-                                    <div class="text-primary h4">{{ pick['name_ordered'] }}</div>
+                                    <div class="text-primary h5">{{ pick['name_ordered'] }}</div>
                                     <div class="text-secondary h5">sku: <span class="font-weight-bold"> {{ pick['sku_ordered'] }} </span></div>
                                     <div class="text-secondary h5">product: <span class="font-weight-bold"> <a target="_blank" :href="'/products?sku=' + product_sku ">{{ product_sku }}</a> </span></div>
                                 </div>
