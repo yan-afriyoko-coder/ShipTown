@@ -19,7 +19,7 @@ class ReadyOrderShipmentController extends Controller
                 'order_shipments.shipping_number'
             ])
             ->join('orders', 'orders.id', '=', 'order_shipments.order_id')
-            ->whereDate('order_shipments.created_at', '=', Carbon::today())
+//            ->whereDate('order_shipments.created_at', '=', Carbon::today())
             ->where('orders.status_code', '=', 'ready')
             ->orderBy('orders.status_code')
             ->orderBy('order_shipments.created_at');
