@@ -35,16 +35,18 @@ class RecalculateQuantityReservedJob implements ShouldQueue
      */
     public function handle()
     {
-        $recordsCorrected = Queries::getProductsWithQuantityReservedErrorsQuery()
+        $incorrectProductRecords = Queries::getProductsWithQuantityReservedErrorsQuery()
             ->limit(100) // for performance purposes
-            ->each(function ($errorRecord) {
-                Product::find($errorRecord->product_id)
-                    ->log('Incorrect quantity reserved detected, recalculating')
-                    ->update([
-                        'quantity_reserved' => $errorRecord->correct_inventory_quantity_reserved ?? 0
-                    ]);
-            });
+            ->get();
 
-        info('Successfully ran RecalculateQuantityReservedJob', ['records_corrected_count' => $recordsCorrected->count()]);
+        $incorrectProductRecords->each(function ($errorRecord) {
+            Product::find($errorRecord->product_id)
+                ->log('Incorrect quantity reserved detected, recalculating')
+                ->update([
+                    'quantity_reserved' => $errorRecord->correct_inventory_quantity_reserved ?? 0
+                ]);
+        });
+
+        info('Successfully ran RecalculateQuantityReservedJob', ['records_corrected_count' => $incorrectProductRecords->count()]);
     }
 }
