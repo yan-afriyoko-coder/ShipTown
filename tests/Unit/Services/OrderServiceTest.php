@@ -144,7 +144,41 @@ class OrderServiceTest extends TestCase
      *
      * @return void
      */
-    public function testNullLocationId()
+    public function testCanFulfillMethod()
+    {
+        Order::query()->forceDelete();
+        Product::query()->forceDelete();
+        Inventory::query()->forceDelete();
+
+        factory(Product::class)->create();
+
+        $order = factory(Order::class)
+            ->with('orderProducts')
+            ->create();
+
+        $orderProduct = $order->orderProducts()->first();
+
+        $inventory = Inventory::query()->updateOrCreate([
+            'product_id' => $orderProduct->product_id,
+            'location_id' => 100
+        ], [
+            'quantity' => $orderProduct->quantity_ordered,
+            'quantity_reserved' => 0,
+        ]);
+
+        $this->assertTrue(OrderService::canFulfill($order), 'a');
+        $this->assertFalse(OrderService::canNotFulfill($order), 'b');
+
+        $this->assertTrue(OrderService::canFulfill($order, 100), 'c');
+        $this->assertFalse(OrderService::canFulfill($order, 99), 'd');
+    }
+
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
+    public function testCanNotFulfillMethod()
     {
         Order::query()->forceDelete();
         Product::query()->forceDelete();
@@ -166,24 +200,8 @@ class OrderServiceTest extends TestCase
             'quantity_reserved' => 0,
         ]);
 
-        $canFulfill = OrderService::canFulfill($order);
-
-        $this->assertFalse($canFulfill, 'Should not be able to fulfill, no stock (canFulfill)');
-        $this->assertTrue(OrderService::canNotFulfill($order), 'Should not be able to fulfill, no stock (canNotFulfill)');
-
-        Inventory::query()->updateOrCreate([
-            'product_id' => $orderProduct->product_id,
-            'location_id' => 100
-        ], [
-            'quantity' => $orderProduct->quantity_ordered,
-            'quantity_reserved' => 0,
-        ]);
-
-        $this->assertTrue(OrderService::canFulfill($order));
-        $this->assertFalse(OrderService::canNotFulfill($order));
-
-        $this->assertTrue(OrderService::canFulfill($order, 100));
-        $this->assertFalse(OrderService::canFulfill($order, 99));
+        $this->assertTrue(OrderService::canNotFulfill($order), 'Should not be able to fulfill from any location');
+        $this->assertTrue(OrderService::canNotFulfill($order, 99), 'Should not be able to fulfill from location 99');
     }
 
     /**

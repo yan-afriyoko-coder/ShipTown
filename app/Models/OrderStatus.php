@@ -49,6 +49,7 @@ class OrderStatus extends Model
         'on_hold',
         'missing_item',
         'auto_missing_item',
+        'ready'
     ];
 
     public static $completedStatusCodeList = [
@@ -57,7 +58,6 @@ class OrderStatus extends Model
         'closed',
         'complete',
         'completed_imported_to_rms',
-        'ready'
     ];
 
     public static function getActiveStatusCodesList()

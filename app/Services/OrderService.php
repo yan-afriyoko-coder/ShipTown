@@ -39,22 +39,22 @@ class OrderService
      */
     public static function canFulfill(Order $order, $sourceLocationId = null)
     {
-        $products = $order->orderProducts()->get();
+        $orderProducts = $order->orderProducts()->get();
 
-        foreach ($products as $product) {
-            $query = Inventory::where('product_id', $product->product_id);
+        foreach ($orderProducts as $orderProduct) {
+            $query = Inventory::where('product_id', $orderProduct->product_id);
 
             if ($sourceLocationId) {
                 $query->where('location_id', $sourceLocationId);
             }
 
-            $quantity_available = $query->sum(\DB::raw('(quantity - quantity_reserved)'));
+            $quantity = $query->sum(\DB::raw('(quantity)'));
 
-            if (!$quantity_available) {
+            if (!$quantity) {
                 return false;
             }
 
-            if ((double) $quantity_available < (double) $product->quantity_ordered) {
+            if ((double) $quantity < (double) $orderProduct->quantity_ordered) {
                 return false;
             }
         }

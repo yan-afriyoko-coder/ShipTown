@@ -21,14 +21,14 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property int|null $product_id
  * @property string $sku_ordered
  * @property string $name_ordered
- * @property string $price
- * @property string $quantity_ordered
- * @property string $quantity_shipped
- * @property string $quantity_to_ship
- * @property string $quantity_to_pick
- * @property string $quantity_picked
- * @property string $quantity_skipped_picking
- * @property string $quantity_not_picked
+ * @property float $price
+ * @property float $quantity_ordered
+ * @property float $quantity_shipped
+ * @property float $quantity_to_ship
+ * @property float $quantity_to_pick
+ * @property float $quantity_picked
+ * @property float $quantity_skipped_picking
+ * @property float $quantity_not_picked
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
