@@ -79,6 +79,48 @@ class Queries
                 DB::raw('IFNULL(`' . DB::getTablePrefix() . 'inventory_totals`.`total_quantity_reserved`, 0)')
             );
     }
+    /**
+     * @return Product|\Illuminate\Database\Eloquent\Builder
+     */
+    public static function getProductsWithQuantityErrorsQuery()
+    {
+        // select all products
+        // left join inventory to get actual quantity
+        // left join expected quantities sub query
+        // select only where expected not matching actual
+        return Product::query()
+            ->select([
+                'products.id',
+                'products.id as product_id',
+                'products.quantity as actual_product_quantity',
+                'inventory_totals.total_quantity as correct_inventory_quantity',
+            ])
+            ->leftJoinSub(
+                Queries::getInventoryQuantityTotalsByProductIdQuery(),
+                'inventory_totals',
+                'inventory_totals.product_id',
+                '=',
+                'products.id'
+            )
+            ->where(
+                DB::raw('IFNULL(' . DB::getTablePrefix() . 'products.quantity, 0)'),
+                '!=',
+                DB::raw('IFNULL(`' . DB::getTablePrefix() . 'inventory_totals`.`total_quantity`, 0)')
+            );
+    }
+
+    /**
+     * @return OrderProduct|Builder
+     */
+    public static function getInventoryQuantityTotalsByProductIdQuery()
+    {
+        return Inventory::query()
+            ->select([
+                'product_id',
+                DB::raw('sum(quantity) as total_quantity')
+            ])
+            ->groupBy(['product_id']);
+    }
 
     /**
      * This query will
