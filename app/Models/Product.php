@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Events\Product\TagAttachedEvent;
+use App\Traits\HasTagsTrait;
+use App\Traits\LogsActivityTrait;
 use Eloquent;
-use Exception;
 use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -15,8 +15,6 @@ use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\Activitylog\Traits\LogsActivity;
-use App\Traits\HasTagsTrait;
 use Spatie\Tags\Tag;
 
 /**
@@ -74,9 +72,8 @@ use Spatie\Tags\Tag;
  */
 class Product extends Model
 {
-    use SoftDeletes;
-    use LogsActivity;
-    use Notifiable, HasManyKeyByRelationship, HasTagsTrait;
+    use LogsActivityTrait, HasTagsTrait, SoftDeletes;
+    use Notifiable, HasManyKeyByRelationship;
 
     protected static $logAttributes = [
         'quantity',
@@ -197,11 +194,5 @@ class Product extends Model
         return $query->whereHas('aliases', function (Builder $query) use ($skuOrAlias) {
             return $query->where('alias', 'like', '%'.$skuOrAlias.'%');
         });
-    }
-
-    public function log($message)
-    {
-        activity()->on($this)->log($message);
-        return $this;
     }
 }

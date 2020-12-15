@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivityTrait;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * App\Models\Inventory
@@ -40,7 +40,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  */
 class Inventory extends Model
 {
-    use LogsActivity;
+    use LogsActivityTrait;
 
     protected static $logAttributes = [
         'quantity',
