@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\Inventory;
 use App\Models\OrderProduct;
 use App\Models\OrderStatus;
 use App\Models\Product;
@@ -50,6 +51,36 @@ class Queries
     }
 
     /**
+     * @return Product|\Illuminate\Database\Eloquent\Builder|Builder
+     */
+    public static function getProductsWithQuantityReservedErrorsQuery()
+    {
+        // select all products
+        // left join inventory to get actual quantity reserved
+        // left join expected quantities reserved sub query
+        // select only where expected not matching actual
+        return Product::query()
+            ->select([
+                'products.id',
+                'products.id as product_id',
+                'products.quantity_reserved as actual_product_quantity_reserved',
+                'inventory_totals.total_quantity_reserved as correct_inventory_quantity_reserved',
+            ])
+            ->leftJoinSub(
+                Queries::getInventoryTotalsByProductIdQuery(),
+                'inventory_totals',
+                'inventory_totals.product_id',
+                '=',
+                'products.id'
+            )
+            ->where(
+                DB::raw('IFNULL(' . DB::getTablePrefix() . 'products.quantity_reserved, 0)'),
+                '!=',
+                DB::raw('IFNULL(`' . DB::getTablePrefix() . 'inventory_totals`.`total_quantity_reserved`, 0)')
+            );
+    }
+
+    /**
      * This query will
      * return sum of order_products.quantity_to_ship
      * where orders.status_code is in open status list
@@ -65,6 +96,20 @@ class Queries
                 DB::raw('sum(quantity_to_ship) as total_quantity_to_ship'),
             ])
             ->whereStatusCodeIn(OrderStatus::getOpenStatuses())
+            ->groupBy(['product_id']);
+    }
+
+
+    /**
+     * @return OrderProduct|\Illuminate\Database\Eloquent\Builder|Builder
+     */
+    public static function getInventoryTotalsByProductIdQuery()
+    {
+        return Inventory::query()
+            ->select([
+                'product_id',
+                DB::raw('sum(quantity_reserved) as total_quantity_reserved')
+            ])
             ->groupBy(['product_id']);
     }
 }
