@@ -6,6 +6,7 @@ use App\Traits\LogsActivityTrait;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
@@ -16,12 +17,12 @@ use Illuminate\Support\Carbon;
  * @property int $product_id
  * @property int $location_id
  * @property string $shelve_location
- * @property string $quantity
- * @property string $quantity_reserved
+ * @property float $quantity
+ * @property float $quantity_reserved
  * @property string|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read mixed $quantity_available
+ * @property-read float $quantity_available
  * @property-read Product $product
  * @method static Builder|Inventory newModelQuery()
  * @method static Builder|Inventory newQuery()
@@ -84,8 +85,11 @@ class Inventory extends Model
         return $quantity_available;
     }
 
+    /**
+     * @return Model|BelongsTo|object|null
+     */
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class)->first();
     }
 }

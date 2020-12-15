@@ -17,6 +17,15 @@ class InventoryObserver
      */
     public function created(Inventory $inventory)
     {
+        $product = $inventory->product();
+
+        if ($product) {
+            $product->update([
+                'quantity' => $product->quantity + $inventory->quantity,
+                'quantity_reserved' => $product->quantity_reserved + $inventory->quantity_reserved
+            ]);
+        }
+
         CreatedEvent::dispatch($inventory);
     }
 
@@ -28,6 +37,15 @@ class InventoryObserver
      */
     public function updated(Inventory $inventory)
     {
+        $product = $inventory->product();
+
+        if ($product) {
+            $product->update([
+                'quantity' => $product->quantity + $inventory->quantity - $inventory->getOriginal('quantity'),
+                'quantity_reserved' => $product->quantity_reserved + $inventory->quantity_reserved - $inventory->getOriginal('quantity_reserved'),
+            ]);
+        }
+
         UpdatedEvent::dispatch($inventory);
     }
 
@@ -39,6 +57,15 @@ class InventoryObserver
      */
     public function deleted(Inventory $inventory)
     {
+        $product = $inventory->product();
+
+        if ($product) {
+            $product->update([
+                'quantity' => $product->quantity - $inventory->getOriginal('quantity'),
+                'quantity_reserved' => $product->quantity_reserved - $inventory->getOriginal('quantity_reserved'),
+            ]);
+        }
+
         DeletedEvent::dispatch($inventory);
     }
 
@@ -50,7 +77,14 @@ class InventoryObserver
      */
     public function restored(Inventory $inventory)
     {
-        //
+        $product = $inventory->product();
+
+        if ($product) {
+            $product->update([
+                'quantity' => $product->quantity + $inventory->quantity,
+                'quantity_reserved' => $product->quantity_reserved + $inventory->quantity_reserved
+            ]);
+        }
     }
 
     /**
@@ -61,6 +95,13 @@ class InventoryObserver
      */
     public function forceDeleted(Inventory $inventory)
     {
-        //
+        $product = $inventory->product();
+
+        if ($product) {
+            $product->update([
+                'quantity' => $product->quantity - $inventory->getOriginal('quantity'),
+                'quantity_reserved' => $product->quantity_reserved - $inventory->getOriginal('quantity_reserved'),
+            ]);
+        }
     }
 }
