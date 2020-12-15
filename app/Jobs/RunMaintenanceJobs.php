@@ -21,7 +21,7 @@ class RunMaintenanceJobs implements ShouldQueue
         \App\Jobs\Orders\ClearPackerIdAssignmentJob::class,
         \App\Jobs\Inventory\RecalculateLocation999QuantityReservedJob::class,
         \App\Jobs\Products\RecalculateProductQuantityJob::class,
-        \App\Jobs\Products\RecalculateQuantityReservedJob::class,
+        \App\Jobs\Products\RecalculateProductQuantityReservedJob::class,
         \App\Jobs\RefillStatusesJob::class,
         \App\Jobs\SyncProductToApi2cart::class,
     ];

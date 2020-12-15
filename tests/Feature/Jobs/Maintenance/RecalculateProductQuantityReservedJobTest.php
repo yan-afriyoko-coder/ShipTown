@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Jobs\Maintenance;
 
+use App\Jobs\Products\RecalculateProductQuantityJob;
+use App\Jobs\Products\RecalculateProductQuantityReservedJob;
 use App\Jobs\RunMaintenanceJobs;
 use App\Models\Inventory;
 use App\Models\Order;
@@ -30,7 +32,7 @@ class RecalculateProductQuantityReservedJobTest extends TestCase
             'quantity_reserved' => 0
         ]);
 
-        RunMaintenanceJobs::dispatchNow();
+        RecalculateProductQuantityReservedJob::dispatchNow();
 
         $this->assertEquals(
             Product::query()->sum('quantity_reserved'),
