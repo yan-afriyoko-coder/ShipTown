@@ -8,7 +8,7 @@
             </div>
         </div>
 
-        <div v-if="order['is_packed']" class="row" >
+        <div v-if="order && order['is_packed']" class="row" >
             <div class="col">
                 <div class="alert alert-danger" role="alert">
                     Order already packed...
