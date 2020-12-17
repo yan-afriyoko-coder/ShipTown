@@ -78,31 +78,31 @@
                   <hr>
                     <div class="row text-left mb-2">
                         <div class="col-lg-6">
-                            <div class="small">{{ order_product['name_ordered'] }}</div>
+                            <small>{{ order_product['name_ordered'] }}</small>
                             <div class="small"><a target="_blank" :href="getProductLink(order_product)">{{ order_product['sku_ordered'] }}</a></div>
                         </div>
 
                         <div class="col-lg-6">
                             <div class="row text-center">
                                 <div class="col-2">
-                                    <div class="small">ordered</div>
-                                    <div class="h3">{{ Math.ceil(order_product['quantity_ordered']) }}</div>
+                                    <small>ordered</small>
+                                    <h3>{{ Math.ceil(order_product['quantity_ordered']) }}</h3>
                                 </div>
                                 <div class="col-2">
-                                    <div class="small">picked</div>
-                                    <div class="h3">{{ dashIfZero(Number(order_product['quantity_picked'])) }}</div>
+                                    <small>picked</small>
+                                    <h3>{{ dashIfZero(Number(order_product['quantity_picked'])) }}</h3>
                                 </div>
                                 <div class="col-2" v-bind:class="{ 'bg-warning': Number(order_product['quantity_skipped_picking']) > 0 }">
-                                    <div class="small">skipped</div>
-                                    <div class="h3">{{ dashIfZero(Number(order_product['quantity_skipped_picking'])) }}</div>
+                                    <small>skipped</small>
+                                    <h3>{{ dashIfZero(Number(order_product['quantity_skipped_picking'])) }}</h3>
                                 </div>
                                 <div class="col-2">
-                                    <div class="small">shipped</div>
-                                    <div class="h3">{{ dashIfZero(Number(order_product['quantity_shipped']))  }}</div>
+                                    <small>shipped</small>
+                                    <h3>{{ dashIfZero(Number(order_product['quantity_shipped']))  }}</h3>
                                 </div>
                                 <div class="col-4" v-bind:class="{ 'bg-warning': ifHasEnoughStock(order_product) }">
-                                    <div class="small">inventory</div>
-                                    <div class="h3">{{ dashIfZero(getProductQuantity(order_product)) }}</div>
+                                    <small>inventory</small>
+                                    <h3>{{ dashIfZero(getProductQuantity(order_product)) }}</h3>
                                 </div>
                             </div>
                         </div>
@@ -182,7 +182,7 @@
                 return orderProduct['product'] ? Number(orderProduct['product']['quantity']) : -1;
             },
             ifHasEnoughStock(orderProduct) {
-                return this.getProductQuantity(orderProduct) < Number(orderProduct['quantity_ordered']);
+                return this.getProductQuantity(orderProduct) < Number(orderProduct['quantity_to_ship']);
             }
         },
     }
