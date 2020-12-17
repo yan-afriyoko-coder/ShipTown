@@ -26,11 +26,11 @@
                     </div>
                 </div>
                 <div class="col-3 text-center">
-                    <label>to ship</label>
+                    <small>to ship</small>
                     <h3>{{ dashIfZero(Math.ceil(entry['quantity_ordered'] - entry['quantity_shipped'])) }}</h3>
                 </div>
                 <div class="col-3 text-center">
-                    <label>shelf</label>
+                    <small>shelf</small>
                     <h3>{{ entry['inventory_source_shelf_location'] }}</h3>
                 </div>
             </div>

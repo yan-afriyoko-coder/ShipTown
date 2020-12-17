@@ -18,17 +18,17 @@
                                     <div>product: <b> <a target="_blank" :href="'/products?sku=' + product_sku ">{{ product_sku }}</a></b></div>
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="row text-center">
-                                        <div class="col-6 text-left">
+                                    <div class="row">
+                                        <div class="col-6 small ">
                                             <div>stock: <b> {{ Math.ceil(pick['inventory_source_quantity']) }} </b></div>
                                         </div>
-                                        <div class="col-2" v-bind:class="{ 'bg-warning': Math.ceil(pick['total_quantity_to_pick']) > 1 }">
-                                            <div class="small">to pick</div>
-                                            <div class="h3">{{ this.quantity_requested_integer }}</div>
+                                        <div class="col-2 text-center" v-bind:class="{ 'bg-warning': Math.ceil(pick['total_quantity_to_pick']) > 1 }">
+                                            <small>to pick</small>
+                                            <h3>{{ this.quantity_requested_integer }}</h3>
                                         </div>
-                                        <div class="col-4">
-                                            <div class="small">shelf</div>
-                                            <div class="h3">{{ pick['inventory_source_shelf_location'] }}</div>
+                                        <div class="col-4 text-center">
+                                            <small>shelf</small>
+                                            <h3>{{ pick['inventory_source_shelf_location'] }}</h3>
                                         </div>
                                     </div>
                                 </div>
