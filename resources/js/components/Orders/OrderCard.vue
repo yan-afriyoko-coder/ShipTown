@@ -100,7 +100,11 @@
                                     <small>shipped</small>
                                     <h3>{{ dashIfZero(Number(order_product['quantity_shipped']))  }}</h3>
                                 </div>
-                                <div class="col-4" v-bind:class="{ 'bg-warning': ifHasEnoughStock(order_product) }">
+                                <div class="col-2">
+                                    <small>to ship</small>
+                                    <h3>{{ dashIfZero(Number(order_product['quantity_to_ship']))  }}</h3>
+                                </div>
+                                <div class="col-2" v-bind:class="{ 'bg-warning': ifHasEnoughStock(order_product) }">
                                     <small>inventory</small>
                                     <h3>{{ dashIfZero(getProductQuantity(order_product)) }}</h3>
                                 </div>
@@ -199,4 +203,7 @@
         /*border: 1px solid #76777838;*/
     }
 
+    .widget {
+        width: 20%;
+    }
 </style>
