@@ -1,20 +1,22 @@
 <template>
-    <div class="row">
-        <div class="col-3">
-            <div>Order #: </div>
-            <div class="font-weight-bold">{{ order['order_number'] }}</div>
-        </div>
-        <div class="col-3">
-            <div>Date:</div>
-            <div class="font-weight-bold">{{ formatDateMMMDD(order['order_placed_at']) }}</div>
-        </div>
-        <div class="col-3">
-            <div>Lines #:</div>
-            <div class="font-weight-bold">{{ order['product_line_count'] }}</div>
-        </div>
-        <div class="col-3">
-            <div>Quantity #:</div>
-            <div class="font-weight-bold">{{ order['total_quantity_ordered'] }}</div>
+    <div class="col">
+        <div class="row">
+            <div class="col-3">
+                <label>Order #: </label>
+                <b>{{ order['order_number'] }}</b>
+            </div>
+            <div class="col-3">
+                <label>Date:</label>
+                <b>{{ formatDateMMMDD(order['order_placed_at']) }}</b>
+            </div>
+            <div class="col-3">
+                <label>Lines #:</label>
+                <b>{{ order['product_line_count'] }}</b>
+            </div>
+            <div class="col-3">
+                <label>Quantity #:</label>
+                <b>{{ order['total_quantity_ordered'] }}</b>
+            </div>
         </div>
     </div>
 </template>

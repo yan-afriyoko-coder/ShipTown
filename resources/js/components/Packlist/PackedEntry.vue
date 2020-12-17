@@ -1,13 +1,17 @@
 <template>
-    <div :id="getElementId" class="swiper-container mb-3">
+    <div :id="getElementId" class="swiper-container">
         <div class="swiper-wrapper">
 
             <div class="swiper-slide">
+<!--            <div class="swiper-slide rounded bg-success text-right">-->
+<!--                <div class="swipe-action-container swipe-action-container&#45;&#45;right">-->
+<!--                    <div>SHIP THEM ALL</div>-->
+<!--                </div>-->
             </div>
 
             <div class="swiper-slide">
-                <div class="row ml-1 mr-1 disabled">
-                    <div class="col p-2 pl-3">
+                <div class="row">
+                    <div class="col p-2 pl-3 ml-1 mr-1 rounded disabled">
                         <entry-card :entry="picklistItem"/>
                     </div>
                 </div>

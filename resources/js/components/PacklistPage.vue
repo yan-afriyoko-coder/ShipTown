@@ -1,86 +1,37 @@
 <template>
     <div>
-
-        <set-shipping-number-modal ref="shippingNumberModal" @shippingNumberUpdated="addShippingNumber"></set-shipping-number-modal>
-
-        <filters-modal ref="filtersModal" @btnSaveClicked="onConfigChange">
-            <template v-slot:actions="slotScopes">
-                <button type="button" class="btn btn-info" @click.prevent="changeStatus('partially_shipped')">partially_shipped</button>
-                <button type="button" class="btn btn-info" @click.prevent="changeStatus('for_later')">for_later</button>
-                <button type="button" class="btn btn-info" @click.prevent="changeStatus('missing_item')">missing_item</button>
-                <button type="button" class="btn btn-info" @click.prevent="changeStatus('picking')">picking</button>
-                <button type="button" class="btn btn-info" @click.prevent="changeStatus('packing_warehouse')">picking</button>
-                <button type="button" class="btn btn-info" @click.prevent="changeStatus('fabrics')">fabrics</button>
-                <hr>
-                <button type="button" class="btn btn-info" @click.prevent="displayShippingNumberModal">Add Shipping Number</button>
-                <button type="button" class="btn btn-info" @click.prevent="printAddressLabel">Print Address Label</button>
-            </template>
-        </filters-modal>
-
-        <div v-if="showMultipackerWarning" class="row" >
-            <div class="col alert-danger">
+        <div class="row" v-if="showMultipackerWarning" >
+            <div class="col">
+                <div class="alert alert-danger" role="alert">
                     This order is already opened by someone else. Be careful
+                </div>
             </div>
         </div>
 
-        <div v-if="order === null && !isLoading" class="row" >
-            <div class="col text-center mt-3">
-                <button type="button"  class="btn-info" @click.prevent="fetchFromAutoPilot">
-                    Start AutoPilot Packing
-                </button>
+        <div v-if="order['is_packed']" class="row" >
+            <div class="col">
+                <div class="alert alert-danger" role="alert">
+                    Order already packed...
+                </div>
             </div>
+        </div>
+
+        <div v-if="order === null && !isLoading" class="row text-center mt-3" >
+            <button type="button"  class="btn-info" @click.prevent="fetchFromAutoPilot">
+                Start AutoPilot Packing
+            </button>
         </div>
 
         <div v-if="order !== null && !isLoading">
-            <template v-if="user['id'] === 14">
-                <vue-countdown-timer
-                    :start-time="(new Date).getTime()"
-                    :end-time="endAt"
-                    :interval="1000"
-                    :start-label="''"
-                    :end-label="''"
-                    label-position="begin"
-                    :end-text="'Event ended!'"
-                    :day-txt="'days'"
-                    :hour-txt="'hours'"
-                    :minutes-txt="'minutes'"
-                    :seconds-txt="'seconds'"
-                    showDay="false"
-                    >
-                    <template slot="countdown" slot-scope="scope">
-                        <span>{{ Number(scope.props.minutes)}}:{{scope.props.seconds}}</span>
-                    </template>
-                </vue-countdown-timer>
-            </template>
-            <template v-for="order_comment in order['order_comments']">
-                <div class="row mb-2">
-                    <div class="col">
-                        <b>{{ order_comment['user']['name'] }}: </b>{{ order_comment['comment'] }}
-                    </div>
-                </div>
-            </template>
-
-            <hr>
-
             <div class="row mb-3">
-                <div class="col">
-                    <order-details :order="order" />
-                </div>
-            </div>
-
-            <div v-if="order['is_packed']" class="row" >
-                <div class="col">
-                    <div class="alert alert-danger" role="alert">
-                        Order already packed...
-                    </div>
-                </div>
+                <order-details :order="order" />
             </div>
 
             <div class="row mb-3">
                 <div class="col-11">
                     <barcode-input-field @barcodeScanned="packBarcode"/>
                 </div>
-                <div class="col-1 ml-0 pl-0">
+                <div class="col-1">
                     <button type="button" class="btn btn-light" data-toggle="modal" data-target="#filterConfigurationModal" href="#"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
                 </div>
             </div>
@@ -114,6 +65,21 @@
             </template>
 
         </div>
+
+        <set-shipping-number-modal ref="shippingNumberModal" @shippingNumberUpdated="addShippingNumber"></set-shipping-number-modal>
+
+        <filters-modal ref="filtersModal" @btnSaveClicked="onConfigChange">
+            <template v-slot:actions="slotScopes">
+                <button type="button" class="btn btn-info" @click.prevent="changeStatus('partially_shipped')">partially_shipped</button>
+                <button type="button" class="btn btn-info" @click.prevent="changeStatus('for_later')">for_later</button>
+                <button type="button" class="btn btn-info" @click.prevent="changeStatus('missing_item')">missing_item</button>
+                <button type="button" class="btn btn-info" @click.prevent="changeStatus('picking')">picking</button>
+                <button type="button" class="btn btn-info" @click.prevent="changeStatus('packing_warehouse')">picking</button>
+                <button type="button" class="btn btn-info" @click.prevent="changeStatus('fabrics')">fabrics</button>
+                <button type="button" class="btn btn-info" @click.prevent="displayShippingNumberModal">Add Shipping Number</button>
+                <button type="button" class="btn btn-info" @click.prevent="printAddressLabel">Print Address Label</button>
+            </template>
+        </filters-modal>
 
     </div>
 </template>
@@ -151,7 +117,8 @@
                     packed: [],
                     modalTest: false,
                     startAt:  (new Date).getTime(),
-                    endAt:  this.startAt + 1000 * 60 * 7
+                    endAt:  this.startAt + 1000 * 60 * 7,
+                    somethingHasBeenPackedDuringThisSession: false,
                 };
             },
 
@@ -175,6 +142,10 @@
                         return;
                     }
 
+                    if (this.somethingHasBeenPackedDuringThisSession === false) {
+                        return;
+                    }
+
                     if(this.packlist.length === 0) {
                         this.order['is_packed'] = true;
                         this.markAsPacked();
@@ -189,6 +160,7 @@
                     this.startAt = (new Date).getTime();
                     this.endAt =  this.startAt + 1000 * 60 * 7;
                 },
+
                 fetchFromAutoPilot() {
                     let params = {}
 
@@ -408,6 +380,7 @@
                         'quantity_shipped': quantity
                     })
                         .then(({data}) => {
+                            this.somethingHasBeenPackedDuringThisSession = true;
                             this.addToLists(data.data);
                             this.beep();
                         })
