@@ -15,7 +15,7 @@
     @endif
     <div class="row justify-content-center">
         <div class="col-lg-12">
-            <packlist-table></packlist-table>
+            <packsheet-page></packsheet-page>
         </div>
     </div>
 </div>

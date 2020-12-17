@@ -19,7 +19,7 @@
                 <div class="text-secondary h4">#{{ order['order_number'] }}</div>
               </div>
               <div class="col-6 text-right">
-                  <div class=""><a target="_blank" :href="'/packlist?order_number=' + order['order_number'] ">OPEN ORDER</a></div>
+                  <div class=""><a target="_blank" :href="'/order/packsheet?order_number=' + order['order_number'] ">OPEN ORDER</a></div>
               </div>
             </div>
 
@@ -73,12 +73,9 @@
                     </div>
                 </template>
 
-
               <template v-for="order_product in order['order_products']">
 
-
                   <hr>
-
                     <div class="row text-left mb-2">
                         <div class="col-lg-6">
                             <div class="small">{{ order_product['name_ordered'] }}</div>

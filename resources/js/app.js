@@ -125,8 +125,8 @@ Vue.component(
 );
 
 Vue.component(
-    'packlist-table',
-    require('./components/PacklistPage.vue').default
+    'packsheet-page',
+    require('./components/PacksheetPage.vue').default
 );
 
 Vue.component(

@@ -299,7 +299,7 @@
                 },
 
                 loadUser() {
-                    return axios.get('api/settings/user/me')
+                    return axios.get('/api/settings/user/me')
                         .then(({data}) => {
                             this.user = (data.data);
                         })
@@ -316,7 +316,7 @@
                 },
 
                 addShippingNumber(shipping_number) {
-                    axios.post('api/order/shipments', {
+                    axios.post('/api/order/shipments', {
                         'order_id': this.order['id'],
                         'shipping_number': shipping_number,
                     })
@@ -333,7 +333,7 @@
                 },
 
                 packAndShip() {
-                    return axios.put('api/orders/' + this.order['id'], {
+                    return axios.put('/api/orders/' + this.order['id'], {
                         'is_packed': true,
                     })
                         .then(() => {
