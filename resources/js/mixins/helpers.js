@@ -4,8 +4,12 @@ function getValueOrDefault(value, defaultValue){
 
 export default {
     methods: {
+        toNumberOrDash(value) {
+            return this.dashIfZero(Number(value));
+        },
+
         dashIfZero(value) {
-            return value === 0 ? '-' : value;
+            return (value && value !== 0) ? value : '-';
         },
 
         setFocus: function (input, autoSelectAll = false, hideOnScreenKeyboard = false) {

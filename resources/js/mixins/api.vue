@@ -12,16 +12,28 @@ export default {
             },
 
             apiGetProducts: function(params) {
-                return axios.get('/api/products', {params: params})
+                return axios.get('/api/products', {params: params});
             },
 
             apiGetOrders: function(params) {
-                return axios.get('/api/orders', {params: params})
+                return axios.get('/api/orders', {params: params});
             },
 
             apiGetOrderProducts: function(params) {
-                return axios.get('/api/order/products', {params: params})
+                return axios.get('/api/order/products', {params: params});
             },
+
+            apiGetOrderComments: function(params) {
+                return axios.get('/api/order/comments', {params: params});
+            },
+
+            apiPostOrderComment: function (data) {
+                return axios.post('/api/order/comments', data);
+            },
+
+            apiGetOrderActivities: function (params) {
+                return axios.get('/api/logs', {params: params});
+            }
         }
     }
 </script>

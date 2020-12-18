@@ -28,7 +28,8 @@ class LogController extends Controller
                 'causer'
             ])
             ->allowedSorts([
-                'id'
+                'id',
+                'created_at',
             ]);
 
         return $this->getPaginatedResult($query);

@@ -38,6 +38,19 @@
             'barcode-input-field': BarcodeInputField,
         },
 
+        data: function() {
+            return {
+                query: null,
+                sort: 'sku',
+                order: 'asc',
+                orders: [],
+                total: 0,
+                page: 1,
+                last_page: 1,
+                next_per_page: 10,
+            };
+        },
+
         created() {
             this.getOrderList(this.page);
         },
@@ -60,8 +73,9 @@
                     // 'filter[order_number]': this.getUrlParameter('search', ''),
                     'filter[search]': this.getUrlParameter('search', ''),
                     'sort': this.getUrlParameter('sort','-updated_at'),
-                    'per_page': this.getUrlParameter('per_page',50),
-                    'include': 'activities,activities.causer,packer,order_shipments,order_products,order_products.product,order_comments,order_comments.user',
+                    'per_page': this.getUrlParameter('per_page', 25),
+                    // 'include': 'activities,activities.causer,packer,order_shipments,order_products,order_products.product,order_comments,order_comments.user',
+                    'include': 'order_comments,order_comments.user',
                     page: page,
                     q: this.query,
                 };
@@ -74,17 +88,17 @@
                 return new Promise((resolve, reject) => {
                     this.showLoading();
                     axios.get('/api/orders', {
-                        params: params
-                    }).then(({ data }) => {
-                        this.orders = this.orders.concat(data.data);
-                        this.total = data.meta.total;
-                        this.last_page = data.meta.last_page;
-                        resolve(data);
-                    })
-                    .catch(reject)
-                    .then(() => {
-                        this.hideLoading();
-                    });
+                            params: params
+                        }).then(({ data }) => {
+                            this.orders = this.orders.concat(data.data);
+                            this.total = data.meta.total;
+                            this.last_page = data.meta.last_page;
+                            resolve(data);
+                        })
+                        .catch(reject)
+                        .then(() => {
+                            this.hideLoading();
+                        })
                 });
             },
 
@@ -109,18 +123,6 @@
                     }
                 };
             },
-        },
-
-        data: function() {
-            return {
-                query: null,
-                sort: 'sku',
-                order: 'asc',
-                orders: [],
-                total: 0,
-                page: 1,
-                last_page: 1,
-            };
         },
     }
 </script>

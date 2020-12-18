@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedInclude;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
@@ -54,10 +56,13 @@ class OrderComment extends Model
     {
         return QueryBuilder::for(OrderComment::class)
             ->allowedFilters([
+                AllowedFilter::exact('order_id'),
             ])
             ->allowedIncludes([
+                'user'
             ])
             ->allowedSorts([
+                'created_at'
             ]);
     }
 }
