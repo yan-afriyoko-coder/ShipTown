@@ -84,28 +84,28 @@
 
                         <div class="col-lg-6">
                             <div class="row text-center">
-                                <div class="col-2">
-                                    <small>ordered</small>
+                                <div class="col">
+                                    <small> ordered </small>
                                     <h3>{{ Math.ceil(order_product['quantity_ordered']) }}</h3>
                                 </div>
-                                <div class="col-2">
-                                    <small>picked</small>
-                                    <h3>{{ dashIfZero(Number(order_product['quantity_picked'])) }}</h3>
+                                <div class="col">
+                                    <small> picked </small>
+                                    <h3>{{  }}</h3>
                                 </div>
-                                <div class="col-2" v-bind:class="{ 'bg-warning': Number(order_product['quantity_skipped_picking']) > 0 }">
-                                    <small>skipped</small>
+                                <div class="col" v-bind:class="{ 'bg-warning': Number(order_product['quantity_skipped_picking']) > 0 }">
+                                    <small> skipped </small>
                                     <h3>{{ dashIfZero(Number(order_product['quantity_skipped_picking'])) }}</h3>
                                 </div>
-                                <div class="col-2 d-none d-sm-block">
-                                    <small>shipped</small>
+                                <div class="col d-none d-sm-block">
+                                    <small> shipped </small>
                                     <h3>{{ dashIfZero(Number(order_product['quantity_shipped']))  }}</h3>
                                 </div>
-                                <div class="col-2">
-                                    <small>to ship</small>
+                                <div class="col">
+                                    <small> to ship </small>
                                     <h3>{{ dashIfZero(Number(order_product['quantity_to_ship']))  }}</h3>
                                 </div>
-                                <div class="col-2 col-md-2 col-xs-3" v-bind:class="{ 'bg-warning': ifHasEnoughStock(order_product) }">
-                                    <small>inventory</small>
+                                <div class="col" v-bind:class="{ 'bg-warning': ifHasEnoughStock(order_product) }">
+                                    <small> inventory </small>
                                     <h3>{{ dashIfZero(getProductQuantity(order_product)) }}</h3>
                                 </div>
                             </div>
@@ -154,7 +154,7 @@
         data: function () {
             return {
                 input_comment: '',
-                showOrderDetails: false
+                showOrderDetails: false,
             }
         },
 

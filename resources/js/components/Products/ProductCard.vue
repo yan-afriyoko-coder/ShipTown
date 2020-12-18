@@ -79,25 +79,25 @@
                                    </div>
                                </div>
                                <div class="col-8">
-                                   <div class="row justify-content-end text-center small">
-                                       <div class="col-2">
-                                           <div>ordered</div>
+                                   <div class="row justify-content-end text-center">
+                                       <div class="col">
+                                           <small>ordered</small>
                                            <h3>{{ Math.ceil(orderProduct['quantity_ordered']) }}</h3>
                                        </div>
-                                       <div class="col-2">
-                                           <div>picked</div>
+                                       <div class="col">
+                                           <small>picked</small>
                                            <h3>{{ dashIfZero(Number(orderProduct['quantity_picked'])) }}</h3>
                                        </div>
-                                       <div class="col-2">
-                                           <div>skipped</div>
+                                       <div class="col">
+                                           <small>skipped</small>
                                            <h3>{{ dashIfZero(Number(orderProduct['quantity_skipped_picking'])) }}</h3>
                                        </div>
-                                       <div class="col-2 d-none d-sm-block">
-                                           <div>shipped</div>
+                                       <div class="col d-none d-sm-block">
+                                           <small>shipped</small>
                                            <h3>{{ dashIfZero(Number(orderProduct['quantity_shipped']))  }}</h3>
                                        </div>
-                                       <div class="col-2">
-                                           <div>to ship</div>
+                                       <div class="col">
+                                           <small>to ship</small>
                                            <h3>{{ dashIfZero(Number(orderProduct['quantity_to_ship']))  }}</h3>
                                        </div>
                                    </div>
