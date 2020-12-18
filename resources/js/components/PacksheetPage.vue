@@ -374,13 +374,13 @@
                 },
 
                 setQuantityShipped(orderProduct, quantity) {
+                    this.somethingHasBeenPackedDuringThisSession = true;
                     this.removeFromLists(orderProduct);
 
                     axios.put('/api/order/products/' + orderProduct['id'], {
                         'quantity_shipped': quantity
                     })
                         .then(({data}) => {
-                            this.somethingHasBeenPackedDuringThisSession = true;
                             this.addToLists(data.data);
                             this.beep();
                         })

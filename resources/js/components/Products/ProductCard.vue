@@ -4,7 +4,7 @@
             <div class="row text-left">
                 <div class="col-md-6">
                     <div class="text-primary h5">{{ product.name }}</div>
-                    <div class="text-secondary h5">sku: <span class="font-weight-bold"> {{ product.sku }} </span></div>
+                    <div>sku: <b> {{ product.sku }} </b></div>
                     <div>
                         <template v-for="tag in product.tags">
                             <a class="badge" :href="'products?has_tags=' + Object.values(tag.name)[0]"> {{ Object.values(tag.name)[0] }} </a>
@@ -117,8 +117,14 @@
 </template>
 
 <script>
+    import api from "../../mixins/api";
+
     export default {
         name: "ProductCard",
+
+        components: {
+            api
+        },
 
         props: {
             product: Object,
@@ -178,8 +184,8 @@
                     'sort': 'id',
                     'include': 'order'
                 }
-
-                axios.get('/api/order/products', {params: params})
+                this.api.getOrderProducts(params)
+                // axios.get('/api/order/products', {params: params})
                     .then(({data}) => {
                         this.statusMessage = '';
                         this.orderProducts = data.data;
