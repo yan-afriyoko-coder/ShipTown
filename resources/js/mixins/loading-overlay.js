@@ -15,6 +15,8 @@ export default {
             this.loader = this.$loading.show({
                 container: this.$refs.loadingContainer,
             });
+
+            return this;
         },
 
         hideLoading() {
@@ -24,6 +26,8 @@ export default {
 
             this.loader = null;
             this.isLoading = false;
+
+            return this;
         }
     }
 }

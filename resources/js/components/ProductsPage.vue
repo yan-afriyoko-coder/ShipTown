@@ -1,25 +1,24 @@
 <template>
     <div>
+
         <div class="row no-gutters mb-3 ml-1 mr-1">
             <div class="col">
-                <input ref="search" @focus="doSelectAll" class="form-control" @keyup.enter="doSearch"
-                       v-model="filters['search']" placeholder="Search for products..." />
+                <input ref="search" class="form-control" @keyup.enter="doSearch" v-model="filters['search']" placeholder="Search for products..." />
             </div>
         </div>
-        <div class="container">
-            <div v-if="total === 0 && !isLoading" class="row" >
-                <div class="col">
-                    <div class="alert alert-info" role="alert">
-                        No products found.
-                    </div>
+
+        <div v-if="products.length === 0" class="row" >
+            <div class="col">
+                <div class="alert alert-info" role="alert">
+                    No products found.
                 </div>
             </div>
-            <template v-else class="row">
-                <template v-for="product in products">
-                    <product-card :product="product"/>
-                </template>
-            </template>
         </div>
+
+        <template v-for="product in products">
+            <product-card :product="product"/>
+        </template>
+
     </div>
 </template>
 
@@ -27,108 +26,81 @@
     import loadingOverlay from '../mixins/loading-overlay';
     import ProductCard from "./Products/ProductCard";
     import url from "../mixins/url";
+    import api from "../mixins/api";
+    import helpers from "../mixins/helpers";
 
     export default {
-        mixins: [loadingOverlay, url],
+        mixins: [loadingOverlay, url, api, helpers],
 
-        components: { 'product-card': ProductCard },
+        components: {
+            'product-card': ProductCard,
+        },
 
         data: function() {
             return {
-                filters: {
-                },
+                filters: {},
                 products: [],
-                total: 0,
-                page: 1,
-                last_page: 1,
+                lastPageLoaded: 1,
+                lastPage: 1,
             };
         },
 
-        created() {
-            return this.loadProducts();
-        },
-
         mounted() {
-            this.filters['search'] = this.getUrlParameter('search', null);
-            this.$refs.search.focus();
-            setTimeout(() => { document.execCommand('selectall', null, false); });
-            this.scroll();
+            this.filters['search'] = this.getUrlParameter('search');
+
+            window.onscroll = () => this.loadMore();
+
+            this.loadProductList(1);
         },
 
         methods: {
-            doSearch: function() {
-                this.products = [];
-                this.updateUrl(this.filters);
-
-                this.$refs.search.readOnly = true;
-                this.$refs.search.focus();
-                this.$refs.search.readOnly = false;
-
-                setTimeout(() => { document.execCommand('selectall', null, false); });
-
-                this.getProductList(1);
-            },
-
-            getProducts: function (page, params) {
-                this.page = page;
-                this.last_page = 1;
-                this.total = 0;
-
-                return new Promise((resolve, reject) => {
-                    this.showLoading();
-                    axios.get('/api/products', {params: params})
-                        .then(({data}) => {
-                            this.products = this.products.concat(data.data);
-                            this.total = data.total;
-                            this.last_page = data.last_page;
-                            resolve(data);
-                        })
-                        .catch(reject)
-                        .then(() => {
-                            this.hideLoading();
-                        });
-                });
-            },
-
-            getProductList: function(page) {
+            loadProductList: function(page) {
                 const params = {
-                    page: page,
                     'filter[sku]': this.getUrlParameter('sku'),
                     'filter[search]': this.getUrlParameter('search'),
                     'filter[has_tags]': this.getUrlParameter('has_tags'),
                     'filter[without_tags]': this.getUrlParameter('without_tags'),
-                    q: this.getUrlFilter('query'),
-                    sort: '-quantity',
-                    'include': 'inventory,tags'
+                    'sort': this.getUrlParameter('sort', '-quantity'),
+                    'include': 'inventory,tags',
+                    'page': page
                 }
 
-                return this.getProducts(page, params);
+                this.showLoading()
+                    .updateUrl(this.filters);
+
+                if (page === 1) {
+                    this.products = [];
+                    this.lastPageLoaded = 1;
+                }
+
+                this.apiGetProducts(params)
+                    .then(({data}) => {
+                        this.products = this.products.concat(data.data);
+                        this.lastPage = data.last_page;
+                        this.lastPageLoaded = page;
+                    })
+                    .finally(() => {
+                        this.hideLoading()
+                            .setFocus(this.$refs.search, true, true)
+                    });
+
+                return this;
             },
 
-            loadProducts(e) {
-                this.products = [];
-                this.setUrlFilter('query', this.query);
-                this.getProductList(1)
-                    .then(this.doSelectAll);
+            doSearch: function() {
+                this.loadProductList(1);
             },
 
-            doSelectAll() {
-                if (this.query) {
-                    setTimeout(() => { document.execCommand('selectall', null, false); });
+            loadMore: function () {
+                if (this.isBottomOfTheWindow() && this.hasMorePagesToLoad()) {
+                    this.loadProductList(++this.lastPageLoaded);
                 }
             },
 
-            scroll (person) {
-                window.onscroll = () => {
-                    let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
-
-                    if (bottomOfWindow && this.last_page > this.page) {
-                        this.getProductList(++this.page);
-                    }
-                };
+            hasMorePagesToLoad: function () {
+                return this.lastPage > this.lastPageLoaded;
             },
         },
-
     }
 </script>
 

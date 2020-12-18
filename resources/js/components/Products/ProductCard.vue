@@ -79,22 +79,26 @@
                                    </div>
                                </div>
                                <div class="col-8">
-                                   <div class="row text-center">
-                                       <div class="col-3">
-                                           <div class="small">ordered</div>
-                                           <div class="h3">{{ Math.ceil(orderProduct['quantity_ordered']) }}</div>
+                                   <div class="row justify-content-end text-center small">
+                                       <div class="col-2">
+                                           <div>ordered</div>
+                                           <h3>{{ Math.ceil(orderProduct['quantity_ordered']) }}</h3>
                                        </div>
-                                       <div class="col-3">
-                                           <div class="small">picked</div>
-                                           <div class="h3">{{ dashIfZero(Number(orderProduct['quantity_picked'])) }}</div>
+                                       <div class="col-2">
+                                           <div>picked</div>
+                                           <h3>{{ dashIfZero(Number(orderProduct['quantity_picked'])) }}</h3>
                                        </div>
-                                       <div class="col-3">
-                                           <div class="small">skipped</div>
-                                           <div class="h3">{{ dashIfZero(Number(orderProduct['quantity_skipped_picking'])) }}</div>
+                                       <div class="col-2">
+                                           <div>skipped</div>
+                                           <h3>{{ dashIfZero(Number(orderProduct['quantity_skipped_picking'])) }}</h3>
                                        </div>
-                                       <div class="col-3">
-                                           <div class="small">shipped</div>
-                                           <div class="h3">{{ dashIfZero(Number(orderProduct['quantity_shipped']))  }}</div>
+                                       <div class="col-2 d-none d-sm-block">
+                                           <div>shipped</div>
+                                           <h3>{{ dashIfZero(Number(orderProduct['quantity_shipped']))  }}</h3>
+                                       </div>
+                                       <div class="col-2">
+                                           <div>to ship</div>
+                                           <h3>{{ dashIfZero(Number(orderProduct['quantity_to_ship']))  }}</h3>
                                        </div>
                                    </div>
                                </div>
@@ -122,9 +126,7 @@
     export default {
         name: "ProductCard",
 
-        components: {
-            api
-        },
+        mixins: [api],
 
         props: {
             product: Object,
@@ -184,8 +186,7 @@
                     'sort': 'id',
                     'include': 'order'
                 }
-                this.api.getOrderProducts(params)
-                // axios.get('/api/order/products', {params: params})
+                this.apiGetOrderProducts(params)
                     .then(({data}) => {
                         this.statusMessage = '';
                         this.orderProducts = data.data;
@@ -203,7 +204,7 @@
                     'include': 'causer'
                 }
 
-                axios.get('/api/logs', {params: params})
+                this.apiGetActivityLog(params)
                     .then(({data}) => {
                         this.activityLog = data.data
                     });

@@ -40,12 +40,16 @@
             setUrlParameter: function(param, value) {
                 this.$router.currentRoute.query[param] = value;
                 this.updateUrl(this.$router.currentRoute.query);
+
+                return this;
             },
 
             updateUrlParameters(params) {
                 for (let parameter in params) {
                     this.setUrlParameter(parameter, params[parameter]);
                 }
+
+                return this;
             },
 
             updateUrl: function(params) {
@@ -57,15 +61,26 @@
                     }
                 }
 
-                this.$router.push(url);
+                this.$router.push(url).catch(err => {
+                    // Ignore the vuex err regarding  navigating to the page they are already on.
+                    if (
+                        err.name !== 'NavigationDuplicated' &&
+                        !err.message.includes('Avoided redundant navigation to current location')
+                    ) {
+                        // But print any other errors to the console
+                        console.error(err);
+                    }
+                });
+
+                return this;
             },
 
             isSet: function (value) {
-              return (value === undefined) || (value === null);
+                return (value === undefined) || (value === null);
             },
 
             getValueOrDefault: function (value, defaultValue){
-                  return this.isSet(value) ? defaultValue : value;
+                return this.isSet(value) ? defaultValue : value;
             },
         }
     }

@@ -15,7 +15,6 @@ import 'vue-loading-overlay/dist/vue-loading.css';
 import { BootstrapVue } from 'bootstrap-vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCog, faQuestionCircle, faUserEdit, faBarcode, faUserMinus } from '@fortawesome/free-solid-svg-icons';
-import { faYoutube } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VueTippy, { TippyComponent } from "vue-tippy";
 import Snotify from 'vue-snotify';
@@ -26,13 +25,13 @@ library.add(faQuestionCircle);
 library.add(faUserEdit);
 library.add(faUserMinus);
 library.add(faBarcode);
-library.add(faYoutube);
 Vue.config.productionTip = false;
 
 Vue.use(VueCountdownTimer);
 
 Vue.use(Loading);
 Vue.use(require('vue-moment'));
+
 // Install BootstrapVue
 Vue.use(BootstrapVue);
 Vue.use(VueTippy);
@@ -69,100 +68,25 @@ Vue.component("tippy", TippyComponent);
 /**
  * Application mixins
  */
-Vue.component(
-    'passport-clients',
-    require('./components/Settings/OauthClients.vue').default
-);
-
-Vue.component(
-    'passport-authorized-clients',
-    require('./components/Settings/AuthorizedClients.vue').default
-);
-
-Vue.component(
-    'passport-personal-access-tokens',
-    require('./components/Settings/PersonalAccessTokens.vue').default
-);
-
-Vue.component(
-    'create-topic',
-    require('./components/misc/CreateTopic.vue').default
-);
-
-Vue.component(
-    'subscribe-topic',
-    require('./components/misc/SubscribeTopic.vue').default
-);
-
-Vue.component(
-    'missing-table',
-    require('./components/misc/Missing.vue').default
-);
-
-Vue.component(
-    'products-table',
-    require('./components/ProductsPage.vue').default
-);
-
-Vue.component(
-    'orders-table',
-    require('./components/OrdersPage.vue').default
-);
-
-Vue.component(
-    'api2cart-configuration',
-    require('./components/Settings/Api2cartConnections.vue').default
-);
-
-Vue.component(
-    'rmsapi-configuration',
-    require('./components/Settings/RmsapiiConfiguration.vue').default
-);
-
-Vue.component(
-    'packlist-configuration-modal',
-    require('./components/Packlist/FiltersModal.vue').default
-);
-
-Vue.component(
-    'packsheet-page',
-    require('./components/PacksheetPage.vue').default
-);
-
-Vue.component(
-    'packlist-table-entry',
-    require('./components/Packlist/PacklistEntry.vue').default
-);
-
-Vue.component(
-    'apt-configuration-modal',
-    require('./components/Widgets/APT/ConfigurationModal.vue').default
-);
-
-Vue.component(
-    'user-table',
-    require('./components/UsersPage.vue').default
-);
-
-Vue.component(
-    'printnode-configuration',
-    require('./components/Settings/PrintNode.vue').default
-);
-
-Vue.component(
-    'printer-configuration',
-    require('./components/Settings/PrintersConfiguration.vue').default
-);
-
-Vue.component(
-    'picks-table',
-    require('./components/PicklistPage.vue').default
-);
-
-Vue.component(
-    'settings-page',
-    require('./components/SettingsPage').default
-)
+Vue.component('passport-clients', require('./components/Settings/OauthClients.vue').default);
+Vue.component('passport-authorized-clients', require('./components/Settings/AuthorizedClients.vue').default);
+Vue.component('passport-personal-access-tokens', require('./components/Settings/PersonalAccessTokens.vue').default);
+Vue.component('create-topic', require('./components/misc/CreateTopic.vue').default);
+Vue.component('subscribe-topic', require('./components/misc/SubscribeTopic.vue').default);
+Vue.component('missing-table', require('./components/misc/Missing.vue').default);
+Vue.component('products-table', require('./components/ProductsPage.vue').default);
+Vue.component('orders-table', require('./components/OrdersPage.vue').default);
+Vue.component('api2cart-configuration', require('./components/Settings/Api2cartConnections.vue').default);
+Vue.component('rmsapi-configuration', require('./components/Settings/RmsapiiConfiguration.vue').default);
+Vue.component('packlist-configuration-modal', require('./components/Packlist/FiltersModal.vue').default);
+Vue.component('packsheet-page', require('./components/PacksheetPage.vue').default);
+Vue.component('packlist-table-entry', require('./components/Packlist/PacklistEntry.vue').default);
+Vue.component('apt-configuration-modal', require('./components/Widgets/APT/ConfigurationModal.vue').default);
+Vue.component('user-table', require('./components/UsersPage.vue').default);
+Vue.component('printnode-configuration', require('./components/Settings/PrintNode.vue').default);
+Vue.component('printer-configuration', require('./components/Settings/PrintersConfiguration.vue').default);
+Vue.component('picks-table', require('./components/PicklistPage.vue').default);
+Vue.component('api', require('./mixins/api').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -171,5 +95,5 @@ Vue.component(
  */
 
 const app = new Vue({
-    el: '#app',
+    el: '#app'
 });

@@ -24,6 +24,7 @@ class OrderProductResource extends JsonResource
             'quantity_picked' => $this->quantity_picked,
             'quantity_skipped_picking' => $this->quantity_skipped_picking,
             'quantity_shipped' => $this->quantity_shipped,
+            'quantity_to_ship' => $this->quantity_to_ship,
             'inventory_source_location_id' => $this->inventory_source_location_id,
             'inventory_source_shelf_location' => $this->inventory_source_shelf_location,
             'inventory_source_quantity' => $this->inventory_source_quantity,
