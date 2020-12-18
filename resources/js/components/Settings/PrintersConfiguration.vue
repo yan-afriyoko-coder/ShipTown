@@ -42,10 +42,10 @@
 <script>
 export default {
     created() {
-        axios.get('api/settings/user/me')
+        axios.get('/api/settings/user/me')
             .then(({ data }) => {
                 this.defaultPrinter = data.data.printer_id;
-                axios.get('api/settings/modules/printnode/printers')
+                axios.get('/api/settings/modules/printnode/printers')
                     .then(({ data }) => {
                         this.printers = data.data;
                     }).catch(e => {
@@ -62,7 +62,7 @@ export default {
 
     methods: {
         setDefault(printerId) {
-            axios.post('api/settings/user/me', {
+            axios.post('/api/settings/user/me', {
                     'printer_id': printerId
                 })
                 .then(({ data }) => {

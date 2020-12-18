@@ -343,7 +343,7 @@
                 },
 
                 markAsPacked: function () {
-                    return  axios.put('api/orders/' + this.order['id'], {
+                    return  axios.put('/api/orders/' + this.order['id'], {
                         'is_packed': true,
                     })
                         .catch((error) => {
@@ -457,7 +457,7 @@
 
                     this.$refs.filtersModal.hide();
 
-                    axios.put(`api/print/order/${orderNumber}/address_label`)
+                    axios.put(`/api/print/order/${orderNumber}/address_label`)
                         .then(() => {
                             this.$snotify.success('Address label printed', {
                                 timeout: 1000,
