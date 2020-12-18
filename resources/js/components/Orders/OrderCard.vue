@@ -90,7 +90,7 @@
                                 </div>
                                 <div class="col">
                                     <small> picked </small>
-                                    <h3>{{  }}</h3>
+                                    <h3>{{ dashIfZero(Number(order_product['quantity_picked'])) }}</h3>
                                 </div>
                                 <div class="col" v-bind:class="{ 'bg-warning': Number(order_product['quantity_skipped_picking']) > 0 }">
                                     <small> skipped </small>
@@ -154,7 +154,9 @@
         data: function () {
             return {
                 input_comment: '',
-                showOrderDetails: false,
+                showOrderDetails: false
+
+
             }
         },
 
