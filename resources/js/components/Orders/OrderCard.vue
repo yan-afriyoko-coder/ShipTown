@@ -147,7 +147,7 @@
                     <div class="row">
                       <div class="col-12">
                           Shipping Numbers:
-                          <template v-for="shipment in order['order_shipments']">
+                          <template v-for="shipment in order_shipments">
                               <div class="text-secondary h6"><span class="font-weight-bold">{{ shipment['shipping_number'] }}</span></div>
                           </template>
                       </div>
@@ -209,10 +209,24 @@
                 order_products: null,
                 order_comments: null,
                 order_activities: null,
+                order_shipments: null,
             }
         },
 
         methods: {
+            toggleOrderDetails() {
+                if (this.orderDetailsVisible) {
+                    this.orderDetailsVisible = false;
+                    return;
+                }
+
+                this.orderDetailsVisible = true;
+                this.loadOrderComments()
+                    .loadOrderProducts()
+                    .loadOrderActivities()
+                    .loadOrderShipments();
+            },
+
             loadOrderProducts() {
                 if (this.order_products) {
                     return this;
@@ -268,6 +282,24 @@
                 return this;
             },
 
+            loadOrderShipments() {
+                if (this.order_shipments) {
+                    return this;
+                }
+
+                let params = {
+                    'filter[order_id]': this.order['id'],
+                    'sort': 'created_at',
+                };
+
+                this.apiGetOrderActivities(params)
+                    .then(({data}) => {
+                        this.order_shipments = data.data;
+                    })
+
+                return this;
+            },
+
             hasSkippedPick(orderProduct) {
                 return Number(orderProduct['quantity_skipped_picking']) > 0;
             },
@@ -285,18 +317,6 @@
                         this.loadOrderComments();
                         this.input_comment = '';
                     })
-            },
-
-            toggleOrderDetails() {
-                if (this.orderDetailsVisible) {
-                    this.orderDetailsVisible = false;
-                    return;
-                }
-
-                this.orderDetailsVisible = true;
-                this.loadOrderComments();
-                this.loadOrderProducts();
-                this.loadOrderActivities();
             },
 
             getProductLink(orderProduct) {
