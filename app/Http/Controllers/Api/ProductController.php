@@ -16,15 +16,12 @@ class ProductController extends Controller
     {
         $query = QueryBuilder::for(Product::class)
             ->allowedFilters([
+                AllowedFilter::scope('search', 'whereHasText'),
                 AllowedFilter::exact('id'),
                 AllowedFilter::exact('sku'),
                 AllowedFilter::exact('name'),
                 AllowedFilter::exact('price'),
-
-                AllowedFilter::scope('q', 'whereHasText'), // to be removed, left for backwards compatibility only text should be used
-                AllowedFilter::scope('search', 'whereHasText'),
-                AllowedFilter::scope('sku_or_alias'),
-                AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->default(100),
+                AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->ignore(['', null]),
 
                 AllowedFilter::scope('has_tags', 'withAllTags'),
                 AllowedFilter::scope('without_tags', 'withoutAllTags'),
