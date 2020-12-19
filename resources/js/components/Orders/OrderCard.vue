@@ -63,16 +63,6 @@
             </div>
 
 
-<!--            <div class="row" @click="showHideProducts">-->
-<!--              <div class="col-11">-->
-<!--                  <template v-for="shipment in order['order_shipments']">-->
-<!--                      <div class="text-secondary h6"><span class="font-weight-bold">{{ shipment['shipping_number'] }}</span></div>-->
-<!--                  </template>-->
-<!--              </div>-->
-<!--              <div class="col-1 text-center text-primary h1">-->
-<!--                  +-->
-<!--              </div>-->
-<!--            </div>-->
 
             <div v-if="orderDetailsVisible">
 
@@ -152,6 +142,14 @@
                             <div> packed at: <b> {{ order['packed_at'] | moment('MM/DD H:mm') }} </b> </div>
                             <div> packed by: <b> {{ order['packer'] ? order['packer']['name'] : '&nbsp' }} </b> </div>
                         </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-12">
+                          <template v-for="shipment in order['order_shipments']">
+                              <div class="text-secondary h6"><span class="font-weight-bold">{{ shipment['shipping_number'] }}</span></div>
+                          </template>
+                      </div>
                     </div>
                 </div>
 
