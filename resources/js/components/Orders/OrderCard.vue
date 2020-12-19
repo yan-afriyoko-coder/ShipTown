@@ -292,7 +292,7 @@
                     'sort': 'created_at',
                 };
 
-                this.apiGetOrderActivities(params)
+                this.apiGetOrderShipments(params)
                     .then(({data}) => {
                         this.order_shipments = data.data;
                     })
