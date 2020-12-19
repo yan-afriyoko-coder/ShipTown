@@ -90,7 +90,7 @@
 
                 <div class="row tabs-container mb-2">
                     <ul class="nav nav-tabs">
-                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#tab-general" @click.prevent="currentTab = 'productsOrdered'" >Product Ordered</a></li>
+                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#tab-general" @click.prevent="currentTab = 'productsOrdered'" >Products Ordered</a></li>
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderDetails'" >Details</a></li>
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderActivities'" >Activity Log</a></li>
                         <li class="nav-item"><a class="nav-link" target="_blank" :href="'/order/packsheet?order_number=' + order['order_number']">Packsheet</a></li>
