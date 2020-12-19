@@ -15,6 +15,8 @@ use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Spatie\Activitylog\Models\Activity;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\Tags\Tag;
 
 /**
@@ -118,6 +120,38 @@ class Product extends Model
         "quantity" => 0,
         'quantity_reserved' => 0
     ];
+
+
+    /**
+     * @return QueryBuilder
+     */
+    public static function getSpatieQueryBuilder(): QueryBuilder
+    {
+        return QueryBuilder::for(Product::class)
+            ->allowedFilters([
+                AllowedFilter::scope('search', 'whereHasText'),
+                AllowedFilter::exact('id'),
+                AllowedFilter::exact('sku'),
+                AllowedFilter::exact('name'),
+                AllowedFilter::exact('price'),
+                AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->ignore(['', null]),
+
+                AllowedFilter::scope('has_tags', 'withAllTags'),
+                AllowedFilter::scope('without_tags', 'withoutAllTags'),
+            ])
+            ->allowedSorts([
+                'id',
+                'sku',
+                'name',
+                'price',
+                'quantity'
+            ])
+            ->allowedIncludes([
+                'inventory',
+                'aliases',
+                'tags'
+            ]);
+    }
 
     /**
      * @param \Illuminate\Database\Query\Builder $query
