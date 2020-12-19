@@ -55,6 +55,8 @@
 
         methods: {
             loadProductList: function(page) {
+                this.showLoading();
+
                 const params = {
                     'filter[sku]': this.getUrlParameter('sku'),
                     'filter[search]': this.getUrlParameter('search'),
@@ -64,9 +66,6 @@
                     'include': 'inventory,tags',
                     'page': page
                 }
-
-                this.showLoading()
-                    .updateUrl(this.filters);
 
                 if (page === 1) {
                     this.products = [];
@@ -88,7 +87,8 @@
             },
 
             doSearch: function() {
-                this.loadProductList(1);
+                this.updateUrl(this.filters)
+                    .loadProductList(1);
             },
 
             loadMore: function () {
