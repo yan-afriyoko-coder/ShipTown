@@ -3,7 +3,11 @@
 
         <div class="row no-gutters mb-3 ml-1 mr-1">
             <div class="col">
-                <barcode-input-field :placeholder="'Scan order number and click enter'" @barcodeScanned="searchText" />
+                <input placeholder="Search for products..."
+                       class="form-control"
+                       ref="search"
+                       v-model="searchText"
+                       @keyup.enter="findText" />
             </div>
         </div>
 
@@ -48,26 +52,27 @@
                 total: 0,
                 page: 1,
                 last_page: 1,
+                searchText: '',
             };
         },
 
         mounted() {
-            this.loadOrderList(this.page);
+            this.reloadOrders();
             this.scroll();
         },
 
         methods: {
-            searchText(text) {
-                this.setUrlParameter('search', text);
+            findText() {
+                this.setUrlParameter('search', this.searchText);
                 this.reloadOrders();
             },
 
             reloadOrders(e) {
                 this.orders = [];
-                this.loadOrderList(1);
+                this.loadOrderList();
             },
 
-            loadOrderList: function(page) {
+            loadOrderList: function(page = 1) {
                 this.showLoading();
 
                 this.page = page;

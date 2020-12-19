@@ -3,7 +3,11 @@
 
         <div class="row no-gutters mb-3 ml-1 mr-1">
             <div class="col">
-                <barcode-input-field :placeholder="'Search for products...'" @barcodeScanned="searchText" />
+                <input placeholder="Search for products..."
+                       class="form-control"
+                       ref="search"
+                       v-model="searchText"
+                       @keyup.enter="findText" />
             </div>
         </div>
 
@@ -18,7 +22,7 @@
         <template v-for="product in products">
             <div class="row">
                 <div class="col">
-                    <product-card :product="product"/>
+                    <product-card :product="product" :expanded="products.length === 1"/>
                 </div>
             </div>
         </template>
@@ -48,11 +52,12 @@
                 products: [],
                 lastPageLoaded: 1,
                 lastPage: 1,
+                searchText: '',
             };
         },
 
         mounted() {
-            this.filters['search'] = this.getUrlParameter('search');
+            this.searchText = this.getUrlParameter('search');
 
             window.onscroll = () => this.loadMore();
 
@@ -60,8 +65,8 @@
         },
 
         methods: {
-            searchText(text) {
-                this.setUrlParameter('search', text);
+            findText() {
+                this.setUrlParameter('search', this.searchText);
                 this.reloadProducts();
             },
 

@@ -9,9 +9,12 @@
 
 <script>
     import VueObserveVisibilityPlugin from 'vue-observe-visibility';
+    import helpers from "../../mixins/helpers";
 
     export default {
         name: "BarcodeInputField",
+
+        mixins: [helpers],
 
         props: {
             placeholder: '',
@@ -28,6 +31,9 @@
             setTimeout(() => { this.setFocusOnBarcodeInput() }, 500);
         },
 
+        created() {
+        },
+
         methods: {
             barcodeScanned(barcode) {
                 this.$emit('barcodeScanned', barcode);
@@ -36,19 +42,8 @@
             },
 
             setFocusOnBarcodeInput() {
-
-                if (this.$refs.barcode === document.activeElement) {
-                    return;
-                }
-
-                // we using readOnly field here to prevent
-                // on-screen keyboard showing up
-                // on phones and tablets
-                this.$refs.barcode.readOnly = true;
-                this.$refs.barcode.focus();
-                this.$refs.barcode.readOnly = false;
-
-                this.simulateSelectAll();
+                console.log(this.$refs);
+                this.setFocus(this.$refs.barcode, true,true)
             },
 
             simulateSelectAll() {
