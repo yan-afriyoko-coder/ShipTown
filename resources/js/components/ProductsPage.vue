@@ -67,13 +67,11 @@
                     'page': page
                 }
 
-                if (page === 1) {
-                    this.products = [];
-                    this.lastPageLoaded = 1;
-                }
-
                 this.apiGetProducts(params)
                     .then(({data}) => {
+                        if (page === 1) {
+                            this.products = [];
+                        }
                         this.products = this.products.concat(data.data);
                         this.lastPage = data.last_page;
                         this.lastPageLoaded = page;

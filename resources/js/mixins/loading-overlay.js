@@ -12,9 +12,14 @@ export default {
 
             this.isLoading = true;
 
-            this.loader = this.$loading.show({
-                container: this.$refs.loadingContainer,
-            });
+            setTimeout(
+                () => {
+                    this.loader = this.$loading.show({
+                            container: this.$refs.loadingContainer,
+                        });
+                    },
+                100
+            );
 
             return this;
         },

@@ -15,7 +15,6 @@ export default {
         setFocus: function (input, autoSelectAll = false, hideOnScreenKeyboard = false) {
             setTimeout(
             () => {
-                console.log('setFocus');
                 if (hideOnScreenKeyboard) {
                     // this simple hack of setting focus when field is read only will
                     // prevent showing on screen keyboard on mobile devices
