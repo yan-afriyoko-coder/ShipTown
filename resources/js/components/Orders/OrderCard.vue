@@ -12,7 +12,7 @@
 
       <div class="swiper-slide">
         <div class="row ml-1 mr-1 card" >
-          <div class="col p-2 pl-3">
+          <div class="col p-2 pl-3 rounded">
 
 <!--            <div class="row text-left">-->
 <!--              <div class="col-6">-->
@@ -76,7 +76,7 @@
 
             <div v-if="orderDetailsVisible">
 
-                <div class="row mb-2">
+                <div class="row mb-2 mt-1">
                     <input ref="newCommentInput" v-model="input_comment" class="form-control" placeholder="Add comment here" @keypress.enter="addComment"/>
                 </div>
 
@@ -159,8 +159,6 @@
                         <hr>
                     </template>
                 </div>
-
-                <hr>
 
                 <div class="container" v-if="currentTab === 'orderActivities'">
                     <div class="row">
