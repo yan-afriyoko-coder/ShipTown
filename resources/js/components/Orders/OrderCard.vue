@@ -195,6 +195,7 @@
 
         props: {
             order: Object,
+            expanded: false,
         },
 
         mixins: [api, helpers],
@@ -211,6 +212,20 @@
                 order_activities: null,
                 order_shipments: null,
             }
+        },
+
+        created: function () {
+            if (this.expanded) {
+                this.toggleOrderDetails();
+            }
+        },
+
+        watch: {
+            expanded() {
+                if (this.expanded) {
+                    this.toggleOrderDetails();
+                }
+            },
         },
 
         methods: {

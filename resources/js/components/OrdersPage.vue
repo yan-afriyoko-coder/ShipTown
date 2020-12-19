@@ -16,7 +16,7 @@
             <template v-else class="row">
                 <div class="col">
                     <template v-for="order in orders">
-                        <order-card :order="order"/>
+                        <order-card :order="order" :expanded="orders.length === 1"/>
                     </template>
                 </div>
             </template>
