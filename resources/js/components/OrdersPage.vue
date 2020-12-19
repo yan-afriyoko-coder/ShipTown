@@ -7,7 +7,7 @@
             </div>
         </div>
 
-        <div class="row"  v-if="total === 0 && !isLoading">
+        <div class="row" v-if="orders.length === 0 && !isLoading">
             <div class="col">
                 <div class="alert alert-info" role="alert">
                     No orders found.
@@ -70,19 +70,18 @@
             loadOrderList: function(page) {
                 this.showLoading();
 
+                this.page = page;
+                this.last_page = 1;
+                this.total = 0;
+
                 const params = {
                     'filter[status]': this.getUrlParameter('status'),
                     'filter[search]': this.getUrlParameter('search'),
                     'sort': this.getUrlParameter('sort','-updated_at'),
-                    'per_page': this.getUrlParameter('per_page', 25),
+                    'per_page': this.getUrlParameter('per_page'),
                     'include': 'order_comments,order_comments.user',
                     'page': page,
                 };
-
-                // this.orders = [];
-                this.page = page;
-                this.last_page = 1;
-                this.total = 0;
 
                 this.apiGetOrders(params)
                     .then(({ data }) => {

@@ -3,11 +3,11 @@
 
         <div class="row no-gutters mb-3 ml-1 mr-1">
             <div class="col">
-                <input ref="search" class="form-control" @keyup.enter="doSearch" v-model="filters['search']" placeholder="Search for products..." />
+                <barcode-input-field :placeholder="'Search for products...'" @barcodeScanned="searchText" />
             </div>
         </div>
 
-        <div v-if="products.length === 0" class="row" >
+        <div class="row" v-if="products.length === 0 && !isLoading" >
             <div class="col">
                 <div class="alert alert-info" role="alert">
                     No products found.
@@ -16,7 +16,11 @@
         </div>
 
         <template v-for="product in products">
-            <product-card :product="product"/>
+            <div class="row">
+                <div class="col">
+                    <product-card :product="product"/>
+                </div>
+            </div>
         </template>
 
     </div>
@@ -25,6 +29,7 @@
 <script>
     import loadingOverlay from '../mixins/loading-overlay';
     import ProductCard from "./Products/ProductCard";
+    import BarcodeInputField from "./SharedComponents/BarcodeInputField";
     import url from "../mixins/url";
     import api from "../mixins/api";
     import helpers from "../mixins/helpers";
@@ -33,7 +38,8 @@
         mixins: [loadingOverlay, url, api, helpers],
 
         components: {
-            'product-card': ProductCard,
+            ProductCard,
+            BarcodeInputField
         },
 
         data: function() {
@@ -54,7 +60,17 @@
         },
 
         methods: {
-            loadProductList: function(page) {
+            searchText(text) {
+                this.setUrlParameter('search', text);
+                this.reloadProducts();
+            },
+
+            reloadProducts() {
+                this.products = [];
+                this.loadProductList();
+            },
+
+            loadProductList: function(page = 1) {
                 this.showLoading();
 
                 const params = {
@@ -82,11 +98,6 @@
                     });
 
                 return this;
-            },
-
-            doSearch: function() {
-                this.updateUrl(this.filters)
-                    .loadProductList(1);
             },
 
             loadMore: function () {
