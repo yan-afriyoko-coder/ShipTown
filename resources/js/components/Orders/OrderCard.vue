@@ -80,18 +80,6 @@
                     <input ref="newCommentInput" v-model="input_comment" class="form-control" placeholder="Add comment here" @keypress.enter="addComment"/>
                 </div>
 
-<!--                <div class="row small">-->
-<!--                    <div class="col-4">-->
-<!--                        <div> date: <b> {{ order['order_placed_at'] | moment('MM/DD H:mm') }} </b> </div>-->
-<!--                        <div> paid: <b> {{ order['total_paid'] }} </b> </div>-->
-<!--                    </div>-->
-<!--&lt;!&ndash;                    <div class="col">&ndash;&gt;-->
-<!--&lt;!&ndash;                        <div> picked at: <b> {{ order['picked_at'] | moment('MM/DD H:mm') }} </b> </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                        <div> packed at: <b> {{ order['packed_at'] | moment('MM/DD H:mm') }} </b> </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                        <div> packed by: <b> {{ order['packer'] ? order['packer']['name'] : '&nbsp' }} </b> </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-<!--                </div>-->
-
                 <template v-for="order_comment in order_comments">
                     <div class="row mb-2">
                         <div class="col">
@@ -103,17 +91,10 @@
                 <div class="row tabs-container mb-2">
                     <ul class="nav nav-tabs">
                         <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#tab-general" @click.prevent="currentTab = 'productsOrdered'" >Product Ordered</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderDetails'" >Details</a></li>
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderActivities'" >Activity Log</a></li>
+                        <li class="nav-item"><a class="nav-link" target="_blank" :href="'/order/packsheet?order_number=' + order['order_number']">Packsheet</a></li>
                     </ul>
-                    <div class="tab-content">
-
-                        <!--                            @include('products.sections.modal.tabs.general')-->
-
-                        <!--                            @include('products.sections.modal.tabs.stock')-->
-
-                        <!--                            @include('products.sections.modal.tabs.onOrder')-->
-
-                    </div>
                 </div>
 
 
@@ -130,27 +111,27 @@
                                 <div class="row text-center">
                                     <div class="col">
                                         <small> ordered </small>
-                                        <h3>{{ toNumberOrDash(order_product['quantity_ordered']) }}</h3>
+                                        <h4>{{ toNumberOrDash(order_product['quantity_ordered']) }}</h4>
                                     </div>
                                     <div class="col">
                                         <small> picked </small>
-                                        <h3>{{ toNumberOrDash(order_product['quantity_picked']) }}</h3>
+                                        <h4>{{ toNumberOrDash(order_product['quantity_picked']) }}</h4>
                                     </div>
                                     <div class="col" v-bind:class="{ 'bg-warning': Number(order_product['quantity_skipped_picking']) > 0 }">
                                         <small> skipped </small>
-                                        <h3>{{ toNumberOrDash(order_product['quantity_skipped_picking']) }}</h3>
+                                        <h4>{{ toNumberOrDash(order_product['quantity_skipped_picking']) }}</h4>
                                     </div>
                                     <div class="col d-none d-sm-block">
                                         <small> shipped </small>
-                                        <h3>{{ toNumberOrDash(order_product['quantity_shipped'])  }}</h3>
+                                        <h4>{{ toNumberOrDash(order_product['quantity_shipped'])  }}</h4>
                                     </div>
                                     <div class="col">
                                         <small> to ship </small>
-                                        <h3>{{ toNumberOrDash(order_product['quantity_to_ship'])  }}</h3>
+                                        <h4>{{ toNumberOrDash(order_product['quantity_to_ship'])  }}</h4>
                                     </div>
                                     <div class="col" v-bind:class="{ 'bg-warning': ifHasEnoughStock(order_product) }">
                                         <small> inventory </small>
-                                        <h3>{{ toNumberOrDash(getProductQuantity(order_product)) }}</h3>
+                                        <h4>{{ toNumberOrDash(getProductQuantity(order_product)) }}</h4>
                                     </div>
                                 </div>
                             </div>
@@ -158,6 +139,20 @@
                         </div>
                         <hr>
                     </template>
+                </div>
+
+                <div class="container" v-if="currentTab === 'orderDetails'">
+                    <div class="row small">
+                        <div class="col-4">
+                            <div> date: <b> {{ order['order_placed_at'] | moment('MM/DD H:mm') }} </b> </div>
+                            <div> paid: <b> {{ order['total_paid'] }} </b> </div>
+                        </div>
+                        <div class="col">
+                            <div> picked at: <b> {{ order['picked_at'] | moment('MM/DD H:mm') }} </b> </div>
+                            <div> packed at: <b> {{ order['packed_at'] | moment('MM/DD H:mm') }} </b> </div>
+                            <div> packed by: <b> {{ order['packer'] ? order['packer']['name'] : '&nbsp' }} </b> </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="container" v-if="currentTab === 'orderActivities'">
