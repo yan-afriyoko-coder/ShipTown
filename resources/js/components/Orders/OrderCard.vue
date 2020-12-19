@@ -53,7 +53,7 @@
                     </div>
                 </div>
                 <div class="col align-text-bottom" style="max-width: 20px;">
-                    <h2 class="text-primary text-center h-100 align-middle"> + </h2>
+                    <h3 class="text-primary text-center h-100 align-middle"> + </h3>
                 </div>
 
                 <div class="col-12" v-if="order['order_comments'].length > 0 && orderDetailsVisible === false">
