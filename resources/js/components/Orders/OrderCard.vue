@@ -52,7 +52,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col align-middle" style="max-width: 20px;">
+                <div class="col align-text-bottom" style="max-width: 20px;">
                     <h2 class="text-primary text-center h-100 align-middle"> + </h2>
                 </div>
 
@@ -90,9 +90,9 @@
 
                 <div class="row tabs-container mb-2">
                     <ul class="nav nav-tabs">
-                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#tab-general" @click.prevent="currentTab = 'productsOrdered'" >Products Ordered</a></li>
+                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#tab-general" @click.prevent="currentTab = 'productsOrdered'" >Products</a></li>
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderDetails'" >Details</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderActivities'" >Activity Log</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderActivities'" >Activity</a></li>
                         <li class="nav-item"><a class="nav-link" target="_blank" :href="'/order/packsheet?order_number=' + order['order_number']">Packsheet</a></li>
                     </ul>
                 </div>
