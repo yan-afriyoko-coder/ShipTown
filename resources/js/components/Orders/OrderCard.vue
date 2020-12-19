@@ -24,7 +24,7 @@
 <!--            </div>-->
 
             <div class="row" @click="toggleOrderDetails">
-                <div class="col-5 col-md-3">
+                <div class="col-5 col-md-4 col-lg-3">
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <h5 class="text-primary">#{{ order['order_number'] }} </h5>
@@ -90,10 +90,10 @@
 
                 <div class="row tabs-container mb-2">
                     <ul class="nav nav-tabs">
-                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#tab-general" @click.prevent="currentTab = 'productsOrdered'" >Products</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderDetails'" >Details</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderActivities'" >Activity</a></li>
-                        <li class="nav-item"><a class="nav-link" target="_blank" :href="'/order/packsheet?order_number=' + order['order_number']">Packsheet</a></li>
+                        <li class="nav-item"><a class="nav-link active pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'productsOrdered'" >Products</a></li>
+                        <li class="nav-item"><a class="nav-link pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderDetails'" >Details</a></li>
+                        <li class="nav-item"><a class="nav-link pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderActivities'" >Activity</a></li>
+                        <li class="nav-item"><a class="nav-link pl-2 pr-2" target="_blank" :href="'/order/packsheet?order_number=' + order['order_number']">Packsheet</a></li>
                     </ul>
                 </div>
 
@@ -103,11 +103,11 @@
                     <template v-for="order_product in order_products">
 
                         <div class="row text-left mb-2">
-                            <div class="col-lg-6">
+                            <div class="col-md-4">
                                 <small>{{ order_product['name_ordered'] }}</small>
                                 <div class="small"><a target="_blank" :href="getProductLink(order_product)">{{ order_product['sku_ordered'] }}</a></div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col">
                                 <div class="row text-center">
                                     <div class="col">
                                         <small> ordered </small>
@@ -327,5 +327,8 @@
 
     .widget {
         width: 20%;
+    }
+    .nav-item {
+        margin-right: unset;
     }
 </style>
