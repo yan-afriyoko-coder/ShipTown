@@ -146,6 +146,7 @@
 
                     <div class="row">
                       <div class="col-12">
+                          Shipping Numbers:
                           <template v-for="shipment in order['order_shipments']">
                               <div class="text-secondary h6"><span class="font-weight-bold">{{ shipment['shipping_number'] }}</span></div>
                           </template>
