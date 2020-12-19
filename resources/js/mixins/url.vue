@@ -52,15 +52,7 @@
                 return this;
             },
 
-            updateUrl: function(params) {
-                let url = this.$router.currentRoute.path + '?';
-
-                for (let element in params) {
-                    if( params[element] != null) {
-                        url += element +'=' + params[element] + '&';
-                    }
-                }
-
+            pushUrl: function (url) {
                 this.$router.push(url).catch(err => {
                     // Ignore the vuex err regarding  navigating to the page they are already on.
                     if (
@@ -71,6 +63,21 @@
                         console.error(err);
                     }
                 });
+            },
+
+            updateUrl: function(params) {
+                let url = this.$router.currentRoute.path + '?';
+
+                for (let element in params) {
+                    if( params[element] != null) {
+                        url += element +'=' + params[element] + '&';
+                    }
+                }
+
+                // we setting url twice because sometimes when only parameter is updated
+                // but path stays NavigationDuplicated error might occur
+                this.pushUrl('/');
+                this.pushUrl(url);
 
                 return this;
             },

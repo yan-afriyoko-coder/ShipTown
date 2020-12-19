@@ -1,26 +1,28 @@
 <template>
     <div>
+
         <div class="row no-gutters mb-3 ml-1 mr-1">
             <div class="col">
                 <barcode-input-field :placeholder="'Scan order number and click enter'" @barcodeScanned="searchText" />
             </div>
         </div>
-        <div class="container">
-            <div v-if="total === 0 && !isLoading" class="row" >
-                <div class="col">
-                    <div class="alert alert-info" role="alert">
-                        No orders found.
-                    </div>
+
+        <div class="row"  v-if="total === 0 && !isLoading">
+            <div class="col">
+                <div class="alert alert-info" role="alert">
+                    No orders found.
                 </div>
             </div>
-            <template v-else class="row">
-                <div class="col">
-                    <template v-for="order in orders">
-                        <order-card :order="order" :expanded="orders.length === 1"/>
-                    </template>
-                </div>
-            </template>
         </div>
+
+        <template v-for="order in orders">
+            <div class="row">
+                <div class="col">
+                    <order-card :order="order" :expanded="orders.length === 1"/>
+                </div>
+            </div>
+        </template>
+
     </div>
 </template>
 

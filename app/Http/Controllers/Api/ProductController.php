@@ -42,7 +42,7 @@ class ProductController extends Controller
                 'tags'
             ]);
 
-        return $this->getPaginatedResult($query, 100);
+        return $this->getPaginatedResult($query);
     }
 
     public function store(StoreProductsRequest $request)
