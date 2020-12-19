@@ -27,6 +27,12 @@
             </div>
         </template>
 
+        <div class="row">
+            <div class="col">
+                <div ref="loadingContainerOverride" style="height: 100px"></div>
+            </div>
+        </div>
+
     </div>
 </template>
 

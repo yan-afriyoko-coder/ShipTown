@@ -15,7 +15,7 @@ export default {
             setTimeout(
                 () => {
                     this.loader = this.$loading.show({
-                            container: this.$refs.loadingContainer,
+                            container: this.$refs.loadingContainerOverride ?? this.$refs.loadingContainer,
                         });
                     },
                 100

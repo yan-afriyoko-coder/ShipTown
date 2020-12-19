@@ -10,7 +10,6 @@
                        @keyup.enter="findText" />
             </div>
         </div>
-
         <div class="row" v-if="orders.length === 0 && !isLoading">
             <div class="col">
                 <div class="alert alert-info" role="alert">
@@ -26,6 +25,12 @@
                 </div>
             </div>
         </template>
+
+        <div class="row">
+            <div class="col">
+                <div ref="loadingContainerOverride" style="height: 100px"></div>
+            </div>
+        </div>
 
     </div>
 </template>
