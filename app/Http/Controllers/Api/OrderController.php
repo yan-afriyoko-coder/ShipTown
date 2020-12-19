@@ -27,7 +27,7 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $query = OrderService::getSpatieQueryBuilder();
+        $query = Order::getSpatieQueryBuilder();
 
         return OrderResource::collection($this->getPaginatedResult($query));
     }

@@ -31,9 +31,11 @@
     import OrderCard from "./Orders/OrderCard";
     import url from "../mixins/url";
     import BarcodeInputField from "./SharedComponents/BarcodeInputField";
+    import api from "../mixins/api";
+    import helpers from "../mixins/helpers";
 
     export default {
-        mixins: [loadingOverlay, url],
+        mixins: [loadingOverlay, url, api, helpers],
 
         components: {
             'order-card': OrderCard,
@@ -42,29 +44,31 @@
 
         data: function() {
             return {
-                query: null,
-                sort: 'sku',
-                order: 'asc',
                 orders: [],
                 total: 0,
                 page: 1,
                 last_page: 1,
-                next_per_page: 10,
             };
         },
 
         mounted() {
-            this.getOrderList(this.page);
+            this.loadOrderList(this.page);
             this.scroll();
         },
 
         methods: {
             searchText(text) {
                 this.setUrlParameter('search', text);
-                this.loadOrders();
+                this.reloadOrders();
             },
 
-            getOrderList: function(page) {
+            reloadOrders(e) {
+                this.orders = [];
+                this.loadOrderList(1);
+            },
+
+            loadOrderList: function(page) {
+                this.showLoading();
 
                 const params = {
                     'filter[status]': this.getUrlParameter('status'),
@@ -72,8 +76,7 @@
                     'sort': this.getUrlParameter('sort','-updated_at'),
                     'per_page': this.getUrlParameter('per_page', 25),
                     'include': 'order_comments,order_comments.user',
-                    page: page,
-                    q: this.query,
+                    'page': page,
                 };
 
                 // this.orders = [];
@@ -81,33 +84,18 @@
                 this.last_page = 1;
                 this.total = 0;
 
-                return new Promise((resolve, reject) => {
-                    this.showLoading();
-                    axios.get('/api/orders', {
-                            params: params
-                        }).then(({ data }) => {
-                            this.orders = this.orders.concat(data.data);
-                            this.total = data.meta.total;
-                            this.last_page = data.meta.last_page;
-                            resolve(data);
-                        })
-                        .catch(reject)
-                        .then(() => {
-                            this.hideLoading();
-                        })
-                });
-            },
+                this.apiGetOrders(params)
+                    .then(({ data }) => {
+                        this.orders = this.orders.concat(data.data);
+                        this.total = data.meta.total;
+                        this.last_page = data.meta.last_page;
+                    })
+                    .finally(() => {
+                        this.hideLoading()
+                            .setFocus(this.$refs.search, true, true);
+                    })
 
-            loadOrders(e) {
-                this.orders = [];
-                this.getOrderList(1)
-                    .then(this.doSelectAll);
-            },
-
-            doSelectAll() {
-                if (this.query) {
-                    setTimeout(() => { document.execCommand('selectall', null, false); });
-                }
+                return this;
             },
 
             scroll (person) {
@@ -115,7 +103,7 @@
                     let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight >= document.documentElement.offsetHeight;
 
                     if (bottomOfWindow && this.last_page > this.page) {
-                        this.getOrderList(++this.page);
+                        this.loadOrderList(++this.page);
                     }
                 };
             },

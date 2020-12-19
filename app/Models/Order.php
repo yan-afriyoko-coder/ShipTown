@@ -366,7 +366,6 @@ class Order extends Model
     {
         return QueryBuilder::for(Order::class)
             ->allowedFilters([
-                AllowedFilter::partial('q', 'order_number'),
                 AllowedFilter::scope('search', 'whereHasText')->ignore([null, '']),
 
                 AllowedFilter::exact('status', 'status_code'),

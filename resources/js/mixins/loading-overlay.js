@@ -7,7 +7,7 @@ export default {
     methods: {
         showLoading() {
             if (this.isLoading) {
-                return;
+                return this;
             }
 
             this.isLoading = true;
