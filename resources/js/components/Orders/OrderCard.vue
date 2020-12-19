@@ -220,11 +220,12 @@
                     return;
                 }
 
-                this.orderDetailsVisible = true;
                 this.loadOrderComments()
                     .loadOrderProducts()
                     .loadOrderActivities()
                     .loadOrderShipments();
+
+                this.orderDetailsVisible = true;
             },
 
             loadOrderProducts() {
