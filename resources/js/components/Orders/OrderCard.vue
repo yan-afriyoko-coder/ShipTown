@@ -23,7 +23,7 @@
 <!--              </div>-->
 <!--            </div>-->
 
-            <div class="row" @click="toggleOrderDetails">
+            <div class="row">
                 <div class="col-5 col-md-4 col-lg-3">
                     <div class="row">
                         <div class="col-12 col-md-6">
@@ -32,7 +32,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col text-center">
+                <div class="col text-center" @click="toggleOrderDetails">
                     <div class="row">
                         <div class="col">
                             <small> age </small>
@@ -52,7 +52,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col align-text-bottom" style="max-width: 20px;">
+                <div class="col align-text-bottom" style="max-width: 20px;" @click="toggleOrderDetails">
                     <h3 class="text-primary text-center h-100 align-middle"> + </h3>
                 </div>
 

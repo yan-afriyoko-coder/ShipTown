@@ -379,7 +379,9 @@ class Order extends Model
 
                 AllowedFilter::scope('has_packer'),
 
-                AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->default(100),
+                AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')
+                    ->ignore([null, '']),
+//                    ->default(100),
             ])
             ->allowedIncludes([
                 'activities',

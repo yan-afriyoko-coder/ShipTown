@@ -77,13 +77,13 @@
 
                             <!-- Menu Items END -->
                             <div class="dropdown-menu dropdown-menu-left text-center text-md-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('order.packsheet') . '?status=packing_web&is_picked=true&sort=order_placed_at,product_line_count,total_quantity_ordered'}}">
+                                <a class="dropdown-item" href="{{ route('order.packsheet', ['inventory_source_location_id' => 100, 'status' => 'packing_web', 'is_picked' => 'true', 'sort' => 'order_placed_at,product_line_count,total_quantity_ordered']) }}">
                                     {{ __('Status: packing_web') }}
                                 </a>
-                                <a class="dropdown-item" href="{{ route('order.packsheet', ['status' => 'packing_warehouse', 'inventory_source_location_id' => 99, 'sort' => 'order_placed_at']) }}">
+                                <a class="dropdown-item" href="{{ route('order.packsheet', ['inventory_source_location_id' => 99, 'status' => 'packing_warehouse', 'sort' => 'order_placed_at']) }}">
                                     {{ __('Status: packing_warehouse') }}
                                 </a>
-                                <a class="dropdown-item" href="{{ route('order.packsheet') . '?status=single_line_orders&sort=min_shelf_location'}}">
+                                <a class="dropdown-item" href="{{ route('order.packsheet',  ['inventory_source_location_id' => 100, 'status' => 'single_line_orders', 'sort' => 'min_shelf_location']) }}">
                                     {{ __('Status: single_line_orders') }}
                                 </a>
                             </div>

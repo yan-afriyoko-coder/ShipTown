@@ -169,6 +169,7 @@
                     } else {
                         params = {
                             'filter[status]': this.getUrlParameter('status','picking'),
+                            'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id'),
                             'sort': this.getUrlParameter('sort', 'order_placed_at'),
                         };
                     }
