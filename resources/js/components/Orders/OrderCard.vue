@@ -24,11 +24,11 @@
 <!--            </div>-->
 
             <div class="row" @click="toggleOrderDetails">
-                <div class="col-4">
+                <div class="col-5 col-md-3">
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <h5 class="text-primary">#{{ order['order_number'] }} </h5>
-                            <div class="small"> status: <b> {{ order['status_code'] }} </b> </div>
+                            <div class="small"> <b> {{ order['status_code'] }} </b> </div>
                         </div>
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                             <small> quantity </small>
                             <h5> {{ order['total_quantity_ordered'] }} </h5>
                         </div>
-                        <div class="col">
+                        <div class="col d-none d-sm-block">
                             <small> total </small>
                             <h5>{{ order['total'] }}</h5>
                         </div>
