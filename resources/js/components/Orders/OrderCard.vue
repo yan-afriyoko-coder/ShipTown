@@ -110,8 +110,8 @@
 
                             <div class="row text-left mb-2">
                                 <div class="col-md-4">
-                                    <small>{{ order_product['name_ordered'] }}</small>
-                                    <div class="small"><a target="_blank" :href="getProductLink(order_product)">{{ order_product['sku_ordered'] }}</a></div>
+                                    <small>{{ order_product['name_ordered'] }} &nbsp;</small>
+                                    <div class="small"><a target="_blank" :href="getProductLink(order_product)">{{ order_product['sku_ordered'] }}<&nbsp;</div>
                                 </div>
                                 <div class="col">
                                     <div class="row text-center">
