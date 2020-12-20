@@ -37,7 +37,7 @@
                     <div class="row">
                         <div class="col">
                             <small> age </small>
-                            <h5>4</h5>
+                            <h5> {{ order['age_in_days'] }}</h5>
                         </div>
                         <div class="col">
                             <small> products </small>

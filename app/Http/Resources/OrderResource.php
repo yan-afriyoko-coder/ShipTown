@@ -37,6 +37,7 @@ class OrderResource extends JsonResource
             "max_shelf_location" => $this->max_shelf_location,
             "is_picked" => $this->is_picked,
             "is_packed" => $this->is_packed,
+            "age_in_days" => $this->age_in_days,
 
             "activities" => ActivityResource::collection($this->whenLoaded('activities')),
             "stats" => new JsonResource($this->whenLoaded('stats')),

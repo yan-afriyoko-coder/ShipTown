@@ -125,6 +125,7 @@ class Order extends Model
     protected $appends = [
         'is_picked',
         'is_packed',
+        'age_in_days',
     ];
 
     /**
@@ -139,6 +140,14 @@ class Order extends Model
             ->orWhereHas('orderShipments', function ($query) use ($text) {
                 return $query->where('shipping_number', 'like', '%'. $text . '%');
             });
+    }
+
+    /**
+     * @return int
+     */
+    public function getAgeInDaysAttribute()
+    {
+        return Carbon::now()->ceilDay()->diffInDays($this->order_placed_at);
     }
 
     public function scopeWhereActive($query)
