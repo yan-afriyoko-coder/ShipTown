@@ -4,19 +4,21 @@ namespace App\Events\Order;
 
 use App\Models\Order;
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class CreatedEvent
+class OrderUpdatedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * @var Order
      */
-    public $order;
+    private $order;
 
     /**
      * Create a new event instance.
@@ -33,7 +35,7 @@ class CreatedEvent
      */
     public function getOrder()
     {
-        return $this->order;
+        return $this->order->load('orderProducts');
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace App\Listeners\Order\Created;
 
-use App\Events\Order\CreatedEvent;
+use App\Events\Order\OrderCreatedEvent;
 use App\Jobs\Modules\Sns\PublishSnsNotificationJob;
 
 class PublishSnsNotificationListener
@@ -20,10 +20,10 @@ class PublishSnsNotificationListener
     /**
      * Handle the event.
      *
-     * @param CreatedEvent $event
+     * @param OrderCreatedEvent $event
      * @return void
      */
-    public function handle(CreatedEvent $event)
+    public function handle(OrderCreatedEvent $event)
     {
         PublishSnsNotificationJob::dispatch(
             'orders_events',

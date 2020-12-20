@@ -35,11 +35,11 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         // Order
-        \App\Events\Order\CreatedEvent::class => [
+        \App\Events\Order\OrderCreatedEvent::class => [
             PublishSnsNotificationListener::class
         ],
 
-        \App\Events\Order\UpdatedEvent::class => [
+        \App\Events\Order\OrderUpdatedEvent::class => [
             \App\Listeners\Order\Updated\PublishSnsNotificationListener::class,
             \App\Listeners\Order\Updated\CheckAndMarkPaidListener::class,
             \App\Listeners\Order\Updated\ChangeToPackingWebStatusListener::class,

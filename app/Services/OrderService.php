@@ -3,7 +3,7 @@
 
 namespace App\Services;
 
-use App\Events\Order\CreatedEvent;
+use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\StatusChangedEvent;
 use App\Jobs\Api2cart\ImportShippingAddressJob;
 use App\Models\Inventory;
@@ -108,7 +108,7 @@ class OrderService
 
         $order = self::syncOrderProducts($orderAttributes['order_products'], $order);
 
-        CreatedEvent::dispatch($order);
+        OrderCreatedEvent::dispatch($order);
 
         return $order;
     }
