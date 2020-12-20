@@ -15,15 +15,6 @@
           <div class="row ml-1 mr-1 card">
           <div class="col p-2 pl-3 rounded">
 
-<!--            <div class="row text-left">-->
-<!--              <div class="col-6">-->
-<!--                <div class="text-secondary h4">#{{ order['order_number'] }}</div>-->
-<!--              </div>-->
-<!--              <div class="col-6 text-right">-->
-<!--                  <div class=""><a target="_blank" :href="'/order/packsheet?order_number=' + order['order_number'] ">OPEN ORDER</a></div>-->
-<!--              </div>-->
-<!--            </div>-->
-
             <div class="row">
                 <div class="col-5 col-md-4 col-lg-3">
                     <div class="row">
@@ -232,17 +223,27 @@
 
         methods: {
             toggleOrderDetails() {
-                if (this.orderDetailsVisible) {
-                    this.orderDetailsVisible = false;
-                    return;
-                }
+                    if (navigator.share) {
+                        navigator.share({
+                            url: location.href,
+                            title: document.title
+                        })
+                    } else {
 
-                this.loadOrderComments()
-                    .loadOrderProducts()
-                    .loadOrderActivities()
-                    .loadOrderShipments();
+                        // Show custom share UI
+                    }
 
-                this.orderDetailsVisible = true;
+                // if (this.orderDetailsVisible) {
+                //     this.orderDetailsVisible = false;
+                //     return;
+                // }
+                //
+                // this.loadOrderComments()
+                //     .loadOrderProducts()
+                //     .loadOrderActivities()
+                //     .loadOrderShipments();
+                //
+                // this.orderDetailsVisible = true;
             },
 
             loadOrderProducts() {

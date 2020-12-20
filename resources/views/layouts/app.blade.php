@@ -35,19 +35,6 @@
                     @yield('title')
                 </a>
 
-
-{{--                <ul class="navbar-nav d-flex  mr-auto text-center text-md-left">--}}
-{{--                    <li class="nav-item">--}}
-{{--                        <a class="nav-link" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>--}}
-{{--                    </li>--}}
-{{--                    <li class="nav-item">--}}
-{{--                        <a class="nav-link" href="{{ route('products') }}">{{ __('Products') }}</a>--}}
-{{--                    </li>--}}
-{{--                    <li class="nav-item">--}}
-{{--                        <a class="nav-link" href="{{ route('orders') }}">{{ __('Orders') }}</a>--}}
-{{--                    </li>--}}
-{{--                </ul>--}}
-
                 <div class="d-block d-md-none">
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <a type="button" class="btn btn-secondary" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
