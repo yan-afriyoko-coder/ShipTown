@@ -26,6 +26,7 @@ class InventoryUpdatedEventListener
     {
         $this->updateProductTotalQuantity($event);
         $this->updateProductQuantityReserved($event);
+        $this->updateProductInventoryTotals($event);
     }
 
     /**
@@ -72,5 +73,21 @@ class InventoryUpdatedEventListener
                 'quantity_reserved',
                 $event->getInventory()->quantity
             );
+    }
+
+    /**
+     * @param InventoryUpdatedEvent $event
+     */
+    public function updateProductInventoryTotals(InventoryUpdatedEvent $event)
+    {
+        $inventory = $event->getInventory();
+        $product = $inventory->product();
+
+        if ($product) {
+            $product->update([
+                'quantity' => $product->quantity + $inventory->quantity - $inventory->getOriginal('quantity'),
+                'quantity_reserved' => $product->quantity_reserved + $inventory->quantity_reserved - $inventory->getOriginal('quantity_reserved'),
+            ]);
+        }
     }
 }

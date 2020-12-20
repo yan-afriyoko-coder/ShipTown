@@ -29,15 +29,6 @@ class InventoryObserver
      */
     public function updated(Inventory $inventory)
     {
-        $product = $inventory->product();
-
-        if ($product) {
-            $product->update([
-                'quantity' => $product->quantity + $inventory->quantity - $inventory->getOriginal('quantity'),
-                'quantity_reserved' => $product->quantity_reserved + $inventory->quantity_reserved - $inventory->getOriginal('quantity_reserved'),
-            ]);
-        }
-
         InventoryUpdatedEvent::dispatch($inventory);
     }
 
