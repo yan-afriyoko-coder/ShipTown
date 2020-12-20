@@ -87,7 +87,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a v-if="sharingAvailable()" class="nav-link p-0 pl-2 pr-2" target="_blank" @click.prevent="shareLink" href="#">
+                            <a v-if="sharingAvailable()" class="nav-link p-0 pl-2 pr-2" @click.prevent="shareLink" href="#">
                                 <font-awesome-icon icon="share-alt" class="fas fa-sm"></font-awesome-icon>
                             </a>
                         </li>
@@ -241,7 +241,7 @@
 
             shareLink() {
                 navigator.share({
-                    url: '/orders?order_number=' + this.order['order_number'],
+                    url: '/orders?search=' + this.order['order_number'],
                     title: document.title
                 });
             },
@@ -377,9 +377,6 @@
         /*border: 1px solid #76777838;*/
     }
 
-    .widget {
-        width: 20%;
-    }
     .nav-item {
         margin-right: unset;
     }
