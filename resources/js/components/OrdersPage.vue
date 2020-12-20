@@ -115,6 +115,10 @@
                     this.loadOrderList(++this.page);
                 }
             },
+
+            hasMorePagesToLoad: function () {
+                return this.lastPage > this.lastPageLoaded;
+            },
         },
     }
 </script>
