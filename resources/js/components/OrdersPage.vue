@@ -10,6 +10,7 @@
                        @keyup.enter="findText" />
             </div>
         </div>
+
         <div class="row" v-if="orders.length === 0 && !isLoading">
             <div class="col">
                 <div class="alert alert-info" role="alert">
