@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\Listeners\Inventory\Updated\UpdateProductsQuantityReservedListener;
-use App\Listeners\Inventory\Updated\UpdateProductTotalQuantityListener;
 use App\Listeners\Order\Created\PublishSnsNotificationListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -54,8 +52,7 @@ class EventServiceProvider extends ServiceProvider
 
         // Inventory
         \App\Events\Inventory\InventoryUpdatedEvent::class => [
-            UpdateProductTotalQuantityListener::class,
-            UpdateProductsQuantityReservedListener::class
+            \App\Listeners\Inventory\InventoryUpdatedEventListener::class
         ],
 
         // Other
