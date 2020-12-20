@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Events\Product\CreatedEvent;
-use App\Events\Product\UpdatedEvent;
+use App\Events\Product\ProductUpdatedEvent;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Warehouse;
@@ -42,7 +42,7 @@ class ProductObserver
      */
     public function updated(Product $product)
     {
-        UpdatedEvent::dispatch($product);
+        ProductUpdatedEvent::dispatch($product);
     }
 
     /**

@@ -36,7 +36,7 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\Product\Created\PublishSnsNotificationListener::class,
         ],
 
-        \App\Events\Product\UpdatedEvent::class => [
+        \App\Events\Product\ProductUpdatedEvent::class => [
             \App\Listeners\Product\Updated\AttachTagsListener::class,
             \App\Listeners\Product\ProductUpdatedEventListener::class,
         ],

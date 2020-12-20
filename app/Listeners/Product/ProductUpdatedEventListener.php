@@ -2,7 +2,7 @@
 
 namespace App\Listeners\Product;
 
-use App\Events\Product\UpdatedEvent;
+use App\Events\Product\ProductUpdatedEvent;
 use App\Jobs\Modules\Sns\PublishSnsNotificationJob;
 use App\Services\Api2cartService;
 use Exception;
@@ -22,11 +22,11 @@ class ProductUpdatedEventListener
     /**
      * Handle the event.
      *
-     * @param UpdatedEvent $event
+     * @param ProductUpdatedEvent $event
      * @return void
      * @throws Exception
      */
-    public function handle(UpdatedEvent $event)
+    public function handle(ProductUpdatedEvent $event)
     {
         $this->publishSnsNotification($event);
         $this->attachAutoTags($event);
@@ -36,11 +36,11 @@ class ProductUpdatedEventListener
     /**
      * Handle the event.
      *
-     * @param UpdatedEvent $event
+     * @param ProductUpdatedEvent $event
      * @return void
      * @throws Exception
      */
-    public function ifOosSyncApi2cart(UpdatedEvent $event)
+    public function ifOosSyncApi2cart(ProductUpdatedEvent $event)
     {
         $product = $event->getProduct();
 
@@ -54,10 +54,10 @@ class ProductUpdatedEventListener
     /**
      * Handle the event.
      *
-     * @param UpdatedEvent $event
+     * @param ProductUpdatedEvent $event
      * @return void
      */
-    public function publishSnsNotification(UpdatedEvent $event)
+    public function publishSnsNotification(ProductUpdatedEvent $event)
     {
         PublishSnsNotificationJob::dispatch(
             'products_events',
@@ -68,10 +68,10 @@ class ProductUpdatedEventListener
     /**
      * Handle the event.
      *
-     * @param  UpdatedEvent  $event
+     * @param  ProductUpdatedEvent  $event
      * @return void
      */
-    public function attachAutoTags(UpdatedEvent $event)
+    public function attachAutoTags(ProductUpdatedEvent $event)
     {
         $product = $event->getProduct();
 

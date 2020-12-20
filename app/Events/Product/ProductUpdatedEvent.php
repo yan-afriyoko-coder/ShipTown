@@ -14,7 +14,7 @@ use Illuminate\Queue\SerializesModels;
  * Class UpdatedEvent
  * @package App\Events\Product
  */
-class UpdatedEvent implements ShouldQueue
+class ProductUpdatedEvent implements ShouldQueue
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
