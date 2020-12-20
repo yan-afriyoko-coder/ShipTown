@@ -11,7 +11,7 @@
 <!--      </div>-->
 
       <div class="swiper-slide">
-          <div id="spacer-top" class="row mt-2" v-if="orderDetailsVisible"></div>
+<!--          <div id="spacer-top" class="row mt-2" v-if="orderDetailsVisible"></div>-->
           <div class="row ml-1 mr-1 card">
               <div class="col p-2 pl-2 rounded">
                 <div class="row">
@@ -39,24 +39,36 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col align-text-bottom" style="max-width: 20px;" @click="toggleOrderDetails">
-                        <h3 class="text-primary text-center h-100 align-middle"> + </h3>
-                    </div>
+<!--                    <div class="col align-text-bottom" style="max-width: 20px;" @click="toggleOrderDetails">-->
+<!--                        <h3 class="text-primary text-center h-100 align-middle"> + </h3>-->
+<!--                    </div>-->
 
-                    <div class="col-12" v-if="order['order_comments'].length > 0 && orderDetailsVisible === false">
+                    <div class="col-12 small" v-if="order['order_comments'].length > 0 && orderDetailsVisible === false">
                         <b>{{ order['order_comments'][0]['user']['name'] }}: </b>{{ order['order_comments'][0]['comment'] }}
                     </div>
 
                 </div>
 
 
+                <div class="row text-center text-secondary" v-if="!orderDetailsVisible" @click="toggleOrderDetails">
+                    <div class="col">
+                        <font-awesome-icon icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
+                    </div>
+                </div>
 
                 <div v-if="orderDetailsVisible">
+
+                    <div class="row text-center" @click="toggleOrderDetails">
+                        <div class="col">
+                            <font-awesome-icon icon="chevron-up" class="fa fa-xs text-secondary"></font-awesome-icon>
+                        </div>
+                    </div>
+
                     <div class="row mb-2 mt-1">
                         <input ref="newCommentInput" v-model="input_comment" class="form-control" placeholder="Add comment here" @keypress.enter="addComment"/>
                     </div>
 
-                    <template v-for="order_comment in order_comments">
+                    <template v-for="order_comment in order['order_comments']">
                         <div class="row mb-2">
                             <div class="col">
                                 <b>{{ order_comment['user']['name'] }}: </b>{{ order_comment['comment'] }}
@@ -212,11 +224,18 @@
 
                 currentTab: 'productsOrdered',
 
-                order_products: null,
+                order_products: [],
                 order_comments: null,
                 order_activities: null,
                 order_shipments: null,
             }
+        },
+
+        mounted() {
+            // we pre creating array of empty products so UI will display 4 empty rows
+            // its simply more pleasant to eye and card doesnt "jump"
+            for (let i = 0; i < this.order['product_line_count']; i++)
+                this.order_products.unshift([]);
         },
 
         created: function () {
@@ -251,19 +270,15 @@
                     return;
                 }
 
-                this.loadOrderComments()
-                    .loadOrderProducts()
-                    .loadOrderActivities()
-                    .loadOrderShipments();
+                // this.loadOrderComments();
+                this.loadOrderProducts()
+                this.loadOrderActivities();
+                this.loadOrderShipments();
 
                 this.orderDetailsVisible = true;
             },
 
             loadOrderProducts() {
-                if (this.order_products) {
-                    return this;
-                }
-
                 let params = {
                     'filter[order_id]': this.order['id']
                 };

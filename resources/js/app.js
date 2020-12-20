@@ -14,7 +14,7 @@ import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import { BootstrapVue } from 'bootstrap-vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCog, faQuestionCircle, faUserEdit, faBarcode, faUserMinus, faShareAlt } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faQuestionCircle, faUserEdit, faBarcode, faUserMinus, faShareAlt, faChevronDown, faChevronUp, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VueTippy, { TippyComponent } from "vue-tippy";
 import Snotify from 'vue-snotify';
@@ -26,6 +26,9 @@ library.add(faUserEdit);
 library.add(faUserMinus);
 library.add(faBarcode);
 library.add(faShareAlt);
+library.add(faChevronDown);
+library.add(faChevronUp);
+library.add(faExternalLinkAlt);
 Vue.config.productionTip = false;
 
 Vue.use(VueCountdownTimer);
