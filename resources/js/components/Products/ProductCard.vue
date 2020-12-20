@@ -1,6 +1,8 @@
 <template>
 
-    <div id="spacer-top" class="row mt-2" v-if="showOrders"></div>
+    <div>
+
+    <div class="spacer-top row mt-2" v-if="showOrders"></div>
 
     <div class="row card mb-3 ml-1 mr-1" >
         <div class="col p-2 pl-3">
@@ -120,10 +122,12 @@
             </div>
 
         </div>
+
     </div>
 
-    <div id="spacer-bottom" class="row mb-4 mt-4" v-if="showOrders"></div>
+        <div class="spacer-bottom row mb-4 mt-4" v-if="showOrders"></div>
 
+    </div>
 </template>
 
 <script>
