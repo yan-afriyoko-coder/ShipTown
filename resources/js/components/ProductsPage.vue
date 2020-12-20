@@ -91,6 +91,7 @@
                     'filter[without_tags]': this.getUrlParameter('without_tags'),
                     'sort': this.getUrlParameter('sort', '-quantity'),
                     'include': 'inventory,tags',
+                    'per_page': this.getUrlParameter('per_page', 25),
                     'page': page
                 }
 

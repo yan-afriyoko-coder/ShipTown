@@ -91,7 +91,7 @@
                     'filter[status]': this.getUrlParameter('status'),
                     'filter[search]': this.getUrlParameter('search'),
                     'sort': this.getUrlParameter('sort','-updated_at'),
-                    'per_page': this.getUrlParameter('per_page'),
+                    'per_page': this.getUrlParameter('per_page', 20),
                     'include': 'order_comments,order_comments.user',
                     'page': page,
                 };
