@@ -43,12 +43,15 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         // Inventory
+        \App\Events\Inventory\InventoryCreatedEvent::class => [
+            \App\Listeners\Inventory\InventoryCreatedEventListener::class
+        ],
+
         \App\Events\Inventory\InventoryUpdatedEvent::class => [
             \App\Listeners\Inventory\InventoryUpdatedEventListener::class
         ],
 
         // Other
-
     ];
 
     /**
