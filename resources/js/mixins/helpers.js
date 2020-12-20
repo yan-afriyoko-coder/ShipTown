@@ -35,8 +35,8 @@ export default {
             );
         },
 
-        isBottomOfTheWindow: function () {
-            return document.documentElement.scrollTop + window.innerHeight > document.documentElement.offsetHeight - 10;
+        isMoreThanPercentageScrolled: function (percentage) {
+            return document.documentElement.scrollTop + window.innerHeight > document.documentElement.offsetHeight * (percentage / 100);
         },
 
         getValueOrDefault,

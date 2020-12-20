@@ -29,7 +29,7 @@
 
         <div class="row">
             <div class="col">
-                <div ref="loadingContainerOverride" style="height: 100px"></div>
+                <div ref="loadingContainerOverride" style="height: 100px">  No more records found </div>
             </div>
         </div>
 
@@ -112,7 +112,7 @@
             },
 
             loadMore: function () {
-                if (this.isBottomOfTheWindow() && this.hasMorePagesToLoad()) {
+                if (this.isMoreThanPercentageScrolled(80) && this.hasMorePagesToLoad() && !this.isLoading) {
                     this.loadProductList(++this.lastPageLoaded);
                 }
             },

@@ -62,8 +62,11 @@
         },
 
         mounted() {
+            this.searchText = this.getUrlParameter('search');
+
+            window.onscroll = () => this.loadMore();
+
             this.reloadOrders();
-            this.scroll();
         },
 
         methods: {
@@ -107,14 +110,10 @@
                 return this;
             },
 
-            scroll (person) {
-                window.onscroll = () => {
-                    let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight >= document.documentElement.offsetHeight;
-
-                    if (bottomOfWindow && this.last_page > this.page) {
-                        this.loadOrderList(++this.page);
-                    }
-                };
+            loadMore: function () {
+                if (this.isMoreThanPercentageScrolled(80) && this.hasMorePagesToLoad() && !this.isLoading) {
+                    this.loadOrderList(++this.page);
+                }
             },
         },
     }
