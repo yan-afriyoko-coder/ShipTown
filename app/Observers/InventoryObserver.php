@@ -4,7 +4,7 @@ namespace App\Observers;
 
 use App\Events\Inventory\CreatedEvent;
 use App\Events\Inventory\DeletedEvent;
-use App\Events\Inventory\UpdatedEvent;
+use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Models\Inventory;
 
 class InventoryObserver
@@ -37,7 +37,7 @@ class InventoryObserver
             ]);
         }
 
-        UpdatedEvent::dispatch($inventory);
+        InventoryUpdatedEvent::dispatch($inventory);
     }
 
     /**

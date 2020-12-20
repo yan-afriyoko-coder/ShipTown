@@ -53,7 +53,7 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         // Inventory
-        \App\Events\Inventory\UpdatedEvent::class => [
+        \App\Events\Inventory\InventoryUpdatedEvent::class => [
             UpdateProductTotalQuantityListener::class,
             UpdateProductsQuantityReservedListener::class
         ],

@@ -2,7 +2,7 @@
 
 namespace App\Listeners\Inventory\Updated;
 
-use App\Events\Inventory\UpdatedEvent;
+use App\Events\Inventory\InventoryUpdatedEvent;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -21,10 +21,10 @@ class UpdateProductTotalQuantityListener
     /**
      * Handle the event.
      *
-     * @param UpdatedEvent $event
+     * @param InventoryUpdatedEvent $event
      * @return void
      */
-    public function handle(UpdatedEvent $event)
+    public function handle(InventoryUpdatedEvent $event)
     {
         $event->getInventory()
             ->product()

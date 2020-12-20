@@ -9,7 +9,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class UpdatedEvent
+class InventoryUpdatedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
