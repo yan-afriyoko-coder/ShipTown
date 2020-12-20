@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Listeners\Order\Created\PublishSnsNotificationListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -36,7 +35,7 @@ class EventServiceProvider extends ServiceProvider
 
         // Order
         \App\Events\Order\OrderCreatedEvent::class => [
-            PublishSnsNotificationListener::class
+            \App\Listeners\Order\OrderUpdatedEventListener::class
         ],
 
         \App\Events\Order\OrderUpdatedEvent::class => [

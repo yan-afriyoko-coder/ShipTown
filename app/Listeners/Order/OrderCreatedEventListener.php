@@ -2,8 +2,8 @@
 
 namespace App\Listeners\Order;
 
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Events\Order\OrderCreatedEvent;
+use App\Jobs\Modules\Sns\PublishSnsNotificationJob;
 
 class OrderCreatedEventListener
 {
@@ -20,11 +20,25 @@ class OrderCreatedEventListener
     /**
      * Handle the event.
      *
-     * @param  object  $event
+     * @param OrderCreatedEvent $event
      * @return void
      */
-    public function handle($event)
+    public function handle(OrderCreatedEvent $event)
     {
-        //
+        $this->publishSnsNotification($event);
+    }
+
+    /**
+     * Handle the event.
+     *
+     * @param OrderCreatedEvent $event
+     * @return void
+     */
+    public function publishSnsNotification(OrderCreatedEvent $event)
+    {
+        PublishSnsNotificationJob::dispatch(
+            'orders_events',
+            $event->getOrder()->toJson()
+        );
     }
 }
