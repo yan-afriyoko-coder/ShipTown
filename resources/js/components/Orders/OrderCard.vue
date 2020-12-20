@@ -11,7 +11,8 @@
 <!--      </div>-->
 
       <div class="swiper-slide">
-        <div class="row ml-1 mr-1 card" >
+          <div id="spacer-top" class="row mt-2" v-if="orderDetailsVisible"></div>
+          <div class="row ml-1 mr-1 card">
           <div class="col p-2 pl-3 rounded">
 
 <!--            <div class="row text-left">-->
@@ -173,6 +174,7 @@
             </div>
           </div>
         </div>
+          <div id="spacer-bottom" class="row mb-4 mt-4" v-if="orderDetailsVisible"></div>
       </div>
     </div>
 
