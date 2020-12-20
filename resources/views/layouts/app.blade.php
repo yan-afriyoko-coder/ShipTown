@@ -30,10 +30,31 @@
         @auth
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
+                <a class="navbar-brand d-none d-md-block" href="{{ url('/') }}">
                     PM
                     @yield('title')
                 </a>
+
+
+{{--                <ul class="navbar-nav d-flex  mr-auto text-center text-md-left">--}}
+{{--                    <li class="nav-item">--}}
+{{--                        <a class="nav-link" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>--}}
+{{--                    </li>--}}
+{{--                    <li class="nav-item">--}}
+{{--                        <a class="nav-link" href="{{ route('products') }}">{{ __('Products') }}</a>--}}
+{{--                    </li>--}}
+{{--                    <li class="nav-item">--}}
+{{--                        <a class="nav-link" href="{{ route('orders') }}">{{ __('Orders') }}</a>--}}
+{{--                    </li>--}}
+{{--                </ul>--}}
+
+                <div class="d-block d-md-none">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <a type="button" class="btn btn-secondary" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
+                        <a type="button" class="btn btn-secondary" href="{{ route('products') }}">{{ __('Products') }}</a>
+                        <a type="button" class="btn btn-secondary" href="{{ route('orders') }}">{{ __('Orders') }}</a>
+                    </div>
+                </div>
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -42,14 +63,17 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto text-center text-md-left">
-                        <li class="nav-item d-none d-md-inline">
+                        <li class="nav-item d-none d-md-inline d-md-block">
                             <a class="nav-link" href="{{ route('dashboard') }}">|</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item d-none d-md-block">
                             <a class="nav-link" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item d-none d-md-block">
                             <a class="nav-link" href="{{ route('products') }}">{{ __('Products') }}</a>
+                        </li>
+                        <li class="nav-item d-none d-md-block">
+                            <a class="nav-link" href="{{ route('orders') }}">{{ __('Orders') }}</a>
                         </li>
 
                         <li class="nav-item dropdown">
@@ -87,10 +111,6 @@
                                     {{ __('Status: single_line_orders') }}
                                 </a>
                             </div>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('orders') }}">{{ __('Orders') }}</a>
                         </li>
 
                         <li class="nav-item dropdown">
