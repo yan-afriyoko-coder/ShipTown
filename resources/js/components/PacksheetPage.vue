@@ -74,8 +74,9 @@
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('for_later')">for_later</button>
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('missing_item')">missing_item</button>
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('picking')">picking</button>
-                <button type="button" class="btn btn-info" @click.prevent="changeStatus('packing_warehouse')">picking</button>
+                <button type="button" class="btn btn-info" @click.prevent="changeStatus('packing_warehouse')">packing_warehouse</button>
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('fabrics')">fabrics</button>
+                <button type="button" class="btn btn-info" @click.prevent="changeStatus('ready')">ready</button>
                 <button type="button" class="btn btn-info" @click.prevent="displayShippingNumberModal">Add Shipping Number</button>
                 <button type="button" class="btn btn-info" @click.prevent="printAddressLabel">Print Address Label</button>
             </template>
