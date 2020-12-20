@@ -7,7 +7,7 @@
                     <div>sku: <b> {{ product.sku }} </b></div>
                     <div>
                         <template v-for="tag in product.tags">
-                            <a class="badge" :href="'products?has_tags=' + Object.values(tag.name)[0]"> {{ Object.values(tag.name)[0] }} </a>
+                            <a class="badge text-uppercase" :href="'products?has_tags=' + Object.values(tag.name)[0]"> {{ Object.values(tag.name)[0] }} </a>
                         </template>
                     </div>
                 </div>
@@ -232,5 +232,8 @@
 <style scoped>
 li {
     margin-right: 5px;
+}
+.badge {
+    font-family: "Lato",-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
 }
 </style>
