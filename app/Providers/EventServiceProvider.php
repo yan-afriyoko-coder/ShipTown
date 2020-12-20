@@ -40,10 +40,6 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         \App\Events\Order\OrderUpdatedEvent::class => [
-            \App\Listeners\Order\Updated\PublishSnsNotificationListener::class,
-            \App\Listeners\Order\Updated\CheckAndMarkPaidListener::class,
-            \App\Listeners\Order\Updated\ChangeToPackingWebStatusListener::class,
-            \App\Listeners\Order\Updated\ChangeStatusToReadyIfPackedListener::class,
             \App\Listeners\Order\OrderUpdatedEventListener::class,
         ],
 
