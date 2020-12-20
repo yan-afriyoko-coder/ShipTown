@@ -57,7 +57,6 @@
 
 
             <div v-if="orderDetailsVisible">
-
                 <div class="row mb-2 mt-1">
                     <input ref="newCommentInput" v-model="input_comment" class="form-control" placeholder="Add comment here" @keypress.enter="addComment"/>
                 </div>
@@ -76,10 +75,9 @@
                         <li class="nav-item"><a class="nav-link pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderDetails'" >Details</a></li>
                         <li class="nav-item"><a class="nav-link pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderActivities'" >Activity</a></li>
                         <li class="nav-item"><a class="nav-link pl-2 pr-2" target="_blank" :href="'/order/packsheet?order_number=' + order['order_number']">Packsheet</a></li>
+                        <li class="nav-item" v-if="sharingAvailable()"><a class="nav-link pl-2 pr-2" target="_blank" @click.prevent="shareLink" href="#">Share</a></li>
                     </ul>
                 </div>
-
-
 
                 <div class="container" v-if="currentTab === 'productsOrdered'">
                     <template v-for="order_product in order_products">
@@ -222,28 +220,29 @@
         },
 
         methods: {
+            sharingAvailable() {
+                return navigator.share;
+            },
+
+            shareLink() {
+                navigator.share({
+                    url: '/orders?order_number=' + this.order['order_number'],
+                    title: document.title
+                });
+            },
+
             toggleOrderDetails() {
-                    if (navigator.share) {
-                        navigator.share({
-                            url: location.href,
-                            title: document.title
-                        })
-                    } else {
+                if (this.orderDetailsVisible) {
+                    this.orderDetailsVisible = false;
+                    return;
+                }
 
-                        // Show custom share UI
-                    }
+                this.loadOrderComments()
+                    .loadOrderProducts()
+                    .loadOrderActivities()
+                    .loadOrderShipments();
 
-                // if (this.orderDetailsVisible) {
-                //     this.orderDetailsVisible = false;
-                //     return;
-                // }
-                //
-                // this.loadOrderComments()
-                //     .loadOrderProducts()
-                //     .loadOrderActivities()
-                //     .loadOrderShipments();
-                //
-                // this.orderDetailsVisible = true;
+                this.orderDetailsVisible = true;
             },
 
             loadOrderProducts() {
