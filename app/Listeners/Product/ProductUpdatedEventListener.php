@@ -29,6 +29,7 @@ class ProductUpdatedEventListener
     public function handle(UpdatedEvent $event)
     {
         $this->publishSnsNotification($event);
+        $this->attachAutoTags($event);
         $this->ifOosSyncApi2cart($event);
     }
 
@@ -62,5 +63,28 @@ class ProductUpdatedEventListener
             'products_events',
             $event->getProduct()->toJson()
         );
+    }
+
+    /**
+     * Handle the event.
+     *
+     * @param  UpdatedEvent  $event
+     * @return void
+     */
+    public function attachAutoTags(UpdatedEvent $event)
+    {
+        $product = $event->getProduct();
+
+        if ($product->withAllTags(['Available Online'])->exists()) {
+            $product->attachTag('Not Synced');
+        }
+
+        if ($product->quantity_available <= 0) {
+            $product->attachTag('Out Of Stock');
+        }
+
+        if ($product->quantity_available > 0) {
+            $product->detachTag('Out Of Stock');
+        }
     }
 }
