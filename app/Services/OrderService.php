@@ -22,6 +22,23 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderService
 {
+
+    /**
+     * @param Order $order
+     * @param string $from_status_code
+     * @param bool $condition
+     * @param string $to_status_code
+     * @return Order
+     */
+    public static function changeStatusIf(Order $order, string $from_status_code, bool $condition, string $to_status_code): Order
+    {
+        if ($order->isStatusCode($from_status_code) && $condition) {
+            $order->status_code = $to_status_code;
+        }
+
+        return $order;
+    }
+
     /**
      * @param Order $order
      * @param $sourceLocationId

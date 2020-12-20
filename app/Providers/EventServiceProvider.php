@@ -44,6 +44,7 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\Order\Updated\CheckAndMarkPaidListener::class,
             \App\Listeners\Order\Updated\ChangeToPackingWebStatusListener::class,
             \App\Listeners\Order\Updated\ChangeStatusToReadyIfPackedListener::class,
+            \App\Listeners\Order\OrderUpdatedEventListener::class,
         ],
 
         \App\Events\Order\StatusChangedEvent::class => [
