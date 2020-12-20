@@ -3,7 +3,7 @@
 
         <div class="row no-gutters mb-3 ml-1 mr-1">
             <div class="col">
-                <input placeholder="Search for products..."
+                <input placeholder="Search"
                        class="form-control"
                        ref="search"
                        v-model="searchText"
