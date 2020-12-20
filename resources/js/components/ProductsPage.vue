@@ -54,11 +54,11 @@
 
         data: function() {
             return {
-                filters: {},
-                products: [],
                 lastPageLoaded: 1,
                 lastPage: 1,
                 searchText: '',
+
+                products: [],
             };
         },
 

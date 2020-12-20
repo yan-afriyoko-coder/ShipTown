@@ -53,11 +53,11 @@
 
         data: function() {
             return {
-                orders: [],
-                total: 0,
-                page: 1,
-                last_page: 1,
+                lastPageLoaded: 1,
+                lastPage: 1,
                 searchText: '',
+
+                orders: [],
             };
         },
 
@@ -85,7 +85,6 @@
 
                 this.page = page;
                 this.last_page = 1;
-                this.total = 0;
 
                 const params = {
                     'filter[status]': this.getUrlParameter('status'),
@@ -99,8 +98,8 @@
                 this.apiGetOrders(params)
                     .then(({ data }) => {
                         this.orders = this.orders.concat(data.data);
-                        this.total = data.meta.total;
-                        this.last_page = data.meta.last_page;
+                        this.lastPage = data.meta.last_page
+                        this.lastPageLoaded = page;
                     })
                     .finally(() => {
                         this.hideLoading()
@@ -112,7 +111,7 @@
 
             loadMore: function () {
                 if (this.isMoreThanPercentageScrolled(80) && this.hasMorePagesToLoad() && !this.isLoading) {
-                    this.loadOrderList(++this.page);
+                    this.loadOrderList(++this.lastPageLoaded);
                 }
             },
 
