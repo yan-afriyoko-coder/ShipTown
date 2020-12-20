@@ -280,7 +280,8 @@
 
             loadOrderProducts() {
                 let params = {
-                    'filter[order_id]': this.order['id']
+                    'filter[order_id]': this.order['id'],
+                    'include': 'product',
                 };
 
                 this.apiGetOrderProducts(params)
@@ -371,7 +372,7 @@
                 return '/products?search=' + searchTerm;
             },
             getProductQuantity(orderProduct) {
-                return orderProduct['product'] ? Number(orderProduct['product']['quantity']) : -1;
+                return orderProduct['product'] ? Number(orderProduct['product']['quantity']) : 0;
             },
             ifHasEnoughStock(orderProduct) {
                 return this.getProductQuantity(orderProduct) < Number(orderProduct['quantity_to_ship']);
