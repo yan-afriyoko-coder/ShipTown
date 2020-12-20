@@ -112,7 +112,7 @@
             },
 
             loadMore: function () {
-                if (this.isMoreThanPercentageScrolled(80) && this.hasMorePagesToLoad() && !this.isLoading) {
+                if (this.isMoreThanPercentageScrolled(70) && this.hasMorePagesToLoad() && !this.isLoading) {
                     this.loadProductList(++this.lastPageLoaded);
                 }
             },
