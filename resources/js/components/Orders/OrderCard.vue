@@ -13,171 +13,170 @@
       <div class="swiper-slide">
           <div id="spacer-top" class="row mt-2" v-if="orderDetailsVisible"></div>
           <div class="row ml-1 mr-1 card">
-          <div class="col p-2 pl-3 rounded">
-
-            <div class="row">
-                <div class="col-5 col-md-4 col-lg-3">
-                    <h5 class="text-primary">#{{ order['order_number'] }} </h5>
-                    <div class="small"> <b> {{ order['status_code'] }} </b> </div>
-                </div>
-                <div class="col text-center" @click="toggleOrderDetails">
-                    <div class="row">
-                        <div class="col">
-                            <small> age </small>
-                            <h5> {{ order['age_in_days'] }}</h5>
-                        </div>
-                        <div class="col">
-                            <small> products </small>
-                            <h5> {{ order['product_line_count'] }} </h5>
-                        </div>
-                        <div class="col">
-                            <small> quantity </small>
-                            <h5> {{ order['total_quantity_ordered'] }} </h5>
-                        </div>
-                        <div class="col d-none d-sm-block">
-                            <small> total </small>
-                            <h5>{{ order['total'] }}</h5>
-                        </div>
+              <div class="col p-2 pl-2 rounded">
+                <div class="row">
+                    <div class="col-5 col-md-4 col-lg-3">
+                        <h5 class="text-primary">#{{ order['order_number'] }} </h5>
+                        <div class="small"> <b> {{ order['status_code'] }} </b> </div>
                     </div>
-                </div>
-                <div class="col align-text-bottom" style="max-width: 20px;" @click="toggleOrderDetails">
-                    <h3 class="text-primary text-center h-100 align-middle"> + </h3>
-                </div>
-
-                <div class="col-12" v-if="order['order_comments'].length > 0 && orderDetailsVisible === false">
-                    <b>{{ order['order_comments'][0]['user']['name'] }}: </b>{{ order['order_comments'][0]['comment'] }}
-                </div>
-
-            </div>
-
-
-
-            <div v-if="orderDetailsVisible">
-                <div class="row mb-2 mt-1">
-                    <input ref="newCommentInput" v-model="input_comment" class="form-control" placeholder="Add comment here" @keypress.enter="addComment"/>
-                </div>
-
-                <template v-for="order_comment in order_comments">
-                    <div class="row mb-2">
-                        <div class="col">
-                            <b>{{ order_comment['user']['name'] }}: </b>{{ order_comment['comment'] }}
-                        </div>
-                    </div>
-                </template>
-                <div class="row tabs-container mb-2">
-                    <ul class="nav nav-tabs">
-                        <li class="nav-item">
-                            <a class="nav-link active p-0 pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'productsOrdered'" >
-                                Products
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link p-0 pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderDetails'" >
-                                Details
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link p-0 pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderActivities'" >
-                                Activity
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link p-0 pl-2 pr-2" target="_blank" :href="'/order/packsheet?order_number=' + order['order_number']">
-                                Packsheet
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a v-if="sharingAvailable()" class="nav-link p-0 pl-2 pr-2" @click.prevent="shareLink" href="#">
-                                <font-awesome-icon icon="share-alt" class="fas fa-sm"></font-awesome-icon>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="container" v-if="currentTab === 'productsOrdered'">
-                    <template v-for="order_product in order_products">
-
-                        <div class="row text-left mb-2">
-                            <div class="col-md-4">
-                                <small>{{ order_product['name_ordered'] }}</small>
-                                <div class="small"><a target="_blank" :href="getProductLink(order_product)">{{ order_product['sku_ordered'] }}</a></div>
+                    <div class="col text-center" @click="toggleOrderDetails">
+                        <div class="row">
+                            <div class="col">
+                                <small> age </small>
+                                <h5> {{ order['age_in_days'] }}</h5>
                             </div>
                             <div class="col">
-                                <div class="row text-center">
-                                    <div class="col">
-                                        <small> ordered </small>
-                                        <h4>{{ toNumberOrDash(order_product['quantity_ordered']) }}</h4>
-                                    </div>
-                                    <div class="col">
-                                        <small> picked </small>
-                                        <h4>{{ toNumberOrDash(order_product['quantity_picked']) }}</h4>
-                                    </div>
-                                    <div class="col" v-bind:class="{ 'bg-warning': Number(order_product['quantity_skipped_picking']) > 0 }">
-                                        <small> skipped </small>
-                                        <h4>{{ toNumberOrDash(order_product['quantity_skipped_picking']) }}</h4>
-                                    </div>
-                                    <div class="col d-none d-sm-block">
-                                        <small> shipped </small>
-                                        <h4>{{ toNumberOrDash(order_product['quantity_shipped'])  }}</h4>
-                                    </div>
-                                    <div class="col">
-                                        <small> to ship </small>
-                                        <h4>{{ toNumberOrDash(order_product['quantity_to_ship'])  }}</h4>
-                                    </div>
-                                    <div class="col" v-bind:class="{ 'bg-warning': ifHasEnoughStock(order_product) }">
-                                        <small> inventory </small>
-                                        <h4>{{ toNumberOrDash(getProductQuantity(order_product)) }}</h4>
-                                    </div>
-                                </div>
+                                <small> products </small>
+                                <h5> {{ order['product_line_count'] }} </h5>
                             </div>
-
+                            <div class="col">
+                                <small> quantity </small>
+                                <h5> {{ order['total_quantity_ordered'] }} </h5>
+                            </div>
+                            <div class="col d-none d-sm-block">
+                                <small> total </small>
+                                <h5>{{ order['total'] }}</h5>
+                            </div>
                         </div>
-                        <hr>
+                    </div>
+                    <div class="col align-text-bottom" style="max-width: 20px;" @click="toggleOrderDetails">
+                        <h3 class="text-primary text-center h-100 align-middle"> + </h3>
+                    </div>
+
+                    <div class="col-12" v-if="order['order_comments'].length > 0 && orderDetailsVisible === false">
+                        <b>{{ order['order_comments'][0]['user']['name'] }}: </b>{{ order['order_comments'][0]['comment'] }}
+                    </div>
+
+                </div>
+
+
+
+                <div v-if="orderDetailsVisible">
+                    <div class="row mb-2 mt-1">
+                        <input ref="newCommentInput" v-model="input_comment" class="form-control" placeholder="Add comment here" @keypress.enter="addComment"/>
+                    </div>
+
+                    <template v-for="order_comment in order_comments">
+                        <div class="row mb-2">
+                            <div class="col">
+                                <b>{{ order_comment['user']['name'] }}: </b>{{ order_comment['comment'] }}
+                            </div>
+                        </div>
                     </template>
-                </div>
-
-                <div class="container" v-if="currentTab === 'orderDetails'">
-                    <div class="row small">
-                        <div class="col-4">
-                            <div> date: <b> {{ order['order_placed_at'] | moment('MM/DD H:mm') }} </b> </div>
-                            <div> paid: <b> {{ order['total_paid'] }} </b> </div>
-                        </div>
-                        <div class="col">
-                            <div> picked at: <b> {{ order['picked_at'] | moment('MM/DD H:mm') }} </b> </div>
-                            <div> packed at: <b> {{ order['packed_at'] | moment('MM/DD H:mm') }} </b> </div>
-                            <div> packed by: <b> {{ order['packer'] ? order['packer']['name'] : '&nbsp' }} </b> </div>
-                        </div>
+                    <div class="row tabs-container mb-2">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active p-0 pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'productsOrdered'" >
+                                    Products
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link p-0 pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderDetails'" >
+                                    Details
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link p-0 pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderActivities'" >
+                                    Activity
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link p-0 pl-2 pr-2" target="_blank" :href="'/order/packsheet?order_number=' + order['order_number']">
+                                    Packsheet
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a v-if="sharingAvailable()" class="nav-link p-0 pl-2 pr-2" @click.prevent="shareLink" href="#">
+                                    <font-awesome-icon icon="share-alt" class="fas fa-sm"></font-awesome-icon>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
 
-                    <div class="row">
-                      <div class="col-12">
-                          Shipping Numbers:
-                          <template v-for="shipment in order_shipments">
-                              <div class="text-secondary h6"><span class="font-weight-bold">{{ shipment['shipping_number'] }}</span></div>
-                          </template>
-                      </div>
-                    </div>
-                </div>
+                    <div class="container" v-if="currentTab === 'productsOrdered'">
+                        <template v-for="order_product in order_products">
 
-                <div class="container" v-if="currentTab === 'orderActivities'">
-                    <div class="row">
-                        <div class="col-12">
-                            <template v-for="activity in order_activities">
-                                <div class="text-secondary h6">
-                                    {{ activity['created_at'] | moment('MMM DD @ H:mm')  }}
-                                    <b>
-                                        {{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }}
-                                    </b>
-                                    {{ activity['description'] }} {{ activity['changes'] }}
+                            <div class="row text-left mb-2">
+                                <div class="col-md-4">
+                                    <small>{{ order_product['name_ordered'] }}</small>
+                                    <div class="small"><a target="_blank" :href="getProductLink(order_product)">{{ order_product['sku_ordered'] }}</a></div>
                                 </div>
-                            </template>
+                                <div class="col">
+                                    <div class="row text-center">
+                                        <div class="col">
+                                            <small> ordered </small>
+                                            <h4>{{ toNumberOrDash(order_product['quantity_ordered']) }}</h4>
+                                        </div>
+                                        <div class="col">
+                                            <small> picked </small>
+                                            <h4>{{ toNumberOrDash(order_product['quantity_picked']) }}</h4>
+                                        </div>
+                                        <div class="col" v-bind:class="{ 'bg-warning': Number(order_product['quantity_skipped_picking']) > 0 }">
+                                            <small> skipped </small>
+                                            <h4>{{ toNumberOrDash(order_product['quantity_skipped_picking']) }}</h4>
+                                        </div>
+                                        <div class="col d-none d-sm-block">
+                                            <small> shipped </small>
+                                            <h4>{{ toNumberOrDash(order_product['quantity_shipped'])  }}</h4>
+                                        </div>
+                                        <div class="col">
+                                            <small> to ship </small>
+                                            <h4>{{ toNumberOrDash(order_product['quantity_to_ship'])  }}</h4>
+                                        </div>
+                                        <div class="col" v-bind:class="{ 'bg-warning': ifHasEnoughStock(order_product) }">
+                                            <small> inventory </small>
+                                            <h4>{{ toNumberOrDash(getProductQuantity(order_product)) }}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <hr>
+                        </template>
+                    </div>
+
+                    <div class="container" v-if="currentTab === 'orderDetails'">
+                        <div class="row small">
+                            <div class="col-4">
+                                <div> date: <b> {{ order['order_placed_at'] | moment('MM/DD H:mm') }} </b> </div>
+                                <div> paid: <b> {{ order['total_paid'] }} </b> </div>
+                            </div>
+                            <div class="col">
+                                <div> picked at: <b> {{ order['picked_at'] | moment('MM/DD H:mm') }} </b> </div>
+                                <div> packed at: <b> {{ order['packed_at'] | moment('MM/DD H:mm') }} </b> </div>
+                                <div> packed by: <b> {{ order['packer'] ? order['packer']['name'] : '&nbsp' }} </b> </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-12">
+                              Shipping Numbers:
+                              <template v-for="shipment in order_shipments">
+                                  <div class="text-secondary h6"><span class="font-weight-bold">{{ shipment['shipping_number'] }}</span></div>
+                              </template>
+                          </div>
                         </div>
                     </div>
-                </div>
 
+                    <div class="container" v-if="currentTab === 'orderActivities'">
+                        <div class="row">
+                            <div class="col-12">
+                                <template v-for="activity in order_activities">
+                                    <div class="text-secondary h6">
+                                        {{ activity['created_at'] | moment('MMM DD @ H:mm')  }}
+                                        <b>
+                                            {{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }}
+                                        </b>
+                                        {{ activity['description'] }} {{ activity['changes'] }}
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
           <div id="spacer-bottom" class="row mb-4 mt-4" v-if="orderDetailsVisible"></div>
       </div>
     </div>
