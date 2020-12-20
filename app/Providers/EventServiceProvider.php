@@ -32,7 +32,7 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         // Product
-        \App\Events\Product\CreatedEvent::class => [
+        \App\Events\Product\ProductCreatedEvent::class => [
             \App\Listeners\Product\Created\PublishSnsNotificationListener::class,
         ],
 

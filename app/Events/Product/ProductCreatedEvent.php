@@ -13,7 +13,7 @@ use Illuminate\Queue\SerializesModels;
  * Class CreatedEvent
  * @package App\Events\Product
  */
-class CreatedEvent
+class ProductCreatedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
