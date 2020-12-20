@@ -12,6 +12,9 @@ export default {
 
             this.isLoading = true;
 
+            // This is a cheap and dirty and probably unmoral "improvement hack"
+            // But still... our perception should perceive it as "its faster"
+            // I shall not do it... But! Its such a pleasant "white lie"
             setTimeout(
                 () => {
                     this.loader = this.$loading.show({
