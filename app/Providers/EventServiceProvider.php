@@ -35,15 +35,11 @@ class EventServiceProvider extends ServiceProvider
 
         // Order
         \App\Events\Order\OrderCreatedEvent::class => [
-            \App\Listeners\Order\OrderUpdatedEventListener::class
+            \App\Listeners\Order\OrderCreatedEventListener::class
         ],
 
         \App\Events\Order\OrderUpdatedEvent::class => [
             \App\Listeners\Order\OrderUpdatedEventListener::class,
-        ],
-
-        \App\Events\Order\StatusChangedEvent::class => [
-            \App\Listeners\Order\StatusChanged\UpdateClosedAt::class,
         ],
 
         // Inventory

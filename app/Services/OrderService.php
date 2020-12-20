@@ -4,20 +4,14 @@
 namespace App\Services;
 
 use App\Events\Order\OrderCreatedEvent;
-use App\Events\Order\StatusChangedEvent;
-use App\Jobs\Api2cart\ImportShippingAddressJob;
+use App\Jobs\Modules\Api2cart\ImportShippingAddressJob;
 use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderProduct;
-use App\Models\PickRequest;
-use App\Models\Product;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
+use Exception;
 use Illuminate\Support\Str;
 use phpseclib\Math\BigInteger;
-use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderService
@@ -113,6 +107,7 @@ class OrderService
     /**
      * @param array $orderAttributes
      * @return Order
+     * @throws Exception
      */
     public static function updateOrCreate(array $orderAttributes)
     {
@@ -171,7 +166,7 @@ class OrderService
      * @param $order_products
      * @param Order $order
      * @return Order
-     * @throws \Exception
+     * @throws Exception
      */
     private static function syncOrderProducts($order_products, Order $order): Order
     {

@@ -30,6 +30,7 @@ class OrderUpdatedEventListener
         $this->markedIfPayed($event);
         $this->moveOrderFromPickingToPackingWeb($event);
         $this->changeStatusToReadyIfPacked($event);
+        $this->updateOrderClosedAt($event);
         $this->publishSnsNotification($event);
     }
 
@@ -91,6 +92,21 @@ class OrderUpdatedEventListener
 
         if ($event->getOrder()->is_packed) {
             $event->getOrder()->update(['status_code' => 'ready']);
+        }
+    }
+
+    /**
+     * Handle the event.
+     *
+     * @param OrderUpdatedEvent $event
+     * @return void
+     */
+    public function updateOrderClosedAt(OrderUpdatedEvent $event)
+    {
+        if ($event->getOrder()['status_code'] !== $event->getOrder()->getOriginal('status_code')) {
+            if (($event->getOrder()->order_closed_at === null) && (OrderStatus::isComplete($event->getOrder()['status_code']))) {
+                $event->getOrder()->update(['order_closed_at' => now()]);
+            }
         }
     }
 }
