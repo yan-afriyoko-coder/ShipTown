@@ -17,12 +17,8 @@
 
             <div class="row">
                 <div class="col-5 col-md-4 col-lg-3">
-                    <div class="row">
-                        <div class="col-12 col-md-6">
-                            <h5 class="text-primary">#{{ order['order_number'] }} </h5>
-                            <div class="small"> <b> {{ order['status_code'] }} </b> </div>
-                        </div>
-                    </div>
+                    <h5 class="text-primary">#{{ order['order_number'] }} </h5>
+                    <div class="small"> <b> {{ order['status_code'] }} </b> </div>
                 </div>
                 <div class="col text-center" @click="toggleOrderDetails">
                     <div class="row">
@@ -68,14 +64,33 @@
                         </div>
                     </div>
                 </template>
-
                 <div class="row tabs-container mb-2">
                     <ul class="nav nav-tabs">
-                        <li class="nav-item"><a class="nav-link active pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'productsOrdered'" >Products</a></li>
-                        <li class="nav-item"><a class="nav-link pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderDetails'" >Details</a></li>
-                        <li class="nav-item"><a class="nav-link pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderActivities'" >Activity</a></li>
-                        <li class="nav-item"><a class="nav-link pl-2 pr-2" target="_blank" :href="'/order/packsheet?order_number=' + order['order_number']">Packsheet</a></li>
-                        <li class="nav-item" v-if="sharingAvailable()"><a class="nav-link pl-2 pr-2" target="_blank" @click.prevent="shareLink" href="#">Share</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link active p-0 pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'productsOrdered'" >
+                                Products
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link p-0 pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderDetails'" >
+                                Details
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link p-0 pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderActivities'" >
+                                Activity
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link p-0 pl-2 pr-2" target="_blank" :href="'/order/packsheet?order_number=' + order['order_number']">
+                                Packsheet
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a v-if="sharingAvailable()" class="nav-link p-0 pl-2 pr-2" target="_blank" @click.prevent="shareLink" href="#">
+                                <font-awesome-icon icon="share-alt" class="fas fa-sm"></font-awesome-icon>
+                            </a>
+                        </li>
                     </ul>
                 </div>
 
