@@ -33,11 +33,10 @@ class RecalculateQuantityToShipJob implements ShouldQueue
         OrderProduct::query()
             ->whereRaw('quantity_to_ship != quantity_ordered - quantity_shipped')
             ->latest()
-            // for performance purposes limit to 1000 records per job
-            ->limit(1000)
-            ->each(function ($orderProduct) {
-                activity()->on($orderProduct)->log('Incorrect quantity to ship detected');
-                $orderProduct->save();
+            ->limit(1000) // for performance purposes
+            ->each(function (OrderProduct $orderProduct) {
+                $orderProduct->log('Incorrect quantity to ship detected')
+                    ->save();
             });
     }
 }
