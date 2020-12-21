@@ -319,11 +319,12 @@
 
                 let params = {
                     'filter[subject_id]': this.order['id'],
+                    'filter[subject_type]': 'App\\Models\\Order',
                     'include': 'causer',
-                    'sort': 'created_at',
+                    'sort': '-created_at',
                 };
 
-                this.apiGetOrderActivities(params)
+                this.apiGetActivityLog(params)
                     .then(({data}) => {
                         this.order_activities = data.data;
                     })
