@@ -2,7 +2,6 @@
 
 namespace App\Modules\Rmsapi\src\Jobs;
 
-use App\Jobs\Modules\Rmsapi\ProcessImportedProductsJob;
 use App\Models\RmsapiConnection;
 use App\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Client as RmsapiClient;

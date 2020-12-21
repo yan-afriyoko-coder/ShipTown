@@ -3,7 +3,7 @@
 namespace App\Listeners\Product;
 
 use App\Events\Product\ProductCreatedEvent;
-use App\Jobs\Modules\Sns\PublishSnsNotificationJob;
+use App\Modules\Sns\src\Jobs\PublishSnsNotificationJob;
 use App\Models\Inventory;
 use App\Models\Warehouse;
 

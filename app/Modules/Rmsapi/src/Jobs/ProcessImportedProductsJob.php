@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Modules\Rmsapi;
+namespace App\Modules\Rmsapi\src\Jobs;
 
 use App\Models\Inventory;
 use App\Models\Product;

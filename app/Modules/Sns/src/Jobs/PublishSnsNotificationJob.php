@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Modules\Sns;
+namespace App\Modules\Sns\src\Jobs;
 
 use App\Http\Controllers\SnsController;
 use Illuminate\Bus\Queueable;

@@ -4,7 +4,7 @@
 namespace App\Services;
 
 use App\Events\Order\OrderCreatedEvent;
-use App\Jobs\Modules\Api2cart\ImportShippingAddressJob;
+use App\Modules\Api2cart\src\Jobs\ImportShippingAddressJob;
 use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderAddress;

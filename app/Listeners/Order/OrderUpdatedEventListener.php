@@ -3,7 +3,7 @@
 namespace App\Listeners\Order;
 
 use App\Events\Order\OrderUpdatedEvent;
-use App\Jobs\Modules\Sns\PublishSnsNotificationJob;
+use App\Modules\Sns\src\Jobs\PublishSnsNotificationJob;
 use App\Jobs\Orders\SetStatusPaidIfPaidJob;
 use App\Models\OrderStatus;
 
