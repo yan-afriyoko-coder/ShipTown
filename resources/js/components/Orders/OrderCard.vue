@@ -15,7 +15,7 @@
                 <div class="row">
 
                     <div class="col-5 col-md-4 col-lg-3">
-                        <h5 class="text-primary">#{{ order['order_number'] }} </h5>
+                        <h5 class="text-primary"><a :href="'/orders/?search=' + order['order_number']"> #{{ order['order_number'] }} </a> </h5>
                         <div class="small"> <b> {{ order['status_code'] }} </b> </div>
                     </div>
 

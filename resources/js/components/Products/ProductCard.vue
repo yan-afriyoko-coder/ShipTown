@@ -6,7 +6,7 @@
                 <div class="row text-left">
                     <div class="col-md-6">
                         <div class="text-primary h5">{{ product.name }}</div>
-                        <div>sku: <b> {{ product.sku }} </b></div>
+                        <div>sku: <b> <a :href="'/products?search=' + product['sku']">{{ product['sku'] }}</a></b></div>
                         <div>
                             <template v-for="tag in product.tags">
                                 <a class="badge text-uppercase" :href="'products?has_tags=' + Object.values(tag.name)[0]"> {{ Object.values(tag.name)[0] }} </a>
