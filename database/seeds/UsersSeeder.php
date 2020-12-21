@@ -30,7 +30,7 @@ class UsersSeeder extends Seeder
             $user->first()->assignRole('user');
         }
 
-        $users = factory(User::class, 15)->create();
+        $users = factory(User::class, 2)->create();
         $users->each(function ($user) {
             $user->assignRole('user');
         });

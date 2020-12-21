@@ -17,16 +17,9 @@ class OrdersSeeder extends Seeder
     {
         $count = rand(400,600);
 
-        do {
-            factory(Order::class)
-                ->with('orderProducts', rand(1,4))
-                ->create([
-                    'order_placed_at' => \Carbon\Carbon::now()->subDays(rand(0,7)),
-                    'status_code' => 'paid'
-                ]);
-
-            $count--;
-        } while ($count > 0);
+        factory(Order::class, $count)
+            ->with('orderProducts')
+            ->create();
 
 //        factory(Order::class, rand(10, 30))
 //            ->with('orderProducts', rand(1,4))

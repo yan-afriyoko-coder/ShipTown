@@ -79,6 +79,7 @@
             reloadOrders(e) {
                 this.orders = [];
                 this.loadOrderList();
+                this.setFocus(this.$refs.search, true, true);
             },
 
             loadOrderList: function(page = 1) {
@@ -103,8 +104,7 @@
                         this.lastPageLoaded = page;
                     })
                     .finally(() => {
-                        this.hideLoading()
-                            .setFocus(this.$refs.search, true, true);
+                        this.hideLoading();
                     })
 
                 return this;

@@ -11,9 +11,11 @@ $factory->define(Order::class, function (Faker $faker) {
 
     $order_closed_at = null;
 
-    $status_code = $faker->randomElement(['complete','processing','cancelled','on_hold']);
+    $status_code = $faker->randomElement([
+        'complete','processing','cancelled','on_hold','paid','picking','packing'
+    ]);
 
-    $order_placed_at = $faker->dateTimeBetween('-5 months');
+    $order_placed_at = $faker->dateTimeBetween('-2 months');
 
     if (OrderStatus::isActive($status_code)) {
         $order_closed_at = $faker->dateTimeBetween($order_placed_at, now());

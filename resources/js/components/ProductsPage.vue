@@ -74,6 +74,7 @@
             findText() {
                 this.setUrlParameter('search', this.searchText);
                 this.reloadProducts();
+                this.setFocus(this.$refs.search, true, true)
             },
 
             reloadProducts() {
@@ -105,8 +106,7 @@
                         this.lastPageLoaded = page;
                     })
                     .finally(() => {
-                        this.hideLoading()
-                            .setFocus(this.$refs.search, true, true)
+                        this.hideLoading();
                     });
 
                 return this;
