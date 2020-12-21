@@ -15,8 +15,6 @@ class RunMaintenanceJobs implements ShouldQueue
     private $jobClassesToRun = [
         \App\Jobs\OrderProducts\RecalculateQuantityToShipJob::class,
         \App\Jobs\OrderProducts\RecalculateQuantityToPickJob::class,
-        \App\Jobs\Orders\RecalculateProductLineCountJob::class,
-        \App\Jobs\Orders\RecalculateTotalQuantityOrderedJob::class,
         \App\Jobs\Orders\ClearPackerIdAssignmentJob::class,
         \App\Jobs\Inventory\RecalculateLocation999QuantityReservedJob::class,
         \App\Jobs\Products\RecalculateProductQuantityJob::class,
