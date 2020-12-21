@@ -35,12 +35,23 @@
                             <div class="col-2 d-none d-sm-block ">{{ product.quantity | numberFormat }}</div>
                             <div class="col-3 col-sm-2">{{ product.quantity_reserved | numberFormat }}</div>
                             <div class="col-3">{{ product.quantity - product.quantity_reserved | numberFormat }}</div>
-                            <div class="col-4 col-sm-3 text-primary h2 mb-0 pr-2 ">
-                                +
-                            </div>
                         </div>
                     </div>
                 </div>
+
+
+                <div v-if="!showOrders" @click="toggle" class="row text-center text-secondary" >
+                    <div class="col">
+                        <font-awesome-icon icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
+                    </div>
+                </div>
+
+                <div v-else @click="toggle" class="row text-center">
+                    <div class="col">
+                        <font-awesome-icon icon="chevron-up" class="fa fa-xs text-secondary"></font-awesome-icon>
+                    </div>
+                </div>
+
                 <div class="row" v-if="showOrders">
                     <div class="col">
                         <div class="row tabs-container mb-2">
@@ -140,6 +151,7 @@
 
         props: {
             product: Object,
+            expanded: false,
         },
 
         watch: {
@@ -165,6 +177,12 @@
                 showOrders: false,
                 orderProducts: null,
             };
+        },
+
+        created: function () {
+            if (this.expanded) {
+                this.toggle();
+            }
         },
 
         filters: {
