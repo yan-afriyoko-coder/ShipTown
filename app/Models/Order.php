@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivityTrait;
 use App\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection;
@@ -87,7 +88,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class Order extends Model
 {
-    use LogsActivity;
+    use LogsActivityTrait;
 
     protected $fillable = [
         'order_number',
