@@ -36,7 +36,7 @@ class RecalculateOrderTotalQuantities implements ShouldQueue
     public function handle()
     {
         $this->order->total_quantity_ordered = $this->order->orderProducts()->sum('quantity_ordered');
-        $this->order->product_line_count = $this->order->orderProducts()->count();
+        $this->order->product_line_count = $this->order->orderProducts()->count('id');
         $this->order->save();
     }
 }
