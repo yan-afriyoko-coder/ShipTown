@@ -81,7 +81,7 @@
                         <template v-if="currentTab === 'pendingOrders'" v-for="orderProduct in orderProducts">
                            <div>
                                <div class="row text-left mb-2">
-                                   <div class="col-4">
+                                   <div class="col">
                                        <div>
                                            <a target="_blank" :href="getProductLink(orderProduct)">
                                                #{{ orderProduct['order']['order_number']}}
@@ -94,9 +94,9 @@
                                            {{ orderProduct['order']['status_code']}}
                                        </div>
                                    </div>
-                                   <div class="col-8">
+                                   <div class="col">
                                        <div class="row justify-content-end text-center">
-                                           <div class="col">
+                                           <div class="cold d-none d-sm-block">
                                                <small>ordered</small>
                                                <h3>{{ Math.ceil(orderProduct['quantity_ordered']) }}</h3>
                                            </div>
