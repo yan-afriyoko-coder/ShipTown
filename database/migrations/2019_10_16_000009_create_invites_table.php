@@ -13,11 +13,11 @@ class CreateInvitesTable extends Migration
      */
     public function up()
     {
-        if (Schema::hasTable('invites')) {
+        if (Schema::hasTable('user_invites')) {
             return;
         }
 
-        Schema::create('invites', function (Blueprint $table) {
+        Schema::create('user_invites', function (Blueprint $table) {
             $table->increments('id');
             $table->string('email');
             $table->string('token', 16)->unique();
@@ -32,6 +32,6 @@ class CreateInvitesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('invites');
+        Schema::dropIfExists('user_invites');
     }
 }

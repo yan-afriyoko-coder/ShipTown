@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-use App\Models\Invite;
+use App\Models\UserInvite;
 
 class InviteCreated extends Mailable
 {
@@ -18,10 +18,10 @@ class InviteCreated extends Mailable
     /**
      * Create a new message instance.
      *
-     * @return void
+     * @param UserInvite $invite
      */
 
-    public function __construct(Invite $invite)
+    public function __construct(UserInvite $invite)
     {
         $this->invite = $invite;
     }

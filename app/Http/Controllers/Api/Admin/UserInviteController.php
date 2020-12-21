@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Invites\UserInviteProcessRequest;
 use App\Http\Requests\Invites\UserInviteStoreRequest;
 use App\Mail\InviteCreated;
-use App\Models\Invite;
+use App\Models\UserInvite;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -19,10 +19,10 @@ class UserInviteController extends Controller
         do {
             //generate a random string using Laravel's str_random helper
             $token = str_random();
-        } while (Invite::where('token', $token)->first()); //check if the token already exists and if it does, try again
+        } while (UserInvite::where('token', $token)->first()); //check if the token already exists and if it does, try again
 
         //create a new invite record
-        $invite = Invite::create([
+        $invite = UserInvite::create([
             'email' => $request->get('email'),
             'token' => $token
         ]);
@@ -36,7 +36,7 @@ class UserInviteController extends Controller
     public function accept($token)
     {
         // Look up the invite
-        if (!$invite = Invite::where('token', $token)->first()) {
+        if (!$invite = UserInvite::where('token', $token)->first()) {
             return response('Not Found', 404);
         }
 
@@ -46,7 +46,7 @@ class UserInviteController extends Controller
     public function process(UserInviteProcessRequest $request)
     {
         // Look up the invite
-        if (!$invite = Invite::where('token', $request->input('token'))->first()) {
+        if (!$invite = UserInvite::where('token', $request->input('token'))->first()) {
             return response('Not Found', 404);
         }
 

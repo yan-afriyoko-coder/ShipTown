@@ -2,7 +2,7 @@
 
 namespace Tests\Routes\Api\Admin;
 
-use App\Models\Invite;
+use App\Models\UserInvite;
 use App\User;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
@@ -29,7 +29,7 @@ class UserInvitesRoutesTest extends TestCase
      */
     public function testExample()
     {
-        $invite = factory(Invite::class)->make();
+        $invite = factory(UserInvite::class)->make();
 
         $response = $this->post('/api/admin/user/invites', $invite->toArray());
 
