@@ -17,7 +17,6 @@ class RunMaintenanceJobs implements ShouldQueue
         \App\Jobs\OrderProducts\RecalculateQuantityToPickJob::class,
         \App\Jobs\Orders\RecalculateProductLineCountJob::class,
         \App\Jobs\Orders\RecalculateTotalQuantityOrderedJob::class,
-        \App\Jobs\Orders\RecalculatePickedAtForPickingOrdersJob::class,
         \App\Jobs\Orders\ClearPackerIdAssignmentJob::class,
         \App\Jobs\Inventory\RecalculateLocation999QuantityReservedJob::class,
         \App\Jobs\Products\RecalculateProductQuantityJob::class,
