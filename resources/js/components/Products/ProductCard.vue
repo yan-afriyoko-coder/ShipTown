@@ -180,9 +180,8 @@
         },
 
         methods: {
-
             sharingAvailable() {
-                return true;// navigator.share;
+                return navigator.share;
             },
 
             shareLink() {
