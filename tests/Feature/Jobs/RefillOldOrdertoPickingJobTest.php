@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Jobs;
 
-use App\Jobs\Orders\Refill\RefillOldOrdersToPickingJob;
 use App\Models\Order;
+use App\Modules\AutoPilot\src\Jobs\Refill\RefillOldOrdersToPickingJob;
 use Carbon\Carbon;
 use Tests\TestCase;
 

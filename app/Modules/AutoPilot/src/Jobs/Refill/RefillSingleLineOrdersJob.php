@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Jobs\Orders\Refill;
+namespace App\Modules\AutoPilot\src\Jobs\Refill;
 
 use App\Models\Order;
-use App\Services\OrderService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class RefillPackingWarehouseJob implements ShouldQueue
+class RefillSingleLineOrdersJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -32,10 +31,11 @@ class RefillPackingWarehouseJob implements ShouldQueue
     public function handle()
     {
         Order::where('status_code', 'paid')
+            ->where('product_line_count', 1)
             ->get()->each(function ($order) {
-                if (OrderService::canFulfill($order, 99)) {
-                    $order->update(['status_code' => 'packing_warehouse']);
-                }
+                $order->update([
+                    'status_code' => 'single_line_orders'
+                ]);
             });
     }
 }

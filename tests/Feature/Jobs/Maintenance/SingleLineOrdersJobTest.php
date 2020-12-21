@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Jobs\Maintenance;
 
-use App\Jobs\Orders\Refill\RefillSingleLineOrdersJob;
 use App\Models\Order;
+use App\Modules\AutoPilot\src\Jobs\Refill\RefillSingleLineOrdersJob;
 use Tests\TestCase;
 
 class SingleLineOrdersJobTest extends TestCase

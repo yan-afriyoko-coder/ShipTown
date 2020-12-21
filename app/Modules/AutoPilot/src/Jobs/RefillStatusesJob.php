@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Modules\AutoPilot\src\Jobs;
 
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
@@ -31,15 +31,15 @@ class RefillStatusesJob implements ShouldQueue
     public function handle()
     {
         \App\Modules\AutoPilot\src\Jobs\Refill\RefillPaidJob::dispatchNow();
-        \App\Jobs\Orders\Refill\RefillPackingWarehouseJob::dispatchNow();
-        \App\Jobs\Orders\Refill\RefillSingleLineOrdersJob::dispatchNow();
+        \App\Modules\AutoPilot\src\Jobs\Refill\RefillPackingWarehouseJob::dispatchNow();
+        \App\Modules\AutoPilot\src\Jobs\Refill\RefillSingleLineOrdersJob::dispatchNow();
 
         if (Order::where(['status_code' => 'picking'])->count() > 0) {
             return;
         }
 
-        \App\Jobs\Orders\Refill\RefillOldOrdersToPickingJob::dispatchNow();
-        \App\Jobs\Orders\Refill\RefillPickingMissingStockJob::dispatchNow();
-        \App\Jobs\Orders\Refill\RefillPickingByOldestJob::dispatchNow();
+        \App\Modules\AutoPilot\src\Jobs\Refill\RefillOldOrdersToPickingJob::dispatchNow();
+        \App\Modules\AutoPilot\src\Jobs\Refill\RefillPickingMissingStockJob::dispatchNow();
+        \App\Modules\AutoPilot\src\Jobs\Refill\RefillPickingByOldestJob::dispatchNow();
     }
 }
