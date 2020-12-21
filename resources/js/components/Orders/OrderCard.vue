@@ -1,6 +1,5 @@
 <template>
 
-<!--  <div :id="pickCardId" class="swiper-container mb-3">-->
   <div class="swiper-container mb-1">
     <div class="swiper-wrapper">
 
@@ -11,14 +10,15 @@
 <!--      </div>-->
 
       <div class="swiper-slide">
-<!--          <div id="spacer-top" class="row mt-2" v-if="orderDetailsVisible"></div>-->
           <div class="row ml-1 mr-1 card">
               <div class="col p-2 pl-2 rounded">
                 <div class="row">
+
                     <div class="col-5 col-md-4 col-lg-3">
                         <h5 class="text-primary">#{{ order['order_number'] }} </h5>
                         <div class="small"> <b> {{ order['status_code'] }} </b> </div>
                     </div>
+
                     <div class="col text-center" @click="toggleOrderDetails">
                         <div class="row">
                             <div class="col">
@@ -39,9 +39,6 @@
                             </div>
                         </div>
                     </div>
-<!--                    <div class="col align-text-bottom" style="max-width: 20px;" @click="toggleOrderDetails">-->
-<!--                        <h3 class="text-primary text-center h-100 align-middle"> + </h3>-->
-<!--                    </div>-->
 
                     <div class="col-12 small" v-if="order['order_comments'].length > 0 && orderDetailsVisible === false">
                         <b>{{ order['order_comments'][0]['user']['name'] }}: </b>{{ order['order_comments'][0]['comment'] }}

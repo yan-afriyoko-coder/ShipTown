@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class RenameQuantityOutstandingColumnOnOrderProductsTable extends Migration
+class UpdateOrderIdColumnInOrderProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class RenameQuantityOutstandingColumnOnOrderProductsTable extends Migration
      */
     public function up()
     {
-        if (Schema::hasColumn('order_products', 'quantity_to_ship')) {
-            return;
-        }
-
         Schema::table('order_products', function (Blueprint $table) {
-            $table->renameColumn('quantity_outstanding', 'quantity_to_ship');
+            $table->unsignedBigInteger('order_id')->nullable(false)->change();
         });
     }
 
@@ -29,6 +25,6 @@ class RenameQuantityOutstandingColumnOnOrderProductsTable extends Migration
      */
     public function down()
     {
-        //
+
     }
 }

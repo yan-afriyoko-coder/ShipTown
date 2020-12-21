@@ -19,7 +19,7 @@ class CreateOrderProductsTable extends Migration
 
         Schema::create('order_products', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('order_id')->nullable();
+            $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('product_id')->nullable();
             $table->string('sku_ordered');
             $table->string('name_ordered');

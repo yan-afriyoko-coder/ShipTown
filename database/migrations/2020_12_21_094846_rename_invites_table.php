@@ -13,7 +13,9 @@ class RenameInvitesTable extends Migration
      */
     public function up()
     {
-        Schema::rename('invites', 'user_invites');
+        if (Schema::hasTable('invites')) {
+            Schema::rename('invites', 'user_invites');
+        }
     }
 
     /**
@@ -23,6 +25,8 @@ class RenameInvitesTable extends Migration
      */
     public function down()
     {
-        Schema::rename('user_invites', 'invites');
+        if (Schema::hasTable('user_invites')) {
+            Schema::rename('user_invites', 'invites');
+        }
     }
 }

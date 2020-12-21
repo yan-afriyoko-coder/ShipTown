@@ -2,7 +2,6 @@
 
 namespace App\Observers;
 
-use App\Models\Inventory;
 use App\Models\OrderProduct;
 
 class OrderProductObserver
@@ -15,21 +14,7 @@ class OrderProductObserver
      */
     public function created(OrderProduct $orderProduct)
     {
-        $order = $orderProduct->order();
-        $order->total_quantity_ordered += $orderProduct->quantity_ordered;
-        $order->product_line_count++;
-        $order->save();
-
-        if ($orderProduct->product_id) {
-            $inventory = Inventory::firstOrCreate([
-                'product_id' => $orderProduct->product_id,
-                'location_id' => 999
-            ]);
-
-            $inventory->update([
-                'quantity_reserved' => $inventory->quantity_reserved + $orderProduct->quantity_to_ship
-            ]);
-        }
+        $this->updateOrderTotals($orderProduct);
     }
 
     /**
@@ -40,28 +25,9 @@ class OrderProductObserver
      */
     public function updated(OrderProduct $orderProduct)
     {
-        if ($orderProduct->product_id) {
-            $inventory = Inventory::firstOrCreate([
-                'product_id' => $orderProduct->product_id,
-                'location_id' => 999
-            ]);
+        $this->updateOrderTotals($orderProduct);
 
-            $inventory->update([
-                'quantity_reserved' => $inventory->quantity_reserved - $orderProduct->getOriginal('quantity_to_ship') + $orderProduct->quantity_to_ship
-            ]);
-        }
-
-        $quantity_delta = $orderProduct['quantity_ordered'] - $orderProduct->getOriginal('quantity_ordered');
-        $orderProduct->order()->increment('total_quantity_ordered', $quantity_delta);
-
-        $orderHasMoreToPick = OrderProduct::query()
-            ->where('quantity_to_pick', '>', 0)
-            ->where(['order_id' => $orderProduct->order_id])
-            ->exists();
-
-        if ($orderHasMoreToPick === false) {
-            $orderProduct->order()->update(['picked_at' => now()]);
-        }
+        $this->setOrdersPickedAtIfAllPicked($orderProduct);
     }
 
     /**
@@ -72,18 +38,6 @@ class OrderProductObserver
      */
     public function deleted(OrderProduct $orderProduct)
     {
-        if ($orderProduct->product_id) {
-            $inventory = Inventory::firstOrCreate([
-                'product_id' => $orderProduct->product_id,
-                'location_id' => 999
-            ]);
-
-            $inventory->update([
-                'quantity_reserved' => $inventory->quantity_reserved - $orderProduct->quantity_to_ship
-            ]);
-        }
-
-
         $orderProduct->order()->decrement('total_quantity_ordered', $orderProduct['quantity_ordered']);
         $orderProduct->order()->decrement('product_line_count');
     }
@@ -96,17 +50,6 @@ class OrderProductObserver
      */
     public function restored(OrderProduct $orderProduct)
     {
-        if ($orderProduct->product_id) {
-            $inventory = Inventory::firstOrCreate([
-                'product_id' => $orderProduct->product_id,
-                'location_id' => 999
-            ]);
-
-            $inventory->update([
-                'quantity_reserved' => $inventory->quantity_reserved + $orderProduct->quantity_to_ship
-            ]);
-        }
-
         $orderProduct->order()->increment('total_quantity_ordered', $orderProduct['quantity_ordered']);
         $orderProduct->order()->increment('product_line_count');
     }
@@ -119,18 +62,36 @@ class OrderProductObserver
      */
     public function forceDeleted(OrderProduct $orderProduct)
     {
-        if ($orderProduct->product_id) {
-            $inventory = Inventory::firstOrCreate([
-                'product_id' => $orderProduct->product_id,
-                'location_id' => 999
-            ]);
-
-            $inventory->update([
-                'quantity_reserved' => $inventory->quantity_reserved - $orderProduct->quantity_to_ship
-            ]);
-        }
-
         $orderProduct->order()->decrement('total_quantity_ordered', $orderProduct['quantity_ordered']);
         $orderProduct->order()->decrement('product_line_count');
+    }
+
+    /**
+     * @param OrderProduct $orderProduct
+     */
+    private function updateOrderTotals(OrderProduct $orderProduct): void
+    {
+        $order = $orderProduct->order()->first();
+
+        $quantity_to_ship_delta = $orderProduct->quantity_ordered - ($orderProduct->getOriginal('quantity_ordered') ?? 0);
+
+        $order->total_quantity_ordered += $orderProduct->quantity_ordered;
+        $order->product_line_count++;
+        $order->save();
+    }
+
+    /**
+     * @param OrderProduct $orderProduct
+     */
+    private function setOrdersPickedAtIfAllPicked(OrderProduct $orderProduct): void
+    {
+        $orderHasMoreToPick = OrderProduct::query()
+            ->where('quantity_to_pick', '>', 0)
+            ->where(['order_id' => $orderProduct->order_id])
+            ->exists();
+
+        if ($orderHasMoreToPick === false) {
+            $orderProduct->order()->update(['picked_at' => now()]);
+        }
     }
 }
