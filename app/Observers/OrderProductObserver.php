@@ -15,7 +15,7 @@ class OrderProductObserver
      */
     public function created(OrderProduct $orderProduct)
     {
-        RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order());
+        RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order()->first());
     }
 
     /**
@@ -26,7 +26,7 @@ class OrderProductObserver
      */
     public function updated(OrderProduct $orderProduct)
     {
-        RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order());
+        RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order()->first());
 
         $this->setOrdersPickedAtIfAllPicked($orderProduct);
     }
@@ -39,7 +39,7 @@ class OrderProductObserver
      */
     public function deleted(OrderProduct $orderProduct)
     {
-        RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order());
+        RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order()->first());
     }
 
     /**
@@ -50,7 +50,7 @@ class OrderProductObserver
      */
     public function restored(OrderProduct $orderProduct)
     {
-        RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order());
+        RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order()->first());
     }
 
     /**
@@ -61,7 +61,7 @@ class OrderProductObserver
      */
     public function forceDeleted(OrderProduct $orderProduct)
     {
-        RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order());
+        RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order()->first());
     }
 
     /**
