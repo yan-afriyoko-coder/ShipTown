@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Orders\Refill;
+namespace App\Modules\AutoPilot\src\Jobs\Refill;
 
 use App\Jobs\Orders\SetStatusPaidIfPaidJob;
 use App\Models\Order;

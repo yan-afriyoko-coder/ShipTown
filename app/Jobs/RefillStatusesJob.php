@@ -30,7 +30,7 @@ class RefillStatusesJob implements ShouldQueue
      */
     public function handle()
     {
-        \App\Jobs\Orders\Refill\RefillPaidJob::dispatchNow();
+        \App\Modules\AutoPilot\src\Jobs\Refill\RefillPaidJob::dispatchNow();
         \App\Jobs\Orders\Refill\RefillPackingWarehouseJob::dispatchNow();
         \App\Jobs\Orders\Refill\RefillSingleLineOrdersJob::dispatchNow();
 
