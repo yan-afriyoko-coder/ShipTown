@@ -2,7 +2,7 @@
 
 namespace App\Modules\AutoPilot\src\Jobs\Refill;
 
-use App\Jobs\Orders\SetStatusPaidIfPaidJob;
+use App\Modules\AutoPilot\src\Jobs\SetStatusPaidIfPaidJob;
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

@@ -4,7 +4,7 @@ namespace App\Listeners\Order;
 
 use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\Sns\src\Jobs\PublishSnsNotificationJob;
-use App\Jobs\Orders\SetStatusPaidIfPaidJob;
+use App\Modules\AutoPilot\src\Jobs\SetStatusPaidIfPaidJob;
 use App\Models\OrderStatus;
 
 class OrderUpdatedEventListener
