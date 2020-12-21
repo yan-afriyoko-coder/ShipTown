@@ -123,11 +123,25 @@
                            </div>
                         </template>
 
-                        <template  v-if="currentTab === 'activityLog'" v-for="activity in activityLog">
-                            <div class="row text-secondary h6">
-                                {{ activity['created_at'] | moment('MMM DD @ H:mm')  }} <b> {{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }}</b> {{ activity['description'] }} {{ activity['changes'] }}
-                            </div>
-                        </template>
+                        <div class="container" v-if="currentTab === 'activityLog'">
+                            <template v-for="activity in activityLog">
+                                <div class="d-flex flex-column flex-md-row align-middle">
+                                    <div class="d-none d-md-block align-middle">
+                                        {{ activity['created_at'] | moment('MMM DD')  }} <small>@</small> {{ activity['created_at'] | moment('H:mm')  }}:
+                                    </div>
+                                    <div class="small flex-row d-block d-md-none align-middle">
+                                        {{ activity['created_at'] | moment('MMM DD')  }}
+                                        {{ activity['created_at'] | moment('H:mm')  }}:
+                                    </div>
+                                    <div class="pl-sm-0 pl-md-1">
+                                        <b>
+                                            {{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }}
+                                        </b>
+                                        {{ activity['description'] }} {{ activity['changes'] }}
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
 
                     </div>
                 </div>
