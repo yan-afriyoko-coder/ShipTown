@@ -15,6 +15,11 @@ class OrderProductObserver
      */
     public function created(OrderProduct $orderProduct)
     {
+        $order = $orderProduct->order();
+        $order->total_quantity_ordered += $orderProduct->quantity_ordered;
+        $order->product_line_count++;
+        $order->save();
+
         if ($orderProduct->product_id) {
             $inventory = Inventory::firstOrCreate([
                 'product_id' => $orderProduct->product_id,
@@ -25,10 +30,6 @@ class OrderProductObserver
                 'quantity_reserved' => $inventory->quantity_reserved + $orderProduct->quantity_to_ship
             ]);
         }
-
-
-        $orderProduct->order()->increment('total_quantity_ordered', $orderProduct['quantity_ordered']);
-        $orderProduct->order()->increment('product_line_count');
     }
 
     /**

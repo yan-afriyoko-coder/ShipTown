@@ -5,6 +5,7 @@ namespace App\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
@@ -214,11 +215,17 @@ class OrderProduct extends Model
         });
     }
 
+    /**
+     * @return BelongsTo|Order
+     */
     public function order()
     {
         return $this->belongsTo(Order::class);
     }
 
+    /**
+     * @return BelongsTo|Product
+     */
     public function product()
     {
         return $this->belongsTo(Product::class);
