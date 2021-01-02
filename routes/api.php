@@ -17,7 +17,7 @@ Route::middleware('auth:api')->group(function () {
     Route::put('print/order/{order_number}/{view}', 'Api\PrintOrderController@store');
 
     Route::apiResource('run/sync', 'Api\Run\SyncController')->only('index');
-    Route::apiResource('run/sync/api2cart', 'Api\Run\SyncApi2cartController')->only('index');
+    Route::apiResource('run/sync/api2cart', 'Api\Run\SyncApi2CartController')->only('index');
     Route::apiResource('run/hourly/jobs', 'Api\Run\HourlyJobsController')->only('index');
     Route::apiResource('run/daily/jobs', 'Api\Run\DailyJobsController')->only('index');
 
