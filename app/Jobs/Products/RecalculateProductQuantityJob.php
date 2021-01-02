@@ -42,7 +42,7 @@ class RecalculateProductQuantityJob implements ShouldQueue
     {
         $incorrectProductRecords = Queries::getProductsWithQuantityErrorsQuery()
             // for performance purposes limit to 1000 products per job
-            ->limit(100)
+            ->limit(1000)
             ->get();
 
         $incorrectProductRecords->each(function ($errorRecord) {
