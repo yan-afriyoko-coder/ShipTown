@@ -67,13 +67,7 @@ class ProcessImportedProductsJob implements ShouldQueue
         ], $attributes);
 
 
-        if ($importedProduct->raw_import['is_web_item']) {
-            try {
-                $product->attachTag('Available Online');
-            } catch (Exception $exception) {
-                Log::warning('Could not attach Available Online tag');
-            }
-        }
+        $this->attachTags($importedProduct, $product);
 
         $this->importAliases($importedProduct, $product);
 
@@ -120,5 +114,20 @@ class ProcessImportedProductsJob implements ShouldQueue
             'quantity_reserved' => $importedProduct->raw_import['quantity_committed'],
             'shelve_location' => Arr::get($importedProduct->raw_import, 'rmsmobile_shelve_location'),
         ]);
+    }
+
+    /**
+     * @param RmsapiProductImport $importedProduct
+     * @param $product
+     */
+    private function attachTags(RmsapiProductImport $importedProduct, $product): void
+    {
+        if ($importedProduct->raw_import['is_web_item']) {
+            try {
+                $product->attachTag('Available Online');
+            } catch (Exception $exception) {
+                Log::warning('Could not attach Available Online tag');
+            }
+        }
     }
 }
