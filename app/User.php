@@ -2,9 +2,8 @@
 
 namespace App;
 
-use App\Models\Order;
 use App\Services\PrintService;
-use Eloquent;
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
@@ -20,7 +19,6 @@ use PrintNode\Response;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
-use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
 

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Traits\HasTagsTrait;
 use App\Traits\LogsActivityTrait;
-use Eloquent;
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -71,6 +71,7 @@ use Spatie\Tags\Tag;
  * @method static Builder|Product withAnyTags($tags, $type = null)
  * @method static Builder|Product withAnyTagsOfAnyType($tags)
  * @mixin Eloquent
+ * @method static Builder|Product withoutAllTags($tags, $type = null)
  */
 class Product extends Model
 {

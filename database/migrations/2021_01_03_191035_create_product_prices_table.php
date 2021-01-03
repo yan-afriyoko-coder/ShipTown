@@ -19,6 +19,7 @@ class CreateProductPricesTable extends Migration
 
         Schema::create('product_prices', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('product_id')->index();
             $table->unsignedBigInteger('location_id');
             $table->decimal('price', 10, 2)->default(0);
             $table->decimal('sale_price', 10, 2)->default(0);
@@ -26,6 +27,11 @@ class CreateProductPricesTable extends Migration
             $table->date('sale_price_end_date')->default('1899-01-01');
             $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('product_id')
+                ->on('products')
+                ->references('id')
+                ->onDelete('CASCADE');
         });
     }
 

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Barryvdh\LaravelIdeHelper\Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -9,12 +11,12 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int $order_id
  * @property int|null $age_in_days
- * @method static \Illuminate\Database\Eloquent\Builder|OrderStats newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|OrderStats newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|OrderStats query()
- * @method static \Illuminate\Database\Eloquent\Builder|OrderStats whereAgeInDays($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OrderStats whereOrderId($value)
- * @mixin \Eloquent
+ * @method static Builder|OrderStats newModelQuery()
+ * @method static Builder|OrderStats newQuery()
+ * @method static Builder|OrderStats query()
+ * @method static Builder|OrderStats whereAgeInDays($value)
+ * @method static Builder|OrderStats whereOrderId($value)
+ * @mixin Eloquent
  */
 class OrderStats extends Model
 {

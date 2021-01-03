@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\User;
-use Eloquent;
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -32,6 +32,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static Builder|OrderShipment whereUpdatedAt($value)
  * @method static Builder|OrderShipment whereUserId($value)
  * @mixin Eloquent
+ * @property-read mixed $age_in_days
+ * @method static Builder|OrderShipment whereAgeInDaysBetween($ageInDaysFrom, $ageInDaysTo)
  */
 class OrderShipment extends Model
 {
