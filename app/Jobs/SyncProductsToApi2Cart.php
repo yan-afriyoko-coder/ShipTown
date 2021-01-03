@@ -75,6 +75,7 @@ class SyncProductsToApi2Cart implements ShouldQueue
             'sku' => $product->sku,
             'quantity' => $product->inventory()->where('location_id', 100)->first()->quantity_available ?? 0,
             'in_stock' => $product->quantity_available > 0 ? "True" : "False",
+            'price' => $productPrice->price,
             'special_price' => $productPrice->sale_price,
             'sprice_create' => $productPrice->sale_price_start_date,
             'sprice_expire' => $productPrice->sale_price_end_date,
