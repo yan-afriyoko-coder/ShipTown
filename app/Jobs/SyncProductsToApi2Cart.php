@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Product;
+use App\Models\ProductPrice;
 use App\Modules\Api2cart\src\Jobs\UpdateProductJob;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Exception;
@@ -64,12 +65,15 @@ class SyncProductsToApi2Cart implements ShouldQueue
      */
     private function syncProduct(Product $product, Api2cartConnection $connection): void
     {
-        $productPrice = $product->prices()->where('location_id', 1)->first();
+        $productPrice = $product->prices()->firstOrCreate([
+            'product_id' => $product->getKey(),
+            'location_id' => 1
+        ]);
 
         $product_data = [
             'product_id' => $product->getKey(),
             'sku' => $product->sku,
-            'quantity' => $product->inventory()->where('location_id', 100)->first()->quantity_available,
+            'quantity' => $product->inventory()->where('location_id', 100)->first()->quantity_available ?? 0,
             'in_stock' => $product->quantity_available > 0 ? "True" : "False",
             'special_price' => $productPrice->sale_price,
             'sprice_create' => $productPrice->sale_price_start_date,

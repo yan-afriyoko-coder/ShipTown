@@ -2,7 +2,7 @@
 
 namespace App\Modules\Api2cart\src\Models;
 
-use Eloquent;
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
