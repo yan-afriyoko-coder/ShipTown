@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Traits\HasTagsTrait;
 use App\Traits\LogsActivityTrait;
-use Eloquent;
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -71,6 +71,9 @@ use Spatie\Tags\Tag;
  * @method static Builder|Product withAnyTags($tags, $type = null)
  * @method static Builder|Product withAnyTagsOfAnyType($tags)
  * @mixin Eloquent
+ * @method static Builder|Product withoutAllTags($tags, $type = null)
+ * @property-read Collection|ProductPrice[] $prices
+ * @property-read int|null $prices_count
  */
 class Product extends Model
 {
@@ -203,6 +206,15 @@ class Product extends Model
     public function inventory()
     {
         return $this->hasMany(Inventory::class)
+            ->keyBy('location_id');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function prices()
+    {
+        return $this->hasMany(ProductPrice::class)
             ->keyBy('location_id');
     }
 

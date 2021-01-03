@@ -5,6 +5,7 @@ namespace App\Modules\Rmsapi\src\Jobs;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductAlias;
+use App\Models\ProductPrice;
 use App\Models\RmsapiConnection;
 use App\Models\RmsapiProductImport;
 use Exception;
@@ -14,7 +15,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
-use Log;
+use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
 class ProcessImportedProductsJob implements ShouldQueue
@@ -67,17 +68,13 @@ class ProcessImportedProductsJob implements ShouldQueue
         ], $attributes);
 
 
-        if ($importedProduct->raw_import['is_web_item']) {
-            try {
-                $product->attachTag('Available Online');
-            } catch (Exception $exception) {
-                Log::warning('Could not attach Available Online tag');
-            }
-        }
+        $this->attachTags($importedProduct, $product);
 
         $this->importAliases($importedProduct, $product);
 
         $this->importInventory($importedProduct, $product);
+
+        $this->importPricing($importedProduct, $product);
 
         $importedProduct->update([
             'when_processed' => now(),
@@ -120,5 +117,39 @@ class ProcessImportedProductsJob implements ShouldQueue
             'quantity_reserved' => $importedProduct->raw_import['quantity_committed'],
             'shelve_location' => Arr::get($importedProduct->raw_import, 'rmsmobile_shelve_location'),
         ]);
+    }
+
+    /**
+     * @param RmsapiProductImport $importedProduct
+     * @param Product $product
+     */
+    private function importPricing(RmsapiProductImport $importedProduct, Product $product): void
+    {
+        $connection = RmsapiConnection::query()->find($importedProduct->connection_id);
+
+        ProductPrice::query()->updateOrCreate([
+            'product_id' => $product->id,
+            'location_id' => $connection->location_id
+        ], [
+            'price' => $importedProduct->raw_import['price'],
+            'sale_price' => $importedProduct->raw_import['sale_price'],
+            'sale_price_start_date' => $importedProduct->raw_import['sale_start_date'],
+            'sale_price_end_date' => $importedProduct->raw_import['sale_end_date'],
+        ]);
+    }
+
+    /**
+     * @param RmsapiProductImport $importedProduct
+     * @param $product
+     */
+    private function attachTags(RmsapiProductImport $importedProduct, $product): void
+    {
+        if ($importedProduct->raw_import['is_web_item']) {
+            try {
+                $product->attachTag('Available Online');
+            } catch (Exception $exception) {
+                Log::warning('Could not attach Available Online tag');
+            }
+        }
     }
 }
