@@ -45,4 +45,15 @@ class ProductPrice extends Model
         'sale_price_start_date',
         'sale_price_end_date'
     ];
+
+    // we use attributes to set default values
+    // we wont use database default values
+    // as this is then not populated
+    // correctly to events
+    protected $attributes = [
+        'price' => 0,
+        "sale_price" => 0,
+        "sale_price_start_date" => '2001-01-01 00:00:00',
+        "sale_price_end_date" => '2001-01-01 00:00:00',
+    ];
 }
