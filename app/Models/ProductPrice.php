@@ -37,5 +37,12 @@ use Illuminate\Support\Carbon;
  */
 class ProductPrice extends Model
 {
-    //
+    protected $fillable = [
+        'product_id',
+        'location_id',
+        'price',
+        'sale_price',
+        'sale_price_start_date',
+        'sale_price_end_date'
+    ];
 }
