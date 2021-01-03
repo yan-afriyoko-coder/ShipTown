@@ -44,7 +44,8 @@ class UpdateProductJob implements ShouldQueue
     public function handle()
     {
         try {
-            Products::update($this->bridge_api_key, $this->product_data);
+            $result = Products::update($this->bridge_api_key, $this->product_data);
+            logger('Synced product to api2cart', ['reuslt' => $result, 'data' => $this->product_data]);
         } catch (Exception $exception) {
             Log::warning('Could not disable product, will retry', $this->product_data);
             $this->release(60);
