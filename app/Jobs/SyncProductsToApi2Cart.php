@@ -50,10 +50,12 @@ class SyncProductsToApi2Cart implements ShouldQueue
      */
     private function dispatchSyncJobs(Product $product)
     {
+        logger('Dispatching api2cart sync jobs',['sku' => $product->sku]);
         Api2cartConnection::all()
             ->each(function (Api2cartConnection $connection) use ($product) {
                 $this->syncProduct($product, $connection);
             });
+        logger('Dispatched api2cart sync jobs',['sku' => $product->sku]);
     }
 
     /**
@@ -76,5 +78,6 @@ class SyncProductsToApi2Cart implements ShouldQueue
         ];
 
         UpdateProductJob::dispatch($connection->bridge_api_key, $product_data);
+        logger('Dispatched api2cart sync job', ['sku' => $product->sku]);
     }
 }
