@@ -21,8 +21,8 @@ class CreateProductPricesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('product_id')->index();
             $table->unsignedBigInteger('location_id');
-            $table->decimal('price', 10, 2)->default(0);
-            $table->decimal('sale_price', 10, 2)->default(0);
+            $table->decimal('price', 10, 2)->default(99999);
+            $table->decimal('sale_price', 10, 2)->default(99999);
             $table->date('sale_price_start_date')->default('1899-01-01');
             $table->date('sale_price_end_date')->default('1899-01-01');
             $table->softDeletes();

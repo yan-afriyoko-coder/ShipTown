@@ -51,8 +51,8 @@ class ProductPrice extends Model
     // as this is then not populated
     // correctly to events
     protected $attributes = [
-        'price' => 0,
-        "sale_price" => 0,
+        'price' => 99999,
+        "sale_price" => 99999,
         "sale_price_start_date" => '2001-01-01 00:00:00',
         "sale_price_end_date" => '2001-01-01 00:00:00',
     ];
