@@ -210,7 +210,7 @@ class Product extends Model
     }
 
     /**
-     * @return mixed
+     * @return mixed|ProductPrice
      */
     public function prices()
     {

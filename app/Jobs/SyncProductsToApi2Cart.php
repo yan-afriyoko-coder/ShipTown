@@ -62,11 +62,17 @@ class SyncProductsToApi2Cart implements ShouldQueue
      */
     private function syncProduct(Product $product, Api2cartConnection $connection): void
     {
+        $productPrice = $product->prices()->where('location_id', 1)->first();
+
         $product_data = [
             'product_id' => $product->getKey(),
             'sku' => $product->sku,
             'quantity' => $product->inventory()->where('location_id', 100)->first()->quantity_available,
             'in_stock' => $product->quantity_available > 0 ? "True" : "False",
+            'special_price' => $productPrice->sale_price,
+            'sprice_create' => $productPrice->sale_price_start_date,
+            'sprice_expire' => $productPrice->sale_price_end_date,
+            'store_id' => 1,
         ];
 
         UpdateProductJob::dispatch($connection->bridge_api_key, $product_data);
