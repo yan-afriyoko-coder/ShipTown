@@ -33,6 +33,13 @@ class Client
            ]
         ]);
 
+        if ($response->isNotSuccess()) {
+            \Log::alert('Failed fetching from Rmsapi', [
+                "status_code" => $response->getResponseRaw()->getStatusCode(),
+                "body" => $response->asArray()
+            ]);
+        }
+
         return $response;
     }
 
@@ -58,6 +65,13 @@ class Client
                 "body" => $response->asArray()
             ]
         ]);
+
+        if ($response->isNotSuccess()) {
+            \Log::alert('Failed fetching from Rmsapi', [
+                "status_code" => $response->getResponseRaw()->getStatusCode(),
+                "body" => $response->asArray()
+            ]);
+        }
 
         return $response;
     }
