@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Models\Product;
-use App\Models\ProductPrice;
 use App\Modules\Api2cart\src\Jobs\UpdateProductJob;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Exception;
@@ -36,6 +35,7 @@ class SyncProductsToApi2Cart implements ShouldQueue
     public function handle()
     {
         $products = Product::withAllTags(['Available Online', 'Not Synced'])
+            ->limit(5)
             ->get()
             ->each(function (Product $product) {
                 $this->dispatchSyncJobs($product);
