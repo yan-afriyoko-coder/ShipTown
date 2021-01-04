@@ -106,8 +106,10 @@ class SyncProductsToApi2Cart implements ShouldQueue
             ]);
 
         $productInventory = $product->inventory()
-            ->where('location_id', 100)
-            ->first();
+            ->firstOrCreate([
+                'product_id' => $product->getKey(),
+                'location_id' => 100
+            ]);
 
         return [
             'product_id' => $product->getKey(),
@@ -135,8 +137,10 @@ class SyncProductsToApi2Cart implements ShouldQueue
             ]);
 
         $productInventory = $product->inventory()
-            ->where('location_id', 100)
-            ->first();
+            ->firstOrCreate([
+                'product_id' => $product->getKey(),
+                'location_id' => 100
+            ]);
 
         return [
             'product_id' => $product->getKey(),
