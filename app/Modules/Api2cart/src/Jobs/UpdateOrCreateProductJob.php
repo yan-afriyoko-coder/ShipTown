@@ -11,7 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class UpdateProductJob implements ShouldQueue
+class UpdateOrCreateProductJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -44,10 +44,10 @@ class UpdateProductJob implements ShouldQueue
     public function handle()
     {
         try {
-            $response = Products::update($this->bridge_api_key, $this->product_data);
+            $response = Products::updateOrCreate($this->bridge_api_key, $this->product_data);
             logger('Synced product to api2cart', ['response' => $response->getAsJson(), 'data' => $this->product_data]);
         } catch (Exception $exception) {
-            Log::warning('Could not disable product, will retry', $this->product_data);
+            Log::warning('Could not sync product, will retry', $this->product_data);
             $this->release(60);
         }
     }
