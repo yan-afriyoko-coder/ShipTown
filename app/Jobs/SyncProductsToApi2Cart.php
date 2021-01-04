@@ -76,7 +76,7 @@ class SyncProductsToApi2Cart implements ShouldQueue
 
         UpdateOrCreateProductJob::dispatch($connection->bridge_api_key, $product_data);
 
-        logger('Dispatched api2cart sync job Ireland', ['sku' => $product->sku]);
+        logger('Dispatched api2cart sync job UK', ['sku' => $product->sku]);
     }
 
     /**
@@ -152,7 +152,7 @@ class SyncProductsToApi2Cart implements ShouldQueue
             'special_price' => $productPrice->sale_price,
             'sprice_create' => $this->formatDateForApi2cart($productPrice->sale_price_start_date),
             'sprice_expire' => $this->formatDateForApi2cart($productPrice->sale_price_end_date),
-            'store_id' => 5,
+            'store_id' => 2,
         ];
     }
 }
