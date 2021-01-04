@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\Product;
 use App\Modules\Api2cart\src\Jobs\UpdateProductJob;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -77,12 +78,27 @@ class SyncProductsToApi2Cart implements ShouldQueue
             'in_stock' => $product->quantity_available > 0 ? "True" : "False",
             'price' => $productPrice->price,
             'special_price' => $productPrice->sale_price,
-            'sprice_create' => $productPrice->sale_price_start_date,
-            'sprice_expire' => $productPrice->sale_price_end_date,
+            'sprice_create' => $this->formatDateForApi2cart($productPrice->sale_price_start_date),
+            'sprice_expire' => $this->formatDateForApi2cart($productPrice->sale_price_end_date),
             'store_id' => 1,
         ];
 
         UpdateProductJob::dispatch($connection->bridge_api_key, $product_data);
         logger('Dispatched api2cart sync job', ['sku' => $product->sku]);
+    }
+
+    /**
+     * @param $date
+     * @return string
+     */
+    public function formatDateForApi2cart($date): string
+    {
+        $carbon_date = new Carbon( $date ?? '2000-01-01 00:00:00');
+
+        if ($carbon_date->year < 2000) {
+            return '2000-01-01 00:00:00';
+        }
+
+        return $date;
     }
 }
