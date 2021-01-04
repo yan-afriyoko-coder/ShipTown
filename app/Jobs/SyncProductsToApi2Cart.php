@@ -65,27 +65,17 @@ class SyncProductsToApi2Cart implements ShouldQueue
      */
     private function syncProduct(Product $product, Api2cartConnection $connection): void
     {
-        $productPrice = $product->prices()->firstOrCreate([
-            'product_id' => $product->getKey(),
-            'location_id' => 1
-        ]);
-
-        $productInventory = $product->inventory()->where('location_id', 100)->first();
-
-        $product_data = [
-            'product_id' => $product->getKey(),
-            'sku' => $product->sku,
-            'quantity' => $productInventory->quantity_available ?? 0,
-            'in_stock' => $productInventory->quantity_available > 0 ? "True" : "False",
-            'price' => $productPrice->price,
-            'special_price' => $productPrice->sale_price,
-            'sprice_create' => $this->formatDateForApi2cart($productPrice->sale_price_start_date),
-            'sprice_expire' => $this->formatDateForApi2cart($productPrice->sale_price_end_date),
-            'store_id' => 1,
-        ];
+        $product_data = $this->getProductDataIreland($product);
 
         UpdateProductJob::dispatch($connection->bridge_api_key, $product_data);
-        logger('Dispatched api2cart sync job', ['sku' => $product->sku]);
+
+        logger('Dispatched api2cart sync job Ireland', ['sku' => $product->sku]);
+
+        $product_data = $this->getProductDataUK($product);
+
+        UpdateProductJob::dispatch($connection->bridge_api_key, $product_data);
+
+        logger('Dispatched api2cart sync job Ireland', ['sku' => $product->sku]);
     }
 
     /**
@@ -101,5 +91,67 @@ class SyncProductsToApi2Cart implements ShouldQueue
         }
 
         return $date;
+    }
+
+    /**
+     * @param Product $product
+     * @return array
+     */
+    private function getProductDataIreland(Product $product): array
+    {
+        $productPrice = $product->prices()
+            ->firstOrCreate([
+                'product_id' => $product->getKey(),
+                'location_id' => 1
+            ]);
+
+        $productInventory = $product->inventory()
+            ->firstOrCreate([
+                'product_id' => $product->getKey(),
+                'location_id' => 100
+            ]);
+
+        return [
+            'product_id' => $product->getKey(),
+            'sku' => $product->sku,
+            'quantity' => $productInventory->quantity_available ?? 0,
+            'in_stock' => $productInventory->quantity_available > 0 ? "True" : "False",
+            'price' => $productPrice->price,
+            'special_price' => $productPrice->sale_price,
+            'sprice_create' => $this->formatDateForApi2cart($productPrice->sale_price_start_date),
+            'sprice_expire' => $this->formatDateForApi2cart($productPrice->sale_price_end_date),
+            'store_id' => 1,
+        ];
+    }
+
+    /**
+     * @param Product $product
+     * @return array
+     */
+    private function getProductDataUK(Product $product): array
+    {
+        $productPrice = $product->prices()
+            ->firstOrCreate([
+                'product_id' => $product->getKey(),
+                'location_id' => 5
+            ]);
+
+        $productInventory = $product->inventory()
+            ->firstOrCreate([
+                'product_id' => $product->getKey(),
+                'location_id' => 100
+            ]);
+
+        return [
+            'product_id' => $product->getKey(),
+            'sku' => $product->sku,
+            'quantity' => $productInventory->quantity_available ?? 0,
+            'in_stock' => $productInventory->quantity_available > 0 ? "True" : "False",
+            'price' => $productPrice->price,
+            'special_price' => $productPrice->sale_price,
+            'sprice_create' => $this->formatDateForApi2cart($productPrice->sale_price_start_date),
+            'sprice_expire' => $this->formatDateForApi2cart($productPrice->sale_price_end_date),
+            'store_id' => 5,
+        ];
     }
 }
