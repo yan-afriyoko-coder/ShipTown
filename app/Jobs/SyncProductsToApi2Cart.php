@@ -36,7 +36,6 @@ class SyncProductsToApi2Cart implements ShouldQueue
     public function handle()
     {
         $products = Product::withAllTags(['Available Online', 'Not Synced'])
-            ->limit(5)
             ->get()
             ->each(function (Product $product) {
                 $this->dispatchSyncJobs($product);
