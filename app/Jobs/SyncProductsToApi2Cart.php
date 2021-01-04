@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Product;
+use App\Modules\Api2cart\src\Jobs\UpdateOrCreateProductJob;
 use App\Modules\Api2cart\src\Jobs\UpdateProductJob;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Carbon\Carbon;
@@ -67,13 +68,13 @@ class SyncProductsToApi2Cart implements ShouldQueue
     {
         $product_data = $this->getProductDataIreland($product);
 
-        UpdateProductJob::dispatch($connection->bridge_api_key, $product_data);
+        UpdateOrCreateProductJob::dispatch($connection->bridge_api_key, $product_data);
 
         logger('Dispatched api2cart sync job Ireland', ['sku' => $product->sku]);
 
         $product_data = $this->getProductDataUK($product);
 
-        UpdateProductJob::dispatch($connection->bridge_api_key, $product_data);
+        UpdateOrCreateProductJob::dispatch($connection->bridge_api_key, $product_data);
 
         logger('Dispatched api2cart sync job Ireland', ['sku' => $product->sku]);
     }
