@@ -70,11 +70,13 @@ class SyncProductsToApi2Cart implements ShouldQueue
             'location_id' => 1
         ]);
 
+        $productInventory = $product->inventory()->where('location_id', 100)->first();
+
         $product_data = [
             'product_id' => $product->getKey(),
             'sku' => $product->sku,
-            'quantity' => $product->inventory()->where('location_id', 100)->first()->quantity_available ?? 0,
-            'in_stock' => $product->quantity_available > 0 ? "True" : "False",
+            'quantity' => $productInventory->quantity_available ?? 0,
+            'in_stock' => $productInventory->quantity_available > 0 ? "True" : "False",
             'price' => $productPrice->price,
             'special_price' => $productPrice->sale_price,
             'sprice_create' => $this->formatDateForApi2cart($productPrice->sale_price_start_date),
