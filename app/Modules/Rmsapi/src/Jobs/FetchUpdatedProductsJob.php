@@ -5,6 +5,7 @@ namespace App\Modules\Rmsapi\src\Jobs;
 use App\Models\RmsapiConnection;
 use App\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Client as RmsapiClient;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -20,7 +21,7 @@ class FetchUpdatedProductsJob implements ShouldQueue
     /**
      * @var RmsapiConnection
      */
-    private $rmsapiConnectionId;
+    private $rmsapiConnection;
 
     /**
      * @var UuidInterface
@@ -31,11 +32,11 @@ class FetchUpdatedProductsJob implements ShouldQueue
      * Create a new job instance.
      *
      * @param int $rmsapiConnectionId
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(int $rmsapiConnectionId)
     {
-        $this->rmsapiConnectionId = $rmsapiConnectionId;
+        $this->rmsapiConnection = RmsapiConnection::find($rmsapiConnectionId);
         $this->batch_uuid = Uuid::uuid4();
     }
 
@@ -43,41 +44,34 @@ class FetchUpdatedProductsJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle()
     {
-        $rmsapiConnection = RmsapiConnection::find($this->rmsapiConnectionId);
+        logger('Starting Rmsapi FetchUpdatedProductsJob', ['connection_id' => $this->rmsapiConnection->getKey()]);
 
         $params = [
             'per_page' => config('rmsapi.import.products.per_page'),
             'order_by'=> 'db_change_stamp:asc',
-            'min:db_change_stamp' => $rmsapiConnection->products_last_timestamp,
+            'min:db_change_stamp' => $this->rmsapiConnection->products_last_timestamp,
         ];
 
-        $response = RmsapiClient::GET(
-            $rmsapiConnection,
-            'api/products',
-            $params
-        );
+        $response = RmsapiClient::GET($this->rmsapiConnection, 'api/products', $params);
 
-        // early exit if nothing new imported
-        if (empty($response->getResult())) {
-            return;
+        if ($response->getResult()) {
+            $this->saveImportedProducts($response->getResult());
+
+            ProcessImportedProductsJob::dispatch($this->batch_uuid);
+
+            if (isset($response->asArray()['next_page_url'])) {
+                FetchUpdatedProductsJob::dispatch($this->rmsapiConngection->getKey());
+            }
         }
-
-        $this->saveImportedProducts($response->getResult());
-
-        ProcessImportedProductsJob::dispatch($this->batch_uuid);
 
         info('Imported RMSAPI products', [
-            'location_id' => $rmsapiConnection->location_id,
+            'location_id' => $this->rmsapiConnection->location_id,
             'count' => $response->asArray()['total'],
         ]);
-
-        if (isset($response->asArray()['next_page_url'])) {
-            FetchUpdatedProductsJob::dispatch($this->rmsapiConnectionId);
-        }
     }
 
     public function saveImportedProducts(array $productList)
@@ -89,7 +83,7 @@ class FetchUpdatedProductsJob implements ShouldQueue
 
         $insertData = $productsCollection->map(function ($product) use ($time) {
             return [
-                'connection_id' => $this->rmsapiConnectionId,
+                'connection_id' => $this->rmsapiConnection->getKey(),
                 'batch_uuid' => $this->batch_uuid->toString(),
                 'raw_import' => json_encode($product),
                 'created_at' => $time,
@@ -102,7 +96,7 @@ class FetchUpdatedProductsJob implements ShouldQueue
         // be careful as this probably wont invoke event (not 100% sure)
         RmsapiProductImport::query()->insert($insertData->toArray());
 
-        RmsapiConnection::find($this->rmsapiConnectionId)->update([
+        RmsapiConnection::find($this->rmsapiConnection->getKey())->update([
             'products_last_timestamp' => $productsCollection->last()['db_change_stamp']
         ]);
     }
