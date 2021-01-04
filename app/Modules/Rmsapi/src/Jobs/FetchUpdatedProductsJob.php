@@ -76,7 +76,7 @@ class FetchUpdatedProductsJob implements ShouldQueue
         ]);
 
         if (isset($response->asArray()['next_page_url'])) {
-            FetchUpdatedProductsJob::dispatchNow($this->rmsapiConnectionId);
+            FetchUpdatedProductsJob::dispatch($this->rmsapiConnectionId);
         }
     }
 
