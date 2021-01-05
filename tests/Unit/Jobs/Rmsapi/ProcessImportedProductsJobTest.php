@@ -6,7 +6,7 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductAlias;
 use App\Models\RmsapiProductImport;
-use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductsJob;
+use App\Modules\Rmsapi\src\Jobs\ProcessImportedBatch;
 use Spatie\Tags\Tag;
 use Tests\TestCase;
 
@@ -27,7 +27,7 @@ class ProcessImportedProductsJobTest extends TestCase
         $importData->update(['raw_import' => $raw_import]);
 
         // act
-        $job = new ProcessImportedProductsJob();
+        $job = new ProcessImportedBatch();
 
         $job->handle();
 
@@ -51,7 +51,7 @@ class ProcessImportedProductsJobTest extends TestCase
         $importData = factory(RmsapiProductImport::class)->create();
 
         // act
-        $job = new ProcessImportedProductsJob();
+        $job = new ProcessImportedBatch();
 
         $job->handle();
 
@@ -71,7 +71,7 @@ class ProcessImportedProductsJobTest extends TestCase
         $importData = factory(RmsapiProductImport::class)->create();
 
         // act
-        $job = new ProcessImportedProductsJob();
+        $job = new ProcessImportedBatch();
 
         $job->handle();
 

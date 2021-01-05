@@ -6,7 +6,7 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Jobs\ExtractSkuAndProductIdJob;
-use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductsJob;
+use App\Modules\Rmsapi\src\Jobs\ProcessImportedBatch;
 use Tests\TestCase;
 
 class ExtractSkuProductIdJobTest extends TestCase
@@ -32,7 +32,7 @@ class ExtractSkuProductIdJobTest extends TestCase
             'when_processed' => null,
         ]);
 
-        ProcessImportedProductsJob::dispatchNow();
+        ProcessImportedBatch::dispatchNow();
 
         RmsapiProductImport::query()->update([
             'sku' => null,
