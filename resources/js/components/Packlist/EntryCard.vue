@@ -25,7 +25,7 @@
                         inventory: <b>{{ dashIfZero(Math.ceil(productInventory)) }}</b>
                     </div>
                 </div>
-                <div class="col-3 text-center">
+                <div class="col-3 text-center" v-bind:class="{ 'bg-warning': Math.ceil(entry['quantity_to_ship']) > 1 }">
                     <small>to ship</small>
                     <h3>{{ dashIfZero(Math.ceil(entry['quantity_ordered'] - entry['quantity_shipped'])) }}</h3>
                 </div>
