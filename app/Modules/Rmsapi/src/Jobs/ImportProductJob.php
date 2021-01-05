@@ -59,8 +59,9 @@ class ImportProductJob implements ShouldQueue
         $product = Product::query()
             ->updateOrCreate([
                 "sku" => $attributes['sku']
-            ], $attributes)
-            ->touch(); // we touching just in case there was no changes but we still want to force it
+            ], $attributes);
+
+        $product->touch(); // we touching just in case there was no changes but we still want to force it
 
         $this->attachTags($importedProduct, $product);
 
