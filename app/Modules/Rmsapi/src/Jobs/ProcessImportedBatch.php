@@ -18,7 +18,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
-class ProcessImportedProductsJob implements ShouldQueue
+class ProcessImportedBatch implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
