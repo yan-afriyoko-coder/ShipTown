@@ -161,6 +161,8 @@
                           <div class="col-12">
                               Shipping Numbers:
                               <template v-for="shipment in order_shipments">
+                                  <div class="text-secondary h6"><span class="font-weight-bold">{{ shipment['created_at'] }}</span></div>
+                                  <div class="text-secondary h6"><span class="font-weight-bold">{{ shipment['user_id'] }}</span></div>
                                   <div class="text-secondary h6"><span class="font-weight-bold">{{ shipment['shipping_number'] }}</span></div>
                               </template>
                           </div>
