@@ -61,8 +61,6 @@ class ImportProductJob implements ShouldQueue
                 "sku" => $attributes['sku']
             ], $attributes);
 
-        $product->touch(); // we touching just in case there was no changes but we still want to force it
-
         $this->attachTags($importedProduct, $product);
 
         $this->importAliases($importedProduct, $product);
@@ -76,6 +74,8 @@ class ImportProductJob implements ShouldQueue
             'product_id' => $product->id,
             'sku' => $attributes['sku']
         ]);
+
+        $product->touch(); // we touching coz there was changes
     }
 
     /**
