@@ -32,10 +32,13 @@ class RefillPackingWarehouseJob implements ShouldQueue
     public function handle()
     {
         Order::where('status_code', 'paid')
-            ->get()->each(function ($order) {
+            ->get()
+            ->each(function ($order) {
                 if (OrderService::canFulfill($order, 99)) {
                     $order->update(['status_code' => 'packing_warehouse']);
                 }
             });
+
+        info('Refilled packing_warehouse');
     }
 }

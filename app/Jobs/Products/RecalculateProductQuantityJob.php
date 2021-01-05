@@ -3,13 +3,9 @@
 namespace App\Jobs\Products;
 
 use App\Helpers\Queries;
-use App\Models\Inventory;
-use App\Models\OrderProduct;
 use App\Models\Product;
-use DB;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -23,6 +19,9 @@ class RecalculateProductQuantityJob implements ShouldQueue
      */
     private $locationId;
 
+    private $maxPerJob;
+
+
     /**
      * Create a new job instance.
      *
@@ -31,6 +30,7 @@ class RecalculateProductQuantityJob implements ShouldQueue
     public function __construct()
     {
         $this->locationId = 999;
+        $this->maxPerJob = 100;
     }
 
     /**
@@ -41,8 +41,7 @@ class RecalculateProductQuantityJob implements ShouldQueue
     public function handle()
     {
         $incorrectProductRecords = Queries::getProductsWithQuantityErrorsQuery()
-            // for performance purposes limit to 1000 products per job
-            ->limit(1000)
+            ->limit($this->maxPerJob)
             ->get();
 
         $incorrectProductRecords->each(function ($errorRecord) {
@@ -52,6 +51,10 @@ class RecalculateProductQuantityJob implements ShouldQueue
                     'quantity' => $errorRecord->correct_inventory_quantity ?? 0
                 ]);
         });
+
+        if($incorrectProductRecords->count() === $this->maxPerJob) {
+            self::dispatch();
+        }
 
         info('Successfully ran RecalculateProductQuantityJob', ['records_corrected_count' => $incorrectProductRecords->count()]);
     }
