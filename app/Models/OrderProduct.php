@@ -103,6 +103,7 @@ class OrderProduct extends Model
         'quantity_skipped_picking'=> 'float',
         'quantity_not_picked'=> 'float',
         'quantity_shipped'=> 'float',
+        'quantity_to_ship'=> 'float',
     ];
 
     /**
