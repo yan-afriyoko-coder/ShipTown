@@ -241,4 +241,12 @@ class Product extends Model
             return $query->where('alias', 'like', '%'.$skuOrAlias.'%');
         });
     }
+
+    /**
+     * @return bool
+     */
+    public function isOutOfStock(): bool
+    {
+        return $this->quantity_available < 0;
+    }
 }

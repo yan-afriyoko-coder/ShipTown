@@ -44,11 +44,9 @@ class ProductUpdatedEventListener
     {
         $product = $event->getProduct();
 
-        if ($product->quantity_available > 0) {
-            return;
+        if ($product->isOutOfStock() && $product->hasTags(['Available Online'])) {
+            Api2cartService::syncProduct($product);
         }
-
-        Api2cartService::syncProduct($product);
     }
 
     /**
