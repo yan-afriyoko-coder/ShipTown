@@ -44,11 +44,9 @@ class ProductUpdatedEventListener
     {
         $product = $event->getProduct();
 
-        if ($product->quantity_available > 0) {
-            return;
+        if ($product->isOutOfStock() && $product->hasTags(['Available Online'])) {
+            Api2cartService::syncProduct($product);
         }
-
-        Api2cartService::syncProduct($product);
     }
 
     /**
@@ -75,15 +73,15 @@ class ProductUpdatedEventListener
     {
         $product = $event->getProduct();
 
-        if ($product->withAllTags(['Available Online'])->exists()) {
+        if ($product->hasTags(['Available Online'])) {
             $product->attachTag('Not Synced');
         }
 
-        if ($product->quantity_available <= 0) {
+        if ($product->isOutOfStock() && $product->doesNotHaveTags(['Out Of Stock'])) {
             $product->attachTag('Out Of Stock');
         }
 
-        if ($product->quantity_available > 0) {
+        if ($product->isInStock() && $product->hasTags(['Out Of Stock'])) {
             $product->detachTag('Out Of Stock');
         }
     }

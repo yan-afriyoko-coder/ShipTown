@@ -21,7 +21,8 @@ class UpdateOrderClosedAtTest extends TestCase
         Order::query()->forceDelete();
 
         $order = factory(Order::class)->create([
-            'status_code' => 'blue'
+            'status_code' => 'blue',
+            'order_closed_at' => null,
         ]);
 
         $order->update(['status_code' => 'black']);
