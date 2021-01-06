@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Events\Product\TagAttachedEvent;
+use ArrayAccess;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\Tags\HasTags;
@@ -20,7 +21,7 @@ trait HasTagsTrait
      * @param string|null $type
      * @return $this
      */
-    public function attachTag($tag, string $type = null)
+    public function attachTag($tag, string $type = null): HasTagsTrait
     {
         try {
             $this->traitHasTagsAttachTag($tag, $type);
@@ -34,11 +35,11 @@ trait HasTagsTrait
 
 
     /**
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param array|\ArrayAccess|\Spatie\Tags\Tag $tags
+     * @param Builder $query
+     * @param array|ArrayAccess|Tag $tags
      *
      * @param string|null $type
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeWithoutAllTags(Builder $query, $tags, string $type = null): Builder
     {
@@ -51,5 +52,14 @@ trait HasTagsTrait
         });
 
         return $query;
+    }
+
+    /**
+     * @param array|null $tags
+     * @return bool
+     */
+    public function hasTags(array $tags = null): bool
+    {
+        return static::withAllTags($tags)->whereId($this->getKey())->exists();
     }
 }
