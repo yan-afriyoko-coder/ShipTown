@@ -28,8 +28,6 @@ class SyncProductsToApi2cartTest extends TestCase
      */
     public function testExample()
     {
-//        $this->doesNotPerformAssertions();
-
         $product = factory(Product::class)
             ->with('inventory')
             ->create();
