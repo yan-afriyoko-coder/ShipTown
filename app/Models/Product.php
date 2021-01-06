@@ -247,6 +247,14 @@ class Product extends Model
      */
     public function isOutOfStock(): bool
     {
-        return $this->quantity_available < 0;
+        return $this->quantity_available <= 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInStock(): bool
+    {
+        return $this->quantity_available > 0;
     }
 }
