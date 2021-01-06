@@ -6,6 +6,7 @@ use App\Events\Product\TagAttachedEvent;
 use ArrayAccess;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use phpDocumentor\Reflection\Types\Mixed_;
 use Spatie\Tags\HasTags;
 use Spatie\Tags\Tag;
 
@@ -17,11 +18,10 @@ trait HasTagsTrait
 
     /**
      * @param string|Tag $tag
-     *
      * @param string|null $type
      * @return $this
      */
-    public function attachTag($tag, string $type = null): HasTagsTrait
+    public function attachTag($tag, string $type = null)
     {
         try {
             $this->traitHasTagsAttachTag($tag, $type);
@@ -61,5 +61,14 @@ trait HasTagsTrait
     public function hasTags(array $tags = null): bool
     {
         return static::withAllTags($tags)->whereId($this->getKey())->exists();
+    }
+
+    /**
+     * @param array|null $tags
+     * @return bool
+     */
+    public function doesNotHaveTags(array $tags = null): bool
+    {
+        return !$this->hasTags($tags);
     }
 }
