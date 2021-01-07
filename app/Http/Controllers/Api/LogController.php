@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\LogResource;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -15,9 +17,9 @@ class LogController extends Controller
      * Display a listing of the resource.
      *
      * @param Request $request
-     * @return LengthAwarePaginator
+     * @return AnonymousResourceCollection
      */
-    public function index(Request $request)
+    public function index(Request $request): AnonymousResourceCollection
     {
         $query = QueryBuilder::for(Activity::class)
             ->allowedFilters([
@@ -32,6 +34,6 @@ class LogController extends Controller
                 'created_at',
             ]);
 
-        return $this->getPaginatedResult($query);
+        return LogResource::collection($this->getPaginatedResult($query));
     }
 }
