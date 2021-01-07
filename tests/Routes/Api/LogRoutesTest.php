@@ -26,7 +26,9 @@ class LogRoutesTest extends AuthenticatedRoutesTestCase
         $response->assertJsonStructure([
             'data' => [
                 '*' => [
+                    'created_at',
                     'id',
+                    'description',
                     'subject_id',
                     'subject_type',
                     'causer_id',
