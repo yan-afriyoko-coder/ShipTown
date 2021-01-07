@@ -289,6 +289,7 @@
                 let params = {
                     'filter[order_id]': this.order['id'],
                     'include': 'product',
+                    'per_page': '999',
                 };
 
                 this.apiGetOrderProducts(params)
@@ -308,6 +309,7 @@
                     'filter[order_id]': this.order['id'],
                     'include': 'user',
                     'sort': '-created_at',
+                    'per_page': '999',
                 };
 
                 this.apiGetOrderComments(params)
@@ -328,6 +330,7 @@
                     'filter[subject_type]': 'App\\Models\\Order',
                     'include': 'causer',
                     'sort': '-created_at',
+                    'per_page': '999',
                 };
 
                 this.apiGetActivityLog(params)
@@ -345,7 +348,8 @@
 
                 let params = {
                     'filter[order_id]': this.order['id'],
-                    'sort': 'created_at',
+                    'sort': '-created_at',
+                    'per_page': '999',
                 };
 
                 this.apiGetOrderShipments(params)
@@ -379,9 +383,11 @@
                 const searchTerm = orderProduct['product'] ? orderProduct['product']['sku'] : orderProduct['sku_ordered'];
                 return '/products?search=' + searchTerm;
             },
+
             getProductQuantity(orderProduct) {
                 return orderProduct['product'] ? Number(orderProduct['product']['quantity']) : 0;
             },
+
             ifHasEnoughStock(orderProduct) {
                 return this.getProductQuantity(orderProduct) < Number(orderProduct['quantity_to_ship']);
             }
