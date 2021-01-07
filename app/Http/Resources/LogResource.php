@@ -5,7 +5,6 @@ namespace App\Http\Resources;
 use Arr;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use mysql_xdevapi\Result;
 
 class LogResource extends JsonResource
 {
@@ -25,6 +24,7 @@ class LogResource extends JsonResource
             'causer_type' => $this->causer_type,
             'properties' => $this->properties,
             'changes' => $this->getChanges(),
+            'causer' => $this->whenLoaded('causer'),
         ];
     }
 
