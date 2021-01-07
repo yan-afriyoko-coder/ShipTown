@@ -333,7 +333,6 @@
                 this.apiGetActivityLog(params)
                     .then(({data}) => {
                         this.order_activities = data.data;
-                        console.log(this.order_activities);
                     })
 
                 return this;
