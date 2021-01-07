@@ -276,8 +276,7 @@
                     this.orderDetailsVisible = false;
                     return;
                 }
-
-                // this.loadOrderComments();
+ga
                 this.loadOrderProducts()
                 this.loadOrderActivities();
                 this.loadOrderShipments();
