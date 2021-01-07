@@ -187,7 +187,7 @@
                                     <b>
                                         {{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }}
                                     </b>
-                                    {{ activity['description'] }} {{ activity['changes'].length > 0 ? activity['changes'] : '' }}
+                                    {{ activity['description'] }} {{ activity['changes'] }}
                                 </div>
                             </div>
                         </template>
@@ -276,7 +276,7 @@
                     this.orderDetailsVisible = false;
                     return;
                 }
-ga
+
                 this.loadOrderProducts()
                 this.loadOrderActivities();
                 this.loadOrderShipments();
