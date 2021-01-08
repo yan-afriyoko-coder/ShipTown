@@ -38,6 +38,8 @@ class PacklistOrderController extends Controller
             ->whereNull('packed_at')
             ->update(['packer_user_id' => null]);
 
+        $order->log('received order for packing');
+
         return new OrderResource($order);
     }
 
