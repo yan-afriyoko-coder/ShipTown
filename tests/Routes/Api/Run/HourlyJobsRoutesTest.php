@@ -21,6 +21,8 @@ class HourlyJobsRoutesTest extends TestCase
 
         $response = $this->get('api/run/hourly/jobs');
 
+        dd($response->json());
+
         $response->assertStatus(200);
     }
 }
