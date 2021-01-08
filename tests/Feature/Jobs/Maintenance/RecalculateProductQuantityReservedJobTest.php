@@ -29,7 +29,7 @@ class RecalculateProductQuantityReservedJobTest extends TestCase
             ->create(['status_code' => 'paid']);
 
         Product::query()->update([
-            'quantity_reserved' => 0
+            'quantity_reserved' => 0,
         ]);
 
         RecalculateProductQuantityReservedJob::dispatchNow();

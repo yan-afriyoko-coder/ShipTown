@@ -25,7 +25,7 @@ class OrderPackedTest extends TestCase
         ]);
 
         $response = $this->put('/api/orders/'.$order->getKey(), [
-            'is_packed' => true
+            'is_packed' => true,
         ]);
 
         $response->assertStatus(200);

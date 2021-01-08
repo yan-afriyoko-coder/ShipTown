@@ -12,19 +12,19 @@ use Tests\TestCase;
 class ProductEventsTest extends TestCase
 {
     const REQUIRED_FIELDS = [
-        "sku",
-        "name",
-        "price",
-        "sale_price",
-        "sale_price_start_date",
-        "sale_price_end_date",
-        "quantity",
-        "quantity_reserved",
-        "quantity_available"
+        'sku',
+        'name',
+        'price',
+        'sale_price',
+        'sale_price_start_date',
+        'sale_price_end_date',
+        'quantity',
+        'quantity_reserved',
+        'quantity_available',
     ];
 
     /**
-     * Test ProductCreatedEvent
+     * Test ProductCreatedEvent.
      */
     public function testIfProductCreatedEventIsDispatchedWithRequiredFields()
     {
@@ -41,12 +41,10 @@ class ProductEventsTest extends TestCase
             'price' => 10,
         ];
 
-
         Product::query()->where('sku', '=', $product_data['sku'])->delete();
 
         // Act
-        $response = $this->json("POST", '/api/products', $product_data);
-
+        $response = $this->json('POST', '/api/products', $product_data);
 
         // Assert
         $response->assertStatus(200);
@@ -56,9 +54,8 @@ class ProductEventsTest extends TestCase
         });
     }
 
-
     /**
-     * Test ProductCreatedEvent
+     * Test ProductCreatedEvent.
      */
     public function testIfProductUpdatedEventIsDispatchedWithRequiredFields()
     {
@@ -74,11 +71,11 @@ class ProductEventsTest extends TestCase
         $product_update = [
             'sku' => $product['sku'],
             'name' => $product['name'],
-            'price' => $product['price'] * 2
+            'price' => $product['price'] * 2,
         ];
 
         // Act
-        $response_update = $this->json("POST", '/api/products', $product_update);
+        $response_update = $this->json('POST', '/api/products', $product_update);
 
         // Assert
         $response_update->assertStatus(200);

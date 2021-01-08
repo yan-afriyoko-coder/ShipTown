@@ -38,7 +38,7 @@ class ClearOrderPackerAssignmentJobTest extends TestCase
     }
 
     /**
-     * A basic feature test
+     * A basic feature test.
      *
      * @return void
      */

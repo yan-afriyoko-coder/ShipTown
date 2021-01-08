@@ -4,11 +4,11 @@ namespace Tests\Feature\Api;
 
 use App\Models\Product;
 use App\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProductsTest extends TestCase
 {
@@ -23,23 +23,24 @@ class ProductsTest extends TestCase
         $response->assertSuccessful();
 
         $response->assertJsonStructure([
-            "current_page",
-            "data" => [
-                "*" => [
-                    "sku",
-                    "name",
-                    "price",
-                    "sale_price",
-                    "sale_price_start_date",
-                    "sale_price_end_date",
-                    "quantity",
-                    "quantity_reserved",
-                    "quantity_available"
-                ]
+            'current_page',
+            'data' => [
+                '*' => [
+                    'sku',
+                    'name',
+                    'price',
+                    'sale_price',
+                    'sale_price_start_date',
+                    'sale_price_end_date',
+                    'quantity',
+                    'quantity_reserved',
+                    'quantity_available',
+                ],
             ],
-            "total",
+            'total',
         ]);
     }
+
     /**
      * @return void
      */
@@ -61,7 +62,6 @@ class ProductsTest extends TestCase
         $response->assertStatus(302);
     }
 
-
     public function testGetProductsResponseStructure()
     {
         Passport::actingAs(
@@ -70,28 +70,28 @@ class ProductsTest extends TestCase
 
         $product = factory(Product::class)->make();
 
-        $this->json("POST", '/api/products', $product->toArray());
+        $this->json('POST', '/api/products', $product->toArray());
 
         $response = $this->get('/api/products');
 
         $response->assertStatus(200);
 
         $response->assertJsonStructure([
-            "current_page",
-            "data" => [
-                "*" => [
-                    "sku",
-                    "name",
-                    "price",
-                    "sale_price",
-                    "sale_price_start_date",
-                    "sale_price_end_date",
-                    "quantity",
-                    "quantity_reserved",
-                    "quantity_available"
-                ]
+            'current_page',
+            'data' => [
+                '*' => [
+                    'sku',
+                    'name',
+                    'price',
+                    'sale_price',
+                    'sale_price_start_date',
+                    'sale_price_end_date',
+                    'quantity',
+                    'quantity_reserved',
+                    'quantity_available',
+                ],
             ],
-            "total",
+            'total',
         ]);
     }
 
@@ -101,7 +101,7 @@ class ProductsTest extends TestCase
             factory(User::class)->make()
         );
 
-        $response = $this->get("api/products/0/sync");
+        $response = $this->get('api/products/0/sync');
 
         $response->assertNotFound();
     }
