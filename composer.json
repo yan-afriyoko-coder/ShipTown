@@ -75,8 +75,7 @@
     "scripts": {
         "install-hooks": [
             "rm -rf .git/hooks",
-            "ln -s ../scripts/hooks .git/hooks",
-            "chmod +x .git/hooks/pre-commit"
+            "ln -s ../scripts/hooks .git/hooks"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
