@@ -42,7 +42,9 @@
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^3.0",
         "phpunit/phpunit": "*",
-        "squizlabs/php_codesniffer": "*"
+        "squizlabs/php_codesniffer": "*",
+        "jasonmccreary/laravel-test-assertions": "^1.0",
+        "mpociot/laravel-test-factory-helper": "^2.1"
     },
     "config": {
         "optimize-autoloader": true,
@@ -71,7 +73,11 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
-        "install-hooks": ["rm -rf .git/hooks", "ln -s ../scripts/hooks .git/hooks", "chmod +x .git/hooks/pre-commit"],
+        "install-hooks": [
+            "rm -rf .git/hooks",
+            "ln -s ../scripts/hooks .git/hooks",
+            "chmod +x .git/hooks/pre-commit"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
