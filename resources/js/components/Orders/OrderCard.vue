@@ -328,7 +328,7 @@
                     'filter[subject_id]': this.order['id'],
                     'filter[subject_type]': 'App\\Models\\Order',
                     'include': 'causer',
-                    'sort': '-created_at',
+                    'sort': '-id',
                     'per_page': '999',
                 };
 
