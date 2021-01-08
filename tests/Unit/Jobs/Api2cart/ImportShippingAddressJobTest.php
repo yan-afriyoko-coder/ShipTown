@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Jobs\Api2cart;
 
-use App\Modules\Api2cart\src\Jobs\ImportShippingAddressJob;
 use App\Models\Order;
 use App\Models\OrderAddress;
+use App\Modules\Api2cart\src\Jobs\ImportShippingAddressJob;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use Tests\TestCase;
 

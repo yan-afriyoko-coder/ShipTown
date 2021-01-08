@@ -75,7 +75,6 @@ class ProcessImportedProductsJobTest extends TestCase
 
         $job->handle();
 
-
         // get product
         $product = Product::query()->where(['sku' => $importData->raw_import['item_code']])->first('id');
 

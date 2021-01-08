@@ -2,10 +2,9 @@
 
 namespace Tests\Unit\Services;
 
+use App\Services\PrintService;
 use PrintNode\PrintJob;
 use PrintNode\Request;
-
-use App\Services\PrintService;
 use Tests\TestCase;
 
 class PrintServiceTest extends TestCase
