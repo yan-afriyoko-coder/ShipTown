@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Product;
+use App\Modules\Api2cart\src\Jobs\UpdateOrCreateProductJob;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Products;
 use Exception;
@@ -18,6 +19,7 @@ class Api2cartService
     {
         Api2cartConnection::all()
             ->each(function ($connection) use ($product) {
+                UpdateOrCreateProductJob::dispatch();
                 self::updateProduct($product, $connection->bridge_api_key);
             });
     }
