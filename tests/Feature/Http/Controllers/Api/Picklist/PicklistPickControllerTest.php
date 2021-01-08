@@ -38,6 +38,4 @@ class PicklistPickControllerTest extends TestCase
             ],
         ]);
     }
-
-    // test cases...
 }
