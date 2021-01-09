@@ -5,12 +5,12 @@ namespace Tests\Feature;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class InventoryRoutesTest extends TestCase
 {
@@ -69,7 +69,7 @@ class InventoryRoutesTest extends TestCase
             'sku' => $product->sku,
             'location_id' => 0,
             'quantity' => $inventory->quantity,
-            'quantity_reserved' => $inventory->quantity_reserved
+            'quantity_reserved' => $inventory->quantity_reserved,
         ];
 
         $response = $this->postJson('/api/product/inventory', $update);

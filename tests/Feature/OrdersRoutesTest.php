@@ -4,11 +4,11 @@ namespace Tests\Feature;
 
 use App\Models\Order;
 use App\Models\Product;
-use Illuminate\Support\Facades\Event;
-use Tests\TestCase;
 use App\User;
-use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
+use Laravel\Passport\Passport;
+use Tests\TestCase;
 
 class OrdersRoutesTest extends TestCase
 {
@@ -17,7 +17,7 @@ class OrdersRoutesTest extends TestCase
         Order::query()->delete();
 
         factory(Order::class)->create([
-            'picked_at' => now()
+            'picked_at' => now(),
         ]);
 
         Passport::actingAs(
@@ -27,13 +27,13 @@ class OrdersRoutesTest extends TestCase
         $response = $this->get('api/orders?filter[is_picked]=false');
 
         $response->assertJsonStructure([
-            "data" => [
-                "*" => [
-                    "id",
-                ]
+            'data' => [
+                '*' => [
+                    'id',
+                ],
             ],
-            "links",
-            "meta",
+            'links',
+            'meta',
         ]);
 
         $this->assertEquals(0, $response->json('meta.total'));
@@ -44,7 +44,7 @@ class OrdersRoutesTest extends TestCase
         Order::query()->delete();
 
         factory(Order::class)->create([
-            'picked_at' => now()
+            'picked_at' => now(),
         ]);
 
         Passport::actingAs(
@@ -54,13 +54,13 @@ class OrdersRoutesTest extends TestCase
         $response = $this->get('api/orders?filter[is_picked]=true');
 
         $response->assertJsonStructure([
-            "data" => [
-                "*" => [
-                    "id",
-                ]
+            'data' => [
+                '*' => [
+                    'id',
+                ],
             ],
-            "links",
-            "meta",
+            'links',
+            'meta',
         ]);
 
         $this->assertEquals(1, $response->json('meta.total'));
@@ -84,7 +84,7 @@ class OrdersRoutesTest extends TestCase
 
         $data = [
             'order_number'      => '0123456789',
-            "products" => [
+            'products' => [
                 [
                     'sku' => '123',
                     'quantity'     => 2,
@@ -96,7 +96,7 @@ class OrdersRoutesTest extends TestCase
                     'quantity'     => 5,
                     'price'        => 10,
                 ],
-            ]
+            ],
         ];
 
         Passport::actingAs(
@@ -107,14 +107,14 @@ class OrdersRoutesTest extends TestCase
             ->assertStatus(200);
 
         $this->assertDatabaseHas('orders', [
-            'order_number' => $data['order_number']
+            'order_number' => $data['order_number'],
         ]);
 
         $this->json('DELETE', 'api/orders/0123456789')
             ->assertStatus(200);
 
         $this->assertDatabaseMissing('orders', [
-            'order_number' => $data['order_number']
+            'order_number' => $data['order_number'],
         ]);
     }
 
@@ -122,7 +122,7 @@ class OrdersRoutesTest extends TestCase
     {
         $data = [
             'orderID'      => '001241',
-            "products" => [
+            'products' => [
                 [
                     'sku' => '123',
                     'quantity'     => 2,
@@ -134,7 +134,7 @@ class OrdersRoutesTest extends TestCase
                     'quantity'     => 5,
                     'price'        => 10,
                 ],
-            ]
+            ],
         ];
 
         $this->json('POST', 'api/orders', [$data])
@@ -145,7 +145,7 @@ class OrdersRoutesTest extends TestCase
     {
         $data = [
             //'order_number'      => '001241',
-            "products" => [
+            'products' => [
                 [
                     'sku' => '123',
                     'quantity'     => 2,
@@ -157,9 +157,8 @@ class OrdersRoutesTest extends TestCase
                     'quantity'     => 5,
                     'price'        => 10,
                 ],
-            ]
+            ],
         ];
-
 
         Passport::actingAs(
             factory(User::class)->create()
@@ -171,11 +170,9 @@ class OrdersRoutesTest extends TestCase
 
     public function testIfMissingProductsSectionIsNotAllowed()
     {
-
         $data = [
             'order_number'      => '001241',
         ];
-
 
         Passport::actingAs(
             factory(User::class)->create()
@@ -190,9 +187,9 @@ class OrdersRoutesTest extends TestCase
     {
         $data = [
             'order_number'      => '001241',
-            "products" => [
-                [] // blank products record
-            ]
+            'products' => [
+                [], // blank products record
+            ],
         ];
 
         Passport::actingAs(
@@ -212,20 +209,20 @@ class OrdersRoutesTest extends TestCase
 
         $order = [
             'order_number'      => '0123456789',
-            "products" => [
+            'products' => [
                 [
                     'sku'       => '0123456',
                     'quantity'  => 2,
                     'price'     => 4,
-                ]
-            ]
+                ],
+            ],
         ];
 
         Passport::actingAs(
             factory(User::class)->create()
         );
 
-        $product_before = Product::firstOrCreate(["sku" => '0123456']);
+        $product_before = Product::firstOrCreate(['sku' => '0123456']);
 
         $this->json('POST', 'api/orders', $order)->assertStatus(200);
         $this->json('DELETE', 'api/orders/0123456789')->assertStatus(200);

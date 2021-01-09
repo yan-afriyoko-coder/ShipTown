@@ -2,16 +2,16 @@
 
 namespace Tests\Unit;
 
-use App\Services\ProductService;
 use App\Models\Product;
+use App\Services\ProductService;
 use App\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Arr;
 
 class ProductModelTest extends TestCase
 {
@@ -19,14 +19,14 @@ class ProductModelTest extends TestCase
     {
         Event::fake();
 
-        $product_before = Product::firstOrCreate(["sku" => '0123456']);
+        $product_before = Product::firstOrCreate(['sku' => '0123456']);
 
         // reserve 1 more than actually in stock
         // so quantity_available < 0
         ProductService::reserve(
-            "0123456",
+            '0123456',
             $product_before->quantity + 1,
-            "ProductModeTest reservation"
+            'ProductModeTest reservation'
         );
 
         $product_after = $product_before->fresh();
@@ -41,12 +41,12 @@ class ProductModelTest extends TestCase
      */
     public function testIfReservesCorrectly()
     {
-        $product_before = Product::firstOrCreate(["sku" => '0123456']);
+        $product_before = Product::firstOrCreate(['sku' => '0123456']);
 
         ProductService::reserve(
-            "0123456",
+            '0123456',
             5,
-            "ProductModeTest reservation"
+            'ProductModeTest reservation'
         );
 
         $product_after = $product_before->fresh();

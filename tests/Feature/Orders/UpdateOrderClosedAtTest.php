@@ -4,9 +4,9 @@ namespace Tests\Feature\Orders;
 
 use App\Models\Order;
 use App\Models\RmsapiProductImport;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class UpdateOrderClosedAtTest extends TestCase
 {

@@ -5,10 +5,10 @@ namespace Tests\Feature\Orders;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProductLinesCountTest extends TestCase
 {

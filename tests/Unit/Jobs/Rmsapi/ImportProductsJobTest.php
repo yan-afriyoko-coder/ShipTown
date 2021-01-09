@@ -10,7 +10,6 @@ use Tests\TestCase;
 class ImportProductsJobTest extends TestCase
 {
     /**
-     *
      * @return void
      * @throws \Exception
      */

@@ -25,7 +25,7 @@ class SingleLineOrdersJobTest extends TestCase
 
         $this->assertDatabaseMissing('orders', [
             'status_code' => 'paid',
-            'product_line_count' => 1
+            'product_line_count' => 1,
         ]);
     }
 }

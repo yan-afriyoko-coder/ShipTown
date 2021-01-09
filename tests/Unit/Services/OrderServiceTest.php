@@ -78,11 +78,11 @@ class OrderServiceTest extends TestCase
         );
 
         $order = OrderService::updateOrCreate($attributes);
-        $equals = 2+$randomCount === OrderProduct::count();
+        $equals = 2 + $randomCount === OrderProduct::count();
 
-    //        if (!$equals) {
-    //            dd($attributes);
-    //        }
+        //        if (!$equals) {
+        //            dd($attributes);
+        //        }
 
         $this->assertTrue($equals);
     }
@@ -160,7 +160,7 @@ class OrderServiceTest extends TestCase
 
         $inventory = Inventory::query()->updateOrCreate([
             'product_id' => $orderProduct->product_id,
-            'location_id' => 100
+            'location_id' => 100,
         ], [
             'quantity' => $orderProduct->quantity_ordered,
             'quantity_reserved' => 0,
@@ -194,7 +194,7 @@ class OrderServiceTest extends TestCase
 
         Inventory::query()->updateOrCreate([
             'product_id' => $orderProduct->product_id,
-            'location_id' => 100
+            'location_id' => 100,
         ], [
             'quantity' => 0,
             'quantity_reserved' => 0,
@@ -223,7 +223,7 @@ class OrderServiceTest extends TestCase
             'product_id' => $orderProduct->product_id,
             'location_id' => $locationId,
         ], [
-            'quantity' => $orderProduct->quantity_ordered - 1
+            'quantity' => $orderProduct->quantity_ordered - 1,
         ]);
 
         $this->assertFalse(
@@ -245,7 +245,7 @@ class OrderServiceTest extends TestCase
             'product_id' => $orderProduct->product_id,
             'location_id' => $locationId,
         ], [
-            'quantity' => $orderProduct->quantity_ordered
+            'quantity' => $orderProduct->quantity_ordered,
         ]);
 
         $this->assertTrue(
