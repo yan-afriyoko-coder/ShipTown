@@ -19,7 +19,7 @@ class OrderShipmentsTest extends TestCase
 
         $response = $this->post('/api/order/shipments', [
             'order_id' => $order['id'],
-            'shipping_number' => '123'
+            'shipping_number' => '123',
         ]);
 
         $response->assertStatus(201);

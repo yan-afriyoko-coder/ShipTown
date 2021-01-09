@@ -27,7 +27,7 @@ class RecalculateProductQuantityJobTest extends TestCase
             ->create(['status_code' => 'paid']);
 
         Product::query()->update([
-            'quantity' => 0
+            'quantity' => 0,
         ]);
 
         RunMaintenanceJobs::dispatchNow();

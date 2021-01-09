@@ -30,8 +30,8 @@ class OrderProductsTest extends TestCase
 
         $orderProduct = OrderProduct::first();
 
-        $response = $this->put('/api/order/products/'. $orderProduct->getKey(), [
-            'quantity_shipped' => $orderProduct->quantity_ordered
+        $response = $this->put('/api/order/products/'.$orderProduct->getKey(), [
+            'quantity_shipped' => $orderProduct->quantity_ordered,
         ]);
 
         $response->assertStatus(200);

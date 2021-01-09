@@ -2,9 +2,8 @@
 
 namespace Tests\Unit\Models;
 
-use Tests\TestCase;
-
 use App\Models\RmsapiConnection;
+use Tests\TestCase;
 
 class RmsapiConnectionTest extends TestCase
 {

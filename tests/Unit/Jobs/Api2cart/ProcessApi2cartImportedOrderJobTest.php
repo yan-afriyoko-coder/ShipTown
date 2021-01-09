@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Jobs\Api2cart;
 
-use App\Modules\Api2cart\src\Jobs\ProcessApi2cartImportedOrderJob;
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Modules\Api2cart\src\Jobs\ProcessApi2cartImportedOrderJob;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;

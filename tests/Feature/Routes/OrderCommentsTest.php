@@ -24,7 +24,7 @@ class OrderCommentsTest extends TestCase
 
         $data = [
             'order_id' => $order->getKey(),
-            'comment' => 'Test comment'
+            'comment' => 'Test comment',
         ];
 
         $response = $this->post('/api/order/comments', $data);
@@ -37,7 +37,7 @@ class OrderCommentsTest extends TestCase
                     'order_id',
                     'user_id',
                     'comment',
-                ]
+                ],
             ],
         ]);
     }

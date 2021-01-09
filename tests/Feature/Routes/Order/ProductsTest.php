@@ -25,22 +25,22 @@ class ProductsTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertJsonStructure([
-            "meta",
-            "links",
-            "data" => [
-                "*" => [
-                    "id",
-                    "order_id",
-                    "product_id",
-                    "sku_ordered",
-                    "name_ordered",
-                    "quantity_ordered",
-                    "quantity_picked",
-                    "quantity_shipped",
-                    "order",
-                    "product"
-                ]
-            ]
+            'meta',
+            'links',
+            'data' => [
+                '*' => [
+                    'id',
+                    'order_id',
+                    'product_id',
+                    'sku_ordered',
+                    'name_ordered',
+                    'quantity_ordered',
+                    'quantity_picked',
+                    'quantity_shipped',
+                    'order',
+                    'product',
+                ],
+            ],
         ]);
 
 //        dd($response->json());

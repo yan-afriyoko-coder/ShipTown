@@ -5,10 +5,10 @@ namespace Tests\Feature\Orders;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class IncludeOrderStatsTest extends TestCase
 {
@@ -25,19 +25,19 @@ class IncludeOrderStatsTest extends TestCase
 
         $response = $this->get(
             '/api/orders?'.
-            "filter[order_number]=".$order->order_number.
-            "&include=stats",
+            'filter[order_number]='.$order->order_number.
+            '&include=stats',
             []
         );
 
         $response->assertStatus(200);
 
         $response->assertJsonStructure([
-            "data" => [
+            'data' => [
                 '*' => [
-                    'stats'
-                ]
-            ]
+                    'stats',
+                ],
+            ],
         ]);
     }
 }

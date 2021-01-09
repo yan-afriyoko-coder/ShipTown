@@ -42,7 +42,6 @@ class ExtractSkuProductIdJobTest extends TestCase
         // do
         ExtractSkuAndProductIdJob::dispatchNow();
 
-
         // assert
         $this->assertFalse(
             RmsapiProductImport::query()
