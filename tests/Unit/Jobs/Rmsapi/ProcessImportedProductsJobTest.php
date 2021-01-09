@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\ProductAlias;
 use App\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedBatch;
+use Event;
 use Spatie\Tags\Tag;
 use Tests\TestCase;
 
@@ -61,7 +62,7 @@ class ProcessImportedProductsJobTest extends TestCase
 
     public function testIfProcessesCorrectly()
     {
-//        Event::fake();
+        Event::fake();
 
         // prepare
         RmsapiProductImport::query()->delete();
