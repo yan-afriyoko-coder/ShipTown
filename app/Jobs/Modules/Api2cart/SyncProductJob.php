@@ -50,9 +50,7 @@ class SyncProductJob implements ShouldQueue
                 $this->getBasicData($product),
                 $this->getPricingData($product, $connection->pricingLocationId ?? 0),
                 $this->getInventoryData($product, $connection->inventoryLocationId ?? 0),
-                [
-                    'store_id' => 1
-                ]
+                $this->getMagentoStoreId($connection)
             );
 
             UpdateOrCreateProductJob::dispatch($connection->bridge_api_key, $product_data);
@@ -128,5 +126,20 @@ class SyncProductJob implements ShouldQueue
         }
 
         return $date;
+    }
+
+    /**
+     * @param $connection
+     * @return array
+     */
+    private function getMagentoStoreId($connection): array
+    {
+        if($connection->magento_store_id) {
+            return [
+                'store_id' => $connection->magento_store_id
+            ];
+        }
+
+        return [];
     }
 }
