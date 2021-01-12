@@ -18,10 +18,6 @@ class SyncProductJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * @var Api2cartConnection[]|Collection
-     */
-    private $connections;
-    /**
      * @var Product
      */
     private $product;
@@ -34,7 +30,6 @@ class SyncProductJob implements ShouldQueue
     public function __construct(Product $product)
     {
         $this->product = $product;
-        $this->connections = Api2cartConnection::all();
     }
 
     /**
@@ -45,7 +40,7 @@ class SyncProductJob implements ShouldQueue
     public function handle()
     {
         $product = $this->product;
-        $this->connections->each(function ($connection) use ($product) {
+        Api2cartConnection::all()->each(function ($connection) use ($product) {
             $product_data = array_merge(
                 $this->getBasicData($product),
                 $this->getPricingData($product, $connection->pricingLocationId ?? 0),
