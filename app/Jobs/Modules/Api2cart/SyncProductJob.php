@@ -48,8 +48,8 @@ class SyncProductJob implements ShouldQueue
         $this->connections->each(function ($connection) use ($product) {
             $product_data = array_merge(
                 $this->getBasicData($product),
-                $this->getPricingData($product, 1),
-                $this->getInventoryData($product, 100),
+                $this->getPricingData($product, $connection->pricingLocationId ?? 0),
+                $this->getInventoryData($product, $connection->inventoryLocationId ?? 0),
                 [
                     'store_id' => 1
                 ]
@@ -84,6 +84,10 @@ class SyncProductJob implements ShouldQueue
                 'location_id' => $location_id
             ]);
 
+        if(!$productPrice) {
+            return [];
+        }
+
         return [
             'price' => $productPrice->price,
             'special_price' => $productPrice->sale_price,
@@ -94,6 +98,7 @@ class SyncProductJob implements ShouldQueue
 
     /**
      * @param Product $product
+     * @param int $location_id
      * @return array
      */
     private function getInventoryData(Product $product, int $location_id): array
