@@ -288,7 +288,7 @@ class Products extends Entity
         $response = Client::GET($store_key, 'product.update.json', $product);
 
         if ($response->isSuccess()) {
-            info("Product updated", $product);
+            logger("Product updated", $product);
             return $response;
         }
 
@@ -344,7 +344,7 @@ class Products extends Entity
         $response = Client::GET($store_key, 'product.variant.update.json', $properties);
 
         if ($response->isSuccess()) {
-            info("Variant updated", $properties);
+            logger("Variant updated", $properties);
             return $response;
         }
 
