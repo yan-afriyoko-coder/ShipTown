@@ -2,7 +2,9 @@
 
 namespace App\Jobs\Modules\Api2cart;
 
+use App\Models\Inventory;
 use App\Models\Product;
+use App\Models\ProductPrice;
 use App\Modules\Api2cart\src\Jobs\UpdateOrCreateProductJob;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Carbon\Carbon;
@@ -70,8 +72,7 @@ class SyncProductJob implements ShouldQueue
      */
     private function getPricingData(Product $product, int $location_id): array
     {
-        $productPrice = $product->prices()
-            ->firstOrCreate([
+        $productPrice = ProductPrice::query()->firstOrCreate([
                 'product_id' => $product->getKey(),
                 'location_id' => $location_id
             ]);
@@ -95,8 +96,7 @@ class SyncProductJob implements ShouldQueue
      */
     private function getInventoryData(Product $product, int $location_id): array
     {
-        $productInventory = $product->inventory()
-            ->firstOrCreate([
+        $productInventory = Inventory::query()->firstOrCreate([
                 'product_id' => $product->getKey(),
                 'location_id' => $location_id
             ]);

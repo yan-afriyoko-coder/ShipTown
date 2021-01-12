@@ -4,9 +4,6 @@ namespace App\Jobs;
 
 use App\Jobs\Modules\Api2cart\SyncProductJob;
 use App\Models\Product;
-use App\Modules\Api2cart\src\Jobs\UpdateOrCreateProductJob;
-use App\Modules\Api2cart\src\Models\Api2cartConnection;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
