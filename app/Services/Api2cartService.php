@@ -19,7 +19,6 @@ class Api2cartService
     {
         Api2cartConnection::all()
             ->each(function ($connection) use ($product) {
-                UpdateOrCreateProductJob::dispatch();
                 self::updateProduct($product, $connection->bridge_api_key);
             });
     }
