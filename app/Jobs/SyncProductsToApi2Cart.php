@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Jobs\Modules\Api2cart\SyncProductJob;
 use App\Models\Product;
 use App\Modules\Api2cart\src\Jobs\UpdateOrCreateProductJob;
 use App\Modules\Api2cart\src\Jobs\UpdateProductJob;
@@ -43,7 +44,8 @@ class SyncProductsToApi2Cart implements ShouldQueue
             ->limit($limit)
             ->get()
             ->each(function (Product $product) {
-                $this->dispatchSyncJobs($product);
+                SyncProductJob::dispatch($product);
+//                $this->dispatchSyncJobs($product);
                 $product->detachTag('Not Synced');
             });
 
