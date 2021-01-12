@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Jobs\Modules\Api2cart\SyncProductJob;
 use App\Models\Product;
 use App\Modules\Api2cart\src\Jobs\UpdateOrCreateProductJob;
-use App\Modules\Api2cart\src\Jobs\UpdateProductJob;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Carbon\Carbon;
 use Exception;
@@ -40,7 +39,7 @@ class SyncProductsToApi2Cart implements ShouldQueue
         $limit = 100;
 
         $products = Product::withAllTags(['Available Online', 'Not Synced'])
-            ->orderBy('updated_at', 'desc')
+            ->orderBy('updated_at')
             ->limit($limit)
             ->get()
             ->each(function (Product $product) {
@@ -49,7 +48,7 @@ class SyncProductsToApi2Cart implements ShouldQueue
                 logger('SyncProductJob dispatched and tag removed', ['sku' => $product->sku]);
             });
 
-        info('Dispatched products to Api2cart', ['count' => $products->count()]);
+        info('Dispatched Api2cart product sync jobs', ['count' => $products->count()]);
 
         // if we got maximum allowed record count, there might be more!
         if($products->count() === $limit) {
