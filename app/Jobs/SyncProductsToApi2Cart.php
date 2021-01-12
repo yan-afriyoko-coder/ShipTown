@@ -45,13 +45,13 @@ class SyncProductsToApi2Cart implements ShouldQueue
             ->get()
             ->each(function (Product $product) {
                 SyncProductJob::dispatch($product);
-//                $this->dispatchSyncJobs($product);
                 $product->detachTag('Not Synced');
+                logger('SyncProductJob dispatched and tag removed', ['sku' => $product->sku]);
             });
 
         info('Dispatched products to Api2cart', ['count' => $products->count()]);
 
-        // if we got maximum allwed record count, there might be more!
+        // if we got maximum allowed record count, there might be more!
         if($products->count() === $limit) {
             self::dispatch();
         }
