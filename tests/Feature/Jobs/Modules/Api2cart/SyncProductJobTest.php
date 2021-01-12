@@ -3,7 +3,9 @@
 namespace Tests\Feature\Jobs\Modules\Api2cart;
 
 use App\Jobs\Modules\Api2cart\SyncProductJob;
+use App\Models\Inventory;
 use App\Models\Product;
+use App\Models\ProductPrice;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Tests\TestCase;
 
@@ -16,8 +18,20 @@ class SyncProductJobTest extends TestCase
      */
     public function testExample()
     {
-        factory(Api2cartConnection::class)->create();
+        Api2cartConnection::query()->forceDelete();
+
         $product = factory(Product::class)->create();
+
+        $inventory = factory(Inventory::class)->create(['product_id' => $product->getKey()]);
+
+        $pricing = factory(ProductPrice::class)->create(['product_id' => $product->getKey()]);
+
+        $connection = factory(Api2cartConnection::class)->create(
+            [
+                'pricing_location_id' => $pricing->location_id,
+                'inventory_location_id' => $inventory->location_id,
+            ]
+        );
 
         SyncProductJob::dispatchNow($product);
 
