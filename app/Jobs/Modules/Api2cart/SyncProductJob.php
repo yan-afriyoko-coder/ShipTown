@@ -8,7 +8,6 @@ use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -43,8 +42,8 @@ class SyncProductJob implements ShouldQueue
         Api2cartConnection::all()->each(function ($connection) use ($product) {
             $product_data = array_merge(
                 $this->getBasicData($product),
-                $this->getPricingData($product, $connection->pricingLocationId ?? 0),
-                $this->getInventoryData($product, $connection->inventoryLocationId ?? 0),
+                $this->getPricingData($product, $connection->pricing_location_id ?? 0),
+                $this->getInventoryData($product, $connection->inventory_location_id ?? 0),
                 $this->getMagentoStoreId($connection)
             );
 
