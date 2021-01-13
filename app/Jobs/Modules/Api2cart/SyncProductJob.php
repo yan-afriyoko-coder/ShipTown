@@ -140,12 +140,13 @@ class SyncProductJob implements ShouldQueue
      */
     private function getMagentoStoreId($connection): array
     {
-        if($connection->magento_store_id) {
-            return [
-                'store_id' => $connection->magento_store_id
-            ];
+        if(empty($connection->magento_store_id)) {
+            Log::warning('magento store id not specified!', $connection);
         }
 
-        return [];
+        return [
+            'store_id' => $connection->magento_store_id
+        ];
+
     }
 }
