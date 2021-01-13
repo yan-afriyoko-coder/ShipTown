@@ -100,10 +100,18 @@ class SyncProductJob implements ShouldQueue
      */
     private function getInventoryData(Product $product, int $location_id): array
     {
-        $productInventory = Inventory::query()->firstOrCreate([
-                'product_id' => $product->getKey(),
-                'location_id' => $location_id
-            ]);
+        $attributes = [
+            'product_id' => $product->getKey(),
+            'location_id' => $location_id
+        ];
+
+        $productInventory = Inventory::query()->where($attributes)->first();
+
+        if(empty($productInventory)) {
+            Log::warning('Inventory data not found', $attributes);
+            return [];
+        }
+
 
         return [
             'quantity' => $productInventory->quantity_available ?? 0,
@@ -132,12 +140,13 @@ class SyncProductJob implements ShouldQueue
      */
     private function getMagentoStoreId($connection): array
     {
-        if($connection->magento_store_id) {
-            return [
-                'store_id' => $connection->magento_store_id
-            ];
+        if(empty($connection->magento_store_id)) {
+            Log::warning('magento store id not specified!', $connection);
         }
 
-        return [];
+        return [
+            'store_id' => $connection->magento_store_id
+        ];
+
     }
 }
