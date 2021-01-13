@@ -13,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class SyncProductJob implements ShouldQueue
 {
@@ -72,12 +73,15 @@ class SyncProductJob implements ShouldQueue
      */
     private function getPricingData(Product $product, int $location_id): array
     {
-        $productPrice = ProductPrice::query()->firstOrCreate([
-                'product_id' => $product->getKey(),
-                'location_id' => $location_id
-            ]);
+        $attributes = [
+            'product_id' => $product->getKey(),
+            'location_id' => $location_id
+        ];
+
+        $productPrice = ProductPrice::query()->where($attributes)->first();
 
         if(!$productPrice) {
+            Log::warning('Pricing data not found', $attributes);
             return [];
         }
 
