@@ -3,6 +3,7 @@
 namespace App\Listeners\Product;
 
 use App\Events\Product\ProductUpdatedEvent;
+use App\Jobs\Modules\Api2cart\SyncProductJob;
 use App\Modules\Sns\src\Jobs\PublishSnsNotificationJob;
 use App\Services\Api2cartService;
 use Exception;
