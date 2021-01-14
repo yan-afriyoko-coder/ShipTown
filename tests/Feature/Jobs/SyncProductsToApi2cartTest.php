@@ -22,7 +22,7 @@ class SyncProductsToApi2cartTest extends TestCase
     }
 
     /**
-     * A basic feature test eSxample.
+     * A basic feature test example.
      *
      * @return void
      */

@@ -15,7 +15,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class SyncProductJob implements ShouldQueue
+class SyncProductJobCopy implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -43,15 +43,39 @@ class SyncProductJob implements ShouldQueue
     {
         $product = $this->product;
         Api2cartConnection::all()->each(function ($connection) use ($product) {
-            $product_data = array_merge(
-                $this->getBasicData($product),
-                $this->getPricingData($product, $connection->pricing_location_id),
-                $this->getInventoryData($product, $connection->inventory_location_id),
-                $this->getMagentoStoreId($connection)
-            );
-
+            $product_data = $this->getProductData($product, $connection);
             UpdateOrCreateProductJob::dispatch($connection->bridge_api_key, $product_data);
         });
+    }
+
+    /**
+     * @param Product $product
+     * @param $connection
+     * @return array
+     */
+    private function getProductData(Product $product, $connection): array
+    {
+        $product_data = $this->getBasicData($product);
+
+        if($connection->pricing_location_id) {
+            $product_data = array_merge($product_data, $this->getPricingData($product, $connection->pricing_location_id));
+        } else {
+            Log::warning('Pricing source not specified', ['connection ' => $connection->getAttributes(), 'product' => $product]);
+        }
+
+        if($connection->inventory_location_id) {
+            $product_data = array_merge($product_data, $this->getInventoryData($product, $connection->inventory_location_id));
+        } else {
+            Log::warning('Inventory source not specified', ['connection ' => $connection->getAttributes(), 'product' => $product]);
+        }
+
+        if($connection->magento_store_id) {
+            $product_data = array_merge($product_data, $this->getMagentoStoreId($connection));
+        } else {
+            Log::warning('Destination Magento Store ID not specified', ['connection ' => $connection->getAttributes(), 'product' => $product]);
+        }
+
+        return $product_data;
     }
 
     /**
@@ -112,7 +136,6 @@ class SyncProductJob implements ShouldQueue
             return [];
         }
 
-
         return [
             'quantity' => $productInventory->quantity_available ?? 0,
             'in_stock' => $productInventory->quantity_available > 0 ? "True" : "False",
@@ -135,10 +158,10 @@ class SyncProductJob implements ShouldQueue
     }
 
     /**
-     * @param $connection
+     * @param Api2cartConnection $connection
      * @return array
      */
-    private function getMagentoStoreId($connection): array
+    private function getMagentoStoreId(Api2cartConnection $connection): array
     {
         if(empty($connection->magento_store_id)) {
             Log::warning('Magento store id not specified!', $connection->getAttributes());
@@ -147,6 +170,5 @@ class SyncProductJob implements ShouldQueue
         return [
             'store_id' => $connection->magento_store_id
         ];
-
     }
 }
