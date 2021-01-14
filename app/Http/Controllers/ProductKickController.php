@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\Modules\Api2cart\SyncProductJob;
+use App\Jobs\Modules\Api2cart\SyncProductJobCopy;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -12,7 +12,7 @@ class ProductKickController extends Controller
     {
         $product = Product::query()->where(['sku' => $sku])->first();
 
-        SyncProductJob::dispatch($product);
+        SyncProductJobCopy::dispatch($product);
 
         return redirect('products');
     }

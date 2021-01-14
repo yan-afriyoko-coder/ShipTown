@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Jobs\Modules\Api2cart\SyncProductJob;
+use App\Jobs\Modules\Api2cart\SyncProductJobCopy;
 use App\Models\Product;
 use Exception;
 use Illuminate\Bus\Queueable;
