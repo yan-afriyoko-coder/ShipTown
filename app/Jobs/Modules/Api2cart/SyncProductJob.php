@@ -45,8 +45,8 @@ class SyncProductJob implements ShouldQueue
         Api2cartConnection::all()->each(function ($connection) use ($product) {
             $product_data = array_merge(
                 $this->getBasicData($product),
-                $this->getPricingData($product, $connection->pricing_location_id ?? 0),
-                $this->getInventoryData($product, $connection->inventory_location_id ?? 0),
+                $this->getPricingData($product, $connection->pricing_location_id),
+                $this->getInventoryData($product, $connection->inventory_location_id),
                 $this->getMagentoStoreId($connection)
             );
 
