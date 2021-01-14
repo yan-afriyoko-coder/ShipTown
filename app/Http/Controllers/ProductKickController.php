@@ -14,6 +14,6 @@ class ProductKickController extends Controller
 
         SyncProductJobCopy::dispatch($product);
 
-        return redirect('products');
+        return 'product kicked';
     }
 }
