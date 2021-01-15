@@ -8,12 +8,14 @@ use App\Models\ProductPrice;
 use App\Modules\Api2cart\src\Jobs\UpdateOrCreateProductJob;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Carbon\Carbon;
+use FontLib\Table\Type\loca;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use function PHPUnit\Framework\isNull;
 
 class SyncProductJob implements ShouldQueue
 {
@@ -95,11 +97,21 @@ class SyncProductJob implements ShouldQueue
 
     /**
      * @param Product $product
-     * @param int $location_id
+     * @param int|null $location_id
      * @return array
      */
-    private function getInventoryData(Product $product, int $location_id): array
+    private function getInventoryData(Product $product, int $location_id = null): array
     {
+        if(is_null($location_id)) {
+            // we will refresh to get latest data
+            $product = $product->refresh();
+
+            return [
+                'quantity' => $product->quantity_available ?? 0,
+                'in_stock' => $product->quantity_available > 0 ? "True" : "False",
+            ];
+        }
+
         $attributes = [
             'product_id' => $product->getKey(),
             'location_id' => $location_id
@@ -107,16 +119,15 @@ class SyncProductJob implements ShouldQueue
 
         $productInventory = Inventory::query()->where($attributes)->first();
 
-        if(empty($productInventory)) {
-            Log::warning('Inventory data not found', $attributes);
-            return [];
+        if($productInventory) {
+            return [
+                'quantity' => $productInventory->quantity_available ?? 0,
+                'in_stock' => $productInventory->quantity_available > 0 ? "True" : "False",
+            ];
         }
 
-
-        return [
-            'quantity' => $productInventory->quantity_available ?? 0,
-            'in_stock' => $productInventory->quantity_available > 0 ? "True" : "False",
-        ];
+        Log::warning('Inventory data not found', $attributes);
+        return [];
     }
 
     /**
