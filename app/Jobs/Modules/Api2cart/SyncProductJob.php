@@ -8,14 +8,12 @@ use App\Models\ProductPrice;
 use App\Modules\Api2cart\src\Jobs\UpdateOrCreateProductJob;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Carbon\Carbon;
-use FontLib\Table\Type\loca;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use function PHPUnit\Framework\isNull;
 
 class SyncProductJob implements ShouldQueue
 {
