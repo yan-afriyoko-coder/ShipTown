@@ -50,7 +50,7 @@ class CompareMagentoJob implements ShouldQueue
             $magentoProductList = collect($response->getResult()['product']);
 
             $magentoProductList->each(function ($magentoProduct) use ($connection) {
-                $pmProduct = Product::findBySKU($magentoProduct['u_model']);g
+                $pmProduct = Product::findBySKU($magentoProduct['u_model']);
 
                 if(is_null($pmProduct)) {
                     \Log::warning('Magento product not found in Products Management', [$magentoProduct]);
