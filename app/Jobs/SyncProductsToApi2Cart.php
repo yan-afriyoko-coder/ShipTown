@@ -37,6 +37,8 @@ class SyncProductsToApi2Cart implements ShouldQueue
         $limit = 100;
 
         $products = Product::withAllTags(['Available Online', 'Not Synced'])
+            // we want to sync products with smallest quantities first to avoid oversells
+            ->orderBy('quantity',)
             ->orderBy('updated_at')
             ->limit($limit)
             ->get()
