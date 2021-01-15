@@ -126,14 +126,10 @@
                         <div class="container" v-if="currentTab === 'activityLog'">
                             <template v-for="activity in activityLog">
                                 <div class="d-flex flex-column flex-md-row align-middle">
-                                    <div class="d-none d-md-block align-middle">
-                                        {{ activity['created_at'] | moment('MMM DD')  }} <small>@</small> {{ activity['created_at'] | moment('H:mm')  }}:
+                                    <div class="small flex-row align-middle">
+                                        {{ activity['created_at'] | moment('MMM DD')  }} {{ activity['created_at'] | moment('H:mm')  }}:
                                     </div>
-                                    <div class="small flex-row d-block d-md-none align-middle">
-                                        {{ activity['created_at'] | moment('MMM DD')  }}
-                                        {{ activity['created_at'] | moment('H:mm')  }}:
-                                    </div>
-                                    <div class="pl-sm-0 pl-md-1">
+                                    <div class="small pl-sm-0 pl-md-1">
                                         <b>
                                             {{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }}
                                         </b>
@@ -254,7 +250,8 @@
                     'filter[subject_type]': 'App\\Models\\Product',
                     'filter[subject_id]': this.product['id'],
                     'sort': '-id',
-                    'include': 'causer'
+                    'include': 'causer',
+                    'per_page': 100
                 }
 
                 this.apiGetActivityLog(params)
