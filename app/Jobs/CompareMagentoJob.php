@@ -73,6 +73,7 @@ class CompareMagentoJob implements ShouldQueue
      */
     private function areInSync($magentoProduct, Model $pmProduct, Api2cartConnection $connection): bool
     {
+        \Log::notice('Compare if Magento is in sync', [$magentoProduct, $pmProduct]);
         // compare prices
         // feed prices
         // compare values
