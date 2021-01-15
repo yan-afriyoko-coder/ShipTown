@@ -42,7 +42,7 @@ class CompareMagentoJob implements ShouldQueue
                 'modified_from' => Carbon::now()->subDay()->toDateTimeString(),
                 'params' => 'model,price,special_price,quantity,avail_sale,avail_view',
                 'sort_by' => 'modified_at',
-                'count' => '10',
+                'count' => config('api2cart.compare_products_count'),
             ];
 
             $response = Products::getProductList($connection->bridge_api_key, $params);
