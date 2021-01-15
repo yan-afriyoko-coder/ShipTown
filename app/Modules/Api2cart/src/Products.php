@@ -2,6 +2,7 @@
 
 namespace App\Modules\Api2cart\src;
 
+use App\Modules\Api2cart\src\Exceptions\GetRequestException;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Arr;
@@ -32,6 +33,23 @@ class Products extends Entity
         "name",
         "description"
     ];
+
+    /**
+     * @param string $store_key
+     * @param array $params
+     * @return \App\Modules\Api2cart\src\RequestResponse
+     * @throws GetRequestException
+     */
+    public static function getProductList(string $store_key, array $params): \App\Modules\Api2cart\src\RequestResponse
+    {
+        $requestResponse = Client::GET($store_key, 'product.list.json', $params);
+
+        if($requestResponse->isNotSuccess()) {
+            throw new GetRequestException($requestResponse->getReturnMessage(), $requestResponse->getReturnCode());
+        }
+
+        return $requestResponse;
+    }
 
     /**
      * @param string $store_key
