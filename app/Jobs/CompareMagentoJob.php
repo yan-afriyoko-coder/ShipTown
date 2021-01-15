@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Modules\Api2cart\src\Exceptions\GetRequestException;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Products;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
@@ -37,7 +38,10 @@ class CompareMagentoJob implements ShouldQueue
     {
         Api2cartConnection::all()->each(function(Api2cartConnection $connection) {
             $params = [
+                'store_id' => $connection->magento_store_id,
+                'modified_from' => Carbon::now()->subDay()->toDateTimeString(),
                 'params' => 'model,price,special_price,quantity,avail_sale,avail_view',
+                'sort_by' => 'modified_at',
                 'count' => '10',
             ];
 
