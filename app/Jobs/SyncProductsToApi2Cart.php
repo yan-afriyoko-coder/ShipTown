@@ -2,9 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Jobs\Modules\Api2cart\SyncProductJob;
-use App\Jobs\Modules\Api2cart\SyncProductJobCopy;
 use App\Models\Product;
+use App\Services\Api2cartService;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -43,7 +42,7 @@ class SyncProductsToApi2Cart implements ShouldQueue
             ->limit($limit)
             ->get()
             ->each(function (Product $product) {
-                SyncProductJob::dispatch($product);
+                Api2cartService::dispatchSyncProductJob($product);
                 $product->detachTag('Not Synced');
                 logger('SyncProductJob dispatched and tag removed', ['sku' => $product->sku]);
             });
