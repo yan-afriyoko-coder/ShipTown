@@ -43,13 +43,7 @@ class SyncProductJob implements ShouldQueue
     {
         $product = $this->product;
         Api2cartConnection::all()->each(function ($connection) use ($product) {
-            $product_data = array_merge(
-                $this->getBasicData($product),
-                $this->getPricingData($product, $connection->pricing_location_id),
-                $this->getInventoryData($product, $connection->inventory_location_id),
-                $this->getMagentoStoreId($connection)
-            );
-
+            $product_data = $this->getProductData($product, $connection);
             UpdateOrCreateProductJob::dispatch($connection->bridge_api_key, $product_data);
         });
     }
@@ -157,5 +151,20 @@ class SyncProductJob implements ShouldQueue
             'store_id' => $connection->magento_store_id
         ];
 
+    }
+
+    /**
+     * @param Product $product
+     * @param $connection
+     * @return array
+     */
+    private function getProductData(Product $product, $connection): array
+    {
+        return array_merge(
+            $this->getBasicData($product),
+            $this->getPricingData($product, $connection->pricing_location_id),
+            $this->getInventoryData($product, $connection->inventory_location_id),
+            $this->getMagentoStoreId($connection)
+        );
     }
 }
