@@ -80,17 +80,17 @@ class SyncProductJob implements ShouldQueue
 
         $productPrice = ProductPrice::query()->where($attributes)->first();
 
-        if(!$productPrice) {
-            Log::warning('Pricing data not found', $attributes);
-            return [];
+        if($productPrice) {
+            return [
+                'price' => $productPrice->price,
+                'special_price' => $productPrice->sale_price,
+                'sprice_create' => $this->formatDateForApi2cart($productPrice->sale_price_start_date),
+                'sprice_expire' => $this->formatDateForApi2cart($productPrice->sale_price_end_date),
+            ];
         }
 
-        return [
-            'price' => $productPrice->price,
-            'special_price' => $productPrice->sale_price,
-            'sprice_create' => $this->formatDateForApi2cart($productPrice->sale_price_start_date),
-            'sprice_expire' => $this->formatDateForApi2cart($productPrice->sale_price_end_date),
-        ];
+        Log::warning('Pricing data not found', $attributes);
+        return [];
     }
 
     /**
