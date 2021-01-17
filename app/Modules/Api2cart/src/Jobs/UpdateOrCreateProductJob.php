@@ -45,9 +45,18 @@ class UpdateOrCreateProductJob implements ShouldQueue
     {
         try {
             $response = Products::updateOrCreate($this->bridge_api_key, $this->product_data);
-            logger('Synced product to api2cart', ['response' => $response ? $response->getAsJson() : null, 'data' => $this->product_data]);
+            info('Api2cart: Product synced', [
+                'response' => $response ? $response->asArray() : null,
+                'data' => $this->product_data
+            ]);
         } catch (Exception $exception) {
-            Log::warning('Could not sync product, will retry', $this->product_data);
+            Log::warning('Api2cart: Product NOT SYNCED, retrying', [
+                'exception' => [
+                    'code' => $exception->getCode(),
+                    'message' => $exception->getMessage(),
+                ],
+                'product_data' => $this->product_data
+            ]);
             $this->release(60);
         }
     }
