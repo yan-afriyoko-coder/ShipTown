@@ -63,6 +63,8 @@ class CompareMagentoJob implements ShouldQueue
                 }
             });
         });
+
+        info('CompareMagentoJob finished');
     }
 
     /**

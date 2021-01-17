@@ -41,5 +41,7 @@ class RefillStatusesJob implements ShouldQueue
         \App\Modules\AutoPilot\src\Jobs\Refill\RefillOldOrdersToPickingJob::dispatchNow();
         \App\Modules\AutoPilot\src\Jobs\Refill\RefillPickingMissingStockJob::dispatchNow();
         \App\Modules\AutoPilot\src\Jobs\Refill\RefillPickingByOldestJob::dispatchNow();
+
+        info('RefillStatusesJob finished');
     }
 }

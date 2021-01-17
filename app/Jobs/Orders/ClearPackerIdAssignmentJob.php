@@ -43,6 +43,6 @@ class ClearPackerIdAssignmentJob implements ShouldQueue
                     ->update(['packer_user_id' => null]);
             });
 
-        info('ClearPackerIdAssignmentJob', ['record_recalculated' => $records->count()]);
+        info('ClearPackerIdAssignmentJob finished', ['record_recalculated' => $records->count()]);
     }
 }

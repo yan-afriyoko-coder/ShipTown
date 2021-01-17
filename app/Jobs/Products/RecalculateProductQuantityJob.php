@@ -56,6 +56,6 @@ class RecalculateProductQuantityJob implements ShouldQueue
             self::dispatch();
         }
 
-        info('RecalculateProductQuantityJob', ['records_corrected_count' => $incorrectProductRecords->count()]);
+        info('RecalculateProductQuantityJob finished', ['records_corrected_count' => $incorrectProductRecords->count()]);
     }
 }

@@ -52,6 +52,6 @@ class RecalculateLocation999QuantityReservedJob implements ShouldQueue
                 ]);
         });
 
-        info('RecalculateLocation999QuantityReservedJob', ['records_corrected_count' => $incorrectInventoryRecords->count()]);
+        info('RecalculateLocation999QuantityReservedJob finished', ['records_corrected_count' => $incorrectInventoryRecords->count()]);
     }
 }

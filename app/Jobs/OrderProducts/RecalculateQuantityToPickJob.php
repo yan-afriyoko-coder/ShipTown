@@ -41,6 +41,6 @@ class RecalculateQuantityToPickJob implements ShouldQueue
                     ->save();
             });
 
-        info('RecalculateQuantityToPickJob', ['record_recalculated' => $records->count()]);
+        info('RecalculateQuantityToPickJob finished', ['record_recalculated' => $records->count()]);
     }
 }

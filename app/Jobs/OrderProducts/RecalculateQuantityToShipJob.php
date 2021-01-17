@@ -42,6 +42,6 @@ class RecalculateQuantityToShipJob implements ShouldQueue
                     ->save();
             });
 
-        info('RecalculateQuantityToShipJob', ['record_recalculated' => $records->count()]);
+        info('RecalculateQuantityToShipJob finished', ['record_recalculated' => $records->count()]);
     }
 }
