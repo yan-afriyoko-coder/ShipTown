@@ -38,6 +38,7 @@ class RecalculateQuantityToShipJob implements ShouldQueue
 
         $records->each(function (OrderProduct $orderProduct) {
                 $orderProduct->log('Incorrect quantity to ship detected')
+                    // quantity_to_ship is recalculated on model save
                     ->save();
             });
 

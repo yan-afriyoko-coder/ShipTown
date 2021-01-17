@@ -30,16 +30,17 @@ class RecalculateQuantityToPickJob implements ShouldQueue
      */
     public function handle()
     {
-        OrderProduct::query()
+        $records = OrderProduct::query()
             ->whereRaw('(quantity_to_pick) <> (quantity_ordered - quantity_picked - quantity_skipped_picking)')
             ->latest('updated_at')
-            ->limit(500)
-            ->each(function (OrderProduct $orderProduct) {
-                $orderProduct
-                    ->log('Incorrect quantity to pick detected')
-                    ->update([
-                        'quantity_to_pick' => \DB::raw('quantity_ordered - quantity_picked - quantity_skipped_picking')
-                    ]);
+            ->limit(500);
+
+        $records->each(function (OrderProduct $orderProduct) {
+                $orderProduct->log('Incorrect quantity to pick detected')
+                    // quantity_to_pick is recalculated on model save
+                    ->save();
             });
+
+        info('RecalculateQuantityToShipJob', ['record_recalculated' => $records->count()]);
     }
 }
