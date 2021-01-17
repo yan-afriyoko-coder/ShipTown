@@ -33,13 +33,16 @@ class ClearPackerIdAssignmentJob implements ShouldQueue
     {
         $maxHoursOfInactivity = 12;
 
-        Order::whereNull('packed_at')
+        $records = Order::whereNull('packed_at')
             ->whereNotNull('packer_user_id')
             ->where('updated_at', '<', Carbon::now()->subHours($maxHoursOfInactivity))
-            ->get()
-            ->each(function (Order $order) {
+            ->get();
+
+        $records->each(function (Order $order) {
                 $order->log('Clearing packer assignment')
                     ->update(['packer_user_id' => null]);
             });
+
+        info('ClearPackerIdAssignmentJob finished', ['record_recalculated' => $records->count()]);
     }
 }

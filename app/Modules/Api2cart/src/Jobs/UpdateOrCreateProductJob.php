@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
 class UpdateOrCreateProductJob implements ShouldQueue
@@ -46,16 +47,16 @@ class UpdateOrCreateProductJob implements ShouldQueue
         try {
             $response = Products::updateOrCreate($this->bridge_api_key, $this->product_data);
             info('Api2cart: Product synced', [
+                'product_data' => $this->product_data,
                 'response' => $response ? $response->asArray() : null,
-                'data' => $this->product_data
             ]);
         } catch (Exception $exception) {
             Log::warning('Api2cart: Product NOT SYNCED, retrying', [
+                'product_data' => $this->product_data,
                 'exception' => [
                     'code' => $exception->getCode(),
                     'message' => $exception->getMessage(),
                 ],
-                'product_data' => $this->product_data
             ]);
             $this->release(60);
         }
