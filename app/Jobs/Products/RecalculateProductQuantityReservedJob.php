@@ -47,6 +47,6 @@ class RecalculateProductQuantityReservedJob implements ShouldQueue
                 ]);
         });
 
-        info('Successfully ran RecalculateQuantityReservedJob', ['records_corrected_count' => $incorrectProductRecords->count()]);
+        info('RecalculateProductQuantityReservedJob', ['records_corrected_count' => $incorrectProductRecords->count()]);
     }
 }
