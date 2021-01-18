@@ -17,6 +17,14 @@ trait HasTagsTrait
     }
 
     /**
+     * @param $tag
+     */
+    protected function onTagAttached($tag)
+    {
+        // override this function on model
+    }
+
+    /**
      * @param string|Tag $tag
      * @param string|null $type
      * @return $this
@@ -25,7 +33,7 @@ trait HasTagsTrait
     {
         try {
             $this->traitHasTagsAttachTag($tag, $type);
-            TagAttachedEvent::dispatch($this, $tag);
+            $this->onTagAttached($tag);
         } catch (Exception $exception) {
             $this->log("Could not assign '{$tag}'' tag");
         }

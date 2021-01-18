@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\Product\TagAttachedEvent;
 use App\Traits\HasTagsTrait;
 use App\Traits\LogsActivityTrait;
 use Barryvdh\LaravelIdeHelper\Eloquent;
@@ -154,6 +155,14 @@ class Product extends Model
                 'aliases',
                 'tags'
             ]);
+    }
+
+    /**
+     * @param $tag
+     */
+    protected function onTagAttached($tag)
+    {
+        TagAttachedEvent::dispatch($this, $tag);
     }
 
     /**
