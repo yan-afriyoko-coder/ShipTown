@@ -80,12 +80,14 @@ class FetchUpdatedOrdersJob implements ShouldQueue
      */
     private function importOrders(Api2cartConnection $connection): void
     {
+        $batchSize = 100;
+
         // initialize params
         $params = [
             'params' => 'force_all',
             'sort_by' => 'modified_at',
             'sort_direction' => 'asc',
-            'count' => 100,
+            'count' => $batchSize,
         ];
 
         if (isset($connection->last_synced_modified_at)) {
@@ -98,18 +100,21 @@ class FetchUpdatedOrdersJob implements ShouldQueue
 
         $orders = Orders::get($connection->bridge_api_key, $params);
 
-        if (empty($orders)) {
+        if (!$orders) {
+            info('Imported Api2cart orders', ['count' => 0]);
             return;
         }
 
         $this->saveOrders($connection, $orders);
 
-        info('Imported Api2cart orders', ['count' => count($orders)]);
-
         // for better performance and no long blocking jobs
         // recursively dispatch another import job
         // if there might be still some more to import
-        self::dispatch($connection);
+        if (count($orders) >= $batchSize) {
+            self::dispatch($connection);
+        }
+
+        info('Imported Api2cart orders', ['count' => count($orders)]);
     }
 
     /**
