@@ -100,9 +100,12 @@ class FetchUpdatedOrdersJob implements ShouldQueue
 
         $orders = Orders::get($connection->bridge_api_key, $params);
 
-        if ($orders) {
-            $this->saveOrders($connection, $orders);
+        if (!$orders) {
+            info('Imported Api2cart orders', ['count' => 0]);
+            return;
         }
+
+        $this->saveOrders($connection, $orders);
 
         // for better performance and no long blocking jobs
         // recursively dispatch another import job
