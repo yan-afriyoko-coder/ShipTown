@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::view('settings', 'settings')->name('settings');
 
     Route::get('pdf/orders/{order_number}/{template}', 'PdfOrderController@show');
+    Route::get('orders/{order_number}/kick', 'OrderKickController@index');
     Route::get('products/24h/kick', 'Products24hKickController@index');
     Route::get('products/{sku}/kick', 'ProductKickController@index');
     Route::get('csv/ready_order_shipments', 'Csv\ReadyOrderShipmentController@index')->name('ready_order_shipments_as_csv');
