@@ -3,6 +3,7 @@
 namespace App\Listeners\Order;
 
 use App\Events\Order\OrderUpdatedEvent;
+use App\Modules\AutoPilot\src\Jobs\CheckIfOrderOutOfStockJob;
 use App\Modules\Sns\src\Jobs\PublishSnsNotificationJob;
 use App\Modules\AutoPilot\src\Jobs\SetStatusPaidIfPaidJob;
 use App\Models\OrderStatus;
@@ -31,6 +32,7 @@ class OrderUpdatedEventListener
         $this->moveOrderFromPickingToPackingWeb($event);
         $this->changeStatusToReadyIfPacked($event);
         $this->updateOrderClosedAt($event);
+        CheckIfOrderOutOfStockJob::dispatch($event->getOrder());
         $this->publishSnsNotification($event);
     }
 

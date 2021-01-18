@@ -3,6 +3,7 @@
 namespace App\Listeners\Order;
 
 use App\Events\Order\OrderCreatedEvent;
+use App\Modules\AutoPilot\src\Jobs\CheckIfOrderOutOfStockJob;
 use App\Modules\Sns\src\Jobs\PublishSnsNotificationJob;
 
 class OrderCreatedEventListener
@@ -26,6 +27,7 @@ class OrderCreatedEventListener
     public function handle(OrderCreatedEvent $event)
     {
         $this->publishSnsNotification($event);
+        CheckIfOrderOutOfStockJob::dispatch($event->order);
     }
 
     /**
