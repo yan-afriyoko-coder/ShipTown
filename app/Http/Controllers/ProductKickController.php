@@ -19,6 +19,7 @@ class ProductKickController extends Controller
     public function index(Request $request, $sku)
     {
         $product = Product::query()->where(['sku' => $sku])->first();
+        $product->save();
 
         Api2cartService::dispatchSyncProductJob($product);
 
