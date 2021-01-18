@@ -26,7 +26,7 @@ class SyncController extends Controller
         // import RMSAPI products
         foreach (RmsapiConnection::all() as $rmsapiConnection) {
             FetchUpdatedProductsJob::dispatch($rmsapiConnection->id);
-            info('Rmsapi sync job dispatched', ['connection_id' => $rmsapiConnection->id]);
+            logger('Rmsapi sync job dispatched', ['connection_id' => $rmsapiConnection->id]);
         }
 
         info('Sync jobs dispatched');

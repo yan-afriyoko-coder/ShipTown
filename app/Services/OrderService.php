@@ -48,7 +48,7 @@ class OrderService
      * @param $sourceLocationId
      * @return bool
      */
-    public static function canFulfill(Order $order, $sourceLocationId = null)
+    public static function canFulfill(Order $order, $sourceLocationId = null): bool
     {
         $orderProducts = $order->orderProducts()->get();
 
@@ -59,13 +59,13 @@ class OrderService
                 $query->where('location_id', $sourceLocationId);
             }
 
-            $quantity = $query->sum(\DB::raw('(quantity)'));
+            $quantity_available = $query->sum(\DB::raw('(quantity)'));
 
-            if (!$quantity) {
+            if (!$quantity_available) {
                 return false;
             }
 
-            if ((double) $quantity < (double) $orderProduct->quantity_ordered) {
+            if ((double) $quantity_available < (double) $orderProduct->quantity_to_ship) {
                 return false;
             }
         }
