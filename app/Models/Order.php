@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasTagsTrait;
 use App\Traits\LogsActivityTrait;
 use App\User;
 use Barryvdh\LaravelIdeHelper\Eloquent;
@@ -88,7 +89,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class Order extends Model
 {
-    use LogsActivityTrait;
+    use LogsActivityTrait, HasTagsTrait;
 
     protected $fillable = [
         'order_number',
@@ -388,9 +389,10 @@ class Order extends Model
 
                 AllowedFilter::scope('has_packer'),
 
-                AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')
-                    ->ignore([null, '']),
-//                    ->default(100),
+                AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->ignore([null, '']),
+
+                AllowedFilter::scope('has_tags', 'withAllTags'),
+                AllowedFilter::scope('without_tags', 'withoutAllTags'),
             ])
             ->allowedIncludes([
                 'activities',

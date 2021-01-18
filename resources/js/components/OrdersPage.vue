@@ -91,6 +91,8 @@
                 const params = {
                     'filter[status]': this.getUrlParameter('status'),
                     'filter[search]': this.getUrlParameter('search'),
+                    'filter[has_tags]': this.getUrlParameter('has_tags'),
+                    'filter[without_tags]': this.getUrlParameter('without_tags'),
                     'sort': this.getUrlParameter('sort','-updated_at'),
                     'per_page': this.getUrlParameter('per_page', 20),
                     'include': 'order_comments,order_comments.user',

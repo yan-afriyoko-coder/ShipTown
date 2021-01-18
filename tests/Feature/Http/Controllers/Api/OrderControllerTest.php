@@ -2,9 +2,12 @@
 
 namespace Tests\Feature\Http\Controllers\Api;
 
+use App\Models\Order;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Passport\Passport;
+use Spatie\Tags\Tag;
 use Tests\TestCase;
 
 /**
@@ -116,6 +119,50 @@ class OrderControllerTest extends TestCase
         ]);
 
         // TODO: perform additional assertions
+    }
+
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
+    public function test_has_tags_filter_exists()
+    {
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        Order::query()->forceDelete();
+        Tag::query()->forceDelete();
+
+        $order = factory(Order::class)->create();
+
+        $order->attachTag('Test');
+
+        $response = $this->get('api/orders?filter[has_tags]=Test');
+
+        $this->assertEquals(1, $response->json()['meta']['total']);
+    }
+
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
+    public function test_has_tags_filter_missing()
+    {
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        Order::query()->forceDelete();
+        Tag::query()->forceDelete();
+
+        $order = factory(Order::class)->create();
+
+        $response = $this->get('api/orders?filter[has_tags]=Test');
+
+        $this->assertEquals(0, $response->json()['meta']['total']);
     }
 
     // test cases...

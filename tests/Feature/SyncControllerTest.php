@@ -21,6 +21,7 @@ class SyncControllerTest extends TestCase
      */
     public function testIfDispatchesJobs()
     {
+        User::query()->forceDelete();
         Bus::fake();
 
         factory(RmsapiConnection::class)->create();
