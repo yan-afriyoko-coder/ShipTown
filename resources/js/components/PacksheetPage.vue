@@ -120,6 +120,7 @@
                     startAt:  (new Date).getTime(),
                     endAt:  this.startAt + 1000 * 60 * 7,
                     somethingHasBeenPackedDuringThisSession: false,
+                    autopilotEnabled: false,
                 };
             },
 
@@ -165,7 +166,13 @@
                 fetchFromAutoPilot() {
                     let params = {}
 
-                    if( this.getUrlParameter('order_number') != null) {
+                    this.autopilotEnabled = this.getUrlParameter('order_number') === null;
+
+                    if( this.autopilotEnabled === false) {
+                        if(this.order) {
+                            //we have already loaded this order
+                            return;
+                        }
                         params = {'filter[order_number]': this.getUrlParameter('order_number')};
                     } else {
                         params = {
@@ -195,6 +202,7 @@
                     this.order = null;
                     this.packlist = [];
                     this.packed = [];
+                    this.somethingHasBeenPackedDuringThisSession = false;
 
                     const params = {
                         'filter[order_number]': orderNumber,
@@ -325,7 +333,9 @@
                         .then(() => {
                             this.$snotify.success('Shipping number saved');
                             if(this.packlist.length === 0) {
-                                this.order = null;
+                                if (this.autopilotEnabled) {
+                                    this.order = null;
+                                }
                                 this.fetchFromAutoPilot();
                             }
                         })
