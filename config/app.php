@@ -9,7 +9,7 @@ return [
      */
     'tenant_name' => env('TENANT_NAME', 'demo'),
 
-    'sns_topic_prefix' => env('DB_TABLE_PREFIX', ''),
+    'sns_topic_prefix' => '',
 
     /*
      * API2CART application API key
