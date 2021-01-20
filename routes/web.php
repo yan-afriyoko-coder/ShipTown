@@ -26,6 +26,8 @@ try {
 Route::get('invites/{token}', 'Api\Admin\UserInviteController@accept')->name('accept');
 Route::post('invites/{token}', 'Api\Admin\UserInviteController@process');
 
+Route::get('manifest.json', 'ManifestController@index');
+
 // Routes for authenticated users only
 Route::middleware('auth')->group(function () {
     Route::redirect('', 'dashboard');

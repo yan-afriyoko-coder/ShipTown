@@ -54,7 +54,7 @@ return [
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => env('TENANT_NAME', 'demo').'_',
+            'prefix' => config('app.tenant_name') . '_',
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
