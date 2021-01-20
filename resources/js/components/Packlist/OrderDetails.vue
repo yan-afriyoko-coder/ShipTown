@@ -1,5 +1,5 @@
 <template>
-    <div class="col">
+    <div class="col" v-if="order">
         <div class="row">
             <div class="col-3">
                 <label>Order #: </label>

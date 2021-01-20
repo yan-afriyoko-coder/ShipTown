@@ -7,6 +7,7 @@ return [
      * This is used to have topics per tenant subdomain
      * ie democompany_orders_events
      */
+    'tenant_name' => env('TENANT_NAME', 'demo'),
 
     'sns_topic_prefix' => env('DB_TABLE_PREFIX', ''),
 

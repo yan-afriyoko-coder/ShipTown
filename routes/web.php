@@ -26,6 +26,8 @@ try {
 Route::get('invites/{token}', 'Api\Admin\UserInviteController@accept')->name('accept');
 Route::post('invites/{token}', 'Api\Admin\UserInviteController@process');
 
+Route::get('manifest.json', 'ManifestController@index');
+
 // Routes for authenticated users only
 Route::middleware('auth')->group(function () {
     Route::redirect('', 'dashboard');
@@ -34,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::view('picklist', 'picklist')->name('picklist');
     Route::view('orders', 'orders')->name('orders');
     Route::view('order/packsheet', 'packsheet')->name('order.packsheet');
+    Route::resource('order/packsheet', 'Order\PacksheetController')->only(['show']);
     Route::view('reports/picks', 'reports/picks_report')->name('picks_report');
     Route::view('settings', 'settings')->name('settings');
 

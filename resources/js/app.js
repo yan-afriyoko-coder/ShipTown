@@ -84,6 +84,7 @@ Vue.component('api2cart-configuration', require('./components/Settings/Api2cartC
 Vue.component('rmsapi-configuration', require('./components/Settings/RmsapiiConfiguration.vue').default);
 Vue.component('packlist-configuration-modal', require('./components/Packlist/FiltersModal.vue').default);
 Vue.component('packsheet-page', require('./components/PacksheetPage.vue').default);
+Vue.component('autopilot-packsheet-page', require('./components/AutopilotPacksheetPage.vue').default);
 Vue.component('packlist-table-entry', require('./components/Packlist/PacklistEntry.vue').default);
 Vue.component('apt-configuration-modal', require('./components/Widgets/APT/ConfigurationModal.vue').default);
 Vue.component('user-table', require('./components/UsersPage.vue').default);
