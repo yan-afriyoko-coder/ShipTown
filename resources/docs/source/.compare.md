@@ -643,9 +643,7 @@ fetch(url, {
 <!-- END_63e4b1fec7af67340e915fe752069636 -->
 
 <!-- START_7af098584a3eac68b9c66167b36d88ad -->
-## GET Inventory
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+## api/product/inventory
 > Example request:
 
 ```php
@@ -659,10 +657,6 @@ $response = $client->get(
             'Accept' => 'application/json',
             'Authorization' => 'Bearer {token}',
         ],
-        'query' => [
-            'location_id'=> 'exercitationem',
-            'user_id'=> 'me',
-        ],
     ]
 );
 $body = $response->getBody();
@@ -671,7 +665,7 @@ print_r(json_decode((string) $body));
 
 ```bash
 curl -X GET \
-    -G "http://localhost/api/product/inventory?location_id=exercitationem&user_id=me" \
+    -G "http://localhost/api/product/inventory" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -H "Authorization: Bearer {token}"
@@ -681,13 +675,6 @@ curl -X GET \
 const url = new URL(
     "http://localhost/api/product/inventory"
 );
-
-let params = {
-    "location_id": "exercitationem",
-    "user_id": "me",
-};
-Object.keys(params)
-    .forEach(key => url.searchParams.append(key, params[key]));
 
 let headers = {
     "Content-Type": "application/json",
@@ -715,12 +702,6 @@ fetch(url, {
 ### HTTP Request
 `GET api/product/inventory`
 
-#### Query Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -----------
-    `location_id` |  required  | The id of the location.
-    `user_id` |  required  | The id of the user.
 
 <!-- END_7af098584a3eac68b9c66167b36d88ad -->
 

@@ -529,8 +529,7 @@ fetch(url, {
 <p><code>GET api/product/aliases</code></p>
 <!-- END_63e4b1fec7af67340e915fe752069636 -->
 <!-- START_7af098584a3eac68b9c66167b36d88ad -->
-<h2>GET Inventory</h2>
-<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
+<h2>api/product/inventory</h2>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -544,29 +543,18 @@ $response = $client-&gt;get(
             'Accept' =&gt; 'application/json',
             'Authorization' =&gt; 'Bearer {token}',
         ],
-        'query' =&gt; [
-            'location_id'=&gt; 'exercitationem',
-            'user_id'=&gt; 'me',
-        ],
     ]
 );
 $body = $response-&gt;getBody();
 print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/product/inventory?location_id=exercitationem&amp;user_id=me" \
+    -G "http://localhost/api/product/inventory" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -H "Authorization: Bearer {token}"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/product/inventory"
 );
-
-let params = {
-    "location_id": "exercitationem",
-    "user_id": "me",
-};
-Object.keys(params)
-    .forEach(key =&gt; url.searchParams.append(key, params[key]));
 
 let headers = {
     "Content-Type": "application/json",
@@ -588,28 +576,6 @@ fetch(url, {
 }</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/product/inventory</code></p>
-<h4>Query Parameters</h4>
-<table>
-<thead>
-<tr>
-<th>Parameter</th>
-<th>Status</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>location_id</code></td>
-<td>required</td>
-<td>The id of the location.</td>
-</tr>
-<tr>
-<td><code>user_id</code></td>
-<td>required</td>
-<td>The id of the user.</td>
-</tr>
-</tbody>
-</table>
 <!-- END_7af098584a3eac68b9c66167b36d88ad -->
 <!-- START_7a677685c3fe5c46d3a581967c5e674a -->
 <h2>api/product/inventory</h2>

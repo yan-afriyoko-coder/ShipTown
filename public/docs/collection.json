@@ -2,7 +2,7 @@
     "variables": [],
     "info": {
         "name": "Products Management API",
-        "_postman_id": "8edf5b7d-48a4-45a5-a905-3a0d0d3f0fdb",
+        "_postman_id": "74d36d9e-e721-46c1-8e77-4986419ac6b2",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.0.0\/collection.json"
     },
@@ -332,26 +332,13 @@
                     }
                 },
                 {
-                    "name": "GET Inventory",
+                    "name": "api\/product\/inventory",
                     "request": {
                         "url": {
                             "protocol": "http",
                             "host": "localhost",
                             "path": "api\/product\/inventory",
-                            "query": [
-                                {
-                                    "key": "location_id",
-                                    "value": "exercitationem",
-                                    "description": "The id of the location.",
-                                    "disabled": false
-                                },
-                                {
-                                    "key": "user_id",
-                                    "value": "me",
-                                    "description": "The id of the user.",
-                                    "disabled": false
-                                }
-                            ]
+                            "query": []
                         },
                         "method": "GET",
                         "header": [

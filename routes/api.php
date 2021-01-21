@@ -27,11 +27,11 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('products', 'Api\ProductController')->only(['index','store']);
     Route::apiResource('product/aliases', 'Api\Product\ProductAliasController')->only(['index']);
     Route::apiResource('product/inventory', 'Api\Product\ProductInventoryController')->only(['index','store']);
-    Route::apiResource('product/tags', 'Api\Product\ProductTagController')->only(['index','store']);
+    Route::apiResource('product/tags', 'Api\Product\ProductTagController')->only(['index']);
 
     Route::apiResource('orders', 'Api\OrderController');
-    Route::apiResource('order/products', 'Api\Order\OrderProductController');
-    Route::apiResource('order/shipments', 'Api\Order\OrderShipmentController');
+    Route::apiResource('order/products', 'Api\Order\OrderProductController')->only(['index', 'update']);
+    Route::apiResource('order/shipments', 'Api\Order\OrderShipmentController')->only(['index', 'store']);
     Route::apiResource('order/comments', 'Api\Order\OrderCommentController')->only(['index', 'store']);
 
     Route::apiResource('picklist', 'Api\PicklistController')->only(['index']);
@@ -43,8 +43,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResource('settings/user/me', 'Api\Settings\UserMeController')->only(['index','store']);
     Route::apiResource('settings/widgets', 'Api\Settings\WidgetController')->only(['store','update']);
-    Route::apiResource('settings/modules/rms_api/connections', "Api\Settings\Module\Rmsapi\RmsapiConnectionController")->except(['update']);
-    Route::apiResource('settings/modules/api2cart/connections', "Api\Settings\Module\Api2cart\Api2cartConnectionController")->except(['update']);
+    Route::apiResource('settings/modules/rms_api/connections', "Api\Settings\Module\Rmsapi\RmsapiConnectionController")->only(['index','store','destroy']);
+    Route::apiResource('settings/modules/api2cart/connections', "Api\Settings\Module\Api2cart\Api2cartConnectionController")->only(['index','store','destroy']);
     Route::apiResource('settings/modules/printnode/printers', 'Api\Settings\Module\Printnode\PrinterController')->only(['index']);
 
     // Routes for users with the admin role only
@@ -52,6 +52,6 @@ Route::middleware('auth:api')->group(function () {
         Route::apiResource('configuration', 'Api\Settings\ConfigurationController')->only(['store','show']);
         Route::apiResource('admin/user/invites', 'Api\Admin\UserInviteController')->only(['store']);
         Route::apiResource('admin/user/roles', 'Api\Admin\UserRoleController')->only(['index'])->middleware('can:list roles');
-        Route::apiResource('admin/users', 'Api\Admin\UserController')->middleware('can:manage users');
+        Route::apiResource('admin/users', 'Api\Admin\UserController')->only(['index','show','update','destroy'])->middleware('can:manage users');
     });
 });
