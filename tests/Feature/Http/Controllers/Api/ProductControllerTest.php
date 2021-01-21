@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Api;
 
+use App\Models\Product;
 use App\User;
 use Carbon\Carbon;
 use Tests\TestCase;
@@ -65,9 +66,12 @@ class ProductControllerTest extends TestCase
     {
         $user = factory(User::class)->create();
 
+        factory(Product::class)->create();
+
         $response = $this->actingAs($user, 'api')->getJson(route('products.index'));
 
         $response->assertOk();
+
         $response->assertJsonStructure([
             'meta',
             'links',
