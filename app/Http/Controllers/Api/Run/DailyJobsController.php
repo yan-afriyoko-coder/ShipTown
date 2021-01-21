@@ -7,6 +7,10 @@ use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
+/**
+ * Class DailyJobsController
+ * @package App\Http\Controllers\Api\Run
+ */
 class DailyJobsController extends Controller
 {
     /**

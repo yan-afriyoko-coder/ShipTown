@@ -11,8 +11,16 @@ use App\Models\Packlist;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 
+/**
+ * Class PacklistOrderController
+ * @package App\Http\Controllers\Api
+ */
 class PacklistOrderController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return OrderResource|void
+     */
     public function index(Request $request)
     {
         $order = OrderService::getSpatieQueryBuilder()
@@ -43,6 +51,11 @@ class PacklistOrderController extends Controller
         return new OrderResource($order);
     }
 
+    /**
+     * @param StoreRequest $request
+     * @param Packlist $packlist
+     * @return PacklistResource
+     */
     public function store(StoreRequest $request, Packlist $packlist)
     {
         $attributes = array_merge(

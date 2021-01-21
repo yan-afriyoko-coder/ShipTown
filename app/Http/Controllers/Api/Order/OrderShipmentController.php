@@ -9,6 +9,10 @@ use App\Models\OrderShipment;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 
+/**
+ * Class OrderShipmentController
+ * @package App\Http\Controllers\Api\Order
+ */
 class OrderShipmentController extends Controller
 {
     /**

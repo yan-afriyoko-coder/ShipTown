@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Api;
 
+use App\Models\Product;
 use App\User;
 use Tests\TestCase;
 
@@ -15,16 +16,55 @@ class ProductControllerTest extends TestCase
      */
     public function index_returns_an_ok_response()
     {
+        Product::query()->forceDelete();
+        factory(Product::class)->create();
+
         $user = factory(User::class)->create();
 
-        $response = $this->actingAs($user, 'api')->getJson(route('products.index'));
+        $response = $this->actingAs($user, 'api')->getJson(route('products.index', [
+            'include' => [
+                'inventory',
+                'aliases',
+                'tags'
+            ],
+            'filter[inventory_source_location_id]' => 1,
+        ]));
 
         $response->assertOk();
+
+//        $this->assertNotEquals(0, $response->json('meta.total'));
+
         $response->assertJsonStructure([
-            'meta',
-            'links',
+//            'meta',
+//            'links',
             'data' => [
                 '*' => [
+                    'id',
+                    'sku',
+                    'name',
+                    'price',
+                    'sale_price',
+                    'sale_price_start_date',
+                    'sale_price_end_date',
+                    'quantity',
+                    'quantity_reserved',
+                    'quantity_available',
+                    'deleted_at',
+                    'created_at',
+                    'updated_at',
+                    'inventory_source_shelf_location',
+                    'inventory_source_quantity',
+                    'inventory_source_product_id',
+                    'inventory_source_location_id',
+                    'inventory' => [
+                        '*' => []
+                    ],
+                    'aliases' => [
+                        '*' => []
+                    ],
+                    'tags' => [
+                        '*' => []
+                    ],
                 ]
             ]
         ]);

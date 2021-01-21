@@ -49,6 +49,99 @@
 <p>Welcome to the generated API reference.
 <a href="http://localhost/docs/collection.json">Get Postman Collection</a></p>
 <!-- END_INFO -->
+<h1>Products</h1>
+<!-- START_86e0ac5d4f8ce9853bc22fd08f2a0109 -->
+<h2>GET</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost/api/products',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; 'Bearer {token}',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://localhost/api/products" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: Bearer {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/products"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Unauthenticated."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/products</code></p>
+<!-- END_86e0ac5d4f8ce9853bc22fd08f2a0109 -->
+<!-- START_05b4383f00fd57c4828a831e7057e920 -->
+<h2>POST</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://localhost/api/products',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; 'Bearer {token}',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost/api/products" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: Bearer {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/products"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/products</code></p>
+<!-- END_05b4383f00fd57c4828a831e7057e920 -->
 <h1>general</h1>
 <!-- START_287222567e23d11d5f921dd30ef04fe8 -->
 <h2>api/print/order/{order_number}/{view}</h2>
@@ -387,98 +480,6 @@ fetch(url, {
 <h3>HTTP Request</h3>
 <p><code>GET api/logs</code></p>
 <!-- END_54cb226e1c806f816f425980068f574f -->
-<!-- START_86e0ac5d4f8ce9853bc22fd08f2a0109 -->
-<h2>api/products</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
-<pre><code class="language-php">
-$client = new \GuzzleHttp\Client();
-$response = $client-&gt;get(
-    'http://localhost/api/products',
-    [
-        'headers' =&gt; [
-            'Content-Type' =&gt; 'application/json',
-            'Accept' =&gt; 'application/json',
-            'Authorization' =&gt; 'Bearer {token}',
-        ],
-    ]
-);
-$body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
-<pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/products" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -H "Authorization: Bearer {token}"</code></pre>
-<pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/products"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-    "Authorization": "Bearer {token}",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response =&gt; response.json())
-    .then(json =&gt; console.log(json));</code></pre>
-<blockquote>
-<p>Example response (401):</p>
-</blockquote>
-<pre><code class="language-json">{
-    "message": "Unauthenticated."
-}</code></pre>
-<h3>HTTP Request</h3>
-<p><code>GET api/products</code></p>
-<!-- END_86e0ac5d4f8ce9853bc22fd08f2a0109 -->
-<!-- START_05b4383f00fd57c4828a831e7057e920 -->
-<h2>api/products</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
-<pre><code class="language-php">
-$client = new \GuzzleHttp\Client();
-$response = $client-&gt;post(
-    'http://localhost/api/products',
-    [
-        'headers' =&gt; [
-            'Content-Type' =&gt; 'application/json',
-            'Accept' =&gt; 'application/json',
-            'Authorization' =&gt; 'Bearer {token}',
-        ],
-    ]
-);
-$body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
-<pre><code class="language-bash">curl -X POST \
-    "http://localhost/api/products" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -H "Authorization: Bearer {token}"</code></pre>
-<pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/products"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-    "Authorization": "Bearer {token}",
-};
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-})
-    .then(response =&gt; response.json())
-    .then(json =&gt; console.log(json));</code></pre>
-<h3>HTTP Request</h3>
-<p><code>POST api/products</code></p>
-<!-- END_05b4383f00fd57c4828a831e7057e920 -->
 <!-- START_63e4b1fec7af67340e915fe752069636 -->
 <h2>Display a listing of the resource.</h2>
 <blockquote>
@@ -529,8 +530,7 @@ fetch(url, {
 <p><code>GET api/product/aliases</code></p>
 <!-- END_63e4b1fec7af67340e915fe752069636 -->
 <!-- START_7af098584a3eac68b9c66167b36d88ad -->
-<h2>GET Inventory</h2>
-<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
+<h2>api/product/inventory</h2>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -544,29 +544,18 @@ $response = $client-&gt;get(
             'Accept' =&gt; 'application/json',
             'Authorization' =&gt; 'Bearer {token}',
         ],
-        'query' =&gt; [
-            'location_id'=&gt; 'exercitationem',
-            'user_id'=&gt; 'me',
-        ],
     ]
 );
 $body = $response-&gt;getBody();
 print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost/api/product/inventory?location_id=exercitationem&amp;user_id=me" \
+    -G "http://localhost/api/product/inventory" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -H "Authorization: Bearer {token}"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/product/inventory"
 );
-
-let params = {
-    "location_id": "exercitationem",
-    "user_id": "me",
-};
-Object.keys(params)
-    .forEach(key =&gt; url.searchParams.append(key, params[key]));
 
 let headers = {
     "Content-Type": "application/json",
@@ -588,28 +577,6 @@ fetch(url, {
 }</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/product/inventory</code></p>
-<h4>Query Parameters</h4>
-<table>
-<thead>
-<tr>
-<th>Parameter</th>
-<th>Status</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>location_id</code></td>
-<td>required</td>
-<td>The id of the location.</td>
-</tr>
-<tr>
-<td><code>user_id</code></td>
-<td>required</td>
-<td>The id of the user.</td>
-</tr>
-</tbody>
-</table>
 <!-- END_7af098584a3eac68b9c66167b36d88ad -->
 <!-- START_7a677685c3fe5c46d3a581967c5e674a -->
 <h2>api/product/inventory</h2>
@@ -1940,7 +1907,7 @@ fetch(url, {
 <p><code>GET api/configuration/{configuration}</code></p>
 <!-- END_4f6fc31e416ca01343cb2a9350b7b868 -->
 <!-- START_e51d919398c365c2182c859f435c1cd5 -->
-<h2>api/admin/user/invites</h2>
+<h2>POST api/admin/user/invites</h2>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -2032,7 +1999,7 @@ fetch(url, {
 <p><code>GET api/admin/user/roles</code></p>
 <!-- END_662cf68e6e75c426f32835df494daf3b -->
 <!-- START_1fdf5c126c9b5b722e5044c3f680bf8e -->
-<h2>api/admin/users</h2>
+<h2>GET api/admin/users</h2>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -2081,7 +2048,7 @@ fetch(url, {
 <p><code>GET api/admin/users</code></p>
 <!-- END_1fdf5c126c9b5b722e5044c3f680bf8e -->
 <!-- START_538c6352521b306dbf554e89cd64ac98 -->
-<h2>api/admin/users/{user}</h2>
+<h2>SHOW api/admin/users</h2>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -2130,7 +2097,7 @@ fetch(url, {
 <p><code>GET api/admin/users/{user}</code></p>
 <!-- END_538c6352521b306dbf554e89cd64ac98 -->
 <!-- START_a7a0cf16fbe0b43360d4ccee6a11c638 -->
-<h2>api/admin/users/{user}</h2>
+<h2>PUT api/admin/users</h2>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -2174,7 +2141,7 @@ fetch(url, {
 <p><code>PATCH api/admin/users/{user}</code></p>
 <!-- END_a7a0cf16fbe0b43360d4ccee6a11c638 -->
 <!-- START_7d625b15e5b59cfac2c9129fa450c5f5 -->
-<h2>api/admin/users/{user}</h2>
+<h2>DELETE api/admin/users</h2>
 <blockquote>
 <p>Example request:</p>
 </blockquote>

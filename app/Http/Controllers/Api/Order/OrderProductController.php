@@ -9,6 +9,10 @@ use App\Models\OrderProduct;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/**
+ * Class OrderProductController
+ * @package App\Http\Controllers\Api\Order
+ */
 class OrderProductController extends Controller
 {
     /**

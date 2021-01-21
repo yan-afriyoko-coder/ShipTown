@@ -6,10 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Picklist\StoreDeletedPickRequest;
 use App\Models\OrderProduct;
 use App\Models\Pick;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * Class PicklistPickController
+ * @package App\Http\Controllers\Api\Picklist
+ */
 class PicklistPickController extends Controller
 {
+    /**
+     * @param StoreDeletedPickRequest $request
+     * @return AnonymousResourceCollection
+     */
     public function store(StoreDeletedPickRequest $request)
     {
         if ($request->get('quantity_picked', 0) !== 0) {

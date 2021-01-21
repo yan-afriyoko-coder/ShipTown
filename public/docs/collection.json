@@ -2,11 +2,81 @@
     "variables": [],
     "info": {
         "name": "Products Management API",
-        "_postman_id": "8edf5b7d-48a4-45a5-a905-3a0d0d3f0fdb",
+        "_postman_id": "b7449ba9-cf8b-4a2f-944c-7eba82312098",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.0.0\/collection.json"
     },
     "item": [
+        {
+            "name": "Products",
+            "description": "",
+            "item": [
+                {
+                    "name": "GET",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost",
+                            "path": "api\/products",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "POST",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost",
+                            "path": "api\/products",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {token}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                }
+            ]
+        },
         {
             "name": "general",
             "description": "",
@@ -236,70 +306,6 @@
                     }
                 },
                 {
-                    "name": "api\/products",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "localhost",
-                            "path": "api\/products",
-                            "query": []
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Authorization",
-                                "value": "Bearer {token}"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "api\/products",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "localhost",
-                            "path": "api\/products",
-                            "query": []
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Authorization",
-                                "value": "Bearer {token}"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
                     "name": "Display a listing of the resource.",
                     "request": {
                         "url": {
@@ -332,26 +338,13 @@
                     }
                 },
                 {
-                    "name": "GET Inventory",
+                    "name": "api\/product\/inventory",
                     "request": {
                         "url": {
                             "protocol": "http",
                             "host": "localhost",
                             "path": "api\/product\/inventory",
-                            "query": [
-                                {
-                                    "key": "location_id",
-                                    "value": "exercitationem",
-                                    "description": "The id of the location.",
-                                    "disabled": false
-                                },
-                                {
-                                    "key": "user_id",
-                                    "value": "me",
-                                    "description": "The id of the user.",
-                                    "disabled": false
-                                }
-                            ]
+                            "query": []
                         },
                         "method": "GET",
                         "header": [
@@ -1305,7 +1298,7 @@
                     }
                 },
                 {
-                    "name": "api\/admin\/user\/invites",
+                    "name": "POST api\/admin\/user\/invites",
                     "request": {
                         "url": {
                             "protocol": "http",
@@ -1369,7 +1362,7 @@
                     }
                 },
                 {
-                    "name": "api\/admin\/users",
+                    "name": "GET api\/admin\/users",
                     "request": {
                         "url": {
                             "protocol": "http",
@@ -1401,7 +1394,7 @@
                     }
                 },
                 {
-                    "name": "api\/admin\/users\/{user}",
+                    "name": "SHOW api\/admin\/users",
                     "request": {
                         "url": {
                             "protocol": "http",
@@ -1433,7 +1426,7 @@
                     }
                 },
                 {
-                    "name": "api\/admin\/users\/{user}",
+                    "name": "PUT api\/admin\/users",
                     "request": {
                         "url": {
                             "protocol": "http",
@@ -1465,7 +1458,7 @@
                     }
                 },
                 {
-                    "name": "api\/admin\/users\/{user}",
+                    "name": "DELETE api\/admin\/users",
                     "request": {
                         "url": {
                             "protocol": "http",

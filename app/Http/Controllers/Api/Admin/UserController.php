@@ -18,6 +18,8 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 class UserController extends Controller
 {
     /**
+     * GET api/admin/users
+     *
      * @param Request $request
      * @return AnonymousResourceCollection
      */
@@ -29,6 +31,8 @@ class UserController extends Controller
     }
 
     /**
+     * SHOW api/admin/users
+     *
      * @param User $user
      * @return UserResource
      */
@@ -38,6 +42,8 @@ class UserController extends Controller
     }
 
     /**
+     * PUT api/admin/users
+     *
      * @param UserUpdateRequest $request
      * @param User $user
      * @return UserResource
@@ -58,6 +64,8 @@ class UserController extends Controller
     }
 
     /**
+     * DELETE api/admin/users
+     *
      * @param UserDeleteRequest $request
      * @param User $user
      * @return UserResource

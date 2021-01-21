@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\RmsapiConnection;
 use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
 use App\Modules\Rmsapi\src\Jobs\FetchUpdatedProductsJob;
+use Request;
 
 /**
  * Class SyncController
@@ -14,9 +15,9 @@ use App\Modules\Rmsapi\src\Jobs\FetchUpdatedProductsJob;
 class SyncController extends Controller
 {
     /**
-     *
+     * @param Request $request
      */
-    public function index()
+    public function index(Request $request)
     {
         logger('Dispatching sync jobs');
 

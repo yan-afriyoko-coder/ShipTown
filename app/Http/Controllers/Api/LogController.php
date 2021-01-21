@@ -10,6 +10,10 @@ use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
+/**
+ * Class LogController
+ * @package App\Http\Controllers\Api
+ */
 class LogController extends Controller
 {
     /**

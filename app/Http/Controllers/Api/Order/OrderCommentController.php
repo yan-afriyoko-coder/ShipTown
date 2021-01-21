@@ -8,7 +8,12 @@ use App\Http\Resources\OrderCommentResource;
 use App\Models\OrderComment;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/**
+ * Class OrderCommentController
+ * @package App\Http\Controllers\Api\Order
+ */
 class OrderCommentController extends Controller
 {
 
@@ -25,6 +30,10 @@ class OrderCommentController extends Controller
         return $this->getPaginatedResult($query);
     }
 
+    /**
+     * @param OrderCommentStoreRequest $request
+     * @return AnonymousResourceCollection
+     */
     public function store(OrderCommentStoreRequest $request)
     {
         $shipment = new OrderComment($request->validated());

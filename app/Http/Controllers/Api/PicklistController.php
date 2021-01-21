@@ -8,6 +8,10 @@ use App\Models\OrderProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class PicklistController
+ * @package App\Http\Controllers\Api
+ */
 class PicklistController extends Controller
 {
     public function index(Request $request)

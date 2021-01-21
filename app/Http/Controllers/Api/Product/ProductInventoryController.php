@@ -9,8 +9,16 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * Class ProductInventoryController
+ * @package App\Http\Controllers\Api\Product
+ */
 class ProductInventoryController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function index(Request $request)
     {
         if ($request->get('per_page') == 'all') {
@@ -37,6 +45,10 @@ class ProductInventoryController extends Controller
         }
     }
 
+    /**
+     * @param StoreInventoryRequest $request
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
     public function store(StoreInventoryRequest $request)
     {
         $product = Product::where('sku', '=', $request->sku)
