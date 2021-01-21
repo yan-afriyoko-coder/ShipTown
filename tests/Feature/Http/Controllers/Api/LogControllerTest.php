@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Http\Controllers\Api;
 
-use App\Models\Order;
 use App\Models\Product;
 use App\User;
 use Spatie\Activitylog\Models\Activity;
