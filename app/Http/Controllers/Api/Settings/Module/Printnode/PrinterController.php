@@ -37,7 +37,11 @@ class PrinterController extends Controller
         try {
             $printers = $this->printService->getPrinters();
 
-            return new ResourceCollection(collect($printers));
+            $sortedPrinters = collect($printers)->sortBy(function ($printer) {
+                return $printer->computer->name . $printer->name;
+            });
+
+            return new ResourceCollection($sortedPrinters);
         } catch (\Exception $e) {
             return response()->json([], 422);
         }

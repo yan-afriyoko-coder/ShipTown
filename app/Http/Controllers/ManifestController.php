@@ -2,13 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 
+/**
+ * Class ManifestController
+ * @package App\Http\Controllers
+ */
 class ManifestController extends Controller
 {
-    public function index()
+    /**
+     * @return JsonResponse
+     */
+    public function index(): JsonResponse
     {
-        return json_encode([
+        return response()->json([
             "name" => " Product Management ". Str::ucfirst(config('app.tenant_name')),
             "short_name" => "PM " . Str::ucfirst(config('app.tenant_name')),
             "icons" => [
