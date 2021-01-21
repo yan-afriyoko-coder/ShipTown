@@ -13,8 +13,8 @@
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
-                            <th scope="col">Name</th>
                             <th scope="col">Computer</th>
+                            <th scope="col">Name</th>
                             <th scope="col">Status</th>
                             <th scope="col">Action</th>
                         </tr>
@@ -27,8 +27,8 @@
                             'table-primary': isDefaultPrinter(printer.id)
                         }">
                             <td>{{ printer.id }}</td>
-                            <td>{{ printer.name }}</td>
                             <td>{{ printer.computer.name }}</td>
+                            <td>{{ printer.name }}</td>
                             <td>{{ printer.state }}</td>
                             <td><a v-if="!isDefaultPrinter(printer.id)" href="#" @click.prevent="setDefault(printer.id)">Use</a></td>
                         </tr>
