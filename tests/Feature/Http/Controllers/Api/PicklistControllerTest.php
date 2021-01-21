@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Http\Controllers\Api;
 
-use App\Models\Order;
 use App\Models\OrderProduct;
 use App\User;
 use Tests\TestCase;
