@@ -8,7 +8,6 @@ use App\Http\Resources\OrderShipmentResource;
 use App\Models\OrderShipment;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderShipmentController extends Controller
 {

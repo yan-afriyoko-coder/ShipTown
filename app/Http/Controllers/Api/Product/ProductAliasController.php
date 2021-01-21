@@ -7,8 +7,6 @@ use App\Http\Resources\ProductAliasResource;
 use App\Models\ProductAlias;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class ProductAliasController extends Controller
 {

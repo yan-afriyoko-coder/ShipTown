@@ -6,9 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductsRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class ProductController extends Controller
 {
