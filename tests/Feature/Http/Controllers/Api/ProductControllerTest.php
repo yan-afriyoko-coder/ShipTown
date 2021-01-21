@@ -11,16 +11,6 @@ use Tests\TestCase;
  */
 class ProductControllerTest extends TestCase
 {
-//    /**
-//     * A basic feature test example.
-//     *
-//     * @return void
-//     */
-//    public function testGet()
-//    {
-////        $response = $this->get('/api/products?&');
-//    }
-
     /**
      * @test
      */
