@@ -39,13 +39,14 @@
         "beyondcode/laravel-dump-server": "^1.0",
         "filp/whoops": "^2.0",
         "fzaninotto/faker": "^1.4",
+        "jasonmccreary/laravel-test-assertions": "^1.0",
         "laravel/dusk": "^5.0",
         "mockery/mockery": "^1.0",
+        "mpociot/laravel-apidoc-generator": "^4.8",
+        "mpociot/laravel-test-factory-helper": "1.*",
         "nunomaduro/collision": "^3.0",
         "phpunit/phpunit": "*",
-        "squizlabs/php_codesniffer": "*",
-        "jasonmccreary/laravel-test-assertions": "^1.0",
-        "mpociot/laravel-test-factory-helper": "1.*"
+        "squizlabs/php_codesniffer": "*"
     },
     "config": {
         "optimize-autoloader": true,
