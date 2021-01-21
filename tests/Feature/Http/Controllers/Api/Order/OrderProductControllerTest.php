@@ -23,7 +23,7 @@ class OrderProductControllerTest extends TestCase
 
         factory(OrderProduct::class)->create();
 
-        $response = $this->actingAs($user, 'api')->getJson(route('products.index', [
+        $response = $this->actingAs($user, 'api')->getJson(route('order.products.index', [
             'include'=> [
                 'order',
                 'product',
@@ -65,7 +65,7 @@ class OrderProductControllerTest extends TestCase
         $user = factory(User::class)->create();
         $orderProduct = factory(OrderProduct::class)->create();
 
-        $response = $this->actingAs($user, 'api')->putJson(route('products.update', [$orderProduct]), [
+        $response = $this->actingAs($user, 'api')->putJson(route('order.products.update', [$orderProduct]), [
             'quantity_shipped' => $orderProduct->quantity_to_ship
         ]);
 

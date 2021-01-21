@@ -4,7 +4,6 @@ namespace Tests\Feature\Http\Controllers\Api;
 
 use App\Models\Product;
 use App\User;
-use Carbon\Carbon;
 use Tests\TestCase;
 
 /**
@@ -12,19 +11,42 @@ use Tests\TestCase;
  */
 class ProductControllerTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function testGet()
-    {
-        $response = $this->get('/api/products?include=inventory,aliases,tags&filter[inventory_source_location_id]=100');
+//    /**
+//     * A basic feature test example.
+//     *
+//     * @return void
+//     */
+//    public function testGet()
+//    {
+////        $response = $this->get('/api/products?&');
+//    }
 
-        $response->assertStatus(200);
+    /**
+     * @test
+     */
+    public function index_returns_an_ok_response()
+    {
+        Product::query()->forceDelete();
+        factory(Product::class)->create();
+
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user, 'api')->getJson(route('products.index', [
+            'include' => [
+                'inventory',
+                'aliases',
+                'tags'
+            ],
+            'filter[inventory_source_location_id]' => 1,
+        ]));
+
+        $response->assertOk();
+
+//        $this->assertNotEquals(0, $response->json('meta.total'));
 
         $response->assertJsonStructure([
-            'current_page',
+//            'meta',
+//            'links',
             'data' => [
                 '*' => [
                     'id',
@@ -53,30 +75,6 @@ class ProductControllerTest extends TestCase
                     'tags' => [
                         '*' => []
                     ],
-                ]
-            ],
-            'total',
-        ]);
-    }
-
-    /**
-     * @test
-     */
-    public function index_returns_an_ok_response()
-    {
-        $user = factory(User::class)->create();
-
-        factory(Product::class)->create();
-
-        $response = $this->actingAs($user, 'api')->getJson(route('products.index'));
-
-        $response->assertOk();
-
-        $response->assertJsonStructure([
-            'meta',
-            'links',
-            'data' => [
-                '*' => [
                 ]
             ]
         ]);
