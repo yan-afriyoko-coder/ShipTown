@@ -23,7 +23,7 @@ class OrderControllerTest extends TestCase
     public function index_returns_an_ok_response()
     {
         Order::query()->forceDelete();
-        factory(Order::class);
+        factory(Order::class)->create();
 
         $user = factory(User::class)->create();
 

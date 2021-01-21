@@ -22,7 +22,7 @@ class PacklistOrderControllerTest extends TestCase
 
         factory(Order::class)->create(['status_code' => 'packing']);
 
-        $response = $this->actingAs($user, 'api')->getJson(route('order.index'));
+        $response = $this->actingAs($user, 'api')->getJson(route('packlist.order.index'));
 
         $response->assertOk();
         $response->assertJsonStructure([

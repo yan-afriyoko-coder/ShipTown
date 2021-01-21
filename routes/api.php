@@ -39,7 +39,7 @@ Route::middleware('auth:api')->group(function () {
 
     // this should be called "order reservation"
     // its job is to fetch next order and block it so no other user gets it again
-    Route::apiResource('packlist/order', 'Api\PacklistOrderController')->only(['index']);
+    Route::apiResource('packlist/order', 'Api\PacklistOrderController', ['as' => 'packlist'])->only(['index']);
 
     Route::apiResource('settings/user/me', 'Api\Settings\UserMeController')->only(['index','store']);
     Route::apiResource('settings/widgets', 'Api\Settings\WidgetController')->only(['store','update']);
