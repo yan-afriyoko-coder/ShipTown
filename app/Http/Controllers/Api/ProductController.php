@@ -12,10 +12,14 @@ use Illuminate\Http\Request;
 /**
  * Class ProductController
  * @package App\Http\Controllers\Api
+ *
+ * @group Products
  */
 class ProductController extends Controller
 {
     /**
+     * GET
+     *
      * @param Request $request
      * @return LengthAwarePaginator
      */
@@ -27,6 +31,8 @@ class ProductController extends Controller
     }
 
     /**
+     * POST
+     *
      * @param StoreProductsRequest $request
      * @return JsonResponse
      */
