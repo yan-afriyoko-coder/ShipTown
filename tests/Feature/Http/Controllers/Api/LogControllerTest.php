@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Http\Controllers\Api;
 
+use App\Models\Order;
 use App\User;
+use Spatie\Activitylog\Models\Activity;
 use Tests\TestCase;
 
 /**
@@ -10,6 +12,41 @@ use Tests\TestCase;
  */
 class LogControllerTest extends TestCase
 {
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
+    public function testExample()
+    {
+        Activity::query()->forceDelete();
+
+        $order = factory(Order::class)->create();
+
+        $order->update(['status_code' => 'something_random_52']);
+
+        $response = $this->get('api/logs?subject_type=App\Models\Order');
+
+        $response->assertJsonStructure([
+            'data' => [
+                '*' => [
+                    'created_at',
+                    'id',
+                    'description',
+                    'subject_id',
+                    'subject_type',
+                    'causer_id',
+                    'causer_type',
+                    'properties' => [
+                        '*' => []
+                    ],
+                    'changes' => []
+                ]
+            ],
+            'meta',
+        ]);
+    }
+
     /**
      * @test
      */
