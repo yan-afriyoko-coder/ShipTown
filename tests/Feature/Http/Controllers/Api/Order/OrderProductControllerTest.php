@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Api\Order;
 
+use App\Models\OrderProduct;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -20,14 +21,37 @@ class OrderProductControllerTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $response = $this->actingAs($user, 'api')->getJson(route('products.index'));
+        factory(OrderProduct::class)->create();
+
+        $response = $this->actingAs($user, 'api')->getJson(route('products.index', [
+            'include'=> [
+                'order',
+                'product',
+                'product.aliases'
+            ]
+        ]));
 
         $response->assertOk();
+
+        $this->assertNotEquals(0, $response->json('meta.total'));
+
         $response->assertJsonStructure([
             'meta',
             'links',
             'data' => [
                 '*' => [
+                    'id',
+                    'order_id',
+                    'product_id',
+                    'sku_ordered',
+                    'name_ordered',
+                    'quantity_ordered',
+                    'quantity_picked',
+                    'quantity_shipped',
+                    'order' => [],
+                    'product' => [
+                        'aliases' => []
+                    ],
                 ]
             ]
         ]);
