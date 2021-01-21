@@ -8,12 +8,25 @@ use App\Http\Requests\Invites\UserInviteStoreRequest;
 use App\Mail\InviteCreated;
 use App\Models\UserInvite;
 use App\User;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\View\View;
 
 class UserInviteController extends Controller
 {
+    /**
+     * POST api/admin/user/invites
+     *
+     * @param UserInviteStoreRequest $request
+     * @return Application|ResponseFactory|Response
+     */
     public function store(UserInviteStoreRequest $request)
     {
         do {
@@ -33,6 +46,12 @@ class UserInviteController extends Controller
         return response('ok', 201);
     }
 
+    /**
+     * GET invites/{invite_token}
+     *
+     * @param $token
+     * @return array|Application|ResponseFactory|Factory|Response|View|mixed
+     */
     public function accept($token)
     {
         // Look up the invite
@@ -43,6 +62,12 @@ class UserInviteController extends Controller
         return view('invites.accept', $invite);
     }
 
+    /**
+     * POST invites/{invite_token}
+     *
+     * @param UserInviteProcessRequest $request
+     * @return Application|ResponseFactory|RedirectResponse|Response|Redirector|void
+     */
     public function process(UserInviteProcessRequest $request)
     {
         // Look up the invite

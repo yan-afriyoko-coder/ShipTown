@@ -2,7 +2,7 @@
     "variables": [],
     "info": {
         "name": "Products Management API",
-        "_postman_id": "74d36d9e-e721-46c1-8e77-4986419ac6b2",
+        "_postman_id": "fd943e95-e82e-4e1e-89e9-028e63a0c0dc",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.0.0\/collection.json"
     },
@@ -1292,7 +1292,7 @@
                     }
                 },
                 {
-                    "name": "api\/admin\/user\/invites",
+                    "name": "POST api\/admin\/user\/invites",
                     "request": {
                         "url": {
                             "protocol": "http",
@@ -1356,7 +1356,7 @@
                     }
                 },
                 {
-                    "name": "api\/admin\/users",
+                    "name": "GET api\/admin\/users",
                     "request": {
                         "url": {
                             "protocol": "http",
@@ -1388,7 +1388,7 @@
                     }
                 },
                 {
-                    "name": "api\/admin\/users\/{user}",
+                    "name": "SHOW api\/admin\/users",
                     "request": {
                         "url": {
                             "protocol": "http",
@@ -1420,7 +1420,7 @@
                     }
                 },
                 {
-                    "name": "api\/admin\/users\/{user}",
+                    "name": "PUT api\/admin\/users",
                     "request": {
                         "url": {
                             "protocol": "http",
@@ -1452,7 +1452,7 @@
                     }
                 },
                 {
-                    "name": "api\/admin\/users\/{user}",
+                    "name": "DELETE api\/admin\/users",
                     "request": {
                         "url": {
                             "protocol": "http",

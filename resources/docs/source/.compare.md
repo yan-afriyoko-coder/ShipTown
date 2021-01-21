@@ -2432,7 +2432,8 @@ fetch(url, {
 <!-- END_4f6fc31e416ca01343cb2a9350b7b868 -->
 
 <!-- START_e51d919398c365c2182c859f435c1cd5 -->
-## api/admin/user/invites
+## POST api/admin/user/invites
+
 > Example request:
 
 ```php
@@ -2551,7 +2552,8 @@ fetch(url, {
 <!-- END_662cf68e6e75c426f32835df494daf3b -->
 
 <!-- START_1fdf5c126c9b5b722e5044c3f680bf8e -->
-## api/admin/users
+## GET api/admin/users
+
 > Example request:
 
 ```php
@@ -2614,7 +2616,8 @@ fetch(url, {
 <!-- END_1fdf5c126c9b5b722e5044c3f680bf8e -->
 
 <!-- START_538c6352521b306dbf554e89cd64ac98 -->
-## api/admin/users/{user}
+## SHOW api/admin/users
+
 > Example request:
 
 ```php
@@ -2677,7 +2680,8 @@ fetch(url, {
 <!-- END_538c6352521b306dbf554e89cd64ac98 -->
 
 <!-- START_a7a0cf16fbe0b43360d4ccee6a11c638 -->
-## api/admin/users/{user}
+## PUT api/admin/users
+
 > Example request:
 
 ```php
@@ -2735,7 +2739,8 @@ fetch(url, {
 <!-- END_a7a0cf16fbe0b43360d4ccee6a11c638 -->
 
 <!-- START_7d625b15e5b59cfac2c9129fa450c5f5 -->
-## api/admin/users/{user}
+## DELETE api/admin/users
+
 > Example request:
 
 ```php
