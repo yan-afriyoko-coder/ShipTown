@@ -13,6 +13,8 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 /**
  * Class OrderCommentController
  * @package App\Http\Controllers\Api\Order
+ *
+ * @group Order
  */
 class OrderCommentController extends Controller
 {

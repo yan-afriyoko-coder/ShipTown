@@ -21,11 +21,378 @@ Welcome to the generated API reference.
 
 <!-- END_INFO -->
 
+#Order
+
+
+<!-- START_8896bf33ad9a0011f0d5b223a9a833db -->
+## Display a listing of the resource.
+
+> Example request:
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost/api/order/products',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer {token}',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```bash
+curl -X GET \
+    -G "http://localhost/api/order/products" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: Bearer {token}"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/order/products"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (401):
+
+```json
+{
+    "message": "Unauthenticated."
+}
+```
+
+### HTTP Request
+`GET api/order/products`
+
+
+<!-- END_8896bf33ad9a0011f0d5b223a9a833db -->
+
+<!-- START_96fee8377b192be0057637a65fabe21a -->
+## Update the specified resource in storage.
+
+> Example request:
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->put(
+    'http://localhost/api/order/products/1',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer {token}',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```bash
+curl -X PUT \
+    "http://localhost/api/order/products/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: Bearer {token}"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/order/products/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+
+### HTTP Request
+`PUT api/order/products/{product}`
+
+`PATCH api/order/products/{product}`
+
+
+<!-- END_96fee8377b192be0057637a65fabe21a -->
+
+<!-- START_6908ccba00e6a1b3daa2af04183f7dde -->
+## Display a listing of the resource.
+
+> Example request:
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost/api/order/shipments',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer {token}',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```bash
+curl -X GET \
+    -G "http://localhost/api/order/shipments" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: Bearer {token}"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/order/shipments"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (401):
+
+```json
+{
+    "message": "Unauthenticated."
+}
+```
+
+### HTTP Request
+`GET api/order/shipments`
+
+
+<!-- END_6908ccba00e6a1b3daa2af04183f7dde -->
+
+<!-- START_aa15fa2955e4aabc463fbf1545582693 -->
+## Store a newly created resource in storage.
+
+> Example request:
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost/api/order/shipments',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer {token}',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```bash
+curl -X POST \
+    "http://localhost/api/order/shipments" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: Bearer {token}"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/order/shipments"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+
+### HTTP Request
+`POST api/order/shipments`
+
+
+<!-- END_aa15fa2955e4aabc463fbf1545582693 -->
+
+<!-- START_b2c2a9afa301783a2a643f32f0c49a94 -->
+## Display a listing of the resource.
+
+> Example request:
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost/api/order/comments',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer {token}',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```bash
+curl -X GET \
+    -G "http://localhost/api/order/comments" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: Bearer {token}"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/order/comments"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (401):
+
+```json
+{
+    "message": "Unauthenticated."
+}
+```
+
+### HTTP Request
+`GET api/order/comments`
+
+
+<!-- END_b2c2a9afa301783a2a643f32f0c49a94 -->
+
+<!-- START_ce39ddba0721a0fa3ec9b5ce8f94b356 -->
+## api/order/comments
+> Example request:
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost/api/order/comments',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer {token}',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```bash
+curl -X POST \
+    "http://localhost/api/order/comments" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: Bearer {token}"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/order/comments"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+
+### HTTP Request
+`POST api/order/comments`
+
+
+<!-- END_ce39ddba0721a0fa3ec9b5ce8f94b356 -->
+
 #Products
 
 
 <!-- START_86e0ac5d4f8ce9853bc22fd08f2a0109 -->
-## GET
+## Get Product List
 
 > Example request:
 
@@ -89,7 +456,7 @@ fetch(url, {
 <!-- END_86e0ac5d4f8ce9853bc22fd08f2a0109 -->
 
 <!-- START_05b4383f00fd57c4828a831e7057e920 -->
-## POST
+## Update or Create Product
 
 > Example request:
 
@@ -1124,370 +1491,6 @@ fetch(url, {
 
 
 <!-- END_c280b55cf267ef09fc12c6b09ac78ede -->
-
-<!-- START_8896bf33ad9a0011f0d5b223a9a833db -->
-## Display a listing of the resource.
-
-> Example request:
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost/api/order/products',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-            'Authorization' => 'Bearer {token}',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/order/products" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -H "Authorization: Bearer {token}"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/order/products"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-    "Authorization": "Bearer {token}",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
-
-### HTTP Request
-`GET api/order/products`
-
-
-<!-- END_8896bf33ad9a0011f0d5b223a9a833db -->
-
-<!-- START_96fee8377b192be0057637a65fabe21a -->
-## Update the specified resource in storage.
-
-> Example request:
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->put(
-    'http://localhost/api/order/products/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-            'Authorization' => 'Bearer {token}',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```bash
-curl -X PUT \
-    "http://localhost/api/order/products/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -H "Authorization: Bearer {token}"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/order/products/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-    "Authorization": "Bearer {token}",
-};
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`PUT api/order/products/{product}`
-
-`PATCH api/order/products/{product}`
-
-
-<!-- END_96fee8377b192be0057637a65fabe21a -->
-
-<!-- START_6908ccba00e6a1b3daa2af04183f7dde -->
-## Display a listing of the resource.
-
-> Example request:
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost/api/order/shipments',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-            'Authorization' => 'Bearer {token}',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/order/shipments" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -H "Authorization: Bearer {token}"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/order/shipments"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-    "Authorization": "Bearer {token}",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
-
-### HTTP Request
-`GET api/order/shipments`
-
-
-<!-- END_6908ccba00e6a1b3daa2af04183f7dde -->
-
-<!-- START_aa15fa2955e4aabc463fbf1545582693 -->
-## Store a newly created resource in storage.
-
-> Example request:
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost/api/order/shipments',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-            'Authorization' => 'Bearer {token}',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```bash
-curl -X POST \
-    "http://localhost/api/order/shipments" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -H "Authorization: Bearer {token}"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/order/shipments"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-    "Authorization": "Bearer {token}",
-};
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`POST api/order/shipments`
-
-
-<!-- END_aa15fa2955e4aabc463fbf1545582693 -->
-
-<!-- START_b2c2a9afa301783a2a643f32f0c49a94 -->
-## Display a listing of the resource.
-
-> Example request:
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost/api/order/comments',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-            'Authorization' => 'Bearer {token}',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```bash
-curl -X GET \
-    -G "http://localhost/api/order/comments" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -H "Authorization: Bearer {token}"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/order/comments"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-    "Authorization": "Bearer {token}",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
-
-### HTTP Request
-`GET api/order/comments`
-
-
-<!-- END_b2c2a9afa301783a2a643f32f0c49a94 -->
-
-<!-- START_ce39ddba0721a0fa3ec9b5ce8f94b356 -->
-## api/order/comments
-> Example request:
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost/api/order/comments',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-            'Authorization' => 'Bearer {token}',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```bash
-curl -X POST \
-    "http://localhost/api/order/comments" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -H "Authorization: Bearer {token}"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost/api/order/comments"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-    "Authorization": "Bearer {token}",
-};
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-
-
-### HTTP Request
-`POST api/order/comments`
-
-
-<!-- END_ce39ddba0721a0fa3ec9b5ce8f94b356 -->
 
 <!-- START_71e8edc3ca4cfd2c754069064cda0100 -->
 ## api/picklist
