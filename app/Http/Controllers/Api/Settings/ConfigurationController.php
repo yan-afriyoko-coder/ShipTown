@@ -7,8 +7,16 @@ use App\Models\Configuration;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * Class ConfigurationController
+ * @package App\Http\Controllers\Api\Settings
+ */
 class ConfigurationController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return JsonResource
+     */
     public function store(Request $request)
     {
         $config = Configuration::firstOrNew([
@@ -21,6 +29,11 @@ class ConfigurationController extends Controller
         return new JsonResource($config);
     }
 
+    /**
+     * @param Request $request
+     * @param $key
+     * @return JsonResource
+     */
     public function show(Request $request, $key)
     {
         $config = Configuration::where('key', $key)->firstOrFail();

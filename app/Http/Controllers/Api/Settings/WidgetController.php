@@ -8,6 +8,10 @@ use App\Http\Requests\UpdateWidgetRequest;
 use App\Models\Widget;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * Class WidgetController
+ * @package App\Http\Controllers\Api\Settings
+ */
 class WidgetController extends Controller
 {
     /**

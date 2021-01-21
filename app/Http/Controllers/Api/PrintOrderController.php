@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\PdfOrderController;
 use Illuminate\Http\Request;
 
+/**
+ * Class PrintOrderController
+ * @package App\Http\Controllers\Api
+ */
 class PrintOrderController extends PdfOrderController
 {
     public function store(Request $request, $order_number, $template)

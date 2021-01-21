@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Jobs\SyncProductsToApi2Cart;
 use Illuminate\Http\Request;
 
+/**
+ * Class SyncApi2CartController
+ * @package App\Http\Controllers\Api\Run
+ */
 class SyncApi2CartController extends Controller
 {
     /**

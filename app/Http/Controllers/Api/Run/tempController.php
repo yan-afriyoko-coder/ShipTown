@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Jobs\SyncProductsToApi2cart_MG;
 use Illuminate\Http\Request;
 
+/**
+ * Class tempController
+ * @package App\Http\Controllers\Api\Run
+ */
 class tempController extends Controller
 {
     /**
