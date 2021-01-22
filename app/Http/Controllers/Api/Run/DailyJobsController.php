@@ -23,5 +23,7 @@ class DailyJobsController extends Controller
                 $connection->last_synced_modified_at = Carbon::createFromTimeString($connection->last_synced_modified_at)->subDay();
                 $connection->save();
             });
+
+        $this->respondOK200('Daily job dispatched');
     }
 }
