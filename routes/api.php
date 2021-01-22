@@ -18,7 +18,6 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResource('run/sync', 'Api\Run\SyncController')->only('index');
     Route::apiResource('run/sync/api2cart', 'Api\Run\SyncApi2CartController')->only('index');
-    Route::apiResource('run/sync/api2cart/mg', 'Api\Run\tempController')->only('index');
     Route::apiResource('run/hourly/jobs', 'Api\Run\HourlyJobsController')->only('index');
     Route::apiResource('run/daily/jobs', 'Api\Run\DailyJobsController')->only('index');
 
