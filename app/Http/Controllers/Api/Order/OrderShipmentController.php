@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 /**
  * Class OrderShipmentController
  * @package App\Http\Controllers\Api\Order
+ *
+ * @group Order
  */
 class OrderShipmentController extends Controller
 {

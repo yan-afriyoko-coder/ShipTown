@@ -2,6 +2,7 @@
 
 namespace App\Modules\Api2cart\src\Jobs;
 
+use App\Jobs\VerifyProductSyncJob;
 use App\Modules\Api2cart\src\Products;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -46,6 +47,9 @@ class UpdateOrCreateProductJob implements ShouldQueue
     {
         try {
             $response = Products::updateOrCreate($this->bridge_api_key, $this->product_data);
+
+            VerifyProductSyncJob::dispatch($this->bridge_api_key, $this->product_data);
+
             info('Api2cart: Product synced', [
                 'product_data' => $this->product_data,
                 'response' => $response ? $response->asArray() : null,

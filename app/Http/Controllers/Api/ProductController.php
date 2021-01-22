@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     /**
-     * GET
+     * Get Product List
      *
      * @param Request $request
      * @return LengthAwarePaginator
@@ -31,7 +31,7 @@ class ProductController extends Controller
     }
 
     /**
-     * POST
+     * Update or Create Product
      *
      * @param StoreProductsRequest $request
      * @return JsonResponse

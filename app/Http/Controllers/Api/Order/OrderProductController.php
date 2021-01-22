@@ -12,6 +12,8 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 /**
  * Class OrderProductController
  * @package App\Http\Controllers\Api\Order
+ *
+ * @group Order
  */
 class OrderProductController extends Controller
 {
