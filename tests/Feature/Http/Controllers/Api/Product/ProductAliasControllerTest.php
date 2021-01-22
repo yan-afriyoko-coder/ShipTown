@@ -17,7 +17,7 @@ class ProductAliasControllerTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $response = $this->actingAs($user, 'api')->getJson(route('aliases.index'));
+        $response = $this->actingAs($user, 'api')->getJson(route('product.aliases.index'));
 
         $response->assertOk();
         $response->assertJsonStructure([
