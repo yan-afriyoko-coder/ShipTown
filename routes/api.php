@@ -18,14 +18,13 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResource('run/sync', 'Api\Run\SyncController')->only('index');
     Route::apiResource('run/sync/api2cart', 'Api\Run\SyncApi2CartController')->only('index');
-    Route::apiResource('run/sync/api2cart/mg', 'Api\Run\tempController')->only('index');
-    Route::apiResource('run/hourly/jobs', 'Api\Run\HourlyJobsController')->only('index');
-    Route::apiResource('run/daily/jobs', 'Api\Run\DailyJobsController')->only('index');
+    Route::apiResource('run/hourly/jobs', 'Api\Run\HourlyJobsController', ['as' => 'run.hourly'])->only('index');
+    Route::apiResource('run/daily/jobs', 'Api\Run\DailyJobsController', ['as' => 'run.daily'])->only('index');
 
     Route::apiResource('logs', 'Api\LogController')->only(['index']);
 
     Route::apiResource('products', 'Api\ProductController')->only(['index','store']);
-    Route::apiResource('product/aliases', 'Api\Product\ProductAliasController')->only(['index']);
+    Route::apiResource('product/aliases', 'Api\Product\ProductAliasController', ['as' => 'product'])->only(['index']);
     Route::apiResource('product/inventory', 'Api\Product\ProductInventoryController')->only(['index','store']);
     Route::apiResource('product/tags', 'Api\Product\ProductTagController')->only(['index']);
 
@@ -45,13 +44,13 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('settings/widgets', 'Api\Settings\WidgetController')->only(['store','update']);
     Route::apiResource('settings/modules/rms_api/connections', "Api\Settings\Module\Rmsapi\RmsapiConnectionController")->only(['index','store','destroy']);
     Route::apiResource('settings/modules/api2cart/connections', "Api\Settings\Module\Api2cart\Api2cartConnectionController")->only(['index','store','destroy']);
-    Route::apiResource('settings/modules/printnode/printers', 'Api\Settings\Module\Printnode\PrinterController')->only(['index']);
+    Route::apiResource('settings/modules/printnode/printers', 'Api\Settings\Module\Printnode\PrinterController' , ['as' => 'module.printnode'])->only(['index']);
 
     // Routes for users with the admin role only
     Route::middleware('role:admin')->group(function () {
         Route::apiResource('configuration', 'Api\Settings\ConfigurationController')->only(['store','show']);
         Route::apiResource('admin/user/invites', 'Api\Admin\UserInviteController')->only(['store']);
-        Route::apiResource('admin/user/roles', 'Api\Admin\UserRoleController')->only(['index'])->middleware('can:list roles');
+        Route::apiResource('admin/user/roles', 'Api\Admin\UserRoleController', ['as' => 'admin.users'])->only(['index'])->middleware('can:list roles');
         Route::apiResource('admin/users', 'Api\Admin\UserController')->only(['index','show','update','destroy'])->middleware('can:manage users');
     });
 });

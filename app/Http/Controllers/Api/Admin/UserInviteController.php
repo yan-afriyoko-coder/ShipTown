@@ -43,7 +43,7 @@ class UserInviteController extends Controller
         // send the email
         Mail::to($request->get('email'))->queue(new InviteCreated($invite));
 
-        return response('ok', 201);
+        $this->respondOK200('User invite created');
     }
 
     /**

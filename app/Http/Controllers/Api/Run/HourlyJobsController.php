@@ -14,11 +14,10 @@ class HourlyJobsController extends Controller
 {
     /**
      * @param Request $request
-     * @return string
      */
     public function index(Request $request)
     {
         RunMaintenanceJobs::dispatch();
-        return 'Jobs Dispatched';
+        $this->respondOK200('Hourly jobs Dispatched');
     }
 }

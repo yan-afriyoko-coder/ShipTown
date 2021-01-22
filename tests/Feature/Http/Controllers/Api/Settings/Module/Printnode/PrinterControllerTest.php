@@ -17,7 +17,7 @@ class PrinterControllerTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $response = $this->actingAs($user, 'api')->getJson(route('printers.index'));
+        $response = $this->actingAs($user, 'api')->getJson(route('module.printnode.printers.index'));
 
         $response->assertStatus(422);
 //        $response->assertJsonStructure([
