@@ -1,0 +1,129 @@
+<?php
+
+namespace App\Jobs;
+
+use App\Modules\Api2cart\src\Products;
+use Arr;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
+
+class VerifyProductSyncJob implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+
+    /**
+     * @var string|null
+     */
+    private $_store_key = null;
+
+    /**
+     * @var array|null
+     */
+    private $_product_data = null;
+
+    /**
+     * @var array
+     */
+    private $_results = [];
+
+    /**
+     * Create a new job instance.
+     *
+     * @param string $store_key
+     * @param array $product_data
+     */
+    public function __construct(string $store_key, array $product_data)
+    {
+        $this->_store_key = $store_key;
+        $this->_product_data = $product_data;
+    }
+
+    /**
+     * Execute the job.
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function handle()
+    {
+        $store_id = Arr::has($this->_product_data, "store_id") ? $this->_product_data["store_id"] : null;
+
+        $product_now = Products::getProductInfo($this->_store_key, $this->_product_data["sku"], $store_id);
+
+        if(empty($product_now)) {
+            Log::alert("Update Check FAILED - Could not find product", ["sku" => $this->_product_data["sku"]]);
+            return;
+        };
+
+        $this->_results = [
+            "type" => $product_now["type"],
+            "sku" => $product_now["sku"],
+            "store_id" => $store_id,
+            "differences" => $this->getDifferences($this->_product_data, $product_now)
+        ];
+
+        if(empty($this->_results["differences"])) {
+            info('Update Check OK', $this->_results);
+        } else {
+            Log::alert("Update Check FAILED", $this->_results);
+        }
+
+    }
+
+    /**
+     * @return array
+     */
+    public function getResults(): array
+    {
+        return $this->_results;
+    }
+
+    /**
+     * @param array $expected
+     * @param array $actual
+     * @return array
+     */
+    private function getDifferences(array $expected, array $actual): array
+    {
+        // initialize variables
+        $differences = [];
+
+        $keys_to_verify = [
+            "price",
+            "special_price",
+            "quantity"
+        ];
+
+
+        if ((Arr::has($expected, "sprice_expire")) &&
+            (Carbon::createFromTimeString($expected["sprice_expire"])->isFuture())) {
+
+            $keys_to_verify = array_merge($keys_to_verify, [
+                "sprice_create",
+                "sprice_expire",
+            ]);
+
+        }
+
+        $expected_data = Arr::only($expected, $keys_to_verify);
+        $actual_data   = Arr::only($actual, $keys_to_verify);
+
+        foreach (array_keys($expected_data) as $key ) {
+            if((!Arr::has($actual_data, $key)) or ($expected_data[$key] != $actual_data[$key])) {
+                $differences[$key] = [
+                    "expected" => $expected_data[$key],
+                    "actual" => $actual_data[$key]
+                ];
+            }
+        }
+
+        return Arr::dot($differences);
+    }
+}
