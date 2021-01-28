@@ -55,8 +55,8 @@ class SyncProductJob implements ShouldQueue
                 VerifyProductSyncJob::dispatch($connection->bridge_api_key, $product_data);
 
                 info('Api2cart: Product synced', [
-                    'product_data' => $product_data,
                     'response' => $response ? $response->asArray() : null,
+                    'product_data' => $product_data,
                 ]);
             } catch (Exception $exception) {
 
@@ -65,11 +65,11 @@ class SyncProductJob implements ShouldQueue
                 }, 100);
 
                 Log::warning('Api2cart: Product NOT SYNCED', [
-                    'product_data' => $product_data,
                     'response' => [
                         'code' => $exception->getCode(),
                         'message' => $exception->getMessage(),
                     ],
+                    'product_data' => $product_data,
                 ]);
             }
         });
