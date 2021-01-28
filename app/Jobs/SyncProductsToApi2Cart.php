@@ -43,8 +43,6 @@ class SyncProductsToApi2Cart implements ShouldQueue
             ->get()
             ->each(function (Product $product) {
                 Api2cartService::dispatchSyncProductJob($product);
-                $product->detachTag('Not Synced');
-                logger('SyncProductJob dispatched and tag removed', ['sku' => $product->sku]);
             });
 
         info('Dispatched Api2cart product sync jobs', ['count' => $products->count()]);

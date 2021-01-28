@@ -2,19 +2,21 @@
 
 namespace App\Jobs\Modules\Api2cart;
 
+use App\Jobs\VerifyProductSyncJob;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductPrice;
-use App\Modules\Api2cart\src\Jobs\UpdateOrCreateProductJob;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
+use App\Modules\Api2cart\src\Products;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\Jobs\Job;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use function Clue\StreamFilter\fun;
 
 class SyncProductJob implements ShouldQueue
 {
@@ -39,14 +41,40 @@ class SyncProductJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws Exception
      */
     public function handle()
     {
         $product = $this->product;
         Api2cartConnection::all()->each(function ($connection) use ($product) {
-            $product_data = $this->getProductData($product, $connection);
-            UpdateOrCreateProductJob::dispatch($connection->bridge_api_key, $product_data);
+            try {
+                $product_data = $this->getProductData($product, $connection);
+
+                $response = Products::updateOrCreate($connection->bridge_api_key, $product_data);
+
+                VerifyProductSyncJob::dispatch($connection->bridge_api_key, $product_data);
+
+                info('Api2cart: Product synced', [
+                    'product_data' => $product_data,
+                    'response' => $response ? $response->asArray() : null,
+                ]);
+            } catch (Exception $exception) {
+
+                retry(20, function () use ($product) {
+                    $product->attachTag('Not Synced');
+                }, 100);
+
+                Log::warning('Api2cart: Product NOT SYNCED, retrying', [
+                    'product_data' => $product_data,
+                    'response' => [
+                        'code' => $exception->getCode(),
+                        'message' => $exception->getMessage(),
+                    ],
+                ]);
+            }
         });
+
+
     }
 
     /**
