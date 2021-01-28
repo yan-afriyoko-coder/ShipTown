@@ -3,6 +3,7 @@
 namespace App\Modules\Api2cart\src;
 
 use App\Modules\Api2cart\src\Exceptions\GetRequestException;
+use App\Modules\Api2cart\src\Exceptions\RequestException;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Arr;
@@ -185,6 +186,7 @@ class Products extends Entity
      * @param string $store_key
      * @param string $sku
      * @return int|null
+     * @throws RequestException
      */
     public static function getSimpleProductID(string $store_key, string $sku)
     {
@@ -203,7 +205,10 @@ class Products extends Entity
                 'store_id' => 0
             ]);
         } catch (Exception $exception) {
-            return null;
+            if ($exception instanceof RequestException && $exception->getCode() === RequestResponse::RETURN_CODE_MODEL_NOT_FOUND) {
+                return null;
+            }
+            throw $exception;
         }
 
         if (isset($response) && ($response->isNotSuccess())) {
