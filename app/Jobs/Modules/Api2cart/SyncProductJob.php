@@ -64,7 +64,7 @@ class SyncProductJob implements ShouldQueue
                     $product->attachTag('Not Synced');
                 }, 100);
 
-                Log::warning('Api2cart: Product NOT SYNCED, retrying', [
+                Log::warning('Api2cart: Product NOT SYNCED', [
                     'product_data' => $product_data,
                     'response' => [
                         'code' => $exception->getCode(),
