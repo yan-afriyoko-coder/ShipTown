@@ -37,19 +37,14 @@ class SyncProductsToApi2Cart implements ShouldQueue
 
         $products = Product::withAllTags(['Available Online', 'Not Synced'])
             // we want to sync products with smallest quantities first to avoid oversells
-            ->orderBy('quantity',)
+            ->orderBy('quantity')
             ->orderBy('updated_at')
-            ->limit($limit)
-            ->get()
-            ->each(function (Product $product) {
-                Api2cartService::dispatchSyncProductJob($product);
+            ->chunk($limit, function ($products) {
+                foreach ($products as $product) {
+                    Api2cartService::dispatchSyncProductJob($product);
+                }
             });
 
         info('Dispatched Api2cart product sync jobs', ['count' => $products->count()]);
-
-        // if we got maximum allowed record count, there might be more!
-        if($products->count() === $limit) {
-            self::dispatch();
-        }
     }
 }
