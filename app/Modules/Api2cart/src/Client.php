@@ -28,19 +28,19 @@ class Client
             self::getGuzzleClient()->get($uri, ['query' => $query])
         );
 
+        logger("GET", [
+            "uri" => $uri,
+            "query" => $query,
+            "response" => [
+                "status_code" => $response->getResponseRaw()->getStatusCode(),
+                "body" => $response->asArray()
+            ]
+        ]);
+
         if ($response->isNotSuccess())
         {
             throw new RequestException($response->getReturnMessage(),$response->getReturnCode());
         }
-
-        logger("GET", [
-           "uri" => $uri,
-           "query" => $query,
-           "response" => [
-                "status_code" => $response->getResponseRaw()->getStatusCode(),
-                "body" => $response->asArray()
-           ]
-        ]);
 
         return $response;
     }
