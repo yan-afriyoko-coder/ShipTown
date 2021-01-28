@@ -196,13 +196,17 @@ class Products extends Entity
             return $id;
         }
 
-        $response =  Client::GET($store_key, 'product.find.json', [
-            'find_where' => "model",
-            'find_value' => $sku,
-            'store_id' => 0
-        ]);
+        try {
+            $response =  Client::GET($store_key, 'product.find.json', [
+                'find_where' => "model",
+                'find_value' => $sku,
+                'store_id' => 0
+            ]);
+        } catch (Exception $exception) {
+            return null;
+        }
 
-        if ($response->isNotSuccess()) {
+        if (isset($response) && ($response->isNotSuccess())) {
             return null;
         }
 
@@ -228,12 +232,16 @@ class Products extends Entity
             return $id;
         }
 
-        $response =  Client::GET($store_key, 'product.child_item.find.json', [
-            'find_where' => "sku",
-            'find_value' => $sku
-        ]);
+        try {
+            $response = Client::GET($store_key, 'product.child_item.find.json', [
+                'find_where' => "sku",
+                'find_value' => $sku
+            ]);
+        } catch (Exception $exception) {
+            return null;
+        }
 
-        if ($response->isNotSuccess()) {
+        if (isset($response) && ($response->isNotSuccess())) {
             return null;
         }
 
