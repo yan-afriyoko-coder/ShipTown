@@ -16,13 +16,18 @@ class SyncProductsToApi2Cart implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
+     * @var int
+     */
+    private $chunkSize;
+
+    /**
      * Create a new job instance.
      *
      * @return void
      */
     public function __construct()
     {
-        //
+        $this->chunkSize = 100;
     }
 
     /**
@@ -33,18 +38,16 @@ class SyncProductsToApi2Cart implements ShouldQueue
      */
     public function handle()
     {
-        $limit = 100;
-
-        $products = Product::withAllTags(['Available Online', 'Not Synced'])
+        Product::withAllTags(['Available Online', 'Not Synced'])
             // we want to sync products with smallest quantities first to avoid oversells
             ->orderBy('quantity')
             ->orderBy('updated_at')
-            ->chunk($limit, function ($products) {
+            ->chunk($this->chunkSize, function ($products) {
                 foreach ($products as $product) {
                     Api2cartService::dispatchSyncProductJob($product);
                 }
+                info('Dispatched Api2cart product sync jobs', ['count' => $products->count()]);
             });
 
-        info('Dispatched Api2cart product sync jobs', ['count' => $products->count()]);
     }
 }
