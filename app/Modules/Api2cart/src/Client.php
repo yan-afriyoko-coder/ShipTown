@@ -3,6 +3,7 @@
 
 namespace App\Modules\Api2cart\src;
 
+use App\Modules\Api2cart\src\Exceptions\RequestException;
 use GuzzleHttp\Client as GuzzleClient;
 
 class Client
@@ -12,8 +13,9 @@ class Client
      * @param string $uri
      * @param array $params
      * @return RequestResponse
+     * @throws RequestException
      */
-    public static function GET(string $store_key, string $uri, array $params)
+    public static function GET(string $store_key, string $uri, array $params): RequestResponse
     {
         $query = [
             'api_key' => self::getApiKey(),
@@ -25,6 +27,11 @@ class Client
         $response = new RequestResponse(
             self::getGuzzleClient()->get($uri, ['query' => $query])
         );
+
+        if ($response->isNotSuccess())
+        {
+            throw new RequestException($response->getReturnMessage(),$response->getReturnCode());
+        }
 
         logger("GET", [
            "uri" => $uri,
@@ -43,8 +50,9 @@ class Client
      * @param string $uri
      * @param array $data
      * @return RequestResponse
+     * @throws RequestException
      */
-    public static function POST(string $store_key, string $uri, array $data)
+    public static function POST(string $store_key, string $uri, array $data): RequestResponse
     {
         $query = [
             'api_key' => self::getApiKey(),
@@ -57,6 +65,11 @@ class Client
                 'json' => $data
             ])
         );
+
+        if ($response->isNotSuccess())
+        {
+            throw new RequestException($response->getReturnMessage(),$response->getReturnCode());
+        }
 
         logger("POST", [
             "uri" => $uri,
@@ -77,7 +90,7 @@ class Client
      * @param array $params
      * @return RequestResponse
      */
-    public static function DELETE(string $store_key, string $uri, array $params)
+    public static function DELETE(string $store_key, string $uri, array $params): RequestResponse
     {
         $query = [
             'api_key' => self::getApiKey(),
@@ -91,7 +104,10 @@ class Client
         return new RequestResponse($response);
     }
 
-    public static function getGuzzleClient()
+    /**
+     * @return GuzzleClient
+     */
+    public static function getGuzzleClient(): GuzzleClient
     {
         return new GuzzleClient([
             'base_uri' =>  'https://api.api2cart.com/v1.1/',
@@ -100,7 +116,10 @@ class Client
         ]);
     }
 
-    public static function getApiKey()
+    /**
+     * @return string
+     */
+    public static function getApiKey(): string
     {
         return config('app.api2cart_api_key');
     }
