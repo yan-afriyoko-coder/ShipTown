@@ -86,7 +86,7 @@ class SyncProductJob implements ShouldQueue
         return [
             'product_id' => $product->getKey(),
             'sku' => $product->sku,
-            'name' => $product->name,
+            'description' => $product->name,
         ];
     }
 
