@@ -86,7 +86,7 @@ class SyncProductJob implements ShouldQueue
         return [
             'product_id' => $product->getKey(),
             'sku' => $product->sku,
-            'name' => $product->name,
+            'description' => $product->name,
         ];
     }
 
@@ -129,7 +129,7 @@ class SyncProductJob implements ShouldQueue
             $product = $product->refresh();
 
             return [
-                'quantity' => $product->quantity_available ?? 0,
+                'quantity' => floor($product->quantity_available) ?? 0,
                 'in_stock' => $product->quantity_available > 0 ? "True" : "False",
             ];
         }
