@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Product;
 use App\Modules\Api2cart\src\Products;
 use Arr;
 use Carbon\Carbon;
@@ -72,6 +73,7 @@ class VerifyProductSyncJob implements ShouldQueue
         if(empty($this->_results["differences"])) {
             info('Update Check OK', $this->_results);
         } else {
+            Product::findBySKU($this->_product_data['sku'])->attachTag('Not Synced');
             Log::alert("Update Check FAILED", $this->_results);
         }
 
