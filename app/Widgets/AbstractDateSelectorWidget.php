@@ -30,6 +30,22 @@ abstract class AbstractDateSelectorWidget extends AbstractWidget
     }
 
     /**
+     * @return mixed
+     */
+    protected function getStartingDateTime()
+    {
+        return $this->config['starting_date'];
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getEndingDateTime()
+    {
+        return $this->config['ending_date'];
+    }
+
+    /**
      * @return Collection
      */
     private function getDefaultValues(): Collection

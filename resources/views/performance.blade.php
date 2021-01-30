@@ -33,11 +33,11 @@
                     </div>
                 </div>
 
-{{--                <div class="row">--}}
-{{--                    <div class="col-md-8 offset-md-2">--}}
-{{--                        <div class="">@asyncWidget('ProductsPickedTodayCountsWidget')</div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
+                <div class="row">
+                    <div class="col-md-8 offset-md-2">
+                        <div class="">@asyncWidget('ProductsPickedCountsWidget')</div>
+                    </div>
+                </div>
 
 {{--                <div class="row">--}}
 {{--                    <div class="col-md-8 offset-md-2">--}}
