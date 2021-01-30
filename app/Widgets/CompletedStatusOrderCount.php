@@ -4,12 +4,9 @@ namespace App\Widgets;
 
 use App\Models\Order;
 use App\Models\OrderStatus;
-use Arrilot\Widgets\AbstractWidget;
-use Carbon\Carbon;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
-class CompletedStatusOrderCount extends AbstractWidget
+class CompletedStatusOrderCount extends AbstractDateSelectorWidget
 {
     /**
      * The configuration array.
@@ -27,7 +24,10 @@ class CompletedStatusOrderCount extends AbstractWidget
         $status_order_counts = Order::query()
             ->select(['status_code', DB::raw('count(*) as order_count')])
             ->whereIn('status_code', OrderStatus::getCompletedStatusCodeList())
-            ->whereDate('order_closed_at', '>', Carbon::now()->subDays(7))
+            ->whereBetween('order_closed_at', [
+                $this->getStartingDateTime(),
+                $this->getEndingDateTime()
+            ])
             ->groupBy(['status_code'])
             ->get();
 

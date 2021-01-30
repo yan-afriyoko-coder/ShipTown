@@ -22,8 +22,8 @@ class ProductsPackedTodayCountsWidget extends AbstractDateSelectorWidget
         $count_per_user = Order::query()
             ->select(['packer_user_id','users.name', \DB::raw('sum(total_quantity_ordered) as total')])
             ->whereBetween('packed_at', [
-                $this->config['starting_date'],
-                $this->config['ending_date']
+                $this->getStartingDateTime(),
+                $this->getEndingDateTime()
             ])
             ->leftJoin('users',
                 'packer_user_id', '=', 'users.id')
