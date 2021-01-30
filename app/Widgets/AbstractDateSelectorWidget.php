@@ -13,6 +13,9 @@ use Illuminate\Support\Collection;
  */
 abstract class AbstractDateSelectorWidget extends AbstractWidget
 {
+    protected $name = null;
+    protected $widgetId = null;
+
     /**
      * AbstractDateSelectorWidget constructor.
      * @param array $config
@@ -27,6 +30,22 @@ abstract class AbstractDateSelectorWidget extends AbstractWidget
 
         $this->config['starting_date'] = $betweenDates->first();
         $this->config['ending_date'] = $betweenDates->last();
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getStartingDateTime()
+    {
+        return $this->config['starting_date'];
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getEndingDateTime()
+    {
+        return $this->config['ending_date'];
     }
 
     /**

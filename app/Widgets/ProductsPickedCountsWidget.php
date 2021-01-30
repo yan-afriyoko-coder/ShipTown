@@ -2,11 +2,10 @@
 
 namespace App\Widgets;
 
-use App\Models\Order;
-use Arrilot\Widgets\AbstractWidget;
+use App\Models\Pick;
 use Carbon\Carbon;
 
-class ProductsPackedTodayCountsWidget extends AbstractWidget
+class ProductsPickedCountsWidget extends AbstractDateSelectorWidget
 {
     /**
      * The configuration array.
@@ -21,14 +20,14 @@ class ProductsPackedTodayCountsWidget extends AbstractWidget
      */
     public function run()
     {
-        $startingDate = Carbon::today();
-
-        $count_per_user = Order::query()
-            ->select(['packer_user_id', \DB::raw('sum(total_quantity_ordered) as total'), 'users.name'])
-            ->whereDate('packed_at', '>=', $startingDate)
-            ->leftJoin('users', 'packer_user_id', '=', 'users.id')
-            ->groupBy(['packer_user_id'])
-            ->orderByDesc('total')
+        $count_per_user = Pick::query()
+            ->select(['user_id', 'users.name', \DB::raw('count(*) as total')])
+            ->whereBetween('picks.created_at', [
+                $this->getStartingDateTime(),
+                $this->getEndingDateTime()
+            ])
+            ->leftJoin('users', 'user_id', '=', 'users.id')
+            ->groupBy(['user_id'])
             ->get();
 
         $total_count = 0;
@@ -37,7 +36,7 @@ class ProductsPackedTodayCountsWidget extends AbstractWidget
             $total_count += $count['total'];
         }
 
-        return view('widgets.products_packed_today_counts_widget', [
+        return view('widgets.products_picked_counts_widget', [
             'config' => $this->config,
             'count_per_user' => $count_per_user,
             'total_count' => $total_count,

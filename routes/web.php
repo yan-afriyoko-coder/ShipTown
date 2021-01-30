@@ -32,6 +32,7 @@ Route::get('manifest.json', 'ManifestController@index');
 Route::middleware('auth')->group(function () {
     Route::redirect('', 'dashboard');
     Route::view('dashboard', 'dashboard')->name('dashboard');
+    Route::view('performance/dashboard', 'performance')->name('performance.dashboard');
     Route::view('products', 'products')->name('products');
     Route::view('picklist', 'picklist')->name('picklist');
     Route::view('orders', 'orders')->name('orders');
