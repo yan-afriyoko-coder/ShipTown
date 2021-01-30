@@ -21,7 +21,7 @@ abstract class AbstractDateSelectorWidget extends AbstractWidget
     {
         parent::__construct($config);
 
-        $stringFilterValue = $this->config['between_dates'] ?? 'today,today';
+        $stringFilterValue = $this->config['between_dates'] ?? 'today,today end of day';
 
         $betweenDates = $this->getDates($stringFilterValue);
 

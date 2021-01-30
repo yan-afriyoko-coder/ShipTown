@@ -7,7 +7,7 @@ use Arrilot\Widgets\AbstractWidget;
 use Carbon\Carbon;
 use Exception;
 
-class PackedTodayByUser extends AbstractDateSelectorWidget
+class OrderPackedCountsByUser extends AbstractDateSelectorWidget
 {
     /**
      * The configuration array.
