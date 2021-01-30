@@ -108,6 +108,7 @@
 
                             <!-- Menu Items END -->
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('performance.dashboard') .'?between_dates=-7days,now' }}">{{ __('Performance Dashboard') }}</a>
                                 <a class="dropdown-item" href="{{ route('picks_report') }}">{{ __('Picks') }}</a>
                                 <a class="dropdown-item" href="{{ route('ready_order_shipments_as_csv') }}" target="_blank">{{ __("Download Ready Shipments") }}</a>
                                 <a class="dropdown-item" href="{{ route('partial_order_shipments_as_csv') }}" target="_blank">{{ __("Download Today's Partial Shipments") }}</a>
