@@ -4,7 +4,7 @@ namespace App\Widgets;
 
 use App\Models\Order;
 
-class ProductsPackedTodayCountsWidget extends AbstractDateSelectorWidget
+class ProductsPackedCountsWidget extends AbstractDateSelectorWidget
 {
     /**
      * The configuration array.
