@@ -11,49 +11,49 @@
 
                 <div class="row">
                     <div class="col-md-8 offset-md-2">
-                        <div class="">@widget('PackedTodayByUser')</div>
+                        <div class="">@asyncWidget('PackedTodayByUser')</div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-8 offset-md-2">
-                        <div class="">@widget('ActiveOrdersWidget')</div>
+                        <div class="">@asyncWidget('ActiveOrdersWidget')</div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-8 offset-md-2">
-                        <div class="">@widget('ToFollowStatusOrderCountWidget')</div>
+                        <div class="">@asyncWidget('ToFollowStatusOrderCountWidget')</div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-8 offset-md-2">
-                        <div class="">@widget('OrdersByAgeWidget')</div>
+                        <div class="">@asyncWidget('OrdersByAgeWidget')</div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-8 offset-md-2">
-                        <div class="">@widget('TimeToZeroWidget')</div>
+                        <div class="">@asyncWidget('TimeToZeroWidget')</div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-8 offset-md-2">
-                        <div class="">@widget('ProductsPackedTodayCountsWidget')</div>
+                        <div class="">@asyncWidget('ProductsPackedTodayCountsWidget')</div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-8 offset-md-2">
-                        <div class="">@widget('ProductsPickedTodayCountsWidget')</div>
+                        <div class="">@asyncWidget('ProductsPickedTodayCountsWidget')</div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-8 offset-md-2">
-                        <div class="">@widget('CompletedStatusOrderCount')</div>
+                        <div class="">@asyncWidget('CompletedStatusOrderCount')</div>
                     </div>
                 </div>
 
@@ -61,31 +61,31 @@
 
                     <div class="row">
                         <div class="col-md-8 offset-md-2">
-                            <div class="">@widget('apt')</div>
+                            <div class="">@asyncWidget('apt')</div>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-8 offset-md-2">
-                            <div class="">@widget('PacksStatisticsWidget')</div>
+                            <div class="">@asyncWidget('PacksStatisticsWidget')</div>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-8 offset-md-2">
-                            <div class="">@widget('NewOrdersCounts')</div>
+                            <div class="">@asyncWidget('NewOrdersCounts')</div>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-8 offset-md-2">
-                            <div class="">@widget('CompletedOrdersCountByDateWidget')</div>
+                            <div class="">@asyncWidget('CompletedOrdersCountByDateWidget')</div>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-8 offset-md-2">
-                            <div class="">@widget('UserPickCounts')</div>
+                            <div class="">@asyncWidget('UserPickCounts')</div>
                         </div>
                     </div>
 
