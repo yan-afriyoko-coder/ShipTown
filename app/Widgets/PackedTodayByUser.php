@@ -7,7 +7,7 @@ use Arrilot\Widgets\AbstractWidget;
 use Carbon\Carbon;
 use Exception;
 
-class PackedTodayByUser extends AbstractWidget
+class PackedTodayByUser extends AbstractDateSelectorWidget
 {
     /**
      * The configuration array.
@@ -22,21 +22,19 @@ class PackedTodayByUser extends AbstractWidget
      */
     public function run()
     {
-        try {
-            $betweenDates = $this->config['between_dates']
-                ? explode(',' ,$this->config['between_dates'])
-                : ['today', 'today'];
-            $startingDate = Carbon::parse($betweenDates[0]);
-            $endingDate = Carbon::parse($betweenDates[1])->endOfDay();
-        } catch (Exception $exception) {
-            $startingDate = Carbon::today();
-            $endingDate = Carbon::today()->endOfDay();
-        }
-
         $count_per_user = Order::query()
-            ->select(['packer_user_id', \DB::raw('count(*) as total'), 'users.name'])
-            ->whereBetween('packed_at', [$startingDate, $endingDate])
-            ->leftJoin('users', 'packer_user_id', '=', 'users.id')
+            ->select([
+                'packer_user_id',
+                'users.name',
+                \DB::raw('count(*) as total'),
+            ])
+            ->whereBetween('packed_at', [
+                $this->config['starting_date'],
+                $this->config['ending_date']],
+            )
+            ->leftJoin('users',
+                'packer_user_id', '=', 'users.id'
+            )
             ->groupBy(['packer_user_id'])
             ->orderByDesc('total')
             ->get();
