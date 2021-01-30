@@ -24,10 +24,10 @@ class ProductsPickedTodayCountsWidget extends AbstractWidget
         $startingDate = Carbon::today();
 
         $count_per_user = Pick::query()
-            ->select(['picker_user_id', \DB::raw('count(*) as total'), 'users.name'])
-            ->whereDate('picked_at', '>=', $startingDate)
-            ->leftJoin('users', 'picker_user_id', '=', 'users.id')
-            ->groupBy(['picker_user_id'])
+            ->select(['user_id', \DB::raw('count(*) as total'), 'users.name'])
+            ->whereDate('picks.created_at', '>=', $startingDate)
+            ->leftJoin('users', 'user_id', '=', 'users.id')
+            ->groupBy(['user_id'])
             ->get();
 
         $total_count = 0;
