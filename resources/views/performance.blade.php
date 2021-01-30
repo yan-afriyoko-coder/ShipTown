@@ -49,7 +49,7 @@
 
                     <div class="row">
                         <div class="col-md-8 offset-md-2">
-                            <div class="">@asyncWidget('apt', ['between_dates' => Request::get('between_dates') ]g)</div>
+                            <div class="">@asyncWidget('apt', ['between_dates' => Request::get('between_dates') ])</div>
                         </div>
                     </div>
 
