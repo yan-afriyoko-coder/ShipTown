@@ -3,8 +3,9 @@
 namespace App\Widgets;
 
 use App\Models\Order;
+use App\Models\OrderStatus;
 
-class Apt extends BaseWidget
+class Apt extends AbstractDateSelectorWidget
 {
     protected $name = 'apt';
 
@@ -28,18 +29,14 @@ class Apt extends BaseWidget
     {
         $this->statuses = Order::groupBy('status_code')->pluck('status_code')->toArray();
 
-        $selectedStatuses = $this->statusesFromConfig();
-
         $apt_seconds  = (integer) Order::query()
             ->selectRaw("AVG(TIME_TO_SEC(TIMEDIFF(order_closed_at, order_placed_at))) as apt")
-            ->when(count($selectedStatuses) == 0, function ($q) {
-                $q->whereIn('status_code', $this->statuses);
-            })
-            ->when(count($selectedStatuses) > 0, function ($q) use ($selectedStatuses) {
-                $q->whereIn('status_code', $selectedStatuses);
-            })
+            ->whereIn('status_code', OrderStatus::getCompletedStatusCodeList())
             ->whereRaw('order_closed_at > order_placed_at')
-            ->whereRaw('order_closed_at BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() ')
+            ->whereBetween('order_closed_at', [
+                $this->getStartingDateTime(),
+                $this->getEndingDateTime()
+            ])
             ->value('apt');
 
         return view('widgets.apt', [
@@ -70,17 +67,5 @@ class Apt extends BaseWidget
         }
 
         return $result;
-    }
-
-    private function statusesFromConfig()
-    {
-        return array_keys(array_intersect($this->config, $this->selectedStatuses()));
-    }
-
-    private function selectedStatuses()
-    {
-        return array_filter($this->config, function ($isSelected) {
-            return $isSelected === true;
-        });
     }
 }

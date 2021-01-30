@@ -13,6 +13,9 @@ use Illuminate\Support\Collection;
  */
 abstract class AbstractDateSelectorWidget extends AbstractWidget
 {
+    protected $name = null;
+    protected $widgetId = null;
+
     /**
      * AbstractDateSelectorWidget constructor.
      * @param array $config
