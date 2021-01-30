@@ -1,7 +1,7 @@
 <table class="table table-borderless">
     <thead>
     <tr>
-        <th scope="col">Products - Packed Today </th>
+        <th scope="col">Products Packed</th>
         <th scope="col" class="text-right">{{ $total_count }}</th>
     </tr>
     </thead>
