@@ -21,7 +21,7 @@ class ProductsPickedCountsWidget extends AbstractDateSelectorWidget
     public function run()
     {
         $count_per_user = Pick::query()
-            ->select(['user_id', 'users.name', \DB::raw('sum(quantity_picked) as total')])
+            ->select(['user_id', 'users.name', \DB::raw('floor(sum(quantity_picked)) as total')])
             ->whereBetween('picks.created_at', [
                 $this->getStartingDateTime(),
                 $this->getEndingDateTime()
