@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             InventorySeeder::class,
             OrdersSeeder::class,
             ClosedOrdersSeeder::class,
+            PicksSeeder::class,
 
 //            Api2CartOrderImportSeeder::class,
 //            RmsapiConnectionSeeder::class,
