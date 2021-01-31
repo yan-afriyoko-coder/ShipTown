@@ -93,6 +93,8 @@
                     'filter[search]': this.getUrlParameter('search'),
                     'filter[has_tags]': this.getUrlParameter('has_tags'),
                     'filter[without_tags]': this.getUrlParameter('without_tags'),
+                    'filter[age_in_days]': this.getUrlParameter('age_in_days'),
+                    'filter[is_active]': this.getUrlParameter('is_active'),
                     'sort': this.getUrlParameter('sort','-updated_at'),
                     'per_page': this.getUrlParameter('per_page', 20),
                     'include': 'order_comments,order_comments.user',

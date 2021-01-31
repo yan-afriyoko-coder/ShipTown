@@ -7,6 +7,7 @@ use App\Traits\LogsActivityTrait;
 use App\User;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\HigherOrderBuilderProxy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -155,6 +156,28 @@ class Order extends Model
     public function scopeWhereActive($query)
     {
         return $query->whereIn('status_code', OrderStatus::getActiveStatusCodesList());
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @return QueryBuilder
+     */
+    public function scopeIsActive(QueryBuilder $query): QueryBuilder
+    {
+        return $query->whereIn('status_code', OrderStatus::getActiveStatusCodesList());
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param int $age
+     * @return Builder|QueryBuilder
+     */
+    public function scopeWhereAgeInDays($query, $age)
+    {
+        return $query->orWhereBetween('order_placed_at', [
+            Carbon::now()->subDays($age)->startOfDay(),
+            Carbon::now()->subDays($age)->endOfDay(),
+        ]);
     }
 
     /**
@@ -379,13 +402,16 @@ class Order extends Model
             ->allowedFilters([
                 AllowedFilter::scope('search', 'whereHasText')->ignore([null, '']),
 
+
                 AllowedFilter::exact('status', 'status_code'),
                 AllowedFilter::exact('order_number')->ignore([null, '']),
                 AllowedFilter::exact('packer_user_id'),
+                AllowedFilter::scope('age_in_days', 'whereAgeInDays')->ignore([null,'']),
 
                 AllowedFilter::scope('is_picked'),
                 AllowedFilter::scope('is_packed'),
                 AllowedFilter::scope('is_packing'),
+                AllowedFilter::scope('is_active'),
 
                 AllowedFilter::scope('has_packer'),
 
