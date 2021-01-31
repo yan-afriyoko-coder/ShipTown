@@ -1,6 +1,5 @@
 <?php
 
-use App\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -21,6 +20,7 @@ class DatabaseSeeder extends Seeder
             OrdersSeeder::class,
             ClosedOrdersSeeder::class,
             PicksSeeder::class,
+            OrderShipmentsSeeder::class,
 
 //            Api2CartOrderImportSeeder::class,
 //            RmsapiConnectionSeeder::class,
