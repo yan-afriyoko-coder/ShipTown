@@ -17,7 +17,7 @@ $factory->define(Order::class, function (Faker $faker) {
         'shipping_address_id' => $shippingAddress->getKey(),
         'order_placed_at' => $faker->dateTimeBetween('-7days', now()),
         'status_code' => $faker->randomElement([
-            'complete','processing','cancelled','on_hold','paid','picking','packing'
+            'complete','processing','cancelled','on_hold','paid','picking','packing','packing_warehouse','packing_web'
         ])
     ];
 
