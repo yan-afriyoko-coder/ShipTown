@@ -20,7 +20,7 @@ class PackersAverage extends AbstractDateSelectorWidget
     public function run()
     {
         $count_per_user = $this->getDailyTotals()
-            ->orderByDesc('total')
+            ->orderByDesc('daily_average')
             ->get();
 
         $total_count = 0;
