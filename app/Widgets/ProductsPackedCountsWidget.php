@@ -20,7 +20,7 @@ class ProductsPackedCountsWidget extends AbstractDateSelectorWidget
     public function run()
     {
         $count_per_user = Order::query()
-            ->select(['packer_user_id','users.name', \DB::raw('sum(total_quantity_ordered) as total')])
+            ->select(['packer_user_id','users.name', \DB::raw('floor(sum(total_quantity_ordered)) as total')])
             ->whereBetween('packed_at', [
                 $this->getStartingDateTime(),
                 $this->getEndingDateTime()
