@@ -8,47 +8,32 @@
         </tippy>
     </template>
 </div>
-<div class="card text-center">
+<div class="card">
     <div class="card-body">
-        <h4 class="card-title">Picks</h4>
-
-        <div class="row font-weight-bold">
-            <div class="col-2 text-left">
-                {{ __('Picked At') }}
-            </div>
-            <div class="col-2 text-left">
-                {{ __('SKU') }}
-            </div>
-            <div class="col-4 text-left">
-                {{ __('Name') }}
-            </div>
-            <div class="col-2 text-left">
-                {{ __('Quantity') }}
-            </div>
-            <div class="col-2 text-left">
-                {{ __('Picker') }}
-            </div>
-        </div>
-
-        @foreach ($picks as $pick)
-            <div class="row">
-                <div class="col-2 text-left">
-                    {{  \Carbon\Carbon::parse($pick['picked_at'] ?? $pick['deleted_at'])->format('M d, H:i') }}
-                    {{ $pick['deleted_at'] ? ' - DELETED' : '' }}
-                </div>
-                <div class="col-2 text-left">
-                    {{ $pick['sku_ordered'] }}
-                </div>
-                <div class="col-4 text-left">
-                    {{ $pick['name_ordered'] }}
-                </div>
-                <div class="col-2 text-left">
-                    {{ $pick['quantity_required'] }}
-                </div>
-                <div class="col-2 text-left">
-                    {{ $pick['user']['name'] }}
-                </div>
-            </div>
-        @endforeach
+        <h4 class="card-title text-center">Picks</h4>
+        <table class="table-hover w-100">
+            <thead>
+                <tr>
+                    <th>{{ __('Picked At') }}</th>
+                    <th>{{ __('Picker') }}</th>
+                    <th>{{ __('SKU') }}</th>
+                    <th>{{ __('Name') }}</th>
+                    <th class="text-right">{{ __('Picked') }}</th>
+                    <th class="text-right">{{ __('Skipped') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($picks as $pick)
+                    <tr class="table-hover">
+                        <td class="pr-2">{{  \Carbon\Carbon::parse($pick['created_at'])->format('M d, H:i') }}</td>
+                        <td class="pr-4">{{ $pick['user']['name'] }}</td>
+                        <td class="pr-4">{{ $pick['sku_ordered'] }}</td>
+                        <td class="pr-5">{{ $pick['name_ordered'] }}</td>
+                        <td class="pl-5 text-right">{{ $pick['quantity_picked'] == 0 ? '' : round($pick['quantity_picked'])  }}</td>
+                        <td class="pl-5 text-right">{{ $pick['quantity_skipped_picking'] == 0 ? '' : round($pick['quantity_skipped_picking'])  }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 </div>

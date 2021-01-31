@@ -75,7 +75,7 @@ class Pick extends Model
         'quantity_picked',
         'quantity_skipped_picking',
 
-        'quantity_required',
+//        'quantity_required',
         'picker_user_id',
         'picked_at'
     ];
@@ -93,7 +93,7 @@ class Pick extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class, 'picker_user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function scopeWhereHasQuantityRequired($query)

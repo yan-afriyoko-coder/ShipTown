@@ -20,12 +20,10 @@ class PicksReport extends AbstractWidget
      */
     public function run()
     {
-        $picks = Pick::withTrashed()
-            ->whereNotNull('picked_at')
-            ->orWhereNotNull('deleted_at')
-            ->orderByDesc('updated_at')
+        $picks = Pick::query()
+            ->with('user')
+            ->latest()
             ->limit(250)
-            ->with('User')
             ->get();
 
         return view('widgets.picks_report', [
