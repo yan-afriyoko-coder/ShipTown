@@ -81,7 +81,9 @@ class OrderShipment extends Model
     {
         return QueryBuilder::for(OrderShipment::class)
             ->allowedFilters([
+                AllowedFilter::exact('user_id'),
                 AllowedFilter::exact('order_id'),
+
                 AllowedFilter::scope('age_in_days_between', 'whereAgeInDaysBetween'),
                 'created_at',
                 'updated_at',
@@ -90,8 +92,9 @@ class OrderShipment extends Model
                 'order',
                 'user'
             ])
+            ->defaultSort('-id')
             ->allowedSorts([
-                'created_at'
+                'id'
             ]);
     }
 }

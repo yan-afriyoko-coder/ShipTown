@@ -307,7 +307,7 @@
                 let params = {
                     'filter[order_id]': this.order['id'],
                     'include': 'user',
-                    'sort': '-created_at',
+                    'sort': '-id',
                     'per_page': '999',
                 };
 
@@ -347,7 +347,7 @@
 
                 let params = {
                     'filter[order_id]': this.order['id'],
-                    'sort': '-created_at',
+                    'sort': '-id',
                     'per_page': '999',
                 };
 

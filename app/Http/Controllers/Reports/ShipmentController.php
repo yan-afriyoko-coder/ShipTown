@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Http\Controllers\Reports;
+
+use App\Http\Controllers\Controller;
+use App\Models\OrderShipment;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\View\View;
+use Request;
+
+class ShipmentController extends Controller
+{
+    /**
+     * @param Request $request
+     * @return array|Application|Factory|View|mixed
+     */
+    public function index(Request $request)
+    {
+        $shipments = OrderShipment::getSpatieQueryBuilder()
+            ->with('user')
+            ->with('order')
+            ->limit(1000)
+            ->get()
+            ->toArray();
+
+        return view('reports.shipments', ['shipments' => $shipments]);
+    }
+}
