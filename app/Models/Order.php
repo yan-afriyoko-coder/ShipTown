@@ -169,6 +169,27 @@ class Order extends Model
 
     /**
      * @param QueryBuilder $query
+     * @return QueryBuilder
+     */
+    public function scopePackedBetween(QueryBuilder $query, $startingTimeString, $endingTimeString): QueryBuilder
+    {
+        try {
+            $dates = [
+                Carbon::parse($startingTimeString),
+                Carbon::parse($endingTimeString),
+            ];
+        } catch (\Exception $exception) {
+            $dates = [
+                Carbon::today(),
+                Carbon::now(),
+            ];
+        }
+
+        return $query->whereBetween('packed_at', $dates);
+    }
+
+    /**
+     * @param QueryBuilder $query
      * @param int $age
      * @return Builder|QueryBuilder
      */
@@ -406,12 +427,13 @@ class Order extends Model
                 AllowedFilter::exact('status', 'status_code'),
                 AllowedFilter::exact('order_number')->ignore([null, '']),
                 AllowedFilter::exact('packer_user_id'),
-                AllowedFilter::scope('age_in_days', 'whereAgeInDays')->ignore([null,'']),
 
+                AllowedFilter::scope('age_in_days', 'whereAgeInDays')->ignore([null,'']),
                 AllowedFilter::scope('is_picked'),
                 AllowedFilter::scope('is_packed'),
                 AllowedFilter::scope('is_packing'),
                 AllowedFilter::scope('is_active'),
+                AllowedFilter::scope('packed_between'),
 
                 AllowedFilter::scope('has_packer'),
 
@@ -438,6 +460,7 @@ class Order extends Model
                 'product_line_count',
                 'total_quantity_ordered',
                 'order_placed_at',
+                'packed_at',
                 'order_closed_at',
                 'min_shelf_location',
             ]);
