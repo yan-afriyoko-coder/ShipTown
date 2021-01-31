@@ -18,8 +18,16 @@
                     <th>{{ __('Picker') }}</th>
                     <th>{{ __('SKU') }}</th>
                     <th>{{ __('Name') }}</th>
-                    <th class="text-right">{{ __('Picked') }}</th>
-                    <th class="text-right">{{ __('Skipped') }}</th>
+                    <th class="text-right">
+                        <a href="{{ route('reports.picks', ['filter[quantity_picked_between]=1,99999']) }}">
+                            {{ __('Picked') }}
+                        </a>
+                    </th>
+                    <th class="text-right">
+                        <a href="{{ route('reports.picks', ['filter[quantity_skipped_between]=1,99999']) }}">
+                            {{ __('Skipped') }}
+                        </a>
+                    </th>
                 </tr>
             </thead>
             <tbody>
