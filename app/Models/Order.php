@@ -160,6 +160,15 @@ class Order extends Model
 
     /**
      * @param QueryBuilder $query
+     * @return QueryBuilder
+     */
+    public function scopeIsActive(QueryBuilder $query): QueryBuilder
+    {
+        return $query->whereIn('status_code', OrderStatus::getActiveStatusCodesList());
+    }
+
+    /**
+     * @param QueryBuilder $query
      * @param int $age
      * @return Builder|QueryBuilder
      */
@@ -402,6 +411,7 @@ class Order extends Model
                 AllowedFilter::scope('is_picked'),
                 AllowedFilter::scope('is_packed'),
                 AllowedFilter::scope('is_packing'),
+                AllowedFilter::scope('is_active'),
 
                 AllowedFilter::scope('has_packer'),
 
