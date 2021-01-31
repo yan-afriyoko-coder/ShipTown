@@ -4,6 +4,7 @@ namespace App\Widgets;
 
 use App\Models\Pick;
 use Arrilot\Widgets\AbstractWidget;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class PicksReport extends AbstractWidget
 {
@@ -20,10 +21,10 @@ class PicksReport extends AbstractWidget
      */
     public function run()
     {
-        $picks = Pick::query()
+        $picks = Pick::getSpatieQueryBuilder()
             ->with('user')
             ->latest()
-            ->limit(250)
+            ->limit(1000)
             ->get();
 
         return view('widgets.picks_report', [

@@ -38,7 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::view('orders', 'orders')->name('orders');
     Route::view('order/packsheet', 'packsheet')->name('order.packsheet');
     Route::resource('order/packsheet', 'Order\PacksheetController')->only(['show']);
-    Route::view('reports/picks', 'reports/picks_report')->name('picks_report');
+    Route::view('reports/picks', 'reports/picks_report')->name('reports.picks');
     Route::view('settings', 'settings')->name('settings');
 
     Route::get('pdf/orders/{order_number}/{template}', 'PdfOrderController@show');

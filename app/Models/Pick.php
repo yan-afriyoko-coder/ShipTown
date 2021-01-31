@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
+use Spatie\QueryBuilder\QueryBuilder;
 
 /**
  * App\Models\Pick
@@ -212,5 +215,47 @@ class Pick extends Model
     public function pickRequests()
     {
         return $this->hasMany(PickRequest::class, 'pick_id');
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param double $min
+     * @param double $max
+     * @return QueryBuilder
+     */
+    public function scopeQuantityPickedBetween(QueryBuilder $query, $min, $max): QueryBuilder
+    {
+        return $query->whereBetween('quantity_picked', [$min,$max]);
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param double $min
+     * @param double $max
+     * @return QueryBuilder
+     */
+    public function scopeQuantitySkippedBetween(QueryBuilder $query, $min, $max): QueryBuilder
+    {
+        return $query->whereBetween('quantity_skipped_picking', [$min,$max]);
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    public static function getSpatieQueryBuilder(): QueryBuilder
+    {
+        return QueryBuilder::for(Pick::class)
+            ->allowedFilters([
+                'user_id',
+                AllowedFilter::scope('quantity_picked_between','quantityPickedBetween'),
+                AllowedFilter::scope('quantity_skipped_between','quantitySkippedBetween'),
+                AllowedFilter::exact('sku_picked', 'sku_ordered')
+            ])
+            ->defaultSort('-id')
+            ->allowedSorts([
+                'id',
+                'user_id',
+                AllowedSort::field('sku_picked','sku_ordered'),
+            ]);
     }
 }
