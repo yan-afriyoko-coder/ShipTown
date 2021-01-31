@@ -21,6 +21,11 @@ class OrdersSeeder extends Seeder
             ->with('orderProducts')
             ->create();
 
+
+        factory(Order::class, rand(20,50))
+            ->with('orderProducts', 1)
+            ->create(['status_code' => 'single_line_orders']);
+
 //        factory(Order::class, rand(10, 30))
 //            ->with('orderProducts', rand(1,4))
 //            ->create([
