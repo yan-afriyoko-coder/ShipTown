@@ -26,8 +26,16 @@
                 @foreach ($picks as $pick)
                     <tr class="table-hover">
                         <td class="pr-2">{{  \Carbon\Carbon::parse($pick['created_at'])->format('M d, H:i') }}</td>
-                        <td class="pr-4">{{ $pick['user']['name'] }}</td>
-                        <td class="pr-4">{{ $pick['sku_ordered'] }}</td>
+                        <td class="pr-4">
+                            <a href="{{ route('reports.picks', ['filter[user_id]' => $pick['user_id']], true) }}">
+                                {{ $pick['user']['name'] }}
+                            </a>
+                        </td>
+                        <td class="pr-4">
+                            <a href="{{ route('reports.picks', ['filter[sku_picked]' => $pick['sku_ordered']], true) }}">
+                                {{ $pick['sku_ordered'] }}
+                            </a>
+                        </td>
                         <td class="pr-5">{{ $pick['name_ordered'] }}</td>
                         <td class="pl-5 text-right">{{ $pick['quantity_picked'] == 0 ? '' : round($pick['quantity_picked'])  }}</td>
                         <td class="pl-5 text-right">{{ $pick['quantity_skipped_picking'] == 0 ? '' : round($pick['quantity_skipped_picking'])  }}</td>

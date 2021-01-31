@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 /**
  * App\Models\Pick
@@ -212,5 +214,17 @@ class Pick extends Model
     public function pickRequests()
     {
         return $this->hasMany(PickRequest::class, 'pick_id');
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    public static function getSpatieQueryBuilder(): QueryBuilder
+    {
+        return QueryBuilder::for(Pick::class)
+            ->allowedFilters([
+                'user_id',
+                AllowedFilter::exact('sku_picked', 'sku_ordered')
+            ]);
     }
 }
