@@ -442,6 +442,12 @@ class Products extends Entity
     {
         $cache_key = $store_key."_".$sku."_getProductTypeAndId";
 
+        $cached_product = Cache::get(self::getSkuCacheKey($store_key, $sku));
+
+        if ($cached_product) {
+            return $cached_product;
+        }
+
         $cached_product = Cache::get($cache_key);
 
         if ($cached_product) {
@@ -470,6 +476,7 @@ class Products extends Entity
             ];
 
             Cache::put($cache_key, $product, 60 * 24 * 7);
+            Cache::put(self::getSkuCacheKey($store_key, $sku), $product, 60 * 24 * 7);
 
             return $product;
         }
@@ -478,5 +485,15 @@ class Products extends Entity
             "type" => null,
             "id" => null
         ];
+    }
+
+    /**
+     * @param string $store_key
+     * @param string $sku
+     * @return string
+     */
+    public static function getSkuCacheKey(string $store_key, string $sku): string
+    {
+        return $store_key . "_" . $sku;
     }
 }

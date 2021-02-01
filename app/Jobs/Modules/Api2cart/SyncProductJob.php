@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\ProductPrice;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Products;
+use Cache;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -63,6 +64,10 @@ class SyncProductJob implements ShouldQueue
                 retry(20, function () use ($product) {
                     $product->attachTag('Not Synced');
                 }, 100);
+
+                if (isset($product_data)) {
+                    Cache::forget(Products::getSkuCacheKey($connection->bridge_api_key, $product_data['sku']));
+                }
 
                 Log::warning('Api2cart: Product NOT SYNCED', [
                     'response' => [
