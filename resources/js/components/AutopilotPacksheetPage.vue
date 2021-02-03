@@ -259,7 +259,10 @@
                 },
 
                 loadUser() {
-                    this.apiGetUserMe([]);
+                    this.apiGetUserMe()
+                        .then(({data}) => {
+                            this.user = (data.data);
+                        });
                 },
 
                 displayShippingNumberModal() {
