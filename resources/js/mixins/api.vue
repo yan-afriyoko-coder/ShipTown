@@ -7,6 +7,10 @@ export default {
         name: "api",
 
         methods: {
+            apiGetUserMe: function (params) {
+                return axios.get('/api/settings/user/me', {params: params});
+            },
+
             apiGetActivityLog: function (params) {
                 return axios.get('/api/logs', {params: params});
             },

@@ -62,7 +62,7 @@
 
         <set-shipping-number-modal ref="shippingNumberModal" @shippingNumberUpdated="addShippingNumber"></set-shipping-number-modal>
 
-        <filters-modal ref="filtersModal" @btnSaveClicked="onConfigChange">
+        <filters-modal ref="filtersModal">
             <template v-slot:actions="slotScopes">
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('partially_shipped')">partially_shipped</button>
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('for_later')">for_later</button>
@@ -91,9 +91,10 @@
         import FiltersModal from "./Packlist/FiltersModal";
         import url from "../mixins/url";
         import SetShippingNumberModal from "./Packlist/ShippingNumberModal";
+        import api from "../mixins/api";
 
         export default {
-            mixins: [loadingOverlay, beep, url],
+            mixins: [loadingOverlay, beep, url, api],
 
             components: {
                 PacklistEntry,
@@ -114,19 +115,14 @@
                     order: null,
                     packlist: null,
                     packed: [],
-                    modalTest: false,
-                    startAt:  (new Date).getTime(),
-                    endAt:  this.startAt + 1000 * 60 * 7,
                     somethingHasBeenPackedDuringThisSession: false,
                     autopilotEnabled: false,
                 };
             },
 
             mounted() {
-                this.loadUser()
-                    .then(() => {
-                        this.loadOrder(this.order_number);
-                    });
+                this.loadUser();
+                this.loadOrder(this.order_number);
             },
 
             watch: {
@@ -154,11 +150,6 @@
             },
 
             methods: {
-                resetTimer() {
-                    this.startAt = (new Date).getTime();
-                    this.endAt =  this.startAt + 1000 * 60 * 7;
-                },
-
                 loadOrder: function (orderNumber) {
                     this.showLoading();
 
@@ -172,9 +163,8 @@
                         'include': 'order_comments,order_comments.user',
                     };
 
-                    return axios.get('/api/orders', {params: params})
+                    return this.apiGetOrders(params)
                         .then(({data}) => {
-                                this.resetTimer();
                                 this.order = data.meta.total > 0 ? data.data[0] : null;
                         })
                         .catch((error) => {
@@ -198,7 +188,7 @@
                         'per_page': 999,
                     };
 
-                    axios.get('/api/order/products', {params: params})
+                    this.apiGetOrderProducts('/api/order/products', params)
                         .then(({ data }) => {
                             if(data.meta.total > 0) {
                                 this.packed = data.data.filter(
@@ -269,10 +259,7 @@
                 },
 
                 loadUser() {
-                    return axios.get('/api/settings/user/me')
-                        .then(({data}) => {
-                            this.user = (data.data);
-                        })
+                    this.apiGetUserMe([]);
                 },
 
                 displayShippingNumberModal() {
@@ -296,12 +283,6 @@
                         .catch( error => {
                             this.notificationError('Error saving shipping number, try again');
                         })
-                },
-
-                packAndShip() {
-                    return axios.put('/api/orders/' + this.order['id'], {
-                        'is_packed': true,
-                    });
                 },
 
                 markAsPacked: function () {
@@ -406,13 +387,6 @@
                     this.notificationError(`"${barcode}" not found on packlist!`);
                 },
 
-                onConfigChange: function(config) {
-                },
-
-                getValueOrDefault: function (value, defaultValue){
-                    return (value === undefined) || (value === null) ? defaultValue : value;
-                },
-
                 printAddressLabel: function() {
                     let orderNumber = this.order['order_number'];
 
@@ -424,7 +398,8 @@
                                 timeout: 1000,
                                 icon: false,
                             });
-                        }).catch((error) => {
+                        })
+                        .catch((error) => {
                         let errorMsg = 'Error occurred when printing label';
 
                         if (error.response.status === 404) {
