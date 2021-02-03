@@ -92,9 +92,10 @@
         import url from "../mixins/url";
         import SetShippingNumberModal from "./Packlist/ShippingNumberModal";
         import api from "../mixins/api";
+        import helpers from "../mixins/helpers";
 
         export default {
-            mixins: [loadingOverlay, beep, url, api],
+            mixins: [loadingOverlay, beep, url, api, helpers],
 
             components: {
                 PacklistEntry,
@@ -168,7 +169,7 @@
                                 this.order = data.meta.total > 0 ? data.data[0] : null;
                         })
                         .catch((error) => {
-                            this.notificationError('Error occurred while loading order');
+                            this.notifyError('Error occurred while loading order');
                         })
                         .finally(() => {
                             this.hideLoading();
@@ -201,7 +202,7 @@
                             }
                         })
                         .catch( error => {
-                            this.notificationError('Error occurred while loading packlist');
+                            this.notifyError('Error occurred while loading packlist');
 
                         })
                         .finally(() => {
@@ -251,10 +252,10 @@
                         'status_code': code
                     })
                         .then(() => {
-                            this.$snotify.success('Status changed')
+                            this.notifySuccess('Status changed')
                         })
                         .catch(() => {
-                            this.$snotify.error('Error when changing status');
+                            this.notifyError('Error when changing status');
                         });
                 },
 
@@ -270,21 +271,16 @@
                     $('#shippingNumberModal').modal();
                 },
 
-                notificationError: function (message) {
-                    this.$snotify.error(message, {timeout: 5000});
-                    this.errorBeep();
-                },
-
                 addShippingNumber(shipping_number) {
                     axios.post('/api/order/shipments', {
                         'order_id': this.order['id'],
                         'shipping_number': shipping_number,
                     })
                         .then(() => {
-                            this.$snotify.success('Shipping number saved');
+                            this.notifySuccess('Shipping number saved');
                         })
                         .catch( error => {
-                            this.notificationError('Error saving shipping number, try again');
+                            this.notifyError('Error saving shipping number, try again');
                         })
                 },
 
@@ -294,12 +290,7 @@
                     })
                         .catch((error) => {
                             let errorMsg = 'Error'+error.response.message;
-
-                            // if (error.response.status === 404) {
-                            //     errorMsg = `Order #${orderNumber} not found.`;
-                            // }
-
-                            this.notificationError(errorMsg);
+                            this.notifyError(errorMsg);
                         });
                 },
 
@@ -328,12 +319,11 @@
                     })
                         .then(({data}) => {
                             this.addToLists(data.data);
-                            this.beep();
+                            this.notifySuccess('ha');
                         })
                         .catch((error) => {
                             this.addToLists(orderProduct);
-                            this.$snotify.error('Error occurred when saving quantity shipped')
-                            this.errorBeep();
+                            this.notifyError('Error occurred when saving quantity shipped');
                         });
                 },
 
@@ -387,7 +377,7 @@
                         return;
                     }
 
-                    this.notificationError(`"${barcode}" not found on packlist!`);
+                    this.notifyError(`"${barcode}" not found on packlist!`);
                 },
 
                 printAddressLabel: function() {
@@ -396,21 +386,15 @@
                     this.$refs.filtersModal.hide();
 
                     axios.put(`/api/print/order/${orderNumber}/address_label`)
-                        .then(() => {
-                            this.$snotify.success('Address label printed', {
-                                timeout: 1000,
-                                icon: false,
-                            });
-                        })
                         .catch((error) => {
-                        let errorMsg = 'Error occurred when printing label';
+                            let errorMsg = 'Error occurred when printing label';
 
-                        if (error.response.status === 404) {
-                            errorMsg = `Order #${orderNumber} not found.`;
-                        }
+                            if (error.response.status === 404) {
+                                errorMsg = `Order #${orderNumber} not found.`;
+                            }
 
-                        this.notificationError(errorMsg);
-                    });
+                            this.notifyError(errorMsg);
+                        });
                 }
             },
 

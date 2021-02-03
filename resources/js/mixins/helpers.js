@@ -1,8 +1,12 @@
+import beep from "./beep";
+
 function getValueOrDefault(value, defaultValue){
     return (value === undefined) || (value === null) ? defaultValue : value;
 }
 
 export default {
+    mixins: [beep],
+
     methods: {
         toNumberOrDash(value) {
             return this.dashIfZero(Number(value));
@@ -40,5 +44,20 @@ export default {
         },
 
         getValueOrDefault,
+
+        notifyError: function (message) {
+            this.$snotify.error(message, {timeout: 5000});
+            this.errorBeep();
+        },
+
+        notifySuccess: function (message = null, beep = true) {
+            if(message) {
+                this.$snotify.success(message);
+            }
+
+            if (beep) {
+                this.beep();
+            }
+        },
     }
 }
