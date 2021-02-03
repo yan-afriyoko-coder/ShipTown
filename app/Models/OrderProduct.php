@@ -4,12 +4,14 @@ namespace App\Models;
 
 use App\Traits\LogsActivityTrait;
 use Barryvdh\LaravelIdeHelper\Eloquent;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
+use MongoDB\Driver\Query;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -118,6 +120,28 @@ class OrderProduct extends Model
     }
 
     /**
+     * @param QueryBuilder $query
+     * @param $min
+     * @param $max
+     * @return QueryBuilder
+     */
+    public function scopeCreatedBetween(QueryBuilder $query, $min, $max): QueryBuilder
+    {
+        try {
+            $startingDateTime = Carbon::parse($min);
+            $endingDateTime = Carbon::parse($max);
+        } catch (Exception $exception) {
+            return $query;
+        }
+
+        return $query->whereBetween('created_at', [
+            $startingDateTime,
+            $endingDateTime
+        ]);
+
+    }
+
+    /**
      * @return QueryBuilder
      */
     public static function getSpatieQueryBuilder(): QueryBuilder
@@ -135,6 +159,7 @@ class OrderProduct extends Model
 
                 AllowedFilter::scope('current_shelf_location', 'MinimumShelfLocation'),
                 AllowedFilter::exact('order.status_code')->ignore(''),
+                AllowedFilter::scope('created_between'),
             ])
             ->allowedIncludes([
                 'order',

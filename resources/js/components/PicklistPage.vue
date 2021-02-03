@@ -155,6 +155,7 @@ export default {
                 'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id'),
                 'filter[current_shelf_location]': this.getUrlParameter('current_shelf_location'),
                 'filter[order.status_code]': this.getUrlParameter('order.status_code'),
+                'filter[created_between]': this.getUrlParameter('created_between'),
             };
 
             return axios.get('/api/picklist', {params:  params})
