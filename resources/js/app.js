@@ -90,6 +90,7 @@ Vue.component('apt-configuration-modal', require('./components/Widgets/APT/Confi
 Vue.component('user-table', require('./components/UsersPage.vue').default);
 Vue.component('printnode-configuration', require('./components/Settings/PrintNode.vue').default);
 Vue.component('printer-configuration', require('./components/Settings/PrintersConfiguration.vue').default);
+Vue.component('user-courier-integration-select', require('./components/Settings/UsersCourierIntegrationSelect.vue').default);
 Vue.component('picks-table', require('./components/PicklistPage.vue').default);
 Vue.component('settings-page', require('./components/SettingsPage.vue').default);
 Vue.component('api', require('./mixins/api').default);

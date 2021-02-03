@@ -22,6 +22,7 @@
                         <printnode-configuration></printnode-configuration>
                     @endrole
                     <printer-configuration></printer-configuration>
+                    <user-courier-integration-select></user-courier-integration-select>
     </div>
 </div>
 @endsection
