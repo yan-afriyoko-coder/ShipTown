@@ -74,7 +74,7 @@
                                 <a class="dropdown-item" href="{{ route('picklist') . '?order.status_code=picking&inventory_source_location_id=100'}}">
                                     {{ __('Web: picking') }}
                                 </a>
-                                <a class="dropdown-item" href="{{ route('picklist') . '?order.status_code=paid,picking&inventory_source_location_id=99'}}">
+                                <a class="dropdown-item" href="{{ route('picklist', ['order.status_code' => 'paid,picking', 'inventory_source_location_id' => '99', 'created_between' => '-1year,-1hour']) }}">
                                     {{ __('Warehouse: paid,picking') }}
                                 </a>
                             </div>
