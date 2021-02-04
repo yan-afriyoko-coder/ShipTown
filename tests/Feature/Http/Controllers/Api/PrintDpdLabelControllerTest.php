@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Api;
 
+use App\Modules\Dpd\src\Dpd;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -30,6 +31,18 @@ class PrintDpdLabelControllerTest extends TestCase
         ]);
 
         // TODO: perform additional assertions
+    }
+
+    /**
+     * @test
+     */
+    public function if_authorization_is_cached()
+    {
+        $auth1 = Dpd::getAuthorization();
+        $auth2 = Dpd::getAuthorization();
+
+        $this->assertTrue($auth2['from_cache']);
+        $this->assertEquals($auth1['authorization_response']['AccessToken'], $auth2['authorization_response']['AccessToken']);
     }
 
     // test cases...

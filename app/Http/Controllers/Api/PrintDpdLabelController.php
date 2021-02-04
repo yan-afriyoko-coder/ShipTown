@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PrintDpdLabelStoreRequest;
+use App\Modules\Dpd\src\Dpd;
 
 /**
  * Class PrintDpdLabelController
@@ -17,6 +18,8 @@ class PrintDpdLabelController extends Controller
      */
     public function store(PrintDpdLabelStoreRequest $request)
     {
+        Dpd::getPreAdvice();
+
         return $this->respondOK200();
     }
 }
