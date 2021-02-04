@@ -12,14 +12,6 @@ class Dpd
     const AUTHORIZATION_CACHE_KEY = 'dpd.authorization';
     const HTTPS_PRE_PROD_PAPI_DPD_IE = 'https://pre-prod-papi.dpd.ie';
 
-    /**
-     * @return string
-     */
-    private static function getBaseUrl(): string
-    {
-        return self::HTTPS_PRE_PROD_PAPI_DPD_IE;
-    }
-
     public static function getPreAdvice()
     {
         $authorization = self::getCachedAuthorization();
@@ -44,18 +36,6 @@ class Dpd
         Cache::put(self::AUTHORIZATION_CACHE_KEY, $authorization,86400);
 
         return $authorization;
-    }
-
-    /**
-     * @return GuzzleClient
-     */
-    public static function getGuzzleClient(): GuzzleClient
-    {
-        return new GuzzleClient([
-            'base_uri' => self::getBaseUrl(),
-            'timeout' => 60,
-            'exceptions' => true,
-        ]);
     }
 
     /**
@@ -85,5 +65,25 @@ class Dpd
             'authorization_time' => Carbon::now(),
             'authorization_response' => json_decode($authorizationResponse->getBody()->getContents(), true),
         ];
+    }
+
+    /**
+     * @return GuzzleClient
+     */
+    public static function getGuzzleClient(): GuzzleClient
+    {
+        return new GuzzleClient([
+            'base_uri' => self::getBaseUrl(),
+            'timeout' => 60,
+            'exceptions' => true,
+        ]);
+    }
+
+    /**
+     * @return string
+     */
+    private static function getBaseUrl(): string
+    {
+        return self::HTTPS_PRE_PROD_PAPI_DPD_IE;
     }
 }
