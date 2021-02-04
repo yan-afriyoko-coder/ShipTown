@@ -151,6 +151,13 @@
             },
 
             methods: {
+                loadUser() {
+                    this.apiGetUserMe()
+                        .then(({data}) => {
+                            this.user = (data.data);
+                        });
+                },
+
                 loadOrder: function (orderNumber) {
                     this.showLoading();
 
@@ -256,13 +263,6 @@
                         })
                         .catch(() => {
                             this.notifyError('Error when changing status');
-                        });
-                },
-
-                loadUser() {
-                    this.apiGetUserMe()
-                        .then(({data}) => {
-                            this.user = (data.data);
                         });
                 },
 
