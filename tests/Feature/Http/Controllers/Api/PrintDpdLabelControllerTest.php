@@ -12,7 +12,7 @@ use Tests\TestCase;
  */
 class PrintDpdLabelControllerTest extends TestCase
 {
-    use RefreshDatabase;
+//    use RefreshDatabase;
 
     /**
      * @test

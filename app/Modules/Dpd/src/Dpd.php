@@ -9,14 +9,31 @@ use Illuminate\Support\Facades\Cache;
 
 class Dpd
 {
+    const API_URL_LIVE = 'https://papi.dpd.ie';
     const AUTHORIZATION_CACHE_KEY = 'dpd.authorization';
-    const HTTPS_PRE_PROD_PAPI_DPD_IE = 'https://pre-prod-papi.dpd.ie';
+    const COMMON_API_PREADVICE = '/common/api/preadvice';
+    const COMMON_API_AUTHORIZE = '/common/api/authorize';
+
+    const API_URL_TEST = 'https://pre-prod-papi.dpd.ie';
 
     public static function getPreAdvice()
     {
-        $authorization = self::getCachedAuthorization();
+        $authorizationToken = self::getCachedAuthorization();
 
-        return null;
+        $options = [
+            'headers' => [
+                'Authorization' => 'Bearer '. $authorizationToken['authorization_response']['AccessToken'],
+                'Content-Type' => 'application/xml; charset=UTF8',
+                'Accept' => 'application/xml',
+            ],
+            'body' => self::xmlContent()
+        ];
+
+        $response = self::getGuzzleClient()->post(self::COMMON_API_PREADVICE, $options);
+
+        $responseContent = $response->getBody()->getContents();
+
+        return $responseContent;
     }
 
     /**
@@ -55,7 +72,7 @@ class Dpd
             'Accept' => 'application/json',
         ];
 
-        $authorizationResponse = self::getGuzzleClient()->post('/common/api/authorize', [
+        $authorizationResponse = self::getGuzzleClient()->post(self::COMMON_API_AUTHORIZE, [
             'headers' => $headers,
             'json' => $body
         ]);
@@ -84,6 +101,58 @@ class Dpd
      */
     private static function getBaseUrl(): string
     {
-        return self::HTTPS_PRE_PROD_PAPI_DPD_IE;
+        return self::API_URL_TEST;
+    }
+
+    /**
+     * @return string
+     */
+    private static function xmlContent(): string
+    {
+        return '<?xml version="1.0" encoding="iso-8859-1"?>
+<PreAdvice>
+	<Consignment>
+		<RecordID>1</RecordID>
+		<CustomerAccount>6597L3</CustomerAccount>
+		<DeliveryDepot>0</DeliveryDepot>
+		<Gazzed>0</Gazzed>
+		<ConsignmentCreationDateTime>2021-01-31T20:00:00</ConsignmentCreationDateTime>
+		<GazzType>PreAdvice</GazzType>
+		<TrackingNumber>0</TrackingNumber>
+		<TotalParcels>1</TotalParcels>
+		<Relabel>1</Relabel>
+		<ServiceOption>5</ServiceOption>
+		<ServiceType>1</ServiceType>
+		<DeliveryAddress>
+			<Contact>Daniel Guiney</Contact>
+			<ContactTelephone>12345678901</ContactTelephone>
+			<ContactEmail>john.smith@ie.ie</ContactEmail>
+			<BusinessName></BusinessName>
+			<AddressLine1>DPD Ireland, Westmeath</AddressLine1>
+			<AddressLine2>Unit 2B Midland Gateway Bus </AddressLine2>
+			<AddressLine3>Kilbeggan</AddressLine3>
+			<AddressLine4>Westmeath</AddressLine4>
+			<CountryCode>IE</CountryCode>
+		</DeliveryAddress>
+		<CollectionAddress>
+			<Contact>Artur Hanusek</Contact>
+			<ContactTelephone>1234567890</ContactTelephone>
+			<ContactEmail>dpd@ie</ContactEmail>
+			<BusinessName>Depot 500</BusinessName>
+			<AddressLine1>Athlone Business Park</AddressLine1>
+			<AddressLine2>Dublin Road</AddressLine2>
+			<AddressLine3>Athlone</AddressLine3>
+			<AddressLine4>Westmeath</AddressLine4>
+			<CountryCode>IE</CountryCode>
+		</CollectionAddress>
+		<References>
+			<Reference>
+				<ReferenceName>ShippingTransactionID</ReferenceName>
+				<ReferenceValue>123</ReferenceValue>
+				<ParcelNumber>1</ParcelNumber>
+			</Reference>
+		</References>
+	</Consignment>
+</PreAdvice>';
     }
 }
