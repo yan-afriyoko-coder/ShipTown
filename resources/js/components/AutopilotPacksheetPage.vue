@@ -73,6 +73,7 @@
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('ready')">ready</button>
                 <button type="button" class="btn btn-info" @click.prevent="displayShippingNumberModal">Add Shipping Number</button>
                 <button type="button" class="btn btn-info" @click.prevent="printAddressLabel">Print Address Label</button>
+                <button type="button" class="btn btn-info" @click.prevent="printDpdLabel">Print DPD Label</button>
             </template>
         </filters-modal>
 
@@ -380,12 +381,12 @@
                     this.notifyError(`"${barcode}" not found on packlist!`);
                 },
 
-                printAddressLabel: function() {
+                printLabel: function(template) {
                     let orderNumber = this.order['order_number'];
 
                     this.$refs.filtersModal.hide();
 
-                    axios.put(`/api/print/order/${orderNumber}/address_label`)
+                    axios.put(`/api/print/order/${orderNumber}/${template}`)
                         .catch((error) => {
                             let errorMsg = 'Error occurred when printing label';
 
@@ -395,6 +396,15 @@
 
                             this.notifyError(errorMsg);
                         });
+                },
+
+
+                printAddressLabel: function() {
+                    this.printLabel('address_label');
+                },
+
+                printDpdLabel: function() {
+                    this.printLabel('dpd_label');
                 }
             },
 
