@@ -38,8 +38,8 @@ class PrintDpdLabelControllerTest extends TestCase
      */
     public function if_authorization_is_cached()
     {
-        $auth1 = Dpd::getAuthorization();
-        $auth2 = Dpd::getAuthorization();
+        $auth1 = Dpd::getCachedAuthorization();
+        $auth2 = Dpd::getCachedAuthorization();
 
         $this->assertTrue($auth2['from_cache']);
         $this->assertEquals($auth1['authorization_response']['AccessToken'], $auth2['authorization_response']['AccessToken']);

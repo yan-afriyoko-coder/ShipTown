@@ -22,7 +22,7 @@ class Dpd
 
     public static function getPreAdvice()
     {
-        $authorization = self::getAuthorization();
+        $authorization = self::getCachedAuthorization();
 
         return null;
     }
@@ -30,7 +30,7 @@ class Dpd
     /**
      * @return array
      */
-    public static function getAuthorization(): array
+    public static function getCachedAuthorization(): array
     {
         $cachedAuthorization = Cache::get('' . self::AUTHORIZATION_CACHE_KEY . '');
 
@@ -39,7 +39,7 @@ class Dpd
             return $cachedAuthorization;
         }
 
-        $authorization = self::authorize();
+        $authorization = self::getAuthorization();
 
         Cache::put(self::AUTHORIZATION_CACHE_KEY, $authorization,86400);
 
@@ -61,7 +61,7 @@ class Dpd
     /**
      * @return array
      */
-    private static function authorize(): array
+    private static function getAuthorization(): array
     {
         $body = [
             'User' => config('dpd.user'),
