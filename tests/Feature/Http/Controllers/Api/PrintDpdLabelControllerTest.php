@@ -12,7 +12,7 @@ use Tests\TestCase;
  */
 class PrintDpdLabelControllerTest extends TestCase
 {
-//    use RefreshDatabase;
+    use RefreshDatabase;
 
     /**
      * @test
@@ -43,6 +43,16 @@ class PrintDpdLabelControllerTest extends TestCase
 
         $this->assertTrue($auth2['from_cache']);
         $this->assertEquals($auth1['authorization_response']['AccessToken'], $auth2['authorization_response']['AccessToken']);
+    }
+
+    /**
+     * @test
+     */
+    public function successfully_generate_preadvice()
+    {
+        $preAdvice = Dpd::getPreAdvice();
+
+        $this->assertEquals('OK', $preAdvice->status());
     }
 
     // test cases...

@@ -3,20 +3,44 @@
 
 namespace App\Modules\Dpd\src;
 
+use App\Modules\Dpd\src\Responses\PreAdvice;
+use App\Modules\Dpd\src\Responses\XmlResponse;
 use Carbon\Carbon;
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * Class Dpd
+ * @package App\Modules\Dpd\src
+ */
 class Dpd
 {
+    /**
+     *
+     */
     const API_URL_LIVE = 'https://papi.dpd.ie';
+    /**
+     *
+     */
     const AUTHORIZATION_CACHE_KEY = 'dpd.authorization';
+    /**
+     *
+     */
     const COMMON_API_PREADVICE = '/common/api/preadvice';
+    /**
+     *
+     */
     const COMMON_API_AUTHORIZE = '/common/api/authorize';
 
+    /**
+     *
+     */
     const API_URL_TEST = 'https://pre-prod-papi.dpd.ie';
 
-    public static function getPreAdvice()
+    /**
+     * @return PreAdvice
+     */
+    public static function getPreAdvice(): PreAdvice
     {
         $authorizationToken = self::getCachedAuthorization();
 
@@ -29,11 +53,10 @@ class Dpd
             'body' => self::xmlContent()
         ];
 
-        $response = self::getGuzzleClient()->post(self::COMMON_API_PREADVICE, $options);
+        $response = self::getGuzzleClient()
+            ->post(self::COMMON_API_PREADVICE, $options);
 
-        $responseContent = $response->getBody()->getContents();
-
-        return $responseContent;
+        return new PreAdvice($response->getBody()->getContents());
     }
 
     /**
@@ -41,7 +64,7 @@ class Dpd
      */
     public static function getCachedAuthorization(): array
     {
-        $cachedAuthorization = Cache::get('' . self::AUTHORIZATION_CACHE_KEY . '');
+        $cachedAuthorization = Cache::get(self::AUTHORIZATION_CACHE_KEY);
 
         if($cachedAuthorization) {
             $cachedAuthorization['from_cache'] = true;
