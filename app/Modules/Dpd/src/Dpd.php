@@ -4,9 +4,6 @@
 namespace App\Modules\Dpd\src;
 
 use App\Modules\Dpd\src\Responses\PreAdvice;
-use Carbon\Carbon;
-use GuzzleHttp\Client as GuzzleClient;
-use Illuminate\Support\Facades\Cache;
 
 /**
  * Class Dpd
