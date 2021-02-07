@@ -12,13 +12,11 @@ use App\Modules\Dpd\src\Responses\PreAdvice;
 class Dpd
 {
     /**
-     * @param array $shipment
+     * @param Shipment $shipment
      * @return PreAdvice
      */
-    public static function getPreAdvice(array $shipment): PreAdvice
+    public static function getPreAdvice(Shipment $shipment): PreAdvice
     {
-        $shipment = new Shipment($shipment);
-
         $response = Client::postXml($shipment->toXml());
 
         return new PreAdvice($response->getBody()->getContents());

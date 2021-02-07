@@ -4,6 +4,7 @@ namespace Tests\External\Dpd;
 
 use App\Modules\Dpd\src\Client;
 use App\Modules\Dpd\src\Dpd;
+use App\Modules\Dpd\src\Shipment;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -37,7 +38,9 @@ class DpdTest extends TestCase
      */
     public function successfully_generate_preadvice()
     {
-        $preAdvice = Dpd::getPreAdvice([]);
+        $shipment = new Shipment([]);
+
+        $preAdvice = Dpd::getPreAdvice($shipment);
 
         $this->assertEquals('OK', $preAdvice->status());
     }
