@@ -37,7 +37,7 @@ class DpdTest extends TestCase
      */
     public function successfully_generate_preadvice()
     {
-        $preAdvice = Dpd::getPreAdvice();
+        $preAdvice = Dpd::getPreAdvice([]);
 
         $this->assertEquals('OK', $preAdvice->status());
     }
