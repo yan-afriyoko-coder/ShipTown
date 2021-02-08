@@ -4,7 +4,7 @@ namespace Tests\External\DpdIreland;
 
 use App\Modules\DpdIreland\Dpd;
 use App\Modules\DpdIreland\src\Client;
-use App\Modules\DpdIreland\src\Shipment;
+use App\Modules\DpdIreland\src\Consignment;
 use Tests\TestCase;
 
 class DpdTest extends TestCase
@@ -13,12 +13,14 @@ class DpdTest extends TestCase
 
     public function if_record_id_matches()
     {
+        $this->markTestIncomplete('Compare if record_id matches RecordID return in PreAdvice');
         // DPDCommonPreAdviceAPI.docx.pdf
 
         // RecordID CHR M “001”
         // Custom identifier for the consignment’s
         // request – will be return in the response
     }
+
     /**
      * @test
      */
@@ -47,8 +49,8 @@ class DpdTest extends TestCase
     {
         // be very careful,
         // xml column order needs to be kept
-        $shipment = new Shipment([
-            'Consignment' => [
+        $shipment = new Consignment([
+//            'Consignment' => [
                 'RecordID' => 1,
                 'CustomerAccount' => '',
                 'TotalParcels'=> 1,
@@ -84,7 +86,7 @@ class DpdTest extends TestCase
 //                            'ParcelNumber' => 1,
 //                        ]
 //                    ]
-            ],
+//            ],
 
         ]);
 

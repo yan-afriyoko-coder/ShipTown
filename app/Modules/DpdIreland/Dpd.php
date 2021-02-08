@@ -5,7 +5,7 @@ namespace App\Modules\DpdIreland;
 
 use App\Modules\DpdIreland\src\Client;
 use App\Modules\DpdIreland\src\Responses\PreAdvice;
-use App\Modules\DpdIreland\src\Shipment;
+use App\Modules\DpdIreland\src\Consignment;
 
 /**
  * Class Dpd
@@ -14,10 +14,10 @@ use App\Modules\DpdIreland\src\Shipment;
 class Dpd
 {
     /**
-     * @param Shipment $shipment
+     * @param Consignment $shipment
      * @return PreAdvice
      */
-    public static function getPreAdvice(Shipment $shipment): PreAdvice
+    public static function getPreAdvice(Consignment $shipment): PreAdvice
     {
         $response = Client::postXml($shipment->toXml());
 
