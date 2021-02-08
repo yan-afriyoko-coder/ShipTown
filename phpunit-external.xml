@@ -26,7 +26,6 @@
         <server name="MAIL_DRIVER" value="array"/>
         <server name="QUEUE_CONNECTION" value="sync"/>
         <server name="SESSION_DRIVER" value="array"/>
-        <server name="LOG_CHANNEL" value="daily"/>
         <server name="API2CART_TEST_STORE_KEY" value="ed58a22dfecb405a50ea3ea56979360d"/>
     </php>
 </phpunit>

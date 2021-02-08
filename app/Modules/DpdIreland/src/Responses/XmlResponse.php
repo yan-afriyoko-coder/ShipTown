@@ -5,6 +5,7 @@ namespace App\Modules\DpdIreland\src\Responses;
 
 
 use Illuminate\Support\Str;
+use SimpleXMLElement;
 
 /**
  * Class PreAdviceResponse
@@ -16,6 +17,10 @@ abstract class XmlResponse
      * @var string
      */
     private $xmlResponse;
+    /**
+     * @var SimpleXMLElement|string
+     */
+    private $simpleXml;
 
     /**
      * PreAdviceResponse constructor.
@@ -24,6 +29,8 @@ abstract class XmlResponse
     public function __construct(string $xmlResponse)
     {
         $this->xmlResponse = $xmlResponse;
+
+        $this->simpleXml = simplexml_load_string($xmlResponse);
     }
 
     /**

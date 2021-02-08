@@ -18,10 +18,6 @@ class DpdTest extends TestCase
     public function if_record_id_matches()
     {
         $consignment = new Consignment([
-            'RecordID' => 1,
-            'TotalParcels'=> 1,
-            'ServiceOption' => 5,
-            'ServiceType' => 1,
             'DeliveryAddress' => [
                 'Contact' => 'John Smith',
                 'ContactTelephone' => '12345678901',
@@ -108,6 +104,6 @@ class DpdTest extends TestCase
 
         $preAdvice = Dpd::getPreAdvice($consignment);
 
-        $this->assertTrue($preAdvice->isSuccess());
+        $this->assertTrue($preAdvice->responseIsSuccess());
     }
 }

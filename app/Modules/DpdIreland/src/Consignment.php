@@ -5,6 +5,7 @@ namespace App\Modules\DpdIreland\src;
 
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Spatie\ArrayToXml\ArrayToXml;
 
 /**
@@ -13,6 +14,19 @@ use Spatie\ArrayToXml\ArrayToXml;
  */
 class Consignment
 {
+    const SERVICE_OPTION_COD = 1;
+    const SERVICE_OPTION_PREMIUM_DOCUMENT_SERVICE = 2;
+    const SERVICE_OPTION_RETURN_RECEIPT = 3;
+    const SERVICE_OPTION_SWAPIT = 4;
+    const SERVICE_OPTION_NORMAL = 5;
+
+    const SERVICE_TYPE_OVERNIGHT = 1;
+    const SERVICE_TYPE_SATURDAY = 2;
+    const SERVICE_TYPE_TIMED = 3;
+    const SERVICE_TYPE_SPECIAL = 4;
+    const SERVICE_TYPE_CANCELLED_ON_ARRIVAL = 5;
+    const SERVICE_TYPE_2_DAY_SERVICE = 6;
+
     /**
      * @var array
      */
@@ -21,8 +35,8 @@ class Consignment
         'CustomerAccount' => '',
         'TotalParcels'=> 1,
         'Relabel'=> 0,
-        'ServiceOption' => 0,
-        'ServiceType' => 0,
+        'ServiceOption' => self::SERVICE_OPTION_NORMAL,
+        'ServiceType' => self::SERVICE_TYPE_OVERNIGHT,
         'DeliveryAddress' => [
             'Contact' => '',
             'ContactTelephone' => '',
@@ -77,7 +91,23 @@ class Consignment
             'Consignment' => $this->toArray()
         ];
 
-        return ArrayToXml::convert($data, 'PreAdvice', true, 'iso-8859-1');
+        return ArrayToXml::convert(
+            $data,
+            'PreAdvice',
+            true,
+            'iso-8859-1',
+        );
+    }
+    /**
+     * @return string
+     */
+    public function toString(): string
+    {
+        $data = $this->toXml();
+
+        $data = str_replace(PHP_EOL,'',$data);
+
+        return $data;
     }
 
     /**
