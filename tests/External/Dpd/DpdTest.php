@@ -10,8 +10,16 @@ use Tests\TestCase;
 
 class DpdTest extends TestCase
 {
-    use RefreshDatabase;
+//    use RefreshDatabase;
 
+    public function if_record_id_matches()
+    {
+        // DPDCommonPreAdviceAPI.docx.pdf
+
+        // RecordID CHR M “001”
+        // Custom identifier for the consignment’s
+        // request – will be return in the response
+    }
     /**
      * @test
      */
@@ -38,7 +46,48 @@ class DpdTest extends TestCase
      */
     public function successfully_generate_preadvice()
     {
-        $shipment = new Shipment([]);
+        // be very careful,
+        // xml column order needs to be kept
+        $shipment = new Shipment([
+            'Consignment' => [
+                'RecordID' => 1,
+                'CustomerAccount' => '',
+                'TotalParcels'=> 1,
+                'Relabel'=> 0,
+                'ServiceOption' => 5,
+                'ServiceType' => 1,
+                'DeliveryAddress' => [
+                    'Contact' => 'John Smith',
+                    'ContactTelephone' => '12345678901',
+                    'ContactEmail' => 'john.smith@ie.ie',
+                    'BusinessName' => 'JS Business',
+                    'AddressLine1' => 'DPD Ireland, Westmeath',
+                    'AddressLine2' => 'Unit 2B Midland Gateway Bus',
+                    'AddressLine3' => 'Kilbeggan',
+                    'AddressLine4' => 'Westmeath',
+                    'CountryCode' =>  'IE',
+                ],
+                'CollectionAddress' => [
+                    'Contact' => 'John Smith',
+                    'ContactTelephone' => '12345678901',
+                    'ContactEmail' => 'john.smith@ie.ie',
+                    'BusinessName' => 'JS Business',
+                    'AddressLine1' => 'DPD Ireland, Westmeath',
+                    'AddressLine2' => 'Unit 2B Midland Gateway Bus',
+                    'AddressLine3' => 'Kilbeggan',
+                    'AddressLine4' => 'Westmeath',
+                    'CountryCode' =>  'IE',
+                ],
+//                    'References' => [
+//                        'Reference' => [
+//                            'ReferenceName' => 'SHIP.TOWN',
+//                            'ReferenceValue' => '',
+//                            'ParcelNumber' => 1,
+//                        ]
+//                    ]
+            ],
+
+        ]);
 
         $preAdvice = Dpd::getPreAdvice($shipment);
 
