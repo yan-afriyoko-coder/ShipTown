@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PrintDpdLabelStoreRequest;
 use App\Modules\DpdIreland\Dpd;
+use App\Modules\DpdIreland\src\Consignment;
 
 /**
  * Class PrintDpdLabelController
@@ -18,8 +19,9 @@ class PrintDpdLabelController extends Controller
      */
     public function store(PrintDpdLabelStoreRequest $request, $order_number)
     {
-        dd($request->get('order_number'));
-        Dpd::getPreAdvice();
+        $consignment = new Consignment([]);
+
+        Dpd::getPreAdvice($consignment);
 
         return $this->respondOK200();
     }
