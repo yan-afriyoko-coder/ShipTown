@@ -1,9 +1,11 @@
 <?php
 
 
-namespace App\Modules\Dpd\src;
+namespace App\Modules\DpdIreland;
 
-use App\Modules\Dpd\src\Responses\PreAdvice;
+use App\Modules\DpdIreland\src\Client;
+use App\Modules\DpdIreland\src\Responses\PreAdvice;
+use App\Modules\DpdIreland\src\Shipment;
 
 /**
  * Class Dpd

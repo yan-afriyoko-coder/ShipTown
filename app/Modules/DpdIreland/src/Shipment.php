@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Modules\Dpd\src;
+namespace App\Modules\DpdIreland\src;
 
 
 use Spatie\ArrayToXml\ArrayToXml;

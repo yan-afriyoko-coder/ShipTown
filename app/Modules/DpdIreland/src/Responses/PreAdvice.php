@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Modules\Dpd\src\Responses;
+namespace App\Modules\DpdIreland\src\Responses;
 
 
 /**

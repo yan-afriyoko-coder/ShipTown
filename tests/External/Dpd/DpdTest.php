@@ -2,10 +2,9 @@
 
 namespace Tests\External\Dpd;
 
-use App\Modules\Dpd\src\Client;
-use App\Modules\Dpd\src\Dpd;
-use App\Modules\Dpd\src\Shipment;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Modules\DpdIreland\Dpd;
+use App\Modules\DpdIreland\src\Client;
+use App\Modules\DpdIreland\src\Shipment;
 use Tests\TestCase;
 
 class DpdTest extends TestCase
