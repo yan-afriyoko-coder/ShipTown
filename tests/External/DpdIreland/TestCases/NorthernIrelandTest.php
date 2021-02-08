@@ -5,6 +5,7 @@ namespace Tests\External\DpdIreland\TestCases;
 
 use App\Modules\DpdIreland\Dpd;
 use App\Modules\DpdIreland\src\Consignment;
+use Tests\TestCase;
 
 /**
  * Customer sending to Northern Ireland from
@@ -14,21 +15,22 @@ use App\Modules\DpdIreland\src\Consignment;
  * Class NorthernIrelandTest
  * @package Tests\External\DpdIreland\TestCases
  */
-class NorthernIrelandTest
+class NorthernIrelandTest extends TestCase
 {
     /**
      * One consignment with 1 parcel
      */
-    public function test_consignment_with_one_parcel()
+    public function test_consignment_with_one_parcel_test()
     {
+        dd(1);
         $consignment = new Consignment([
             'DeliveryAddress' => [
 
             ]
         ]);
 
-        Dpd::getPreAdvice($consignment);
+        $preAdvice = Dpd::getPreAdvice($consignment);
 
-        $this->assertEquals('OK', $preAdvice->isSucess());
+        $this->assertTrue($preAdvice->isSuccess());
     }
 }

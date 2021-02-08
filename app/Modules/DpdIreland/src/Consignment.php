@@ -74,7 +74,7 @@ class Consignment
     public function toXml(): string
     {
         $data = [
-            'Consignment' => $this->getConsignmentData()
+            'Consignment' => $this->toArray()
         ];
 
         return ArrayToXml::convert($data, 'PreAdvice', true, 'iso-8859-1');
@@ -83,7 +83,7 @@ class Consignment
     /**
      * @return array
      */
-    private function getConsignmentData(): array
+    public function toArray(): array
     {
         $fixedValues = collect([
             'CustomerAccount' => config('dpd.user'),

@@ -5,20 +5,50 @@ namespace Tests\External\DpdIreland;
 use App\Modules\DpdIreland\Dpd;
 use App\Modules\DpdIreland\src\Client;
 use App\Modules\DpdIreland\src\Consignment;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class DpdTest extends TestCase
 {
 //    use RefreshDatabase;
 
+    /**
+     * @test
+     */
     public function if_record_id_matches()
     {
-        $this->markTestIncomplete('Compare if record_id matches RecordID return in PreAdvice');
-        // DPDCommonPreAdviceAPI.docx.pdf
+        $consignment = new Consignment([
+            'RecordID' => 1,
+            'TotalParcels'=> 1,
+            'ServiceOption' => 5,
+            'ServiceType' => 1,
+            'DeliveryAddress' => [
+                'Contact' => 'John Smith',
+                'ContactTelephone' => '12345678901',
+                'ContactEmail' => 'john.smith@ie.ie',
+                'BusinessName' => 'JS Business',
+                'AddressLine1' => 'DPD Ireland, Westmeath',
+                'AddressLine2' => 'Unit 2B Midland Gateway Bus',
+                'AddressLine3' => 'Kilbeggan',
+                'AddressLine4' => 'Westmeath',
+                'CountryCode' =>  'IE',
+            ],
+            'CollectionAddress' => [
+                'Contact' => 'John Smith',
+                'ContactTelephone' => '12345678901',
+                'ContactEmail' => 'john.smith@ie.ie',
+                'BusinessName' => 'JS Business',
+                'AddressLine1' => 'DPD Ireland, Westmeath',
+                'AddressLine2' => 'Unit 2B Midland Gateway Bus',
+                'AddressLine3' => 'Kilbeggan',
+                'AddressLine4' => 'Westmeath',
+                'CountryCode' =>  'IE',
+            ],
+        ]);
 
-        // RecordID CHR M “001”
-        // Custom identifier for the consignment’s
-        // request – will be return in the response
+        $preAdvice = Dpd::getPreAdvice($consignment);
+
+        $this->assertEquals($consignment->toArray()['RecordID'], $preAdvice->getAttribute('RecordID'));
     }
 
     /**
