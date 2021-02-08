@@ -19,6 +19,7 @@ class NorthernIrelandTest extends TestCase
 {
     /**
      * One consignment with 1 parcel
+     * @test
      */
     public function test_consignment_with_one_parcel_test()
     {
