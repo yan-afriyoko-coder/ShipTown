@@ -23,8 +23,6 @@ class NorthernIrelandTest extends TestCase
      */
     public function consignment_with_one_parcel()
     {
-        $this->markTestIncomplete('Request fails, database error');
-
         $consignment = new Consignment([
             'ServiceType' => Consignment::SERVICE_TYPE_2_DAY_SERVICE,
             'DeliveryAddress' => [
@@ -37,7 +35,7 @@ class NorthernIrelandTest extends TestCase
                 'AddressLine3' => 'Belfast',
                 'AddressLine4' => '',
                 'PostCode' => 'BT12 6HU',
-                'CountryCode' =>  'UK',
+                'CountryCode' =>  'GB',
             ],
             'CollectionAddress' => [
                 'Contact' => 'John Smith',
