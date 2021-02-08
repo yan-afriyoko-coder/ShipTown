@@ -11,6 +11,14 @@ namespace App\Modules\DpdIreland\src\Responses;
 class PreAdvice extends XmlResponse
 {
     /**
+     * @return bool
+     */
+    public function isSuccess(): bool
+    {
+        return $this->status() === 'OK';
+    }
+
+    /**
      * @return string
      */
     public function status(): string

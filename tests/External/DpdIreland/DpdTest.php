@@ -47,7 +47,7 @@ class DpdTest extends TestCase
      */
     public function successfully_generate_preadvice()
     {
-        $shipment = new Consignment([
+        $consignment = new Consignment([
                 'RecordID' => 1,
                 'TotalParcels'=> 1,
                 'ServiceOption' => 5,
@@ -76,8 +76,8 @@ class DpdTest extends TestCase
                 ],
         ]);
 
-        $preAdvice = Dpd::getPreAdvice($shipment);
+        $preAdvice = Dpd::getPreAdvice($consignment);
 
-        $this->assertEquals('OK', $preAdvice->status());
+        $this->assertTrue($preAdvice->isSuccess());
     }
 }
