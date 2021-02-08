@@ -197,7 +197,7 @@
                         'per_page': 999,
                     };
 
-                    this.apiGetOrderProducts('/api/order/products', params)
+                    this.apiGetOrderProducts(params)
                         .then(({ data }) => {
                             if(data.meta.total > 0) {
                                 this.packed = data.data.filter(
