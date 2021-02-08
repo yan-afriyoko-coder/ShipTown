@@ -46,6 +46,7 @@ class Consignment
             'AddressLine2' => '',
             'AddressLine3' => '',
             'AddressLine4' => '',
+            'PostCode' => '',
             'CountryCode' =>  '',
         ],
         'CollectionAddress' => [
@@ -57,6 +58,7 @@ class Consignment
             'AddressLine2' => '',
             'AddressLine3' => '',
             'AddressLine4' => '',
+            'PostCode' => '',
             'CountryCode' =>  '',
         ],
         'References' => [
