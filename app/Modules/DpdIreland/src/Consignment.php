@@ -73,7 +73,9 @@ class Consignment
      */
     public function toXml(): string
     {
-        $data = $this->getConsignmentData();
+        $data = [
+            'Consignment' => $this->getConsignmentData()
+        ];
 
         return ArrayToXml::convert($data, 'PreAdvice', true, 'iso-8859-1');
     }
@@ -89,13 +91,9 @@ class Consignment
 
         $template = collect($this->templateArray);
 
-        $data = $template->merge($this->consignment)
+        return $template->merge($this->consignment)
             ->merge($fixedValues)
             ->only($template->keys())
             ->toArray();
-
-        return [
-            'Consignment' => $data
-        ];
     }
 }

@@ -47,16 +47,12 @@ class DpdTest extends TestCase
      */
     public function successfully_generate_preadvice()
     {
-        // be very careful,
-        // xml column order needs to be kept
         $shipment = new Consignment([
-//            'Consignment' => [
-                'RecordID' => 1,
-                'CustomerAccount' => '',
                 'TotalParcels'=> 1,
-                'Relabel'=> 0,
-                'ServiceOption' => 5,
-                'ServiceType' => 1,
+            'Relabel'=> 0,
+            'ServiceOption' => 5,
+            'RecordID' => 1,
+            'ServiceType' => 1,
                 'DeliveryAddress' => [
                     'Contact' => 'John Smith',
                     'ContactTelephone' => '12345678901',
@@ -79,15 +75,6 @@ class DpdTest extends TestCase
                     'AddressLine4' => 'Westmeath',
                     'CountryCode' =>  'IE',
                 ],
-//                    'References' => [
-//                        'Reference' => [
-//                            'ReferenceName' => 'SHIP.TOWN',
-//                            'ReferenceValue' => '',
-//                            'ParcelNumber' => 1,
-//                        ]
-//                    ]
-//            ],
-
         ]);
 
         $preAdvice = Dpd::getPreAdvice($shipment);
