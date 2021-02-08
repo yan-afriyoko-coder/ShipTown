@@ -1,7 +1,6 @@
 <?php
 
-
-namespace Tests\External\DpdIreland\TestCases;
+namespace Tests\External\DpdIreland;
 
 use App\Modules\DpdIreland\Dpd;
 use App\Modules\DpdIreland\src\Consignment;
@@ -21,9 +20,8 @@ class NorthernIrelandTest extends TestCase
      * One consignment with 1 parcel
      * @test
      */
-    public function test_consignment_with_one_parcel_test()
+    public function if_consignment_with_one_parcel_test()
     {
-        dd(1);
         $consignment = new Consignment([
             'DeliveryAddress' => [
 
