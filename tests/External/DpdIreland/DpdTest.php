@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\External\Dpd;
+namespace Tests\External\DpdIreland;
 
 use App\Modules\DpdIreland\Dpd;
 use App\Modules\DpdIreland\src\Client;
