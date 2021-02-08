@@ -86,7 +86,9 @@ class Consignment
     private function getConsignmentData(): array
     {
         $fixedValues = collect([
-            'CustomerAccount' => config('dpd.user')
+            'CustomerAccount' => config('dpd.user'),
+            'DeliveryAddress' => (new Address($this->consignment['DeliveryAddress']))->toArray(),
+            'CollectionAddress' => (new Address($this->consignment['CollectionAddress']))->toArray(),
         ]);
 
         $template = collect($this->templateArray);
