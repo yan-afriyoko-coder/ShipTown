@@ -15,6 +15,7 @@ use Illuminate\Support\Carbon;
  * @property string $gender
  * @property string $first_name
  * @property string $last_name
+ * @property string $full_name
  * @property string $address1
  * @property string $address2
  * @property string $postcode
@@ -76,6 +77,14 @@ class OrderAddress extends Model
         'website',
         'region',
     ];
+
+    /**
+     * @return string
+     */
+    public function getFullNameAttribute(): string
+    {
+        return $this->first_name .' '. $this->last_name;
+    }
 
     public function order()
     {

@@ -4,7 +4,9 @@
 namespace App\Modules\DpdIreland\src;
 
 
+use App\Modules\DpdIreland\src\Exceptions\ConsignmentValidationException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Spatie\ArrayToXml\ArrayToXml;
 
@@ -26,6 +28,20 @@ class Consignment
     const SERVICE_TYPE_SPECIAL = 4;
     const SERVICE_TYPE_CANCELLED_ON_ARRIVAL = 5;
     const SERVICE_TYPE_2_DAY_SERVICE = 6;
+
+    public $rules = [
+        'RecordID' => 'sometimes',
+        'DeliveryAddress.Contact' => 'required',
+        'DeliveryAddress.ContactTelephone' => 'required',
+        'DeliveryAddress.ContactEmail' => 'sometimes',
+        'DeliveryAddress.BusinessName' => 'sometimes',
+        'DeliveryAddress.AddressLine1' => 'required',
+        'DeliveryAddress.AddressLine2' => 'required',
+        'DeliveryAddress.AddressLine3' => 'required',
+        'DeliveryAddress.AddressLine4' => 'required',
+        'DeliveryAddress.PostCode' => 'sometimes',
+        'DeliveryAddress.CountryCode' => 'required|in:IE,IRL',
+    ];
 
     /**
      * @var array
@@ -76,12 +92,25 @@ class Consignment
     private $consignment;
 
     /**
+     * @var Validator
+     */
+    private $validator;
+
+    /**
      * Shipment constructor.
      * @param array $consignment
+     * @throws ConsignmentValidationException
      */
     public function __construct(array $consignment)
     {
         $this->consignment = collect($consignment);
+
+        $this->validator = Validator::make($consignment, $this->rules);
+
+        if($this->validator->fails())
+        {
+            throw new ConsignmentValidationException($this->validator->errors());
+        }
     }
 
     /**
@@ -120,7 +149,17 @@ class Consignment
         $fixedValues = collect([
             'CustomerAccount' => config('dpd.user'),
             'DeliveryAddress' => (new Address($this->consignment['DeliveryAddress']))->toArray(),
-            'CollectionAddress' => (new Address($this->consignment['CollectionAddress']))->toArray(),
+            'CollectionAddress' => (new Address([
+                'Contact' => 'John Smith',
+                'ContactTelephone' => '12345678901',
+                'ContactEmail' => 'john.smith@ie.ie',
+                'BusinessName' => 'JS Business',
+                'AddressLine1' => 'DPD Ireland, Westmeath',
+                'AddressLine2' => 'Unit 2B Midland Gateway Bus',
+                'AddressLine3' => 'Kilbeggan',
+                'AddressLine4' => 'Westmeath',
+                'CountryCode' =>  'IE',
+            ]))->toArray(),
         ]);
 
         $template = collect($this->templateArray);

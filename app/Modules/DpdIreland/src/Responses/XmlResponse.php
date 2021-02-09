@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Modules\DpdIreland\src\Responses;
-
 
 use Illuminate\Support\Str;
 use SimpleXMLElement;
@@ -16,21 +14,33 @@ abstract class XmlResponse
     /**
      * @var string
      */
-    private $xmlResponse;
+    private $xml;
+
     /**
      * @var SimpleXMLElement|string
      */
-    private $simpleXml;
+    protected $simpleXmlArray;
 
     /**
      * PreAdviceResponse constructor.
-     * @param string $xmlResponse
+     * @param string $responseXml
      */
-    public function __construct(string $xmlResponse)
+    public function __construct(string $responseXml)
     {
-        $this->xmlResponse = $xmlResponse;
+        $this->setXml($responseXml);
+    }
 
-        $this->simpleXml = simplexml_load_string($xmlResponse);
+    /**
+     * @param string $responseXml
+     * @return XmlResponse
+     */
+    public function setXml(string $responseXml): XmlResponse
+    {
+        $this->xml = $responseXml;
+
+        $this->simpleXmlArray = simplexml_load_string($this->xml);
+
+        return $this;
     }
 
     /**
@@ -38,7 +48,7 @@ abstract class XmlResponse
      */
     public function toString(): string
     {
-        return $this->xmlResponse;
+        return $this->xml;
     }
 
     /**
@@ -50,6 +60,14 @@ abstract class XmlResponse
         $startTag = "<$key>";
         $endTag = "</$key>";
 
-        return Str::before(Str::after($this->xmlResponse, $startTag), $endTag);
+        return Str::before(Str::after($this->xml, $startTag), $endTag);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPreAdviceErrorCode()
+    {
+        return $this->simpleXmlArray->PreAdviceErrorCode;
     }
 }

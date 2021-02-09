@@ -23,7 +23,7 @@ class PreAdvice extends XmlResponse
      */
     public function responseIsSuccess(): bool
     {
-        return $this->status() === 'OK';
+        return ($this->status() === 'OK') && ($this->receivedConsignmentsNumber() > 0);
     }
 
     /**
@@ -32,6 +32,22 @@ class PreAdvice extends XmlResponse
     public function status(): string
     {
         return $this->getAttribute('Status');
+    }
+
+    /**
+     * @return int
+     */
+    public function receivedConsignmentsNumber(): int
+    {
+        return (int) $this->simpleXmlArray->ReceivedConsignmentsNumber;
+    }
+
+    /**
+     * @return array
+     */
+    public function consignment(): array
+    {
+        return (array) $this->simpleXmlArray->Consignment;
     }
 
     /**
@@ -48,5 +64,19 @@ class PreAdvice extends XmlResponse
     public function labelImage(): string
     {
         return $this->getAttribute('LabelImage');
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'Status' => (string) $this->simpleXmlArray->Status,
+            'PreAdviceErrorCode' => (array) $this->simpleXmlArray->PreAdviceErrorCode,
+            'PreAdviceErrorDetails' => $this->simpleXmlArray->PreAdviceErrorDetails ? (array) $this->simpleXmlArray->PreAdviceErrorDetails : '',
+            'ReceivedConsignmentsNumber' => (integer) $this->simpleXmlArray->ReceivedConsignmentsNumber,
+            'Consignment' => (array) $this->simpleXmlArray->Consignment,
+        ];
     }
 }
