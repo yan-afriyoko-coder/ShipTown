@@ -5,6 +5,7 @@ namespace App\Modules\DpdIreland\src;
 
 
 use App\Modules\DpdIreland\src\Exceptions\ConsignmentValidationException;
+use App\Modules\DpdIreland\src\Models\DpdCollectionAddress;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -149,17 +150,7 @@ class Consignment
         $fixedValues = collect([
             'CustomerAccount' => config('dpd.user'),
             'DeliveryAddress' => (new Address($this->consignment['DeliveryAddress']))->toArray(),
-            'CollectionAddress' => (new Address([
-                'Contact' => 'John Smith',
-                'ContactTelephone' => '12345678901',
-                'ContactEmail' => 'john.smith@ie.ie',
-                'BusinessName' => 'JS Business',
-                'AddressLine1' => 'DPD Ireland, Westmeath',
-                'AddressLine2' => 'Unit 2B Midland Gateway Bus',
-                'AddressLine3' => 'Kilbeggan',
-                'AddressLine4' => 'Westmeath',
-                'CountryCode' =>  'IE',
-            ]))->toArray(),
+            'CollectionAddress' => $this->getCollectionAddress(),
         ]);
 
         $template = collect($this->templateArray);
@@ -168,5 +159,17 @@ class Consignment
             ->merge($fixedValues)
             ->only($template->keys())
             ->toArray();
+    }
+
+    /**
+     * @return array
+     */
+    private function getCollectionAddress(): array
+    {
+        $CollectionAddress = DpdCollectionAddress::getCollectionAddress();
+
+        $address = new Address($CollectionAddress);
+
+        return $address->toArray();
     }
 }
