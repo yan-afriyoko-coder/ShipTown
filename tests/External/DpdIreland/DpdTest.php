@@ -15,6 +15,16 @@ class DpdTest extends TestCase
     /**
      * @test
      */
+    public function if_env_variables_are_set()
+    {
+        $this->assertNotEmpty(config('dpd.token'));
+        $this->assertNotEmpty(config('dpd.user'));
+        $this->assertNotEmpty(config('dpd.password'));
+    }
+
+    /**
+     * @test
+     */
     public function if_record_id_matches()
     {
         $consignment = new Consignment([
