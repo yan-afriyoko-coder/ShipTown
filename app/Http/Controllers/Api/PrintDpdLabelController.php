@@ -57,5 +57,6 @@ class PrintDpdLabelController extends Controller
             $this->respondBadRequest($exception->getMessage());
         }
 
+        return $this->respondOK200();
     }
 }
