@@ -73,7 +73,7 @@
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('ready')">ready</button>
                 <button type="button" class="btn btn-info" @click.prevent="displayShippingNumberModal">Add Shipping Number</button>
                 <button type="button" class="btn btn-info" @click.prevent="printAddressLabel">Print Address Label</button>
-                <button type="button" class="btn btn-info" @click.prevent="printDpdLabel">Print DPD Label</button>
+                <button type="button" class="btn btn-info" @click.prevent="getDpdLabel">Get DPD Label</button>
             </template>
         </filters-modal>
 
@@ -386,7 +386,7 @@
 
                     this.$refs.filtersModal.hide();
 
-                    axios.put(`/api/print/order/${orderNumber}/${template}`)
+                    return axios.put(`/api/print/order/${orderNumber}/${template}`)
                         .catch((error) => {
                             let errorMsg = 'Error occurred when printing label';
 
@@ -403,8 +403,13 @@
                     this.printLabel('address_label');
                 },
 
-                printDpdLabel: function() {
-                    this.printLabel('dpd_label');
+                getDpdLabel: function() {
+                    this.printLabel('dpd_label')
+                        .then(({data}) => {
+                            const preAdvice = data.data[0];
+                            console.log(preAdvice);
+                            window.open(preAdvice['Consignment']['LabelImage'])
+                        });
                 }
             },
 
