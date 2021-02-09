@@ -5,6 +5,7 @@ namespace Tests\External\DpdIreland;
 use App\Modules\DpdIreland\Dpd;
 use App\Modules\DpdIreland\src\Client;
 use App\Modules\DpdIreland\src\Consignment;
+use App\Modules\DpdIreland\src\Exceptions\ConsignmentValidationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -17,13 +18,23 @@ class DpdTest extends TestCase
      */
     public function if_env_variables_are_set()
     {
-        $this->assertNotEmpty(config('dpd.token'));
-        $this->assertNotEmpty(config('dpd.user'));
-        $this->assertNotEmpty(config('dpd.password'));
+        $this->assertNotEmpty(config('dpd.token'), 'DPD_TOKEN is not set');
+        $this->assertNotEmpty(config('dpd.user'), 'DPD_USER is not set');
+        $this->assertNotEmpty(config('dpd.password'), 'DPD_PASSWORD is not set');
     }
 
     /**
      * @test
+     */
+    public function if_authenticates()
+    {
+        $auth = Client::getCachedAuthorization();
+        $this->assertEquals('OK', $auth['authorization_response']['Status']);
+    }
+
+    /**
+     * @test
+     * @throws ConsignmentValidationException
      */
     public function if_record_id_matches()
     {
@@ -55,15 +66,6 @@ class DpdTest extends TestCase
         $preAdvice = Dpd::getPreAdvice($consignment);
 
         $this->assertEquals($consignment->toArray()['RecordID'], $preAdvice->getAttribute('RecordID'));
-    }
-
-    /**
-     * @test
-     */
-    public function if_authenticates()
-    {
-        $auth = Client::getCachedAuthorization();
-        $this->assertEquals('OK', $auth['authorization_response']['Status']);
     }
 
     /**
