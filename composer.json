@@ -20,7 +20,6 @@
         "hulkur/laravel-hasmany-keyby": "^1.1",
         "laravel/framework": "5.8.*",
         "laravel/passport": "^7.3",
-        "laravel/telescope": "2.1.7",
         "laravel/tinker": "^1.0",
         "lcobucci/jwt": "3.3",
         "league/csv": "^9.6",
