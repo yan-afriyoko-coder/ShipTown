@@ -62,7 +62,7 @@
 
         <set-shipping-number-modal ref="shippingNumberModal" @shippingNumberUpdated="addShippingNumber"></set-shipping-number-modal>
 
-        <filters-modal ref="filtersModal" @btnSaveClicked="onConfigChange">
+        <filters-modal ref="filtersModal">
             <template v-slot:actions="slotScopes">
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('partially_shipped')">partially_shipped</button>
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('for_later')">for_later</button>
@@ -73,6 +73,7 @@
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('ready')">ready</button>
                 <button type="button" class="btn btn-info" @click.prevent="displayShippingNumberModal">Add Shipping Number</button>
                 <button type="button" class="btn btn-info" @click.prevent="printAddressLabel">Print Address Label</button>
+                <button type="button" class="btn btn-info" @click.prevent="printDpdLabel">Print DPD Label</button>
             </template>
         </filters-modal>
 
@@ -91,9 +92,11 @@
         import FiltersModal from "./Packlist/FiltersModal";
         import url from "../mixins/url";
         import SetShippingNumberModal from "./Packlist/ShippingNumberModal";
+        import api from "../mixins/api";
+        import helpers from "../mixins/helpers";
 
         export default {
-            mixins: [loadingOverlay, beep, url],
+            mixins: [loadingOverlay, beep, url, api, helpers],
 
             components: {
                 PacklistEntry,
@@ -114,19 +117,14 @@
                     order: null,
                     packlist: null,
                     packed: [],
-                    modalTest: false,
-                    startAt:  (new Date).getTime(),
-                    endAt:  this.startAt + 1000 * 60 * 7,
                     somethingHasBeenPackedDuringThisSession: false,
                     autopilotEnabled: false,
                 };
             },
 
             mounted() {
-                this.loadUser()
-                    .then(() => {
-                        this.loadOrder(this.order_number);
-                    });
+                this.loadUser();
+                this.loadOrder(this.order_number);
             },
 
             watch: {
@@ -154,9 +152,11 @@
             },
 
             methods: {
-                resetTimer() {
-                    this.startAt = (new Date).getTime();
-                    this.endAt =  this.startAt + 1000 * 60 * 7;
+                loadUser() {
+                    this.apiGetUserMe()
+                        .then(({data}) => {
+                            this.user = (data.data);
+                        });
                 },
 
                 loadOrder: function (orderNumber) {
@@ -172,13 +172,12 @@
                         'include': 'order_comments,order_comments.user',
                     };
 
-                    return axios.get('/api/orders', {params: params})
+                    return this.apiGetOrders(params)
                         .then(({data}) => {
-                                this.resetTimer();
                                 this.order = data.meta.total > 0 ? data.data[0] : null;
                         })
                         .catch((error) => {
-                            this.notificationError('Error occurred while loading order');
+                            this.notifyError('Error occurred while loading order');
                         })
                         .finally(() => {
                             this.hideLoading();
@@ -198,7 +197,7 @@
                         'per_page': 999,
                     };
 
-                    axios.get('/api/order/products', {params: params})
+                    this.apiGetOrderProducts(params)
                         .then(({ data }) => {
                             if(data.meta.total > 0) {
                                 this.packed = data.data.filter(
@@ -211,7 +210,7 @@
                             }
                         })
                         .catch( error => {
-                            this.notificationError('Error occurred while loading packlist');
+                            this.notifyError('Error occurred while loading packlist');
 
                         })
                         .finally(() => {
@@ -261,28 +260,16 @@
                         'status_code': code
                     })
                         .then(() => {
-                            this.$snotify.success('Status changed')
+                            this.notifySuccess('Status changed')
                         })
                         .catch(() => {
-                            this.$snotify.error('Error when changing status');
+                            this.notifyError('Error when changing status');
                         });
-                },
-
-                loadUser() {
-                    return axios.get('/api/settings/user/me')
-                        .then(({data}) => {
-                            this.user = (data.data);
-                        })
                 },
 
                 displayShippingNumberModal() {
                     this.$refs.filtersModal.hide();
                     $('#shippingNumberModal').modal();
-                },
-
-                notificationError: function (message) {
-                    this.$snotify.error(message, {timeout: 5000});
-                    this.errorBeep();
                 },
 
                 addShippingNumber(shipping_number) {
@@ -291,17 +278,11 @@
                         'shipping_number': shipping_number,
                     })
                         .then(() => {
-                            this.$snotify.success('Shipping number saved');
+                            this.notifySuccess('Shipping number saved');
                         })
                         .catch( error => {
-                            this.notificationError('Error saving shipping number, try again');
+                            this.notifyError('Error saving shipping number, try again');
                         })
-                },
-
-                packAndShip() {
-                    return axios.put('/api/orders/' + this.order['id'], {
-                        'is_packed': true,
-                    });
                 },
 
                 markAsPacked: function () {
@@ -310,12 +291,7 @@
                     })
                         .catch((error) => {
                             let errorMsg = 'Error'+error.response.message;
-
-                            // if (error.response.status === 404) {
-                            //     errorMsg = `Order #${orderNumber} not found.`;
-                            // }
-
-                            this.notificationError(errorMsg);
+                            this.notifyError(errorMsg);
                         });
                 },
 
@@ -344,12 +320,11 @@
                     })
                         .then(({data}) => {
                             this.addToLists(data.data);
-                            this.beep();
+                            this.notifySuccess('ha');
                         })
                         .catch((error) => {
                             this.addToLists(orderProduct);
-                            this.$snotify.error('Error occurred when saving quantity shipped')
-                            this.errorBeep();
+                            this.notifyError('Error occurred when saving quantity shipped');
                         });
                 },
 
@@ -403,36 +378,33 @@
                         return;
                     }
 
-                    this.notificationError(`"${barcode}" not found on packlist!`);
+                    this.notifyError(`"${barcode}" not found on packlist!`);
                 },
 
-                onConfigChange: function(config) {
-                },
-
-                getValueOrDefault: function (value, defaultValue){
-                    return (value === undefined) || (value === null) ? defaultValue : value;
-                },
-
-                printAddressLabel: function() {
+                printLabel: function(template) {
                     let orderNumber = this.order['order_number'];
 
                     this.$refs.filtersModal.hide();
 
-                    axios.put(`/api/print/order/${orderNumber}/address_label`)
-                        .then(() => {
-                            this.$snotify.success('Address label printed', {
-                                timeout: 1000,
-                                icon: false,
-                            });
-                        }).catch((error) => {
-                        let errorMsg = 'Error occurred when printing label';
+                    axios.put(`/api/print/order/${orderNumber}/${template}`)
+                        .catch((error) => {
+                            let errorMsg = 'Error occurred when printing label';
 
-                        if (error.response.status === 404) {
-                            errorMsg = `Order #${orderNumber} not found.`;
-                        }
+                            if (error.response.status === 404) {
+                                errorMsg = `Order #${orderNumber} not found.`;
+                            }
 
-                        this.notificationError(errorMsg);
-                    });
+                            this.notifyError(errorMsg);
+                        });
+                },
+
+
+                printAddressLabel: function() {
+                    this.printLabel('address_label');
+                },
+
+                printDpdLabel: function() {
+                    this.printLabel('dpd_label');
                 }
             },
 
