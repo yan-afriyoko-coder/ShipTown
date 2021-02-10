@@ -7,12 +7,9 @@ use App\Http\Requests\PrintDpdLabelStoreRequest;
 use App\Http\Resources\PreAdviceResource;
 use App\Models\Order;
 use App\Modules\DpdIreland\Dpd;
-use App\Modules\DpdIreland\src\Consignment;
 use App\Modules\DpdIreland\src\Exceptions\ConsignmentValidationException;
-use Exception;
+use App\Modules\DpdIreland\src\Responses\PreAdvice;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Class PrintDpdLabelController
@@ -29,27 +26,8 @@ class PrintDpdLabelController extends Controller
     {
         try {
             $order = Order::whereOrderNumber($order_number)->firstOrFail();
-            $shipping_address = $order->shippingAddress()->first();
 
-            $consignment = new Consignment([
-                'RecordID' => $order->order_number,
-                'DeliveryAddress' => [
-                    'Contact' => $shipping_address->full_name,
-                    'ContactTelephone' => $shipping_address->phone,
-                    'ContactEmail' => '',
-                    'AddressLine1' => $shipping_address->address1,
-                    'AddressLine2' => $shipping_address->address2,
-                    'AddressLine3' => $shipping_address->city,
-                    'AddressLine4' => $shipping_address->state_name ?: $shipping_address->city,
-                    'CountryCode' => $shipping_address->country_code,
-                ]
-            ]);
-
-            $preAdvice = Dpd::getPreAdvice($consignment);
-
-            if ($preAdvice->isNotSuccess()) {
-                $this->respondBadRequest($preAdvice->consignment()['RecordErrorDetails']);
-            }
+            $preAdvice = $this->createPreAdviceOrFail($order);
 
             return PreAdviceResource::collection(collect([0 => $preAdvice->toArray()]));
 
@@ -58,5 +36,21 @@ class PrintDpdLabelController extends Controller
         }
 
         return $this->respondOK200();
+    }
+
+    /**
+     * @param Order $order
+     * @return PreAdvice
+     * @throws ConsignmentValidationException
+     */
+    private function createPreAdviceOrFail(Order $order): PreAdvice
+    {
+        $preAdvice = Dpd::shipOrder($order);
+
+        if ($preAdvice->isNotSuccess()) {
+            $this->respondBadRequest($preAdvice->consignment()['RecordErrorDetails']);
+        }
+
+        return $preAdvice;
     }
 }
