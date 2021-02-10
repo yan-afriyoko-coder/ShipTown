@@ -10,6 +10,14 @@ class PrintService
 {
     private $request;
 
+    /**
+     * @return PrintService
+     */
+    public static function print(): PrintService
+    {
+        return app(PrintService::class);
+    }
+
     public function __construct(Request $request)
     {
         $this->request = $request;
@@ -40,6 +48,11 @@ class PrintService
         }
 
         return $this->newPrintJob($printerId, $title, base64_encode($content));
+    }
+
+    public function printPdfFromUrl($printerId, $title, $url): Response
+    {
+        return $this->newPrintJob($printerId, $title, $url, 'pdf_uri');
     }
 
     /**

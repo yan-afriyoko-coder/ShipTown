@@ -407,8 +407,8 @@
                     this.printLabel('dpd_label')
                         .then(({data}) => {
                             const preAdvice = data.data[0];
-                            console.log(preAdvice);
-                            window.open(preAdvice['Consignment']['LabelImage'])
+                            // console.log(preAdvice);
+                            // window.open(preAdvice['Consignment']['LabelImage'])
                         });
                 }
             },
