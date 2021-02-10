@@ -51,6 +51,10 @@ Route::middleware('auth')->group(function () {
     Route::get('csv/products/picked', 'Csv\ProductsPickedInWarehouse@index')->name('warehouse_picks.csv');
     Route::get('csv/products/shipped', 'Csv\ProductsShippedFromWarehouseController@index')->name('warehouse_shipped.csv');
 
+    Route::get('/test_dpd', function () {
+        \App\Jobs\DpdIntegrationTestJob::dispatch();
+    });
+
     // Admin only routes
     Route::middleware('role:admin')->group(function () {
         Route::view('users', 'users')->name('users');

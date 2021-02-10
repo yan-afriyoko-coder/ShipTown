@@ -10,7 +10,7 @@ use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;
 
 $factory->define(Order::class, function (Faker $faker) {
-    $shippingAddress = factory(OrderAddress::class)->create();
+    $shippingAddress = OrderAddress::query()->inRandomOrder()->first() ?? factory(OrderAddress::class)->create();
 
     $newOrder = [
         'order_number' => (string)(10000000 + $faker->unique()->randomNumber(7)),
