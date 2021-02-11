@@ -12,26 +12,21 @@
                 <table class="table">
                     <tbody>
                         <tr>
-                            <td>Shipping Label</td>
+                            <td>Automatically Print Label</td>
                             <td class="text-right">
-                                <select class="w-100">
-                                    <option value="">Automatically print address label</option>
+                                <select class="w-100" @change="updateUsersAddressLabelTemplate" v-model="selected_address_label_template">
+                                    <option value=""></option>
+                                    <option value="address_label">address_label</option>
+                                    <option value="dpd_label">dpd_label</option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
-                            <td>Shipping Number</td>
+                            <td>Ask to scan shipping number</td>
                             <td class="text-right">
                                 <select class="w-100">
-                                    <option value="">Ask for shipping number</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Label Template</td>
-                            <td class="text-right">
-                                <select class="w-100">
-                                    <option value="">Generic Address Label</option>
+                                    <option value="">Yes</option>
+                                    <option value="">No</option>
                                 </select>
                             </td>
                         </tr>
@@ -43,38 +38,28 @@
 </template>
 
 <script>
+import api from "../../mixins/api";
+
 export default {
+    mixins: [api],
+
     created() {
-        axios.get('/api/settings/user/me')
+        this.apiGetUserMe()
             .then(({ data }) => {
-                this.defaultPrinter = data.data.printer_id;
-                axios.get('/api/settings/modules/printnode/printers')
-                    .then(({ data }) => {
-                        this.printers = data.data;
-                    }).catch(e => {
-                        this.error = true;
-                    });
+                this.selected_address_label_template = data.data.address_label_template;
             });
     },
 
     data: () => ({
-        defaultPrinter: null,
-        printers: [],
+        selected_address_label_template: "",
         error: false,
     }),
 
     methods: {
-        setDefault(printerId) {
-            axios.post('/api/settings/user/me', {
-                    'printer_id': printerId
-                })
-                .then(({ data }) => {
-                    this.defaultPrinter = data.printer_id;
-                });
-        },
-
-        isDefaultPrinter(printerId) {
-            return printerId === this.defaultPrinter && this.defaultPrinter != null;
+        updateUsersAddressLabelTemplate() {
+            this.apiPostUserMe({
+                'address_label_template': this.selected_address_label_template
+            });
         }
     }
 }

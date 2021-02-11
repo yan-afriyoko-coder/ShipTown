@@ -72,8 +72,8 @@
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('fabrics')">fabrics</button>
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('ready')">ready</button>
                 <button type="button" class="btn btn-info" @click.prevent="displayShippingNumberModal">Add Shipping Number</button>
-                <button type="button" class="btn btn-info" @click.prevent="printAddressLabel">Print Address Label</button>
-                <button type="button" class="btn btn-info" @click.prevent="getDpdLabel">Get DPD Label</button>
+                <button type="button" class="btn btn-info" @click.prevent="printLabel('address_label')">Print Address Label</button>
+                <button type="button" class="btn btn-info" @click.prevent="printLabel('dpd_label')">Print DPD Label</button>
             </template>
         </filters-modal>
 
@@ -145,7 +145,9 @@
                     if(this.packlist && this.packlist.length === 0) {
                         this.order['is_packed'] = true;
                         this.markAsPacked();
-                        this.printAddressLabel();
+                        if(this.user.address_label_template) {
+                            this.printLabel(this.user.address_label_template);
+                        }
                         this.displayShippingNumberModal();
                     }
                 }
@@ -397,20 +399,6 @@
                             this.notifyError(errorMsg);
                         });
                 },
-
-
-                printAddressLabel: function() {
-                    this.printLabel('address_label');
-                },
-
-                getDpdLabel: function() {
-                    this.printLabel('dpd_label')
-                        .then(({data}) => {
-                            const preAdvice = data.data[0];
-                            // console.log(preAdvice);
-                            // window.open(preAdvice['Consignment']['LabelImage'])
-                        });
-                }
             },
 
             computed: {

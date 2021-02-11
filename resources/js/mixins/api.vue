@@ -41,6 +41,10 @@ export default {
 
             apiGetOrderActivities: function (params) {
                 return axios.get('/api/logs', {params: params});
+            },
+
+            apiPostUserMe: function (data) {
+                return axios.post('/api/settings/user/me', data);
             }
         }
     }

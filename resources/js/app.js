@@ -92,7 +92,8 @@ Vue.component('printnode-configuration', require('./components/Settings/PrintNod
 Vue.component('printer-configuration', require('./components/Settings/PrintersConfiguration.vue').default);
 Vue.component('user-courier-integration-select', require('./components/Settings/UsersCourierIntegrationSelect.vue').default);
 Vue.component('picks-table', require('./components/PicklistPage.vue').default);
-Vue.component('settings-page', require('./components/SettingsPage.vue').default);
+Vue.component('auto-pilot-tuning-section', require('./components/Settings/AutoPilotTuningSection.vue').default);
+Vue.component('maintenance-section', require('./components/Settings/MaintenanceSection.vue').default);
 Vue.component('api', require('./mixins/api').default);
 
 /**

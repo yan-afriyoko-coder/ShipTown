@@ -12,8 +12,11 @@
                         </div>
                     @endif
 
-                    <settings-page></settings-page>
+                    <printer-configuration></printer-configuration>
+                    <user-courier-integration-select></user-courier-integration-select>
                     @role('admin')
+                        <maintenance-section></maintenance-section>
+                        <auto-pilot-tuning-section></auto-pilot-tuning-section>
                         <passport-clients></passport-clients>
                         <passport-authorized-clients></passport-authorized-clients>
                         <passport-personal-access-tokens></passport-personal-access-tokens>
@@ -21,8 +24,6 @@
                         <rmsapi-configuration></rmsapi-configuration>
                         <printnode-configuration></printnode-configuration>
                     @endrole
-                    <printer-configuration></printer-configuration>
-                    <user-courier-integration-select></user-courier-integration-select>
     </div>
 </div>
 @endsection
