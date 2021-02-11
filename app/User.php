@@ -27,6 +27,7 @@ use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
  *
  * @property int $id
  * @property int|null $printer_id
+ * @property string $address_label_template
  * @property string $name
  * @property string $email
  * @property Carbon|null $email_verified_at
@@ -77,7 +78,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','printer_id'
+        'name', 'email', 'password','printer_id','address_label_template'
     ];
 
     /**

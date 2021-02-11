@@ -21,6 +21,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'role_id' => $role ? $role->getKey() : null,
             'printer_id' => $this->printer_id,
+            'address_label_template' => $this->address_label_template,
         ];
     }
 }
