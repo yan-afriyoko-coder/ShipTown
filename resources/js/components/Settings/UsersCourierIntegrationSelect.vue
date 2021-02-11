@@ -24,9 +24,9 @@
                         <tr>
                             <td>Ask to scan shipping number</td>
                             <td class="text-right">
-                                <select class="w-100">
-                                    <option value="">Yes</option>
-                                    <option value="">No</option>
+                                <select class="w-100" @change="saveAskForShippingNumberValue" v-model="selected_ask_for_shipping_number">
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
                                 </select>
                             </td>
                         </tr>
@@ -47,11 +47,13 @@ export default {
         this.apiGetUserMe()
             .then(({ data }) => {
                 this.selected_address_label_template = data.data.address_label_template;
+                this.selected_ask_for_shipping_number = data.data.ask_for_shipping_number === 'true';
             });
     },
 
     data: () => ({
         selected_address_label_template: "",
+        selected_ask_for_shipping_number: false,
         error: false,
     }),
 
@@ -59,6 +61,12 @@ export default {
         updateUsersAddressLabelTemplate() {
             this.apiPostUserMe({
                 'address_label_template': this.selected_address_label_template
+            });
+        },
+
+        saveAskForShippingNumberValue() {
+            this.apiPostUserMe({
+                'ask_for_shipping_number': this.selected_ask_for_shipping_number
             });
         }
     }

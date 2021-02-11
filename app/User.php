@@ -78,7 +78,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','printer_id','address_label_template'
+        'name', 'email', 'password','printer_id','address_label_template','ask_for_shipping_number'
     ];
 
     /**
@@ -97,6 +97,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'ask_for_shipping_number' => 'bool',
     ];
 
     /**

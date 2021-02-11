@@ -22,6 +22,7 @@ class UserResource extends JsonResource
             'role_id' => $role ? $role->getKey() : null,
             'printer_id' => $this->printer_id,
             'address_label_template' => $this->address_label_template,
+            'ask_for_shipping_number' => $this->ask_for_shipping_number,
         ];
     }
 }
