@@ -108,7 +108,7 @@ class SyncProductJob implements ShouldQueue
             'location_id' => $location_id
         ];
 
-        $productPrice = ProductPrice::query()->where($attributes)->first();
+        $productPrice = ProductPrice::query()->firstOrCreate($attributes);
 
         if($productPrice) {
             return [
