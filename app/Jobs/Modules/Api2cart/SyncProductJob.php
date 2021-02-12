@@ -196,11 +196,16 @@ class SyncProductJob implements ShouldQueue
      */
     private function getProductData(Product $product, $connection): array
     {
-        return array_merge(
-            $this->getBasicData($product),
-            $this->getPricingData($product, $connection->pricing_location_id),
-            $this->getInventoryData($product, $connection->inventory_location_id),
-            $this->getMagentoStoreId($connection)
-        );
+        $product_data = collect();
+
+        $product_data->add($this->getBasicData($product));
+        $product_data->add($this->getMagentoStoreId($connection));
+        $product_data->add($this->getInventoryData($product, $connection->inventory_location_id));
+
+        if (isset($connection->pricing_location_id)) {
+            $product_data->add($this->getPricingData($product, $connection->pricing_location_id));
+        }
+
+        return $product_data->flatten()->toArray();
     }
 }
