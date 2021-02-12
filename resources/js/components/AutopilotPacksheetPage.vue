@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="order">
         <div class="row" v-if="showMultipackerWarning" >
             <div class="col">
                 <div class="alert alert-danger" role="alert">
@@ -124,15 +124,22 @@
 
             mounted() {
                 this.loadUser();
-                this.loadOrder(this.order_number);
+                if (this.order_number) {
+                    this.loadOrder(this.order_number);
+                }
             },
 
             watch: {
+                order_number() {
+                    this.loadOrder(this.order_number);
+                },
+
                 order() {
                     if(this.order) {
                         this.loadProducts();
                     }
                 },
+
                 packlist() {
                     if(this.order === null) {
                         return;

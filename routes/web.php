@@ -37,6 +37,9 @@ Route::middleware('auth')->group(function () {
     Route::view('picklist', 'picklist')->name('picklist');
     Route::view('orders', 'orders')->name('orders');
     Route::view('order/packsheet', 'packsheet')->name('order.packsheet');
+
+    Route::view('autopilot/packlist', 'bluelagoon');
+
     Route::resource('order/packsheet', 'Order\PacksheetController')->only(['show']);
     Route::view('reports/picks', 'reports/picks_report')->name('reports.picks');
     Route::get('reports/shipments', 'Reports\ShipmentController@index')->name('reports.shipments');

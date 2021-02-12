@@ -75,6 +75,12 @@ Vue.component("tippy", TippyComponent);
 Vue.component('passport-clients', require('./components/Settings/OauthClients.vue').default);
 Vue.component('passport-authorized-clients', require('./components/Settings/AuthorizedClients.vue').default);
 Vue.component('passport-personal-access-tokens', require('./components/Settings/PersonalAccessTokens.vue').default);
+
+Vue.component('autopilot-packlist-page', require('./components/AutopilotPacklistPage.vue').default);
+
+
+
+
 Vue.component('create-topic', require('./components/misc/CreateTopic.vue').default);
 Vue.component('subscribe-topic', require('./components/misc/SubscribeTopic.vue').default);
 Vue.component('missing-table', require('./components/misc/Missing.vue').default);
