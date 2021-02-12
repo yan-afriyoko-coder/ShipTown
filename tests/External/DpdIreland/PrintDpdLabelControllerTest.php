@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api;
+namespace Tests\External\DpdIreland;
 
 use App\Models\Order;
 use App\Models\OrderAddress;
@@ -20,7 +20,10 @@ class PrintDpdLabelControllerTest extends TestCase
      */
     public function store_returns_an_ok_response()
     {
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->create([
+            'address_label_template' => 'dpd_label'
+        ]);
+
         $address = factory(OrderAddress::class)->create([
             'company' => 'test',
             'address1' => 'test',
