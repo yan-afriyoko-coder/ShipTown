@@ -8,9 +8,11 @@ use App\Http\Resources\PreAdviceResource;
 use App\Models\Order;
 use App\Modules\DpdIreland\Dpd;
 use App\Modules\DpdIreland\src\Exceptions\ConsignmentValidationException;
+use App\Modules\DpdIreland\src\Exceptions\PreAdviceRequestException;
 use App\Modules\DpdIreland\src\Responses\PreAdvice;
 use App\Services\PrintService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use function request;
 
 /**
  * Class PrintDpdLabelController
@@ -46,11 +48,11 @@ class PrintDpdLabelController extends Controller
     /**
      * @param Order $order
      * @return PreAdvice
-     * @throws ConsignmentValidationException
+     * @throws ConsignmentValidationException|PreAdviceRequestException
      */
     private function createPreAdviceOrFail(Order $order): PreAdvice
     {
-        $preAdvice = Dpd::shipOrder($order);
+        $preAdvice = Dpd::shipOrder($order, request()->user());
 
         if ($preAdvice->isNotSuccess()) {
             $this->respondBadRequest($preAdvice->consignment()['RecordErrorDetails']);
