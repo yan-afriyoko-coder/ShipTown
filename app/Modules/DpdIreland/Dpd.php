@@ -9,6 +9,7 @@ use App\Modules\DpdIreland\src\Client;
 use App\Modules\DpdIreland\src\Consignment;
 use App\Modules\DpdIreland\src\Exceptions\PreAdviceRequestException;
 use App\Modules\DpdIreland\src\Responses\PreAdvice;
+use App\User;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
@@ -20,12 +21,13 @@ class Dpd
 {
     /**
      * @param Order $order
+     * @param User|null $user
      * @return PreAdvice
-     * @throws src\Exceptions\ConsignmentValidationException
      * @throws PreAdviceRequestException
+     * @throws src\Exceptions\ConsignmentValidationException
      * @throws Exception
      */
-    public static function shipOrder(Order $order): PreAdvice
+    public static function shipOrder(Order $order, User $user = null): PreAdvice
     {
         $shipping_address = $order->shippingAddress()->first();
 
@@ -36,8 +38,11 @@ class Dpd
 
         $preAdvice = self::getPreAdvice($consignment);
 
-        retry(15, function () use ($order, $preAdvice){
-            $order->orderShipments()->create(['shipping_number' => $preAdvice->trackingNumber()]);
+        retry(15, function () use ($order, $preAdvice, $user){
+            $order->orderShipments()->create([
+                'user_id' => $user ? $user->getKey() : null,
+                'shipping_number' => $preAdvice->trackingNumber(),
+            ]);
         }, 150);
 
         return $preAdvice;
