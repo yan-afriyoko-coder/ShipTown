@@ -178,12 +178,8 @@ class SyncProductJob implements ShouldQueue
      */
     private function getMagentoStoreId($connection): array
     {
-        if(empty($connection->magento_store_id)) {
-            Log::warning('Magento store id not specified!', $connection->getAttributes());
-        }
-
         return [
-            'store_id' => $connection->magento_store_id
+            'store_id' => $connection->magento_store_id ?? 0
         ];
 
     }
@@ -201,6 +197,9 @@ class SyncProductJob implements ShouldQueue
         $product_data = $product_data->merge($this->getMagentoStoreId($connection));
         $product_data = $product_data->merge($this->getInventoryData($product, $connection->inventory_location_id));
 
+        if (isset($connection->pricing_location_id)) {
+            $product_data = $product_data->merge($this->getMagentoStoreId($connection));
+        }
         if (isset($connection->pricing_location_id)) {
             $product_data = $product_data->merge($this->getPricingData($product, $connection->pricing_location_id));
         }
