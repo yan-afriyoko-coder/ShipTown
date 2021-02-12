@@ -205,6 +205,6 @@ class SyncProductJob implements ShouldQueue
             $product_data = $product_data->merge($this->getPricingData($product, $connection->pricing_location_id));
         }
 
-        return $product_data->flatten()->toArray();
+        return $product_data->toArray();
     }
 }
