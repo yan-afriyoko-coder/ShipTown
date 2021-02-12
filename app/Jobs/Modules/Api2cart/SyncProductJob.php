@@ -8,7 +8,6 @@ use App\Models\Product;
 use App\Models\ProductPrice;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Products;
-use Cache;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -16,8 +15,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use function Clue\StreamFilter\fun;
 
 class SyncProductJob implements ShouldQueue
 {
@@ -198,14 +197,14 @@ class SyncProductJob implements ShouldQueue
     {
         $product_data = collect();
 
-        $product_data->add($this->getBasicData($product));
-        $product_data->add($this->getMagentoStoreId($connection));
-        $product_data->add($this->getInventoryData($product, $connection->inventory_location_id));
+        $product_data = $product_data->merge($this->getBasicData($product));
+        $product_data = $product_data->merge($this->getMagentoStoreId($connection));
+        $product_data = $product_data->merge($this->getInventoryData($product, $connection->inventory_location_id));
 
         if (isset($connection->pricing_location_id)) {
-            $product_data->add($this->getPricingData($product, $connection->pricing_location_id));
+            $product_data = $product_data->merge($this->getPricingData($product, $connection->pricing_location_id));
         }
 
-        return $product_data->flatten()->toArray();
+        return $product_data->toArray();
     }
 }
