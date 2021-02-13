@@ -223,10 +223,9 @@
                 },
 
                 completeOrder: function () {
-                    this.markAsPacked();
                     this.printLabelIfNeeded();
                     this.askForShippingNumberIfNeeded();
-                    this.$emit('orderCompleted');
+                    this.markAsPacked();
                 },
 
                 shipPartialSwiped(orderProduct) {
@@ -303,8 +302,11 @@
                     this.order['is_packed'] = true;
 
                     return  axios.put('/api/orders/' + this.order['id'], {
-                        'is_packed': true,
-                    })
+                            'is_packed': true,
+                        })
+                        .then(() => {
+                            this.$emit('orderCompleted');
+                        })
                         .catch((error) => {
                             let errorMsg = 'Error'+error.response.message;
                             this.notifyError(errorMsg);
@@ -336,7 +338,6 @@
                     })
                         .then(({data}) => {
                             this.addToLists(data.data);
-                            this.notifySuccess('ha');
                         })
                         .catch((error) => {
                             this.addToLists(orderProduct);
