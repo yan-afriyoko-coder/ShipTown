@@ -6,59 +6,46 @@
             </button>
         </div>
 
-        <autopilot-packsheet-page v-if="order_number" :order_number="order_number"></autopilot-packsheet-page>
+        <autopilot-packsheet-page v-if="order_number" :order_number="order_number" @orderCompleted="loadNextOrder"></autopilot-packsheet-page>
     </div>
 </template>
 
-    <script>
-
+<script>
     import url from "../mixins/url";
 
     export default {
-            mixins: [url],
+        mixins: [url],
 
-            components: {},
+        data: function() {
+            return {
+                order_number: null,
+            };
+        },
 
-            props: {},
-
-            data: function() {
-                return {
-                    order_number: null,
+        methods: {
+            loadNextOrder() {
+                let params = {
+                    'filter[status]': this.getUrlParameter('status','picking'),
+                    'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id'),
+                    'sort': this.getUrlParameter('sort', 'order_placed_at'),
                 };
+
+                axios.get('/api/packlist/order', {params: params})
+                    .then(({data}) => {
+                        this.order_number = data.data['order_number'];
+                    })
+                    .catch((error) => {
+                        let msg = 'Error occurred loading order';
+                        if (error.response.status === 404) {
+                            msg = "No orders available with specified filters"
+                        }
+                        this.$snotify.error(msg);
+                        this.errorBeep();
+                    })
             },
-
-            mounted() {},
-
-            watch: {},
-
-            methods: {
-                loadNextOrder() {
-                    let params = {
-                            'filter[status]': this.getUrlParameter('status','picking'),
-                            'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id'),
-                            'sort': this.getUrlParameter('sort', 'order_placed_at'),
-                        };
-
-                    axios.get('/api/packlist/order', {params: params})
-                        .then(({data}) => {
-                            this.order_number = data.data['order_number'];
-                        })
-                        .catch((error) => {
-                            let msg = 'Error occurred loading order';
-                            if (error.response.status === 404) {
-                                msg = "No orders available with specified filters"
-                            }
-                            this.$snotify.error(msg);
-                            this.errorBeep();
-                        })
-                },
-
-
-            },
-
-            computed: {}
-        }
-    </script>
+        },
+    }
+</script>
 
 
 <style lang="scss">
