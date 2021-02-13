@@ -11,6 +11,7 @@ use App\Modules\DpdIreland\src\Exceptions\ConsignmentValidationException;
 use App\Modules\DpdIreland\src\Exceptions\PreAdviceRequestException;
 use App\Modules\DpdIreland\src\Responses\PreAdvice;
 use App\Services\PrintService;
+use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use function request;
 
@@ -24,6 +25,7 @@ class PrintDpdLabelController extends Controller
      * @param PrintDpdLabelStoreRequest $request
      * @param string $order_number
      * @return AnonymousResourceCollection
+     * @throws PreAdviceRequestException
      */
     public function store(PrintDpdLabelStoreRequest $request, string $order_number): AnonymousResourceCollection
     {
@@ -48,14 +50,22 @@ class PrintDpdLabelController extends Controller
     /**
      * @param Order $order
      * @return PreAdvice
-     * @throws ConsignmentValidationException|PreAdviceRequestException
      */
     private function createPreAdviceOrFail(Order $order): PreAdvice
     {
-        $preAdvice = Dpd::shipOrder($order, request()->user());
+        $preAdvice = null;
 
-        if ($preAdvice->isNotSuccess()) {
-            $this->respondBadRequest($preAdvice->consignment()['RecordErrorDetails']);
+        try {
+            $preAdvice = Dpd::shipOrder($order, request()->user());
+
+            if ($preAdvice->isNotSuccess()) {
+                $this->respondBadRequest($preAdvice->consignment()['RecordErrorDetails']);
+            }
+
+        } catch (Exception $exception) {
+            $this->respondBadRequest(
+                $preAdvice ? $preAdvice->consignment()['RecordErrorDetails'] : ''
+            );
         }
 
         return $preAdvice;
