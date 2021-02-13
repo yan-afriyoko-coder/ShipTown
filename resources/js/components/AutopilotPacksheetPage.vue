@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="order">
         <div class="row" v-if="showMultipackerWarning" >
             <div class="col">
                 <div class="alert alert-danger" role="alert">
@@ -71,9 +71,9 @@
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('packing_warehouse')">packing_warehouse</button>
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('fabrics')">fabrics</button>
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('ready')">ready</button>
-                <button type="button" class="btn btn-info" @click.prevent="askForShippingNumber">Add Shipping Number</button>
-                <button type="button" class="btn btn-info" @click.prevent="printLabel('address_label')">Print Address Label</button>
-                <button type="button" class="btn btn-info" @click.prevent="printLabel('dpd_label')">Print DPD Label</button>
+                <button type="button" class="btn btn-info" @click.prevent="askForShippingNumberIfNeeded">Add Shipping Number</button>
+                <button type="button" class="btn btn-info" @click.prevent="printLabelIfNeeded('address_label')">Print Address Label</button>
+                <button type="button" class="btn btn-info" @click.prevent="printLabelIfNeeded('dpd_label')">Print DPD Label</button>
             </template>
         </filters-modal>
 
@@ -124,15 +124,22 @@
 
             mounted() {
                 this.loadUser();
-                this.loadOrder(this.order_number);
+                if (this.order_number) {
+                    this.loadOrder(this.order_number);
+                }
             },
 
             watch: {
+                order_number() {
+                    this.loadOrder(this.order_number);
+                },
+
                 order() {
                     if(this.order) {
                         this.loadProducts();
                     }
                 },
+
                 packlist() {
                     if(this.order === null) {
                         return;
@@ -143,14 +150,7 @@
                     }
 
                     if(this.packlist && this.packlist.length === 0) {
-                        this.order['is_packed'] = true;
-                        this.markAsPacked();
-                        if(this.user.address_label_template) {
-                            this.printLabel(this.user.address_label_template);
-                        }
-                        if(this.user['ask_for_shipping_number'] === true) {
-                            this.askForShippingNumber();
-                        }
+                        this.completeOrder();
                     }
                 }
             },
@@ -222,6 +222,13 @@
                         });
                 },
 
+                completeOrder: function () {
+                    this.markAsPacked();
+                    this.printLabelIfNeeded();
+                    this.askForShippingNumberIfNeeded();
+                    this.$emit('orderCompleted');
+                },
+
                 shipPartialSwiped(orderProduct) {
                     this.$snotify.prompt('Partial shipment', {
                         placeholder: 'Enter quantity to ship:',
@@ -271,7 +278,10 @@
                         });
                 },
 
-                askForShippingNumber() {
+                askForShippingNumberIfNeeded() {
+                    if (this.user['ask_for_shipping_number'] !== true) {
+                        return;
+                    }
                     this.$refs.filtersModal.hide();
                     $('#shippingNumberModal').modal();
                 },
@@ -290,6 +300,8 @@
                 },
 
                 markAsPacked: function () {
+                    this.order['is_packed'] = true;
+
                     return  axios.put('/api/orders/' + this.order['id'], {
                         'is_packed': true,
                     })
@@ -385,7 +397,12 @@
                     this.notifyError(`"${barcode}" not found on packlist!`);
                 },
 
-                printLabel: function(template) {
+                printLabelIfNeeded: function() {
+                    if (!this.user.address_label_template) {
+                        return ;
+                    }
+
+                    let template = this.user.address_label_template;
                     let orderNumber = this.order['order_number'];
 
                     this.$refs.filtersModal.hide();
