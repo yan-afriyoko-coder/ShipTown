@@ -72,8 +72,8 @@
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('fabrics')">fabrics</button>
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('ready')">ready</button>
                 <button type="button" class="btn btn-info" @click.prevent="askForShippingNumberIfNeeded">Add Shipping Number</button>
-                <button type="button" class="btn btn-info" @click.prevent="printLabelIfNeeded('address_label')">Print Address Label</button>
-                <button type="button" class="btn btn-info" @click.prevent="printLabelIfNeeded('dpd_label')">Print DPD Label</button>
+                <button type="button" class="btn btn-info" @click.prevent="printLabel('address_label')">Print Address Label</button>
+                <button type="button" class="btn btn-info" @click.prevent="printLabel('dpd_label')">Print DPD Label</button>
             </template>
         </filters-modal>
 
@@ -81,21 +81,21 @@
 </template>
 
     <script>
-        import beep from '../mixins/beep';
-        import loadingOverlay from '../mixins/loading-overlay';
+    import beep from '../mixins/beep';
+    import loadingOverlay from '../mixins/loading-overlay';
 
-        import PacklistEntry from './Packlist/PacklistEntry';
-        import PackedEntry from './Packlist/PackedEntry';
+    import PacklistEntry from './Packlist/PacklistEntry';
+    import PackedEntry from './Packlist/PackedEntry';
 
-        import OrderDetails from "./Packlist/OrderDetails";
-        import BarcodeInputField from "./SharedComponents/BarcodeInputField";
-        import FiltersModal from "./Packlist/FiltersModal";
-        import url from "../mixins/url";
-        import SetShippingNumberModal from "./Packlist/ShippingNumberModal";
-        import api from "../mixins/api";
-        import helpers from "../mixins/helpers";
+    import OrderDetails from "./Packlist/OrderDetails";
+    import BarcodeInputField from "./SharedComponents/BarcodeInputField";
+    import FiltersModal from "./Packlist/FiltersModal";
+    import url from "../mixins/url";
+    import SetShippingNumberModal from "./Packlist/ShippingNumberModal";
+    import api from "../mixins/api";
+    import helpers from "../mixins/helpers";
 
-        export default {
+    export default {
             mixins: [loadingOverlay, beep, url, api, helpers],
 
             components: {
@@ -405,6 +405,11 @@
                     }
 
                     let template = this.user.address_label_template;
+
+                    this.printLabel(template);
+                },
+
+                printLabel: function(template) {
                     let orderNumber = this.order['order_number'];
 
                     this.$refs.filtersModal.hide();
