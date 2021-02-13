@@ -12,7 +12,7 @@
                 <table class="table">
                     <tbody>
                         <tr>
-                            <td>Automatically Print Label</td>
+                            <td>When last item scanned, Automatically Print:</td>
                             <td class="text-right">
                                 <select class="w-100" @change="updateUsersAddressLabelTemplate" v-model="selected_address_label_template">
                                     <option value=""></option>

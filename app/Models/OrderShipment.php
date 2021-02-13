@@ -42,6 +42,7 @@ class OrderShipment extends Model
      */
     protected $fillable = [
         'order_id',
+        'user_id',
         'shipping_number',
     ];
 

@@ -72,8 +72,8 @@
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('fabrics')">fabrics</button>
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('ready')">ready</button>
                 <button type="button" class="btn btn-info" @click.prevent="askForShippingNumberIfNeeded">Add Shipping Number</button>
-                <button type="button" class="btn btn-info" @click.prevent="printLabelIfNeeded('address_label')">Print Address Label</button>
-                <button type="button" class="btn btn-info" @click.prevent="printLabelIfNeeded('dpd_label')">Print DPD Label</button>
+                <button type="button" class="btn btn-info" @click.prevent="printLabel('address_label')">Print Address Label</button>
+                <button type="button" class="btn btn-info" @click.prevent="printLabel('dpd_label')">Print DPD Label</button>
             </template>
         </filters-modal>
 
@@ -81,21 +81,21 @@
 </template>
 
     <script>
-        import beep from '../mixins/beep';
-        import loadingOverlay from '../mixins/loading-overlay';
+    import beep from '../mixins/beep';
+    import loadingOverlay from '../mixins/loading-overlay';
 
-        import PacklistEntry from './Packlist/PacklistEntry';
-        import PackedEntry from './Packlist/PackedEntry';
+    import PacklistEntry from './Packlist/PacklistEntry';
+    import PackedEntry from './Packlist/PackedEntry';
 
-        import OrderDetails from "./Packlist/OrderDetails";
-        import BarcodeInputField from "./SharedComponents/BarcodeInputField";
-        import FiltersModal from "./Packlist/FiltersModal";
-        import url from "../mixins/url";
-        import SetShippingNumberModal from "./Packlist/ShippingNumberModal";
-        import api from "../mixins/api";
-        import helpers from "../mixins/helpers";
+    import OrderDetails from "./Packlist/OrderDetails";
+    import BarcodeInputField from "./SharedComponents/BarcodeInputField";
+    import FiltersModal from "./Packlist/FiltersModal";
+    import url from "../mixins/url";
+    import SetShippingNumberModal from "./Packlist/ShippingNumberModal";
+    import api from "../mixins/api";
+    import helpers from "../mixins/helpers";
 
-        export default {
+    export default {
             mixins: [loadingOverlay, beep, url, api, helpers],
 
             components: {
@@ -113,6 +113,8 @@
 
             data: function() {
                 return {
+                    canClose: true,
+                    isPrintingLabel: false,
                     user: null,
                     order: null,
                     packlist: null,
@@ -166,6 +168,7 @@
                 loadOrder: function (orderNumber) {
                     this.showLoading();
 
+                    this.canClose = true;
                     this.order = null;
                     this.packlist = [];
                     this.packed = [];
@@ -225,8 +228,15 @@
                 completeOrder: function () {
                     this.markAsPacked();
                     this.printLabelIfNeeded();
-                    this.askForShippingNumberIfNeeded();
-                    this.$emit('orderCompleted');
+
+                    if (this.user['ask_for_shipping_number'] === true) {
+                        this.askForShippingNumberIfNeeded();
+                        return;
+                    }
+
+                    if(this.order['is_packed'] && this.canClose) {
+                        this.$emit('orderCompleted')
+                    }
                 },
 
                 shipPartialSwiped(orderProduct) {
@@ -292,6 +302,9 @@
                         'shipping_number': shipping_number,
                     })
                         .then(() => {
+                            if(this.order['is_packed']) {
+                                this.$emit('orderCompleted')
+                            }
                             this.notifySuccess('Shipping number saved');
                         })
                         .catch( error => {
@@ -299,12 +312,12 @@
                         })
                 },
 
-                markAsPacked: function () {
+                markAsPacked: async function () {
                     this.order['is_packed'] = true;
 
-                    return  axios.put('/api/orders/' + this.order['id'], {
-                        'is_packed': true,
-                    })
+                    return axios.put('/api/orders/' + this.order['id'], {
+                            'is_packed': true,
+                        })
                         .catch((error) => {
                             let errorMsg = 'Error'+error.response.message;
                             this.notifyError(errorMsg);
@@ -336,7 +349,7 @@
                     })
                         .then(({data}) => {
                             this.addToLists(data.data);
-                            this.notifySuccess('ha');
+                            this.notifySuccess();
                         })
                         .catch((error) => {
                             this.addToLists(orderProduct);
@@ -397,18 +410,24 @@
                     this.notifyError(`"${barcode}" not found on packlist!`);
                 },
 
-                printLabelIfNeeded: function() {
+                printLabelIfNeeded: async function() {
                     if (!this.user.address_label_template) {
                         return ;
                     }
 
                     let template = this.user.address_label_template;
+
+                    return await this.printLabel(template);
+                },
+
+                printLabel: async function(template) {
                     let orderNumber = this.order['order_number'];
 
                     this.$refs.filtersModal.hide();
 
                     return axios.put(`/api/print/order/${orderNumber}/${template}`)
                         .catch((error) => {
+                            this.canClose = false;
                             let errorMsg = 'Error occurred when printing label';
 
                             if (error.response.status === 404) {
