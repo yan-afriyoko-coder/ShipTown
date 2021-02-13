@@ -338,6 +338,7 @@
                     })
                         .then(({data}) => {
                             this.addToLists(data.data);
+                            this.notifySuccess();
                         })
                         .catch((error) => {
                             this.addToLists(orderProduct);
