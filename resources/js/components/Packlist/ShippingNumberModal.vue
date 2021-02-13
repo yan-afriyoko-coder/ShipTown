@@ -31,8 +31,11 @@
 <script>
 
 import VueObserveVisibilityPlugin from 'vue-observe-visibility';
+import helpers from "../../mixins/helpers";
 
 export default {
+    mixins: [helpers],
+
     name: "SetShippingNumberModal",
 
     data: function() {
@@ -62,13 +65,19 @@ export default {
         },
 
         setShippingNumber() {
+            if (!this.shipping_number) {
+                this.notifyError('Shipping number missing');
+                this.focusOnInput();
+                return;
+            }
+
             this.hide();
             this.$emit('shippingNumberUpdated', this.shipping_number);
             this.shipping_number = '';
         },
 
         simulateSelectAll() {
-            setTimeout(() => { document.execCommand('selectall', null, false); });
+            setTimeout(() => { document.execCommand('selectall', null, false); }, 100);
         },
 
         hide() {
