@@ -2,20 +2,24 @@
     <div class="col" v-if="order">
         <div class="row">
             <div class="col-3">
-                <label>Order #: </label>
-                <b>{{ order['order_number'] }}</b>
+              <label>Order #: </label>
+              <br>
+              <b>{{ order['order_number'] }}</b>
             </div>
             <div class="col-3">
-                <label>Date:</label>
-                <b>{{ formatDateMMMDD(order['order_placed_at']) }}</b>
+              <label>Date:</label>
+              <br>
+              <b>{{ formatDateMMMDD(order['order_placed_at']) }}</b>
             </div>
             <div class="col-3">
-                <label>Lines #:</label>
-                <b>{{ order['product_line_count'] }}</b>
+              <label>Lines #:</label>
+              <br>
+              <b>{{ order['product_line_count'] }}</b>
             </div>
             <div class="col-3">
-                <label>Quantity #:</label>
-                <b>{{ order['total_quantity_ordered'] }}</b>
+              <label>Quantity #:</label>
+              <br>
+              <b>{{ order['total_quantity_ordered'] }}</b>
             </div>
         </div>
     </div>
