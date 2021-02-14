@@ -427,11 +427,20 @@
 
                     return axios.put(`/api/print/order/${orderNumber}/${template}`)
                         .catch((error) => {
+
                             this.canClose = false;
                             let errorMsg = 'Error occurred when printing label';
 
+                            if (error.response.status === 400) {
+                                errorMsg = 'Error occurred: ' + error.response.data.message;
+                            }
+
+                            if (error.response.status === 403) {
+                                errorMsg = 'Error occurred: ' + error.response.data.message;
+                            }
+
                             if (error.response.status === 404) {
-                                errorMsg = `Order #${orderNumber} not found.`;
+                                errorMsg = 'Order not found: #' + orderNumber;
                             }
 
                             this.notifyError(errorMsg);

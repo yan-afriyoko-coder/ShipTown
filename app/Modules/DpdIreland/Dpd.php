@@ -7,9 +7,11 @@ use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Modules\DpdIreland\src\Client;
 use App\Modules\DpdIreland\src\Consignment;
+use App\Modules\DpdIreland\src\Exceptions\AuthorizationException;
 use App\Modules\DpdIreland\src\Exceptions\PreAdviceRequestException;
 use App\Modules\DpdIreland\src\Responses\PreAdvice;
 use App\User;
+use Composer\Cache;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
@@ -19,6 +21,8 @@ use Illuminate\Support\Facades\Log;
  */
 class Dpd
 {
+    const NOT_AUTH = 'NOT_AUTH';
+
     /**
      * @param Order $order
      * @param User|null $user
@@ -26,6 +30,7 @@ class Dpd
      * @throws PreAdviceRequestException
      * @throws src\Exceptions\ConsignmentValidationException
      * @throws Exception
+     * @throws AuthorizationException
      */
     public static function shipOrder(Order $order, User $user = null): PreAdvice
     {
@@ -52,6 +57,7 @@ class Dpd
      * @param Consignment $consignment
      * @return PreAdvice
      * @throws PreAdviceRequestException
+     * @throws AuthorizationException
      */
     public static function getPreAdvice(Consignment $consignment): PreAdvice
     {
@@ -64,7 +70,13 @@ class Dpd
                 'xml_received' => $preAdvice->toString(),
                 'xml_sent' => $consignment->toString(),
             ]);
-            throw new PreAdviceRequestException();
+
+            if ($preAdvice->getPreAdviceErrorCode() === self::NOT_AUTH) {
+                Client::clearCache();
+                throw new AuthorizationException($preAdvice->getPreAdviceErrorDetails());
+            } else {
+                throw new PreAdviceRequestException($preAdvice->consignment()['RecordErrorDetails']);
+            }
         }
 
         return $preAdvice;

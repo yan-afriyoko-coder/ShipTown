@@ -64,10 +64,18 @@ abstract class XmlResponse
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getPreAdviceErrorCode()
+    public function getPreAdviceErrorCode(): string
     {
         return $this->simpleXmlArray->PreAdviceErrorCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPreAdviceErrorDetails(): string
+    {
+        return $this->simpleXmlArray->PreAdviceErrorDetails;
     }
 }
