@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="order_number === null" class="row text-center mt-3" >
+        <div v-if="!order_number" class="row text-center mt-3" >
             <button type="button"  class="btn-info" @click.prevent="loadNextOrder">
                 Start AutoPilot Packing
             </button>
