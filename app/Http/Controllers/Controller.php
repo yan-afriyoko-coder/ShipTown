@@ -85,6 +85,12 @@ class Controller extends BaseController
             ->respond($message);
     }
 
+    public function respond403Forbidden($message = "Forbidden")
+    {
+        return $this->setStatusCode(403)
+            ->respond($message);
+    }
+
     public function setStatusCode($code)
     {
         $this->status_code = $code;

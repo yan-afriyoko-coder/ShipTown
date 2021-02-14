@@ -7,12 +7,16 @@ use App\Http\Requests\PrintDpdLabelStoreRequest;
 use App\Http\Resources\PreAdviceResource;
 use App\Models\Order;
 use App\Modules\DpdIreland\Dpd;
+use App\Modules\DpdIreland\src\Exceptions\AuthorizationException;
 use App\Modules\DpdIreland\src\Exceptions\ConsignmentValidationException;
 use App\Modules\DpdIreland\src\Exceptions\PreAdviceRequestException;
 use App\Modules\DpdIreland\src\Responses\PreAdvice;
 use App\Services\PrintService;
 use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Log;
+use Sentry\Client;
+use Sentry\Event;
 use function request;
 
 /**
@@ -62,10 +66,11 @@ class PrintDpdLabelController extends Controller
                 $this->respondBadRequest($preAdvice->consignment()['RecordErrorDetails']);
             }
 
+        } catch (AuthorizationException $exception){
+            $this->respond403Forbidden($exception->getMessage());
+
         } catch (Exception $exception) {
-            $this->respondBadRequest(
-                $preAdvice ? $preAdvice->consignment()['RecordErrorDetails'] : ''
-            );
+            $this->respondBadRequest($exception->getMessage());
         }
 
         return $preAdvice;

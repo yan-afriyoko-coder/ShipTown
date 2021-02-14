@@ -7,6 +7,7 @@ namespace App\Modules\DpdIreland\src;
 use Carbon\Carbon;
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\Facades\Cache;
+use PHP_CodeSniffer\Standards\Generic\Sniffs\NamingConventions\CamelCapsFunctionNameSniff;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -97,11 +98,20 @@ class Client
         return $authorization;
     }
 
+    public static function forceAuthorization(): array
+    {
+        self::clearCache();
+
+        return self::getCachedAuthorization();
+    }
+
     /**
      * @return array
      */
     private static function getAuthorization(): array
     {
+        self::clearCache();
+
         $body = [
             'User' => config('dpd.user'),
             'Password' => config('dpd.password'),
@@ -136,5 +146,10 @@ class Client
             'timeout' => 60,
             'exceptions' => true,
         ]);
+    }
+
+    public static function clearCache(): void
+    {
+        Cache::forget(self::AUTHORIZATION_CACHE_KEY);
     }
 }
