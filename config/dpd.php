@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'live' => env('DPD_LIVE', false),
     'token' => env('DPD_TOKEN', ''),
     'user' => env('DPD_USER', ''),
     'password' => env('DPD_PASSWORD', ''),

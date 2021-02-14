@@ -40,6 +40,13 @@ class Client
      */
     const AUTHORIZATION_CACHE_KEY = 'dpd.authorization';
 
+    /**
+     * @return string
+     */
+    private static function getBaseUrl(): string
+    {
+        return config('dpd.live') ? self::API_URL_LIVE : self::API_URL_TEST;
+    }
 
     /**
      * @param string $xml
@@ -129,13 +136,5 @@ class Client
             'timeout' => 60,
             'exceptions' => true,
         ]);
-    }
-
-    /**
-     * @return string
-     */
-    private static function getBaseUrl(): string
-    {
-        return self::API_URL_TEST;
     }
 }
