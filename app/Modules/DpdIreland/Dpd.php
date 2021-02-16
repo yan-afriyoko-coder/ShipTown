@@ -38,7 +38,15 @@ class Dpd
 
         $consignment = new Consignment([
             'RecordID' => $order->order_number,
-            'DeliveryAddress' => self::getDeliveryAddress($shipping_address)
+            'DeliveryAddress' => self::getDeliveryAddress($shipping_address),
+            'ConsignmentReference' => $order->order_number,
+            'References' => [
+                'Reference' => [
+                    'ReferenceName' => 'Order',
+                    'ReferenceValue' => $order->order_number,
+                    'ParcelNumber' => 1,
+                ]
+            ]
         ]);
 
         $preAdvice = self::getPreAdvice($consignment);

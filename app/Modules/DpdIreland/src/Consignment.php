@@ -54,6 +54,7 @@ class Consignment
         'Relabel'=> 0,
         'ServiceOption' => self::SERVICE_OPTION_NORMAL,
         'ServiceType' => self::SERVICE_TYPE_OVERNIGHT,
+        'ConsignmentReference' => '',
         'DeliveryAddress' => [
             'Contact' => '',
             'ContactTelephone' => '',
