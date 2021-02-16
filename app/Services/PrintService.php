@@ -76,6 +76,10 @@ class PrintService
         $printJob->content = $content;
         $printJob->source = env('APP_NAME');
         $printJob->title = $title;
+        $printJob->options = [
+            'fit_to_page' => true
+        ];
+
 
         return $this->request->post($printJob);
     }
