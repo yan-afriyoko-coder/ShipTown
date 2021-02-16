@@ -71,7 +71,7 @@
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('packing_warehouse')">packing_warehouse</button>
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('fabrics')">fabrics</button>
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('ready')">ready</button>
-                <button type="button" class="btn btn-info" @click.prevent="askForShippingNumberIfNeeded">Add Shipping Number</button>
+                <button type="button" class="btn btn-info" @click.prevent="askForShippingNumber">Add Shipping Number</button>
                 <button type="button" class="btn btn-info" @click.prevent="printLabel('address_label')">Print Address Label</button>
                 <button type="button" class="btn btn-info" @click.prevent="printLabel('dpd_label')">Print DPD Label</button>
             </template>
@@ -292,6 +292,10 @@
                     if (this.user['ask_for_shipping_number'] !== true) {
                         return;
                     }
+                    this.askForShippingNumber();
+                },
+
+                askForShippingNumber() {
                     this.$refs.filtersModal.hide();
                     $('#shippingNumberModal').modal();
                 },
