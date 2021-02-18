@@ -83,7 +83,7 @@ class Dpd
             'ContactEmail' => '',
             'AddressLine1' => $shipping_address->address1,
             'AddressLine2' => $shipping_address->address2,
-            'AddressLine3' => $shipping_address->city.' '.$shipping_address->postcode,
+            'AddressLine3' => $shipping_address->city,
             'AddressLine4' => $shipping_address->state_name ?: $shipping_address->city,
             'PostCode' => $shipping_address->postcode,
             'CountryCode' => $shipping_address->country_code,
