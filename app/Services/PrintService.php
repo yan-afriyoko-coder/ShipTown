@@ -76,7 +76,7 @@ class PrintService
      * @param string $contentType
      * @return Response|null
      */
-    public function newPrintJob(int $printerId, string $title, string $content, $contentType = 'pdf_base64'): Response
+    public function newPrintJob(int $printerId, string $title, string $content, $contentType = 'pdf_base64'): ?Response
     {
         $printJob = new PrintJob();
         $printJob->printer = $printerId;
