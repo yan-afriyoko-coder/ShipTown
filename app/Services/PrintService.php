@@ -44,12 +44,12 @@ class PrintService
     }
 
     /**
-     * @param int $printerId
+     * @param $printerId
      * @param string $title
      * @param string $content
      * @return Response|null
      */
-    public function newPdfPrintJob(int $printerId, string $title, string $content): ?Response
+    public function newPdfPrintJob($printerId, string $title, string $content): ?Response
     {
         if (@is_file($content)) { // if file exists and is a file and not a directory
             $content = file_get_contents($content);
@@ -59,24 +59,24 @@ class PrintService
     }
 
     /**
-     * @param int $printerId
+     * @param $printerId
      * @param string $title
      * @param string $url
      * @return Response|null
      */
-    public function printPdfFromUrl(int $printerId, string $title, string $url): ?Response
+    public function printPdfFromUrl($printerId, string $title, string $url): ?Response
     {
         return $this->newPrintJob($printerId, $title, $url, 'pdf_uri');
     }
 
     /**
-     * @param int $printerId
+     * @param $printerId
      * @param string $title
      * @param string $content
      * @param string $contentType
      * @return Response|null
      */
-    public function newPrintJob(int $printerId, string $title, string $content, $contentType = 'pdf_base64'): ?Response
+    public function newPrintJob($printerId, string $title, string $content, $contentType = 'pdf_base64'): ?Response
     {
         $printJob = new PrintJob();
         $printJob->printer = $printerId;
