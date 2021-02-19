@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use PrintNode\Printer;
 use PrintNode\PrintJob;
 use PrintNode\Request;
 use PrintNode\Response;
@@ -24,9 +25,9 @@ class PrintService
     }
 
     /**
-     * @return \PrintNode\Printer[]
+     * @return Printer[]
      */
-    public function getPrinters()
+    public function getPrinters(): array
     {
         return $this->request->getPrinters();
     }
@@ -41,7 +42,7 @@ class PrintService
      *
      * @return Response
      */
-    public function newPdfPrintJob($printerId, $title, $content)
+    public function newPdfPrintJob($printerId, string $title, string $content): Response
     {
         if (@is_file($content)) { // if file exists and is a file and not a directory
             $content = file_get_contents($content);
@@ -65,10 +66,10 @@ class PrintService
      *  this should be the URI from which the document you wish to print can be downloaded.
      *  If contentType is pdf_base64 or raw_base64, this should be the
      *  base64-encoding of the document you wish to print.
-     *
+     * @param string $contentType
      * @return Response
      */
-    public function newPrintJob($printerId, $title, $content, $contentType = 'pdf_base64')
+    public function newPrintJob($printerId, string $title, string $content, $contentType = 'pdf_base64'): Response
     {
         $printJob = new PrintJob();
         $printJob->printer = $printerId;
@@ -78,9 +79,8 @@ class PrintService
         $printJob->title = $title;
         $printJob->options = [
             'paper' => 'User defined',
-            'fit_to_page' => true
+            'fit_to_page' => false
         ];
-
 
         return $this->request->post($printJob);
     }
