@@ -40,6 +40,8 @@ class PrintDpdLabelController extends Controller
 
             $job_name = $order_number . '_by_' . $request->user()->id;
 
+            info('Label generated', ['url' => $preAdvice->labelImage()]);
+
             PrintService::print()->printPdfFromUrl($request->user()->printer_id, $job_name, $preAdvice->labelImage());
 
             return PreAdviceResource::collection(collect([0 => $preAdvice->toArray()]));
