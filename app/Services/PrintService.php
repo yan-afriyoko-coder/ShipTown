@@ -7,8 +7,15 @@ use PrintNode\PrintJob;
 use PrintNode\Request;
 use PrintNode\Response;
 
+/**
+ * Class PrintService
+ * @package App\Services
+ */
 class PrintService
 {
+    /**
+     * @var Request
+     */
     private $request;
 
     /**
@@ -19,6 +26,10 @@ class PrintService
         return app(PrintService::class);
     }
 
+    /**
+     * PrintService constructor.
+     * @param Request $request
+     */
     public function __construct(Request $request)
     {
         $this->request = $request;
@@ -33,16 +44,12 @@ class PrintService
     }
 
     /**
-     * Sends a new print job request to the service from a PDF source.
-     *
-     * @param int|string $printerId The id of the printer you wish to print to.
-     * @param string $title A title to give the print job.
-     *  This is the name which will appear in the operating system's print queue.
-     * @param string $content The path to the pdf file, a pdf string
-     *
-     * @return Response
+     * @param int $printerId
+     * @param string $title
+     * @param string $content
+     * @return Response|null
      */
-    public function newPdfPrintJob($printerId, string $title, string $content): Response
+    public function newPdfPrintJob(int $printerId, string $title, string $content): ?Response
     {
         if (@is_file($content)) { // if file exists and is a file and not a directory
             $content = file_get_contents($content);
@@ -51,25 +58,25 @@ class PrintService
         return $this->newPrintJob($printerId, $title, base64_encode($content));
     }
 
-    public function printPdfFromUrl($printerId, $title, $url): Response
+    /**
+     * @param int $printerId
+     * @param string $title
+     * @param string $url
+     * @return Response|null
+     */
+    public function printPdfFromUrl(int $printerId, string $title, string $url): ?Response
     {
         return $this->newPrintJob($printerId, $title, $url, 'pdf_uri');
     }
 
     /**
-     * Sends a new print job request to the service.
-     *
-     * @param int|string $printerId The id of the printer you wish to print to.
-     * @param string $title A title to give the print job.
-     *  This is the name which will appear in the operating system's print queue.
-     * @param string $content If contentType is pdf_uri or raw_uri,
-     *  this should be the URI from which the document you wish to print can be downloaded.
-     *  If contentType is pdf_base64 or raw_base64, this should be the
-     *  base64-encoding of the document you wish to print.
+     * @param int $printerId
+     * @param string $title
+     * @param string $content
      * @param string $contentType
-     * @return Response
+     * @return Response|null
      */
-    public function newPrintJob($printerId, string $title, string $content, $contentType = 'pdf_base64'): Response
+    public function newPrintJob(int $printerId, string $title, string $content, $contentType = 'pdf_base64'): Response
     {
         $printJob = new PrintJob();
         $printJob->printer = $printerId;
