@@ -25,9 +25,9 @@ class PrintService
     }
 
     /**
-     * @return Printer[]
+     * @return Printer[]|null
      */
-    public function getPrinters(): array
+    public function getPrinters(): ?array
     {
         return $this->request->getPrinters();
     }
