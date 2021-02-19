@@ -77,6 +77,7 @@ class PrintService
         $printJob->source = env('APP_NAME');
         $printJob->title = $title;
         $printJob->options = [
+            'paper' => 'User defined',
             'fit_to_page' => true
         ];
 
