@@ -59,7 +59,7 @@ class Dpd
 
         $preAdvice = new PreAdvice($response->getBody()->getContents());
 
-        if($preAdvice->isNotSuccess()) {
+        if ($preAdvice->isNotSuccess()) {
             Log::error('DPD PreAdvice request failed', [
                 'xml_received' => $preAdvice->toString(),
                 'xml_sent' => $consignment->toString(),
