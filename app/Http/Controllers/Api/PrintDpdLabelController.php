@@ -8,7 +8,6 @@ use App\Http\Resources\PreAdviceResource;
 use App\Models\Order;
 use App\Modules\DpdIreland\Dpd;
 use App\Modules\DpdIreland\src\Exceptions\AuthorizationException;
-use App\Modules\DpdIreland\src\Exceptions\ConsignmentValidationException;
 use App\Modules\DpdIreland\src\Responses\PreAdvice;
 use App\Services\PrintService;
 use Exception;
