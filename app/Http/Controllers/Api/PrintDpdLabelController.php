@@ -9,15 +9,10 @@ use App\Models\Order;
 use App\Modules\DpdIreland\Dpd;
 use App\Modules\DpdIreland\src\Exceptions\AuthorizationException;
 use App\Modules\DpdIreland\src\Exceptions\ConsignmentValidationException;
-use App\Modules\DpdIreland\src\Exceptions\PreAdviceRequestException;
 use App\Modules\DpdIreland\src\Responses\PreAdvice;
 use App\Services\PrintService;
 use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\Log;
-use Sentry\Client;
-use Sentry\Event;
-use function request;
 
 /**
  * Class PrintDpdLabelController
@@ -25,11 +20,10 @@ use function request;
  */
 class PrintDpdLabelController extends Controller
 {
-    /**
+    /**ø
      * @param PrintDpdLabelStoreRequest $request
      * @param string $order_number
      * @return AnonymousResourceCollection
-     * @throws PreAdviceRequestException
      */
     public function store(PrintDpdLabelStoreRequest $request, string $order_number): AnonymousResourceCollection
     {
@@ -45,7 +39,6 @@ class PrintDpdLabelController extends Controller
             PrintService::print()->printPdfFromUrl($request->user()->printer_id, $job_name, $preAdvice->labelImage());
 
             return PreAdviceResource::collection(collect([0 => $preAdvice->toArray()]));
-
         } catch (ConsignmentValidationException $exception) {
             $this->respondBadRequest($exception->getMessage());
         }
@@ -68,13 +61,11 @@ class PrintDpdLabelController extends Controller
                 $this->respondBadRequest($preAdvice->consignment()['RecordErrorDetails']);
             }
 
-        } catch (AuthorizationException $exception){
+            return $preAdvice;
+        } catch (AuthorizationException $exception) {
             $this->respond403Forbidden($exception->getMessage());
-
         } catch (Exception $exception) {
             $this->respondBadRequest($exception->getMessage());
         }
-
-        return $preAdvice;
     }
 }
