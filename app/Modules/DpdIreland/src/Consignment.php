@@ -3,7 +3,6 @@
 
 namespace App\Modules\DpdIreland\src;
 
-
 use App\Modules\DpdIreland\src\Exceptions\ConsignmentValidationException;
 use App\Modules\DpdIreland\src\Models\DpdCollectionAddress;
 use Illuminate\Support\Collection;
@@ -109,8 +108,7 @@ class Consignment
 
         $this->validator = Validator::make($consignment, $this->rules);
 
-        if($this->validator->fails())
-        {
+        if ($this->validator->fails()) {
             throw new ConsignmentValidationException($this->validator->errors());
         }
     }
@@ -138,7 +136,7 @@ class Consignment
     {
         $data = $this->toXml();
 
-        $data = str_replace(PHP_EOL,'',$data);
+        $data = str_replace(PHP_EOL, '', $data);
 
         return $data;
     }

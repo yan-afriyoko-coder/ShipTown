@@ -18,7 +18,7 @@ class PrintDpdLabelControllerTest extends TestCase
     /**
      * @test
      */
-    public function store_returns_an_ok_response()
+    public function storeReturnsOkResponse()
     {
         $user = factory(User::class)->create([
             'address_label_template' => 'dpd_label'
