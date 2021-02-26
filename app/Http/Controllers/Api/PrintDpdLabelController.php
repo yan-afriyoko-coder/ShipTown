@@ -32,11 +32,7 @@ class PrintDpdLabelController extends Controller
 
             $preAdvice = $this->createPreAdviceOrFail($order);
 
-            $job_name = $order_number . '_by_' . $request->user()->id;
-
-            info('Label generated', ['url' => $preAdvice->labelImage()]);
-
-            PrintService::print()->printPdfFromUrl($request->user()->printer_id, $job_name, $preAdvice->labelImage());
+            $this->printPreAdvice($order_number, $preAdvice);
 
             return PreAdviceResource::collection(collect([0 => $preAdvice->toArray()]));
         } catch (ConsignmentValidationException $exception) {
@@ -67,5 +63,16 @@ class PrintDpdLabelController extends Controller
         } catch (Exception $exception) {
             $this->respondBadRequest($exception->getMessage());
         }
+    }
+
+    /**
+     * @param string $order_number
+     * @param PreAdvice $preAdvice
+     */
+    public function printPreAdvice(string $order_number, PreAdvice $preAdvice): void
+    {
+        $job_name = $order_number . '_by_' . request()->user()->id;
+
+        PrintService::print()->printPdfFromUrl(request()->user()->printer_id, $job_name, $preAdvice->labelImage());
     }
 }
