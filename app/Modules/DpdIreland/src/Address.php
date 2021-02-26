@@ -3,7 +3,6 @@
 
 namespace App\Modules\DpdIreland\src;
 
-
 use Illuminate\Support\Collection;
 use Spatie\ArrayToXml\ArrayToXml;
 
@@ -26,6 +25,7 @@ class Address
         'AddressLine3' => '',
         'AddressLine4' => '',
         'CountryCode' =>  '',
+        'PostCode' => '',
     ];
 
     /**
