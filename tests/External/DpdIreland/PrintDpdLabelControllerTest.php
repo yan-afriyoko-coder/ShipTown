@@ -18,7 +18,7 @@ class PrintDpdLabelControllerTest extends TestCase
     /**
      * @test
      */
-    public function store_returns_an_ok_response()
+    public function storeReturnsOkResponse()
     {
         $user = factory(User::class)->create([
             'address_label_template' => 'dpd_label'
@@ -31,6 +31,7 @@ class PrintDpdLabelControllerTest extends TestCase
             'phone' => '12345678901',
             'city' => 'Dublin',
             'state_name' => 'Co. Dublin',
+            'postcode' => 'ABC1234',
             'country_code' => 'IRL'
         ]);
 
