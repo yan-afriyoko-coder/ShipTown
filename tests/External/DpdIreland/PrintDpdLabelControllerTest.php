@@ -31,6 +31,7 @@ class PrintDpdLabelControllerTest extends TestCase
             'phone' => '12345678901',
             'city' => 'Dublin',
             'state_name' => 'Co. Dublin',
+            'postcode' => 'ABC1234',
             'country_code' => 'IRL'
         ]);
 

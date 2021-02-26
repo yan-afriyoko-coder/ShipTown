@@ -40,7 +40,7 @@ class Consignment
         'DeliveryAddress.AddressLine2' => 'sometimes',
         'DeliveryAddress.AddressLine3' => 'required',
         'DeliveryAddress.AddressLine4' => 'required',
-        'DeliveryAddress.PostCode' => 'sometimes',
+        'DeliveryAddress.PostCode' => ['sometimes','max:7'],
         'DeliveryAddress.CountryCode' => 'required|in:IE,IRL',
     ];
 
