@@ -23,7 +23,7 @@ class OrderShipmentController extends Controller
      * @param Request $request
      * @return LengthAwarePaginator
      */
-    public function index(Request $request)
+    public function index(Request $request): LengthAwarePaginator
     {
         $query = OrderShipment::getSpatieQueryBuilder();
 
@@ -36,7 +36,7 @@ class OrderShipmentController extends Controller
      * @param OrderShipmentStoreRequest $request
      * @return OrderShipmentResource
      */
-    public function store(OrderShipmentStoreRequest $request)
+    public function store(OrderShipmentStoreRequest $request): OrderShipmentResource
     {
         $shipment = new OrderShipment($request->validated());
         $shipment->user()->associate($request->user());
