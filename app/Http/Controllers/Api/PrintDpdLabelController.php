@@ -13,6 +13,8 @@ use App\Modules\DpdIreland\src\Responses\PreAdvice;
 use App\Services\PrintService;
 use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Arr;
+use PrintNode\Response;
 
 /**
  * Class PrintDpdLabelController
@@ -27,19 +29,15 @@ class PrintDpdLabelController extends Controller
      */
     public function store(PrintDpdLabelStoreRequest $request, string $order_number): AnonymousResourceCollection
     {
-        try {
-            $order = Order::whereOrderNumber($order_number)->firstOrFail();
+        $order = Order::whereOrderNumber($order_number)->firstOrFail();
 
-            $preAdvice = $this->createPreAdviceOrFail($order);
+        $preAdvice = $this->createPreAdviceOrFail($order);
 
-            $this->printPreAdvice($order_number, $preAdvice);
+        $printRequest = $this->printOrFail($order_number, $preAdvice);
 
-            return PreAdviceResource::collection(collect([0 => $preAdvice->toArray()]));
-        } catch (ConsignmentValidationException $exception) {
-            $this->respondBadRequest($exception->getMessage());
-        }
-
-        return $this->respondOK200();
+        return PreAdviceResource::collection(
+            collect()->add($preAdvice->toArray())
+        );
     }
 
     /**
@@ -66,13 +64,22 @@ class PrintDpdLabelController extends Controller
     }
 
     /**
-     * @param string $order_number
+     * @param string $job_title
      * @param PreAdvice $preAdvice
+     * @return Response|null
      */
-    public function printPreAdvice(string $order_number, PreAdvice $preAdvice): void
+    public function printOrFail(string $job_title, PreAdvice $preAdvice): ?Response
     {
-        $job_name = $order_number . '_by_' . request()->user()->id;
+        try {
+            $full_job_title = $job_title . '_by_' . request()->user()->id;
 
-        PrintService::print()->printPdfFromUrl(request()->user()->printer_id, $job_name, $preAdvice->labelImage());
+            return PrintService::print()->printPdfFromUrl(
+                request()->user()->printer_id,
+                $full_job_title,
+                $preAdvice->labelImage()
+            );
+        } catch (ConsignmentValidationException $exception) {
+            $this->respondBadRequest($exception->getMessage());
+        }
     }
 }
