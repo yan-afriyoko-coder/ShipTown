@@ -13,7 +13,6 @@ use App\Modules\DpdIreland\src\Responses\PreAdvice;
 use App\Services\PrintService;
 use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Arr;
 use PrintNode\Response;
 
 /**
@@ -33,7 +32,7 @@ class PrintDpdLabelController extends Controller
 
         $preAdvice = $this->createPreAdviceOrFail($order);
 
-        $printRequest = $this->printOrFail($order_number, $preAdvice);
+        $printRequest = $this->printOrFail($preAdvice);
 
         return PreAdviceResource::collection(
             collect()->add($preAdvice->toArray())
@@ -64,21 +63,20 @@ class PrintDpdLabelController extends Controller
     }
 
     /**
-     * @param string $job_title
      * @param PreAdvice $preAdvice
      * @return Response|null
      */
-    public function printOrFail(string $job_title, PreAdvice $preAdvice): ?Response
+    public function printOrFail(PreAdvice $preAdvice): ?Response
     {
         try {
-            $full_job_title = $job_title . '_by_' . request()->user()->id;
+            $job_title = $preAdvice->trackingNumber() . '_by_' . request()->user()->id;
 
             return PrintService::print()->printPdfFromUrl(
                 request()->user()->printer_id,
-                $full_job_title,
+                $job_title,
                 $preAdvice->labelImage()
             );
-        } catch (ConsignmentValidationException $exception) {
+        } catch (Exception $exception) {
             $this->respondBadRequest($exception->getMessage());
         }
     }
