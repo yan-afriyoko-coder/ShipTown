@@ -40,8 +40,8 @@ class Dpd
         self::saveOrderShipment($order, $preAdvice, $user);
 
         logger('DPD PreAdvice generated', [
-            'consignment' => $consignment,
-            'preAdvice' => $preAdvice,
+            'consignment' => $consignment->toArray(),
+            'preAdvice' => $preAdvice->toArray(),
         ]);
 
         return $preAdvice;
