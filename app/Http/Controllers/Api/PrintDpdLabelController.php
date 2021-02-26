@@ -39,7 +39,6 @@ class PrintDpdLabelController extends Controller
             PrintService::print()->printPdfFromUrl($request->user()->printer_id, $job_name, $preAdvice->labelImage());
 
             return PreAdviceResource::collection(collect([0 => $preAdvice->toArray()]));
-
         } catch (ConsignmentValidationException $exception) {
             $this->respondBadRequest($exception->getMessage());
         }
@@ -62,13 +61,11 @@ class PrintDpdLabelController extends Controller
                 $this->respondBadRequest($preAdvice->consignment()['RecordErrorDetails']);
             }
 
-        } catch (AuthorizationException $exception){
+            return $preAdvice;
+        } catch (AuthorizationException $exception) {
             $this->respond403Forbidden($exception->getMessage());
-
         } catch (Exception $exception) {
             $this->respondBadRequest($exception->getMessage());
         }
-
-        return $preAdvice;
     }
 }
