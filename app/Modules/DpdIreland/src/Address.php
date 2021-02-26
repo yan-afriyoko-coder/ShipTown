@@ -24,8 +24,8 @@ class Address
         'AddressLine2' => '',
         'AddressLine3' => '',
         'AddressLine4' => '',
+        'PostCode' => '',
         'CountryCode' =>  '',
-//        'PostCode' => '',
     ];
 
     /**
