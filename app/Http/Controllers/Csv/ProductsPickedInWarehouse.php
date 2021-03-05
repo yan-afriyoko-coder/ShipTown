@@ -16,10 +16,7 @@ class ProductsPickedInWarehouse extends Controller
 
     public function index(Request $request)
     {
-        $query = QueryBuilder::for(Pick::class)
-            ->allowedFilters([
-                'user_id'
-            ])
+        $query = Pick::getSpatieQueryBuilder()
             ->select([
                 'products.sku',
                 'products.name',

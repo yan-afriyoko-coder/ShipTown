@@ -247,15 +247,15 @@ class Pick extends Model
         return QueryBuilder::for(Pick::class)
             ->allowedFilters([
                 'user_id',
-                AllowedFilter::scope('quantity_picked_between','quantityPickedBetween'),
-                AllowedFilter::scope('quantity_skipped_between','quantitySkippedBetween'),
+                AllowedFilter::scope('quantity_picked_between', 'quantityPickedBetween'),
+                AllowedFilter::scope('quantity_skipped_between', 'quantitySkippedBetween'),
                 AllowedFilter::exact('sku_picked', 'sku_ordered')
             ])
             ->defaultSort('-id')
             ->allowedSorts([
                 'id',
                 'user_id',
-                AllowedSort::field('sku_picked','sku_ordered'),
+                AllowedSort::field('sku_picked', 'sku_ordered'),
             ]);
     }
 }
