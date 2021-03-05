@@ -251,11 +251,11 @@ class Pick extends Model
                 AllowedFilter::scope('quantity_skipped_between', 'quantitySkippedBetween'),
                 AllowedFilter::exact('sku_picked', 'sku_ordered')
             ])
-            ->defaultSort('-id')
             ->allowedSorts([
-                'id',
+                'picks.id',
                 'user_id',
                 AllowedSort::field('sku_picked', 'sku_ordered'),
-            ]);
+            ])
+            ->defaultSort('-picks.id');
     }
 }
