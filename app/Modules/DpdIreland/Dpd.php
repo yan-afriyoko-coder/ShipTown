@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Modules\DpdIreland;
 
 use App\Models\Order;
@@ -13,6 +12,7 @@ use App\Modules\DpdIreland\src\Responses\PreAdvice;
 use App\User;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 /**
  * Class Dpd
@@ -90,7 +90,7 @@ class Dpd
             'AddressLine2' => $shipping_address->address2,
             'AddressLine3' => $shipping_address->city,
             'AddressLine4' => $shipping_address->state_name ?: $shipping_address->city,
-            'PostCode' => $shipping_address->postcode,
+            'PostCode' =>  Str::length($shipping_address->postcode)===7 ? $shipping_address->postcode : '',
             'CountryCode' => $shipping_address->country_code,
         ];
     }
