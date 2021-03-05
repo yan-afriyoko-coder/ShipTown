@@ -25,7 +25,7 @@ class NormalOvernightTest extends TestCase
                 'AddressLine2' => 'Unit 2B Midland Gateway Bus',
                 'AddressLine3' => 'Kilbeggan',
                 'AddressLine4' => 'Westmeath',
-                'CountryCode' =>  'IE',
+                'CountryCode'  =>  'IE',
             ],
             'CollectionAddress' => [
                 'Contact' => 'John Smith',
@@ -36,6 +36,7 @@ class NormalOvernightTest extends TestCase
                 'AddressLine2' => 'Unit 2B Midland Gateway Bus',
                 'AddressLine3' => 'Kilbeggan',
                 'AddressLine4' => 'Westmeath',
+                'PostCode'     => 'XYZ1234',
                 'CountryCode' =>  'IE',
             ],
         ]);
@@ -72,6 +73,7 @@ class NormalOvernightTest extends TestCase
                 'AddressLine2' => 'Unit 2B Midland Gateway Bus',
                 'AddressLine3' => 'Kilbeggan',
                 'AddressLine4' => 'Westmeath',
+                'PostCode'     => 'XYZ1234',
                 'CountryCode' =>  'IE',
             ],
         ]);
@@ -109,6 +111,7 @@ class NormalOvernightTest extends TestCase
                 'AddressLine2' => 'Unit 2B Midland Gateway Bus',
                 'AddressLine3' => 'Kilbeggan',
                 'AddressLine4' => 'Westmeath',
+                'PostCode'     => 'XYZ1234',
                 'CountryCode' =>  'IE',
             ],
         ]);
