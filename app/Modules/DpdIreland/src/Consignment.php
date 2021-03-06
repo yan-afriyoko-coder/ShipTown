@@ -148,7 +148,7 @@ class Consignment
     {
         $fixedValues = collect([
             'CustomerAccount' => config('dpd.user'),
-            'DeliveryAddress' => (new Address($this->consignment['DeliveryAddress']))->toArray(),
+            'DeliveryAddress' => (new DpdAddress($this->consignment['DeliveryAddress']))->toArray(),
             'CollectionAddress' => $this->getCollectionAddress(),
         ]);
 
@@ -167,7 +167,7 @@ class Consignment
     {
         $CollectionAddress = DpdCollectionAddress::getCollectionAddress();
 
-        $address = new Address($CollectionAddress);
+        $address = new DpdAddress($CollectionAddress);
 
         return $address->toArray();
     }
