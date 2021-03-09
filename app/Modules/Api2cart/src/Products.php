@@ -74,17 +74,21 @@ class Products extends Entity
 
         $params = [
             "id" => $product_id,
-            "params" => implode(",", $fields ?? [
-                "id",
-                "model",
-                "u_model",
-                "sku",
-                "u_sku",
-                "price",
-                "special_price",
-                "stores_ids",
-                "quantity"
-            ]),
+            "params" => implode(
+                ",",
+                $fields ?? [
+                    "id",
+                    "model",
+                    "u_model",
+                    "sku",
+                    "u_sku",
+                    "price",
+                    "special_price",
+                    "stores_ids",
+                    "quantity",
+                    "inventory"
+                ]
+            ),
         ];
 
         if ($store_id) {
@@ -121,10 +125,16 @@ class Products extends Entity
      * @param string $store_key
      * @param string $sku
      * @param int|null $store_id
+     * @param array|null $fields
      * @return array|null
+     * @throws RequestException
      */
-    public static function getVariantInfo(string $store_key, string $sku, int $store_id = null)
-    {
+    public static function getVariantInfo(
+        string $store_key,
+        string $sku,
+        int $store_id = null,
+        array $fields = null
+    ): ?array {
         $variant_id = Products::getVariantID($store_key, $sku);
 
         if (empty($variant_id)) {
@@ -133,7 +143,21 @@ class Products extends Entity
 
         $params = [
             "id" => $variant_id,
-            "params" => "force_all",
+            "params" => implode(
+                ",",
+                $fields ?? [
+                    "id",
+                    "model",
+                    "u_model",
+                    "sku",
+                    "u_sku",
+                    "price",
+                    "special_price",
+                    "stores_ids",
+                    "quantity",
+                    "inventory"
+                ]
+            ),
         ];
 
         if ($store_id) {
