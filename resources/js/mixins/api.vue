@@ -19,6 +19,10 @@ export default {
                 return axios.get('/api/products', {params: params});
             },
 
+            apiModuleEcommerceProductInfo: function(params) {
+                return axios.get('/api/settings/modules/api2cart/products', {params: params});
+            },
+
             apiGetOrders: function(params) {
                 return axios.get('/api/orders', {params: params});
             },

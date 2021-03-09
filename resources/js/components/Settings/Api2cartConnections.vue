@@ -32,7 +32,7 @@
                                 <a @click="handleDelete(configuration.id, i)" class="action-link text-danger">Delete</a>
                             </td>
                             <td>
-                                <a @click="showSkuDetails('01')" class="action-link text-danger">SKU Lookup</a>
+                                <a @click="showSkuDetails('01')" class="action-link">SKU Lookup</a>
                             </td>
                         </tr>
                     </tbody>
@@ -117,11 +117,12 @@
                     icon: false,
                     buttons: [
                         {
-                            text: 'Find',
+                            text: 'Show In Web Console',
                             action: (toast) => {
-                                this.apiGetProducts({
-                                    'filter[sku]': toast.value
-                                });
+                                this.apiModuleEcommerceProductInfo({'filter[sku]': toast.value})
+                                    .then(({ data }) => {
+                                        console.log(data);
+                                    });
                                 this.$snotify.remove(toast.id);
                             }
                         },
