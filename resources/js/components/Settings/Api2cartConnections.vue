@@ -119,7 +119,7 @@
                         {
                             text: 'Show In Web Console',
                             action: (toast) => {
-                                this.apiModuleEcommerceProductInfo({'filter[sku]': toast.value})
+                                this.apiModuleEcommerceProductInfo({'sku': toast.value})
                                     .then(({ data }) => {
                                         console.log(data);
                                     });

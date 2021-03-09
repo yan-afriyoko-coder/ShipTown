@@ -7,18 +7,18 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 /**
- * @see \App\Http\Requests\StoreProductsRequest
+ * @see \App\Http\Requests\ProductsIndexRequest
  */
 class StoreProductsRequestTest extends TestCase
 {
-    /** @var \App\Http\Requests\StoreProductsRequest */
+    /** @var \App\Http\Requests\ProductsIndexRequest */
     private $subject;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->subject = new \App\Http\Requests\StoreProductsRequest();
+        $this->subject = new \App\Http\Requests\ProductsIndexRequest();
     }
 
     /**
