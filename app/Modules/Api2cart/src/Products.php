@@ -45,7 +45,7 @@ class Products extends Entity
     {
         $requestResponse = Client::GET($store_key, 'product.list.json', $params);
 
-        if($requestResponse->isNotSuccess()) {
+        if ($requestResponse->isNotSuccess()) {
             throw new GetRequestException($requestResponse->getReturnMessage(), $requestResponse->getReturnCode());
         }
 
@@ -56,10 +56,16 @@ class Products extends Entity
      * @param string $store_key
      * @param string $sku
      * @param int|null $store_id
+     * @param array|null $fields
      * @return array|null
+     * @throws RequestException
      */
-    public static function getSimpleProductInfo(string $store_key, string $sku, int $store_id = null)
-    {
+    public static function getSimpleProductInfo(
+        string $store_key,
+        string $sku,
+        int $store_id = null,
+        array $fields = null
+    ): ?array {
         $product_id = Products::getSimpleProductID($store_key, $sku);
 
         if (empty($product_id)) {
@@ -68,7 +74,7 @@ class Products extends Entity
 
         $params = [
             "id" => $product_id,
-            "params" => implode(",", [
+            "params" => $fields ?? implode(",", [
                 "id",
                 "model",
                 "u_model",
@@ -163,11 +169,13 @@ class Products extends Entity
      * @param string $store_key
      * @param string $sku
      * @param int|null $store_id
+     * @param array|null $fields
      * @return array|null
+     * @throws RequestException
      */
-    public static function getProductInfo(string $store_key, string $sku, int $store_id = null)
+    public static function getProductInfo(string $store_key, string $sku, int $store_id = null, array $fields = null)
     {
-        $product = Products::getSimpleProductInfo($store_key, $sku, $store_id);
+        $product = Products::getSimpleProductInfo($store_key, $sku, $store_id, $fields);
 
         if ($product) {
             return $product;
