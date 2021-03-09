@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Http\Requests;
 
+use App\Http\Requests\StoreProductsRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -11,14 +12,14 @@ use Tests\TestCase;
  */
 class StoreProductsRequestTest extends TestCase
 {
-    /** @var \App\Http\Requests\ProductsIndexRequest */
+    /** @var StoreProductsRequest */
     private $subject;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->subject = new \App\Http\Requests\ProductsIndexRequest();
+        $this->subject = new StoreProductsRequest();
     }
 
     /**

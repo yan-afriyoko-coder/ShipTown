@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductsIndexRequest;
+use App\Http\Requests\StoreProductsRequest;
 use App\Models\Product;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
@@ -33,10 +33,10 @@ class ProductController extends Controller
     /**
      * Update or Create Product
      *
-     * @param ProductsIndexRequest $request
+     * @param StoreProductsRequest $request
      * @return JsonResponse
      */
-    public function store(ProductsIndexRequest $request)
+    public function store(StoreProductsRequest $request)
     {
         $product = Product::query()->updateOrCreate(
             ['sku' => $request->sku],
