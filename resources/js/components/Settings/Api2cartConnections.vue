@@ -20,6 +20,7 @@
                             <th>URL</th>
                             <th>Store Type</th>
                             <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -29,6 +30,9 @@
                             <td>{{ configuration.type | capitalize }}</td>
                             <td>
                                 <a @click="handleDelete(configuration.id, i)" class="action-link text-danger">Delete</a>
+                            </td>
+                            <td>
+                                <a @click="showSkuDetails('01')" class="action-link">SKU Lookup</a>
                             </td>
                         </tr>
                     </tbody>
@@ -44,13 +48,19 @@
         <b-modal ref="formModal" id="api2cart-connection-modal" title="Configure Connection" @ok="handleModalOk">
             <api-configuration-form ref="form" @saved="handleSaved" />
         </b-modal>
+
+        <!-- The modal -->
+        <b-modal ref="formModal" id="sku_details_modal" title="SKU Lookup">
+            {{ sku_details }}
+        </b-modal>
     </div>
 </template>
 
 <script>
-    import { BModal, VBModal, BButton } from 'bootstrap-vue';
+    import { BModal, VBModal, BButton} from 'bootstrap-vue';
 
     import Api2CartConfigurationForm from '../SharedComponents/Api2CartConfigurationForm';
+    import api from "../../mixins/api";
 
     export default {
         components: {
@@ -59,12 +69,15 @@
             'api-configuration-form': Api2CartConfigurationForm,
         },
 
+        mixins: [api],
+
         directives: {
             'b-modal': VBModal
         },
 
         data: () => ({
-            configurations: []
+            configurations: [],
+            sku_details: '',
         }),
 
         mounted() {
@@ -95,6 +108,33 @@
                 this.$nextTick(() => {
                     this.$refs.formModal.hide();
                 });
+            },
+
+            showSkuDetails(sku) {
+                this.$snotify.prompt('Partial shipment', {
+                    placeholder: 'Enter SKU:',
+                    position: 'centerCenter',
+                    icon: false,
+                    buttons: [
+                        {
+                            text: 'Show In Web Console',
+                            action: (toast) => {
+                                this.apiModuleEcommerceProductInfo({'sku': toast.value})
+                                    .then(({ data }) => {
+                                        console.log(data);
+                                    });
+                                this.$snotify.remove(toast.id);
+                            }
+                        },
+                        {
+                            text: 'Cancel',
+                            action: (toast) => {
+                                this.$snotify.remove(toast.id);
+                            }
+                        },
+                    ],
+                });
+
             },
 
             handleDelete(id, index) {
