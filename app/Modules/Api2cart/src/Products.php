@@ -74,7 +74,7 @@ class Products extends Entity
 
         $params = [
             "id" => $product_id,
-            "params" => $fields ?? implode(",", [
+            "params" => implode(",", $fields ?? [
                 "id",
                 "model",
                 "u_model",
