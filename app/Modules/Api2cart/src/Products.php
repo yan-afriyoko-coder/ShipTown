@@ -103,10 +103,12 @@ class Products extends Entity
 
         $product = $response->getResult();
 
+        $warehouse_id = null;
 
         $product["type"]            = "product";
         $product["sku"]             = empty($product["u_sku"]) ? $product["u_model"] : $product["u_sku"];
         $product["model"]           = $product["u_model"];
+        $product["quantity"]        = $warehouse_id ? $product["inventory"][0]['quantity'] : $product["quantity"];
 
         $created_at = $product["special_price"]["created_at"];
         $product["sprice_create"]   = empty($created_at) ? "1900-01-01 00:00:00" : $created_at["value"];
@@ -173,8 +175,12 @@ class Products extends Entity
         $variant = $response->getResult()["variant"];
 
         $variant['type']            = "variant";
+
+        $warehouse_id = null;
+
         $variant["sku"]             = empty($variant["u_sku"]) ? $variant["u_model"] : $variant["u_sku"];
         $variant["model"]           = $variant["u_model"];
+        $product["quantity"]        = $warehouse_id ? $variant["inventory"][0]['quantity'] : $variant["quantity"];
 
         $created_at = $variant["special_price"]["created_at"];
         $variant["sprice_create"]   = empty($created_at) ? "1900-01-01 00:00:00":$created_at["value"];
@@ -205,7 +211,7 @@ class Products extends Entity
             return $product;
         }
 
-        $variant = Products::getVariantInfo($store_key, $sku, $store_id);
+        $variant = Products::getVariantInfo($store_key, $sku, $store_id, $fields);
 
         if ($variant) {
             return $variant;
