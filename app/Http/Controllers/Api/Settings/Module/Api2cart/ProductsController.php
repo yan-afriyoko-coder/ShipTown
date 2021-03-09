@@ -15,7 +15,7 @@ class ProductsController extends Controller
 
         $sku = $request->get('sku');
 
-        $productInfo = Products::getProductInfo($connection->bridge_api_key, $sku);
+        $productInfo = Products::getProductInfo($connection->bridge_api_key, $sku, null, ['force_all']);
 
         return $this->respondOK200($productInfo);
     }
