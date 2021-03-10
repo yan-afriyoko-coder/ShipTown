@@ -170,12 +170,10 @@ class Products extends Entity
 
         $product = $response->getResult();
 
-        $warehouse_id = null;
-
         $product["type"]            = "product";
         $product["sku"]             = empty($product["u_sku"]) ? $product["u_model"] : $product["u_sku"];
         $product["model"]           = $product["u_model"];
-        $product["quantity"]        = self::getQuantity($product, $warehouse_id);
+        $product["quantity"]        = self::getQuantity($product, $conn->magento_warehouse_id);
 
         $created_at = $product["special_price"]["created_at"];
         $product["sprice_create"]   = empty($created_at) ? "1900-01-01 00:00:00" : $created_at["value"];
@@ -689,11 +687,11 @@ class Products extends Entity
     }
 
     /**
-     * @param $warehouse_id
+     * @param string $warehouse_id
      * @param array $product
-     * @return mixed
+     * @return int
      */
-    public static function getQuantity(array $product, $warehouse_id)
+    public static function getQuantity(array $product, string $warehouse_id): int
     {
         if ($warehouse_id) {
             return $product["inventory"][0]['quantity'];

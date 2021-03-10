@@ -17,6 +17,7 @@ use Illuminate\Support\Carbon;
  * @property string $prefix
  * @property string|null $bridge_api_key
  * @property int|null $magento_store_id
+ * @property string|null $magento_warehouse_id
  * @property string $last_synced_modified_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -24,7 +25,8 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Api2cartConnection newQuery()
  * @method static Builder|Api2cartConnection query()
  * @method static Builder|Api2cartConnection whereBridgeApiKey($value)
- * @method static Builder|Api2cartConnection whereMagentoStoreIdd($value)
+ * @method static Builder|Api2cartConnection whereMagentoStoreId($value)
+ * @method static Builder|Api2cartConnection whereMagentoWarehouseId($value)
  * @method static Builder|Api2cartConnection whereCreatedAt($value)
  * @method static Builder|Api2cartConnection whereId($value)
  * @method static Builder|Api2cartConnection whereLastSyncedModifiedAt($value)
