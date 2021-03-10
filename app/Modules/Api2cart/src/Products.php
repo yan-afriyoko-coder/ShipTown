@@ -687,11 +687,11 @@ class Products extends Entity
     }
 
     /**
-     * @param string $warehouse_id
      * @param array $product
+     * @param string|null $warehouse_id
      * @return int
      */
-    public static function getQuantity(array $product, string $warehouse_id): int
+    public static function getQuantity(array $product, string $warehouse_id = null): int
     {
         if ($warehouse_id) {
             return $product["inventory"][0]['quantity'];
