@@ -312,11 +312,9 @@ class Products extends Entity
 
         $variant['type']            = "variant";
 
-        $warehouse_id = null;
-
         $variant["sku"]             = empty($variant["u_sku"]) ? $variant["u_model"] : $variant["u_sku"];
         $variant["model"]           = $variant["u_model"];
-        $product["quantity"]        = $warehouse_id ? $variant["inventory"][0]['quantity'] : $variant["quantity"];
+        $variant["quantity"]        = self::getQuantity($variant, $connection->magento_warehouse_id);
 
         $created_at = $variant["special_price"]["created_at"];
         $variant["sprice_create"]   = empty($created_at) ? "1900-01-01 00:00:00":$created_at["value"];
