@@ -52,14 +52,13 @@ class SyncProductJob implements ShouldQueue
 
                 $response = Products::updateOrCreate($connection->bridge_api_key, $product_data);
 
-                VerifyProductSyncJob::dispatch($connection->bridge_api_key, $product_data);
+                VerifyProductSyncJob::dispatch($connection, $product_data);
 
                 info('Api2cart: Product synced', [
                     'response' => $response ? $response->asArray() : null,
                     'product_data' => $product_data,
                 ]);
             } catch (Exception $exception) {
-
                 retry(20, function () use ($product) {
                     $product->attachTag('Not Synced');
                 }, 100);
@@ -77,8 +76,6 @@ class SyncProductJob implements ShouldQueue
                 ]);
             }
         });
-
-
     }
 
     /**
@@ -109,7 +106,7 @@ class SyncProductJob implements ShouldQueue
 
         $productPrice = ProductPrice::query()->firstOrCreate($attributes);
 
-        if($productPrice) {
+        if ($productPrice) {
             return [
                 'price' => $productPrice->price,
                 'special_price' => $productPrice->sale_price,
@@ -129,7 +126,7 @@ class SyncProductJob implements ShouldQueue
      */
     private function getInventoryData(Product $product, int $location_id = null): array
     {
-        if(is_null($location_id)) {
+        if (is_null($location_id)) {
             // we will refresh to get latest data
             $product = $product->refresh();
 
@@ -146,7 +143,7 @@ class SyncProductJob implements ShouldQueue
 
         $productInventory = Inventory::query()->where($attributes)->first();
 
-        if($productInventory) {
+        if ($productInventory) {
             return [
                 'quantity' => $productInventory->quantity_available ?? 0,
                 'in_stock' => $productInventory->quantity_available > 0 ? "True" : "False",
@@ -163,7 +160,7 @@ class SyncProductJob implements ShouldQueue
      */
     public function formatDateForApi2cart($date): string
     {
-        $carbon_date = new Carbon( $date ?? '2000-01-01 00:00:00');
+        $carbon_date = new Carbon($date ?? '2000-01-01 00:00:00');
 
         if ($carbon_date->year < 2000) {
             return '2000-01-01 00:00:00';
@@ -181,7 +178,6 @@ class SyncProductJob implements ShouldQueue
         return [
             'store_id' => $connection->magento_store_id ?? 0
         ];
-
     }
 
     /**
