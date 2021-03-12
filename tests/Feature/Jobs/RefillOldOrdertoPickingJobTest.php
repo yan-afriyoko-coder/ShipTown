@@ -22,7 +22,7 @@ class RefillOldOrdertoPickingJobTest extends TestCase
             ->create([
                 'status_code' => 'paid',
                 'order_placed_at' => Carbon::now()->subDays(7),
-            ]);
+            ])->with('orderProducts');
 
         RefillOldOrdersToPickingJob::dispatchNow();
 

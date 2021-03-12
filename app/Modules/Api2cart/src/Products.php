@@ -162,7 +162,7 @@ class Products extends Entity
             $params["store_id"] = $conn->magento_store_id;
         }
 
-        $response =  Client::GET($conn->magento_store_id, 'product.info.json', $params);
+        $response =  Client::GET($conn->bridge_api_key, 'product.info.json', $params);
 
         if ($response->isNotSuccess()) {
             return null;
