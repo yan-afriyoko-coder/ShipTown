@@ -6,6 +6,7 @@ namespace App\Modules\PrintNode\src;
 use App\Modules\PrintNode\src\Models\Client;
 use App\Modules\PrintNode\src\Models\PrintJob;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class PrintNode
 {
@@ -34,6 +35,11 @@ class PrintNode
     public static function print(PrintJob $printJob): int
     {
         $printNodeClient = self::getPrintNodeClient();
+
+        if (!$printNodeClient) {
+            Log::warning('Print job failed, no PrintNode clients configured');
+            return -1;
+        }
 
         $response = $printNodeClient->postRequest('printjobs', $printJob->toPrintNodePayload());
 
