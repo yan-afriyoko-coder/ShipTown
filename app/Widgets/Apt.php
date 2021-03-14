@@ -52,11 +52,11 @@ class Apt extends AbstractDateSelectorWidget
     {
         $result = '';
 
-        $data = array(
+        $data = [
             'd' => 86400,
             'h' => 3600,
             'm' => 60
-        );
+        ];
 
         foreach ($data as $k => $v) {
             if ($diffInSeconds >= $v) {

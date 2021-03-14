@@ -90,8 +90,8 @@ class ImportProductJob implements ShouldQueue
 
         foreach ($importedProduct->raw_import['aliases'] as $alias) {
             ProductAlias::query()->updateOrCreate(
-                array('alias'       => $alias['alias']),
-                array('product_id'  => $product->id)
+                ['alias'       => $alias['alias']],
+                ['product_id'  => $product->id]
             );
         }
     }
