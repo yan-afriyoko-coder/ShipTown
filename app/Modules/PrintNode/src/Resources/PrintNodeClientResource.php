@@ -4,7 +4,7 @@ namespace App\Modules\PrintNode\src\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ConfigurationResource extends JsonResource
+class PrintNodeClientResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,6 +14,11 @@ class ConfigurationResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'api_key' => '****',
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
+        ];
     }
 }

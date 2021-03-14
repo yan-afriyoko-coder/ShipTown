@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api\Settings\Module\Printnode;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePrintNodeClientRequest;
-use App\Http\Resources\PrintNodeClientResource;
 use App\Modules\PrintNode\src\Models\Client;
 use App\Modules\PrintNode\src\PrintNode;
+use App\Modules\PrintNode\src\Resources\PrintNodeClientResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
