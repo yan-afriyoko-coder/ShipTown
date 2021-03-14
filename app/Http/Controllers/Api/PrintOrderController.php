@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\PdfOrderController;
+use App\Modules\PrintNode\src\Client;
+use App\Modules\PrintNode\src\Models\PrintJob;
+use App\Modules\PrintNode\src\PrintNode;
+use App\Modules\PrintNode\src\Resources\PrintJobResource;
 use Illuminate\Http\Request;
 
 /**
@@ -15,13 +19,13 @@ class PrintOrderController extends PdfOrderController
     {
         $pdf = parent::show($request, $order_number, $template);
 
-        $job_name = $template . '_' . $order_number . '_by_' . $request->user()->id;
+        $printJob = new PrintJob();
+        $printJob->printer_id = $request->user()->printer_id;
+        $printJob->title = $template . '_' . $order_number . '_by_' . $request->user()->id;
+        $printJob->pdf = base64_encode($pdf);
 
-        $response = $request->user()->newPdfPrintJob($job_name, $pdf);
+        PrintNode::print($printJob);
 
-        return response(
-            $response->getContent(),
-            $response->getStatusCode()
-        );
+        return PrintJobResource::make($printJob);
     }
 }

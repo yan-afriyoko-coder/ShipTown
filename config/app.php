@@ -192,7 +192,6 @@ return [
         Aws\Laravel\AwsServiceProvider::class,
         Sentry\Laravel\ServiceProvider::class,
 
-        App\Providers\PrintServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
     ],

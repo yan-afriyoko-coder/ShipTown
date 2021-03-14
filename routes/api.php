@@ -47,6 +47,8 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('settings/modules/api2cart/connections', "Api\Settings\Module\Api2cart\Api2cartConnectionController")->only(['index','store','destroy']);
     Route::apiResource('settings/modules/api2cart/products', "Api\Settings\Module\Api2cart\ProductsController", ['as' => 'module.api2cart'])->only(['index']);
     Route::apiResource('settings/modules/printnode/printers', 'Api\Settings\Module\Printnode\PrinterController', ['as' => 'module.printnode'])->only(['index']);
+    Route::apiResource('settings/modules/printnode/printjobs', 'Api\Settings\Module\Printnode\PrintJobController', ['as' => 'module.printnode'])->only(['store']);
+    Route::apiResource('settings/modules/printnode/clients', 'Api\Settings\Module\Printnode\ClientController', ['as' => 'module.printnode'])->only(['index','store']);
 
     // Routes for users with the admin role only
     Route::middleware('role:admin')->group(function () {

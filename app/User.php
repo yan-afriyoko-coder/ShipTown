@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Services\PrintService;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,7 +14,6 @@ use Illuminate\Support\Carbon;
 use Laravel\Passport\Client;
 use Laravel\Passport\HasApiTokens;
 use Laravel\Passport\Token;
-use PrintNode\Response;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
@@ -99,21 +97,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'ask_for_shipping_number' => 'bool',
     ];
-
-    /**
-     * Sends a new print job request to the service from a PDF source.
-     *
-     * @param string $title A title to give the print job.
-     *   This is the name which will appear in the operating system's print queue.
-     * @param string $content The path to the pdf file, a pdf string
-     *
-     * @return Response
-     */
-    public function newPdfPrintJob($title, $content)
-    {
-        return app(PrintService::class)->newPdfPrintJob($this->printer_id, $title, $content);
-    }
-
 
     /**
      * @return QueryBuilder
