@@ -1,8 +1,7 @@
 <?php
 
-namespace Tests\External;
+namespace Tests\External\PrintNode;
 
-use App\Models\Order;
 use App\Modules\PrintNode\src\Models\Client;
 use App\Modules\PrintNode\src\PrintNode;
 use App\User;
