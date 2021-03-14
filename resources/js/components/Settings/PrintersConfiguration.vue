@@ -30,7 +30,10 @@
                             <td>{{ printer.computer.name }}</td>
                             <td>{{ printer.name }}</td>
                             <td>{{ printer.state }}</td>
-                            <td><a v-if="!isDefaultPrinter(printer.id)" href="#" @click.prevent="setDefault(printer.id)">Use</a></td>
+                            <td>
+                                <a v-if="!isDefaultPrinter(printer.id)" href="#" @click.prevent="setDefault(printer.id)">Use</a>
+                                <a href="#" @click.prevent="printTest(printer)">Print Test</a>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -45,12 +48,13 @@ export default {
         axios.get('/api/settings/user/me')
             .then(({ data }) => {
                 this.defaultPrinter = data.data.printer_id;
-                axios.get('/api/settings/modules/printnode/printers')
-                    .then(({ data }) => {
-                        this.printers = data.data;
-                    }).catch(e => {
-                        this.error = true;
-                    });
+            });
+
+        axios.get('/api/settings/modules/printnode/printers')
+            .then(({ data }) => {
+                this.printers = data.data;
+            }).catch(e => {
+                this.error = true;
             });
     },
 
@@ -63,11 +67,18 @@ export default {
     methods: {
         setDefault(printerId) {
             axios.post('/api/settings/user/me', {
-                    'printer_id': printerId
-                })
+                'printer_id': printerId
+            })
                 .then(({ data }) => {
                     this.defaultPrinter = data.printer_id;
                 });
+        },
+
+        printTest(printer) {
+            axios.post('/api/settings/modules/printnode/printjobs', {
+                'printer_id': printer.id,
+                'pdf_url': 'https://api.printnode.com/static/test/pdf/label_4in_x_6in.pdf'
+            });
         },
 
         isDefaultPrinter(printerId) {

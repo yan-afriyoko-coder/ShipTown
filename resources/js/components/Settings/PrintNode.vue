@@ -14,7 +14,7 @@
                         <label for="key">API Key</label>
                         <input v-model="value" type="text" class="form-control" id="key" />
                     </div>
-                    
+
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>
@@ -25,9 +25,10 @@
 <script>
 export default {
     created() {
-        axios.get(`api/configuration/${process.env.MIX_PRINTNODE_CONFIG_KEY_NAME}`).then(({ data }) => {
-            this.value = data.data.value;
-        });
+        axios.get('api/settings/modules/printnode/clients')
+            .then(({ data }) => {
+                this.value = data.data[0]['api_key'];
+            });
     },
 
     data: () => ({
@@ -37,9 +38,8 @@ export default {
     methods: {
         handleSubmit() {
             if (this.value) {
-                axios.post(`api/configuration`, {
-                    key: process.env.MIX_PRINTNODE_CONFIG_KEY_NAME,
-                    value: this.value,
+                axios.post('api/settings/modules/printnode/clients', {
+                    'api_key': this.value
                 });
             }
         }

@@ -9,10 +9,14 @@ use App\Models\Order;
 use App\Modules\DpdIreland\Dpd;
 use App\Modules\DpdIreland\src\Exceptions\AuthorizationException;
 use App\Modules\DpdIreland\src\Responses\PreAdvice;
+use App\Modules\PrintNode\src\Client;
+use App\Modules\PrintNode\src\Models\PrintJob;
+use App\Modules\PrintNode\src\PrintNode;
 use App\Services\PrintService;
 use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use PrintNode\Response;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class PrintDpdLabelController
@@ -31,7 +35,7 @@ class PrintDpdLabelController extends Controller
 
         $preAdvice = $this->createPreAdviceOrFail($order);
 
-        $printRequest = $this->printOrFail($preAdvice);
+        $this->printOrFail($preAdvice);
 
         return PreAdviceResource::collection(
             collect()->add($preAdvice->toArray())
@@ -63,18 +67,17 @@ class PrintDpdLabelController extends Controller
 
     /**
      * @param PreAdvice $preAdvice
-     * @return Response|null
+     * @return int
      */
-    public function printOrFail(PreAdvice $preAdvice): ?Response
+    public function printOrFail(PreAdvice $preAdvice): int
     {
         try {
-            $job_title = $preAdvice->trackingNumber() . '_by_' . request()->user()->id;
+            $printJob = new PrintJob();
+            $printJob->printer_id = request()->user()->printer_id;
+            $printJob->title = $preAdvice->trackingNumber() . '_by_' . request()->user()->id;
+            $printJob->pdf_url = $preAdvice->labelImage();
 
-            return PrintService::print()->printPdfFromUrl(
-                request()->user()->printer_id,
-                $job_title,
-                $preAdvice->labelImage()
-            );
+            return PrintNode::print($printJob);
         } catch (Exception $exception) {
             $this->respondBadRequest($exception->getMessage());
         }

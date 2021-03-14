@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Api\Settings\Module\Printnode;
 
 use App\Http\Controllers\Controller;
-use App\Services\PrintService;
-use Illuminate\Http\JsonResponse;
+use App\Modules\PrintNode\src\PrintNode;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class PrinterController
@@ -15,35 +14,11 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 class PrinterController extends Controller
 {
     /**
-     * @var PrintService
-     */
-    private $printService;
-
-    /**
-     * PrinterController constructor.
-     * @param PrintService $printService
-     */
-    public function __construct(PrintService $printService)
-    {
-        $this->printService = $printService;
-    }
-
-    /**
      * @param Request $request
-     * @return JsonResponse|ResourceCollection
+     * @return JsonResource
      */
-    public function index(Request $request)
+    public function index(Request $request): JsonResource
     {
-        try {
-            $printers = $this->printService->getPrinters();
-
-            $sortedPrinters = collect($printers)->sortBy(function ($printer) {
-                return $printer->computer->name . $printer->name;
-            });
-
-            return new ResourceCollection($sortedPrinters);
-        } catch (\Exception $e) {
-            return response()->json([], 422);
-        }
+        return new JsonResource(PrintNode::getPrinters());
     }
 }
