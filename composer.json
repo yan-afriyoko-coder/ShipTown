@@ -32,7 +32,8 @@
         "spatie/laravel-query-builder": "^3.3",
         "spatie/laravel-tags": "^4.0",
         "thomasjohnkane/snooze": "^1.0",
-        "ext-simplexml": "*"
+        "ext-simplexml": "*",
+        "laravel/ui": "^2.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",
