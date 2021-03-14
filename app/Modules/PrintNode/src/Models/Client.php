@@ -80,7 +80,7 @@ class Client extends Model
     /**
      * @return QueryBuilder
      */
-    public function getSpatieQueryBuilder(): QueryBuilder
+    public static function getSpatieQueryBuilder(): QueryBuilder
     {
         return QueryBuilder::for(Client::class);
     }

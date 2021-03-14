@@ -14,7 +14,7 @@ class ClientController extends Controller
 {
     public function index(Request $request): AnonymousResourceCollection
     {
-        return PrintNodeClientResource::collection($this->getPaginatedResult(Client::query()));
+        return PrintNodeClientResource::collection($this->getPaginatedResult(Client::getSpatieQueryBuilder()));
     }
 
     public function store(StorePrintNodeClientRequest $request): PrintNodeClientResource
