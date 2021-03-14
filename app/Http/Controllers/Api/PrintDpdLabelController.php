@@ -9,14 +9,10 @@ use App\Models\Order;
 use App\Modules\DpdIreland\Dpd;
 use App\Modules\DpdIreland\src\Exceptions\AuthorizationException;
 use App\Modules\DpdIreland\src\Responses\PreAdvice;
-use App\Modules\PrintNode\src\Client;
 use App\Modules\PrintNode\src\Models\PrintJob;
 use App\Modules\PrintNode\src\PrintNode;
-use App\Services\PrintService;
 use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use PrintNode\Response;
-use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class PrintDpdLabelController
