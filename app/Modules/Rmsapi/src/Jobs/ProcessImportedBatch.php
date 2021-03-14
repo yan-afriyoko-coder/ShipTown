@@ -52,5 +52,4 @@ class ProcessImportedBatch implements ShouldQueue
             ImportProductJob::dispatch($importedProduct);
         }
     }
-
 }

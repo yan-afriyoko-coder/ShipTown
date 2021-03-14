@@ -25,8 +25,12 @@ class ProductsPackedCountsWidget extends AbstractDateSelectorWidget
                 $this->getStartingDateTime(),
                 $this->getEndingDateTime()
             ])
-            ->leftJoin('users',
-                'packer_user_id', '=', 'users.id')
+            ->leftJoin(
+                'users',
+                'packer_user_id',
+                '=',
+                'users.id'
+            )
             ->groupBy(['packer_user_id'])
             ->orderByDesc('total')
             ->get();

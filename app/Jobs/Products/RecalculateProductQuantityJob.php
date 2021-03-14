@@ -52,7 +52,7 @@ class RecalculateProductQuantityJob implements ShouldQueue
                 ]);
         });
 
-        if($incorrectProductRecords->count() === $this->maxPerJob) {
+        if ($incorrectProductRecords->count() === $this->maxPerJob) {
             self::dispatch();
         }
 

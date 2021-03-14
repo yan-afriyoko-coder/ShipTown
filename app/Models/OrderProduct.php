@@ -138,7 +138,6 @@ class OrderProduct extends Model
             $startingDateTime,
             $endingDateTime
         ]);
-
     }
 
     /**

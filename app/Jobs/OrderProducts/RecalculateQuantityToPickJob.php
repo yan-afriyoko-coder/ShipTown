@@ -39,7 +39,7 @@ class RecalculateQuantityToPickJob implements ShouldQueue
                 $orderProduct->log('Incorrect quantity to pick detected')
                     // quantity_to_pick is recalculated on model save
                     ->save();
-            });
+        });
 
         info('RecalculateQuantityToPickJob finished', ['record_recalculated' => $records->count()]);
     }

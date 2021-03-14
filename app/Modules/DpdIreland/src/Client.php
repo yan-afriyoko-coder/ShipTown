@@ -3,7 +3,6 @@
 
 namespace App\Modules\DpdIreland\src;
 
-
 use Carbon\Carbon;
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\Facades\Cache;
@@ -86,14 +85,14 @@ class Client
     {
         $cachedAuthorization = Cache::get(self::AUTHORIZATION_CACHE_KEY);
 
-        if($cachedAuthorization) {
+        if ($cachedAuthorization) {
             $cachedAuthorization['from_cache'] = true;
             return $cachedAuthorization;
         }
 
         $authorization = self::getAuthorization();
 
-        Cache::put(self::AUTHORIZATION_CACHE_KEY, $authorization,86400);
+        Cache::put(self::AUTHORIZATION_CACHE_KEY, $authorization, 86400);
 
         return $authorization;
     }

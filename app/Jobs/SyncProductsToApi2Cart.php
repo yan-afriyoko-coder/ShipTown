@@ -48,6 +48,5 @@ class SyncProductsToApi2Cart implements ShouldQueue
                 }
                 info('Dispatched Api2cart product sync jobs', ['count' => $products->count()]);
             });
-
     }
 }

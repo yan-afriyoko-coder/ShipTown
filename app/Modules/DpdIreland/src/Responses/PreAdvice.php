@@ -3,7 +3,6 @@
 
 namespace App\Modules\DpdIreland\src\Responses;
 
-
 /**
  * Class PreAdvice
  * @package App\Modules\Dpd\src\Responses
