@@ -5,11 +5,22 @@ namespace App\Modules\PrintNode\src\Models;
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Database\Eloquent\Model;
 use Psr\Http\Message\ResponseInterface;
+use Spatie\QueryBuilder\QueryBuilder;
 
+/**
+ * Class Client
+ * @package App\Modules\PrintNode\src\Models
+ */
 class Client extends Model
 {
+    /**
+     * @var string
+     */
     protected $table = 'module_printnode_clients';
 
+    /**
+     * @var string[]
+     */
     protected $fillable = ['api_key'];
 
     /**
@@ -17,6 +28,10 @@ class Client extends Model
      */
     private $guzzleClient;
 
+    /**
+     * Client constructor.
+     * @param array $attributes
+     */
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -50,6 +65,9 @@ class Client extends Model
         ]);
     }
 
+    /**
+     * @return string[]
+     */
     public function generateHeaders(): array
     {
         return  [
@@ -57,5 +75,13 @@ class Client extends Model
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
         ];
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    public function getSpatieQueryBuilder(): QueryBuilder
+    {
+        return QueryBuilder::for(Client::class);
     }
 }
