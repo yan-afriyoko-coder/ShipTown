@@ -2,11 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Dompdf\Dompdf;
-
 use App\Services\PrintService;
 use App\User;
+use Dompdf\Dompdf;
+use Illuminate\Console\Command;
 
 class TestPrint extends Command
 {
@@ -24,7 +23,7 @@ class TestPrint extends Command
      *
      * @var string
      */
-    protected $description = 'Make a test print using the default user\'s (user ID = 1) preferred printer. 
+    protected $description = 'Make a test print using the default user\'s (user ID = 1) preferred printer.
         Setup printers via the UI before using this command.';
 
     /**
