@@ -19,6 +19,19 @@ class PrintNodeTest extends TestCase
         $this->assertNotEmpty($actual, 'PRINTNODE_TEST_API_KEY env key is not set');
     }
 
+    public function test_get_clients()
+    {
+        $repository = config('printnode.test_api_key');
+
+        Client::query()->updateOrCreate([], ['api_key' => $repository]);
+
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user, 'api')->get('api/settings/modules/printnode/clients');
+
+        $response->assertSuccessful();
+    }
+
     public function test_get_printers()
     {
         $repository = config('printnode.test_api_key');
