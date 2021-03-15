@@ -39,6 +39,13 @@
             </template>
         </div>
 
+
+        <div class="row">
+            <div class="col">
+                <div ref="loadingContainerOverride" style="height: 100px"></div>
+            </div>
+        </div>
+
         <!--     Modal -->
         <picklist-configuration-modal id='picklistConfigurationModal' @btnSaveClicked="reloadPicks" />
 
@@ -75,9 +82,7 @@ export default {
     watch: {
         picklist: {
             handler() {
-                 if (this.isLoading) return;
-
-                if (this.picklist.length === 0) {
+                if (this.picklist.length === 0 && this.isLoading() === false ) {
                     this.reloadPicks();
                 }
 
@@ -165,7 +170,7 @@ export default {
                 .catch( error => {
                     this.$snotify.error('Action failed (Http code  '+ error.response.status+')');
                 })
-                .then( () => {
+                .finally( () => {
                         this.hideLoading();
                         this.setFocusOnBarcodeInput();
                 });

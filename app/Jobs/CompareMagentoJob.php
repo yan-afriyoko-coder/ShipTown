@@ -36,7 +36,7 @@ class CompareMagentoJob implements ShouldQueue
      */
     public function handle()
     {
-        Api2cartConnection::all()->each(function(Api2cartConnection $connection) {
+        Api2cartConnection::all()->each(function (Api2cartConnection $connection) {
             $params = [
                 'store_id' => $connection->magento_store_id,
                 'modified_from' => Carbon::now()->subDay()->toDateTimeString(),
@@ -52,7 +52,7 @@ class CompareMagentoJob implements ShouldQueue
             $magentoProductList->each(function ($magentoProduct) use ($connection) {
                 $pmProduct = Product::findBySKU($magentoProduct['u_model']);
 
-                if(is_null($pmProduct)) {
+                if (is_null($pmProduct)) {
                     \Log::warning('Magento product not found in Products Management', [$magentoProduct]);
                     return;
                 }
@@ -97,5 +97,4 @@ class CompareMagentoJob implements ShouldQueue
     {
         return !$this->areInSync($magentoProduct, $pmProduct, $connection);
     }
-
 }

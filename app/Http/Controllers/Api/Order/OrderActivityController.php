@@ -27,7 +27,7 @@ class OrderActivityController extends Controller
         $query = QueryBuilder::for($query)
             ->allowedFilters([
                 AllowedFilter::exact('subject_type'),
-                AllowedFilter::exact('subject_id','subject_id'),
+                AllowedFilter::exact('subject_id', 'subject_id'),
             ])
             ->allowedIncludes([
                 'causer'

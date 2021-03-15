@@ -84,5 +84,4 @@ abstract class AbstractDateSelectorWidget extends AbstractWidget
         }
         return $datesCollection;
     }
-
 }
