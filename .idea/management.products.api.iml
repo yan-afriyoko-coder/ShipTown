@@ -181,6 +181,16 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/laravel/ui" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/laminas/laminas-diactoros" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/laminas/laminas-zendframework-bridge" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/commandlinetools" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/inspectionProfiles" />
+      <excludeFolder url="file://$MODULE_DIR$/storage/framework/cache/data/0d" />
+      <excludeFolder url="file://$MODULE_DIR$/storage/framework/cache/data/2f" />
+      <excludeFolder url="file://$MODULE_DIR$/storage/framework/cache/data/5a" />
+      <excludeFolder url="file://$MODULE_DIR$/storage/framework/cache/data/44" />
+      <excludeFolder url="file://$MODULE_DIR$/storage/framework/cache/data/85" />
+      <excludeFolder url="file://$MODULE_DIR$/storage/framework/cache/data/aa" />
+      <excludeFolder url="file://$MODULE_DIR$/storage/framework/cache/data/c2" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
