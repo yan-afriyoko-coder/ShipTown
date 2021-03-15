@@ -37,7 +37,7 @@ class FetchUpdatedProductsJob implements ShouldQueue
     public function __construct(int $rmsapiConnectionId)
     {
         $this->rmsapiConnection = RmsapiConnection::find($rmsapiConnectionId);
-        $this->batch_uuid = Uuid::uuid4();
+        $this->batch_uuid = Uuid::uuid4()->toString();
     }
 
     /**
