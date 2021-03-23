@@ -120,9 +120,9 @@ class OrderProduct extends Model
      * @param Builder|QueryBuilder $query
      * @param $min
      * @param $max
-     * @return QueryBuilder
+     * @return Builder|QueryBuilder
      */
-    public function scopeCreatedBetween($query, $min, $max): QueryBuilder
+    public function scopeCreatedBetween($query, $min, $max)
     {
         try {
             $startingDateTime = Carbon::parse($min);
