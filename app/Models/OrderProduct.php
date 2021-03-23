@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Traits\LogsActivityTrait;
-use Barryvdh\LaravelIdeHelper\Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
-use MongoDB\Driver\Query;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -65,7 +63,6 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereUpdatedAt($value)
  * @method static Builder|OrderProduct withTrashed()
  * @method static Builder|OrderProduct withoutTrashed()
- * @mixin Eloquent
  * @property string $quantity_outstanding
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereHasStockReserved($statusCodeArray)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityOutstanding($value)
@@ -120,12 +117,12 @@ class OrderProduct extends Model
     }
 
     /**
-     * @param QueryBuilder $query
+     * @param Builder|QueryBuilder $query
      * @param $min
      * @param $max
-     * @return QueryBuilder
+     * @return Builder|QueryBuilder
      */
-    public function scopeCreatedBetween(QueryBuilder $query, $min, $max): QueryBuilder
+    public function scopeCreatedBetween($query, $min, $max)
     {
         try {
             $startingDateTime = Carbon::parse($min);
