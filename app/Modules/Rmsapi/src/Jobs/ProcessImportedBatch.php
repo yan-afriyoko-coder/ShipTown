@@ -22,13 +22,14 @@ class ProcessImportedBatch implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $batch_uuid = null;
+    private ?string $batch_uuid = null;
+
     /**
      * Create a new job instance.
      *
-     * @param Uuid|null $batch_uuid
+     * @param String|null $batch_uuid
      */
-    public function __construct(Uuid $batch_uuid = null)
+    public function __construct(String $batch_uuid = null)
     {
         $this->batch_uuid = $batch_uuid;
     }
@@ -52,5 +53,4 @@ class ProcessImportedBatch implements ShouldQueue
             ImportProductJob::dispatch($importedProduct);
         }
     }
-
 }

@@ -37,9 +37,8 @@ class Client
             ]
         ]);
 
-        if ($response->isNotSuccess())
-        {
-            throw new RequestException($response->getReturnMessage(),$response->getReturnCode());
+        if ($response->isNotSuccess()) {
+            throw new RequestException($response->getReturnMessage(), $response->getReturnCode());
         }
 
         return $response;
@@ -66,9 +65,8 @@ class Client
             ])
         );
 
-        if ($response->isNotSuccess())
-        {
-            throw new RequestException($response->getReturnMessage(),$response->getReturnCode());
+        if ($response->isNotSuccess()) {
+            throw new RequestException($response->getReturnMessage(), $response->getReturnCode());
         }
 
         logger("POST", [

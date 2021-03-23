@@ -66,6 +66,12 @@
 
         </div>
 
+        <div class="row">
+            <div class="col">
+                <div ref="loadingContainerOverride" style="height: 100px"></div>
+            </div>
+        </div>
+
         <set-shipping-number-modal ref="shippingNumberModal" @shippingNumberUpdated="addShippingNumber"></set-shipping-number-modal>
 
         <filters-modal ref="filtersModal" @btnSaveClicked="onConfigChange">

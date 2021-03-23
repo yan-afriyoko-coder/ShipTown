@@ -56,6 +56,5 @@ class DpdIntegrationTestJob implements ShouldQueue
                     ]);
                 }
             });
-
     }
 }
