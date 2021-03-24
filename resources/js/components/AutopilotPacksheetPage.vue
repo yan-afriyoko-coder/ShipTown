@@ -346,17 +346,32 @@
 
                 setQuantityShipped(orderProduct, quantity) {
                     this.somethingHasBeenPackedDuringThisSession = true;
-                    this.removeFromLists(orderProduct);
+
+                    const quantity_shipped_before = orderProduct['quantity_shipped'];
+                    let removedFromList = false;
+
+                    orderProduct['quantity_shipped'] = quantity;
+
+                    if(orderProduct['quantity_shipped'] === orderProduct['quantity_ordered']) {
+                        this.removeFromLists(orderProduct);
+                        removedFromList = true;
+                    }
 
                     axios.put('/api/order/products/' + orderProduct['id'], {
                         'quantity_shipped': quantity
                     })
                         .then(({data}) => {
-                            this.addToLists(data.data);
+                            if(removedFromList === true) {
+                                this.addToLists(data.data);
+                            }
                             this.notifySuccess();
                         })
                         .catch((error) => {
-                            this.addToLists(orderProduct);
+                            orderProduct['quantity_shipped'] = quantity_shipped_before;
+
+                            if(removedFromList === true) {
+                                this.addToLists(data.data);
+                            }
                             this.notifyError('Error occurred when saving quantity shipped');
                         });
                 },
@@ -406,12 +421,17 @@
 
                     let pickItem = this.findEntry(barcode);
 
-                    if(pickItem) {
-                        this.shipAll(pickItem);
+                    if(!pickItem) {
+                        this.notifyError(`"${barcode}" not found on packlist!`);
                         return;
                     }
 
-                    this.notifyError(`"${barcode}" not found on packlist!`);
+                    if (pickItem['quantity_ordered'] - pickItem['quantity_shipped'] < 1) {
+                        this.notifyError(`SKU already shipped`);
+                        return;
+                    }
+
+                    this.setQuantityShipped(pickItem,pickItem['quantity_shipped'] + 1);
                 },
 
                 printLabelIfNeeded: async function() {

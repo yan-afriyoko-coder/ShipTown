@@ -12,7 +12,7 @@
         <div class="col-lg-6">
             <div class="row">
                 <div class="col-6 small">
-                    <div>
+                    <div >
                         ordered: <b>{{ dashIfZero(Math.ceil(entry['quantity_ordered'])) }}</b>
                     </div>
                     <div>
@@ -25,7 +25,7 @@
                         inventory: <b>{{ dashIfZero(Math.ceil(productInventory)) }}</b>
                     </div>
                 </div>
-                <div class="col-3 text-center" v-bind:class="{ 'bg-warning': Math.ceil(entry['quantity_to_ship']) > 1 }">
+                <div class="col-3 text-center" v-bind:class="{ 'bg-warning': Math.ceil(entry['quantity_ordered']) > 1 }">
                     <small>to ship</small>
                     <h3>{{ dashIfZero(Math.ceil(entry['quantity_ordered'] - entry['quantity_shipped'])) }}</h3>
                 </div>
