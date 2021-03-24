@@ -24,9 +24,9 @@ class FetchUpdatedProductsJob implements ShouldQueue
     private $rmsapiConnection;
 
     /**
-     * @var UuidInterface
+     * @var string
      */
-    public $batch_uuid;
+    public string $batch_uuid;
 
     /**
      * Create a new job instance.
@@ -37,7 +37,7 @@ class FetchUpdatedProductsJob implements ShouldQueue
     public function __construct(int $rmsapiConnectionId)
     {
         $this->rmsapiConnection = RmsapiConnection::find($rmsapiConnectionId);
-        $this->batch_uuid = Uuid::uuid4();
+        $this->batch_uuid = Uuid::uuid4()->toString();
     }
 
     /**
@@ -84,7 +84,7 @@ class FetchUpdatedProductsJob implements ShouldQueue
         $insertData = $productsCollection->map(function ($product) use ($time) {
             return [
                 'connection_id' => $this->rmsapiConnection->getKey(),
-                'batch_uuid' => $this->batch_uuid->toString(),
+                'batch_uuid' => $this->batch_uuid,
                 'raw_import' => json_encode($product),
                 'created_at' => $time,
                 'updated_at' => $time,
