@@ -2,21 +2,12 @@
 
 namespace App\Modules\Rmsapi\src\Jobs;
 
-use App\Models\Inventory;
-use App\Models\Product;
-use App\Models\ProductAlias;
-use App\Models\ProductPrice;
-use App\Models\RmsapiConnection;
 use App\Models\RmsapiProductImport;
-use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
-use Ramsey\Uuid\Uuid;
 
 class ProcessImportedBatch implements ShouldQueue
 {
@@ -29,7 +20,7 @@ class ProcessImportedBatch implements ShouldQueue
      *
      * @param String|null $batch_uuid
      */
-    public function __construct(String $batch_uuid = null)
+    public function __construct(string $batch_uuid = null)
     {
         $this->batch_uuid = $batch_uuid;
     }
