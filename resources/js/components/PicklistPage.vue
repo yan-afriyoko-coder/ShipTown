@@ -82,7 +82,7 @@ export default {
     watch: {
         picklist: {
             handler() {
-                if (this.picklist.length === 0 && this.isLoading() === false ) {
+                if (this.picklist.length === 0 && this.isLoading === false ) {
                     this.reloadPicks();
                 }
 
