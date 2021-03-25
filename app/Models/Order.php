@@ -5,14 +5,12 @@ namespace App\Models;
 use App\Traits\HasTagsTrait;
 use App\Traits\LogsActivityTrait;
 use App\User;
-use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\HigherOrderBuilderProxy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
@@ -85,7 +83,6 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereTotalPaid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereTotalQuantityOrdered($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
- * @mixin Eloquent
  * @property-read int $age_in_days
  */
 class Order extends Model
@@ -159,24 +156,26 @@ class Order extends Model
     }
 
     /**
-     * @param QueryBuilder $query
-     * @return QueryBuilder
+     * @param Builder $query
+     * @return Builder
      */
-    public function scopeIsActive(QueryBuilder $query): QueryBuilder
+    public function scopeIsActive(Builder $query): Builder
     {
         return $query->whereIn('status_code', OrderStatus::getActiveStatusCodesList());
     }
 
     /**
-     * @param QueryBuilder $query
-     * @return QueryBuilder
+     * @param Builder $query
+     * @param string $fromDateTime
+     * @param string $toDateTime
+     * @return Builder
      */
-    public function scopePackedBetween(QueryBuilder $query, $startingTimeString, $endingTimeString): QueryBuilder
+    public function scopePackedBetween(Builder $query, string $fromDateTime, string $toDateTime): Builder
     {
         try {
             $dates = [
-                Carbon::parse($startingTimeString),
-                Carbon::parse($endingTimeString),
+                Carbon::parse($fromDateTime),
+                Carbon::parse($toDateTime),
             ];
         } catch (\Exception $exception) {
             $dates = [
