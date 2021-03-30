@@ -35,9 +35,10 @@ class PicklistPickController extends Controller
 
         foreach ($orderProducts as $orderProduct) {
             $quantity = min($quantityToDistribute, $orderProduct->quantity_to_pick);
-            $orderProduct->update([
+            $orderProduct->fill([
                 $key => $orderProduct->getAttribute($key) + $quantity
             ]);
+            $orderProduct->save();
             $quantityToDistribute -= $quantity;
             if ($quantityToDistribute <= 0) {
                 break;
