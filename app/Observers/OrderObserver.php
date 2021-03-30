@@ -29,6 +29,14 @@ class OrderObserver
      */
     public function updated(Order $order)
     {
+        // if all shipped
+        if ($order->orderProducts->where('quantity_to_pick', '>', 0)->exists()) {
+            // change status to packing_web
+            $order->update([
+                'status_code' => 'packing_web'
+            ]);
+        }
+
         OrderUpdatedEvent::dispatch($order);
     }
 
