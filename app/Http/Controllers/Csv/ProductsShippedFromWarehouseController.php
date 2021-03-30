@@ -17,10 +17,7 @@ class ProductsShippedFromWarehouseController extends Controller
 
     public function index(Request $request)
     {
-        $query = QueryBuilder::for(OrderProduct::class)
-            ->allowedFilters([
-                AllowedFilter::exact('packer_user_id', 'orders.packer_user_id'),
-            ])
+        $query = OrderProduct::getSpatieQueryBuilder()
             ->select([
                 'products.sku',
                 'products.name',
