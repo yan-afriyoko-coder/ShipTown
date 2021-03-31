@@ -4,13 +4,12 @@ namespace Tests\Feature\Jobs;
 
 use App\Models\Order;
 use App\Models\OrderProduct;
-use App\Models\Product;
 use App\Modules\AutoPilot\src\Jobs\Refill\RefillOldOrdersToPickingJob;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class RefillOldOrdertoPickingJobTest extends TestCase
+class RefillOldOrdersPickingJobTest extends TestCase
 {
     use RefreshDatabase;
 

@@ -102,7 +102,6 @@ class Order extends Model
         'raw_import',
         'total',
         'total_paid',
-        'total_quantity_ordered',
     ];
 
     protected static $logAttributes = [
