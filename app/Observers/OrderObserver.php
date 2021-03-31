@@ -22,6 +22,13 @@ class OrderObserver
         // after created OrderProducts etc
     }
 
+    public function saving(Order $order)
+    {
+        $order->setAttribute('total_quantity_ordered', $order->orderProducts()->sum('quantity_ordered'));
+        $order->total_quantity_ordered = $order->orderProducts()->sum('quantity_ordered');
+        $order->product_line_count = $order->orderProducts()->count('id');
+    }
+
     /**
      * @param Order $order
      */

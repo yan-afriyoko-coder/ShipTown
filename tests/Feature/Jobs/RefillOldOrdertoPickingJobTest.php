@@ -3,12 +3,17 @@
 namespace Tests\Feature\Jobs;
 
 use App\Models\Order;
+use App\Models\OrderProduct;
+use App\Models\Product;
 use App\Modules\AutoPilot\src\Jobs\Refill\RefillOldOrdersToPickingJob;
 use Carbon\Carbon;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class RefillOldOrdertoPickingJobTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * A basic feature test example.
      *
@@ -16,13 +21,16 @@ class RefillOldOrdertoPickingJobTest extends TestCase
      */
     public function testExample()
     {
-        Order::query()->forceDelete();
+        $order = factory(Order::class)->create([
+            'order_placed_at' => Carbon::now()->subDays(100),
+            'status_code' => 'processing'
+        ]);
 
-        $order = factory(Order::class)
-            ->create([
-                'status_code' => 'paid',
-                'order_placed_at' => Carbon::now()->subDays(7),
-            ])->with('orderProducts');
+        factory(OrderProduct::class)->create([
+            'order_id' => $order->id
+        ]);
+
+        $order->update(['status_code' => 'paid']);
 
         RefillOldOrdersToPickingJob::dispatchNow();
 
