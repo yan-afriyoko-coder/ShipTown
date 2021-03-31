@@ -29,7 +29,6 @@ class OrderUpdatedEventListener
     public function handle(OrderUpdatedEvent $event)
     {
         $this->markedIfPayed($event);
-        $this->moveOrderFromPickingToPackingWeb($event);
         $this->changeStatusToReadyIfPacked($event);
         $this->updateOrderClosedAt($event);
         CheckIfOrderOutOfStockJob::dispatch($event->getOrder());
@@ -63,17 +62,6 @@ class OrderUpdatedEventListener
         }
 
         SetStatusPaidIfPaidJob::dispatch($event->getOrder());
-    }
-
-    public function moveOrderFromPickingToPackingWeb(OrderUpdatedEvent $event)
-    {
-        if ($event->getOrder()->isNotStatusCode('picking')) {
-            return;
-        }
-
-        if ($event->getOrder()->is_picked) {
-            $event->getOrder()->update(['status_code' => 'packing_web']);
-        }
     }
 
     /**

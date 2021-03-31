@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Events\Order\OrderUpdatedEvent;
 use App\Models\Order;
+use Carbon\Carbon;
 
 class OrderObserver
 {
@@ -16,9 +17,35 @@ class OrderObserver
     public function created(Order $order)
     {
         // we will not dispatch CreatedEvent here
-        // please user OrderService method
+        // please use OrderService method
         // CreatedEvent should be dispatched
         // after created OrderProducts etc
+    }
+
+    public function saving(Order $order)
+    {
+        $order->setAttribute('total_quantity_ordered', $order->orderProducts()->sum('quantity_ordered'));
+        $order->total_quantity_ordered = $order->orderProducts()->sum('quantity_ordered');
+        $order->product_line_count = $order->orderProducts()->count('id');
+    }
+
+    /**
+     * @param Order $order
+     */
+    public function saved(Order $order)
+    {
+        // if no more orderProducts to pick exists
+        if (!$order->orderProducts()->where('quantity_to_pick', '>', 0)->exists()) {
+            if ($order->isNotStatusCode('picking')) {
+                return;
+            }
+
+            // change status to packing_web
+            $order->update([
+                'status_code' => 'packing_web',
+                'picked_at' => Carbon::now(),
+            ]);
+        }
     }
 
     /**
@@ -30,38 +57,5 @@ class OrderObserver
     public function updated(Order $order)
     {
         OrderUpdatedEvent::dispatch($order);
-    }
-
-    /**
-     * Handle the order "deleted" event.
-     *
-     * @param  Order  $order
-     * @return void
-     */
-    public function deleted(Order $order)
-    {
-        //
-    }
-
-    /**
-     * Handle the order "restored" event.
-     *
-     * @param  Order  $order
-     * @return void
-     */
-    public function restored(Order $order)
-    {
-        //
-    }
-
-    /**
-     * Handle the order "force deleted" event.
-     *
-     * @param  Order  $order
-     * @return void
-     */
-    public function forceDeleted(Order $order)
-    {
-        //
     }
 }

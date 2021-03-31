@@ -328,9 +328,9 @@ class Order extends Model
         return $query->whereNull('picked_at');
     }
 
-    public function scopeIsPacked($query, $value)
+    public function scopeIsPacked($query)
     {
-        return $query->whereNull('packed_at', 'and', $value);
+        return $query->whereNull('packed_at');
     }
 
     public function getIsPackedAttribute()

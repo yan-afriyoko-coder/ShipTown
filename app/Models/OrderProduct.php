@@ -72,6 +72,11 @@ class OrderProduct extends Model
     use SoftDeletes;
     use LogsActivityTrait;
 
+    /**
+     * @var string[]
+     */
+    protected $touches = ['order'];
+
     protected static $logAttributes = [
         'quantity_ordered',
         'quantity_shipped',
