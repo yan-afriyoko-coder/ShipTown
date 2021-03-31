@@ -5,11 +5,8 @@ namespace App\Http\Controllers\Csv;
 use App\Http\Controllers\Controller;
 use App\Models\OrderProduct;
 use App\Traits\CsvFileResponse;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class ProductsShippedFromWarehouseController extends Controller
 {
@@ -27,7 +24,6 @@ class ProductsShippedFromWarehouseController extends Controller
             ])
             ->join('products', 'products.id', '=', 'order_products.product_id')
             ->join('orders', 'orders.id', '=', 'order_products.order_id')
-            ->whereDate('orders.packed_at', '=', Carbon::today())
             ->where('order_products.quantity_shipped', '>', 0);
 
         return $this->toCsvFileResponse($query->get(), 'warehouse_shipped.csv');
