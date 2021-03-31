@@ -25,7 +25,7 @@ class ProductsPickedInWarehouse extends Controller
                 'picks.quantity_picked',
             ])
             ->join('products', 'products.id', '=', 'picks.product_id')
-            ->whereDate('picks.created_at', '=', Carbon::today())
+//            ->whereDate('picks.created_at', '=', Carbon::today())
             ->where('quantity_picked', '>', 0);
 
         return $this->toCsvFileResponse($query->get(), 'warehouse_picks.csv');
