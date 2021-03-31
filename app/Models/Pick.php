@@ -86,12 +86,8 @@ class Pick extends Model
      */
     public function scopeCreatedBetween($query, $min, $max)
     {
-        try {
-            $startingDateTime = Carbon::parse($min);
-            $endingDateTime = Carbon::parse($max);
-        } catch (Exception $exception) {
-            return $query;
-        }
+        $startingDateTime = Carbon::parse($min);
+        $endingDateTime = Carbon::parse($max);
 
         return $query->whereBetween('picks.created_at', [
             $startingDateTime,
