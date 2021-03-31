@@ -3,8 +3,7 @@
 namespace App\Models;
 
 use App\User;
-use Barryvdh\LaravelIdeHelper\Eloquent;
-use Illuminate\Database\Eloquent\Collection;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -32,7 +31,6 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read bool $is_picked
- * @property-read Collection|PickRequest[] $pickRequests
  * @property-read int|null $pick_requests_count
  * @property-read Product|null $product
  * @property-read User|null $user
@@ -61,7 +59,6 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static \Illuminate\Database\Eloquent\Builder|Pick whereUserId($value)
  * @method static Builder|Pick withTrashed()
  * @method static Builder|Pick withoutTrashed()
- * @mixin Eloquent
  */
 class Pick extends Model
 {
@@ -77,11 +74,30 @@ class Pick extends Model
         'name_ordered',
         'quantity_picked',
         'quantity_skipped_picking',
-
-//        'quantity_required',
         'picker_user_id',
         'picked_at'
     ];
+
+    /**
+     * @param Builder|QueryBuilder $query
+     * @param $min
+     * @param $max
+     * @return Builder|QueryBuilder
+     */
+    public function scopeCreatedBetween($query, $min, $max)
+    {
+        try {
+            $startingDateTime = Carbon::parse($min);
+            $endingDateTime = Carbon::parse($max);
+        } catch (Exception $exception) {
+            return $query;
+        }
+
+        return $query->whereBetween('picks.created_at', [
+            $startingDateTime,
+            $endingDateTime
+        ]);
+    }
 
     /**
      * @return BelongsTo
@@ -210,14 +226,6 @@ class Pick extends Model
     }
 
     /**
-     * @return HasMany
-     */
-    public function pickRequests()
-    {
-        return $this->hasMany(PickRequest::class, 'pick_id');
-    }
-
-    /**
      * @param QueryBuilder $query
      * @param double $min
      * @param double $max
@@ -246,10 +254,11 @@ class Pick extends Model
     {
         return QueryBuilder::for(Pick::class)
             ->allowedFilters([
-                'user_id',
+                AllowedFilter::exact('user_id'),
+                AllowedFilter::exact('sku_picked', 'sku_ordered'),
                 AllowedFilter::scope('quantity_picked_between', 'quantityPickedBetween'),
                 AllowedFilter::scope('quantity_skipped_between', 'quantitySkippedBetween'),
-                AllowedFilter::exact('sku_picked', 'sku_ordered')
+                AllowedFilter::scope('created_between'),
             ])
             ->allowedSorts([
                 'picks.id',
