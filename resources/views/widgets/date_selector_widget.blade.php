@@ -9,8 +9,8 @@
                 <option value="?between_dates=today,now">Today</option>
                 <option value="?between_dates=yesterday,today">Yesterday</option>
                 <option value="?between_dates=-7days,now">Last 7 days</option>
-                <option value="?between_dates=this weeks monday,now">This week</option>
-                <option value="?between_dates=last weeks monday,this week monday">Last Week</option>
+                <option value="?between_dates=this week monday,now">This week</option>
+                <option value="?between_dates=last week monday,this week monday">Last Week</option>
             </select>
         </td>
     </tr>
