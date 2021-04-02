@@ -8,7 +8,6 @@ use App\Models\OrderStatus;
 use App\Models\Product;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
-use Spatie\Ray\Ray;
 
 /**
  * Class ProductQueriesService
