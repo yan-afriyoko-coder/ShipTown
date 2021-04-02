@@ -19,7 +19,11 @@
                             <th>Location ID</th>
                             <th>URL</th>
                             <th>Store Type</th>
-                            <th></th>
+                            <th>Magento Store ID</th>
+                            <th>magento_warehouse_id</th>
+                            <th>pricing_location_id</th>
+                            <th></th><!--Delete-->
+                            <th></th><!--SKU Lookup-->
                             <th></th>
                         </tr>
                     </thead>
@@ -28,6 +32,9 @@
                             <td>{{ configuration.location_id }}</td>
                             <td>{{ configuration.url }}</td>
                             <td>{{ configuration.type | capitalize }}</td>
+                            <td>{{ configuration.magento_store_id }}</td>
+                            <td>{{ configuration.magento_warehouse_id }}</td>
+                            <td>{{ configuration.pricing_location_id }}</td>
                             <td>
                                 <a @click="handleDelete(configuration.id, i)" class="action-link text-danger">Delete</a>
                             </td>
