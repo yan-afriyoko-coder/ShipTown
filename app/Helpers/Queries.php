@@ -132,13 +132,15 @@ class Queries
      */
     public static function getOrderProductQuantityToShipTotalsByProductIdQuery()
     {
-        return OrderProduct::query()
+        $query = OrderProduct::query()
             ->select([
                 'product_id',
                 DB::raw('sum(quantity_to_ship) as total_quantity_to_ship'),
             ])
-            ->whereStatusCodeIn(OrderStatus::getOpenStatuses())
+            ->whereStatusCodeNotIn(OrderStatus::getClosedStatuses())
             ->groupBy(['product_id']);
+
+        return $query;
     }
 
 

@@ -152,7 +152,7 @@ class Order extends Model
 
     public function scopeWhereActive($query)
     {
-        return $query->whereIn('status_code', OrderStatus::getActiveStatusCodesList());
+        return $this->scopeIsActive($query);
     }
 
     /**
@@ -161,7 +161,8 @@ class Order extends Model
      */
     public function scopeIsActive(Builder $query): Builder
     {
-        return $query->whereIn('status_code', OrderStatus::getActiveStatusCodesList());
+        return $query->whereNotIn('status_code', OrderStatus::getClosedStatuses())
+            ->whereNotIn('status_code', OrderStatus::getToFollowStatusList());
     }
 
     /**

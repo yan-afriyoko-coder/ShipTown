@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -25,23 +24,9 @@ use Illuminate\Support\Carbon;
  * @method static Builder|OrderStatus whereName($value)
  * @method static Builder|OrderStatus whereOrderActive($value)
  * @method static Builder|OrderStatus whereUpdatedAt($value)
- * @mixin Eloquent
  */
 class OrderStatus extends Model
 {
-    public static $activeOrderStatusList = [
-        'paid',
-        'picking',
-        'picking_web',
-        'picking_warehouse',
-        'packing',
-        'packing_web',
-        'packing_warehouse',
-        'for_later',
-        'single_line_orders',
-        'fabrics',
-    ];
-
     public static $toFollowStatusList = [
         'processing',
         'unshipped',
@@ -61,11 +46,6 @@ class OrderStatus extends Model
         'completed_imported_to_rms',
     ];
 
-    public static function getActiveStatusCodesList()
-    {
-        return self::$activeOrderStatusList;
-    }
-
     public static function getToFollowStatusList()
     {
         return self::$toFollowStatusList;
@@ -74,14 +54,6 @@ class OrderStatus extends Model
     public static function getCompletedStatusCodeList()
     {
         return self::$completedStatusCodeList;
-    }
-
-    public static function getOpenStatuses()
-    {
-        return array_merge(
-            static::getActiveStatusCodesList(),
-            static::getToFollowStatusList()
-        );
     }
 
     public static function getClosedStatuses()
