@@ -24,8 +24,12 @@ class ActiveOrdersWidget extends AbstractWidget
     public function run()
     {
         $order_status_counts = Order::query()
-            ->select(['status_code', DB::raw('count(*) as order_count')])
-            ->whereIn('status_code', OrderStatus::getActiveStatusCodesList())
+            ->select([
+                'orders.status_code',
+                DB::raw('count(*) as order_count')
+            ])
+            ->whereNotIn('status_code', OrderStatus::getClosedStatuses())
+            ->whereNotIn('status_code', OrderStatus::getToFollowStatusList())
             ->groupBy(['status_code'])
             ->orderByDesc('order_count')
             ->get();

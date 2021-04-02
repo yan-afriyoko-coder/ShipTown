@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -197,7 +198,10 @@ class OrderProduct extends Model
     {
         return $query->where('quantity_to_ship', '>', 0)
             ->whereHas('order', function ($query) use ($statusCodeArray) {
-                $query->select(\DB::raw(1))->whereIn('status_code', OrderStatus::getOpenStatuses());
+                $query->select([
+                    DB::raw(1)
+                ])
+                    ->whereNotIn('status_code', OrderStatus::getClosedStatuses());
             });
     }
 
@@ -209,7 +213,19 @@ class OrderProduct extends Model
     public function scopeWhereStatusCodeIn($query, $statusCodeArray)
     {
         return $query->whereHas('order', function ($query) use ($statusCodeArray) {
-            $query->select(\DB::raw(1))->whereIn('status_code', $statusCodeArray);
+            $query->select(['id'])->whereIn('status_code', $statusCodeArray);
+        });
+    }
+
+    /**
+     * @param Builder $query
+     * @param array $statusCodeArray
+     * @return Builder
+     */
+    public function scopeWhereStatusCodeNotIn($query, $statusCodeArray)
+    {
+        return $query->whereHas('order', function ($query) use ($statusCodeArray) {
+            $query->select(['id'])->whereNotIn('status_code', $statusCodeArray);
         });
     }
 

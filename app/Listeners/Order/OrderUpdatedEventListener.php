@@ -72,17 +72,19 @@ class OrderUpdatedEventListener
      */
     public function changeStatusToReadyIfPacked(OrderUpdatedEvent $event)
     {
+        if ($event->getOrder()->isStatusCodeIn(OrderStatus::getClosedStatuses())) {
+            return;
+        }
+
         if ($event->getOrder()->status_code === 'ready') {
             return;
         }
 
-        if ($event->getOrder()->isStatusCodeNotIn(OrderStatus::getActiveStatusCodesList())) {
+        if ($event->getOrder()->is_packed === false) {
             return;
         }
 
-        if ($event->getOrder()->is_packed) {
-            $event->getOrder()->update(['status_code' => 'ready']);
-        }
+        $event->getOrder()->update(['status_code' => 'ready']);
     }
 
     /**

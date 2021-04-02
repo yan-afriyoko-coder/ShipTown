@@ -8,6 +8,7 @@ use App\Models\OrderStatus;
 use App\Models\Product;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
+use Spatie\Ray\Ray;
 
 /**
  * Class ProductQueriesService
@@ -132,13 +133,15 @@ class Queries
      */
     public static function getOrderProductQuantityToShipTotalsByProductIdQuery()
     {
-        return OrderProduct::query()
+        $query = OrderProduct::query()
             ->select([
                 'product_id',
                 DB::raw('sum(quantity_to_ship) as total_quantity_to_ship'),
             ])
-            ->whereStatusCodeIn(OrderStatus::getOpenStatuses())
+            ->whereStatusCodeNotIn(OrderStatus::getClosedStatuses())
             ->groupBy(['product_id']);
+
+        return $query;
     }
 
 
