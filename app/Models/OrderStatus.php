@@ -91,9 +91,17 @@ class OrderStatus extends Model
         );
     }
 
-    public static function isActive(string $status_code)
+    /**
+     * @param string $status_code
+     * @return bool
+     */
+    public static function isActive(string $status_code): bool
     {
-        return array_search($status_code, self::getActiveStatusCodesList()) != false;
+        if (self::isComplete($status_code) || self::isToFollow($status_code)) {
+            return false;
+        }
+
+        return true;
     }
 
     public static function isToFollow(string $status_code)
