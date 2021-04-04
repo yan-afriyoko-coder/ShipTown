@@ -26,7 +26,8 @@ class Products extends Entity
         "sprice_expire",
         "quantity",
         "in_stock",
-        "store_id"
+        "store_id",
+        "warehouse_id",
     ];
 
     private const PRODUCT_DONT_UPDATE_KEYS = [
@@ -337,7 +338,7 @@ class Products extends Entity
      * @return array|null
      * @throws RequestException
      */
-    public static function getProductInfo(string $store_key, string $sku, int $store_id = null, array $fields = null)
+    public static function getProductInfo(string $store_key, string $sku, int $store_id = null, array $fields = ['force_all'])
     {
         $product = Products::getSimpleProductInfo($store_key, $sku, $store_id, $fields);
 

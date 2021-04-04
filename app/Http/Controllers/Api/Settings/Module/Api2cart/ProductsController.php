@@ -11,11 +11,11 @@ class ProductsController extends Controller
 {
     public function index(ProductsIndexRequest $request)
     {
-        $connection = Api2cartConnection::query()->first();
+        $c = Api2cartConnection::query()->first();
 
         $sku = $request->get('sku');
 
-        $productInfo = Products::getProductInfo($connection->bridge_api_key, $sku, null, ['force_all']);
+        $productInfo = Products::getProductInfo($c->bridge_api_key, $sku, $c->magento_store_id, ['force_all']);
 
         return $this->respondOK200($productInfo);
     }
