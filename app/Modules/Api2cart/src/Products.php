@@ -53,7 +53,7 @@ class Products extends Entity
      * @return array|null
      * @throws RequestException
      */
-    public static function getSimpleProductInfoNew(Api2cartConnection $conn, string $sku, array $fields = null): ?array
+    public static function getSimpleProductInfo(Api2cartConnection $conn, string $sku, array $fields = null): ?array
     {
         $product_id = Products::getSimpleProductID($conn->bridge_api_key, $sku);
 
@@ -117,7 +117,7 @@ class Products extends Entity
      * @return array|null
      * @throws RequestException
      */
-    public static function getVariantInfoNew(Api2cartConnection $connection, string $sku, array $fields = null): ?array
+    public static function getVariantInfo(Api2cartConnection $connection, string $sku, array $fields = null): ?array
     {
         $variant_id = Products::getVariantID($connection->bridge_api_key, $sku);
 
@@ -182,10 +182,10 @@ class Products extends Entity
      * @return array|null
      * @throws RequestException
      */
-    public static function getProductInfoNew(Api2cartConnection $connection, string $sku, array $fields = null): ?array
+    public static function getProductInfo(Api2cartConnection $connection, string $sku, array $fields = null): ?array
     {
-        return Products::getSimpleProductInfoNew($connection, $sku, $fields)
-            ?? Products::getVariantInfoNew($connection, $sku, $fields);
+        return Products::getSimpleProductInfo($connection, $sku, $fields)
+            ?? Products::getVariantInfo($connection, $sku, $fields);
     }
 
     /**
