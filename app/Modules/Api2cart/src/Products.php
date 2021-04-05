@@ -2,7 +2,6 @@
 
 namespace App\Modules\Api2cart\src;
 
-use App\Modules\Api2cart\src\Exceptions\GetRequestException;
 use App\Modules\Api2cart\src\Exceptions\RequestException;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Carbon\Carbon;
@@ -10,7 +9,6 @@ use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use App\Modules\Api2cart\src\RequestResponse;
 
 class Products extends Entity
 {
@@ -40,18 +38,12 @@ class Products extends Entity
     /**
      * @param string $store_key
      * @param array $params
-     * @return \App\Modules\Api2cart\src\RequestResponse
-     * @throws GetRequestException
+     * @return RequestResponse
+     * @throws RequestException
      */
-    public static function getProductList(string $store_key, array $params): \App\Modules\Api2cart\src\RequestResponse
+    public static function getProductList(string $store_key, array $params): RequestResponse
     {
-        $requestResponse = Client::GET($store_key, 'product.list.json', $params);
-
-        if ($requestResponse->isNotSuccess()) {
-            throw new GetRequestException($requestResponse->getReturnMessage(), $requestResponse->getReturnCode());
-        }
-
-        return $requestResponse;
+        return  Client::GET($store_key, 'product.list.json', $params);
     }
 
     /**
@@ -456,21 +448,11 @@ class Products extends Entity
 
     /**
      * @param string $store_key
-     * @param int $product_id
-     * @return RequestResponse
-     */
-    public static function deleteProduct(string $store_key, int $product_id)
-    {
-        return Client::DELETE($store_key, 'product.delete.json', ['id' => $product_id]);
-    }
-
-    /**
-     * @param string $store_key
      * @param array $product_data
      * @return RequestResponse
      * @throws Exception
      */
-    public static function createSimpleProduct(string $store_key, array $product_data)
+    public static function createSimpleProduct(string $store_key, array $product_data): RequestResponse
     {
         $fields = [
             "sku",
@@ -507,7 +489,7 @@ class Products extends Entity
      * @return RequestResponse
      * @throws Exception
      */
-    public static function updateSimpleProduct(string $store_key, array $product_data)
+    public static function updateSimpleProduct(string $store_key, array $product_data): RequestResponse
     {
         $product = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
 
@@ -538,7 +520,7 @@ class Products extends Entity
      * @return RequestResponse
      * @throws Exception
      */
-    public static function assignStore(string $store_key, int $product_id, int $store_id)
+    public static function assignStore(string $store_key, int $product_id, int $store_id): RequestResponse
     {
         $data = [
             "product_id" => $product_id,
@@ -563,7 +545,7 @@ class Products extends Entity
      * @return RequestResponse
      * @throws Exception
      */
-    public static function updateVariant(string $store_key, array $variant_data)
+    public static function updateVariant(string $store_key, array $variant_data): RequestResponse
     {
         $properties = Arr::only($variant_data, self::PRODUCT_ALLOWED_KEYS);
 
@@ -586,7 +568,7 @@ class Products extends Entity
      * @return RequestResponse
      * @throws Exception
      */
-    public static function update(string $store_key, array $product_data)
+    public static function update(string $store_key, array $product_data): RequestResponse
     {
         $product = Products::getProductTypeAndId($store_key, $product_data['sku']);
 
@@ -611,7 +593,7 @@ class Products extends Entity
      * @return RequestResponse
      * @throws Exception
      */
-    public static function updateOrCreate(string $store_key, array $product_data)
+    public static function updateOrCreate(string $store_key, array $product_data): RequestResponse
     {
         $product = Products::getProductTypeAndId($store_key, $product_data['sku']);
 
@@ -634,8 +616,9 @@ class Products extends Entity
      * @param string $store_key
      * @param string $sku
      * @return array
+     * @throws RequestException
      */
-    private static function getProductTypeAndId(string $store_key, string $sku)
+    private static function getProductTypeAndId(string $store_key, string $sku): array
     {
         $cached_product = Cache::get(self::getSkuCacheKey($store_key, $sku));
 
