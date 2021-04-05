@@ -57,7 +57,7 @@ class VerifyProductSyncJob implements ShouldQueue
     {
         $store_id = Arr::has($this->product_data, "store_id") ? $this->product_data["store_id"] : null;
 
-        $product_now = Products::getProductInfoNew($this->api2cartConnection, $this->product_data["sku"]);
+        $product_now = Products::getProductInfo($this->api2cartConnection, $this->product_data["sku"]);
 
         if (empty($product_now)) {
             Log::warning("Update Check FAILED - Could not find product", ["sku" => $this->product_data["sku"]]);

@@ -47,84 +47,13 @@ class Products extends Entity
     }
 
     /**
-     * @param string $store_key
-     * @param string $sku
-     * @param int|null $store_id
-     * @param array|null $fields
-     * @return array|null
-     * @throws RequestException
-     */
-    public static function getSimpleProductInfo(
-        string $store_key,
-        string $sku,
-        int $store_id = null,
-        array $fields = null
-    ): ?array {
-        $product_id = Products::getSimpleProductID($store_key, $sku);
-
-        if (empty($product_id)) {
-            return null;
-        }
-
-        $params = [
-            "id" => $product_id,
-            "params" => implode(
-                ",",
-                $fields ?? [
-                    "id",
-                    "model",
-                    "u_model",
-                    "sku",
-                    "u_sku",
-                    "price",
-                    "special_price",
-                    "stores_ids",
-                    "quantity",
-                    "inventory"
-                ]
-            ),
-        ];
-
-        if ($store_id) {
-            $params["store_id"] = $store_id;
-        }
-
-        $response =  Client::GET($store_key, 'product.info.json', $params);
-
-        if ($response->isNotSuccess()) {
-            return null;
-        }
-
-        $product = $response->getResult();
-
-        $warehouse_id = null;
-
-        $product["type"]            = "product";
-        $product["sku"]             = empty($product["u_sku"]) ? $product["u_model"] : $product["u_sku"];
-        $product["model"]           = $product["u_model"];
-        $product["quantity"]        = self::getQuantity($product, $warehouse_id);
-
-        $created_at = $product["special_price"]["created_at"];
-        $product["sprice_create"]   = empty($created_at) ? "1900-01-01 00:00:00" : $created_at["value"];
-        $product["sprice_create"] = Carbon::createFromTimeString($product["sprice_create"])->format("Y-m-d H:i:s");
-
-        $expired_at = $product["special_price"]["expired_at"];
-        $product["sprice_expire"]   = empty($expired_at) ? "1900-01-01 00:00:00" : $expired_at["value"];
-        $product["sprice_expire"] = Carbon::createFromTimeString($product["sprice_expire"])->format("Y-m-d H:i:s");
-
-        $product["special_price"]   = $product["special_price"]["value"];
-
-        return $product;
-    }
-
-    /**
      * @param Api2cartConnection $conn
      * @param string $sku
      * @param array|null $fields
      * @return array|null
      * @throws RequestException
      */
-    public static function getSimpleProductInfoNew(Api2cartConnection $conn, string $sku, array $fields = null): ?array
+    public static function getSimpleProductInfo(Api2cartConnection $conn, string $sku, array $fields = null): ?array
     {
         $product_id = Products::getSimpleProductID($conn->bridge_api_key, $sku);
 
@@ -188,7 +117,7 @@ class Products extends Entity
      * @return array|null
      * @throws RequestException
      */
-    public static function getVariantInfoNew(Api2cartConnection $connection, string $sku, array $fields = null): ?array
+    public static function getVariantInfo(Api2cartConnection $connection, string $sku, array $fields = null): ?array
     {
         $variant_id = Products::getVariantID($connection->bridge_api_key, $sku);
 
@@ -253,10 +182,10 @@ class Products extends Entity
      * @return array|null
      * @throws RequestException
      */
-    public static function getProductInfoNew(Api2cartConnection $connection, string $sku, array $fields = null): ?array
+    public static function getProductInfo(Api2cartConnection $connection, string $sku, array $fields = null): ?array
     {
-        return Products::getSimpleProductInfoNew($connection, $sku, $fields)
-            ?? Products::getVariantInfoNew($connection, $sku, $fields);
+        return Products::getSimpleProductInfo($connection, $sku, $fields)
+            ?? Products::getVariantInfo($connection, $sku, $fields);
     }
 
     /**

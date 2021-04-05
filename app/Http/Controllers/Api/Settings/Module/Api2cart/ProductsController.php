@@ -18,7 +18,7 @@ class ProductsController extends Controller
         $sku = $request->get('sku');
 
         try {
-            $productInfo = Products::getProductInfoNew($c, $sku, ['force_all']);
+            $productInfo = Products::getProductInfo($c, $sku, ['force_all']);
         } catch (Exception $exception) {
             $this->setStatusCode(500)->respond('Server error occurred, see logs for details');
         }
