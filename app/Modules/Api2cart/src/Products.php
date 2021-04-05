@@ -323,31 +323,6 @@ class Products extends Entity
     }
 
     /**
-     * @param string $store_key
-     * @param string $sku
-     * @param int|null $store_id
-     * @param array|null $fields
-     * @return array|null
-     * @throws RequestException
-     */
-    public static function getProductInfo(string $store_key, string $sku, int $store_id = null, array $fields = ['force_all'])
-    {
-        $product = Products::getSimpleProductInfo($store_key, $sku, $store_id, $fields);
-
-        if ($product) {
-            return $product;
-        }
-
-        $variant = Products::getVariantInfo($store_key, $sku, $store_id, $fields);
-
-        if ($variant) {
-            return $variant;
-        }
-
-        return null;
-    }
-
-    /**
      * @param Api2cartConnection $connection
      * @param string $sku
      * @param array|null $fields
@@ -356,19 +331,8 @@ class Products extends Entity
      */
     public static function getProductInfoNew(Api2cartConnection $connection, string $sku, array $fields = null): ?array
     {
-        $product = Products::getSimpleProductInfoNew($connection, $sku, $fields);
-
-        if ($product) {
-            return $product;
-        }
-
-        $variant = Products::getVariantInfoNew($connection, $sku, $fields);
-
-        if ($variant) {
-            return $variant;
-        }
-
-        return null;
+        return Products::getSimpleProductInfoNew($connection, $sku, $fields)
+            ?? Products::getVariantInfoNew($connection, $sku, $fields);
     }
 
     /**
@@ -377,7 +341,7 @@ class Products extends Entity
      * @return int|null
      * @throws RequestException
      */
-    public static function getSimpleProductID(string $store_key, string $sku)
+    public static function getSimpleProductID(string $store_key, string $sku): ?int
     {
         $cache_key = $store_key."_".$sku."_product_id";
 
@@ -393,8 +357,8 @@ class Products extends Entity
                 'find_value' => $sku,
                 'store_id' => 0
             ]);
-        } catch (Exception $exception) {
-            if ($exception instanceof RequestException && $exception->getCode() === RequestResponse::RETURN_CODE_MODEL_NOT_FOUND) {
+        } catch (RequestException $exception) {
+            if ($exception->getCode() === RequestResponse::RETURN_CODE_MODEL_NOT_FOUND) {
                 return null;
             }
             throw $exception;
@@ -416,7 +380,7 @@ class Products extends Entity
      * @param string $sku
      * @return int|null
      */
-    public static function getVariantID(string $store_key, string $sku)
+    public static function getVariantID(string $store_key, string $sku): ?int
     {
         $cache_key = $store_key."_".$sku."_variant_id";
 
@@ -491,9 +455,10 @@ class Products extends Entity
      */
     public static function updateSimpleProduct(string $store_key, array $product_data): RequestResponse
     {
-        $product = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
-
-        $product = Arr::except($product, self::PRODUCT_DONT_UPDATE_KEYS);
+        $product = collect($product_data)
+            ->only(self::PRODUCT_ALLOWED_KEYS)
+            ->except(self::PRODUCT_DONT_UPDATE_KEYS)
+            ->toArray();
 
         $response = Client::GET($store_key, 'product.update.json', $product);
 
@@ -506,7 +471,6 @@ class Products extends Entity
             case RequestResponse::RETURN_CODE_MODEL_NOT_FOUND:
                 Products::assignStore($store_key, $product_data['id'], $product_data['store_id']);
                 return self::updateSimpleProduct($store_key, $product_data);
-                break;
         }
 
         Log::error('product.update.json failed', $response->asArray());
@@ -522,20 +486,10 @@ class Products extends Entity
      */
     public static function assignStore(string $store_key, int $product_id, int $store_id): RequestResponse
     {
-        $data = [
+        return Client::POST($store_key, 'product.store.assign.json', [
             "product_id" => $product_id,
             "store_id" => $store_id
-        ];
-
-        $response = Client::POST($store_key, 'product.store.assign.json', $data);
-
-        if ($response->isSuccess()) {
-            Log::info('Store assigned', $data);
-            return $response;
-        }
-
-        Log::error('product.store.assign.json failed', $response->asArray());
-        return $response;
+        ]);
     }
 
     /**
@@ -547,19 +501,12 @@ class Products extends Entity
      */
     public static function updateVariant(string $store_key, array $variant_data): RequestResponse
     {
-        $properties = Arr::only($variant_data, self::PRODUCT_ALLOWED_KEYS);
+        $properties = collect($variant_data)
+            ->only(self::PRODUCT_ALLOWED_KEYS)
+            ->except(self::PRODUCT_DONT_UPDATE_KEYS)
+            ->toArray();
 
-        $properties = Arr::except($properties, self::PRODUCT_DONT_UPDATE_KEYS);
-
-        $response = Client::GET($store_key, 'product.variant.update.json', $properties);
-
-        if ($response->isSuccess()) {
-            logger("Variant updated", $properties);
-            return $response;
-        }
-
-        Log::error('product.variant.update.json failed', $response->asArray());
-        return $response;
+        return Client::GET($store_key, 'product.variant.update.json', $properties);
     }
 
     /**
@@ -576,11 +523,9 @@ class Products extends Entity
             case "product":
                 $properties = array_merge($product_data, ['id' => $product["id"]]);
                 return Products::updateSimpleProduct($store_key, $properties);
-                break;
             case "variant":
                 $properties = array_merge($product_data, ['id' => $product["id"]]);
                 return Products::updateVariant($store_key, $properties);
-                break;
             default:
                 logger('Cannot update - SKU not found', [$product_data['sku']]);
                 break;
@@ -601,14 +546,11 @@ class Products extends Entity
             case "product":
                 $properties = array_merge($product_data, ['id' => $product["id"]]);
                 return Products::updateSimpleProduct($store_key, $properties);
-                break;
             case "variant":
                 $properties = array_merge($product_data, ['id' => $product["id"]]);
                 return Products::updateVariant($store_key, $properties);
-                break;
             default:
                 return Products::createSimpleProduct($store_key, $product_data);
-                break;
         }
     }
 

@@ -15,7 +15,7 @@ class ProductsController extends Controller
 
         $sku = $request->get('sku');
 
-        $productInfo = Products::getProductInfo($c->bridge_api_key, $sku, $c->magento_store_id, ['force_all']);
+        $productInfo = Products::getProductInfoNew($c, $sku, ['force_all']);
 
         return $this->respondOK200($productInfo);
     }
