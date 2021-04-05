@@ -182,90 +182,14 @@ class Products extends Entity
     }
 
     /**
-     * @param string $store_key
+     * @param Api2cartConnection $connection
      * @param string $sku
-     * @param int|null $store_id
      * @param array|null $fields
      * @return array|null
      * @throws RequestException
      */
-    public static function getVariantInfo(
-        string $store_key,
-        string $sku,
-        int $store_id = null,
-        array $fields = null
-    ): ?array {
-        $variant_id = Products::getVariantID($store_key, $sku);
-
-        if (empty($variant_id)) {
-            return null;
-        }
-
-        $params = [
-            "id" => $variant_id,
-            "params" => implode(
-                ",",
-                $fields ?? [
-                    "id",
-                    "model",
-                    "u_model",
-                    "sku",
-                    "u_sku",
-                    "price",
-                    "special_price",
-                    "stores_ids",
-                    "quantity",
-                    "inventory"
-                ]
-            ),
-        ];
-
-        if ($store_id) {
-            $params["store_id"] = $store_id;
-        }
-
-        $response =  Client::GET($store_key, 'product.variant.info.json', $params);
-
-        if ($response->isNotSuccess()) {
-            return null;
-        }
-
-        $variant = $response->getResult()["variant"];
-
-        $variant['type']            = "variant";
-
-        $warehouse_id = null;
-
-        $variant["sku"]             = empty($variant["u_sku"]) ? $variant["u_model"] : $variant["u_sku"];
-        $variant["model"]           = $variant["u_model"];
-        $product["quantity"]        = $warehouse_id ? $variant["inventory"][0]['quantity'] : $variant["quantity"];
-
-        $created_at = $variant["special_price"]["created_at"];
-        $variant["sprice_create"]   = empty($created_at) ? "1900-01-01 00:00:00":$created_at["value"];
-        $variant["sprice_create"] = Carbon::createFromTimeString($variant["sprice_create"])->format("Y-m-d H:i:s");
-
-        $expired_at = $variant["special_price"]["expired_at"];
-        $variant["sprice_expire"]   = empty($expired_at) ? "1900-01-01 00:00:00":$expired_at["value"];
-        $variant["sprice_expire"] = Carbon::createFromTimeString($variant["sprice_expire"])->format("Y-m-d H:i:s");
-
-        $variant["special_price"]   = $variant["special_price"]["value"];
-
-        return $variant;
-    }
-
-    /**
-     * @param string $store_key
-     * @param string $sku
-     * @param int|null $store_id
-     * @param array|null $fields
-     * @return array|null
-     * @throws RequestException
-     */
-    public static function getVariantInfoNew(
-        Api2cartConnection $connection,
-        string $sku,
-        array $fields = null
-    ): ?array {
+    public static function getVariantInfoNew(Api2cartConnection $connection, string $sku, array $fields = null): ?array
+    {
         $variant_id = Products::getVariantID($connection->bridge_api_key, $sku);
 
         if (empty($variant_id)) {
