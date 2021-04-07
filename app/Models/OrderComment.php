@@ -61,7 +61,9 @@ class OrderComment extends Model
                 'user'
             ])
             ->allowedSorts([
-                'created_at'
-            ]);
+                'id',
+                'created_at',
+            ])
+            ->defaultSort('id');
     }
 }
