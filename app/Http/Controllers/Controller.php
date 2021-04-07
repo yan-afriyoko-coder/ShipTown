@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\CsvBuilder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -19,7 +20,25 @@ class Controller extends BaseController
     /**
      * @var int
      */
-    private $status_code = 200;
+    private int $status_code = 200;
+
+    /**
+     * @param QueryBuilder $query
+     */
+    public function throwCsvDownloadResponse(QueryBuilder $query)
+    {
+        $fieldsArray = explode(',', request('fields'));
+        $content = CsvBuilder::fromQueryBuilder($query, $fieldsArray);
+
+        $filename = request('filename', 'filename_url_param_not_specified.csv');
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Transfer-Encoding' => 'binary',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+
+        response($content, 200, $headers)->throwResponse();
+    }
 
     /**
      * @param QueryBuilder $query
@@ -41,7 +60,7 @@ class Controller extends BaseController
      * @param $message
      * @return JsonResponse
      */
-    public function getResponse($status_code, $message)
+    public function getResponse($status_code, $message): JsonResponse
     {
         return response()->json(
             [
@@ -58,46 +77,41 @@ class Controller extends BaseController
             $this->getStatusCode()
         );
 
-        return $response->throwResponse();
+        $response->throwResponse();
     }
 
     public function respondNotAllowed405($message = 'Method not allowed')
     {
-        return $this->setStatusCode(405)
-            ->respond($message);
+        $this->setStatusCode(405)->respond($message);
     }
 
     public function respondOK200($message = null)
     {
-        return $this->setStatusCode(200)
-            ->respond($message);
+        $this->setStatusCode(200)->respond($message);
     }
 
     public function respondNotFound($message = "Not Found!")
     {
-        return $this->setStatusCode(404)
-            ->respond($message);
+        $this->setStatusCode(404)->respond($message);
     }
 
     public function respondBadRequest($message = "Bad request")
     {
-        return $this->setStatusCode(400)
-            ->respond($message);
+        $this->setStatusCode(400)->respond($message);
     }
 
     public function respond403Forbidden($message = "Forbidden")
     {
-        return $this->setStatusCode(403)
-            ->respond($message);
+        $this->setStatusCode(403)->respond($message);
     }
 
-    public function setStatusCode($code)
+    public function setStatusCode($code): Controller
     {
         $this->status_code = $code;
         return $this;
     }
 
-    public function getStatusCode()
+    public function getStatusCode(): int
     {
         return $this->status_code;
     }

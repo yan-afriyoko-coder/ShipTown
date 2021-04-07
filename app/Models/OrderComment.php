@@ -28,7 +28,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static Builder|OrderComment whereCreatedAt($value)
  * @method static Builder|OrderComment whereId($value)
  * @method static Builder|OrderComment whereOrderId($value)
- * @method static Builder|OrderComment whereUpdatedAt($value)
+ * @method static Builder|OrderComment whereUpdaatedAt($value)
  * @method static Builder|OrderComment whereUserId($value)
  * @mixin Eloquent
  */

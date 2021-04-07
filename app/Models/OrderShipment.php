@@ -82,6 +82,7 @@ class OrderShipment extends Model
     {
         return QueryBuilder::for(OrderShipment::class)
             ->allowedFilters([
+                AllowedFilter::exact('order.status_code'),
                 AllowedFilter::exact('user_id'),
                 AllowedFilter::exact('order_id'),
 
