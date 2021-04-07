@@ -163,9 +163,11 @@
                               <table>
                                   <template v-for="shipment in order_shipments">
                                       <tr>
-                                          <td>{{ shipment['created_at'] }}</td>
-                                          <td>{{ shipment['user_id'] }}</td>
+                                          <td>
+                                              {{ shipment['created_at'] | moment('MMM DD')  }} <small>@</small> {{ shipment['created_at'] | moment('H:mm')  }}:
+                                          </td>
                                           <td>{{ shipment['shipping_number'] }}</td>
+                                          <td>shipped by {{ shipment['user']['name'] }}</td>
                                       </tr>
                                   </template>
                               </table>
@@ -347,6 +349,7 @@
 
                 let params = {
                     'filter[order_id]': this.order['id'],
+                    'include': 'user',
                     'sort': '-id',
                     'per_page': '999',
                 };
