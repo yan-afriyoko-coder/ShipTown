@@ -57,11 +57,9 @@ class OrderUpdatedEventListener
      */
     public function markedIfPayed(OrderUpdatedEvent $event)
     {
-        if ($event->getOrder()->isNotStatusCode('processing')) {
-            return;
+        if ($event->getOrder()->isStatusCode('processing')) {
+            SetStatusPaidIfPaidJob::dispatch($event->getOrder());
         }
-
-        SetStatusPaidIfPaidJob::dispatch($event->getOrder());
     }
 
     /**
