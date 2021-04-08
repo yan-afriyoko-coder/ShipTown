@@ -116,15 +116,14 @@ class Controller extends BaseController
 
     /**
      * @param string $pdfString
-     * @return ResponseFactory|Response
      */
-    public function getPdfResponse(string $pdfString)
+    public function throwPdfResponse(string $pdfString)
     {
         $headers = [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline',
         ];
 
-        return response($pdfString, 200, $headers);
+        response($pdfString, $this->status_code, $headers)->throwResponse();
     }
 }
