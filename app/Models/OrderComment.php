@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\User;
-use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -28,9 +27,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static Builder|OrderComment whereCreatedAt($value)
  * @method static Builder|OrderComment whereId($value)
  * @method static Builder|OrderComment whereOrderId($value)
- * @method static Builder|OrderComment whereUpdaatedAt($value)
+ * @method static Builder|OrderComment whereUpdatedAt($value)
  * @method static Builder|OrderComment whereUserId($value)
- * @mixin Eloquent
  */
 class OrderComment extends Model
 {
