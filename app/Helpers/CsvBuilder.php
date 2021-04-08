@@ -63,13 +63,4 @@ class CsvBuilder
             return $result;
         });
     }
-
-    /**
-     * @param QueryBuilder $query
-     * @param array|null $fields
-     * @return Writer
-     */
-    public function getCsvString(QueryBuilder $query, array $fields = null): Writer
-    {
-    }
 }
