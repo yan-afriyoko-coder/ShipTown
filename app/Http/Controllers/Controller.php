@@ -55,21 +55,6 @@ class Controller extends BaseController
             ->appends($requestQuery);
     }
 
-    /**
-     * @param $status_code
-     * @param $message
-     * @return JsonResponse
-     */
-    public function getResponse($status_code, $message): JsonResponse
-    {
-        return response()->json(
-            [
-                "message" => $message
-            ],
-            $status_code
-        );
-    }
-
     public function throwJsonResponse($message)
     {
         response()->json(
