@@ -85,7 +85,6 @@
                             <a class="dropdown-item" href="{{ route('performance.dashboard') .'?between_dates=-7days,now' }}">{{ __('Performance Dashboard') }}</a>
                             <a class="dropdown-item" href="{{ route('reports.picks') }}">{{ __('Picks') }}</a>
                             <a class="dropdown-item" href="{{ route('reports.shipments') }}">{{ __('Shipments') }}</a>
-                            <a class="dropdown-item" href="{{ route('ready_order_shipments_as_csv') }}" target="_blank">{{ __("Download Ready Shipments") }}</a>
                             <a class="dropdown-item" href="{{ route('ready_order_shipments_as_csv').'?include=order&filter[shipping_number]=LJ&filter[order.status_code]=ready&fields=shipping_number,order.order_number&filename=AnPost_Ready_Shipments'}}" target="_blank">{{ __("Download AnPost Shipments") }}</a>
                             <a class="dropdown-item" href="{{ route('ready_order_shipments_as_csv').'?include=order&filter[shipping_number]=8543&filter[order.status_code]=ready&fields=id,shipping_number,order.order_number&filename=DPD_Ready_Shipments'}}" target="_blank">{{ __("Download DPD Shipments") }}</a>
                             <a class="dropdown-item" href="{{ route('partial_order_shipments_as_csv') }}" target="_blank">{{ __("Download Today's Partial Shipments") }}</a>
