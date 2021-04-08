@@ -20,7 +20,7 @@ class ProductsController extends Controller
         try {
             $productInfo = Products::getProductInfo($c, $sku, ['force_all']);
         } catch (Exception $exception) {
-            $this->setStatusCode(500)->respond('Server error occurred, see logs for details');
+            $this->setStatusCode(500)->throwJsonResponse('Server error occurred, see logs for details');
         }
 
         return $this->respondOK200($productInfo);

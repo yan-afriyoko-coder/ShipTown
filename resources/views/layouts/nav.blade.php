@@ -34,6 +34,7 @@
                         <a class="nav-link" href="{{ route('orders') }}">{{ __('Orders') }}</a>
                     </li>
 
+                    <!-- Picklist Dropdown -->
                     <li class="nav-item dropdown">
                         <!-- User dropdown menu -->
                         <a id="navbarDropdown3" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -51,6 +52,7 @@
                         </div>
                     </li>
 
+                    <!-- Packlist Dropdown -->
                     <li class="nav-item dropdown">
                         <!-- User dropdown menu -->
                         <a id="navbarDropdown3" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -71,6 +73,7 @@
                         </div>
                     </li>
 
+                    <!-- Reports Dropdown -->
                     <li class="nav-item dropdown">
                         <!-- User dropdown menu -->
                         <a id="navbarDropdown3" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -82,7 +85,8 @@
                             <a class="dropdown-item" href="{{ route('performance.dashboard') .'?between_dates=-7days,now' }}">{{ __('Performance Dashboard') }}</a>
                             <a class="dropdown-item" href="{{ route('reports.picks') }}">{{ __('Picks') }}</a>
                             <a class="dropdown-item" href="{{ route('reports.shipments') }}">{{ __('Shipments') }}</a>
-                            <a class="dropdown-item" href="{{ route('ready_order_shipments_as_csv') }}" target="_blank">{{ __("Download Ready Shipments") }}</a>
+                            <a class="dropdown-item" href="{{ route('ready_order_shipments_as_csv').'?include=order&filter[shipping_number]=LJ&filter[order.status_code]=ready&fields=shipping_number,order.order_number&filename=AnPost_Ready_Shipments'}}" target="_blank">{{ __("Download AnPost Shipments") }}</a>
+                            <a class="dropdown-item" href="{{ route('ready_order_shipments_as_csv').'?include=order&filter[shipping_number]=8543&filter[order.status_code]=ready&fields=id,shipping_number,order.order_number&filename=DPD_Ready_Shipments'}}" target="_blank">{{ __("Download DPD Shipments") }}</a>
                             <a class="dropdown-item" href="{{ route('partial_order_shipments_as_csv') }}" target="_blank">{{ __("Download Today's Partial Shipments") }}</a>
                             <a class="dropdown-item" href="{{ route('warehouse_picks.csv').'?filter[user_id]=8&filter[created_between]=today,now' }}" target="_blank">{{ __("Download Today's Warehouse Picks") }}</a>
                             <a class="dropdown-item" href="{{ route('warehouse_shipped.csv').'?filter[packer_user_id]=8&filter[order.packed_between]=today,now' }}" target="_blank">{{ __("Download Today's Warehouse Shipped") }}</a>
