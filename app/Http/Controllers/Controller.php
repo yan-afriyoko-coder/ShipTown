@@ -70,39 +70,37 @@ class Controller extends BaseController
         );
     }
 
-    public function respond($message)
+    public function throwJsonResponse($message)
     {
-        $response = response()->json(
+        response()->json(
             ["message" => $message],
             $this->getStatusCode()
-        );
-
-        $response->throwResponse();
+        )->throwResponse();
     }
 
     public function respondNotAllowed405($message = 'Method not allowed')
     {
-        $this->setStatusCode(405)->respond($message);
+        $this->setStatusCode(405)->throwJsonResponse($message);
     }
 
     public function respondOK200($message = null)
     {
-        $this->setStatusCode(200)->respond($message);
+        $this->setStatusCode(200)->throwJsonResponse($message);
     }
 
     public function respondNotFound($message = "Not Found!")
     {
-        $this->setStatusCode(404)->respond($message);
+        $this->setStatusCode(404)->throwJsonResponse($message);
     }
 
     public function respondBadRequest($message = "Bad request")
     {
-        $this->setStatusCode(400)->respond($message);
+        $this->setStatusCode(400)->throwJsonResponse($message);
     }
 
     public function respond403Forbidden($message = "Forbidden")
     {
-        $this->setStatusCode(403)->respond($message);
+        $this->setStatusCode(403)->throwJsonResponse($message);
     }
 
     public function setStatusCode($code): Controller
