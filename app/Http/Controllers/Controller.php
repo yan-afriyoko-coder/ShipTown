@@ -41,6 +41,27 @@ class Controller extends BaseController
     }
 
     /**
+     * @param string $pdfString
+     */
+    public function throwPdfResponse(string $pdfString)
+    {
+        $headers = [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline',
+        ];
+
+        response($pdfString, $this->status_code, $headers)->throwResponse();
+    }
+
+    public function throwJsonResponse($message)
+    {
+        response()->json(
+            ["message" => $message],
+            $this->getStatusCode()
+        )->throwResponse();
+    }
+
+    /**
      * @param QueryBuilder $query
      * @param int $defaultPerPage
      * @return LengthAwarePaginator
@@ -53,14 +74,6 @@ class Controller extends BaseController
 
         return $query->paginate($perPage)
             ->appends($requestQuery);
-    }
-
-    public function throwJsonResponse($message)
-    {
-        response()->json(
-            ["message" => $message],
-            $this->getStatusCode()
-        )->throwResponse();
     }
 
     public function respondNotAllowed405($message = 'Method not allowed')
@@ -97,18 +110,5 @@ class Controller extends BaseController
     public function getStatusCode(): int
     {
         return $this->status_code;
-    }
-
-    /**
-     * @param string $pdfString
-     */
-    public function throwPdfResponse(string $pdfString)
-    {
-        $headers = [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline',
-        ];
-
-        response($pdfString, $this->status_code, $headers)->throwResponse();
     }
 }
