@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\OrderShipment;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Support\Facades\Request;
 use Illuminate\View\View;
-use Request;
 
 class ShipmentController extends Controller
 {

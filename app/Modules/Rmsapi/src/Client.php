@@ -5,6 +5,9 @@ namespace App\Modules\Rmsapi\src;
 
 use App\Models\RmsapiConnection;
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class Client
@@ -17,6 +20,7 @@ class Client
      * @param string $uri
      * @param array $query
      * @return RequestResponse
+     * @throws GuzzleException
      */
     public static function GET(RmsapiConnection $connection, string $uri, array $query = [])
     {
@@ -34,7 +38,7 @@ class Client
         ]);
 
         if ($response->isNotSuccess()) {
-            \Log::alert('Failed fetching from Rmsapi', [
+            Log::alert('Failed fetching from Rmsapi', [
                 "status_code" => $response->getResponseRaw()->getStatusCode(),
                 "body" => $response->asArray()
             ]);
@@ -48,6 +52,7 @@ class Client
      * @param string $uri
      * @param array $data
      * @return RequestResponse
+     * @throws GuzzleException
      */
     public static function POST(RmsapiConnection $connection, string $uri, array $data)
     {
@@ -67,7 +72,7 @@ class Client
         ]);
 
         if ($response->isNotSuccess()) {
-            \Log::alert('Failed fetching from Rmsapi', [
+            Log::alert('Failed fetching from Rmsapi', [
                 "status_code" => $response->getResponseRaw()->getStatusCode(),
                 "body" => $response->asArray()
             ]);
@@ -81,6 +86,7 @@ class Client
      * @param string $uri
      * @param array $query
      * @return RequestResponse
+     * @throws GuzzleException
      */
     public static function DELETE(RmsapiConnection $connection, string $uri, array $query)
     {
@@ -101,7 +107,7 @@ class Client
             'exceptions' => false,
             'auth' => [
                 $connection->username,
-                \Crypt::decryptString($connection->password)
+                Crypt::decryptString($connection->password)
             ]
         ]);
     }
