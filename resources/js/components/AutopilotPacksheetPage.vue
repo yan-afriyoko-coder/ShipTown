@@ -21,6 +21,13 @@
                 <order-details :order="order" />
             </div>
 
+            <template v-for="order_comment in order['order_comments']">
+                <div class="row mb-2">
+                    <div class="col">
+                        <b>{{ order_comment['user']['name'] }}: </b>{{ order_comment['comment'] }}
+                    </div>
+                </div>
+            </template>
             <div class="row mb-3">
                 <div class="col-11">
                     <barcode-input-field @barcodeScanned="packBarcode"/>
