@@ -3,9 +3,7 @@
 namespace App\Widgets;
 
 use App\Models\Order;
-use Arrilot\Widgets\AbstractWidget;
-use Carbon\Carbon;
-use Exception;
+use Illuminate\Support\Facades\DB;
 
 class OrderPackedCountsByUser extends AbstractDateSelectorWidget
 {
@@ -24,17 +22,15 @@ class OrderPackedCountsByUser extends AbstractDateSelectorWidget
     {
         $count_per_user = Order::query()
             ->select([
-                'packer_user_id',
-                'users.name',
-                \DB::raw('count(*) as total'),
-            ])
+                    'packer_user_id',
+                    'users.name',
+                    DB::raw('count(*) as total'),
+                ])
             ->whereBetween('packed_at', [
-                $this->config['starting_date'],
-                $this->config['ending_date']],
-            )
-            ->leftJoin('users',
-                'packer_user_id', '=', 'users.id'
-            )
+                    $this->config['starting_date'],
+                    $this->config['ending_date']
+                ])
+            ->leftJoin('users', 'packer_user_id', '=', 'users.id')
             ->groupBy(['packer_user_id'])
             ->orderByDesc('total')
             ->get();

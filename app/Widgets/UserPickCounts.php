@@ -5,6 +5,7 @@ namespace App\Widgets;
 use App\Models\Pick;
 use Arrilot\Widgets\AbstractWidget;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class UserPickCounts extends AbstractWidget
 {
@@ -24,7 +25,7 @@ class UserPickCounts extends AbstractWidget
         $startingDate = Carbon::now()->subDays(7);
 
         $count_per_user = Pick::query()
-            ->select(['user_id', 'users.name', \DB::raw('count(*) as total')])
+            ->select(['user_id', 'users.name', DB::raw('count(*) as total')])
             ->leftJoin('users', 'user_id', '=', 'users.id')
             ->whereDate('picks.created_at', '>', $startingDate)
             ->groupBy(['user_id'])

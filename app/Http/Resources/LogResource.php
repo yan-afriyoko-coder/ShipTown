@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources;
 
-use Arr;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Arr;
 
 class LogResource extends JsonResource
 {

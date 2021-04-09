@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\RmsapiConnection;
 use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
 use App\Modules\Rmsapi\src\Jobs\FetchUpdatedProductsJob;
-use Request;
+use Illuminate\Support\Facades\Request;
 
 /**
  * Class SyncController
@@ -32,6 +32,6 @@ class SyncController extends Controller
 
         info('Sync jobs dispatched');
 
-        return $this->respondOK200('Sync jobs dispatched');
+        $this->respondOK200('Sync jobs dispatched');
     }
 }

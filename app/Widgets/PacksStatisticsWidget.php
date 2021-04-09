@@ -5,6 +5,7 @@ namespace App\Widgets;
 use App\Models\Order;
 use Arrilot\Widgets\AbstractWidget;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class PacksStatisticsWidget extends AbstractWidget
 {
@@ -24,7 +25,7 @@ class PacksStatisticsWidget extends AbstractWidget
         $startingDate = Carbon::now()->subDays(7);
 
         $count_per_user = Order::query()
-            ->select(['packer_user_id', \DB::raw('count(*) as total'), 'users.name'])
+            ->select(['packer_user_id', DB::raw('count(*) as total'), 'users.name'])
             ->where('packed_at', '>', $startingDate)
             ->leftJoin('users', 'packer_user_id', '=', 'users.id')
             ->groupBy(['packer_user_id'])

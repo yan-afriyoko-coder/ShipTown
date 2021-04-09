@@ -3,6 +3,8 @@
 namespace App\Widgets;
 
 use App\Models\Order;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class PackersAverage extends AbstractDateSelectorWidget
 {
@@ -37,25 +39,23 @@ class PackersAverage extends AbstractDateSelectorWidget
     }
 
     /**
-     * @return Order|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
+     * @return Order|Builder
      */
     private function getDailyTotals()
     {
         return Order::query()
             ->select([
-                'packer_user_id',
-                'users.name',
-                \DB::raw('count(*) as total'),
-                \DB::raw('count(distinct cast(packed_at as date)) as days_worked'),
-                \DB::raw('count(*) / count(distinct cast(packed_at as date)) as daily_average'),
-            ])
+                    'packer_user_id',
+                    'users.name',
+                    DB::raw('count(*) as total'),
+                    DB::raw('count(distinct cast(packed_at as date)) as days_worked'),
+                    DB::raw('count(*) / count(distinct cast(packed_at as date)) as daily_average'),
+                ])
             ->whereBetween('packed_at', [
-                $this->config['starting_date'],
-                $this->config['ending_date']],
-            )
-            ->leftJoin('users',
-                'packer_user_id', '=', 'users.id'
-            )
+                    $this->config['starting_date'],
+                    $this->config['ending_date']
+                ])
+            ->leftJoin('users', 'packer_user_id', '=', 'users.id')
             ->groupBy(['packer_user_id']);
     }
 }

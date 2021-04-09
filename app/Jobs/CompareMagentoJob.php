@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Product;
-use App\Modules\Api2cart\src\Exceptions\GetRequestException;
+use App\Modules\Api2cart\src\Exceptions\RequestException;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Products;
 use Carbon\Carbon;
@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class CompareMagentoJob implements ShouldQueue
 {
@@ -32,7 +33,7 @@ class CompareMagentoJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
-     * @throws GetRequestException
+     * @throws RequestException
      */
     public function handle()
     {
@@ -53,12 +54,12 @@ class CompareMagentoJob implements ShouldQueue
                 $pmProduct = Product::findBySKU($magentoProduct['u_model']);
 
                 if (is_null($pmProduct)) {
-                    \Log::warning('Magento product not found in Products Management', [$magentoProduct]);
+                    Log::warning('Magento product not found in Products Management', [$magentoProduct]);
                     return;
                 }
 
                 if ($this->areNotInSync($magentoProduct, $pmProduct, $connection)) {
-                    \Log::warning('Magento product is out of sync', [$pmProduct, $magentoProduct]);
+                    Log::warning('Magento product is out of sync', [$pmProduct, $magentoProduct]);
                     return;
                 }
             });
@@ -75,7 +76,7 @@ class CompareMagentoJob implements ShouldQueue
      */
     private function areInSync($magentoProduct, Model $pmProduct, Api2cartConnection $connection): bool
     {
-        \Log::notice('Compare if Magento is in sync', [$magentoProduct, $pmProduct]);
+        Log::notice('Compare if Magento is in sync', [$magentoProduct, $pmProduct]);
         // compare prices
         // feed prices
         // compare values
