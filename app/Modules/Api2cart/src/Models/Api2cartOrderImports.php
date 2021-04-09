@@ -7,6 +7,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 /**
  * App\Modules\Api2cart\src\Models\Api2cartOrderImports
@@ -57,6 +58,8 @@ class Api2cartOrderImports extends Model
 
     public function extractShippingAddressAttributes()
     {
+        Log::debug('Processing order', $this->raw_import);
+
         // array_filter will cleanup null values
         return array_filter([
             'company'       => $this->raw_import['shipping_address']['company'],
