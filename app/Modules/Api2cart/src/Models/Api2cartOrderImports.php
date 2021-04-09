@@ -56,28 +56,31 @@ class Api2cartOrderImports extends Model
     ];
 
 
-    public function extractShippingAddressAttributes()
+    /**
+     * @return array
+     */
+    public function extractShippingAddressAttributes(): array
     {
-        Log::debug('Processing order', $this->raw_import);
+        $shipping_address = $this->raw_import['shipping_address'];
 
         // array_filter will cleanup null values
         return array_filter([
-            'company'       => $this->raw_import['shipping_address']['company'],
-            'gender'        => $this->raw_import['shipping_address']['gender'],
-            'first_name'    => $this->raw_import['shipping_address']['first_name'],
-            'last_name'     => $this->raw_import['shipping_address']['last_name'],
-            'address1'      => $this->raw_import['shipping_address']['address1'],
-            'address2'      => $this->raw_import['shipping_address']['address2'],
-            'postcode'      => $this->raw_import['shipping_address']['postcode'],
-            'city'          => $this->raw_import['shipping_address']['city'],
-            'state_code'    => $this->raw_import['shipping_address']['state']['code'],
-            'state_name'    => $this->raw_import['shipping_address']['state']['name'],
-            'country_code'  => $this->raw_import['shipping_address']['country']['code3'],
-            'country_name'  => $this->raw_import['shipping_address']['country']['name'],
-            'phone'         => $this->raw_import['shipping_address']['phone'],
-            'fax'           => $this->raw_import['shipping_address']['fax'],
-            'website'       => $this->raw_import['shipping_address']['website'],
-            'region'        => $this->raw_import['shipping_address']['region'],
+            'company'       => $shipping_address['company'],
+            'gender'        => $shipping_address['gender'],
+            'first_name'    => $shipping_address['first_name'],
+            'last_name'     => $shipping_address['last_name'],
+            'address1'      => $shipping_address['address1'],
+            'address2'      => $shipping_address['address2'],
+            'postcode'      => $shipping_address['postcode'],
+            'city'          => $shipping_address['city'],
+            'state_code'    => $shipping_address['state'] ? $shipping_address['state']['code'] : '',
+            'state_name'    => $shipping_address['state'] ? $shipping_address['state']['name'] : '',
+            'country_code'  => $shipping_address['country']['code3'],
+            'country_name'  => $shipping_address['country']['name'],
+            'phone'         => $shipping_address['phone'],
+            'fax'           => $shipping_address['fax'],
+            'website'       => $shipping_address['website'],
+            'region'        => $shipping_address['region'],
         ]);
     }
 
