@@ -2,15 +2,26 @@
 
 namespace Tests\Feature\Http\Controllers\Api\Product\ProductAliasController;
 
+use App\User;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class IndexTest extends TestCase
 {
     /** @test */
     public function test_index_call_returns_ok()
     {
-        $this->markTestIncomplete();
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user, 'api')->getJson(route('product.aliases.index'));
+
+        $response->assertOk();
+        $response->assertJsonStructure([
+            'meta',
+            'links',
+            'data' => [
+                '*' => [
+                ]
+            ]
+        ]);
     }
 }
