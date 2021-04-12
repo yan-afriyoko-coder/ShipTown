@@ -2,15 +2,28 @@
 
 namespace Tests\Feature\Http\Controllers\Api\PacklistOrderController;
 
+use App\Models\Order;
+use App\User;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class IndexTest extends TestCase
 {
     /** @test */
     public function test_index_call_returns_ok()
     {
-        $this->markTestIncomplete();
+        $user = factory(User::class)->create();
+
+        factory(Order::class)->create(['status_code' => 'packing']);
+
+        $response = $this->actingAs($user, 'api')->getJson(route('packlist.order.index'));
+
+        $response->assertOk();
+
+        $response->assertJsonStructure([
+            'data' => [
+                '*' => [
+                ]
+            ]
+        ]);
     }
 }
