@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6e188ae595d7fffc4ef79f4b053ed19e",
+    "content-hash": "c1fab4d277774c9078c3a4a60f1702c3",
     "packages": [
         {
             "name": "arrilot/laravel-widgets",
@@ -9220,6 +9220,74 @@
                 }
             ],
             "time": "2021-04-07T11:19:20+00:00"
+        },
+        {
+            "name": "bpocallaghan/generators",
+            "version": "6.06",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bpocallaghan/generators.git",
+                "reference": "c10051b277303fe684e59b24edfd8705df3668eb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bpocallaghan/generators/zipball/c10051b277303fe684e59b24edfd8705df3668eb",
+                "reference": "c10051b277303fe684e59b24edfd8705df3668eb",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^7.6",
+                "php": "^7.2.5",
+                "symfony/console": "^5.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "5.*"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Bpocallaghan\\Generators\\GeneratorsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Bpocallaghan\\Generators\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ben-Piet O'Callaghan",
+                    "email": "bpocallaghan@gmail.com",
+                    "homepage": "http://bpocallaghan.co.za",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Custom Laravel File Generators with config and publishable stubs.",
+            "keywords": [
+                "commands",
+                "config",
+                "customization",
+                "generators",
+                "laravel",
+                "stubs"
+            ],
+            "support": {
+                "issues": "https://github.com/bpocallaghan/generators/issues",
+                "source": "https://github.com/bpocallaghan/generators/tree/master"
+            },
+            "funding": [
+                {
+                    "url": "https://www.patreon.com/bpocallaghan",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2020-08-16T18:22:59+00:00"
         },
         {
             "name": "doctrine/instantiator",
