@@ -47,7 +47,7 @@ class AppGenerateRoutesTests extends Command
      */
     public function generateTest($testName): void
     {
-        Artisan::call('generate:test ' . $testName . ' --stub=test_controller --force');
+        Artisan::call('generate:test ' . $testName . ' --stub=test_controller');
     }
 
     /**
