@@ -6,10 +6,13 @@ use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Modules\Api2cart\src\Jobs\ImportShippingAddressJob;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ImportShippingAddressJobTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * A basic feature test example.
      *
