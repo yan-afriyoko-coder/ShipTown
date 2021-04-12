@@ -2,15 +2,26 @@
 
 namespace Tests\Feature\Http\Controllers\Api\Admin\UserInviteController;
 
+use App\Models\UserInvite;
+use App\User;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class StoreTest extends TestCase
 {
     /** @test */
     public function test_store_call_returns_ok()
     {
-        $this->markTestIncomplete();
+        $invite = factory(UserInvite::class)->make();
+        $user = factory(User::class)->create()->assignRole('admin');
+
+        $response = $this->actingAs($user, 'api')->postJson(route('invites.store'), [
+            'email' => $invite->email
+        ]);
+
+        $response->assertSuccessful();
+
+        $response->assertJsonStructure([
+            'message'
+        ]);
     }
 }
