@@ -2,15 +2,24 @@
 
 namespace Tests\Feature\Http\Controllers\Api\Settings\Module\Api2cart\Api2cartConnectionController;
 
+use App\User;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class IndexTest extends TestCase
 {
     /** @test */
     public function test_index_call_returns_ok()
     {
-        $this->markTestIncomplete();
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user, 'api')->getJson(route('connections.index'));
+
+        $response->assertOk();
+        $response->assertJsonStructure([
+            'data' => [
+                '*' => [
+                ]
+            ]
+        ]);
     }
 }
