@@ -172,5 +172,6 @@ return [
         'contract'               => base_path() . '/resources/stubs/contract.stub',
         'factory'                => base_path() . '/resources/stubs/factory.stub',
         'test'                   => base_path() . '/resources/stubs/test.stub',
+        'test_controller'                   => base_path() . '/resources/stubs/test.controller.stub',
     ]
 ];
