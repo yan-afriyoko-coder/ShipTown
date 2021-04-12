@@ -4,8 +4,6 @@ namespace Tests\Feature\Http\Controllers\Api\Settings;
 
 use App\Models\Configuration;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 /**
@@ -28,11 +26,6 @@ class ConfigurationControllerTest extends TestCase
         $response = $this->actingAs($user, 'api')->getJson($route);
 
         $response->assertOk();
-        $response->assertJsonStructure([
-            // TODO: compare expected response data
-        ]);
-
-        // TODO: perform additional assertions
     }
 
     /**
@@ -59,6 +52,4 @@ class ConfigurationControllerTest extends TestCase
             ]
         ]);
     }
-
-    // test cases...
 }

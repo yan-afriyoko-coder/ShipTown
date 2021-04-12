@@ -8,6 +8,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class StoreTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function test_store_call_returns_ok()
     {
