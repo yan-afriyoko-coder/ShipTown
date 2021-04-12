@@ -4,8 +4,6 @@ namespace Tests\Feature\Http\Controllers\Api\Picklist;
 
 use App\Models\Order;
 use App\Models\OrderProduct;
-use App\Models\Pick;
-use App\Models\Product;
 use App\User;
 use Tests\TestCase;
 
@@ -33,7 +31,6 @@ class PicklistPickControllerTest extends TestCase
         $response->assertOk();
         $response->assertJsonStructure([
             'data' => [
-                // displays array of picked order products
                 '*' => [],
             ],
         ]);

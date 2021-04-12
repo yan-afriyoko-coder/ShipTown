@@ -29,6 +29,4 @@ class ProductAliasControllerTest extends TestCase
             ]
         ]);
     }
-
-    // test cases...
 }

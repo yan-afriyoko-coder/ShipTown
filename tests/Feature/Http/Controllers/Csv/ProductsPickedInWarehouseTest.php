@@ -21,6 +21,4 @@ class ProductsPickedInWarehouseTest extends TestCase
 
         $response->assertOk();
     }
-
-    // test cases...
 }

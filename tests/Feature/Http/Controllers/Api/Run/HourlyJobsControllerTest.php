@@ -20,12 +20,5 @@ class HourlyJobsControllerTest extends TestCase
         $response = $this->actingAs($user, 'api')->getJson(route('run.hourly.jobs.index'));
 
         $response->assertOk();
-        $response->assertJsonStructure([
-            // TODO: compare expected response data
-        ]);
-
-        // TODO: perform additional assertions
     }
-
-    // test cases...
 }

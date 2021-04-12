@@ -2,8 +2,6 @@
 
 namespace Tests\Feature\Http\Controllers\Csv;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 /**
@@ -22,6 +20,4 @@ class ProductsShippedFromWarehouseControllerTest extends TestCase
 
         $response->assertOk();
     }
-
-    // test cases...
 }

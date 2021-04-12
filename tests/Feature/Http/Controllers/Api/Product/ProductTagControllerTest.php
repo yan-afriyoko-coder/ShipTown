@@ -29,6 +29,4 @@ class ProductTagControllerTest extends TestCase
             ]
         ]);
     }
-
-    // test cases...
 }

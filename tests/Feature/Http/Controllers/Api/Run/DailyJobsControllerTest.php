@@ -20,10 +20,5 @@ class DailyJobsControllerTest extends TestCase
         $response = $this->actingAs($user, 'api')->getJson(route('run.daily.jobs.index'));
 
         $response->assertOk();
-        $response->assertJsonStructure([
-            // TODO: compare expected response data
-        ]);
     }
-
-    // test cases...
 }
