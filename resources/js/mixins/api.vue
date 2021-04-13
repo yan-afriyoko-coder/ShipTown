@@ -51,6 +51,14 @@ export default {
                 return axios.post('/api/settings/user/me', data);
             },
 
+            apiGetUsers: function (userId) {
+                return axios.get(`/api/admin/users/${userId}`);
+            },
+
+            apiPostUserUpdate: function (userId, data) {
+                return axios.put(`/api/admin/users/${userId}`, data);
+            },
+
             apiGetModulePrintnodeClients: function (params) {
                 return axios.get('api/settings/modules/printnode/clients', {params: params})
             },
