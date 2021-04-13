@@ -23,9 +23,13 @@
 </template>
 
 <script>
+import api from "../../mixins/api";
+
 export default {
+    mixins: [api],
+
     created() {
-        axios.get('api/settings/modules/printnode/clients')
+        this.apiGetModulePrintnodeClients()
             .then(({ data }) => {
                 this.value = data.data[0]['api_key'];
             });
@@ -38,7 +42,7 @@ export default {
     methods: {
         handleSubmit() {
             if (this.value) {
-                axios.post('api/settings/modules/printnode/clients', {
+                this.apiPostModulePrintnodeClients({
                     'api_key': this.value
                 });
             }
