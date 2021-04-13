@@ -15,7 +15,7 @@ class RoutesCoverageTest extends TestCase
      */
     public function test_if_all_routes_have_test_file()
     {
-        Artisan::call('route:list --json --path=api');
+        Artisan::call('route:list --json --path=api --env=production');
 
         $routes = collect(json_decode(Artisan::output()));
 
