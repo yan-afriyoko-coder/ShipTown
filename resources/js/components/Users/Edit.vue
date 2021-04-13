@@ -34,22 +34,28 @@
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
 
 import Loading from '../../mixins/loading-overlay';
+import api from "../../mixins/api";
 
 export default {
+    mixins: [api, Loading],
+
     components: {
         ValidationObserver, ValidationProvider
     },
 
     mounted() {
         this.showLoading();
-        axios.get(`/api/admin/users/${this.id}`).then(({ data }) => {
-            const user = data.data;
-            this.name = user.name;
-            this.roleId = user.role_id;
-        }).then(this.hideLoading);
+        this.apiGetUsers({
+                'filter[user_id]': this.id
+            })
+            .then(({ data }) => {
+                console.log(data);
+                const user = data.data[0];
+                this.name = user.name;
+                this.roleId = user.role_id;
+            })
+            .finally(this.hideLoading);
     },
-
-    mixins: [Loading],
 
     props: {
         id: Number,
@@ -62,21 +68,25 @@ export default {
     }),
 
     methods: {
+
         submit() {
             this.showLoading();
-            axios.put(`/api/admin/users/${this.id}`, {
-                name: this.name,
-                role_id: this.roleId,
-            }).then(({ data }) => {
-                this.$emit('saved');
-                this.$snotify.success('User updated.');
-            }).catch((error) => {
-                if (error.response) {
-                    if (error.response.status === 422) {
-                        this.$refs.form.setErrors(error.response.data.errors);
+            this.apiPostUserUpdate(this.id, {
+                    name: this.name,
+                    role_id: this.roleId,
+                })
+                .then(({ data }) => {
+                    this.$emit('saved');
+                    this.$snotify.success('User updated.');
+                })
+                .catch((error) => {
+                    if (error.response) {
+                        if (error.response.status === 422) {
+                            this.$refs.form.setErrors(error.response.data.errors);
+                        }
                     }
-                }
-            }).then(this.hideLoading);
+                })
+                .finally(this.hideLoading);
         },
     },
 

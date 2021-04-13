@@ -65,13 +65,14 @@
     import { ValidationObserver, ValidationProvider } from 'vee-validate';
 
     import Loading from '../../mixins/loading-overlay';
+    import api from "../../mixins/api";
 
     export default {
         components: {
             ValidationObserver, ValidationProvider
         },
 
-        mixins: [Loading],
+        mixins: [api, Loading],
 
         data: () => ({
             location_id: null,
@@ -87,23 +88,27 @@
         methods: {
             submit() {
                 this.showLoading();
-                axios.post('/api/settings/modules/rms_api/connections', {
+                let data = {
                     location_id: this.location_id,
                     url: this.url,
                     password: this.password,
                     username: this.username,
-                }).then(({ data }) => {
-                    const config = data.data;
+                };
+                this.apiPostRmsapiConnections(data)
+                    .then(({ data }) => {
+                        const config = data.data;
 
-                    this.$emit('saved', config);
-                     // this.reset();
-                }).catch((error) => {
-                    if (error.response) {
-                        if (error.response.status == 422) {
-                            this.$refs.form.setErrors(error.response.data.errors);
+                        this.$emit('saved', config);
+                         // this.reset();
+                    })
+                    .catch((error) => {
+                        if (error.response) {
+                            if (error.response.status === 422) {
+                                this.$refs.form.setErrors(error.response.data.errors);
+                            }
                         }
-                    }
-                }).then(this.hideLoading);
+                    })
+                    .finally(this.hideLoading);
             },
 
             reset() {

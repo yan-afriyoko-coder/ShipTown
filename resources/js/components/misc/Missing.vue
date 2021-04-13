@@ -69,9 +69,10 @@
     import { HotTable } from '@handsontable/vue';
 
     import loadingOverlay from '../../mixins/loading-overlay';
+    import api from "../../mixins/api";
 
     export default {
-        mixins: [loadingOverlay],
+        mixins: [api, loadingOverlay],
 
         created: function() {
             this.loadProductList(1);
@@ -79,17 +80,23 @@
         },
 
         methods: {
+            getAxiosPromise: function (params) {
+                return axios.get(`/api/inventory`, {params: params});
+            },
+
             loadProductList: function(page) {
                 this.showLoading();
-                axios.get(`/api/inventory?page=${page}`).then(({ data }) => {
-                    this.productsData = data;
-                }).then(this.hideLoading);
+                const params = {
+                  'page': page
+                };
+                this.getAxiosPromise(params)
+                    .then(({ data }) => {
+                        this.productsData = data;
+                    })
+                    .finally(this.hideLoading);
             },
 
             loadAllProducts: function(page) {
-                axios.get(`/api/inventory?per_page=all`).then(({ data }) => {
-                    this.allProducts = data.map(this.dataMap);
-                });
             },
 
             next() {

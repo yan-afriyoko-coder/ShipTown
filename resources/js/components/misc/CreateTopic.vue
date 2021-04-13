@@ -30,18 +30,7 @@
 
     export default {
         methods: {
-
             createTopic : function(name) {
-
-                axios.post('/api/createtopic', name)
-                    .then(response => {
-                        if (!(response.status == 200)) {
-                            alert(response.data);
-                        }
-                        else {
-                            alert(response.data)
-                        }
-                    })
             }
         }
     }

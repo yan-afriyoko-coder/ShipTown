@@ -98,7 +98,7 @@
             },
 
             getConfiguration() {
-                axios.get('/api/settings/modules/api2cart/connections')
+                this.apiGetApi2cartConnections({})
                     .then(({ data }) => {
                         this.configurations = data.data;
                     });
@@ -144,10 +144,11 @@
 
             },
 
-            handleDelete(id, index) {
-                axios.delete(`/api/settings/modules/api2cart/connections/${id}`).then(() => {
-                    Vue.delete(this.configurations, index);
-                });
+            handleDelete(connection_id, index) {
+                this.apiDeleteApi2cartConnection(connection_id)
+                    .then(() => {
+                        Vue.delete(this.configurations, index);
+                    });
             }
         },
 

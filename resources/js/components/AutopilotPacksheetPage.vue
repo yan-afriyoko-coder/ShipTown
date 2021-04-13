@@ -282,11 +282,12 @@
                     });
                 },
 
-                changeStatus(code) {
+                changeStatus(status_code) {
                     this.$refs.filtersModal.hide();
-                    return axios.put('/api/orders/' + this.order['id'], {
-                        'status_code': code
-                    })
+
+                    return this.apiUpdateOrder(this.order['id'], {
+                            'status_code': status_code
+                        })
                         .then(() => {
                             this.notifySuccess('Status changed')
                         })
@@ -308,10 +309,11 @@
                 },
 
                 addShippingNumber(shipping_number) {
-                    axios.post('/api/order/shipments', {
+                    let data = {
                         'order_id': this.order['id'],
                         'shipping_number': shipping_number,
-                    })
+                    };
+                    this.apiPostOrderShipment(data)
                         .then(() => {
                             if(this.order['is_packed']) {
                                 this.$emit('orderCompleted')
@@ -326,7 +328,7 @@
                 markAsPacked: async function () {
                     this.order['is_packed'] = true;
 
-                    return axios.put('/api/orders/' + this.order['id'], {
+                    this.apiUpdateOrder(this.order['id'],{
                             'is_packed': true,
                         })
                         .catch((error) => {
@@ -364,9 +366,9 @@
                         removedFromList = true;
                     }
 
-                    axios.put('/api/order/products/' + orderProduct['id'], {
-                        'quantity_shipped': quantity
-                    })
+                    this.apiUpdateOrderProduct(orderProduct.id, {
+                            'quantity_shipped': quantity
+                        })
                         .then(({data}) => {
                             if(removedFromList === true) {
                                 this.addToLists(data.data);
@@ -456,7 +458,7 @@
 
                     this.$refs.filtersModal.hide();
 
-                    return axios.put(`/api/print/order/${orderNumber}/${template}`)
+                    return this.apiPrintLabel(orderNumber, template)
                         .catch((error) => {
 
                             this.canClose = false;
