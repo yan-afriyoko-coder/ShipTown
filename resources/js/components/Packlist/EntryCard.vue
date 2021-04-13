@@ -13,21 +13,21 @@
             <div class="row">
                 <div class="col-6 small">
                     <div >
-                        ordered: <b>{{ dashIfZero(Math.ceil(entry['quantity_ordered'])) }}</b>
+                        ordered: <b>{{ dashIfZero(Number(entry['quantity_ordered'])) }}</b>
                     </div>
                     <div>
-                        picked: <b>{{ dashIfZero(Math.ceil(entry['quantity_picked'])) }}</b>
+                        picked: <b>{{ dashIfZero(Number(entry['quantity_picked'])) }}</b>
                     </div>
                     <div>
-                        shipped: <b>{{ dashIfZero(Math.ceil(entry['quantity_shipped'])) }}</b>
+                        shipped: <b>{{ dashIfZero(Number(entry['quantity_shipped'])) }}</b>
                     </div>
                     <div>
-                        inventory: <b>{{ dashIfZero(Math.ceil(productInventory)) }}</b>
+                        inventory: <b>{{ dashIfZero(Number(productInventory)) }}</b>
                     </div>
                 </div>
-                <div class="col-3 text-center" v-bind:class="{ 'bg-warning': Math.ceil(entry['quantity_ordered']) > 1 }">
+                <div class="col-3 text-center" v-bind:class="{ 'bg-warning': Number(entry['quantity_ordered']) !== 1 }">
                     <small>to ship</small>
-                    <h3>{{ dashIfZero(Math.ceil(entry['quantity_ordered'] - entry['quantity_shipped'])) }}</h3>
+                    <h3>{{ dashIfZero(Number(entry['quantity_ordered']) - Number(entry['quantity_shipped'])) }}</h3>
                 </div>
                 <div class="col-3 text-center">
                     <small>shelf</small>
