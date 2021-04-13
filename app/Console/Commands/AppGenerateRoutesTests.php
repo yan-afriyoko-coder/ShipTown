@@ -63,6 +63,7 @@ class AppGenerateRoutesTests extends Command
         $testDirectory = Str::after($controllerName, 'App\\') ;
         $testName = $testDirectory . '\\' . Str::ucfirst($methodName) . 'Test';
 
+        // $sample_output = 'Http/Controllers/Api/Settings/UserMeController/IndexTest'
         return str_replace('\\', '/', $testName);
     }
 }
