@@ -49,7 +49,15 @@ export default {
 
             apiPostUserMe: function (data) {
                 return axios.post('/api/settings/user/me', data);
-            }
+            },
+
+            apiGetModulePrintnodeClients: function (params) {
+                return axios.get('api/settings/modules/printnode/clients', {params: params})
+            },
+
+            apiPostModulePrintnodeClients: function (data) {
+                return axios.post('api/settings/modules/printnode/clients', data);
+            },
         }
     }
 </script>

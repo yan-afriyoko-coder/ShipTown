@@ -41,14 +41,31 @@ Route::middleware('auth:api')->group(function () {
     // its job is to fetch next order and block it so no other user gets it again
     Route::apiResource('packlist/order', 'Api\PacklistOrderController', ['as' => 'packlist'])->only(['index']);
 
+
     Route::apiResource('settings/user/me', 'Api\Settings\UserMeController')->only(['index','store']);
     Route::apiResource('settings/widgets', 'Api\Settings\WidgetController')->only(['store','update']);
-    Route::apiResource('settings/modules/rms_api/connections', "Api\Settings\Module\Rmsapi\RmsapiConnectionController")->only(['index','store','destroy']);
-    Route::apiResource('settings/modules/api2cart/connections', "Api\Settings\Module\Api2cart\Api2cartConnectionController")->only(['index','store','destroy']);
-    Route::apiResource('settings/modules/api2cart/products', "Api\Settings\Module\Api2cart\ProductsController", ['as' => 'module.api2cart'])->only(['index']);
-    Route::apiResource('settings/modules/printnode/printers', 'Api\Settings\Module\Printnode\PrinterController', ['as' => 'module.printnode'])->only(['index']);
-    Route::apiResource('settings/modules/printnode/printjobs', 'Api\Settings\Module\Printnode\PrintJobController', ['as' => 'module.printnode'])->only(['store']);
-    Route::apiResource('settings/modules/printnode/clients', 'Api\Settings\Module\Printnode\ClientController', ['as' => 'module.printnode'])->only(['index','store']);
+
+    Route::group(['prefix' => 'settings', 'namespace' => 'Api\Settings', 'as' => 'api.settings.'], function () {
+
+        // modules
+        Route::group(['prefix' => 'modules', 'namespace' => 'Module', 'as' => 'module.'], function () {
+            // api2cart
+            Route::group(['prefix' => 'api2cart', 'namespace' => 'Api2cart', 'as' => 'api2cart.'], function () {
+                Route::apiResource('connections', "Api2cartConnectionController")->only(['index', 'store', 'destroy']);
+                Route::apiResource('products', "ProductsController")->only(['index']);
+            });
+            // printnode
+            Route::group(['prefix' => 'printnode', 'namespace' => 'Printnode', 'as' => 'printnode.'], function () {
+                Route::apiResource('printers', 'PrinterController')->only(['index']);
+                Route::apiResource('printjobs', 'PrintJobController')->only(['store']);
+                Route::apiResource('clients', 'ClientController')->only(['index', 'store']);
+            });
+            // rms_api
+            Route::group(['prefix' => 'rms_api', 'namespace' => 'Rmsapi', 'as' => 'rmsapi.'], function () {
+                Route::apiResource('connections', "RmsapiConnectionController")->only(['index', 'store', 'destroy']);
+            });
+        });
+    });
 
     // Routes for users with the admin role only
     Route::middleware('role:admin')->group(function () {
