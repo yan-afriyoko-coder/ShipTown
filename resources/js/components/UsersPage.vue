@@ -59,15 +59,17 @@ import { find } from 'lodash';
 
 import Invite from './Users/Invite';
 import Edit from './Users/Edit';
+import api from "../mixins/api";
 
 export default {
+    mixins: [api],
     components: {
         'invite-modal': Invite,
         'edit-modal': Edit,
     },
 
     created() {
-        axios.get('/api/settings/user/me')
+        this.apiGetUserMe()
             .then(({ data }) => {
                 this.currentUser = data.data;
             })
@@ -87,14 +89,16 @@ export default {
 
     methods: {
         loadUsers() {
-            axios.get('/api/admin/users?per_page=999')
+            this.apiGetUsers({
+                    'per_page': 999
+                })
                 .then(({ data }) => {
                     this.users = data.data;
                 });
         },
 
         loadRoles() {
-            axios.get('/api/admin/user/roles')
+            this.apiGetUserRoles()
                 .then(({ data }) => {
                     this.roles = data.data;
                 });
@@ -120,12 +124,13 @@ export default {
             this.$bvModal.msgBoxConfirm('Deactivate this user?')
                 .then(value => {
                     if (value === true) {
-                        axios.delete(`/api/admin/users/${id}`).then(() => {
-                            this.$snotify.success('User deactivated.');
-                            let index = find(this.users, ['id', id]);
+                        this.apiDeleteUser(id)
+                            .then(() => {
+                                this.$snotify.success('User deactivated.');
+                                let index = find(this.users, ['id', id]);
 
-                            this.users = this.users.splice(index, 1);
-                        });
+                                this.users = this.users.splice(index, 1);
+                            });
                     }
                 })
                 .catch(err => {

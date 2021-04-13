@@ -45,7 +45,9 @@ export default {
 
     mounted() {
         this.showLoading();
-        this.apiGetUsers(this.id)
+        this.apiGetUser({
+            'filter[user_id]': this.id
+        })
             .then(({ data }) => {
                 const user = data.data;
                 this.name = user.name;
@@ -82,7 +84,8 @@ export default {
                             this.$refs.form.setErrors(error.response.data.errors);
                         }
                     }
-                }).then(this.hideLoading);
+                })
+                .finally(this.hideLoading);
         },
     },
 

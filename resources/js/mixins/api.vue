@@ -51,12 +51,24 @@ export default {
                 return axios.post('/api/settings/user/me', data);
             },
 
-            apiGetUsers: function (userId) {
+            apiGetUser: function (userId) {
                 return axios.get(`/api/admin/users/${userId}`);
+            },
+
+            apiGetUsers: function (params) {
+                return axios.get(`/api/admin/users`, {params: params});
             },
 
             apiPostUserUpdate: function (userId, data) {
                 return axios.put(`/api/admin/users/${userId}`, data);
+            },
+
+            apiDeleteUser: function (id) {
+                return axios.delete(`/api/admin/users/${id}`);
+            },
+
+            apiGetUserRoles: function (params) {
+                return axios.get('/api/admin/user/roles');
             },
 
             apiGetModulePrintnodeClients: function (params) {
