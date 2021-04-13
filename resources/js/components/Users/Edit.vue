@@ -45,11 +45,12 @@ export default {
 
     mounted() {
         this.showLoading();
-        this.apiGetUser({
-            'filter[user_id]': this.id
-        })
+        this.apiGetUsers({
+                'filter[user_id]': this.id
+            })
             .then(({ data }) => {
-                const user = data.data;
+                console.log(data);
+                const user = data.data[0];
                 this.name = user.name;
                 this.roleId = user.role_id;
             })

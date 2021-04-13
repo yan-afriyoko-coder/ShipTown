@@ -27,9 +27,10 @@
 
 <script>
 import loadingOverlay from '../../../mixins/loading-overlay';
+import api from "../../../mixins/api";
 
 export default {
-    mixins: [loadingOverlay],
+    mixins: [api, loadingOverlay],
 
     created() {
         if (this.widgetId) {
@@ -71,33 +72,28 @@ export default {
 
     methods: {
         handleSubmit() {
-            let url = '/api/widgets';
-            let method = 'post';
             const data = {
                 name: this.name,
                 config: this.config
             };
 
             if (this.id) {
-                url = `/api/widgets/${this.id}`;
-                method = 'put';
+                this.apiPutWidget(this.id, data);
             }
 
             this.showLoading();
 
-            axios({
-                method,
-                data,
-                url
-            }).then(({ data }) => {
-                const widget = data.data;
-                this.id = widget.id;
-                this.config = widget.config;
+            this.apiPostWidget(data)
+                .then(({ data }) => {
+                    const widget = data.data;
+                    this.id = widget.id;
+                    this.config = widget.config;
 
-                this.$snotify.success('APT Widget configuration saved.');
-                $(this.$el).modal('hide');
-                window.location.reload();
-            }).then(this.hideLoading);
+                    this.$snotify.success('APT Widget configuration saved.');
+                    $(this.$el).modal('hide');
+                    window.location.reload();
+                })
+                .finally(this.hideLoading);
         }
     }
 }

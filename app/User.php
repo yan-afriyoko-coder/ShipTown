@@ -17,6 +17,7 @@ use Laravel\Passport\Token;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
 
@@ -105,6 +106,8 @@ class User extends Authenticatable
     {
         return QueryBuilder::for(User::class)
             ->allowedFilters([
+                AllowedFilter::exact('id'),
+                AllowedFilter::exact('user_id', 'id'),
             ])
             ->allowedIncludes([
             ])

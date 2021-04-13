@@ -100,6 +100,7 @@ export default {
         loadRoles() {
             this.apiGetUserRoles()
                 .then(({ data }) => {
+                    console.log(data);
                     this.roles = data.data;
                 });
         },

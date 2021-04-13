@@ -12,9 +12,10 @@
 
 <script>
     import url from "../mixins/url";
+    import api from "../mixins/api";
 
     export default {
-        mixins: [url],
+        mixins: [api, url],
 
         data: function() {
             return {
@@ -30,7 +31,8 @@
                     'sort': this.getUrlParameter('sort', 'order_placed_at'),
                 };
 
-                axios.get('/api/packlist/order', {params: params})
+                console.log('ha');
+                this.apiGetPacklistOrder(params)
                     .then(({data}) => {
                         this.order_number = data.data['order_number'];
                     })

@@ -51,8 +51,11 @@
     import { BModal, VBModal, BButton } from 'bootstrap-vue';
 
     import RMSApiConfigurationForm from './RmsapiConfigurationForm';
+    import api from "../../mixins/api";
 
     export default {
+        mixins: [api],
+
         components: {
             'b-modal': BModal,
             'b-button': BButton,
@@ -72,7 +75,6 @@
         },
 
         methods: {
-
             prepareComponent() {
                 this.getConfiguration();
             },
@@ -81,7 +83,7 @@
              * Get all of the personal access tokens for the user.
              */
             getConfiguration() {
-                axios.get('/api/settings/modules/rms_api/connections')
+                this.apiGetRmsapiConnections()
                     .then(({ data }) => {
                         this.configurations = data.data;
                     });
@@ -101,11 +103,12 @@
             },
 
             handleDelete(id, index) {
-                axios.delete(`/api/settings/modules/rms_api/connections/${id}`).then(() => {
-                    Vue.delete(this.configurations, index);
-                });
+                this.apiDeleteRmsapiConnection(id)
+                    .then(() => {
+                        Vue.delete(this.configurations, index);
+                    });
             }
-        }
+        },
     }
 
 </script>

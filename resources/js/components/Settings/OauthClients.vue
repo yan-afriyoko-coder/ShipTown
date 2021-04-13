@@ -211,7 +211,12 @@
 </template>
 
 <script>
+    import api from "../../mixins/api";
+
     export default {
+
+        mixins: [api],
+
         /*
          * The mixins's data.
          */
@@ -267,7 +272,7 @@
              * Get all of the OAuth clients for the user.
              */
             getClients() {
-                axios.get('/oauth/clients')
+                this.apiGetOauthClients()
                         .then(response => {
                             this.clients = response.data;
                         });
@@ -345,6 +350,6 @@
                             this.getClients();
                         });
             }
-        }
+        },
     }
 </script>

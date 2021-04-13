@@ -45,13 +45,6 @@
         methods: {
 
             subscribe : function(url) {
-                axios.post('/api/subscribetopic', url)
-                    .then(response => {
-                        alert("Subscribed to topic");
-                    })
-                    .catch(error => {
-                        alert("Something went wrong. Please try again.")
-                    })
             }
         }
     }

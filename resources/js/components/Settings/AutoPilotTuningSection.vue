@@ -24,7 +24,11 @@
 </template>
 
 <script>
+import api from "../../mixins/api";
+
 export default {
+    mixins: [api],
+
     name: "AutoPilotTuningSection",
 
     data: function () {
@@ -36,23 +40,26 @@ export default {
     },
 
     created() {
-        axios.get(`api/configuration/${process.env.MIX_PACKING_DAILY_MAX_CONFIG_KEY_NAME}`).then(({ data }) => {
-            this.value = data.data.value;
-        });
-        axios.get(`api/configuration/max_order_age_allowed`).then(({ data }) => {
-            this.maxOrderAgeAllowed = data.data.value;
-        });
+        this.apiGetConfigurationAutopilot('packing_daily_max')
+            .then(({ data }) => {
+                this.value = data.data.value;
+            });
+        this.apiGetConfigurationAutopilot(`max_order_age_allowed`)
+            .then(({ data }) => {
+                this.maxOrderAgeAllowed = data.data.value;
+            });
     },
 
     methods: {
+
         saveAutoPilotTuningSettings() {
             if (this.value) {
                 this.btnSaveAutoPilotTuningSettings = ! this.btnSaveAutoPilotTuningSettings;
-                axios.post(`api/configuration`, {
-                    key: process.env.MIX_PACKING_DAILY_MAX_CONFIG_KEY_NAME,
+                this.apiPostAutoPilotConfiguration({
+                    key: 'packing_daily_max',
                     value: this.value,
                 });
-                axios.post(`api/configuration`, {
+                this.apiPostAutoPilotConfiguration({
                     key: 'max_order_age_allowed',
                     value: this.maxOrderAgeAllowed,
                 });

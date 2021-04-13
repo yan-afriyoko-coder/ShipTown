@@ -43,14 +43,18 @@
 </template>
 
 <script>
+import api from "../../mixins/api";
+
 export default {
+    mixins: [api],
+
     created() {
-        axios.get('/api/settings/user/me')
+        this.apiGetUserMe()
             .then(({ data }) => {
                 this.defaultPrinter = data.data.printer_id;
             });
 
-        axios.get('/api/settings/modules/printnode/printers')
+        this.apiGetPrintNodePrinters()
             .then(({ data }) => {
                 this.printers = data.data;
             }).catch(e => {
@@ -66,19 +70,20 @@ export default {
 
     methods: {
         setDefault(printerId) {
-            axios.post('/api/settings/user/me', {
-                'printer_id': printerId
-            })
+            this.apiPostUserMe({
+                    'printer_id': printerId
+                })
                 .then(({ data }) => {
                     this.defaultPrinter = data.printer_id;
                 });
         },
 
         printTest(printer) {
-            axios.post('/api/settings/modules/printnode/printjobs', {
+            let data = {
                 'printer_id': printer.id,
                 'pdf_url': 'https://api.printnode.com/static/test/pdf/label_4in_x_6in.pdf'
-            });
+            };
+            this.apiPostPrintnodePrintJob(data);
         },
 
         isDefaultPrinter(printerId) {

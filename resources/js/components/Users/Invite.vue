@@ -36,21 +36,26 @@ export default {
     }),
 
     methods: {
+
         submit() {
             this.showLoading();
-            axios.post('/api/admin/user/invites', {
+            let data = {
                 email: this.email,
-            }).then(({ data }) => {
-                this.$emit('saved');
-                this.$snotify.success('User invite sent.');
-                this.reset();
-            }).catch((error) => {
-                if (error.response) {
-                    if (error.response.status === 422) {
-                        this.$refs.form.setErrors(error.response.data.errors);
+            };
+            this.apiPostUserInvite(data)
+                .then(({ data }) => {
+                    this.$emit('saved');
+                    this.$snotify.success('User invite sent.');
+                    this.reset();
+                })
+                .catch((error) => {
+                    if (error.response) {
+                        if (error.response.status === 422) {
+                            this.$refs.form.setErrors(error.response.data.errors);
+                        }
                     }
-                }
-            }).then(this.hideLoading);
+                })
+                .finally(this.hideLoading);
         },
 
         reset() {

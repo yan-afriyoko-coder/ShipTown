@@ -21,7 +21,11 @@
 </template>
 
 <script>
+import api from "../../mixins/api";
+
 export default {
+    mixins: [api],
+
     name: "MaintenanceSection",
     data: function () {
         return {
@@ -33,7 +37,7 @@ export default {
     methods: {
         runHourlyJobs() {
             this.btnRunHourlyJobsEnabled = false;
-            axios.get('/api/run/hourly/jobs')
+            this.apiGetRunHourlyJobs()
                 .then(() => {
                         this.$snotify.success('Job run requested');
                     }
@@ -43,9 +47,10 @@ export default {
                     }
                 );
         },
+
         runDailyJobs() {
             this.btnRunDailyJobsEnabled = false;
-            axios.get('/api/run/daily/jobs')
+            this.apiGetRunDailyJobs()
                 .then(() => {
                         this.$snotify.success('Job run requested');
                     }
@@ -55,9 +60,10 @@ export default {
                     }
                 );
         },
+
         runSync() {
             this.btnRunSyncEnabled = false;
-            axios.get('/api/run/sync')
+            this.apiGetRunSync()
                 .then(() => {
                         this.$snotify.success('Sync requested');
                     }

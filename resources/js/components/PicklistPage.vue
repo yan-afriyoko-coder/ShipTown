@@ -60,11 +60,12 @@ import PicklistConfigurationModalNew from './Picks/ConfigurationModal.vue';
 
 import url from "../mixins/url";
 import beep from "../mixins/beep";
+import api from "../mixins/api";
 
 export default {
     name: "PicksTable",
 
-    mixins: [loadingOverlay, url, beep],
+    mixins: [loadingOverlay, url, beep, api],
 
     components: {
         'pick-card': PickCard,
@@ -163,7 +164,7 @@ export default {
                 'filter[created_between]': this.getUrlParameter('created_between'),
             };
 
-            return axios.get('/api/picklist', {params:  params})
+            return this.apiGetPicklist(params)
                 .then( ({data}) => {
                     this.picklist = data.data;
                 })
@@ -177,18 +178,19 @@ export default {
         },
 
         postPick(pick, quantity_picked, quantity_skipped_picking) {
-            return axios.post('/api/picklist/picks', {
-                    'quantity_picked': quantity_picked,
-                    'quantity_skipped_picking': quantity_skipped_picking,
-                    'order_product_ids': pick['order_product_ids'],
-                })
+            let data = {
+                'quantity_picked': quantity_picked,
+                'quantity_skipped_picking': quantity_skipped_picking,
+                'order_product_ids': pick['order_product_ids'],
+            };
+            return this.apiPostPicklistPick(data)
                 .catch( error => {
                     this.$snotify.error('Action failed (Http code  '+ error.response.status +')');
                 });
         },
 
         postPickUpdate(pick, quantity_picked) {
-            return axios.post('/api/picklist/picks', {
+            return this.apiPostPicklistPick({
                     'quantity_picked': quantity_picked,
                     'order_product_ids': pick['order_product_ids'],
                 })
