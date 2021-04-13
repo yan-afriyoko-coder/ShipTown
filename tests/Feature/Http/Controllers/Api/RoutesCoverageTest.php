@@ -13,7 +13,7 @@ class RoutesCoverageTest extends TestCase
      *
      * @return void
      */
-    public function test_if_all_routes_have_test_file()
+    public function test_if_all_api_routes_have_test_file()
     {
         Artisan::call('route:list --json --path=api --env=production');
 
