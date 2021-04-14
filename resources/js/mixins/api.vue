@@ -143,7 +143,7 @@ export default {
                 return axios.post('/api/settings/modules/rms_api/connections', data);
             },
 
-            apiGetRmsapiConnections: function () {
+            apiGetRmsapiConnections: function (params) {
                 return axios.get('/api/settings/modules/rms_api/connections', {params: params});
             },
 

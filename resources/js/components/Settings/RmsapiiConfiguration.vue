@@ -83,7 +83,7 @@
              * Get all of the personal access tokens for the user.
              */
             getConfiguration() {
-                this.apiGetRmsapiConnections()
+                this.apiGetRmsapiConnections({})
                     .then(({ data }) => {
                         this.configurations = data.data;
                     });

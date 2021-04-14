@@ -217,6 +217,7 @@
     import helpers from "../../mixins/helpers";
 
     export default {
+        mixins: [api, helpers],
         name: "OrderCard",
 
         props: {
@@ -224,7 +225,6 @@
             expanded: false,
         },
 
-        mixins: [api, helpers],
 
         data: function () {
             return {
