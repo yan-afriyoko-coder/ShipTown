@@ -10,7 +10,7 @@
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "devDependencies": {
-    "axios": "^0.18",
+    "axios": "^0.21.1",
     "bootstrap": "^4.5.0",
     "cross-env": "^5.2.1",
     "jquery": "^3.5.1",
@@ -24,17 +24,20 @@
     "vue-template-compiler": "^2.6.11"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.29",
-    "@fortawesome/free-brands-svg-icons": "^5.15.1",
-    "@fortawesome/free-solid-svg-icons": "^5.13.1",
+    "-": "0.0.1",
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-brands-svg-icons": "^5.15.3",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/vue-fontawesome": "^0.1.10",
     "@handsontable/vue": "^4.1.1",
     "bootstrap-vue": "^2.15.0",
     "dotenv": "^8.2.0",
     "fs": "0.0.1-security",
+    "g": "^2.0.1",
     "handsontable": "^7.4.2",
     "laravel-vue-pagination": "^2.3.1",
     "moment": "^2.27.0",
+    "npm": "^7.9.0",
     "quagga": "^0.12.1",
     "register-service-worker": "^1.7.1",
     "swiper": "^5.4.5",
@@ -44,7 +47,7 @@
     "vue-observe-visibility": "^0.4.6",
     "vue-router": "^3.3.4",
     "vue-snotify": "^3.2.1",
-    "vue-tippy": "^4.5.1",
+    "vue-tippy": "^4.10.0",
     "vuejs-countdown-timer": "^2.1.3"
   }
 }

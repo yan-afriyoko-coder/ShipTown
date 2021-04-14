@@ -23,13 +23,14 @@
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
 
 import Loading from '../../mixins/loading-overlay';
+import api from "../../mixins/api";
 
 export default {
     components: {
         ValidationObserver, ValidationProvider
     },
 
-    mixins: [Loading],
+    mixins: [api, Loading],
 
     data: () => ({
         email: null

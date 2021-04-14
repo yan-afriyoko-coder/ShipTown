@@ -51,7 +51,10 @@
 </template>
 
 <script>
+    import api from "../../mixins/api";
+
     export default {
+        mixins: [api],
         /*
          * The mixins's data.
          */
