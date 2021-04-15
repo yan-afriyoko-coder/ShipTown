@@ -87,31 +87,15 @@ class SnsController extends Controller
             'Message'   => $message,
         ];
 
-        logger("Publishing SNS message", $notification);
-
         try {
-            $result = $this->awsSnsClient->publish($notification);
-
-            logger("SNS message published", [
-                "Message" => $notification,
-                "MessageId" => $result["MessageId"],
-                "Result" => $result["@metadata"]["statusCode"]
-            ]);
-
+            $this->awsSnsClient->publish($notification);
             return true;
         } catch (AwsException $e) {
-            switch ($e->getStatusCode()) {
-                case 404:
-                    $this->createTopic();
-                    $this->publish($message);
-                    break;
-                default:
-                    Log::error("Could not publish SNS message", [
-                        "code" => $e->getStatusCode(),
-                        "return_message" => $e->getMessage(),
-                        "message" => $notification
-                    ]);
-            }
+            Log::error("Could not publish SNS message", [
+                "code" => $e->getStatusCode(),
+                "return_message" => $e->getMessage(),
+                "message" => $notification
+            ]);
         } catch (\Exception $e) {
             Log::error("Could not publish SNS message", [
                 "code" => $e->getCode(),
