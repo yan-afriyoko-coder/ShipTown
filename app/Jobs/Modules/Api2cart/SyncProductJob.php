@@ -52,7 +52,7 @@ class SyncProductJob implements ShouldQueue
 
                 $response = Products::updateOrCreate($connection->bridge_api_key, $product_data);
 
-                VerifyProductSyncJob::dispatch($connection, $product_data);
+                VerifyProductSyncJob::dispatchNow($connection, $product_data);
 
                 info('Api2cart: Product synced', [
                     'response' => $response ? $response->asArray() : null,
