@@ -50,4 +50,13 @@ class Api2cartConnection extends Model
     ];
 
     protected $table = 'api2cart_connections';
+
+    public function __construct(array $attributes = [])
+    {
+        $this->setRawAttributes(array(
+            'last_synced_modified_at' => Carbon::now()
+        ), true);
+
+        parent::__construct($attributes);
+    }
 }
