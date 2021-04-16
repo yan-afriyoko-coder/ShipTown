@@ -2,7 +2,7 @@
 
 namespace Tests\External\Api2cart;
 
-use App\Jobs\CompareMagentoJob;
+use App\Jobs\Modules\Api2cart\CompareMagentoJob;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Tests\TestCase;
 
