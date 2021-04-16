@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Modules\Api2cart;
+namespace App\Modules\Api2cart\src\Jobs;
 
 use App\Jobs\VerifyProductSyncJob;
 use App\Models\Inventory;
@@ -46,16 +46,19 @@ class SyncProductJob implements ShouldQueue
     public function handle()
     {
         $product = $this->product;
+
         Api2cartConnection::all()->each(function ($connection) use ($product) {
             try {
                 $product_data = $this->getProductData($product, $connection);
 
-                $response = Products::updateOrCreate($connection->bridge_api_key, $product_data);
+                $response = Products::updateOrCreate($connection, $product_data);
+
+                $product->detachTag('Not Synced');
 
                 VerifyProductSyncJob::dispatchNow($connection, $product_data);
 
                 info('Api2cart: Product synced', [
-                    'response' => $response ? $response->asArray() : null,
+                    'response' => $response ? $response->asArray()   : null,
                     'product_data' => $product_data,
                 ]);
             } catch (Exception $exception) {

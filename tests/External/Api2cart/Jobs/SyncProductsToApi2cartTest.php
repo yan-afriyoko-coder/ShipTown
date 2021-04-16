@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Jobs;
+namespace Tests\External\Api2cart\Jobs;
 
 use App\Jobs\SyncProductsToApi2Cart;
 use App\Models\Inventory;
@@ -36,6 +36,7 @@ class SyncProductsToApi2cartTest extends TestCase
             ->create();
 
         $product->attachTags(['Available Online', 'Not Synced']);
+
 
         $this->assertTrue(Product::withAllTags(['Not Synced'])->exists());
 
