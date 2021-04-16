@@ -103,6 +103,9 @@ class VerifyProductSyncJob implements ShouldQueue
             "quantity"
         ];
 
+        if ((Arr::has($actual, "manage_stock")) && ($actual["manage_stock"])->isFuture()) {
+            $keys_to_verify = array_merge($keys_to_verify, ["quantity"]);
+        }
 
         if ((Arr::has($expected, "sprice_expire")) &&
             (Carbon::createFromTimeString($expected["sprice_expire"])->isFuture())) {
