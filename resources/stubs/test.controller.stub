@@ -13,8 +13,8 @@ class {{class}} extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $user = factory(User::class)->create()->assignRole('admin');
-        $this->actingAs($user);
+        $admin = factory(User::class)->create()->assignRole('admin');
+        $this->actingAs($admin, 'api');
     }
 
     /** @test */
