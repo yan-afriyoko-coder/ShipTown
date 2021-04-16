@@ -472,10 +472,10 @@ class Products extends Entity
      */
     public static function getQuantity(array $product, string $warehouse_id = null): int
     {
-        if ($warehouse_id) {
-            return $product["inventory"][0]['quantity'];
+        if (is_null($warehouse_id)) {
+            return $product["quantity"];
         }
 
-        return $product["quantity"];
+        return $product["inventory"][0]['quantity'];
     }
 }

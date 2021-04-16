@@ -42,10 +42,10 @@ class SyncProductsToApi2cartTest extends TestCase
 
         $product->attachTags(['Available Online', 'Not Synced']);
 
-        $this->assertTrue(Product::withAllTags(['Not Synced'])->exists(), 'a');
+        $this->assertTrue(Product::withAllTags(['Not Synced'])->exists());
 
         SyncProductsToApi2Cart::dispatchNow();
 
-        $this->assertFalse(Product::withAllTags(['Not Synced'])->exists(), 'b');
+        $this->assertFalse(Product::withAllTags(['Not Synced'])->exists(), 'Sync tag still attached');
     }
 }
