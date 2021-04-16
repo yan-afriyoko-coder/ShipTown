@@ -37,7 +37,7 @@ class DpdIntegrationJobTest extends TestCase
      */
     public function if_record_id_matches()
     {
-        $order = factory(Order::class, 10)->create();
+        $order = factory(Order::class)->create();
 
         try {
             Dpd::shipOrder($order);
