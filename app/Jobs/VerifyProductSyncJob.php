@@ -75,7 +75,7 @@ class VerifyProductSyncJob implements ShouldQueue
             info('Update Check OK', $this->results);
         } else {
             Product::findBySKU($this->product_data['sku'])->attachTag('Not Synced');
-            Log::warning("Update Check FAILED", $this->results);
+            Log::warning("Update Check FAILED", ['differences' => $this->results, 'now' => $product_now]);
         }
     }
 
