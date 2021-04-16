@@ -17,7 +17,10 @@ class CompareMagentoJobTest extends TestCase
      */
     public function testExample()
     {
-        factory(Api2cartConnection::class)->create();
+        factory(Api2cartConnection::class)->create([
+            'bridge_api_key' => config('api2cart.api2cart_test_store_key'),
+            'magento_store_id' => null,
+        ]);
 
         CompareMagentoJob::dispatchNow();
 
