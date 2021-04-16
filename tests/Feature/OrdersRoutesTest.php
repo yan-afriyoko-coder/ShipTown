@@ -12,46 +12,6 @@ use Tests\TestCase;
 
 class OrdersRoutesTest extends TestCase
 {
-    public function testOrdersCreateAndDeleteRoutesForAuthenticatedUser()
-    {
-        Event::fake();
-
-        $data = [
-            'order_number'      => '0123456789',
-            'products' => [
-                [
-                    'sku' => '123',
-                    'quantity'     => 2,
-                    'price'        => 4,
-                ],
-
-                [
-                    'sku' => '456',
-                    'quantity'     => 5,
-                    'price'        => 10,
-                ],
-            ],
-        ];
-
-        Passport::actingAs(
-            factory(User::class)->create()
-        );
-
-        $this->json('POST', 'api/orders', $data)
-            ->assertStatus(200);
-
-        $this->assertDatabaseHas('orders', [
-            'order_number' => $data['order_number'],
-        ]);
-
-        $this->json('DELETE', 'api/orders/0123456789')
-            ->assertStatus(200);
-
-        $this->assertDatabaseMissing('orders', [
-            'order_number' => $data['order_number'],
-        ]);
-    }
-
     public function testOrdersRouteForUnauthenticatedUser()
     {
         $data = [
