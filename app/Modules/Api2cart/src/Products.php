@@ -74,8 +74,9 @@ class Products extends Entity
                     "price",
                     "special_price",
                     "stores_ids",
+                    "manage_stock",
                     "quantity",
-                    "inventory"
+                    "inventory",
                 ]
             ),
         ];
