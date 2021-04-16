@@ -7,6 +7,7 @@ use App\Modules\DpdIreland\Dpd;
 use App\Modules\DpdIreland\src\Client;
 use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class DpdIntegrationJobTest extends TestCase
@@ -44,6 +45,7 @@ class DpdIntegrationJobTest extends TestCase
             $success = true;
         } catch (Exception $e) {
             $success = false;
+            Log::error($e->getMessage());
         }
 
         // we just want no exceptions
