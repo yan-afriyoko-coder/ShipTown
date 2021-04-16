@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Jobs\Maintenance;
 
-use App\Jobs\Orders\ClearPackerIdAssignmentJob;
+use App\Jobs\Orders\ClearPackerIdJob;
 use App\Models\Order;
 use App\User;
 use Carbon\Carbon;
@@ -28,7 +28,7 @@ class ClearOrderPackerAssignmentJobTest extends TestCase
         // act
         Bus::fake();
 
-        ClearPackerIdAssignmentJob::dispatchNow();
+        ClearPackerIdJob::dispatchNow();
 
         // assert
         $this->assertFalse(
@@ -56,7 +56,7 @@ class ClearOrderPackerAssignmentJobTest extends TestCase
             'updated_at' => Carbon::now()->subHours(14),
         ]);
 
-        ClearPackerIdAssignmentJob::dispatchNow();
+        ClearPackerIdJob::dispatchNow();
 
         $this->assertTrue(
             Order::whereNull('packer_user_id')

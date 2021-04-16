@@ -12,29 +12,6 @@ use Tests\TestCase;
 
 class OrdersRoutesTest extends TestCase
 {
-    public function testOrdersRouteForUnauthenticatedUser()
-    {
-        $data = [
-            'orderID'      => '001241',
-            'products' => [
-                [
-                    'sku' => '123',
-                    'quantity'     => 2,
-                    'price'        => 4,
-                ],
-
-                [
-                    'sku' => '456',
-                    'quantity'     => 5,
-                    'price'        => 10,
-                ],
-            ],
-        ];
-
-        $this->json('POST', 'api/orders', [$data])
-            ->assertStatus(401);
-    }
-
     public function testIfMissingOrderNumberIsNotAllowed()
     {
         $data = [
