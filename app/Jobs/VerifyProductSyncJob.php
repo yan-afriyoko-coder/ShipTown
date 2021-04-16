@@ -103,7 +103,7 @@ class VerifyProductSyncJob implements ShouldQueue
             "quantity"
         ];
 
-        if ((Arr::has($actual, "manage_stock")) && ($actual["manage_stock"] === true)) {
+        if ((Arr::has($actual, "manage_stock")) && ($actual["manage_stock"] != "False")) {
             $keys_to_verify = array_merge($keys_to_verify, ["quantity"]);
         }
 
