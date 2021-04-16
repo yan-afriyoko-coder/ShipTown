@@ -2,10 +2,10 @@
 
 namespace Tests\External\DpdIreland;
 
-use App\Jobs\DpdIntegrationTestJob;
 use App\Models\Order;
-use App\Models\OrderAddress;
+use App\Modules\DpdIreland\Dpd;
 use App\Modules\DpdIreland\src\Client;
+use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -37,13 +37,16 @@ class DpdIntegrationJobTest extends TestCase
      */
     public function if_record_id_matches()
     {
-        factory(OrderAddress::class, 100)->create([
-            'country_code' => 'IRL'
-        ]);
-        factory(Order::class, 10)->create();
-        DpdIntegrationTestJob::dispatchNow();
+        $order = factory(Order::class, 10)->create();
+
+        try {
+            Dpd::shipOrder($order);
+            $success = true;
+        } catch (Exception $e) {
+            $success = false;
+        }
 
         // we just want no exceptions
-        $this->assertTrue(true);
+        $this->assertTrue($success);
     }
 }
