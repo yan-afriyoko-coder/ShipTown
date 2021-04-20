@@ -8,11 +8,18 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class RunMaintenanceJobs implements ShouldQueue
+/**
+ * Class RunHourlyJobs
+ * @package App\Jobs
+ */
+class RunHourlyJobs implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $jobClassesToRun = [
+    /**
+     * @var array|string[]
+     */
+    private array $jobClassesToRun = [
         \App\Jobs\OrderProducts\RecalculateQuantityToShipJob::class,
         \App\Jobs\OrderProducts\RecalculateQuantityToPickJob::class,
         \App\Jobs\Orders\ClearPackerIdJob::class,
@@ -23,25 +30,16 @@ class RunMaintenanceJobs implements ShouldQueue
     ];
 
     /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Execute the job.
      *
      * @return void
      */
     public function handle()
     {
-        $jobs = collect($this->jobClassesToRun)->map(function ($jobClass) {
-            return new $jobClass;
-        })->all();
+        $jobs = collect($this->jobClassesToRun)
+            ->map(function ($jobClass) {
+                return new $jobClass;
+            })->all();
 
         $this->chain($jobs);
     }

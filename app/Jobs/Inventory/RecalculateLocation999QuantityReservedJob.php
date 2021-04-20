@@ -17,17 +17,12 @@ class RecalculateLocation999QuantityReservedJob implements ShouldQueue
     /**
      * @var int
      */
-    private $locationId;
+    private int $locationId = 999;
 
     /**
-     * Create a new job instance.
-     *
-     * @return void
+     * @var int
      */
-    public function __construct()
-    {
-        $this->locationId = 999;
-    }
+    private int $maxPerJob = 200;
 
     /**
      * Execute the job.
@@ -37,8 +32,8 @@ class RecalculateLocation999QuantityReservedJob implements ShouldQueue
     public function handle()
     {
         $incorrectInventoryRecords = Queries::getProductsWithIncorrectQuantityReservedQuery($this->locationId)
-            // for performance purposes limit to 1000 products per job
-            ->limit(1000)
+            // for performance purposes we will limit products per job
+            ->limit($this->maxPerJob)
             ->get();
 
         $incorrectInventoryRecords->each(function ($errorRecord) {
@@ -52,6 +47,8 @@ class RecalculateLocation999QuantityReservedJob implements ShouldQueue
                 ]);
         });
 
-        info('RecalculateLocation999QuantityReservedJob finished', ['records_corrected_count' => $incorrectInventoryRecords->count()]);
+        info('RecalculateLocation999QuantityReservedJob finished', [
+            'records_corrected_count' => $incorrectInventoryRecords->count()
+        ]);
     }
 }
