@@ -4,7 +4,7 @@ namespace Tests\Feature\Jobs\Maintenance;
 
 use App\Jobs\Products\RecalculateProductQuantityJob;
 use App\Jobs\Products\RecalculateProductQuantityReservedJob;
-use App\Jobs\RunMaintenanceJobs;
+use App\Jobs\RunHourlyJobs;
 use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Jobs\Maintenance;
 
-use App\Jobs\RunMaintenanceJobs;
+use App\Jobs\RunHourlyJobs;
 use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
@@ -30,7 +30,7 @@ class RecalculateProductQuantityJobTest extends TestCase
             'quantity' => 0,
         ]);
 
-        RunMaintenanceJobs::dispatchNow();
+        RunHourlyJobs::dispatchNow();
 
         $this->assertEquals(
             Product::query()->sum('quantity'),
