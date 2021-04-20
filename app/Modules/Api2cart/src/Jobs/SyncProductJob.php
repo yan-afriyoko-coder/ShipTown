@@ -51,21 +51,17 @@ class SyncProductJob implements ShouldQueue
             try {
                 $product_data = $this->getProductData($product, $connection);
 
-                $response = Products::updateOrCreate($connection, $product_data);
+                $requestResponse = Products::updateOrCreate($connection, $product_data);
 
-                $product->detachTag('Not Synced');
-
-                VerifyProductSyncJob::dispatchNow($connection, $product_data);
-
-                info('Api2cart: Product synced', [
-                    'response' => $response ? $response->asArray()   : null,
-                    'product_data' => $product_data,
-                ]);
+                if ($requestResponse->isSuccess()) {
+                    $product->detachTag('Not Synced');
+                    VerifyProductSyncJob::dispatchNow($connection, $product_data);
+                    info('Api2cart: Product synced', [
+                        'response' => $requestResponse->asArray(),
+                        'product_data' => $product_data,
+                    ]);
+                }
             } catch (Exception $exception) {
-                retry(20, function () use ($product) {
-                    $product->attachTag('Not Synced');
-                }, 100);
-
                 if (isset($product_data)) {
                     Cache::forget(Products::getSkuCacheKey($connection->bridge_api_key, $product_data['sku']));
                 }
@@ -75,7 +71,7 @@ class SyncProductJob implements ShouldQueue
                         'code' => $exception->getCode(),
                         'message' => $exception->getMessage(),
                     ],
-                    'product_data' => $product_data,
+                    'product_data' => $product_data ?? null,
                 ]);
             }
         });
