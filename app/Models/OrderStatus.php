@@ -27,6 +27,18 @@ use Illuminate\Support\Carbon;
  */
 class OrderStatus extends Model
 {
+    protected $table = 'orders_statuses';
+
+    protected $fillable = [
+        'status_code',
+        'is_open',
+        'reserves_stock',
+    ];
+
+    protected $attributes = [
+        'reserves_stock' => true,
+    ];
+
     public static $toFollowStatusList = [
         'processing',
         'unshipped',
