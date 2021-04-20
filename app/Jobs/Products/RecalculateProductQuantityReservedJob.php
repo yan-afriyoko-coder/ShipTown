@@ -10,23 +10,23 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * Class RecalculateProductQuantityReservedJob
+ * @package App\Jobs\Products
+ */
 class RecalculateProductQuantityReservedJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
     /**
      * @var int
      */
-    private $locationId;
+    private int $locationId = 999;
 
     /**
-     * Create a new job instance.
-     *
-     * @return void
+     * @var int
      */
-    public function __construct()
-    {
-        $this->locationId = 999;
-    }
+    private int $maxPerJob = 200;
 
     /**
      * Execute the job.
@@ -36,7 +36,7 @@ class RecalculateProductQuantityReservedJob implements ShouldQueue
     public function handle()
     {
         $incorrectProductRecords = Queries::getProductsWithQuantityReservedErrorsQuery()
-            ->limit(100) // for performance purposes
+            ->limit($this->maxPerJob) // for performance purposes
             ->get();
 
         $incorrectProductRecords->each(function ($errorRecord) {
@@ -47,6 +47,8 @@ class RecalculateProductQuantityReservedJob implements ShouldQueue
                 ]);
         });
 
-        info('RecalculateProductQuantityReservedJob finished', ['records_corrected_count' => $incorrectProductRecords->count()]);
+        info('RecalculateProductQuantityReservedJob finished', [
+            'records_corrected_count' => $incorrectProductRecords->count()
+        ]);
     }
 }
