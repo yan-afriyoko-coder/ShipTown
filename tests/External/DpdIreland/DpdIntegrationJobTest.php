@@ -7,11 +7,9 @@ use App\Models\OrderAddress;
 use App\Modules\DpdIreland\Dpd;
 use App\Modules\DpdIreland\src\Client;
 use Exception;
-use Faker\Provider\Address;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
-use function Sodium\add;
 
 class DpdIntegrationJobTest extends TestCase
 {
