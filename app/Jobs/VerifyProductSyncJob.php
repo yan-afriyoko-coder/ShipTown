@@ -99,7 +99,6 @@ class VerifyProductSyncJob implements ShouldQueue
 
         $keys_to_verify = [
             "price",
-            "special_price"
         ];
 
         if ((Arr::has($actual, "manage_stock")) && ($actual["manage_stock"] != "False")) {
@@ -109,6 +108,7 @@ class VerifyProductSyncJob implements ShouldQueue
         if ((Arr::has($expected, "sprice_expire")) &&
             (Carbon::createFromTimeString($expected["sprice_expire"])->isFuture())) {
             $keys_to_verify = array_merge($keys_to_verify, [
+                "special_price",
                 "sprice_create",
                 "sprice_expire",
             ]);

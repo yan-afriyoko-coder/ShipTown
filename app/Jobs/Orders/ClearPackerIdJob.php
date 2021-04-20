@@ -10,7 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ClearPackerIdAssignmentJob implements ShouldQueue
+class ClearPackerIdJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -43,6 +43,6 @@ class ClearPackerIdAssignmentJob implements ShouldQueue
                     ->update(['packer_user_id' => null]);
         });
 
-        info('ClearPackerIdAssignmentJob finished', ['record_recalculated' => $records->count()]);
+        info('ClearPackerIdJob finished', ['record_recalculated' => $records->count()]);
     }
 }

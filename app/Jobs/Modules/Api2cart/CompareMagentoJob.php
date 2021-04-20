@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Modules\Api2cart;
 
 use App\Models\Product;
 use App\Modules\Api2cart\src\Exceptions\RequestException;

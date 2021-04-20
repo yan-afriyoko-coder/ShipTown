@@ -2,12 +2,14 @@
 
 namespace Tests\External\Api2cart;
 
-use App\Jobs\CompareMagentoJob;
+use App\Jobs\Modules\Api2cart\CompareMagentoJob;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class CompareMagentoJobTest extends TestCase
 {
+    use RefreshDatabase;
     /**
      * A basic feature test example.
      *
@@ -15,8 +17,10 @@ class CompareMagentoJobTest extends TestCase
      */
     public function testExample()
     {
-        Api2cartConnection::query()->forceDelete();
-        factory(Api2cartConnection::class)->create();
+        factory(Api2cartConnection::class)->create([
+            'bridge_api_key' => config('api2cart.api2cart_test_store_key'),
+            'magento_store_id' => null,
+        ]);
 
         CompareMagentoJob::dispatchNow();
 

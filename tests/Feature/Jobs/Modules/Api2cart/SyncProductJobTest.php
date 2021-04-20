@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Jobs\Modules\Api2cart;
 
-use App\Jobs\Modules\Api2cart\SyncProductJob;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductPrice;
+use App\Modules\Api2cart\src\Jobs\SyncProductJob;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Tests\TestCase;
 

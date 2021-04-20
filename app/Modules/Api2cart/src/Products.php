@@ -387,24 +387,25 @@ class Products extends Entity
     }
 
     /**
-     * @param string $store_key
+     * @param Api2cartConnection $connection
      * @param array $product_data
      * @return RequestResponse
+     * @throws RequestException
      * @throws Exception
      */
-    public static function updateOrCreate(string $store_key, array $product_data): RequestResponse
+    public static function updateOrCreate(Api2cartConnection $connection, array $product_data): RequestResponse
     {
-        $product = Products::getProductTypeAndId($store_key, $product_data['sku']);
+        $product = Products::getProductTypeAndId($connection->bridge_api_key, $product_data['sku']);
 
         switch ($product["type"]) {
             case "product":
                 $properties = array_merge($product_data, ['id' => $product["id"]]);
-                return Products::updateSimpleProduct($store_key, $properties);
+                return Products::updateSimpleProduct($connection->bridge_api_key, $properties);
             case "variant":
                 $properties = array_merge($product_data, ['id' => $product["id"]]);
-                return Products::updateVariant($store_key, $properties);
+                return Products::updateVariant($connection->bridge_api_key, $properties);
             default:
-                return Products::createSimpleProduct($store_key, $product_data);
+                return Products::createSimpleProduct($connection->bridge_api_key, $product_data);
         }
     }
 
@@ -471,10 +472,10 @@ class Products extends Entity
      */
     public static function getQuantity(array $product, string $warehouse_id = null): int
     {
-        if ($warehouse_id) {
-            return $product["inventory"][0]['quantity'];
+        if (is_null($warehouse_id)) {
+            return $product["quantity"];
         }
 
-        return $product["quantity"];
+        return $product["inventory"][0]['quantity'];
     }
 }

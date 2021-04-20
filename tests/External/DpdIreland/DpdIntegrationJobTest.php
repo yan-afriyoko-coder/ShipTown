@@ -2,12 +2,16 @@
 
 namespace Tests\External\DpdIreland;
 
-use App\Jobs\DpdIntegrationTestJob;
 use App\Models\Order;
 use App\Models\OrderAddress;
+use App\Modules\DpdIreland\Dpd;
 use App\Modules\DpdIreland\src\Client;
+use Exception;
+use Faker\Provider\Address;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
+use function Sodium\add;
 
 class DpdIntegrationJobTest extends TestCase
 {
@@ -37,13 +41,24 @@ class DpdIntegrationJobTest extends TestCase
      */
     public function if_record_id_matches()
     {
-        factory(OrderAddress::class, 100)->create([
+        $address = factory(OrderAddress::class)->create([
             'country_code' => 'IRL'
         ]);
-        factory(Order::class, 10)->create();
-        DpdIntegrationTestJob::dispatchNow();
+
+        $order = factory(Order::class)->create([
+            'shipping_address_id' => $address->getKey()
+        ]);
+
+        try {
+            Dpd::shipOrder($order);
+            $success = true;
+        } catch (Exception $e) {
+            $success = false;
+            Log::error($e->getMessage());
+            $this->assertTrue($success, $e->getMessage());
+        }
 
         // we just want no exceptions
-        $this->assertTrue(true);
+        $this->assertTrue($success);
     }
 }
