@@ -36,7 +36,7 @@ class Queries
             })
             // left join expected quantities reserved sub query
             ->leftJoinSub(
-                Queries::getOrderProductQuantityToShipTotalsByProductIdQuery(),
+                Queries::getOrderProductQuantityReservedTotalsByProductIdQuery(),
                 'product_reserved_totals',
                 'product_reserved_totals.product_id',
                 '=',
@@ -77,9 +77,12 @@ class Queries
                 'products.id'
             )
             ->where(
+//                DB::raw('IFNULL(' . DB::getTablePrefix() . 'products.quantity_reserved, 0)'),
+//                '!=',
+//                DB::raw('IFNULL(`' . DB::getTablePrefix() . 'inventory_totals`.`total_quantity_reserved`, 0)')
                 DB::raw('IFNULL(' . DB::getTablePrefix() . 'products.quantity_reserved, 0)'),
                 '!=',
-                DB::raw('IFNULL(`' . DB::getTablePrefix() . 'inventory_totals`.`total_quantity_reserved`, 0)')
+                DB::raw(0)
             );
     }
     /**
@@ -144,6 +147,24 @@ class Queries
             ->groupBy(['product_id']);
 
         return $query;
+    }
+
+    /**
+     * This query will
+     * return sum of order_products.quantity_to_ship
+     * where orders.status_code is in open status list
+     * grouped by product_id
+     *
+     * @return OrderProduct|\Illuminate\Database\Eloquent\Builder|Builder
+     */
+    public static function getOrderProductQuantityReservedTotalsByProductIdQuery()
+    {
+        return OrderProduct::query()
+            ->select([
+                'product_id',
+                DB::raw('sum(quantity_reserved) as total_quantity_reserved'),
+            ])
+            ->groupBy(['product_id']);
     }
 
 

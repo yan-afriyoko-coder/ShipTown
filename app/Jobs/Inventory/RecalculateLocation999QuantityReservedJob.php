@@ -3,7 +3,6 @@
 namespace App\Jobs\Inventory;
 
 use App\Models\Inventory;
-use App\Helpers\Queries;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -31,21 +30,28 @@ class RecalculateLocation999QuantityReservedJob implements ShouldQueue
      */
     public function handle()
     {
-        $incorrectInventoryRecords = Queries::getProductsWithIncorrectQuantityReservedQuery($this->locationId)
-            // for performance purposes we will limit products per job
+//        $incorrectInventoryRecords = Queries::getProductsWithIncorrectQuantityReservedQuery($this->locationId)
+//            // for performance purposes we will limit products per job
+//            ->limit($this->maxPerJob)
+//            ->get();
+
+        $incorrectInventoryRecords = Inventory::whereLocationId($this->locationId)
+            ->where('quantity_reserved', '!=', 0)
             ->limit($this->maxPerJob)
             ->get();
 
-        $incorrectInventoryRecords->each(function ($errorRecord) {
-            Inventory::query()->firstOrCreate([
-                    'product_id' => $errorRecord->product_id,
-                    'location_id' => $this->locationId,
-                ])
-                ->log('Incorrect quantity reserved detected')
-                ->update([
-//                    'quantity_reserved' => $errorRecord->quantity_reserved_expected ?? 0
-                    'quantity_reserved' => 0
-                ]);
+        $incorrectInventoryRecords->each(function ($incorrectInventoryRecord) {
+//            Inventory::query()->firstOrCreate([
+//                    'product_id' => $incorrectInventoryRecord->product_id,
+//                    'location_id' => $this->locationId,
+//                ])
+            $incorrectInventoryRecord->log('Incorrect quantity reserved detected');
+            $incorrectInventoryRecord->quantity_reserved = 0;
+            $incorrectInventoryRecord->save();
+//                ->update([
+////                    'quantity_reserved' => $errorRecord->quantity_reserved_expected ?? 0
+//                    'quantity_reserved' => 0
+//                ]);
         });
 
         info('RecalculateLocation999QuantityReservedJob finished', [
