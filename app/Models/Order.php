@@ -53,6 +53,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property-read int|null $packlist_count
  * @property-read OrderAddress|null $shippingAddress
  * @property-read OrderStats|null $stats
+ * @property-read OrderStatus $order_status
  * @method static \Illuminate\Database\Eloquent\Builder|Order active()
  * @method static \Illuminate\Database\Eloquent\Builder|Order addInventorySource($inventory_location_id)
  * @method static \Illuminate\Database\Eloquent\Builder|Order hasPacker($expected)
@@ -127,6 +128,30 @@ class Order extends Model
         'is_packed',
         'age_in_days',
     ];
+
+    /**
+     * @return OrderStatus
+     */
+    public function orderStatus(): OrderStatus
+    {
+        return OrderStatus::firstOrCreate([
+            'name' => $this->status_code,
+            'code'=> $this->status_code
+        ]);
+    }
+
+    public function isOpen(): bool
+    {
+        return $this->order_closed_at === null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isClosed(): bool
+    {
+        return ! $this->isOpen();
+    }
 
     /**
      * @param $query

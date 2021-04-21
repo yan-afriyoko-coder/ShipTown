@@ -10,8 +10,9 @@ use Illuminate\Support\Carbon;
  * App\Models\OrderStatus
  *
  * @property int $id
- * @property string $name
  * @property string $code
+ * @property string $name
+ * @property bool $reserves_stock
  * @property int $order_active
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -28,6 +29,8 @@ use Illuminate\Support\Carbon;
 class OrderStatus extends Model
 {
     protected $fillable = [
+        'name',
+        'code',
         'status_code',
         'is_open',
         'reserves_stock',

@@ -3,11 +3,17 @@
 namespace App\Listeners\Order;
 
 use App\Events\Order\OrderUpdatedEvent;
+use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Modules\AutoPilot\src\Jobs\CheckIfOrderOutOfStockJob;
 use App\Modules\Sns\src\Jobs\PublishSnsNotificationJob;
 use App\Modules\AutoPilot\src\Jobs\SetStatusPaidIfPaidJob;
 use App\Models\OrderStatus;
 
+/**
+ * Class OrderUpdatedEventListener
+ * @package App\Listeners\Order
+ */
 class OrderUpdatedEventListener
 {
     /**
@@ -31,6 +37,7 @@ class OrderUpdatedEventListener
         $this->markedIfPayed($event);
         $this->changeStatusToReadyIfPacked($event);
         $this->updateOrderClosedAt($event);
+        $this->updateOrderProductsQuantityReserved($event->getOrder());
         CheckIfOrderOutOfStockJob::dispatch($event->getOrder());
         $this->publishSnsNotification($event);
     }
@@ -93,10 +100,37 @@ class OrderUpdatedEventListener
      */
     public function updateOrderClosedAt(OrderUpdatedEvent $event)
     {
-        if ($event->getOrder()['status_code'] !== $event->getOrder()->getOriginal('status_code')) {
-            if (($event->getOrder()->order_closed_at === null) && (OrderStatus::isComplete($event->getOrder()['status_code']))) {
-                $event->getOrder()->update(['order_closed_at' => now()]);
-            }
+        if ($event->getOrder()['status_code'] === $event->getOrder()->getOriginal('status_code')) {
+            return;
         }
+
+        if ($event->getOrder()->isClosed()) {
+            return;
+        }
+
+        if (OrderStatus::isComplete($event->getOrder()['status_code'])) {
+                $event->getOrder()->update(['order_closed_at' => now()]);
+        }
+    }
+
+    /**
+     * @param Order $order
+     */
+    private function updateOrderProductsQuantityReserved(Order $order)
+    {
+        if ($order->orderStatus()->reserves_stock) {
+            $order->orderProducts()->each(function (OrderProduct $orderProduct) {
+                $orderProduct->quantity_reserved = $orderProduct->quantity_to_ship;
+                $orderProduct->save();
+            });
+            return;
+        }
+
+        $order->orderProducts()->each(function (OrderProduct $orderProduct) {
+            if ($orderProduct->quantity_reserved != 0) {
+                $orderProduct->quantity_reserved = 0;
+                $orderProduct->save();
+            }
+        });
     }
 }
