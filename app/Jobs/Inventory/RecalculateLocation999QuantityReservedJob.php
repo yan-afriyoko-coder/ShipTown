@@ -43,7 +43,8 @@ class RecalculateLocation999QuantityReservedJob implements ShouldQueue
                 ])
                 ->log('Incorrect quantity reserved detected')
                 ->update([
-                    'quantity_reserved' => $errorRecord->quantity_reserved_expected ?? 0
+//                    'quantity_reserved' => $errorRecord->quantity_reserved_expected ?? 0
+                    'quantity_reserved' => 0
                 ]);
         });
 
