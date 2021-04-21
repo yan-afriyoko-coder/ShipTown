@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrdersStatusesTable extends Migration
+class AddReservesStockColumnToOrderStatusesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateOrdersStatusesTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders_statuses', function (Blueprint $table) {
-            $table->id();
-            $table->string('status_code');
-            $table->boolean('reserves_stock');
-            $table->timestamps();
+        Schema::table('order_statuses', function (Blueprint $table) {
+            $table->boolean('reserves_stock')->default(true)->after('code');
         });
     }
 
@@ -28,6 +25,6 @@ class CreateOrdersStatusesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders_statuses');
+
     }
 }

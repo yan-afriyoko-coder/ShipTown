@@ -27,8 +27,6 @@ use Illuminate\Support\Carbon;
  */
 class OrderStatus extends Model
 {
-    protected $table = 'orders_statuses';
-
     protected $fillable = [
         'status_code',
         'is_open',
@@ -69,6 +67,13 @@ class OrderStatus extends Model
     }
 
     public static function getClosedStatuses()
+    {
+        return array_merge(
+            static::getCompletedStatusCodeList()
+        );
+    }
+
+    public static function getStatusesReservingStock()
     {
         return array_merge(
             static::getCompletedStatusCodeList()
