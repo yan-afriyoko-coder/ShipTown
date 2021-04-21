@@ -43,12 +43,8 @@ class RecalculateProductQuantityReservedJob implements ShouldQueue
             ->limit($this->maxPerJob) // for performance purposes
             ->get();
 
-
-        dd($incorrectProductRecords);
-
         $incorrectProductRecords->each(function ($incorrectProductRecord) {
             $incorrectProductRecord->log('Incorrect quantity reserved detected, recalculating');
-            dd($incorrectProductRecord);
             $incorrectProductRecord->quantity_reserved = 0;
             $incorrectProductRecord->save();
         });
