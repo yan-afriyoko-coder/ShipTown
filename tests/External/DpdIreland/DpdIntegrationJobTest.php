@@ -41,7 +41,7 @@ class DpdIntegrationJobTest extends TestCase
     {
         $address = factory(OrderAddress::class)->create([
             'city' => 'Athlone',
-            'post_code' => '1234XYZ',
+            'postcode' => '1234XYZ',
             'country_code' => 'IRL',
         ]);
 
