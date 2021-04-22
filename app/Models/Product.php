@@ -10,6 +10,7 @@ use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
@@ -212,7 +213,10 @@ class Product extends Model
         return $quantity_available;
     }
 
-    public function inventory()
+    /**
+     * @return HasMany
+     */
+    public function inventory(): HasMany
     {
         return $this->hasMany(Inventory::class)
             ->keyBy('location_id');

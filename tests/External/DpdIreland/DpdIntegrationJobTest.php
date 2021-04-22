@@ -40,7 +40,9 @@ class DpdIntegrationJobTest extends TestCase
     public function if_record_id_matches()
     {
         $address = factory(OrderAddress::class)->create([
-            'country_code' => 'IRL'
+            'city' => 'Athlone',
+            'post_code' => '1234XYZ',
+            'country_code' => 'IRL',
         ]);
 
         $order = factory(Order::class)->create([

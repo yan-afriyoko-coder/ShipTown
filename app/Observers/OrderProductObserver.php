@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Jobs\Order\RecalculateOrderTotalQuantities;
+use App\Models\Inventory;
 use App\Models\OrderProduct;
 
 class OrderProductObserver
@@ -16,6 +17,8 @@ class OrderProductObserver
     public function created(OrderProduct $orderProduct)
     {
         RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order()->first());
+
+        $this->recalculateQuantityReserved($orderProduct);
     }
 
     /**
@@ -27,6 +30,8 @@ class OrderProductObserver
     public function updated(OrderProduct $orderProduct)
     {
         RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order()->first());
+
+        $this->recalculateQuantityReserved($orderProduct);
 
         $this->setOrdersPickedAtIfAllPicked($orderProduct);
     }
@@ -40,6 +45,8 @@ class OrderProductObserver
     public function deleted(OrderProduct $orderProduct)
     {
         RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order()->first());
+
+        $this->recalculateQuantityReserved($orderProduct);
     }
 
     /**
@@ -51,6 +58,8 @@ class OrderProductObserver
     public function restored(OrderProduct $orderProduct)
     {
         RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order()->first());
+
+        $this->recalculateQuantityReserved($orderProduct);
     }
 
     /**
@@ -62,6 +71,8 @@ class OrderProductObserver
     public function forceDeleted(OrderProduct $orderProduct)
     {
         RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order()->first());
+
+        $this->recalculateQuantityReserved($orderProduct);
     }
 
     /**
@@ -76,6 +87,24 @@ class OrderProductObserver
 
         if ($orderHasMoreToPick === false) {
             $orderProduct->order()->update(['picked_at' => now()]);
+        }
+    }
+
+    /**
+     * @param OrderProduct $orderProduct
+     */
+    public function recalculateQuantityReserved(OrderProduct $orderProduct): void
+    {
+        if ($orderProduct->product) {
+            $inventory = Inventory::firstOrNew([
+                'product_id' => $orderProduct->product_id,
+                'location_id' => 999,
+            ]);
+
+            $inventory->quantity_reserved = OrderProduct::where(['product_id' => $orderProduct->product_id])
+                ->where('quantity_reserved', '!=', 0)
+                ->sum('quantity_reserved');
+            $inventory->save();
         }
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Listeners\Inventory;
 
 use App\Events\Inventory\InventoryUpdatedEvent;
+use App\Models\Inventory;
+use App\Models\OrderProduct;
 
 class InventoryUpdatedEventListener
 {
@@ -36,10 +38,13 @@ class InventoryUpdatedEventListener
         $product = $inventory->product();
 
         if ($product) {
-            $product->update([
-                'quantity' => $product->quantity + $inventory->quantity - $inventory->getOriginal('quantity'),
-                'quantity_reserved' => $product->quantity_reserved + $inventory->quantity_reserved - $inventory->getOriginal('quantity_reserved'),
-            ]);
+            $product->quantity = Inventory::where(['product_id' => $inventory->product_id])
+                ->where('quantity_reserved', '!=', 0)
+                ->sum('quantity');
+            $product->quantity_reserved = Inventory::where(['product_id' => $inventory->product_id])
+                ->where('quantity_reserved', '!=', 0)
+                ->sum('quantity_reserved');
+            $product->save();
         }
     }
 }
