@@ -3,12 +3,14 @@
 namespace App\Jobs\Products;
 
 use App\Helpers\Queries;
+use App\Models\Inventory;
 use App\Models\Product;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class RecalculateProductQuantityReservedJob
@@ -35,22 +37,23 @@ class RecalculateProductQuantityReservedJob implements ShouldQueue
      */
     public function handle()
     {
-//        $incorrectProductRecords = Queries::getProductsWithQuantityReservedErrorsQuery()
-//            ->limit($this->maxPerJob) // for performance purposes
-//            ->get();
-
-        $incorrectProductRecords = Product::where('quantity_reserved', '!=', 0)
-            ->limit($this->maxPerJob) // for performance purposes
+        $incorrectInventoryRecords = Inventory::query()->select([
+            'product_id',
+            DB::raw('max(products.quantity_reserved) as current_quantity_reserved'),
+            DB::raw('sum(inventory.quantity_reserved) as expected_quantity_reserved'),
+        ])
+            ->leftJoin('products', 'products.id', '=', 'inventory.product_id')
+            ->groupBy('product_id')
+            ->having(DB::raw('current_quantity_reserved'), '!=', DB::raw('expected_quantity_reserved'))
             ->get();
 
-        $incorrectProductRecords->each(function ($incorrectProductRecord) {
-            $incorrectProductRecord->log('Incorrect quantity reserved detected, recalculating');
-            $incorrectProductRecord->quantity_reserved = 0;
-            $incorrectProductRecord->save();
+        $incorrectInventoryRecords->each(function ($inventoryRecord) {
+            $product = Product::where(['id' => $inventoryRecord->product_id])->first();
+            $product->recalculateQuantityTotals();
         });
 
         info('RecalculateProductQuantityReservedJob finished', [
-            'records_corrected_count' => $incorrectProductRecords->count()
+            'records_corrected_count' => $incorrectInventoryRecords->count()
         ]);
     }
 }

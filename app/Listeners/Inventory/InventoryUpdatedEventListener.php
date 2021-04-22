@@ -38,13 +38,7 @@ class InventoryUpdatedEventListener
         $product = $inventory->product();
 
         if ($product) {
-            $product->quantity = Inventory::where(['product_id' => $inventory->product_id])
-                ->where('quantity_reserved', '!=', 0)
-                ->sum('quantity');
-            $product->quantity_reserved = Inventory::where(['product_id' => $inventory->product_id])
-                ->where('quantity_reserved', '!=', 0)
-                ->sum('quantity_reserved');
-            $product->save();
+            $product->recalculateQuantityTotals();
         }
     }
 }

@@ -214,6 +214,21 @@ class Product extends Model
     }
 
     /**
+     * @param Inventory $inventory
+     * @param $product
+     */
+    public function recalculateQuantityTotals(): void
+    {
+        $this->quantity = Inventory::where(['product_id' => $this->id])
+            ->where('quantity', '!=', 0)
+            ->sum('quantity');
+        $this->quantity_reserved = Inventory::where(['product_id' => $this->id])
+            ->where('quantity_reserved', '!=', 0)
+            ->sum('quantity_reserved');
+        $this->save();
+    }
+
+    /**
      * @return HasMany
      */
     public function inventory(): HasMany
