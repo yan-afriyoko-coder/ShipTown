@@ -2,6 +2,8 @@
 
 namespace App\Observers;
 
+use App\Events\OrderProduct\OrderProductCreatedEvent;
+use App\Events\OrderProduct\OrderProductUpdatedEvent;
 use App\Jobs\Order\RecalculateOrderTotalQuantities;
 use App\Models\Inventory;
 use App\Models\OrderProduct;
@@ -16,6 +18,8 @@ class OrderProductObserver
      */
     public function created(OrderProduct $orderProduct)
     {
+        OrderProductCreatedEvent::dispatch($orderProduct);
+
         RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order()->first());
 
         $this->recalculateQuantityReserved($orderProduct);
@@ -29,6 +33,8 @@ class OrderProductObserver
      */
     public function updated(OrderProduct $orderProduct)
     {
+        OrderProductUpdatedEvent::dispatch($orderProduct);
+
         RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order()->first());
 
         $this->recalculateQuantityReserved($orderProduct);

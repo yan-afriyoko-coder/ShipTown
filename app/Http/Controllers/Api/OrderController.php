@@ -7,6 +7,9 @@ use App\Http\Requests\Order\UpdateRequest;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
+use App\Models\OrderProduct;
+use App\Models\Product;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -39,10 +42,22 @@ class OrderController extends Controller
     {
         $order = Order::query()->updateOrCreate(
             ['order_number' => $request->order_number],
-            $request->all()
+            $request->validated()
         );
 
-        return response()->json($order, 200);
+        collect($request['products'])->each(function ($orderProductData) use ($order) {
+            $product = Product::findBySKU($orderProductData['sku']);
+            OrderProduct::create([
+                'order_id' => $order->getKey(),
+                'product_id' => $product ? $product->getKey() : null,
+                'sku_ordered' => $orderProductData['sku'],
+                'name_ordered' => $orderProductData['name'],
+                'quantity_ordered' => $orderProductData['quantity'],
+                'price' => $orderProductData['price'],
+            ]);
+        });
+
+        return response()->json($order);
     }
 
     /**
@@ -91,18 +106,18 @@ class OrderController extends Controller
 
     /**
      * @param $order_number
-     * @throws \Exception
+     * @throws Exception
      */
     public function destroy($order_number)
     {
         try {
             $order = Order::query()->where('order_number', $order_number)->firstOrFail();
         } catch (ModelNotFoundException $e) {
-            return $this->respondNotFound();
+            $this->respondNotFound();
         }
 
         $order->delete();
 
-        return $this->respondOK200();
+        $this->respondOK200();
     }
 }

@@ -37,7 +37,6 @@ class OrderUpdatedEventListener
         $this->markedIfPayed($event);
         $this->changeStatusToReadyIfPacked($event);
         $this->updateOrderClosedAt($event);
-        $this->updateOrderProductsQuantityReserved($event->getOrder());
         CheckIfOrderOutOfStockJob::dispatch($event->getOrder());
         $this->publishSnsNotification($event);
     }
@@ -111,26 +110,5 @@ class OrderUpdatedEventListener
         if (OrderStatus::isComplete($event->getOrder()['status_code'])) {
                 $event->getOrder()->update(['order_closed_at' => now()]);
         }
-    }
-
-    /**
-     * @param Order $order
-     */
-    private function updateOrderProductsQuantityReserved(Order $order)
-    {
-        if ($order->orderStatus()->reserves_stock) {
-            $order->orderProducts()->each(function (OrderProduct $orderProduct) {
-                $orderProduct->quantity_reserved = $orderProduct->quantity_to_ship;
-                $orderProduct->save();
-            });
-            return;
-        }
-
-        $order->orderProducts()->each(function (OrderProduct $orderProduct) {
-            if ($orderProduct->quantity_reserved != 0) {
-                $orderProduct->quantity_reserved = 0;
-                $orderProduct->save();
-            }
-        });
     }
 }

@@ -159,6 +159,17 @@ class Product extends Model
     }
 
     /**
+     * @param float $quantity
+     * @return $this
+     */
+    public function reserveStock(float $quantity): Product
+    {
+        $this->quantity_reserved += $quantity;
+        $this->save();
+        return $this;
+    }
+
+    /**
      * @param $tag
      */
     protected function onTagAttached($tag)

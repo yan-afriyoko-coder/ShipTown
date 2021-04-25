@@ -30,28 +30,15 @@ class RecalculateLocation999QuantityReservedJob implements ShouldQueue
      */
     public function handle()
     {
-//        $incorrectInventoryRecords = Queries::getProductsWithIncorrectQuantityReservedQuery($this->locationId)
-//            // for performance purposes we will limit products per job
-//            ->limit($this->maxPerJob)
-//            ->get();
-
         $incorrectInventoryRecords = Inventory::whereLocationId($this->locationId)
             ->where('quantity_reserved', '!=', 0)
             ->limit($this->maxPerJob)
             ->get();
 
-        $incorrectInventoryRecords->each(function ($incorrectInventoryRecord) {
-//            Inventory::query()->firstOrCreate([
-//                    'product_id' => $incorrectInventoryRecord->product_id,
-//                    'location_id' => $this->locationId,
-//                ])
+        $incorrectInventoryRecords->each(function (Inventory $incorrectInventoryRecord) {
             $incorrectInventoryRecord->log('Incorrect quantity reserved detected');
             $incorrectInventoryRecord->quantity_reserved = 0;
             $incorrectInventoryRecord->save();
-//                ->update([
-////                    'quantity_reserved' => $errorRecord->quantity_reserved_expected ?? 0
-//                    'quantity_reserved' => 0
-//                ]);
         });
 
         info('RecalculateLocation999QuantityReservedJob finished', [

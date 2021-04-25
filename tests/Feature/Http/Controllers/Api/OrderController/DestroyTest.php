@@ -11,20 +11,27 @@ class DestroyTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * @var Order
+     */
+    private Order $order;
+
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->order = factory(Order::class)->create();
+
         $admin = factory(User::class)->create()->assignRole('admin');
         $this->actingAs($admin, 'api');
+
     }
 
     /** @test */
     public function test_destroy_call_returns_ok()
     {
-        $order = factory(Order::class)->create();
+        $this->delete( 'api/orders/' . $this->order->order_number)->assertStatus(200);
 
-        $this->delete( 'api/orders/' . $order->order_number)->assertStatus(200);
-
-        $this->assertDatabaseMissing('orders', ['order_number' => $order->order_number]);
+        $this->assertDatabaseMissing('orders', ['order_number' => $this->order->order_number]);
     }
 }

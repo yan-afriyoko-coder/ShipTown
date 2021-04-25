@@ -40,15 +40,24 @@ class EventServiceProvider extends ServiceProvider
 
         \App\Events\Order\OrderUpdatedEvent::class => [
             \App\Listeners\Order\OrderUpdatedEventListener::class,
+            \App\Modules\InventoryReservations\src\Listeners\OrderUpdatedListener::class,
+        ],
+
+        // OrderProduct
+        \App\Events\OrderProduct\OrderProductCreatedEvent::class => [
+            \App\Modules\InventoryReservations\src\Listeners\OrderProductCreatedListener::class,
         ],
 
         // Inventory
         \App\Events\Inventory\InventoryCreatedEvent::class => [
-            \App\Listeners\Inventory\InventoryCreatedEventListener::class
+            \App\Listeners\Inventory\InventoryCreatedEventListener::class,
+            \App\Modules\InventoryReservations\src\Listeners\InventoryCreatedListener::class,
+
         ],
 
         \App\Events\Inventory\InventoryUpdatedEvent::class => [
-            \App\Listeners\Inventory\InventoryUpdatedEventListener::class
+            \App\Listeners\Inventory\InventoryUpdatedEventListener::class,
+            \App\Modules\InventoryReservations\src\Listeners\InventoryUpdatedListener::class,
         ],
 
         // Other
