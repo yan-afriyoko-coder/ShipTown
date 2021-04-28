@@ -47,16 +47,17 @@ class RecalculateQuantityReservedJob implements ShouldQueue
             ->groupBy('product_id')
             ->get()
             ->each(function (OrderProduct $orderProduct) use (&$checkedProductIds) {
-                $inventory = $orderProduct->product->inventory()
-                    ->where('location_id', '=', 999)
-                    ->first();
-
                 $checkedProductIds[] = $orderProduct->product_id;
 
+                $inventory = Inventory::firstOrCreate([
+                    'product_id' => $orderProduct->product_id,
+                    'location_id' => 999,
+                ]);
+
                 if ($inventory->quantity_reserved != $orderProduct->getAttribute('new_quantity_reserved')) {
+                    $orderProduct->product->log('Recalculated quantity_reserved');
                     $inventory->quantity_reserved = $orderProduct->getAttribute('new_quantity_reserved');
                     $inventory->save();
-                    $orderProduct->product->log('Recalculated quantity_reserved');
                 }
             });
 
