@@ -3,12 +3,10 @@
 namespace App\Listeners\Order;
 
 use App\Events\Order\OrderUpdatedEvent;
-use App\Models\Order;
-use App\Models\OrderProduct;
-use App\Modules\AutoPilot\src\Jobs\CheckIfOrderOutOfStockJob;
-use App\Modules\Sns\src\Jobs\PublishSnsNotificationJob;
-use App\Modules\AutoPilot\src\Jobs\SetStatusPaidIfPaidJob;
 use App\Models\OrderStatus;
+use App\Modules\AutoPilot\src\Jobs\CheckIfOrderOutOfStockJob;
+use App\Modules\AutoPilot\src\Jobs\SetStatusPaidIfPaidJob;
+use App\Modules\Sns\src\Jobs\PublishSnsNotificationJob;
 
 /**
  * Class OrderUpdatedEventListener

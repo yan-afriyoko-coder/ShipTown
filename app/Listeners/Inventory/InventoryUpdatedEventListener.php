@@ -3,8 +3,6 @@
 namespace App\Listeners\Inventory;
 
 use App\Events\Inventory\InventoryUpdatedEvent;
-use App\Models\Inventory;
-use App\Models\OrderProduct;
 
 class InventoryUpdatedEventListener
 {
