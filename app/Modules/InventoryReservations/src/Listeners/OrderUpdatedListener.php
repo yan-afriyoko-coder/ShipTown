@@ -27,7 +27,7 @@ class OrderUpdatedListener
      */
     public function handle(OrderUpdatedEvent $event)
     {
-//        $this->reserveOrReleaseStock($event->getOrder());
+        $this->reserveOrReleaseStock($event->getOrder());
     }
 
     /**
@@ -36,9 +36,9 @@ class OrderUpdatedListener
     private function reserveOrReleaseStock(Order $order)
     {
         $previous_status = OrderStatus::firstOrCreate([
-            'code' => $order->getOriginal('order_status')
+            'code' => $order->getOriginal('order_status')['code']
         ], [
-            'name' => $order->getOriginal('order_status'),
+            'name' => $order->getOriginal('order_status')['code'],
         ]);
 
         if ($previous_status->reserves_stock === $order->orderStatus->reserves_stock) {
@@ -75,7 +75,7 @@ class OrderUpdatedListener
             if ($orderProduct->product) {
                 $inventory = $orderProduct->product->inventory()->where(['location_id' => 999])->first();
                 $inventory->quantity_reserved -= $orderProduct->quantity_to_ship;
-                $orderProduct->save();
+                $inventory->save();
             }
         });
     }

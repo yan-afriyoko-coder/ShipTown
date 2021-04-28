@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\Modules\InventoryReservations;
 
+use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\OrderStatus;
+use App\Models\Product;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -21,10 +23,14 @@ class OrderStatusChangedTest extends TestCase
         parent::setUp();
         $admin = factory(User::class)->create()->assignRole('admin');
         $this->actingAs($admin, 'api');
+
+        OrderProduct::query()->forceDelete();
+        Inventory::query()->forceDelete();
+        Product::query()->forceDelete();
     }
 
     /** @test */
-    public function test_if_reserves_quantity_when_order_created()
+    public function test_if_releases_quantity_when_status_changed()
     {
         factory(OrderStatus::class)->create([
             'code' => 'open',
@@ -38,31 +44,31 @@ class OrderStatusChangedTest extends TestCase
             'reserves_stock' => false,
         ]);
 
-        $order = factory(Order::class)->make(['status_code' => 'new']);
+        $product = factory(Product::class)->create();
 
-        $orderProduct = factory(OrderProduct::class)->make();
-
-        $this->assertDatabaseHas('products', ['quantity_reserved' => 0]);
+        $randomQuantity = rand(1, 30);
 
         $data = [
-            'order_number' => $order->order_number,
-            'status_code' => $order->status_code,
+            'order_number' => '1234567',
+            'status_code' => 'open',
             'products' => [
                 [
-                    'sku' => $orderProduct->sku_ordered,
-                    'name' => $orderProduct->name_ordered,
-                    'quantity' => $orderProduct->quantity_ordered,
-                    'price' => $orderProduct->price,
+                    'sku' => $product->sku,
+                    'name' => $product->name,
+                    'quantity' => $randomQuantity,
+                    'price' => $product->price,
                 ]
             ]
         ];
 
         $response = $this->postJson('api/orders', $data)->assertOk();
-        $this->assertDatabaseHas('inventory', ['quantity_reserved' => $orderProduct->quantity_ordered]);
-        $this->assertDatabaseHas('products', ['quantity_reserved' => $orderProduct->quantity_ordered]);
+        $this->assertDatabaseHas('inventory', ['quantity_reserved' => $randomQuantity]);
+        $this->assertDatabaseHas('products', ['quantity_reserved' => $randomQuantity]);
+
 
         $order_id = $response->json('id');
-        $this->putJson('api/orders/' . $order_id, ['status_code' => 'cancelled'])->assertOk();
+        $this->putJson('api/orders/' . $order_id, ['status_code' => 'cancelled'])
+            ->assertOk();
 
         $this->assertDatabaseHas('inventory', ['quantity_reserved' => 0]);
         $this->assertDatabaseHas('products', ['quantity_reserved' => 0]);

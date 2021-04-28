@@ -2,9 +2,10 @@
 
 namespace Tests\Feature\Modules\InventoryReservations;
 
-use App\Models\Order;
+use App\Models\Inventory;
 use App\Models\OrderProduct;
 use App\Models\OrderStatus;
+use App\Models\Product;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -25,6 +26,10 @@ class OrderCreatedTest extends TestCase
         parent::setUp();
         $admin = factory(User::class)->create()->assignRole('admin');
         $this->actingAs($admin, 'api');
+
+        OrderProduct::query()->forceDelete();
+        Inventory::query()->forceDelete();
+        Product::query()->forceDelete();
     }
 
     /** @test */
@@ -36,28 +41,29 @@ class OrderCreatedTest extends TestCase
             'reserves_stock' => true,
         ]);
 
-        $order = factory(Order::class)->make(['status_code' => 'new']);
-
-        $orderProduct = factory(OrderProduct::class)->make();
+        $product = factory(Product::class)->create();
 
         $this->assertDatabaseHas('products', ['quantity_reserved' => 0]);
 
+        $quantityOrdered = rand(1, 30);
+
         $data = [
-            'order_number' => $order->order_number,
-            'status_code' => $order->status_code,
+            'order_number' => '123456',
+            'status_code' => 'new',
             'products' => [
                 [
-                    'sku' => $orderProduct->sku_ordered,
-                    'name' => $orderProduct->name_ordered,
-                    'quantity' => $orderProduct->quantity_ordered,
-                    'price' => $orderProduct->price,
+                    'sku' => $product->sku,
+                    'name' => $product->name,
+                    'quantity' => $quantityOrdered,
+                    'price' => $product->price,
                 ]
             ]
         ];
 
-        $this->postJson('api/orders', $data)->assertOk();
+        $response = $this->postJson('api/orders', $data);
+        $response->assertOk();
 
-        $this->assertDatabaseHas('inventory', ['quantity_reserved' => $orderProduct->quantity_ordered]);
-        $this->assertDatabaseHas('products', ['quantity_reserved' => $orderProduct->quantity_ordered]);
+        $this->assertDatabaseHas('inventory', ['quantity_reserved' => $quantityOrdered]);
+        $this->assertDatabaseHas('products', ['quantity_reserved' => $quantityOrdered]);
     }
 }
