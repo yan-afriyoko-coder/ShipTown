@@ -2,6 +2,7 @@
 
 namespace App\Modules\InventoryReservations\src\Jobs;
 
+use App\Models\Inventory;
 use App\Models\OrderProduct;
 use App\Models\OrderStatus;
 use Illuminate\Bus\Queueable;
@@ -9,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 
 class RecalculateQuantityReservedJob implements ShouldQueue
 {
@@ -31,16 +33,33 @@ class RecalculateQuantityReservedJob implements ShouldQueue
      */
     public function handle()
     {
-        // for each reserved OrderProduct
-        $statusCodes = OrderStatus::whereReservesStock(true)->select(['code'])->get();
+        $inventorToReset = Inventory::whereLocationId(999)
+            ->where('quantity_reserved', '!=', 0)
+            ->get()->each(function (Inventory $inventory) {
+                $inventory->product->log('Resetting quantity reserved');
+                $inventory->quantity_reserved = 0;
+                $inventory->save();
+            });
 
-        $orderProducts = OrderProduct::whereStatusCodeIn($statusCodes)
-            ->select('product_id')
-            ->distinct()
+        // for each reserved OrderProduct
+        $statusCodes = OrderStatus::whereReservesStock(true)
+            ->select(['code'])
             ->get();
 
-//        $orderProducts->each(function (OrderProduct $orderProduct) {
-//            $orderProduct->quantity_to_ship;
-//        });
+        OrderProduct::whereStatusCodeIn($statusCodes)
+            ->select([
+                'product_id',
+                DB::raw('sum(quantity_to_ship) as new_quantity_reserved')
+            ])
+            ->groupBy('product_id')
+            ->get()
+            ->each(function (OrderProduct $orderProduct) {
+                $inventory = $orderProduct->product->inventory()
+                    ->where('location_id', '=', 999)
+                    ->first();
+                $inventory->quantity_reserved += $orderProduct->getAttribute('new_quantity_reserved');
+                $orderProduct->product->log('Recalculated quantity_reserved');
+                $inventory->save();
+            });
     }
 }

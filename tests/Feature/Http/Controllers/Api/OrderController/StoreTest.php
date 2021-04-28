@@ -28,19 +28,23 @@ class StoreTest extends TestCase
             'products' => [
                 [
                     'sku' => '123',
+                    'name' => 'Test Product',
                     'quantity'     => 2,
                     'price'        => 4,
                 ],
 
                 [
                     'sku' => '456',
+                    'name' => 'Test Product',
                     'quantity'     => 5,
                     'price'        => 10,
                 ],
             ],
         ];
 
-        $this->postJson('api/orders', $data)->assertStatus(200);
+        $response = $this->postJson('api/orders', $data);
+//        dd($response->getContent());
+        $response->assertStatus(200, );
 
         $this->assertDatabaseHas('orders', ['order_number' => $data['order_number']]);
     }
@@ -63,5 +67,47 @@ class StoreTest extends TestCase
             ->assertJsonValidationErrors(['products.0.sku'])
             ->assertJsonValidationErrors(['products.0.quantity'])
             ->assertJsonValidationErrors(['products.0.price']);
+    }
+
+    public function testIfMissingOrderNumberIsNotAllowed()
+    {
+        $data = [
+            //'order_number'      => '001241',
+            'products' => [
+                [
+                    'sku' => '123',
+                    'quantity'     => 2,
+                    'price'        => 4,
+                ],
+
+                [
+                    'sku' => '456',
+                    'quantity'     => 5,
+                    'price'        => 10,
+                ],
+            ],
+        ];
+
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        $this->json('POST', 'api/orders', $data)
+            ->assertStatus(422);
+    }
+
+    public function testIfMissingProductsSectionIsNotAllowed()
+    {
+        $data = [
+            'order_number'      => '001241',
+        ];
+
+        Passport::actingAs(
+            factory(User::class)->create()
+        );
+
+        $this->json('POST', 'api/orders', $data)
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['products']);
     }
 }

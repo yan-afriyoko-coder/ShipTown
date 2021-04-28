@@ -27,6 +27,10 @@ class OrderProductCreatedListener
     {
         $orderProduct = $event->orderProduct;
 
+        if ($orderProduct->product_id === null) {
+            return;
+        }
+
         if ($orderProduct->order->orderStatus->reserves_stock === false) {
             return;
         }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Modules\InventoryReservations;
+namespace Tests\Feature\Modules\InventoryReservations\Jobs;
 
 use App\Models\Inventory;
 use App\Models\Order;

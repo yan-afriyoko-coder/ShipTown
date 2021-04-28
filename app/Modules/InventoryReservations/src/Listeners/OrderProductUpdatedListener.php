@@ -27,6 +27,10 @@ class OrderProductUpdatedListener
     {
         $orderProduct = $event->orderProduct;
 
+        if ($orderProduct->product_id === null) {
+            return;
+        }
+
         $delta = $orderProduct->getAttribute('quantity_to_ship') - $orderProduct->getOriginal('quantity_to_ship') ?? 0;
 
         if ($delta === 0) {

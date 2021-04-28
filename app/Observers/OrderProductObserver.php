@@ -22,7 +22,7 @@ class OrderProductObserver
 
         RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order()->first());
 
-        $this->recalculateQuantityReserved($orderProduct);
+//        $this->recalculateQuantityReserved($orderProduct);
     }
 
     /**
@@ -108,8 +108,8 @@ class OrderProductObserver
             ]);
 
             $inventory->quantity_reserved = OrderProduct::where(['product_id' => $orderProduct->product_id])
-                ->where('quantity_reserved', '!=', 0)
-                ->sum('quantity_reserved');
+                ->where('quantity_to_ship', '!=', 0)
+                ->sum('quantity_to_ship');
             $inventory->save();
         }
     }

@@ -2,11 +2,9 @@
 
 namespace Tests\Feature\Modules\InventoryReservations;
 
-use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\OrderStatus;
-use App\Models\Product;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

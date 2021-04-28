@@ -103,21 +103,4 @@ class OrderController extends Controller
     {
         return new JsonResource($order);
     }
-
-    /**
-     * @param $order_number
-     * @throws Exception
-     */
-    public function destroy($order_number)
-    {
-        try {
-            $order = Order::query()->where('order_number', $order_number)->firstOrFail();
-        } catch (ModelNotFoundException $e) {
-            $this->respondNotFound();
-        }
-
-        $order->delete();
-
-        $this->respondOK200();
-    }
 }

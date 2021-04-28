@@ -58,8 +58,11 @@ class OrderUpdatedListener
     private function reserveOrderProducts(Order $order): void
     {
         $order->orderProducts->each(function (OrderProduct $orderProduct) {
-            $orderProduct->quantity_reserved += $orderProduct->quantity_to_ship;
-            $orderProduct->save();
+            if ($orderProduct->product) {
+                $inventory = $orderProduct->product->inventory()->where(['location_id' => 999])->first();
+                $inventory->quantity_reserved += $orderProduct->quantity_to_ship;
+                $orderProduct->save();
+            }
         });
     }
 
@@ -69,8 +72,11 @@ class OrderUpdatedListener
     private function releaseOrderProducts(Order $order): void
     {
         $order->orderProducts->each(function (OrderProduct $orderProduct) {
-            $orderProduct->quantity_reserved -= $orderProduct->quantity_to_ship;
-            $orderProduct->save();
+            if ($orderProduct->product) {
+                $inventory = $orderProduct->product->inventory()->where(['location_id' => 999])->first();
+                $inventory->quantity_reserved -= $orderProduct->quantity_to_ship;
+                $orderProduct->save();
+            }
         });
     }
 }
