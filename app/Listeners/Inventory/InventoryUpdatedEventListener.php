@@ -35,7 +35,7 @@ class InventoryUpdatedEventListener
     public function updateProductInventoryTotals(InventoryUpdatedEvent $event)
     {
         $inventory = $event->getInventory();
-        $product = $inventory->product();
+        $product = $inventory->product;
 
         if ($product) {
             $product->recalculateQuantityTotals();

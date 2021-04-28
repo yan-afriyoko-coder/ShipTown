@@ -33,33 +33,41 @@ class RecalculateQuantityReservedJob implements ShouldQueue
      */
     public function handle()
     {
-        $inventorToReset = Inventory::whereLocationId(999)
-            ->where('quantity_reserved', '!=', 0)
-            ->get()->each(function (Inventory $inventory) {
-                $inventory->product->log('Resetting quantity reserved');
-                $inventory->quantity_reserved = 0;
-                $inventory->save();
-            });
+        $checkedProductIds = [];
 
-        // for each reserved OrderProduct
-        $statusCodes = OrderStatus::whereReservesStock(true)
+        $reservingStatusCodes = OrderStatus::whereReservesStock(true)
             ->select(['code'])
             ->get();
 
-        OrderProduct::whereStatusCodeIn($statusCodes)
+        OrderProduct::whereStatusCodeIn($reservingStatusCodes)
             ->select([
                 'product_id',
                 DB::raw('sum(quantity_to_ship) as new_quantity_reserved')
             ])
             ->groupBy('product_id')
             ->get()
-            ->each(function (OrderProduct $orderProduct) {
+            ->each(function (OrderProduct $orderProduct) use (&$checkedProductIds) {
                 $inventory = $orderProduct->product->inventory()
                     ->where('location_id', '=', 999)
                     ->first();
-                $inventory->quantity_reserved += $orderProduct->getAttribute('new_quantity_reserved');
-                $orderProduct->product->log('Recalculated quantity_reserved');
-                $inventory->save();
+
+                $checkedProductIds[] = $orderProduct->product_id;
+
+                if ($inventory->quantity_reserved != $orderProduct->getAttribute('new_quantity_reserved')) {
+                    $inventory->quantity_reserved = $orderProduct->getAttribute('new_quantity_reserved');
+                    $inventory->save();
+                    $orderProduct->product->log('Recalculated quantity_reserved');
+                }
             });
+
+            Inventory::whereLocationId(999)
+                ->where('quantity_reserved', '!=', 0)
+                ->whereNotIn('product_id', $checkedProductIds)
+                ->get()
+                ->each(function (Inventory $inventory) {
+                    $inventory->product->log('Resetting quantity reserved');
+                    $inventory->quantity_reserved = 0;
+                    $inventory->save();
+                });
     }
 }
