@@ -10,8 +10,9 @@ use Illuminate\Support\Carbon;
  * App\Models\OrderStatus
  *
  * @property int $id
- * @property string $name
  * @property string $code
+ * @property string $name
+ * @property bool $reserves_stock
  * @property int $order_active
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -24,9 +25,22 @@ use Illuminate\Support\Carbon;
  * @method static Builder|OrderStatus whereName($value)
  * @method static Builder|OrderStatus whereOrderActive($value)
  * @method static Builder|OrderStatus whereUpdatedAt($value)
+ * @method static Builder|OrderStatus whereReservesStock(bool $true)
  */
 class OrderStatus extends Model
 {
+    protected $fillable = [
+        'name',
+        'code',
+        'status_code',
+        'is_open',
+        'reserves_stock',
+    ];
+
+    protected $attributes = [
+        'reserves_stock' => true,
+    ];
+
     public static $toFollowStatusList = [
         'processing',
         'unshipped',
@@ -57,6 +71,13 @@ class OrderStatus extends Model
     }
 
     public static function getClosedStatuses()
+    {
+        return array_merge(
+            static::getCompletedStatusCodeList()
+        );
+    }
+
+    public static function getStatusesReservingStock()
     {
         return array_merge(
             static::getCompletedStatusCodeList()

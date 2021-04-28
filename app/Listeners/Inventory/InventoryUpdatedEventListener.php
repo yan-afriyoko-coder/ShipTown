@@ -33,13 +33,10 @@ class InventoryUpdatedEventListener
     public function updateProductInventoryTotals(InventoryUpdatedEvent $event)
     {
         $inventory = $event->getInventory();
-        $product = $inventory->product();
+        $product = $inventory->product;
 
         if ($product) {
-            $product->update([
-                'quantity' => $product->quantity + $inventory->quantity - $inventory->getOriginal('quantity'),
-                'quantity_reserved' => $product->quantity_reserved + $inventory->quantity_reserved - $inventory->getOriginal('quantity_reserved'),
-            ]);
+            $product->recalculateQuantityTotals();
         }
     }
 }

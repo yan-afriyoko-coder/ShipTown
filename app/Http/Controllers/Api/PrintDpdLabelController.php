@@ -50,7 +50,7 @@ class PrintDpdLabelController extends Controller
             $preAdvice = Dpd::shipOrder($order, request()->user());
 
             if ($preAdvice->isNotSuccess()) {
-                $this->respondBadRequest($preAdvice->consignment()['RecordErrorDetails']);
+                $this->respondBadRequest('DPD Responded: ' . $preAdvice->consignment()['RecordErrorDetails']);
             }
 
             return $preAdvice;

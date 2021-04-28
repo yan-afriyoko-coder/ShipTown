@@ -3,11 +3,15 @@
 namespace App\Listeners\Order;
 
 use App\Events\Order\OrderUpdatedEvent;
-use App\Modules\AutoPilot\src\Jobs\CheckIfOrderOutOfStockJob;
-use App\Modules\Sns\src\Jobs\PublishSnsNotificationJob;
-use App\Modules\AutoPilot\src\Jobs\SetStatusPaidIfPaidJob;
 use App\Models\OrderStatus;
+use App\Modules\AutoPilot\src\Jobs\CheckIfOrderOutOfStockJob;
+use App\Modules\AutoPilot\src\Jobs\SetStatusPaidIfPaidJob;
+use App\Modules\Sns\src\Jobs\PublishSnsNotificationJob;
 
+/**
+ * Class OrderUpdatedEventListener
+ * @package App\Listeners\Order
+ */
 class OrderUpdatedEventListener
 {
     /**
@@ -93,10 +97,16 @@ class OrderUpdatedEventListener
      */
     public function updateOrderClosedAt(OrderUpdatedEvent $event)
     {
-        if ($event->getOrder()['status_code'] !== $event->getOrder()->getOriginal('status_code')) {
-            if (($event->getOrder()->order_closed_at === null) && (OrderStatus::isComplete($event->getOrder()['status_code']))) {
+        if ($event->getOrder()['status_code'] === $event->getOrder()->getOriginal('status_code')) {
+            return;
+        }
+
+        if ($event->getOrder()->isClosed()) {
+            return;
+        }
+
+        if (OrderStatus::isComplete($event->getOrder()['status_code'])) {
                 $event->getOrder()->update(['order_closed_at' => now()]);
-            }
         }
     }
 }

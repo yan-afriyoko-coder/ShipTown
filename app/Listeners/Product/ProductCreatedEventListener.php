@@ -3,9 +3,9 @@
 namespace App\Listeners\Product;
 
 use App\Events\Product\ProductCreatedEvent;
-use App\Modules\Sns\src\Jobs\PublishSnsNotificationJob;
 use App\Models\Inventory;
 use App\Models\Warehouse;
+use App\Modules\Sns\src\Jobs\PublishSnsNotificationJob;
 
 class ProductCreatedEventListener
 {

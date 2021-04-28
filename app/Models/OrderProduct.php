@@ -25,6 +25,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property string $name_ordered
  * @property float $price
  * @property float $quantity_ordered
+ * @property float $quantity_reserved
  * @property float $quantity_shipped
  * @property float $quantity_to_ship
  * @property float $quantity_to_pick
@@ -104,11 +105,13 @@ class OrderProduct extends Model
     protected $casts = [
         'price'=> 'float',
         'quantity_ordered'=> 'float',
+        'quantity_reserved'=> 'float',
+        'quantity_to_ship'=> 'float',
+        'quantity_to_pick'=> 'float',
         'quantity_picked'=> 'float',
         'quantity_skipped_picking'=> 'float',
         'quantity_not_picked'=> 'float',
         'quantity_shipped'=> 'float',
-        'quantity_to_ship'=> 'float',
     ];
 
     /**

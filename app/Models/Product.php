@@ -10,6 +10,7 @@ use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
@@ -158,6 +159,17 @@ class Product extends Model
     }
 
     /**
+     * @param float $quantity
+     * @return $this
+     */
+    public function reserveStock(float $quantity): Product
+    {
+        $this->quantity_reserved += $quantity;
+        $this->save();
+        return $this;
+    }
+
+    /**
      * @param $tag
      */
     protected function onTagAttached($tag)
@@ -212,7 +224,25 @@ class Product extends Model
         return $quantity_available;
     }
 
-    public function inventory()
+    /**
+     * @param Inventory $inventory
+     * @param $product
+     */
+    public function recalculateQuantityTotals(): void
+    {
+        $this->quantity = Inventory::where(['product_id' => $this->id])
+            ->where('quantity', '!=', 0)
+            ->sum('quantity');
+        $this->quantity_reserved = Inventory::where(['product_id' => $this->id])
+            ->where('quantity_reserved', '!=', 0)
+            ->sum('quantity_reserved');
+        $this->save();
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function inventory(): HasMany
     {
         return $this->hasMany(Inventory::class)
             ->keyBy('location_id');

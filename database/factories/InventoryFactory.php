@@ -12,6 +12,6 @@ $factory->define(Inventory::class, function (Faker $faker) {
         'shelve_location' => \Illuminate\Support\Str::upper($faker->randomLetter)
             .$faker->numberBetween(1, 20),
         'quantity' => $faker->numberBetween(0, 100),
-        'quantity_reserved' => $faker->numberBetween(0, 100),
+        'quantity_reserved' => 0,
     ];
 });

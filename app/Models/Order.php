@@ -53,41 +53,45 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property-read int|null $packlist_count
  * @property-read OrderAddress|null $shippingAddress
  * @property-read OrderStats|null $stats
- * @method static \Illuminate\Database\Eloquent\Builder|Order active()
- * @method static \Illuminate\Database\Eloquent\Builder|Order addInventorySource($inventory_location_id)
- * @method static \Illuminate\Database\Eloquent\Builder|Order hasPacker($expected)
- * @method static \Illuminate\Database\Eloquent\Builder|Order isPacked($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order isPacking($is_packing)
- * @method static \Illuminate\Database\Eloquent\Builder|Order isPicked($expected)
- * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Order query()
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereActive()
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereHasText($text)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereIsNotPicked()
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereIsPicked()
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderClosedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderPlacedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order wherePackedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order wherePackerUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order wherePickedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereProductLineCount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereRawImport($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereShippingAddressId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereStatusCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereTotal($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereTotalPaid($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereTotalQuantityOrdered($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
+ * @property-read OrderStatus $order_status
+ * @method static Builder|Order active()
+ * @method static Builder|Order addInventorySource($inventory_location_id)
+ * @method static Builder|Order hasPacker($expected)
+ * @method static Builder|Order isPacked($value)
+ * @method static Builder|Order isPacking($is_packing)
+ * @method static Builder|Order isPicked($expected)
+ * @method static Builder|Order newModelQuery()
+ * @method static Builder|Order newQuery()
+ * @method static Builder|Order query()
+ * @method static Builder|Order whereActive()
+ * @method static Builder|Order whereCreatedAt($value)
+ * @method static Builder|Order whereDeletedAt($value)
+ * @method static Builder|Order whereHasText($text)
+ * @method static Builder|Order whereId($value)
+ * @method static Builder|Order whereIsNotPicked()
+ * @method static Builder|Order whereIsPicked()
+ * @method static Builder|Order whereOrderClosedAt($value)
+ * @method static Builder|Order whereOrderNumber($value)
+ * @method static Builder|Order whereOrderPlacedAt($value)
+ * @method static Builder|Order wherePackedAt($value)
+ * @method static Builder|Order wherePackerUserId($value)
+ * @method static Builder|Order wherePickedAt($value)
+ * @method static Builder|Order whereProductLineCount($value)
+ * @method static Builder|Order whereRawImport($value)
+ * @method static Builder|Order whereShippingAddressId($value)
+ * @method static Builder|Order whereStatusCode($value)
+ * @method static Builder|Order whereTotal($value)
+ * @method static Builder|Order whereTotalPaid($value)
+ * @method static Builder|Order whereTotalQuantityOrdered($value)
+ * @method static Builder|Order whereUpdatedAt($value)
  * @property-read int $age_in_days
+ * @property OrderStatus orderStatus
  */
 class Order extends Model
 {
     use LogsActivityTrait, HasTagsTrait;
+
+//    protected $touches = ['orderProducts'];
 
     protected $fillable = [
         'order_number',
@@ -104,7 +108,10 @@ class Order extends Model
         'total_paid',
     ];
 
-    protected static $logAttributes = [
+    /**
+     * @var array|string[]
+     */
+    protected static array $logAttributes = [
         'status_code',
         'packer_user_id'
     ];
@@ -127,6 +134,38 @@ class Order extends Model
         'is_packed',
         'age_in_days',
     ];
+
+    /**
+     * @return OrderStatus
+     */
+    public function getOrderStatusAttribute(): OrderStatus
+    {
+        return $this->orderStatus();
+    }
+
+    /**
+     * @return OrderStatus
+     */
+    public function orderStatus(): OrderStatus
+    {
+        return OrderStatus::firstOrCreate([
+            'name' => $this->status_code,
+            'code'=> $this->status_code
+        ]);
+    }
+
+    public function isOpen(): bool
+    {
+        return $this->order_closed_at === null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isClosed(): bool
+    {
+        return ! $this->isOpen();
+    }
 
     /**
      * @param $query

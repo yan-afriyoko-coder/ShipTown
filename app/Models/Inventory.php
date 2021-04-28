@@ -39,6 +39,7 @@ use Spatie\Activitylog\Models\Activity;
  * @method static Builder|Inventory whereShelveLocation($value)
  * @method static Builder|Inventory whereUpdatedAt($value)
  * @method static Builder|Inventory whereWarehouseId($value)
+ * @method static Inventory firstOrNew(array $array)
  * @mixin Eloquent
  * @property-read Collection|Activity[] $activities
  * @property-read int|null $activities_count
@@ -94,6 +95,6 @@ class Inventory extends Model
      */
     public function product()
     {
-        return $this->belongsTo(Product::class)->first();
+        return $this->belongsTo(Product::class);
     }
 }

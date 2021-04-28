@@ -2,13 +2,14 @@
 
 namespace App\Jobs\Products;
 
-use App\Helpers\Queries;
+use App\Models\Inventory;
 use App\Models\Product;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class RecalculateProductQuantityJob
@@ -35,24 +36,23 @@ class RecalculateProductQuantityJob implements ShouldQueue
      */
     public function handle()
     {
-        $incorrectProductRecords = Queries::getProductsWithQuantityErrorsQuery()
-            ->limit($this->maxPerJob)
+        $incorrectInventoryRecords = Inventory::query()->select([
+            'product_id',
+            DB::raw('max(products.quantity) as current_quantity'),
+            DB::raw('sum(inventory.quantity) as expected_quantity'),
+        ])
+            ->leftJoin('products', 'products.id', '=', 'inventory.product_id')
+            ->groupBy('product_id')
+            ->having(DB::raw('current_quantity'), '!=', DB::raw('expected_quantity'))
             ->get();
 
-        $incorrectProductRecords->each(function ($errorRecord) {
-            Product::find($errorRecord->product_id)
-                ->log('Incorrect quantity detected, recalculating')
-                ->update([
-                    'quantity' => $errorRecord->correct_inventory_quantity ?? 0
-                ]);
+        $incorrectInventoryRecords->each(function ($inventoryRecord) {
+            $product = Product::where(['id' => $inventoryRecord->product_id])->first();
+            $product->recalculateQuantityTotals();
         });
 
-        if ($incorrectProductRecords->count() === $this->maxPerJob) {
-            self::dispatch();
-        }
-
         info('RecalculateProductQuantityJob finished', [
-            'records_corrected_count' => $incorrectProductRecords->count()
+            'records_corrected_count' => $incorrectInventoryRecords->count()
         ]);
     }
 }
