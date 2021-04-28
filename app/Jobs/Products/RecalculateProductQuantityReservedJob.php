@@ -2,7 +2,6 @@
 
 namespace App\Jobs\Products;
 
-use App\Helpers\Queries;
 use App\Models\Inventory;
 use App\Models\Product;
 use Illuminate\Bus\Queueable;
