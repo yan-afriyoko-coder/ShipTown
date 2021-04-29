@@ -13,12 +13,14 @@ class AddQuantityReservedColumnToOrderProductsTable extends Migration
      */
     public function up()
     {
-        Schema::table('order_products', function (Blueprint $table) {
-            $table->decimal('quantity_reserved')
-                ->default(0)
-                ->nullable(false)
-                ->after('quantity_ordered');
-        });
+        if ( ! Schema::hasColumn('order_products', 'quantity_reserved')) {
+            Schema::table('order_products', function (Blueprint $table) {
+                $table->decimal('quantity_reserved')
+                    ->default(0)
+                    ->nullable(false)
+                    ->after('quantity_ordered');
+            });
+        }
     }
 
     /**
