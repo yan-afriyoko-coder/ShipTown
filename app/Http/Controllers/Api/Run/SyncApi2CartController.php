@@ -18,6 +18,7 @@ class SyncApi2CartController extends Controller
     public function index(Request $request)
     {
         SyncProductsToApi2Cart::dispatch();
-        return $this->respondOK200('Job dispatched');
+
+        $this->respondOK200('Job dispatched');
     }
 }
