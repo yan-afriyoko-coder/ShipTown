@@ -3,8 +3,6 @@
 namespace Tests\Feature\Modules\InventoryReservations\Jobs;
 
 use App\Models\Inventory;
-use App\Models\Order;
-use App\Models\OrderProduct;
 use App\Models\OrderStatus;
 use App\Models\Product;
 use App\Modules\InventoryReservations\src\Jobs\RecalculateQuantityReservedJob;
@@ -31,7 +29,7 @@ class RecalculateQuantityReservedJobTest extends TestCase
     }
 
     /** @test */
-    public function test_if_recalculates()
+    public function test_if_recalculates_correctly()
     {
         factory(OrderStatus::class)->create([
             'code' => 'new',
@@ -39,19 +37,19 @@ class RecalculateQuantityReservedJobTest extends TestCase
             'reserves_stock' => true,
         ]);
 
-        $order = factory(Order::class)->make(['status_code' => 'new']);
+        $product = factory(Product::class)->create();
 
-        $orderProduct = factory(OrderProduct::class)->make();
+        $random_quantity = rand(1,20);
 
         $data = [
-            'order_number' => $order->order_number,
-            'status_code' => $order->status_code,
+            'order_number' => '1234',
+            'status_code' => 'new',
             'products' => [
                 [
-                    'sku' => $orderProduct->sku_ordered,
-                    'name' => $orderProduct->name_ordered,
-                    'quantity' => $orderProduct->quantity_ordered,
-                    'price' => $orderProduct->price,
+                    'sku' => $product->sku,
+                    'name' => $product->name,
+                    'quantity' => $random_quantity,
+                    'price' => $product->price,
                 ]
             ]
         ];
@@ -63,7 +61,7 @@ class RecalculateQuantityReservedJobTest extends TestCase
 
         RecalculateQuantityReservedJob::dispatchNow();
 
-        $this->assertDatabaseHas('inventory', ['quantity_reserved' => $orderProduct->quantity_ordered]);
-        $this->assertDatabaseHas('products', ['quantity_reserved' => $orderProduct->quantity_ordered]);
+        $this->assertDatabaseHas('inventory', ['quantity_reserved' => $random_quantity]);
+        $this->assertDatabaseHas('products', ['quantity_reserved' => $random_quantity]);
     }
 }
