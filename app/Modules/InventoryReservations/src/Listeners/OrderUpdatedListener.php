@@ -59,7 +59,10 @@ class OrderUpdatedListener
     {
         $order->orderProducts->each(function (OrderProduct $orderProduct) {
             if ($orderProduct->product) {
-                $inventory = $orderProduct->product->inventory()->where(['location_id' => 999])->first();
+                $inventory = $orderProduct->product->inventory()->firstOrCreate([
+                    'product_id' => $orderProduct->product_id,
+                    'location_id' => 999
+                ]);
                 $inventory->quantity_reserved += $orderProduct->quantity_to_ship;
                 $orderProduct->save();
             }
@@ -73,7 +76,10 @@ class OrderUpdatedListener
     {
         $order->orderProducts->each(function (OrderProduct $orderProduct) {
             if ($orderProduct->product) {
-                $inventory = $orderProduct->product->inventory()->where(['location_id' => 999])->first();
+                $inventory = $orderProduct->product->inventory()->firstOrCreate([
+                    'product_id' => $orderProduct->product_id,
+                    'location_id' => 999
+                ]);
                 $inventory->quantity_reserved -= $orderProduct->quantity_to_ship;
                 $inventory->save();
             }
