@@ -38,8 +38,8 @@ class RecalculateProductQuantityReservedJob implements ShouldQueue
     {
         $incorrectInventoryRecords = Inventory::query()->select([
             'product_id',
-            DB::raw('max(products.quantity_reserved) as current_quantity_reserved'),
-            DB::raw('sum(inventory.quantity_reserved) as expected_quantity_reserved'),
+            DB::raw('max('. DB::getTablePrefix() .'products.quantity_reserved) as current_quantity_reserved'),
+            DB::raw('sum('. DB::getTablePrefix() .'inventory.quantity_reserved) as expected_quantity_reserved'),
         ])
             ->leftJoin('products', 'products.id', '=', 'inventory.product_id')
             ->groupBy('product_id')
