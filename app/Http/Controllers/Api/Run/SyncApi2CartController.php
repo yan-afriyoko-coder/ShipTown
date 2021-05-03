@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Run;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\SyncProductsToApi2Cart;
+use App\Modules\Api2cart\src\Jobs\SyncProductsToApi2Cart;
 use Illuminate\Http\Request;
 
 /**

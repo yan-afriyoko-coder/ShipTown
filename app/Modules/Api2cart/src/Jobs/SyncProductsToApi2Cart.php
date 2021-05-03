@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Modules\Api2cart\src\Jobs;
 
 use App\Models\Product;
 use App\Services\Api2cartService;
@@ -42,6 +42,7 @@ class SyncProductsToApi2Cart implements ShouldQueue
             // we want to sync products with smallest quantities first to avoid oversells
             ->orderBy('quantity')
             ->orderBy('updated_at')
+            ->limit(100)
             ->chunk($this->chunkSize, function ($products) {
                 foreach ($products as $product) {
                     Api2cartService::dispatchSyncProductJob($product);
