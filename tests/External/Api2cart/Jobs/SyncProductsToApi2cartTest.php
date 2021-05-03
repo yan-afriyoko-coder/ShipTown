@@ -2,9 +2,9 @@
 
 namespace Tests\External\Api2cart\Jobs;
 
-use App\Jobs\SyncProductsToApi2Cart;
 use App\Models\Inventory;
 use App\Models\Product;
+use App\Modules\Api2cart\src\Jobs\SyncProductsToApi2Cart;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Tags\Tag;
