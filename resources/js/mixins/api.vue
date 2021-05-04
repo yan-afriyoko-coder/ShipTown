@@ -19,6 +19,10 @@ export default {
                 return axios.get('/api/products', {params: params});
             },
 
+            apiKickProduct: function(sku) {
+              return axios.get('/products/' + sku  + '/kick/', {params: null});
+            },
+
             apiModuleEcommerceProductInfo: function(params) {
                 return axios.get('/api/settings/modules/api2cart/products', {params: params});
             },

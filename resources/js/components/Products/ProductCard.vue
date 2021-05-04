@@ -5,7 +5,7 @@
             <div class="col p-2 pl-3">
                 <div class="row text-left">
                     <div class="col-md-6">
-                        <div class="text-primary h5">{{ product.name }}</div>
+                        <div class="text-primary h5">{{ product.name }} <a @click="kickProduct" class="text-white">o</a></div>
                         <div>sku: <b> <a :href="'/products?search=' + product['sku']">{{ product['sku'] }}</a></b></div>
                         <div>
                             <template v-for="tag in product.tags">
@@ -225,6 +225,10 @@
                 if ((this.showOrders) && (this.currentTab === '')) {
                     this.currentTab = 'pendingOrders';
                 }
+            },
+
+            kickProduct: function () {
+                this.apiKickProduct(this.product['sku']);
             },
 
             loadOrders: function () {
