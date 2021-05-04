@@ -54,8 +54,11 @@ class SyncProductJob implements ShouldQueue
                 $requestResponse = Products::updateOrCreate($connection, $product_data);
 
                 if ($requestResponse->isNotSuccess()) {
+                    $product->detachTag('Not Synced');
                     $product->attachTag('SYNC ERROR');
                     $product->log('eCommerce: Sync failed (code ' . $requestResponse->getReturnCode() . '), see logs');
+                    $product->log($requestResponse->getReturnCode() . ': ' . $requestResponse->getReturnMessage());
+
                     Log::warning('Api2cart: Product NOT SYNCED', [
                         'response' => [
                             'code' => $requestResponse->getReturnCode(),
