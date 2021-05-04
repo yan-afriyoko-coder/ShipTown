@@ -3,7 +3,6 @@
 namespace App\Modules\Api2cart\src\Jobs;
 
 use App\Models\Product;
-use App\Services\Api2cartService;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -46,7 +45,7 @@ class SyncProductsToApi2Cart implements ShouldQueue
             ->get();
 
         $products->each(function ($product) {
-            Api2cartService::dispatchSyncProductJob($product);
+            SyncProductJob::dispatch($product);
         });
 
         info('Dispatched Api2cart product sync jobs', ['count' => $products->count()]);

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Services\Api2cartService;
+use App\Modules\Api2cart\src\Jobs\SyncProductJob;
 use Illuminate\Http\Request;
 
 /**
@@ -21,7 +21,7 @@ class ProductKickController extends Controller
         $product = Product::query()->where(['sku' => $sku])->first();
         $product->save();
 
-        Api2cartService::dispatchSyncProductJob($product);
+        SyncProductJob::dispatch($product);
 
         $this->respondOK200('Product Kicked');
     }
