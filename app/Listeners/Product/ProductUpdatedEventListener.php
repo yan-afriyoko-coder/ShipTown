@@ -3,8 +3,8 @@
 namespace App\Listeners\Product;
 
 use App\Events\Product\ProductUpdatedEvent;
+use App\Modules\Api2cart\src\Jobs\SyncProductJob;
 use App\Modules\Sns\src\Jobs\PublishSnsNotificationJob;
-use App\Services\Api2cartService;
 use Exception;
 
 class ProductUpdatedEventListener
@@ -45,7 +45,7 @@ class ProductUpdatedEventListener
         $product = $event->getProduct();
 
         if ($product->isOutOfStock() && $product->hasTags(['Available Online'])) {
-            Api2cartService::dispatchSyncProductJob($product);
+            SyncProductJob::dispatch($product);
         }
     }
 
