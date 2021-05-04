@@ -11,6 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class RecalculateQuantityReservedJob implements ShouldQueue
 {
@@ -33,6 +34,7 @@ class RecalculateQuantityReservedJob implements ShouldQueue
      */
     public function handle()
     {
+        Log::debug('');
         $checkedProductIds = [];
 
         $reservingStatusCodes = OrderStatus::whereReservesStock(true)
@@ -44,9 +46,10 @@ class RecalculateQuantityReservedJob implements ShouldQueue
                 'product_id',
                 DB::raw('sum(quantity_to_ship) as new_quantity_reserved')
             ])
+            ->whereNotNull('product_id')
             ->groupBy('product_id')
             ->get()
-            ->each(function (OrderProduct $orderProduct) use (&$checkedProductIds) {
+            ->each(function ($orderProduct) use (&$checkedProductIds) {
                 $checkedProductIds[] = $orderProduct->product_id;
 
                 $inventory = Inventory::firstOrCreate([
