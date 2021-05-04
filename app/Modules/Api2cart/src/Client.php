@@ -5,6 +5,7 @@ namespace App\Modules\Api2cart\src;
 
 use App\Modules\Api2cart\src\Exceptions\RequestException;
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\GuzzleException;
 
 class Client
 {
@@ -14,6 +15,7 @@ class Client
      * @param array $params
      * @return RequestResponse
      * @throws RequestException
+     * @throws GuzzleException
      */
     public static function GET(string $store_key, string $uri, array $params): RequestResponse
     {
@@ -28,12 +30,16 @@ class Client
             self::getGuzzleClient()->get($uri, ['query' => $query])
         );
 
+        // hide sensitive information
+        $query['api_key'] = '***';
+        $query['store_key'] = '***';
+
+        // log query
         logger("GET", [
             "uri" => $uri,
             "query" => $query,
             "response" => [
                 "status_code" => $response->getResponseRaw()->getStatusCode(),
-                "body" => $response->asArray()
             ]
         ]);
 
@@ -49,7 +55,7 @@ class Client
      * @param string $uri
      * @param array $data
      * @return RequestResponse
-     * @throws RequestException
+     * @throws RequestException|GuzzleException
      */
     public static function POST(string $store_key, string $uri, array $data): RequestResponse
     {
@@ -69,13 +75,17 @@ class Client
             throw new RequestException($response->getReturnMessage(), $response->getReturnCode());
         }
 
+        // hide sensitive information
+        $query['api_key'] = '***';
+        $query['store_key'] = '***';
+
+        // log query
         logger("POST", [
             "uri" => $uri,
             "query" => $query,
             "json" => $data,
             "response" => [
                 "status_code" => $response->getResponseRaw()->getStatusCode(),
-                "body" => $response->asArray()
             ]
         ]);
 
@@ -87,6 +97,7 @@ class Client
      * @param string $uri
      * @param array $params
      * @return RequestResponse
+     * @throws GuzzleException
      */
     public static function DELETE(string $store_key, string $uri, array $params): RequestResponse
     {
