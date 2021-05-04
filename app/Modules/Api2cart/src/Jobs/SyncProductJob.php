@@ -81,6 +81,7 @@ class SyncProductJob implements ShouldQueue
                     Cache::forget(Products::getSkuCacheKey($connection->bridge_api_key, $product_data['sku']));
                 }
 
+                $product->detachTag('Not Synced');
                 $product->attachTag('SYNC ERROR');
                 $product->log('eCommerce: Sync failed (code ' . $exception->getCode() . '), see logs');
 
