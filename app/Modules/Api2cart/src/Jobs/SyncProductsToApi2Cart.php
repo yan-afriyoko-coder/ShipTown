@@ -38,16 +38,17 @@ class SyncProductsToApi2Cart implements ShouldQueue
      */
     public function handle()
     {
-        Product::withAllTags(['Available Online', 'Not Synced'])
+        $products = Product::withAllTags(['Available Online', 'Not Synced'])
             // we want to sync products with smallest quantities first to avoid oversells
             ->orderBy('quantity')
             ->orderBy('updated_at')
-            ->limit(100)
-            ->chunk($this->chunkSize, function ($products) {
-                foreach ($products as $product) {
-                    Api2cartService::dispatchSyncProductJob($product);
-                }
-                info('Dispatched Api2cart product sync jobs', ['count' => $products->count()]);
-            });
+            ->limit($this->chunkSize)
+            ->get();
+
+        $products->each(function ($product) {
+            Api2cartService::dispatchSyncProductJob($product);
+        });
+
+        info('Dispatched Api2cart product sync jobs', ['count' => $products->count()]);
     }
 }
