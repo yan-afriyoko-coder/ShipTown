@@ -54,8 +54,8 @@ class SyncProductJob implements ShouldQueue
                 $requestResponse = Products::updateOrCreate($connection, $product_data);
 
                 if ($requestResponse->isNotSuccess()) {
-                    $product->detachTag('Not Synced');
                     $product->attachTag('SYNC ERROR');
+                    $product->detachTag('Not Synced');
                     $product->log('eCommerce: Sync failed (code ' . $requestResponse->getReturnCode() . '), see logs');
                     $product->log($requestResponse->getReturnCode() . ': ' . $requestResponse->getReturnMessage());
 
@@ -67,8 +67,8 @@ class SyncProductJob implements ShouldQueue
                         'product_data' => $product_data ?? null,
                     ]);
                 } else {
-                    $product->detachTag('Not Synced');
                     $product->detachTag('SYNC ERROR');
+                    $product->detachTag('Not Synced');
                     $product->log('eCommerce: Product synced');
                     VerifyProductSyncJob::dispatchNow($connection, $product_data);
                     info('Api2cart: Product synced', [
@@ -81,8 +81,8 @@ class SyncProductJob implements ShouldQueue
                     Cache::forget(Products::getSkuCacheKey($connection->bridge_api_key, $product_data['sku']));
                 }
 
-                $product->detachTag('Not Synced');
                 $product->attachTag('SYNC ERROR');
+                $product->detachTag('Not Synced');
                 $product->log('eCommerce: Sync failed (code ' . $exception->getCode() . '), see logs');
 
                 Log::warning('Api2cart: Product NOT SYNCED', [
