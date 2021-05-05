@@ -312,6 +312,10 @@ class Products extends Entity
         $product = collect($product_data)
             ->only(self::PRODUCT_ALLOWED_KEYS)
             ->except(self::PRODUCT_DONT_UPDATE_KEYS)
+            ->merge([
+                'reindex' => false,
+                'clear_cache' => false,
+            ])
             ->toArray();
 
         $response = Client::GET($store_key, 'product.update.json', $product);
