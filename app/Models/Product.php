@@ -126,7 +126,6 @@ class Product extends Model
         'quantity_reserved' => 0
     ];
 
-
     /**
      * @return QueryBuilder
      */
