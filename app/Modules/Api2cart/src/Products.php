@@ -362,6 +362,10 @@ class Products extends Entity
         $properties = collect($variant_data)
             ->only(self::PRODUCT_ALLOWED_KEYS)
             ->except(self::PRODUCT_DONT_UPDATE_KEYS)
+            ->merge([
+                'reindex' => 'False',
+                'clear_cache' => 'False',
+            ])
             ->toArray();
 
         return Client::GET($store_key, 'product.variant.update.json', $properties);
