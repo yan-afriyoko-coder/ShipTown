@@ -14,6 +14,7 @@ trait HasTagsTrait
 {
     use HasTags {
         attachTag as traitHasTagsAttachTag;
+        detachTag as traitHasTagsDetachTag;
     }
 
     /**
@@ -34,8 +35,27 @@ trait HasTagsTrait
         try {
             $this->traitHasTagsAttachTag($tag, $type);
             $this->onTagAttached($tag);
+            $this->log('"'.$tag.'" tag attached');
         } catch (Exception $exception) {
             $this->log("Could not assign '{$tag}'' tag");
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string|Tag $tag
+     * @param string|null $type
+     * @return $this
+     */
+    public function detachTag($tag, string $type = null)
+    {
+        try {
+            $this->traitHasTagsDetachTag($tag, $type);
+//            $this->onTagAttached($tag);
+            $this->log('"'.$tag.'" tag detached');
+        } catch (Exception $exception) {
+            $this->log("Could not detach '{$tag}'' tag");
         }
 
         return $this;
