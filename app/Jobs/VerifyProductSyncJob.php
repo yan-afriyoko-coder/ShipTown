@@ -23,12 +23,12 @@ class VerifyProductSyncJob implements ShouldQueue
     /**
      * @var Api2cartConnection|null
      */
-    private ?Api2cartConnection $api2cartConnection = null;
+    private ?Api2cartConnection $api2cartConnection;
 
     /**
      * @var array|null
      */
-    private ?array $product_data = null;
+    private ?array $product_data;
 
     /**
      * @var array
@@ -65,7 +65,7 @@ class VerifyProductSyncJob implements ShouldQueue
         if (empty($product_now)) {
             Log::warning("Update Check FAILED - Could not find product", ["sku" => $this->product_data["sku"]]);
             return;
-        };
+        }
 
         $this->results = [
             "type" => $product_now["type"],
