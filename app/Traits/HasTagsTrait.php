@@ -2,11 +2,9 @@
 
 namespace App\Traits;
 
-use App\Events\Product\TagAttachedEvent;
 use ArrayAccess;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
-use phpDocumentor\Reflection\Types\Mixed_;
 use Spatie\Tags\HasTags;
 use Spatie\Tags\Tag;
 
@@ -33,11 +31,15 @@ trait HasTagsTrait
     public function attachTag($tag, string $type = null)
     {
         try {
+            if ($this->hasTags([$tag])) {
+                return $this;
+            }
+
             $this->traitHasTagsAttachTag($tag, $type);
             $this->onTagAttached($tag);
             $this->log('"'.$tag.'" tag attached');
         } catch (Exception $exception) {
-            $this->log("Could not assign '{$tag}'' tag");
+            $this->log("Could not attach '{$tag}'' tag");
         }
 
         return $this;
@@ -51,9 +53,10 @@ trait HasTagsTrait
     public function detachTag($tag, string $type = null)
     {
         try {
-            $this->traitHasTagsDetachTag($tag, $type);
-//            $this->onTagAttached($tag);
-            $this->log('"'.$tag.'" tag detached');
+            if ($this->hasTags([$tag])) {
+                $this->traitHasTagsDetachTag($tag, $type);
+                $this->log('"'.$tag.'" tag detached');
+            }
         } catch (Exception $exception) {
             $this->log("Could not detach '{$tag}'' tag");
         }
