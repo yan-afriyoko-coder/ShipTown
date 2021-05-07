@@ -28,6 +28,11 @@ class SyncProductJob implements ShouldQueue
     private Product $product;
 
     /**
+     * @var Api2cartConnection[]
+     */
+    private $connections;
+
+    /**
      * Create a new job instance.
      *
      * @param Product $product
@@ -35,6 +40,7 @@ class SyncProductJob implements ShouldQueue
     public function __construct(Product $product)
     {
         $this->product = $product;
+        $this->connections = Api2cartConnection::all();
     }
 
     /**
@@ -47,7 +53,7 @@ class SyncProductJob implements ShouldQueue
     {
         $product = $this->product;
 
-        Api2cartConnection::all()->each(function ($connection) use ($product) {
+        $this->connections->each(function ($connection) use ($product) {
             try {
                 $product_data = $this->getProductData($product, $connection);
 
@@ -55,11 +61,15 @@ class SyncProductJob implements ShouldQueue
 
                 $product->detachTag('Not Synced');
 
-                if ($requestResponse->isNotSuccess()) {
+                if ($requestResponse->isSuccess()) {
+                    $product->detachTag('SYNC ERROR');
+                    $product->log('eCommerce: Product synced');
+                    VerifyProductSyncJob::dispatchNow($connection, $product_data);
+                } else {
                     $product->attachTag('SYNC ERROR');
-                    $product->log('eCommerce: Sync failed');
-                    $product->log('eCommerce: '. $requestResponse->getReturnCode() .
-                        ': ' . $requestResponse->getReturnMessage());
+                    $product->log('eCommerce: Sync failed (' .
+                        $requestResponse->getReturnCode() . ': ' .
+                        $requestResponse->getReturnMessage() . ')');
 
                     Log::warning('Api2cart: Product NOT SYNCED', [
                         'response' => [
@@ -68,17 +78,7 @@ class SyncProductJob implements ShouldQueue
                         ],
                         'product_data' => $product_data ?? null,
                     ]);
-
-                    return;
                 }
-
-                $product->detachTag('SYNC ERROR');
-                $product->log('eCommerce: Product synced');
-                VerifyProductSyncJob::dispatchNow($connection, $product_data);
-                info('Api2cart: Product synced', [
-                    'response' => $requestResponse->asArray(),
-                    'product_data' => $product_data,
-                ]);
             } catch (Exception $exception) {
                 if (isset($product_data)) {
                     Cache::forget(Products::getSkuCacheKey($connection->bridge_api_key, $product_data['sku']));
