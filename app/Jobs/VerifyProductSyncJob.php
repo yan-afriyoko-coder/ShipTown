@@ -21,19 +21,19 @@ class VerifyProductSyncJob implements ShouldQueue
 
 
     /**
-     * @var Api2cartConnection
+     * @var Api2cartConnection|null
      */
-    private $api2cartConnection = null;
+    private ?Api2cartConnection $api2cartConnection = null;
 
     /**
      * @var array|null
      */
-    private $product_data = null;
+    private ?array $product_data = null;
 
     /**
      * @var array
      */
-    private $results = [];
+    private array $results = [];
 
     /**
      * Create a new job instance.
