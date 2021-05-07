@@ -25,7 +25,7 @@ class SyncProductJob implements ShouldQueue
     /**
      * @var Product
      */
-    private $product;
+    private Product $product;
 
     /**
      * Create a new job instance.
@@ -53,11 +53,13 @@ class SyncProductJob implements ShouldQueue
 
                 $requestResponse = Products::updateOrCreate($connection, $product_data);
 
+                $product->detachTag('Not Synced');
+
                 if ($requestResponse->isNotSuccess()) {
                     $product->attachTag('SYNC ERROR');
-                    $product->detachTag('Not Synced');
-                    $product->log('eCommerce: Sync failed (code ' . $requestResponse->getReturnCode() . '), see logs');
-                    $product->log($requestResponse->getReturnCode() . ': ' . $requestResponse->getReturnMessage());
+                    $product->log('eCommerce: Sync failed');
+                    $product->log('eCommerce: '. $requestResponse->getReturnCode() .
+                        ': ' . $requestResponse->getReturnMessage());
 
                     Log::warning('Api2cart: Product NOT SYNCED', [
                         'response' => [
@@ -66,16 +68,17 @@ class SyncProductJob implements ShouldQueue
                         ],
                         'product_data' => $product_data ?? null,
                     ]);
-                } else {
-                    $product->detachTag('SYNC ERROR');
-                    $product->detachTag('Not Synced');
-                    $product->log('eCommerce: Product synced');
-                    VerifyProductSyncJob::dispatchNow($connection, $product_data);
-                    info('Api2cart: Product synced', [
-                        'response' => $requestResponse->asArray(),
-                        'product_data' => $product_data,
-                    ]);
+
+                    return;
                 }
+
+                $product->detachTag('SYNC ERROR');
+                $product->log('eCommerce: Product synced');
+                VerifyProductSyncJob::dispatchNow($connection, $product_data);
+                info('Api2cart: Product synced', [
+                    'response' => $requestResponse->asArray(),
+                    'product_data' => $product_data,
+                ]);
             } catch (Exception $exception) {
                 if (isset($product_data)) {
                     Cache::forget(Products::getSkuCacheKey($connection->bridge_api_key, $product_data['sku']));
