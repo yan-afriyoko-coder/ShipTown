@@ -33,11 +33,15 @@ trait HasTagsTrait
     public function attachTag($tag, string $type = null)
     {
         try {
+            if ($this->hasTags([$tag])) {
+                return $this;
+            }
+
             $this->traitHasTagsAttachTag($tag, $type);
             $this->onTagAttached($tag);
             $this->log('"'.$tag.'" tag attached');
         } catch (Exception $exception) {
-            $this->log("Could not assign '{$tag}'' tag");
+            $this->log("Could not attach '{$tag}'' tag");
         }
 
         return $this;
