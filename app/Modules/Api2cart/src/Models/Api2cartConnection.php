@@ -5,6 +5,7 @@ namespace App\Modules\Api2cart\src\Models;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -58,5 +59,13 @@ class Api2cartConnection extends Model
         ), true);
 
         parent::__construct($attributes);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function productLinks(): HasMany
+    {
+        return $this->hasMany(Api2cartProductLink::class);
     }
 }

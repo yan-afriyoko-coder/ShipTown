@@ -26,6 +26,7 @@ class RunHourlyJobs implements ShouldQueue
         \App\Jobs\Products\RecalculateProductQuantityJob::class,
         \App\Jobs\Products\RecalculateProductQuantityReservedJob::class,
         \App\Modules\AutoPilot\src\Jobs\RefillStatusesJob::class,
+        \App\Modules\Api2cart\src\Jobs\FetchUpdatedProductsJob::class,
     ];
 
     /**
