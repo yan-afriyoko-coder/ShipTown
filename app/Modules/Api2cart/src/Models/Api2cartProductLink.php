@@ -42,6 +42,11 @@ class Api2cartProductLink extends Model
         'api2cart_sale_price_end_date',
     ];
 
+    protected $dates = [
+        'sale_price_start_date',
+        'sale_price_end_date'
+    ];
+
     /**
      * @var string[]
      */
@@ -62,8 +67,12 @@ class Api2cartProductLink extends Model
             $this->api2cart_quantity = $this->getQuantity($product_data, $this->api2cartConnection);
             $this->api2cart_price = $product_data->price;
             $this->api2cart_sale_price = $product_data->special_price->value;
-            $this->api2cart_sale_price_start_date = $product_data->special_price->created_at;
-            $this->api2cart_sale_price_end_date = $product_data->special_price->expired_at;
+
+            $specialPrice = $product_data->special_price;
+            $this->api2cart_sale_price_start_date = Carbon::createFromTimeString($specialPrice->created_at)
+                ->format("Y-m-d H:i:s");
+            $this->api2cart_sale_price_end_date = Carbon::createFromTimeString($specialPrice->expired_at)
+                ->format("Y-m-d H:i:s");
         }
 
         return parent::save($options);

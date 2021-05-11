@@ -27,7 +27,9 @@ class FetchUpdatedProductsJob implements ShouldQueue
     public function handle()
     {
         Api2cartConnection::all()->each(function (Api2cartConnection $connection) {
-            $this->fetchProducts($connection)->each(function ($product) use ($connection) {
+            $products = $this->fetchProducts($connection);
+
+            $products->each(function ($product) use ($connection) {
                 $this->saveApi2cartProduct($connection, $product);
             });
         });
@@ -41,8 +43,7 @@ class FetchUpdatedProductsJob implements ShouldQueue
      */
     private function fetchProducts(Api2cartConnection $connection): Collection
     {
-        $response = Products::getProductList($connection->bridge_api_key, [
-//            'params' => 'force_all',
+        $params = [
             'params' => implode(',', [
                 "id",
                 "model",
@@ -57,10 +58,13 @@ class FetchUpdatedProductsJob implements ShouldQueue
                 "inventory",
                 "modified_at",
             ]),
+            'count' => 10,
             'sort_by' => 'modified_at',
             'modified_from' => $this->formatDateForApi2cart(now()->subHours(2)),
             'modified_to' => $this->formatDateForApi2cart(now())
-        ]);
+        ];
+
+        $response = Products::getProductList($connection->bridge_api_key, $params);
 
         return collect($response->getResult()['product']);
     }
