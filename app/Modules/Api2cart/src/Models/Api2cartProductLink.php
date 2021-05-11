@@ -66,13 +66,18 @@ class Api2cartProductLink extends Model
             $this->api2cart_product_id = $product_data->id;
             $this->api2cart_quantity = $this->getQuantity($product_data, $this->api2cartConnection);
             $this->api2cart_price = $product_data->price;
-            $this->api2cart_sale_price = $product_data->special_price->value;
+
 
             $specialPrice = $product_data->special_price;
-            $this->api2cart_sale_price_start_date = Carbon::createFromTimeString($specialPrice->created_at)
-                ->format("Y-m-d H:i:s");
-            $this->api2cart_sale_price_end_date = Carbon::createFromTimeString($specialPrice->expired_at)
-                ->format("Y-m-d H:i:s");
+
+            $this->api2cart_sale_price = $specialPrice->value;
+
+            $this->api2cart_sale_price_start_date = $specialPrice->created_at
+                ? Carbon::createFromTimeString($specialPrice->created_at)->format("Y-m-d H:i:s")
+                : '2000-01-01 00:00:00';
+            $this->api2cart_sale_price_end_date = $specialPrice->expired_at
+                ? Carbon::createFromTimeString($specialPrice->expired_at)->format("Y-m-d H:i:s")
+                : '2000-01-01 00:00:00';
         }
 
         return parent::save($options);
