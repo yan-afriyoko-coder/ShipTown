@@ -3,26 +3,24 @@
 namespace App\Http\Controllers\Api\Settings\Module\Api2cart;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Api2cart\src\Exceptions\RequestException;
 use App\Modules\Api2cart\src\Http\Requests\ProductsIndexRequest;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Products;
-use Exception;
 
 class ProductsController extends Controller
 {
+    /**
+     * @throws RequestException
+     */
     public function index(ProductsIndexRequest $request)
     {
-        $productInfo = null;
-        $c = Api2cartConnection::query()->first();
+        $connection = Api2cartConnection::query()->first();
 
         $sku = $request->get('sku');
 
-        try {
-            $productInfo = Products::getProductInfo($c, $sku, ['force_all']);
-        } catch (Exception $exception) {
-            $this->setStatusCode(500)->throwJsonResponse('Server error occurred, see logs for details');
-        }
+        $productInfo = Products::getProductInfo($connection, $sku, ['force_all']);
 
-        return $this->respondOK200($productInfo);
+        $this->respondOK200($productInfo);
     }
 }
