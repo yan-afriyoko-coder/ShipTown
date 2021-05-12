@@ -67,18 +67,15 @@ class Api2cartProductLink extends Model
             $this->api2cart_quantity = $this->getQuantity($product_data, $this->api2cartConnection);
             $this->api2cart_price = $product_data->price;
 
+            $this->api2cart_sale_price = $product_data->special_price->value;
 
-            $specialPrice = $product_data->special_price;
-
-            $this->api2cart_sale_price = $specialPrice->value;
-
-            $created_at = $product_data["special_price"]["created_at"];
-            $sprice_create = empty($created_at) ? "2000-01-01 00:00:00" : $created_at["value"];
+            $created_at = $product_data->special_price->created_at;
+            $sprice_create = empty($created_at) ? "2000-01-01 00:00:00" : $created_at->value;
             $sprice_create = Carbon::createFromTimeString($sprice_create)->format("Y-m-d H:i:s");
             $this->api2cart_sale_price_start_date = Carbon::createFromTimeString($sprice_create)->format("Y-m-d H:i:s");
 
-            $expired_at = $product_data["special_price"]["expired_at"];
-            $sprice_expired_at = empty($expired_at) ? "2000-01-01 00:00:00" : $expired_at["value"];
+            $expired_at = $product_data->special_price->expired_at;
+            $sprice_expired_at = empty($expired_at) ? "2000-01-01 00:00:00" : $expired_at->value;
             $sprice_expired_at = Carbon::createFromTimeString($sprice_expired_at)->format("Y-m-d H:i:s");
             $this->api2cart_sale_price_end_date = Carbon::createFromTimeString($sprice_expired_at)->format("Y-m-d H:i:s");
         }
