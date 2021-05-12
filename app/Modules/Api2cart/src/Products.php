@@ -484,6 +484,10 @@ class Products extends Entity
             return $product["quantity"];
         }
 
-        return $product["inventory"][0]['quantity'];
+        if (! key_exists($warehouse_id, $product['inventory'])) {
+            return 0;
+        }
+
+        return $product["inventory"][$warehouse_id]['quantity'];
     }
 }
