@@ -64,7 +64,7 @@ class Api2cartProductLink extends Model
             $product_data = json_decode((string)$this->last_fetched_data);
 
             $this->api2cart_product_id = $product_data->id;
-            $this->api2cart_quantity = $this->getQuantity($product_data, $this->api2cartConnection);
+            $this->api2cart_quantity = $this->getQuantity((array) $product_data, $this->api2cartConnection);
             $this->api2cart_price = $product_data->price;
 
             $this->api2cart_sale_price = $product_data->special_price->value;
@@ -85,14 +85,14 @@ class Api2cartProductLink extends Model
 
 
     /**
-     * @param $product
-     * @param Api2cartConnection $connection
+     * @param array $product
+     * @param Api2cartConnection|null $connection
      * @return int
      */
-    private function getQuantity($product, Api2cartConnection $connection): int
+    public static function getQuantity(array $product, Api2cartConnection $connection = null): int
     {
-        if (is_null($connection->magento_warehouse_id)) {
-            return $product["quantity"];
+        if (is_null($connection) or is_null($connection->magento_warehouse_id)) {
+            return $product['quantity'];
         }
 
         if (! key_exists($connection->magento_warehouse_id, $product['inventory'])) {
