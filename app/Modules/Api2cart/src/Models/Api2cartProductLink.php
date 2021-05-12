@@ -87,15 +87,19 @@ class Api2cartProductLink extends Model
     /**
      * @param $product
      * @param Api2cartConnection $connection
-     * @return int
+     * @return int|null
      */
-    private function getQuantity($product, Api2cartConnection $connection): int
+    private function getQuantity($product, Api2cartConnection $connection): ?int
     {
-        if (is_null($connection->magento_warehouse_id)) {
-            return $product->quantity;
-        }
+        try {
+            if (is_null($connection->magento_warehouse_id)) {
+                return $product->quantity;
+            }
 
-        return $product->inventory[0]->quantity;
+            return $product->inventory[0]->quantity;
+        } catch (\Exception $exception) {
+            return null;
+        }
     }
 
     /**
