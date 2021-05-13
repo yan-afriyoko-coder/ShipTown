@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Events\Product\TagAttachedEvent;
 use App\Traits\HasTagsTrait;
 use App\Traits\LogsActivityTrait;
-use Barryvdh\LaravelIdeHelper\Eloquent;
 use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -72,7 +71,6 @@ use Spatie\Tags\Tag;
  * @method static Builder|Product withAllTagsOfAnyType($tags)
  * @method static Builder|Product withAnyTags($tags, $type = null)
  * @method static Builder|Product withAnyTagsOfAnyType($tags)
- * @mixin Eloquent
  * @method static Builder|Product withoutAllTags($tags, $type = null)
  * @property-read Collection|ProductPrice[] $prices
  * @property-read int|null $prices_count
@@ -140,7 +138,7 @@ class Product extends Model
                 AllowedFilter::exact('price'),
                 AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->ignore(['', null]),
 
-                AllowedFilter::scope('has_tags', 'withAllTags'),
+                AllowedFilter::scope('has_tags', 'hasTags'),
                 AllowedFilter::scope('without_tags', 'withoutAllTags'),
             ])
             ->allowedSorts([
