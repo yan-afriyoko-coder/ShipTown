@@ -13,6 +13,7 @@ trait HasTagsTrait
     use HasTags {
         attachTag as traitHasTagsAttachTag;
         detachTag as traitHasTagsDetachTag;
+        scopeWithAllTags as traitHasTagsScopeWithAllTags;
     }
 
     /**
@@ -21,6 +22,16 @@ trait HasTagsTrait
     protected function onTagAttached($tag)
     {
         // override this function on model
+    }
+
+    public function scopeHasTags(Builder $query, $tags): Builder
+    {
+        $tags = collect(func_get_args());
+        $tags->shift();
+
+        $toArray = $tags->toArray();
+
+        return $this->traitHasTagsScopeWithAllTags($query, $toArray);
     }
 
     /**
