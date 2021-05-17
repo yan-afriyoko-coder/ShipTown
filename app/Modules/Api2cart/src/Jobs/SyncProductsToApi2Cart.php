@@ -26,7 +26,7 @@ class SyncProductsToApi2Cart implements ShouldQueue
      */
     public function __construct()
     {
-        $this->chunkSize = 100;
+        $this->chunkSize = 200;
     }
 
     /**
