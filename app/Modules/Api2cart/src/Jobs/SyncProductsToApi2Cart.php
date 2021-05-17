@@ -17,7 +17,7 @@ class SyncProductsToApi2Cart implements ShouldQueue
     /**
      * @var int
      */
-    private $chunkSize;
+    private int $chunkSize;
 
     /**
      * Create a new job instance.
@@ -26,7 +26,7 @@ class SyncProductsToApi2Cart implements ShouldQueue
      */
     public function __construct()
     {
-        $this->chunkSize = 100;
+        $this->chunkSize = 200;
     }
 
     /**
