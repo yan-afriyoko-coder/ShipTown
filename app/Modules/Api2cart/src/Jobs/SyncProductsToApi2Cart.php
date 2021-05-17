@@ -17,7 +17,7 @@ class SyncProductsToApi2Cart implements ShouldQueue
     /**
      * @var int
      */
-    private $chunkSize;
+    private int $chunkSize;
 
     /**
      * Create a new job instance.
