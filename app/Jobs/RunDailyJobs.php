@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Modules\InventoryReservations\src\Jobs\RecalculateQuantityReservedJob;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -19,6 +18,7 @@ class RunDailyJobs implements ShouldQueue
     private array $jobClassesToRun = [
         \App\Modules\Api2cart\src\Jobs\ResyncLastDayJob::class,
         \App\Modules\InventoryReservations\src\Jobs\RecalculateQuantityReservedJob::class,
+        \App\Modules\Api2cart\src\Jobs\ResyncSyncErrorsTagged::class,
     ];
 
     /**
