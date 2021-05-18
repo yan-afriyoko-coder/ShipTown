@@ -16,7 +16,7 @@ class InventoryCreatedEvent
     /**
      * @var Inventory
      */
-    private $inventory;
+    private Inventory $inventory;
 
     /**
      * Create a new event instance.
@@ -31,7 +31,7 @@ class InventoryCreatedEvent
     /**
      * @return Inventory
      */
-    public function getInventory()
+    public function getInventory(): Inventory
     {
         return $this->inventory;
     }
@@ -39,7 +39,7 @@ class InventoryCreatedEvent
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return Channel|array
+     * @return Channel
      */
     public function broadcastOn()
     {

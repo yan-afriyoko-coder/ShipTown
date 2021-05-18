@@ -20,7 +20,7 @@ class ProductCreatedEvent
     /**
      * @var Product
      */
-    private $product;
+    private Product $product;
 
     /**
      * Create a new event instance.
@@ -35,7 +35,7 @@ class ProductCreatedEvent
     /**
      * @return Product
      */
-    public function getProduct()
+    public function getProduct(): Product
     {
         return $this->product;
     }
@@ -43,7 +43,7 @@ class ProductCreatedEvent
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return Channel|array
+     * @return Channel
      */
     public function broadcastOn()
     {

@@ -21,7 +21,7 @@ class ProductUpdatedEvent implements ShouldQueue
     /**
      * @var Product
      */
-    private $product;
+    private Product $product;
 
     /**
      * Create a new event instance.
@@ -36,7 +36,7 @@ class ProductUpdatedEvent implements ShouldQueue
     /**
      * @return Product
      */
-    public function getProduct()
+    public function getProduct(): Product
     {
         return $this->product;
     }
@@ -44,7 +44,7 @@ class ProductUpdatedEvent implements ShouldQueue
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return Channel|array
+     * @return Channel
      */
     public function broadcastOn()
     {
