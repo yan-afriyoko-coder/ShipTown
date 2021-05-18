@@ -484,10 +484,15 @@ class Products extends Entity
             return $product["quantity"];
         }
 
-        if (! key_exists($warehouse_id, $product['inventory'])) {
-            return 0;
+        $inventories = collect($product['inventory'])
+            ->filter(function ($warehouse_inventory) use ($warehouse_id) {
+                return $warehouse_inventory['warehouse_id'] === $warehouse_id;
+            });
+
+        if ($inventories->isEmpty()) {
+            return $product["quantity"];
         }
 
-        return $product["inventory"][$warehouse_id]['quantity'];
+        return $inventories->first()['quantity'];
     }
 }
