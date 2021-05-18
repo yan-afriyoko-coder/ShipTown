@@ -493,10 +493,6 @@ class Products extends Entity
             return $product["quantity"];
         }
 
-        if (! key_exists($warehouse_id, $product['inventory'])) {
-            return 0;
-        }
-
         return $inventories->first()['quantity'];
     }
 }
