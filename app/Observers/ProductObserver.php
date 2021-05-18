@@ -19,6 +19,8 @@ class ProductObserver
      */
     public function created(Product $product)
     {
+        $this->insertInventoryRecords($product);
+
         ProductCreatedEvent::dispatch($product);
     }
 
@@ -65,5 +67,23 @@ class ProductObserver
     public function forceDeleted(Product $product)
     {
         //
+    }
+
+
+    /**
+     * @param Product $product
+     */
+    private function insertInventoryRecords(Product $product): void
+    {
+        $warehouse_ids = Warehouse::all('id')
+            ->map(function ($warehouse) use ($product) {
+                return [
+                    'warehouse_id' => $warehouse->getKey(),
+                    'product_id' => $product->getKey(),
+                    'location_id' => $warehouse->getKey(),
+                ];
+            });
+
+        Inventory::query()->insert($warehouse_ids->toArray());
     }
 }

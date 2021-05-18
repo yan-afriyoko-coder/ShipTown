@@ -3,7 +3,6 @@
 namespace App\Listeners\Product;
 
 use App\Events\Product\ProductUpdatedEvent;
-use App\Modules\Api2cart\src\Jobs\SyncProductJob;
 use App\Modules\Sns\src\Jobs\PublishSnsNotificationJob;
 use Exception;
 
@@ -30,23 +29,6 @@ class ProductUpdatedEventListener
     {
         $this->publishSnsNotification($event);
         $this->attachAutoTags($event);
-        $this->ifOosSyncApi2cart($event);
-    }
-
-    /**
-     * Handle the event.
-     *
-     * @param ProductUpdatedEvent $event
-     * @return void
-     * @throws Exception
-     */
-    public function ifOosSyncApi2cart(ProductUpdatedEvent $event)
-    {
-        $product = $event->getProduct();
-
-        if ($product->isOutOfStock() && $product->hasTags(['Available Online'])) {
-            SyncProductJob::dispatch($product);
-        }
     }
 
     /**

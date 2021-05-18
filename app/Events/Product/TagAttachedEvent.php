@@ -48,6 +48,14 @@ class TagAttachedEvent
     }
 
     /**
+     * @return string
+     */
+    public function tag(): string
+    {
+        return $this->tag;
+    }
+
+    /**
      * Get the channels the event should broadcast on.
      *
      * @return Channel
