@@ -73,10 +73,6 @@ class ProductUpdatedEventListener
     {
         $product = $event->getProduct();
 
-        if ($product->hasTags(['Available Online'])) {
-            $product->attachTag('Not Synced');
-        }
-
         if ($product->isOutOfStock() && $product->doesNotHaveTags(['Out Of Stock'])) {
             $product->attachTag('Out Of Stock');
         }

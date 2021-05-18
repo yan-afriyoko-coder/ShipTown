@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Barryvdh\LaravelIdeHelper\Eloquent;
+use App\BaseModel;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
@@ -20,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property Product $product
  * @method static Builder|ProductPrice newModelQuery()
  * @method static Builder|ProductPrice newQuery()
  * @method static Builder|ProductPrice query()
@@ -33,9 +34,8 @@ use Illuminate\Support\Carbon;
  * @method static Builder|ProductPrice whereSalePriceEndDate($value)
  * @method static Builder|ProductPrice whereSalePriceStartDate($value)
  * @method static Builder|ProductPrice whereUpdatedAt($value)
- * @mixin Eloquent
  */
-class ProductPrice extends Model
+class ProductPrice extends BaseModel
 {
     protected $fillable = [
         'product_id',
@@ -56,4 +56,12 @@ class ProductPrice extends Model
         "sale_price_start_date" => '2001-01-01 00:00:00',
         "sale_price_end_date" => '2001-01-01 00:00:00',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

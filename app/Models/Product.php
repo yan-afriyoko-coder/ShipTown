@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use App\BaseModel;
 use App\Events\Product\TagAttachedEvent;
 use App\Traits\HasTagsTrait;
 use App\Traits\LogsActivityTrait;
 use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\DatabaseNotification;
@@ -75,7 +75,7 @@ use Spatie\Tags\Tag;
  * @property-read Collection|ProductPrice[] $prices
  * @property-read int|null $prices_count
  */
-class Product extends Model
+class Product extends BaseModel
 {
     use LogsActivityTrait, HasTagsTrait, SoftDeletes;
     use Notifiable, HasManyKeyByRelationship;
@@ -222,8 +222,6 @@ class Product extends Model
     }
 
     /**
-     * @param Inventory $inventory
-     * @param $product
      */
     public function recalculateQuantityTotals(): void
     {
