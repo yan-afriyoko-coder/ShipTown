@@ -16,7 +16,7 @@ class OrderCreatedEvent
     /**
      * @var Order
      */
-    public $order;
+    public Order $order;
 
     /**
      * Create a new event instance.
@@ -31,7 +31,7 @@ class OrderCreatedEvent
     /**
      * @return Order
      */
-    public function getOrder()
+    public function getOrder(): Order
     {
         return $this->order;
     }
@@ -39,7 +39,7 @@ class OrderCreatedEvent
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return Channel|array
+     * @return Channel
      */
     public function broadcastOn()
     {

@@ -8,7 +8,6 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Spatie\Tags\Tag;
 
 /**
  * Class TagAttachedEvent
@@ -21,12 +20,12 @@ class TagAttachedEvent
     /**
      * @var Product
      */
-    private $product;
+    private Product $product;
 
     /**
-     * @var
+     * @var string
      */
-    private $tag;
+    private string $tag;
 
     /**
      * Create a new event instance.
@@ -43,7 +42,7 @@ class TagAttachedEvent
     /**
      * @return Product
      */
-    public function product()
+    public function product(): Product
     {
         return $this->product;
     }
@@ -51,7 +50,7 @@ class TagAttachedEvent
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return Channel|array
+     * @return Channel
      */
     public function broadcastOn()
     {

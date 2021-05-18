@@ -1,31 +1,43 @@
 <?php
 
-namespace App\Events\OrderProduct;
+namespace App\Events\ProductPrice;
 
-use App\Models\OrderProduct;
+use App\Models\ProductPrice;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class OrderProductUpdatedEvent
+/**
+ * Class CreatedEvent
+ * @package App\Events\Product
+ */
+class ProductPriceUpdatedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * @var OrderProduct
+     * @var ProductPrice
      */
-    public OrderProduct $orderProduct;
+    private ProductPrice $product_price;
 
     /**
      * Create a new event instance.
      *
-     * @return void
+     * @param ProductPrice $product_price
      */
-    public function __construct(OrderProduct $orderProduct)
+    public function __construct(ProductPrice $product_price)
     {
-        $this->orderProduct = $orderProduct;
+        $this->product_price = $product_price;
+    }
+
+    /**
+     * @return ProductPrice
+     */
+    public function getProductPrice(): ProductPrice
+    {
+        return $this->product_price;
     }
 
     /**

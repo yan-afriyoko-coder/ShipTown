@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Events\Inventory\InventoryCreatedEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
+use App\Events\ProductPrice\ProductPriceUpdatedEvent;
 use App\Models\Inventory;
 
 class InventoryObserver
@@ -27,39 +28,14 @@ class InventoryObserver
      */
     public function updated(Inventory $inventory)
     {
-        InventoryUpdatedEvent::dispatch($inventory);
-    }
+        $changed = $inventory->isAnyAttributeChanged([
+            'quantity',
+            'quantity_reserved',
+            'shelve_location',
+        ]);
 
-    /**
-     * Handle the inventory "deleted" event.
-     *
-     * @param Inventory $inventory
-     * @return void
-     */
-    public function deleted(Inventory $inventory)
-    {
-        //
-    }
-
-    /**
-     * Handle the inventory "restored" event.
-     *
-     * @param Inventory $inventory
-     * @return void
-     */
-    public function restored(Inventory $inventory)
-    {
-        //
-    }
-
-    /**
-     * Handle the inventory "force deleted" event.
-     *
-     * @param Inventory $inventory
-     * @return void
-     */
-    public function forceDeleted(Inventory $inventory)
-    {
-        //
+        if ($changed) {
+            InventoryUpdatedEvent::dispatch($inventory);
+        }
     }
 }

@@ -33,6 +33,11 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\Product\ProductUpdatedEventListener::class,
         ],
 
+        // ProductPrice
+        \App\Events\ProductPrice\ProductPriceUpdatedEvent::class => [
+            \App\Modules\Api2cart\src\Listeners\ProductPriceUpdatedEvent\SyncWhenProductPriceUpdated::class
+        ],
+
         // Order
         \App\Events\Order\OrderCreatedEvent::class => [
             \App\Listeners\Order\OrderCreatedEventListener::class
@@ -57,9 +62,8 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\Inventory\InventoryUpdatedEvent::class => [
             \App\Listeners\Inventory\InventoryUpdatedEventListener::class,
             \App\Modules\InventoryReservations\src\Listeners\InventoryUpdatedListener::class,
+            \App\Modules\Api2cart\src\Listeners\InventoryUpdatedEvent\SyncWhenInventoryUpdatedListener::class,
         ],
-
-        // Other
     ];
 
     /**
