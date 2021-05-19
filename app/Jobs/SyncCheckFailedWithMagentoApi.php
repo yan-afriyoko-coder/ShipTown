@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Helpers\StockItems;
 use App\Models\Product;
+use Grayloon\Magento\Api\AbstractApi;
 use Grayloon\Magento\Magento;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,19 +13,33 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Class SyncCheckFailedWithMagentoApi
+ * @package App\Jobs
+ */
 class SyncCheckFailedWithMagentoApi implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    /**
+     * @var Product|null
+     */
+    private ?Product $product;
+    private StockItems $stockItems;
+    private Magento $magento;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Product $product = null)
     {
-        //
+        $this->product = $product;
+        $this->magento = new Magento();
+        $this->stockItems = new StockItems($this->magento);
     }
+
 
     /**
      * Execute the job.
@@ -33,18 +48,21 @@ class SyncCheckFailedWithMagentoApi implements ShouldQueue
      */
     public function handle()
     {
-        $magento = new Magento();
+        $productsCollection = collect();
 
-        $stockItems = new StockItems($magento);
+        if ($this->product) {
+            $productsCollection->add($this->product);
+        } else {
+            $productsCollection = Product::withAllTags(['CHECK FAILED'])
+                ->limit(10);
+        }
 
-        Product::withAllTags(['CHECK FAILED'])
-            ->limit(10)
-            ->each(function (Product $product) use ($stockItems) {
+        $productsCollection->each(function (Product $product) {
                 $params = [
                     'is_in_stock' => $product->quantity_available > 0,
                     'qty' => $product->quantity_available,
                 ];
-                $response = $stockItems->update($product->sku, $params);
+                $response = $this->stockItems->update($product->sku, $params);
 
                 Log::info('MagentoApi: stockItem updated', [
                     'sku' => $product->sku,
@@ -52,6 +70,6 @@ class SyncCheckFailedWithMagentoApi implements ShouldQueue
                     'response_status_code' => $response->status(),
                     'response_body' => $response->json(),
                 ]);
-            });
+        });
     }
 }
