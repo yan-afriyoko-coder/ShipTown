@@ -47,18 +47,23 @@ class SyncCheckFailedWithMagentoApi implements ShouldQueue
      */
     public function handle()
     {
+        Log::debug('Starting ' . self::class);
+        $log_context = [];
+
         $productsCollection = collect();
 
         if ($this->product) {
             $productsCollection->add($this->product);
         } else {
             $productsCollection = Product::withAllTags(['CHECK FAILED'])
-                ->limit(10)
+                ->limit(50)
                 ->get();
-            Log::info('Selected products for MagentoSync', ['count' => $productsCollection->count()]);
+            $log_context['products_selected_count'] = $productsCollection->count();
         }
 
-        $productsCollection->each(function (Product $product) {
+        $log_context['products_synced_count'] = 0;
+
+        $productsCollection->each(function (Product $product) use ($log_context) {
                 $params = [
                     'is_in_stock' => $product->quantity_available > 0,
                     'qty' => $product->quantity_available,
@@ -68,9 +73,10 @@ class SyncCheckFailedWithMagentoApi implements ShouldQueue
                 if ($response->ok()) {
                     $product->log('Stock synced with Magento API')
                         ->detachTag('CHECK FAILED');
+                    $log_context['products_synced_count']++;
                 }
 
-                Log::info('MagentoApi: stockItem updated', [
+                Log::debug('MagentoApi: stockItem updated', [
                     'sku' => $product->sku,
                     'params' => $params,
                     'response_status_code' => $response->status(),
@@ -78,6 +84,6 @@ class SyncCheckFailedWithMagentoApi implements ShouldQueue
                 ]);
         });
 
-        Log::info('Synced product with Magento API', ['count' => $productsCollection->count()]);
+        Log::info('Finished '. self::class, $log_context);
     }
 }
