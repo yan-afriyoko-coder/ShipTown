@@ -25,8 +25,6 @@ class SyncProductStockJob implements ShouldQueue
      * @var Product
      */
     private Product $product;
-    private StockItems $stockItems;
-    private Magento $magento;
 
     /**
      * Create a new job instance.
