@@ -36,6 +36,10 @@ class SyncCheckFailedProductsJob implements ShouldQueue
      */
     public function handle()
     {
+        if (config('modules.magentoApi.enabled') === false) {
+            return;
+        }
+
         Log::debug('Starting ' . self::class);
 
         $productsCollection = Product::withAllTags(['CHECK FAILED'])

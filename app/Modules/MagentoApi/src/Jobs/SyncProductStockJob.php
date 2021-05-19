@@ -44,6 +44,10 @@ class SyncProductStockJob implements ShouldQueue
      */
     public function handle()
     {
+        if (config('modules.magentoApi.enabled') === false) {
+            return;
+        }
+
         Log::debug('Starting ' . self::class);
 
         $response = $this->syncProductStock($this->product);
