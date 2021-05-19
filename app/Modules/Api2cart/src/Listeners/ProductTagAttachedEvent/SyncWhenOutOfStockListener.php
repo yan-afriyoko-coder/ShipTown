@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Modules\Api2cart\src\Listeners\ProductPriceUpdatedEvent;
+namespace App\Modules\Api2cart\src\Listeners\ProductTagAttachedEvent;
 
 use App\Events\Product\TagAttachedEvent;
 use App\Modules\Api2cart\src\Jobs\SyncProductJob;
 
-class ProductTagAttachedListener
+class SyncWhenOutOfStockListener
 {
     /**
      * Create the event listener.
@@ -25,15 +25,9 @@ class ProductTagAttachedListener
      */
     public function handle(TagAttachedEvent $event)
     {
-        if ($event->tag() !== 'Not Synced') {
-            return;
-        }
-
-        $product = $event->product();
-
-        if ($product->isOutOfStock()) {
-            $product->log('Product out of stock, forcing sync');
-            SyncProductJob::dispatch($product);
+        if ($event->tag() === 'Out Of Stock') {
+            $event->product()->log('Product out of stock, forcing sync');
+            SyncProductJob::dispatch($event->product());
         }
     }
 }

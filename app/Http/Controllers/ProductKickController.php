@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\SyncCheckFailedWithMagentoApi;
 use App\Models\Product;
 use App\Modules\Api2cart\src\Jobs\SyncProductJob;
+use App\Modules\MagentoApi\src\Jobs\SyncProductStockJob;
 use Illuminate\Http\Request;
 
 /**
@@ -24,7 +24,7 @@ class ProductKickController extends Controller
 
         SyncProductJob::dispatch($product);
 
-        SyncCheckFailedWithMagentoApi::dispatch($product);
+        SyncProductStockJob::dispatch($product);
 
         $this->respondOK200('Product Kicked');
     }

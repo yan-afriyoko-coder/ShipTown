@@ -59,7 +59,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:admin')->group(function () {
         Route::view('users', 'users')->name('users');
         Route::get('sync-magento-api', function () {
-            \App\Jobs\SyncCheckFailedWithMagentoApi::dispatch();
+            \App\Modules\MagentoApi\src\Jobs\SyncCheckFailedProductsJob::dispatch();
         });
     });
 });
