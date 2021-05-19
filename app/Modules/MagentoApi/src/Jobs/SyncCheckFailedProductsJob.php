@@ -40,8 +40,6 @@ class SyncCheckFailedProductsJob implements ShouldQueue
             return;
         }
 
-        Log::debug('Starting ' . self::class);
-
         $productsCollection = Product::withAllTags(['CHECK FAILED'])
             ->limit(50)
             ->get()

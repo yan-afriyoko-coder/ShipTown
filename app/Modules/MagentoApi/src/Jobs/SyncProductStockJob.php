@@ -48,20 +48,10 @@ class SyncProductStockJob implements ShouldQueue
             return;
         }
 
-        Log::debug('Starting ' . self::class);
-
-        $response = $this->syncProductStock($this->product);
-
-        if ($response->ok()) {
-            $this->product->log('Stock synced with Magento API')
-                ->detachTag('CHECK FAILED');
+        if ($this->syncProductStock($this->product)->ok()) {
+            $this->product->log('Stock synced with Magento API');
+            $this->product->detachTag('CHECK FAILED');
         }
-
-        Log::debug('MagentoApi: stockItem update', [
-            'sku' => $this->product->sku,
-            'response_status_code' => $response->status(),
-            'response_body' => $response->json(),
-        ]);
     }
 
     /**
@@ -76,6 +66,14 @@ class SyncProductStockJob implements ShouldQueue
             'qty' => $product->quantity_available,
         ];
 
-        return $stockItems->update($product->sku, $params);
+        $response = $stockItems->update($product->sku, $params);
+
+        Log::debug('MagentoApi: stockItem update', [
+            'sku' => $product->sku,
+            'response_status_code' => $response->status(),
+            'response_body' => $response->json(),
+        ]);
+
+        return $response;
     }
 }
