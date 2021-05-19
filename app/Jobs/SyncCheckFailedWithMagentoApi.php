@@ -65,6 +65,11 @@ class SyncCheckFailedWithMagentoApi implements ShouldQueue
                 ];
                 $response = $this->stockItems->update($product->sku, $params);
 
+                if ($response->ok()) {
+                    $product->log('Stock synced with Magento API')
+                        ->detachTag('CHECK FAILED');
+                }
+
                 Log::info('MagentoApi: stockItem updated', [
                     'sku' => $product->sku,
                     'params' => $params,
