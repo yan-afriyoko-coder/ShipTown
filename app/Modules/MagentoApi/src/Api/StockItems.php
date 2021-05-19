@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Helpers;
+namespace App\Modules\MagentoApi\src\Api;
 
 use Grayloon\Magento\Api\AbstractApi;
 

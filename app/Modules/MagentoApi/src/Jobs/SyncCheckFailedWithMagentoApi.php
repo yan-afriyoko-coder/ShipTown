@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Modules\MagentoApi\src\Jobs;
 
-use App\Helpers\StockItems;
 use App\Models\Product;
+use App\Modules\MagentoApi\src\Api\StockItems;
 use Grayloon\Magento\Magento;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -54,6 +54,7 @@ class SyncCheckFailedWithMagentoApi implements ShouldQueue
 
         if ($this->product) {
             $productsCollection->add($this->product);
+            $log_context['sku'] = $this->product->sku;
         } else {
             $productsCollection = Product::withAllTags(['CHECK FAILED'])
                 ->limit(50)

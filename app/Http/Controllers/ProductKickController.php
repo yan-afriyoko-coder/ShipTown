@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\SyncCheckFailedWithMagentoApi;
 use App\Models\Product;
 use App\Modules\Api2cart\src\Jobs\SyncProductJob;
+use App\Modules\MagentoApi\src\Jobs\SyncCheckFailedWithMagentoApi;
 use Illuminate\Http\Request;
 
 /**
