@@ -35,12 +35,18 @@ class EventServiceProvider extends ServiceProvider
 
         // ProductPrice
         \App\Events\ProductPrice\ProductPriceUpdatedEvent::class => [
-            \App\Modules\Api2cart\src\Listeners\ProductPriceUpdatedEvent\SyncWhenProductPriceUpdated::class
+            \App\Modules\Api2cart\src\Listeners\ProductPriceUpdatedEvent\SyncWhenProductPriceUpdated::class,
+        ],
+
+        // ProductTag
+        \App\Events\Product\TagAttachedEvent::class => [
+            \App\Modules\Api2cart\src\Listeners\ProductTagAttachedEvent\SyncWhenOutOfStockListener::class,
+            \App\Modules\MagentoApi\src\Listeners\ProductTagAttachedEvent\SyncWhenOutOfStockListener::class,
         ],
 
         // Order
         \App\Events\Order\OrderCreatedEvent::class => [
-            \App\Listeners\Order\OrderCreatedEventListener::class
+            \App\Listeners\Order\OrderCreatedEventListener::class,
         ],
 
         \App\Events\Order\OrderUpdatedEvent::class => [
