@@ -58,5 +58,8 @@ Route::middleware('auth')->group(function () {
     // Admin only routes
     Route::middleware('role:admin')->group(function () {
         Route::view('users', 'users')->name('users');
+        Route::get('sync-magento-api', function () {
+            \App\Jobs\SyncCheckFailedWithMagentoApi::dispatch();
+        });
     });
 });

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c1fab4d277774c9078c3a4a60f1702c3",
+    "content-hash": "f78408bc1e71c0186dcea0d052460259",
     "packages": [
         {
             "name": "arrilot/laravel-widgets",
@@ -1551,6 +1551,69 @@
                 }
             ],
             "time": "2020-10-22T13:57:20+00:00"
+        },
+        {
+            "name": "grayloon/laravel-magento-api",
+            "version": "0.12.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/grayloon/magento-laravel-api.git",
+                "reference": "56eb80380c17fe2ed6fee4e4fc7ba16978412be7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/grayloon/magento-laravel-api/zipball/56eb80380c17fe2ed6fee4e4fc7ba16978412be7",
+                "reference": "56eb80380c17fe2ed6fee4e4fc7ba16978412be7",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.0|^7.0",
+                "illuminate/support": "^7.0|^8.0",
+                "php": "^7.3|^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.16",
+                "orchestra/testbench": "^5.0|^6.0",
+                "phpunit/phpunit": "^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Grayloon\\Magento\\MagentoServiceProvider"
+                    ],
+                    "aliases": {
+                        "Magento": "Grayloon\\Magento\\MagentoFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Grayloon\\Magento\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Gray Loon Marketing Group",
+                    "email": "webmaster@grayloon.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Magento 2 REST API Wrapper to export Magento data to use in your Laravel application.",
+            "homepage": "https://github.com/grayloon/laravel-magento-api",
+            "keywords": [
+                "grayloon",
+                "laravel-magento-api"
+            ],
+            "support": {
+                "issues": "https://github.com/grayloon/magento-laravel-api/issues",
+                "source": "https://github.com/grayloon/magento-laravel-api/tree/0.12.0"
+            },
+            "time": "2021-05-15T16:08:31+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
