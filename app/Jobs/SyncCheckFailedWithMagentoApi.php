@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Helpers\StockItems;
 use App\Models\Product;
-use Grayloon\Magento\Api\AbstractApi;
 use Grayloon\Magento\Magento;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -54,7 +53,9 @@ class SyncCheckFailedWithMagentoApi implements ShouldQueue
             $productsCollection->add($this->product);
         } else {
             $productsCollection = Product::withAllTags(['CHECK FAILED'])
-                ->limit(10);
+                ->limit(10)
+                ->get();
+            Log::info('Selected products for MagentoSync', ['count' => $productsCollection->count()]);
         }
 
         $productsCollection->each(function (Product $product) {
@@ -71,5 +72,7 @@ class SyncCheckFailedWithMagentoApi implements ShouldQueue
                     'response_body' => $response->json(),
                 ]);
         });
+
+        Log::info('Synced product with Magento API', ['count' => $productsCollection->count()]);
     }
 }
