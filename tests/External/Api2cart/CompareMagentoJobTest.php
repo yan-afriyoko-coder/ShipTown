@@ -1,8 +1,9 @@
 <?php
 
 namespace Tests\External\Api2cart;
+;
 
-use App\Jobs\Modules\Api2cart\CompareMagentoJob;
+use App\Modules\Api2cart\src\Jobs\CompareMagentoJob;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
