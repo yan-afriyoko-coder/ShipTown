@@ -6,6 +6,7 @@ use App\Events\Product\ProductCreatedEvent;
 use App\Events\Product\ProductUpdatedEvent;
 use App\Models\Inventory;
 use App\Models\Product;
+use App\Models\ProductPrice;
 use App\Models\Warehouse;
 use Exception;
 
@@ -20,6 +21,7 @@ class ProductObserver
     public function created(Product $product)
     {
         $this->insertInventoryRecords($product);
+        $this->insertPricingRecords($product);
 
         ProductCreatedEvent::dispatch($product);
     }
@@ -69,7 +71,6 @@ class ProductObserver
         //
     }
 
-
     /**
      * @param Product $product
      */
@@ -85,5 +86,21 @@ class ProductObserver
             });
 
         Inventory::query()->insert($warehouse_ids->toArray());
+    }
+
+    /**
+     * @param Product $product
+     */
+    private function insertPricingRecords(Product $product): void
+    {
+        $productPriceRecords = ProductPrice::all('id')
+            ->map(function ($record) use ($product) {
+                return [
+                    'product_id' => $product->getKey(),
+                    'location_id' => $record->getKey(),
+                ];
+            });
+
+        ProductPrice::query()->insert($productPriceRecords->toArray());
     }
 }

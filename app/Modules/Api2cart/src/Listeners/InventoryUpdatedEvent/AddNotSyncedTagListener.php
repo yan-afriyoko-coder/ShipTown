@@ -4,18 +4,8 @@ namespace App\Modules\Api2cart\src\Listeners\InventoryUpdatedEvent;
 
 use App\Events\Inventory\InventoryUpdatedEvent;
 
-class SyncWhenInventoryUpdatedListener
+class AddNotSyncedTagListener
 {
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
     /**
      * Handle the event.
      *
