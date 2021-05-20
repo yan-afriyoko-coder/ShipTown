@@ -3,7 +3,6 @@
 namespace App\Listeners\Product;
 
 use App\Events\Product\ProductUpdatedEvent;
-use App\Modules\Sns\src\Jobs\PublishSnsNotificationJob;
 use Exception;
 
 class ProductUpdatedEventListener
@@ -27,22 +26,7 @@ class ProductUpdatedEventListener
      */
     public function handle(ProductUpdatedEvent $event)
     {
-        $this->publishSnsNotification($event);
         $this->attachAutoTags($event);
-    }
-
-    /**
-     * Handle the event.
-     *
-     * @param ProductUpdatedEvent $event
-     * @return void
-     */
-    public function publishSnsNotification(ProductUpdatedEvent $event)
-    {
-        PublishSnsNotificationJob::dispatch(
-            'products_events',
-            $event->getProduct()->toJson()
-        );
     }
 
     /**

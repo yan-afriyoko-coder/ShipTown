@@ -31,6 +31,7 @@ class EventServiceProvider extends ServiceProvider
 
         \App\Events\Product\ProductUpdatedEvent::class => [
             \App\Listeners\Product\ProductUpdatedEventListener::class,
+            \App\Modules\Sns\src\Jobs\Listeners\ProductUpdatedEvent\PublishSnsNotificationListener::class,
         ],
 
         // ProductPrice
@@ -45,8 +46,8 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         \App\Events\Product\ProductTagDetachedEvent::class => [
-            \App\Modules\Api2cart\src\Listeners\ProductTagAttachedEvent\SyncWhenOutOfStockAttachedListener::class,
-            \App\Modules\MagentoApi\src\Listeners\ProductTagAttachedEvent\SyncWhenOutOfStockAttachedListener::class,
+            \App\Modules\Api2cart\src\Listeners\ProductTagDetachedEvent\SyncWhenOutOfStockDetachedListener::class,
+            \App\Modules\MagentoApi\src\Listeners\ProductTagDetachedEvent\SyncWhenOutOfStockDetachedListener::class,
         ],
 
         // Order
