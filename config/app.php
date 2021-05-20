@@ -194,6 +194,8 @@ return [
 
         Barryvdh\DomPDF\ServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
+
+        App\Modules\MagentoApi\src\EventServiceProvider::class,
     ],
 
     /*
