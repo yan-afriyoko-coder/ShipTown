@@ -2,7 +2,6 @@
 
 namespace App\Modules\Api2cart\src\Listeners\ProductTagDetachedEvent;
 
-use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
 use App\Modules\Api2cart\src\Jobs\SyncProductJob;
 

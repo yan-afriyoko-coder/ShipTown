@@ -7,16 +7,6 @@ use App\Events\Inventory\InventoryUpdatedEvent;
 class InventoryUpdatedEventListener
 {
     /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Handle the event.
      *
      * @param InventoryUpdatedEvent $event

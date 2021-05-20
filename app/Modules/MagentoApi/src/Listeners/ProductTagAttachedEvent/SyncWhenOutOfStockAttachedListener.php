@@ -8,16 +8,6 @@ use App\Modules\MagentoApi\src\Jobs\SyncProductStockJob;
 class SyncWhenOutOfStockAttachedListener
 {
     /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Handle the event.
      *
      * @param ProductTagAttachedEvent $event

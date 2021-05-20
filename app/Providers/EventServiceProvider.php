@@ -53,11 +53,13 @@ class EventServiceProvider extends ServiceProvider
         // Order
         \App\Events\Order\OrderCreatedEvent::class => [
             \App\Listeners\Order\OrderCreatedEventListener::class,
+            \App\Modules\Sns\src\Listeners\OrderCreatedEvent\PublishSnsNotificationListener::class,
         ],
 
         \App\Events\Order\OrderUpdatedEvent::class => [
             \App\Listeners\Order\OrderUpdatedEventListener::class,
             \App\Modules\InventoryReservations\src\Listeners\OrderUpdatedListener::class,
+            \App\Modules\Sns\src\Listeners\OrderUpdatedEvent\PublishSnsNotificationListener::class,
         ],
 
         // OrderProduct
