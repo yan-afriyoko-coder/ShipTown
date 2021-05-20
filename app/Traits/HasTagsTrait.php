@@ -50,7 +50,7 @@ trait HasTagsTrait
     public function attachTag($tag, string $type = null)
     {
         try {
-            if ($this->hasTags([$tag])) {
+            if ($this->doesNotHaveTags([$tag])) {
                 return $this;
             }
 

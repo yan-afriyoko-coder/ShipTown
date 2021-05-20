@@ -30,7 +30,6 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         \App\Events\Product\ProductUpdatedEvent::class => [
-            \App\Listeners\Product\ProductUpdatedEventListener::class,
             \App\Modules\Sns\src\Listeners\ProductUpdatedEvent\PublishSnsNotificationListener::class,
         ],
 
@@ -70,13 +69,15 @@ class EventServiceProvider extends ServiceProvider
         // Inventory
         \App\Events\Inventory\InventoryCreatedEvent::class => [
             \App\Modules\InventoryReservations\src\Listeners\InventoryCreatedListener::class,
-
+            \App\Modules\AutoTags\src\Listeners\InventoryUpdatedEvent\AttachOutOfStockTagListener::class,
+            \App\Modules\AutoTags\src\Listeners\InventoryUpdatedEvent\DetachOutOfStockTagListener::class,
         ],
 
         \App\Events\Inventory\InventoryUpdatedEvent::class => [
-            \App\Listeners\Inventory\InventoryUpdatedEventListener::class,
             \App\Modules\InventoryReservations\src\Listeners\InventoryUpdatedListener::class,
             \App\Modules\Api2cart\src\Listeners\InventoryUpdatedEvent\SyncWhenInventoryUpdatedListener::class,
+            \App\Modules\AutoTags\src\Listeners\InventoryUpdatedEvent\AttachOutOfStockTagListener::class,
+            \App\Modules\AutoTags\src\Listeners\InventoryUpdatedEvent\DetachOutOfStockTagListener::class,
         ],
     ];
 
