@@ -8,16 +8,6 @@ use App\Modules\Sns\src\Jobs\PublishSnsNotificationJob;
 class PublishSnsNotificationListener
 {
     /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Handle the event.
      *
      * @param ProductUpdatedEvent $event

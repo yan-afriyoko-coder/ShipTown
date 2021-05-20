@@ -2,7 +2,7 @@
 
 namespace App\Modules\Sns\src\Listeners\OrderCreatedEvent;
 
-use App\Events\Product\ProductCreatedEvent;
+use App\Events\Order\OrderCreatedEvent;
 use App\Modules\Sns\src\Jobs\PublishSnsNotificationJob;
 
 class PublishSnsNotificationListener
@@ -10,14 +10,14 @@ class PublishSnsNotificationListener
     /**
      * Handle the event.
      *
-     * @param ProductCreatedEvent $event
+     * @param OrderCreatedEvent $event
      * @return void
      */
-    public function handle(ProductCreatedEvent $event)
+    public function handle(OrderCreatedEvent $event)
     {
         PublishSnsNotificationJob::dispatch(
-            'products_events',
-            $event->getProduct()->toJson()
+            'orders_events',
+            $event->getOrder()->toJson()
         );
     }
 }
