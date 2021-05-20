@@ -2,13 +2,10 @@
 
 namespace Tests\Feature\Jobs\Maintenance;
 
-use App\Jobs\Products\RecalculateProductQuantityJob;
-use App\Jobs\Products\RecalculateProductQuantityReservedJob;
-use App\Jobs\RunHourlyJobs;
-use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
+use App\Modules\Maintenance\src\Jobs\Products\RecalculateProductQuantityReservedJob;
 use Tests\TestCase;
 
 class RecalculateProductQuantityReservedJobTest extends TestCase
@@ -35,10 +32,5 @@ class RecalculateProductQuantityReservedJobTest extends TestCase
         RecalculateProductQuantityReservedJob::dispatchNow();
 
         $this->markTestIncomplete();
-
-//        $this->assertEquals(
-//            Product::query()->sum('quantity_reserved'),
-//            Inventory::query()->sum('quantity_reserved')
-//        );
     }
 }

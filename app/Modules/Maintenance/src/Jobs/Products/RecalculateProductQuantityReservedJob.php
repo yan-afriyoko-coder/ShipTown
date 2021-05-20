@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Products;
+namespace App\Modules\Maintenance\src\Jobs\Products;
 
 use App\Models\Inventory;
 use App\Models\Product;
@@ -12,10 +12,10 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Class RecalculateProductQuantityJob
+ * Class RecalculateProductQuantityReservedJob
  * @package App\Jobs\Products
  */
-class RecalculateProductQuantityJob implements ShouldQueue
+class RecalculateProductQuantityReservedJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -38,12 +38,12 @@ class RecalculateProductQuantityJob implements ShouldQueue
     {
         $incorrectInventoryRecords = Inventory::query()->select([
             'product_id',
-            DB::raw('max('. DB::getTablePrefix() .'products.quantity) as current_quantity'),
-            DB::raw('sum('. DB::getTablePrefix() .'inventory.quantity) as expected_quantity'),
+            DB::raw('max('. DB::getTablePrefix() .'products.quantity_reserved) as current_quantity_reserved'),
+            DB::raw('sum('. DB::getTablePrefix() .'inventory.quantity_reserved) as expected_quantity_reserved'),
         ])
             ->leftJoin('products', 'products.id', '=', 'inventory.product_id')
             ->groupBy('product_id')
-            ->having(DB::raw('current_quantity'), '!=', DB::raw('expected_quantity'))
+            ->having(DB::raw('current_quantity_reserved'), '!=', DB::raw('expected_quantity_reserved'))
             ->get();
 
         $incorrectInventoryRecords->each(function ($inventoryRecord) {
@@ -51,7 +51,7 @@ class RecalculateProductQuantityJob implements ShouldQueue
             $product->recalculateQuantityTotals();
         });
 
-        info('RecalculateProductQuantityJob finished', [
+        info('RecalculateProductQuantityReservedJob finished', [
             'records_corrected_count' => $incorrectInventoryRecords->count()
         ]);
     }

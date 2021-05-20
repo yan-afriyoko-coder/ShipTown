@@ -136,6 +136,16 @@ class Order extends Model
     ];
 
     /**
+     * @return $this
+     */
+    public function recalculateTotals(): Order
+    {
+        $this->total_quantity_ordered = $this->orderProducts()->sum('quantity_ordered');
+        $this->product_line_count = $this->orderProducts()->count('id');
+        return $this;
+    }
+
+    /**
      * @return OrderStatus
      */
     public function getOrderStatusAttribute(): OrderStatus
