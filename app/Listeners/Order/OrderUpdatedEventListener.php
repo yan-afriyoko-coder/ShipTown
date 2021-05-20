@@ -6,7 +6,6 @@ use App\Events\Order\OrderUpdatedEvent;
 use App\Models\OrderStatus;
 use App\Modules\AutoPilot\src\Jobs\CheckIfOrderOutOfStockJob;
 use App\Modules\AutoPilot\src\Jobs\SetStatusPaidIfPaidJob;
-use App\Modules\Sns\src\Jobs\PublishSnsNotificationJob;
 
 /**
  * Class OrderUpdatedEventListener
@@ -36,21 +35,6 @@ class OrderUpdatedEventListener
         $this->changeStatusToReadyIfPacked($event);
         $this->updateOrderClosedAt($event);
         CheckIfOrderOutOfStockJob::dispatch($event->getOrder());
-        $this->publishSnsNotification($event);
-    }
-
-    /**
-     * Handle the event.
-     *
-     * @param OrderUpdatedEvent $event
-     * @return void
-     */
-    public function publishSnsNotification(OrderUpdatedEvent $event)
-    {
-        PublishSnsNotificationJob::dispatch(
-            'orders_events',
-            $event->getOrder()->toJson()
-        );
     }
 
     /**

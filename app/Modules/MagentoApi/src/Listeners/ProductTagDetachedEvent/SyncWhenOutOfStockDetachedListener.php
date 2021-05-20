@@ -1,29 +1,19 @@
 <?php
 
-namespace App\Modules\MagentoApi\src\Listeners\ProductTagAttachedEvent;
+namespace App\Modules\MagentoApi\src\Listeners\ProductTagDetachedEvent;
 
-use App\Events\Product\TagAttachedEvent;
+use App\Events\Product\ProductTagDetachedEvent;
 use App\Modules\MagentoApi\src\Jobs\SyncProductStockJob;
 
-class SyncWhenOutOfStockListener
+class SyncWhenOutOfStockDetachedListener
 {
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
     /**
      * Handle the event.
      *
-     * @param TagAttachedEvent $event
+     * @param ProductTagDetachedEvent $event
      * @return void
      */
-    public function handle(TagAttachedEvent $event)
+    public function handle(ProductTagDetachedEvent $event)
     {
         if (config('modules.magentoApi.enabled') === false) {
             return;

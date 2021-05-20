@@ -3,7 +3,8 @@
 namespace App\Models;
 
 use App\BaseModel;
-use App\Events\Product\TagAttachedEvent;
+use App\Events\Product\ProductTagAttachedEvent;
+use App\Events\Product\ProductTagDetachedEvent;
 use App\Traits\HasTagsTrait;
 use App\Traits\LogsActivityTrait;
 use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
@@ -171,7 +172,15 @@ class Product extends BaseModel
      */
     protected function onTagAttached($tag)
     {
-        TagAttachedEvent::dispatch($this, $tag);
+        ProductTagAttachedEvent::dispatch($this, $tag);
+    }
+
+    /**
+     * @param $tag
+     */
+    protected function onTagDetached($tag)
+    {
+        ProductTagDetachedEvent::dispatch($this, $tag);
     }
 
     /**

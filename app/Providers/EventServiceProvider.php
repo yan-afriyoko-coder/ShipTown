@@ -26,11 +26,12 @@ class EventServiceProvider extends ServiceProvider
 
         // Product
         \App\Events\Product\ProductCreatedEvent::class => [
-            \App\Listeners\Product\ProductCreatedEventListener::class,
+            \App\Modules\Sns\src\Listeners\ProductCreatedEvent\PublishSnsNotificationListener::class,
         ],
 
         \App\Events\Product\ProductUpdatedEvent::class => [
             \App\Listeners\Product\ProductUpdatedEventListener::class,
+            \App\Modules\Sns\src\Listeners\ProductUpdatedEvent\PublishSnsNotificationListener::class,
         ],
 
         // ProductPrice
@@ -39,19 +40,26 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         // ProductTag
-        \App\Events\Product\TagAttachedEvent::class => [
-            \App\Modules\Api2cart\src\Listeners\ProductTagAttachedEvent\SyncWhenOutOfStockListener::class,
-            \App\Modules\MagentoApi\src\Listeners\ProductTagAttachedEvent\SyncWhenOutOfStockListener::class,
+        \App\Events\Product\ProductTagAttachedEvent::class => [
+            \App\Modules\Api2cart\src\Listeners\ProductTagAttachedEvent\SyncWhenOutOfStockAttachedListener::class,
+            \App\Modules\MagentoApi\src\Listeners\ProductTagAttachedEvent\SyncWhenOutOfStockAttachedListener::class,
+        ],
+
+        \App\Events\Product\ProductTagDetachedEvent::class => [
+            \App\Modules\Api2cart\src\Listeners\ProductTagDetachedEvent\SyncWhenOutOfStockDetachedListener::class,
+            \App\Modules\MagentoApi\src\Listeners\ProductTagDetachedEvent\SyncWhenOutOfStockDetachedListener::class,
         ],
 
         // Order
         \App\Events\Order\OrderCreatedEvent::class => [
             \App\Listeners\Order\OrderCreatedEventListener::class,
+            \App\Modules\Sns\src\Listeners\OrderCreatedEvent\PublishSnsNotificationListener::class,
         ],
 
         \App\Events\Order\OrderUpdatedEvent::class => [
             \App\Listeners\Order\OrderUpdatedEventListener::class,
             \App\Modules\InventoryReservations\src\Listeners\OrderUpdatedListener::class,
+            \App\Modules\Sns\src\Listeners\OrderUpdatedEvent\PublishSnsNotificationListener::class,
         ],
 
         // OrderProduct

@@ -24,6 +24,14 @@ trait HasTagsTrait
         // override this function on model
     }
 
+    /**
+     * @param $tag
+     */
+    protected function onTagDetached($tag)
+    {
+        // override this function on model
+    }
+
     public function scopeHasTags(Builder $query, $tags): Builder
     {
         $tags = collect(func_get_args());
@@ -66,6 +74,7 @@ trait HasTagsTrait
         try {
             if ($this->hasTags([$tag])) {
                 $this->traitHasTagsDetachTag($tag, $type);
+                $this->onTagDetached($tag);
                 $this->log('"'.$tag.'" tag detached');
             }
         } catch (Exception $exception) {
