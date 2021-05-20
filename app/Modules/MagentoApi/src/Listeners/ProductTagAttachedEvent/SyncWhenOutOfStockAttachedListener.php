@@ -19,9 +19,15 @@ class SyncWhenOutOfStockAttachedListener
             return;
         }
 
-        if ($event->tag() === 'Out Of Stock') {
-            $event->product()->log('Product out of stock, forcing MagentoApi sync');
-            SyncProductStockJob::dispatch($event->product());
+        if ($event->tag() !== 'Out Of Stock') {
+            return;
         }
+
+        if ($event->product()->doesNotHaveTags(['Available Online'])) {
+            return;
+        }
+
+        $event->product()->log('Product out of stock, forcing MagentoApi sync');
+        SyncProductStockJob::dispatch($event->product());
     }
 }
