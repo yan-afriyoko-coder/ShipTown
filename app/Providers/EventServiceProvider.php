@@ -26,12 +26,12 @@ class EventServiceProvider extends ServiceProvider
 
         // Product
         \App\Events\Product\ProductCreatedEvent::class => [
-            \App\Listeners\Product\ProductCreatedEventListener::class,
+            \App\Modules\Sns\src\Listeners\ProductCreatedEvent\PublishSnsNotificationListener::class,
         ],
 
         \App\Events\Product\ProductUpdatedEvent::class => [
             \App\Listeners\Product\ProductUpdatedEventListener::class,
-            \App\Modules\Sns\src\Jobs\Listeners\ProductUpdatedEvent\PublishSnsNotificationListener::class,
+            \App\Modules\Sns\src\Listeners\ProductUpdatedEvent\PublishSnsNotificationListener::class,
         ],
 
         // ProductPrice
