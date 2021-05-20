@@ -8,16 +8,6 @@ use App\Modules\Api2cart\src\Jobs\SyncProductJob;
 class SyncWhenOutOfStockDetachedListener
 {
     /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Handle the event.
      *
      * @param ProductTagDetachedEvent $event
@@ -25,9 +15,15 @@ class SyncWhenOutOfStockDetachedListener
      */
     public function handle(ProductTagDetachedEvent $event)
     {
-        if ($event->tag() === 'Out Of Stock') {
-            $event->product()->log('Product out of stock, forcing sync');
-            SyncProductJob::dispatch($event->product());
+        if ($event->tag() !== 'Out Of Stock') {
+            return;
         }
+
+        if ($event->product()->doesNotHaveTags(['Available Online'])) {
+            return;
+        }
+
+        $event->product()->log('Product out of stock, forcing sync');
+        SyncProductJob::dispatch($event->product());
     }
 }
