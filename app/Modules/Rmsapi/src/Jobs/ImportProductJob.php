@@ -135,16 +135,12 @@ class ImportProductJob implements ShouldQueue
 
     /**
      * @param RmsapiProductImport $importedProduct
-     * @param $product
+     * @param Product $product
      */
-    private function attachTags(RmsapiProductImport $importedProduct, $product): void
+    private function attachTags(RmsapiProductImport $importedProduct, Product $product): void
     {
         if ($importedProduct->raw_import['is_web_item']) {
-            try {
-                $product->attachTag('Available Online');
-            } catch (Exception $exception) {
-                Log::warning('Could not attach Available Online tag');
-            }
+            $product->attachTag('Available Online');
         }
     }
 }
