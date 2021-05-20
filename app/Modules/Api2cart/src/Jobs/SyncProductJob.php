@@ -2,7 +2,6 @@
 
 namespace App\Modules\Api2cart\src\Jobs;
 
-use App\Jobs\VerifyProductSyncJob;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductPrice;

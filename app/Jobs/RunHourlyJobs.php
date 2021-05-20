@@ -20,13 +20,8 @@ class RunHourlyJobs implements ShouldQueue
      * @var array|string[]
      */
     private array $jobClassesToRun = [
-        \App\Jobs\OrderProducts\RecalculateQuantityToShipJob::class,
-        \App\Jobs\OrderProducts\RecalculateQuantityToPickJob::class,
         \App\Jobs\Orders\ClearPackerIdJob::class,
-        \App\Jobs\Products\RecalculateProductQuantityJob::class,
-        \App\Jobs\Products\RecalculateProductQuantityReservedJob::class,
         \App\Modules\AutoPilot\src\Jobs\RefillStatusesJob::class,
-        \App\Modules\Api2cart\src\Jobs\FetchUpdatedProductsJob::class,
     ];
 
     /**

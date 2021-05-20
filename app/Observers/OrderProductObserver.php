@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Events\OrderProduct\OrderProductCreatedEvent;
 use App\Events\OrderProduct\OrderProductUpdatedEvent;
-use App\Jobs\Order\RecalculateOrderTotalQuantities;
 use App\Models\OrderProduct;
 
 class OrderProductObserver
@@ -17,9 +16,9 @@ class OrderProductObserver
      */
     public function created(OrderProduct $orderProduct)
     {
-        OrderProductCreatedEvent::dispatch($orderProduct);
+        $orderProduct->order->recalculateTotals()->save();
 
-        RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order()->first());
+        OrderProductCreatedEvent::dispatch($orderProduct);
     }
 
     /**
@@ -30,11 +29,10 @@ class OrderProductObserver
      */
     public function updated(OrderProduct $orderProduct)
     {
-        OrderProductUpdatedEvent::dispatch($orderProduct);
-
-        RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order()->first());
-
+        $orderProduct->order->recalculateTotals()->save();
         $this->setOrdersPickedAtIfAllPicked($orderProduct);
+
+        OrderProductUpdatedEvent::dispatch($orderProduct);
     }
 
     /**
@@ -45,7 +43,7 @@ class OrderProductObserver
      */
     public function deleted(OrderProduct $orderProduct)
     {
-        RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order()->first());
+        $orderProduct->order->recalculateTotals()->save();
     }
 
     /**
@@ -56,7 +54,7 @@ class OrderProductObserver
      */
     public function restored(OrderProduct $orderProduct)
     {
-        RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order()->first());
+        $orderProduct->order->recalculateTotals()->save();
     }
 
     /**
@@ -67,7 +65,7 @@ class OrderProductObserver
      */
     public function forceDeleted(OrderProduct $orderProduct)
     {
-        RecalculateOrderTotalQuantities::dispatchNow($orderProduct->order()->first());
+        $orderProduct->order->recalculateTotals()->save();
     }
 
     /**
