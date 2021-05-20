@@ -39,9 +39,14 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         // ProductTag
-        \App\Events\Product\TagAttachedEvent::class => [
-            \App\Modules\Api2cart\src\Listeners\ProductTagAttachedEvent\SyncWhenOutOfStockListener::class,
-            \App\Modules\MagentoApi\src\Listeners\ProductTagAttachedEvent\SyncWhenOutOfStockListener::class,
+        \App\Events\Product\ProductTagAttachedEvent::class => [
+            \App\Modules\Api2cart\src\Listeners\ProductTagAttachedEvent\SyncWhenOutOfStockAttachedListener::class,
+            \App\Modules\MagentoApi\src\Listeners\ProductTagAttachedEvent\SyncWhenOutOfStockAttachedListener::class,
+        ],
+
+        \App\Events\Product\ProductTagDetachedEvent::class => [
+            \App\Modules\Api2cart\src\Listeners\ProductTagAttachedEvent\SyncWhenOutOfStockAttachedListener::class,
+            \App\Modules\MagentoApi\src\Listeners\ProductTagAttachedEvent\SyncWhenOutOfStockAttachedListener::class,
         ],
 
         // Order

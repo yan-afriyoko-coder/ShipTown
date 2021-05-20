@@ -2,7 +2,7 @@
 
 namespace Tests\Models;
 
-use App\Events\Product\TagAttachedEvent;
+use App\Events\Product\ProductTagAttachedEvent;
 use App\Models\Product;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\TestCase;
@@ -21,6 +21,6 @@ class ProductModelTest extends TestCase
 
         $product->attachTag('Test');
 
-        Event::assertDispatched(TagAttachedEvent::class);
+        Event::assertDispatched(ProductTagAttachedEvent::class);
     }
 }

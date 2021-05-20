@@ -9,11 +9,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-/**
- * Class TagAttachedEvent
- * @package App\Events\Product
- */
-class TagAttachedEvent
+class ProductTagDetachedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
