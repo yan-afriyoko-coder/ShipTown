@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Events\Inventory\InventoryCreatedEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
-use App\Events\ProductPrice\ProductPriceUpdatedEvent;
 use App\Models\Inventory;
 
 class InventoryObserver
@@ -28,13 +27,11 @@ class InventoryObserver
      */
     public function updated(Inventory $inventory)
     {
-        $changed = $inventory->isAnyAttributeChanged([
-            'quantity',
-            'quantity_reserved',
-            'shelve_location',
-        ]);
+        if ($inventory->isAnyAttributeChanged(['quantity', 'quantity_reserved'])) {
+            $inventory->product->recalculateQuantityTotals();
+        }
 
-        if ($changed) {
+        if ($inventory->isAnyAttributeChanged(['quantity', 'quantity_reserved', 'shelve_location'])) {
             InventoryUpdatedEvent::dispatch($inventory);
         }
     }

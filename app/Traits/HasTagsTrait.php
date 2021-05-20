@@ -72,11 +72,13 @@ trait HasTagsTrait
     public function detachTag($tag, string $type = null)
     {
         try {
-            if ($this->hasTags([$tag])) {
-                $this->traitHasTagsDetachTag($tag, $type);
-                $this->onTagDetached($tag);
-                $this->log('"'.$tag.'" tag detached');
+            if ($this->doesNotHaveTags([$tag])) {
+                return $this;
             }
+
+            $this->traitHasTagsDetachTag($tag, $type);
+            $this->onTagDetached($tag);
+            $this->log('"'.$tag.'" tag detached');
         } catch (Exception $exception) {
             $this->log("Could not detach '{$tag}'' tag");
         }
@@ -120,6 +122,6 @@ trait HasTagsTrait
      */
     public function doesNotHaveTags(array $tags = null): bool
     {
-        return !$this->hasTags($tags);
+        return ! $this->hasTags($tags);
     }
 }
