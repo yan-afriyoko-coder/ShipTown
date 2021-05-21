@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Sns\src\Jobs;
+namespace App\Modules\AmazonSns\src\Jobs;
 
 use App\Http\Controllers\SnsController;
 use Illuminate\Bus\Queueable;
@@ -16,12 +16,12 @@ class PublishSnsNotificationJob implements ShouldQueue
     /**
      * @var string
      */
-    private $topic;
+    private string $topic;
 
     /**
      * @var string
      */
-    private $message;
+    private string $message;
 
     /**
      * Create a new job instance.

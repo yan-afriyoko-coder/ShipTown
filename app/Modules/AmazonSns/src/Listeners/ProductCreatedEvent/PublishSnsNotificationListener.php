@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Modules\Sns\src\Listeners\ProductCreatedEvent;
+namespace App\Modules\AmazonSns\src\Listeners\ProductCreatedEvent;
 
 use App\Events\Product\ProductCreatedEvent;
-use App\Modules\Sns\src\Jobs\PublishSnsNotificationJob;
+use App\Modules\AmazonSns\src\Jobs\PublishSnsNotificationJob;
 
 class PublishSnsNotificationListener
 {
