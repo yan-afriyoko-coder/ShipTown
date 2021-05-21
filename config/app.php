@@ -197,6 +197,7 @@ return [
 
         App\Modules\MagentoApi\src\EventServiceProvider::class,
         App\Modules\Api2cart\src\Providers\EventServiceProvider::class,
+        App\Modules\InventoryReservations\src\Providers\EventServiceProvider::class,
     ],
 
     /*
