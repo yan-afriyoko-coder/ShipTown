@@ -231,8 +231,9 @@ class Product extends BaseModel
     }
 
     /**
+     * @return $this
      */
-    public function recalculateQuantityTotals(): void
+    public function recalculateQuantityTotals(): Product
     {
         $this->quantity = Inventory::where(['product_id' => $this->id])
             ->where('quantity', '!=', 0)
@@ -240,7 +241,8 @@ class Product extends BaseModel
         $this->quantity_reserved = Inventory::where(['product_id' => $this->id])
             ->where('quantity_reserved', '!=', 0)
             ->sum('quantity_reserved');
-        $this->save();
+
+        return $this;
     }
 
     /**

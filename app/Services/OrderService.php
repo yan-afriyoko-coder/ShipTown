@@ -97,14 +97,6 @@ class OrderService
     }
 
     /**
-     * @return QueryBuilder
-     */
-    public static function getSpatieQueryBuilder(): QueryBuilder
-    {
-        return Order::getSpatieQueryBuilder();
-    }
-
-    /**
      * @param array $orderAttributes
      * @return Order
      * @throws Exception
