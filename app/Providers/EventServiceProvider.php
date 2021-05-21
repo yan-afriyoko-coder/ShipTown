@@ -33,19 +33,12 @@ class EventServiceProvider extends ServiceProvider
             \App\Modules\Sns\src\Listeners\ProductUpdatedEvent\PublishSnsNotificationListener::class,
         ],
 
-        // ProductPrice
-        \App\Events\ProductPrice\ProductPriceUpdatedEvent::class => [
-            \App\Modules\Api2cart\src\Listeners\ProductPriceUpdatedEvent\AddNotSyncedTagListener::class,
-        ],
-
         // ProductTag
         \App\Events\Product\ProductTagAttachedEvent::class => [
-            \App\Modules\Api2cart\src\Listeners\ProductTagAttachedEvent\SyncWhenOutOfStockAttachedListener::class,
 //            \App\Modules\MagentoApi\src\Listeners\ProductTagAttachedEvent\SyncWhenOutOfStockAttachedListener::class,
         ],
 
         \App\Events\Product\ProductTagDetachedEvent::class => [
-            \App\Modules\Api2cart\src\Listeners\ProductTagDetachedEvent\SyncWhenOutOfStockDetachedListener::class,
 //            \App\Modules\MagentoApi\src\Listeners\ProductTagDetachedEvent\SyncWhenOutOfStockDetachedListener::class,
         ],
 
@@ -73,7 +66,6 @@ class EventServiceProvider extends ServiceProvider
 
         \App\Events\Inventory\InventoryUpdatedEvent::class => [
             \App\Modules\InventoryReservations\src\Listeners\InventoryUpdatedListener::class,
-            \App\Modules\Api2cart\src\Listeners\InventoryUpdatedEvent\AddNotSyncedTagListener::class,
             \App\Modules\AutoTags\src\Listeners\InventoryUpdatedEvent\AttachOutOfStockTagListener::class,
             \App\Modules\AutoTags\src\Listeners\InventoryUpdatedEvent\DetachOutOfStockTagListener::class,
         ],
