@@ -4,7 +4,7 @@ namespace App\Modules\AutoTags\src\Listeners\InventoryUpdatedEvent;
 
 use App\Events\Inventory\InventoryUpdatedEvent;
 
-class AttachOutOfStockTagListener
+class OutOfStockTagListener
 {
     /**
      * Handle the event.
@@ -18,6 +18,8 @@ class AttachOutOfStockTagListener
 
         if ($product->isOutOfStock()) {
             $product->attachTag('Out Of Stock');
+        } else {
+            $product->detachTag('Out Of Stock');
         }
     }
 }

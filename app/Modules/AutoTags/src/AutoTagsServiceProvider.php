@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Providers;
+namespace App\Modules\AutoTags\src;
 
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
+use App\Events\Inventory\InventoryUpdatedEvent;
+use App\Modules\AutoTags\src\Listeners\InventoryUpdatedEvent\OutOfStockTagListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 /**
  * Class EventServiceProvider
  * @package App\Providers
  */
-class EventServiceProvider extends ServiceProvider
+class AutoTagsServiceProvider extends ServiceProvider
 {
     /**
      * The event listener mappings for the application.
@@ -18,17 +18,8 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        // App
-        Registered::class => [
-            SendEmailVerificationNotification::class,
-        ],
-
-        \App\Events\Order\OrderCreatedEvent::class => [
-            \App\Listeners\Order\OrderCreatedEventListener::class,
-        ],
-
-        \App\Events\Order\OrderUpdatedEvent::class => [
-            \App\Listeners\Order\OrderUpdatedEventListener::class,
+        InventoryUpdatedEvent::class => [
+            OutOfStockTagListener::class,
         ],
     ];
 
