@@ -31,14 +31,6 @@ class EventServiceProvider extends ServiceProvider
         OrderProductCreatedEvent::class => [
             OrderProductCreatedListener::class,
         ],
-
-        InventoryCreatedEvent::class => [
-            InventoryCreatedListener::class,
-        ],
-
-        InventoryUpdatedEvent::class => [
-            InventoryUpdatedListener::class,
-        ],
     ];
 
     /**

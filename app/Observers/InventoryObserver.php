@@ -16,6 +16,7 @@ class InventoryObserver
      */
     public function created(Inventory $inventory)
     {
+        $inventory->product->recalculateQuantityTotals()->save();
         InventoryCreatedEvent::dispatch($inventory);
     }
 
@@ -28,7 +29,7 @@ class InventoryObserver
     public function updated(Inventory $inventory)
     {
         if ($inventory->isAnyAttributeChanged(['quantity', 'quantity_reserved'])) {
-            $inventory->product->recalculateQuantityTotals();
+            $inventory->product->recalculateQuantityTotals()->save();
         }
 
         if ($inventory->isAnyAttributeChanged(['quantity', 'quantity_reserved', 'shelve_location'])) {
