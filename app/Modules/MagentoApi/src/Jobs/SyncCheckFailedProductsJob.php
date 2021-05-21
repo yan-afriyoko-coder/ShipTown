@@ -19,13 +19,18 @@ class SyncCheckFailedProductsJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
+     * @var int
+     */
+    private int $batchSize;
+
+    /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Product $product = null)
+    public function __construct()
     {
-        //
+        $this->batchSize = 200;
     }
 
 
@@ -41,7 +46,7 @@ class SyncCheckFailedProductsJob implements ShouldQueue
         }
 
         $productsCollection = Product::withAllTags(['CHECK FAILED'])
-            ->limit(50)
+            ->limit($this->batchSize)
             ->get()
             ->each(function (Product $product) {
                 SyncProductStockJob::dispatch($product);
