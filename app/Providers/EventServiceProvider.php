@@ -23,24 +23,12 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
 
-        // Product
-        \App\Events\Product\ProductCreatedEvent::class => [
-            \App\Modules\Sns\src\Listeners\ProductCreatedEvent\PublishSnsNotificationListener::class,
-        ],
-
-        \App\Events\Product\ProductUpdatedEvent::class => [
-            \App\Modules\Sns\src\Listeners\ProductUpdatedEvent\PublishSnsNotificationListener::class,
-        ],
-
-        // Order
         \App\Events\Order\OrderCreatedEvent::class => [
             \App\Listeners\Order\OrderCreatedEventListener::class,
-            \App\Modules\Sns\src\Listeners\OrderCreatedEvent\PublishSnsNotificationListener::class,
         ],
 
         \App\Events\Order\OrderUpdatedEvent::class => [
             \App\Listeners\Order\OrderUpdatedEventListener::class,
-            \App\Modules\Sns\src\Listeners\OrderUpdatedEvent\PublishSnsNotificationListener::class,
         ],
 
         \App\Events\Inventory\InventoryUpdatedEvent::class => [
