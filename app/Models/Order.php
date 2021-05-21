@@ -54,6 +54,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property-read OrderAddress|null $shippingAddress
  * @property-read OrderStats|null $stats
  * @property-read OrderStatus $order_status
+ * @property-read boolean isPaid
  * @method static Builder|Order active()
  * @method static Builder|Order addInventorySource($inventory_location_id)
  * @method static Builder|Order hasPacker($expected)
