@@ -23,7 +23,7 @@ class PacklistOrderController extends Controller
      */
     public function index(Request $request)
     {
-        $order = OrderService::getSpatieQueryBuilder()
+        $order = Order::getSpatieQueryBuilder()
             ->whereNull('packed_at')
             ->whereNull('packer_user_id')
             ->first();
