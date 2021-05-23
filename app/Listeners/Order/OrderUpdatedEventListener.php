@@ -4,7 +4,6 @@ namespace App\Listeners\Order;
 
 use App\Events\Order\OrderUpdatedEvent;
 use App\Models\OrderStatus;
-use App\Modules\AutoPilot\src\Jobs\CheckIfOrderOutOfStockJob;
 use App\Modules\AutoPilot\src\Jobs\SetStatusPaidIfPaidJob;
 
 /**
@@ -34,7 +33,6 @@ class OrderUpdatedEventListener
         $this->markedIfPayed($event);
         $this->changeStatusToReadyIfPacked($event);
         $this->updateOrderClosedAt($event);
-        CheckIfOrderOutOfStockJob::dispatch($event->getOrder());
     }
 
     /**
