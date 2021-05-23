@@ -23,10 +23,6 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
 
-        \App\Events\Order\OrderCreatedEvent::class => [
-            \App\Listeners\Order\OrderCreatedEventListener::class,
-        ],
-
         \App\Events\Order\OrderUpdatedEvent::class => [
             \App\Listeners\Order\OrderUpdatedEventListener::class,
         ],
