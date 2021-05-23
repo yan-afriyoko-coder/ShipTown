@@ -3,7 +3,9 @@
 namespace App\Modules\AutoTags\src;
 
 use App\Events\Inventory\InventoryUpdatedEvent;
-use App\Modules\AutoTags\src\Listeners\InventoryUpdatedEvent\OutOfStockTagListener;
+use App\Events\Order\OrderCreatedEvent;
+use App\Events\Order\OrderUpdatedEvent;
+use App\Modules\AutoTags\src\Listeners\InventoryUpdatedEvent\ToggleProductOutOfStockTagListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 /**
@@ -19,7 +21,15 @@ class AutoTagsServiceProvider extends ServiceProvider
      */
     protected $listen = [
         InventoryUpdatedEvent::class => [
-            OutOfStockTagListener::class,
+            ToggleProductOutOfStockTagListener::class,
+        ],
+
+        OrderCreatedEvent::class => [
+            Listeners\OrderCreatedEvent\ToggleOrderOutOfStockTagListener::class
+        ],
+
+        OrderUpdatedEvent::class => [
+            Listeners\OrderUpdatedEvent\ToggleOrderOutOfStockTagListener::class
         ],
     ];
 
