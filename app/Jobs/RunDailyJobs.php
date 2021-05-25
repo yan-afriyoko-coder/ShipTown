@@ -2,12 +2,12 @@
 
 namespace App\Jobs;
 
+use App\Events\DailyEvent;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 
 class RunDailyJobs implements ShouldQueue
@@ -35,6 +35,8 @@ class RunDailyJobs implements ShouldQueue
             dispatch(new $jobClass);
         });
 
-        Log::info('Hourly jobs dispatched');
+        DailyEvent::dispatch();
+
+        Log::info('Daily jobs dispatched');
     }
 }
