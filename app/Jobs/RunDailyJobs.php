@@ -7,6 +7,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 
 class RunDailyJobs implements ShouldQueue
 {
@@ -23,27 +25,16 @@ class RunDailyJobs implements ShouldQueue
     ];
 
     /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Execute the job.
      *
      * @return void
      */
     public function handle()
     {
-        $jobs = collect($this->jobClassesToRun)
-            ->map(function ($jobClass) {
-                return new $jobClass;
-            })->all();
+        collect($this->jobClassesToRun)->each(function ($jobClass) {
+            dispatch(new $jobClass);
+        });
 
-        $this->chain($jobs);
+        Log::info('Hourly jobs dispatched');
     }
 }
