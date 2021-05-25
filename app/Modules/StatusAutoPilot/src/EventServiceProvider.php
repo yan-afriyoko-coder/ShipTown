@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Providers;
+namespace App\Modules\StatusAutoPilot\src;
 
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
+use App\Events\Order\OrderUpdatedEvent;
+use App\Modules\StatusAutoPilot\src\Listeners\OrderUpdatedEvent\ProcessingToPaidListener;
+use App\Modules\StatusAutoPilot\src\Listeners\OrderUpdatedEvent\SetReadyWhenPacked;
+use App\Modules\StatusAutoPilot\src\Listeners\OrderUpdatedEvent\UpdateClosedAt;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 /**
@@ -18,9 +20,10 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        // App
-        Registered::class => [
-            SendEmailVerificationNotification::class,
+        OrderUpdatedEvent::class => [
+            UpdateClosedAt::class,
+            ProcessingToPaidListener::class,
+            SetReadyWhenPacked::class,
         ],
     ];
 

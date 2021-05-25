@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\AutoPilot\src\Jobs\Refill;
+namespace App\Modules\StatusAutoPilot\src\Jobs\Refill;
 
 use App\Models\Order;
 use App\Services\AutoPilot;
@@ -15,7 +15,7 @@ class RefillOldOrdersToPickingJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $maxBatchSize;
+    private int $maxBatchSize;
     private $currentOrdersInProcessCount;
     private $ordersRequiredCount;
 

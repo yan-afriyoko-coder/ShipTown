@@ -5,7 +5,7 @@ namespace Tests\Unit\Jobs\Maintenance;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
-use App\Modules\AutoPilot\src\Jobs\RefillStatusesJob;
+use App\Modules\StatusAutoPilot\src\Jobs\RefillStatusesJob;
 use App\Services\AutoPilot;
 use Tests\TestCase;
 
