@@ -23,7 +23,6 @@ class RunHourlyJobs implements ShouldQueue
      */
     private array $jobClassesToRun = [
         \App\Jobs\Orders\ClearPackerIdJob::class,
-        \App\Modules\StatusAutoPilot\src\Jobs\RefillStatusesJob::class,
     ];
 
     /**

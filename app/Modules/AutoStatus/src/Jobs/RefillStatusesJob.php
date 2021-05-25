@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\StatusAutoPilot\src\Jobs;
+namespace App\Modules\AutoStatus\src\Jobs;
 
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
@@ -12,16 +12,6 @@ use Illuminate\Queue\SerializesModels;
 class RefillStatusesJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
 
     /**
      * Execute the job.

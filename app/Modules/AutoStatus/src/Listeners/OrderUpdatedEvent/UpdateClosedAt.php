@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Modules\StatusAutoPilot\src\Listeners\OrderUpdatedEvent;
+namespace App\Modules\AutoStatus\src\Listeners\OrderUpdatedEvent;
 
 use App\Events\Order\OrderUpdatedEvent;
-use App\Models\OrderStatus;
 
 /**
  * Class UpdateClosedAt
