@@ -11,7 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Class RunHourlyJobs
+ * Class RunHourlyListener
  * @package App\Jobs
  */
 class RunHourlyJobs implements ShouldQueue

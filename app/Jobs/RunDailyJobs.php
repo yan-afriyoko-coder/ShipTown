@@ -19,9 +19,6 @@ class RunDailyJobs implements ShouldQueue
      */
     private array $jobClassesToRun = [
         \App\Modules\InventoryReservations\src\Jobs\RecalculateQuantityReservedJob::class,
-        \App\Modules\Api2cart\src\Jobs\ResyncLastDayJob::class,
-        \App\Modules\Api2cart\src\Jobs\ResyncSyncErrorsTaggedJob::class,
-        \App\Modules\Api2cart\src\Jobs\ResyncCheckFailedTaggedJob::class,
     ];
 
     /**
