@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class RunHourlyJobs
@@ -31,11 +32,10 @@ class RunHourlyJobs implements ShouldQueue
      */
     public function handle()
     {
-        $jobs = collect($this->jobClassesToRun)
-            ->map(function ($jobClass) {
-                return new $jobClass;
-            })->all();
+        collect($this->jobClassesToRun)->each(function ($jobClass) {
+            dispatch(new $jobClass);
+        });
 
-        $this->chain($jobs);
+        Log::info('Hourly jobs dispatched');
     }
 }
