@@ -47,6 +47,7 @@ class DpdIntegrationJobTest extends TestCase
             'address2' => 'Dublin Road',
             'phone' => '0861230000',
             'city' => 'Athlone',
+            'state_name' => 'Athlone',
             'postcode' => '1234XYZ',
             'country_code' => 'IRL',
         ]);

@@ -4,7 +4,7 @@ namespace App\Modules\AutoTags\src\Listeners\InventoryUpdatedEvent;
 
 use App\Events\Inventory\InventoryUpdatedEvent;
 
-class OutOfStockTagListener
+class ToggleProductOutOfStockTagListener
 {
     /**
      * Handle the event.

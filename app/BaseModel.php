@@ -17,6 +17,15 @@ abstract class BaseModel extends Model
     }
 
     /**
+     * @param string $attribute
+     * @return bool
+     */
+    public function isAttributeNotChanged(string $attribute): bool
+    {
+        return ! $this->isAttributeChanged($attribute);
+    }
+
+    /**
      * @param array $attributes
      * @return bool
      */

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\AutoPilot\src\Jobs;
+namespace App\Modules\StatusAutoPilot\src\Jobs\Refill;
 
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
@@ -9,23 +9,18 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class SetStatusPaidIfPaidJob implements ShouldQueue
+class RefillSingleLineOrdersJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * @var Order
-     */
-    private $order;
-
-    /**
      * Create a new job instance.
      *
-     * @param Order $order
+     * @return void
      */
-    public function __construct(Order $order)
+    public function __construct()
     {
-        $this->order = $order;
+        //
     }
 
     /**
@@ -35,9 +30,12 @@ class SetStatusPaidIfPaidJob implements ShouldQueue
      */
     public function handle()
     {
-        if ($this->order->isPaid) {
-            $this->order->update(['status_code' => 'paid']);
-            info('SetStatusPaidIfPaid: updated status to paid', ['order_number' => $this->order->order_number]);
-        }
+        Order::where('status_code', 'paid')
+            ->where('product_line_count', 1)
+            ->get()->each(function ($order) {
+                $order->update([
+                    'status_code' => 'single_line_orders'
+                ]);
+            });
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\AutoPilot\src\Jobs;
+namespace App\Modules\StatusAutoPilot\src\Jobs\Refill;
 
 use App\Models\Order;
 use App\Services\OrderService;
@@ -10,23 +10,18 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class CheckIfOrderOutOfStockJob implements ShouldQueue
+class RefillPackingWarehouseJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * @var Order
-     */
-    private $order;
-
-    /**
      * Create a new job instance.
      *
-     * @param Order $order
+     * @return void
      */
-    public function __construct(Order $order)
+    public function __construct()
     {
-        $this->order = $order;
+        //
     }
 
     /**
@@ -36,8 +31,14 @@ class CheckIfOrderOutOfStockJob implements ShouldQueue
      */
     public function handle()
     {
-        if (OrderService::canNotFulfill($this->order)) {
-            $this->order->attachTag('Out Of Stock');
-        }
+        Order::where('status_code', 'paid')
+            ->get()
+            ->each(function ($order) {
+                if (OrderService::canFulfill($order, 99)) {
+                    $order->update(['status_code' => 'packing_warehouse']);
+                }
+            });
+
+        info('Refilled packing_warehouse');
     }
 }

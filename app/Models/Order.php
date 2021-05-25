@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\BaseModel;
 use App\Traits\HasTagsTrait;
 use App\Traits\LogsActivityTrait;
 use App\User;
@@ -55,6 +56,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property-read OrderStats|null $stats
  * @property-read OrderStatus $order_status
  * @property-read boolean isPaid
+ * @property-read boolean isNotPaid
  * @method static Builder|Order active()
  * @method static Builder|Order addInventorySource($inventory_location_id)
  * @method static Builder|Order hasPacker($expected)
@@ -88,7 +90,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property-read int $age_in_days
  * @property OrderStatus orderStatus
  */
-class Order extends Model
+class Order extends BaseModel
 {
     use LogsActivityTrait, HasTagsTrait;
 
@@ -136,6 +138,10 @@ class Order extends Model
         'age_in_days',
     ];
 
+    protected $dates = [
+        'order_closed_at'
+    ];
+
     /**
      * @return $this
      */
@@ -163,6 +169,14 @@ class Order extends Model
             'name' => $this->status_code,
             'code'=> $this->status_code
         ]);
+    }
+
+    /**
+     * @return OrderStatus
+     */
+    public function getPreviousOrderStatus(): OrderStatus
+    {
+        return OrderStatus::whereCode($this->getOriginal('status_code'));
     }
 
     public function isOpen(): bool
@@ -279,6 +293,11 @@ class Order extends Model
     public function getIsPaidAttribute()
     {
         return ($this->total > 0) && ($this->total === $this->total_paid);
+    }
+
+    public function getIsNotPaidAttribute(): bool
+    {
+        return ! $this->isPaid;
     }
 
     /**

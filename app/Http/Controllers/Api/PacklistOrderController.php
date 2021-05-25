@@ -21,7 +21,7 @@ class PacklistOrderController extends Controller
      * @param Request $request
      * @return OrderResource
      */
-    public function index(Request $request)
+    public function index(Request $request): OrderResource
     {
         $order = Order::getSpatieQueryBuilder()
             ->whereNull('packed_at')
@@ -52,7 +52,7 @@ class PacklistOrderController extends Controller
      * @param Packlist $packlist
      * @return PacklistResource
      */
-    public function store(StoreRequest $request, Packlist $packlist)
+    public function store(StoreRequest $request, Packlist $packlist): PacklistResource
     {
         $attributes = array_merge(
             $request->validated(),
