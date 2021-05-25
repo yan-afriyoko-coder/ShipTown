@@ -9,8 +9,9 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
 /**
- * This event will be dispatched hourly
- * Hourly is not guaranteed, it can also be multiple times
+ * This event will be dispatched HOURLY
+ * HOURLY is not guaranteed,
+ * it can also be dispatched multiple times as
  * users can dispatch this manually if required
  *
  * @package App\Events
