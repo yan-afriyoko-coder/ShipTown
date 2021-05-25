@@ -15,25 +15,14 @@ class RunDailyJobs implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * @var array|string[]
-     */
-    private array $jobClassesToRun = [
-        \App\Modules\InventoryReservations\src\Jobs\RecalculateQuantityReservedJob::class,
-    ];
-
-    /**
      * Execute the job.
      *
      * @return void
      */
     public function handle()
     {
-        collect($this->jobClassesToRun)->each(function ($jobClass) {
-            dispatch(new $jobClass);
-        });
-
         DailyEvent::dispatch();
 
-        Log::info('Daily jobs dispatched');
+        Log::info('Daily event dispatched');
     }
 }

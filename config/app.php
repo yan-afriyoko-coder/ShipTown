@@ -197,7 +197,7 @@ return [
 
         App\Modules\MagentoApi\src\EventServiceProvider::class,
         App\Modules\Api2cart\src\EventServiceProvider::class,
-        App\Modules\InventoryReservations\src\Providers\EventServiceProvider::class,
+        App\Modules\InventoryReservations\src\EventServiceProvider::class,
         App\Modules\AmazonSns\src\AmazonSnsServiceProvider::class,
         App\Modules\AutoTags\src\AutoTagsServiceProvider::class,
         App\Modules\StatusAutoPilot\src\EventServiceProvider::class,
