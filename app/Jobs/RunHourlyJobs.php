@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\HourlyEvent;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -10,7 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Class RunHourlyJobs
+ * Class RunHourlyListener
  * @package App\Jobs
  */
 class RunHourlyJobs implements ShouldQueue
@@ -35,6 +36,8 @@ class RunHourlyJobs implements ShouldQueue
         collect($this->jobClassesToRun)->each(function ($jobClass) {
             dispatch(new $jobClass);
         });
+
+        HourlyEvent::dispatch();
 
         Log::info('Hourly jobs dispatched');
     }

@@ -1,15 +1,11 @@
 <?php
 
-namespace App\Modules\InventoryReservations\src\Providers;
+namespace App\Modules\InventoryReservations\src;
 
-use App\Events\Inventory\InventoryCreatedEvent;
-use App\Events\Inventory\InventoryUpdatedEvent;
+use App\Events\DailyEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Events\OrderProduct\OrderProductCreatedEvent;
-use App\Modules\InventoryReservations\src\Listeners\InventoryCreatedListener;
-use App\Modules\InventoryReservations\src\Listeners\InventoryUpdatedListener;
-use App\Modules\InventoryReservations\src\Listeners\OrderProductCreatedListener;
-use App\Modules\InventoryReservations\src\Listeners\OrderUpdatedListener;
+use App\Modules\InventoryReservations\src\Listeners\DailyEvent\RunRecalculateQuantityReservedJobListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 /**
@@ -24,12 +20,16 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
+        DailyEvent::class => [
+            RunRecalculateQuantityReservedJobListener::class
+        ],
+
         OrderUpdatedEvent::class => [
-            OrderUpdatedListener::class,
+            Listeners\OrderUpdatedListener::class,
         ],
 
         OrderProductCreatedEvent::class => [
-            OrderProductCreatedListener::class,
+            Listeners\OrderProductCreatedListener::class,
         ],
     ];
 
