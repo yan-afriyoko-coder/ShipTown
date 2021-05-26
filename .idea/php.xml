@@ -122,7 +122,6 @@
       <path value="$PROJECT_DIR$/vendor/laravel/dusk" />
       <path value="$PROJECT_DIR$/vendor/laravel/tinker" />
       <path value="$PROJECT_DIR$/vendor/laravel/framework" />
-      <path value="$PROJECT_DIR$/vendor/dnoegel/php-xdg-base-dir" />
       <path value="$PROJECT_DIR$/vendor/egulias/email-validator" />
       <path value="$PROJECT_DIR$/vendor/vlucas/phpdotenv" />
       <path value="$PROJECT_DIR$/vendor/arrilot/laravel-widgets" />
@@ -208,7 +207,7 @@
       <path value="$PROJECT_DIR$/vendor/doctrine/deprecations" />
       <path value="$PROJECT_DIR$/vendor/bpocallaghan/generators" />
       <path value="$PROJECT_DIR$/vendor/grayloon/laravel-magento-api" />
-      <path value="$PROJECT_DIR$/vendor/nwidart/laravel-modules" />
+      <path value="$PROJECT_DIR$/vendor/romanzipp/laravel-queue-monitor" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4" />
