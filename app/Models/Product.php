@@ -27,12 +27,13 @@ use Spatie\Tags\Tag;
  * @property int $id
  * @property string $sku
  * @property string $name
- * @property string $price
- * @property string $sale_price
+ * @property float $price
+ * @property float $sale_price
  * @property Carbon $sale_price_start_date
  * @property Carbon $sale_price_end_date
- * @property string $quantity
- * @property string $quantity_reserved
+ * @property float $quantity
+ * @property float $quantity_reserved
+ * @property float $quantity_available
  * @property Collection|Tag[] $tags
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
@@ -41,7 +42,6 @@ use Spatie\Tags\Tag;
  * @property-read int|null $activities_count
  * @property-read Collection|ProductAlias[] $aliases
  * @property-read int|null $aliases_count
- * @property-read mixed $quantity_available
  * @property-read Collection|Inventory[] $inventory
  * @property-read int|null $inventory_count
  * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications
@@ -83,7 +83,8 @@ class Product extends BaseModel
 
     protected static $logAttributes = [
         'quantity',
-        'quantity_reserved'
+        'quantity_reserved',
+        'quantity_available',
     ];
 
     protected $fillable = [
@@ -97,10 +98,6 @@ class Product extends BaseModel
         "quantity"
     ];
 
-    protected $appends = [
-        "quantity_available"
-    ];
-
     // we use attributes to set default values
     // we wont use database default values
     // as this is then not populated
@@ -112,7 +109,8 @@ class Product extends BaseModel
         "sale_price_start_date" => '2001-01-01 00:00:00',
         "sale_price_end_date" => '2001-01-01 00:00:00',
         "quantity" => 0,
-        'quantity_reserved' => 0
+        'quantity_reserved' => 0,
+        'quantity_available' => 0,
     ];
 
     protected $dates = [
@@ -121,9 +119,21 @@ class Product extends BaseModel
     ];
 
     protected $casts = [
-        "quantity" => 0,
-        'quantity_reserved' => 0
+        "quantity" => 'float',
+        'quantity_reserved' => 'float',
+        'quantity_available' => 'float',
     ];
+
+    public function save(array $options = [])
+    {
+        $quantity_available = $this->quantity - $this->quantity_reserved;
+
+        if ($this->quantity_available != $quantity_available) {
+            $this->quantity_available = $quantity_available;
+        }
+
+        return parent::save($options);
+    }
 
     /**
      * @return QueryBuilder
@@ -156,6 +166,17 @@ class Product extends BaseModel
             ]);
     }
 
+    public function setQuantityReservedAttribute($value)
+    {
+        $this->attributes['quantity_reserved'] = $value;
+        $this->quantity_available = $this->quantity - $this->quantity_reserved;
+    }
+
+    public function setQuantityAttribute($value)
+    {
+        $this->attributes['quantity'] = $value;
+        $this->quantity_available = $this->quantity - $this->quantity_reserved;
+    }
     /**
      * @param float $quantity
      * @return $this
@@ -217,17 +238,6 @@ class Product extends BaseModel
         return $query->leftJoinSub($source_inventory, 'inventory_source', function ($join) {
             $join->on('products.id', '=', 'inventory_source_product_id');
         });
-    }
-
-    public function getQuantityAvailableAttribute()
-    {
-        $quantity_available = $this->quantity - $this->quantity_reserved;
-
-        if ($quantity_available<0) {
-            return 0;
-        }
-
-        return $quantity_available;
     }
 
     /**

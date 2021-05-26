@@ -19,25 +19,16 @@ class RunHourlyJobs implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * @var array|string[]
-     */
-    private array $jobClassesToRun = [
-        \App\Jobs\Orders\ClearPackerIdJob::class,
-    ];
-
-    /**
      * Execute the job.
      *
      * @return void
      */
     public function handle()
     {
-        collect($this->jobClassesToRun)->each(function ($jobClass) {
-            dispatch(new $jobClass);
-        });
+        Log::debug('Hourly event - dispatching');
 
         HourlyEvent::dispatch();
 
-        Log::info('Hourly jobs dispatched');
+        Log::info('Hourly event - dispatched successfully');
     }
 }

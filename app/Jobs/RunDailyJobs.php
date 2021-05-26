@@ -21,8 +21,10 @@ class RunDailyJobs implements ShouldQueue
      */
     public function handle()
     {
+        Log::debug('Daily event - dispatching');
+
         DailyEvent::dispatch();
 
-        Log::info('Daily event dispatched');
+        Log::info('Daily event - dispatched successfully');
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Jobs\Maintenance;
 
-use App\Jobs\Orders\ClearPackerIdJob;
 use App\Models\Order;
+use App\Modules\AutoPilot\src\Jobs\ClearPackerIdJob;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Bus;

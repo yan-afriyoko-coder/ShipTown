@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Orders;
+namespace App\Modules\AutoPilot\src\Jobs;
 
 use App\Models\Order;
 use Carbon\Carbon;
