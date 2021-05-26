@@ -36,7 +36,8 @@
         "spatie/laravel-query-builder": "^3.3",
         "spatie/laravel-ray": "^1.17",
         "spatie/laravel-tags": "^2.0",
-        "thomasjohnkane/snooze": "^1.0"
+        "thomasjohnkane/snooze": "^1.0",
+        "romanzipp/laravel-queue-monitor": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",

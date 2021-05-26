@@ -9,20 +9,12 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class FixQuantityAvailableJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
 
     /**
      * Execute the job.
@@ -31,21 +23,21 @@ class FixQuantityAvailableJob implements ShouldQueue
      */
     public function handle()
     {
+        Log::debug('Starting FixQuantityAvailableJob');
+
         $invalidProducts = Product::query()
             ->where(
                 DB::raw(DB::getTablePrefix() .'products.quantity - '. DB::getTablePrefix() .'products.quantity_reserved'),
                 '!=',
                 DB::raw(DB::getTablePrefix() .'products.quantity_available')
             )
-            ->get();
+            ->get()
+            ->each(function (Product $product) {
+                // calling save method will recalculate
+                $product->quantity_available = $product->quantity - $product->quantity_reserved;
+                $product->save();
+            });
 
-        $invalidProducts->each(function (Product $product) {
-            // calling save method will enforce quantity_available recalculation
-            $product->save();
-        });
-
-        info('FixQuantityAvailableJob finished successfully', [
-            'records_corrected' => $invalidProducts->count()
-        ]);
+        info('Finished FixQuantityAvailableJob', ['records_corrected' => $invalidProducts->count()]);
     }
 }

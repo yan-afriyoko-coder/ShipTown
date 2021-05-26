@@ -62,4 +62,8 @@ Route::middleware('auth')->group(function () {
             \App\Modules\MagentoApi\src\Jobs\SyncCheckFailedProductsJob::dispatch();
         });
     });
+
+    Route::prefix('jobs')->group(function () {
+        Route::queueMonitor();
+    });
 });
