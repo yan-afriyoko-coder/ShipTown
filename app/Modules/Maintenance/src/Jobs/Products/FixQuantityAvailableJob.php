@@ -34,6 +34,7 @@ class FixQuantityAvailableJob implements ShouldQueue
             ->get()
             ->each(function (Product $product) {
                 // calling save method will recalculate
+                $product->quantity_available = $product->quantity - $product->quantity_reserved;
                 $product->save();
             });
 
