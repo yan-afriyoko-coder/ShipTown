@@ -166,6 +166,17 @@ class Product extends BaseModel
             ]);
     }
 
+    public function setQuantityReservedAttribute($value)
+    {
+        $this->attributes['quantity_reserved'] = $value;
+        $this->quantity_available = $this->quantity - $this->quantity_reserved;
+    }
+
+    public function setQuantityAttribute($value)
+    {
+        $this->attributes['quantity'] = $value;
+        $this->quantity_available = $this->quantity - $this->quantity_reserved;
+    }
     /**
      * @param float $quantity
      * @return $this
