@@ -199,6 +199,7 @@ return [
         App\Modules\Api2cart\src\EventServiceProvider::class,
         App\Modules\InventoryReservations\src\EventServiceProvider::class,
         App\Modules\AmazonSns\src\AmazonSnsServiceProvider::class,
+        App\Modules\AutoPilot\src\EventServiceProvider::class,
         App\Modules\AutoTags\src\AutoTagsServiceProvider::class,
         App\Modules\AutoStatus\src\EventServiceProvider::class,
     ],
