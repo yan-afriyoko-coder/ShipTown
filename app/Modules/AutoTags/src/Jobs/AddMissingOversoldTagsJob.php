@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Maintenance\src\Jobs\Tags;
+namespace App\Modules\AutoTags\src\Jobs;
 
 use App\Models\Product;
 use Illuminate\Bus\Queueable;
@@ -11,7 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 
-class RemoveWrongOutOfStockTagsJob implements ShouldQueue
+class AddMissingOversoldTagsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
 
@@ -24,11 +24,11 @@ class RemoveWrongOutOfStockTagsJob implements ShouldQueue
     {
         Log::debug('Starting RemoveWrongOutOfStockTagsJob');
 
-        $invalidProducts = Product::withAllTags(['Out Of Stock'])
-            ->where('quantity_available', '>', 0)
+        $invalidProducts = Product::withoutAllTags(['oversold'])
+            ->where('quantity_available', '<', 0)
             ->get()
             ->each(function (Product $product) {
-                $product->detachTag('Out Of Stock');
+                $product->attachTag('oversold');
             });
 
         info('Finished RemoveWrongOutOfStockTagsJob', ['records_corrected' => $invalidProducts->count()]);
