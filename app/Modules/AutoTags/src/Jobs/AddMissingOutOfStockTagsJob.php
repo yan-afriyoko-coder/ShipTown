@@ -31,6 +31,6 @@ class AddMissingOutOfStockTagsJob implements ShouldQueue
                 $product->attachTag('Out Of Stock');
             });
 
-        info('Finished RemoveWrongOutOfStockTagsJob', ['records_corrected' => $invalidProducts->count()]);
+        Log::info('Finished RemoveWrongOutOfStockTagsJob', ['records_corrected' => $invalidProducts->count()]);
     }
 }
