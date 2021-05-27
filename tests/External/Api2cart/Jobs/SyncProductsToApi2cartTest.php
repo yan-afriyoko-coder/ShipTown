@@ -4,7 +4,7 @@ namespace Tests\External\Api2cart\Jobs;
 
 use App\Models\Inventory;
 use App\Models\Product;
-use App\Modules\Api2cart\src\Jobs\SyncProductsToApi2Cart;
+use App\Modules\Api2cart\src\Jobs\SyncProductsJob;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Tags\Tag;
@@ -44,7 +44,7 @@ class SyncProductsToApi2cartTest extends TestCase
 
         $this->assertTrue(Product::withAllTags(['Not Synced'])->exists());
 
-        SyncProductsToApi2Cart::dispatchNow();
+        SyncProductsJob::dispatchNow();
 
 //        $this->assertFalse(Product::withAllTags(['Not Synced'])->exists(), 'Sync tag still attached');
     }

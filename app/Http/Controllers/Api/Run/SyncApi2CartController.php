@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Run;
 
 use App\Http\Controllers\Controller;
-use App\Modules\Api2cart\src\Jobs\SyncProductsToApi2Cart;
+use App\Modules\Api2cart\src\Jobs\SyncProductsJob;
 use Illuminate\Http\Request;
 
 /**
@@ -17,7 +17,7 @@ class SyncApi2CartController extends Controller
      */
     public function index(Request $request)
     {
-        SyncProductsToApi2Cart::dispatch();
+        SyncProductsJob::dispatch();
 
         $this->respondOK200('Job dispatched');
     }
