@@ -10,27 +10,13 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 use function Clue\StreamFilter\fun;
 
-class SyncProductsToApi2Cart implements ShouldQueue
+class SyncProductsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
-
-    /**
-     * @var int
-     */
-    private int $chunkSize;
-
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->chunkSize = 50;
-    }
 
     /**
      * Execute the job.
@@ -44,7 +30,7 @@ class SyncProductsToApi2Cart implements ShouldQueue
 
         $totalCount = $query->count();
 
-        $chunkSize = $this->chunkSize;
+        $chunkSize = 10;
 
         // we want to sync products with smallest quantities first to avoid oversells
         $query->orderBy('quantity')
@@ -53,10 +39,10 @@ class SyncProductsToApi2Cart implements ShouldQueue
                 $this->queueProgressChunk($totalCount, $chunkSize);
 
                 $products->each(function (Product $product) {
-                    SyncProductJob::dispatch($product);
+                    SyncProductJob::dispatchNow($product);
                 });
             });
 
-        info('Dispatched Api2cart product sync jobs');
+        Log::info('Synced products with Api2cart product sync jobs');
     }
 }
