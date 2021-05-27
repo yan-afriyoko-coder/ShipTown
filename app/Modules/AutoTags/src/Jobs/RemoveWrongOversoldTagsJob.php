@@ -22,7 +22,7 @@ class RemoveWrongOversoldTagsJob implements ShouldQueue
      */
     public function handle()
     {
-        Log::debug('Starting RemoveWrongOutOfStockTagsJob');
+        Log::debug('Starting RemoveWrongOversoldTagsJob');
 
         $invalidProducts = Product::withAllTags(['oversold'])
             ->where('quantity_available', '>=', 0)
@@ -31,6 +31,6 @@ class RemoveWrongOversoldTagsJob implements ShouldQueue
                 $product->detachTag('oversold');
             });
 
-        info('Finished RemoveWrongOutOfStockTagsJob', ['records_corrected' => $invalidProducts->count()]);
+        info('Finished RemoveWrongOversoldTagsJob', ['records_corrected' => $invalidProducts->count()]);
     }
 }

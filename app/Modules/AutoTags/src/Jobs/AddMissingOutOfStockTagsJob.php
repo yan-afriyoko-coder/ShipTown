@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 
@@ -24,13 +25,20 @@ class AddMissingOutOfStockTagsJob implements ShouldQueue
     {
         Log::debug('Starting RemoveWrongOutOfStockTagsJob');
 
-        $invalidProducts = Product::withoutAllTags(['Out Of Stock'])
-            ->where('quantity_available', '<=', 0)
-            ->get()
-            ->each(function (Product $product) {
+        $query = Product::where('quantity_available', '<=', 0)
+            ->withoutAllTags(['Out Of Stock']);
+
+        $totalCount = $query->count();
+        $chunkSize = 50;
+
+        $query->chunk($chunkSize, function (Collection $productsCollection) use ($totalCount, $chunkSize) {
+            $this->queueProgressChunk($totalCount, $chunkSize);
+
+            $productsCollection->each(function (Product $product) {
                 $product->attachTag('Out Of Stock');
             });
+        });
 
-        info('Finished RemoveWrongOutOfStockTagsJob', ['records_corrected' => $invalidProducts->count()]);
+        Log::info('Finished RemoveWrongOutOfStockTagsJob', ['records_corrected' => $query->count()]);
     }
 }
