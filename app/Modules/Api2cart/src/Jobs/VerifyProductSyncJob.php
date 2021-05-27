@@ -56,13 +56,14 @@ class VerifyProductSyncJob implements ShouldQueue
     public function handle()
     {
         $product = Product::findBySKU($this->product_data['sku']);
-        $product->detachTag('CHECK FAILED');
 
         $store_id = Arr::has($this->product_data, "store_id") ? $this->product_data["store_id"] : null;
 
         $product_now = Products::getProductInfo($this->api2cartConnection, $this->product_data["sku"]);
 
         if (empty($product_now)) {
+            $product->detachTag('CHECK FAILED')
+                ->log('eCommerce: Sync check failed, cannot find product');
             Log::warning("Update Check FAILED - Could not find product", ["sku" => $this->product_data["sku"]]);
             return;
         }
@@ -75,6 +76,7 @@ class VerifyProductSyncJob implements ShouldQueue
         ];
 
         if (empty($this->results["differences"])) {
+            $product->detachTag('CHECK FAILED');
             info('Update Check OK', $this->results);
         } else {
             $product->attachTag('CHECK FAILED')

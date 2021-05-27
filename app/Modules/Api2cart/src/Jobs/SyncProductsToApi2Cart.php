@@ -9,10 +9,13 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
+use romanzipp\QueueMonitor\Traits\IsMonitored;
+use function Clue\StreamFilter\fun;
 
 class SyncProductsToApi2Cart implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
 
     /**
      * @var int
@@ -26,7 +29,7 @@ class SyncProductsToApi2Cart implements ShouldQueue
      */
     public function __construct()
     {
-        $this->chunkSize = 200;
+        $this->chunkSize = 50;
     }
 
     /**
@@ -37,17 +40,23 @@ class SyncProductsToApi2Cart implements ShouldQueue
      */
     public function handle()
     {
-        $products = Product::withAllTags(['Available Online', 'Not Synced'])
-            // we want to sync products with smallest quantities first to avoid oversells
-            ->orderBy('quantity')
+        $query = Product::withAllTags(['Available Online', 'Not Synced']);
+
+        $totalCount = $query->count();
+
+        $chunkSize = $this->chunkSize;
+
+        // we want to sync products with smallest quantities first to avoid oversells
+        $query->orderBy('quantity')
             ->orderBy('updated_at')
-            ->limit($this->chunkSize)
-            ->get();
+            ->chunk($chunkSize, function (Collection $products) use ($totalCount, $chunkSize) {
+                $this->queueProgressChunk($totalCount, $chunkSize);
 
-        $products->each(function ($product) {
-            SyncProductJob::dispatch($product);
-        });
+                $products->each(function (Product $product) {
+                    SyncProductJob::dispatch($product);
+                });
+            });
 
-        info('Dispatched Api2cart product sync jobs', ['count' => $products->count()]);
+        info('Dispatched Api2cart product sync jobs');
     }
 }
