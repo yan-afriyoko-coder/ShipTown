@@ -11,6 +11,6 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         DailyEvent::class => [
             Listeners\DailyEvent\RunDailyMaintenanceJobsListener::class,
-        ]
+        ],
     ];
 }

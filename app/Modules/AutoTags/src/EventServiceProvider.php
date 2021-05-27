@@ -2,6 +2,7 @@
 
 namespace App\Modules\AutoTags\src;
 
+use App\Events\DailyEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
@@ -19,6 +20,10 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
+        DailyEvent::class => [
+            Listeners\DailyEvent\RunDailyMaintenanceJobsListener::class,
+        ],
+
         InventoryUpdatedEvent::class => [
             Listeners\InventoryUpdatedEvent\ToggleProductOutOfStockTagListener::class,
             Listeners\InventoryUpdatedEvent\ToggleProductOversoldTagListener::class,
