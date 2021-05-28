@@ -2,6 +2,10 @@
 
 namespace App\Modules\Api2cart\src\Models;
 
+use App\Models\Product;
+use App\Modules\Api2cart\src\Exceptions\RequestException;
+use App\Modules\Api2cart\src\Products;
+use App\Modules\Api2cart\src\RequestResponse;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -12,6 +16,8 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property int $product_id
+ * @property Product $product
+ * @property string|null $api2cart_product_type
  * @property string|null $api2cart_product_id
  * @property Carbon $last_fetched_at
  * @property array $last_fetched_data
@@ -108,5 +114,50 @@ class Api2cartProductLink extends Model
     public function api2cartConnection(): BelongsTo
     {
         return $this->belongsTo(Api2cartConnection::class, 'api2cart_connection_id');
+    }
+
+
+    /**
+     * @return BelongsTo
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function updateTypeAndId(): Api2cartProductLink
+    {
+        $response = Products::getProductTypeAndId($this->api2cartConnection->bridge_api_key, $this->product->sku);
+
+        $this->api2cart_product_type = $response['type'];
+        $this->api2cart_product_id = $response['id'];
+
+        return $this;
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function updateOrCreate($product_data): RequestResponse
+    {
+        $store_key = $this->api2cartConnection->bridge_api_key;
+
+        if ($this->api2cart_product_type === null) {
+            $this->updateTypeAndId();
+        }
+
+        switch ($this->api2cart_product_type) {
+            case "product":
+                $properties = array_merge($product_data, ['id' => $this->api2cart_product_id]);
+                return Products::updateSimpleProduct($store_key, $properties);
+            case "variant":
+                $properties = array_merge($product_data, ['id' => $this->api2cart_product_id]);
+                return Products::updateVariant($store_key, $properties);
+            default:
+                return Products::createSimpleProduct($store_key, $product_data);
+        }
     }
 }
