@@ -423,7 +423,7 @@ class Products extends Entity
      * @return array
      * @throws RequestException
      */
-    private static function getProductTypeAndId(string $store_key, string $sku): array
+    public static function getProductTypeAndId(string $store_key, string $sku): array
     {
         $cached_product = Cache::get(self::getSkuCacheKey($store_key, $sku));
 

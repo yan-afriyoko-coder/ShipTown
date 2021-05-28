@@ -62,6 +62,6 @@ class SyncCheckFailedProductsJob implements ShouldQueue
                 });
             });
 
-        Log::info('Dispatched Sync MagentoApi Jobs', ['products_count' => $productsCollection->count()]);
+        Log::info('Dispatched Sync MagentoApi Jobs', ['count' => $totalCount]);
     }
 }

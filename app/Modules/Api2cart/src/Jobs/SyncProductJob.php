@@ -6,6 +6,7 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductPrice;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
+use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use App\Modules\Api2cart\src\Products;
 use Carbon\Carbon;
 use Exception;
@@ -31,6 +32,8 @@ class SyncProductJob implements ShouldQueue
      */
     private $connections;
 
+    private Api2cartProductLink $api2cartProduct;
+
     /**
      * Create a new job instance.
      *
@@ -54,9 +57,15 @@ class SyncProductJob implements ShouldQueue
 
         $this->connections->each(function ($connection) use ($product) {
             try {
+                $this->api2cartProduct = new Api2cartProductLink();
+                $this->api2cartProduct->product()->associate($product);
+                $this->api2cartProduct->api2cartConnection()->associate($connection);
+                $this->api2cartProduct->updateTypeAndId()
+                    ->save();
+
                 $product_data = $this->getProductData($product, $connection);
 
-                $requestResponse = Products::updateOrCreate($connection, $product_data);
+                $requestResponse = $this->api2cartProduct->updateOrCreate($product_data);
 
                 $product->detachTag('Not Synced');
 
