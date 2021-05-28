@@ -4,6 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class BaseModel
+ * @package App
+ *
+ * @method static firstOrCreate(array $array, array $array)
+ */
 abstract class BaseModel extends Model
 {
 
