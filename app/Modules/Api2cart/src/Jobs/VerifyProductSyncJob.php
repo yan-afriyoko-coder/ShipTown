@@ -4,6 +4,7 @@ namespace App\Modules\Api2cart\src\Jobs;
 
 use App\Models\Product;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
+use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use App\Modules\Api2cart\src\Products;
 use Carbon\Carbon;
 use Exception;
@@ -59,7 +60,21 @@ class VerifyProductSyncJob implements ShouldQueue
 
         $store_id = Arr::has($this->product_data, "store_id") ? $this->product_data["store_id"] : null;
 
-        $product_now = Products::getProductInfo($this->api2cartConnection, $this->product_data["sku"]);
+        $api2cartProduct = Api2cartProductLink::firstOrCreate([
+            'product_id' => $product->getKey(),
+            'api2cart_connection_id' => $this->api2cartConnection->getKey(),
+        ], []);
+
+        switch ($api2cartProduct->api2cart_product_type) {
+            case "product":
+                $product_now = Products::getSimpleProductInfo($this->api2cartConnection, $product->sku);
+                break;
+            case "variant":
+                $product_now = Products::getVariantInfo($this->api2cartConnection, $product->sku);
+                break;
+            default:
+                $product_now = null;
+        }
 
         if (empty($product_now)) {
             $product->detachTag('CHECK FAILED')
