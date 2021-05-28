@@ -2,6 +2,7 @@
 
 namespace App\Modules\Api2cart\src\Models;
 
+use App\BaseModel;
 use App\Models\Product;
 use App\Modules\Api2cart\src\Exceptions\RequestException;
 use App\Modules\Api2cart\src\Products;
@@ -29,7 +30,7 @@ use Illuminate\Support\Carbon;
  * @property Api2cartConnection $api2cartConnection
  *
  */
-class Api2cartProductLink extends Model
+class Api2cartProductLink extends BaseModel
 {
     /**
      * @var string[]
@@ -146,7 +147,7 @@ class Api2cartProductLink extends Model
         $store_key = $this->api2cartConnection->bridge_api_key;
 
         if ($this->api2cart_product_type === null) {
-            $this->updateTypeAndId();
+            $this->updateTypeAndId()->save();
         }
 
         switch ($this->api2cart_product_type) {

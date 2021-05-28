@@ -55,13 +55,12 @@ class SyncProductJob implements ShouldQueue
     {
         $product = $this->product;
 
-        $this->connections->each(function ($connection) use ($product) {
+        $this->connections->each(function (Api2cartConnection $connection) use ($product) {
             try {
-                $this->api2cartProduct = new Api2cartProductLink();
-                $this->api2cartProduct->product()->associate($product);
-                $this->api2cartProduct->api2cartConnection()->associate($connection);
-                $this->api2cartProduct->updateTypeAndId()
-                    ->save();
+                $this->api2cartProduct = Api2cartProductLink::firstOrCreate([
+                    'product_id' => $product->getKey(),
+                    'api2cart_connection_id' => $connection->getKey(),
+                ], []);
 
                 $product_data = $this->getProductData($product, $connection);
 
