@@ -14,16 +14,6 @@ class RefillSingleLineOrdersJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Execute the job.
      *
      * @return void
@@ -32,7 +22,7 @@ class RefillSingleLineOrdersJob implements ShouldQueue
     {
         Order::where('status_code', 'paid')
             ->where('product_line_count', 1)
-            ->get()->each(function ($order) {
+            ->get()->each(function (Order $order) {
                 $order->update([
                     'status_code' => 'single_line_orders'
                 ]);
