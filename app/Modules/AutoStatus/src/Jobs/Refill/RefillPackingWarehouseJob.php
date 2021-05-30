@@ -15,16 +15,6 @@ class RefillPackingWarehouseJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Execute the job.
      *
      * @return void
@@ -33,7 +23,7 @@ class RefillPackingWarehouseJob implements ShouldQueue
     {
         Order::where('status_code', 'paid')
             ->get()
-            ->each(function ($order) {
+            ->each(function (Order $order) {
                 if (OrderService::canFulfill($order, 99)) {
                     $order->update(['status_code' => 'packing_warehouse']);
                 }
