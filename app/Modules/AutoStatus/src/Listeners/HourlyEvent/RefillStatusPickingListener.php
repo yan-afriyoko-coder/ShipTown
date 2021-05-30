@@ -3,13 +3,13 @@
 namespace App\Modules\AutoStatus\src\Listeners\HourlyEvent;
 
 use App\Events\HourlyEvent;
-use App\Modules\AutoStatus\src\Jobs\RefillStatusesJob;
+use App\Modules\AutoStatus\src\Jobs\RefillStatusPicking;
 
 /**
  * Class UpdateClosedAt
  * @package App\Listeners\Order
  */
-class RefillStatusesListener
+class RefillStatusPickingListener
 {
     /**
      * Handle the event.
@@ -19,6 +19,6 @@ class RefillStatusesListener
      */
     public function handle(HourlyEvent $event)
     {
-        RefillStatusesJob::dispatch();
+        RefillStatusPicking::dispatch();
     }
 }

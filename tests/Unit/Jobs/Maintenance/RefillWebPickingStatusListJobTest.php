@@ -5,7 +5,7 @@ namespace Tests\Unit\Jobs\Maintenance;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
-use App\Modules\AutoStatus\src\Jobs\RefillStatusesJob;
+use App\Modules\AutoStatus\src\Jobs\RefillStatusPicking;
 use App\Services\AutoPilot;
 use Tests\TestCase;
 
@@ -28,7 +28,7 @@ class RefillWebPickingStatusListJobTest extends TestCase
             ->with('orderProducts', 2)
             ->create(['status_code' => 'paid']);
 
-        RefillStatusesJob::dispatchNow();
+        RefillStatusPicking::dispatchNow();
 
         $this->assertEquals(
             AutoPilot::getBatchSize(),
