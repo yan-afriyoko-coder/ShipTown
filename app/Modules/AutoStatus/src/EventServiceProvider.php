@@ -14,6 +14,8 @@ class EventServiceProvider extends ServiceProvider
 {
     protected $listen = [
         HourlyEvent::class => [
+            Listeners\HourlyEvent\RefillStatusPackingWarehouseListener::class,
+            Listeners\HourlyEvent\RefillStatusSingleLineOrdersListener::class,
             Listeners\HourlyEvent\RefillStatusesListener::class,
         ],
 

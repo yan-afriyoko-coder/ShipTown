@@ -20,8 +20,6 @@ class RefillStatusesJob implements ShouldQueue
      */
     public function handle()
     {
-        Refill\RefillPackingWarehouseJob::dispatchNow();
-        Refill\RefillSingleLineOrdersJob::dispatchNow();
 
         if (Order::where(['status_code' => 'picking'])->count() > 0) {
             return;
