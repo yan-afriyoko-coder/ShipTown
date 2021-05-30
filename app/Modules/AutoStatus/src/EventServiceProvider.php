@@ -16,7 +16,7 @@ class EventServiceProvider extends ServiceProvider
         HourlyEvent::class => [
             Listeners\HourlyEvent\RefillStatusPackingWarehouseListener::class,
             Listeners\HourlyEvent\RefillStatusSingleLineOrdersListener::class,
-            Listeners\HourlyEvent\Re::class,
+            Listeners\HourlyEvent\RefillStatusPickingListener::class,
         ],
 
         OrderUpdatedEvent::class => [
