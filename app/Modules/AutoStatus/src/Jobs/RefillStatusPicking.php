@@ -9,7 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class RefillStatusesJob implements ShouldQueue
+class RefillStatusPicking implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -29,6 +29,6 @@ class RefillStatusesJob implements ShouldQueue
         Refill\RefillPickingMissingStockJob::dispatchNow();
         Refill\RefillPickingByOldestJob::dispatchNow();
 
-        info('RefillStatusesJob finished');
+        info('RefillStatusPicking finished');
     }
 }
