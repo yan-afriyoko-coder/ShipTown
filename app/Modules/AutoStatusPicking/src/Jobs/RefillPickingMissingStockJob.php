@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\AutoStatus\src\Jobs\Refill;
+namespace App\Modules\AutoStatusPicking\src\Jobs;
 
 use App\Models\Order;
 use App\Services\AutoPilot;
