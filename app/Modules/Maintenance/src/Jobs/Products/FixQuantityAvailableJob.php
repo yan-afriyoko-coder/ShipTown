@@ -23,8 +23,6 @@ class FixQuantityAvailableJob implements ShouldQueue
      */
     public function handle()
     {
-        Log::debug('Starting FixQuantityAvailableJob');
-
         $invalidProducts = Product::query()
             ->where(
                 DB::raw(DB::getTablePrefix() .'products.quantity - '. DB::getTablePrefix() .'products.quantity_reserved'),
@@ -33,6 +31,10 @@ class FixQuantityAvailableJob implements ShouldQueue
             )
             ->get()
             ->each(function (Product $product) {
+                Log::warning('Incorrect quantity_available detected', [
+                    'sku' => $product->sku,
+                ]);
+
                 // calling save method will recalculate
                 $product->quantity_available = $product->quantity - $product->quantity_reserved;
                 $product->save();

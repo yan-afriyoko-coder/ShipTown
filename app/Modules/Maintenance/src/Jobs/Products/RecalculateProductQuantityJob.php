@@ -10,6 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class RecalculateProductQuantityJob
@@ -48,6 +49,9 @@ class RecalculateProductQuantityJob implements ShouldQueue
 
         $incorrectInventoryRecords->each(function ($inventoryRecord) {
             $product = Product::where(['id' => $inventoryRecord->product_id])->first();
+            Log::warning('Incorrect product total quantity detected', [
+                'sku' => $product->sku,
+            ]);
             $product->recalculateQuantityTotals();
         });
 

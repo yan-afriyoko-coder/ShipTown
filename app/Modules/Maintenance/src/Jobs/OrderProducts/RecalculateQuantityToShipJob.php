@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class RecalculateQuantityToShipJob implements ShouldQueue
 {
@@ -27,9 +28,14 @@ class RecalculateQuantityToShipJob implements ShouldQueue
             ->limit(1000);
 
         $records->each(function (OrderProduct $orderProduct) {
-                $orderProduct->log('Incorrect quantity to ship detected')
-                    // quantity_to_ship is recalculated on model save
-                    ->save();
+            Log::warning('Incorrect quantity to ship detected', [
+                'order' => $orderProduct->order->order_number,
+                'sku' => $orderProduct->sku_ordered,
+            ]);
+
+            $orderProduct->log('Incorrect quantity to ship detected')
+                // quantity_to_ship is recalculated on model save
+                ->save();
         });
 
         info('RecalculateQuantityToShipJob finished', ['record_recalculated' => $records->count()]);
