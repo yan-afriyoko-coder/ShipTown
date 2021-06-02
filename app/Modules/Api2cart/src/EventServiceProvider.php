@@ -3,11 +3,11 @@
 namespace App\Modules\Api2cart\src;
 
 use App\Events\DailyEvent;
-use App\Events\HourlyEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
 use App\Events\ProductPrice\ProductPriceUpdatedEvent;
+use App\Events\SyncRequestedEvent;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 /**
@@ -22,6 +22,10 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
+        SyncRequestedEvent::class => [
+            Listeners\SyncRequestedEvent\DispatchImportOrdersJobsListener::class,
+        ],
+
         DailyEvent::class => [
             Listeners\DailyEvent\RunResyncLastDayJobListener::class,
             Listeners\DailyEvent\RunResyncSyncErrorTaggedJobListener::class,
