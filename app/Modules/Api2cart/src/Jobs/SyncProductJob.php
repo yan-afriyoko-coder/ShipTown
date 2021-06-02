@@ -18,6 +18,10 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Class SyncProductJob
+ * @package App\Modules\Api2cart\src\Jobs
+ */
 class SyncProductJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -32,6 +36,9 @@ class SyncProductJob implements ShouldQueue
      */
     private $connections;
 
+    /**
+     * @var Api2cartProductLink
+     */
     private Api2cartProductLink $api2cartProduct;
 
     /**

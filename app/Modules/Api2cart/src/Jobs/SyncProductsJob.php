@@ -10,9 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
-use function Clue\StreamFilter\fun;
 
 class SyncProductsJob implements ShouldQueue
 {
@@ -42,7 +40,5 @@ class SyncProductsJob implements ShouldQueue
                     SyncProductJob::dispatchNow($product);
                 });
             });
-
-        Log::info('Synced products with Api2cart product sync jobs');
     }
 }

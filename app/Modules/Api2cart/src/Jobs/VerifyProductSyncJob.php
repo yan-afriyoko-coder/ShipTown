@@ -20,7 +20,6 @@ class VerifyProductSyncJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-
     /**
      * @var Api2cartConnection|null
      */
@@ -56,7 +55,7 @@ class VerifyProductSyncJob implements ShouldQueue
      */
     public function handle()
     {
-        $product = Product::findBySKU($this->product_data['sku']);
+        $product = Product::whereSku($this->product_data['sku'])->first();
 
         $store_id = Arr::has($this->product_data, "store_id") ? $this->product_data["store_id"] : null;
 
