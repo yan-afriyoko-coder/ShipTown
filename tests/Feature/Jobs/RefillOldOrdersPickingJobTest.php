@@ -4,7 +4,7 @@ namespace Tests\Feature\Jobs;
 
 use App\Models\Order;
 use App\Models\OrderProduct;
-use App\Modules\AutoStatus\src\Jobs\Refill\RefillOldOrdersToPickingJob;
+use App\Modules\AutoStatusPicking\src\Jobs\RefillOldOrdersToPickingJob;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

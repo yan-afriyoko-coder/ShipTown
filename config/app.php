@@ -203,6 +203,7 @@ return [
         App\Modules\AutoPilot\src\EventServiceProvider::class,
         App\Modules\AutoTags\src\EventServiceProvider::class,
         App\Modules\AutoStatus\src\EventServiceProvider::class,
+        App\Modules\AutoStatusPicking\src\EventServiceProvider::class,
     ],
 
     /*
