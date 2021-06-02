@@ -195,16 +195,14 @@ class OrderProduct extends Model
     /**
      * @param Builder $query
      * @param array $statusCodeArray
-     * @return Builder
+     * @return Builder|mixed
      */
     public function scopeWhereHasStockReserved($query, $statusCodeArray)
     {
         return $query->where('quantity_to_ship', '>', 0)
             ->whereHas('order', function ($query) use ($statusCodeArray) {
-                $query->select([
-                    DB::raw(1)
-                ])
-                    ->whereNotIn('status_code', OrderStatus::getClosedStatuses());
+                $query->select([DB::raw(1)])
+                    ->whereIn('status_code', OrderStatus::whereReservesStock(true)->get('code'));
             });
     }
 
