@@ -49,6 +49,9 @@ class RecalculateProductQuantityReservedJob implements ShouldQueue
 
         $incorrectInventoryRecords->each(function ($inventoryRecord) {
             $product = Product::where(['id' => $inventoryRecord->product_id])->first();
+            Log::warning('Incorrect product total quantity_reserved detected', [
+                'sku' => $product->sku,
+            ]);
             $product->recalculateQuantityTotals();
         });
 
