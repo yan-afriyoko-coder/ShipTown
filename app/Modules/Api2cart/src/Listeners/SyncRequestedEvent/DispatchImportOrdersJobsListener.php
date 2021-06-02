@@ -2,7 +2,7 @@
 
 namespace App\Modules\Api2cart\src\Listeners\SyncRequestedEvent;
 
-use App\Events\DailyEvent;
+use App\Events\SyncRequestedEvent;
 use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
 
 class DispatchImportOrdersJobsListener
@@ -10,10 +10,10 @@ class DispatchImportOrdersJobsListener
     /**
      * Handle the event.
      *
-     * @param DailyEvent $event
+     * @param SyncRequestedEvent $event
      * @return void
      */
-    public function handle(DailyEvent $event)
+    public function handle(SyncRequestedEvent $event)
     {
         DispatchImportOrdersJobs::dispatch();
     }

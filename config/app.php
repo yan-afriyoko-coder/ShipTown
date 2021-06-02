@@ -204,6 +204,7 @@ return [
         App\Modules\AutoTags\src\EventServiceProvider::class,
         App\Modules\AutoStatus\src\EventServiceProvider::class,
         App\Modules\AutoStatusPicking\src\EventServiceProvider::class,
+        App\Modules\Rmsapi\src\EventServiceProvider::class,
     ],
 
     /*
