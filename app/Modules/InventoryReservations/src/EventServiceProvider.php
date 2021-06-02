@@ -5,6 +5,8 @@ namespace App\Modules\InventoryReservations\src;
 use App\Events\DailyEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Events\OrderProduct\OrderProductCreatedEvent;
+use App\Events\OrderProduct\OrderProductUpdatedEvent;
+use App\Modules\InventoryReservations\src\Listeners\OrderProductUpdatedEvent\UpdateQuantityReservedListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 /**
@@ -21,6 +23,10 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         DailyEvent::class => [
             Listeners\DailyEvent\RunRecalculateQuantityReservedJobListener::class
+        ],
+
+        OrderProductUpdatedEvent::class => [
+            UpdateQuantityReservedListener::class,
         ],
 
         OrderUpdatedEvent::class => [

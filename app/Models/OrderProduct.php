@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\BaseModel;
 use App\Traits\LogsActivityTrait;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
@@ -69,7 +70,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereHasStockReserved($statusCodeArray)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityOutstanding($value)
  */
-class OrderProduct extends Model
+class OrderProduct extends BaseModel
 {
     use SoftDeletes;
     use LogsActivityTrait;
