@@ -2,16 +2,16 @@
 
 namespace App\Modules\Api2cart\src\Jobs;
 
-use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
+use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use App\Modules\Api2cart\src\Orders;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
 
 class FetchUpdatedOrdersJob implements ShouldQueue
@@ -21,12 +21,12 @@ class FetchUpdatedOrdersJob implements ShouldQueue
     /**
      * @var bool
      */
-    public $finishedSuccessfully;
+    public bool $finishedSuccessfully;
 
     /**
      * @var Api2cartConnection
      */
-    private $api2cartConnection;
+    private Api2cartConnection $api2cartConnection;
 
     /**
      * Create a new job instance.
@@ -36,7 +36,6 @@ class FetchUpdatedOrdersJob implements ShouldQueue
     {
         $this->api2cartConnection = $api2cartConnection;
         $this->finishedSuccessfully = false;
-        logger('Job Api2cart\ImportOrdersJob dispatched');
     }
 
     /**

@@ -16,7 +16,7 @@ class ProcessApi2cartImportedOrderJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $orderImport = null;
+    private ?Api2cartOrderImports $orderImport;
 
     /**
      * Create a new job instance.

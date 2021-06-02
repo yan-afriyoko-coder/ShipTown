@@ -15,7 +15,7 @@ class ImportShippingAddressJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $order_id;
+    private int $order_id;
 
     /**
      * Create a new job instance.
@@ -34,7 +34,7 @@ class ImportShippingAddressJob implements ShouldQueue
      */
     public function handle()
     {
-        $order = Order::find($this->order_id);
+        $order = Order::whereId($this->order_id)->first();
 
         if (!$order) {
             return;
@@ -42,7 +42,8 @@ class ImportShippingAddressJob implements ShouldQueue
 
         $order_import = Api2cartOrderImports::query()
             ->where('order_number', '=', $order->order_number)
-            ->latest()->first();
+            ->latest()
+            ->first();
 
         if (!$order_import) {
             return;
