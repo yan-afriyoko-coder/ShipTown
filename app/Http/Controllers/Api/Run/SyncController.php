@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Run;
 
+use App\Events\SyncRequestedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\RmsapiConnection;
 use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
@@ -21,8 +22,7 @@ class SyncController extends Controller
     {
         logger('Dispatching sync jobs');
 
-        // import API2CART orders
-        DispatchImportOrdersJobs::dispatch();
+        SyncRequestedEvent::dispatch();
 
         // import RMSAPI products
         foreach (RmsapiConnection::all() as $rmsapiConnection) {
