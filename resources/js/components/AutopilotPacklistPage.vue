@@ -31,7 +31,6 @@
                     'sort': this.getUrlParameter('sort', 'order_placed_at'),
                 };
 
-                console.log('ha');
                 this.apiGetPacklistOrder(params)
                     .then(({data}) => {
                         this.order_number = data.data['order_number'];

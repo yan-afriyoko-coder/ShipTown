@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import {Swiper} from "swiper/js/swiper.esm";
+import Swiper from "swiper";
 
 export default {
     name: "PickCard",

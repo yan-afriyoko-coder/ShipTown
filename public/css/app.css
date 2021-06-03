@@ -1,4 +1,5 @@
-@charset "UTF-8";@import url(https://fonts.googleapis.com/css?family=Nunito);/*!
+@import url(https://fonts.googleapis.com/css?family=Nunito);@charset "UTF-8";
+/*!
  * Copyright (c) HANDSONCODE sp. z o. o.
  * 
  * HANDSONTABLE is a software distributed by HANDSONCODE sp. z o. o.,
@@ -51,7 +52,7 @@
 
 /*!
  * Handsontable HiddenRows
- */.handsontable th.afterHiddenRow:after,.handsontable th.beforeHiddenRow:before{color:#bbb;font-size:6pt;line-height:6pt;position:absolute;left:2px}.handsontable th.afterHiddenRow,.handsontable th.beforeHiddenRow{position:relative}.handsontable th.beforeHiddenRow:before{content:"\25B2";bottom:2px}.handsontable th.afterHiddenRow:after{content:"\25BC";top:2px}.handsontable.ht__selection--rows tbody th.afterHiddenRow.ht__highlight:after,.handsontable.ht__selection--rows tbody th.beforeHiddenRow.ht__highlight:before{color:#eee}.handsontable td.afterHiddenRow.firstVisibleRow,.handsontable th.afterHiddenRow.firstVisibleRow{border-top:1px solid #ccc}
+ */.handsontable th.afterHiddenRow:after,.handsontable th.beforeHiddenRow:before{color:#bbb;font-size:6pt;line-height:6pt;position:absolute;left:2px}.handsontable th.afterHiddenRow,.handsontable th.beforeHiddenRow{position:relative}.handsontable th.beforeHiddenRow:before{content:"\25B2";bottom:2px}.handsontable th.afterHiddenRow:after{content:"\25BC";top:2px}.handsontable.ht__selection--rows tbody th.afterHiddenRow.ht__highlight:after,.handsontable.ht__selection--rows tbody th.beforeHiddenRow.ht__highlight:before{color:#eee}.handsontable td.afterHiddenRow.firstVisibleRow,.handsontable th.afterHiddenRow.firstVisibleRow{border-top:1px solid #ccc}@charset "UTF-8";
 
 /*!
  * Bootstrap v4.6.0 (https://getbootstrap.com/)
