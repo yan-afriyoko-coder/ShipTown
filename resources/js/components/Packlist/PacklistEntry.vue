@@ -26,9 +26,10 @@
 </template>
 
 <script>
-    import 'swiper/css/swiper.min.css';
-    import { Swiper } from 'swiper/js/swiper.esm.js';
+    import Swiper from "swiper";
     import EntryCard from "./EntryCard";
+    // import Swiper styles
+    import 'swiper/swiper-bundle.css';
 
     export default {
         name: 'PacklistEntry',
