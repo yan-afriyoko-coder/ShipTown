@@ -11,8 +11,8 @@
         "php": "7.4.*",
         "ext-json": "*",
         "ext-simplexml": "*",
-        "arrilot/laravel-widgets": "^3.13",
-        "aws/aws-sdk-php-laravel": "^3.6",
+        "arrilot/laravel-widgets": "3.13.*",
+        "aws/aws-sdk-php-laravel": "3.6.*",
         "barryvdh/laravel-dompdf": "^0.9",
         "doctrine/dbal": "^2.0",
         "dompdf/dompdf": "^1.0",
@@ -21,7 +21,7 @@
         "grayloon/laravel-magento-api": "^0.12.0",
         "guzzlehttp/guzzle": "^6.3.1|^7.0.1",
         "hulkur/laravel-hasmany-keyby": "^2.0",
-        "laravel/framework": "^7.29",
+        "laravel/framework": "7.30.*",
         "laravel/passport": "^9.3",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^2.5",
@@ -29,6 +29,7 @@
         "league/csv": "^9.6",
         "makeabledk/laravel-factory-enhanced": "^2.1",
         "milon/barcode": "^7.0",
+        "romanzipp/laravel-queue-monitor": "*",
         "sentry/sentry-laravel": "^2.4",
         "spatie/array-to-xml": "^2.15",
         "spatie/laravel-activitylog": "^3.17",
@@ -36,8 +37,7 @@
         "spatie/laravel-query-builder": "^3.3",
         "spatie/laravel-ray": "^1.17",
         "spatie/laravel-tags": "^2.0",
-        "thomasjohnkane/snooze": "^1.0",
-        "romanzipp/laravel-queue-monitor": "*"
+        "thomasjohnkane/snooze": "^1.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",
