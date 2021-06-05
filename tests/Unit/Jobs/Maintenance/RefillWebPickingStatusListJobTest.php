@@ -7,11 +7,15 @@ use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Modules\AutoStatusPicking\src\Listeners\HourlyEvent\RefillStatusPickingListener;
+use App\Modules\AutoStatusPicking\src\Models\ModuleAutoStatusPickings;
 use App\Services\AutoPilot;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class RefillWebPickingStatusListJobTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * A basic feature test example.
      *
