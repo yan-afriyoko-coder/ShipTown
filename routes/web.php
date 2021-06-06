@@ -57,13 +57,21 @@ Route::middleware('auth')->group(function () {
 
     // Admin only routes
     Route::middleware('role:admin')->group(function () {
+
+        Route::group([], function () {
+
+            // tools
+//            Route::group(['prefix' => 'tools', 'namespace' => 'tools', 'as' => 'tools.'], function () {
+                Route::get('admin/tools/log-viewer', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+                Route::prefix('admin/tools/queue-monitor')->group(function () {
+                    Route::queueMonitor();
+                });
+//            });
+        });
+
         Route::view('users', 'users')->name('users');
         Route::get('sync-magento-api', function () {
             \App\Modules\MagentoApi\src\Jobs\SyncCheckFailedProductsJob::dispatch();
         });
-    });
-
-    Route::prefix('jobs')->group(function () {
-        Route::queueMonitor();
     });
 });
