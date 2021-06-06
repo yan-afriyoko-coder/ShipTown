@@ -116,6 +116,12 @@
                                 <a class="dropdown-item" href="{{ route('users') }}">
                                     {{ __('Users') }}
                                 </a>
+                                <a class="dropdown-item" href="{{ url('admin/tools/queue-monitor') }}" target="_blank">
+                                    {{ __('Queue Monitor') }}
+                                </a>
+                                <a class="dropdown-item" href="{{ url('admin/tools/log-viewer') }}" target="_blank">
+                                    {{ __('Log Viewer') }}
+                                </a>
                             @endcan
 
                             <a class="dropdown-item" href="https://www.youtube.com/channel/UCl04S5dRXop1ZdZsOqY3OnA" target="_blank">

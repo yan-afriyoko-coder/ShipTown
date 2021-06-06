@@ -194,6 +194,7 @@ return [
 
         Barryvdh\DomPDF\ServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
+        Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
 
         App\Modules\MagentoApi\src\EventServiceProvider::class,
         App\Modules\Maintenance\src\EventServiceProvider::class,

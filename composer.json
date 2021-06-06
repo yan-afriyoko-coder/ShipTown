@@ -29,6 +29,7 @@
         "league/csv": "^9.6",
         "makeabledk/laravel-factory-enhanced": "^2.1",
         "milon/barcode": "^7.0",
+        "rap2hpoutre/laravel-log-viewer": "^1.7",
         "romanzipp/laravel-queue-monitor": "*",
         "sentry/sentry-laravel": "^2.4",
         "spatie/array-to-xml": "^2.15",
