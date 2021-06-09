@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Modules\AutoStatus\src\Listeners\HourlyEvent;
+namespace App\Modules\AutoStatusSingleLineOrders\src\Listeners\HourlyEvent;
 
 use App\Events\HourlyEvent;
-use App\Modules\AutoStatus\src\Jobs\Refill\RefillSingleLineOrdersJob;
+use App\Modules\AutoStatusSingleLineOrders\src\Jobs\RefillSingleLineOrdersJob;
 
 /**
  * Class UpdateClosedAt
@@ -19,6 +19,7 @@ class RefillStatusSingleLineOrdersListener
      */
     public function handle(HourlyEvent $event)
     {
+        // dispatching job for monitoring purposes
         RefillSingleLineOrdersJob::dispatch();
     }
 }

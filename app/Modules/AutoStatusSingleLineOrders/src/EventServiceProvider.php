@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\AutoStatus\src;
+namespace App\Modules\AutoStatusSingleLineOrders\src;
 
 use App\Events\HourlyEvent;
 use App\Events\Order\OrderUpdatedEvent;
@@ -13,10 +13,8 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 class EventServiceProvider extends ServiceProvider
 {
     protected $listen = [
-        OrderUpdatedEvent::class => [
-            Listeners\OrderUpdatedEvent\UpdateClosedAt::class,
-            Listeners\OrderUpdatedEvent\ProcessingToPaidListener::class,
-            Listeners\OrderUpdatedEvent\SetReadyWhenPacked::class,
+        HourlyEvent::class => [
+            Listeners\HourlyEvent\RefillStatusSingleLineOrdersListener::class
         ],
     ];
 

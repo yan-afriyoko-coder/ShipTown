@@ -2,8 +2,9 @@
 
 namespace Tests\Feature\Jobs\Maintenance;
 
+use App\Events\HourlyEvent;
 use App\Models\Order;
-use App\Modules\AutoStatus\src\Jobs\Refill\RefillSingleLineOrdersJob;
+use App\Modules\AutoStatusSingleLineOrders\src\Jobs\RefillSingleLineOrdersJob;
 use Tests\TestCase;
 
 class SingleLineOrdersJobTest extends TestCase
@@ -21,10 +22,10 @@ class SingleLineOrdersJobTest extends TestCase
             ->with('orderProducts')
             ->create(['status_code' => 'paid']);
 
-        RefillSingleLineOrdersJob::dispatchNow();
+        HourlyEvent::dispatch();
 
-        $this->assertDatabaseMissing('orders', [
-            'status_code' => 'paid',
+        $this->assertDatabaseHas('orders', [
+            'status_code' => 'single_line_orders',
             'product_line_count' => 1,
         ]);
     }

@@ -6,8 +6,6 @@ use App\Events\HourlyEvent;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
-use App\Modules\AutoStatusPicking\src\Listeners\HourlyEvent\RefillStatusPickingListener;
-use App\Modules\AutoStatusPicking\src\Models\ModuleAutoStatusPickings;
 use App\Services\AutoPilot;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

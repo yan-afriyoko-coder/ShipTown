@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Modules\AutoStatus\src\Jobs\Refill;
+namespace App\Modules\AutoStatusSingleLineOrders\src\Jobs;
 
 use App\Models\Order;
-use App\Services\OrderService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -11,7 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 
-class RefillPackingWarehouseJob implements ShouldQueue
+class RefillSingleLineOrdersJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
 
@@ -23,13 +22,11 @@ class RefillPackingWarehouseJob implements ShouldQueue
     public function handle()
     {
         Order::where('status_code', 'paid')
-            ->get()
-            ->each(function (Order $order) {
-                if (OrderService::canFulfill($order, 99)) {
-                    $order->update(['status_code' => 'packing_warehouse']);
-                }
+            ->where('product_line_count', 1)
+            ->get()->each(function (Order $order) {
+                $order->update([
+                    'status_code' => 'single_line_orders'
+                ]);
             });
-
-        info('Refilled packing_warehouse');
     }
 }
