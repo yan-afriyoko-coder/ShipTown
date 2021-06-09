@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\AutoStatus\src\Listeners\OrderUpdatedEvent;
+namespace App\Modules\AutoStatusPaid\src\Listeners\OrderUpdatedEvent;
 
 use App\Events\Order\OrderUpdatedEvent;
 
