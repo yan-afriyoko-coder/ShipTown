@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Modules\AutoStatusPackingWarehouse\src\Listeners\OrderUpdated;
+namespace App\Modules\AutoStatusPackingWarehouse\src\Listeners\ActiveOrdersCheckEvent;
 
+use App\Events\Order\ActiveOrderCheckEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Services\OrderService;
 
@@ -14,10 +15,10 @@ class SetStatusPackingWarehouseListener
     /**
      * Handle the event.
      *
-     * @param OrderUpdatedEvent $event
+     * @param ActiveOrderCheckEvent $event
      * @return void
      */
-    public function handle(OrderUpdatedEvent $event)
+    public function handle(ActiveOrderCheckEvent $event)
     {
         $order = $event->getOrder();
 

@@ -25,6 +25,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property int|null $shipping_address_id
  * @property string $order_number
  * @property string $status_code
+ * @property boolean $is_active
  * @property string $total
  * @property string $total_paid
  * @property string|null $order_placed_at
@@ -87,6 +88,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static Builder|Order whereTotalPaid($value)
  * @method static Builder|Order whereTotalQuantityOrdered($value)
  * @method static Builder|Order whereUpdatedAt($value)
+ * @method static Builder|Order whereIsActive()
  * @property-read int $age_in_days
  * @property OrderStatus orderStatus
  */
@@ -100,6 +102,7 @@ class Order extends BaseModel
         'order_number',
         'picked_at',
         'shipping_number',
+        'is_active',
         'shipping_address_id',
         'is_packed',
         'order_placed_at',
@@ -120,6 +123,7 @@ class Order extends BaseModel
     ];
 
     protected $casts = [
+        'is_active' => 'boolean',
         'raw_import' => 'array',
     ];
 
@@ -212,6 +216,11 @@ class Order extends BaseModel
     public function getAgeInDaysAttribute()
     {
         return Carbon::now()->ceilDay()->diffInDays($this->order_placed_at);
+    }
+
+    public function scopeWhereIsActive($query)
+    {
+        return $this->scopeIsActive($query);
     }
 
     public function scopeWhereActive($query)
