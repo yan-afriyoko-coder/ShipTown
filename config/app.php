@@ -196,11 +196,12 @@ return [
         Milon\Barcode\BarcodeServiceProvider::class,
         Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
 
-        App\Modules\MagentoApi\src\EventServiceProvider::class,
+        // misc modules
         App\Modules\Maintenance\src\EventServiceProvider::class,
-        App\Modules\Api2cart\src\EventServiceProvider::class,
         App\Modules\InventoryReservations\src\EventServiceProvider::class,
-        App\Modules\AmazonSns\src\AmazonSnsServiceProvider::class,
+
+        // Automations modules
+        // order MIGHT be important!
         App\Modules\AutoPilot\src\EventServiceProvider::class,
         App\Modules\AutoTags\src\EventServiceProvider::class,
         App\Modules\AutoStatusPackingWarehouse\src\EventServiceProvider::class,
@@ -209,7 +210,13 @@ return [
         App\Modules\AutoStatusReady\src\EventServiceProvider::class,
         App\Modules\AutoStatusPaid\src\EventServiceProvider::class,
         App\Modules\AutoStatus\src\EventServiceProvider::class,
+
+        // 3rd party integrations
+        // order SHOULD not be important
+        App\Modules\AmazonSns\src\AmazonSnsServiceProvider::class,
+        App\Modules\Api2cart\src\EventServiceProvider::class,
         App\Modules\Rmsapi\src\EventServiceProvider::class,
+        App\Modules\MagentoApi\src\EventServiceProvider::class,
     ],
 
     /*
