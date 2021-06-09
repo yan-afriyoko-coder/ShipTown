@@ -28,7 +28,10 @@ class UpdateClosedAt
 
         if ($closesOrder and ($order->order_closed_at === null)) {
             $order->log('status "'. $order->status_code .'" closing order ')
-                ->update(['order_closed_at' => now()]);
+                ->update([
+                    'is_active' => false,
+                    'order_closed_at' => now()
+                ]);
         }
     }
 }
