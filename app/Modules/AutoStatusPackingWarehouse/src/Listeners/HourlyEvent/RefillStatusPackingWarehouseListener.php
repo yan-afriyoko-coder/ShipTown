@@ -3,7 +3,7 @@
 namespace App\Modules\AutoStatusPackingWarehouse\src\Listeners\HourlyEvent;
 
 use App\Events\HourlyEvent;
-use App\Modules\AutoStatus\src\Jobs\Refill\RefillPackingWarehouseJob;
+use App\Modules\AutoStatusPackingWarehouse\src\Jobs\Refill\RefillPackingWarehouseJob;
 
 /**
  * Class UpdateClosedAt
