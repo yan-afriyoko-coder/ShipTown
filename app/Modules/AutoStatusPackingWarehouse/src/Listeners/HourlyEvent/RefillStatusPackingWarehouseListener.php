@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\AutoStatus\src\Listeners\HourlyEvent;
+namespace App\Modules\AutoStatusPackingWarehouse\src\Listeners\HourlyEvent;
 
 use App\Events\HourlyEvent;
 use App\Modules\AutoStatus\src\Jobs\Refill\RefillPackingWarehouseJob;

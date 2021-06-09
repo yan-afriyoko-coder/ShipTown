@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\AutoStatus\src;
+namespace App\Modules\AutoStatusPackingWarehouse\src;
 
 use App\Events\HourlyEvent;
 use App\Events\Order\OrderUpdatedEvent;
@@ -14,13 +14,10 @@ class EventServiceProvider extends ServiceProvider
 {
     protected $listen = [
         HourlyEvent::class => [
-            Listeners\HourlyEvent\RefillStatusSingleLineOrdersListener::class,
+            Listeners\HourlyEvent\RefillStatusPackingWarehouseListener::class,
         ],
-
         OrderUpdatedEvent::class => [
-            Listeners\OrderUpdatedEvent\UpdateClosedAt::class,
-            Listeners\OrderUpdatedEvent\ProcessingToPaidListener::class,
-            Listeners\OrderUpdatedEvent\SetReadyWhenPacked::class,
+            Listeners\OrderUpdated\SetStatusPackingWarehouseListener::class,
         ],
     ];
 
