@@ -6,7 +6,7 @@ use App\Events\Order\OrderUpdatedEvent;
 use App\Models\OrderStatus;
 
 /**
- * Class UpdateClosedAt
+ * Class SetPackingWebStatus
  * @package App\Listeners\Order
  */
 class SetReadyWhenPacked

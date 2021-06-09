@@ -27,24 +27,9 @@ class OrderObserver
         $order->setAttribute('total_quantity_ordered', $order->orderProducts()->sum('quantity_ordered'));
         $order->total_quantity_ordered = $order->orderProducts()->sum('quantity_ordered');
         $order->product_line_count = $order->orderProducts()->count('id');
-    }
-
-    /**
-     * @param Order $order
-     */
-    public function saved(Order $order)
-    {
-        // if no more orderProducts to pick exists
-        if (!$order->orderProducts()->where('quantity_to_pick', '>', 0)->exists()) {
-            if ($order->isNotStatusCode('picking')) {
-                return;
-            }
-
-            // change status to packing_web
-            $order->update([
-                'status_code' => 'packing_web',
-                'picked_at' => Carbon::now(),
-            ]);
+        $order->is_active = $order->order_status->order_active ?? 1;
+        if ($order->isAttributeChanged('is_active')) {
+            $order->order_closed_at = $order->is_active ? null : now();
         }
     }
 

@@ -133,6 +133,7 @@ class Order extends BaseModel
     // correctly to events
     protected $attributes = [
         'status_code' => 'processing',
+        'is_active' => 1,
         'raw_import' => '{}',
     ];
 

@@ -10,7 +10,7 @@ use App\Modules\AutoStatusPicking\src\Jobs\RefillPickingMissingStockJob;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 /**
- * Class UpdateClosedAt
+ * Class SetPackingWebStatus
  * @package App\Listeners\Order
  */
 class RefillStatusPickingListener implements ShouldQueue

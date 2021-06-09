@@ -6,7 +6,7 @@ use App\Events\HourlyEvent;
 use App\Modules\AutoStatusPackingWarehouse\src\Jobs\Refill\RefillPackingWarehouseJob;
 
 /**
- * Class UpdateClosedAt
+ * Class SetPackingWebStatus
  * @package App\Listeners\Order
  */
 class RefillStatusPackingWarehouseListener

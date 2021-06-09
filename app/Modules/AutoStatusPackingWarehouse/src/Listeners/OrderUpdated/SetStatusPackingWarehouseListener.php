@@ -6,7 +6,7 @@ use App\Events\Order\OrderUpdatedEvent;
 use App\Services\OrderService;
 
 /**
- * Class UpdateClosedAt
+ * Class SetPackingWebStatus
  * @package App\Listeners\Order
  */
 class SetStatusPackingWarehouseListener

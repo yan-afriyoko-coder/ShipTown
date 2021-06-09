@@ -204,11 +204,12 @@ return [
         // order MIGHT be important!
         App\Modules\AutoPilot\src\EventServiceProvider::class,
         App\Modules\AutoTags\src\EventServiceProvider::class,
+        App\Modules\AutoStatusPaid\src\EventServiceProvider::class,
         App\Modules\AutoStatusPackingWarehouse\src\EventServiceProvider::class,
         App\Modules\AutoStatusSingleLineOrders\src\EventServiceProvider::class,
         App\Modules\AutoStatusPicking\src\EventServiceProvider::class,
+        App\Modules\AutoStatusPackingWeb\src\EventServiceProvider::class,
         App\Modules\AutoStatusReady\src\EventServiceProvider::class,
-        App\Modules\AutoStatusPaid\src\EventServiceProvider::class,
         App\Modules\AutoStatus\src\EventServiceProvider::class,
 
         // 3rd party integrations
