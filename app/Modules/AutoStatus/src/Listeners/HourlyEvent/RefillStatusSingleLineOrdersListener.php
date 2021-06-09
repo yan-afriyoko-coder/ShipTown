@@ -19,6 +19,6 @@ class RefillStatusSingleLineOrdersListener
      */
     public function handle(HourlyEvent $event)
     {
-        RefillSingleLineOrdersJob::dispatchNow();
+        RefillSingleLineOrdersJob::dispatch();
     }
 }
