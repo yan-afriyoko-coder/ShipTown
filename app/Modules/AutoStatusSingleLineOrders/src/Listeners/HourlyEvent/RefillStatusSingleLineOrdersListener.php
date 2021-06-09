@@ -6,7 +6,7 @@ use App\Events\HourlyEvent;
 use App\Modules\AutoStatusSingleLineOrders\src\Jobs\RefillSingleLineOrdersJob;
 
 /**
- * Class UpdateClosedAt
+ * Class SetPackingWebStatus
  * @package App\Listeners\Order
  */
 class RefillStatusSingleLineOrdersListener

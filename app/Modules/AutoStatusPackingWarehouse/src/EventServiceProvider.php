@@ -3,6 +3,7 @@
 namespace App\Modules\AutoStatusPackingWarehouse\src;
 
 use App\Events\HourlyEvent;
+use App\Events\Order\ActiveOrderCheckEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -16,6 +17,11 @@ class EventServiceProvider extends ServiceProvider
         HourlyEvent::class => [
             Listeners\HourlyEvent\RefillStatusPackingWarehouseListener::class,
         ],
+
+        ActiveOrderCheckEvent::class => [
+            Listeners\ActiveOrdersCheckEvent\SetStatusPackingWarehouseListener::class,
+        ],
+
         OrderUpdatedEvent::class => [
             Listeners\OrderUpdated\SetStatusPackingWarehouseListener::class,
         ],

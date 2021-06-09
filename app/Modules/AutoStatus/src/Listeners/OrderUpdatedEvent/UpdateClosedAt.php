@@ -5,7 +5,7 @@ namespace App\Modules\AutoStatus\src\Listeners\OrderUpdatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 
 /**
- * Class UpdateClosedAt
+ * Class SetPackingWebStatus
  * @package App\Listeners\Order
  */
 class UpdateClosedAt
@@ -28,7 +28,10 @@ class UpdateClosedAt
 
         if ($closesOrder and ($order->order_closed_at === null)) {
             $order->log('status "'. $order->status_code .'" closing order ')
-                ->update(['order_closed_at' => now()]);
+                ->update([
+                    'is_active' => false,
+                    'order_closed_at' => now()
+                ]);
         }
     }
 }

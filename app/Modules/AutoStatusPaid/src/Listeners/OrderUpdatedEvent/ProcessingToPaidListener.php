@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Modules\AutoStatus\src\Listeners\OrderUpdatedEvent;
+namespace App\Modules\AutoStatusPaid\src\Listeners\OrderUpdatedEvent;
 
 use App\Events\Order\OrderUpdatedEvent;
 
 /**
- * Class UpdateClosedAt
+ * Class SetPackingWebStatus
  * @package App\Listeners\Order
  */
 class ProcessingToPaidListener
