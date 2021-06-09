@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\AutoStatus\src\Listeners\OrderUpdatedEvent;
+namespace App\Modules\AutoStatusReady\src\Listeners\OrderUpdatedEvent;
 
 use App\Events\Order\OrderUpdatedEvent;
 use App\Models\OrderStatus;

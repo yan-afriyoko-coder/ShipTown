@@ -206,6 +206,7 @@ return [
         App\Modules\AutoStatusPackingWarehouse\src\EventServiceProvider::class,
         App\Modules\AutoStatusSingleLineOrders\src\EventServiceProvider::class,
         App\Modules\AutoStatusPicking\src\EventServiceProvider::class,
+        App\Modules\AutoStatusReady\src\EventServiceProvider::class,
         App\Modules\AutoStatus\src\EventServiceProvider::class,
         App\Modules\Rmsapi\src\EventServiceProvider::class,
     ],
