@@ -51,7 +51,7 @@ class SyncCheckFailedProductsJob implements ShouldQueue
 
         $totalCount = $query->count();
 
-        $chunkSize = 10;
+        $chunkSize = 100;
 
         $query->orderBy('quantity')
             ->chunk($chunkSize, function (Collection $products) use ($totalCount, $chunkSize) {
@@ -62,6 +62,7 @@ class SyncCheckFailedProductsJob implements ShouldQueue
                 });
             });
 
+        $this->queueProgress(0);
         Log::info('Dispatched Sync MagentoApi Jobs', ['count' => $totalCount]);
     }
 }
