@@ -21,7 +21,7 @@ class SetPackingWebStatus
     {
         $order = $event->getOrder();
 
-        if ($order->isNotStatusCode('picking')) {
+        if ($order->status_code !== 'picking') {
             return;
         }
 

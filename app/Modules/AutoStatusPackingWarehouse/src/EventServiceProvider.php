@@ -2,9 +2,7 @@
 
 namespace App\Modules\AutoStatusPackingWarehouse\src;
 
-use App\Events\HourlyEvent;
 use App\Events\Order\ActiveOrderCheckEvent;
-use App\Events\Order\OrderUpdatedEvent;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 /**
@@ -14,28 +12,8 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 class EventServiceProvider extends ServiceProvider
 {
     protected $listen = [
-        HourlyEvent::class => [
-            Listeners\HourlyEvent\RefillStatusPackingWarehouseListener::class,
-        ],
-
         ActiveOrderCheckEvent::class => [
             Listeners\ActiveOrdersCheckEvent\SetStatusPackingWarehouseListener::class,
         ],
-
-        OrderUpdatedEvent::class => [
-            Listeners\OrderUpdated\SetStatusPackingWarehouseListener::class,
-        ],
     ];
-
-    /**
-     * Register any events for your application.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        parent::boot();
-
-        //
-    }
 }
