@@ -20,6 +20,13 @@
             </div>
 
             <div class="card">
+                <a href="{{ route('users') }}">
+                    <div class="title">Users</div>
+                    <div class="swiper-button-black">Manage Users</div>
+                </a>
+            </div>
+
+            <div class="card">
                 <a href="{{ route('settings.printnode') }}">
                     <div class="title">PrintNode</div>
                     <div class="swiper-button-black">View and update PrintNode integration  settings</div>
@@ -53,6 +60,20 @@
                     <div class="swiper-button-black">View and update application API settings and tokens</div>
                 </a>
             </div>
-    </div>
+
+            <div class="card">
+                <a href="{{ url('admin/tools/queue-monitor') }}" target="_blank">
+                    <div class="title">Queue Monitor</div>
+                    <div class="swiper-button-black">Open jobs monitor</div>
+                </a>
+            </div>
+
+            <div class="card">
+                <a href="{{ url('admin/tools/log-viewer') }}" target="_blank">
+                    <div class="title">Log Viewer</div>
+                    <div class="swiper-button-black">View application logs</div>
+                </a>
+            </div>
+        </div>
 </div>
 @endsection
