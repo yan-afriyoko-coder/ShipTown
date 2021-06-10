@@ -45,6 +45,12 @@ Route::middleware('auth')->group(function () {
     Route::view('reports/picks', 'reports/picks_report')->name('reports.picks');
     Route::get('reports/shipments', 'Reports\ShipmentController@index')->name('reports.shipments');
     Route::view('settings', 'settings')->name('settings');
+    Route::view('settings/general', 'settings/general')->name('settings.general');
+    Route::view('settings/printnode', 'settings/printnode')->name('settings.printnode');
+    Route::view('settings/rmsapi', 'settings/rmsapi')->name('settings.rmsapi');
+    Route::view('settings/dpd-ireland', 'settings/dpd-ireland')->name('settings.dpd-ireland');
+    Route::view('settings/api2cart', 'settings/api2cart')->name('settings.api2cart');
+    Route::view('settings/api', 'settings/api')->name('settings.api');
 
     Route::get('pdf/orders/{order_number}/{template}', 'PdfOrderController@show');
     Route::get('orders/{order_number}/kick', 'OrderKickController@index');
