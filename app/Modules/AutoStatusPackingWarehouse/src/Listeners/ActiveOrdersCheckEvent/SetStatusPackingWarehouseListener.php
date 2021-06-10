@@ -20,10 +20,18 @@ class SetStatusPackingWarehouseListener
      */
     public function handle(ActiveOrderCheckEvent $event)
     {
+        $sourceLocationId = 99;
+        $newOrderStatus = 'packing_warehouse';
+
         $order = $event->getOrder();
 
-        if (($order->status_code === 'paid') && (OrderService::canFulfill($order, 99))) {
-                $order->update(['status_code' => 'packing_warehouse']);
+        if ($order->status_code !== 'paid') {
+            return;
+        }
+
+        if (OrderService::canFulfill($order, $sourceLocationId)) {
+            $order->log("Possible to fulfill from location $sourceLocationId, changing order status");
+            $order->update(['status_code' => $newOrderStatus]);
         }
     }
 }
