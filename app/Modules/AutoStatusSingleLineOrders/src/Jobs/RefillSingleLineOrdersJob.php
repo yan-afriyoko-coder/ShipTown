@@ -21,12 +21,16 @@ class RefillSingleLineOrdersJob implements ShouldQueue
      */
     public function handle()
     {
-        Order::where('status_code', 'paid')
+        $orders = Order::where('status_code', 'paid')
             ->where('product_line_count', 1)
-            ->get()->each(function (Order $order) {
-                $order->update([
-                    'status_code' => 'single_line_orders'
-                ]);
-            });
+            ->get();
+
+        $orders->each(function (Order $order) {
+            $order->update([
+                'status_code' => 'single_line_orders'
+            ]);
+        });
+
+        $this->queueData(['orders_changed' => $orders->count()]);
     }
 }

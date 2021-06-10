@@ -27,5 +27,7 @@ class FireActiveOrderCheckEventsJob implements ShouldQueue
         $orders->each(function (Order $order) {
             ActiveOrderCheckEvent::dispatch($order);
         });
+
+        $this->queueData(['events_fired' => $orders->count()]);
     }
 }
