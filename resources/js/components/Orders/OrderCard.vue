@@ -215,9 +215,10 @@
 <script>
     import api from "../../mixins/api";
     import helpers from "../../mixins/helpers";
+    import url from "../../mixins/url";
 
     export default {
-        mixins: [api, helpers],
+        mixins: [api, helpers, url],
         name: "OrderCard",
 
         props: {
@@ -288,6 +289,7 @@
 
             loadOrderProducts() {
                 let params = {
+                    'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id'),
                     'filter[order_id]': this.order['id'],
                     'include': 'product',
                     'per_page': '999',
@@ -387,6 +389,9 @@
             },
 
             getProductQuantity(orderProduct) {
+                if(this.getUrlParameter('inventory_source_location_id')) {
+                    return orderProduct['inventory_source_quantity']
+                }
                 return orderProduct['product'] ? Number(orderProduct['product']['quantity']) : 0;
             },
 
