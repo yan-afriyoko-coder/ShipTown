@@ -2,8 +2,7 @@
 
 namespace App\Modules\AutoStatusSingleLineOrders\src;
 
-use App\Events\HourlyEvent;
-use App\Events\Order\OrderUpdatedEvent;
+use App\Events\Order\ActiveOrderCheckEvent;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 /**
@@ -13,20 +12,8 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 class EventServiceProvider extends ServiceProvider
 {
     protected $listen = [
-        HourlyEvent::class => [
-            Listeners\HourlyEvent\RefillStatusSingleLineOrdersListener::class
+        ActiveOrderCheckEvent::class => [
+            Listeners\ActiveOrdersCheckEvent\SetStatusSingleLineOrders::class,
         ],
     ];
-
-    /**
-     * Register any events for your application.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        parent::boot();
-
-        //
-    }
 }
