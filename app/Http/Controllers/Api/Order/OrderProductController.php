@@ -23,7 +23,7 @@ class OrderProductController extends Controller
      * @param Request $request
      * @return AnonymousResourceCollection
      */
-    public function index(Request $request)
+    public function index(Request $request): AnonymousResourceCollection
     {
         $query = OrderProduct::getSpatieQueryBuilder();
 
@@ -37,7 +37,7 @@ class OrderProductController extends Controller
      * @param $id
      * @return OrderProductResource
      */
-    public function update(UpdateRequest $request, $id)
+    public function update(UpdateRequest $request, $id): OrderProductResource
     {
         $orderProduct = OrderProduct::findOrFail($id);
 
