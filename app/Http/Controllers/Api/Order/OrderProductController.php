@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderProducts\UpdateRequest;
 use App\Http\Resources\OrderProductResource;
 use App\Models\OrderProduct;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
@@ -20,10 +19,9 @@ class OrderProductController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
      * @return AnonymousResourceCollection
      */
-    public function index(Request $request)
+    public function index(): AnonymousResourceCollection
     {
         $query = OrderProduct::getSpatieQueryBuilder();
 
@@ -34,15 +32,13 @@ class OrderProductController extends Controller
      * Update the specified resource in storage.
      *
      * @param UpdateRequest $request
-     * @param $id
+     * @param OrderProduct $product
      * @return OrderProductResource
      */
-    public function update(UpdateRequest $request, $id)
+    public function update(UpdateRequest $request, OrderProduct $product): OrderProductResource
     {
-        $orderProduct = OrderProduct::findOrFail($id);
+        $product->update($request->validated());
 
-        $orderProduct->update($request->validated());
-
-        return new OrderProductResource($orderProduct);
+        return new OrderProductResource($product);
     }
 }

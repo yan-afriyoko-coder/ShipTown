@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @package App
  *
  * @method static firstOrCreate(array $array, array $array)
+ * @method static findOrFail($id)
  */
 abstract class BaseModel extends Model
 {
