@@ -354,6 +354,9 @@
                     const request = this.apiUpdateOrderProduct(orderProduct.id, {
                             'quantity_shipped': quantity
                         })
+                        .then(data => {
+                            this.notifySuccess();
+                        })
                         .catch(error => {
                             this.notifyError('Error occurred when saving quantity shipped, try again');
                         })
