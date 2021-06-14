@@ -18,7 +18,7 @@ class OrdersSeeder extends Seeder
         factory(Order::class, 100)
             ->with('orderProducts', 1)
             ->create(['status_code' => 'processing']);
-
+//
         factory(Order::class, 100)
             ->with('orderProducts', 2)
             ->create(['status_code' => 'processing']);

@@ -120,6 +120,7 @@
 
             data: function() {
                 return {
+                    pendingRequests: [],
                     canClose: true,
                     isPrintingLabel: false,
                     user: null,
@@ -158,9 +159,17 @@
                         return;
                     }
 
+                    if (this.pendingRequests.length > 0) {
+                        return;
+                    }
+
                     if(this.packlist && this.packlist.length === 0) {
                         this.completeOrder();
                     }
+                },
+
+                pendingRequests() {
+                    console.log(this.pendingRequests.length);
                 }
             },
 
@@ -175,6 +184,7 @@
                 loadOrder: function (orderNumber) {
                     this.showLoading();
 
+                    this.pendingRequests = [];
                     this.canClose = true;
                     this.order = null;
                     this.packlist = [];
@@ -366,22 +376,28 @@
                         removedFromList = true;
                     }
 
-                    this.apiUpdateOrderProduct(orderProduct.id, {
+                    const request = this.apiUpdateOrderProduct(orderProduct.id, {
                             'quantity_shipped': quantity
-                        })
-                        .then(({data}) => {
+                        });
+
+                    this.pendingRequests.unshift(request);
+
+                    request.then((data) => {
                             if(removedFromList === true) {
                                 this.addToLists(data.data);
                             }
                             this.notifySuccess();
                         })
-                        .catch((error) => {
+                        .catch(error => {
                             orderProduct['quantity_shipped'] = quantity_shipped_before;
 
                             if(removedFromList === true) {
-                                this.addToLists(data.data);
+                                this.addToLists(orderProduct);
                             }
-                            this.notifyError('Error occurred when saving quantity shipped');
+                            this.notifyError('Error occurred when saving quantity shipped, try again');
+                        })
+                        .finally(() => {
+                            this.pendingRequests.splice(this.packlist.indexOf(request), 1);
                         });
                 },
 
