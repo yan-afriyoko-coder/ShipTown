@@ -30,5 +30,10 @@ class OrdersSeeder extends Seeder
         factory(Order::class, 100)
             ->with('orderProducts', 4)
             ->create(['status_code' => 'processing']);
+
+        Order::all()->each(function (Order $order) {
+            $order->total_paid = $order->total;
+            $order->save();
+        });
     }
 }
