@@ -120,7 +120,6 @@
 
             data: function() {
                 return {
-                    pendingRequests: [],
                     canClose: true,
                     isPrintingLabel: false,
                     user: null,
@@ -159,18 +158,10 @@
                         return;
                     }
 
-                    if (this.pendingRequests.length > 0) {
-                        return;
-                    }
-
                     if(this.packlist && this.packlist.length === 0) {
                         this.completeOrder();
                     }
                 },
-
-                pendingRequests() {
-                    console.log(this.pendingRequests.length);
-                }
             },
 
             methods: {
@@ -209,9 +200,9 @@
                 },
 
                 loadProducts: function() {
-                    this.showLoading();
+                    // this.showLoading();
 
-                    this.packed = [];
+                    // this.packed = [];
 
                     const params = {
                         'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id', null),
@@ -224,13 +215,15 @@
                     this.apiGetOrderProducts(params)
                         .then(({ data }) => {
                             if(data.meta.total > 0) {
-                                this.packed = data.data.filter(
+                                const newPackedList = data.data.filter(
                                     orderProduct => Number(orderProduct['quantity_shipped']) >= Number(orderProduct['quantity_ordered'])
                                 );
 
-                                this.packlist = data.data.filter(
+                                const newPacklist = data.data.filter(
                                     orderProduct => Number(orderProduct['quantity_shipped']) < Number(orderProduct['quantity_ordered'])
                                 );
+                                this.packed = newPackedList;
+                                this.packlist = newPacklist;
                             }
                         })
                         .catch( error => {
@@ -238,7 +231,7 @@
 
                         })
                         .finally(() => {
-                            this.hideLoading();
+                            // this.hideLoading();
                         });
                 },
 
@@ -355,49 +348,17 @@
                     }
                 },
 
-                removeFromLists: function (orderProduct) {
-                    if (this.packlist.indexOf(orderProduct) > -1) {
-                        this.packlist.splice(this.packlist.indexOf(orderProduct), 1);
-                    } else {
-                        this.packed.splice(this.packed.indexOf(orderProduct), 1);
-                    }
-                },
-
                 setQuantityShipped(orderProduct, quantity) {
                     this.somethingHasBeenPackedDuringThisSession = true;
 
-                    const quantity_shipped_before = orderProduct['quantity_shipped'];
-                    let removedFromList = false;
-
-                    orderProduct['quantity_shipped'] = quantity;
-
-                    if(orderProduct['quantity_shipped'] === orderProduct['quantity_ordered']) {
-                        this.removeFromLists(orderProduct);
-                        removedFromList = true;
-                    }
-
                     const request = this.apiUpdateOrderProduct(orderProduct.id, {
                             'quantity_shipped': quantity
-                        });
-
-                    this.pendingRequests.unshift(request);
-
-                    request.then((data) => {
-                            if(removedFromList === true) {
-                                this.addToLists(data.data);
-                            }
-                            this.notifySuccess();
                         })
                         .catch(error => {
-                            orderProduct['quantity_shipped'] = quantity_shipped_before;
-
-                            if(removedFromList === true) {
-                                this.addToLists(orderProduct);
-                            }
                             this.notifyError('Error occurred when saving quantity shipped, try again');
                         })
                         .finally(() => {
-                            this.pendingRequests.splice(this.packlist.indexOf(request), 1);
+                            this.loadProducts();
                         });
                 },
 
