@@ -37,7 +37,6 @@ class OrderProductController extends Controller
      */
     public function update(UpdateRequest $request, OrderProduct $product): OrderProductResource
     {
-        $this->setStatusCode(500)->throwJsonResponse('');
         $product->update($request->validated());
 
         return new OrderProductResource($product);
