@@ -42,7 +42,6 @@
             },
 
             setFocusOnBarcodeInput() {
-                console.log(this.$refs);
                 this.setFocus(this.$refs.barcode, true,true)
             },
 

@@ -45,8 +45,12 @@ export default {
 
         getValueOrDefault,
 
-        notifyError: function (message) {
-            this.$snotify.error(message, {timeout: 5000});
+        notifyError: function (message, options = null) {
+            const defaultOptions = {
+                timeout: 5000
+            };
+
+            this.$snotify.error(message, options ?? defaultOptions);
             this.errorBeep();
         },
 

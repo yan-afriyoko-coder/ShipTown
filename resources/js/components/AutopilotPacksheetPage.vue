@@ -78,6 +78,7 @@
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('packing_warehouse')">packing_warehouse</button>
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('fabrics')">fabrics</button>
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('ready')">ready</button>
+                <button type="button" class="btn btn-info" @click.prevent="openPreviousOrder">Open Previous Order</button>
                 <button type="button" class="btn btn-info" @click.prevent="askForShippingNumber">Add Shipping Number</button>
                 <button type="button" class="btn btn-info" @click.prevent="printLabel('address_label')">Print Address Label</button>
                 <button type="button" class="btn btn-info" @click.prevent="printLabel('dpd_label')">Print DPD Label</button>
@@ -120,6 +121,7 @@
 
             data: function() {
                 return {
+                    previousOrderNumber: null,
                     canClose: true,
                     isPrintingLabel: false,
                     user: null,
@@ -177,6 +179,9 @@
 
                     this.pendingRequests = [];
                     this.canClose = true;
+                    if(this.order && this.order['order_number'] !== orderNumber) {
+                        this.previousOrderNumber = this.order['order_number'];
+                    }
                     this.order = null;
                     this.packlist = [];
                     this.packed = [];
@@ -235,9 +240,9 @@
                         });
                 },
 
-                completeOrder: function () {
-                    this.markAsPacked();
-                    this.printLabelIfNeeded();
+                completeOrder: async function () {
+                    await this.markAsPacked();
+                    await this.printLabelIfNeeded();
 
                     if (this.user['ask_for_shipping_number'] === true) {
                         this.askForShippingNumberIfNeeded();
@@ -456,9 +461,26 @@
                                 errorMsg = 'Order not found: #' + orderNumber;
                             }
 
-                            this.notifyError(errorMsg);
+                            this.notifyError(errorMsg, {
+                                closeOnClick: true,
+                                timeout: 0,
+                                buttons: [
+                                    {text: 'OK', action: null},
+                                ]
+                            });
                         });
                 },
+                openPreviousOrder: function (){
+                    this.$refs.filtersModal.hide();
+
+                    if (! this.previousOrderNumber) {
+                        this.notifyError('Not Available');
+                        return;
+                    }
+
+                    this.loadOrder(this.previousOrderNumber);
+                    this.notifySuccess(this.previousOrderNumber);
+                }
             },
 
             computed: {
