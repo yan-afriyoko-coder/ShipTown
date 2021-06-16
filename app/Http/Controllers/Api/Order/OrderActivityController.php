@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\Order;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LogResource;
 use App\Models\Order;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -16,12 +15,10 @@ class OrderActivityController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
      * @return AnonymousResourceCollection
      */
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(): AnonymousResourceCollection
     {
-        $query = Activity::query()->where('subject_type', Order::class);
         $query = Activity::query()->where('subject_type', Order::class);
 
         $query = QueryBuilder::for($query)

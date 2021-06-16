@@ -8,7 +8,6 @@ use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\User;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
@@ -20,10 +19,9 @@ class UserController extends Controller
     /**
      * GET api/admin/users
      *
-     * @param Request $request
      * @return AnonymousResourceCollection
      */
-    public function index(Request $request)
+    public function index(): AnonymousResourceCollection
     {
         $query = User::getSpatieQueryBuilder();
 
@@ -36,7 +34,7 @@ class UserController extends Controller
      * @param User $user
      * @return UserResource
      */
-    public function show(User $user)
+    public function show(User $user): UserResource
     {
         return new UserResource($user);
     }
@@ -48,7 +46,7 @@ class UserController extends Controller
      * @param User $user
      * @return UserResource
      */
-    public function update(UserUpdateRequest $request, User $user)
+    public function update(UserUpdateRequest $request, User $user): UserResource
     {
         $updateData = collect($request->validated());
 

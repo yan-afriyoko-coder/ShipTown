@@ -7,7 +7,6 @@ use App\Http\Requests\OrderShipmentStoreRequest;
 use App\Http\Resources\OrderShipmentResource;
 use App\Models\OrderShipment;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Http\Request;
 
 /**
  * Class OrderShipmentController
@@ -20,10 +19,9 @@ class OrderShipmentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
      * @return LengthAwarePaginator
      */
-    public function index(Request $request): LengthAwarePaginator
+    public function index(): LengthAwarePaginator
     {
         $query = OrderShipment::getSpatieQueryBuilder();
 

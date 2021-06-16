@@ -19,7 +19,7 @@ class PicklistPickController extends Controller
      * @param StoreDeletedPickRequest $request
      * @return AnonymousResourceCollection
      */
-    public function store(StoreDeletedPickRequest $request)
+    public function store(StoreDeletedPickRequest $request): AnonymousResourceCollection
     {
         if ($request->get('quantity_picked', 0) !== 0) {
             $key = 'quantity_picked';
