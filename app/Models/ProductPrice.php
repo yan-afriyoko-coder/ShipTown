@@ -34,6 +34,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|ProductPrice whereSalePriceEndDate($value)
  * @method static Builder|ProductPrice whereSalePriceStartDate($value)
  * @method static Builder|ProductPrice whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class ProductPrice extends BaseModel
 {

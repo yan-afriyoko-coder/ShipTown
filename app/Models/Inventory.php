@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\BaseModel;
 use App\Traits\LogsActivityTrait;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -41,6 +42,7 @@ use Spatie\Activitylog\Models\Activity;
  * @method static Inventory firstOrNew(array $array)
  * @property-read Collection|Activity[] $activities
  * @property-read int|null $activities_count
+ * @mixin Eloquent
  */
 class Inventory extends BaseModel
 {

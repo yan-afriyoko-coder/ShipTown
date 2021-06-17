@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class PrintJob
- * @package App\Modules\PrintNode\src\Models
  *
+ * @package App\Modules\PrintNode\src\Models
  * @property int $printer_id
  * Print job title displayed in system
  * @property string $title
@@ -21,6 +21,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $pdf_url
  * Time in seconds to expire if cannot be delivered to printer
  * @property int $expire_after
+ * @method static \Illuminate\Database\Eloquent\Builder|PrintJob newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PrintJob newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PrintJob query()
+ * @mixin \Eloquent
  */
 class PrintJob extends Model
 {

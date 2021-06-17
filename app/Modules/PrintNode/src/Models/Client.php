@@ -9,7 +9,20 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 /**
  * Class Client
+ *
  * @package App\Modules\PrintNode\src\Models
+ * @property int $id
+ * @property string $api_key
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Client newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Client newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Client query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Client whereApiKey($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Client whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Client whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Client whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Client extends Model
 {

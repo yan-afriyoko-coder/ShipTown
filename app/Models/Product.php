@@ -75,6 +75,9 @@ use Spatie\Tags\Tag;
  * @method static Builder|Product withoutAllTags($tags, $type = null)
  * @property-read Collection|ProductPrice[] $prices
  * @property-read int|null $prices_count
+ * @method static Builder|Product hasTags($tags)
+ * @method static Builder|Product whereQuantityAvailable($value)
+ * @mixin \Eloquent
  */
 class Product extends BaseModel
 {

@@ -6,7 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class DpdCollectionAddress
+ *
  * @package App\Modules\DpdIreland\src\Models
+ * @method static \Illuminate\Database\Eloquent\Builder|DpdCollectionAddress newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DpdCollectionAddress newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DpdCollectionAddress query()
+ * @mixin \Eloquent
  */
 class DpdCollectionAddress extends Model
 {

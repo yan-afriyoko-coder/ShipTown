@@ -2,7 +2,7 @@
 
 namespace App;
 
-use Barryvdh\LaravelIdeHelper\Eloquent;
+use Eloquent;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
@@ -64,6 +64,9 @@ use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
  * @method static Builder|User withTrashed()
  * @method static Builder|User withoutTrashed()
  * @mixin Eloquent
+ * @property bool $ask_for_shipping_number
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereAddressLabelTemplate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereAskForShippingNumber($value)
  */
 class User extends Authenticatable
 {

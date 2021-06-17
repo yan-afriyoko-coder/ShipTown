@@ -13,8 +13,8 @@ use Illuminate\Support\Carbon;
 
 /**
  * Class Api2cartProductLink
- * @package App\Modules\Api2cart\src\Models
  *
+ * @package App\Modules\Api2cart\src\Models
  * @property int $id
  * @property int $product_id
  * @property Product $product
@@ -28,7 +28,32 @@ use Illuminate\Support\Carbon;
  * @property Carbon api2cart_sale_price_start_date
  * @property Carbon api2cart_sale_price_end_date
  * @property Api2cartConnection $api2cartConnection
- *
+ * @property string|null $api2cart_connection_id
+ * @property string|null $api2cart_quantity
+ * @property string|null $api2cart_price
+ * @property string|null $api2cart_sale_price
+ * @property string|null $api2cart_sale_price_start_date
+ * @property string|null $api2cart_sale_price_end_date
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereApi2cartConnectionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereApi2cartPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereApi2cartProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereApi2cartProductType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereApi2cartQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereApi2cartSalePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereApi2cartSalePriceEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereApi2cartSalePriceStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereLastFetchedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereLastFetchedData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Api2cartProductLink extends BaseModel
 {

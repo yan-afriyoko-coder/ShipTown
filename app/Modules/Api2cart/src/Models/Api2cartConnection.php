@@ -37,6 +37,12 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Api2cartConnection whereUpdatedAt($value)
  * @method static Builder|Api2cartConnection whereUrl($value)
  * @mixin Eloquent
+ * @property int|null $inventory_location_id
+ * @property int|null $pricing_location_id
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Modules\Api2cart\src\Models\Api2cartProductLink[] $productLinks
+ * @property-read int|null $product_links_count
+ * @method static Builder|Api2cartConnection whereInventoryLocationId($value)
+ * @method static Builder|Api2cartConnection wherePricingLocationId($value)
  */
 class Api2cartConnection extends Model
 {

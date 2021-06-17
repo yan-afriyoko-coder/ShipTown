@@ -26,6 +26,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|OrderStatus whereOrderActive($value)
  * @method static Builder|OrderStatus whereUpdatedAt($value)
  * @method static Builder|OrderStatus whereReservesStock(bool $reserves_stock)
+ * @mixin \Eloquent
  */
 class OrderStatus extends Model
 {

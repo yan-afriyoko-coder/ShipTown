@@ -29,6 +29,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static Builder|OrderComment whereOrderId($value)
  * @method static Builder|OrderComment whereUpdatedAt($value)
  * @method static Builder|OrderComment whereUserId($value)
+ * @mixin \Eloquent
  */
 class OrderComment extends Model
 {
