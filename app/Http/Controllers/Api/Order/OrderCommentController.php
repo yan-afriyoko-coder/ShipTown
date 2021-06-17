@@ -7,7 +7,6 @@ use App\Http\Requests\OrderCommentStoreRequest;
 use App\Http\Resources\OrderCommentResource;
 use App\Models\OrderComment;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
@@ -22,10 +21,9 @@ class OrderCommentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
      * @return LengthAwarePaginator
      */
-    public function index(Request $request)
+    public function index(): LengthAwarePaginator
     {
         $query = OrderComment::getSpatieQueryBuilder();
 
@@ -36,7 +34,7 @@ class OrderCommentController extends Controller
      * @param OrderCommentStoreRequest $request
      * @return AnonymousResourceCollection
      */
-    public function store(OrderCommentStoreRequest $request)
+    public function store(OrderCommentStoreRequest $request): AnonymousResourceCollection
     {
         $shipment = new OrderComment($request->validated());
         $shipment->user()->associate($request->user());

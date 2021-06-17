@@ -69,6 +69,9 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property string $quantity_outstanding
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereHasStockReserved($statusCodeArray)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityOutstanding($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct createdBetween($min, $max)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereStatusCodeNotIn($statusCodeArray)
+ * @mixin \Eloquent
  */
 class OrderProduct extends BaseModel
 {

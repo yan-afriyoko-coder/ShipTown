@@ -26,14 +26,15 @@ class UserInviteController extends Controller
      * POST api/admin/user/invites
      *
      * @param UserInviteStoreRequest $request
-     * @return Application|ResponseFactory|Response
+     * @return void
      */
     public function store(UserInviteStoreRequest $request)
     {
         do {
             //generate a random string using Laravel's str_random helper
             $token = Str::random();
-        } while (UserInvite::where('token', $token)->first()); //check if the token already exists and if it does, try again
+        } while (UserInvite::where('token', $token)->first());
+        //check if the token already exists and if it does, try again
 
         //create a new invite record
         $invite = UserInvite::create([

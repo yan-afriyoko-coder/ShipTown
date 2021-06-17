@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Api\Run;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\RunDailyJobs;
-use App\Modules\Api2cart\src\Models\Api2cartConnection;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 /**
@@ -15,9 +13,8 @@ use Illuminate\Http\Request;
 class DailyJobsController extends Controller
 {
     /**
-     * @param Request $request
      */
-    public function index(Request $request)
+    public function index()
     {
         RunDailyJobs::dispatch();
 

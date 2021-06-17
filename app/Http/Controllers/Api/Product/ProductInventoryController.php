@@ -7,6 +7,7 @@ use App\Http\Requests\StoreInventoryRequest;
 use App\Models\Inventory;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -47,12 +48,11 @@ class ProductInventoryController extends Controller
 
     /**
      * @param StoreInventoryRequest $request
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
-    public function store(StoreInventoryRequest $request)
+    public function store(StoreInventoryRequest $request): AnonymousResourceCollection
     {
-        $product = Product::where('sku', '=', $request->sku)
-            ->firstOrFail();
+        $product = Product::where('sku', '=', $request->sku)->firstOrFail();
 
         $update = $request->all();
 

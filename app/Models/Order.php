@@ -91,6 +91,19 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static Builder|Order whereIsActive()
  * @property-read int $age_in_days
  * @property OrderStatus orderStatus
+ * @property-read bool $is_not_paid
+ * @property Collection|\Spatie\Tags\Tag[] $tags
+ * @property-read int|null $tags_count
+ * @method static Builder|Order hasTags($tags)
+ * @method static Builder|Order isActive()
+ * @method static Builder|Order packedBetween($fromDateTime, $toDateTime)
+ * @method static Builder|Order whereAgeInDays($age)
+ * @method static Builder|Order withAllTags($tags, $type = null)
+ * @method static Builder|Order withAllTagsOfAnyType($tags)
+ * @method static Builder|Order withAnyTags($tags, $type = null)
+ * @method static Builder|Order withAnyTagsOfAnyType($tags)
+ * @method static Builder|Order withoutAllTags($tags, $type = null)
+ * @mixin \Eloquent
  */
 class Order extends BaseModel
 {

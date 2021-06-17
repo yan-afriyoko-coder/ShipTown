@@ -30,7 +30,7 @@
         "makeabledk/laravel-factory-enhanced": "^2.1",
         "milon/barcode": "^7.0",
         "rap2hpoutre/laravel-log-viewer": "^1.7",
-        "romanzipp/laravel-queue-monitor": "*",
+        "romanzipp/laravel-queue-monitor": "2.1.*",
         "sentry/sentry-laravel": "^2.4",
         "spatie/array-to-xml": "^2.15",
         "spatie/laravel-activitylog": "^3.17",
@@ -41,6 +41,7 @@
         "thomasjohnkane/snooze": "^1.0"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "2.8.*",
         "barryvdh/laravel-debugbar": "^3.5",
         "bpocallaghan/generators": "6.06",
         "facade/ignition": "^2.0",

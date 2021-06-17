@@ -59,6 +59,10 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static \Illuminate\Database\Eloquent\Builder|Pick whereUserId($value)
  * @method static Builder|Pick withTrashed()
  * @method static Builder|Pick withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick createdBetween($min, $max)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick quantityPickedBetween($min, $max)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pick quantitySkippedBetween($min, $max)
+ * @mixin \Eloquent
  */
 class Pick extends Model
 {
