@@ -15,8 +15,8 @@ class PublishSnsNotificationListener implements ShouldQueue
     /**
      * The time (seconds) before the job should be processed.
      *
-     * We will wait few seconds to make sure all listeners
-     * finished updating order
+     * We will queue it and wait few seconds
+     * to make sure all listeners finished updating order
      *
      * @var int
      */
