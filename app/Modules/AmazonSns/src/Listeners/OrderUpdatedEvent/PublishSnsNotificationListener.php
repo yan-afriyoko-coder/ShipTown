@@ -4,20 +4,31 @@ namespace App\Modules\AmazonSns\src\Listeners\OrderUpdatedEvent;
 
 use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\AmazonSns\src\Jobs\PublishSnsNotificationJob;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class PublishSnsNotificationListener
+/**
+ * Class PublishSnsNotificationListener
+ * @package App\Modules\AmazonSns\src\Listeners\OrderUpdatedEvent
+ */
+class PublishSnsNotificationListener implements ShouldQueue
 {
     /**
-     * Handle the event.
+     * The time (seconds) before the job should be processed.
+     *
+     * @var int
+     */
+    public int $delay = 5;
+
+    /**
+     * Handle the event
      *
      * @param OrderUpdatedEvent $event
      * @return void
      */
     public function handle(OrderUpdatedEvent $event)
     {
-        PublishSnsNotificationJob::dispatch(
-            'orders_events',
-            $event->getOrder()->toJson()
-        );
+        $upToDateOrder = $event->getOrder()->refresh();
+
+        PublishSnsNotificationJob::dispatchNow('orders_events', $upToDateOrder->toJson());
     }
 }
