@@ -8,10 +8,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 /**
- * Class PublishSnsNotificationListener
+ * Class OrderUpdatedWebhookListener
  * @package App\Modules\AmazonSns\src\Listeners\OrderUpdatedEvent
  */
-class PublishSnsNotificationListener implements ShouldQueue
+class OrderUpdatedWebhookListener implements ShouldQueue
 {
     use IsMonitored;
 
@@ -34,6 +34,11 @@ class PublishSnsNotificationListener implements ShouldQueue
     public function handle(OrderUpdatedEvent $event)
     {
         $upToDateOrder = $event->getOrder()->refresh();
+
+        $this->queueData([
+            'order_id' => $upToDateOrder->getKey(),
+            'order_number' => $upToDateOrder->order_number
+        ]);
 
         PublishSnsNotificationJob::dispatchNow('orders_events', $upToDateOrder->toJson());
     }
