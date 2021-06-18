@@ -5,6 +5,7 @@ namespace App\Modules\AmazonSns\src\Listeners\OrderUpdatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\AmazonSns\src\Jobs\PublishSnsNotificationJob;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 /**
  * Class PublishSnsNotificationListener
@@ -12,6 +13,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
  */
 class PublishSnsNotificationListener implements ShouldQueue
 {
+    use IsMonitored;
+
     /**
      * The time (seconds) before the job should be processed.
      *
