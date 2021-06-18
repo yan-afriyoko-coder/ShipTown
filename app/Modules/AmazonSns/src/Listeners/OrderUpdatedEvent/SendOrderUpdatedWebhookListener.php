@@ -8,10 +8,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 /**
- * Class OrderUpdatedWebhookListener
+ * Class SendOrderUpdatedWebhookListener
  * @package App\Modules\AmazonSns\src\Listeners\OrderUpdatedEvent
  */
-class OrderUpdatedWebhookListener implements ShouldQueue
+class SendOrderUpdatedWebhookListener implements ShouldQueue
 {
     use IsMonitored;
 

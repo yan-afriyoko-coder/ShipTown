@@ -33,7 +33,7 @@ class AmazonSnsServiceProvider extends ServiceProvider
         ],
 
         OrderUpdatedEvent::class => [
-            Listeners\OrderUpdatedEvent\OrderUpdatedWebhookListener::class,
+            Listeners\OrderUpdatedEvent\SendOrderUpdatedWebhookListener::class,
         ],
     ];
 
