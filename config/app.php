@@ -214,7 +214,7 @@ return [
 
         // 3rd party integrations
         // order SHOULD not be important
-        App\Modules\AmazonSns\src\AmazonSnsServiceProvider::class,
+        App\Modules\Webhooks\src\WebhooksServiceProvider::class,
         App\Modules\Api2cart\src\EventServiceProvider::class,
         App\Modules\Rmsapi\src\EventServiceProvider::class,
         App\Modules\MagentoApi\src\EventServiceProvider::class,

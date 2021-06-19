@@ -2,19 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use AWS;
 use Aws\Exception\AwsException;
+use Aws\Result;
+use Aws\Sns\SnsClient;
+use Exception;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Class SnsController
+ * @package App\Http\Controllers
+ */
 class SnsController extends Controller
 {
-    private $awsSnsClient;
-    private $topicName;
+    /**
+     * @var SnsClient
+     */
+    public $awsSnsClient;
 
+    /**
+     * @var string
+     */
+    private string $topicName;
 
     /**
      * @var AwsException
      */
-    public $lastException;
+    public AwsException $lastException;
+
+    /**
+     * @var Result
+     */
+    public Result $lastResponse;
 
     /**
      * SnsController constructor.
@@ -23,16 +42,24 @@ class SnsController extends Controller
     public function __construct($topicName)
     {
         if (empty(config('aws.user_code')) === false) {
-            $this->awsSnsClient = \AWS::createClient('sns');
-        };
+            $this->awsSnsClient = AWS::createClient('sns');
+        }
 
         $this->topicName = $topicName;
     }
 
     /**
+     * @return mixed
+     */
+    public function listSubscriptions()
+    {
+        return $this->awsSnsClient->listSubscriptions();
+    }
+
+    /**
      * @return bool
      */
-    public function createTopic()
+    public function createTopic(): bool
     {
         try {
             $this->awsSnsClient->createTopic([
@@ -51,7 +78,7 @@ class SnsController extends Controller
      * @param string $subscription_url
      * @return bool
      */
-    public function subscribeToTopic(string $subscription_url)
+    public function subscribeToTopic(string $subscription_url): bool
     {
         try {
             $this->awsSnsClient->subscribe([
@@ -75,9 +102,8 @@ class SnsController extends Controller
      * @param string $message
      * @return bool
      */
-    public function publish(string $message)
+    public function publish(string $message): bool
     {
-
         if (is_null($this->awsSnsClient)) {
             return false;
         }
@@ -88,7 +114,7 @@ class SnsController extends Controller
         ];
 
         try {
-            $this->awsSnsClient->publish($notification);
+            $this->lastResponse = $this->awsSnsClient->publish($notification);
             return true;
         } catch (AwsException $e) {
             Log::error("Could not publish SNS message", [
@@ -96,19 +122,21 @@ class SnsController extends Controller
                 "return_message" => $e->getMessage(),
                 "message" => $notification
             ]);
-        } catch (\Exception $e) {
+            return false;
+        } catch (Exception $e) {
             Log::error("Could not publish SNS message", [
                 "code" => $e->getCode(),
                 "return_message" => $e->getMessage(),
                 "message" => $notification
             ]);
+            return false;
         }
     }
 
     /**
      * @return bool
      */
-    public function deleteTopic()
+    public function deleteTopic(): bool
     {
 
         try {
