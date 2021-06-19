@@ -31,7 +31,7 @@ class PublishOrdersWebhooksJob implements ShouldQueue
      */
     public function handle()
     {
-        $awaiting_publish_tag = config('webhooks.tag.awaiting.name');
+        $awaiting_publish_tag = config('webhooks.tags.awaiting.name');
 
         $orders = Order::withAllTags($awaiting_publish_tag)
             ->with('orderProducts')
