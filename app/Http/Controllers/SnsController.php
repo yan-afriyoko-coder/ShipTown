@@ -115,7 +115,7 @@ class SnsController extends Controller
 
         try {
             $this->lastResponse = $this->awsSnsClient->publish($notification);
-            Log::debug('AwsSns: message published', $this->lastResponse);
+            Log::debug('AwsSns: message published', $this->lastResponse->toArray());
             return true;
         } catch (AwsException $e) {
             Log::error("Could not publish SNS message", [
