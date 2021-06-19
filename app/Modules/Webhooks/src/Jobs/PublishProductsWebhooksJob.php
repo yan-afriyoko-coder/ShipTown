@@ -39,7 +39,7 @@ class PublishProductsWebhooksJob implements ShouldQueue
             $product->detachTag(config('webhooks.tags.awaiting.name'));
 
             $productResource = new ProductResource($product);
-            if (! AwsSns::publish('orders_events', $productResource->toJson())) {
+            if (! AwsSns::publish('products_events', $productResource->toJson())) {
                 $product->attachTag(config('webhooks.tags.awaiting.name'));
             }
 
