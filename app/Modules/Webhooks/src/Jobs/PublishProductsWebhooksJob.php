@@ -29,18 +29,21 @@ class PublishProductsWebhooksJob implements ShouldQueue
     {
         $awaiting_publish_tag = config('webhooks.tags.awaiting.name');
 
-        Product::withAllTags($awaiting_publish_tag)
-            ->get()
-            ->each(function (Product $product) {
-                $product->attachTag(config('webhooks.tags.publishing.name'));
-                $product->detachTag(config('webhooks.tags.awaiting.name'));
+        $products = Product::withAllTags($awaiting_publish_tag)
+            ->get();
 
-                $orderResource = new ProductResource($product);
-                if (! AwsSns::publish('orders_events', $orderResource->toJson())) {
-                    $product->attachTag(config('webhooks.tags.awaiting.name'));
-                }
+        $this->queueData(['products_count' => $products->count()]);
 
-                $product->detachTag(config('webhooks.tags.publishing.name'));
-            });
+        $products->each(function (Product $product) {
+            $product->attachTag(config('webhooks.tags.publishing.name'));
+            $product->detachTag(config('webhooks.tags.awaiting.name'));
+
+            $productResource = new ProductResource($product);
+            if (! AwsSns::publish('products_events', $productResource->toJson())) {
+                $product->attachTag(config('webhooks.tags.awaiting.name'));
+            }
+
+            $product->detachTag(config('webhooks.tags.publishing.name'));
+        });
     }
 }
