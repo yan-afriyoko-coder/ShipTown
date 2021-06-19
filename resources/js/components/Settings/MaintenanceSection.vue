@@ -13,6 +13,7 @@
             <div class="card-body">
                 <button :disabled="!btnRunHourlyJobsEnabled" @click.prevent="runHourlyJobs">Run Hourly Jobs</button>
                 <button :disabled="!btnRunDailyJobsEnabled" @click.prevent="runDailyJobs">Run Daily Jobs</button>
+                <button :disabled="!btnRunApi2cartSyncEnabled" @click.prevent="runApi2cartSync">Run Api2cart Sync</button>
                 <button :disabled="!btnRunSyncEnabled" @click.prevent="runSync">Run Sync</button>
             </div>
         </div>
@@ -31,6 +32,7 @@ export default {
         return {
             btnRunHourlyJobsEnabled: true,
             btnRunDailyJobsEnabled: true,
+            btnRunApi2cartSyncEnabled: true,
             btnRunSyncEnabled: true,
         }
     },
@@ -57,6 +59,19 @@ export default {
                 )
                 .catch(() => {
                         this.$snotify.error('Jub run request failed');
+                    }
+                );
+        },
+
+        runApi2cartSync() {
+            this.btnRunApi2cartSyncEnabled = false;
+            this.apiGetRunSync()
+                .then(() => {
+                        this.$snotify.success('Api2cart Sync requested');
+                    }
+                )
+                .catch(() => {
+                        this.$snotify.error('Sync request failed');
                     }
                 );
         },
