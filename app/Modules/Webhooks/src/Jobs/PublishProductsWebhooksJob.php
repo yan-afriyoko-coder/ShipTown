@@ -27,7 +27,7 @@ class PublishProductsWebhooksJob implements ShouldQueue
      */
     public function handle()
     {
-        $awaiting_publish_tag = config('webhooks.tag.awaiting.name');
+        $awaiting_publish_tag = config('webhooks.tags.awaiting.name');
 
         Product::withAllTags($awaiting_publish_tag)
             ->get()
