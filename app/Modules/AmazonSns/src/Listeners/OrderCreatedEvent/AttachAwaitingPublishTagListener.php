@@ -3,21 +3,21 @@
 namespace App\Modules\AmazonSns\src\Listeners\OrderCreatedEvent;
 
 use App\Events\Order\OrderCreatedEvent;
-use App\Modules\AmazonSns\src\Jobs\PublishSnsNotificationJob;
 
-class PublishSnsNotificationListener
+/**
+ * Class AttachAwaitingPublishTagListener
+ * @package App\Modules\AmazonSns\src\Listeners\OrderUpdatedEvent
+ */
+class AttachAwaitingPublishTagListener
 {
     /**
-     * Handle the event.
+     * Handle the event
      *
      * @param OrderCreatedEvent $event
      * @return void
      */
     public function handle(OrderCreatedEvent $event)
     {
-        PublishSnsNotificationJob::dispatch(
-            'orders_events',
-            $event->getOrder()->toJson()
-        );
+        $event->getOrder()->attachTag(config('webhooks.tags.awaiting.name'));
     }
 }

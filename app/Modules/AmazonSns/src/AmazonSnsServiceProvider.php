@@ -6,6 +6,9 @@ use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Events\Product\ProductCreatedEvent;
 use App\Events\Product\ProductUpdatedEvent;
+use App\Events\SyncRequestedEvent;
+use App\Modules\AmazonSns\src\Jobs\PublishOrdersWebhooksJob;
+use App\Modules\AmazonSns\src\Listeners\SyncRequestedEvent\PublishProductsWebhooksListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 /**
@@ -20,41 +23,36 @@ class AmazonSnsServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
+        SyncRequestedEvent::class => [
+            PublishOrdersWebhooksJob::class,
+            PublishProductsWebhooksListener::class,
+        ],
+
         ProductCreatedEvent::class => [
-            Listeners\ProductCreatedEvent\PublishSnsNotificationListener::class,
+            Listeners\ProductCreatedEvent\AttachAwaitingPublishTagListener::class,
         ],
 
         ProductUpdatedEvent::class => [
-            Listeners\ProductUpdatedEvent\PublishSnsNotificationListener::class,
+            Listeners\ProductUpdatedEvent\AttachAwaitingPublishTagListener::class,
         ],
 
         OrderCreatedEvent::class => [
-            Listeners\OrderCreatedEvent\PublishSnsNotificationListener::class,
+            Listeners\OrderCreatedEvent\AttachAwaitingPublishTagListener::class,
         ],
 
         OrderUpdatedEvent::class => [
-            Listeners\OrderUpdatedEvent\SendOrderUpdatedWebhookListener::class,
+            Listeners\OrderUpdatedEvent\AttachAwaitingPublishTagListener::class,
         ],
     ];
 
-    /**
-     * The subscriber classes to register.
-     *
-     * @var array
-     */
-    protected $subscribe = [
-
-    ];
-
-    /**
-     * Register any events for your application.
-     *
-     * @return void
-     */
     public function boot()
     {
         parent::boot();
 
-        //
+        $this->publishes([
+            __DIR__.'/../config/webhooks.php' => config_path('webhooks.php'),
+        ], 'config');
+
+        $this->mergeConfigFrom(__DIR__ . '/../config/webhooks.php', 'webhooks');
     }
 }

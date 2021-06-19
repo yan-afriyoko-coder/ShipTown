@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use AWS;
 use Aws\Exception\AwsException;
+use Aws\Result;
 use Aws\Sns\SnsClient;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -28,6 +29,11 @@ class SnsController extends Controller
      * @var AwsException
      */
     public AwsException $lastException;
+
+    /**
+     * @var Result
+     */
+    public Result $lastResponse;
 
     /**
      * SnsController constructor.
@@ -98,7 +104,6 @@ class SnsController extends Controller
      */
     public function publish(string $message): bool
     {
-
         if (is_null($this->awsSnsClient)) {
             return false;
         }
@@ -109,7 +114,7 @@ class SnsController extends Controller
         ];
 
         try {
-            $this->awsSnsClient->publish($notification);
+            $this->lastResponse = $this->awsSnsClient->publish($notification);
             return true;
         } catch (AwsException $e) {
             Log::error("Could not publish SNS message", [

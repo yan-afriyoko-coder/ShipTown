@@ -3,9 +3,8 @@
 namespace App\Modules\AmazonSns\src\Listeners\ProductUpdatedEvent;
 
 use App\Events\Product\ProductUpdatedEvent;
-use App\Modules\AmazonSns\src\Jobs\PublishSnsNotificationJob;
 
-class PublishSnsNotificationListener
+class AttachAwaitingPublishTagListener
 {
     /**
      * Handle the event.
@@ -15,9 +14,6 @@ class PublishSnsNotificationListener
      */
     public function handle(ProductUpdatedEvent $event)
     {
-        PublishSnsNotificationJob::dispatch(
-            'products_events',
-            $event->getProduct()->toJson()
-        );
+        $event->getProduct()->attachTag(config('webhooks.tags.awaiting.name'));
     }
 }
