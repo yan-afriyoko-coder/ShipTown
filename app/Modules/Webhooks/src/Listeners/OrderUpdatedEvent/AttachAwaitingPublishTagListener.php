@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Modules\AmazonSns\src\Listeners\OrderUpdatedEvent;
+namespace App\Modules\Webhooks\src\Listeners\OrderUpdatedEvent;
 
 use App\Events\Order\OrderUpdatedEvent;
 
 /**
  * Class AttachAwaitingPublishTagListener
- * @package App\Modules\AmazonSns\src\Listeners\OrderUpdatedEvent
+ * @package App\Modules\Webhooks\src\Listeners\OrderUpdatedEvent
  */
 class AttachAwaitingPublishTagListener
 {

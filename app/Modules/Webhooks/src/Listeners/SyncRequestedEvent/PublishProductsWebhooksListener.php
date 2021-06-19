@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Modules\AmazonSns\src\Listeners\SyncRequestedEvent;
+namespace App\Modules\Webhooks\src\Listeners\SyncRequestedEvent;
 
 use App\Events\SyncRequestedEvent;
-use App\Modules\AmazonSns\src\Jobs\PublishProductsWebhooksJob;
+use App\Modules\Webhooks\src\Jobs\PublishProductsWebhooksJob;
 
 class PublishProductsWebhooksListener
 {

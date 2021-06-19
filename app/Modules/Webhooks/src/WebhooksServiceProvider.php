@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Modules\AmazonSns\src;
+namespace App\Modules\Webhooks\src;
 
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Events\Product\ProductCreatedEvent;
 use App\Events\Product\ProductUpdatedEvent;
 use App\Events\SyncRequestedEvent;
-use App\Modules\AmazonSns\src\Jobs\PublishOrdersWebhooksJob;
-use App\Modules\AmazonSns\src\Listeners\SyncRequestedEvent\PublishProductsWebhooksListener;
+use App\Modules\Webhooks\src\Jobs\PublishOrdersWebhooksJob;
+use App\Modules\Webhooks\src\Listeners\SyncRequestedEvent\PublishProductsWebhooksListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 /**
  * Class EventServiceProvider
  * @package App\Providers
  */
-class AmazonSnsServiceProvider extends ServiceProvider
+class WebhooksServiceProvider extends ServiceProvider
 {
     /**
      * The event listener mappings for the application.

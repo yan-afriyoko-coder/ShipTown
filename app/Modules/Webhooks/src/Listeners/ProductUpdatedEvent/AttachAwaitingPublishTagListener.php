@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\AmazonSns\src\Listeners\ProductUpdatedEvent;
+namespace App\Modules\Webhooks\src\Listeners\ProductUpdatedEvent;
 
 use App\Events\Product\ProductUpdatedEvent;
 

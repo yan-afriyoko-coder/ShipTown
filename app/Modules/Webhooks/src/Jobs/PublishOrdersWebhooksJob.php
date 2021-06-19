@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Modules\AmazonSns\src\Jobs;
+namespace App\Modules\Webhooks\src\Jobs;
 
 use App\Http\Controllers\SnsController;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
+use App\Modules\Webhooks\src\AwsSns;
 use Aws\Exception\AwsException;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -17,7 +18,7 @@ use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 /**
  * Class PublishOrdersWebhooksJob
- * @package App\Modules\AmazonSns\src\Jobs
+ * @package App\Modules\Webhooks\src\Jobs
  */
 class PublishOrdersWebhooksJob implements ShouldQueue
 {
@@ -40,41 +41,11 @@ class PublishOrdersWebhooksJob implements ShouldQueue
                 $order->detachTag(config('webhooks.tags.awaiting.name'));
 
                 $orderResource = new OrderResource($order);
-                if (! $this->publishWebhook('orders_events', $orderResource->toJson())) {
+                if (! AwsSns::publish('orders_events', $orderResource->toJson())) {
                     $order->attachTag(config('webhooks.tags.awaiting.name'));
                 }
 
                 $order->detachTag(config('webhooks.tags.publishing.name'));
             });
-    }
-
-    /**
-     * @param string $topic
-     * @param string $message
-     * @return bool
-     */
-    private function publishWebhook(string $topic, string $message): bool
-    {
-        $snsTopic = new SnsController($topic);
-
-        try {
-            return $snsTopic->publish($message);
-        } catch (AwsException $e) {
-            Log::error("Could not publish SNS message", [
-                "code" => $e->getStatusCode(),
-                "return_message" => $e->getMessage(),
-                "topic" => $topic,
-                "message" => $message,
-            ]);
-            return false;
-        } catch (Exception $e) {
-            Log::error("Could not publish SNS message", [
-                "code" => $e->getCode(),
-                "return_message" => $e->getMessage(),
-                "topic" => $topic,
-                "message" => $message,
-            ]);
-            return false;
-        }
     }
 }
