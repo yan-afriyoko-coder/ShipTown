@@ -49,6 +49,10 @@ class SyncCheckFailedProductsJob implements ShouldQueue
         }
         $query = Product::withAllTags(['CHECK FAILED']);
 
+        $this->queueData([
+            'total_count' => $query->count()
+        ]);
+
         $totalCount = $query->count();
 
         $chunkSize = 100;
