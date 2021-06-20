@@ -26,6 +26,10 @@ class SyncProductsJob implements ShouldQueue
     {
         $query = Product::withAllTags(['Available Online', 'Not Synced']);
 
+        $this->queueData([
+            'total_count' => $query->count()
+        ]);
+
         $totalCount = $query->count();
 
         $chunkSize = 10;
