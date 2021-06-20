@@ -65,7 +65,7 @@ export default {
 
         runApi2cartSync() {
             this.btnRunApi2cartSyncEnabled = false;
-            this.apiGetRunSync()
+            this.apiGetRunSyncApi2cart()
                 .then(() => {
                         this.$snotify.success('Api2cart Sync requested');
                     }
