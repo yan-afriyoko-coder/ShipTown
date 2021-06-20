@@ -136,7 +136,7 @@ export default {
             },
 
             apiGetRunSyncApi2cart: function () {
-                return axios.get('/run/sync/api2cart');
+                return axios.get('/api/run/sync/api2cart');
             },
 
             apiGetPrintNodePrinters: function () {
