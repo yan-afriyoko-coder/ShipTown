@@ -135,6 +135,10 @@ export default {
                 return axios.get('/api/run/sync');
             },
 
+            apiGetRunSyncApi2cart: function () {
+                return axios.get('/run/sync/api2cart');
+            },
+
             apiGetPrintNodePrinters: function () {
                 return axios.get('/api/settings/modules/printnode/printers');
             },
