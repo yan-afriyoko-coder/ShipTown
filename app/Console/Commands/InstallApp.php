@@ -41,7 +41,7 @@ class InstallApp extends Command
 
         $this->migrate();
 
-        $this->passportKey();
+//        $this->passportKey();
     }
 
     private function keyGenerate(): void
