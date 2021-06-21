@@ -99,6 +99,7 @@ class FetchUpdatedOrdersJob implements ShouldQueue
         }
 
         $orders = Orders::get($connection->bridge_api_key, $params);
+        $this->queueData(['fetched_count' => count($orders)]);
 
         if (!$orders) {
             $this->queueData(['count' => 0]);
@@ -115,7 +116,6 @@ class FetchUpdatedOrdersJob implements ShouldQueue
             self::dispatch($connection);
         }
 
-        $this->queueData(['count' => count($orders)]);
         info('Imported Api2cart orders', ['count' => count($orders)]);
     }
 
