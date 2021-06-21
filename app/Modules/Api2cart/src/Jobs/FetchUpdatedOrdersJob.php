@@ -13,10 +13,11 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
+use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class FetchUpdatedOrdersJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
 
     /**
      * @var bool
@@ -100,6 +101,7 @@ class FetchUpdatedOrdersJob implements ShouldQueue
         $orders = Orders::get($connection->bridge_api_key, $params);
 
         if (!$orders) {
+            $this->queueData(['count' => 0]);
             info('Imported Api2cart orders', ['count' => 0]);
             return;
         }
@@ -113,6 +115,7 @@ class FetchUpdatedOrdersJob implements ShouldQueue
             self::dispatch($connection);
         }
 
+        $this->queueData(['count' => count($orders)]);
         info('Imported Api2cart orders', ['count' => count($orders)]);
     }
 
