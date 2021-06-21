@@ -35,14 +35,23 @@ use Illuminate\Support\Facades\Log;
  */
 class Api2cartOrderImports extends Model
 {
+    /**
+     * @var string
+     */
     protected $table = 'api2cart_order_imports';
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'when_processed',
         'order_number',
         'raw_import',
     ];
 
+    /**
+     * @var string[]
+     */
     protected $casts = [
         'raw_import' => 'array',
     ];
@@ -51,6 +60,9 @@ class Api2cartOrderImports extends Model
     // we wont use database default values
     // as this is then not populated
     // correctly to events
+    /**
+     * @var string[]
+     */
     protected $attributes = [
         'raw_import' => '{}',
     ];
@@ -83,6 +95,7 @@ class Api2cartOrderImports extends Model
             'region'        => $shipping_address['region'],
         ]);
     }
+
 
     /**
      * @return array
@@ -122,5 +135,13 @@ class Api2cartOrderImports extends Model
         }
 
         return $statuses;
+    }
+
+    /**
+     * @return Carbon
+     */
+    public function ordersCreateAt(): Carbon
+    {
+        return Carbon::createFromTimeString($this->raw_import['create_at']['value']);
     }
 }

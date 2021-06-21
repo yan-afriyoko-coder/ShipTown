@@ -17,48 +17,4 @@ class Api2cartOrderImportsObserver
     {
         ProcessApi2cartImportedOrderJob::dispatch($api2cartOrderImports);
     }
-
-    /**
-     * Handle the api2cart order imports "updated" event.
-     *
-     * @param  Api2cartOrderImports  $api2cartOrderImports
-     * @return void
-     */
-    public function updated(Api2cartOrderImports $api2cartOrderImports)
-    {
-        //
-    }
-
-    /**
-     * Handle the api2cart order imports "deleted" event.
-     *
-     * @param  Api2cartOrderImports  $api2cartOrderImports
-     * @return void
-     */
-    public function deleted(Api2cartOrderImports $api2cartOrderImports)
-    {
-        //
-    }
-
-    /**
-     * Handle the api2cart order imports "restored" event.
-     *
-     * @param  Api2cartOrderImports  $api2cartOrderImports
-     * @return void
-     */
-    public function restored(Api2cartOrderImports $api2cartOrderImports)
-    {
-        //
-    }
-
-    /**
-     * Handle the api2cart order imports "force deleted" event.
-     *
-     * @param  Api2cartOrderImports  $api2cartOrderImports
-     * @return void
-     */
-    public function forceDeleted(Api2cartOrderImports $api2cartOrderImports)
-    {
-        //
-    }
 }
