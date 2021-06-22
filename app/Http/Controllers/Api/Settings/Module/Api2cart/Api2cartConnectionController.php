@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Settings\Module\Api2cart;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreApi2cartConnectionRequest;
+use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -21,7 +22,7 @@ class Api2cartConnectionController extends Controller
     /**
      * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         return JsonResource::collection(Api2cartConnection::all());
     }
@@ -30,11 +31,13 @@ class Api2cartConnectionController extends Controller
      * @param StoreApi2cartConnectionRequest $request
      * @return JsonResource
      */
-    public function store(StoreApi2cartConnectionRequest $request)
+    public function store(StoreApi2cartConnectionRequest $request): JsonResource
     {
         $config = new Api2cartConnection();
         $config->fill($request->only($config->getFillable()));
         $config->save();
+
+        DispatchImportOrdersJobs::dispatch();
 
         return new JsonResource($config);
     }
