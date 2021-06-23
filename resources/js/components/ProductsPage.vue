@@ -108,7 +108,7 @@
                     .finally(() => {
                         this.hideLoading();
                     });
-
+                this.setFocus(this.$refs.search, true, true);
                 return this;
             },
 
