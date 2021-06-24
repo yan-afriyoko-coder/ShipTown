@@ -13,16 +13,16 @@ use Tests\TestCase;
 
 class DpdIntegrationJobTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, SeedConfiguration;
 
     /**
      * @test
      */
     public function if_env_variables_are_set()
     {
-        $this->assertNotEmpty(config('dpd.token'), 'DPD_TOKEN is not set');
-        $this->assertNotEmpty(config('dpd.user'), 'DPD_USER is not set');
-        $this->assertNotEmpty(config('dpd.password'), 'DPD_PASSWORD is not set');
+        $this->assertNotEmpty(env('TEST_DPD_TOKEN'), 'TEST_DPD_TOKEN is not set');
+        $this->assertNotEmpty(env('TEST_DPD_USER'), 'TEST_DPD_USER is not set');
+        $this->assertNotEmpty(env('TEST_DPD_PASSWORD'), 'TEST_DPD_PASSWORD is not set');
     }
 
     /**
@@ -53,7 +53,7 @@ class DpdIntegrationJobTest extends TestCase
         ]);
 
         $order = factory(Order::class)->create([
-            'shipping_address_id' => $address->getKey()
+            'shipping_address_id' => $address->getKey(),
         ]);
 
         try {

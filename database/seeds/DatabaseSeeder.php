@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
 //            Api2CartOrderImportSeeder::class,
 //            RmsapiConnectionSeeder::class,
 //            RmsapiProductImportSeeder::class,
-//
+//            DpdSeeder::class,
 //            PicksSeeder::class
         ]);
 

@@ -1,10 +1,10 @@
 <?php
 
-
 namespace App\Modules\DpdIreland\src;
 
 use App\Modules\DpdIreland\src\Exceptions\ConsignmentValidationException;
-use App\Modules\DpdIreland\src\Models\DpdCollectionAddress;
+use App\Modules\DpdIreland\src\Models\DpdIreland;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -49,8 +49,8 @@ class Consignment
     private $templateArray = [
         'RecordID' => 1,
         'CustomerAccount' => '',
-        'TotalParcels'=> 1,
-        'Relabel'=> 0,
+        'TotalParcels' => 1,
+        'Relabel' => 0,
         'ServiceOption' => self::SERVICE_OPTION_NORMAL,
         'ServiceType' => self::SERVICE_TYPE_OVERNIGHT,
         'ConsignmentReference' => '',
@@ -64,7 +64,7 @@ class Consignment
             'AddressLine3' => '',
             'AddressLine4' => '',
             'PostCode' => '',
-            'CountryCode' =>  '',
+            'CountryCode' => '',
         ],
         'CollectionAddress' => [
             'Contact' => 'John ',
@@ -76,15 +76,15 @@ class Consignment
             'AddressLine3' => '',
             'AddressLine4' => '',
             'PostCode' => '',
-            'CountryCode' =>  '',
+            'CountryCode' => '',
         ],
         'References' => [
             'Reference' => [
                 'ReferenceName' => '',
                 'ReferenceValue' => '',
                 'ParcelNumber' => 1,
-            ]
-        ]
+            ],
+        ],
     ];
 
     /**
@@ -98,9 +98,15 @@ class Consignment
     private $validator;
 
     /**
+     * @var DpdIreland
+     */
+    private $config;
+
+    /**
      * Shipment constructor.
      * @param array $consignment
      * @throws ConsignmentValidationException
+     * @throws ModelNotFoundException
      */
     public function __construct(array $consignment)
     {
@@ -111,6 +117,8 @@ class Consignment
         if ($this->validator->fails()) {
             throw new ConsignmentValidationException($this->validator->errors());
         }
+
+        $this->config = DpdIreland::firstOrFail();
     }
 
     /**
@@ -119,7 +127,7 @@ class Consignment
     public function toXml(): string
     {
         $data = [
-            'Consignment' => $this->toArray()
+            'Consignment' => $this->toArray(),
         ];
 
         return ArrayToXml::convert(
@@ -147,7 +155,7 @@ class Consignment
     public function toArray(): array
     {
         $fixedValues = collect([
-            'CustomerAccount' => config('dpd.user'),
+            'CustomerAccount' => $this->config->user,
             'DeliveryAddress' => (new DpdAddress($this->consignment['DeliveryAddress']))->toArray(),
             'CollectionAddress' => $this->getCollectionAddress(),
         ]);
@@ -165,7 +173,7 @@ class Consignment
      */
     private function getCollectionAddress(): array
     {
-        $CollectionAddress = DpdCollectionAddress::getCollectionAddress();
+        $CollectionAddress = $this->config->getCollectionAddress();
 
         $address = new DpdAddress($CollectionAddress);
 
