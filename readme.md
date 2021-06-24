@@ -20,4 +20,17 @@ php artisan db:seed
 ```
 This will run the seeders which should populate necessary tables, including generating one user which will be given the 'admin' role.
 
-#
+## Modules
+You will find all modules in separate folders.
+
+app/Modules/*
+
+Each module has separate folder and need to be decoupled
+
+All modules load trough App service provider
+https://github.com/ArturHanusek/management.products.api/blob/dev/config/app.php#L200
+
+Each time ServiceProvider is booted, module checks against database if it should be enabled.
+
+You can configure modules in _UI > Settings > Modules_
+
