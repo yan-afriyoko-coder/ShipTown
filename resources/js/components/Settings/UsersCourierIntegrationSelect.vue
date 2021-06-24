@@ -25,8 +25,8 @@
                             <td>Ask to scan shipping number</td>
                             <td class="text-right">
                                 <div class="custom-control custom-switch">
-                                    <input type="checkbox" @change="saveAskForShippingNumberValue" class="custom-control-input" id="customSwitch1" v-model="selected_ask_for_shipping_number">
-                                    <label class="custom-control-label" for="customSwitch1"></label>
+                                    <input type="checkbox" @change="saveAskForShippingNumberValue" class="custom-control-input" id="swicth-scan-shipping-number" v-model="selected_ask_for_shipping_number">
+                                    <label class="custom-control-label" for="swicth-scan-shipping-number"></label>
                                 </div>
                             </td>
                         </tr>
