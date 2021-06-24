@@ -10,13 +10,13 @@ use App\Events\Product\ProductTagDetachedEvent;
 use App\Events\ProductPrice\ProductPriceUpdatedEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\Api2cart\src\Listeners\HourlyEvent\DispatchSyncProductsJobListener;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use App\Modules\ModuleServiceProvider;
 
 /**
  * Class EventServiceProvider
  * @package App\Providers
  */
-class EventServiceProvider extends ServiceProvider
+class EventServiceProvider extends ModuleServiceProvider
 {
     /**
      * The event listener mappings for the application.

@@ -7,13 +7,13 @@ use App\Events\Order\OrderUpdatedEvent;
 use App\Events\OrderProduct\OrderProductCreatedEvent;
 use App\Events\OrderProduct\OrderProductUpdatedEvent;
 use App\Modules\InventoryReservations\src\Listeners\OrderProductUpdatedEvent\UpdateQuantityReservedListener;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use App\Modules\ModuleServiceProvider;
 
 /**
  * Class EventServiceProvider
  * @package App\Providers
  */
-class EventServiceProvider extends ServiceProvider
+class EventServiceProvider extends ModuleServiceProvider
 {
     /**
      * The event listener mappings for the application.

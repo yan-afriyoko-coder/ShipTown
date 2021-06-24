@@ -4,9 +4,9 @@
 namespace App\Modules\Maintenance\src;
 
 use App\Events\DailyEvent;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use App\Modules\ModuleServiceProvider;
 
-class EventServiceProvider extends ServiceProvider
+class EventServiceProvider extends ModuleServiceProvider
 {
     protected $listen = [
         DailyEvent::class => [

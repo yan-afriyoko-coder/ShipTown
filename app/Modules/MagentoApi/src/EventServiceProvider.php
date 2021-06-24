@@ -5,13 +5,13 @@ namespace App\Modules\MagentoApi\src;
 use App\Events\HourlyEvent;
 use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use App\Modules\ModuleServiceProvider;
 
 /**
  * Class EventServiceProvider
  * @package App\Providers
  */
-class EventServiceProvider extends ServiceProvider
+class EventServiceProvider extends ModuleServiceProvider
 {
     /**
      * The event listener mappings for the application.

@@ -3,9 +3,9 @@
 namespace App\Modules\Rmsapi\src;
 
 use App\Events\SyncRequestedEvent;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use App\Modules\ModuleServiceProvider;
 
-class EventServiceProvider extends ServiceProvider
+class EventServiceProvider extends ModuleServiceProvider
 {
     protected $listen = [
         SyncRequestedEvent::class => [
