@@ -37,23 +37,4 @@ class EventServiceProvider extends ServiceProvider
             Listeners\OrderProductCreatedListener::class,
         ],
     ];
-
-    /**
-     * The subscriber classes to register.
-     *
-     * @var array
-     */
-    protected $subscribe = [
-
-    ];
-
-    /**
-     * Register any events for your application.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        parent::boot();
-    }
 }
