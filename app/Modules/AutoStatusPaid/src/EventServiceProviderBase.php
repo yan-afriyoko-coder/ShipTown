@@ -3,13 +3,13 @@
 namespace App\Modules\AutoStatusPaid\src;
 
 use App\Events\Order\OrderUpdatedEvent;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class EventServiceProvider
+ * Class EventServiceProviderBase
  * @package App\Providers
  */
-class EventServiceProvider extends ServiceProvider
+class EventServiceProviderBase extends BaseModuleServiceProvider
 {
     protected $listen = [
         OrderUpdatedEvent::class => [

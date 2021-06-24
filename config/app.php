@@ -197,27 +197,27 @@ return [
         Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
 
         // misc modules
-        App\Modules\Maintenance\src\EventServiceProvider::class,
-        App\Modules\InventoryReservations\src\EventServiceProvider::class,
+        App\Modules\Maintenance\src\EventServiceProviderBase::class,
+        App\Modules\InventoryReservations\src\EventServiceProviderBase::class,
 
         // Automations modules
         // order MIGHT be important!
-        App\Modules\AutoPilot\src\EventServiceProvider::class,
-        App\Modules\AutoTags\src\EventServiceProvider::class,
-        App\Modules\AutoStatusPaid\src\EventServiceProvider::class,
-        App\Modules\AutoStatusPackingWarehouse\src\EventServiceProvider::class,
-        App\Modules\AutoStatusSingleLineOrders\src\EventServiceProvider::class,
-        App\Modules\AutoStatusPicking\src\EventServiceProvider::class,
-        App\Modules\AutoStatusPackingWeb\src\EventServiceProvider::class,
-        App\Modules\AutoStatusReady\src\EventServiceProvider::class,
+        App\Modules\AutoPilot\src\EventServiceProviderBase::class,
+        App\Modules\AutoTags\src\EventServiceProviderBase::class,
+        App\Modules\AutoStatusPaid\src\EventServiceProviderBase::class,
+        App\Modules\AutoStatusPackingWarehouse\src\EventServiceProviderBase::class,
+        App\Modules\AutoStatusSingleLineOrders\src\EventServiceProviderBase::class,
+        App\Modules\AutoStatusPicking\src\EventServiceProviderBase::class,
+        App\Modules\AutoStatusPackingWeb\src\EventServiceProviderBase::class,
+        App\Modules\AutoStatusReady\src\EventServiceProviderBase::class,
         App\Modules\AutoStatus\src\EventServiceProvider::class,
 
         // 3rd party integrations
         // order SHOULD not be important
-        App\Modules\Webhooks\src\WebhooksServiceProvider::class,
-        App\Modules\Api2cart\src\EventServiceProvider::class,
-        App\Modules\Rmsapi\src\EventServiceProvider::class,
-        App\Modules\MagentoApi\src\EventServiceProvider::class,
+        App\Modules\Webhooks\src\WebhooksServiceProviderBase::class,
+        App\Modules\Api2cart\src\EventServiceProviderBase::class,
+        App\Modules\Rmsapi\src\EventServiceProviderBase::class,
+        App\Modules\MagentoApi\src\EventServiceProviderBase::class,
     ],
 
     /*

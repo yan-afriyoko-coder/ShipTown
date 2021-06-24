@@ -10,13 +10,13 @@ use App\Events\Product\ProductTagDetachedEvent;
 use App\Events\ProductPrice\ProductPriceUpdatedEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\Api2cart\src\Listeners\HourlyEvent\DispatchSyncProductsJobListener;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class EventServiceProvider
+ * Class EventServiceProviderBase
  * @package App\Providers
  */
-class EventServiceProvider extends ServiceProvider
+class EventServiceProviderBase extends BaseModuleServiceProvider
 {
     /**
      * The event listener mappings for the application.
@@ -54,25 +54,4 @@ class EventServiceProvider extends ServiceProvider
             Listeners\InventoryUpdatedEvent\AddNotSyncedTagListener::class,
         ],
     ];
-
-    /**
-     * The subscriber classes to register.
-     *
-     * @var array
-     */
-    protected $subscribe = [
-
-    ];
-
-    /**
-     * Register any events for your application.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        parent::boot();
-
-        //
-    }
 }

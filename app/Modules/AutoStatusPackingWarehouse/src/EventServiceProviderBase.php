@@ -3,13 +3,13 @@
 namespace App\Modules\AutoStatusPackingWarehouse\src;
 
 use App\Events\Order\ActiveOrderCheckEvent;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class EventServiceProvider
+ * Class EventServiceProviderBase
  * @package App\Providers
  */
-class EventServiceProvider extends ServiceProvider
+class EventServiceProviderBase extends BaseModuleServiceProvider
 {
     protected $listen = [
         ActiveOrderCheckEvent::class => [
