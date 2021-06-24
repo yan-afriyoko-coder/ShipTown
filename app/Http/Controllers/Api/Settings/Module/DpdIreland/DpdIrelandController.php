@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Settings\Module\DpdIreland;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreDpdIrelandRequest;
+use App\Http\Resources\DpdIrelandConfigurationResource;
 use App\Modules\DpdIreland\src\Client;
 use App\Modules\DpdIreland\src\Models\DpdIreland;
 use Illuminate\Http\Request;
@@ -13,13 +14,9 @@ class DpdIrelandController extends Controller
 {
     public function index(Request $request): JsonResource
     {
-        $config = DpdIreland::first();
+        $config = DpdIreland::firstOrFail();
 
-        if (!$config) {
-            $this->respondNotFound('No Dpd Ireland Configuration Found');
-        } else {
-            return JsonResource::make($config);
-        }
+        return DpdIrelandConfigurationResource::make($config);
     }
 
     public function store(StoreDpdIrelandRequest $request): JsonResource
@@ -34,6 +31,6 @@ class DpdIrelandController extends Controller
 
         Client::clearCache();
 
-        return JsonResource::make($config);
+        return DpdIrelandConfigurationResource::make($config);
     }
 }
