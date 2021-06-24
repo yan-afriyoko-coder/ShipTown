@@ -1,12 +1,11 @@
 <?php
 
-
 namespace App\Modules\DpdIreland\src;
 
+use App\Modules\DpdIreland\src\Models\DpdIreland;
 use Carbon\Carbon;
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\Facades\Cache;
-use PHP_CodeSniffer\Standards\Generic\Sniffs\NamingConventions\CamelCapsFunctionNameSniff;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -45,7 +44,9 @@ class Client
      */
     private static function getBaseUrl(): string
     {
-        return config('dpd.live') ? self::API_URL_LIVE : self::API_URL_TEST;
+        $config = DpdIreland::firstOrFail();
+
+        return $config->live ? self::API_URL_LIVE : self::API_URL_TEST;
     }
 
     /**
@@ -56,11 +57,11 @@ class Client
     {
         $options = [
             'headers' => [
-                'Authorization' => 'Bearer '. self::getAuthorizationToken(),
+                'Authorization' => 'Bearer ' . self::getAuthorizationToken(),
                 'Content-Type' => 'application/xml; charset=UTF8',
                 'Accept' => 'application/xml',
             ],
-            'body' => $xml
+            'body' => $xml,
         ];
 
         return self::getGuzzleClient()->post(self::COMMON_API_PREADVICE, $options);
@@ -111,21 +112,23 @@ class Client
     {
         self::clearCache();
 
+        $config = DpdIreland::firstOrFail();
+
         $body = [
-            'User' => config('dpd.user'),
-            'Password' => config('dpd.password'),
+            'User' => $config->user,
+            'Password' => $config->password,
             'Type' => 'CUST',
         ];
 
         $headers = [
-            'Authorization' => 'Bearer ' . config('dpd.token'),
+            'Authorization' => 'Bearer ' . $config->token,
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
         ];
 
         $authorizationResponse = self::getGuzzleClient()->post(self::COMMON_API_AUTHORIZE, [
             'headers' => $headers,
-            'json' => $body
+            'json' => $body,
         ]);
 
         return [

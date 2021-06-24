@@ -54,6 +54,12 @@ Route::middleware('auth:api')->group(function () {
                 Route::apiResource('connections', "Api2cartConnectionController")->only(['index', 'store', 'destroy']);
                 Route::apiResource('products', "ProductsController")->only(['index']);
             });
+
+            // dpdireland
+            Route::group(['prefix' => 'dpd-ireland', 'namespace' => 'DpdIreland', 'as' => 'dpd-ireland.'], function () {
+                Route::apiResource('', 'DpdIrelandController')->only(['index', 'store']);
+            });
+
             // printnode
             Route::group(['prefix' => 'printnode', 'namespace' => 'Printnode', 'as' => 'printnode.'], function () {
                 Route::apiResource('printers', 'PrinterController')->only(['index']);

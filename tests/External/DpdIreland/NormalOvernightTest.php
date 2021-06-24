@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\External\DpdIreland;
-
 
 use App\Modules\DpdIreland\Dpd;
 use App\Modules\DpdIreland\src\Consignment;
@@ -10,6 +8,8 @@ use Tests\TestCase;
 
 class NormalOvernightTest extends TestCase
 {
+    use SeedConfiguration;
+
     /**
      * @test
      */
@@ -25,7 +25,7 @@ class NormalOvernightTest extends TestCase
                 'AddressLine2' => 'Unit 2B Midland Gateway Bus',
                 'AddressLine3' => 'Kilbeggan',
                 'AddressLine4' => 'Westmeath',
-                'CountryCode'  =>  'IE',
+                'CountryCode' => 'IE',
             ],
             'CollectionAddress' => [
                 'Contact' => 'John Smith',
@@ -36,8 +36,8 @@ class NormalOvernightTest extends TestCase
                 'AddressLine2' => 'Unit 2B Midland Gateway Bus',
                 'AddressLine3' => 'Kilbeggan',
                 'AddressLine4' => 'Westmeath',
-                'PostCode'     => 'XYZ1234',
-                'CountryCode' =>  'IE',
+                'PostCode' => 'XYZ1234',
+                'CountryCode' => 'IE',
             ],
         ]);
 
@@ -52,7 +52,7 @@ class NormalOvernightTest extends TestCase
     public function normal_overnight_consignment_between_2_and_10_parcels()
     {
         $consignment = new Consignment([
-            'TotalParcels' => rand(2,10),
+            'TotalParcels' => rand(2, 10),
             'DeliveryAddress' => [
                 'Contact' => 'John Smith',
                 'ContactTelephone' => '12345678901',
@@ -62,7 +62,7 @@ class NormalOvernightTest extends TestCase
                 'AddressLine2' => 'Unit 2B Midland Gateway Bus',
                 'AddressLine3' => 'Kilbeggan',
                 'AddressLine4' => 'Westmeath',
-                'CountryCode' =>  'IE',
+                'CountryCode' => 'IE',
             ],
             'CollectionAddress' => [
                 'Contact' => 'John Smith',
@@ -73,8 +73,8 @@ class NormalOvernightTest extends TestCase
                 'AddressLine2' => 'Unit 2B Midland Gateway Bus',
                 'AddressLine3' => 'Kilbeggan',
                 'AddressLine4' => 'Westmeath',
-                'PostCode'     => 'XYZ1234',
-                'CountryCode' =>  'IE',
+                'PostCode' => 'XYZ1234',
+                'CountryCode' => 'IE',
             ],
         ]);
 
@@ -89,7 +89,7 @@ class NormalOvernightTest extends TestCase
     public function normal_overnight_consignment_more_than_10_parcels()
     {
         $consignment = new Consignment([
-            'TotalParcels' => rand(11,20),
+            'TotalParcels' => rand(11, 20),
             'DeliveryAddress' => [
                 'Contact' => 'John Smith',
                 'ContactTelephone' => '12345678901',
@@ -99,7 +99,7 @@ class NormalOvernightTest extends TestCase
                 'AddressLine2' => 'Unit 2B Midland Gateway Bus',
                 'AddressLine3' => 'Kilbeggan',
                 'AddressLine4' => 'Westmeath',
-                'CountryCode' =>  'IE',
+                'CountryCode' => 'IE',
             ],
             'CollectionAddress' => [
                 'Contact' => 'John Smith',
@@ -110,8 +110,8 @@ class NormalOvernightTest extends TestCase
                 'AddressLine2' => 'Unit 2B Midland Gateway Bus',
                 'AddressLine3' => 'Kilbeggan',
                 'AddressLine4' => 'Westmeath',
-                'PostCode'     => 'XYZ1234',
-                'CountryCode' =>  'IE',
+                'PostCode' => 'XYZ1234',
+                'CountryCode' => 'IE',
             ],
         ]);
 
@@ -126,7 +126,7 @@ class NormalOvernightTest extends TestCase
     public function if_succeeds_with_wrong_postcode()
     {
         $consignment = new Consignment([
-            'TotalParcels' => rand(11,20),
+            'TotalParcels' => rand(11, 20),
             'DeliveryAddress' => [
                 'Contact' => 'John Smith',
                 'ContactTelephone' => '12345678901',
@@ -136,8 +136,8 @@ class NormalOvernightTest extends TestCase
                 'AddressLine2' => 'Unit 2B Midland Gateway Bus',
                 'AddressLine3' => 'Kilbeggan',
                 'AddressLine4' => 'Westmeath',
-                'PostCode'     => 'XYZ12345678901234',
-                'CountryCode' =>  'IE',
+                'PostCode' => 'XYZ12345678901234',
+                'CountryCode' => 'IE',
             ],
             'CollectionAddress' => [
                 'Contact' => 'John Smith',
@@ -148,8 +148,8 @@ class NormalOvernightTest extends TestCase
                 'AddressLine2' => 'Unit 2B Midland Gateway Bus',
                 'AddressLine3' => 'Kilbeggan',
                 'AddressLine4' => 'Westmeath',
-                'PostCode'     => 'XYZ1234',
-                'CountryCode' =>  'IE',
+                'PostCode' => 'XYZ1234',
+                'CountryCode' => 'IE',
             ],
         ]);
 
