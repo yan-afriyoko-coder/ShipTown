@@ -13,7 +13,7 @@ use Tests\TestCase;
 
 class DpdIntegrationJobTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, SeedConfiguration;
 
     /**
      * @test
@@ -53,7 +53,7 @@ class DpdIntegrationJobTest extends TestCase
         ]);
 
         $order = factory(Order::class)->create([
-            'shipping_address_id' => $address->getKey()
+            'shipping_address_id' => $address->getKey(),
         ]);
 
         try {

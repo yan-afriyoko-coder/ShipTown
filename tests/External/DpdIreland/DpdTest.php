@@ -11,7 +11,7 @@ use Tests\TestCase;
 
 class DpdTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, SeedConfiguration;
 
     /**
      * @test
@@ -48,7 +48,7 @@ class DpdTest extends TestCase
                 'AddressLine2' => 'Unit 2B Midland Gateway Bus',
                 'AddressLine3' => 'Kilbeggan',
                 'AddressLine4' => 'Westmeath',
-                'CountryCode' =>  'IE',
+                'CountryCode' => 'IE',
             ],
             'CollectionAddress' => [
                 'Contact' => 'John Smith',
@@ -59,7 +59,7 @@ class DpdTest extends TestCase
                 'AddressLine2' => 'Unit 2B Midland Gateway Bus',
                 'AddressLine3' => 'Kilbeggan',
                 'AddressLine4' => 'Westmeath',
-                'CountryCode' =>  'IE',
+                'CountryCode' => 'IE',
             ],
         ]);
 
@@ -86,32 +86,32 @@ class DpdTest extends TestCase
     public function successfully_generate_preadvice()
     {
         $consignment = new Consignment([
-                'RecordID' => 1,
-                'TotalParcels'=> 1,
-                'ServiceOption' => 5,
-                'ServiceType' => 1,
-                'DeliveryAddress' => [
-                    'Contact' => 'John Smith',
-                    'ContactTelephone' => '12345678901',
-                    'ContactEmail' => 'john.smith@ie.ie',
-                    'BusinessName' => 'JS Business',
-                    'AddressLine1' => 'DPD Ireland, Westmeath',
-                    'AddressLine2' => 'Unit 2B Midland Gateway Bus',
-                    'AddressLine3' => 'Kilbeggan',
-                    'AddressLine4' => 'Westmeath',
-                    'CountryCode' =>  'IE',
-                ],
-                'CollectionAddress' => [
-                    'Contact' => 'John Smith',
-                    'ContactTelephone' => '12345678901',
-                    'ContactEmail' => 'john.smith@ie.ie',
-                    'BusinessName' => 'JS Business',
-                    'AddressLine1' => 'DPD Ireland, Westmeath',
-                    'AddressLine2' => 'Unit 2B Midland Gateway Bus',
-                    'AddressLine3' => 'Kilbeggan',
-                    'AddressLine4' => 'Westmeath',
-                    'CountryCode' =>  'IE',
-                ],
+            'RecordID' => 1,
+            'TotalParcels' => 1,
+            'ServiceOption' => 5,
+            'ServiceType' => 1,
+            'DeliveryAddress' => [
+                'Contact' => 'John Smith',
+                'ContactTelephone' => '12345678901',
+                'ContactEmail' => 'john.smith@ie.ie',
+                'BusinessName' => 'JS Business',
+                'AddressLine1' => 'DPD Ireland, Westmeath',
+                'AddressLine2' => 'Unit 2B Midland Gateway Bus',
+                'AddressLine3' => 'Kilbeggan',
+                'AddressLine4' => 'Westmeath',
+                'CountryCode' => 'IE',
+            ],
+            'CollectionAddress' => [
+                'Contact' => 'John Smith',
+                'ContactTelephone' => '12345678901',
+                'ContactEmail' => 'john.smith@ie.ie',
+                'BusinessName' => 'JS Business',
+                'AddressLine1' => 'DPD Ireland, Westmeath',
+                'AddressLine2' => 'Unit 2B Midland Gateway Bus',
+                'AddressLine3' => 'Kilbeggan',
+                'AddressLine4' => 'Westmeath',
+                'CountryCode' => 'IE',
+            ],
         ]);
 
         $preAdvice = Dpd::getPreAdvice($consignment);
