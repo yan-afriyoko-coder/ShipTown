@@ -10,8 +10,9 @@ trait SeedConfiguration
      * Delete previous DpdIreland configuration and create a new one
      *
      * @return void
+     * @throws \Exception
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
