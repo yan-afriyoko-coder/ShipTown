@@ -24,10 +24,10 @@
                         <tr>
                             <td>Ask to scan shipping number</td>
                             <td class="text-right">
-                                <select class="w-100" @change="saveAskForShippingNumberValue" v-model="selected_ask_for_shipping_number">
-                                    <option value="1">Yes</option>
-                                    <option value="0">No</option>
-                                </select>
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" @change="saveAskForShippingNumberValue" class="custom-control-input" id="customSwitch1" v-model="selected_ask_for_shipping_number">
+                                    <label class="custom-control-label" for="customSwitch1"></label>
+                                </div>
                             </td>
                         </tr>
                     </tbody>
@@ -47,7 +47,7 @@ export default {
         this.apiGetUserMe()
             .then(({ data }) => {
                 this.selected_address_label_template = data.data.address_label_template;
-                this.selected_ask_for_shipping_number = data.data.ask_for_shipping_number === 'true';
+                this.selected_ask_for_shipping_number = data.data.ask_for_shipping_number;
             });
     },
 
