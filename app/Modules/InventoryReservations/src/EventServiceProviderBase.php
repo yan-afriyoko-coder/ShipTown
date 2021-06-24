@@ -16,6 +16,16 @@ use App\Modules\BaseModuleServiceProvider;
 class EventServiceProviderBase extends BaseModuleServiceProvider
 {
     /**
+     * @var string
+     */
+    public string $module_name = 'Inventory Reservations';
+
+    /**
+     * @var string
+     */
+    public string $module_description = 'Reserves stock for open orders. Is using location 999';
+
+    /**
      * The event listener mappings for the application.
      *
      * @var array

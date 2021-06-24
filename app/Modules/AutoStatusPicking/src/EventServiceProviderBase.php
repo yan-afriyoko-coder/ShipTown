@@ -12,6 +12,17 @@ use App\Modules\BaseModuleServiceProvider;
 class EventServiceProviderBase extends BaseModuleServiceProvider
 {
     /**
+     * @var string
+     */
+    public string $module_name = 'Auto "picking" status';
+
+    /**
+     * @var string
+     */
+    public string $module_description = 'Automatically moves batch of orders "paid" to "picking" status. ' .
+    'It prioritize old orders';
+
+    /**
      * @var string[][]
      */
     protected $listen = [

@@ -11,6 +11,20 @@ use App\Modules\BaseModuleServiceProvider;
  */
 class EventServiceProviderBase extends BaseModuleServiceProvider
 {
+    /**
+     * @var string
+     */
+    public string $module_name = 'Auto "packing_web" status';
+
+    /**
+     * @var string
+     */
+    public string $module_description = 'Automatically changes status from "picking" to "packing_web" ' .
+    'when order is fully picked';
+
+    /**
+     * @var array
+     */
     protected $listen = [
         OrderUpdatedEvent::class => [
             Listeners\OrderUpdatedEvent\SetPackingWebStatus::class,
