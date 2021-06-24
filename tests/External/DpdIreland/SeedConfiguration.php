@@ -10,17 +10,18 @@ trait SeedConfiguration
      * Delete previous DpdIreland configuration and create a new one
      *
      * @return void
+     * @throws \Exception
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         DpdIreland::query()->delete();
-        DpdIreland::query()->create([
+        DpdIreland::query()->firstOrCreate([
             'live' => false,
-            'user' => 'someuser',
-            'password' => 'somepassword',
-            'token' => 'sometoken',
+            'user' => env('TEST_DPD_USER'),
+            'password' => env('TEST_DPD_PASSWORD'),
+            'token' => env('TEST_DPD_TOKEN'),
             'contact' => 'DPD Contact',
             'contact_telephone' => '0860000000',
             'contact_email' => 'testemail@dpd.ie',
