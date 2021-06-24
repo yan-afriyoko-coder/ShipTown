@@ -23,6 +23,8 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
+    @yield('css')
+
     <link rel="manifest" href="/manifest.json">
 </head>
 <body>
