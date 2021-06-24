@@ -7,13 +7,13 @@ use App\Events\Order\OrderUpdatedEvent;
 use App\Events\OrderProduct\OrderProductCreatedEvent;
 use App\Events\OrderProduct\OrderProductUpdatedEvent;
 use App\Modules\InventoryReservations\src\Listeners\OrderProductUpdatedEvent\UpdateQuantityReservedListener;
-use App\Modules\ModuleServiceProvider;
+use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class EventServiceProvider
+ * Class EventServiceProviderBase
  * @package App\Providers
  */
-class EventServiceProvider extends ModuleServiceProvider
+class EventServiceProviderBase extends BaseModuleServiceProvider
 {
     /**
      * The event listener mappings for the application.

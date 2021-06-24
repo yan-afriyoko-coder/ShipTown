@@ -6,13 +6,13 @@ use App\Events\DailyEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
-use App\Modules\ModuleServiceProvider;
+use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class EventServiceProvider
+ * Class EventServiceProviderBase
  * @package App\Providers
  */
-class EventServiceProvider extends ModuleServiceProvider
+class EventServiceProviderBase extends BaseModuleServiceProvider
 {
     /**
      * The event listener mappings for the application.

@@ -3,9 +3,9 @@
 namespace App\Modules\Rmsapi\src;
 
 use App\Events\SyncRequestedEvent;
-use App\Modules\ModuleServiceProvider;
+use App\Modules\BaseModuleServiceProvider;
 
-class EventServiceProvider extends ModuleServiceProvider
+class EventServiceProviderBase extends BaseModuleServiceProvider
 {
     protected $listen = [
         SyncRequestedEvent::class => [

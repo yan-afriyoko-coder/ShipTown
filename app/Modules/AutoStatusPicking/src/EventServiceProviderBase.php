@@ -3,13 +3,13 @@
 namespace App\Modules\AutoStatusPicking\src;
 
 use App\Events\HourlyEvent;
-use App\Modules\ModuleServiceProvider;
+use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class EventServiceProvider
+ * Class EventServiceProviderBase
  * @package App\Providers
  */
-class EventServiceProvider extends ModuleServiceProvider
+class EventServiceProviderBase extends BaseModuleServiceProvider
 {
     /**
      * @var string[][]

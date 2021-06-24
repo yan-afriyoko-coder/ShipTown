@@ -3,13 +3,13 @@
 namespace App\Modules\AutoStatusReady\src;
 
 use App\Events\Order\OrderUpdatedEvent;
-use App\Modules\ModuleServiceProvider;
+use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class EventServiceProvider
+ * Class EventServiceProviderBase
  * @package App\Providers
  */
-class EventServiceProvider extends ModuleServiceProvider
+class EventServiceProviderBase extends BaseModuleServiceProvider
 {
     protected $listen = [
         OrderUpdatedEvent::class => [

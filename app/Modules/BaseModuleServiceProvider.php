@@ -10,10 +10,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
 
 /**
- * Class ModuleServiceProvider
+ * Class BaseModuleServiceProvider
  * @package App\Modules
  */
-class ModuleServiceProvider extends EventServiceProvider
+class BaseModuleServiceProvider extends EventServiceProvider
 {
     /**
      * Should we automatically enable it
