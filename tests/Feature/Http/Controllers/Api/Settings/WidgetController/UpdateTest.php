@@ -11,6 +11,6 @@ class UpdateTest extends TestCase
     /** @test */
     public function test_update_call_returns_ok()
     {
-        $this->markTestIncomplete();
+        $this->markTestSkipped();
     }
 }
