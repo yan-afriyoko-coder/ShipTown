@@ -73,15 +73,28 @@ class BaseModuleServiceProvider extends EventServiceProvider
      */
     public static function enableModule()
     {
-        Module::updateOrCreate(['service_provider_class' => get_called_class()], ['enabled' => true]);
-        App::register(get_called_class());
+        $module = Module::firstOrCreate(['service_provider_class' => get_called_class()], ['enabled' => false]);
+
+        if ($module->enabled) {
+            return;
+        }
+
+        $module->enabled = true;
+        $module->save();
+
+        App::register(get_called_class())->boot();
     }
 
     /**
-     * @return Module|Model
+     *
      */
     public static function disableModule()
     {
-        return Module::updateOrCreate(['service_provider_class' => get_called_class()], ['enabled' => false]);
+        $module = Module::firstOrCreate(['service_provider_class' => get_called_class()], ['enabled' => false]);
+
+        if ($module->enabled) {
+            $module->enabled = false;
+            $module->save();
+        }
     }
 }
