@@ -11,7 +11,6 @@ class StoreTest extends TestCase
     /** @test */
     public function test_store_call_returns_ok()
     {
-        $this->markTestSkipped('fdsa');
-        $this->assertTrue(false);
+        $this->markTestSkipped();
     }
 }

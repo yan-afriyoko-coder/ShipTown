@@ -11,6 +11,6 @@ class ShowTest extends TestCase
     /** @test */
     public function test_show_call_returns_ok()
     {
-        $this->markTestIncomplete();
+        $this->markTestSkipped();
     }
 }
