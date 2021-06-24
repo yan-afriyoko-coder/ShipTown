@@ -11,6 +11,20 @@ use App\Modules\BaseModuleServiceProvider;
  */
 class EventServiceProviderBase extends BaseModuleServiceProvider
 {
+    /**
+     * @var string
+     */
+    public string $module_name = 'Auto single_line_orders status';
+
+    /**
+     * @var string
+     */
+    public string $module_description = 'Automatically changes status from "paid" to "single_line_orders" ' .
+    'if order has only 1 product ordered';
+
+    /**
+     * @var array
+     */
     protected $listen = [
         ActiveOrderCheckEvent::class => [
             Listeners\ActiveOrdersCheckEvent\SetStatusSingleLineOrders::class,

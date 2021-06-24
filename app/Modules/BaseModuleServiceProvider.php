@@ -8,6 +8,7 @@ use App\Module;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
+use function PHPUnit\Framework\throwException;
 
 /**
  * Class BaseModuleServiceProvider
@@ -15,6 +16,16 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider;
  */
 class BaseModuleServiceProvider extends EventServiceProvider
 {
+    /**
+     * @var string
+     */
+    public string $module_name;
+
+    /**
+     * @var string
+     */
+    public string $module_description;
+
     /**
      * Should we automatically enable it
      * When module first registered
@@ -27,9 +38,14 @@ class BaseModuleServiceProvider extends EventServiceProvider
      * Register any events for your application.
      *
      * @return void
+     * @throws Exception
      */
     public function boot()
     {
+        if (empty($this->module_name) or empty($this->module_description)) {
+            throw new Exception('Module "'.get_called_class().'" missing name or description');
+        }
+
         if ($this->isEnabled()) {
             parent::boot();
         }

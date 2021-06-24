@@ -18,6 +18,16 @@ use App\Modules\Webhooks\src\Listeners\SyncRequestedEvent\PublishProductsWebhook
 class WebhooksServiceProviderBase extends BaseModuleServiceProvider
 {
     /**
+     * @var string
+     */
+    public string $module_name = 'Webhooks';
+
+    /**
+     * @var string
+     */
+    public string $module_description = 'Amazon SNS integration to provide webhooks';
+
+    /**
      * The event listener mappings for the application.
      *
      * @var array

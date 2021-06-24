@@ -15,6 +15,16 @@ use App\Modules\BaseModuleServiceProvider;
 class EventServiceProviderBase extends BaseModuleServiceProvider
 {
     /**
+     * @var string
+     */
+    public string $module_name = 'AutoTags';
+
+    /**
+     * @var string
+     */
+    public string $module_description = 'Automatically manages Out Of Stock & Oversold tags';
+
+    /**
      * The event listener mappings for the application.
      *
      * @var array
