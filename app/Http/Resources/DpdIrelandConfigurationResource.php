@@ -16,8 +16,8 @@ class DpdIrelandConfigurationResource extends JsonResource
     {
         return [
             'api_username' => $this->user,
-            'api_password' => $this->password,
-            'api_token' => $this->token,
+            'api_password' => '*****',
+            'api_token' => '*****',
             'collection_contact' => $this->contact,
             'collection_telephone' => $this->telephone,
             'collection_email' => $this->email,
