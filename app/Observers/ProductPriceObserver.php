@@ -11,6 +11,7 @@ class ProductPriceObserver
      * Handle the product "updated" event.
      *
      * @param ProductPrice $product_price
+     *
      * @return void
      */
     public function updated(ProductPrice $product_price)
@@ -19,7 +20,7 @@ class ProductPriceObserver
             'price',
             'sale_price',
             'sale_price_start_date',
-            'sale_price_end_date'
+            'sale_price_end_date',
         ]);
 
         if ($pricingChanged) {

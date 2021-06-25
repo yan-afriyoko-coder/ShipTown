@@ -7,7 +7,6 @@ use App\Models\OrderStatus;
 use Arrilot\Widgets\AbstractWidget;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 
 class OrdersByAgeWidget extends AbstractWidget
 {
@@ -25,9 +24,9 @@ class OrdersByAgeWidget extends AbstractWidget
     public function run()
     {
         $orders_counts = Order::select([
-                DB::raw('Date(order_placed_at) as date'),
-                DB::raw('count(*) as order_count')
-            ])
+            DB::raw('Date(order_placed_at) as date'),
+            DB::raw('count(*) as order_count'),
+        ])
             ->whereNotIn('status_code', OrderStatus::getClosedStatuses())
             ->whereNotIn('status_code', OrderStatus::getToFollowStatusList())
             ->groupBy(DB::raw('date(order_placed_at)'))
@@ -39,11 +38,11 @@ class OrdersByAgeWidget extends AbstractWidget
         });
 
         return view('widgets.orders_by_age_widget', [
-            'config' => $this->config,
+            'config'              => $this->config,
             'orders_per_days_age' => $orders_counts->map(function ($var) {
                 return [
-                    'days_age' => Carbon::make($var->date)->diffInDays(),
-                    'order_count' => $var->order_count
+                    'days_age'    => Carbon::make($var->date)->diffInDays(),
+                    'order_count' => $var->order_count,
                 ];
             }),
             'total_count' => $total_count,

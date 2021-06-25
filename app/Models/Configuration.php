@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\Configuration
+ * App\Models\Configuration.
  *
- * @property int $id
- * @property string $key
- * @property string $value
+ * @property int         $id
+ * @property string      $key
+ * @property string      $value
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|Configuration newModelQuery()
  * @method static Builder|Configuration newQuery()
  * @method static Builder|Configuration query()

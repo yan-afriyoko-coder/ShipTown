@@ -14,8 +14,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 
 /**
- * Class Api2cartConnectionController
- * @package App\Http\Controllers\Api\Settings\Module\Api2cart
+ * Class Api2cartConnectionController.
  */
 class Api2cartConnectionController extends Controller
 {
@@ -29,6 +28,7 @@ class Api2cartConnectionController extends Controller
 
     /**
      * @param StoreApi2cartConnectionRequest $request
+     *
      * @return JsonResource
      */
     public function store(StoreApi2cartConnectionRequest $request): JsonResource
@@ -44,12 +44,15 @@ class Api2cartConnectionController extends Controller
 
     /**
      * @param Api2cartConnection $api2cart_configuration
-     * @return Application|ResponseFactory|Response
+     *
      * @throws Exception
+     *
+     * @return Application|ResponseFactory|Response
      */
     public function destroy(Api2cartConnection $api2cart_configuration)
     {
         $api2cart_configuration->delete();
+
         return response('ok');
     }
 }

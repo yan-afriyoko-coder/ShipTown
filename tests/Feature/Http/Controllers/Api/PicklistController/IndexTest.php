@@ -34,9 +34,9 @@ class IndexTest extends TestCase
                     'inventory_source_shelf_location',
                     'inventory_source_quantity',
                     'quantity_required',
-                    'order_product_ids' => []
-                ]
-            ]
+                    'order_product_ids' => [],
+                ],
+            ],
         ]);
     }
 }

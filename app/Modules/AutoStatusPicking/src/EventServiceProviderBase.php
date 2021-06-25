@@ -6,8 +6,7 @@ use App\Events\HourlyEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class EventServiceProviderBase
- * @package App\Providers
+ * Class EventServiceProviderBase.
  */
 class EventServiceProviderBase extends BaseModuleServiceProvider
 {
@@ -19,7 +18,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public string $module_description = 'Automatically moves batch of orders "paid" to "picking" status. ' .
+    public string $module_description = 'Automatically moves batch of orders "paid" to "picking" status. '.
     'It prioritize old orders';
 
     /**

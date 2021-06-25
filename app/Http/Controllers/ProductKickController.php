@@ -8,8 +8,7 @@ use App\Modules\MagentoApi\src\Jobs\SyncProductStockJob;
 use Illuminate\Http\Request;
 
 /**
- * Class ProductKickController
- * @package App\Http\Controllers
+ * Class ProductKickController.
  */
 class ProductKickController extends Controller
 {

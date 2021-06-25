@@ -7,8 +7,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 use Spatie\Permission\Models\Role;
 
 /**
- * Class UserRoleController
- * @package App\Http\Controllers\Api\Admin
+ * Class UserRoleController.
  */
 class UserRoleController extends Controller
 {

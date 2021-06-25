@@ -12,14 +12,14 @@ $factory->define(Pick::class, function (Faker $faker) {
 
     $user = User::query()->inRandomOrder()->first() ?? factory(User::class)->create();
 
-    $skippingPick = (rand(1,20) === 1);
+    $skippingPick = (rand(1, 20) === 1);
 
     return [
-        'product_id' => $product->getKey(),
-        'sku_ordered' => $product->sku,
-        'name_ordered' => $product->name,
-        'user_id' => $user->getKey(),
-        'quantity_picked' => $skippingPick ? 0 : $faker->numberBetween(1,50),
-        'quantity_skipped_picking' => $skippingPick ? $faker->numberBetween(1,50) : 0,
+        'product_id'               => $product->getKey(),
+        'sku_ordered'              => $product->sku,
+        'name_ordered'             => $product->name,
+        'user_id'                  => $user->getKey(),
+        'quantity_picked'          => $skippingPick ? 0 : $faker->numberBetween(1, 50),
+        'quantity_skipped_picking' => $skippingPick ? $faker->numberBetween(1, 50) : 0,
     ];
 });

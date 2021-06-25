@@ -12,13 +12,13 @@ use App\Services\OrderService;
 use Illuminate\Http\Request;
 
 /**
- * Class PacklistOrderController
- * @package App\Http\Controllers\Api
+ * Class PacklistOrderController.
  */
 class PacklistOrderController extends Controller
 {
     /**
      * @param Request $request
+     *
      * @return OrderResource
      */
     public function index(Request $request): OrderResource
@@ -49,7 +49,8 @@ class PacklistOrderController extends Controller
 
     /**
      * @param StoreRequest $request
-     * @param Packlist $packlist
+     * @param Packlist     $packlist
+     *
      * @return PacklistResource
      */
     public function store(StoreRequest $request, Packlist $packlist): PacklistResource

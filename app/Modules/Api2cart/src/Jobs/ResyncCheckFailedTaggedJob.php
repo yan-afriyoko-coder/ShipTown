@@ -12,7 +12,11 @@ use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class ResyncCheckFailedTaggedJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use IsMonitored;
 
     /**ø
      * Execute the job.

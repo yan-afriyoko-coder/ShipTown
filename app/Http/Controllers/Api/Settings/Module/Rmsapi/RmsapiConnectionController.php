@@ -12,8 +12,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 /**
- * Class RmsapiConnectionController
- * @package App\Http\Controllers\Api\Settings\Module\Rmsapi
+ * Class RmsapiConnectionController.
  */
 class RmsapiConnectionController extends Controller
 {
@@ -27,6 +26,7 @@ class RmsapiConnectionController extends Controller
 
     /**
      * @param StoreConfigurationRmsApiRequest $request
+     *
      * @return RmsapiConnectionResource
      */
     public function store(StoreConfigurationRmsApiRequest $request)
@@ -40,8 +40,10 @@ class RmsapiConnectionController extends Controller
 
     /**
      * @param RmsapiConnection $rms_api_configuration
-     * @return Application|ResponseFactory|Response
+     *
      * @throws \Exception
+     *
+     * @return Application|ResponseFactory|Response
      */
     public function destroy(RmsapiConnection $rms_api_configuration)
     {

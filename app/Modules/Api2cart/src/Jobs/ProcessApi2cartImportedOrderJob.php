@@ -14,12 +14,16 @@ use Illuminate\Support\Arr;
 
 class ProcessApi2cartImportedOrderJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     private ?Api2cartOrderImports $orderImport;
 
     /**
      * Create a new job instance.
+     *
      * @param Api2cartOrderImports $orderImport
      */
     public function __construct(Api2cartOrderImports $orderImport)
@@ -30,8 +34,9 @@ class ProcessApi2cartImportedOrderJob implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
      * @throws Exception
+     *
+     * @return void
      */
     public function handle()
     {
@@ -53,7 +58,7 @@ class ProcessApi2cartImportedOrderJob implements ShouldQueue
         $order = OrderService::updateOrCreate($orderAttributes);
 
         $this->orderImport->update([
-            'order_number' => $order->order_number,
+            'order_number'   => $order->order_number,
             'when_processed' => now(),
         ]);
     }

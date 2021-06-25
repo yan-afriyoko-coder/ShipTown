@@ -9,7 +9,7 @@ use Tests\TestCase;
 class RoutesCoverageTest extends TestCase
 {
     /**
-     * A basic test to make sure all routes have minimum one test file
+     * A basic test to make sure all routes have minimum one test file.
      *
      * @return void
      */
@@ -22,7 +22,7 @@ class RoutesCoverageTest extends TestCase
         $routes->each(function ($route) {
             $testName = $this->getTestName($route);
 
-            $fileName = app()->basePath() . '/tests/Feature/'. $testName . '.php';
+            $fileName = app()->basePath().'/tests/Feature/'.$testName.'.php';
 
             $this->assertFileExists(
                 $fileName,
@@ -33,6 +33,7 @@ class RoutesCoverageTest extends TestCase
 
     /**
      * @param $route
+     *
      * @return string
      */
     public function getTestName($route): string
@@ -41,8 +42,8 @@ class RoutesCoverageTest extends TestCase
         $controllerName = Str::before($route->action, '@');
         $methodName = Str::after($route->action, '@');
 
-        $testDirectory = Str::after($controllerName, 'App\\') ;
-        $testName = $testDirectory . '\\' . Str::ucfirst($methodName) . 'Test';
+        $testDirectory = Str::after($controllerName, 'App\\');
+        $testName = $testDirectory.'\\'.Str::ucfirst($methodName).'Test';
 
         // $sample_output = 'Http/Controllers/Api/Settings/UserMeController/IndexTest'
         return str_replace('\\', '/', $testName);

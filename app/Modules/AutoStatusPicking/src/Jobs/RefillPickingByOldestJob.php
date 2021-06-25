@@ -13,7 +13,11 @@ use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class RefillPickingByOldestJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use IsMonitored;
 
     private $maxDailyAllowed;
 
@@ -37,7 +41,7 @@ class RefillPickingByOldestJob implements ShouldQueue
         $currentOrdersInProcessCount = Order::whereIn('status_code', ['picking'])->count();
 
         logger('Refilling "picking" status', [
-            'max_daily_allowed' => $this->maxDailyAllowed,
+            'max_daily_allowed'    => $this->maxDailyAllowed,
             'currently_in_process' => $currentOrdersInProcessCount,
         ]);
 
@@ -52,6 +56,7 @@ class RefillPickingByOldestJob implements ShouldQueue
             ->each(function ($order) {
                 $order->update(['status_code' => 'picking']);
                 info('RefillPickingJob: updated status to picking', ['order_number' => $order->order_number]);
+
                 return true;
             });
     }

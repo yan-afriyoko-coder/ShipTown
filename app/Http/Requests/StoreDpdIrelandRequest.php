@@ -20,37 +20,37 @@ class StoreDpdIrelandRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     * If no configuration found, token, user, and password field is required
+     * If no configuration found, token, user, and password field is required.
      *
      * @return array
      */
     public function rules()
     {
         $baseRule = [
-            'user' => 'required',
-            'live' => 'required|boolean',
-            'contact' => 'required',
+            'user'              => 'required',
+            'live'              => 'required|boolean',
+            'contact'           => 'required',
             'contact_telephone' => 'required',
-            'contact_email' => 'sometimes',
-            'business_name' => 'sometimes',
-            'address_line_1' => 'sometimes',
-            'address_line_2' => 'sometimes',
-            'address_line_3' => 'required',
-            'address_line_4' => 'required',
-            'country_code' => 'required|in:IE,IRL,UK,GB',
+            'contact_email'     => 'sometimes',
+            'business_name'     => 'sometimes',
+            'address_line_1'    => 'sometimes',
+            'address_line_2'    => 'sometimes',
+            'address_line_3'    => 'required',
+            'address_line_4'    => 'required',
+            'country_code'      => 'required|in:IE,IRL,UK,GB',
         ];
 
         $config = DpdIreland::first();
 
         if (!$config) {
             return array_merge($baseRule, [
-                'token' => 'required',
+                'token'    => 'required',
                 'password' => 'required',
             ]);
         }
 
         return array_merge($baseRule, [
-            'token' => ['sometimes', Rule::notIn(['*****', ''])],
+            'token'    => ['sometimes', Rule::notIn(['*****', ''])],
             'password' => ['sometimes', Rule::notIn(['*****', ''])],
         ]);
     }

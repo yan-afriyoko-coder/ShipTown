@@ -15,21 +15,22 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 /**
- * Class Dpd
- * @package App\Modules\Dpd\src
+ * Class Dpd.
  */
 class Dpd
 {
     const NOT_AUTH = 'NOT_AUTH';
 
     /**
-     * @param Order $order
+     * @param Order     $order
      * @param User|null $user
-     * @return PreAdvice
+     *
      * @throws PreAdviceRequestException
      * @throws src\Exceptions\ConsignmentValidationException
      * @throws Exception
      * @throws AuthorizationException
+     *
+     * @return PreAdvice
      */
     public static function shipOrder(Order $order, User $user = null): PreAdvice
     {
@@ -41,7 +42,7 @@ class Dpd
 
         logger('DPD PreAdvice generated', [
             'consignment' => $consignment->toArray(),
-            'preAdvice' => $preAdvice->toArray(),
+            'preAdvice'   => $preAdvice->toArray(),
         ]);
 
         return $preAdvice;
@@ -49,9 +50,11 @@ class Dpd
 
     /**
      * @param Consignment $consignment
-     * @return PreAdvice
+     *
      * @throws PreAdviceRequestException
      * @throws AuthorizationException
+     *
+     * @return PreAdvice
      */
     public static function getPreAdvice(Consignment $consignment): PreAdvice
     {
@@ -62,11 +65,12 @@ class Dpd
         if ($preAdvice->isNotSuccess()) {
             Log::error('DPD PreAdvice request failed', [
                 'xml_received' => $preAdvice->toString(),
-                'xml_sent' => $consignment->toString(),
+                'xml_sent'     => $consignment->toString(),
             ]);
 
             if ($preAdvice->getPreAdviceErrorCode() === self::NOT_AUTH) {
                 Client::clearCache();
+
                 throw new AuthorizationException($preAdvice->getPreAdviceErrorDetails());
             } else {
                 throw new PreAdviceRequestException($preAdvice->consignment()['RecordErrorDetails']);
@@ -78,57 +82,61 @@ class Dpd
 
     /**
      * @param OrderAddress $shipping_address
+     *
      * @return array
      */
     private static function getDeliveryAddress(OrderAddress $shipping_address): array
     {
         return [
-            'Contact' => $shipping_address->full_name,
+            'Contact'          => $shipping_address->full_name,
             'ContactTelephone' => $shipping_address->phone,
-            'ContactEmail' => '',
-            'AddressLine1' => $shipping_address->address1,
-            'AddressLine2' => $shipping_address->address2,
-            'AddressLine3' => $shipping_address->city,
-            'AddressLine4' => $shipping_address->state_name ?: $shipping_address->city,
-            'PostCode' =>  Str::length($shipping_address->postcode)===7 ? $shipping_address->postcode : '',
-            'CountryCode' => $shipping_address->country_code,
+            'ContactEmail'     => '',
+            'AddressLine1'     => $shipping_address->address1,
+            'AddressLine2'     => $shipping_address->address2,
+            'AddressLine3'     => $shipping_address->city,
+            'AddressLine4'     => $shipping_address->state_name ?: $shipping_address->city,
+            'PostCode'         => Str::length($shipping_address->postcode) === 7 ? $shipping_address->postcode : '',
+            'CountryCode'      => $shipping_address->country_code,
         ];
     }
 
     /**
      * @param Order $order
-     * @return Consignment
+     *
      * @throws src\Exceptions\ConsignmentValidationException
+     *
+     * @return Consignment
      */
     private static function getConsignment(Order $order): Consignment
     {
         $shipping_address = $order->shippingAddress()->first();
 
         return new Consignment([
-            'RecordID' => $order->order_number,
-            'DeliveryAddress' => self::getDeliveryAddress($shipping_address),
+            'RecordID'             => $order->order_number,
+            'DeliveryAddress'      => self::getDeliveryAddress($shipping_address),
             'ConsignmentReference' => $order->order_number,
-            'References' => [
+            'References'           => [
                 'Reference' => [
-                    'ReferenceName' => 'Order',
+                    'ReferenceName'  => 'Order',
                     'ReferenceValue' => $order->order_number,
-                    'ParcelNumber' => 1,
-                ]
-            ]
+                    'ParcelNumber'   => 1,
+                ],
+            ],
         ]);
     }
 
     /**
-     * @param Order $order
+     * @param Order     $order
      * @param PreAdvice $preAdvice
      * @param User|null $user
+     *
      * @throws Exception
      */
     private static function saveOrderShipment(Order $order, PreAdvice $preAdvice, ?User $user): void
     {
         retry(15, function () use ($order, $preAdvice, $user) {
             $order->orderShipments()->create([
-                'user_id' => $user ? $user->getKey() : null,
+                'user_id'         => $user ? $user->getKey() : null,
                 'shipping_number' => $preAdvice->trackingNumber(),
             ]);
         }, 150);

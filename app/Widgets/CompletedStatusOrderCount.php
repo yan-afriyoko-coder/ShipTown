@@ -26,7 +26,7 @@ class CompletedStatusOrderCount extends AbstractDateSelectorWidget
             ->whereIn('status_code', OrderStatus::getCompletedStatusCodeList())
             ->whereBetween('order_closed_at', [
                 $this->getStartingDateTime(),
-                $this->getEndingDateTime()
+                $this->getEndingDateTime(),
             ])
             ->groupBy(['status_code'])
             ->get();
@@ -36,9 +36,9 @@ class CompletedStatusOrderCount extends AbstractDateSelectorWidget
         });
 
         return view('widgets.completed_orders_counts', [
-            'config' => $this->config,
+            'config'              => $this->config,
             'status_order_counts' => $status_order_counts,
-            'total_count' => $total_count,
+            'total_count'         => $total_count,
         ]);
     }
 }

@@ -4,7 +4,6 @@ namespace App\Widgets;
 
 use App\Models\Pick;
 use Arrilot\Widgets\AbstractWidget;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class PicksReport extends AbstractWidget
 {
@@ -29,7 +28,7 @@ class PicksReport extends AbstractWidget
 
         return view('widgets.picks_report', [
             'config' => $this->config,
-            'picks' => $picks->toArray()
+            'picks'  => $picks->toArray(),
         ]);
     }
 }

@@ -15,8 +15,7 @@ use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
- * Class PrintDpdLabelController
- * @package App\Http\Controllers\Api
+ * Class PrintDpdLabelController.
  */
 class PrintDpdLabelController extends Controller
 {
@@ -40,6 +39,7 @@ class PrintDpdLabelController extends Controller
 
     /**
      * @param Order $order
+     *
      * @return PreAdvice
      */
     private function createPreAdviceOrFail(Order $order): PreAdvice
@@ -50,7 +50,7 @@ class PrintDpdLabelController extends Controller
             $preAdvice = Dpd::shipOrder($order, request()->user());
 
             if ($preAdvice->isNotSuccess()) {
-                $this->respondBadRequest('DPD Responded: ' . $preAdvice->consignment()['RecordErrorDetails']);
+                $this->respondBadRequest('DPD Responded: '.$preAdvice->consignment()['RecordErrorDetails']);
             }
 
             return $preAdvice;
@@ -63,6 +63,7 @@ class PrintDpdLabelController extends Controller
 
     /**
      * @param PreAdvice $preAdvice
+     *
      * @return int
      */
     public function printOrFail(PreAdvice $preAdvice): int
@@ -70,7 +71,7 @@ class PrintDpdLabelController extends Controller
         try {
             $printJob = new PrintJob();
             $printJob->printer_id = request()->user()->printer_id;
-            $printJob->title = $preAdvice->trackingNumber() . '_by_' . request()->user()->id;
+            $printJob->title = $preAdvice->trackingNumber().'_by_'.request()->user()->id;
             $printJob->pdf_url = $preAdvice->labelImage();
 
             return PrintNode::print($printJob);

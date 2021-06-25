@@ -10,8 +10,7 @@ use App\Modules\AutoStatusPicking\src\Jobs\RefillPickingMissingStockJob;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 /**
- * Class SetPackingWebStatus
- * @package App\Listeners\Order
+ * Class SetPackingWebStatus.
  */
 class RefillStatusPickingListener implements ShouldQueue
 {
@@ -19,6 +18,7 @@ class RefillStatusPickingListener implements ShouldQueue
      * Handle the event.
      *
      * @param HourlyEvent $event
+     *
      * @return void
      */
     public function handle(HourlyEvent $event)

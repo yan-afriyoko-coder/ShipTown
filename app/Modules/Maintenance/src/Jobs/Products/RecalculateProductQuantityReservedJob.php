@@ -13,12 +13,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Class RecalculateProductQuantityReservedJob
- * @package App\Jobs\Products
+ * Class RecalculateProductQuantityReservedJob.
  */
 class RecalculateProductQuantityReservedJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * @var int
@@ -39,8 +41,8 @@ class RecalculateProductQuantityReservedJob implements ShouldQueue
     {
         $incorrectInventoryRecords = Inventory::query()->select([
             'product_id',
-            DB::raw('max('. DB::getTablePrefix() .'products.quantity_reserved) as current_quantity_reserved'),
-            DB::raw('sum('. DB::getTablePrefix() .'inventory.quantity_reserved) as expected_quantity_reserved'),
+            DB::raw('max('.DB::getTablePrefix().'products.quantity_reserved) as current_quantity_reserved'),
+            DB::raw('sum('.DB::getTablePrefix().'inventory.quantity_reserved) as expected_quantity_reserved'),
         ])
             ->leftJoin('products', 'products.id', '=', 'inventory.product_id')
             ->groupBy('product_id')
@@ -56,7 +58,7 @@ class RecalculateProductQuantityReservedJob implements ShouldQueue
         });
 
         info('RecalculateProductQuantityReservedJob finished', [
-            'records_corrected_count' => $incorrectInventoryRecords->count()
+            'records_corrected_count' => $incorrectInventoryRecords->count(),
         ]);
     }
 }

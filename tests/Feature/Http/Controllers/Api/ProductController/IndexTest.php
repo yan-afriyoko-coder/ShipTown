@@ -14,7 +14,6 @@ class IndexTest extends TestCase
     /** @test */
     public function test_index_call_returns_ok()
     {
-
         Product::query()->forceDelete();
         factory(Product::class)->create();
 
@@ -24,7 +23,7 @@ class IndexTest extends TestCase
             'include' => [
                 'inventory',
                 'aliases',
-                'tags'
+                'tags',
             ],
             'filter[inventory_source_location_id]' => 1,
         ]));
@@ -52,16 +51,16 @@ class IndexTest extends TestCase
                     'inventory_source_product_id',
                     'inventory_source_location_id',
                     'inventory' => [
-                        '*' => []
+                        '*' => [],
                     ],
                     'aliases' => [
-                        '*' => []
+                        '*' => [],
                     ],
                     'tags' => [
-                        '*' => []
+                        '*' => [],
                     ],
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 }

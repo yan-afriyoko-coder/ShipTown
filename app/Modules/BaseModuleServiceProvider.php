@@ -1,18 +1,14 @@
 <?php
 
-
 namespace App\Modules;
 
 use App;
 use App\Module;
 use Exception;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
-use function PHPUnit\Framework\throwException;
 
 /**
- * Class BaseModuleServiceProvider
- * @package App\Modules
+ * Class BaseModuleServiceProvider.
  */
 class BaseModuleServiceProvider extends EventServiceProvider
 {
@@ -28,7 +24,7 @@ class BaseModuleServiceProvider extends EventServiceProvider
 
     /**
      * Should we automatically enable it
-     * When module first registered
+     * When module first registered.
      *
      * @var bool
      */
@@ -37,8 +33,9 @@ class BaseModuleServiceProvider extends EventServiceProvider
     /**
      * Register any events for your application.
      *
-     * @return void
      * @throws Exception
+     *
+     * @return void
      */
     public function boot()
     {
@@ -58,19 +55,17 @@ class BaseModuleServiceProvider extends EventServiceProvider
     {
         try {
             $module = Module::firstOrCreate([
-                    'service_provider_class' => get_called_class()
-                ], [
-                    'enabled' => $this->autoEnable
-                ]);
+                'service_provider_class' => get_called_class(),
+            ], [
+                'enabled' => $this->autoEnable,
+            ]);
+
             return $module->enabled;
         } catch (Exception $exception) {
             return false;
         }
     }
 
-    /**
-     *
-     */
     public static function enableModule()
     {
         $module = Module::firstOrCreate(['service_provider_class' => get_called_class()], ['enabled' => false]);
@@ -85,9 +80,6 @@ class BaseModuleServiceProvider extends EventServiceProvider
         App::register(get_called_class())->boot();
     }
 
-    /**
-     *
-     */
     public static function disableModule()
     {
         $module = Module::firstOrCreate(['service_provider_class' => get_called_class()], ['enabled' => false]);

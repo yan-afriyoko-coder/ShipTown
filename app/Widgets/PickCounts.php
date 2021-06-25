@@ -3,7 +3,6 @@
 namespace App\Widgets;
 
 use App\Models\Pick;
-use App\Models\Picklist;
 use Arrilot\Widgets\AbstractWidget;
 use Carbon\Carbon;
 
@@ -29,7 +28,7 @@ class PickCounts extends AbstractWidget
             ->count();
 
         return view('widgets.pick_counts', [
-            'config' => $this->config,
+            'config'    => $this->config,
             'pickCount' => $picksCount,
         ]);
     }

@@ -18,7 +18,7 @@ class StoreTest extends TestCase
         $order = factory(Order::class)->create();
         $attributes = [
             'order_id' => $order->getKey(),
-            'comment' => 'Test comment',
+            'comment'  => 'Test comment',
         ];
 
         $response = $this->actingAs($user, 'api')->postJson(route('comments.store'), $attributes);

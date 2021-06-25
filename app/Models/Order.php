@@ -6,12 +6,11 @@ use App\BaseModel;
 use App\Traits\HasTagsTrait;
 use App\Traits\LogsActivityTrait;
 use App\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
@@ -19,23 +18,23 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
- * App\Models\Order
+ * App\Models\Order.
  *
- * @property int $id
- * @property int|null $shipping_address_id
- * @property string $order_number
- * @property string $status_code
- * @property boolean $is_active
- * @property string $total
- * @property string $total_paid
+ * @property int         $id
+ * @property int|null    $shipping_address_id
+ * @property string      $order_number
+ * @property string      $status_code
+ * @property bool        $is_active
+ * @property string      $total
+ * @property string      $total_paid
  * @property string|null $order_placed_at
  * @property string|null $order_closed_at
- * @property int $product_line_count
+ * @property int         $product_line_count
  * @property string|null $picked_at
  * @property string|null $packed_at
- * @property int|null $packer_user_id
- * @property string $total_quantity_ordered
- * @property array $raw_import
+ * @property int|null    $packer_user_id
+ * @property string      $total_quantity_ordered
+ * @property array       $raw_import
  * @property string|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -56,8 +55,9 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property-read OrderAddress|null $shippingAddress
  * @property-read OrderStats|null $stats
  * @property-read OrderStatus $order_status
- * @property-read boolean isPaid
- * @property-read boolean isNotPaid
+ * @property-read bool isPaid
+ * @property-read bool isNotPaid
+ *
  * @method static Builder|Order active()
  * @method static Builder|Order addInventorySource($inventory_location_id)
  * @method static Builder|Order hasPacker($expected)
@@ -89,11 +89,13 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static Builder|Order whereTotalQuantityOrdered($value)
  * @method static Builder|Order whereUpdatedAt($value)
  * @method static Builder|Order whereIsActive()
+ *
  * @property-read int $age_in_days
  * @property OrderStatus orderStatus
  * @property-read bool $is_not_paid
  * @property Collection|\Spatie\Tags\Tag[] $tags
  * @property-read int|null $tags_count
+ *
  * @method static Builder|Order hasTags($tags)
  * @method static Builder|Order isActive()
  * @method static Builder|Order packedBetween($fromDateTime, $toDateTime)
@@ -107,7 +109,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class Order extends BaseModel
 {
-    use LogsActivityTrait, HasTagsTrait;
+    use LogsActivityTrait;
+    use HasTagsTrait;
 
 //    protected $touches = ['orderProducts'];
 
@@ -132,11 +135,11 @@ class Order extends BaseModel
      */
     protected static array $logAttributes = [
         'status_code',
-        'packer_user_id'
+        'packer_user_id',
     ];
 
     protected $casts = [
-        'is_active' => 'boolean',
+        'is_active'  => 'boolean',
         'raw_import' => 'array',
     ];
 
@@ -146,8 +149,8 @@ class Order extends BaseModel
     // correctly to events
     protected $attributes = [
         'status_code' => 'processing',
-        'is_active' => 1,
-        'raw_import' => '{}',
+        'is_active'   => 1,
+        'raw_import'  => '{}',
     ];
 
     protected $appends = [
@@ -157,7 +160,7 @@ class Order extends BaseModel
     ];
 
     protected $dates = [
-        'order_closed_at'
+        'order_closed_at',
     ];
 
     /**
@@ -167,6 +170,7 @@ class Order extends BaseModel
     {
         $this->total_quantity_ordered = $this->orderProducts()->sum('quantity_ordered');
         $this->product_line_count = $this->orderProducts()->count('id');
+
         return $this;
     }
 
@@ -185,7 +189,7 @@ class Order extends BaseModel
     {
         return OrderStatus::firstOrCreate([
             'name' => $this->status_code,
-            'code'=> $this->status_code
+            'code' => $this->status_code,
         ]);
     }
 
@@ -207,20 +211,21 @@ class Order extends BaseModel
      */
     public function isClosed(): bool
     {
-        return ! $this->isOpen();
+        return !$this->isOpen();
     }
 
     /**
      * @param $query
      * @param $text
+     *
      * @return Builder
      */
     public function scopeWhereHasText($query, $text)
     {
-        return $query->where('order_number', 'like', '%' . $text . '%')
+        return $query->where('order_number', 'like', '%'.$text.'%')
             ->orWhere('status_code', '=', $text)
             ->orWhereHas('orderShipments', function ($query) use ($text) {
-                return $query->where('shipping_number', 'like', '%'. $text . '%');
+                return $query->where('shipping_number', 'like', '%'.$text.'%');
             });
     }
 
@@ -244,6 +249,7 @@ class Order extends BaseModel
 
     /**
      * @param Builder $query
+     *
      * @return Builder
      */
     public function scopeIsActive(Builder $query): Builder
@@ -254,8 +260,9 @@ class Order extends BaseModel
 
     /**
      * @param Builder $query
-     * @param string $fromDateTime
-     * @param string $toDateTime
+     * @param string  $fromDateTime
+     * @param string  $toDateTime
+     *
      * @return Builder
      */
     public function scopePackedBetween(Builder $query, string $fromDateTime, string $toDateTime): Builder
@@ -277,7 +284,8 @@ class Order extends BaseModel
 
     /**
      * @param QueryBuilder $query
-     * @param int $age
+     * @param int          $age
+     *
      * @return Builder|QueryBuilder
      */
     public function scopeWhereAgeInDays($query, $age)
@@ -290,7 +298,8 @@ class Order extends BaseModel
 
     /**
      * @param Builder $query
-     * @param int $inventory_location_id
+     * @param int     $inventory_location_id
+     *
      * @return Builder
      */
     public function scopeAddInventorySource($query, $inventory_location_id)
@@ -320,11 +329,12 @@ class Order extends BaseModel
 
     public function getIsNotPaidAttribute(): bool
     {
-        return ! $this->isPaid;
+        return !$this->isPaid;
     }
 
     /**
      * @param $expected
+     *
      * @return bool
      */
     public function isNotStatusCode($expected)
@@ -334,6 +344,7 @@ class Order extends BaseModel
 
     /**
      * @param $expected
+     *
      * @return bool
      */
     public function isStatusCode($expected)
@@ -341,9 +352,9 @@ class Order extends BaseModel
         return $this->getAttribute('status_code') === $expected;
     }
 
-
     /**
      * @param array $statusCodes
+     *
      * @return bool
      */
     public function isStatusCodeNotIn(array $statusCodes)
@@ -353,6 +364,7 @@ class Order extends BaseModel
 
     /**
      * @param array $statusCodes
+     *
      * @return bool
      */
     public function isStatusCodeIn(array $statusCodes)
@@ -365,6 +377,7 @@ class Order extends BaseModel
     /**
      * @param $query
      * @param bool $expected
+     *
      * @return self
      */
     public function scopeHasPacker($query, bool $expected)
@@ -379,6 +392,7 @@ class Order extends BaseModel
     /**
      * @param $query
      * @param bool $expected
+     *
      * @return self
      */
     public function scopeIsPicked($query, bool $expected)
@@ -392,6 +406,7 @@ class Order extends BaseModel
 
     /**
      * @param $query
+     *
      * @return self
      */
     public function scopeIsPacking($query, $is_packing)
@@ -405,6 +420,7 @@ class Order extends BaseModel
 
     /**
      * @param $query
+     *
      * @return self
      */
     public function scopeWhereIsPicked($query)
@@ -414,6 +430,7 @@ class Order extends BaseModel
 
     /**
      * @param $query
+     *
      * @return self
      */
     public function scopeWhereIsNotPicked($query)
@@ -490,6 +507,7 @@ class Order extends BaseModel
     {
         return $this->hasMany(OrderShipment::class)->latest();
     }
+
     /**
      * @return HasOne
      */
@@ -515,12 +533,11 @@ class Order extends BaseModel
             ->allowedFilters([
                 AllowedFilter::scope('search', 'whereHasText')->ignore([null, '']),
 
-
                 AllowedFilter::exact('status', 'status_code'),
                 AllowedFilter::exact('order_number')->ignore([null, '']),
                 AllowedFilter::exact('packer_user_id'),
 
-                AllowedFilter::scope('age_in_days', 'whereAgeInDays')->ignore([null,'']),
+                AllowedFilter::scope('age_in_days', 'whereAgeInDays')->ignore([null, '']),
                 AllowedFilter::scope('is_picked'),
                 AllowedFilter::scope('is_packed'),
                 AllowedFilter::scope('is_packing'),

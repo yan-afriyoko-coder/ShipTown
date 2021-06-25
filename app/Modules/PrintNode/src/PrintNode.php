@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Modules\PrintNode\src;
 
 use App\Modules\PrintNode\src\Models\Client;
@@ -26,6 +25,7 @@ class PrintNode
 
         try {
             $response = $client->getRequest('noop');
+
             return $response->getStatusCode() === 200;
         } catch (Exception $exception) {
             return false;
@@ -38,6 +38,7 @@ class PrintNode
 
         if (!$printNodeClient) {
             Log::warning('Print job failed, no PrintNode clients configured');
+
             return -1;
         }
 

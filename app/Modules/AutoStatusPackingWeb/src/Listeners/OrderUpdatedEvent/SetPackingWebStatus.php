@@ -6,8 +6,7 @@ use App\Events\Order\OrderUpdatedEvent;
 use Carbon\Carbon;
 
 /**
- * Class SetPackingWebStatus
- * @package App\Listeners\Order
+ * Class SetPackingWebStatus.
  */
 class SetPackingWebStatus
 {
@@ -15,6 +14,7 @@ class SetPackingWebStatus
      * Handle the event.
      *
      * @param OrderUpdatedEvent $event
+     *
      * @return void
      */
     public function handle(OrderUpdatedEvent $event)
@@ -32,7 +32,7 @@ class SetPackingWebStatus
 
         $order->log('Order fully picked, changing status');
         $order->update([
-            'picked_at' => Carbon::now(),
+            'picked_at'   => Carbon::now(),
             'status_code' => 'packing_web',
         ]);
     }

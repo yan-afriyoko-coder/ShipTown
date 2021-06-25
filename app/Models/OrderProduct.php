@@ -6,7 +6,6 @@ use App\BaseModel;
 use App\Traits\LogsActivityTrait;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
@@ -17,22 +16,22 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
- * App\Models\OrderProduct
+ * App\Models\OrderProduct.
  *
- * @property int $id
- * @property int|null $order_id
- * @property int|null $product_id
- * @property string $sku_ordered
- * @property string $name_ordered
- * @property float $price
- * @property float $quantity_ordered
- * @property float $quantity_reserved
- * @property float $quantity_shipped
- * @property float $quantity_to_ship
- * @property float $quantity_to_pick
- * @property float $quantity_picked
- * @property float $quantity_skipped_picking
- * @property float $quantity_not_picked
+ * @property int         $id
+ * @property int|null    $order_id
+ * @property int|null    $product_id
+ * @property string      $sku_ordered
+ * @property string      $name_ordered
+ * @property float       $price
+ * @property float       $quantity_ordered
+ * @property float       $quantity_reserved
+ * @property float       $quantity_shipped
+ * @property float       $quantity_to_ship
+ * @property float       $quantity_to_pick
+ * @property float       $quantity_picked
+ * @property float       $quantity_skipped_picking
+ * @property float       $quantity_not_picked
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -40,6 +39,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property-read int|null $activities_count
  * @property-read Order|null $order
  * @property-read Product|null $product
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct addInventorySource($inventory_location_id)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct minimumShelfLocation($currentLocation)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct newModelQuery()
@@ -66,7 +66,9 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereUpdatedAt($value)
  * @method static Builder|OrderProduct withTrashed()
  * @method static Builder|OrderProduct withoutTrashed()
+ *
  * @property string $quantity_outstanding
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereHasStockReserved($statusCodeArray)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityOutstanding($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct createdBetween($min, $max)
@@ -107,25 +109,27 @@ class OrderProduct extends BaseModel
     ];
 
     protected $casts = [
-        'price'=> 'float',
-        'quantity_ordered'=> 'float',
-        'quantity_reserved'=> 'float',
-        'quantity_to_ship'=> 'float',
-        'quantity_to_pick'=> 'float',
-        'quantity_picked'=> 'float',
+        'price'                   => 'float',
+        'quantity_ordered'        => 'float',
+        'quantity_reserved'       => 'float',
+        'quantity_to_ship'        => 'float',
+        'quantity_to_pick'        => 'float',
+        'quantity_picked'         => 'float',
         'quantity_skipped_picking'=> 'float',
-        'quantity_not_picked'=> 'float',
-        'quantity_shipped'=> 'float',
+        'quantity_not_picked'     => 'float',
+        'quantity_shipped'        => 'float',
     ];
 
     /**
      * @param array $options
+     *
      * @return bool
      */
     public function save(array $options = [])
     {
         $this->quantity_to_ship = $this->quantity_ordered - $this->quantity_shipped;
         $this->quantity_to_pick = $this->quantity_ordered - $this->quantity_picked - $this->quantity_skipped_picking;
+
         return parent::save($options);
     }
 
@@ -133,6 +137,7 @@ class OrderProduct extends BaseModel
      * @param Builder|QueryBuilder $query
      * @param $min
      * @param $max
+     *
      * @return Builder|QueryBuilder
      */
     public function scopeCreatedBetween($query, $min, $max)
@@ -146,7 +151,7 @@ class OrderProduct extends BaseModel
 
         return $query->whereBetween('created_at', [
             $startingDateTime,
-            $endingDateTime
+            $endingDateTime,
         ]);
     }
 
@@ -188,7 +193,8 @@ class OrderProduct extends BaseModel
 
     /**
      * @param Builder $query
-     * @param string $currentLocation
+     * @param string  $currentLocation
+     *
      * @return Builder
      */
     public function scopeMinimumShelfLocation($query, $currentLocation)
@@ -198,13 +204,14 @@ class OrderProduct extends BaseModel
 
     /**
      * @param Builder $query
-     * @param array $statusCodeArray
+     * @param array   $statusCodeArray
+     *
      * @return Builder|mixed
      */
     public function scopeWhereHasStockReserved($query, $statusCodeArray)
     {
         return $query->where('quantity_to_ship', '>', 0)
-            ->whereHas('order', function ($query) use ($statusCodeArray) {
+            ->whereHas('order', function ($query) {
                 $query->select([DB::raw(1)])
                     ->whereIn('status_code', OrderStatus::whereReservesStock(true)->get('code'));
             });
@@ -212,7 +219,8 @@ class OrderProduct extends BaseModel
 
     /**
      * @param Builder $query
-     * @param array $statusCodeArray
+     * @param array   $statusCodeArray
+     *
      * @return Builder
      */
     public function scopeWhereStatusCodeIn($query, $statusCodeArray)
@@ -224,7 +232,8 @@ class OrderProduct extends BaseModel
 
     /**
      * @param Builder $query
-     * @param array $statusCodeArray
+     * @param array   $statusCodeArray
+     *
      * @return Builder
      */
     public function scopeWhereStatusCodeNotIn($query, $statusCodeArray)
@@ -236,7 +245,8 @@ class OrderProduct extends BaseModel
 
     /**
      * @param Builder $query
-     * @param boolean $in_stock
+     * @param bool    $in_stock
+     *
      * @return mixed
      */
     public function scopeWhereInStock($query, $in_stock)
@@ -250,7 +260,8 @@ class OrderProduct extends BaseModel
 
     /**
      * @param Builder $query
-     * @param int $inventory_location_id
+     * @param int     $inventory_location_id
+     *
      * @return Builder
      */
     public function scopeAddInventorySource($query, $inventory_location_id)

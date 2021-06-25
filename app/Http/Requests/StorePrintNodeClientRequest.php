@@ -24,7 +24,7 @@ class StorePrintNodeClientRequest extends FormRequest
     public function rules()
     {
         return [
-            'api_key' => ['sometimes']
+            'api_key' => ['sometimes'],
         ];
     }
 }

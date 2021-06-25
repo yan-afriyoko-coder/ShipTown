@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class UserUpdateRequest extends FormRequest
 {
@@ -26,9 +25,9 @@ class UserUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['sometimes', 'required', 'string', 'max:255', 'unique:users,name,'.$this->user->id],
-            'email' => ['sometimes', 'required', 'string', 'email', 'max:255', 'unique:users,name,'.$this->user->id],
-            'role_id' => ['sometimes', 'exists:roles,id'],
+            'name'       => ['sometimes', 'required', 'string', 'max:255', 'unique:users,name,'.$this->user->id],
+            'email'      => ['sometimes', 'required', 'string', 'email', 'max:255', 'unique:users,name,'.$this->user->id],
+            'role_id'    => ['sometimes', 'exists:roles,id'],
             'printer_id' => ['sometimes', 'numeric'],
         ];
     }

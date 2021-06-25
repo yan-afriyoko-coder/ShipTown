@@ -6,8 +6,7 @@ use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class EventServiceProviderBase
- * @package App\Providers
+ * Class EventServiceProviderBase.
  */
 class EventServiceProviderBase extends BaseModuleServiceProvider
 {
@@ -19,7 +18,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public string $module_description = 'Automatically changes status from "picking" to "packing_web" ' .
+    public string $module_description = 'Automatically changes status from "picking" to "packing_web" '.
     'when order is fully picked';
 
     /**

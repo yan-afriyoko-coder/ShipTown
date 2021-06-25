@@ -7,8 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Request;
 
 /**
- * Class SyncController
- * @package App\Http\Controllers
+ * Class SyncController.
  */
 class SyncController extends Controller
 {

@@ -6,8 +6,7 @@ use App\Events\Order\OrderUpdatedEvent;
 use App\Models\OrderStatus;
 
 /**
- * Class SetPackingWebStatus
- * @package App\Listeners\Order
+ * Class SetPackingWebStatus.
  */
 class SetReadyWhenPacked
 {
@@ -15,6 +14,7 @@ class SetReadyWhenPacked
      * Handle the event.
      *
      * @param OrderUpdatedEvent $event
+     *
      * @return void
      */
     public function handle(OrderUpdatedEvent $event)

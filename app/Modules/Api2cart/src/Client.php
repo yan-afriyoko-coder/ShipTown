@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Modules\Api2cart\src;
 
 use App\Modules\Api2cart\src\Exceptions\RequestException;
@@ -12,16 +11,18 @@ class Client
     /**
      * @param string $store_key
      * @param string $uri
-     * @param array $params
-     * @return RequestResponse
+     * @param array  $params
+     *
      * @throws RequestException
      * @throws GuzzleException
+     *
+     * @return RequestResponse
      */
     public static function GET(string $store_key, string $uri, array $params): RequestResponse
     {
         $query = [
-            'api_key' => self::getApiKey(),
-            'store_key' => $store_key
+            'api_key'   => self::getApiKey(),
+            'store_key' => $store_key,
         ];
 
         $query = array_merge($query, $params);
@@ -35,12 +36,12 @@ class Client
         $query['store_key'] = '***';
 
         // log query
-        logger("GET", [
-            "uri" => $uri,
-            "query" => $query,
-            "response" => [
-                "status_code" => $response->getResponseRaw()->getStatusCode(),
-            ]
+        logger('GET', [
+            'uri'      => $uri,
+            'query'    => $query,
+            'response' => [
+                'status_code' => $response->getResponseRaw()->getStatusCode(),
+            ],
         ]);
 
         if ($response->isNotSuccess()) {
@@ -53,21 +54,23 @@ class Client
     /**
      * @param string $store_key
      * @param string $uri
-     * @param array $data
-     * @return RequestResponse
+     * @param array  $data
+     *
      * @throws RequestException|GuzzleException
+     *
+     * @return RequestResponse
      */
     public static function POST(string $store_key, string $uri, array $data): RequestResponse
     {
         $query = [
-            'api_key' => self::getApiKey(),
-            'store_key' => $store_key
+            'api_key'   => self::getApiKey(),
+            'store_key' => $store_key,
         ];
 
         $response = new RequestResponse(
             self::getGuzzleClient()->post($uri, [
                 'query' => $query,
-                'json' => $data
+                'json'  => $data,
             ])
         );
 
@@ -80,13 +83,13 @@ class Client
         $query['store_key'] = '***';
 
         // log query
-        logger("POST", [
-            "uri" => $uri,
-            "query" => $query,
-            "json" => $data,
-            "response" => [
-                "status_code" => $response->getResponseRaw()->getStatusCode(),
-            ]
+        logger('POST', [
+            'uri'      => $uri,
+            'query'    => $query,
+            'json'     => $data,
+            'response' => [
+                'status_code' => $response->getResponseRaw()->getStatusCode(),
+            ],
         ]);
 
         return $response;
@@ -95,20 +98,22 @@ class Client
     /**
      * @param string $store_key
      * @param string $uri
-     * @param array $params
-     * @return RequestResponse
+     * @param array  $params
+     *
      * @throws GuzzleException
+     *
+     * @return RequestResponse
      */
     public static function DELETE(string $store_key, string $uri, array $params): RequestResponse
     {
         $query = [
-            'api_key' => self::getApiKey(),
-            'store_key' => $store_key
+            'api_key'   => self::getApiKey(),
+            'store_key' => $store_key,
         ];
 
         $query = array_merge($query, $params);
 
-        $response =  self::getGuzzleClient()->delete($uri, ['query' => $query]);
+        $response = self::getGuzzleClient()->delete($uri, ['query' => $query]);
 
         return new RequestResponse($response);
     }
@@ -119,8 +124,8 @@ class Client
     public static function getGuzzleClient(): GuzzleClient
     {
         return new GuzzleClient([
-            'base_uri' =>  'https://api.api2cart.com/v1.1/',
-            'timeout' => 60,
+            'base_uri'   => 'https://api.api2cart.com/v1.1/',
+            'timeout'    => 60,
             'exceptions' => true,
         ]);
     }

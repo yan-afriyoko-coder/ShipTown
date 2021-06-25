@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class RenameWarehouseIdColumnToApi2cartConnectionsTable extends Migration
 {
@@ -14,7 +14,7 @@ class RenameWarehouseIdColumnToApi2cartConnectionsTable extends Migration
     public function up()
     {
         Schema::table('api2cart_connections', function (Blueprint $table) {
-            $table->renameColumn('warehouse_id','magento_warehouse_id');
+            $table->renameColumn('warehouse_id', 'magento_warehouse_id');
         });
     }
 

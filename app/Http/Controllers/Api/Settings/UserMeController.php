@@ -8,13 +8,13 @@ use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 
 /**
- * Class UserMeController
- * @package App\Http\Controllers\Api\Settings\User
+ * Class UserMeController.
  */
 class UserMeController extends Controller
 {
     /**
      * @param Request $request
+     *
      * @return UserResource
      */
     public function index(Request $request)
@@ -24,6 +24,7 @@ class UserMeController extends Controller
 
     /**
      * @param UserMeStoreRequest $request
+     *
      * @return UserResource
      */
     public function store(UserMeStoreRequest $request)

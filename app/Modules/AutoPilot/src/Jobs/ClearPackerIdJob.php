@@ -12,7 +12,10 @@ use Illuminate\Queue\SerializesModels;
 
 class ClearPackerIdJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Execute the job.
@@ -29,7 +32,7 @@ class ClearPackerIdJob implements ShouldQueue
             ->get();
 
         $records->each(function (Order $order) {
-                $order->log('Clearing packer assignment')
+            $order->log('Clearing packer assignment')
                     ->update(['packer_user_id' => null]);
         });
 

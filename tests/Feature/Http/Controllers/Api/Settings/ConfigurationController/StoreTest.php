@@ -16,7 +16,7 @@ class StoreTest extends TestCase
         $user = factory(User::class)->create()->assignRole('admin');
 
         $response = $this->actingAs($user, 'api')->postJson(route('configuration.store'), [
-            'key' => 'testKey',
+            'key'   => 'testKey',
             'value' => 'testValue',
         ]);
 
@@ -27,7 +27,7 @@ class StoreTest extends TestCase
                 'id',
                 'key',
                 'value',
-            ]
+            ],
         ]);
     }
 }

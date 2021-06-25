@@ -43,7 +43,7 @@ class TimeToZeroWidget extends AbstractWidget
 
         $data['balance'] = $data['orders_closed_count'] - $data['orders_placed_count'];
 
-        $data['staff_days_used'] = (integer) DB::query()
+        $data['staff_days_used'] = (int) DB::query()
             ->fromSub(
                 Order::query()
                 ->select([
@@ -69,7 +69,7 @@ class TimeToZeroWidget extends AbstractWidget
 
         return view('widgets.time_to_zero_widget', [
             'config' => $this->config,
-            'data' => $data
+            'data'   => $data,
         ]);
     }
 }

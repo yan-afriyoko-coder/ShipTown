@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Modules\AutoPilot\src;
 
 use App\Events\HourlyEvent;
@@ -24,7 +23,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
      */
     protected $listen = [
         HourlyEvent::class => [
-            ClearPackerIdListener::class
-        ]
+            ClearPackerIdListener::class,
+        ],
     ];
 }
