@@ -28,7 +28,7 @@ class AutoCloseServiceProviderTest extends TestCase
         $order = factory(Order::class)->create();
 
         OrderUpdatedEvent::dispatch($order);
-;
+
         Bus::assertDispatched(OpenCloseOrderJob::class);
     }
 }

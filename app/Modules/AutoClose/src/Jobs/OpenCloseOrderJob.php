@@ -11,7 +11,10 @@ use Illuminate\Queue\SerializesModels;
 
 class OpenCloseOrderJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     private Order $order;
 
@@ -41,7 +44,7 @@ class OpenCloseOrderJob implements ShouldQueue
         $closesOrder = !$order->order_status->order_active;
 
         if ($closesOrder and ($order->order_closed_at === null)) {
-            $order->log('status "'. $order->status_code.'" closing order ')
+            $order->log('status "'.$order->status_code.'" closing order ')
                 ->update([
                     'is_active'       => false,
                     'order_closed_at' => now(),
