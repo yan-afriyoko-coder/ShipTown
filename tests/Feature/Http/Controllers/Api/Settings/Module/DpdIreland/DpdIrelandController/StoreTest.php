@@ -14,6 +14,7 @@ class StoreTest extends TestCase
     /** @test */
     public function test_config_update()
     {
+
         DpdIreland::query()->create([
             'live' => false,
             'user' => 'someuser',
