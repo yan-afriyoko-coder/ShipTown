@@ -33,4 +33,11 @@ class DpdIrelandController extends Controller
 
         return DpdIrelandConfigurationResource::make($config);
     }
+
+    public function destroy(Request $request)
+    {
+        DpdIreland::query()->delete();
+
+        return response('ok');
+    }
 }

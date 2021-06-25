@@ -7,12 +7,12 @@ use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class IndexTest extends TestCase
+class DestroyTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
-    public function test_index_call_with_config()
+    public function test_delete_config()
     {
         DpdIreland::query()->create([
             'live' => false,
@@ -31,7 +31,9 @@ class IndexTest extends TestCase
         ]);
 
         $user = factory(User::class)->create();
-        $response = $this->actingAs($user, 'api')->get(route('api.settings.module.dpd-ireland.index'));
+        $response = $this->actingAs($user, 'api')->delete(route('api.settings.module.dpd-ireland.destroy'));
         $response->assertOk();
+
+        $this->assertEquals(0, DpdIreland::count());
     }
 }

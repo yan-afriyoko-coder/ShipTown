@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Modules\DpdIreland\src\Models\DpdIreland;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreDpdIrelandRequest extends FormRequest
 {
@@ -18,16 +20,15 @@ class StoreDpdIrelandRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
+     * If no configuration found, token, user, and password field is required
      *
      * @return array
      */
     public function rules()
     {
-        return [
-            'live' => 'required|boolean',
-            'token' => 'required',
+        $baseRule = [
             'user' => 'required',
-            'password' => 'required',
+            'live' => 'required|boolean',
             'contact' => 'required',
             'contact_telephone' => 'required',
             'contact_email' => 'sometimes',
@@ -38,5 +39,19 @@ class StoreDpdIrelandRequest extends FormRequest
             'address_line_4' => 'required',
             'country_code' => 'required|in:IE,IRL,UK,GB',
         ];
+
+        $config = DpdIreland::first();
+
+        if (!$config) {
+            return array_merge($baseRule, [
+                'token' => 'required',
+                'password' => 'required',
+            ]);
+        }
+
+        return array_merge($baseRule, [
+            'token' => ['sometimes', Rule::notIn(['*****', ''])],
+            'password' => ['sometimes', Rule::notIn(['*****', ''])],
+        ]);
     }
 }
