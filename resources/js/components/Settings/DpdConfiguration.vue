@@ -18,7 +18,7 @@
                         <tr>
                             <th>API Username</th>
                             <th>API Live</th>
-                            <th>Contact</th>
+                            <th>Collection Address</th>
                             <th></th><!--Edit Configuration-->
                             <th></th><!--Delete-->
                         </tr>
