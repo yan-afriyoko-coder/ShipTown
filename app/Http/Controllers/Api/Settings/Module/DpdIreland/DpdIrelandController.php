@@ -36,6 +36,6 @@ class DpdIrelandController extends Controller
     {
         $connection->delete();
 
-        return response('ok');
+        return DpdIrelandConfigurationResource::make($connection);
     }
 }
