@@ -31,7 +31,7 @@ class IndexTest extends TestCase
         ]);
 
         $user = factory(User::class)->create();
-        $response = $this->actingAs($user, 'api')->get(route('api.settings.module.dpd-ireland.index'));
+        $response = $this->actingAs($user, 'api')->get(route('api.settings.module.dpd-ireland.connections.index'));
         $response->assertOk();
     }
 }

@@ -14,7 +14,7 @@ class DestroyTest extends TestCase
     /** @test */
     public function test_delete_config()
     {
-        DpdIreland::query()->create([
+        $connection = DpdIreland::query()->create([
             'live' => false,
             'user' => 'someuser',
             'password' => 'somepassword',
@@ -31,7 +31,8 @@ class DestroyTest extends TestCase
         ]);
 
         $user = factory(User::class)->create();
-        $response = $this->actingAs($user, 'api')->delete(route('api.settings.module.dpd-ireland.destroy'));
+        $response = $this->actingAs($user, 'api')
+            ->delete(route('api.settings.module.dpd-ireland.connections.destroy', ['connection' => $connection->getKey()]));
         $response->assertOk();
 
         $this->assertEquals(0, DpdIreland::count());

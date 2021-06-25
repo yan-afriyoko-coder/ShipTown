@@ -40,7 +40,7 @@
                                 <a class="action-link" v-b-modal.dpd-update-form-modal>Edit</a>
                             </td>
                             <td>
-                                <a @click="handleDelete()" class="action-link text-danger">Delete</a>
+                                <a @click="handleDelete(configuration.id)" class="action-link text-danger">Delete</a>
                             </td>
                         </tr>
                     </tbody>
@@ -143,10 +143,12 @@
                         this.$refs.createFormModal.hide();
                     }
                 });
+
+                this.getConfiguration();
             },
 
-            handleDelete() {
-                this.apiDeleteDpdConfiguration()
+            handleDelete(id) {
+                this.apiDeleteDpdConfiguration(id)
                     .then(() => {
                         this.configuration = {};
                         this.has_configuration = false;
