@@ -4,12 +4,12 @@ namespace Tests\Feature\Modules\AutoStatusPackingWarehouse;
 
 use App\Events\Order\ActiveOrderCheckEvent;
 use App\Models\Order;
-use App\Modules\AutoStatusPackingWarehouse\src\Listeners\ActiveOrdersCheckEvent\SetStatusPackingWarehouseListener;
+use App\Modules\AutoStatusPackingWarehouse\src\AutoPackingWarehouseServiceProvider;
+use App\Modules\AutoStatusPackingWarehouse\src\Jobs\SetStatusPackingWarehouseJob;
 use Illuminate\Support\Facades\Bus;
-use Mockery;
 use Tests\TestCase;
 
-class ModuleTest extends TestCase
+class AutoPackingWarehouseServiceProviderTest extends TestCase
 {
     /**
      * A basic feature test example.
@@ -18,15 +18,14 @@ class ModuleTest extends TestCase
      */
     public function test_basic_functionality()
     {
-        Bus::fake();
-
-        $listener = Mockery::spy(SetStatusPackingWarehouseListener::class);
-        app()->instance(SetStatusPackingWarehouseListener::class, $listener);
+        AutoPackingWarehouseServiceProvider::enableModule();
 
         $order = factory(Order::class)->create(['is_active' => true]);
 
+        Bus::fake();
+
         ActiveOrderCheckEvent::dispatch($order);
 
-        $listener->shouldHaveReceived('handle')->once();
+        Bus::assertDispatched(SetStatusPackingWarehouseJob::class);
     }
 }
