@@ -57,7 +57,7 @@ Route::middleware('auth:api')->group(function () {
 
             // dpdireland
             Route::group(['prefix' => 'dpd-ireland', 'namespace' => 'DpdIreland', 'as' => 'dpd-ireland.'], function () {
-                Route::apiResource('', 'DpdIrelandController')->only(['index', 'store', 'destroy']);
+                Route::apiResource('connections', 'DpdIrelandController')->only(['index', 'store', 'destroy']);
             });
 
             // printnode

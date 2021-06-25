@@ -21,21 +21,24 @@ class DpdIrelandController extends Controller
 
     public function store(StoreDpdIrelandRequest $request): JsonResource
     {
-        $config = DpdIreland::first();
+//        $config = DpdIreland::first();
 
-        if (!$config) {
-            $config = DpdIreland::query()->create($request->validated());
-        } else {
-            $config->update($request->validated());
-        }
+        $config = DpdIreland::updateOrCreate([], $request->validated());
+
+//        if (!$config) {
+//            $config = DpdIreland::query()->create($request->validated());
+//        } else {
+//            $config->update($request->validated());
+//        }
 
         Client::clearCache();
 
         return DpdIrelandConfigurationResource::make($config);
     }
 
-    public function destroy(Request $request)
+    public function destroy(Request $request, DpdIreland $dpdIreland)
     {
+        dd(1);
         DpdIreland::query()->delete();
 
         return response('ok');

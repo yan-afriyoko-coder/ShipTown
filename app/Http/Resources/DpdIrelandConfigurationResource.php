@@ -15,6 +15,7 @@ class DpdIrelandConfigurationResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'api_username' => $this->user,
             'api_password' => '*****',
             'api_token' => '*****',

@@ -104,15 +104,15 @@ export default {
             },
 
             apiGetDpdConfiguration: function () {
-                return axios.get(`/api/settings/modules/dpd-ireland`);
+                return axios.get(`/api/settings/modules/dpd-ireland/connections`);
             },
 
             apiPostDpdConfiguration: function (data) {
-                return axios.post(`/api/settings/modules/dpd-ireland`, data);
+                return axios.post(`/api/settings/modules/dpd-ireland/connections`, data);
             },
 
-            apiDeleteDpdConfiguration: function () {
-                return axios.delete(`/api/settings/modules/dpd-ireland`);
+            apiDeleteDpdConfiguration: function (id) {
+                return axios.delete(`/api/settings/modules/dpd-ireland/connections/${id}`);
             },
 
             apiGetOauthTokens: function () {
