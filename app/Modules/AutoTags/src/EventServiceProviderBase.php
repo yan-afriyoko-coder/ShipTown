@@ -6,14 +6,24 @@ use App\Events\DailyEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class EventServiceProvider
+ * Class EventServiceProviderBase
  * @package App\Providers
  */
-class EventServiceProvider extends ServiceProvider
+class EventServiceProviderBase extends BaseModuleServiceProvider
 {
+    /**
+     * @var string
+     */
+    public string $module_name = 'AutoTags';
+
+    /**
+     * @var string
+     */
+    public string $module_description = 'Automatically manages Out Of Stock & Oversold tags';
+
     /**
      * The event listener mappings for the application.
      *

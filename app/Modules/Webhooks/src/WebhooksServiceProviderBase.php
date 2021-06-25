@@ -7,16 +7,26 @@ use App\Events\Order\OrderUpdatedEvent;
 use App\Events\Product\ProductCreatedEvent;
 use App\Events\Product\ProductUpdatedEvent;
 use App\Events\SyncRequestedEvent;
+use App\Modules\BaseModuleServiceProvider;
 use App\Modules\Webhooks\src\Jobs\PublishOrdersWebhooksJob;
 use App\Modules\Webhooks\src\Listeners\SyncRequestedEvent\PublishProductsWebhooksListener;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 /**
- * Class EventServiceProvider
+ * Class EventServiceProviderBase
  * @package App\Providers
  */
-class WebhooksServiceProvider extends ServiceProvider
+class WebhooksServiceProviderBase extends BaseModuleServiceProvider
 {
+    /**
+     * @var string
+     */
+    public string $module_name = 'Webhooks';
+
+    /**
+     * @var string
+     */
+    public string $module_description = 'Amazon SNS integration to provide webhooks';
+
     /**
      * The event listener mappings for the application.
      *

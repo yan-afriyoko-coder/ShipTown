@@ -7,14 +7,24 @@ use App\Events\Order\OrderUpdatedEvent;
 use App\Events\OrderProduct\OrderProductCreatedEvent;
 use App\Events\OrderProduct\OrderProductUpdatedEvent;
 use App\Modules\InventoryReservations\src\Listeners\OrderProductUpdatedEvent\UpdateQuantityReservedListener;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class EventServiceProvider
+ * Class EventServiceProviderBase
  * @package App\Providers
  */
-class EventServiceProvider extends ServiceProvider
+class EventServiceProviderBase extends BaseModuleServiceProvider
 {
+    /**
+     * @var string
+     */
+    public string $module_name = 'Inventory Reservations';
+
+    /**
+     * @var string
+     */
+    public string $module_description = 'Reserves stock for open orders. Is using location 999';
+
     /**
      * The event listener mappings for the application.
      *
@@ -37,23 +47,4 @@ class EventServiceProvider extends ServiceProvider
             Listeners\OrderProductCreatedListener::class,
         ],
     ];
-
-    /**
-     * The subscriber classes to register.
-     *
-     * @var array
-     */
-    protected $subscribe = [
-
-    ];
-
-    /**
-     * Register any events for your application.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        parent::boot();
-    }
 }

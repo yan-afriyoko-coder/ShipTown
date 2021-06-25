@@ -11,6 +11,6 @@ class DestroyTest extends TestCase
     /** @test */
     public function test_destroy_call_returns_ok()
     {
-        $this->markTestIncomplete();
+        $this->markTestSkipped();
     }
 }

@@ -33,6 +33,22 @@ use Illuminate\Support\Carbon;
  * @method static Builder|DpdIreland first()
  * @method static Builder|DpdIreland firstOrFail()
  * @mixin Eloquent
+ * @method static Builder|DpdIreland whereAddressLine1($value)
+ * @method static Builder|DpdIreland whereAddressLine2($value)
+ * @method static Builder|DpdIreland whereAddressLine3($value)
+ * @method static Builder|DpdIreland whereAddressLine4($value)
+ * @method static Builder|DpdIreland whereBusinessName($value)
+ * @method static Builder|DpdIreland whereContact($value)
+ * @method static Builder|DpdIreland whereContactEmail($value)
+ * @method static Builder|DpdIreland whereContactTelephone($value)
+ * @method static Builder|DpdIreland whereCountryCode($value)
+ * @method static Builder|DpdIreland whereCreatedAt($value)
+ * @method static Builder|DpdIreland whereId($value)
+ * @method static Builder|DpdIreland whereLive($value)
+ * @method static Builder|DpdIreland wherePassword($value)
+ * @method static Builder|DpdIreland whereToken($value)
+ * @method static Builder|DpdIreland whereUpdatedAt($value)
+ * @method static Builder|DpdIreland whereUser($value)
  */
 class DpdIreland extends Model
 {
