@@ -31,7 +31,7 @@ class StoreTest extends TestCase
         ]);
 
         $user = factory(User::class)->create();
-        $response = $this->actingAs($user, 'api')->json('post', route('api.settings.module.dpd-ireland.store'), [
+        $response = $this->actingAs($user, 'api')->json('post', route('api.settings.module.dpd-ireland.connections.store'), [
             'live' => false,
             'user' => 'someuser',
             'token' => 'another',
@@ -53,7 +53,7 @@ class StoreTest extends TestCase
     public function test_success_config_create()
     {
         $user = factory(User::class)->create();
-        $response = $this->actingAs($user, 'api')->json('post', route('api.settings.module.dpd-ireland.store'), [
+        $response = $this->actingAs($user, 'api')->json('post', route('api.settings.module.dpd-ireland.connections.store'), [
             'live' => false,
             'user' => 'someuser',
             'password' => 'somepassword',
@@ -76,7 +76,7 @@ class StoreTest extends TestCase
     public function test_failing_config_create()
     {
         $user = factory(User::class)->create();
-        $response = $this->actingAs($user, 'api')->json('post', route('api.settings.module.dpd-ireland.store'), [
+        $response = $this->actingAs($user, 'api')->json('post', route('api.settings.module.dpd-ireland.connections.store'), [
             'live' => false,
             'token' => 'sometoken',
             'contact' => 'DPD Contact',
