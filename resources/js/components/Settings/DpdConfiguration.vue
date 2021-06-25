@@ -19,10 +19,6 @@
                             <th>API Username</th>
                             <th>API Live</th>
                             <th>Contact</th>
-                            <th>Telephone</th>
-                            <th>Email</th>
-                            <th>Business Name</th>
-                            <th>Address</th>
                             <th></th><!--Edit Configuration-->
                             <th></th><!--Delete-->
                         </tr>
@@ -31,11 +27,18 @@
                         <tr key="1">
                             <td>{{ configuration.api_username }}</td>
                             <td>{{ configuration.api_live ? 'true' : 'false'}}</td>
-                            <td>{{ configuration.collection_contact }}</td>
-                            <td>{{ configuration.collection_telephone }}</td>
-                            <td>{{ configuration.collection_email }}</td>
-                            <td>{{ configuration.collection_business_name }}</td>
-                            <td>{{ configurationAddress }}</td>
+                            <td>
+                                <div>{{ configuration.collection_contact }}</div>
+                                <div>{{ configuration.collection_business_name }}</div>
+                                <div>{{ configuration.collection_address_line_1 }}</div>
+                                <div>{{ configuration.collection_address_line_2 }}</div>
+                                <div>{{ configuration.collection_address_line_3 }}</div>
+                                <div>{{ configuration.collection_address_line_4 }}</div>
+                                <div>{{ configuration.collection_country_code }}</div>
+                                <div></div>
+                                <div>{{ configuration.collection_telephone }}</div>
+                                <div>{{ configuration.collection_email }}</div>
+                            </td>
                             <td>
                                 <a class="action-link" v-b-modal.dpd-update-form-modal>Edit</a>
                             </td>
@@ -92,24 +95,7 @@
             this.prepareComponent();
         },
 
-        computed: {
-            configurationAddress: function () {
-                const address = [
-                    this.configuration.collection_address_line_1,
-                    this.configuration.collection_address_line_2,
-                    this.configuration.collection_address_line_3,
-                    this.configuration.collection_address_line_4,
-                    this.configuration.collection_country_code
-                ].filter(each => {
-                    return !!each;
-                });
-
-                return address.join(', ');
-            }
-        },
-
         methods: {
-
             prepareComponent() {
                 this.getConfiguration();
             },
