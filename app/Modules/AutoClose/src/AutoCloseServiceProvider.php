@@ -13,8 +13,8 @@ class AutoCloseServiceProvider extends BaseModuleServiceProvider
     public bool $autoEnable = false;
 
     /**
-    * @var string
-    */
+     * @var string
+     */
     public string $module_name = 'AutoClose Order';
 
     /**
