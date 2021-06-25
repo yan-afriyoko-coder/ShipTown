@@ -202,7 +202,7 @@ return [
 
         // Automations modules
         // order MIGHT be important!
-        App\Modules\AutoPilot\src\EventServiceProviderBase::class,
+        App\Modules\AutoPilot\src\AutoPilotServiceProvider::class,
         App\Modules\AutoTags\src\EventServiceProviderBase::class,
         App\Modules\AutoStatusPaid\src\EventServiceProviderBase::class,
         App\Modules\AutoStatusPackingWarehouse\src\EventServiceProviderBase::class,
@@ -210,7 +210,7 @@ return [
         App\Modules\AutoStatusPicking\src\EventServiceProviderBase::class,
         App\Modules\AutoStatusPackingWeb\src\EventServiceProviderBase::class,
         App\Modules\AutoStatusReady\src\EventServiceProviderBase::class,
-        App\Modules\AutoStatus\src\EventServiceProvider::class,
+        App\Modules\AutoClose\src\AutoCloseServiceProvider::class,
 
         // 3rd party integrations
         // order SHOULD not be important

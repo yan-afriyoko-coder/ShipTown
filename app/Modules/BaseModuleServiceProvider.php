@@ -77,7 +77,8 @@ class BaseModuleServiceProvider extends EventServiceProvider
         $module->enabled = true;
         $module->save();
 
-        App::register(get_called_class())->boot();
+        App::register(get_called_class())
+            ->boot();
     }
 
     public static function disableModule()

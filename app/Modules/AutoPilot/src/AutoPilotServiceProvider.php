@@ -6,7 +6,7 @@ use App\Events\HourlyEvent;
 use App\Modules\AutoPilot\src\Listeners\ClearPackerIdListener;
 use App\Modules\BaseModuleServiceProvider;
 
-class EventServiceProviderBase extends BaseModuleServiceProvider
+class AutoPilotServiceProvider extends BaseModuleServiceProvider
 {
     /**
      * @var string
