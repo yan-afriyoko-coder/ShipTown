@@ -7,6 +7,7 @@ use App\Http\Requests\StoreDpdIrelandRequest;
 use App\Http\Resources\DpdIrelandConfigurationResource;
 use App\Modules\DpdIreland\src\Client;
 use App\Modules\DpdIreland\src\Models\DpdIreland;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -36,10 +37,12 @@ class DpdIrelandController extends Controller
         return DpdIrelandConfigurationResource::make($config);
     }
 
-    public function destroy(Request $request, DpdIreland $dpdIreland)
+    /**
+     * @throws Exception
+     */
+    public function destroy(Request $request, DpdIreland $connection)
     {
-        dd(1);
-        DpdIreland::query()->delete();
+        $connection->delete();
 
         return response('ok');
     }

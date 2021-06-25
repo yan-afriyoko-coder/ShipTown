@@ -143,6 +143,8 @@
                         this.$refs.createFormModal.hide();
                     }
                 });
+
+                this.getConfiguration();
             },
 
             handleDelete(id) {
