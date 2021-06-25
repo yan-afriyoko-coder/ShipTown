@@ -6,15 +6,15 @@ use App\BaseModel;
 use phpseclib\Math\BigInteger;
 
 /**
- * Class ModuleAutoStatusPickings
+ * Class ModuleAutoStatusPickings.
  *
- * @package App\Modules\AutoStatusPicking\src\Models
  * @property BigInteger id
  * @property bool is_enabled
- * @property int $id
- * @property int $is_enabled
+ * @property int                             $id
+ * @property int                             $is_enabled
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ModuleAutoStatusPickings newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ModuleAutoStatusPickings newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ModuleAutoStatusPickings query()
@@ -27,10 +27,10 @@ use phpseclib\Math\BigInteger;
 class ModuleAutoStatusPickings extends BaseModel
 {
     protected $fillable = [
-        'is_enabled'
+        'is_enabled',
     ];
 
     protected $attributes = [
-        'is_enabled' => true
+        'is_enabled' => true,
     ];
 }

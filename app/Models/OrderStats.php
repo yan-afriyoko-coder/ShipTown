@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\OrderStats
+ * App\Models\OrderStats.
  *
- * @property int $order_id
+ * @property int      $order_id
  * @property int|null $age_in_days
+ *
  * @method static Builder|OrderStats newModelQuery()
  * @method static Builder|OrderStats newQuery()
  * @method static Builder|OrderStats query()

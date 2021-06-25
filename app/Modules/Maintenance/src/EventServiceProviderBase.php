@@ -1,14 +1,12 @@
 <?php
 
-
 namespace App\Modules\Maintenance\src;
 
 use App\Events\DailyEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class EventServiceProviderBase
- * @package App\Modules\Maintenance\src
+ * Class EventServiceProviderBase.
  */
 class EventServiceProviderBase extends BaseModuleServiceProvider
 {

@@ -11,6 +11,7 @@ class RunRecalculateQuantityReservedJobListener
      * Handle the event.
      *
      * @param DailyEvent $event
+     *
      * @return void
      */
     public function handle(DailyEvent $event)

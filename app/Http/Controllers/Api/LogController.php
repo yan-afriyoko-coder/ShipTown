@@ -11,8 +11,7 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
- * Class LogController
- * @package App\Http\Controllers\Api
+ * Class LogController.
  */
 class LogController extends Controller
 {
@@ -20,6 +19,7 @@ class LogController extends Controller
      * Display a listing of the resource.
      *
      * @param Request $request
+     *
      * @return AnonymousResourceCollection
      */
     public function index(Request $request): AnonymousResourceCollection
@@ -30,7 +30,7 @@ class LogController extends Controller
                 AllowedFilter::exact('subject_id'),
             ])
             ->allowedIncludes([
-                'causer'
+                'causer',
             ])
             ->allowedSorts([
                 'id',

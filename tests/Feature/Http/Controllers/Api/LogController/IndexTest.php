@@ -38,11 +38,11 @@ class IndexTest extends TestCase
                     'causer_id',
                     'causer_type',
                     'properties' => [
-                        '*' => []
+                        '*' => [],
                     ],
-                    'changes' => []
-                ]
-            ]
+                    'changes' => [],
+                ],
+            ],
         ]);
     }
 }

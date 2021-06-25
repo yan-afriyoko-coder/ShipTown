@@ -11,34 +11,34 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * Class ProductInventoryController
- * @package App\Http\Controllers\Api\Product
+ * Class ProductInventoryController.
  */
 class ProductInventoryController extends Controller
 {
     /**
      * @param Request $request
+     *
      * @return mixed
      */
     public function index(Request $request)
     {
         if ($request->get('per_page') == 'all') {
             return Product::whereHas('inventory', function ($query) {
-                    $query->where('quantity_reserved', '>', 0);
+                $query->where('quantity_reserved', '>', 0);
             })
                 ->get()
                 ->load('inventory');
         } else {
             return Product::whereHas('inventory', function ($query) {
-                    $query->where('quantity_reserved', '>', 0);
+                $query->where('quantity_reserved', '>', 0);
             })
                 ->when($request->has('q'), function ($query) use ($request) {
                     return $query
-                        ->where('sku', 'like', '%' . $request->get('q') . '%')
-                        ->orWhere('name', 'like', '%' . $request->get('q') . '%');
+                        ->where('sku', 'like', '%'.$request->get('q').'%')
+                        ->orWhere('name', 'like', '%'.$request->get('q').'%');
                 })
                 ->when($request->has('sort'), function ($query) use ($request) {
-                        return $query
+                    return $query
                             ->orderBy($request->get('sort'), $request->get('order', 'asc'));
                 })
                 ->with('inventory')
@@ -48,6 +48,7 @@ class ProductInventoryController extends Controller
 
     /**
      * @param StoreInventoryRequest $request
+     *
      * @return AnonymousResourceCollection
      */
     public function store(StoreInventoryRequest $request): AnonymousResourceCollection
@@ -60,8 +61,8 @@ class ProductInventoryController extends Controller
 
         $inventory = Inventory::updateOrCreate(
             [
-                "product_id" => $update['product_id'],
-                "location_id" => $update['location_id'],
+                'product_id'  => $update['product_id'],
+                'location_id' => $update['location_id'],
             ],
             $update
         );

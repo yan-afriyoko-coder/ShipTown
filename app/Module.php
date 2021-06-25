@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Module
+ * App\Module.
  *
- * @property int $id
- * @property string $service_provider_class
- * @property bool $enabled
+ * @property int         $id
+ * @property string      $service_provider_class
+ * @property bool        $enabled
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|Module newModelQuery()
  * @method static Builder|Module newQuery()
  * @method static Builder|Module query()
@@ -29,14 +30,14 @@ class Module extends Model
 {
     protected $fillable = [
         'service_provider_class',
-        'enabled'
+        'enabled',
     ];
 
     protected $casts = [
-        'enabled' => 'boolean'
+        'enabled' => 'boolean',
     ];
 
     protected $appends = [
-        'enabled' => false
+        'enabled' => false,
     ];
 }

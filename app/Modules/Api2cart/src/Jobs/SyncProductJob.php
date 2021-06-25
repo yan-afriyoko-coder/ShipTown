@@ -19,12 +19,14 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Class SyncProductJob
- * @package App\Modules\Api2cart\src\Jobs
+ * Class SyncProductJob.
  */
 class SyncProductJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * @var Product
@@ -55,8 +57,9 @@ class SyncProductJob implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
      * @throws Exception
+     *
+     * @return void
      */
     public function handle()
     {
@@ -65,7 +68,7 @@ class SyncProductJob implements ShouldQueue
         $this->connections->each(function (Api2cartConnection $connection) use ($product) {
             try {
                 $this->api2cartProduct = Api2cartProductLink::firstOrCreate([
-                    'product_id' => $product->getKey(),
+                    'product_id'             => $product->getKey(),
                     'api2cart_connection_id' => $connection->getKey(),
                 ], []);
 
@@ -81,13 +84,13 @@ class SyncProductJob implements ShouldQueue
                     VerifyProductSyncJob::dispatchNow($connection, $product_data);
                 } else {
                     $product->attachTag('SYNC ERROR');
-                    $product->log('eCommerce: Sync failed (' .
-                        $requestResponse->getReturnCode() . ': ' .
-                        $requestResponse->getReturnMessage() . ')');
+                    $product->log('eCommerce: Sync failed ('.
+                        $requestResponse->getReturnCode().': '.
+                        $requestResponse->getReturnMessage().')');
 
                     Log::warning('Api2cart: Product NOT SYNCED', [
                         'response' => [
-                            'code' => $requestResponse->getReturnCode(),
+                            'code'    => $requestResponse->getReturnCode(),
                             'message' => $requestResponse->getReturnMessage(),
                         ],
                         'product_data' => $product_data ?? null,
@@ -100,11 +103,11 @@ class SyncProductJob implements ShouldQueue
 
                 $product->attachTag('SYNC ERROR');
                 $product->detachTag('Not Synced');
-                $product->log('eCommerce: Sync failed (code ' . $exception->getCode() . '), see logs');
+                $product->log('eCommerce: Sync failed (code '.$exception->getCode().'), see logs');
 
                 Log::warning('Api2cart: Product NOT SYNCED', [
                     'response' => [
-                        'code' => $exception->getCode(),
+                        'code'    => $exception->getCode(),
                         'message' => $exception->getMessage(),
                     ],
                     'product_data' => $product_data ?? null,
@@ -115,35 +118,37 @@ class SyncProductJob implements ShouldQueue
 
     /**
      * @param Product $product
+     *
      * @return array
      */
     private function getBasicData(Product $product): array
     {
         return [
-            'product_id' => $product->getKey(),
-            'sku' => $product->sku,
-            'name' => $product->name,
+            'product_id'  => $product->getKey(),
+            'sku'         => $product->sku,
+            'name'        => $product->name,
             'description' => $product->name,
         ];
     }
 
     /**
      * @param Product $product
-     * @param int $location_id
+     * @param int     $location_id
+     *
      * @return array
      */
     private function getPricingData(Product $product, int $location_id): array
     {
         $attributes = [
-            'product_id' => $product->getKey(),
-            'location_id' => $location_id
+            'product_id'  => $product->getKey(),
+            'location_id' => $location_id,
         ];
 
         $productPrice = ProductPrice::query()->firstOrCreate($attributes);
 
         if ($productPrice) {
             return [
-                'price' => $productPrice->price,
+                'price'         => $productPrice->price,
                 'special_price' => $productPrice->sale_price,
                 'sprice_create' => $this->formatDateForApi2cart($productPrice->sale_price_start_date),
                 'sprice_expire' => $this->formatDateForApi2cart($productPrice->sale_price_end_date),
@@ -151,12 +156,14 @@ class SyncProductJob implements ShouldQueue
         }
 
         Log::warning('Pricing data not found', $attributes);
+
         return [];
     }
 
     /**
-     * @param Product $product
+     * @param Product  $product
      * @param int|null $location_id
+     *
      * @return array
      */
     private function getInventoryData(Product $product, int $location_id = null): array
@@ -167,13 +174,13 @@ class SyncProductJob implements ShouldQueue
 
             return [
                 'quantity' => floor($product->quantity_available) ?? 0,
-                'in_stock' => $product->quantity_available > 0 ? "True" : "False",
+                'in_stock' => $product->quantity_available > 0 ? 'True' : 'False',
             ];
         }
 
         $attributes = [
-            'product_id' => $product->getKey(),
-            'location_id' => $location_id
+            'product_id'  => $product->getKey(),
+            'location_id' => $location_id,
         ];
 
         $productInventory = Inventory::query()->where($attributes)->first();
@@ -181,16 +188,18 @@ class SyncProductJob implements ShouldQueue
         if ($productInventory) {
             return [
                 'quantity' => $productInventory->quantity_available ?? 0,
-                'in_stock' => $productInventory->quantity_available > 0 ? "True" : "False",
+                'in_stock' => $productInventory->quantity_available > 0 ? 'True' : 'False',
             ];
         }
 
         Log::warning('Inventory data not found', $attributes);
+
         return [];
     }
 
     /**
      * @param $date
+     *
      * @return string
      */
     public function formatDateForApi2cart($date): string
@@ -206,18 +215,20 @@ class SyncProductJob implements ShouldQueue
 
     /**
      * @param $connection
+     *
      * @return array
      */
     private function getMagentoStoreId($connection): array
     {
         return [
-            'store_id' => $connection->magento_store_id ?? 0
+            'store_id' => $connection->magento_store_id ?? 0,
         ];
     }
 
     /**
      * @param Product $product
      * @param $connection
+     *
      * @return array
      */
     private function getProductData(Product $product, $connection): array

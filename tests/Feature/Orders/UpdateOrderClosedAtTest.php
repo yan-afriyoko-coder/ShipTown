@@ -6,7 +6,6 @@ use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\RmsapiProductImport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class UpdateOrderClosedAtTest extends TestCase
@@ -25,13 +24,13 @@ class UpdateOrderClosedAtTest extends TestCase
         Order::query()->forceDelete();
 
         factory(OrderStatus::class)->create([
-            'code' => 'pending',
-            'name' => 'pending',
+            'code'         => 'pending',
+            'name'         => 'pending',
             'order_active' => 1,
         ]);
 
         $order = factory(Order::class)->create([
-            'status_code' => 'open',
+            'status_code'     => 'open',
             'order_closed_at' => null,
         ]);
 
@@ -52,13 +51,13 @@ class UpdateOrderClosedAtTest extends TestCase
         Order::query()->forceDelete();
 
         factory(OrderStatus::class)->create([
-            'code' => 'closed',
-            'name' => 'closed',
+            'code'         => 'closed',
+            'name'         => 'closed',
             'order_active' => 0,
         ]);
 
         $order = factory(Order::class)->create([
-            'status_code' => 'open',
+            'status_code'     => 'open',
             'order_closed_at' => null,
         ]);
 

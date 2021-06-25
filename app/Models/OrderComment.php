@@ -11,15 +11,16 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
- * App\Models\OrderComment
+ * App\Models\OrderComment.
  *
- * @property int $id
- * @property int $order_id
- * @property int|null $user_id
- * @property string $comment
+ * @property int         $id
+ * @property int         $order_id
+ * @property int|null    $user_id
+ * @property string      $comment
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User|null $user
+ *
  * @method static Builder|OrderComment newModelQuery()
  * @method static Builder|OrderComment newQuery()
  * @method static Builder|OrderComment query()
@@ -36,7 +37,7 @@ class OrderComment extends Model
     protected $fillable = [
         'order_id',
         'user_id',
-        'comment'
+        'comment',
     ];
 
     /**
@@ -57,7 +58,7 @@ class OrderComment extends Model
                 AllowedFilter::exact('order_id'),
             ])
             ->allowedIncludes([
-                'user'
+                'user',
             ])
             ->allowedSorts([
                 'id',

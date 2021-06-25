@@ -8,12 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 
 /**
- * App\Models\Packlist
+ * App\Models\Packlist.
  *
  * @property mixed $is_packed
  * @property-read Order $order
  * @property-read Product $product
  * @property-read User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Packlist addInventorySource($inventory_location_id)
  * @method static \Illuminate\Database\Eloquent\Builder|Packlist newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Packlist newQuery()
@@ -22,7 +23,6 @@ use Illuminate\Database\Query\Builder;
  */
 class Packlist extends Model
 {
-
     protected $fillable = [
         'order_id',
         'order_product_id',
@@ -38,12 +38,13 @@ class Packlist extends Model
     ];
 
     protected $appends = [
-        'is_packed'
+        'is_packed',
     ];
 
     /**
      * @param Builder $query
-     * @param int $inventory_location_id
+     * @param int     $inventory_location_id
+     *
      * @return Builder
      */
     public function scopeAddInventorySource($query, $inventory_location_id)

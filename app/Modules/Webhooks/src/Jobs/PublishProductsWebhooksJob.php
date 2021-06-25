@@ -13,12 +13,15 @@ use Illuminate\Queue\SerializesModels;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 /**
- * Class PublishOrdersWebhooksJob
- * @package App\Modules\Webhooks\src\Jobs
+ * Class PublishOrdersWebhooksJob.
  */
 class PublishProductsWebhooksJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use IsMonitored;
 
     /**
      * Execute the job.
@@ -39,7 +42,7 @@ class PublishProductsWebhooksJob implements ShouldQueue
             $product->detachTag(config('webhooks.tags.awaiting.name'));
 
             $productResource = new ProductResource($product);
-            if (! AwsSns::publish('products_events', $productResource->toJson())) {
+            if (!AwsSns::publish('products_events', $productResource->toJson())) {
                 $product->attachTag(config('webhooks.tags.awaiting.name'));
             }
 

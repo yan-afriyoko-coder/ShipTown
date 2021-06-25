@@ -9,8 +9,7 @@ use App\Models\OrderShipment;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
- * Class OrderShipmentController
- * @package App\Http\Controllers\Api\Order
+ * Class OrderShipmentController.
  *
  * @group Order
  */
@@ -32,6 +31,7 @@ class OrderShipmentController extends Controller
      * Store a newly created resource in storage.
      *
      * @param OrderShipmentStoreRequest $request
+     *
      * @return OrderShipmentResource
      */
     public function store(OrderShipmentStoreRequest $request): OrderShipmentResource

@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,9 +23,9 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResource('logs', 'Api\LogController')->only(['index']);
 
-    Route::apiResource('products', 'Api\ProductController')->only(['index','store']);
+    Route::apiResource('products', 'Api\ProductController')->only(['index', 'store']);
     Route::apiResource('product/aliases', 'Api\Product\ProductAliasController', ['as' => 'product'])->only(['index']);
-    Route::apiResource('product/inventory', 'Api\Product\ProductInventoryController')->only(['index','store']);
+    Route::apiResource('product/inventory', 'Api\Product\ProductInventoryController')->only(['index', 'store']);
     Route::apiResource('product/tags', 'Api\Product\ProductTagController')->only(['index']);
 
     Route::apiResource('orders', 'Api\OrderController')->except('destroy');
@@ -41,9 +40,8 @@ Route::middleware('auth:api')->group(function () {
     // its job is to fetch next order and block it so no other user gets it again
     Route::apiResource('packlist/order', 'Api\PacklistOrderController', ['as' => 'packlist'])->only(['index']);
 
-
-    Route::apiResource('settings/user/me', 'Api\Settings\UserMeController')->only(['index','store']);
-    Route::apiResource('settings/widgets', 'Api\Settings\WidgetController')->only(['store','update']);
+    Route::apiResource('settings/user/me', 'Api\Settings\UserMeController')->only(['index', 'store']);
+    Route::apiResource('settings/widgets', 'Api\Settings\WidgetController')->only(['store', 'update']);
 
     Route::group(['prefix' => 'settings', 'namespace' => 'Api\Settings', 'as' => 'api.settings.'], function () {
 
@@ -51,8 +49,8 @@ Route::middleware('auth:api')->group(function () {
         Route::group(['prefix' => 'modules', 'namespace' => 'Module', 'as' => 'module.'], function () {
             // api2cart
             Route::group(['prefix' => 'api2cart', 'namespace' => 'Api2cart', 'as' => 'api2cart.'], function () {
-                Route::apiResource('connections', "Api2cartConnectionController")->only(['index', 'store', 'destroy']);
-                Route::apiResource('products', "ProductsController")->only(['index']);
+                Route::apiResource('connections', 'Api2cartConnectionController')->only(['index', 'store', 'destroy']);
+                Route::apiResource('products', 'ProductsController')->only(['index']);
             });
 
             // dpdireland
@@ -68,16 +66,16 @@ Route::middleware('auth:api')->group(function () {
             });
             // rms_api
             Route::group(['prefix' => 'rms_api', 'namespace' => 'Rmsapi', 'as' => 'rmsapi.'], function () {
-                Route::apiResource('connections', "RmsapiConnectionController")->only(['index', 'store', 'destroy']);
+                Route::apiResource('connections', 'RmsapiConnectionController')->only(['index', 'store', 'destroy']);
             });
         });
     });
 
     // Routes for users with the admin role only
     Route::middleware('role:admin')->group(function () {
-        Route::apiResource('configuration', 'Api\Settings\ConfigurationController')->only(['store','show']);
+        Route::apiResource('configuration', 'Api\Settings\ConfigurationController')->only(['store', 'show']);
         Route::apiResource('admin/user/invites', 'Api\Admin\UserInviteController')->only(['store']);
         Route::apiResource('admin/user/roles', 'Api\Admin\UserRoleController', ['as' => 'admin.users'])->only(['index'])->middleware('can:list roles');
-        Route::apiResource('admin/users', 'Api\Admin\UserController')->only(['index','show','update','destroy'])->middleware('can:manage users');
+        Route::apiResource('admin/users', 'Api\Admin\UserController')->only(['index', 'show', 'update', 'destroy'])->middleware('can:manage users');
     });
 });

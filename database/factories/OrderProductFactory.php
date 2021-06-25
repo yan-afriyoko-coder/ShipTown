@@ -13,11 +13,11 @@ $factory->define(OrderProduct::class, function (Faker $faker) {
     $order = Order::query()->inRandomOrder()->first() ?? factory(Order::class)->create();
 
     return [
-        'order_id' => $order->getKey(),
-        'product_id' => $product->getKey(),
-        'sku_ordered' => $product->sku,
-        'name_ordered' => $product->name,
-        'quantity_ordered' => Arr::random([1,1,1,1,2,2,3,3]) * Arr::random([1,1,1,1,1,1,1,1,2,3]),
-        'price' => $product->price,
+        'order_id'         => $order->getKey(),
+        'product_id'       => $product->getKey(),
+        'sku_ordered'      => $product->sku,
+        'name_ordered'     => $product->name,
+        'quantity_ordered' => Arr::random([1, 1, 1, 1, 2, 2, 3, 3]) * Arr::random([1, 1, 1, 1, 1, 1, 1, 1, 2, 3]),
+        'price'            => $product->price,
     ];
 });

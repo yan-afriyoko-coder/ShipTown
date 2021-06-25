@@ -6,14 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Jobs\RunHourlyJobs;
 
 /**
- * Class HourlyJobsController
- * @package App\Http\Controllers\Api\Run
+ * Class HourlyJobsController.
  */
 class HourlyJobsController extends Controller
 {
-    /**
-     *
-     */
     public function index()
     {
         RunHourlyJobs::dispatch();

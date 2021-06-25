@@ -9,8 +9,7 @@ use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 /**
- * Class EventServiceProviderBase
- * @package App\Providers
+ * Class EventServiceProviderBase.
  */
 class EventServiceProvider extends ServiceProvider
 {
@@ -27,7 +26,7 @@ class EventServiceProvider extends ServiceProvider
 
         HourlyEvent::class => [
             FireActiveOrderCheckEventsListener::class,
-        ]
+        ],
     ];
 
     /**

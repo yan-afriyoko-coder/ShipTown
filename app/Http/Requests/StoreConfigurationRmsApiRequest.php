@@ -25,9 +25,9 @@ class StoreConfigurationRmsApiRequest extends FormRequest
     {
         return [
             'location_id' => 'required',
-            'url' => 'required|url',
-            'username' => 'required',
-            'password' => 'required',
+            'url'         => 'required|url',
+            'username'    => 'required',
+            'password'    => 'required',
         ];
     }
 }

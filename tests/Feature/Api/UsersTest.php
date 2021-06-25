@@ -3,7 +3,6 @@
 namespace Tests\Feature\Api;
 
 use App\User;
-use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 

@@ -14,7 +14,11 @@ use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class AddMissingOutOfStockTagsJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use IsMonitored;
 
     /**
      * Execute the job.

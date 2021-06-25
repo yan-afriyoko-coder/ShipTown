@@ -11,7 +11,8 @@ use Tests\TestCase;
 
 class DpdTest extends TestCase
 {
-    use RefreshDatabase, SeedConfiguration;
+    use RefreshDatabase;
+    use SeedConfiguration;
 
     /**
      * @test
@@ -34,32 +35,33 @@ class DpdTest extends TestCase
 
     /**
      * @test
+     *
      * @throws ConsignmentValidationException
      */
     public function if_record_id_matches()
     {
         $consignment = new Consignment([
             'DeliveryAddress' => [
-                'Contact' => 'John Smith',
+                'Contact'          => 'John Smith',
                 'ContactTelephone' => '12345678901',
-                'ContactEmail' => 'john.smith@ie.ie',
-                'BusinessName' => 'JS Business',
-                'AddressLine1' => 'DPD Ireland, Westmeath',
-                'AddressLine2' => 'Unit 2B Midland Gateway Bus',
-                'AddressLine3' => 'Kilbeggan',
-                'AddressLine4' => 'Westmeath',
-                'CountryCode' => 'IE',
+                'ContactEmail'     => 'john.smith@ie.ie',
+                'BusinessName'     => 'JS Business',
+                'AddressLine1'     => 'DPD Ireland, Westmeath',
+                'AddressLine2'     => 'Unit 2B Midland Gateway Bus',
+                'AddressLine3'     => 'Kilbeggan',
+                'AddressLine4'     => 'Westmeath',
+                'CountryCode'      => 'IE',
             ],
             'CollectionAddress' => [
-                'Contact' => 'John Smith',
+                'Contact'          => 'John Smith',
                 'ContactTelephone' => '12345678901',
-                'ContactEmail' => 'john.smith@ie.ie',
-                'BusinessName' => 'JS Business',
-                'AddressLine1' => 'DPD Ireland, Westmeath',
-                'AddressLine2' => 'Unit 2B Midland Gateway Bus',
-                'AddressLine3' => 'Kilbeggan',
-                'AddressLine4' => 'Westmeath',
-                'CountryCode' => 'IE',
+                'ContactEmail'     => 'john.smith@ie.ie',
+                'BusinessName'     => 'JS Business',
+                'AddressLine1'     => 'DPD Ireland, Westmeath',
+                'AddressLine2'     => 'Unit 2B Midland Gateway Bus',
+                'AddressLine3'     => 'Kilbeggan',
+                'AddressLine4'     => 'Westmeath',
+                'CountryCode'      => 'IE',
             ],
         ]);
 
@@ -86,31 +88,31 @@ class DpdTest extends TestCase
     public function successfully_generate_preadvice()
     {
         $consignment = new Consignment([
-            'RecordID' => 1,
-            'TotalParcels' => 1,
-            'ServiceOption' => 5,
-            'ServiceType' => 1,
+            'RecordID'        => 1,
+            'TotalParcels'    => 1,
+            'ServiceOption'   => 5,
+            'ServiceType'     => 1,
             'DeliveryAddress' => [
-                'Contact' => 'John Smith',
+                'Contact'          => 'John Smith',
                 'ContactTelephone' => '12345678901',
-                'ContactEmail' => 'john.smith@ie.ie',
-                'BusinessName' => 'JS Business',
-                'AddressLine1' => 'DPD Ireland, Westmeath',
-                'AddressLine2' => 'Unit 2B Midland Gateway Bus',
-                'AddressLine3' => 'Kilbeggan',
-                'AddressLine4' => 'Westmeath',
-                'CountryCode' => 'IE',
+                'ContactEmail'     => 'john.smith@ie.ie',
+                'BusinessName'     => 'JS Business',
+                'AddressLine1'     => 'DPD Ireland, Westmeath',
+                'AddressLine2'     => 'Unit 2B Midland Gateway Bus',
+                'AddressLine3'     => 'Kilbeggan',
+                'AddressLine4'     => 'Westmeath',
+                'CountryCode'      => 'IE',
             ],
             'CollectionAddress' => [
-                'Contact' => 'John Smith',
+                'Contact'          => 'John Smith',
                 'ContactTelephone' => '12345678901',
-                'ContactEmail' => 'john.smith@ie.ie',
-                'BusinessName' => 'JS Business',
-                'AddressLine1' => 'DPD Ireland, Westmeath',
-                'AddressLine2' => 'Unit 2B Midland Gateway Bus',
-                'AddressLine3' => 'Kilbeggan',
-                'AddressLine4' => 'Westmeath',
-                'CountryCode' => 'IE',
+                'ContactEmail'     => 'john.smith@ie.ie',
+                'BusinessName'     => 'JS Business',
+                'AddressLine1'     => 'DPD Ireland, Westmeath',
+                'AddressLine2'     => 'Unit 2B Midland Gateway Bus',
+                'AddressLine3'     => 'Kilbeggan',
+                'AddressLine4'     => 'Westmeath',
+                'CountryCode'      => 'IE',
             ],
         ]);
 

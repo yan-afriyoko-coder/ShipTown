@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Services;
 
 use Dompdf\Dompdf;
@@ -9,7 +8,8 @@ class PdfService
 {
     /**
      * @param string $view
-     * @param array $data
+     * @param array  $data
+     *
      * @return string
      */
     public static function fromView(string $view, array $data)

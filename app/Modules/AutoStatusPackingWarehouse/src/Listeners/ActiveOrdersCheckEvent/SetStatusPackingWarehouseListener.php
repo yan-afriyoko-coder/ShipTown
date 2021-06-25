@@ -3,12 +3,10 @@
 namespace App\Modules\AutoStatusPackingWarehouse\src\Listeners\ActiveOrdersCheckEvent;
 
 use App\Events\Order\ActiveOrderCheckEvent;
-use App\Events\Order\OrderUpdatedEvent;
 use App\Services\OrderService;
 
 /**
- * Class SetPackingWebStatus
- * @package App\Listeners\Order
+ * Class SetPackingWebStatus.
  */
 class SetStatusPackingWarehouseListener
 {
@@ -16,6 +14,7 @@ class SetStatusPackingWarehouseListener
      * Handle the event.
      *
      * @param ActiveOrderCheckEvent $event
+     *
      * @return void
      */
     public function handle(ActiveOrderCheckEvent $event)

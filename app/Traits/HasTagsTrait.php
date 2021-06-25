@@ -43,8 +43,9 @@ trait HasTagsTrait
     }
 
     /**
-     * @param string|Tag $tag
+     * @param string|Tag  $tag
      * @param string|null $type
+     *
      * @return $this
      */
     public function attachTag($tag, string $type = null)
@@ -65,8 +66,9 @@ trait HasTagsTrait
     }
 
     /**
-     * @param string|Tag $tag
+     * @param string|Tag  $tag
      * @param string|null $type
+     *
      * @return $this
      */
     public function detachTag($tag, string $type = null)
@@ -86,12 +88,11 @@ trait HasTagsTrait
         return $this;
     }
 
-
     /**
-     * @param Builder $query
+     * @param Builder               $query
      * @param array|ArrayAccess|Tag $tags
+     * @param string|null           $type
      *
-     * @param string|null $type
      * @return Builder
      */
     public function scopeWithoutAllTags(Builder $query, $tags, string $type = null): Builder
@@ -109,6 +110,7 @@ trait HasTagsTrait
 
     /**
      * @param array|null $tags
+     *
      * @return bool
      */
     public function hasTags(array $tags = null): bool
@@ -118,10 +120,11 @@ trait HasTagsTrait
 
     /**
      * @param array|null $tags
+     *
      * @return bool
      */
     public function doesNotHaveTags(array $tags = null): bool
     {
-        return ! $this->hasTags($tags);
+        return !$this->hasTags($tags);
     }
 }

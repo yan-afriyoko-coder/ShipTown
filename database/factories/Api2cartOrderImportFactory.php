@@ -226,6 +226,6 @@ $factory->define(Api2cartOrderImports::class, function (Faker $faker) {
 
            ]
         }
-        ', true)
+        ', true),
     ];
 });

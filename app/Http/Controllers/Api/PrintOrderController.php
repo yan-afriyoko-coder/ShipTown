@@ -10,8 +10,7 @@ use App\Services\OrderService;
 use Illuminate\Http\Request;
 
 /**
- * Class PrintOrderController
- * @package App\Http\Controllers\Api
+ * Class PrintOrderController.
  */
 class PrintOrderController extends Controller
 {
@@ -19,6 +18,7 @@ class PrintOrderController extends Controller
      * @param Request $request
      * @param $order_number
      * @param $template
+     *
      * @return PrintJobResource
      */
     public function store(Request $request, $order_number, $template): PrintJobResource
@@ -27,7 +27,7 @@ class PrintOrderController extends Controller
 
         $printJob = new PrintJob();
         $printJob->printer_id = $request->user()->printer_id;
-        $printJob->title = $template . '_' . $order_number . '_by_' . $request->user()->id;
+        $printJob->title = $template.'_'.$order_number.'_by_'.$request->user()->id;
         $printJob->pdf = base64_encode($pdfString);
 
         PrintNode::print($printJob);

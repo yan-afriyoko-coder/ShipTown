@@ -18,6 +18,7 @@ trait Encryptable
         if (in_array($key, $this->encryptable) && $value != '') {
             $value = decrypt($value);
         }
+
         return $value;
     }
 
@@ -33,6 +34,7 @@ trait Encryptable
         if (in_array($key, $this->encryptable)) {
             $value = encrypt($value);
         }
+
         return parent::setAttribute($key, $value);
     }
 
@@ -50,6 +52,7 @@ trait Encryptable
                 $attributes[$key] = decrypt($attributes[$key]);
             }
         }
+
         return $attributes;
     }
 }

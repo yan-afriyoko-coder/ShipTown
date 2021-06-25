@@ -12,8 +12,7 @@ use App\Modules\Webhooks\src\Jobs\PublishOrdersWebhooksJob;
 use App\Modules\Webhooks\src\Listeners\SyncRequestedEvent\PublishProductsWebhooksListener;
 
 /**
- * Class EventServiceProviderBase
- * @package App\Providers
+ * Class EventServiceProviderBase.
  */
 class WebhooksServiceProviderBase extends BaseModuleServiceProvider
 {
@@ -63,6 +62,6 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
             __DIR__.'/../config/webhooks.php' => config_path('webhooks.php'),
         ], 'config');
 
-        $this->mergeConfigFrom(__DIR__ . '/../config/webhooks.php', 'webhooks');
+        $this->mergeConfigFrom(__DIR__.'/../config/webhooks.php', 'webhooks');
     }
 }

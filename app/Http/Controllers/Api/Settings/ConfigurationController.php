@@ -8,19 +8,19 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * Class ConfigurationController
- * @package App\Http\Controllers\Api\Settings
+ * Class ConfigurationController.
  */
 class ConfigurationController extends Controller
 {
     /**
      * @param Request $request
+     *
      * @return JsonResource
      */
     public function store(Request $request)
     {
         $config = Configuration::firstOrNew([
-            'key' => $request->input('key')
+            'key' => $request->input('key'),
         ]);
         $config->value = $request->input('value');
 
@@ -32,6 +32,7 @@ class ConfigurationController extends Controller
     /**
      * @param Request $request
      * @param $key
+     *
      * @return JsonResource
      */
     public function show(Request $request, $key)

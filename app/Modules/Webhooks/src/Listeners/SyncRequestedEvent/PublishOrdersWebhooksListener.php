@@ -11,6 +11,7 @@ class PublishOrdersWebhooksListener
      * Handle the event.
      *
      * @param ProductUpdatedEvent $event
+     *
      * @return void
      */
     public function handle(ProductUpdatedEvent $event)

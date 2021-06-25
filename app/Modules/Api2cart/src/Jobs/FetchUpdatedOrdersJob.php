@@ -17,7 +17,11 @@ use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class FetchUpdatedOrdersJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use IsMonitored;
 
     /**
      * @var bool
@@ -31,6 +35,7 @@ class FetchUpdatedOrdersJob implements ShouldQueue
 
     /**
      * Create a new job instance.
+     *
      * @param Api2cartConnection $api2cartConnection
      */
     public function __construct(Api2cartConnection $api2cartConnection)
@@ -42,8 +47,9 @@ class FetchUpdatedOrdersJob implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
      * @throws Exception
+     *
+     * @return void
      */
     public function handle()
     {
@@ -52,7 +58,6 @@ class FetchUpdatedOrdersJob implements ShouldQueue
         // finalize
         $this->finishedSuccessfully = true;
     }
-
 
     /**
      * @param Api2cartConnection $connection
@@ -70,12 +75,13 @@ class FetchUpdatedOrdersJob implements ShouldQueue
         );
 
         $connection->update([
-            'last_synced_modified_at' => $lastTimeStamp->addSecond()
+            'last_synced_modified_at' => $lastTimeStamp->addSecond(),
         ]);
     }
 
     /**
      * @param Api2cartConnection $connection
+     *
      * @throws Exception
      */
     private function importOrders(Api2cartConnection $connection): void
@@ -84,10 +90,10 @@ class FetchUpdatedOrdersJob implements ShouldQueue
 
         // initialize params
         $params = [
-            'params' => 'force_all',
-            'sort_by' => 'modified_at',
+            'params'         => 'force_all',
+            'sort_by'        => 'modified_at',
             'sort_direction' => 'asc',
-            'count' => $batchSize,
+            'count'          => $batchSize,
         ];
 
         if (isset($connection->last_synced_modified_at)) {
@@ -104,6 +110,7 @@ class FetchUpdatedOrdersJob implements ShouldQueue
         if (!$orders) {
             $this->queueData(['count' => 0]);
             info('Imported Api2cart orders', ['count' => 0]);
+
             return;
         }
 
@@ -121,13 +128,13 @@ class FetchUpdatedOrdersJob implements ShouldQueue
 
     /**
      * @param Api2cartConnection $connection
-     * @param array $ordersCollection
+     * @param array              $ordersCollection
      */
     private function saveOrders(Api2cartConnection $connection, array $ordersCollection): void
     {
         foreach ($ordersCollection as $order) {
             Api2cartOrderImports::query()->create([
-                'raw_import' => $order
+                'raw_import' => $order,
             ]);
 
             $this->updateLastSyncedTimestamp($connection, $order);

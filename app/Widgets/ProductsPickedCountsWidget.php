@@ -24,7 +24,7 @@ class ProductsPickedCountsWidget extends AbstractDateSelectorWidget
             ->select(['user_id', 'users.name', DB::raw('floor(sum(quantity_picked)) as total')])
             ->whereBetween('picks.created_at', [
                 $this->getStartingDateTime(),
-                $this->getEndingDateTime()
+                $this->getEndingDateTime(),
             ])
             ->leftJoin('users', 'user_id', '=', 'users.id')
             ->groupBy(['user_id'])
@@ -37,9 +37,9 @@ class ProductsPickedCountsWidget extends AbstractDateSelectorWidget
         }
 
         return view('widgets.products_picked_counts_widget', [
-            'config' => $this->config,
+            'config'         => $this->config,
             'count_per_user' => $count_per_user,
-            'total_count' => $total_count,
+            'total_count'    => $total_count,
         ]);
     }
 }

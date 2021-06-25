@@ -16,6 +16,7 @@ class ProductObserver
      * Handle the product "created" event.
      *
      * @param Product $product
+     *
      * @return void
      */
     public function created(Product $product)
@@ -30,8 +31,10 @@ class ProductObserver
      * Handle the product "updated" event.
      *
      * @param Product $product
-     * @return void
+     *
      * @throws Exception
+     *
+     * @return void
      */
     public function updated(Product $product)
     {
@@ -42,6 +45,7 @@ class ProductObserver
      * Handle the product "deleted" event.
      *
      * @param Product $product
+     *
      * @return void
      */
     public function deleted(Product $product)
@@ -53,6 +57,7 @@ class ProductObserver
      * Handle the product "restored" event.
      *
      * @param Product $product
+     *
      * @return void
      */
     public function restored(Product $product)
@@ -64,6 +69,7 @@ class ProductObserver
      * Handle the product "force deleted" event.
      *
      * @param Product $product
+     *
      * @return void
      */
     public function forceDeleted(Product $product)
@@ -80,8 +86,8 @@ class ProductObserver
             ->map(function ($warehouse) use ($product) {
                 return [
                     'warehouse_id' => $warehouse->getKey(),
-                    'product_id' => $product->getKey(),
-                    'location_id' => $warehouse->getKey(),
+                    'product_id'   => $product->getKey(),
+                    'location_id'  => $warehouse->getKey(),
                 ];
             });
 
@@ -96,7 +102,7 @@ class ProductObserver
         $productPriceRecords = Warehouse::all('id')
             ->map(function ($record) use ($product) {
                 return [
-                    'product_id' => $product->getKey(),
+                    'product_id'  => $product->getKey(),
                     'location_id' => $record->getKey(),
                 ];
             });
