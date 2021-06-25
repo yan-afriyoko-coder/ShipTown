@@ -15,13 +15,13 @@ class StoreTest extends TestCase
         $user = factory(User::class)->create()->assignRole('admin');
 
         $response = $this->actingAs($user, 'api')->postJson(route('invites.store'), [
-            'email' => $invite->email
+            'email' => $invite->email,
         ]);
 
         $response->assertSuccessful();
 
         $response->assertJsonStructure([
-            'message'
+            'message',
         ]);
     }
 }

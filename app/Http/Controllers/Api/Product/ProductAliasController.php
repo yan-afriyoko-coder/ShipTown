@@ -8,8 +8,7 @@ use App\Models\ProductAlias;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
- * Class ProductAliasController
- * @package App\Http\Controllers\Api\Product
+ * Class ProductAliasController.
  */
 class ProductAliasController extends Controller
 {

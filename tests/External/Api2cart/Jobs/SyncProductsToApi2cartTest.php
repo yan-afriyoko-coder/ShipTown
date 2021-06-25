@@ -36,7 +36,7 @@ class SyncProductsToApi2cartTest extends TestCase
             ->create();
 
         factory(Api2cartConnection::class)->create([
-            'bridge_api_key' => config('api2cart.api2cart_test_store_key'),
+            'bridge_api_key'   => config('api2cart.api2cart_test_store_key'),
             'magento_store_id' => null,
         ]);
 

@@ -10,13 +10,13 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * Class PicklistPickController
- * @package App\Http\Controllers\Api\Picklist
+ * Class PicklistPickController.
  */
 class PicklistPickController extends Controller
 {
     /**
      * @param StoreDeletedPickRequest $request
+     *
      * @return AnonymousResourceCollection
      */
     public function store(StoreDeletedPickRequest $request): AnonymousResourceCollection
@@ -36,7 +36,7 @@ class PicklistPickController extends Controller
         foreach ($orderProducts as $orderProduct) {
             $quantity = min($quantityToDistribute, $orderProduct->quantity_to_pick);
             $orderProduct->fill([
-                $key => $orderProduct->getAttribute($key) + $quantity
+                $key => $orderProduct->getAttribute($key) + $quantity,
             ]);
             $orderProduct->save();
             $quantityToDistribute -= $quantity;
@@ -48,13 +48,13 @@ class PicklistPickController extends Controller
         $first = $orderProducts->first();
 
         $pick = Pick::create([
-            'user_id' => request()->user()->getKey(),
-            'product_id' => $first['product_id'],
-            'sku_ordered' => $first['sku_ordered'],
-            'name_ordered' => $first['name_ordered'],
-            'quantity_picked' =>  $request->get('quantity_picked', 0),
-            'quantity_skipped_picking' =>  $request->get('quantity_skipped_picking', 0),
-            'quantity_required' =>  0,
+            'user_id'                  => request()->user()->getKey(),
+            'product_id'               => $first['product_id'],
+            'sku_ordered'              => $first['sku_ordered'],
+            'name_ordered'             => $first['name_ordered'],
+            'quantity_picked'          => $request->get('quantity_picked', 0),
+            'quantity_skipped_picking' => $request->get('quantity_skipped_picking', 0),
+            'quantity_required'        => 0,
         ]);
 
         return JsonResource::collection($orderProducts);

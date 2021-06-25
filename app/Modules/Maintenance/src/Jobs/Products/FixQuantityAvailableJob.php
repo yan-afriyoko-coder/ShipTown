@@ -14,7 +14,11 @@ use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class FixQuantityAvailableJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use IsMonitored;
 
     /**
      * Execute the job.
@@ -25,9 +29,9 @@ class FixQuantityAvailableJob implements ShouldQueue
     {
         $invalidProducts = Product::query()
             ->where(
-                DB::raw(DB::getTablePrefix() .'products.quantity - '. DB::getTablePrefix() .'products.quantity_reserved'),
+                DB::raw(DB::getTablePrefix().'products.quantity - '.DB::getTablePrefix().'products.quantity_reserved'),
                 '!=',
-                DB::raw(DB::getTablePrefix() .'products.quantity_available')
+                DB::raw(DB::getTablePrefix().'products.quantity_available')
             )
             ->get()
             ->each(function (Product $product) {

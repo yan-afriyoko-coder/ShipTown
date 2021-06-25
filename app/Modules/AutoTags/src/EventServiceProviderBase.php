@@ -9,8 +9,7 @@ use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class EventServiceProviderBase
- * @package App\Providers
+ * Class EventServiceProviderBase.
  */
 class EventServiceProviderBase extends BaseModuleServiceProvider
 {
@@ -40,11 +39,11 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
         ],
 
         OrderCreatedEvent::class => [
-            Listeners\OrderCreatedEvent\ToggleOrderOutOfStockTagListener::class
+            Listeners\OrderCreatedEvent\ToggleOrderOutOfStockTagListener::class,
         ],
 
         OrderUpdatedEvent::class => [
-            Listeners\OrderUpdatedEvent\ToggleOrderOutOfStockTagListener::class
+            Listeners\OrderUpdatedEvent\ToggleOrderOutOfStockTagListener::class,
         ],
     ];
 }

@@ -29,22 +29,19 @@ class ProductsSeeder extends Seeder
     private function createSkuWithAliases(array $skuList): void
     {
         foreach ($skuList as $sku) {
-
             if (!Product::query()->where('sku', '=', $sku)->exists()) {
-
                 $product = factory(Product::class)->create(['sku' => $sku]);
 
                 factory(ProductAlias::class)->create([
                     'product_id' => $product->getKey(),
-                    'alias' => $product->sku.'-alias'
+                    'alias'      => $product->sku.'-alias',
                 ]);
 
                 factory(ProductAlias::class)->create([
                     'product_id' => $product->getKey(),
-                    'alias' => $product->sku.'a'
+                    'alias'      => $product->sku.'a',
                 ]);
             }
-
         }
     }
 }

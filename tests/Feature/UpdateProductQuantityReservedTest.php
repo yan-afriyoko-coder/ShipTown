@@ -38,19 +38,19 @@ class UpdateProductQuantityReservedTest extends TestCase
         parent::setUp();
 
         $this->canceled_status = factory(OrderStatus::class)->create([
-            'code' => 'canceled',
-            'name' => 'canceled',
+            'code'           => 'canceled',
+            'name'           => 'canceled',
             'reserves_stock' => false,
         ]);
 
         $this->open_status = factory(OrderStatus::class)->create([
-            'code' => 'open',
-            'name' => 'open',
+            'code'           => 'open',
+            'name'           => 'open',
             'reserves_stock' => true,
         ]);
 
         $this->order = factory(Order::class)->create([
-            'status_code' => 'canceled'
+            'status_code' => 'canceled',
         ]);
 
         $this->orderProduct = factory(OrderProduct::class)->create([])

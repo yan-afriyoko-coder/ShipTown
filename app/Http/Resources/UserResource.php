@@ -9,19 +9,21 @@ class UserResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
     {
         $role = $this->roles()->first();
+
         return [
-            'id' => $this->getKey(),
-            'name' => $this->name,
-            'email' => $this->email,
-            'role_id' => $role ? $role->getKey() : null,
-            'printer_id' => $this->printer_id,
-            'address_label_template' => $this->address_label_template,
+            'id'                      => $this->getKey(),
+            'name'                    => $this->name,
+            'email'                   => $this->email,
+            'role_id'                 => $role ? $role->getKey() : null,
+            'printer_id'              => $this->printer_id,
+            'address_label_template'  => $this->address_label_template,
             'ask_for_shipping_number' => $this->ask_for_shipping_number,
         ];
     }

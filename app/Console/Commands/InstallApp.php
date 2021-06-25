@@ -49,16 +49,17 @@ class InstallApp extends Command
         $this->info('php artisan key:generate --ansi --no-interaction');
         $this->call('key:generate', [
             '--ansi',
-            '--no-interaction' => true
+            '--no-interaction' => true,
         ]);
     }
 
     private function migrate(): void
     {
         $this->info('php artisan migrate --force');
+
         try {
             $this->call('migrate', [
-                '--force' => true
+                '--force' => true,
             ]);
         } catch (\Exception $e) {
             $this->error('Could not migrate, please make sure DB connection is configured');

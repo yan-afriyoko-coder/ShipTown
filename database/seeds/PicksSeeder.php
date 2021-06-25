@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Order;
 use App\Models\Pick;
 use Illuminate\Database\Seeder;
 

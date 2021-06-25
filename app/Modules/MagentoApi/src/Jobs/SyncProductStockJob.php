@@ -14,12 +14,14 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Class SyncCheckFailedProductsJob
- * @package App\Jobs
+ * Class SyncCheckFailedProductsJob.
  */
 class SyncProductStockJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * @var Product
@@ -35,7 +37,6 @@ class SyncProductStockJob implements ShouldQueue
     {
         $this->product = $product;
     }
-
 
     /**
      * Execute the job.
@@ -63,15 +64,15 @@ class SyncProductStockJob implements ShouldQueue
 
         $params = [
             'is_in_stock' => $product->quantity_available > 0,
-            'qty' => $product->quantity_available,
+            'qty'         => $product->quantity_available,
         ];
 
         $response = $stockItems->update($product->sku, $params);
 
         Log::debug('MagentoApi: stockItem update', [
-            'sku' => $product->sku,
+            'sku'                  => $product->sku,
             'response_status_code' => $response->status(),
-            'response_body' => $response->json(),
+            'response_body'        => $response->json(),
         ]);
 
         return $response;

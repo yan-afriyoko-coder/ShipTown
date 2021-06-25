@@ -13,7 +13,7 @@ class AddQuantityReservedColumnToOrderProductsTable extends Migration
      */
     public function up()
     {
-        if ( ! Schema::hasColumn('order_products', 'quantity_reserved')) {
+        if (!Schema::hasColumn('order_products', 'quantity_reserved')) {
             Schema::table('order_products', function (Blueprint $table) {
                 $table->decimal('quantity_reserved')
                     ->default(0)

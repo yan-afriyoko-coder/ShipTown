@@ -5,8 +5,7 @@ namespace App\Modules\AutoStatusPaid\src\Listeners\OrderUpdatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 
 /**
- * Class SetPackingWebStatus
- * @package App\Listeners\Order
+ * Class SetPackingWebStatus.
  */
 class ProcessingToPaidListener
 {
@@ -14,6 +13,7 @@ class ProcessingToPaidListener
      * Handle the event.
      *
      * @param OrderUpdatedEvent $event
+     *
      * @return void
      */
     public function handle(OrderUpdatedEvent $event)

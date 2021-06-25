@@ -12,7 +12,9 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use AuthorizesRequests;
+    use DispatchesJobs;
+    use ValidatesRequests;
 
     /**
      * @var int
@@ -29,9 +31,9 @@ class Controller extends BaseController
 
         $filename = request('filename', 'filename_url_param_not_specified.csv');
         $headers = [
-            'Content-Type' => 'text/csv',
+            'Content-Type'              => 'text/csv',
             'Content-Transfer-Encoding' => 'binary',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Content-Disposition'       => 'attachment; filename="'.$filename.'"',
         ];
 
         response($content, 200, $headers)->throwResponse();
@@ -43,7 +45,7 @@ class Controller extends BaseController
     public function throwPdfResponse(string $pdfString)
     {
         $headers = [
-            'Content-Type' => 'application/pdf',
+            'Content-Type'        => 'application/pdf',
             'Content-Disposition' => 'inline',
         ];
 
@@ -53,14 +55,15 @@ class Controller extends BaseController
     public function throwJsonResponse($message)
     {
         response()->json(
-            ["message" => $message],
+            ['message' => $message],
             $this->getStatusCode()
         )->throwResponse();
     }
 
     /**
      * @param QueryBuilder $query
-     * @param int $defaultPerPage
+     * @param int          $defaultPerPage
+     *
      * @return LengthAwarePaginator
      */
     public function getPaginatedResult(QueryBuilder $query, $defaultPerPage = 10): LengthAwarePaginator
@@ -82,17 +85,17 @@ class Controller extends BaseController
         $this->setStatusCode(200)->throwJsonResponse($message);
     }
 
-    public function respondNotFound($message = "Not Found!")
+    public function respondNotFound($message = 'Not Found!')
     {
         $this->setStatusCode(404)->throwJsonResponse($message);
     }
 
-    public function respondBadRequest($message = "Bad request")
+    public function respondBadRequest($message = 'Bad request')
     {
         $this->setStatusCode(400)->throwJsonResponse($message);
     }
 
-    public function respond403Forbidden($message = "Forbidden")
+    public function respond403Forbidden($message = 'Forbidden')
     {
         $this->setStatusCode(403)->throwJsonResponse($message);
     }
@@ -100,6 +103,7 @@ class Controller extends BaseController
     public function setStatusCode($code): Controller
     {
         $this->status_code = $code;
+
         return $this;
     }
 

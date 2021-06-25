@@ -7,15 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\OrderStatus
+ * App\Models\OrderStatus.
  *
- * @property int $id
- * @property string $code
- * @property string $name
- * @property bool $reserves_stock
- * @property int $order_active
+ * @property int         $id
+ * @property string      $code
+ * @property string      $name
+ * @property bool        $reserves_stock
+ * @property int         $order_active
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|OrderStatus newModelQuery()
  * @method static Builder|OrderStatus newQuery()
  * @method static Builder|OrderStatus query()
@@ -50,7 +51,7 @@ class OrderStatus extends Model
         'on_hold',
         'missing_item',
         'auto_missing_item',
-        'ready'
+        'ready',
     ];
 
     public static $completedStatusCodeList = [
@@ -87,6 +88,7 @@ class OrderStatus extends Model
 
     /**
      * @param string $status_code
+     *
      * @return bool
      */
     public static function isActive(string $status_code): bool

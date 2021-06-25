@@ -24,8 +24,8 @@ class StorePrintJobRequest extends FormRequest
     public function rules()
     {
         return [
-            'printer_id' => ['int','required'],
-            'pdf_url' => ['sometimes'],
+            'printer_id' => ['int', 'required'],
+            'pdf_url'    => ['sometimes'],
         ];
     }
 }

@@ -2,16 +2,15 @@
 
 namespace App\Mail;
 
+use App\Models\UserInvite;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
-
-use App\Models\UserInvite;
 
 class InviteCreated extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $invite;
 
@@ -20,11 +19,11 @@ class InviteCreated extends Mailable
      *
      * @param UserInvite $invite
      */
-
     public function __construct(UserInvite $invite)
     {
         $this->invite = $invite;
     }
+
     /**
      * Build the message.
      *

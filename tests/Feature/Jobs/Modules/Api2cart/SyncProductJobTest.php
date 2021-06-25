@@ -28,7 +28,7 @@ class SyncProductJobTest extends TestCase
 
         $connection = factory(Api2cartConnection::class)->create(
             [
-                'pricing_location_id' => $pricing->location_id,
+                'pricing_location_id'   => $pricing->location_id,
                 'inventory_location_id' => $inventory->location_id,
             ]
         );

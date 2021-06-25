@@ -8,8 +8,7 @@ use App\Events\Product\ProductTagDetachedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class EventServiceProviderBase
- * @package App\Providers
+ * Class EventServiceProviderBase.
  */
 class EventServiceProviderBase extends BaseModuleServiceProvider
 {
@@ -30,7 +29,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
      */
     protected $listen = [
         HourlyEvent::class => [
-            Listeners\HourlyEvent\SyncProductsListener::class
+            Listeners\HourlyEvent\SyncProductsListener::class,
         ],
 
         ProductTagAttachedEvent::class => [

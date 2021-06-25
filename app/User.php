@@ -22,15 +22,15 @@ use Spatie\QueryBuilder\QueryBuilder;
 use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
 
 /**
- * App\User
+ * App\User.
  *
- * @property int $id
- * @property int|null $printer_id
- * @property string $address_label_template
- * @property string $name
- * @property string $email
+ * @property int         $id
+ * @property int|null    $printer_id
+ * @property string      $address_label_template
+ * @property string      $name
+ * @property string      $email
  * @property Carbon|null $email_verified_at
- * @property string $password
+ * @property string      $password
  * @property string|null $remember_token
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
@@ -45,6 +45,7 @@ use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
  * @property-read int|null $roles_count
  * @property-read Collection|Token[] $tokens
  * @property-read int|null $tokens_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
  * @method static Builder|User onlyTrashed()
@@ -64,13 +65,17 @@ use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
  * @method static Builder|User withTrashed()
  * @method static Builder|User withoutTrashed()
  * @mixin Eloquent
+ *
  * @property bool $ask_for_shipping_number
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAddressLabelTemplate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAskForShippingNumber($value)
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable, HasRoles;
+    use HasApiTokens;
+    use Notifiable;
+    use HasRoles;
     use SnoozeNotifiable;
     use SoftDeletes;
 
@@ -80,7 +85,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','printer_id','address_label_template','ask_for_shipping_number'
+        'name', 'email', 'password', 'printer_id', 'address_label_template', 'ask_for_shipping_number',
     ];
 
     /**
@@ -98,7 +103,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'email_verified_at'       => 'datetime',
         'ask_for_shipping_number' => 'bool',
     ];
 

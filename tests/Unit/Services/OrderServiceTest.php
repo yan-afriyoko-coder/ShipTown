@@ -22,11 +22,11 @@ class OrderServiceTest extends TestCase
         Order::query()->forceDelete();
 
         $attributes = [
-            'order_number' => $orderFake->order_number,
-            'status_code' => $orderFake->status_code,
-            'total' => 12.40,
-            'total_paid' => 12.40,
-            'order_products' => factory(OrderProduct::class, 2)->make()->toArray(),
+            'order_number'     => $orderFake->order_number,
+            'status_code'      => $orderFake->status_code,
+            'total'            => 12.40,
+            'total_paid'       => 12.40,
+            'order_products'   => factory(OrderProduct::class, 2)->make()->toArray(),
             'shipping_address' => factory(OrderAddress::class)->make()->toArray(),
         ];
 
@@ -61,11 +61,11 @@ class OrderServiceTest extends TestCase
         Order::query()->forceDelete();
 
         $attributes = [
-            'order_number' => $orderFake->order_number,
-            'status_code' => $orderFake->status_code,
-            'total' => 12.40,
-            'total_paid' => 12.40,
-            'order_products' => factory(OrderProduct::class, 2)->make()->toArray(),
+            'order_number'     => $orderFake->order_number,
+            'status_code'      => $orderFake->status_code,
+            'total'            => 12.40,
+            'total_paid'       => 12.40,
+            'order_products'   => factory(OrderProduct::class, 2)->make()->toArray(),
             'shipping_address' => factory(OrderAddress::class)->make()->toArray(),
         ];
 
@@ -100,11 +100,11 @@ class OrderServiceTest extends TestCase
         Order::query()->forceDelete();
 
         $attributes = [
-            'order_number' => $orderFake->order_number,
-            'status_code' => $orderFake->status_code,
-            'total' => 12.40,
-            'total_paid' => 12.40,
-            'order_products' => factory(OrderProduct::class, 2)->make()->toArray(),
+            'order_number'     => $orderFake->order_number,
+            'status_code'      => $orderFake->status_code,
+            'total'            => 12.40,
+            'total_paid'       => 12.40,
+            'order_products'   => factory(OrderProduct::class, 2)->make()->toArray(),
             'shipping_address' => factory(OrderAddress::class)->make()->toArray(),
         ];
 
@@ -129,8 +129,8 @@ class OrderServiceTest extends TestCase
         $order = factory(Order::class)->make();
 
         $attributes = [
-            'order_number' => $order->order_number,
-            'order_products' => [],
+            'order_number'     => $order->order_number,
+            'order_products'   => [],
             'shipping_address' => [],
         ];
 
@@ -159,10 +159,10 @@ class OrderServiceTest extends TestCase
         $orderProduct = $order->orderProducts()->first();
 
         $inventory = Inventory::query()->updateOrCreate([
-            'product_id' => $orderProduct->product_id,
+            'product_id'  => $orderProduct->product_id,
             'location_id' => 100,
         ], [
-            'quantity' => $orderProduct->quantity_ordered,
+            'quantity'          => $orderProduct->quantity_ordered,
             'quantity_reserved' => 0,
         ]);
 
@@ -193,10 +193,10 @@ class OrderServiceTest extends TestCase
         $orderProduct = $order->orderProducts()->first();
 
         Inventory::query()->updateOrCreate([
-            'product_id' => $orderProduct->product_id,
+            'product_id'  => $orderProduct->product_id,
             'location_id' => 100,
         ], [
-            'quantity' => 0,
+            'quantity'          => 0,
             'quantity_reserved' => 0,
         ]);
 
@@ -220,7 +220,7 @@ class OrderServiceTest extends TestCase
         $orderProduct = $order->orderProducts()->first();
 
         Inventory::updateOrCreate([
-            'product_id' => $orderProduct->product_id,
+            'product_id'  => $orderProduct->product_id,
             'location_id' => $locationId,
         ], [
             'quantity' => $orderProduct->quantity_ordered - 1,
@@ -242,7 +242,7 @@ class OrderServiceTest extends TestCase
         $orderProduct = $order->orderProducts()->first();
 
         Inventory::updateOrCreate([
-            'product_id' => $orderProduct->product_id,
+            'product_id'  => $orderProduct->product_id,
             'location_id' => $locationId,
         ], [
             'quantity' => $orderProduct->quantity_ordered,

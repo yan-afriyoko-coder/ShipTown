@@ -12,13 +12,14 @@ class UpdateQuantityReservedListener
      * Handle the event.
      *
      * @param OrderProductUpdatedEvent $event
+     *
      * @return void
      */
     public function handle(OrderProductUpdatedEvent $event)
     {
         if ($this->shouldModifyReservation($event->orderProduct)) {
             $inventory = Inventory::firstOrNew([
-                'product_id' =>  $event->orderProduct->product_id,
+                'product_id'  => $event->orderProduct->product_id,
                 'location_id' => 999,
             ]);
             $inventory->quantity_reserved -= $event->orderProduct->getOriginal('quantity_to_ship') ?? 0;
@@ -29,6 +30,7 @@ class UpdateQuantityReservedListener
 
     /**
      * @param OrderProduct $orderProduct
+     *
      * @return bool
      */
     public function shouldModifyReservation(OrderProduct $orderProduct): bool

@@ -23,6 +23,7 @@ class OrderUpdatedListener
      * Handle the event.
      *
      * @param OrderUpdatedEvent $event
+     *
      * @return void
      */
     public function handle(OrderUpdatedEvent $event)
@@ -36,7 +37,7 @@ class OrderUpdatedListener
     private function reserveOrReleaseStock(Order $order)
     {
         $previous_status = OrderStatus::firstOrCreate([
-            'code' => $order->getOriginal('order_status')['code']
+            'code' => $order->getOriginal('order_status')['code'],
         ], [
             'name' => $order->getOriginal('order_status')['code'],
         ]);
@@ -60,8 +61,8 @@ class OrderUpdatedListener
         $order->orderProducts->each(function (OrderProduct $orderProduct) {
             if ($orderProduct->product) {
                 $inventory = $orderProduct->product->inventory()->firstOrCreate([
-                    'product_id' => $orderProduct->product_id,
-                    'location_id' => 999
+                    'product_id'  => $orderProduct->product_id,
+                    'location_id' => 999,
                 ]);
                 $inventory->quantity_reserved += $orderProduct->quantity_to_ship;
                 $orderProduct->save();
@@ -77,8 +78,8 @@ class OrderUpdatedListener
         $order->orderProducts->each(function (OrderProduct $orderProduct) {
             if ($orderProduct->product) {
                 $inventory = $orderProduct->product->inventory()->firstOrCreate([
-                    'product_id' => $orderProduct->product_id,
-                    'location_id' => 999
+                    'product_id'  => $orderProduct->product_id,
+                    'location_id' => 999,
                 ]);
                 $inventory->quantity_reserved -= $orderProduct->quantity_to_ship;
                 $inventory->save();

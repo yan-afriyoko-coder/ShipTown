@@ -9,8 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Class PicklistController
- * @package App\Http\Controllers\Api
+ * Class PicklistController.
  */
 class PicklistController extends Controller
 {
@@ -23,8 +22,8 @@ class PicklistController extends Controller
                 'name_ordered',
                 'sku_ordered',
                 'inventory_source_shelf_location',
-                DB::raw("sum(`quantity_to_pick`) as total_quantity_to_pick"),
-                DB::raw("max(`inventory_source_quantity`) as inventory_source_quantity"),
+                DB::raw('sum(`quantity_to_pick`) as total_quantity_to_pick'),
+                DB::raw('max(`inventory_source_quantity`) as inventory_source_quantity'),
                 DB::raw("GROUP_CONCAT(id ORDER BY id SEPARATOR ',' ) AS order_product_ids"),
             ])
             ->groupBy([

@@ -4,13 +4,7 @@ namespace Tests\Unit;
 
 use App\Models\Product;
 use App\Services\ProductService;
-use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
-use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class ProductModelTest extends TestCase

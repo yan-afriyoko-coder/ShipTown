@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateOrdersTable extends Migration
 {
@@ -30,7 +30,7 @@ class CreateOrdersTable extends Migration
             $table->timestamp('picked_at')->nullable();
             $table->timestamp('packed_at')->nullable();
             $table->unsignedBigInteger('packer_user_id')->nullable();
-            $table->decimal('total_quantity_ordered',10,2)->default(0);
+            $table->decimal('total_quantity_ordered', 10, 2)->default(0);
             $table->json('raw_import');
             $table->softDeletes();
             $table->timestamps();

@@ -17,7 +17,7 @@ class RemoveQuantityReservedColumnFromOrderProductsTable extends Migration
             Schema::table('order_products', function (Blueprint $table) {
                 $table->dropColumn('quantity_reserved');
             });
-        };
+        }
     }
 
     /**

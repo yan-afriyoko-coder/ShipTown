@@ -13,7 +13,8 @@ use Tests\TestCase;
  */
 class PrintDpdLabelControllerTest extends TestCase
 {
-    use RefreshDatabase, SeedConfiguration;
+    use RefreshDatabase;
+    use SeedConfiguration;
 
     /**
      * @test
@@ -25,13 +26,13 @@ class PrintDpdLabelControllerTest extends TestCase
         ]);
 
         $address = factory(OrderAddress::class)->create([
-            'company' => 'test',
-            'address1' => 'test',
-            'address2' => 'test',
-            'phone' => '12345678901',
-            'city' => 'Dublin',
-            'state_name' => 'Co. Dublin',
-            'postcode' => 'ABC1234',
+            'company'      => 'test',
+            'address1'     => 'test',
+            'address2'     => 'test',
+            'phone'        => '12345678901',
+            'city'         => 'Dublin',
+            'state_name'   => 'Co. Dublin',
+            'postcode'     => 'ABC1234',
             'country_code' => 'IRL',
         ]);
 
@@ -39,7 +40,7 @@ class PrintDpdLabelControllerTest extends TestCase
             'shipping_address_id' => $address->getKey(),
         ]);
 
-        $response = $this->actingAs($user, 'api')->putJson('api/print/order/' . $order->order_number . '/dpd_label', [
+        $response = $this->actingAs($user, 'api')->putJson('api/print/order/'.$order->order_number.'/dpd_label', [
             // TODO: send request data
         ]);
 

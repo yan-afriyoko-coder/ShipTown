@@ -11,14 +11,17 @@ use Illuminate\Queue\SerializesModels;
 
 class ProcessImportedBatch implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     private ?string $batch_uuid = null;
 
     /**
      * Create a new job instance.
      *
-     * @param String|null $batch_uuid
+     * @param string|null $batch_uuid
      */
     public function __construct(string $batch_uuid = null)
     {

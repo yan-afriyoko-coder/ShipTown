@@ -22,10 +22,10 @@ class FetchUpdatedOrdersJobTest extends TestCase
 
         // we set key to api2cart demo store
         $api2cartConnection = new Api2cartConnection([
-            'location_id' => '99',
-            'type' => 'opencart',
-            'url' => 'http://demo.api2cart.com/opencart',
-            'bridge_api_key' => env('API2CART_TEST_STORE_KEY')
+            'location_id'    => '99',
+            'type'           => 'opencart',
+            'url'            => 'http://demo.api2cart.com/opencart',
+            'bridge_api_key' => env('API2CART_TEST_STORE_KEY'),
         ]);
 
         $api2cartConnection->save();

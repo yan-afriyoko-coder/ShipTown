@@ -4,7 +4,6 @@ namespace Tests\Feature\Jobs\Maintenance;
 
 use App\Events\HourlyEvent;
 use App\Models\Order;
-use App\Modules\AutoStatusSingleLineOrders\src\Jobs\RefillSingleLineOrdersJob;
 use Tests\TestCase;
 
 class SingleLineOrdersJobTest extends TestCase
@@ -25,7 +24,7 @@ class SingleLineOrdersJobTest extends TestCase
         HourlyEvent::dispatch();
 
         $this->assertDatabaseHas('orders', [
-            'status_code' => 'single_line_orders',
+            'status_code'        => 'single_line_orders',
             'product_line_count' => 1,
         ]);
     }

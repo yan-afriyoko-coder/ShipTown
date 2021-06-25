@@ -63,9 +63,9 @@ class InventoryRoutesTest extends TestCase
         $inventory = factory(Inventory::class)->make();
 
         $update = [
-            'sku' => $product->sku,
-            'location_id' => 0,
-            'quantity' => $inventory->quantity,
+            'sku'               => $product->sku,
+            'location_id'       => 0,
+            'quantity'          => $inventory->quantity,
             'quantity_reserved' => $inventory->quantity_reserved,
         ];
 

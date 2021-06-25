@@ -36,8 +36,8 @@ class ProductEventsTest extends TestCase
         Event::fake();
 
         $product_data = [
-            'sku' => 'test',
-            'name' => 'testName',
+            'sku'   => 'test',
+            'name'  => 'testName',
             'price' => 10,
         ];
 
@@ -69,8 +69,8 @@ class ProductEventsTest extends TestCase
         $product = factory(Product::class)->create();
 
         $product_update = [
-            'sku' => $product['sku'],
-            'name' => $product['name'],
+            'sku'   => $product['sku'],
+            'name'  => $product['name'],
             'price' => $product['price'] * 2,
         ];
 

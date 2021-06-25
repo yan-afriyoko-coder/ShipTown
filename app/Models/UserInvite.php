@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\Invite
+ * App\Models\Invite.
  *
- * @property int $id
- * @property string $email
- * @property string $token
+ * @property int         $id
+ * @property string      $email
+ * @property string      $token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|UserInvite newModelQuery()
  * @method static Builder|UserInvite newQuery()
  * @method static Builder|UserInvite query()

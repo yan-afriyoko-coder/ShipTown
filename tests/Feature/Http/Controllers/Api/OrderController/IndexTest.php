@@ -76,8 +76,8 @@ class IndexTest extends TestCase
                 '*' => [
                     'id',
                     'status_code',
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 }

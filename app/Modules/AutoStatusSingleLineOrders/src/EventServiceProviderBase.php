@@ -6,8 +6,7 @@ use App\Events\Order\ActiveOrderCheckEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class EventServiceProviderBase
- * @package App\Providers
+ * Class EventServiceProviderBase.
  */
 class EventServiceProviderBase extends BaseModuleServiceProvider
 {
@@ -19,7 +18,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public string $module_description = 'Automatically changes status from "paid" to "single_line_orders" ' .
+    public string $module_description = 'Automatically changes status from "paid" to "single_line_orders" '.
     'if order has only 1 product ordered';
 
     /**

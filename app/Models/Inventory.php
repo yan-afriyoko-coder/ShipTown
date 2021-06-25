@@ -12,20 +12,21 @@ use Illuminate\Support\Carbon;
 use Spatie\Activitylog\Models\Activity;
 
 /**
- * App\Models\Inventory
+ * App\Models\Inventory.
  *
- * @property int $id
- * @property int|null $warehouse_id
- * @property int $product_id
- * @property int $location_id
- * @property string $shelve_location
- * @property float $quantity
- * @property float $quantity_reserved
+ * @property int         $id
+ * @property int|null    $warehouse_id
+ * @property int         $product_id
+ * @property int         $location_id
+ * @property string      $shelve_location
+ * @property float       $quantity
+ * @property float       $quantity_reserved
  * @property string|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read float $quantity_available
  * @property-read Product $product
+ *
  * @method static Builder|Inventory newModelQuery()
  * @method static Builder|Inventory newQuery()
  * @method static Builder|Inventory query()
@@ -40,6 +41,7 @@ use Spatie\Activitylog\Models\Activity;
  * @method static Builder|Inventory whereUpdatedAt($value)
  * @method static Builder|Inventory whereWarehouseId($value)
  * @method static Inventory firstOrNew(array $array)
+ *
  * @property-read Collection|Activity[] $activities
  * @property-read int|null $activities_count
  * @mixin Eloquent
@@ -60,22 +62,22 @@ class Inventory extends BaseModel
         'shelve_location',
         'product_id',
         'quantity',
-        'quantity_reserved'
+        'quantity_reserved',
     ];
 
     protected $table = 'inventory';
 
     protected $appends = [
-        "quantity_available"
+        'quantity_available',
     ];
 
     protected $attributes = [
-        'quantity' => 0,
+        'quantity'          => 0,
         'quantity_reserved' => 0,
     ];
 
     protected $casts = [
-        'quantity' => 'float',
+        'quantity'          => 'float',
         'quantity_reserved' => 'float',
     ];
 
@@ -83,7 +85,7 @@ class Inventory extends BaseModel
     {
         $quantity_available = $this->quantity - $this->quantity_reserved;
 
-        if ($quantity_available<0) {
+        if ($quantity_available < 0) {
             return 0;
         }
 

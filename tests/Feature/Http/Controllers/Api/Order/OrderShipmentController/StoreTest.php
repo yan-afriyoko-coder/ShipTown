@@ -18,14 +18,14 @@ class StoreTest extends TestCase
         $order = factory(Order::class)->create();
 
         $response = $this->actingAs($user, 'api')->postJson(route('shipments.store'), [
-            'order_id' => $order['id'],
+            'order_id'        => $order['id'],
             'shipping_number' => '123',
         ]);
 
         $response->assertStatus(201);
 
         $response->assertJsonStructure([
-            'data' => []
+            'data' => [],
         ]);
     }
 }

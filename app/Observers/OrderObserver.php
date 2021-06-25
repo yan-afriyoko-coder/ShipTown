@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Events\Order\OrderUpdatedEvent;
 use App\Models\Order;
-use Carbon\Carbon;
 
 class OrderObserver
 {
@@ -12,6 +11,7 @@ class OrderObserver
      * Handle the order "created" event.
      *
      * @param Order $order
+     *
      * @return void
      */
     public function created(Order $order)
@@ -36,7 +36,8 @@ class OrderObserver
     /**
      * Handle the order "updated" event.
      *
-     * @param  Order  $order
+     * @param Order $order
+     *
      * @return void
      */
     public function updated(Order $order)

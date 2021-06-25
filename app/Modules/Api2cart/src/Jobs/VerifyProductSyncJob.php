@@ -18,7 +18,10 @@ use Illuminate\Support\Facades\Log;
 
 class VerifyProductSyncJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * @var Api2cartConnection|null
@@ -39,7 +42,7 @@ class VerifyProductSyncJob implements ShouldQueue
      * Create a new job instance.
      *
      * @param Api2cartConnection $api2cartConnection
-     * @param array $product_data
+     * @param array              $product_data
      */
     public function __construct(Api2cartConnection $api2cartConnection, array $product_data)
     {
@@ -50,25 +53,26 @@ class VerifyProductSyncJob implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
      * @throws Exception
+     *
+     * @return void
      */
     public function handle()
     {
         $product = Product::whereSku($this->product_data['sku'])->first();
 
-        $store_id = Arr::has($this->product_data, "store_id") ? $this->product_data["store_id"] : null;
+        $store_id = Arr::has($this->product_data, 'store_id') ? $this->product_data['store_id'] : null;
 
         $api2cartProduct = Api2cartProductLink::firstOrCreate([
-            'product_id' => $product->getKey(),
+            'product_id'             => $product->getKey(),
             'api2cart_connection_id' => $this->api2cartConnection->getKey(),
         ], []);
 
         switch ($api2cartProduct->api2cart_product_type) {
-            case "product":
+            case 'product':
                 $product_now = Products::getSimpleProductInfo($this->api2cartConnection, $product->sku);
                 break;
-            case "variant":
+            case 'variant':
                 $product_now = Products::getVariantInfo($this->api2cartConnection, $product->sku);
                 break;
             default:
@@ -78,24 +82,25 @@ class VerifyProductSyncJob implements ShouldQueue
         if (empty($product_now)) {
             $product->detachTag('CHECK FAILED')
                 ->log('eCommerce: Sync check failed, cannot find product');
-            Log::warning("Update Check FAILED - Could not find product", ["sku" => $this->product_data["sku"]]);
+            Log::warning('Update Check FAILED - Could not find product', ['sku' => $this->product_data['sku']]);
+
             return;
         }
 
         $this->results = [
-            "type" => $product_now["type"],
-            "sku" => $product_now["sku"],
-            "store_id" => $store_id,
-            "differences" => $this->getDifferences($this->product_data, $product_now)
+            'type'        => $product_now['type'],
+            'sku'         => $product_now['sku'],
+            'store_id'    => $store_id,
+            'differences' => $this->getDifferences($this->product_data, $product_now),
         ];
 
-        if (empty($this->results["differences"])) {
+        if (empty($this->results['differences'])) {
             $product->detachTag('CHECK FAILED');
             info('Update Check OK', $this->results);
         } else {
             $product->attachTag('CHECK FAILED')
                 ->log('eCommerce: Sync check failed, see logs');
-            Log::warning("Update Check FAILED", ['differences' => $this->results, 'now' => $product_now]);
+            Log::warning('Update Check FAILED', ['differences' => $this->results, 'now' => $product_now]);
         }
     }
 
@@ -110,6 +115,7 @@ class VerifyProductSyncJob implements ShouldQueue
     /**
      * @param array $expected
      * @param array $actual
+     *
      * @return array
      */
     private function getDifferences(array $expected, array $actual): array
@@ -118,30 +124,30 @@ class VerifyProductSyncJob implements ShouldQueue
         $differences = [];
 
         $keys_to_verify = [
-            "price",
+            'price',
         ];
 
-        if ((Arr::has($actual, "manage_stock")) && ($actual["manage_stock"] != "False")) {
-            $keys_to_verify = array_merge($keys_to_verify, ["quantity"]);
+        if ((Arr::has($actual, 'manage_stock')) && ($actual['manage_stock'] != 'False')) {
+            $keys_to_verify = array_merge($keys_to_verify, ['quantity']);
         }
 
-        if ((Arr::has($expected, "sprice_expire")) &&
-            (Carbon::createFromTimeString($expected["sprice_expire"])->isFuture())) {
+        if ((Arr::has($expected, 'sprice_expire')) &&
+            (Carbon::createFromTimeString($expected['sprice_expire'])->isFuture())) {
             $keys_to_verify = array_merge($keys_to_verify, [
-                "special_price",
-                "sprice_create",
-                "sprice_expire",
+                'special_price',
+                'sprice_create',
+                'sprice_expire',
             ]);
         }
 
         $expected_data = Arr::only($expected, $keys_to_verify);
-        $actual_data   = Arr::only($actual, $keys_to_verify);
+        $actual_data = Arr::only($actual, $keys_to_verify);
 
         foreach (array_keys($expected_data) as $key) {
             if ((!Arr::has($actual_data, $key)) or ($expected_data[$key] != $actual_data[$key])) {
                 $differences[$key] = [
-                    "expected" => $expected_data[$key],
-                    "actual" => $actual_data[$key]
+                    'expected' => $expected_data[$key],
+                    'actual'   => $actual_data[$key],
                 ];
             }
         }

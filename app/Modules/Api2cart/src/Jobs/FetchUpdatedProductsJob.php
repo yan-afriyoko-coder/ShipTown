@@ -16,13 +16,17 @@ use Illuminate\Support\Collection;
 
 class FetchUpdatedProductsJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Execute the job.
      *
-     * @return void
      * @throws RequestException
+     *
+     * @return void
      */
     public function handle()
     {
@@ -35,33 +39,34 @@ class FetchUpdatedProductsJob implements ShouldQueue
         });
     }
 
-
     /**
      * @param Api2cartConnection $connection
-     * @return Collection
+     *
      * @throws RequestException
+     *
+     * @return Collection
      */
     private function fetchProducts(Api2cartConnection $connection): Collection
     {
         $params = [
             'params' => implode(',', [
-                "id",
-                "model",
-                "u_model",
-                "sku",
-                "u_sku",
-                "price",
-                "special_price",
-                "stores_ids",
-                "manage_stock",
-                "quantity",
-                "inventory",
-                "modified_at",
+                'id',
+                'model',
+                'u_model',
+                'sku',
+                'u_sku',
+                'price',
+                'special_price',
+                'stores_ids',
+                'manage_stock',
+                'quantity',
+                'inventory',
+                'modified_at',
             ]),
-            'count' => 10,
-            'sort_by' => 'modified_at',
+            'count'         => 10,
+            'sort_by'       => 'modified_at',
             'modified_from' => $this->formatDateForApi2cart(now()->subHours(2)),
-            'modified_to' => $this->formatDateForApi2cart(now())
+            'modified_to'   => $this->formatDateForApi2cart(now()),
         ];
 
         $response = Products::getProductList($connection->bridge_api_key, $params);
@@ -77,16 +82,17 @@ class FetchUpdatedProductsJob implements ShouldQueue
     {
         Api2cartProductLink::query()->updateOrCreate([
             'api2cart_connection_id' => $connection->getKey(),
-            'api2cart_product_id' => $product['id'],
+            'api2cart_product_id'    => $product['id'],
         ], [
             'api2cart_product_type' => 'product',
-            'last_fetched_at' => now(),
-            'last_fetched_data' => json_encode($product),
+            'last_fetched_at'       => now(),
+            'last_fetched_data'     => json_encode($product),
         ]);
     }
 
     /**
      * @param $date
+     *
      * @return string
      */
     private function formatDateForApi2cart($date): string

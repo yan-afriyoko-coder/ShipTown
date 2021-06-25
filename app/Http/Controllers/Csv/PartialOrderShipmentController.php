@@ -15,10 +15,10 @@ class PartialOrderShipmentController extends Controller
     public function index(Request $request)
     {
         $query = OrderShipment::select([
-                'orders.status_code',
-                'orders.order_number',
-                'order_shipments.shipping_number'
-            ])
+            'orders.status_code',
+            'orders.order_number',
+            'order_shipments.shipping_number',
+        ])
             ->join('orders', 'orders.id', '=', 'order_shipments.order_id')
             ->whereDate('order_shipments.created_at', '=', Carbon::today())
             ->where('orders.status_code', '<>', 'ready')

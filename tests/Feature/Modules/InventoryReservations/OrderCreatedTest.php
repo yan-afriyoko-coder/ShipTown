@@ -11,16 +11,12 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
- * Class OrderCreatedTest
- * @package Tests\Feature\Modules\InventoryReservations
+ * Class OrderCreatedTest.
  */
 class OrderCreatedTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     *
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -36,8 +32,8 @@ class OrderCreatedTest extends TestCase
     public function test_if_reserves_quantity_when_order_created()
     {
         factory(OrderStatus::class)->create([
-            'code' => 'new',
-            'name' => 'new',
+            'code'           => 'new',
+            'name'           => 'new',
             'reserves_stock' => true,
         ]);
 
@@ -49,15 +45,15 @@ class OrderCreatedTest extends TestCase
 
         $data = [
             'order_number' => '123456',
-            'status_code' => 'new',
-            'products' => [
+            'status_code'  => 'new',
+            'products'     => [
                 [
-                    'sku' => $product->sku,
-                    'name' => $product->name,
+                    'sku'      => $product->sku,
+                    'name'     => $product->name,
                     'quantity' => $quantityOrdered,
-                    'price' => $product->price,
-                ]
-            ]
+                    'price'    => $product->price,
+                ],
+            ],
         ];
 
         $response = $this->postJson('api/orders', $data);

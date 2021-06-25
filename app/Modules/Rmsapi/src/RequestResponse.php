@@ -17,6 +17,7 @@ class RequestResponse
 
     /**
      * Api2CartResponse constructor.
+     *
      * @param ResponseInterface $response
      */
     public function __construct(ResponseInterface $response)
@@ -49,7 +50,7 @@ class RequestResponse
      */
     public function isSuccess()
     {
-        return ($this->response->getStatusCode() == 200);
+        return $this->response->getStatusCode() == 200;
     }
 
     /**
@@ -73,6 +74,6 @@ class RequestResponse
      */
     public function getResult()
     {
-        return $this->asArray()["data"];
+        return $this->asArray()['data'];
     }
 }

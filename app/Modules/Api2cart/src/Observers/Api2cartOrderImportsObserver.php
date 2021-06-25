@@ -10,7 +10,8 @@ class Api2cartOrderImportsObserver
     /**
      * Handle the api2cart order imports "created" event.
      *
-     * @param  Api2cartOrderImports  $api2cartOrderImports
+     * @param Api2cartOrderImports $api2cartOrderImports
+     *
      * @return void
      */
     public function created(Api2cartOrderImports $api2cartOrderImports)
