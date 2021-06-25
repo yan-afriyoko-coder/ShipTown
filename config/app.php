@@ -210,7 +210,7 @@ return [
         App\Modules\AutoStatusPicking\src\EventServiceProviderBase::class,
         App\Modules\AutoStatusPackingWeb\src\EventServiceProviderBase::class,
         App\Modules\AutoStatusReady\src\EventServiceProviderBase::class,
-        App\Modules\AutoStatus\src\EventServiceProvider::class,
+        App\Modules\AutoClose\src\AutoCloseServiceProvider::class,
 
         // 3rd party integrations
         // order SHOULD not be important
