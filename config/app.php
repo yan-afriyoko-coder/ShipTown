@@ -205,7 +205,7 @@ return [
         App\Modules\AutoPilot\src\AutoPilotServiceProvider::class,
         App\Modules\AutoTags\src\EventServiceProviderBase::class,
         App\Modules\AutoStatusPaid\src\EventServiceProviderBase::class,
-        App\Modules\AutoStatusPackingWarehouse\src\EventServiceProviderBase::class,
+        App\Modules\AutoStatusPackingWarehouse\src\AutoPackingWarehouseServiceProvider::class,
         App\Modules\AutoStatusSingleLineOrders\src\EventServiceProviderBase::class,
         App\Modules\AutoStatusPicking\src\EventServiceProviderBase::class,
         App\Modules\AutoStatusPackingWeb\src\EventServiceProviderBase::class,

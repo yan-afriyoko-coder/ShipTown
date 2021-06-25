@@ -3,6 +3,7 @@
 namespace App\Modules\AutoStatusPackingWarehouse\src\Listeners\ActiveOrdersCheckEvent;
 
 use App\Events\Order\ActiveOrderCheckEvent;
+use App\Modules\AutoStatusPackingWarehouse\src\Jobs\SetStatusPackingWarehouseJob;
 use App\Services\OrderService;
 
 /**
@@ -19,18 +20,6 @@ class SetStatusPackingWarehouseListener
      */
     public function handle(ActiveOrderCheckEvent $event)
     {
-        $sourceLocationId = 99;
-        $newOrderStatus = 'packing_warehouse';
-
-        $order = $event->getOrder();
-
-        if ($order->status_code !== 'paid') {
-            return;
-        }
-
-        if (OrderService::canFulfill($order, $sourceLocationId)) {
-            $order->log("Possible to fulfill from location $sourceLocationId, changing order status");
-            $order->update(['status_code' => $newOrderStatus]);
-        }
+        SetStatusPackingWarehouseJob::dispatchNow($event->getOrder());
     }
 }
