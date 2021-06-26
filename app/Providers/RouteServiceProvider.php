@@ -42,39 +42,88 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        $this->mapApiRoutes();
+        $this->mapPublicRoutes();
 
-        $this->mapWebRoutes();
+        $this->mapUserWebRoutes();
 
-        //
+        $this->mapUserApiRoutes();
+
+        $this->mapAdminWebRoutes();
+
+        $this->mapAdminApiRoutes();
     }
 
     /**
-     * Define the "web" routes for the application.
+     * Define the "public" web routes for the application.
+     *
+     * These routes are PUBLICLY accessible !!!!
+     * These routes all receive session state, CSRF protection, etc.
+     *
+     * @return void
+     */
+    protected function mapPublicRoutes()
+    {
+        Route::middleware(['web'])
+             ->namespace($this->namespace)
+             ->group(base_path('routes/public.php'));
+    }
+
+    /**
+     * Define the "web" user routes for the application.
      *
      * These routes all receive session state, CSRF protection, etc.
      *
      * @return void
      */
-    protected function mapWebRoutes()
+    protected function mapUserWebRoutes()
     {
-        Route::middleware('web')
+        Route::middleware(['web', 'auth'])
              ->namespace($this->namespace)
-             ->group(base_path('routes/web.php'));
+             ->group(base_path('routes/user/web.php'));
     }
 
     /**
-     * Define the "api" routes for the application.
+     * Define the "web" admin routes for the application.
+     *
+     * These routes all receive session state, CSRF protection, etc.
+     *
+     * @return void
+     */
+    protected function mapAdminWebRoutes()
+    {
+        Route::middleware(['web', 'auth', 'role:admin'])
+            ->prefix('admin')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/admin/web.php'));
+    }
+
+    /**
+     * Define the "api" user routes for the application.
      *
      * These routes are typically stateless.
      *
      * @return void
      */
-    protected function mapApiRoutes()
+    protected function mapUserApiRoutes()
     {
-        Route::prefix('api')
-             ->middleware('api')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/api.php'));
+        Route::middleware(['api', 'auth:api'])
+            ->prefix('api')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/user/api.php'));
+    }
+
+    /**
+     * Define the "api" admin routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapAdminApiRoutes()
+    {
+        Route::middleware(['api', 'auth:api', 'role:admin'])
+            ->prefix('api')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/admin/api.php'));
     }
 }
