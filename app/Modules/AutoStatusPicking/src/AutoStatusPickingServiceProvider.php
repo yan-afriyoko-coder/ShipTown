@@ -10,8 +10,6 @@ use App\Modules\BaseModuleServiceProvider;
  */
 class AutoStatusPickingServiceProvider extends BaseModuleServiceProvider
 {
-    public bool $autoEnable = false;
-
     /**
      * @var string
      */
