@@ -6,9 +6,7 @@ use App\Events\Order\ActiveOrderCheckEvent;
 use App\Models\Order;
 use App\Modules\AutoStatusPackingWarehouse\src\AutoPackingWarehouseServiceProvider;
 use App\Modules\AutoStatusPackingWarehouse\src\Jobs\SetStatusPackingWarehouseJob;
-use App\Modules\AutoStatusPackingWarehouse\src\Listeners\ActiveOrdersCheckEvent\SetStatusPackingWarehouseListener;
 use Illuminate\Support\Facades\Bus;
-use Mockery;
 use Tests\TestCase;
 
 class AutoPackingWarehouseServiceProviderTest extends TestCase

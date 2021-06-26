@@ -4,7 +4,6 @@ namespace App\Modules\AutoStatusPackingWarehouse\src\Listeners\ActiveOrdersCheck
 
 use App\Events\Order\ActiveOrderCheckEvent;
 use App\Modules\AutoStatusPackingWarehouse\src\Jobs\SetStatusPackingWarehouseJob;
-use App\Services\OrderService;
 
 /**
  * Class SetPackingWebStatus.
