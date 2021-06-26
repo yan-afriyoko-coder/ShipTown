@@ -209,7 +209,7 @@ return [
         App\Modules\AutoStatusSingleLineOrders\src\EventServiceProviderBase::class,
         App\Modules\AutoStatusPicking\src\AutoStatusPickingServiceProvider::class,
         App\Modules\AutoStatusPackingWeb\src\AutoPackingWebServiceProvider::class,
-        App\Modules\AutoStatusReady\src\EventServiceProviderBase::class,
+        App\Modules\AutoStatusReady\src\AutoStatusReadyServiceProvider::class,
         App\Modules\AutoClose\src\AutoCloseServiceProvider::class,
 
         // 3rd party integrations
