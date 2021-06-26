@@ -54,8 +54,9 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Define the "web" routes for the application.
+     * Define the "public" web routes for the application.
      *
+     * These routes are PUBLICLY accessible !!!!
      * These routes all receive session state, CSRF protection, etc.
      *
      * @return void
@@ -68,7 +69,7 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Define the "web" routes for the application.
+     * Define the "web" user routes for the application.
      *
      * These routes all receive session state, CSRF protection, etc.
      *
@@ -82,7 +83,7 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Define the "web" routes for the application.
+     * Define the "web" admin routes for the application.
      *
      * These routes all receive session state, CSRF protection, etc.
      *
@@ -97,7 +98,7 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Define the "api" routes for the application.
+     * Define the "api" user routes for the application.
      *
      * These routes are typically stateless.
      *
@@ -112,7 +113,7 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Define the "api" routes for the application.
+     * Define the "api" admin routes for the application.
      *
      * These routes are typically stateless.
      *
