@@ -12,8 +12,7 @@ use Illuminate\Queue\SerializesModels;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 /**
- * Class RefillOldOrdersToPickingJob
- * @package App\Modules\AutoStatusReady\src\Jobs
+ * Class RefillOldOrdersToPickingJob.
  */
 class SetReadyStatusWhenPackedJob implements ShouldQueue
 {
