@@ -455,7 +455,10 @@ export default {
                         }
                     }
                 })
-                .finally(this.hideLoading);
+                .finally(() =>{
+                        this.hideLoading();
+                    }
+                );
         },
     },
 };

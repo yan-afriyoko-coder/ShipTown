@@ -117,20 +117,20 @@
                 } else {
                     this.$refs.createForm.submit();
                 }
+
+                this.getConfiguration();
             },
 
             handleSaved(data) {
                 this.configuration = data;
-
                 this.$nextTick(() => {
                     if (this.has_configuration) {
                         this.$refs.updateFormModal.hide();
                     } else {
                         this.$refs.createFormModal.hide();
+                        this.has_configuration = true;
                     }
                 });
-
-                this.getConfiguration();
             },
 
             handleDelete(id) {
