@@ -10,7 +10,6 @@ use App\Modules\BaseModuleServiceProvider;
  */
 class AutoStatusPaidServiceProvider extends BaseModuleServiceProvider
 {
-    public bool $autoEnable = false;
     /**
      * @var string
      */

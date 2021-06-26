@@ -10,8 +10,6 @@ use App\Modules\BaseModuleServiceProvider;
  */
 class AutoPackingWarehouseServiceProvider extends BaseModuleServiceProvider
 {
-    public bool $autoEnable = false;
-
     /**
      * @var string
      */

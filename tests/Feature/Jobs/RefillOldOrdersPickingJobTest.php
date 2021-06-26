@@ -4,7 +4,7 @@ namespace Tests\Feature\Jobs;
 
 use App\Models\Order;
 use App\Models\OrderProduct;
-use App\Modules\AutoStatusPicking\src\Jobs\RefillOldOrdersToPickingJob;
+use App\Modules\AutoStatusPicking\src\Jobs\RefillPickingIfEmptyJob;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -31,7 +31,7 @@ class RefillOldOrdersPickingJobTest extends TestCase
 
         $order->update(['status_code' => 'paid']);
 
-        RefillOldOrdersToPickingJob::dispatchNow();
+        RefillPickingIfEmptyJob::dispatchNow();
 
         $this->assertDatabaseHas('orders', ['status_code' => 'picking']);
     }
