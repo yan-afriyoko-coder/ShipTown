@@ -1,5 +1,5 @@
 @auth
-    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm mb-0">
         <div class="container">
             <a class="navbar-brand d-none d-md-block" href="{{ url('/') }}">
                 PM
