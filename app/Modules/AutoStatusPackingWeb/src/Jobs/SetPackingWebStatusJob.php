@@ -3,7 +3,6 @@
 namespace App\Modules\AutoStatusPackingWeb\src\Jobs;
 
 use App\Models\Order;
-use App\Services\OrderService;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
