@@ -8,8 +8,10 @@ use App\Modules\BaseModuleServiceProvider;
 /**
  * Class EventServiceProviderBase.
  */
-class EventServiceProviderBase extends BaseModuleServiceProvider
+class AutoPackingWebServiceProvider extends BaseModuleServiceProvider
 {
+    public bool $autoEnable = false;
+
     /**
      * @var string
      */

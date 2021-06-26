@@ -208,7 +208,7 @@ return [
         App\Modules\AutoStatusPackingWarehouse\src\AutoPackingWarehouseServiceProvider::class,
         App\Modules\AutoStatusSingleLineOrders\src\EventServiceProviderBase::class,
         App\Modules\AutoStatusPicking\src\EventServiceProviderBase::class,
-        App\Modules\AutoStatusPackingWeb\src\EventServiceProviderBase::class,
+        App\Modules\AutoStatusPackingWeb\src\AutoPackingWebServiceProvider::class,
         App\Modules\AutoStatusReady\src\EventServiceProviderBase::class,
         App\Modules\AutoClose\src\AutoCloseServiceProvider::class,
 
