@@ -8,19 +8,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\ProductPrice
+ * App\Models\ProductPrice.
  *
- * @property int $id
- * @property int $product_id
- * @property int $location_id
- * @property string $price
- * @property string $sale_price
- * @property string $sale_price_start_date
- * @property string $sale_price_end_date
+ * @property int         $id
+ * @property int         $product_id
+ * @property int         $location_id
+ * @property string      $price
+ * @property string      $sale_price
+ * @property string      $sale_price_start_date
+ * @property string      $sale_price_end_date
  * @property string|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property Product $product
+ * @property Product     $product
+ *
  * @method static Builder|ProductPrice newModelQuery()
  * @method static Builder|ProductPrice newQuery()
  * @method static Builder|ProductPrice query()
@@ -44,7 +45,7 @@ class ProductPrice extends BaseModel
         'price',
         'sale_price',
         'sale_price_start_date',
-        'sale_price_end_date'
+        'sale_price_end_date',
     ];
 
     // we use attributes to set default values
@@ -52,10 +53,10 @@ class ProductPrice extends BaseModel
     // as this is then not populated
     // correctly to events
     protected $attributes = [
-        'price' => 99999,
-        "sale_price" => 99999,
-        "sale_price_start_date" => '2001-01-01 00:00:00',
-        "sale_price_end_date" => '2001-01-01 00:00:00',
+        'price'                 => 99999,
+        'sale_price'            => 99999,
+        'sale_price_start_date' => '2001-01-01 00:00:00',
+        'sale_price_end_date'   => '2001-01-01 00:00:00',
     ];
 
     /**

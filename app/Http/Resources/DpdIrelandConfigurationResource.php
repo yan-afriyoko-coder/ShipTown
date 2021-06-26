@@ -9,24 +9,27 @@ class DpdIrelandConfigurationResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
     {
         return [
-            'api_username' => $this->user,
-            'api_password' => '*****',
-            'api_token' => '*****',
-            'collection_contact' => $this->contact,
-            'collection_telephone' => $this->telephone,
-            'collection_email' => $this->email,
-            'collection_business_name' => $this->business_name,
+            'id'                        => $this->id,
+            'api_username'              => $this->user,
+            'api_password'              => '*****',
+            'api_token'                 => '*****',
+            'api_live'                  => $this->live,
+            'collection_contact'        => $this->contact,
+            'collection_telephone'      => $this->contact_telephone,
+            'collection_email'          => $this->contact_email,
+            'collection_business_name'  => $this->business_name,
             'collection_address_line_1' => $this->address_line_1,
             'collection_address_line_2' => $this->address_line_2,
             'collection_address_line_3' => $this->address_line_3,
             'collection_address_line_4' => $this->address_line_4,
-            'collection_country_code' => $this->country_code,
+            'collection_country_code'   => $this->country_code,
         ];
     }
 }

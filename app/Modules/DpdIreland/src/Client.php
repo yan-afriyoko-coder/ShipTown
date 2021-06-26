@@ -9,33 +9,29 @@ use Illuminate\Support\Facades\Cache;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class Client
- * @package App\Modules\Dpd\src
+ * Class Client.
  */
 class Client
 {
-    /**
-     *
-     */
     const API_URL_LIVE = 'https://papi.dpd.ie';
 
     /**
-     * DPD Pre Production API URL
+     * DPD Pre Production API URL.
      */
     const API_URL_TEST = 'https://pre-prod-papi.dpd.ie';
 
     /**
-     * Authorization endpoint
+     * Authorization endpoint.
      */
     const COMMON_API_AUTHORIZE = '/common/api/authorize';
 
     /**
-     * PreAdvice API Endpoint
+     * PreAdvice API Endpoint.
      */
     const COMMON_API_PREADVICE = '/common/api/preadvice';
 
     /**
-     * Cache key name used for caching authorization
+     * Cache key name used for caching authorization.
      */
     const AUTHORIZATION_CACHE_KEY = 'dpd.authorization';
 
@@ -51,15 +47,16 @@ class Client
 
     /**
      * @param string $xml
+     *
      * @return ResponseInterface
      */
     public static function postXml(string $xml): ResponseInterface
     {
         $options = [
             'headers' => [
-                'Authorization' => 'Bearer ' . self::getAuthorizationToken(),
-                'Content-Type' => 'application/xml; charset=UTF8',
-                'Accept' => 'application/xml',
+                'Authorization' => 'Bearer '.self::getAuthorizationToken(),
+                'Content-Type'  => 'application/xml; charset=UTF8',
+                'Accept'        => 'application/xml',
             ],
             'body' => $xml,
         ];
@@ -78,7 +75,7 @@ class Client
     }
 
     /**
-     * Using cache we will not need to reauthorize every time
+     * Using cache we will not need to reauthorize every time.
      *
      * @return array
      */
@@ -88,6 +85,7 @@ class Client
 
         if ($cachedAuthorization) {
             $cachedAuthorization['from_cache'] = true;
+
             return $cachedAuthorization;
         }
 
@@ -115,25 +113,25 @@ class Client
         $config = DpdIreland::firstOrFail();
 
         $body = [
-            'User' => $config->user,
+            'User'     => $config->user,
             'Password' => $config->password,
-            'Type' => 'CUST',
+            'Type'     => 'CUST',
         ];
 
         $headers = [
-            'Authorization' => 'Bearer ' . $config->token,
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
+            'Authorization' => 'Bearer '.$config->token,
+            'Content-Type'  => 'application/json',
+            'Accept'        => 'application/json',
         ];
 
         $authorizationResponse = self::getGuzzleClient()->post(self::COMMON_API_AUTHORIZE, [
             'headers' => $headers,
-            'json' => $body,
+            'json'    => $body,
         ]);
 
         return [
-            'from_cache' => false,
-            'authorization_time' => Carbon::now(),
+            'from_cache'             => false,
+            'authorization_time'     => Carbon::now(),
             'authorization_response' => json_decode($authorizationResponse->getBody()->getContents(), true),
         ];
     }
@@ -144,8 +142,8 @@ class Client
     public static function getGuzzleClient(): GuzzleClient
     {
         return new GuzzleClient([
-            'base_uri' => self::getBaseUrl(),
-            'timeout' => 60,
+            'base_uri'   => self::getBaseUrl(),
+            'timeout'    => 60,
             'exceptions' => true,
         ]);
     }

@@ -8,17 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\RmsapiProductImport
+ * App\Models\RmsapiProductImport.
  *
- * @property int $id
- * @property int $connection_id
+ * @property int         $id
+ * @property int         $connection_id
  * @property string|null $batch_uuid
  * @property string|null $when_processed
- * @property int|null $product_id
+ * @property int|null    $product_id
  * @property string|null $sku
- * @property array $raw_import
+ * @property array       $raw_import
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|RmsapiProductImport newModelQuery()
  * @method static Builder|RmsapiProductImport newQuery()
  * @method static Builder|RmsapiProductImport query()
@@ -41,7 +42,7 @@ class RmsapiProductImport extends Model
         'when_processed',
         'product_id',
         'sku',
-        'raw_import'
+        'raw_import',
     ];
 
     protected $casts = [

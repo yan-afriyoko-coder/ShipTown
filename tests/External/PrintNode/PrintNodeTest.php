@@ -58,8 +58,7 @@ class PrintNodeTest extends TestCase
 
         $this->actingAs($user, 'api')->postJson('api/settings/modules/printnode/printjobs', [
             'printer_id' => $printers->first()['id'],
-            'pdf_url' => 'https://api.printnode.com/static/test/pdf/label_6in_x_4in.pdf'
+            'pdf_url'    => 'https://api.printnode.com/static/test/pdf/label_6in_x_4in.pdf',
         ]);
     }
-
 }

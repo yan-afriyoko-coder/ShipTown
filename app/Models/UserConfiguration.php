@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\UserConfiguration
+ * App\Models\UserConfiguration.
  *
  * @method static Builder|UserConfiguration newModelQuery()
  * @method static Builder|UserConfiguration newQuery()
@@ -17,10 +17,10 @@ use Illuminate\Database\Eloquent\Model;
 class UserConfiguration extends Model
 {
     protected $fillable = [
-        'config'
+        'config',
     ];
 
     protected $casts = [
-        'config' => 'array'
+        'config' => 'array',
     ];
 }

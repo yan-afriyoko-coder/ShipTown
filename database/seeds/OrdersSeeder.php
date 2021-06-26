@@ -1,10 +1,7 @@
 <?php
 
 use App\Models\Order;
-use App\Models\OrderAddress;
-use App\Models\OrderProduct;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Arr;
 
 class OrdersSeeder extends Seeder
 {

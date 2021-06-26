@@ -15,17 +15,17 @@
             <div class="list-group">
                 <a href="{{ route('settings.general') }}" class="setting-list">
                     <div class="setting-icon">
-                        <font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon>
+                        <font-awesome-icon icon="cog" class="fa-sm"></font-awesome-icon>
                     </div>
                     <div class="setting-body">
                         <div class="setting-title">General</div>
-                        <div>View and setting-desc application settings</div>
+                        <div class="setting-desc">View and setting-desc application settings</div>
                     </div>
                 </a>
 
                 <a href="{{ route('users') }}" class="setting-list">
                     <div class="setting-icon">
-                        <font-awesome-icon icon="user-edit" class="fa-lg"></font-awesome-icon>
+                        <font-awesome-icon icon="user-edit" class="fa-sm"></font-awesome-icon>
                     </div>
                     <div class="setting-body">
                         <div class="setting-title">Users</div>
@@ -35,7 +35,7 @@
 
                 <a href="{{ route('settings.printnode') }}" class="setting-list">
                     <div class="setting-icon">
-                        <font-awesome-icon icon="print" class="fa-lg"></font-awesome-icon>
+                        <font-awesome-icon icon="print" class="fa-sm"></font-awesome-icon>
                     </div>
                     <div class="setting-body">
                         <div class="setting-title">PrintNode</div>
@@ -45,7 +45,7 @@
 
                 <a href="{{ route('settings.rmsapi') }}" class="setting-list">
                     <div class="setting-icon">
-                        <font-awesome-icon icon="code" class="fa-lg"></font-awesome-icon>
+                        <font-awesome-icon icon="code" class="fa-sm"></font-awesome-icon>
                     </div>
                     <div class="setting-body">
                         <div class="setting-title">Microsoft Dynamic RMS 2.0 API</div>
@@ -55,7 +55,7 @@
 
                 <a href="{{ route('settings.dpd-ireland') }}" class="setting-list">
                     <div class="setting-icon">
-                        <font-awesome-icon icon="truck" class="fa-lg"></font-awesome-icon>
+                        <font-awesome-icon icon="truck" class="fa-sm"></font-awesome-icon>
                     </div>
                     <div class="setting-body">
                         <div class="setting-title">DPD Ireland API</div>
@@ -75,7 +75,7 @@
 
                 <a href="{{ route('settings.api2cart') }}" class="setting-list">
                     <div class="setting-icon">
-                        <font-awesome-icon icon="shopping-cart" class="fa-lg"></font-awesome-icon>
+                        <font-awesome-icon icon="shopping-cart" class="fa-sm"></font-awesome-icon>
                     </div>
                     <div class="setting-body">
                         <div class="setting-title">Api2cart</div>
@@ -85,7 +85,7 @@
 
                 <a href="{{ route('settings.api') }}" class="setting-list">
                     <div class="setting-icon">
-                        <font-awesome-icon icon="key" class="fa-lg"></font-awesome-icon>
+                        <font-awesome-icon icon="key" class="fa-sm"></font-awesome-icon>
                     </div>
                     <div class="setting-body">
                         <div class="setting-title">API</div>
@@ -95,7 +95,7 @@
 
                 <a href="{{ url('admin/tools/queue-monitor') }}" target="_blank" class="setting-list">
                     <div class="setting-icon">
-                        <font-awesome-icon icon="desktop" class="fa-lg"></font-awesome-icon>
+                        <font-awesome-icon icon="desktop" class="fa-sm"></font-awesome-icon>
                     </div>
                     <div class="setting-body">
                         <div class="setting-title">Queue Monitor</div>
@@ -105,7 +105,7 @@
 
                 <a href="{{ url('admin/tools/log-viewer') }}" target="_blank" class="setting-list">
                     <div class="setting-icon">
-                        <font-awesome-icon icon="clipboard-list" class="fa-lg"></font-awesome-icon>
+                        <font-awesome-icon icon="clipboard-list" class="fa-sm"></font-awesome-icon>
                     </div>
                     <div class="setting-body">
                         <div class="setting-title">Log Viewer</div>
@@ -122,13 +122,15 @@
 @section('css')
     <style>
         .setting-list{
-            padding: 0.75rem 1.25rem;
+            border-radius: 1px;
+            padding: 0.5rem 1rem;
             background-color: #fff;
             border: 1px solid rgba(0, 0, 0, 0.125);
             width: 100%;
             color: #495057;
             display: flex;
             align-items: flex-start;
+            margin-bottom: 5px;
         }
 
         .setting-list:hover, .setting-list:focus {
@@ -151,13 +153,14 @@
         .setting-title{
             color: #3490dc;
             font-weight: bolder;
-            font-size: 1.125rem;
-            line-height: 1.2;
-            margin-bottom: 0.5rem;
+            /*font-size: 1rem;*/
+            /*line-height: 1.2;*/
+            margin-bottom: 2px;
         }
 
         .setting-desc{
             color: #6c757d;
+            font-size: 10pt;c
         }
     </style>
 @endsection

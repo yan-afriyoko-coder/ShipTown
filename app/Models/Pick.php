@@ -3,10 +3,8 @@
 namespace App\Models;
 
 use App\User;
-use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
@@ -15,17 +13,17 @@ use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
- * App\Models\Pick
+ * App\Models\Pick.
  *
- * @property int $id
- * @property int|null $user_id
- * @property int|null $product_id
- * @property string $sku_ordered
- * @property string $name_ordered
- * @property string $quantity_picked
- * @property string $quantity_skipped_picking
- * @property string $quantity_required
- * @property int|null $picker_user_id
+ * @property int         $id
+ * @property int|null    $user_id
+ * @property int|null    $product_id
+ * @property string      $sku_ordered
+ * @property string      $name_ordered
+ * @property string      $quantity_picked
+ * @property string      $quantity_skipped_picking
+ * @property string      $quantity_required
+ * @property int|null    $picker_user_id
  * @property string|null $picked_at
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
@@ -34,6 +32,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property-read int|null $pick_requests_count
  * @property-read Product|null $product
  * @property-read User|null $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Pick addInventorySource($inventory_location_id)
  * @method static \Illuminate\Database\Eloquent\Builder|Pick minimumShelfLocation($currentLocation)
  * @method static \Illuminate\Database\Eloquent\Builder|Pick newModelQuery()
@@ -79,13 +78,14 @@ class Pick extends Model
         'quantity_picked',
         'quantity_skipped_picking',
         'picker_user_id',
-        'picked_at'
+        'picked_at',
     ];
 
     /**
      * @param Builder|QueryBuilder $query
      * @param $min
      * @param $max
+     *
      * @return Builder|QueryBuilder
      */
     public function scopeCreatedBetween($query, $min, $max)
@@ -95,7 +95,7 @@ class Pick extends Model
 
         return $query->whereBetween('picks.created_at', [
             $startingDateTime,
-            $endingDateTime
+            $endingDateTime,
         ]);
     }
 
@@ -119,9 +119,11 @@ class Pick extends Model
     {
         return $query->where('quantity_required', '>', 0);
     }
+
     /**
      * @param Builder $query
-     * @param boolean $in_stock
+     * @param bool    $in_stock
+     *
      * @return mixed
      */
     public function scopeWhereInStock($query, $in_stock)
@@ -135,7 +137,8 @@ class Pick extends Model
 
     /**
      * @param Builder $query
-     * @param string $currentLocation
+     * @param string  $currentLocation
+     *
      * @return Builder
      */
     public function scopeMinimumShelfLocation($query, $currentLocation)
@@ -145,7 +148,8 @@ class Pick extends Model
 
     /**
      * @param Builder $query
-     * @param int $inventory_location_id
+     * @param int     $inventory_location_id
+     *
      * @return Builder
      */
     public function scopeAddInventorySource($query, $inventory_location_id)
@@ -166,6 +170,7 @@ class Pick extends Model
 
     /**
      * @param $query
+     *
      * @return Builder
      */
     public function scopeWhereNotPicked($query)
@@ -175,6 +180,7 @@ class Pick extends Model
 
     /**
      * @param Builder $query
+     *
      * @return Builder
      */
     public function scopeWherePicked(Builder $query)
@@ -183,7 +189,7 @@ class Pick extends Model
     }
 
     /**
-     * @param User $picker
+     * @param User  $picker
      * @param float $quantity_picked
      */
     public function pick(User $picker, float $quantity_picked)
@@ -191,7 +197,7 @@ class Pick extends Model
         if ($quantity_picked == 0) {
             $this->update([
                 'picker_user_id' => null,
-                'picked_at' => null
+                'picked_at'      => null,
             ]);
 
             return;
@@ -199,17 +205,18 @@ class Pick extends Model
 
         // we do it in 2 separate calls so Picked & QuantityRequiredChanged event are dispatched correctly
         $this->update([
-            'quantity_required' => $quantity_picked
+            'quantity_required' => $quantity_picked,
         ]);
 
         $this->update([
             'picker_user_id' => $picker->getKey(),
-            'picked_at' => now()
+            'picked_at'      => now(),
         ]);
     }
 
     /**
      * @param $name
+     *
      * @return bool
      */
     public function isAttributeValueChanged($name)
@@ -227,24 +234,26 @@ class Pick extends Model
 
     /**
      * @param QueryBuilder $query
-     * @param double $min
-     * @param double $max
+     * @param float        $min
+     * @param float        $max
+     *
      * @return QueryBuilder
      */
     public function scopeQuantityPickedBetween(QueryBuilder $query, $min, $max): QueryBuilder
     {
-        return $query->whereBetween('quantity_picked', [$min,$max]);
+        return $query->whereBetween('quantity_picked', [$min, $max]);
     }
 
     /**
      * @param QueryBuilder $query
-     * @param double $min
-     * @param double $max
+     * @param float        $min
+     * @param float        $max
+     *
      * @return QueryBuilder
      */
     public function scopeQuantitySkippedBetween(QueryBuilder $query, $min, $max): QueryBuilder
     {
-        return $query->whereBetween('quantity_skipped_picking', [$min,$max]);
+        return $query->whereBetween('quantity_skipped_picking', [$min, $max]);
     }
 
     /**

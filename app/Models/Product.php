@@ -22,22 +22,22 @@ use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\Tags\Tag;
 
 /**
- * App\Models\Product
+ * App\Models\Product.
  *
- * @property int $id
- * @property string $sku
- * @property string $name
- * @property float $price
- * @property float $sale_price
- * @property Carbon $sale_price_start_date
- * @property Carbon $sale_price_end_date
- * @property float $quantity
- * @property float $quantity_reserved
- * @property float $quantity_available
+ * @property int              $id
+ * @property string           $sku
+ * @property string           $name
+ * @property float            $price
+ * @property float            $sale_price
+ * @property Carbon           $sale_price_start_date
+ * @property Carbon           $sale_price_end_date
+ * @property float            $quantity
+ * @property float            $quantity_reserved
+ * @property float            $quantity_available
  * @property Collection|Tag[] $tags
- * @property Carbon|null $deleted_at
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property Carbon|null      $deleted_at
+ * @property Carbon|null      $created_at
+ * @property Carbon|null      $updated_at
  * @property-read Collection|Activity[] $activities
  * @property-read int|null $activities_count
  * @property-read Collection|ProductAlias[] $aliases
@@ -47,6 +47,7 @@ use Spatie\Tags\Tag;
  * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
  * @property-read int|null $tags_count
+ *
  * @method static Builder|Product addInventorySource($inventory_location_id)
  * @method static Builder|Product newModelQuery()
  * @method static Builder|Product newQuery()
@@ -73,16 +74,21 @@ use Spatie\Tags\Tag;
  * @method static Builder|Product withAnyTags($tags, $type = null)
  * @method static Builder|Product withAnyTagsOfAnyType($tags)
  * @method static Builder|Product withoutAllTags($tags, $type = null)
+ *
  * @property-read Collection|ProductPrice[] $prices
  * @property-read int|null $prices_count
+ *
  * @method static Builder|Product hasTags($tags)
  * @method static Builder|Product whereQuantityAvailable($value)
  * @mixin \Eloquent
  */
 class Product extends BaseModel
 {
-    use LogsActivityTrait, HasTagsTrait, SoftDeletes;
-    use Notifiable, HasManyKeyByRelationship;
+    use LogsActivityTrait;
+    use HasTagsTrait;
+    use SoftDeletes;
+    use Notifiable;
+    use HasManyKeyByRelationship;
 
     protected static $logAttributes = [
         'quantity',
@@ -91,14 +97,14 @@ class Product extends BaseModel
     ];
 
     protected $fillable = [
-        "sku",
-        "name",
-        "price",
-        "sale_price",
-        "sale_price_start_date",
-        "sale_price_end_date",
-        "quantity_reserved",
-        "quantity"
+        'sku',
+        'name',
+        'price',
+        'sale_price',
+        'sale_price_start_date',
+        'sale_price_end_date',
+        'quantity_reserved',
+        'quantity',
     ];
 
     // we use attributes to set default values
@@ -106,24 +112,24 @@ class Product extends BaseModel
     // as this is then not populated
     // correctly to events
     protected $attributes = [
-        'name' => '',
-        'price' => 0,
-        "sale_price" => 0,
-        "sale_price_start_date" => '2001-01-01 00:00:00',
-        "sale_price_end_date" => '2001-01-01 00:00:00',
-        "quantity" => 0,
-        'quantity_reserved' => 0,
-        'quantity_available' => 0,
+        'name'                  => '',
+        'price'                 => 0,
+        'sale_price'            => 0,
+        'sale_price_start_date' => '2001-01-01 00:00:00',
+        'sale_price_end_date'   => '2001-01-01 00:00:00',
+        'quantity'              => 0,
+        'quantity_reserved'     => 0,
+        'quantity_available'    => 0,
     ];
 
     protected $dates = [
         'sale_price_start_date',
-        'sale_price_end_date'
+        'sale_price_end_date',
     ];
 
     protected $casts = [
-        "quantity" => 'float',
-        'quantity_reserved' => 'float',
+        'quantity'           => 'float',
+        'quantity_reserved'  => 'float',
         'quantity_available' => 'float',
     ];
 
@@ -160,12 +166,12 @@ class Product extends BaseModel
                 'sku',
                 'name',
                 'price',
-                'quantity'
+                'quantity',
             ])
             ->allowedIncludes([
                 'inventory',
                 'aliases',
-                'tags'
+                'tags',
             ]);
     }
 
@@ -180,14 +186,17 @@ class Product extends BaseModel
         $this->attributes['quantity'] = $value;
         $this->quantity_available = $this->quantity - $this->quantity_reserved;
     }
+
     /**
      * @param float $quantity
+     *
      * @return $this
      */
     public function reserveStock(float $quantity): Product
     {
         $this->quantity_reserved += $quantity;
         $this->save();
+
         return $this;
     }
 
@@ -209,21 +218,23 @@ class Product extends BaseModel
 
     /**
      * @param \Illuminate\Database\Query\Builder $query
-     * @param string $text
+     * @param string                             $text
+     *
      * @return \Illuminate\Database\Query\Builder
      */
     public function scopeWhereHasText($query, $text)
     {
-        return $query->where('sku', 'like', '%' . $text . '%')
-            ->orWhere('name', 'like', '%' . $text . '%')
+        return $query->where('sku', 'like', '%'.$text.'%')
+            ->orWhere('name', 'like', '%'.$text.'%')
             ->orWhereHas('aliases', function (Builder $query) use ($text) {
-                    return $query->where('alias', '=', $text);
+                return $query->where('alias', '=', $text);
             });
     }
 
     /**
      * @param \Illuminate\Database\Query\Builder $query
-     * @param int $inventory_location_id
+     * @param int                                $inventory_location_id
+     *
      * @return \Illuminate\Database\Query\Builder
      */
     public function scopeAddInventorySource($query, $inventory_location_id)
@@ -286,11 +297,10 @@ class Product extends BaseModel
         return static::query()->where('sku', '=', $sku)->first();
     }
 
-
-
     /**
      * @param Builder $query
-     * @param string $skuOrAlias
+     * @param string  $skuOrAlias
+     *
      * @return Builder
      */
     public function scopeSkuOrAlias(Builder $query, string $skuOrAlias)

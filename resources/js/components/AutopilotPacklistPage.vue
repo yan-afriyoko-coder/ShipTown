@@ -13,9 +13,10 @@
 <script>
     import url from "../mixins/url";
     import api from "../mixins/api";
+    import beep from "../mixins/beep";
 
     export default {
-        mixins: [api, url],
+        mixins: [api, beep, url],
 
         data: function() {
             return {

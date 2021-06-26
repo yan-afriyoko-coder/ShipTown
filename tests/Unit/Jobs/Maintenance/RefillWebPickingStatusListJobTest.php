@@ -6,6 +6,7 @@ use App\Events\HourlyEvent;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
+use App\Modules\AutoStatusPicking\src\AutoStatusPickingServiceProvider;
 use App\Services\AutoPilot;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -21,6 +22,8 @@ class RefillWebPickingStatusListJobTest extends TestCase
      */
     public function testExample()
     {
+        AutoStatusPickingServiceProvider::enableModule();
+
         Product::query()->forceDelete();
         OrderProduct::query()->forceDelete();
         Order::query()->forceDelete();

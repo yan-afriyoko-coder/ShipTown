@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Services;
 
-use App\Models\Product;
 use App\Models\ProductAlias;
 use App\Services\ProductService;
 use App\User;

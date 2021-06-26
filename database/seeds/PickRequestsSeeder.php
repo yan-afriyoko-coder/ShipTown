@@ -11,6 +11,5 @@ class PickRequestsSeeder extends Seeder
      */
     public function run()
     {
-
     }
 }

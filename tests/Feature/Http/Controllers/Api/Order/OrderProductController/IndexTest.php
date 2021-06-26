@@ -22,8 +22,8 @@ class IndexTest extends TestCase
             'include'=> [
                 'order',
                 'product',
-                'product.aliases'
-            ]
+                'product.aliases',
+            ],
         ]));
 
         $response->assertOk();
@@ -43,12 +43,12 @@ class IndexTest extends TestCase
                     'quantity_ordered',
                     'quantity_picked',
                     'quantity_shipped',
-                    'order' => [],
+                    'order'   => [],
                     'product' => [
-                        'aliases' => []
+                        'aliases' => [],
                     ],
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 }

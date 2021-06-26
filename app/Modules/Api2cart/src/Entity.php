@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Modules\Api2cart\src;
 
 class Entity
@@ -12,8 +11,9 @@ class Entity
 
     /**
      * Entity constructor.
+     *
      * @param string $store_key
-     * @param bool $exceptions
+     * @param bool   $exceptions
      */
     public function __construct(string $store_key, bool $exceptions = true)
     {

@@ -12,16 +12,17 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
- * App\Models\OrderShipment
+ * App\Models\OrderShipment.
  *
- * @property int $id
- * @property int $order_id
- * @property string $shipping_number
- * @property int|null $user_id
+ * @property int         $id
+ * @property int         $order_id
+ * @property string      $shipping_number
+ * @property int|null    $user_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Order $order
  * @property-read User|null $user
+ *
  * @method static Builder|OrderShipment newModelQuery()
  * @method static Builder|OrderShipment newQuery()
  * @method static Builder|OrderShipment query()
@@ -32,7 +33,9 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static Builder|OrderShipment whereUpdatedAt($value)
  * @method static Builder|OrderShipment whereUserId($value)
  * @mixin Eloquent
+ *
  * @property-read mixed $age_in_days
+ *
  * @method static Builder|OrderShipment whereAgeInDaysBetween($ageInDaysFrom, $ageInDaysTo)
  */
 class OrderShipment extends Model
@@ -47,7 +50,7 @@ class OrderShipment extends Model
     ];
 
     protected $appends = [
-        'age_in_days'
+        'age_in_days',
     ];
 
     /**
@@ -57,6 +60,7 @@ class OrderShipment extends Model
     {
         return $this->belongsTo(Order::class);
     }
+
     /**
      * @return BelongsTo
      */
@@ -72,7 +76,7 @@ class OrderShipment extends Model
 
     public function scopeWhereAgeInDaysBetween($query, $ageInDaysFrom, $ageInDaysTo)
     {
-        return $query->whereRaw("DATEDIFF(now(), `". $this->getConnection()->getTablePrefix() . $this->getTable()."`.`created_at`) BETWEEN $ageInDaysFrom AND $ageInDaysTo");
+        return $query->whereRaw('DATEDIFF(now(), `'.$this->getConnection()->getTablePrefix().$this->getTable()."`.`created_at`) BETWEEN $ageInDaysFrom AND $ageInDaysTo");
     }
 
     /**
@@ -93,11 +97,11 @@ class OrderShipment extends Model
             ])
             ->allowedIncludes([
                 'order',
-                'user'
+                'user',
             ])
             ->defaultSort('-id')
             ->allowedSorts([
-                'id'
+                'id',
             ]);
     }
 }

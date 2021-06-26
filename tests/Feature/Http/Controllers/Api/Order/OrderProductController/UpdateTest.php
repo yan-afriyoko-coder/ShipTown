@@ -18,7 +18,7 @@ class UpdateTest extends TestCase
         $orderProduct = factory(OrderProduct::class)->create();
 
         $response = $this->actingAs($user, 'api')->putJson(route('order.products.update', [$orderProduct]), [
-            'quantity_shipped' => $orderProduct->quantity_to_ship
+            'quantity_shipped' => $orderProduct->quantity_to_ship,
         ]);
 
         $response->assertOk();
@@ -33,7 +33,7 @@ class UpdateTest extends TestCase
                 'quantity_ordered',
                 'quantity_picked',
                 'quantity_shipped',
-            ]
+            ],
         ]);
     }
 }

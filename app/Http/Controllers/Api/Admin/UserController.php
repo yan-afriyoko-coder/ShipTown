@@ -11,13 +11,12 @@ use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
- * Class UsersController
- * @package App\Http\Controllers\Api\Admin
+ * Class UsersController.
  */
 class UserController extends Controller
 {
     /**
-     * GET api/admin/users
+     * GET api/admin/users.
      *
      * @return AnonymousResourceCollection
      */
@@ -29,9 +28,10 @@ class UserController extends Controller
     }
 
     /**
-     * SHOW api/admin/users
+     * SHOW api/admin/users.
      *
      * @param User $user
+     *
      * @return UserResource
      */
     public function show(User $user): UserResource
@@ -40,10 +40,11 @@ class UserController extends Controller
     }
 
     /**
-     * PUT api/admin/users
+     * PUT api/admin/users.
      *
      * @param UserUpdateRequest $request
-     * @param User $user
+     * @param User              $user
+     *
      * @return UserResource
      */
     public function update(UserUpdateRequest $request, User $user): UserResource
@@ -62,16 +63,19 @@ class UserController extends Controller
     }
 
     /**
-     * DELETE api/admin/users
+     * DELETE api/admin/users.
      *
      * @param UserDeleteRequest $request
-     * @param User $user
-     * @return UserResource
+     * @param User              $user
+     *
      * @throws Exception
+     *
+     * @return UserResource
      */
     public function destroy(UserDeleteRequest $request, User $user)
     {
         $user->delete();
+
         return new UserResource($user);
     }
 }

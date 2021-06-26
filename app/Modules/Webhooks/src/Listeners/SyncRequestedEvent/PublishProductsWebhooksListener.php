@@ -11,6 +11,7 @@ class PublishProductsWebhooksListener
      * Handle the event.
      *
      * @param SyncRequestedEvent $event
+     *
      * @return void
      */
     public function handle(SyncRequestedEvent $event)

@@ -10,6 +10,7 @@ class AttachAwaitingPublishTagListener
      * Handle the event.
      *
      * @param ProductCreatedEvent $event
+     *
      * @return void
      */
     public function handle(ProductCreatedEvent $event)

@@ -6,7 +6,6 @@ use Psr\Http\Message\ResponseInterface;
 
 class RequestResponse
 {
-
     const RETURN_CODE_OK = 0;
     const RETURN_CODE_INCORRECT_API_KEY_OR_IP_ADDRESS = 2;
     const RETURN_CODE_EXCEEDED_CONCURRENT_API_REQUESTS_PER_STORE = 7;
@@ -25,6 +24,7 @@ class RequestResponse
 
     /**
      * Api2CartResponse constructor.
+     *
      * @param ResponseInterface $response
      */
     public function __construct(ResponseInterface $response)
@@ -81,7 +81,7 @@ class RequestResponse
      */
     public function getReturnCode()
     {
-        return $this->asArray()["return_code"];
+        return $this->asArray()['return_code'];
     }
 
     /**
@@ -89,7 +89,7 @@ class RequestResponse
      */
     public function getReturnMessage()
     {
-        return $this->asArray()["return_message"];
+        return $this->asArray()['return_message'];
     }
 
     /**
@@ -97,11 +97,12 @@ class RequestResponse
      */
     public function getResult()
     {
-        return $this->asArray()["result"];
+        return $this->asArray()['result'];
     }
 
     /**
      * @param int $return_code
+     *
      * @return bool
      */
     public function isReturnCode(int $return_code)

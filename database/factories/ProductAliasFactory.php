@@ -14,6 +14,6 @@ $factory->define(ProductAlias::class, function (Faker $faker) {
 
     return [
         'product_id' => $product->getKey(),
-        'alias' => $faker->ean13,
+        'alias'      => $faker->ean13,
     ];
 });

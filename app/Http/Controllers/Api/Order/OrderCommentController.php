@@ -10,14 +10,12 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
- * Class OrderCommentController
- * @package App\Http\Controllers\Api\Order
+ * Class OrderCommentController.
  *
  * @group Order
  */
 class OrderCommentController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -32,6 +30,7 @@ class OrderCommentController extends Controller
 
     /**
      * @param OrderCommentStoreRequest $request
+     *
      * @return AnonymousResourceCollection
      */
     public function store(OrderCommentStoreRequest $request): AnonymousResourceCollection

@@ -12,11 +12,13 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
 
 class FetchUpdatedProductsJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * @var RmsapiConnection
@@ -32,6 +34,7 @@ class FetchUpdatedProductsJob implements ShouldQueue
      * Create a new job instance.
      *
      * @param int $rmsapiConnectionId
+     *
      * @throws Exception
      */
     public function __construct(int $rmsapiConnectionId)
@@ -43,16 +46,17 @@ class FetchUpdatedProductsJob implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
      * @throws Exception
+     *
+     * @return void
      */
     public function handle()
     {
         logger('Starting Rmsapi FetchUpdatedProductsJob', ['connection_id' => $this->rmsapiConnection->getKey()]);
 
         $params = [
-            'per_page' => config('rmsapi.import.products.per_page'),
-            'order_by'=> 'db_change_stamp:asc',
+            'per_page'            => config('rmsapi.import.products.per_page'),
+            'order_by'            => 'db_change_stamp:asc',
             'min:db_change_stamp' => $this->rmsapiConnection->products_last_timestamp,
         ];
 
@@ -70,7 +74,7 @@ class FetchUpdatedProductsJob implements ShouldQueue
 
         info('Imported RMSAPI products', [
             'location_id' => $this->rmsapiConnection->location_id,
-            'count' => $response->asArray()['total'],
+            'count'       => $response->asArray()['total'],
         ]);
     }
 
@@ -84,10 +88,10 @@ class FetchUpdatedProductsJob implements ShouldQueue
         $insertData = $productsCollection->map(function ($product) use ($time) {
             return [
                 'connection_id' => $this->rmsapiConnection->getKey(),
-                'batch_uuid' => $this->batch_uuid,
-                'raw_import' => json_encode($product),
-                'created_at' => $time,
-                'updated_at' => $time,
+                'batch_uuid'    => $this->batch_uuid,
+                'raw_import'    => json_encode($product),
+                'created_at'    => $time,
+                'updated_at'    => $time,
             ];
         });
 
@@ -97,7 +101,7 @@ class FetchUpdatedProductsJob implements ShouldQueue
         RmsapiProductImport::query()->insert($insertData->toArray());
 
         RmsapiConnection::find($this->rmsapiConnection->getKey())->update([
-            'products_last_timestamp' => $productsCollection->last()['db_change_stamp']
+            'products_last_timestamp' => $productsCollection->last()['db_change_stamp'],
         ]);
     }
 }

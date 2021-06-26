@@ -14,7 +14,11 @@ use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class RefillOldOrdersToPickingJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use IsMonitored;
 
     private int $maxBatchSize;
     private $currentOrdersInProcessCount;
@@ -35,8 +39,8 @@ class RefillOldOrdersToPickingJob implements ShouldQueue
 
         info('Refilling "picking" status (old orders)', [
             'currently_in_process' => $this->currentOrdersInProcessCount,
-            'max_daily_allowed' => $this->maxBatchSize,
-            'ordersRequiredCount' => $this->ordersRequiredCount,
+            'max_daily_allowed'    => $this->maxBatchSize,
+            'ordersRequiredCount'  => $this->ordersRequiredCount,
         ]);
     }
 

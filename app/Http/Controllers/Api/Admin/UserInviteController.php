@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
-use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Invites\UserInviteProcessRequest;
 use App\Http\Requests\Invites\UserInviteStoreRequest;
@@ -18,14 +17,16 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class UserInviteController extends Controller
 {
     /**
-     * POST api/admin/user/invites
+     * POST api/admin/user/invites.
      *
      * @param UserInviteStoreRequest $request
+     *
      * @return void
      */
     public function store(UserInviteStoreRequest $request)
@@ -39,7 +40,7 @@ class UserInviteController extends Controller
         //create a new invite record
         $invite = UserInvite::create([
             'email' => $request->get('email'),
-            'token' => $token
+            'token' => $token,
         ]);
 
         // send the email
@@ -49,9 +50,10 @@ class UserInviteController extends Controller
     }
 
     /**
-     * GET invites/{invite_token}
+     * GET invites/{invite_token}.
      *
      * @param $token
+     *
      * @return array|Application|ResponseFactory|Factory|Response|View|mixed
      */
     public function accept($token)
@@ -65,9 +67,10 @@ class UserInviteController extends Controller
     }
 
     /**
-     * POST invites/{invite_token}
+     * POST invites/{invite_token}.
      *
      * @param UserInviteProcessRequest $request
+     *
      * @return Application|ResponseFactory|RedirectResponse|Response|Redirector|void
      */
     public function process(UserInviteProcessRequest $request)
@@ -78,8 +81,8 @@ class UserInviteController extends Controller
         }
 
         $user = User::create([
-            'name' => $request->input('name'),
-            'email' => $invite->email,
+            'name'     => $request->input('name'),
+            'email'    => $invite->email,
             'password' => Hash::make($request->input('password')),
         ]);
 

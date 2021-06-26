@@ -10,14 +10,15 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
- * App\Models\ProductAlias
+ * App\Models\ProductAlias.
  *
- * @property int $id
- * @property int $product_id
- * @property string $alias
+ * @property int         $id
+ * @property int         $product_id
+ * @property string      $alias
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Product $product
+ *
  * @method static Builder|ProductAlias newModelQuery()
  * @method static Builder|ProductAlias newQuery()
  * @method static Builder|ProductAlias query()
@@ -34,7 +35,7 @@ class ProductAlias extends Model
 
     protected $fillable = [
         'product_id',
-        'alias'
+        'alias',
     ];
 
     public function product()

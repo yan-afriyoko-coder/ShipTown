@@ -14,13 +14,16 @@ use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class RefillPickingMissingStockJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use IsMonitored;
 
     /**
      * @var int
      */
     private $maxDailyAllowed;
-
 
     /**
      * Create a new job instance.
@@ -43,7 +46,7 @@ class RefillPickingMissingStockJob implements ShouldQueue
 
         logger('Refilling "picking" status (warehouse stock)', [
             'currently_in_process' => $currentOrdersInProcessCount,
-            'max_daily_allowed' => $this->maxDailyAllowed,
+            'max_daily_allowed'    => $this->maxDailyAllowed,
         ]);
 
         if ($currentOrdersInProcessCount >= $this->maxDailyAllowed) {

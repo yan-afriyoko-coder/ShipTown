@@ -489,6 +489,10 @@
                         return false;
                     }
 
+                    if (this.user === null) {
+                        return false;
+                    }
+
                     return (this.order['packer_user_id']  && this.order['packer_user_id'] !== this.user['id']);
                 }
             }

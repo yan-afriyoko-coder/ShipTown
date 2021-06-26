@@ -13,33 +13,35 @@ use Illuminate\Support\Facades\Log;
 class Products extends Entity
 {
     private const PRODUCT_ALLOWED_KEYS = [
-        "id",
-        "sku",
-        "model",
-        "name",
-        "description",
-        "price",
-        "special_price",
-        "sprice_create",
-        "sprice_expire",
-        "quantity",
-        "in_stock",
-        "store_id",
-        "warehouse_id",
+        'id',
+        'sku',
+        'model',
+        'name',
+        'description',
+        'price',
+        'special_price',
+        'sprice_create',
+        'sprice_expire',
+        'quantity',
+        'in_stock',
+        'store_id',
+        'warehouse_id',
     ];
 
     private const PRODUCT_DONT_UPDATE_KEYS = [
-        "model",
-        "sku",
-        "name",
-        "description"
+        'model',
+        'sku',
+        'name',
+        'description',
     ];
 
     /**
      * @param string $store_key
-     * @param array $params
-     * @return RequestResponse
+     * @param array  $params
+     *
      * @throws RequestException
+     *
+     * @return RequestResponse
      */
     public static function getProductList(string $store_key, array $params): RequestResponse
     {
@@ -48,10 +50,12 @@ class Products extends Entity
 
     /**
      * @param Api2cartConnection $conn
-     * @param string $sku
-     * @param array|null $fields
-     * @return array|null
+     * @param string             $sku
+     * @param array|null         $fields
+     *
      * @throws RequestException
+     *
+     * @return array|null
      */
     public static function getSimpleProductInfo(Api2cartConnection $conn, string $sku, array $fields = null): ?array
     {
@@ -62,30 +66,30 @@ class Products extends Entity
         }
 
         $params = [
-            "id" => $product_id,
-            "params" => implode(
-                ",",
+            'id'     => $product_id,
+            'params' => implode(
+                ',',
                 $fields ?? [
-                    "id",
-                    "model",
-                    "u_model",
-                    "sku",
-                    "u_sku",
-                    "price",
-                    "special_price",
-                    "stores_ids",
-                    "manage_stock",
-                    "quantity",
-                    "inventory",
+                    'id',
+                    'model',
+                    'u_model',
+                    'sku',
+                    'u_sku',
+                    'price',
+                    'special_price',
+                    'stores_ids',
+                    'manage_stock',
+                    'quantity',
+                    'inventory',
                 ]
             ),
         ];
 
         if ($conn->magento_store_id) {
-            $params["store_id"] = $conn->magento_store_id;
+            $params['store_id'] = $conn->magento_store_id;
         }
 
-        $response =  Client::GET($conn->bridge_api_key, 'product.info.json', $params);
+        $response = Client::GET($conn->bridge_api_key, 'product.info.json', $params);
 
         if ($response->isNotSuccess()) {
             return null;
@@ -93,30 +97,32 @@ class Products extends Entity
 
         $product = $response->getResult();
 
-        $product["type"]            = "product";
-        $product["sku"]             = empty($product["u_sku"]) ? $product["u_model"] : $product["u_sku"];
-        $product["model"]           = $product["u_model"];
-        $product["quantity"]        = self::getQuantity($product, $conn->magento_warehouse_id);
+        $product['type'] = 'product';
+        $product['sku'] = empty($product['u_sku']) ? $product['u_model'] : $product['u_sku'];
+        $product['model'] = $product['u_model'];
+        $product['quantity'] = self::getQuantity($product, $conn->magento_warehouse_id);
 
-        $created_at = $product["special_price"]["created_at"];
-        $product["sprice_create"]   = empty($created_at) ? "1900-01-01 00:00:00" : $created_at["value"];
-        $product["sprice_create"] = Carbon::createFromTimeString($product["sprice_create"])->format("Y-m-d H:i:s");
+        $created_at = $product['special_price']['created_at'];
+        $product['sprice_create'] = empty($created_at) ? '1900-01-01 00:00:00' : $created_at['value'];
+        $product['sprice_create'] = Carbon::createFromTimeString($product['sprice_create'])->format('Y-m-d H:i:s');
 
-        $expired_at = $product["special_price"]["expired_at"];
-        $product["sprice_expire"]   = empty($expired_at) ? "1900-01-01 00:00:00" : $expired_at["value"];
-        $product["sprice_expire"] = Carbon::createFromTimeString($product["sprice_expire"])->format("Y-m-d H:i:s");
+        $expired_at = $product['special_price']['expired_at'];
+        $product['sprice_expire'] = empty($expired_at) ? '1900-01-01 00:00:00' : $expired_at['value'];
+        $product['sprice_expire'] = Carbon::createFromTimeString($product['sprice_expire'])->format('Y-m-d H:i:s');
 
-        $product["special_price"]   = $product["special_price"]["value"];
+        $product['special_price'] = $product['special_price']['value'];
 
         return $product;
     }
 
     /**
      * @param Api2cartConnection $connection
-     * @param string $sku
-     * @param array|null $fields
-     * @return array|null
+     * @param string             $sku
+     * @param array|null         $fields
+     *
      * @throws RequestException
+     *
+     * @return array|null
      */
     public static function getVariantInfo(Api2cartConnection $connection, string $sku, array $fields = null): ?array
     {
@@ -127,61 +133,63 @@ class Products extends Entity
         }
 
         $params = [
-            "id" => $variant_id,
-            "params" => implode(
-                ",",
+            'id'     => $variant_id,
+            'params' => implode(
+                ',',
                 $fields ?? [
-                    "id",
-                    "model",
-                    "u_model",
-                    "sku",
-                    "u_sku",
-                    "price",
-                    "special_price",
-                    "stores_ids",
-                    "quantity",
-                    "inventory"
+                    'id',
+                    'model',
+                    'u_model',
+                    'sku',
+                    'u_sku',
+                    'price',
+                    'special_price',
+                    'stores_ids',
+                    'quantity',
+                    'inventory',
                 ]
             ),
         ];
 
         if ($connection->magento_store_id) {
-            $params["store_id"] = $connection->magento_store_id;
+            $params['store_id'] = $connection->magento_store_id;
         }
 
-        $response =  Client::GET($connection->bridge_api_key, 'product.variant.info.json', $params);
+        $response = Client::GET($connection->bridge_api_key, 'product.variant.info.json', $params);
 
         if ($response->isNotSuccess()) {
             return null;
         }
 
-        $variant = $response->getResult()["variant"];
+        $variant = $response->getResult()['variant'];
 
-        $variant['type']            = "variant";
+        $variant['type'] = 'variant';
 
-        $variant["sku"]             = empty($variant["u_sku"]) ? $variant["u_model"] : $variant["u_sku"];
-        $variant["model"]           = $variant["u_model"];
-        $variant["quantity"]        = self::getQuantity($variant, $connection->magento_warehouse_id);
+        $variant['sku'] = empty($variant['u_sku']) ? $variant['u_model'] : $variant['u_sku'];
+        $variant['model'] = $variant['u_model'];
+        $variant['quantity'] = self::getQuantity($variant, $connection->magento_warehouse_id);
 
-        $created_at = $variant["special_price"]["created_at"];
-        $variant["sprice_create"]   = empty($created_at) ? "1900-01-01 00:00:00":$created_at["value"];
-        $variant["sprice_create"] = Carbon::createFromTimeString($variant["sprice_create"])->format("Y-m-d H:i:s");
+        $created_at = $variant['special_price']['created_at'];
+        $variant['sprice_create'] = empty($created_at) ? '1900-01-01 00:00:00' : $created_at['value'];
+        $variant['sprice_create'] = Carbon::createFromTimeString($variant['sprice_create'])->format('Y-m-d H:i:s');
 
-        $expired_at = $variant["special_price"]["expired_at"];
-        $variant["sprice_expire"]   = empty($expired_at) ? "1900-01-01 00:00:00":$expired_at["value"];
-        $variant["sprice_expire"] = Carbon::createFromTimeString($variant["sprice_expire"])->format("Y-m-d H:i:s");
+        $expired_at = $variant['special_price']['expired_at'];
+        $variant['sprice_expire'] = empty($expired_at) ? '1900-01-01 00:00:00' : $expired_at['value'];
+        $variant['sprice_expire'] = Carbon::createFromTimeString($variant['sprice_expire'])->format('Y-m-d H:i:s');
 
-        $variant["special_price"]   = $variant["special_price"]["value"];
+        $variant['special_price'] = $variant['special_price']['value'];
 
         return $variant;
     }
 
     /**
      * @param Api2cartConnection $connection
-     * @param string $sku
-     * @param array|null $fields
-     * @return array|null
+     * @param string             $sku
+     * @param array|null         $fields
+     *
      * @throws RequestException
+     *
+     * @return array|null
      */
     public static function getProductInfo(Api2cartConnection $connection, string $sku, array $fields = null): ?array
     {
@@ -192,12 +200,14 @@ class Products extends Entity
     /**
      * @param string $store_key
      * @param string $sku
-     * @return int|null
+     *
      * @throws RequestException
+     *
+     * @return int|null
      */
     public static function getSimpleProductID(string $store_key, string $sku): ?int
     {
-        $cache_key = $store_key."_".$sku."_product_id";
+        $cache_key = $store_key.'_'.$sku.'_product_id';
 
         $id = Cache::get($cache_key);
 
@@ -206,15 +216,16 @@ class Products extends Entity
         }
 
         try {
-            $response =  Client::GET($store_key, 'product.find.json', [
-                'find_where' => "model",
+            $response = Client::GET($store_key, 'product.find.json', [
+                'find_where' => 'model',
                 'find_value' => $sku,
-                'store_id' => 0
+                'store_id'   => 0,
             ]);
         } catch (RequestException $exception) {
             if ($exception->getCode() === RequestResponse::RETURN_CODE_MODEL_NOT_FOUND) {
                 return null;
             }
+
             throw $exception;
         }
 
@@ -222,7 +233,7 @@ class Products extends Entity
             return null;
         }
 
-        $id = $response->getResult()['product'][0]["id"];
+        $id = $response->getResult()['product'][0]['id'];
 
         Cache::put($cache_key, $id, 60 * 24 * 7);
 
@@ -232,11 +243,12 @@ class Products extends Entity
     /**
      * @param string $store_key
      * @param string $sku
+     *
      * @return int|null
      */
     public static function getVariantID(string $store_key, string $sku): ?int
     {
-        $cache_key = $store_key."_".$sku."_variant_id";
+        $cache_key = $store_key.'_'.$sku.'_variant_id';
 
         $id = Cache::get($cache_key);
 
@@ -246,8 +258,8 @@ class Products extends Entity
 
         try {
             $response = Client::GET($store_key, 'product.child_item.find.json', [
-                'find_where' => "sku",
-                'find_value' => $sku
+                'find_where' => 'sku',
+                'find_value' => $sku,
             ]);
         } catch (Exception $exception) {
             return null;
@@ -257,7 +269,7 @@ class Products extends Entity
             return null;
         }
 
-        $id = $response->getResult()['children'][0]["id"];
+        $id = $response->getResult()['children'][0]['id'];
 
         Cache::put($cache_key, $id, 60 * 24 * 7);
 
@@ -266,46 +278,52 @@ class Products extends Entity
 
     /**
      * @param string $store_key
-     * @param array $product_data
-     * @return RequestResponse
+     * @param array  $product_data
+     *
      * @throws Exception
+     *
+     * @return RequestResponse
      */
     public static function createSimpleProduct(string $store_key, array $product_data): RequestResponse
     {
         $fields = [
-            "sku",
-            "model",
-            "name",
-            "description",
-            "price"
+            'sku',
+            'model',
+            'name',
+            'description',
+            'price',
         ];
 
         $product = Arr::only($product_data, $fields);
 
-        if (!Arr::has($product_data, "model")) {
-            $product["model"] = $product_data["sku"];
+        if (!Arr::has($product_data, 'model')) {
+            $product['model'] = $product_data['sku'];
         }
 
         // disable new products
-        $product["available_for_view"] = false;
-        $product["available_for_sale"] = false;
+        $product['available_for_view'] = false;
+        $product['available_for_sale'] = false;
 
         $response = Client::POST($store_key, 'product.add.json', $product);
 
         if ($response->isSuccess()) {
             Log::info('Product created', $product_data);
+
             return $response;
         }
 
-        Log::error("product.add.json failed", $response->asArray());
+        Log::error('product.add.json failed', $response->asArray());
+
         return $response;
     }
 
     /**
      * @param string $store_key
-     * @param array $product_data
-     * @return RequestResponse
+     * @param array  $product_data
+     *
      * @throws Exception
+     *
+     * @return RequestResponse
      */
     public static function updateSimpleProduct(string $store_key, array $product_data): RequestResponse
     {
@@ -313,7 +331,7 @@ class Products extends Entity
             ->only(self::PRODUCT_ALLOWED_KEYS)
             ->except(self::PRODUCT_DONT_UPDATE_KEYS)
             ->merge([
-                'reindex' => 'False',
+                'reindex'     => 'False',
                 'clear_cache' => 'False',
             ])
             ->toArray();
@@ -321,41 +339,49 @@ class Products extends Entity
         $response = Client::GET($store_key, 'product.update.json', $product);
 
         if ($response->isSuccess()) {
-            logger("Product updated", $product);
+            logger('Product updated', $product);
+
             return $response;
         }
 
         switch ($response->getReturnCode()) {
             case RequestResponse::RETURN_CODE_MODEL_NOT_FOUND:
                 Products::assignStore($store_key, $product_data['id'], $product_data['store_id']);
+
                 return self::updateSimpleProduct($store_key, $product_data);
         }
 
         Log::error('product.update.json failed', $response->asArray());
+
         return $response;
     }
 
     /**
      * @param string $store_key
-     * @param int $product_id
-     * @param int $store_id
-     * @return RequestResponse
+     * @param int    $product_id
+     * @param int    $store_id
+     *
      * @throws Exception
+     *
+     * @return RequestResponse
      */
     public static function assignStore(string $store_key, int $product_id, int $store_id): RequestResponse
     {
         return Client::POST($store_key, 'product.store.assign.json', [
-            "product_id" => $product_id,
-            "store_id" => $store_id
+            'product_id' => $product_id,
+            'store_id'   => $store_id,
         ]);
     }
 
     /**
-     * This will only update variant product, will not update simple product
+     * This will only update variant product, will not update simple product.
+     *
      * @param string $store_key
-     * @param array $variant_data
-     * @return RequestResponse
+     * @param array  $variant_data
+     *
      * @throws Exception
+     *
+     * @return RequestResponse
      */
     public static function updateVariant(string $store_key, array $variant_data): RequestResponse
     {
@@ -363,7 +389,7 @@ class Products extends Entity
             ->only(self::PRODUCT_ALLOWED_KEYS)
             ->except(self::PRODUCT_DONT_UPDATE_KEYS)
             ->merge([
-                'reindex' => 'False',
+                'reindex'     => 'False',
                 'clear_cache' => 'False',
             ])
             ->toArray();
@@ -373,20 +399,24 @@ class Products extends Entity
 
     /**
      * @param string $store_key
-     * @param array $product_data
-     * @return RequestResponse
+     * @param array  $product_data
+     *
      * @throws Exception
+     *
+     * @return RequestResponse
      */
     public static function update(string $store_key, array $product_data): RequestResponse
     {
         $product = Products::getProductTypeAndId($store_key, $product_data['sku']);
 
-        switch ($product["type"]) {
-            case "product":
-                $properties = array_merge($product_data, ['id' => $product["id"]]);
+        switch ($product['type']) {
+            case 'product':
+                $properties = array_merge($product_data, ['id' => $product['id']]);
+
                 return Products::updateSimpleProduct($store_key, $properties);
-            case "variant":
-                $properties = array_merge($product_data, ['id' => $product["id"]]);
+            case 'variant':
+                $properties = array_merge($product_data, ['id' => $product['id']]);
+
                 return Products::updateVariant($store_key, $properties);
             default:
                 logger('Cannot update - SKU not found', [$product_data['sku']]);
@@ -396,21 +426,25 @@ class Products extends Entity
 
     /**
      * @param Api2cartConnection $connection
-     * @param array $product_data
-     * @return RequestResponse
+     * @param array              $product_data
+     *
      * @throws RequestException
      * @throws Exception
+     *
+     * @return RequestResponse
      */
     public static function updateOrCreate(Api2cartConnection $connection, array $product_data): RequestResponse
     {
         $product = Products::getProductTypeAndId($connection->bridge_api_key, $product_data['sku']);
 
-        switch ($product["type"]) {
-            case "product":
-                $properties = array_merge($product_data, ['id' => $product["id"]]);
+        switch ($product['type']) {
+            case 'product':
+                $properties = array_merge($product_data, ['id' => $product['id']]);
+
                 return Products::updateSimpleProduct($connection->bridge_api_key, $properties);
-            case "variant":
-                $properties = array_merge($product_data, ['id' => $product["id"]]);
+            case 'variant':
+                $properties = array_merge($product_data, ['id' => $product['id']]);
+
                 return Products::updateVariant($connection->bridge_api_key, $properties);
             default:
                 return Products::createSimpleProduct($connection->bridge_api_key, $product_data);
@@ -420,8 +454,10 @@ class Products extends Entity
     /**
      * @param string $store_key
      * @param string $sku
-     * @return array
+     *
      * @throws RequestException
+     *
+     * @return array
      */
     public static function getProductTypeAndId(string $store_key, string $sku): array
     {
@@ -435,8 +471,8 @@ class Products extends Entity
 
         if (!empty($product_id)) {
             $product = [
-                "type" => "product",
-                "id" => $product_id
+                'type' => 'product',
+                'id'   => $product_id,
             ];
 
             Cache::put(self::getSkuCacheKey($store_key, $sku), $product, 60 * 24 * 7);
@@ -448,8 +484,8 @@ class Products extends Entity
 
         if (!empty($variant_id)) {
             $product = [
-                "type" => "variant",
-                "id" => $variant_id
+                'type' => 'variant',
+                'id'   => $variant_id,
             ];
 
             Cache::put(self::getSkuCacheKey($store_key, $sku), $product, 60 * 24 * 7);
@@ -458,30 +494,32 @@ class Products extends Entity
         }
 
         return [
-            "type" => null,
-            "id" => null
+            'type' => null,
+            'id'   => null,
         ];
     }
 
     /**
      * @param string $store_key
      * @param string $sku
+     *
      * @return string
      */
     public static function getSkuCacheKey(string $store_key, string $sku): string
     {
-        return $store_key . "_" . $sku;
+        return $store_key.'_'.$sku;
     }
 
     /**
-     * @param array $product
+     * @param array       $product
      * @param string|null $warehouse_id
+     *
      * @return int
      */
     public static function getQuantity(array $product, string $warehouse_id = null): int
     {
         if (is_null($warehouse_id)) {
-            return $product["quantity"];
+            return $product['quantity'];
         }
 
         $inventories = collect($product['inventory'])
@@ -490,7 +528,7 @@ class Products extends Entity
             });
 
         if ($inventories->isEmpty()) {
-            return $product["quantity"];
+            return $product['quantity'];
         }
 
         return $inventories->first()['quantity'];

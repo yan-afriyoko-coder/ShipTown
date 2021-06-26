@@ -10,6 +10,7 @@ class ToggleProductOutOfStockTagListener
      * Handle the event.
      *
      * @param InventoryUpdatedEvent $event
+     *
      * @return void
      */
     public function handle(InventoryUpdatedEvent $event)

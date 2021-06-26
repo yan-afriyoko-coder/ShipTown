@@ -24,8 +24,8 @@ class ProductsIndexRequest extends FormRequest
     public function rules()
     {
         return [
-            'sku' => 'string|required|max:50',
-            'connection_id' => 'integer|exists:api2cart_connections'
+            'sku'           => 'string|required|max:50',
+            'connection_id' => 'integer|exists:api2cart_connections',
         ];
     }
 }

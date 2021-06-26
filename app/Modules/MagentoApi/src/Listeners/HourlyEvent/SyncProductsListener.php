@@ -11,6 +11,7 @@ class SyncProductsListener
      * Handle the event.
      *
      * @param HourlyEvent $event
+     *
      * @return void
      */
     public function handle(HourlyEvent $event)

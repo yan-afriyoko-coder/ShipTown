@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Helpers;
 
 use Illuminate\Support\Arr;
@@ -11,24 +10,24 @@ use Spatie\QueryBuilder\QueryBuilder;
 use SplTempFileObject;
 
 /**
- * Class CsvBuilder
- * @package App\Helpers
+ * Class CsvBuilder.
  */
 class CsvBuilder
 {
     /**
      * @param QueryBuilder $query
-     * @param array $fields
+     * @param array        $fields
+     *
      * @return Writer
      */
     public static function fromQueryBuilder(QueryBuilder $query, array $fields): Writer
     {
-        if (empty($fields) or ($fields[0] === "")) {
+        if (empty($fields) or ($fields[0] === '')) {
             return Writer::createFromString('"fields" param not specified, comma delimited, dot notation');
         }
 
         try {
-            $csv = Writer::createFromFileObject(new SplTempFileObject);
+            $csv = Writer::createFromFileObject(new SplTempFileObject());
 
             $rows = self::collectOnly($fields, $query->get()->toArray());
 
@@ -49,6 +48,7 @@ class CsvBuilder
     /**
      * @param array $fromRecords
      * @param array $fields
+     *
      * @return Collection
      */
     public static function collectOnly(array $fields, array $fromRecords): Collection

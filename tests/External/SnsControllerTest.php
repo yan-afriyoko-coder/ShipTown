@@ -23,26 +23,26 @@ class SnsControllerTest extends TestCase
             factory(User::class)->create()
         );
 
-        $snsClient = new SnsController("testTopic");
+        $snsClient = new SnsController('testTopic');
 
         $this->assertTrue(
             $snsClient->createTopic(),
-            "Could not create topic"
+            'Could not create topic'
         );
 
         $this->assertTrue(
             $snsClient->subscribeToTopic('https://phpunit.test.subscription.url'),
-            "Could not subscribe to topic"
+            'Could not subscribe to topic'
         );
 
         $this->assertTrue(
-            $snsClient->publish("This is test message"),
-            "Could not publish message"
+            $snsClient->publish('This is test message'),
+            'Could not publish message'
         );
 
         $this->assertTrue(
             $snsClient->deleteTopic(),
-            "Could not delete topic"
+            'Could not delete topic'
         );
     }
 }

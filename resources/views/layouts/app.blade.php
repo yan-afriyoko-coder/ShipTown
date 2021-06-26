@@ -32,7 +32,7 @@
 
         @include('layouts.nav');
 
-        <main class="py-4 pl-1 pr-2">
+        <main class="py-0 pl-1 pr-2">
             @yield('content')
         </main>
 

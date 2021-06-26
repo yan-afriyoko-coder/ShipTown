@@ -9,13 +9,13 @@ use App\Models\Widget;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * Class WidgetController
- * @package App\Http\Controllers\Api\Settings
+ * Class WidgetController.
  */
 class WidgetController extends Controller
 {
     /**
      * @param StoreWidgetRequest $request
+     *
      * @return JsonResource
      */
     public function store(StoreWidgetRequest $request)
@@ -29,7 +29,8 @@ class WidgetController extends Controller
 
     /**
      * @param UpdateWidgetRequest $request
-     * @param Widget $widget
+     * @param Widget              $widget
+     *
      * @return JsonResource
      */
     public function update(UpdateWidgetRequest $request, Widget $widget)

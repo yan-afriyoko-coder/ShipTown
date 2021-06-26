@@ -6,8 +6,7 @@ use Illuminate\Support\Str;
 use SimpleXMLElement;
 
 /**
- * Class PreAdviceResponse
- * @package App\Modules\Dpd\src\Responses
+ * Class PreAdviceResponse.
  */
 abstract class XmlResponse
 {
@@ -23,6 +22,7 @@ abstract class XmlResponse
 
     /**
      * PreAdviceResponse constructor.
+     *
      * @param string $responseXml
      */
     public function __construct(string $responseXml)
@@ -32,6 +32,7 @@ abstract class XmlResponse
 
     /**
      * @param string $responseXml
+     *
      * @return XmlResponse
      */
     public function setXml(string $responseXml): XmlResponse
@@ -53,6 +54,7 @@ abstract class XmlResponse
 
     /**
      * @param $key
+     *
      * @return string
      */
     public function getAttribute($key): string

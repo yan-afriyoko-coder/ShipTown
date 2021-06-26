@@ -14,20 +14,25 @@ use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class SyncProductsJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use IsMonitored;
 
     /**
      * Execute the job.
      *
-     * @return void
      * @throws Exception
+     *
+     * @return void
      */
     public function handle()
     {
         $query = Product::withAllTags(['Available Online', 'Not Synced']);
 
         $this->queueData([
-            'total_count' => $query->count()
+            'total_count' => $query->count(),
         ]);
 
         $totalCount = $query->count();

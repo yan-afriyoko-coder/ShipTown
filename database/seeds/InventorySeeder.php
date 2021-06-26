@@ -16,8 +16,8 @@ class InventorySeeder extends Seeder
             ->each(function (\App\Models\Product $product) {
                 factory(\App\Models\Inventory::class)
                     ->create([
-                        'product_id' => $product->id,
-                        'location_id' => 99
+                        'product_id'  => $product->id,
+                        'location_id' => 99,
                     ]);
             });
 
@@ -26,8 +26,8 @@ class InventorySeeder extends Seeder
             ->each(function (\App\Models\Product $product) {
                 factory(\App\Models\Inventory::class)
                     ->create([
-                        'product_id' => $product->id,
-                        'location_id' => 100
+                        'product_id'  => $product->id,
+                        'location_id' => 100,
                     ]);
             });
     }

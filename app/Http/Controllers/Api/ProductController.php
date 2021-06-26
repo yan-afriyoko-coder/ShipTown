@@ -10,17 +10,17 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 /**
- * Class ProductController
- * @package App\Http\Controllers\Api
+ * Class ProductController.
  *
  * @group Products
  */
 class ProductController extends Controller
 {
     /**
-     * Get Product List
+     * Get Product List.
      *
      * @param Request $request
+     *
      * @return LengthAwarePaginator
      */
     public function index(Request $request)
@@ -31,9 +31,10 @@ class ProductController extends Controller
     }
 
     /**
-     * Update or Create Product
+     * Update or Create Product.
      *
      * @param StoreProductsRequest $request
+     *
      * @return JsonResponse
      */
     public function store(StoreProductsRequest $request)
@@ -51,7 +52,7 @@ class ProductController extends Controller
      */
     public function publish($sku)
     {
-        $product = Product::query()->where("sku", $sku)->firstOrFail();
+        $product = Product::query()->where('sku', $sku)->firstOrFail();
 
         $product->save();
 

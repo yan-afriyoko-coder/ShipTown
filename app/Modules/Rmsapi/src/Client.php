@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Modules\Rmsapi\src;
 
 use App\Models\RmsapiConnection;
@@ -10,17 +9,18 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Class Client
- * @package App\Modules\Rmsapi\src
+ * Class Client.
  */
 class Client
 {
     /**
      * @param RmsapiConnection $connection
-     * @param string $uri
-     * @param array $query
-     * @return RequestResponse
+     * @param string           $uri
+     * @param array            $query
+     *
      * @throws GuzzleException
+     *
+     * @return RequestResponse
      */
     public static function GET(RmsapiConnection $connection, string $uri, array $query = []): RequestResponse
     {
@@ -28,17 +28,17 @@ class Client
             self::getGuzzleClient($connection)->get($uri, ['query' => $query])
         );
 
-        logger("GET", [
-           "uri" => $uri,
-           "query" => $query,
-           "response" => [
-                "status_code" => $response->getResponseRaw()->getStatusCode(),
-           ]
+        logger('GET', [
+            'uri'      => $uri,
+            'query'    => $query,
+            'response' => [
+                'status_code' => $response->getResponseRaw()->getStatusCode(),
+            ],
         ]);
 
         if ($response->isNotSuccess()) {
             Log::alert('Failed fetching from Rmsapi', [
-                "status_code" => $response->getResponseRaw()->getStatusCode(),
+                'status_code' => $response->getResponseRaw()->getStatusCode(),
             ]);
         }
 
@@ -47,30 +47,32 @@ class Client
 
     /**
      * @param RmsapiConnection $connection
-     * @param string $uri
-     * @param array $data
-     * @return RequestResponse
+     * @param string           $uri
+     * @param array            $data
+     *
      * @throws GuzzleException
+     *
+     * @return RequestResponse
      */
     public static function POST(RmsapiConnection $connection, string $uri, array $data): RequestResponse
     {
         $response = new RequestResponse(
             self::getGuzzleClient($connection)->post($uri, [
-                'json' => $data
+                'json' => $data,
             ])
         );
 
-        logger("POST", [
-            "uri" => $uri,
-            "json" => $data,
-            "response" => [
-                "status_code" => $response->getResponseRaw()->getStatusCode(),
-            ]
+        logger('POST', [
+            'uri'      => $uri,
+            'json'     => $data,
+            'response' => [
+                'status_code' => $response->getResponseRaw()->getStatusCode(),
+            ],
         ]);
 
         if ($response->isNotSuccess()) {
             Log::alert('Failed fetching from Rmsapi', [
-                "status_code" => $response->getResponseRaw()->getStatusCode(),
+                'status_code' => $response->getResponseRaw()->getStatusCode(),
             ]);
         }
 
@@ -79,32 +81,35 @@ class Client
 
     /**
      * @param RmsapiConnection $connection
-     * @param string $uri
-     * @param array $query
-     * @return RequestResponse
+     * @param string           $uri
+     * @param array            $query
+     *
      * @throws GuzzleException
+     *
+     * @return RequestResponse
      */
     public static function DELETE(RmsapiConnection $connection, string $uri, array $query): RequestResponse
     {
-        $response =  self::getGuzzleClient($connection)->delete($uri, ['query' => $query]);
+        $response = self::getGuzzleClient($connection)->delete($uri, ['query' => $query]);
 
         return new RequestResponse($response);
     }
 
     /**
      * @param RmsapiConnection $connection
+     *
      * @return GuzzleClient
      */
     public static function getGuzzleClient(RmsapiConnection $connection): GuzzleClient
     {
         return new GuzzleClient([
-            'base_uri' => $connection->url,
-            'timeout' => 600,
+            'base_uri'   => $connection->url,
+            'timeout'    => 600,
             'exceptions' => false,
-            'auth' => [
+            'auth'       => [
                 $connection->username,
-                Crypt::decryptString($connection->password)
-            ]
+                Crypt::decryptString($connection->password),
+            ],
         ]);
     }
 }

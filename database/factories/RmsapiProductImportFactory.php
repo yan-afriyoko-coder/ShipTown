@@ -2,14 +2,12 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Model;
 use App\Models\RmsapiConnection;
 use App\Models\RmsapiProductImport;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
 $factory->define(RmsapiProductImport::class, function (Faker $faker) {
-
     $connection = factory(RmsapiConnection::class)->create();
 
     $quantity_on_hand = random_int(0, 1000);
@@ -18,7 +16,7 @@ $factory->define(RmsapiProductImport::class, function (Faker $faker) {
 
     return [
         'connection_id' => $connection->id,
-        'raw_import' => json_decode('{
+        'raw_import'    => json_decode('{
            "id":1,
            "cost":110.34,
            "price":'.(random_int(1, 100000) / 100).',
@@ -63,6 +61,6 @@ $factory->define(RmsapiProductImport::class, function (Faker $faker) {
                 }
            ]
         }
-    ')
+    '),
     ];
 });

@@ -13,7 +13,10 @@ use Illuminate\Queue\SerializesModels;
 
 class ImportShippingAddressJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     private int $order_id;
 

@@ -9,8 +9,7 @@ use App\Models\OrderProduct;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
- * Class OrderProductController
- * @package App\Http\Controllers\Api\Order
+ * Class OrderProductController.
  *
  * @group Order
  */
@@ -32,7 +31,8 @@ class OrderProductController extends Controller
      * Update the specified resource in storage.
      *
      * @param UpdateRequest $request
-     * @param OrderProduct $product
+     * @param OrderProduct  $product
+     *
      * @return OrderProductResource
      */
     public function update(UpdateRequest $request, OrderProduct $product): OrderProductResource
