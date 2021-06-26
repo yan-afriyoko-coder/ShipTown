@@ -45,7 +45,12 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('settings/user/me', 'Api\Settings\UserMeController')->only(['index','store']);
     Route::apiResource('settings/widgets', 'Api\Settings\WidgetController')->only(['store','update']);
 
+    Route::apiResource('modules', 'Api\Settings\ModuleConfigurationController', [
+        'as' => 'api'
+    ])->only(['index','update']);
+    
     Route::group(['prefix' => 'settings', 'namespace' => 'Api\Settings', 'as' => 'api.settings.'], function () {
+
 
         // modules
         Route::group(['prefix' => 'modules', 'namespace' => 'Module', 'as' => 'module.'], function () {

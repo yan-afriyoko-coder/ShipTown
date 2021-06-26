@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::get('reports/shipments', 'Reports\ShipmentController@index')->name('reports.shipments');
     Route::view('settings', 'settings')->name('settings');
     Route::view('settings/general', 'settings/general')->name('settings.general');
+    Route::view('settings/module', 'settings/module')->name('settings.module');
     Route::view('settings/printnode', 'settings/printnode')->name('settings.printnode');
     Route::view('settings/rmsapi', 'settings/rmsapi')->name('settings.rmsapi');
     Route::view('settings/dpd-ireland', 'settings/dpd-ireland')->name('settings.dpd-ireland');

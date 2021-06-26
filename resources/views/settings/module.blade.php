@@ -12,11 +12,7 @@
                 </div>
             @endif
 
-            <user-courier-integration-select></user-courier-integration-select>
-            @role('admin')
-                <maintenance-section></maintenance-section>
-                <auto-pilot-tuning-section></auto-pilot-tuning-section>
-            @endrole
+            <module-configuration></module-configuration>
         </div>
     </div>
 </div>

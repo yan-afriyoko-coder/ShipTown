@@ -63,6 +63,16 @@
                     </div>
                 </a>
 
+                <a href="{{ route('settings.module') }}" class="setting-list">
+                    <div class="setting-icon">
+                        <font-awesome-icon icon="puzzle-piece" class="fa-lg"></font-awesome-icon>
+                    </div>
+                    <div class="setting-body">
+                        <div class="setting-title">Modules</div>
+                        <div class="setting-desc">Manage Modules</div>
+                    </div>
+                </a>
+
                 <a href="{{ route('settings.api2cart') }}" class="setting-list">
                     <div class="setting-icon">
                         <font-awesome-icon icon="shopping-cart" class="fa-lg"></font-awesome-icon>

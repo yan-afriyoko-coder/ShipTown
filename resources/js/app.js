@@ -14,7 +14,7 @@ import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import { BootstrapVue } from 'bootstrap-vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCog, faQuestionCircle, faUserEdit, faBarcode, faUserMinus, faShareAlt, faChevronDown, faChevronUp, faExternalLinkAlt, faPrint, faCode, faTruck, faShoppingCart, faKey, faDesktop, faClipboardList } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faQuestionCircle, faUserEdit, faBarcode, faUserMinus, faShareAlt, faChevronDown, faChevronUp, faExternalLinkAlt, faPrint, faCode, faTruck, faShoppingCart, faKey, faDesktop, faClipboardList, faPuzzlePiece } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VueTippy, { TippyComponent } from "vue-tippy";
 import Snotify from 'vue-snotify';
@@ -36,6 +36,7 @@ library.add(faShoppingCart);
 library.add(faKey);
 library.add(faDesktop);
 library.add(faClipboardList);
+library.add(faPuzzlePiece);
 Vue.config.productionTip = false;
 
 Vue.use(VueCountdownTimer);
@@ -106,6 +107,7 @@ Vue.component('user-courier-integration-select', require('./components/Settings/
 Vue.component('picks-table', require('./components/PicklistPage.vue').default);
 Vue.component('auto-pilot-tuning-section', require('./components/Settings/AutoPilotTuningSection.vue').default);
 Vue.component('maintenance-section', require('./components/Settings/MaintenanceSection.vue').default);
+Vue.component('module-configuration', require('./components/Settings/ModuleConfiguration.vue').default);
 Vue.component('api', require('./mixins/api').default);
 
 /**
