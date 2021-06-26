@@ -30,7 +30,7 @@ class StoreTest extends TestCase
             'country_code'      => 'IE',
         ]);
 
-        /** @var User $user **/
+        /** @var User $user * */
         $user = factory(User::class)->create();
         $user->assignRole('admin');
 
@@ -55,7 +55,7 @@ class StoreTest extends TestCase
     /** @test */
     public function test_success_config_create()
     {
-        /** @var User $user **/
+        /** @var User $user * */
         $user = factory(User::class)->create();
         $user->assignRole('admin');
 
@@ -81,7 +81,7 @@ class StoreTest extends TestCase
     /** @test */
     public function test_failing_config_create()
     {
-        /** @var User $user **/
+        /** @var User $user * */
         $user = factory(User::class)->create();
         $user->assignRole('admin');
 
