@@ -90,7 +90,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapAdminWebRoutes()
     {
-        Route::middleware(['web','auth', 'role:admin'])
+        Route::middleware(['web', 'auth', 'role:admin'])
             ->prefix('admin')
             ->namespace($this->namespace)
             ->group(base_path('routes/admin/web.php'));
@@ -105,7 +105,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapUserApiRoutes()
     {
-        Route::middleware(['api','auth:api'])
+        Route::middleware(['api', 'auth:api'])
             ->prefix('api')
             ->namespace($this->namespace)
             ->group(base_path('routes/user/api.php'));
@@ -120,7 +120,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapAdminApiRoutes()
     {
-        Route::middleware(['api','auth:api', 'role:admin'])
+        Route::middleware(['api', 'auth:api', 'role:admin'])
             ->prefix('api')
             ->namespace($this->namespace)
             ->group(base_path('routes/admin/api.php'));

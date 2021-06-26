@@ -30,7 +30,7 @@ class IndexTest extends TestCase
             'country_code'      => 'IE',
         ]);
 
-        /** @var User $user **/
+        /** @var User $user * */
         $user = factory(User::class)->create();
         $user->assignRole('admin');
 

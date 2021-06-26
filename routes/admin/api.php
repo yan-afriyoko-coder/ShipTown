@@ -19,7 +19,6 @@ Route::apiResource('admin/user/invites', 'Api\Admin\UserInviteController')->only
 Route::apiResource('admin/user/roles', 'Api\Admin\UserRoleController', ['as' => 'admin.users'])->only(['index'])->middleware('can:list roles');
 Route::apiResource('admin/users', 'Api\Admin\UserController')->only(['index', 'show', 'update', 'destroy'])->middleware('can:manage users');
 
-
 Route::group(['prefix' => 'settings', 'namespace' => 'Api\Settings', 'as' => 'api.settings.'], function () {
 
     // modules
