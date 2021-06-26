@@ -30,7 +30,10 @@ class StoreTest extends TestCase
             'country_code'      => 'IE',
         ]);
 
+        /** @var User $user * */
         $user = factory(User::class)->create();
+        $user->assignRole('admin');
+
         $response = $this->actingAs($user, 'api')->json('post', route('api.settings.module.dpd-ireland.connections.store'), [
             'live'              => false,
             'user'              => 'someuser',
@@ -52,7 +55,10 @@ class StoreTest extends TestCase
     /** @test */
     public function test_success_config_create()
     {
+        /** @var User $user * */
         $user = factory(User::class)->create();
+        $user->assignRole('admin');
+
         $response = $this->actingAs($user, 'api')->json('post', route('api.settings.module.dpd-ireland.connections.store'), [
             'live'              => false,
             'user'              => 'someuser',
@@ -75,7 +81,10 @@ class StoreTest extends TestCase
     /** @test */
     public function test_failing_config_create()
     {
+        /** @var User $user * */
         $user = factory(User::class)->create();
+        $user->assignRole('admin');
+
         $response = $this->actingAs($user, 'api')->json('post', route('api.settings.module.dpd-ireland.connections.store'), [
             'live'              => false,
             'token'             => 'sometoken',
