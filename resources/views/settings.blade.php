@@ -23,7 +23,7 @@
                     </div>
                 </a>
 
-                <a href="{{ route('users') }}" class="setting-list">
+                <a href="{{ route('settings.users') }}" class="setting-list">
                     <div class="setting-icon">
                         <font-awesome-icon icon="user-edit" class="fa-sm"></font-awesome-icon>
                     </div>
@@ -83,7 +83,7 @@
                     </div>
                 </a>
 
-                <a href="{{ url('admin/tools/queue-monitor') }}" target="_blank" class="setting-list">
+                <a href="{{ route('queue-monitor::index') }}" target="_blank" class="setting-list">
                     <div class="setting-icon">
                         <font-awesome-icon icon="desktop" class="fa-sm"></font-awesome-icon>
                     </div>
@@ -93,7 +93,7 @@
                     </div>
                 </a>
 
-                <a href="{{ url('admin/tools/log-viewer') }}" target="_blank" class="setting-list">
+                <a href="{{ route('tools.log-viewer') }}" target="_blank" class="setting-list">
                     <div class="setting-icon">
                         <font-awesome-icon icon="clipboard-list" class="fa-sm"></font-awesome-icon>
                     </div>

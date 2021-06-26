@@ -30,7 +30,10 @@ class DestroyTest extends TestCase
             'country_code'      => 'IE',
         ]);
 
+        /** @var User $user **/
         $user = factory(User::class)->create();
+        $user->assignRole('admin');
+
         $response = $this->actingAs($user, 'api')
             ->delete(route('api.settings.module.dpd-ireland.connections.destroy', ['connection' => $connection->getKey()]));
         $response->assertOk();

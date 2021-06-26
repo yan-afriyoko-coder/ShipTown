@@ -30,7 +30,10 @@ class IndexTest extends TestCase
             'country_code'      => 'IE',
         ]);
 
+        /** @var User $user **/
         $user = factory(User::class)->create();
+        $user->assignRole('admin');
+
         $response = $this->actingAs($user, 'api')->get(route('api.settings.module.dpd-ireland.connections.index'));
         $response->assertOk();
     }

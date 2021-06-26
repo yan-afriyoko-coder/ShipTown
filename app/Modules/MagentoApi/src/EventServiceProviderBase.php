@@ -5,6 +5,7 @@ namespace App\Modules\MagentoApi\src;
 use App\Events\HourlyEvent;
 use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
+use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
@@ -28,6 +29,10 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
+        SyncRequestedEvent::class => [
+            Listeners\SyncRequestedEvent\DispatchSyncCheckFailedProductsJobListener::class,
+        ],
+
         HourlyEvent::class => [
             Listeners\HourlyEvent\SyncProductsListener::class,
         ],
