@@ -2,8 +2,8 @@
 
 namespace App\Modules\AutoStatusPicking\src\Jobs;
 
+use App\Models\AutoStatusPickingConfiguration;
 use App\Models\Order;
-use App\Services\AutoPilot;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -19,7 +19,7 @@ class RefillPickingByOldestJob implements ShouldQueue
     use SerializesModels;
     use IsMonitored;
 
-    private $maxDailyAllowed;
+    private $configuration;
 
     /**
      * Create a new job instance.
@@ -28,7 +28,7 @@ class RefillPickingByOldestJob implements ShouldQueue
      */
     public function __construct()
     {
-        $this->maxDailyAllowed = AutoPilot::getBatchSize();
+        $this->configuration = AutoStatusPickingConfiguration::firstOrCreate([], []);
     }
 
     /**
@@ -38,26 +38,22 @@ class RefillPickingByOldestJob implements ShouldQueue
      */
     public function handle()
     {
-        $currentOrdersInProcessCount = Order::whereIn('status_code', ['picking'])->count();
-
         logger('Refilling "picking" status', [
-            'max_daily_allowed'    => $this->maxDailyAllowed,
-            'currently_in_process' => $currentOrdersInProcessCount,
+            'max_batch_size'       => $this->configuration->max_batch_size,
+            'currently_in_process' => $this->configuration->current_count_with_status,
         ]);
 
-        if ($this->maxDailyAllowed <= $currentOrdersInProcessCount) {
+        if ($this->configuration->required_count <= 0) {
             return;
         }
 
         Order::whereStatusCode('paid')
             ->orderBy('created_at')
-            ->limit($this->maxDailyAllowed - $currentOrdersInProcessCount)
+            ->limit($this->configuration->required_count)
             ->get()
-            ->each(function ($order) {
+            ->each(function (Order $order) {
+                $order->log('Refilling picking');
                 $order->update(['status_code' => 'picking']);
-                info('RefillPickingJob: updated status to picking', ['order_number' => $order->order_number]);
-
-                return true;
             });
     }
 }
