@@ -15,7 +15,10 @@ use Illuminate\Support\Facades\Log;
 
 class RecalculateQuantityReservedJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Execute the job.
@@ -45,11 +48,10 @@ class RecalculateQuantityReservedJob implements ShouldQueue
             ->whereNotIn('product_id', $alreadyCheckedProductIds)
             ->get()
             ->each(function (Inventory $inventory) {
-
                 Log::warning('Incorrect quantity_reserved detected', [
-                    'sku' => $inventory->product->sku,
+                    'sku'                        => $inventory->product->sku,
                     'quantity_reserved_expected' => 0,
-                    'quantity_reserved_current' => $inventory->quantity_reserved,
+                    'quantity_reserved_current'  => $inventory->quantity_reserved,
                 ]);
 
                 $inventory->product->log('Resetting quantity reserved');
@@ -61,6 +63,7 @@ class RecalculateQuantityReservedJob implements ShouldQueue
     /**
      * @param $reservingStatusCodes
      * @param array $checkedProductIds
+     *
      * @return array
      */
     private function fixReservedQuantity($reservingStatusCodes, array $checkedProductIds): array
@@ -68,7 +71,7 @@ class RecalculateQuantityReservedJob implements ShouldQueue
         OrderProduct::whereStatusCodeIn($reservingStatusCodes)
             ->select([
                 'product_id',
-                DB::raw('sum(quantity_to_ship) as new_quantity_reserved')
+                DB::raw('sum(quantity_to_ship) as new_quantity_reserved'),
             ])
             ->whereNotNull('product_id')
             ->groupBy('product_id')
@@ -77,21 +80,22 @@ class RecalculateQuantityReservedJob implements ShouldQueue
                 $checkedProductIds[] = $orderProduct->product_id;
 
                 $inventory = Inventory::firstOrCreate([
-                    'product_id' => $orderProduct->product_id,
+                    'product_id'  => $orderProduct->product_id,
                     'location_id' => 999,
                 ]);
 
                 if ($inventory->quantity_reserved != $orderProduct->getAttribute('new_quantity_reserved')) {
                     Log::warning('Incorrect quantity_reserved detected', [
-                        'sku' => $inventory->product->sku,
+                        'sku'                        => $inventory->product->sku,
                         'quantity_reserved_expected' => $orderProduct->getAttribute('new_quantity_reserved'),
-                        'quantity_reserved_current' => $inventory->quantity_reserved,
+                        'quantity_reserved_current'  => $inventory->quantity_reserved,
                     ]);
                     $orderProduct->product->log('Recalculated quantity_reserved');
                     $inventory->quantity_reserved = $orderProduct->getAttribute('new_quantity_reserved');
                     $inventory->save();
                 }
             });
+
         return $checkedProductIds;
     }
 }

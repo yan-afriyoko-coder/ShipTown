@@ -9,16 +9,17 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Crypt;
 
 /**
- * App\Models\RmsapiConnection
+ * App\Models\RmsapiConnection.
  *
- * @property int $id
- * @property string $location_id
- * @property string $url
- * @property string $username
- * @property string $password
- * @property int $products_last_timestamp
+ * @property int         $id
+ * @property string      $location_id
+ * @property string      $url
+ * @property string      $username
+ * @property string      $password
+ * @property int         $products_last_timestamp
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|RmsapiConnection newModelQuery()
  * @method static Builder|RmsapiConnection newQuery()
  * @method static Builder|RmsapiConnection query()
@@ -39,7 +40,7 @@ class RmsapiConnection extends Model
         'url',
         'username',
         'password',
-        'products_last_timestamp'
+        'products_last_timestamp',
     ];
 
     public function setPasswordAttribute($password)

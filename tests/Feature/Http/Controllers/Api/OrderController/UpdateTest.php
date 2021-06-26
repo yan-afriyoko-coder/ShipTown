@@ -25,7 +25,7 @@ class UpdateTest extends TestCase
         $user = factory(User::class)->create();
 
         $response = $this->putJson(route('orders.update', [$order]), [
-            'status_code' => "test_status_code",
+            'status_code'    => 'test_status_code',
             'packer_user_id' => $user->getKey(),
         ]);
 
@@ -34,8 +34,8 @@ class UpdateTest extends TestCase
         $response->assertJsonStructure([
             'data' => [
                 '*' => [
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 }

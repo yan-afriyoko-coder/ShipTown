@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Factory;
 
 $factory->define(OrderStatus::class, function (Faker $faker) {
     return [
-        'code' => 'open',
-        'name' => 'open',
+        'code'           => 'open',
+        'name'           => 'open',
         'reserves_stock' => $faker->boolean,
     ];
 });

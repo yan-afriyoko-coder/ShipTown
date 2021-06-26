@@ -9,30 +9,32 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\Configuration
+ * App\Models\Configuration.
  *
- * @property int $id
- * @property bool $live
- * @property string $token
- * @property string $user
- * @property string $password
- * @property string $contact
- * @property string $contact_telephone
- * @property string $contact_email
- * @property string $business_name
- * @property string $address_line_1
- * @property string $address_line_2
- * @property string $address_line_3
- * @property string $address_line_4
- * @property string $country_code
+ * @property int         $id
+ * @property bool        $live
+ * @property string      $token
+ * @property string      $user
+ * @property string      $password
+ * @property string      $contact
+ * @property string      $contact_telephone
+ * @property string      $contact_email
+ * @property string      $business_name
+ * @property string      $address_line_1
+ * @property string      $address_line_2
+ * @property string      $address_line_3
+ * @property string      $address_line_4
+ * @property string      $country_code
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|DpdIreland newModelQuery()
  * @method static Builder|DpdIreland newQuery()
  * @method static Builder|DpdIreland query()
  * @method static Builder|DpdIreland first()
  * @method static Builder|DpdIreland firstOrFail()
  * @mixin Eloquent
+ *
  * @method static Builder|DpdIreland whereAddressLine1($value)
  * @method static Builder|DpdIreland whereAddressLine2($value)
  * @method static Builder|DpdIreland whereAddressLine3($value)
@@ -77,22 +79,22 @@ class DpdIreland extends Model
     ];
 
     /**
-     * DpdIreland collection address as array
+     * DpdIreland collection address as array.
      *
      * @return array
      */
     public function getCollectionAddress(): array
     {
         return [
-            'Contact' => $this->attributes['contact'],
+            'Contact'          => $this->attributes['contact'],
             'ContactTelephone' => $this->attributes['contact_telephone'],
-            'ContactEmail' => $this->attributes['contact_email'],
-            'BusinessName' => $this->attributes['business_name'],
-            'AddressLine1' => $this->attributes['address_line_1'],
-            'AddressLine2' => $this->attributes['address_line_2'],
-            'AddressLine3' => $this->attributes['address_line_3'],
-            'AddressLine4' => $this->attributes['address_line_4'],
-            'CountryCode' => $this->attributes['country_code'],
+            'ContactEmail'     => $this->attributes['contact_email'],
+            'BusinessName'     => $this->attributes['business_name'],
+            'AddressLine1'     => $this->attributes['address_line_1'],
+            'AddressLine2'     => $this->attributes['address_line_2'],
+            'AddressLine3'     => $this->attributes['address_line_3'],
+            'AddressLine4'     => $this->attributes['address_line_4'],
+            'CountryCode'      => $this->attributes['country_code'],
         ];
     }
 }

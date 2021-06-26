@@ -30,7 +30,7 @@ class OrdersShelfLocationsTest extends TestCase
             ->create()
             ->each(function ($product) {
                 factory(Inventory::class)->create([
-                    'product_id' => $product->getKey(),
+                    'product_id'  => $product->getKey(),
                     'location_id' => 100,
                 ]);
             });

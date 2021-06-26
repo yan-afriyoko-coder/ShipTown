@@ -12,6 +12,7 @@ class InventoryObserver
      * Handle the inventory "created" event.
      *
      * @param Inventory $inventory
+     *
      * @return void
      */
     public function created(Inventory $inventory)
@@ -24,6 +25,7 @@ class InventoryObserver
      * Handle the inventory "updated" event.
      *
      * @param Inventory $inventory
+     *
      * @return void
      */
     public function updated(Inventory $inventory)

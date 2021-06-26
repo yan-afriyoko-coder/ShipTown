@@ -1,11 +1,9 @@
 <?php
 
-
 namespace App\Modules\DpdIreland\src\Responses;
 
 /**
- * Class PreAdvice
- * @package App\Modules\Dpd\src\Responses
+ * Class PreAdvice.
  */
 class PreAdvice extends XmlResponse
 {
@@ -71,11 +69,11 @@ class PreAdvice extends XmlResponse
     public function toArray(): array
     {
         return [
-            'Status' => (string) $this->simpleXmlArray->Status,
-            'PreAdviceErrorCode' => (array) $this->simpleXmlArray->PreAdviceErrorCode,
-            'PreAdviceErrorDetails' => $this->simpleXmlArray->PreAdviceErrorDetails ? (array) $this->simpleXmlArray->PreAdviceErrorDetails : '',
-            'ReceivedConsignmentsNumber' => (integer) $this->simpleXmlArray->ReceivedConsignmentsNumber,
-            'Consignment' => (array) $this->simpleXmlArray->Consignment,
+            'Status'                     => (string) $this->simpleXmlArray->Status,
+            'PreAdviceErrorCode'         => (array) $this->simpleXmlArray->PreAdviceErrorCode,
+            'PreAdviceErrorDetails'      => $this->simpleXmlArray->PreAdviceErrorDetails ? (array) $this->simpleXmlArray->PreAdviceErrorDetails : '',
+            'ReceivedConsignmentsNumber' => (int) $this->simpleXmlArray->ReceivedConsignmentsNumber,
+            'Consignment'                => (array) $this->simpleXmlArray->Consignment,
         ];
     }
 }

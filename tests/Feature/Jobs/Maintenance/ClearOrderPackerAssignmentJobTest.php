@@ -20,9 +20,9 @@ class ClearOrderPackerAssignmentJobTest extends TestCase
         $user = factory(User::class)->create();
 
         factory(Order::class)->create([
-            'packed_at' => null,
+            'packed_at'      => null,
             'packer_user_id' => $user->getKey(),
-            'updated_at' => Carbon::now()->subHours(11),
+            'updated_at'     => Carbon::now()->subHours(11),
         ]);
 
         // act
@@ -51,9 +51,9 @@ class ClearOrderPackerAssignmentJobTest extends TestCase
         Passport::actingAs($user);
 
         factory(Order::class)->create([
-            'packed_at' => null,
+            'packed_at'      => null,
             'packer_user_id' => $user->getKey(),
-            'updated_at' => Carbon::now()->subHours(14),
+            'updated_at'     => Carbon::now()->subHours(14),
         ]);
 
         ClearPackerIdJob::dispatchNow();

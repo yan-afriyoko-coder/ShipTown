@@ -6,10 +6,9 @@ use App\Events\Order\ActiveOrderCheckEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class EventServiceProviderBase
- * @package App\Providers
+ * Class EventServiceProviderBase.
  */
-class EventServiceProviderBase extends BaseModuleServiceProvider
+class AutoPackingWarehouseServiceProvider extends BaseModuleServiceProvider
 {
     /**
      * @var string
@@ -19,7 +18,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public string $module_description = 'Changes status from "paid" to "packing_warehouse" ' .
+    public string $module_description = 'Changes status from "paid" to "packing_warehouse" '.
     'if can fulfill from location 99';
 
     /**

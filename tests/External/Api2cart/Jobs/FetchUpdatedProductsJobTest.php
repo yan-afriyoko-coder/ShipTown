@@ -12,17 +12,18 @@ class FetchUpdatedProductsJobTest extends TestCase
     /**
      * A basic feature test example.
      *
-     * @return void
      * @throws RequestException
+     *
+     * @return void
      */
     public function testExample()
     {
         // we set key to api2cart demo store
         new Api2cartConnection([
-            'location_id' => '99',
-            'type' => 'opencart',
-            'url' => 'http://demo.api2cart.com/opencart',
-            'bridge_api_key' => env('API2CART_TEST_STORE_KEY')
+            'location_id'    => '99',
+            'type'           => 'opencart',
+            'url'            => 'http://demo.api2cart.com/opencart',
+            'bridge_api_key' => env('API2CART_TEST_STORE_KEY'),
         ]);
 
         $job = new FetchUpdatedProductsJob();

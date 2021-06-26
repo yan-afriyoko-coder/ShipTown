@@ -1,27 +1,25 @@
 <?php
 
-
 namespace App\Services;
 
 use App\Events\Order\OrderCreatedEvent;
-use App\Modules\Api2cart\src\Jobs\ImportShippingAddressJob;
 use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderProduct;
+use App\Modules\Api2cart\src\Jobs\ImportShippingAddressJob;
 use Exception;
 use Illuminate\Support\Str;
 use phpseclib\Math\BigInteger;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderService
 {
-
     /**
-     * @param Order $order
+     * @param Order  $order
      * @param string $from_status_code
-     * @param bool $condition
+     * @param bool   $condition
      * @param string $to_status_code
+     *
      * @return Order
      */
     public static function changeStatusIf(Order $order, string $from_status_code, bool $condition, string $to_status_code): Order
@@ -36,6 +34,7 @@ class OrderService
     /**
      * @param Order $order
      * @param $sourceLocationId
+     *
      * @return bool
      */
     public static function canNotFulfill(Order $order, $sourceLocationId = null)
@@ -46,6 +45,7 @@ class OrderService
     /**
      * @param Order $order
      * @param $sourceLocationId
+     *
      * @return bool
      */
     public static function canFulfill(Order $order, $sourceLocationId = null): bool
@@ -65,7 +65,7 @@ class OrderService
                 return false;
             }
 
-            if ((double) $quantity_available < (double) $orderProduct->quantity_to_ship) {
+            if ((float) $quantity_available < (float) $orderProduct->quantity_to_ship) {
                 return false;
             }
         }
@@ -76,6 +76,7 @@ class OrderService
     /**
      * @param $order_number
      * @param $template_name
+     *
      * @return string
      */
     public static function getOrderPdf(string $order_number, $template_name)
@@ -90,7 +91,7 @@ class OrderService
             $order = $order->refresh();
         }
 
-        $view = 'pdf/orders/'. $template_name;
+        $view = 'pdf/orders/'.$template_name;
         $data = $order->toArray();
 
         return PdfService::fromView($view, $data);
@@ -98,8 +99,10 @@ class OrderService
 
     /**
      * @param array $orderAttributes
-     * @return Order
+     *
      * @throws Exception
+     *
+     * @return Order
      */
     public static function updateOrCreate(array $orderAttributes)
     {
@@ -120,6 +123,7 @@ class OrderService
     /**
      * @param array $shippingAddressAttributes
      * @param $order
+     *
      * @return Order
      */
     public static function updateOrCreateShippingAddress(Order $order, array $shippingAddressAttributes): Order
@@ -136,6 +140,7 @@ class OrderService
 
     /**
      * @param array $orderProductAttributes
+     *
      * @return BigInteger|null
      */
     private static function getProductId(array $orderProductAttributes)
@@ -157,8 +162,10 @@ class OrderService
     /**
      * @param $order_products
      * @param Order $order
-     * @return Order
+     *
      * @throws Exception
+     *
+     * @return Order
      */
     private static function syncOrderProducts($order_products, Order $order): Order
     {
@@ -179,7 +186,7 @@ class OrderService
                         ->toArray(),
                     // values
                     [
-                        'order_id' => $order->getKey(),
+                        'order_id'   => $order->getKey(),
                         'product_id' => self::getProductId($orderProductAttributes),
                     ]
                 );

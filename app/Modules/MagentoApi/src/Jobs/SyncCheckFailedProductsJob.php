@@ -3,7 +3,6 @@
 namespace App\Modules\MagentoApi\src\Jobs;
 
 use App\Models\Product;
-use App\Modules\Api2cart\src\Jobs\SyncProductJob;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -14,12 +13,15 @@ use Illuminate\Support\Facades\Log;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 /**
- * Class SyncCheckFailedProductsJob
- * @package App\Jobs
+ * Class SyncCheckFailedProductsJob.
  */
 class SyncCheckFailedProductsJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use IsMonitored;
 
     /**
      * @var int
@@ -36,7 +38,6 @@ class SyncCheckFailedProductsJob implements ShouldQueue
         $this->batchSize = 10;
     }
 
-
     /**
      * Execute the job.
      *
@@ -50,7 +51,7 @@ class SyncCheckFailedProductsJob implements ShouldQueue
         $query = Product::withAllTags(['CHECK FAILED']);
 
         $this->queueData([
-            'total_count' => $query->count()
+            'total_count' => $query->count(),
         ]);
 
         $totalCount = $query->count();

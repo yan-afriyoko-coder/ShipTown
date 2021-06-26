@@ -19,14 +19,13 @@ class FixQuantityAvailableJobTest extends TestCase
         factory(Product::class, 10)->create();
 
         Product::query()->update([
-            'quantity_available' => 2
+            'quantity_available' => 2,
         ]);
 
         FixQuantityAvailableJob::dispatch();
 
         $this->assertDatabaseMissing('products', [
-            'quantity_available' => 2
+            'quantity_available' => 2,
         ]);
     }
-
 }

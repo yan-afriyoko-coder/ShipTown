@@ -13,8 +13,7 @@ use App\Modules\Api2cart\src\Listeners\HourlyEvent\DispatchSyncProductsJobListen
 use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class Api2cartServiceProvider
- * @package App\Providers
+ * Class Api2cartServiceProvider.
  */
 class Api2cartServiceProvider extends BaseModuleServiceProvider
 {

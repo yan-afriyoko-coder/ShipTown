@@ -27,7 +27,7 @@ class OrderActivityController extends Controller
                 AllowedFilter::exact('subject_id', 'subject_id'),
             ])
             ->allowedIncludes([
-                'causer'
+                'causer',
             ])
             ->allowedSorts([
                 'id',

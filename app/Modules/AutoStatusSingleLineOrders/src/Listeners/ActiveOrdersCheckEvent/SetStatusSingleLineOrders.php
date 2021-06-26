@@ -5,8 +5,7 @@ namespace App\Modules\AutoStatusSingleLineOrders\src\Listeners\ActiveOrdersCheck
 use App\Events\Order\ActiveOrderCheckEvent;
 
 /**
- * Class SetPackingWebStatus
- * @package App\Listeners\Order
+ * Class SetPackingWebStatus.
  */
 class SetStatusSingleLineOrders
 {
@@ -14,6 +13,7 @@ class SetStatusSingleLineOrders
      * Handle the event.
      *
      * @param ActiveOrderCheckEvent $event
+     *
      * @return void
      */
     public function handle(ActiveOrderCheckEvent $event)
@@ -27,7 +27,7 @@ class SetStatusSingleLineOrders
         }
 
         if ($order->product_line_count === 1) {
-            $order->log("Single line order detected, changing order status");
+            $order->log('Single line order detected, changing order status');
             $order->update(['status_code' => $newOrderStatus]);
         }
     }

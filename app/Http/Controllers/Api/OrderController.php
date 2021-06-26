@@ -9,8 +9,6 @@ use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
-use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -18,13 +16,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
 
 /**
- * Class OrdersController
- * @package App\Http\Controllers\Api
+ * Class OrdersController.
  */
 class OrderController extends Controller
 {
     /**
      * @param Request $request
+     *
      * @return AnonymousResourceCollection
      */
     public function index(Request $request)
@@ -36,6 +34,7 @@ class OrderController extends Controller
 
     /**
      * @param StoreOrderRequest $request
+     *
      * @return JsonResponse
      */
     public function store(StoreOrderRequest $request)
@@ -48,12 +47,12 @@ class OrderController extends Controller
         collect($request['products'])->each(function ($orderProductData) use ($order) {
             $product = Product::findBySKU($orderProductData['sku']);
             OrderProduct::create([
-                'order_id' => $order->getKey(),
-                'product_id' => $product ? $product->getKey() : null,
-                'sku_ordered' => $orderProductData['sku'],
-                'name_ordered' => $orderProductData['name'],
+                'order_id'         => $order->getKey(),
+                'product_id'       => $product ? $product->getKey() : null,
+                'sku_ordered'      => $orderProductData['sku'],
+                'name_ordered'     => $orderProductData['name'],
                 'quantity_ordered' => $orderProductData['quantity'],
-                'price' => $orderProductData['price'],
+                'price'            => $orderProductData['price'],
             ]);
         });
 
@@ -62,7 +61,8 @@ class OrderController extends Controller
 
     /**
      * @param UpdateRequest $request
-     * @param Order $order
+     * @param Order         $order
+     *
      * @return JsonResource
      */
     public function update(UpdateRequest $request, Order $order)
@@ -96,7 +96,8 @@ class OrderController extends Controller
 
     /**
      * @param Request $request
-     * @param Order $order
+     * @param Order   $order
+     *
      * @return JsonResource
      */
     public function show(Request $request, Order $order)

@@ -25,6 +25,5 @@ class AddReservesStockColumnToOrderStatusesTable extends Migration
      */
     public function down()
     {
-
     }
 }

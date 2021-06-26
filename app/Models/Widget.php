@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\Widget
+ * App\Models\Widget.
  *
- * @property int $id
- * @property string $name
- * @property array $config
+ * @property int         $id
+ * @property string      $name
+ * @property array       $config
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|Widget newModelQuery()
  * @method static Builder|Widget newQuery()
  * @method static Builder|Widget query()
@@ -29,10 +30,10 @@ class Widget extends Model
 {
     protected $fillable = [
         'config',
-        'name'
+        'name',
     ];
 
     protected $casts = [
-        'config' => 'array'
+        'config' => 'array',
     ];
 }

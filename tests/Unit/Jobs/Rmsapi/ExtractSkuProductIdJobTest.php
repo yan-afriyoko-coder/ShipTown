@@ -27,15 +27,15 @@ class ExtractSkuProductIdJobTest extends TestCase
         RmsapiProductImport::query()->delete();
 
         factory(RmsapiProductImport::class, 5)->create([
-            'sku' => null,
-            'product_id' => null,
+            'sku'            => null,
+            'product_id'     => null,
             'when_processed' => null,
         ]);
 
         ProcessImportedBatch::dispatchNow();
 
         RmsapiProductImport::query()->update([
-            'sku' => null,
+            'sku'        => null,
             'product_id' => null,
         ]);
 

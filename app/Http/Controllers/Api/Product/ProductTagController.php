@@ -9,8 +9,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\Tags\Tag;
 
 /**
- * Class ProductTagController
- * @package App\Http\Controllers\Api\Product
+ * Class ProductTagController.
  */
 class ProductTagController extends Controller
 {

@@ -6,12 +6,11 @@ use App\Events\DailyEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Events\OrderProduct\OrderProductCreatedEvent;
 use App\Events\OrderProduct\OrderProductUpdatedEvent;
-use App\Modules\InventoryReservations\src\Listeners\OrderProductUpdatedEvent\UpdateQuantityReservedListener;
 use App\Modules\BaseModuleServiceProvider;
+use App\Modules\InventoryReservations\src\Listeners\OrderProductUpdatedEvent\UpdateQuantityReservedListener;
 
 /**
- * Class EventServiceProviderBase
- * @package App\Providers
+ * Class EventServiceProviderBase.
  */
 class EventServiceProviderBase extends BaseModuleServiceProvider
 {
@@ -32,7 +31,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
      */
     protected $listen = [
         DailyEvent::class => [
-            Listeners\DailyEvent\RunRecalculateQuantityReservedJobListener::class
+            Listeners\DailyEvent\RunRecalculateQuantityReservedJobListener::class,
         ],
 
         OrderProductUpdatedEvent::class => [

@@ -6,10 +6,9 @@ use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class EventServiceProviderBase
- * @package App\Providers
+ * Class EventServiceProviderBase.
  */
-class EventServiceProviderBase extends BaseModuleServiceProvider
+class AutoStatusReadyServiceProvider extends BaseModuleServiceProvider
 {
     /**
      * @var string
@@ -26,7 +25,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
      */
     protected $listen = [
         OrderUpdatedEvent::class => [
-            Listeners\OrderUpdatedEvent\SetReadyWhenPacked::class,
+            Listeners\OrderUpdatedEvent\SetReadyWhenPackedListener::class,
         ],
     ];
 }

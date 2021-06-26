@@ -2,9 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-
 use App\User;
+use Illuminate\Console\Command;
 
 class SetEveryoneAdmin extends Command
 {
@@ -33,7 +32,7 @@ class SetEveryoneAdmin extends Command
 
         foreach ($users as $user) {
             $user->assignRole('admin');
-            $this->info('Assigned user: ' . $user->name . ' as admin.');
+            $this->info('Assigned user: '.$user->name.' as admin.');
         }
     }
 }

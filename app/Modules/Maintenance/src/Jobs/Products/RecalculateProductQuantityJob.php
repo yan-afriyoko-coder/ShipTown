@@ -13,12 +13,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Class RecalculateProductQuantityJob
- * @package App\Jobs\Products
+ * Class RecalculateProductQuantityJob.
  */
 class RecalculateProductQuantityJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * @var int
@@ -39,8 +41,8 @@ class RecalculateProductQuantityJob implements ShouldQueue
     {
         $incorrectInventoryRecords = Inventory::query()->select([
             'product_id',
-            DB::raw('max('. DB::getTablePrefix() .'products.quantity) as current_quantity'),
-            DB::raw('sum('. DB::getTablePrefix() .'inventory.quantity) as expected_quantity'),
+            DB::raw('max('.DB::getTablePrefix().'products.quantity) as current_quantity'),
+            DB::raw('sum('.DB::getTablePrefix().'inventory.quantity) as expected_quantity'),
         ])
             ->leftJoin('products', 'products.id', '=', 'inventory.product_id')
             ->groupBy('product_id')
@@ -56,7 +58,7 @@ class RecalculateProductQuantityJob implements ShouldQueue
         });
 
         info('RecalculateProductQuantityJob finished', [
-            'records_corrected_count' => $incorrectInventoryRecords->count()
+            'records_corrected_count' => $incorrectInventoryRecords->count(),
         ]);
     }
 }

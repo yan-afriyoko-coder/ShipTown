@@ -8,7 +8,6 @@ use App\Traits\CsvFileResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class ProductsPickedInWarehouse extends Controller
 {

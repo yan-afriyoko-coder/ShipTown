@@ -3,11 +3,9 @@
 namespace Tests\Feature\Http\Controllers\Api\OrderController;
 
 use App\User;
-use Illuminate\Support\Facades\Event;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class StoreTest extends TestCase
 {
@@ -25,17 +23,17 @@ class StoreTest extends TestCase
     {
         $data = [
             'order_number'      => '0123456789',
-            'products' => [
+            'products'          => [
                 [
-                    'sku' => '123',
-                    'name' => 'Test Product',
+                    'sku'          => '123',
+                    'name'         => 'Test Product',
                     'quantity'     => 2,
                     'price'        => 4,
                 ],
 
                 [
-                    'sku' => '456',
-                    'name' => 'Test Product',
+                    'sku'          => '456',
+                    'name'         => 'Test Product',
                     'quantity'     => 5,
                     'price'        => 10,
                 ],
@@ -53,7 +51,7 @@ class StoreTest extends TestCase
     {
         $data = [
             'order_number'      => '001241',
-            'products' => [
+            'products'          => [
                 [], // blank products record
             ],
         ];
@@ -62,7 +60,7 @@ class StoreTest extends TestCase
             factory(User::class)->create()
         );
 
-        $this->postJson( 'api/orders', $data)
+        $this->postJson('api/orders', $data)
             ->assertStatus(422)
             ->assertJsonValidationErrors(['products.0.sku'])
             ->assertJsonValidationErrors(['products.0.quantity'])
@@ -75,13 +73,13 @@ class StoreTest extends TestCase
             //'order_number'      => '001241',
             'products' => [
                 [
-                    'sku' => '123',
+                    'sku'          => '123',
                     'quantity'     => 2,
                     'price'        => 4,
                 ],
 
                 [
-                    'sku' => '456',
+                    'sku'          => '456',
                     'quantity'     => 5,
                     'price'        => 10,
                 ],

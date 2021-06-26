@@ -8,13 +8,13 @@ use Psr\Http\Message\ResponseInterface;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
- * Class Client
+ * Class Client.
  *
- * @package App\Modules\PrintNode\src\Models
- * @property int $id
- * @property string $api_key
+ * @property int                             $id
+ * @property string                          $api_key
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Client newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Client newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Client query()
@@ -43,6 +43,7 @@ class Client extends Model
 
     /**
      * Client constructor.
+     *
      * @param array $attributes
      */
     public function __construct(array $attributes = [])
@@ -50,14 +51,15 @@ class Client extends Model
         parent::__construct($attributes);
 
         $this->guzzleClient = new GuzzleClient([
-            'base_uri' => 'https://api.printnode.com',
-            'timeout' => 60,
+            'base_uri'   => 'https://api.printnode.com',
+            'timeout'    => 60,
             'exceptions' => true,
         ]);
     }
 
     /**
      * @param string $uri
+     *
      * @return ResponseInterface
      */
     public function getRequest(string $uri): ResponseInterface
@@ -67,14 +69,15 @@ class Client extends Model
 
     /**
      * @param string $uri
-     * @param array $json
+     * @param array  $json
+     *
      * @return ResponseInterface
      */
     public function postRequest(string $uri, array $json): ResponseInterface
     {
         return $this->guzzleClient->post($uri, [
             'headers' => $this->generateHeaders(),
-            'json' => $json
+            'json'    => $json,
         ]);
     }
 
@@ -84,9 +87,9 @@ class Client extends Model
     public function generateHeaders(): array
     {
         return  [
-            'Authorization' => 'Basic ' . base64_encode($this->api_key),
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
+            'Authorization' => 'Basic '.base64_encode($this->api_key),
+            'Content-Type'  => 'application/json',
+            'Accept'        => 'application/json',
         ];
     }
 

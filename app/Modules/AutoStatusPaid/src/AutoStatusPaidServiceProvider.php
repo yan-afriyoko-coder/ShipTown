@@ -6,10 +6,9 @@ use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class EventServiceProviderBase
- * @package App\Providers
+ * Class EventServiceProviderBase.
  */
-class EventServiceProviderBase extends BaseModuleServiceProvider
+class AutoStatusPaidServiceProvider extends BaseModuleServiceProvider
 {
     /**
      * @var string
@@ -19,7 +18,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public string $module_description = 'Automatically changes status from "processing" to "paid" ' .
+    public string $module_description = 'Automatically changes status from "processing" to "paid" '.
         'if order has been paid';
 
     /**

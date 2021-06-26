@@ -6,10 +6,9 @@ use App\Events\HourlyEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class EventServiceProviderBase
- * @package App\Providers
+ * Class AutoStatusPickingServiceProvider.
  */
-class EventServiceProviderBase extends BaseModuleServiceProvider
+class AutoStatusPickingServiceProvider extends BaseModuleServiceProvider
 {
     /**
      * @var string
@@ -19,7 +18,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public string $module_description = 'Automatically moves batch of orders "paid" to "picking" status. ' .
+    public string $module_description = 'Automatically moves batch of orders "paid" to "picking" status. '.
     'It prioritize old orders';
 
     /**
@@ -27,7 +26,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
      */
     protected $listen = [
         HourlyEvent::class => [
-            Listeners\HourlyEvent\RefillStatusPickingListener::class,
+            Listeners\HourlyEvent\RefillPickingIfEmpty::class,
         ],
     ];
 }

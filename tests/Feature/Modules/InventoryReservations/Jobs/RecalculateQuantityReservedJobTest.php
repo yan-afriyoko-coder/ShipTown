@@ -11,16 +11,12 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
- * Class OrderCreatedTest
- * @package Tests\Feature\Modules\InventoryReservations
+ * Class OrderCreatedTest.
  */
 class RecalculateQuantityReservedJobTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     *
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -32,26 +28,26 @@ class RecalculateQuantityReservedJobTest extends TestCase
     public function test_if_recalculates_correctly()
     {
         factory(OrderStatus::class)->create([
-            'code' => 'new',
-            'name' => 'new',
+            'code'           => 'new',
+            'name'           => 'new',
             'reserves_stock' => true,
         ]);
 
         $product = factory(Product::class)->create();
 
-        $random_quantity = rand(1,20);
+        $random_quantity = rand(1, 20);
 
         $data = [
             'order_number' => '1234',
-            'status_code' => 'new',
-            'products' => [
+            'status_code'  => 'new',
+            'products'     => [
                 [
-                    'sku' => $product->sku,
-                    'name' => $product->name,
+                    'sku'      => $product->sku,
+                    'name'     => $product->name,
                     'quantity' => $random_quantity,
-                    'price' => $product->price,
-                ]
-            ]
+                    'price'    => $product->price,
+                ],
+            ],
         ];
 
         $this->postJson('api/orders', $data)->assertOk();

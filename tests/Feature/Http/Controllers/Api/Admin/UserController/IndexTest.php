@@ -31,8 +31,8 @@ class IndexTest extends TestCase
                     'email',
                     'role_id',
                     'printer_id',
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 }

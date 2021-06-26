@@ -20,8 +20,8 @@ class IndexTest extends TestCase
             'links',
             'data' => [
                 '*' => [
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 }

@@ -21,6 +21,7 @@ class OrderProductCreatedListener
      * Handle the event.
      *
      * @param OrderProductCreatedEvent $event
+     *
      * @return void
      */
     public function handle(OrderProductCreatedEvent $event)
@@ -36,7 +37,7 @@ class OrderProductCreatedListener
         }
 
         $inventory = Inventory::firstOrNew([
-            'product_id' =>  $orderProduct->product_id,
+            'product_id'  => $orderProduct->product_id,
             'location_id' => 999,
         ]);
 

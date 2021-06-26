@@ -22,7 +22,7 @@ class DestroyTest extends TestCase
     {
         $user = factory(User::class)->create()->assignRole('user');
 
-        $response = $this->delete('api/admin/users/' . $user->id);
+        $response = $this->delete('api/admin/users/'.$user->id);
 
         $response->assertOk();
 

@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Product;
 use App\Models\ProductAlias;
 use Illuminate\Database\Seeder;
 
@@ -19,7 +18,7 @@ class ProductAliasSeeder extends Seeder
             '45',
             '55',
             '65',
-            '3276000690573'
+            '3276000690573',
         ]);
     }
 
@@ -28,7 +27,7 @@ class ProductAliasSeeder extends Seeder
         foreach ($aliasList as $alias) {
             $aliasExists = ProductAlias::query()->where(['alias' => $alias])->exists();
 
-            if (! $aliasExists) {
+            if (!$aliasExists) {
                 factory(ProductAlias::class)
                     ->create(['alias' => $alias]);
             }

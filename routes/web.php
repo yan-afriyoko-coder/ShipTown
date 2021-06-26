@@ -19,10 +19,10 @@ Route::get('manifest.json', 'ManifestController@index');
 
 // you can register only first user then he should invite others
 try {
-    Auth::routes(['register' => ! User::query()->exists()]);
+    Auth::routes(['register' => !User::query()->exists()]);
 } catch (\Exception $exception) {
     Auth::routes(['register' => false]);
-};
+}
 
 // Routes to allow invite other emails
 Route::get('invites/{token}', 'Api\Admin\UserInviteController@accept')->name('accept');
@@ -62,15 +62,14 @@ Route::middleware('auth')->group(function () {
 
     // Admin only routes
     Route::middleware('role:admin')->group(function () {
-
         Route::group([], function () {
 
             // tools
 //            Route::group(['prefix' => 'tools', 'namespace' => 'tools', 'as' => 'tools.'], function () {
-                Route::get('admin/tools/log-viewer', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
-                Route::prefix('admin/tools/queue-monitor')->group(function () {
-                    Route::queueMonitor();
-                });
+            Route::get('admin/tools/log-viewer', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+            Route::prefix('admin/tools/queue-monitor')->group(function () {
+                Route::queueMonitor();
+            });
 //            });
         });
 

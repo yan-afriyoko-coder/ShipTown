@@ -11,6 +11,8 @@
                     {{ session('status') }}
                 </div>
             @endif
+
+            <dpd-configuration></dpd-configuration>
     </div>
 </div>
 @endsection
