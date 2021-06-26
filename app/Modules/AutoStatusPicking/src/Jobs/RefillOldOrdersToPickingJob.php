@@ -4,7 +4,6 @@ namespace App\Modules\AutoStatusPicking\src\Jobs;
 
 use App\Models\AutoStatusPickingConfiguration;
 use App\Models\Order;
-use App\Services\AutoPilot;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

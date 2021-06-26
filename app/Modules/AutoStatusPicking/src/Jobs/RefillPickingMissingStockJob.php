@@ -4,7 +4,6 @@ namespace App\Modules\AutoStatusPicking\src\Jobs;
 
 use App\Models\AutoStatusPickingConfiguration;
 use App\Models\Order;
-use App\Services\AutoPilot;
 use App\Services\OrderService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -47,7 +46,7 @@ class RefillPickingMissingStockJob implements ShouldQueue
 
         logger('Refilling "picking" status (warehouse stock)', [
             'current_order_count_with_status' => $this->configuration->current_count_with_status,
-            'max_batch_size'    => $this->configuration->max_batch_size,
+            'max_batch_size'                  => $this->configuration->max_batch_size,
         ]);
 
         if ($this->configuration->current_count_with_status >= $this->configuration->max_batch_size) {
@@ -59,7 +58,6 @@ class RefillPickingMissingStockJob implements ShouldQueue
         $orders = Order::whereStatusCode('paid')
             ->orderBy('created_at')
             ->get();
-
 
         foreach ($orders as $order) {
             if (OrderService::canNotFulfill($order, 100)) {

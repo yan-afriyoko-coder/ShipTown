@@ -22,6 +22,7 @@ use Illuminate\Support\Carbon;
  * @property string      $last_synced_modified_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|Api2cartConnection newModelQuery()
  * @method static Builder|Api2cartConnection newQuery()
  * @method static Builder|Api2cartConnection query()
@@ -37,10 +38,12 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Api2cartConnection whereUpdatedAt($value)
  * @method static Builder|Api2cartConnection whereUrl($value)
  * @mixin Eloquent
+ *
  * @property int|null $inventory_location_id
  * @property int|null $pricing_location_id
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Modules\Api2cart\src\Models\Api2cartProductLink[] $productLinks
  * @property-read int|null $product_links_count
+ *
  * @method static Builder|Api2cartConnection whereInventoryLocationId($value)
  * @method static Builder|Api2cartConnection wherePricingLocationId($value)
  */

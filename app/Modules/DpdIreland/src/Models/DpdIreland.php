@@ -27,12 +27,14 @@ use Illuminate\Support\Carbon;
  * @property string      $country_code
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|DpdIreland newModelQuery()
  * @method static Builder|DpdIreland newQuery()
  * @method static Builder|DpdIreland query()
  * @method static Builder|DpdIreland first()
  * @method static Builder|DpdIreland firstOrFail()
  * @mixin Eloquent
+ *
  * @method static Builder|DpdIreland whereAddressLine1($value)
  * @method static Builder|DpdIreland whereAddressLine2($value)
  * @method static Builder|DpdIreland whereAddressLine3($value)

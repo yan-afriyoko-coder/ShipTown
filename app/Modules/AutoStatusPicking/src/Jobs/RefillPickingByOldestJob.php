@@ -4,7 +4,6 @@ namespace App\Modules\AutoStatusPicking\src\Jobs;
 
 use App\Models\AutoStatusPickingConfiguration;
 use App\Models\Order;
-use App\Services\AutoPilot;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -40,7 +39,7 @@ class RefillPickingByOldestJob implements ShouldQueue
     public function handle()
     {
         logger('Refilling "picking" status', [
-            'max_batch_size'    => $this->configuration->max_batch_size,
+            'max_batch_size'       => $this->configuration->max_batch_size,
             'currently_in_process' => $this->configuration->current_count_with_status,
         ]);
 

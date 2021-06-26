@@ -8,15 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
- * App\AutoStatusPickingConfiguration
+ * App\AutoStatusPickingConfiguration.
  *
  * @property int $id
- * @property integer      $max_batch_size
- * @property integer      $max_order_age
+ * @property int $max_batch_size
+ * @property int $max_order_age
  * @property-read int     $current_count_with_status
- * @property-read integer $required_count
+ * @property-read int $required_count
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|AutoStatusPickingConfiguration newModelQuery()
  * @method static Builder|AutoStatusPickingConfiguration newQuery()
  * @method static Builder|AutoStatusPickingConfiguration query()
@@ -36,7 +37,7 @@ class AutoStatusPickingConfiguration extends Model
      */
     protected $fillable = [
         'max_batch_size',
-        'max_order_age'
+        'max_order_age',
     ];
 
     /**
