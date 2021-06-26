@@ -8,7 +8,7 @@ use App\Modules\BaseModuleServiceProvider;
 /**
  * Class EventServiceProviderBase.
  */
-class EventServiceProviderBase extends BaseModuleServiceProvider
+class AutoPackingWebServiceProvider extends BaseModuleServiceProvider
 {
     /**
      * @var string

@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Feature\Modules\AutoStatusPackingWarehouse;
+namespace Tests\Feature\Modules\AutoStatusPackingWeb;
 
-use App\Events\Order\ActiveOrderCheckEvent;
+use App\Events\Order\OrderUpdatedEvent;
 use App\Models\Order;
-use App\Modules\AutoStatusPackingWarehouse\src\AutoPackingWarehouseServiceProvider;
-use App\Modules\AutoStatusPackingWarehouse\src\Jobs\SetStatusPackingWarehouseJob;
+use App\Modules\AutoStatusPackingWeb\src\AutoPackingWebServiceProvider;
+use App\Modules\AutoStatusPackingWeb\src\Jobs\SetPackingWebStatusJob;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
@@ -21,14 +21,14 @@ class AutoPackingWarehouseServiceProviderTest extends TestCase
      */
     public function test_basic_functionality()
     {
-        AutoPackingWarehouseServiceProvider::enableModule();
+        AutoPackingWebServiceProvider::enableModule();
 
         $order = factory(Order::class)->create(['is_active' => true]);
 
         Bus::fake();
 
-        ActiveOrderCheckEvent::dispatch($order);
+        OrderUpdatedEvent::dispatch($order);
 
-        Bus::assertDispatched(SetStatusPackingWarehouseJob::class);
+        Bus::assertDispatched(SetPackingWebStatusJob::class);
     }
 }

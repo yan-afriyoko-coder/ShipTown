@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Modules\AutoStatusPaid\src\Listeners\OrderUpdatedEvent;
+namespace App\Modules\AutoStatusReady\src\Listeners\OrderUpdatedEvent;
 
 use App\Events\Order\OrderUpdatedEvent;
-use App\Modules\AutoStatusPaid\src\Jobs\SetPaidStatusJob;
+use App\Modules\AutoStatusReady\src\Jobs\SetReadyStatusWhenPackedJob;
 
 /**
  * Class SetPackingWebStatus.
  */
-class ProcessingToPaidListener
+class SetReadyWhenPackedListener
 {
     /**
      * Handle the event.
@@ -21,6 +21,6 @@ class ProcessingToPaidListener
     {
         $order = $event->getOrder();
 
-        SetPaidStatusJob::dispatchNow($order);
+        SetReadyStatusWhenPackedJob::dispatchNow($order);
     }
 }

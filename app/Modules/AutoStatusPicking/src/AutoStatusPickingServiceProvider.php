@@ -6,9 +6,9 @@ use App\Events\HourlyEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class EventServiceProviderBase.
+ * Class AutoStatusPickingServiceProvider.
  */
-class EventServiceProviderBase extends BaseModuleServiceProvider
+class AutoStatusPickingServiceProvider extends BaseModuleServiceProvider
 {
     /**
      * @var string
@@ -26,7 +26,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
      */
     protected $listen = [
         HourlyEvent::class => [
-            Listeners\HourlyEvent\RefillStatusPickingListener::class,
+            Listeners\HourlyEvent\RefillPickingIfEmpty::class,
         ],
     ];
 }
