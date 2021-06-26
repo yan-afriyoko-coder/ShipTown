@@ -13,11 +13,11 @@
                     <tbody>
                         <tr v-for="module in modules" :key="module.id">
                             <td>
-                                {{ module.name }}
+                                <div>{{ module.service_provider_class }}</div>
                             </td>
                             <td class="text-right">
                                 <div class="custom-control custom-switch">
-                                    <input type="checkbox" @change="updateModuleStatus(module.id)" class="custom-control-input" :id="module.id" v-model="module.is_active">
+                                    <input type="checkbox" @change="updateModuleStatus(module.id)" class="custom-control-input" :id="module.id" v-model="module.enabled">
                                     <label class="custom-control-label" :for="module.id"></label>
                                 </div>
                             </td>

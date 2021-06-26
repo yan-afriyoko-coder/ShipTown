@@ -204,11 +204,11 @@ export default {
             },
 
             apiGetModules: function () {
-                return axios.get('/api/modules');
+                return axios.get('/api/settings/modules');
             },
 
             apiToggleModules: function (id) {
-                return axios.put('/api/modules/' + id);
+                return axios.put('/api/settings/modules/' + id);
             },
         }
     }

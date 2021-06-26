@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Settings;
 
 use App\Http\Controllers\Controller;
-use App\Models\Module;
+use App\Module;
 use Illuminate\Http\Request;
 use App\Http\Resources\ModuleResource;
 
@@ -24,12 +24,12 @@ class ModuleConfigurationController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Module  $module
+     * @param  \App\Module  $module
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Module $module)
     {
-        $module->is_active = !$module->is_active;
+        $module->enabled = !$module->enabled;
         $module->save();
 
         return new ModuleResource($module);

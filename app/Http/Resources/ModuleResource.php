@@ -16,8 +16,8 @@ class ModuleResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'is_active' => $this->is_active
+            'service_provider_class' => $this->service_provider_class,
+            'enabled' => $this->enabled
         ];
     }
 }

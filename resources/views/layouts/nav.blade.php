@@ -107,9 +107,11 @@
                         <!-- Menu Items END -->
                         <div class="dropdown-menu dropdown-menu-right text-center text-md-left" aria-labelledby="navbarDropdown">
                             <!-- Settings -->
-                            <a class="dropdown-item" href="{{ route('settings') }}">
-                                {{ __('Settings') }}
-                            </a>
+                            @hasrole('admin')
+                                <a class="dropdown-item" href="{{ route('settings') }}">
+                                    {{ __('Settings') }}
+                                </a>
+                            @endhasrole
 
                             <a class="dropdown-item" href="https://www.youtube.com/channel/UCl04S5dRXop1ZdZsOqY3OnA" target="_blank">
                                 {{ __('YouTube') }}
@@ -118,8 +120,8 @@
                             <!-- Logout -->
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                {{ __('Logout') }}
+                               document.getElementById('logout-form').submit();">
+                                 {{ __('Logout') }}
                             </a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
