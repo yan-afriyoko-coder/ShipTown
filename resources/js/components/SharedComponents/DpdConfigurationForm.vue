@@ -1,10 +1,8 @@
 <template>
     <ValidationObserver ref="form">
         <form class="form" @submit.prevent="submit" ref="loadingContainer">
-            <div class="form-group row">
-                <label class="col-sm-3 col-form-label" for="api_username"
-                    >API Username</label
-                >
+            <div class="form-group row" v-if="is_new">
+                <label class="col-sm-3 col-form-label" for="api_username">API Username</label>
                 <div class="col-sm-9">
                     <ValidationProvider name="user" v-slot="{ errors }">
                         <input
@@ -23,10 +21,9 @@
                     </ValidationProvider>
                 </div>
             </div>
-            <div class="form-group row">
-                <label class="col-sm-3 col-form-label" for="api_token"
-                    >API Token</label
-                >
+
+            <div class="form-group row" v-if="is_new">
+                <label class="col-sm-3 col-form-label" for="api_token">API Token</label>
                 <div class="col-sm-9">
                     <ValidationProvider name="token" v-slot="{ errors }">
                         <input
@@ -45,10 +42,8 @@
                     </ValidationProvider>
                 </div>
             </div>
-            <div class="form-group row">
-                <label class="col-sm-3 col-form-label" for="api_password"
-                    >API Password</label
-                >
+            <div class="form-group row" v-if="is_new">
+                <label class="col-sm-3 col-form-label" for="api_password">API Password</label>
                 <div class="col-sm-9">
                     <ValidationProvider name="password" v-slot="{ errors }">
                         <input
@@ -76,18 +71,12 @@
                         v-model="live"
                         required
                     />
-                    <label class="custom-control-label" for="live"
-                        >Live Mode</label
-                    >
+                    <label class="custom-control-label" for="live">Live Mode</label>
                 </div>
             </div>
 
             <div class="form-group row">
-                <label
-                    class="col-sm-3 col-form-label"
-                    for="contact_name"
-                    >Contact Name</label
-                >
+                <label class="col-sm-3 col-form-label" for="this.contact">Contact Name</label>
                 <div class="col-sm-9">
                     <ValidationProvider name="contact_name" v-slot="{ errors }">
                         <input
