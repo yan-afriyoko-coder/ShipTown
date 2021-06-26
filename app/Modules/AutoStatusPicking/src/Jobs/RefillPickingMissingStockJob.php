@@ -2,6 +2,7 @@
 
 namespace App\Modules\AutoStatusPicking\src\Jobs;
 
+use App\Models\AutoStatusPickingConfiguration;
 use App\Models\Order;
 use App\Services\AutoPilot;
 use App\Services\OrderService;
@@ -23,7 +24,7 @@ class RefillPickingMissingStockJob implements ShouldQueue
     /**
      * @var int
      */
-    private $maxDailyAllowed;
+    private $configuration;
 
     /**
      * Create a new job instance.
@@ -32,7 +33,7 @@ class RefillPickingMissingStockJob implements ShouldQueue
      */
     public function __construct()
     {
-        $this->maxDailyAllowed = AutoPilot::getBatchSize();
+        $this->configuration = AutoStatusPickingConfiguration::firstOrCreate([], []);
     }
 
     /**
@@ -42,28 +43,31 @@ class RefillPickingMissingStockJob implements ShouldQueue
      */
     public function handle()
     {
-        $currentOrdersInProcessCount = Order::whereIn('status_code', ['picking'])->count();
+        $currentOrdersInProcessCount = $this->configuration->current_count_with_status;
 
         logger('Refilling "picking" status (warehouse stock)', [
-            'currently_in_process' => $currentOrdersInProcessCount,
-            'max_daily_allowed'    => $this->maxDailyAllowed,
+            'current_order_count_with_status' => $this->configuration->current_count_with_status,
+            'max_batch_size'    => $this->configuration->max_batch_size,
         ]);
 
-        if ($currentOrdersInProcessCount >= $this->maxDailyAllowed) {
+        if ($this->configuration->current_count_with_status >= $this->configuration->max_batch_size) {
             return;
         }
+
+        $requiredCount = $this->configuration->required_count;
 
         $orders = Order::whereStatusCode('paid')
             ->orderBy('created_at')
             ->get();
 
+
         foreach ($orders as $order) {
             if (OrderService::canNotFulfill($order, 100)) {
+                info('RefillPickingMissingStockJob', ['order_number' => $order->order_number]);
                 $order->update(['status_code' => 'picking']);
-                $currentOrdersInProcessCount++;
-                info('RefillPickingMissingStockJob: updated status to picking', ['order_number' => $order->order_number]);
+                $requiredCount--;
             }
-            if ($currentOrdersInProcessCount >= $this->maxDailyAllowed) {
+            if ($requiredCount <= 0) {
                 break;
             }
         }

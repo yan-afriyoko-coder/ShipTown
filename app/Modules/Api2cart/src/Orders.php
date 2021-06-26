@@ -3,6 +3,7 @@
 namespace App\Modules\Api2cart\src;
 
 use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -14,9 +15,9 @@ class Orders extends Entity
      * @param string $store_key
      * @param array  $params
      *
-     * @throws Exception
-     *
      * @return array|null
+     * @throws Exception|GuzzleException
+     *
      */
     public static function get(string $store_key, array $params)
     {

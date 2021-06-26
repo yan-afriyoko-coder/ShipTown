@@ -2,6 +2,7 @@
 
 namespace App\Modules\AutoStatusPicking\src\Jobs;
 
+use App\Models\AutoStatusPickingConfiguration;
 use App\Models\Order;
 use App\Services\AutoPilot;
 use Carbon\Carbon;
@@ -20,9 +21,10 @@ class RefillOldOrdersToPickingJob implements ShouldQueue
     use SerializesModels;
     use IsMonitored;
 
-    private int $maxBatchSize;
-    private $currentOrdersInProcessCount;
-    private $ordersRequiredCount;
+    /**
+     * @var AutoStatusPickingConfiguration
+     */
+    private $configuration;
 
     /**
      * Create a new job instance.
@@ -31,16 +33,12 @@ class RefillOldOrdersToPickingJob implements ShouldQueue
      */
     public function __construct()
     {
-        $this->maxBatchSize = AutoPilot::getBatchSize();
-
-        $this->currentOrdersInProcessCount = Order::whereIn('status_code', ['picking'])->count();
-
-        $this->ordersRequiredCount = $this->maxBatchSize - $this->currentOrdersInProcessCount;
+        $this->configuration = AutoStatusPickingConfiguration::firstOrCreate([], []);
 
         info('Refilling "picking" status (old orders)', [
-            'currently_in_process' => $this->currentOrdersInProcessCount,
-            'max_daily_allowed'    => $this->maxBatchSize,
-            'ordersRequiredCount'  => $this->ordersRequiredCount,
+            'currently_in_process' => $this->configuration->current_count_with_status,
+            'max_daily_allowed'    => $this->configuration->max_batch_size,
+            'ordersRequiredCount'  => $this->configuration->required_count,
         ]);
     }
 
@@ -51,19 +49,18 @@ class RefillOldOrdersToPickingJob implements ShouldQueue
      */
     public function handle()
     {
-        if ($this->ordersRequiredCount <= 0) {
+        if ($this->configuration->required_count <= 0) {
             return;
         }
 
         $orders = Order::whereStatusCode('paid')
-            ->where('order_placed_at', '<', Carbon::now()->subDays(AutoPilot::getMaxOrderAgeAllowed()))
+            ->where('order_placed_at', '<', Carbon::now()->subDays($this->configuration->max_order_age))
             ->orderBy('created_at')
-            ->limit($this->ordersRequiredCount)
+            ->limit($this->configuration->required_count)
             ->get();
 
         foreach ($orders as $order) {
-            activity()->performedOn($order)
-                ->log('Outdated order, status_code => "picking"');
+            $order->log('Outdated order, status_code => "picking"');
             $order->update(['status_code' => 'picking']);
         }
     }

@@ -3,12 +3,14 @@
 namespace Tests\Unit\Jobs\Maintenance;
 
 use App\Events\HourlyEvent;
+use App\Models\AutoStatusPickingConfiguration;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Modules\AutoStatusPicking\src\AutoStatusPickingServiceProvider;
 use App\Services\AutoPilot;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use phpDocumentor\Reflection\Types\AggregatedType;
 use Tests\TestCase;
 
 class RefillWebPickingStatusListJobTest extends TestCase
@@ -36,9 +38,14 @@ class RefillWebPickingStatusListJobTest extends TestCase
 
         HourlyEvent::dispatch();
 
+        ray(
+            AutoStatusPickingConfiguration::firstOrCreate([],[])->max_batch_size,
+            AutoStatusPickingConfiguration::firstOrCreate([],[])->current_count_with_status
+        );
+
         $this->assertEquals(
-            AutoPilot::getBatchSize(),
-            Order::whereStatusCode('picking')->count()
+            AutoStatusPickingConfiguration::firstOrCreate([],[])->max_batch_size,
+            AutoStatusPickingConfiguration::firstOrCreate([],[])->current_count_with_status,
         );
     }
 }

@@ -45,7 +45,6 @@ use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
  * @property-read int|null $roles_count
  * @property-read Collection|Token[] $tokens
  * @property-read int|null $tokens_count
- *
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
  * @method static Builder|User onlyTrashed()
@@ -65,9 +64,7 @@ use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
  * @method static Builder|User withTrashed()
  * @method static Builder|User withoutTrashed()
  * @mixin Eloquent
- *
  * @property bool $ask_for_shipping_number
- *
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAddressLabelTemplate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAskForShippingNumber($value)
  */

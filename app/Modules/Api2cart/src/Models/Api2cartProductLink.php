@@ -34,7 +34,6 @@ use Illuminate\Support\Carbon;
  * @property string|null        $api2cart_sale_price_end_date
  * @property Carbon|null        $created_at
  * @property Carbon|null        $updated_at
- *
  * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink query()
