@@ -4,7 +4,6 @@ namespace App\Modules\AutoStatusPackingWeb\src\Listeners\OrderUpdatedEvent;
 
 use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\AutoStatusPackingWeb\src\Jobs\SetPackingWebStatusJob;
-use Carbon\Carbon;
 
 /**
  * Class SetPackingWebStatus.
