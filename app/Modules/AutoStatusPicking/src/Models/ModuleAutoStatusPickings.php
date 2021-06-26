@@ -15,6 +15,7 @@ use phpseclib\Math\BigInteger;
  * @property bool is_enabled
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|ModuleAutoStatusPickings newModelQuery()
  * @method static Builder|ModuleAutoStatusPickings newQuery()
  * @method static Builder|ModuleAutoStatusPickings query()
@@ -23,6 +24,7 @@ use phpseclib\Math\BigInteger;
  * @method static Builder|ModuleAutoStatusPickings whereIsEnabled($value)
  * @method static Builder|ModuleAutoStatusPickings whereUpdatedAt($value)
  * @mixin Eloquent
+ *
  * @property int $id
  * @property int $is_enabled
  */

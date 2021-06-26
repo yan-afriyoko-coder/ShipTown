@@ -19,6 +19,7 @@ use Illuminate\Support\Collection;
  * @property array                           $raw_import
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ *
  * @method static Builder|Api2cartOrderImports newModelQuery()
  * @method static Builder|Api2cartOrderImports newQuery()
  * @method static Builder|Api2cartOrderImports query()

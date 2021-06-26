@@ -15,9 +15,9 @@ class Orders extends Entity
      * @param string $store_key
      * @param array  $params
      *
-     * @return array|null
      * @throws Exception|GuzzleException
      *
+     * @return array|null
      */
     public static function get(string $store_key, array $params)
     {

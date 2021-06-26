@@ -15,6 +15,7 @@ use Illuminate\Support\Carbon;
  * @property bool        $enabled
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|Module newModelQuery()
  * @method static Builder|Module newQuery()
  * @method static Builder|Module query()
