@@ -6,7 +6,7 @@ use App\Events\HourlyEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
- * Class AutoStatusPickingServiceProvider
+ * Class AutoStatusPickingServiceProvider.
  */
 class AutoStatusPickingServiceProvider extends BaseModuleServiceProvider
 {
