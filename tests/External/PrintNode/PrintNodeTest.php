@@ -12,6 +12,13 @@ class PrintNodeTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $admin = factory(User::class)->create()->assignRole('admin');
+        $this->actingAs($admin, 'api');
+    }
+
     public function test_if_api_key_set()
     {
         $actual = config('printnode.test_api_key');
@@ -20,26 +27,22 @@ class PrintNodeTest extends TestCase
 
     public function test_get_clients()
     {
-        $repository = config('printnode.test_api_key');
+        $apiKey = config('printnode.test_api_key');
 
-        Client::query()->updateOrCreate([], ['api_key' => $repository]);
+        Client::query()->updateOrCreate([], ['api_key' => $apiKey]);
 
-        $user = factory(User::class)->create();
-
-        $response = $this->actingAs($user, 'api')->get('api/settings/modules/printnode/clients');
+        $response = $this->get('api/settings/modules/printnode/clients');
 
         $response->assertSuccessful();
     }
 
     public function test_get_printers()
     {
-        $repository = config('printnode.test_api_key');
+        $apiKey = config('printnode.test_api_key');
 
-        Client::query()->updateOrCreate([], ['api_key' => $repository]);
+        Client::query()->updateOrCreate([], ['api_key' => $apiKey]);
 
-        $user = factory(User::class)->create();
-
-        $response = $this->actingAs($user, 'api')->get('api/settings/modules/printnode/printers');
+        $response = $this->get('api/settings/modules/printnode/printers');
 
         $response->assertSuccessful();
     }
@@ -54,9 +57,7 @@ class PrintNodeTest extends TestCase
 
         $this->assertGreaterThan(0, $printers->count());
 
-        $user = factory(User::class)->create();
-
-        $this->actingAs($user, 'api')->postJson('api/settings/modules/printnode/printjobs', [
+        $this->postJson('api/settings/modules/printnode/printjobs', [
             'printer_id' => $printers->first()['id'],
             'pdf_url'    => 'https://api.printnode.com/static/test/pdf/label_6in_x_4in.pdf',
         ]);
