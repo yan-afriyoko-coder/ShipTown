@@ -8,8 +8,9 @@ use App\Modules\BaseModuleServiceProvider;
 /**
  * Class EventServiceProviderBase.
  */
-class EventServiceProviderBase extends BaseModuleServiceProvider
+class AutoStatusPaidServiceProvider extends BaseModuleServiceProvider
 {
+    public bool $autoEnable = false;
     /**
      * @var string
      */

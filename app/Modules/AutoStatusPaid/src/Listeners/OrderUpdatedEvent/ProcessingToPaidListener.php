@@ -3,6 +3,7 @@
 namespace App\Modules\AutoStatusPaid\src\Listeners\OrderUpdatedEvent;
 
 use App\Events\Order\OrderUpdatedEvent;
+use App\Modules\AutoStatusPaid\src\Jobs\SetPaidStatusJob;
 
 /**
  * Class SetPackingWebStatus.
@@ -20,9 +21,6 @@ class ProcessingToPaidListener
     {
         $order = $event->getOrder();
 
-        if ($order->isStatusCode('processing') and ($order->isPaid)) {
-            $order->log('Order paid in full, changing status to "paid"');
-            $order->update(['status_code' => 'paid']);
-        }
+        SetPaidStatusJob::dispatchNow($order);
     }
 }
