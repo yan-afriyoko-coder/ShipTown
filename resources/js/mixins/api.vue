@@ -202,6 +202,14 @@ export default {
             apiPostPicklistPick: function (data) {
                 return axios.post('/api/picklist/picks', data);
             },
+
+            apiGetModules: function () {
+                return axios.get('/api/settings/modules');
+            },
+
+            apiToggleModules: function (id) {
+                return axios.put('/api/settings/modules/' + id);
+            },
         }
     }
 </script>
