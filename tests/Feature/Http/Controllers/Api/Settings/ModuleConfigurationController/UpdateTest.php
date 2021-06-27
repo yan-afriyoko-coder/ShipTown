@@ -31,7 +31,6 @@ class UpdateTest extends TestCase
         $response->assertRedirect(route('login'));
     }
 
-
     public function test_update_call_should_loggedin_as_admin()
     {
         Passport::actingAs(

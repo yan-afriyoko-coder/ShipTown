@@ -26,6 +26,7 @@ class ModuleConfigurationController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Module              $module
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Module $module)
