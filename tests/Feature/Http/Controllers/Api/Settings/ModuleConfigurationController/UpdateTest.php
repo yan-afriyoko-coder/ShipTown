@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Api\Settings\ModuleConfigurationController;
 
-use App\Module;
+use App\Models\Module;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Passport\Passport;

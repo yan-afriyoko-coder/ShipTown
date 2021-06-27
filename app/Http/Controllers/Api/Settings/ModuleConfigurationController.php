@@ -4,17 +4,19 @@ namespace App\Http\Controllers\Api\Settings;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ModuleResource;
-use App\Module;
+use App\Models\Module;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ModuleConfigurationController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return AnonymousResourceCollection
      */
-    public function index(Request $request)
+    public function index(Request $request): AnonymousResourceCollection
     {
         $modules = Module::all();
 
@@ -24,16 +26,16 @@ class ModuleConfigurationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Module              $module
+     * @param Request $request
+     * @param Module $module
      *
-     * @return \Illuminate\Http\Response
+     * @return ModuleResource
      */
-    public function update(Request $request, Module $module)
+    public function update(Request $request, Module $module): ModuleResource
     {
         $module->enabled = !$module->enabled;
         $module->save();
 
-        return new ModuleResource($module);
+        return ModuleResource::make($module);
     }
 }
