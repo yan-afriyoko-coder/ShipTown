@@ -24,6 +24,9 @@ use phpseclib\Math\BigInteger;
  * @method static Builder|ModuleAutoStatusPickings whereIsEnabled($value)
  * @method static Builder|ModuleAutoStatusPickings whereUpdatedAt($value)
  * @mixin Eloquent
+ *
+ * @property int $id
+ * @property int $is_enabled
  */
 class ModuleAutoStatusPickings extends BaseModel
 {
