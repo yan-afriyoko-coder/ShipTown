@@ -14,6 +14,7 @@ class ModuleConfigurationController extends Controller
      * Display a listing of the resource.
      *
      * @param Request $request
+     *
      * @return AnonymousResourceCollection
      */
     public function index(Request $request): AnonymousResourceCollection
@@ -27,7 +28,7 @@ class ModuleConfigurationController extends Controller
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param Module $module
+     * @param Module  $module
      *
      * @return ModuleResource
      */
