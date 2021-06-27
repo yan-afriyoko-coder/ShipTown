@@ -19,6 +19,9 @@ class SetStatusPackingWarehouseJob implements ShouldQueue
 
     private Order $order;
 
+    private int $location_id;
+    private string $new_status;
+
     /**
      * Create a new job instance.
      *
@@ -27,6 +30,8 @@ class SetStatusPackingWarehouseJob implements ShouldQueue
     public function __construct(Order $order)
     {
         $this->order = $order;
+        $this->location_id = 99;
+        $this->new_status = 'packing_warehouse';
     }
 
     /**
@@ -36,18 +41,25 @@ class SetStatusPackingWarehouseJob implements ShouldQueue
      */
     public function handle()
     {
-        $order = $this->order;
-
-        $sourceLocationId = 99;
-        $newOrderStatus = 'packing_warehouse';
-
-        if ($order->status_code !== 'paid') {
-            return;
+        if ($this->hasRightStatus() and $this->canFulfill()) {
+            $this->order->log("Possible to fulfill, changing status (location ". $this->location_id.')');
+            $this->order->update(['status_code' => $this->new_status]);
         }
+    }
 
-        if (OrderService::canFulfill($order, $sourceLocationId)) {
-            $order->log("Possible to fulfill from location $sourceLocationId, changing order status");
-            $order->update(['status_code' => $newOrderStatus]);
-        }
+    /**
+     * @return bool
+     */
+    private function hasRightStatus(): bool
+    {
+        return in_array($this->order->status_code, ['paid', 'single_line_orders', 'packing_web']);
+    }
+
+    /**
+     * @return bool
+     */
+    private function canFulfill(): bool
+    {
+        return OrderService::canFulfill($this->order, $this->location_id);
     }
 }
