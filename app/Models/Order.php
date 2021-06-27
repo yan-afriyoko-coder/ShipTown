@@ -88,7 +88,6 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static Builder|Order whereTotalPaid($value)
  * @method static Builder|Order whereTotalQuantityOrdered($value)
  * @method static Builder|Order whereUpdatedAt($value)
- * @method static Builder|Order whereIsActive()
  *
  * @property-read int $age_in_days
  * @property OrderStatus orderStatus
@@ -235,27 +234,6 @@ class Order extends BaseModel
     public function getAgeInDaysAttribute()
     {
         return Carbon::now()->ceilDay()->diffInDays($this->order_placed_at);
-    }
-
-    public function scopeWhereIsActive($query)
-    {
-        return $this->scopeIsActive($query);
-    }
-
-    public function scopeWhereActive($query)
-    {
-        return $this->scopeIsActive($query);
-    }
-
-    /**
-     * @param Builder $query
-     *
-     * @return Builder
-     */
-    public function scopeIsActive(Builder $query): Builder
-    {
-        return $query->whereNotIn('status_code', OrderStatus::getClosedStatuses())
-            ->whereNotIn('status_code', OrderStatus::getToFollowStatusList());
     }
 
     /**
