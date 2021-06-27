@@ -3,7 +3,7 @@
 namespace App\Modules;
 
 use App;
-use App\Module;
+use App\Models\Module;
 use Exception;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
 

@@ -63,7 +63,7 @@
                     </div>
                 </a>
 
-                <a href="{{ route('settings.module') }}" class="setting-list">
+                <a href="{{ route('settings.modules') }}" class="setting-list">
                     <div class="setting-icon">
                         <font-awesome-icon icon="puzzle-piece" class="fa-lg"></font-awesome-icon>
                     </div>

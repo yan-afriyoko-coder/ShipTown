@@ -17,7 +17,7 @@ Route::view('settings', 'settings')->name('settings');
 
 Route::prefix('settings')->group(function () {
     Route::view('general', 'settings/general')->name('settings.general');
-    Route::view('module', 'settings/module')->name('settings.module');
+    Route::view('modules', 'settings/modules')->name('settings.modules');
     Route::view('printnode', 'settings/printnode')->name('settings.printnode');
     Route::view('rmsapi', 'settings/rmsapi')->name('settings.rmsapi');
     Route::view('dpd-ireland', 'settings/dpd-ireland')->name('settings.dpd-ireland');
