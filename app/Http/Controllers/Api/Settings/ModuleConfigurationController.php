@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api\Settings;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ModuleResource;
 use App\Module;
 use Illuminate\Http\Request;
-use App\Http\Resources\ModuleResource;
 
 class ModuleConfigurationController extends Controller
 {
@@ -23,7 +23,7 @@ class ModuleConfigurationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @param  \App\Module  $module
      * @return \Illuminate\Http\Response
      */

@@ -2,11 +2,9 @@
 
 namespace Tests\Feature\Api;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Laravel\Passport\Passport;
-use App\User;
 use App\Module;
+use App\User;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class SettingModuleTest extends TestCase
