@@ -197,7 +197,7 @@ class Order extends BaseModel
      */
     public function getPreviousOrderStatus(): OrderStatus
     {
-        return OrderStatus::whereCode($this->getOriginal('status_code'));
+        return OrderStatus::whereCode($this->getOriginal('status_code'))->first();
     }
 
     public function isOpen(): bool
