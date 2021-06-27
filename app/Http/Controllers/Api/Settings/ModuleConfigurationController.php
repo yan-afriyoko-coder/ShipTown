@@ -24,7 +24,7 @@ class ModuleConfigurationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @param \App\Module              $module
      * @return \Illuminate\Http\Response
      */
