@@ -5,16 +5,16 @@
             <div class="card-header">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span>
-                        AutoPilot Tuning
+                        AutoStatus "picking"
                     </span>
                 </div>
             </div>
 
-            <div class="card-body">
+            <div class="card-body" v-if="configuration !== null">
                 <div>Max Batch Size (picking)</div>
-                <input class="form-control" type="number" :placeholder="''" v-model="value"/>
+                <input class="form-control" type="number" :placeholder="''" v-model="configuration['max_batch_size']"/>
                 <div>Max Order Age Allowed</div>
-                <input class="form-control" type="number" :placeholder="''" v-model="maxOrderAgeAllowed"/>
+                <input class="form-control" type="number" :placeholder="''" v-model="configuration['max_order_age']"/>
 
                 <button :disabled="!btnSaveAutoPilotTuningSettings" @click.prevent="saveAutoPilotTuningSettings">Save</button>
             </div>
@@ -34,36 +34,21 @@ export default {
     data: function () {
         return {
             btnSaveAutoPilotTuningSettings: true,
-            value: null,
-            maxOrderAgeAllowed: null,
+            configuration: null,
         }
     },
 
     created() {
-        this.apiGetConfigurationAutopilot('packing_daily_max')
+        this.apiGetModuleAutoStatusPickingConfiguration()
             .then(({ data }) => {
-                this.value = data.data.value;
-            });
-        this.apiGetConfigurationAutopilot(`max_order_age_allowed`)
-            .then(({ data }) => {
-                this.maxOrderAgeAllowed = data.data.value;
+                this.configuration = data.data;
             });
     },
 
     methods: {
-
         saveAutoPilotTuningSettings() {
-            if (this.value) {
-                this.btnSaveAutoPilotTuningSettings = ! this.btnSaveAutoPilotTuningSettings;
-                this.apiPostAutoPilotConfiguration({
-                    key: 'packing_daily_max',
-                    value: this.value,
-                });
-                this.apiPostAutoPilotConfiguration({
-                    key: 'max_order_age_allowed',
-                    value: this.maxOrderAgeAllowed,
-                });
-            }
+            this.apiSetModuleAutoStatusPickingConfiguration(this.configuration);
+            this.btnSaveAutoPilotTuningSettings = ! this.btnSaveAutoPilotTuningSettings;
         },
     }
 }

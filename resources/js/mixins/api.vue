@@ -127,12 +127,12 @@ export default {
                 return axios.get('/oauth/clients');
             },
 
-            apiGetConfigurationAutopilot: function (variable) {
-                return axios.get(`api/configuration/` + variable);
+            apiGetModuleAutoStatusPickingConfiguration: function () {
+                return axios.get(`/api/modules/autostatus/picking/configuration`);
             },
 
-            apiPostAutoPilotConfiguration: function (data) {
-                return axios.post(`api/configuration`, data);
+            apiSetModuleAutoStatusPickingConfiguration: function (configuration) {
+                return axios.post(`/api/modules/autostatus/picking/configuration`, configuration);
             },
 
             apiGetRunHourlyJobs: function () {
