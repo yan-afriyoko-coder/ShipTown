@@ -9,7 +9,7 @@ class ModuleResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return array
      */
     public function toArray($request)
@@ -17,7 +17,7 @@ class ModuleResource extends JsonResource
         return [
             'id'                     => $this->id,
             'service_provider_class' => $this->service_provider_class,
-            'enabled'                => $this->enabled
+            'enabled'                => $this->enabled,
         ];
     }
 }

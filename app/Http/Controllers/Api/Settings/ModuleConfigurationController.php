@@ -17,6 +17,7 @@ class ModuleConfigurationController extends Controller
     public function index(Request $request)
     {
         $modules = Module::all();
+
         return ModuleResource::collection($modules);
     }
 
@@ -24,7 +25,7 @@ class ModuleConfigurationController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \App\Module  $module
+     * @param \App\Module              $module
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Module $module)

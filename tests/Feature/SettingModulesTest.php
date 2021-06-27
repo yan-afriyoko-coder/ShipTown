@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use Laravel\Passport\Passport;
 use App\User;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class SettingModulesTest extends TestCase
