@@ -88,11 +88,11 @@ export default {
             },
 
             apiGetModulePrintnodeClients: function (params) {
-                return axios.get('api/settings/modules/printnode/clients', {params: params})
+                return axios.get('/api/settings/modules/printnode/clients', {params: params})
             },
 
             apiPostModulePrintnodeClients: function (data) {
-                return axios.post('api/settings/modules/printnode/clients', data);
+                return axios.post('/api/settings/modules/printnode/clients', data);
             },
 
             apiGetApi2cartConnections: function (params) {
