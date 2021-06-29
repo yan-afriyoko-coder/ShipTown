@@ -7,7 +7,7 @@ use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class IndexTest extends TestCase
+class DestroyTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -19,11 +19,11 @@ class IndexTest extends TestCase
     }
 
     /** @test */
-    public function test_index_call_returns_ok()
+    public function test_destroy_call_returns_ok()
     {
-        factory(Client::class)->create();
+        $client = factory(Client::class)->create();
 
-        $response = $this->get(route('api.settings.module.printnode.clients.index'));
+        $response = $this->delete(route('api.settings.module.printnode.clients.destroy', $client));
 
         $response->assertSuccessful();
     }
