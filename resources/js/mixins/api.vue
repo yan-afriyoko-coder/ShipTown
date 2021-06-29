@@ -210,6 +210,18 @@ export default {
             apiToggleModules: function (id) {
                 return axios.put('/api/settings/modules/' + id);
             },
+
+            apiGetOrderStatus: function () {
+                return axios.get('/api/settings/order-statuses');
+            },
+
+            apiPostOrderStatus: function () {
+                return axios.put('/api/settings/order-statuses');
+            },
+
+            apiPutOrderStatus: function (id, params) {
+                return axios.put('/api/settings/order-statuses/' + id, params);
+            },
         }
     }
 </script>

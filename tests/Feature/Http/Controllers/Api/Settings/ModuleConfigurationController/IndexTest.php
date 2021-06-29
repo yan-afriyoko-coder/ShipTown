@@ -17,6 +17,7 @@ class IndexTest extends TestCase
         Passport::actingAs(
             factory(User::class)->states('admin')->create()
         );
+
         $response = $this->get(route('api.settings.modules.index'));
 
         $response->assertSuccessful();

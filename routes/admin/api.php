@@ -23,6 +23,7 @@ Route::apiResource('modules/autostatus/picking/configuration', 'Api\Modules\Auto
 
 Route::group(['prefix' => 'settings', 'namespace' => 'Api\Settings', 'as' => 'api.settings.'], function () {
     Route::apiResource('modules', 'ModuleConfigurationController')->only(['index', 'update']);
+    Route::apiResource('order-statuses', 'OrderStatusController')->only(['index', 'store', 'update']);
 
     // modules
     Route::group(['prefix' => 'modules', 'namespace' => 'Module', 'as' => 'module.'], function () {
