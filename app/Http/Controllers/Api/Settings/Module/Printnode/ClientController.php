@@ -7,6 +7,7 @@ use App\Http\Requests\StorePrintNodeClientRequest;
 use App\Modules\PrintNode\src\Models\Client;
 use App\Modules\PrintNode\src\PrintNode;
 use App\Modules\PrintNode\src\Resources\PrintNodeClientResource;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -29,5 +30,15 @@ class ClientController extends Controller
         $printNodeClient->save();
 
         return PrintNodeClientResource::make($printNodeClient);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function destroy(Request $request, Client $client)
+    {
+        $client->delete();
+
+        return PrintNodeClientResource::make($client);
     }
 }

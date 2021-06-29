@@ -95,6 +95,10 @@ export default {
                 return axios.post('/api/settings/modules/printnode/clients', data);
             },
 
+            apiDeletePrintnodeClient: function (id) {
+                return axios.delete(`/api/settings/modules/printnode/clients/${id}`, {});
+            },
+
             apiGetApi2cartConnections: function (params) {
                 return axios.get('/api/settings/modules/api2cart/connections', {params: params});
             },
