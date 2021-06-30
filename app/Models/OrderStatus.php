@@ -13,7 +13,7 @@ use Illuminate\Support\Carbon;
  * @property string      $code
  * @property string      $name
  * @property bool        $reserves_stock
- * @property int         $order_active
+ * @property bool         $order_active
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -34,9 +34,13 @@ class OrderStatus extends Model
     protected $fillable = [
         'name',
         'code',
-        'status_code',
-        'is_open',
+        'order_active',
         'reserves_stock',
+    ];
+
+    protected $casts = [
+        'order_active' => 'boolean',
+        'reserves_stock' => 'boolean',
     ];
 
     protected $attributes = [

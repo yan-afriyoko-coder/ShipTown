@@ -12,6 +12,14 @@ class UpdateTest extends TestCase
 {
     use RefreshDatabase;
 
+    private function simulationTest()
+    {
+        $module = Module::create(['service_provider_class' => 'Test Module', 'enabled' => 1]);
+        $response = $this->put(route('api.settings.modules.update', $module));
+
+        return $response;
+    }
+
     /** @test */
     public function test_update_call_returns_ok()
     {
@@ -19,14 +27,14 @@ class UpdateTest extends TestCase
             factory(User::class)->states('admin')->create()
         );
 
-        $module = Module::create(['service_provider_class' => 'Test Module', 'enabled' => 1]);
-        $response = $this->put(route('api.settings.modules.update', $module));
+        $response = $this->simulationTest();
+
         $response->assertSuccessful();
     }
 
     public function test_update_call_should_be_loggedin()
     {
-        $response = $this->get(route('api.settings.modules.index'));
+        $response = $this->simulationTest();
 
         $response->assertRedirect(route('login'));
     }
@@ -37,8 +45,7 @@ class UpdateTest extends TestCase
             factory(User::class)->create()
         );
 
-        $module = Module::create(['service_provider_class' => 'Test Module', 'enabled' => 1]);
-        $response = $this->put(route('api.settings.modules.update', $module));
+        $response = $this->simulationTest();
 
         $response->assertForbidden();
     }

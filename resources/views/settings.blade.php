@@ -33,6 +33,17 @@
                     </div>
                 </a>
 
+                <a href="{{ route('settings.order_statuses') }}" class="setting-list">
+                    <div class="setting-icon">
+                        <font-awesome-icon icon="box-open" class="fa-sm"></font-awesome-icon>
+                    </div>
+                    <div class="setting-body">
+                        <div class="setting-title">Order Statuses</div>
+                        <div class="setting-desc">Manage Order Statuses</div>
+                    </div>
+                </a>
+
+
                 <a href="{{ route('settings.printnode') }}" class="setting-list">
                     <div class="setting-icon">
                         <font-awesome-icon icon="print" class="fa-sm"></font-awesome-icon>
@@ -65,7 +76,7 @@
 
                 <a href="{{ route('settings.modules') }}" class="setting-list">
                     <div class="setting-icon">
-                        <font-awesome-icon icon="puzzle-piece" class="fa-lg"></font-awesome-icon>
+                        <font-awesome-icon icon="puzzle-piece" class="fa-sm"></font-awesome-icon>
                     </div>
                     <div class="setting-body">
                         <div class="setting-title">Modules</div>
