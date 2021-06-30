@@ -41,7 +41,7 @@ library.add(faBoxOpen);
 library.add(faEdit);
 library.add(faMinus);
 library.add(faCheckCircle);
-library.add(faTimesCircle)
+library.add(faTimesCircle);
 Vue.config.productionTip = false;
 
 Vue.use(VueCountdownTimer);
