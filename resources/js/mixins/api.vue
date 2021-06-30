@@ -215,8 +215,8 @@ export default {
                 return axios.get('/api/settings/order-statuses');
             },
 
-            apiPostOrderStatus: function () {
-                return axios.put('/api/settings/order-statuses');
+            apiPostOrderStatus: function (params) {
+                return axios.post('/api/settings/order-statuses', params);
             },
 
             apiPutOrderStatus: function (id, params) {

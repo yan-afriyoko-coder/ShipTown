@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Settings;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\OrderStatus\StoreRequest;
 use App\Http\Requests\OrderStatus\UpdateRequest;
 use App\Http\Resources\OrderStatusResource;
 use App\Models\OrderStatus;
@@ -29,7 +30,7 @@ class OrderStatusController extends Controller
      * @param  Request $request
      * @return OrderStatusResource
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         $orderStatus = new OrderStatus;
         $orderStatus->name = $request->name;

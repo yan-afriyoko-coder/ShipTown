@@ -6,9 +6,9 @@
                     <span>
                         Order Statuses
                     </span>
-                    <a tabindex="-1" class="action-link" v-b-modal.invite-modal>
-                        Add new
-                    </a>
+                    <button type="button" class="action-link btn btn-sm btn-light" @click="showCreateForm()">
+                        Add New
+                    </button>
                 </div>
             </div>
 
@@ -44,7 +44,7 @@
                                 </font-awesome-icon>
                             </td>
                             <td>
-                                <a @click.prevent="onEditClick(orderStatus)">
+                                <a @click.prevent="showEditForm(orderStatus)">
                                     <font-awesome-icon icon="edit"></font-awesome-icon>
                                 </a>
                             </td>
@@ -58,24 +58,21 @@
             </div>
         </div>
         <!-- The modals -->
-        <!-- <b-modal id="invite-modal" title="Invite User" @ok="handleInviteOk">
-            <create-modal ref="inviteForm"></create-modal>
-        </b-modal> -->
+        <create-modal id="createForm" @onCreated="addOrderStatus"></create-modal>
         <edit-modal :orderStatus="selectedOrderStatus" id="editForm" @onUpdated="updateOrderStatus"></edit-modal>
     </div>
 </template>
 
 <script>
-import { find } from 'lodash';
 
-// import Invite from './Users/Invite';
+import CreateModal from './OrderStatus/CreateModal';
 import EditModal from './OrderStatus/EditModal';
 import api from "../../mixins/api.vue";
 
 export default {
     mixins: [api],
     components: {
-        // 'invite-modal': Invite,
+        'create-modal': CreateModal,
         'edit-modal': EditModal,
     },
 
@@ -92,7 +89,10 @@ export default {
     }),
 
     methods: {
-        onEditClick(orderStatus) {
+        showCreateForm(){
+            $('#createForm').modal('show');
+        },
+        showEditForm(orderStatus) {
             this.selectedOrderStatus = orderStatus;
             $('#editForm').modal('show');
         },

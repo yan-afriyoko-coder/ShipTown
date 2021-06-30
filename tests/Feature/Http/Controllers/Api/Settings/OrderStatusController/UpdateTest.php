@@ -12,7 +12,7 @@ class UpdateTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function simulationUpdate() {
+    private function simulationTest() {
         $orderStatus = OrderStatus::create(['name' => 'testing', 'code' => 'testing', 'order_active' => 1, 'reserves_stock' => 1]);
         $response = $this->put(route('api.settings.order-statuses.update', $orderStatus), ['order_active' => 0, 'reserves_stock' => 0]);
 
@@ -26,14 +26,14 @@ class UpdateTest extends TestCase
             factory(User::class)->states('admin')->create()
         );
 
-        $response = $this->simulationUpdate();
+        $response = $this->simulationTest();
 
         $response->assertSuccessful();
     }
 
     public function test_update_call_should_be_loggedin()
     {
-        $response = $this->simulationUpdate();
+        $response = $this->simulationTest();
 
         $response->assertRedirect(route('login'));
     }
@@ -44,7 +44,7 @@ class UpdateTest extends TestCase
             factory(User::class)->create()
         );
 
-        $response = $this->simulationUpdate();
+        $response = $this->simulationTest();
 
         $response->assertForbidden();
     }
