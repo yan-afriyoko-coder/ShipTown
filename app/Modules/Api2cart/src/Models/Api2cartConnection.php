@@ -2,11 +2,13 @@
 
 namespace App\Modules\Api2cart\src\Models;
 
+use App\Modules\Api2cart\src\Orders;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 /**
  * App\Modules\Api2cart\src\Models\Api2cartConnection.
@@ -41,7 +43,7 @@ use Illuminate\Support\Carbon;
  *
  * @property int|null $inventory_location_id
  * @property int|null $pricing_location_id
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Modules\Api2cart\src\Models\Api2cartProductLink[] $productLinks
+ * @property-read Collection|Api2cartProductLink[] $productLinks
  * @property-read int|null $product_links_count
  *
  * @method static Builder|Api2cartConnection whereInventoryLocationId($value)
@@ -68,6 +70,11 @@ class Api2cartConnection extends Model
         ], true);
 
         parent::__construct($attributes);
+    }
+
+    public static function f()
+    {
+        //
     }
 
     /**
