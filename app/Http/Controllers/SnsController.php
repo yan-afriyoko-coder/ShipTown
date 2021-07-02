@@ -85,7 +85,7 @@ class SnsController extends Controller
         try {
             $this->awsSnsClient->subscribe([
                 'Protocol'              => 'https',
-                'Endpoint'              => $subscription_url,
+                'Endpoint'              => trim($subscription_url),
                 'ReturnSubscriptionArn' => true,
                 'TopicArn'              => $this->getTopicArn(),
             ]);

@@ -36,4 +36,24 @@ class Orders extends Entity
 
         throw new Exception('order.list.json call failed - '.$response->getReturnMessage());
     }
+
+    /**
+     * @param $store_key
+     * @param $params
+     * @throws Exceptions\RequestException
+     * @throws GuzzleException
+     */
+    public static function update($store_key, $params): RequestResponse
+    {
+        return Client::POST($store_key, 'order.update.json', $params);
+    }
+
+    /**
+     * @throws Exceptions\RequestException
+     * @throws GuzzleException
+     */
+    public static function statuses($store_key, $params): RequestResponse
+    {
+        return Client::GET($store_key, 'order.status.list.json', $params);
+    }
 }
