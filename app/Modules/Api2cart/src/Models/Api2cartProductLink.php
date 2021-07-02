@@ -5,8 +5,8 @@ namespace App\Modules\Api2cart\src\Models;
 use App\BaseModel;
 use App\Models\Product;
 use App\Modules\Api2cart\src\Exceptions\RequestException;
-use App\Modules\Api2cart\src\Products;
-use App\Modules\Api2cart\src\RequestResponse;
+use App\Modules\Api2cart\src\Api\Products;
+use App\Modules\Api2cart\src\Api\RequestResponse;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
