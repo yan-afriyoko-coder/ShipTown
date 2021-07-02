@@ -4,7 +4,7 @@ namespace Tests\External\Api2cart\Api;
 
 use App\Modules\Api2cart\src\Exceptions\RequestException;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
-use App\Modules\Api2cart\src\Orders;
+use App\Modules\Api2cart\src\Api\Orders;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
