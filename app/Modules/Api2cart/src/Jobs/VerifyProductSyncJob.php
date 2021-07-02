@@ -3,9 +3,9 @@
 namespace App\Modules\Api2cart\src\Jobs;
 
 use App\Models\Product;
+use App\Modules\Api2cart\src\Api\Products;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
-use App\Modules\Api2cart\src\Products;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Bus\Queueable;

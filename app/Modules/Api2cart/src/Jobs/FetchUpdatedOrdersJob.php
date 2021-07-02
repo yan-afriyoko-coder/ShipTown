@@ -2,9 +2,9 @@
 
 namespace App\Modules\Api2cart\src\Jobs;
 
+use App\Modules\Api2cart\src\Api\Orders;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
-use App\Modules\Api2cart\src\Orders;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Bus\Queueable;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Api2cart\src;
+namespace App\Modules\Api2cart\src\Api;
 
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;

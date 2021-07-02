@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Api2cart\src;
+namespace App\Modules\Api2cart\src\Api;
 
 use Psr\Http\Message\ResponseInterface;
 
