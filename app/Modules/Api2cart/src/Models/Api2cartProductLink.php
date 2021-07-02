@@ -7,6 +7,9 @@ use App\Models\Product;
 use App\Modules\Api2cart\src\Exceptions\RequestException;
 use App\Modules\Api2cart\src\Api\Products;
 use App\Modules\Api2cart\src\Api\RequestResponse;
+use Eloquent;
+use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
@@ -20,39 +23,34 @@ use Illuminate\Support\Carbon;
  * @property string|null $api2cart_product_id
  * @property Carbon      $last_fetched_at
  * @property array       $last_fetched_data
- * @property float api2cart_quantity
- * @property float api2cart_price
- * @property float api2cart_sale_price
- * @property Carbon api2cart_sale_price_start_date
- * @property Carbon api2cart_sale_price_end_date
  * @property Api2cartConnection $api2cartConnection
  * @property string|null        $api2cart_connection_id
- * @property string|null        $api2cart_quantity
- * @property string|null        $api2cart_price
- * @property string|null        $api2cart_sale_price
- * @property string|null        $api2cart_sale_price_start_date
- * @property string|null        $api2cart_sale_price_end_date
+ * @property float|null         $api2cart_quantity
+ * @property float|null         $api2cart_price
+ * @property float|null         $api2cart_sale_price
+ * @property Carbon|null        $api2cart_sale_price_start_date
+ * @property Carbon|null        $api2cart_sale_price_end_date
  * @property Carbon|null        $created_at
  * @property Carbon|null        $updated_at
  *
- * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink query()
- * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereApi2cartConnectionId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereApi2cartPrice($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereApi2cartProductId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereApi2cartProductType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereApi2cartQuantity($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereApi2cartSalePrice($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereApi2cartSalePriceEndDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereApi2cartSalePriceStartDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereLastFetchedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereLastFetchedData($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereProductId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Api2cartProductLink whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @method static Builder|Api2cartProductLink newModelQuery()
+ * @method static Builder|Api2cartProductLink newQuery()
+ * @method static Builder|Api2cartProductLink query()
+ * @method static Builder|Api2cartProductLink whereApi2cartConnectionId($value)
+ * @method static Builder|Api2cartProductLink whereApi2cartPrice($value)
+ * @method static Builder|Api2cartProductLink whereApi2cartProductId($value)
+ * @method static Builder|Api2cartProductLink whereApi2cartProductType($value)
+ * @method static Builder|Api2cartProductLink whereApi2cartQuantity($value)
+ * @method static Builder|Api2cartProductLink whereApi2cartSalePrice($value)
+ * @method static Builder|Api2cartProductLink whereApi2cartSalePriceEndDate($value)
+ * @method static Builder|Api2cartProductLink whereApi2cartSalePriceStartDate($value)
+ * @method static Builder|Api2cartProductLink whereCreatedAt($value)
+ * @method static Builder|Api2cartProductLink whereId($value)
+ * @method static Builder|Api2cartProductLink whereLastFetchedAt($value)
+ * @method static Builder|Api2cartProductLink whereLastFetchedData($value)
+ * @method static Builder|Api2cartProductLink whereProductId($value)
+ * @method static Builder|Api2cartProductLink whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class Api2cartProductLink extends BaseModel
 {
@@ -109,7 +107,8 @@ class Api2cartProductLink extends BaseModel
             $expired_at = $product_data->special_price->expired_at;
             $sprice_expired_at = empty($expired_at) ? '2000-01-01 00:00:00' : $expired_at->value;
             $sprice_expired_at = Carbon::createFromTimeString($sprice_expired_at)->format('Y-m-d H:i:s');
-            $this->api2cart_sale_price_end_date = Carbon::createFromTimeString($sprice_expired_at)->format('Y-m-d H:i:s');
+            $this->api2cart_sale_price_end_date = Carbon::createFromTimeString($sprice_expired_at)
+                ->format('Y-m-d H:i:s');
         }
 
         return parent::save($options);
@@ -151,7 +150,7 @@ class Api2cartProductLink extends BaseModel
     }
 
     /**
-     * @throws RequestException
+     * @throws RequestException|GuzzleException
      */
     public function updateTypeAndId(): Api2cartProductLink
     {
@@ -165,6 +164,7 @@ class Api2cartProductLink extends BaseModel
 
     /**
      * @throws RequestException
+     * @throws GuzzleException
      */
     public function updateOrCreate($product_data): RequestResponse
     {
