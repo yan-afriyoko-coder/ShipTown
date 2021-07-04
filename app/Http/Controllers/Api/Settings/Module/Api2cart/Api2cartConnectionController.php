@@ -49,10 +49,9 @@ class Api2cartConnectionController extends Controller
      *
      * @return Application|ResponseFactory|Response
      */
-    public function destroy(Api2cartConnection $api2cart_configuration)
+    public function destroy(Api2cartConnection $connection)
     {
-        $api2cart_configuration->delete();
-
+        $connection->delete();
         return response('ok');
     }
 }
