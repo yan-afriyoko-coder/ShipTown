@@ -10,6 +10,7 @@ use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use Carbon\Carbon;
 use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -44,75 +45,43 @@ class SyncProductJob implements ShouldQueue
     private Api2cartProductLink $api2cartProduct;
 
     /**
+     * @var Api2cartConnection|null
+     */
+    private $api2cart_connection;
+
+    /**
      * Create a new job instance.
      *
      * @param Product $product
+     * @param int|null $connection_id
      */
-    public function __construct(Product $product)
+    public function __construct(Product $product, int $connection_id = null)
     {
         $this->product = $product;
+        $this->api2cart_connection = $connection_id ? Api2cartConnection::find($connection_id) : null;
         $this->connections = Api2cartConnection::all();
     }
 
     /**
      * Execute the job.
      *
-     * @throws Exception
-     *
      * @return void
+     * @throws GuzzleException
+     *
+     * @throws Exception
      */
     public function handle()
     {
         $product = $this->product;
 
         $this->connections->each(function (Api2cartConnection $connection) use ($product) {
-            try {
-                $this->api2cartProduct = Api2cartProductLink::firstOrCreate([
-                    'product_id'             => $product->getKey(),
-                    'api2cart_connection_id' => $connection->getKey(),
-                ], []);
+            $this->api2cartProduct = Api2cartProductLink::firstOrCreate([
+                'product_id' => $product->getKey(),
+                'api2cart_connection_id' => $connection->getKey(),
+            ], []);
 
-                $product_data = $this->getProductData($product, $connection);
-
-                $requestResponse = $this->api2cartProduct->updateOrCreate($product_data);
-
-                $product->detachTag('Not Synced');
-
-                if ($requestResponse->isSuccess()) {
-                    $product->detachTag('SYNC ERROR');
-                    $product->log('eCommerce: Product synced');
-                    VerifyProductSyncJob::dispatchNow($connection, $product_data);
-                } else {
-                    $product->attachTag('SYNC ERROR');
-                    $product->log('eCommerce: Sync failed ('.
-                        $requestResponse->getReturnCode().': '.
-                        $requestResponse->getReturnMessage().')');
-
-                    Log::warning('Api2cart: Product NOT SYNCED', [
-                        'response' => [
-                            'code'    => $requestResponse->getReturnCode(),
-                            'message' => $requestResponse->getReturnMessage(),
-                        ],
-                        'product_data' => $product_data ?? null,
-                    ]);
-                }
-            } catch (Exception $exception) {
-                if (isset($product_data)) {
-                    Cache::forget(Products::getSkuCacheKey($connection->bridge_api_key, $product_data['sku']));
-                }
-
-                $product->attachTag('SYNC ERROR');
-                $product->detachTag('Not Synced');
-                $product->log('eCommerce: Sync failed (code '.$exception->getCode().'), see logs');
-
-                Log::warning('Api2cart: Product NOT SYNCED', [
-                    'response' => [
-                        'code'    => $exception->getCode(),
-                        'message' => $exception->getMessage(),
-                    ],
-                    'product_data' => $product_data ?? null,
-                ]);
-            }
+            $result = $this->postProductUpdate($product, $connection);
+//               && VerifyProductSyncJob::verifyUpdates($connection, $product);
         });
     }
 
@@ -247,5 +216,62 @@ class SyncProductJob implements ShouldQueue
         }
 
         return $product_data->toArray();
+    }
+
+    /**
+     * @param Product $product
+     * @param Api2cartConnection $connection
+     * @return bool
+     * @throws GuzzleException
+     */
+    private function postProductUpdate(Product $product, Api2cartConnection $connection): bool
+    {
+        try {
+            $product_data = $this->getProductData($product, $connection);
+
+            $requestResponse = $this->api2cartProduct->updateOrCreate($product_data);
+
+            $product->detachTag('Not Synced');
+
+            if ($requestResponse->isSuccess()) {
+                $product->detachTag('SYNC ERROR');
+                $product->log('eCommerce: Product synced');
+                VerifyProductSyncJob::dispatchNow($connection, $product_data);
+                return true;
+            }
+
+            $product->attachTag('SYNC ERROR');
+            $product->log('eCommerce: Sync failed (' .
+                $requestResponse->getReturnCode() . ': ' .
+                $requestResponse->getReturnMessage() . ')');
+
+            Log::warning('Api2cart: Product NOT SYNCED', [
+                'response' => [
+                    'code' => $requestResponse->getReturnCode(),
+                    'message' => $requestResponse->getReturnMessage(),
+                ],
+                'product_data' => $product_data ?? null,
+            ]);
+        } catch (Exception $exception) {
+            if (isset($product_data)) {
+                Cache::forget(Products::getSkuCacheKey($connection->bridge_api_key, $product_data['sku']));
+            }
+
+            $product->attachTag('SYNC ERROR');
+            $product->detachTag('Not Synced');
+            $product->log('eCommerce: Sync failed (code ' . $exception->getCode() . '), see logs');
+
+            Log::warning('Api2cart: Product NOT SYNCED', [
+                'response' => [
+                    'code' => $exception->getCode(),
+                    'message' => $exception->getMessage(),
+                ],
+                'product_data' => $product_data ?? null,
+            ]);
+
+            return false;
+        }
+
+        return false;
     }
 }

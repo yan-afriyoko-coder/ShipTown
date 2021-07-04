@@ -10,7 +10,7 @@ $factory->define(Api2cartConnection::class, function (Faker $faker) {
     return [
         'location_id'           => random_int(1, 100),
         'type'                  => $faker->randomElement(['Magento', 'Prestashop', 'Shopify']),
-        'magento_store_id'      => $faker->randomElement([0, 1, 2]),
+        'magento_store_id'      => 0,
         'inventory_location_id' => $faker->randomNumber(1),
         'pricing_location_id'   => $faker->randomNumber(1),
         'bridge_api_key'        => config('api2cart.api2cart_test_store_key') ?? $faker->uuid,
