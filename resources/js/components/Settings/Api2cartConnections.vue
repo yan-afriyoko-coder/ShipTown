@@ -36,7 +36,7 @@
                             <td>{{ configuration.magento_warehouse_id }}</td>
                             <td>{{ configuration.pricing_location_id }}</td>
                             <td>
-                                <a @click="handleDelete(configuration.id, i)" class="action-link text-danger">Delete</a>
+                                <a @click="confirmDelete(configuration.id, i)" class="action-link text-danger">Delete</a>
                             </td>
                             <td>
                                 <a @click="showSkuDetails('01')" class="action-link">SKU Lookup</a>
@@ -142,6 +142,22 @@
                     ],
                 });
 
+            },
+
+            confirmDelete(connection_id, index){
+                this.$snotify.confirm('After delete data cannot restored', 'Are you sure?', {
+                    position: 'centerCenter',
+                    buttons: [
+                        {
+                            text: 'Yes',
+                            action: (toast) => {
+                                this.handleDelete(connection_id, index)
+                                this.$snotify.remove(toast.id);
+                            }
+                        },
+                        {text: 'Cancel'},
+                    ]
+                });
             },
 
             handleDelete(connection_id, index) {

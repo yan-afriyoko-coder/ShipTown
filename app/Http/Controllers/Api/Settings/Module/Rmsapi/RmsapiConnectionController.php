@@ -39,15 +39,15 @@ class RmsapiConnectionController extends Controller
     }
 
     /**
-     * @param RmsapiConnection $rms_api_configuration
+     * @param RmsapiConnection $connection
      *
      * @throws \Exception
      *
      * @return Application|ResponseFactory|Response
      */
-    public function destroy(RmsapiConnection $rms_api_configuration)
+    public function destroy(RmsapiConnection $connection)
     {
-        $rms_api_configuration->delete();
+        $connection->delete();
 
         return response('ok');
     }

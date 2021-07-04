@@ -28,7 +28,7 @@
                             <td>{{ configuration.url }}</td>
                             <td>{{ configuration.username }}</td>
                             <td>
-                                <a @click="handleDelete(configuration.id, i)" class="action-link text-danger">Delete</a>
+                                <a @click="confirmDelete(configuration.id, i)" class="action-link text-danger">Delete</a>
                             </td>
                         </tr>
                     </tbody>
@@ -99,6 +99,22 @@
 
                 this.$nextTick(() => {
                     this.$refs.formModal.hide();
+                });
+            },
+
+            confirmDelete(id, index){
+                this.$snotify.confirm('After delete data cannot restored', 'Are you sure?', {
+                    position: 'centerCenter',
+                    buttons: [
+                        {
+                            text: 'Yes',
+                            action: (toast) => {
+                                this.handleDelete(id, index)
+                                this.$snotify.remove(toast.id);
+                            }
+                        },
+                        {text: 'Cancel'},
+                    ]
                 });
             },
 
