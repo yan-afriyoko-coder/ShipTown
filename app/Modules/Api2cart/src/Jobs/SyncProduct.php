@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class SyncProductJob.
@@ -62,6 +63,12 @@ class SyncProduct implements ShouldQueue
      */
     private function verifyProductUpdate(): bool
     {
-        return $this->product_link->isInSync();
+        if ($this->product_link->isInSync()) {
+            return true;
+        }
+
+        $this->product_link->product->attachTag('CHECK FAILED');
+        $this->product_link->product->log('eCommerce: Sync check failed, see logs');
+        return false;
     }
 }
