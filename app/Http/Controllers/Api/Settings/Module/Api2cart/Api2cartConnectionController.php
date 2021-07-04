@@ -43,7 +43,7 @@ class Api2cartConnectionController extends Controller
     }
 
     /**
-     * @param Api2cartConnection $api2cart_configuration
+     * @param Api2cartConnection $connection
      *
      * @throws Exception
      *
