@@ -5,6 +5,7 @@ namespace App\Modules\Api2cart\src\Api;
 use App\Modules\Api2cart\src\Exceptions\RequestException;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Facades\Log;
 
 class Client
 {
@@ -45,6 +46,14 @@ class Client
         ]);
 
         if ($response->isNotSuccess()) {
+            Log::warning('Api2cart: GET failed', [
+                'uri' => $uri,
+                'response' => [
+                    'code' => $response->getReturnCode(),
+                    'message' => $response->getReturnMessage(),
+                ],
+                'query' => $query
+            ]);
             throw new RequestException($response->getReturnMessage(), $response->getReturnCode());
         }
 

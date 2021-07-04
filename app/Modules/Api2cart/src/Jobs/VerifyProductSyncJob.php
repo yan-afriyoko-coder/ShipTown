@@ -4,10 +4,12 @@ namespace App\Modules\Api2cart\src\Jobs;
 
 use App\Models\Product;
 use App\Modules\Api2cart\src\Api\Products;
+use App\Modules\Api2cart\src\Exceptions\RequestException;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use Carbon\Carbon;
 use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -53,57 +55,23 @@ class VerifyProductSyncJob implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @throws Exception
-     *
      * @return void
+     * @throws Exception|GuzzleException
+     *
      */
     public function handle()
     {
-        $product = Product::whereSku($this->product_data['sku'])->first();
-
-        $store_id = Arr::has($this->product_data, 'store_id') ? $this->product_data['store_id'] : null;
-
-        $api2cartProduct = Api2cartProductLink::firstOrCreate([
-            'product_id'             => $product->getKey(),
-            'api2cart_connection_id' => $this->api2cartConnection->getKey(),
-        ], []);
-
-        switch ($api2cartProduct->api2cart_product_type) {
-            case 'product':
-                $product_now = Products::getSimpleProductInfo($this->api2cartConnection, $product->sku);
-                break;
-            case 'variant':
-                $product_now = Products::getVariantInfo($this->api2cartConnection, $product->sku);
-                break;
-            default:
-                $product_now = null;
-        }
-
-        if (empty($product_now)) {
-            $product->detachTag('CHECK FAILED')
-                ->log('eCommerce: Sync check failed, cannot find product');
-            Log::warning('Update Check FAILED - Could not find product', ['sku' => $this->product_data['sku']]);
-
-            return;
-        }
-
-        $this->results = [
-            'type'        => $product_now['type'],
-            'sku'         => $product_now['sku'],
-            'store_id'    => $store_id,
-            'differences' => $this->getDifferences($this->product_data, $product_now),
-        ];
-
-        if (empty($this->results['differences'])) {
-            $product->detachTag('CHECK FAILED');
-            info('Update Check OK', $this->results);
-        } else {
-            $product->attachTag('CHECK FAILED')
-                ->log('eCommerce: Sync check failed, see logs');
-            Log::warning('Update Check FAILED', ['differences' => $this->results, 'now' => $product_now]);
-        }
+        $this->verifyUpdate();
     }
 
+    /**
+     * @throws RequestException
+     * @throws GuzzleException
+     */
+    public static function verifyUpdates($api2cart_connection, $product_data): bool
+    {
+        return (new self($api2cart_connection, $product_data))->verifyUpdate();
+    }
     /**
      * @return array
      */
@@ -153,5 +121,57 @@ class VerifyProductSyncJob implements ShouldQueue
         }
 
         return Arr::dot($differences);
+    }
+
+    /**
+     * @throws RequestException
+     * @throws GuzzleException
+     */
+    private function verifyUpdate(): bool
+    {
+        $product = Product::whereSku($this->product_data['sku'])->first();
+
+        $store_id = Arr::has($this->product_data, 'store_id') ? $this->product_data['store_id'] : null;
+
+        $api2cartProduct = Api2cartProductLink::firstOrCreate([
+            'product_id' => $product->getKey(),
+            'api2cart_connection_id' => $this->api2cartConnection->getKey(),
+        ], []);
+
+        switch ($api2cartProduct->api2cart_product_type) {
+            case 'product':
+                $product_now = Products::getSimpleProductInfo($this->api2cartConnection, $product->sku);
+                break;
+            case 'variant':
+                $product_now = Products::getVariantInfo($this->api2cartConnection, $product->sku);
+                break;
+            default:
+                $product_now = null;
+        }
+
+        if (empty($product_now)) {
+            $product->detachTag('CHECK FAILED')
+                ->log('eCommerce: Sync check failed, cannot find product');
+            Log::warning('Update Check FAILED - Could not find product', ['sku' => $this->product_data['sku']]);
+            return false;
+        }
+
+        $this->results = [
+            'type' => $product_now['type'],
+            'sku' => $product_now['sku'],
+            'store_id' => $store_id,
+            'differences' => $this->getDifferences($this->product_data, $product_now),
+        ];
+
+        if (empty($this->results['differences'])) {
+            $product->detachTag('CHECK FAILED');
+            info('Update Check OK', $this->results);
+            return true;
+        }
+
+        $product->attachTag('CHECK FAILED');
+        $product->log('eCommerce: Sync check failed, see logs');
+        Log::warning('Update Check FAILED', ['differences' => $this->results, 'now' => $product_now]);
+        return false;
     }
 }

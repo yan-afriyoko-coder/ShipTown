@@ -3,6 +3,8 @@
 namespace App\Modules\Api2cart\src\Jobs;
 
 use App\Models\Product;
+use App\Modules\Api2cart\src\Models\Api2cartProductLink;
+use App\Modules\MagentoApi\src\Jobs\SyncProductStockJob;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -46,7 +48,11 @@ class SyncProductsJob implements ShouldQueue
                 $this->queueProgressChunk($totalCount, $chunkSize);
 
                 $products->each(function (Product $product) {
-                    SyncProductJob::dispatchNow($product);
+                    Api2cartProductLink::where(['product_id' => $product->getKey()])
+                        ->each(function (Api2cartProductLink $product_link) {
+                            SyncProduct::dispatch($product_link);
+                            SyncProductStockJob::dispatch($product_link->product);
+                        });
                 });
             });
     }

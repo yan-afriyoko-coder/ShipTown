@@ -3,35 +3,40 @@
 namespace App\Modules\Api2cart\src\Models;
 
 use App\BaseModel;
+use App\Models\Inventory;
 use App\Models\Product;
-use App\Modules\Api2cart\src\Exceptions\RequestException;
+use App\Models\ProductPrice;
 use App\Modules\Api2cart\src\Api\Products;
 use App\Modules\Api2cart\src\Api\RequestResponse;
+use App\Modules\Api2cart\src\Exceptions\RequestException;
 use Eloquent;
+use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class Api2cartProductLink.
  *
- * @property int         $id
- * @property int         $product_id
- * @property Product     $product
+ * @property int $id
+ * @property int $product_id
+ * @property Product $product
  * @property string|null $api2cart_product_type
  * @property string|null $api2cart_product_id
- * @property Carbon      $last_fetched_at
- * @property array       $last_fetched_data
+ * @property Carbon $last_fetched_at
+ * @property array $last_fetched_data
  * @property Api2cartConnection $api2cartConnection
- * @property string|null        $api2cart_connection_id
- * @property float|null         $api2cart_quantity
- * @property float|null         $api2cart_price
- * @property float|null         $api2cart_sale_price
- * @property Carbon|null        $api2cart_sale_price_start_date
- * @property Carbon|null        $api2cart_sale_price_end_date
- * @property Carbon|null        $created_at
- * @property Carbon|null        $updated_at
+ * @property string|null $api2cart_connection_id
+ * @property float|null $api2cart_quantity
+ * @property float|null $api2cart_price
+ * @property float|null $api2cart_sale_price
+ * @property Carbon|null $api2cart_sale_price_start_date
+ * @property Carbon|null $api2cart_sale_price_end_date
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  *
  * @method static Builder|Api2cartProductLink newModelQuery()
  * @method static Builder|Api2cartProductLink newQuery()
@@ -91,10 +96,10 @@ class Api2cartProductLink extends BaseModel
     public function save(array $options = []): bool
     {
         if ($this->last_fetched_data) {
-            $product_data = json_decode((string) $this->last_fetched_data);
+            $product_data = json_decode((string)$this->last_fetched_data);
 
             $this->api2cart_product_id = $product_data->id;
-            $this->api2cart_quantity = $this->getQuantity((array) $product_data, $this->api2cartConnection);
+            $this->api2cart_quantity = $this->getQuantity((array)$product_data, $this->api2cartConnection);
             $this->api2cart_price = $product_data->price;
 
             $this->api2cart_sale_price = $product_data->special_price->value;
@@ -115,7 +120,125 @@ class Api2cartProductLink extends BaseModel
     }
 
     /**
-     * @param array                   $product
+     * @return bool
+     */
+    public function postProductUpdate(): bool
+    {
+        $requestResponse = null;
+
+        try {
+            $product_data = $this->getProductData();
+
+            $requestResponse = $this->updateOrCreate($product_data);
+
+            return $requestResponse->isSuccess();
+        } catch (Exception | GuzzleException $exception) {
+            $this->api2cart_product_type = null;
+            $this->api2cart_product_id = null;
+            $this->save();
+
+            Log::warning('Api2cart: postProductUpdate failed', [
+                'sku' => $this->product->sku,
+                'response' => [
+                    'code' => $requestResponse ? $requestResponse->getReturnCode() : '',
+                    'message' => $requestResponse ? $requestResponse->getReturnMessage() : '',
+                ],
+            ]);
+        }
+
+        return false;
+    }
+
+    /**
+     * @throws RequestException
+     * @throws GuzzleException
+     */
+    public function isInSync(): bool
+    {
+        $product_data = $this->getProductData();
+
+        $store_id = Arr::has($product_data, 'store_id') ? $product_data['store_id'] : null;
+
+        if ($this->api2cart_product_type === null) {
+            $this->updateTypeAndId()->save();
+        }
+
+        switch ($this->api2cart_product_type) {
+            case 'product':
+                $product_now = Products::getSimpleProductInfo($this->api2cartConnection, $this->product->sku);
+                break;
+            case 'variant':
+                $product_now = Products::getVariantInfo($this->api2cartConnection, $this->product->sku);
+                break;
+            default:
+                Log::warning('Update Check FAILED - Could not find product', ['sku' => $product_data['sku']]);
+                return false;
+        }
+
+        $this->last_fetched_data = $product_now;
+
+        $differences = $this->getDifferences($product_data, $product_now);
+
+        if (empty($differences)) {
+            return true;
+        }
+
+        Log::warning('Update Check FAILED', [
+            'type' => $product_now['type'],
+            'sku' => $product_now['sku'],
+            'store_id' => $store_id,
+            'differences' => $differences,
+            'now' => $product_now
+        ]);
+
+        return false;
+    }
+
+    /**
+     * @param array $expected
+     * @param array $actual
+     *
+     * @return array
+     */
+    private function getDifferences(array $expected, array $actual): array
+    {
+        // initialize variables
+        $differences = [];
+
+        $keys_to_verify = [
+            'price',
+        ];
+
+        if ((Arr::has($actual, 'manage_stock')) && ($actual['manage_stock'] != 'False')) {
+            $keys_to_verify = array_merge($keys_to_verify, ['quantity']);
+        }
+
+        if ((Arr::has($expected, 'sprice_expire')) &&
+            (\Carbon\Carbon::createFromTimeString($expected['sprice_expire'])->isFuture())) {
+            $keys_to_verify = array_merge($keys_to_verify, [
+                'special_price',
+                'sprice_create',
+                'sprice_expire',
+            ]);
+        }
+
+        $expected_data = Arr::only($expected, $keys_to_verify);
+        $actual_data = Arr::only($actual, $keys_to_verify);
+
+        foreach (array_keys($expected_data) as $key) {
+            if ((!Arr::has($actual_data, $key)) or ($expected_data[$key] != $actual_data[$key])) {
+                $differences[$key] = [
+                    'expected' => $expected_data[$key],
+                    'actual' => $actual_data[$key],
+                ];
+            }
+        }
+
+        return Arr::dot($differences);
+    }
+
+    /**
+     * @param array $product
      * @param Api2cartConnection|null $connection
      *
      * @return int
@@ -168,8 +291,6 @@ class Api2cartProductLink extends BaseModel
      */
     public function updateOrCreate($product_data): RequestResponse
     {
-        $store_key = $this->api2cartConnection->bridge_api_key;
-
         if ($this->api2cart_product_type === null) {
             $this->updateTypeAndId()->save();
         }
@@ -177,14 +298,127 @@ class Api2cartProductLink extends BaseModel
         switch ($this->api2cart_product_type) {
             case 'product':
                 $properties = array_merge($product_data, ['id' => $this->api2cart_product_id]);
-
-                return Products::updateSimpleProduct($store_key, $properties);
+                return Products::updateSimpleProduct($this->api2cartConnection->bridge_api_key, $properties);
             case 'variant':
                 $properties = array_merge($product_data, ['id' => $this->api2cart_product_id]);
-
-                return Products::updateVariant($store_key, $properties);
+                return Products::updateVariant($this->api2cartConnection->bridge_api_key, $properties);
             default:
-                return Products::createSimpleProduct($store_key, $product_data);
+                // when product_type is null we need to create product and then update it
+                Products::createSimpleProduct($this->api2cartConnection->bridge_api_key, $product_data);
+                return $this->updateOrCreate($product_data);
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getProductData(): array
+    {
+        $data = collect();
+
+        $data = $data->merge($this->getBasicData());
+        $data = $data->merge($this->getMagentoStoreId());
+        $data = $data->merge($this->getInventoryData());
+
+        if (isset($this->api2cartConnection->pricing_location_id)) {
+            $data = $data->merge($this->getMagentoStoreId());
+        }
+
+        if (isset($this->api2cartConnection->pricing_location_id)) {
+            $data = $data->merge($this->getPricingData());
+        }
+
+        return $data->toArray();
+    }
+
+    /**
+     * @return array
+     */
+    private function getBasicData(): array
+    {
+        return [
+            'product_id' => $this->product->getKey(),
+            'sku' => $this->product->sku,
+            'name' => $this->product->name,
+            'description' => $this->product->name,
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getMagentoStoreId(): array
+    {
+        return [
+            'store_id' => $this->api2cartConnection->magento_store_id ?? 0,
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getInventoryData(): array
+    {
+        // we will refresh to get latest data
+        $product = $this->product->refresh();
+
+        if (is_null($this->api2cartConnection->inventory_location_id)) {
+            return [
+                'quantity' => floor($product->quantity_available) ?? 0,
+                'in_stock' => $product->quantity_available > 0 ? 'True' : 'False',
+            ];
+        }
+
+        $productInventory = Inventory::firstOrNew([
+            'product_id' => $product->getKey(),
+            'location_id' => $this->api2cartConnection->inventory_location_id,
+        ]);
+
+        return [
+            'quantity' => $productInventory->quantity_available ?? 0,
+            'in_stock' => $productInventory->quantity_available > 0 ? 'True' : 'False',
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getPricingData(): array
+    {
+        $attributes = [
+            'product_id' => $this->product->getKey(),
+            'location_id' => $this->api2cartConnection->location_id,
+        ];
+
+        $productPrice = ProductPrice::query()->firstOrCreate($attributes);
+
+        if ($productPrice) {
+            return [
+                'price' => $productPrice->price,
+                'special_price' => $productPrice->sale_price,
+                'sprice_create' => $this->formatDateForApi2cart($productPrice->sale_price_start_date),
+                'sprice_expire' => $this->formatDateForApi2cart($productPrice->sale_price_end_date),
+            ];
+        }
+
+        Log::warning('Pricing data not found', $attributes);
+
+        return [];
+    }
+
+    /**
+     * @param $date
+     *
+     * @return string
+     */
+    public function formatDateForApi2cart($date): string
+    {
+        $carbon_date = new Carbon($date ?? '2000-01-01 00:00:00');
+
+        if ($carbon_date->year < 2000) {
+            return '2000-01-01 00:00:00';
+        }
+
+        return $carbon_date->toDateTimeString();
     }
 }

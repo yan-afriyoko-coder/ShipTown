@@ -2,9 +2,8 @@
 
 namespace Tests\External\Api2cart\Api;
 
-use App\Modules\Api2cart\src\Exceptions\RequestException;
-use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Api\Orders;
+use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -13,7 +12,6 @@ class UpdateOrderStatusTest extends TestCase
 {
     use RefreshDatabase;
     /**
-     * @throws RequestException
      * @throws GuzzleException
      */
     public function testIfJobRunsWithoutExceptions()
@@ -22,8 +20,8 @@ class UpdateOrderStatusTest extends TestCase
         $api2cartConnection = new Api2cartConnection([
             'location_id'    => '99',
             'type'           => 'opencart',
-            'url'            => 'http://demo.api2cart.com/opencart',
-            'bridge_api_key' => env('API2CART_TEST_STORE_KEY'),
+            'url'            => 'https://demo.api2cart.com/opencart',
+            'bridge_api_key' => env('TEST_API2CART_STORE_KEY'),
         ]);
 
         $api2cartConnection->save();
