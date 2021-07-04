@@ -21,7 +21,7 @@ class UpdateOrderStatusTest extends TestCase
             'location_id'    => '99',
             'type'           => 'opencart',
             'url'            => 'https://demo.api2cart.com/opencart',
-            'bridge_api_key' => env('TEST_API2CART_STORE_KEY'),
+            'bridge_api_key' => config('api2cart.api2cart_test_store_key'),
         ]);
 
         $api2cartConnection->save();

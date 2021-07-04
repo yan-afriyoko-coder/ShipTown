@@ -45,7 +45,7 @@ class ProductUpdateTest extends TestCase
             'location_id' => '99',
             'pricing_location_id' => '99',
             'inventory_location_id' => '99',
-            'bridge_api_key' => env('TEST_API2CART_STORE_KEY'),
+            'bridge_api_key' => config('api2cart.api2cart_test_store_key'),
         ]);
 
         factory(Inventory::class)->create(['location_id' => '99']);
