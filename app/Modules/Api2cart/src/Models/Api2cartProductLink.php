@@ -321,10 +321,6 @@ class Api2cartProductLink extends BaseModel
         $data = $data->merge($this->getInventoryData());
 
         if (isset($this->api2cartConnection->pricing_location_id)) {
-            $data = $data->merge($this->getMagentoStoreId());
-        }
-
-        if (isset($this->api2cartConnection->pricing_location_id)) {
             $data = $data->merge($this->getPricingData());
         }
 
@@ -387,7 +383,7 @@ class Api2cartProductLink extends BaseModel
     {
         $attributes = [
             'product_id' => $this->product->getKey(),
-            'location_id' => $this->api2cartConnection->location_id,
+            'location_id' => $this->api2cartConnection->pricing_location_id,
         ];
 
         $productPrice = ProductPrice::query()->firstOrCreate($attributes);

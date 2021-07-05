@@ -35,6 +35,11 @@ class ProductUpdateTest extends TestCase
      */
     private Product $product;
 
+    /**
+     * @var Inventory
+     */
+    private $inventory;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -48,14 +53,19 @@ class ProductUpdateTest extends TestCase
             'bridge_api_key' => config('api2cart.api2cart_test_store_key'),
         ]);
 
-        factory(Inventory::class)->create(['location_id' => '99']);
 
-        factory(ProductPrice::class)->create(['location_id' => '99']);
+        $this->inventory = factory(Inventory::class)->create(['location_id' => '99', 'product_id' => $product->getKey()]);
+
+        factory(ProductPrice::class)->create(['location_id' => '99', 'product_id' => $product->getKey()]);
 
         $this->api2cart_product_link = factory(Api2cartProductLink::class)->create([]);
         $this->api2cart_product_link->product()->associate($product);
         $this->api2cart_product_link->api2cartConnection()->associate($api2cart_connection);
     }
+
+//    public function test_product_data() {
+//        $product_data = $this->api2cart_product_link->getProductData();
+//    }
 
     /**
      */
