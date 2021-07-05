@@ -64,6 +64,7 @@ class SyncProduct implements ShouldQueue
     private function verifyProductUpdate(): bool
     {
         if ($this->product_link->isInSync()) {
+            $this->product_link->product->detachTag('CHECK FAILED');
             return true;
         }
 
