@@ -11,7 +11,7 @@ class InstallPassport extends Migration
      */
     public function up()
     {
-        Artisan::call('passport:keys');
+        Artisan::call('passport:install');
     }
 
     /**
