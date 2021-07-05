@@ -4,7 +4,7 @@ namespace App\Modules\Rmsapi\src\Jobs;
 
 use App\Models\RmsapiConnection;
 use App\Models\RmsapiProductImport;
-use App\Modules\Rmsapi\src\Client as RmsapiClient;
+use App\Modules\Rmsapi\src\Api\Client as RmsapiClient;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Rmsapi\src;
+namespace App\Modules\Rmsapi\src\Api;
 
 use App\Models\RmsapiConnection;
 use GuzzleHttp\Client as GuzzleClient;

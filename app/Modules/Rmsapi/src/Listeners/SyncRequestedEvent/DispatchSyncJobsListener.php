@@ -6,7 +6,7 @@ use App\Events\SyncRequestedEvent;
 use App\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Jobs\FetchUpdatedProductsJob;
 
-class DisptachSyncJobsListener
+class DispatchSyncJobsListener
 {
     /**
      * Handle the event.
