@@ -3,7 +3,7 @@
 namespace Tests\External\Rmsapi;
 
 use App\Models\RmsapiConnection;
-use App\Modules\Rmsapi\src\Client as RmsapiClient;
+use App\Modules\Rmsapi\src\Api\Client as RmsapiClient;
 use Tests\TestCase;
 
 class RmsapiConnectionTest extends TestCase

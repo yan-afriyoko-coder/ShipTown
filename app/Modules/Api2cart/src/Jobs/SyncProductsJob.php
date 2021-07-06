@@ -3,6 +3,7 @@
 namespace App\Modules\Api2cart\src\Jobs;
 
 use App\Models\Product;
+use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use App\Modules\MagentoApi\src\Jobs\SyncProductStockJob;
 use Exception;
@@ -11,7 +12,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Collection;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class SyncProductsJob implements ShouldQueue
@@ -31,29 +31,37 @@ class SyncProductsJob implements ShouldQueue
      */
     public function handle()
     {
-        $query = Product::withAllTags(['Available Online', 'Not Synced']);
-
-        $this->queueData([
-            'total_count' => $query->count(),
-        ]);
-
-        $totalCount = $query->count();
-
-        $chunkSize = 10;
+        $api2cartConnections = Api2cartConnection::all();
 
         // we want to sync products with smallest quantities first to avoid oversells
-        $query->orderBy('quantity')
+        $products = Product::withAllTags(['Available Online', 'Not Synced'])
+            ->orderBy('quantity')
             ->orderBy('updated_at')
-            ->chunk($chunkSize, function (Collection $products) use ($totalCount, $chunkSize) {
-                $this->queueProgressChunk($totalCount, $chunkSize);
+            ->get();
 
-                $products->each(function (Product $product) {
-                    Api2cartProductLink::where(['product_id' => $product->getKey()])
-                        ->each(function (Api2cartProductLink $product_link) {
-                            SyncProduct::dispatch($product_link);
-                            SyncProductStockJob::dispatch($product_link->product);
-                        });
-                });
+        $products->each(function (Product $product) use ($api2cartConnections) {
+            $api2cartConnections->each(function (Api2cartConnection $api2cartConnection) use ($product) {
+                $this->dispatchSyncJobs($product, $api2cartConnection);
             });
+        });
+
+        $this->queueData([
+            'total_count' => $products->count(),
+        ]);
+    }
+
+    /**
+     * @param Product $product
+     * @param Api2cartConnection $api2cartConnection
+     */
+    private function dispatchSyncJobs(Product $product, Api2cartConnection $api2cartConnection): void
+    {
+        $productLink = Api2cartProductLink::firstOrCreate([
+            'product_id' => $product->getKey(),
+            'api2cart_connection_id' => $api2cartConnection->getKey(),
+        ], []);
+
+        SyncProduct::dispatch($productLink);
+        SyncProductStockJob::dispatch($productLink->product);
     }
 }

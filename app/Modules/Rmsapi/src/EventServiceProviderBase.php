@@ -24,7 +24,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
      */
     protected $listen = [
         SyncRequestedEvent::class => [
-            Listeners\SyncRequestedEvent\DisptachSyncJobsListener::class,
+            Listeners\SyncRequestedEvent\DispatchSyncJobsListener::class,
         ],
     ];
 }
