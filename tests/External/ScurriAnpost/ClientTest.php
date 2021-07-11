@@ -8,6 +8,13 @@ use Tests\TestCase;
 
 class ClientTest extends TestCase
 {
+    public function test_if_credentials_configured()
+    {
+        $this->assertNotNull(config('scurri.company_slug'), 'Scurri company_slug not configured');
+        $this->assertNotNull(config('scurri.username'), 'Scurri username not configured');
+        $this->assertNotNull(config('scurri.password'), 'Scurri password not configured');
+    }
+
     /**
      * A basic feature test example.
      *
