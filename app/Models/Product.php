@@ -172,6 +172,7 @@ class Product extends BaseModel
                 'inventory',
                 'aliases',
                 'tags',
+                'prices',
             ]);
     }
 
