@@ -34,34 +34,36 @@ class ClientTest extends TestCase
     public function test_successful_create_consignment()
     {
         $consignment = Client::createMultipleConsignments([
-            "order_number" => "8384832",
-            "recipient" => [
-                "address" => [
-                    "country" => "IE",
-                    "postcode" => "Y35 DW6E",
-                    "city" => "Wexford",
-                    "address2" => "The Bullring",
-                    "address1" => "Innovation House",
-                    "state" => "Wexford"
-                  ],
-                "contact_number" => "072 8848292234",
-                "email_address" => "john@scurri.com",
-                "company_name" => "Scurri",
-                "name" => "John Doe"
-            ],
-            "packages" => [
-                [
-                    "items" => [
-                        [
-                            "sku" => "n/a",
-                            "quantity" => 1,
-                            "name" => "Shipment"
-                        ]
+            0 => [
+                "order_number" => "8384832",
+                "recipient" => [
+                    "address" => [
+                        "country" => "IE",
+                        "postcode" => "Y35 DW6E",
+                        "city" => "Wexford",
+                        "address2" => "The Bullring",
+                        "address1" => "Innovation House",
+                        "state" => "Wexford"
+                      ],
+                    "contact_number" => "072 8848292234",
+                    "email_address" => "john@scurri.com",
+                    "company_name" => "Scurri",
+                    "name" => "John Doe"
+                ],
+                "packages" => [
+                    [
+                        "items" => [
+                            [
+                                "sku" => "n/a",
+                                "quantity" => 1,
+                                "name" => "Shipment"
+                            ]
+                        ],
+                        "length" => 10,
+                        "height" => 0.5,
+                        "width" => 12.2,
+                        "reference" => "CustomCustomerReference1"
                     ],
-                    "length" => 10,
-                    "height" => 0.5,
-                    "width" => 12.2,
-                    "reference" => "CustomCustomerReference1"
                 ],
             ],
         ]);
@@ -75,39 +77,41 @@ class ClientTest extends TestCase
     public function test_successful_getPdfLabel()
     {
         $consignment = Client::createMultipleConsignments([
-            "order_number" => "8384832",
-            "recipient" => [
-                "address" => [
-                    "country" => "IE",
-                    "postcode" => "Y35 DW6E",
-                    "city" => "Wexford",
-                    "address2" => "The Bullring",
-                    "address1" => "Innovation House",
-                    "state" => "Wexford"
-                  ],
-                "contact_number" => "072 8848292234",
-                "email_address" => "john@scurri.com",
-                "company_name" => "Scurri",
-                "name" => "John Doe"
-            ],
-            "packages" => [
-                [
-                    "items" => [
-                        [
-                            "sku" => "n/a",
-                            "quantity" => 1,
-                            "name" => "Shipment"
-                        ]
+            0 => [
+                "order_number" => "8384832",
+                "recipient" => [
+                    "address" => [
+                        "country" => "IE",
+                        "postcode" => "Y35 DW6E",
+                        "city" => "Wexford",
+                        "address2" => "The Bullring",
+                        "address1" => "Innovation House",
+                        "state" => "Wexford"
+                      ],
+                    "contact_number" => "072 8848292234",
+                    "email_address" => "john@scurri.com",
+                    "company_name" => "Scurri",
+                    "name" => "John Doe"
+                ],
+                "packages" => [
+                    [
+                        "items" => [
+                            [
+                                "sku" => "n/a",
+                                "quantity" => 1,
+                                "name" => "Shipment"
+                            ]
+                        ],
+                        "length" => 10,
+                        "height" => 0.5,
+                        "width" => 12.2,
+                        "reference" => "CustomCustomerReference1"
                     ],
-                    "length" => 10,
-                    "height" => 0.5,
-                    "width" => 12.2,
-                    "reference" => "CustomCustomerReference1"
                 ],
             ],
         ]);
 
-        $documents = Client::getDocuments($consignment);
+        $documents = Client::getDocuments($consignment->success[0]);
 
         $this->assertNotNull($documents->getLabels());
     }
