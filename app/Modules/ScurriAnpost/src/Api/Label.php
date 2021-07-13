@@ -32,9 +32,9 @@ class Label
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
-    public function getLabels()
+    public function getLabels(): ?string
     {
         return base64_decode($this->body['labels']);
     }

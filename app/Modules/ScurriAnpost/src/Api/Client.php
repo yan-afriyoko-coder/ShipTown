@@ -53,27 +53,54 @@ class Client
     }
 
     /**
-     * @param array $data
-     * @return Consignment
+     * @return Response
      * @throws Exception
      */
-    public static function createConsignment(array $data): Consignment
+    public static function getSingleConsignment(string $consignment_id): Response
     {
-        $consignmentList = [];
-        $consignmentList[] = $data;
+        return self::authenticatedClient()
+            ->get(self::fullUrl('consignment/'.$consignment_id));
+    }
 
-        $response = self::authenticatedClient()->post(self::fullUrl('consignments'), $consignmentList);
+    /**
+     * @param array $data
+     * @return ConsignmentsResponse|null
+     * @throws Exception
+     */
+    public static function createMultipleConsignments(array $data): ?ConsignmentsResponse
+    {
+        if (empty($data)) {
+            return null;
+        }
 
-        return new Consignment($response);
+        $response = self::authenticatedClient()->post(self::fullUrl('consignments'), $data);
+
+        return new ConsignmentsResponse($response);
     }
 
     /**
      * @throws Exception
      */
-    public static function getDocuments(Consignment $consignment): Label
+    public static function getDocuments(string $consignment_id): Label
     {
-        $url = self::fullUrl('consignment') . '/'. $consignment->consignmentId() .'/documents';
+        $url = self::fullUrl('consignment') . '/'. $consignment_id .'/documents';
         $response = self::authenticatedClient()->get($url);
         return new Label($response);
+    }
+
+    /**
+     * @param array $data
+     * @return string
+     * @throws Exception
+     */
+    public static function createSingleConsignment(array $data): string
+    {
+        $consignmentList = [
+            0 => $data
+        ];
+
+        $response = self::createMultipleConsignments($consignmentList);
+
+        return $response->success[0];
     }
 }

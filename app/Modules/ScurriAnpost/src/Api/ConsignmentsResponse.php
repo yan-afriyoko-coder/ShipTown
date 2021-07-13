@@ -6,7 +6,7 @@ namespace App\Modules\ScurriAnpost\src\Api;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Collection;
 
-class Consignment
+class ConsignmentsResponse
 {
     private Response $response;
 

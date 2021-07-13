@@ -33,7 +33,7 @@ class ClientTest extends TestCase
      */
     public function test_successful_create_consignment()
     {
-        $consignment = Client::createConsignment([
+        $consignment = Client::createMultipleConsignments([
             "order_number" => "8384832",
             "recipient" => [
                 "address" => [
@@ -74,7 +74,7 @@ class ClientTest extends TestCase
      */
     public function test_successful_getPdfLabel()
     {
-        $consignment = Client::createConsignment([
+        $consignment = Client::createMultipleConsignments([
             "order_number" => "8384832",
             "recipient" => [
                 "address" => [

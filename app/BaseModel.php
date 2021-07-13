@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class BaseModel.
  *
+ * @method static create(array $array)
  * @method static firstOrCreate(array $array, array $array)
  * @method static findOrFail($id)
  */

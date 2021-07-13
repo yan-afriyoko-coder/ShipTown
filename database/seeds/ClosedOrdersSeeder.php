@@ -14,7 +14,7 @@ class ClosedOrdersSeeder extends Seeder
      */
     public function run()
     {
-        $count = Order::whereActive()->count() + 200;
+        $count = rand(150,250);
 
         do {
             $orderClosedAt = Carbon::now()->subDays(rand(0, 7));
