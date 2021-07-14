@@ -57,6 +57,8 @@ class Scurri
         // we need to refresh it in order to obtain shipping number
         $consignment = Client::getSingleConsignment($consignment_id)->json();
 
+        ray($consignment);
+
         return OrderShipment::create([
             'order_id' => $order->getKey(),
             'carrier' => $consignment['carrier'],

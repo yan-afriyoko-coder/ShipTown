@@ -22,7 +22,7 @@ class OrderShipmentResource extends JsonResource
             'user' => new UserResource($this->whenLoaded('user')),
             'carrier' => $this->carrier,
             'service' => $this->service,
-            'shipping_number' => $this->consignment_number,
+            'shipping_number' => $this->shipping_number,
             'tracking_url' => $this->tracking_url,
         ];
     }
