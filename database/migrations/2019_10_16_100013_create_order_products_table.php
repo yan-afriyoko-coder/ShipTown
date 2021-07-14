@@ -25,6 +25,7 @@ class CreateOrderProductsTable extends Migration
             $table->string('name_ordered');
             $table->decimal('price', 10, 2)->default(0);
             $table->decimal('quantity_ordered', 10, 2)->default(0);
+            $table->decimal('quantity_outstanding', 10, 2)->default(0);
             $table->decimal('quantity_to_ship', 10, 2)->default(0);
             $table->decimal('quantity_shipped', 10, 2)->default(0);
             $table->decimal('quantity_to_pick', 10, 2)->default(0);
@@ -44,6 +45,27 @@ class CreateOrderProductsTable extends Migration
                 ->references('id')
                 ->onDelete('cascade');
         });
+
+        if (Schema::hasColumn('order_products', 'quantity_outstanding')) {
+            Schema::table('order_products', function (Blueprint $table) {
+                $table->dropColumn('quantity_outstanding');
+            });
+        }
+
+        if (!Schema::hasColumn('order_products', 'quantity_reserved')) {
+            Schema::table('order_products', function (Blueprint $table) {
+                $table->decimal('quantity_reserved')
+                    ->default(0)
+                    ->nullable(false)
+                    ->after('quantity_ordered');
+            });
+        }
+
+        if (Schema::hasColumn('order_products', 'quantity_reserved')) {
+            Schema::table('order_products', function (Blueprint $table) {
+                $table->dropColumn('quantity_reserved');
+            });
+        }
     }
 
     /**

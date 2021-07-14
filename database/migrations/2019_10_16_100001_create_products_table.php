@@ -30,6 +30,13 @@ class CreateProductsTable extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
+
+        Schema::table('products', function (Blueprint $table) {
+            $table->decimal('quantity_available', 10, 2)
+                ->default(0)
+                ->after('quantity_reserved')
+                ->nullable(false);
+        });
     }
 
     /**

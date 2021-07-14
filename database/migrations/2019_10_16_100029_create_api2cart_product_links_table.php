@@ -13,6 +13,10 @@ class CreateApi2cartProductLinksTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('api2cart_product_links')) {
+            return;
+        }
+
         Schema::create('api2cart_product_links', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->nullable();

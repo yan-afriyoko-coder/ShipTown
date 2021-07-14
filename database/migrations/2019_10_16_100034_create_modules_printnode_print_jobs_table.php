@@ -13,12 +13,16 @@ class CreateModulesPrintnodePrintJobsTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('modules_printnode_print_jobs')) {
+            return;
+        }
+
         Schema::create('modules_printnode_print_jobs', function (Blueprint $table) {
             $table->id();
             $table->string('title'); // = 'Url Print';
             $table->string('printer_id'); // = $printerId;
             $table->string('content_type'); // = 'pdf_base64';
-            $table->string('content'); // = $base64PdfString;
+            $table->longText('content'); // = $base64PdfString;
             $table->integer('expire_after');
             $table->timestamps();
         });

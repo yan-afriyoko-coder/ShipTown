@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateModulesTable extends Migration
+class CreateModuleAutoStatusPickingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,15 @@ class CreateModulesTable extends Migration
      */
     public function up()
     {
-        Schema::create('modules', function (Blueprint $table) {
+        if (Schema::hasTable('module_auto_status_pickings')) {
+            return;
+        }
+
+        Schema::create('module_auto_status_pickings', function (Blueprint $table) {
             $table->id();
-            $table->string('service_provider_class')->nullable(false);
-            $table->boolean('enabled')->nullable(false)->default(false);
+            $table->boolean('is_enabled')
+                ->nullable(false)
+                ->default(true);
             $table->timestamps();
         });
     }
@@ -28,6 +33,6 @@ class CreateModulesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('modules');
+        Schema::dropIfExists('module_auto_status_pickings');
     }
 }
