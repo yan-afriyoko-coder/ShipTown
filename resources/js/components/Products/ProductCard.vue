@@ -67,6 +67,11 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
+                                    <a class="nav-link p-0 pl-2 pr-2"  @click.prevent="currentTab = 'prices'" data-toggle="tab" href="#">
+                                        Pricing
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a v-if="sharingAvailable()" @click.prevent="shareLink" class="nav-link p-0 pl-2 pr-2" href="#">
                                         <font-awesome-icon icon="share-alt" class="fas fa-sm"></font-awesome-icon>
                                     </a>
@@ -139,6 +144,23 @@
                             </template>
                         </div>
 
+                        <div class="container" v-if="currentTab === 'prices'">
+                            <div class="row small font-weight-bold">
+                                <div class="col-3">Location</div>
+                                <div class="col-3">Sale Price</div>
+                                <div class="col-3">Start Date</div>
+                                <div class="col-3">End Date</div>
+                            </div>
+                            <template v-for="price in product.prices">
+                                <div class="row" :key="price.id">
+                                    <div class="col-3">{{ price.location_id }}</div>
+                                    <div class="col-3">{{ price.sale_price }}</div>
+                                    <div class="col-3">{{ price.sale_price_start_date }}</div>
+                                    <div class="col-3">{{ price.sale_price_end_date }}</div>
+                                </div>
+                            </template>
+                        </div>
+
                     </div>
                 </div>
 
@@ -172,6 +194,9 @@
                         break;
                     case 'activityLog':
                         this.loadActivityLog();
+                        break;
+                    case 'prices':
+                        this.loadPrices();
                         break;
                     default:
                         break;
