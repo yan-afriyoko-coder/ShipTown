@@ -2,36 +2,29 @@
 
 namespace App\Modules\PrintNode\src\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class PrintJob.
  *
  * @property int    $printer_id
- *                                Print job title displayed in system
  * @property string $title
- *                                Content type to be printed
  * @property string $content_type
- *                                Content to be printed
  * @property string $content
- *                                PDF filename or content
  * @property string $pdf
- *                                Url to PDF
  * @property string $pdf_url
- *                                Time in seconds to expire if cannot be delivered to printer
  * @property int    $expire_after
  *
- * @method static \Illuminate\Database\Eloquent\Builder|PrintJob newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|PrintJob newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|PrintJob query()
- * @mixin \Eloquent
+ * @method static Builder|PrintJob newModelQuery()
+ * @method static Builder|PrintJob newQuery()
+ * @method static Builder|PrintJob query()
+ * @mixin Eloquent
  */
 class PrintJob extends Model
 {
-    public function save(array $options = []): bool
-    {
-        return false;
-    }
+    protected $table = 'modules_printnode_print_jobs';
 
     protected $fillable = [
         'printer_id', 'title', 'content_type', 'content', 'expire_after', 'pdf_url', 'pdf',
@@ -40,7 +33,7 @@ class PrintJob extends Model
     protected $attributes = [
         'title'        => '',
         'content_type' => 'pdf_uri',
-        'expireAfter'  => 15,
+        'expire_after'  => 15,
     ];
 
     public function setPdfAttribute($value)

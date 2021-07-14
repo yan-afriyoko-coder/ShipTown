@@ -88,6 +88,7 @@ class PrintNode
         $printJob->printer_id = $printerId;
         $printJob->content_type = 'pdf_base64';
         $printJob->content = $base64PdfString;
+        $printJob->save();
 
         return self::print($printJob);
     }
