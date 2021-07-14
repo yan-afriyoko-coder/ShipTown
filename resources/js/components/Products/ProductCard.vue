@@ -147,6 +147,7 @@
                         <div class="container" v-if="currentTab === 'prices'">
                             <div class="row small font-weight-bold">
                                 <div class="col-3">Location</div>
+                                <div class="col-3">Price</div>
                                 <div class="col-3">Sale Price</div>
                                 <div class="col-3">Start Date</div>
                                 <div class="col-3">End Date</div>
@@ -154,6 +155,7 @@
                             <template v-for="price in product.prices">
                                 <div class="row" :key="price.id">
                                     <div class="col-3">{{ price.location_id }}</div>
+                                    <div class="col-3">{{ price.price }}</div>
                                     <div class="col-3">{{ price.sale_price }}</div>
                                     <div class="col-3">{{ price.sale_price_start_date }}</div>
                                     <div class="col-3">{{ price.sale_price_end_date }}</div>
