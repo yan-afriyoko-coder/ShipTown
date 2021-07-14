@@ -24,6 +24,10 @@ class CreateOrderStatusesTable extends Migration
             $table->boolean('order_active')->default(1);
             $table->timestamps();
         });
+
+        Schema::table('order_statuses', function (Blueprint $table) {
+            $table->boolean('reserves_stock')->default(true)->after('code');
+        });
     }
 
     /**

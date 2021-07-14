@@ -45,6 +45,27 @@ class CreateOrderProductsTable extends Migration
                 ->references('id')
                 ->onDelete('cascade');
         });
+
+        if (Schema::hasColumn('order_products', 'quantity_outstanding')) {
+            Schema::table('order_products', function (Blueprint $table) {
+                $table->dropColumn('quantity_outstanding');
+            });
+        }
+
+        if (!Schema::hasColumn('order_products', 'quantity_reserved')) {
+            Schema::table('order_products', function (Blueprint $table) {
+                $table->decimal('quantity_reserved')
+                    ->default(0)
+                    ->nullable(false)
+                    ->after('quantity_ordered');
+            });
+        }
+
+        if (Schema::hasColumn('order_products', 'quantity_reserved')) {
+            Schema::table('order_products', function (Blueprint $table) {
+                $table->dropColumn('quantity_reserved');
+            });
+        }
     }
 
     /**

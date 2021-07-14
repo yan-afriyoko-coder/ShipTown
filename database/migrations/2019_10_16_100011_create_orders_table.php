@@ -45,6 +45,13 @@ class CreateOrdersTable extends Migration
                 ->on('users')
                 ->onDelete('SET NULL');
         });
+
+        Schema::table('orders', function (Blueprint $table) {
+            $table->boolean('is_active')
+                ->after('status_code')
+                ->nullable(false)
+                ->default(0);
+        });
     }
 
     /**

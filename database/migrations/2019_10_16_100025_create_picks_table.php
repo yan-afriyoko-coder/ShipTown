@@ -36,6 +36,12 @@ class CreatePicksTable extends Migration
                 ->on('users')
                 ->onDelete('SET NULL');
         });
+
+        Schema::table('picks', function (Blueprint $table) {
+            $table->dropColumn('quantity_required');
+            $table->dropColumn('picker_user_id');
+            $table->dropColumn('picked_at');
+        });
     }
 
     /**

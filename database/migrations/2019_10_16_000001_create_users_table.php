@@ -28,6 +28,11 @@ class CreateUsersTable extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('address_label_template')->nullable()->after('printer_id');
+            $table->boolean('ask_for_shipping_number')->default(true)->after('address_label_template');
+        });
     }
 
     /**

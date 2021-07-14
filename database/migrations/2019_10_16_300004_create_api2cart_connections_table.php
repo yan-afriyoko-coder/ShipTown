@@ -24,8 +24,19 @@ class CreateApi2cartConnectionsTable extends Migration
             $table->string('url')->default('');
             $table->char('prefix', 10)->default('');
             $table->string('bridge_api_key')->nullable();
+            $table->unsignedBigInteger('magento_store_id')->nullable();
+            $table->unsignedBigInteger('inventory_location_id')->nullable();
+            $table->unsignedBigInteger('pricing_location_id')->nullable();
             $table->dateTime('last_synced_modified_at')->default('2020-01-01 00:00:00');
             $table->timestamps();
+        });
+
+        Schema::table('api2cart_connections', function (Blueprint $table) {
+            $table->string('warehouse_id')->nullable(true)->after('magento_store_id');
+        });
+
+        Schema::table('api2cart_connections', function (Blueprint $table) {
+            $table->renameColumn('warehouse_id', 'magento_warehouse_id');
         });
     }
 
