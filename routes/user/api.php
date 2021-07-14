@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::put('print/order/{order_number}/dpd_label', 'Api\PrintDpdLabelController@store');
+Route::put('print/order/{order_number}/dpd_label', 'Api\Modules\DpdIreland\PrintDpdLabelController@store');
 Route::put('print/order/{order_number}/an_post', 'Api\Modules\Scurri\ShipmentsController@store');
 Route::put('print/order/{order_number}/{view}', 'Api\PrintOrderController@store');
 
