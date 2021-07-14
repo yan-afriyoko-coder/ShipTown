@@ -18,7 +18,7 @@ class CreateModulesPrintnodePrintJobsTable extends Migration
             $table->string('title'); // = 'Url Print';
             $table->string('printer_id'); // = $printerId;
             $table->string('content_type'); // = 'pdf_base64';
-            $table->string('content'); // = $base64PdfString;
+            $table->longText('content'); // = $base64PdfString;
             $table->integer('expire_after');
             $table->timestamps();
         });

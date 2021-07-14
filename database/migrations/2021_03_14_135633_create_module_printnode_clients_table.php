@@ -13,7 +13,11 @@ class CreateModulePrintnodeClientsTable extends Migration
      */
     public function up()
     {
-        Schema::create('module_printnode_clients', function (Blueprint $table) {
+        if (Schema::hasTable('modules_printnode_clients')) {
+            return;
+        }
+
+        Schema::create('modules_printnode_clients', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('api_key');
             $table->timestamps();
