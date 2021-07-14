@@ -14,7 +14,7 @@ class ChangeContentColumnTypeOnPrintJobsTable extends Migration
     public function up()
     {
         Schema::table('modules_printnode_print_jobs', function (Blueprint $table) {
-            $table->longText('content');
+            $table->longText('content')->change();
         });
     }
 
