@@ -18,6 +18,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property int         $order_id
  * @property string      $shipping_number
  * @property int|null    $user_id
+ * @property string|null    $base64_pdf_labels
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Order $order
