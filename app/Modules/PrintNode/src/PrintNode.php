@@ -2,6 +2,7 @@
 
 namespace App\Modules\PrintNode\src;
 
+use App\Modules\DpdIreland\src\Responses\PreAdvice;
 use App\Modules\PrintNode\src\Models\Client;
 use App\Modules\PrintNode\src\Models\PrintJob;
 use Exception;
@@ -72,5 +73,23 @@ class PrintNode
         }
 
         return $clients->first();
+    }
+
+
+    /**
+     * @param string $base64PdfString
+     * @param int $printerId
+     * @return int
+     */
+    public static function printBase64Pdf(string $base64PdfString, int $printerId): int
+    {
+        $printJob = new PrintJob();
+        $printJob->title = 'Url Print';
+        $printJob->printer_id = $printerId;
+        $printJob->content_type = 'pdf_base64';
+        $printJob->content = $base64PdfString;
+        $printJob->save();
+
+        return self::print($printJob);
     }
 }
