@@ -13,6 +13,10 @@ class CreateModulesAutostatusPickingConfigurationsTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('modules_autostatus_picking_configurations')) {
+            return;
+        }
+
         Schema::create('modules_autostatus_picking_configurations', function (Blueprint $table) {
             $table->id();
             $table->integer('max_batch_size')->nullable(false)->default(10);

@@ -13,6 +13,10 @@ class CreateDpdIrelandConfigurationTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('modules_dpd-ireland_configuration')) {
+            return;
+        }
+
         Schema::create('modules_dpd-ireland_configuration', function (Blueprint $table) {
             $table->id();
             $table->boolean('live')->nullable(false)->default(false);
