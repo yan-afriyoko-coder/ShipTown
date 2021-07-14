@@ -58,7 +58,6 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property-read bool isPaid
  * @property-read bool isNotPaid
  *
- * @method static Builder|Order active()
  * @method static Builder|Order addInventorySource($inventory_location_id)
  * @method static Builder|Order hasPacker($expected)
  * @method static Builder|Order isPacked($value)
@@ -67,7 +66,6 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static Builder|Order newModelQuery()
  * @method static Builder|Order newQuery()
  * @method static Builder|Order query()
- * @method static Builder|Order whereActive()
  * @method static Builder|Order whereCreatedAt($value)
  * @method static Builder|Order whereDeletedAt($value)
  * @method static Builder|Order whereHasText($text)
@@ -96,7 +94,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property-read int|null $tags_count
  *
  * @method static Builder|Order hasTags($tags)
- * @method static Builder|Order isActive()
+ * @method static Builder|Order whereIsActive()
  * @method static Builder|Order packedBetween($fromDateTime, $toDateTime)
  * @method static Builder|Order whereAgeInDays($age)
  * @method static Builder|Order withAllTags($tags, $type = null)
@@ -439,11 +437,6 @@ class Order extends BaseModel
     public function setIsPickedAttribute($value)
     {
         $this->picked_at = $value ? now() : null;
-    }
-
-    public function scopeActive($query)
-    {
-        return $query->where('status_code', '=', 'processing');
     }
 
     /**

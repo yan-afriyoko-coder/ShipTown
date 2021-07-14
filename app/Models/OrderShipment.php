@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\BaseModel;
 use App\User;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -38,7 +38,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  *
  * @method static Builder|OrderShipment whereAgeInDaysBetween($ageInDaysFrom, $ageInDaysTo)
  */
-class OrderShipment extends Model
+class OrderShipment extends BaseModel
 {
     /**
      * @var string[]
@@ -46,7 +46,19 @@ class OrderShipment extends Model
     protected $fillable = [
         'order_id',
         'user_id',
+        'carrier',
+        'service',
         'shipping_number',
+        'tracking_url',
+        'base64_pdf_labels',
+    ];
+
+    // we use attributes to set default values
+    // we wont use database default values
+    // as this is then not populated
+    // correctly to events
+    protected $attributes = [
+        'base64_pdf_labels' => ''
     ];
 
     protected $appends = [
@@ -56,7 +68,7 @@ class OrderShipment extends Model
     /**
      * @return BelongsTo
      */
-    public function order()
+    public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }
@@ -64,12 +76,12 @@ class OrderShipment extends Model
     /**
      * @return BelongsTo
      */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function getAgeInDaysAttribute()
+    public function getAgeInDaysAttribute(): int
     {
         return Carbon::now()->ceilDay()->diffInDays($this->created_at);
     }

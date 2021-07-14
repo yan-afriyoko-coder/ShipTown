@@ -82,6 +82,7 @@
                 <button type="button" class="btn btn-info" @click.prevent="askForShippingNumber">Add Shipping Number</button>
                 <button type="button" class="btn btn-info" @click.prevent="printLabel('address_label')">Print Address Label</button>
                 <button type="button" class="btn btn-info" @click.prevent="printLabel('dpd_label')">Print DPD Label</button>
+                <button type="button" class="btn btn-info" @click.prevent="printLabel('an_post')">Print An Post Label</button>
             </template>
         </filters-modal>
 

@@ -10,7 +10,7 @@ use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;
 
 $factory->define(Order::class, function (Faker $faker) {
-    $shippingAddress = OrderAddress::query()->inRandomOrder()->first() ?? factory(OrderAddress::class)->create();
+    $shippingAddress = factory(OrderAddress::class)->create();
 
     $statusList = ['processing',
         'on_hold', 'paid', 'picking',

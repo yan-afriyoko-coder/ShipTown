@@ -218,6 +218,7 @@ return [
         App\Modules\Api2cart\src\Api2cartServiceProvider::class,
         App\Modules\Rmsapi\src\EventServiceProviderBase::class,
         App\Modules\MagentoApi\src\EventServiceProviderBase::class,
+        App\Modules\ScurriAnpost\src\ScurriServiceProvider::class,
     ],
 
     /*

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderShipmentResource extends JsonResource
@@ -9,12 +10,20 @@ class OrderShipmentResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      *
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
-        return parent::toArray($request);
+        return [
+            'order_id' => $this->order_id,
+            'user_id' => $this->user_id,
+            'user' => new UserResource($this->whenLoaded('user')),
+            'carrier' => $this->carrier,
+            'service' => $this->service,
+            'shipping_number' => $this->shipping_number,
+            'tracking_url' => $this->tracking_url,
+        ];
     }
 }
