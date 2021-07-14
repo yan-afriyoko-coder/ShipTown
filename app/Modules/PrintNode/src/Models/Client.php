@@ -29,7 +29,7 @@ class Client extends Model
     /**
      * @var string
      */
-    protected $table = 'module_printnode_clients';
+    protected $table = 'modules_printnode_clients';
 
     /**
      * @var string[]
