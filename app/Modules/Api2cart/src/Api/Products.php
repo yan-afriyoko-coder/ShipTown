@@ -368,8 +368,8 @@ class Products extends Entity
             ->only(self::PRODUCT_ALLOWED_KEYS)
             ->except(self::PRODUCT_DONT_UPDATE_KEYS)
             ->merge([
-                'reindex'     => 'True',
-                'clear_cache' => 'True',
+                'reindex'     => 'False',
+                'clear_cache' => 'False',
             ])
             ->toArray();
 
