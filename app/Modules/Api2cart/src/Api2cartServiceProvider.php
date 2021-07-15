@@ -5,6 +5,7 @@ namespace App\Modules\Api2cart\src;
 use App\Events\DailyEvent;
 use App\Events\HourlyEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
+use App\Events\Order\OrderUpdatedEvent;
 use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
 use App\Events\ProductPrice\ProductPriceUpdatedEvent;
@@ -62,5 +63,9 @@ class Api2cartServiceProvider extends BaseModuleServiceProvider
         InventoryUpdatedEvent::class => [
             Listeners\InventoryUpdatedEvent\AddNotSyncedTagListener::class,
         ],
+
+        OrderUpdatedEvent::class => [
+            Listeners\OrderUpdatedEvent\SyncStatusListener::class,
+        ]
     ];
 }
