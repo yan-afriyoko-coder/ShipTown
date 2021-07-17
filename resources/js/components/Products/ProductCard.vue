@@ -9,7 +9,7 @@
                         <div>sku: <b> <a :href="'/products?search=' + product['sku']">{{ product['sku'] }}</a></b></div>
                         <div>
                             <template v-for="tag in product.tags">
-                                <a class="badge text-uppercase" :href="'products?has_tags=' + Object.values(tag.name)[0]"> {{ Object.values(tag.name)[0] }} </a>
+                                <a class="badge text-uppercase" :key="tag.id" :href="'products?has_tags=' + Object.values(tag.name)[0]"> {{ Object.values(tag.name)[0] }} </a>
                             </template>
                         </div>
                     </div>
@@ -22,7 +22,7 @@
                             <div class="col-4 col-sm-3">Shelf</div>
                         </div>
                         <template v-for="warehouse_inventory in product.inventory">
-                            <div class="row text-right" >
+                            <div class="row text-right" :key="warehouse_inventory.id">
                                 <div class="col-2 text-left">{{ warehouse_inventory.location_id }}</div>
                                 <div class="col-2 d-none d-sm-block">{{ warehouse_inventory.quantity | numberFormat }}</div>
                                 <div class="col-3 col-sm-2">{{ warehouse_inventory.quantity_reserved | numberFormat }}</div>
@@ -79,12 +79,11 @@
                             </ul>
                         </div>
 
-                        <div>
-                            {{ statusMessage }}
-                        </div>
-
-                        <template v-if="currentTab === 'pendingOrders'" v-for="orderProduct in orderProducts">
-                           <div>
+                        <template v-if="currentTab === 'pendingOrders'">
+                            <div>
+                                {{ statusMessageOrder }}
+                            </div>
+                           <div v-for="orderProduct in orderProducts" :key="orderProduct.id">
                                <div class="row text-left mb-2">
                                    <div class="col">
                                        <div>
@@ -128,8 +127,11 @@
                            </div>
                         </template>
 
-                        <div class="container" v-if="currentTab === 'activityLog'">
-                            <template v-for="activity in activityLog">
+                        <template v-if="currentTab === 'activityLog'">
+                            <div>
+                                {{ statusMessageActivity }}
+                            </div>
+                            <div v-for="activity in activityLog" class="container" :key="activity.id">
                                 <div class="d-flex flex-column flex-md-row align-middle">
                                     <div class="small flex-row align-middle">
                                         {{ activity['created_at'] | moment('MMM DD')  }} {{ activity['created_at'] | moment('H:mm')  }}:
@@ -141,27 +143,33 @@
                                         {{ activity['description'] }} {{ activity['changes'] }}
                                     </div>
                                 </div>
-                            </template>
-                        </div>
-
-                        <div class="container" v-if="currentTab === 'prices'">
-                            <div class="row small font-weight-bold">
-                                <div class="col-3">Location</div>
-                                <div class="col-3">Price</div>
-                                <div class="col-3">Sale Price</div>
-                                <div class="col-3">Start Date</div>
-                                <div class="col-3">End Date</div>
                             </div>
-                            <template v-for="price in product.prices">
-                                <div class="row" :key="price.id">
-                                    <div class="col-3">{{ price.location_id }}</div>
-                                    <div class="col-3">{{ price.price }}</div>
-                                    <div class="col-3">{{ price.sale_price }}</div>
-                                    <div class="col-3">{{ price.sale_price_start_date }}</div>
-                                    <div class="col-3">{{ price.sale_price_end_date }}</div>
-                                </div>
-                            </template>
-                        </div>
+                        </template>
+
+                        <template v-if="currentTab === 'prices'">
+                            <div class="container">
+                                <table class="small table table-borderless table-responsive mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Location</th>
+                                            <th>Price</th>
+                                            <th>Sale Price</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="price in product.prices" :key="price.id">
+                                            <td>{{ price.location_id }}</td>
+                                            <td>{{ price.price }}</td>
+                                            <td>{{ price.sale_price }}</td>
+                                            <td>{{ price.sale_price_start_date }}</td>
+                                            <td>{{ price.sale_price_end_date }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </template>
 
                     </div>
                 </div>
@@ -192,13 +200,14 @@
             currentTab() {
                 switch (this.currentTab) {
                     case 'pendingOrders':
-                        this.loadOrders();
+                        if(!this.orderProducts.length){
+                            this.loadOrders();
+                        }
                         break;
                     case 'activityLog':
-                        this.loadActivityLog();
-                        break;
-                    case 'prices':
-                        this.loadPrices();
+                        if(!this.activityLog.length){
+                            this.loadActivityLog();
+                        }
                         break;
                     default:
                         break;
@@ -208,11 +217,12 @@
 
         data: function() {
             return {
-                statusMessage: 'No orders found',
-                activityLog: null,
+                statusMessageOrder: '',
+                statusMessageActivity: '',
+                activityLog: [],
                 currentTab: '',
                 showOrders: false,
-                orderProducts: null,
+                orderProducts: [],
             };
         },
 
@@ -259,24 +269,26 @@
             },
 
             loadOrders: function () {
-                this.statusMessage = 'Loading orders ...'
+                this.statusMessageOrder = "Loading orders ..."
                 const params = {
                     'filter[product_id]': this.product['id'],
                     'filter[has_stock_reserved]': true,
+                    'filter[order.is_active]': true,
                     'sort': 'id',
                     'include': 'order'
                 }
                 this.apiGetOrderProducts(params)
                     .then(({data}) => {
-                        this.statusMessage = '';
+                        this.statusMessageOrder = '';
                         this.orderProducts = data.data;
                         if (this.orderProducts.length === 0) {
-                            this.statusMessage = 'No orders found';
+                            this.statusMessageOrder = 'No orders found';
                         }
                     });
             },
 
             loadActivityLog: function () {
+                this.statusMessageActivity = "Loading activities ...";
                 const params = {
                     'filter[subject_type]': 'App\\Models\\Product',
                     'filter[subject_id]': this.product['id'],
@@ -287,7 +299,11 @@
 
                 this.apiGetActivityLog(params)
                     .then(({data}) => {
+                        this.statusMessageActivity = '';
                         this.activityLog = data.data
+                        if (this.activityLog.length === 0) {
+                            this.statusMessageActivity = 'No activities found';
+                        }
                     });
             },
 
@@ -316,5 +332,8 @@ li {
 }
 .badge {
     font-family: "Lato",-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+}
+.table th, .table td {
+    padding: 0.25rem;
 }
 </style>

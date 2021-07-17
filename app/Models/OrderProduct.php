@@ -173,6 +173,7 @@ class OrderProduct extends BaseModel
 
                 AllowedFilter::scope('current_shelf_location', 'MinimumShelfLocation'),
                 AllowedFilter::exact('order.status_code')->ignore(''),
+                AllowedFilter::exact('order.is_active'),
                 AllowedFilter::scope('created_between'),
 
                 AllowedFilter::exact('packer_user_id', 'orders.packer_user_id'),
