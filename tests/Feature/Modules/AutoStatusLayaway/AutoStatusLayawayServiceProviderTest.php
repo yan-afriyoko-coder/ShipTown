@@ -5,12 +5,7 @@ namespace Tests\Feature\Modules\AutoStatusLayaway;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Models\Order;
 use App\Modules\AutoStatusLayaway\src\AutoStatusLayawayServiceProvider;
-use App\Modules\AutoStatusLayaway\src\Listeners\OrderUpdatedEvent\SetLayawayStatusListener;
-use App\Modules\AutoStatusPackingWeb\src\AutoPackingWebServiceProvider;
-use App\Modules\AutoStatusPackingWeb\src\Jobs\SetPackingWebStatusJob;
-use Event;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
 class AutoStatusLayawayServiceProviderTest extends TestCase
