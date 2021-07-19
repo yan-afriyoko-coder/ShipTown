@@ -10,7 +10,7 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider;
 /**
  * Class BaseModuleServiceProvider.
  */
-class BaseModuleServiceProvider extends EventServiceProvider
+abstract class BaseModuleServiceProvider extends EventServiceProvider
 {
     /**
      * @var string
