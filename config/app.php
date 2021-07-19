@@ -210,6 +210,7 @@ return [
         App\Modules\AutoStatusPicking\src\AutoStatusPickingServiceProvider::class,
         App\Modules\AutoStatusPackingWeb\src\AutoPackingWebServiceProvider::class,
         App\Modules\AutoStatusReady\src\AutoStatusReadyServiceProvider::class,
+        App\Modules\AutoStatusLayaway\src\AutoStatusLayawayServiceProvider::class,
         App\Modules\AutoClose\src\AutoCloseServiceProvider::class,
 
         // 3rd party integrations
