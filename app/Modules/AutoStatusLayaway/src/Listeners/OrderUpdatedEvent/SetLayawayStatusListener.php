@@ -4,13 +4,13 @@
 namespace App\Modules\AutoStatusLayaway\src\Listeners\OrderUpdatedEvent;
 
 use App\Events\Order\OrderUpdatedEvent;
+use App\Modules\AutoStatusLayaway\src\Jobs\SetLayawayStatusJob;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SetLayawayStatusListener
+class SetLayawayStatusListener implements ShouldQueue
 {
     public function handle(OrderUpdatedEvent $event)
     {
-        if ($event->getOrder()->status_code === 'paid') {
-            $event->getOrder()->update(['status_code' => 'layaway']);
-        }
+        SetLayawayStatusJob::dispatchNow($event->getOrder());
     }
 }
