@@ -17,15 +17,22 @@ class SetLayawayStatusJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
+    private Order $order;
+
+    public function __construct(Order $order)
+    {
+        $this->order = $order;
+    }
+
     /**
      * Execute the job.
      *
      * @return void
      */
-    public function handle(Order $order)
+    public function handle()
     {
-        if ($order->status_code === 'paid') {
-            $order->update(['status_code' => 'layaway']);
+        if ($this->order->status_code === 'paid') {
+            $this->order->update(['status_code' => 'layaway']);
         }
     }
 }
