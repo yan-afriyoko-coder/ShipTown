@@ -19,7 +19,7 @@
                 <label for="role_id" class="col-sm-3 col-form-label">Role</label>
                 <div class="col-sm-9">
                     <select class="form-control" v-model="roleId" name="role_id" id="role_id">
-                        <option value=""></option>
+                        <option value="" disabled>Select role</option>
                         <option v-for="(role, i) in roles" :key="i" :value="role.id">
                             {{ role.name }}
                         </option>
@@ -49,7 +49,6 @@ export default {
                 'filter[user_id]': this.id
             })
             .then(({ data }) => {
-                console.log(data);
                 const user = data.data[0];
                 this.name = user.name;
                 this.roleId = user.role_id;
@@ -76,8 +75,8 @@ export default {
                     role_id: this.roleId,
                 })
                 .then(({ data }) => {
-                    this.$emit('saved');
                     this.$snotify.success('User updated.');
+                    this.$emit('saved');
                 })
                 .catch((error) => {
                     if (error.response) {

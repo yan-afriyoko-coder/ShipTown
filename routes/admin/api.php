@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 //Route::apiResource('configuration', 'Api\Settings\ConfigurationController')->only(['store', 'show']);
 Route::apiResource('admin/user/invites', 'Api\Admin\UserInviteController')->only(['store']);
 Route::apiResource('admin/user/roles', 'Api\Admin\UserRoleController', ['as' => 'admin.users'])->only(['index'])->middleware('can:list roles');
-Route::apiResource('admin/users', 'Api\Admin\UserController')->only(['index', 'show', 'update', 'destroy'])->middleware('can:manage users');
+Route::apiResource('admin/users', 'Api\Admin\UserController')->only(['index', 'store', 'show', 'update', 'destroy'])->middleware('can:manage users');
 
 Route::apiResource('modules/autostatus/picking/configuration', 'Api\Modules\AutoStatus\ConfigurationController', ['as' => 'modules.autostatus.picking'])->only('index', 'store');
 

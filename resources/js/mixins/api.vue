@@ -75,6 +75,10 @@ export default {
                 return axios.get(`/api/admin/users`, {params: params});
             },
 
+            apiPostUserStore: function (data) {
+                return axios.post(`/api/admin/users`, data);
+            },
+
             apiPostUserUpdate: function (userId, data) {
                 return axios.put(`/api/admin/users/${userId}`, data);
             },

@@ -6,8 +6,8 @@
                     <span>
                         Users
                     </span>
-                    <a tabindex="-1" class="action-link" v-b-modal.invite-modal>
-                        Invite User
+                    <a tabindex="-1" class="action-link" v-b-modal.create-modal>
+                        Add User
                     </a>
                 </div>
             </div>
@@ -45,11 +45,11 @@
             </div>
         </div>
         <!-- The modals -->
-        <b-modal id="invite-modal" title="Invite User" @ok="handleInviteOk">
-            <invite-modal ref="inviteForm"></invite-modal>
+        <b-modal ref="createModal" id="create-modal" title="Add User" @ok="handleAddOk">
+            <create-modal ref="createForm" :roles="roles" @saved=loadUsers></create-modal>
         </b-modal>
         <b-modal ref="editModal" id="edit-modal" title="Edit User" @ok="handleEditOk">
-            <edit-modal v-if="selectedId" :id="selectedId" :roles="roles" ref="editForm"></edit-modal>
+            <edit-modal v-if="selectedId" :id="selectedId" :roles="roles" @saved=loadUsers ref="editForm"></edit-modal>
         </b-modal>
     </div>
 </template>
@@ -57,14 +57,14 @@
 <script>
 import { find } from 'lodash';
 
-import Invite from './Users/Invite';
+import Create from './Users/Create';
 import Edit from './Users/Edit';
 import api from "../mixins/api";
 
 export default {
     mixins: [api],
     components: {
-        'invite-modal': Invite,
+        'create-modal': Create,
         'edit-modal': Edit,
     },
 
@@ -100,20 +100,24 @@ export default {
         loadRoles() {
             this.apiGetUserRoles()
                 .then(({ data }) => {
-                    console.log(data);
                     this.roles = data.data;
                 });
         },
 
-        handleInviteOk(bvModalEvt) {
+        handleAddOk(bvModalEvt) {
             bvModalEvt.preventDefault();
-            this.$refs.inviteForm.submit();
+            this.$refs.createForm.submit();
+            setTimeout(() => {
+                this.$refs.createModal.hide();
+            }, 500);
         },
 
         handleEditOk(bvModalEvt) {
             bvModalEvt.preventDefault();
             this.$refs.editForm.submit();
-            this.$refs.editModal.hide();
+            setTimeout(() => {
+                this.$refs.editModal.hide();
+            }, 500);
         },
 
         onEditClick(id) {
@@ -128,16 +132,14 @@ export default {
                         this.apiDeleteUser(id)
                             .then(() => {
                                 this.$snotify.success('User deactivated.');
-                                let index = find(this.users, ['id', id]);
-
-                                this.users = this.users.splice(index, 1);
+                                this.loadUsers()
                             });
                     }
                 })
                 .catch(err => {
                     console.log(err);
                 });
-        }
+        },
     },
 
     computed: {
