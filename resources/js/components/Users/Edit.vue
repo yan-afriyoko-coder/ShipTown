@@ -19,7 +19,7 @@
                 <label for="role_id" class="col-sm-3 col-form-label">Role</label>
                 <div class="col-sm-9">
                     <select class="form-control" v-model="roleId" name="role_id" id="role_id">
-                        <option value=""></option>
+                        <option value="" disabled>Select role</option>
                         <option v-for="(role, i) in roles" :key="i" :value="role.id">
                             {{ role.name }}
                         </option>
@@ -71,7 +71,7 @@ export default {
 
         submit() {
             this.showLoading();
-            this.apiPostUserUpdate(this.id, {
+        this.apiPostUserUpdate(this.id, {
                     name: this.name,
                     role_id: this.roleId,
                 })

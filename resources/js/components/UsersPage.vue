@@ -6,8 +6,8 @@
                     <span>
                         Users
                     </span>
-                    <a tabindex="-1" class="action-link" v-b-modal.invite-modal>
-                        Invite User
+                    <a tabindex="-1" class="action-link" v-b-modal.create-modal>
+                        Add User
                     </a>
                 </div>
             </div>
@@ -45,8 +45,8 @@
             </div>
         </div>
         <!-- The modals -->
-        <b-modal id="invite-modal" title="Invite User" @ok="handleInviteOk">
-            <invite-modal ref="inviteForm"></invite-modal>
+        <b-modal id="create-modal" title="Add User" @ok="handleAddOk">
+            <create-modal ref="createForm" :roles="roles"></create-modal>
         </b-modal>
         <b-modal ref="editModal" id="edit-modal" title="Edit User" @ok="handleEditOk">
             <edit-modal v-if="selectedId" :id="selectedId" :roles="roles" ref="editForm"></edit-modal>
@@ -57,14 +57,14 @@
 <script>
 import { find } from 'lodash';
 
-import Invite from './Users/Invite';
+import Create from './Users/Create';
 import Edit from './Users/Edit';
 import api from "../mixins/api";
 
 export default {
     mixins: [api],
     components: {
-        'invite-modal': Invite,
+        'create-modal': Create,
         'edit-modal': Edit,
     },
 
@@ -105,9 +105,9 @@ export default {
                 });
         },
 
-        handleInviteOk(bvModalEvt) {
+        handleAddOk(bvModalEvt) {
             bvModalEvt.preventDefault();
-            this.$refs.inviteForm.submit();
+            this.$refs.createForm.submit();
         },
 
         handleEditOk(bvModalEvt) {

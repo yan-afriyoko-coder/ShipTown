@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserDeleteRequest;
+use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\User;
 use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 
 /**
  * Class UsersController.
@@ -25,6 +28,25 @@ class UserController extends Controller
         $query = User::getSpatieQueryBuilder();
 
         return UserResource::collection($this->getPaginatedResult($query));
+    }
+
+    /**
+     * PUT api/admin/users.
+     *
+     * @param UserStoreRequest $request
+     *
+     * @return UserResource
+     */
+    public function store(UserStoreRequest $request): UserResource
+    {
+        $user = User::create($request->all() + ['password' => bcrypt(Str::random(8))]);
+        $user->assignRole($request->role_id);
+
+        Password::sendResetLink(
+            $request->only('email')
+        );
+
+        return new UserResource($user);
     }
 
     /**
