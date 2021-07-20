@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\BaseModel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -29,7 +30,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|OrderStatus whereReservesStock(bool $reserves_stock)
  * @mixin \Eloquent
  */
-class OrderStatus extends Model
+class OrderStatus extends BaseModel
 {
     protected $fillable = [
         'name',
