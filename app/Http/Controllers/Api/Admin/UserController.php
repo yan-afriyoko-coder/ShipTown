@@ -76,6 +76,8 @@ class UserController extends Controller
         // Not allowed to update your own role
         if ($request->user()->id === $user->id) {
             $updateData->forget('role_id');
+        } else {
+            $user->syncRoles([$request->role_id]);
         }
 
         $user->fill($updateData->toArray());
