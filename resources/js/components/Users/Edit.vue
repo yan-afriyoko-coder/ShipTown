@@ -49,7 +49,6 @@ export default {
                 'filter[user_id]': this.id
             })
             .then(({ data }) => {
-                console.log(data);
                 const user = data.data[0];
                 this.name = user.name;
                 this.roleId = user.role_id;
@@ -71,13 +70,13 @@ export default {
 
         submit() {
             this.showLoading();
-        this.apiPostUserUpdate(this.id, {
+            this.apiPostUserUpdate(this.id, {
                     name: this.name,
                     role_id: this.roleId,
                 })
                 .then(({ data }) => {
-                    this.$emit('saved');
                     this.$snotify.success('User updated.');
+                    this.$emit('saved');
                 })
                 .catch((error) => {
                     if (error.response) {

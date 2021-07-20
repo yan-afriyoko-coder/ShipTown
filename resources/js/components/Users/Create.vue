@@ -87,9 +87,8 @@ export default {
             };
             this.apiPostUserStore(data)
                 .then(({ data }) => {
-                    this.$emit('saved');
                     this.$snotify.success('User created.');
-                    this.reset();
+                    this.$emit('saved');
                 })
                 .catch((error) => {
                     if (error.response) {
@@ -99,10 +98,6 @@ export default {
                     }
                 })
                 .finally(this.hideLoading);
-        },
-
-        reset() {
-            this.email = null;
         }
     }
 }
