@@ -6,6 +6,7 @@ use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\OrderShipment;
+use App\Models\OrderStatus;
 use App\Models\Product;
 use App\Models\ProductPrice;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
@@ -14,6 +15,7 @@ use App\Observers\InventoryObserver;
 use App\Observers\OrderObserver;
 use App\Observers\OrderProductObserver;
 use App\Observers\OrderShipmentObserver;
+use App\Observers\OrderStatusObserver;
 use App\Observers\ProductObserver;
 use App\Observers\ProductPriceObserver;
 use Illuminate\Support\ServiceProvider;
@@ -34,6 +36,7 @@ class AppServiceProvider extends ServiceProvider
         Order::observe(OrderObserver::class);
         OrderProduct::observe(OrderProductObserver::class);
         OrderShipment::observe(OrderShipmentObserver::class);
+        OrderStatus::observe(OrderStatusObserver::class);
 
         // Modules
         Api2cartOrderImports::observe(Api2cartOrderImportsObserver::class);
