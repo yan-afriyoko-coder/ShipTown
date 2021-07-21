@@ -21,7 +21,7 @@ class ProductUpdatedEvent implements ShouldQueue
     /**
      * @var Product
      */
-    private Product $product;
+    public Product $product;
 
     /**
      * Create a new event instance.
