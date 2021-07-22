@@ -20,7 +20,7 @@ class ProductCreatedEvent
     /**
      * @var Product
      */
-    public Product $product;
+    private Product $product;
 
     /**
      * Create a new event instance.

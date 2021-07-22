@@ -33,14 +33,6 @@ class EventServiceProvider extends ServiceProvider
         HourlyEvent::class => [
             FireActiveOrderCheckEventsListener::class,
         ],
-
-        ProductCreatedEvent::class => [
-            ProductCreatedListener::class
-        ],
-
-        ProductUpdatedEvent::class => [
-            ProductUpdatedListener::class
-        ],
     ];
 
     /**
@@ -60,5 +52,7 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
+
+        //
     }
 }
