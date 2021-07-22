@@ -40,15 +40,18 @@ class StatusSyncTest extends TestCase
 
         $orderStatusList = $response->getResult()['cart_order_statuses'];
 
-        $randomStatus = $orderStatusList[rand(0, count($orderStatusList)-1)];
-
-        \App\Models\OrderStatus::firstOrCreate([
-            'name' => $randomStatus['id'],
-            'code' => $randomStatus['id'],
-            'sync_ecommerce' => true,
-        ]);
-
         $order = Order::first();
+
+        do {
+            $randomStatus = $orderStatusList[rand(0, count($orderStatusList)-1)];
+        } while ($order->status_code === $randomStatus['id']);
+
+        \App\Models\OrderStatus::updateOrCreate([
+            'code' => $randomStatus['id']
+        ], [
+            'name' => $randomStatus['id'],
+            'sync_ecommerce' => false,
+        ]);
 
         $order->status_code = $randomStatus['id'];
         $order->save();
