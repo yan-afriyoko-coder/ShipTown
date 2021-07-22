@@ -50,7 +50,7 @@ class StatusSyncTest extends TestCase
             'code' => $randomStatus['id']
         ], [
             'name' => $randomStatus['id'],
-            'sync_ecommerce' => false,
+            'sync_ecommerce' => true,
         ]);
 
         $order->status_code = $randomStatus['id'];
