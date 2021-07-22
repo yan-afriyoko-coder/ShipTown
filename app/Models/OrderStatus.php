@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use App\BaseModel;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
@@ -15,6 +15,7 @@ use Illuminate\Support\Carbon;
  * @property string      $name
  * @property bool        $reserves_stock
  * @property bool         $order_active
+ * @property bool         $sync_ecommerce
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -28,7 +29,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|OrderStatus whereOrderActive($value)
  * @method static Builder|OrderStatus whereUpdatedAt($value)
  * @method static Builder|OrderStatus whereReservesStock(bool $reserves_stock)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class OrderStatus extends BaseModel
 {
@@ -37,15 +38,19 @@ class OrderStatus extends BaseModel
         'code',
         'order_active',
         'reserves_stock',
+        'sync_ecommerce',
     ];
 
     protected $casts = [
         'order_active' => 'boolean',
         'reserves_stock' => 'boolean',
+        'sync_ecommerce' => 'boolean',
     ];
 
     protected $attributes = [
+        'order_active' => true,
         'reserves_stock' => true,
+        'sync_ecommerce' => false,
     ];
 
     public static $toFollowStatusList = [

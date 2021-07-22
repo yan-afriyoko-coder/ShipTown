@@ -16,7 +16,7 @@ class OrderUpdatedEvent
     /**
      * @var Order
      */
-    private Order $order;
+    public Order $order;
 
     /**
      * Create a new event instance.
