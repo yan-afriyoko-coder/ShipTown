@@ -139,8 +139,7 @@ class Dpd
                 'user_id'         => $user ? $user->getKey() : null,
                 'carrier'         => 'DPD Ireland',
                 'shipping_number' => $preAdvice->trackingNumber(),
-                'tracking_url' => 'https://dpd.ie/tracking?deviceType=5&consignmentNumber=' .
-                    ''.$preAdvice->trackingNumber(),
+                'tracking_url' => 'https://dpd.ie/tracking?consignmentNumber='.$preAdvice->trackingNumber(),
             ]);
         }, 150);
     }
