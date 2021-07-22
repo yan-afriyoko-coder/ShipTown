@@ -6,6 +6,7 @@ use App\Events\Product\ProductCreatedEvent;
 use App\Events\Product\ProductUpdatedEvent;
 use App\Models\Inventory;
 use App\Models\Product;
+use App\Models\ProductAlias;
 use App\Models\ProductPrice;
 use App\Models\Warehouse;
 use Exception;
@@ -23,6 +24,7 @@ class ProductObserver
     {
         $this->insertInventoryRecords($product);
         $this->insertPricingRecords($product);
+        $this->upsertProductAliasRecords($product);
 
         ProductCreatedEvent::dispatch($product);
     }
@@ -38,6 +40,8 @@ class ProductObserver
      */
     public function updated(Product $product)
     {
+        $this->upsertProductAliasRecords($product);
+
         ProductUpdatedEvent::dispatch($product);
     }
 
@@ -108,5 +112,16 @@ class ProductObserver
             });
 
         ProductPrice::query()->insert($productPriceRecords->toArray());
+    }
+
+    /**
+     * @param Product $product
+     */
+    private function upsertProductAliasRecords(Product $product): void
+    {
+        ProductAlias::updateOrCreate(
+            ['alias' => $product->sku],
+            ['product_id' => $product->id]
+        );
     }
 }
