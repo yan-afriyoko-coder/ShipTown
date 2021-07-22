@@ -137,7 +137,9 @@ class Dpd
         retry(15, function () use ($order, $preAdvice, $user) {
             $order->orderShipments()->create([
                 'user_id'         => $user ? $user->getKey() : null,
+                'carrier'         => 'DPD Ireland',
                 'shipping_number' => $preAdvice->trackingNumber(),
+                'tracking_url' => 'https://dpd.ie/tracking?consignmentNumber='.$preAdvice->trackingNumber(),
             ]);
         }, 150);
     }
