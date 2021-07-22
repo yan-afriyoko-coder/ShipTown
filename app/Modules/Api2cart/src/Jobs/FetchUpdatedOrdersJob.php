@@ -80,11 +80,11 @@ class FetchUpdatedOrdersJob implements ShouldQueue
     }
 
     /**
-     * @param Api2cartConnection $connection
+     * @param Api2cartConnection $api2cartConnection
      *
      * @throws Exception
      */
-    private function importOrders(Api2cartConnection $connection): void
+    private function importOrders(Api2cartConnection $api2cartConnection): void
     {
         $batchSize = 100;
 
@@ -96,15 +96,19 @@ class FetchUpdatedOrdersJob implements ShouldQueue
             'count'          => $batchSize,
         ];
 
-        if (isset($connection->last_synced_modified_at)) {
+        if ($api2cartConnection->magento_store_id) {
+            $params['store_id'] = $api2cartConnection->magento_store_id;
+        }
+
+        if (isset($api2cartConnection->last_synced_modified_at)) {
             $params = Arr::add(
                 $params,
                 'modified_from',
-                $connection->last_synced_modified_at
+                $api2cartConnection->last_synced_modified_at
             );
         }
 
-        $orders = Orders::get($connection->bridge_api_key, $params);
+        $orders = Orders::get($api2cartConnection->bridge_api_key, $params);
         $this->queueData(['fetched_count' => count($orders)]);
 
         if (!$orders) {
@@ -114,13 +118,13 @@ class FetchUpdatedOrdersJob implements ShouldQueue
             return;
         }
 
-        $this->saveOrders($connection, $orders);
+        $this->saveOrders($api2cartConnection, $orders);
 
         // for better performance and no long blocking jobs
         // recursively dispatch another import job
         // if there might be still some more to import
         if (count($orders) >= $batchSize) {
-            self::dispatch($connection);
+            self::dispatch($api2cartConnection);
         }
 
         info('Imported Api2cart orders', ['count' => count($orders)]);
