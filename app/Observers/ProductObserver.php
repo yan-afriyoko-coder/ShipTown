@@ -114,6 +114,9 @@ class ProductObserver
         ProductPrice::query()->insert($productPriceRecords->toArray());
     }
 
+    /**
+     * @param Product $product
+     */
     private function upsertProductAliasRecords(Product $product): void
     {
         ProductAlias::updateOrCreate(
