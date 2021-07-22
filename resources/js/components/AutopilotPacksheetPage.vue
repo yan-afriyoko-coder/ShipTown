@@ -78,6 +78,7 @@
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('packing_warehouse')">packing_warehouse</button>
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('fabrics')">fabrics</button>
                 <button type="button" class="btn btn-info" @click.prevent="changeStatus('ready')">ready</button>
+                <button type="button" class="btn btn-info" @click.prevent="changeStatus('layaway')">layaway</button>
                 <button type="button" class="btn btn-info" @click.prevent="openPreviousOrder">Open Previous Order</button>
                 <button type="button" class="btn btn-info" @click.prevent="askForShippingNumber">Add Shipping Number</button>
                 <button type="button" class="btn btn-info" @click.prevent="printLabel('address_label')">Print Address Label</button>
