@@ -2,6 +2,7 @@
 
 namespace App\Modules\Api2cart\src\Api;
 
+use App\Modules\Api2cart\src\Exceptions\RequestException;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
@@ -13,11 +14,11 @@ class Orders extends Entity
 {
     /**
      * @param string $store_key
-     * @param array  $params
-     *
-     * @throws Exception|GuzzleException
+     * @param array $params
      *
      * @return array|null
+     * @throws Exception|GuzzleException
+     *
      */
     public static function get(string $store_key, array $params)
     {
@@ -26,7 +27,7 @@ class Orders extends Entity
         if ($response->isSuccess()) {
             logger('Fetched orders', [
                 'source' => 'API2CART',
-                'count'  => $response->getResult()['orders_count'],
+                'count' => $response->getResult()['orders_count'],
             ]);
 
             return $response->getResult()['order'];
@@ -34,14 +35,23 @@ class Orders extends Entity
 
         Log::error('order.list.json call failed', $response->asArray());
 
-        throw new Exception('order.list.json call failed - '.$response->getReturnMessage());
+        throw new Exception('order.list.json call failed - ' . $response->getReturnMessage());
+    }
+
+    /**
+     * @throws GuzzleException|RequestException
+     */
+    public static function list(string $store_key, array $params): RequestResponse
+    {
+        return Client::GET($store_key, 'order.list.json', $params);
     }
 
     /**
      * @param $store_key
      * @param $params
-     * @throws Exceptions\RequestException
+     * @return RequestResponse
      * @throws GuzzleException
+     * @throws RequestException
      */
     public static function update($store_key, $params): RequestResponse
     {
@@ -49,8 +59,7 @@ class Orders extends Entity
     }
 
     /**
-     * @throws Exceptions\RequestException
-     * @throws GuzzleException
+     *
      */
     public static function statuses($store_key, $params): RequestResponse
     {

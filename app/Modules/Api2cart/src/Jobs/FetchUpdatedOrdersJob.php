@@ -127,17 +127,18 @@ class FetchUpdatedOrdersJob implements ShouldQueue
     }
 
     /**
-     * @param Api2cartConnection $connection
+     * @param Api2cartConnection $api2cartConnection
      * @param array              $ordersCollection
      */
-    private function saveOrders(Api2cartConnection $connection, array $ordersCollection): void
+    private function saveOrders(Api2cartConnection $api2cartConnection, array $ordersCollection): void
     {
         foreach ($ordersCollection as $order) {
             Api2cartOrderImports::query()->create([
+                'connection_id' => $api2cartConnection->getKey(),
                 'raw_import' => $order,
             ]);
 
-            $this->updateLastSyncedTimestamp($connection, $order);
+            $this->updateLastSyncedTimestamp($api2cartConnection, $order);
         }
     }
 }

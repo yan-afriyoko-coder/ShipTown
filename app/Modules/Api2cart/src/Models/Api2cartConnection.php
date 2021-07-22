@@ -2,7 +2,6 @@
 
 namespace App\Modules\Api2cart\src\Models;
 
-use App\Modules\Api2cart\src\Orders;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -51,7 +50,6 @@ use Illuminate\Support\Collection;
  */
 class Api2cartConnection extends Model
 {
-    //
     protected $fillable = [
         'prefix',
         'bridge_api_key',
@@ -70,11 +68,6 @@ class Api2cartConnection extends Model
         ], true);
 
         parent::__construct($attributes);
-    }
-
-    public static function f()
-    {
-        //
     }
 
     /**

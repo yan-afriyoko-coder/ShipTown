@@ -16,6 +16,7 @@ use Illuminate\Support\Collection;
  * @property int|null                        $order_id
  * @property string|null                     $when_processed
  * @property string|null                     $order_number
+ * @property integer|null                    $api2cart_order_id
  * @property array                           $raw_import
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -44,6 +45,7 @@ class Api2cartOrderImports extends Model
      * @var string[]
      */
     protected $fillable = [
+        'connection_id',
         'when_processed',
         'order_number',
         'raw_import',
@@ -66,6 +68,12 @@ class Api2cartOrderImports extends Model
     protected $attributes = [
         'raw_import' => '{}',
     ];
+
+    public function save(array $options = [])
+    {
+        $this->api2cart_order_id = $this->raw_import['order_id'];
+        return parent::save($options);
+    }
 
     /**
      * @return array
