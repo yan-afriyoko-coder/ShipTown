@@ -27,8 +27,7 @@ class OrdersByAgeWidget extends AbstractWidget
             DB::raw('Date(order_placed_at) as date'),
             DB::raw('count(*) as order_count'),
         ])
-            ->whereNotIn('status_code', OrderStatus::getClosedStatuses())
-            ->whereNotIn('status_code', OrderStatus::getToFollowStatusList())
+            ->where(['is_active' => true])
             ->groupBy(DB::raw('date(order_placed_at)'))
             ->orderBy('date', 'ASC')
             ->get();
