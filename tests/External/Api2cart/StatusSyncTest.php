@@ -84,11 +84,12 @@ class StatusSyncTest extends TestCase
 
         $randomStatus = $orderStatusList[rand(0, count($orderStatusList)-1)];
 
-        \App\Models\OrderStatus::firstOrCreate([
-            'name' => $randomStatus['id'],
-            'code' => $randomStatus['id'],
-            'sync_ecommerce' => false,
-        ]);
+        \App\Models\OrderStatus::updateOrCreate([
+                'code' => $randomStatus['id']
+            ], [
+                'name' => $randomStatus['id'],
+                'sync_ecommerce' => false,
+            ]);
 
         $order = Order::first();
 
