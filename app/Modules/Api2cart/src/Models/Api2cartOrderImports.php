@@ -85,7 +85,7 @@ class Api2cartOrderImports extends Model
      */
     public function api2cartConnection(): BelongsTo
     {
-        return $this->belongsTo(Api2cartConnection::class);
+        return $this->belongsTo(Api2cartConnection::class, 'connection_id');
     }
 
     /**
