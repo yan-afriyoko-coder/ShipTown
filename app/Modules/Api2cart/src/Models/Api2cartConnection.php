@@ -2,7 +2,7 @@
 
 namespace App\Modules\Api2cart\src\Models;
 
-use Barryvdh\LaravelIdeHelper\Eloquent;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -23,6 +23,10 @@ use Illuminate\Support\Collection;
  * @property string      $last_synced_modified_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property int|null $inventory_location_id
+ * @property int|null $pricing_location_id
+ * @property-read Collection|Api2cartProductLink[] $productLinks
+ * @property-read int|null $product_links_count
  *
  * @method static Builder|Api2cartConnection newModelQuery()
  * @method static Builder|Api2cartConnection newQuery()
@@ -38,15 +42,10 @@ use Illuminate\Support\Collection;
  * @method static Builder|Api2cartConnection whereType($value)
  * @method static Builder|Api2cartConnection whereUpdatedAt($value)
  * @method static Builder|Api2cartConnection whereUrl($value)
- * @mixin Eloquent
- *
- * @property int|null $inventory_location_id
- * @property int|null $pricing_location_id
- * @property-read Collection|Api2cartProductLink[] $productLinks
- * @property-read int|null $product_links_count
- *
  * @method static Builder|Api2cartConnection whereInventoryLocationId($value)
  * @method static Builder|Api2cartConnection wherePricingLocationId($value)
+ * @mixin Eloquent
+ *
  */
 class Api2cartConnection extends Model
 {

@@ -6,18 +6,22 @@ use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 /**
  * App\Modules\Api2cart\src\Models\Api2cartOrderImports.
  *
- * @property int                             $id
- * @property int|null                        $connection_id
- * @property int|null                        $order_id
- * @property string|null                     $when_processed
- * @property string|null                     $order_number
- * @property integer|null                    $api2cart_order_id
- * @property array                           $raw_import
+ * @property int $id
+ * @property int|null $connection_id
+ * @property int|null $order_id
+ * @property string|null $when_processed
+ * @property string|null $order_number
+ * @property integer|null $api2cart_order_id
+ * @property array $raw_import
+ * @property-read Api2cartConnection $api2cartConnection
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  *
@@ -72,7 +76,16 @@ class Api2cartOrderImports extends Model
     public function save(array $options = [])
     {
         $this->api2cart_order_id = $this->raw_import['order_id'];
+
         return parent::save($options);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function api2cartConnection(): BelongsTo
+    {
+        return $this->belongsTo(Api2cartConnection::class);
     }
 
     /**
@@ -84,22 +97,22 @@ class Api2cartOrderImports extends Model
 
         // array_filter will cleanup null values
         return array_filter([
-            'company'       => $shipping_address['company'],
-            'gender'        => $shipping_address['gender'],
-            'first_name'    => $shipping_address['first_name'],
-            'last_name'     => $shipping_address['last_name'],
-            'address1'      => $shipping_address['address1'],
-            'address2'      => $shipping_address['address2'],
-            'postcode'      => $shipping_address['postcode'],
-            'city'          => $shipping_address['city'],
-            'state_code'    => $shipping_address['state'] ? $shipping_address['state']['code'] : '',
-            'state_name'    => $shipping_address['state'] ? $shipping_address['state']['name'] : '',
-            'country_code'  => $shipping_address['country']['code3'],
-            'country_name'  => $shipping_address['country']['name'],
-            'phone'         => $shipping_address['phone'],
-            'fax'           => $shipping_address['fax'],
-            'website'       => $shipping_address['website'],
-            'region'        => $shipping_address['region'],
+            'company' => $shipping_address['company'],
+            'gender' => $shipping_address['gender'],
+            'first_name' => $shipping_address['first_name'],
+            'last_name' => $shipping_address['last_name'],
+            'address1' => $shipping_address['address1'],
+            'address2' => $shipping_address['address2'],
+            'postcode' => $shipping_address['postcode'],
+            'city' => $shipping_address['city'],
+            'state_code' => $shipping_address['state'] ? $shipping_address['state']['code'] : '',
+            'state_name' => $shipping_address['state'] ? $shipping_address['state']['name'] : '',
+            'country_code' => $shipping_address['country']['code3'],
+            'country_name' => $shipping_address['country']['name'],
+            'phone' => $shipping_address['phone'],
+            'fax' => $shipping_address['fax'],
+            'website' => $shipping_address['website'],
+            'region' => $shipping_address['region'],
         ]);
     }
 
@@ -113,10 +126,10 @@ class Api2cartOrderImports extends Model
         foreach ($this->raw_import['order_products'] as $rawOrderProduct) {
             $result[] = [
                 //                'sku'               => null,
-                'sku_ordered'       => $rawOrderProduct['model'],
-                'name_ordered'      => $rawOrderProduct['name'],
-                'quantity_ordered'  => $rawOrderProduct['quantity'],
-                'price'             => $rawOrderProduct['price'],
+                'sku_ordered' => $rawOrderProduct['model'],
+                'name_ordered' => $rawOrderProduct['name'],
+                'quantity_ordered' => $rawOrderProduct['quantity'],
+                'price' => $rawOrderProduct['price'],
             ];
         }
 
@@ -124,12 +137,12 @@ class Api2cartOrderImports extends Model
     }
 
     /**
-     * @param array $order
-     * @param bool  $chronological
+     * @param array|null $order
+     * @param bool $chronological
      *
      * @return Collection
      */
-    public function extractStatusHistory(array $order = null, bool $chronological = true)
+    public function extractStatusHistory(array $order = null, bool $chronological = true): Collection
     {
         $statuses = Collection::make($this['raw_import']['status']['history']);
 
