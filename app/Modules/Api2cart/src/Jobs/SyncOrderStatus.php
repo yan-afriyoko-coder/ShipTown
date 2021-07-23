@@ -28,6 +28,20 @@ class SyncOrderStatus implements ShouldQueue
     private Order $order;
 
     /**
+     * The number of times the job may be attempted.
+     *
+     * @var int
+     */
+    public int $tries = 20;
+
+    /**
+     * The number of seconds to wait before retrying the job.
+     *
+     * @var int
+     */
+    public int $retryAfter = 30;
+
+    /**
      * Create a new job instance.
      *
      * @param Order $order
@@ -40,19 +54,22 @@ class SyncOrderStatus implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
-     * @throws GuzzleException
-     * @throws RequestException
+     * @return boolean
+     * @throws GuzzleException|RequestException
      */
-    public function handle()
+    public function handle(): bool
     {
         $orderImport = Api2cartOrderImports::where(['order_number' => $this->order->order_number])
             ->latest()
-            ->firstOrFail();
+            ->firstOr(function () {
+                return true;
+            });
 
         Orders::update($orderImport->api2cartConnection->bridge_api_key, [
             'order_id' => $orderImport->api2cart_order_id,
             'order_status' => $this->order->status_code
         ]);
+
+        return true;
     }
 }
