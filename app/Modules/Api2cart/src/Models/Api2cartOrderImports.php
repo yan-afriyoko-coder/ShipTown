@@ -75,6 +75,7 @@ class Api2cartOrderImports extends Model
 
     public function save(array $options = [])
     {
+        $this->order_number = $this->raw_import['id'];
         $this->api2cart_order_id = $this->raw_import['order_id'];
 
         return parent::save($options);
