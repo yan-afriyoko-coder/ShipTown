@@ -54,22 +54,17 @@ class SyncOrderStatus implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return boolean
      * @throws GuzzleException|RequestException
      */
-    public function handle(): bool
+    public function handle()
     {
         $orderImport = Api2cartOrderImports::where(['order_number' => $this->order->order_number])
             ->latest()
-            ->firstOr(function () {
-                return true;
-            });
+            ->first();
 
         Orders::update($orderImport->api2cartConnection->bridge_api_key, [
             'order_id' => $orderImport->api2cart_order_id,
             'order_status' => $this->order->status_code
         ]);
-
-        return true;
     }
 }
