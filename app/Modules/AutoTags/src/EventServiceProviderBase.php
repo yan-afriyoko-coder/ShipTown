@@ -24,6 +24,11 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     public string $module_description = 'Automatically manages Out Of Stock & Oversold tags';
 
     /**
+     * @var bool
+     */
+    public bool $autoEnable = true;
+
+    /**
      * The event listener mappings for the application.
      *
      * @var array

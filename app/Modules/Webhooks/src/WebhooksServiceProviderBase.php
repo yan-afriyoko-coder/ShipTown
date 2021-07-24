@@ -27,6 +27,11 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
     public string $module_description = 'Amazon SNS integration to provide webhooks';
 
     /**
+     * @var bool
+     */
+    public bool $autoEnable = true;
+
+    /**
      * The event listener mappings for the application.
      *
      * @var array

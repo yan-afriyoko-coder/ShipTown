@@ -22,6 +22,11 @@ class AutoPackingWarehouseServiceProvider extends BaseModuleServiceProvider
     'if can fulfill from location 99';
 
     /**
+     * @var bool
+     */
+    public bool $autoEnable = true;
+
+    /**
      * @var array
      */
     protected $listen = [

@@ -22,6 +22,11 @@ class AutoStatusPaidServiceProvider extends BaseModuleServiceProvider
         'if order has been paid';
 
     /**
+     * @var bool
+     */
+    public bool $autoEnable = true;
+
+    /**
      * @var array
      */
     protected $listen = [

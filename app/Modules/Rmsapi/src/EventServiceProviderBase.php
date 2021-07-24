@@ -18,6 +18,11 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     public string $module_description = 'Provides connectivity to Microsoft RMS 2.0';
 
     /**
+     * @var bool
+     */
+    public bool $autoEnable = true;
+
+    /**
      * The event listener mappings for the application.
      *
      * @var array

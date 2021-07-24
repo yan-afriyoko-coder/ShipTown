@@ -22,6 +22,11 @@ class AutoPackingWebServiceProvider extends BaseModuleServiceProvider
     'when order is fully picked';
 
     /**
+     * @var bool
+     */
+    public bool $autoEnable = true;
+
+    /**
      * @var array
      */
     protected $listen = [
