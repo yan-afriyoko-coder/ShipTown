@@ -14,7 +14,7 @@ class AddEmailColumnToOrderAddressesTable extends Migration
     public function up()
     {
         Schema::table('order_addresses', function (Blueprint $table) {
-            $table->string('email')->default(0)->after('last_name');
+            $table->string('email')->default('')->after('last_name');
         });
     }
 }
