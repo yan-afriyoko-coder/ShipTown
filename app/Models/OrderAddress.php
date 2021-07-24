@@ -16,6 +16,7 @@ use Illuminate\Support\Carbon;
  * @property string      $first_name
  * @property string      $last_name
  * @property string      $full_name
+ * @property string      $email
  * @property string      $address1
  * @property string      $address2
  * @property string      $postcode
@@ -65,6 +66,7 @@ class OrderAddress extends Model
         'gender',
         'first_name',
         'last_name',
+        'email',
         'address1',
         'address2',
         'postcode',

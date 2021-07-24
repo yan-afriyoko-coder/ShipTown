@@ -11,6 +11,7 @@ $factory->define(OrderAddress::class, function (Faker $faker) {
         'gender'        => $faker->title,
         'first_name'    => $faker->firstName,
         'last_name'     => $faker->lastName,
+        'email'         => $faker->email,
         'address1'      => $faker->streetAddress,
         'address2'      => $faker->words(3, true),
         'postcode'      => $faker->postcode,

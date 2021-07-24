@@ -16,7 +16,9 @@ $factory->define(OrderShipment::class, function (Faker $faker) {
 
     return [
         'order_id'        => $order->getKey(),
+        'carrier'         => $faker->randomElement(['DPD', 'UPS', 'SEUR', 'DHL', 'MRW', 'DPD Ireland', 'DPD UK']),
         'shipping_number' => $shipping_number,
+        'tracking_url'    => $faker->url,
         'user_id'         => $user->getKey(),
     ];
 });
