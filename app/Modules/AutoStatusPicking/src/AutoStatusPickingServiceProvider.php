@@ -24,6 +24,11 @@ class AutoStatusPickingServiceProvider extends BaseModuleServiceProvider
     'It prioritize old orders';
 
     /**
+     * @var bool
+     */
+    public bool $autoEnable = true;
+
+    /**
      * @var string[][]
      */
     protected $listen = [

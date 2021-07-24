@@ -25,6 +25,11 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     public string $module_description = 'Reserves stock for open orders. Is using location 999';
 
     /**
+     * @var bool
+     */
+    public bool $autoEnable = true;
+
+    /**
      * The event listener mappings for the application.
      *
      * @var array

@@ -21,6 +21,11 @@ class AutoStatusReadyServiceProvider extends BaseModuleServiceProvider
     public string $module_description = 'Automatically changes status to "ready" when order is fully packed';
 
     /**
+     * @var bool
+     */
+    public bool $autoEnable = true;
+
+    /**
      * @var array
      */
     protected $listen = [

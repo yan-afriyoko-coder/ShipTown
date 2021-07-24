@@ -19,6 +19,11 @@ class AutoPilotServiceProvider extends BaseModuleServiceProvider
     public string $module_description = 'Clears Packer assignment after 12h of inactivity on order';
 
     /**
+     * @var bool
+     */
+    public bool $autoEnable = true;
+
+    /**
      * @var array
      */
     protected $listen = [

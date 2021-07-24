@@ -21,6 +21,11 @@ class AutoCloseServiceProvider extends BaseModuleServiceProvider
     public string $module_description = 'Automatically opens/closes order when status changed';
 
     /**
+     * @var bool
+     */
+    public bool $autoEnable = true;
+
+    /**
      * @var array
      */
     protected $listen = [

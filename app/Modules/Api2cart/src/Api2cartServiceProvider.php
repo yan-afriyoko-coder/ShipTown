@@ -29,6 +29,11 @@ class Api2cartServiceProvider extends BaseModuleServiceProvider
     public string $module_description = 'Module provides connectivity to eCommerce platforms. It uses api2cart.com';
 
     /**
+     * @var bool
+     */
+    public bool $autoEnable = true;
+
+    /**
      * The event listener mappings for the application.
      *
      * @var array

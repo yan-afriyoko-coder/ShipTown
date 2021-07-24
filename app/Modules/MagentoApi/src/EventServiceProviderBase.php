@@ -24,6 +24,11 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     public string $module_description = 'Module provides connectivity to Magento 2.0 API';
 
     /**
+     * @var bool
+     */
+    public bool $autoEnable = true;
+
+    /**
      * The event listener mappings for the application.
      *
      * @var array

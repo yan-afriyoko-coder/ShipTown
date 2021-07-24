@@ -28,7 +28,7 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
      *
      * @var bool
      */
-    public bool $autoEnable = true;
+    public bool $autoEnable = false;
 
     /**
      * Register any events for your application.

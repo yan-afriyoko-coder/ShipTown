@@ -21,6 +21,11 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     public string $module_description = 'Basic maintenance tasks';
 
     /**
+     * @var bool
+     */
+    public bool $autoEnable = true;
+
+    /**
      * @var array
      */
     protected $listen = [

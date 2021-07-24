@@ -22,6 +22,11 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     'if order has only 1 product ordered';
 
     /**
+     * @var bool
+     */
+    public bool $autoEnable = true;
+
+    /**
      * @var array
      */
     protected $listen = [

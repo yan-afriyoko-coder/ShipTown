@@ -17,6 +17,11 @@ class ScurriServiceProvider extends BaseModuleServiceProvider
     public string $module_description = 'Provides connectivity to AnPost.ie';
 
     /**
+     * @var bool
+     */
+    public bool $autoEnable = true;
+
+    /**
      * The event listener mappings for the application.
      *
      * @var array

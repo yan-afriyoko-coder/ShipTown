@@ -209,6 +209,9 @@
       <path value="$PROJECT_DIR$/vendor/grayloon/laravel-magento-api" />
       <path value="$PROJECT_DIR$/vendor/romanzipp/laravel-queue-monitor" />
       <path value="$PROJECT_DIR$/vendor/rap2hpoutre/laravel-log-viewer" />
+      <path value="$PROJECT_DIR$/vendor/dnoegel/php-xdg-base-dir" />
+      <path value="$PROJECT_DIR$/vendor/mustache/mustache" />
+      <path value="$PROJECT_DIR$/vendor/spatie/laravel-database-mail-templates" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4" />

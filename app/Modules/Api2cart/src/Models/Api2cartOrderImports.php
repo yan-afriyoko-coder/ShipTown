@@ -75,6 +75,7 @@ class Api2cartOrderImports extends Model
 
     public function save(array $options = [])
     {
+        $this->order_number = $this->raw_import['id'];
         $this->api2cart_order_id = $this->raw_import['order_id'];
 
         return parent::save($options);
@@ -101,6 +102,7 @@ class Api2cartOrderImports extends Model
             'gender' => $shipping_address['gender'],
             'first_name' => $shipping_address['first_name'],
             'last_name' => $shipping_address['last_name'],
+            'email' => $this->raw_import['customer']['email'],
             'address1' => $shipping_address['address1'],
             'address2' => $shipping_address['address2'],
             'postcode' => $shipping_address['postcode'],
