@@ -21,6 +21,7 @@
                             <th>Code</th>
                             <th>Reserves Stock</th>
                             <th>Order Active</th>
+                            <th>Sync Ecommerce</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -30,18 +31,13 @@
                             <td>{{ orderStatus.name }}</td>
                             <td>{{ orderStatus.code }}</td>
                             <td align="center">
-                                <font-awesome-icon
-                                    :icon="orderStatus.reserves_stock ? 'check-circle' : 'times-circle'"
-                                    :class="orderStatus.reserves_stock ? 'text-success' : 'text-danger'"
-                                >
-                                </font-awesome-icon>
+                                <status-icon :status="orderStatus.reserves_stock" />
                             </td>
                             <td align="center">
-                                <font-awesome-icon
-                                    :icon="orderStatus.order_active ? 'check-circle' : 'times-circle'"
-                                    :class="orderStatus.order_active ? 'text-success' : 'text-danger'"
-                                >
-                                </font-awesome-icon>
+                                <status-icon :status="orderStatus.order_active" />
+                            </td>
+                            <td align="center">
+                                <status-icon :status="orderStatus.sync_ecommerce" />
                             </td>
                             <td>
                                 <a @click.prevent="showEditForm(orderStatus)">
@@ -67,6 +63,7 @@
 
 import CreateModal from './OrderStatus/CreateModal';
 import EditModal from './OrderStatus/EditModal';
+import StatusIcon from './OrderStatus/StatusIcon';
 import api from "../../mixins/api.vue";
 
 export default {
@@ -74,6 +71,7 @@ export default {
     components: {
         'create-modal': CreateModal,
         'edit-modal': EditModal,
+        'status-icon': StatusIcon
     },
 
     mounted() {

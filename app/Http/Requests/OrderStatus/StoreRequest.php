@@ -28,6 +28,7 @@ class StoreRequest extends FormRequest
             'code'              => ['required', 'string', 'max:100', 'unique:order_statuses,code'],
             'order_active'      => ['required', 'boolean'],
             'reserves_stock'    => ['required', 'boolean'],
+            'sync_ecommerce'    => ['required', 'boolean'],
         ];
     }
 }

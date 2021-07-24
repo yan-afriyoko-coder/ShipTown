@@ -19,6 +19,7 @@ class StoreTest extends TestCase
             'code'              => 'test-create',
             'order_active'      => 0,
             'reserves_stock'    => 0,
+            'sync_ecommerce'    => 0,
         ]);
 
         return $response;
@@ -65,13 +66,15 @@ class StoreTest extends TestCase
             'code'              => '',
             'order_active'      => '',
             'reserves_stock'    => '',
+            'sync_ecommerce'    => '',
         ]);
 
         $response->assertSessionHasErrors([
             'name',
             'code',
             'order_active',
-            'reserves_stock'
+            'reserves_stock',
+            'sync_ecommerce',
         ]);
         $response->assertSessionHasErrors();
     }
