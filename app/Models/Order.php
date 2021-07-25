@@ -266,7 +266,7 @@ class Order extends BaseModel
      */
     public function scopeWhereAgeInDays($query, $age)
     {
-        return $query->orWhereBetween('order_placed_at', [
+        return $query->whereBetween('order_placed_at', [
             Carbon::now()->subDays($age)->startOfDay(),
             Carbon::now()->subDays($age)->endOfDay(),
         ]);
