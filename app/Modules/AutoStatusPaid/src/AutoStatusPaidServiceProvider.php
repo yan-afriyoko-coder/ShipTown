@@ -2,6 +2,7 @@
 
 namespace App\Modules\AutoStatusPaid\src;
 
+use App\Events\Order\ActiveOrderCheckEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
@@ -30,6 +31,10 @@ class AutoStatusPaidServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
+        ActiveOrderCheckEvent::class => [
+            Listeners\OrderUpdatedEvent\ProcessingToPaidListener::class,
+        ],
+
         OrderUpdatedEvent::class => [
             Listeners\OrderUpdatedEvent\ProcessingToPaidListener::class,
         ],
