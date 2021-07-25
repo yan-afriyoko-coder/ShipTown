@@ -58,6 +58,11 @@ class SyncOrderStatus implements ShouldQueue
      */
     public function handle()
     {
+        $this->queueData([
+            'order_number' => $this->order->order_number,
+            'status_code' => $this->order->status_code,
+        ]);
+
         $orderImport = Api2cartOrderImports::where(['order_number' => $this->order->order_number])
             ->latest()
             ->first();
