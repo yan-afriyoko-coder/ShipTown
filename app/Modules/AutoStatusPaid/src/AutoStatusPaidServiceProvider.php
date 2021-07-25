@@ -32,7 +32,7 @@ class AutoStatusPaidServiceProvider extends BaseModuleServiceProvider
      */
     protected $listen = [
         ActiveOrderCheckEvent::class => [
-            Listeners\OrderUpdatedEvent\ProcessingToPaidListener::class,
+            Listeners\ActiveOrderCheckEvent\ProcessingToPaidListener::class,
         ],
 
         OrderUpdatedEvent::class => [
