@@ -506,13 +506,13 @@ class Order extends BaseModel
 
                 AllowedFilter::exact('status', 'status_code'),
                 AllowedFilter::exact('order_number')->ignore([null, '']),
+                AllowedFilter::exact('is_active'),
                 AllowedFilter::exact('packer_user_id'),
 
                 AllowedFilter::scope('age_in_days', 'whereAgeInDays')->ignore([null, '']),
                 AllowedFilter::scope('is_picked'),
                 AllowedFilter::scope('is_packed'),
                 AllowedFilter::scope('is_packing'),
-                AllowedFilter::scope('is_active'),
                 AllowedFilter::scope('packed_between'),
 
                 AllowedFilter::scope('has_packer'),
