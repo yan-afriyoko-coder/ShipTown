@@ -33,7 +33,7 @@ class OrderStatusController extends Controller
     public function store(StoreRequest $request)
     {
         $orderStatus = new OrderStatus;
-        $orderStatus->fill($request->all());
+        $orderStatus->fill($request->validated());
         $orderStatus->save();
 
         return OrderStatusResource::make($orderStatus);
@@ -48,7 +48,7 @@ class OrderStatusController extends Controller
      */
     public function update(UpdateRequest $request, OrderStatus $orderStatus)
     {
-        $orderStatus->fill($request->all());
+        $orderStatus->fill($request->validated());
         $orderStatus->save();
 
         return OrderStatusResource::make($orderStatus);
