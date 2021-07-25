@@ -109,8 +109,6 @@ class Order extends BaseModel
     use LogsActivityTrait;
     use HasTagsTrait;
 
-//    protected $touches = ['orderProducts'];
-
     protected $fillable = [
         'order_number',
         'picked_at',
