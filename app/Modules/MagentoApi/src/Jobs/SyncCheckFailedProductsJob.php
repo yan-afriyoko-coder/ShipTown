@@ -60,14 +60,11 @@ class SyncCheckFailedProductsJob implements ShouldQueue
 
         $query->orderBy('quantity')
             ->chunk($chunkSize, function (Collection $products) use ($totalCount, $chunkSize) {
-                $this->queueProgressChunk($totalCount, $chunkSize);
-
                 $products->each(function (Product $product) {
                     SyncProductStockJob::dispatch($product);
                 });
             });
 
-        $this->queueProgress(0);
         Log::info('Dispatched Sync MagentoApi Jobs', ['count' => $totalCount]);
     }
 }
