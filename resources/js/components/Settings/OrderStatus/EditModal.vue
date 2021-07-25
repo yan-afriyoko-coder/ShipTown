@@ -45,6 +45,25 @@
                                     </ValidationProvider>
                                 </div>
                             </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label" for="sync_ecommerce">Sync Ecommerce</label>
+                                <div class="col-sm-9">
+                                    <ValidationProvider vid="sync_ecommerce" name="sync_ecommerce" v-slot="{ errors }">
+                                        <div class="custom-control custom-switch mt-2" :class="{'is-invalid' : errors.length}">
+                                            <input type="checkbox"
+                                                id="edit-sync_ecommerce"
+                                                class="custom-control-input"
+                                                v-model="syncEcommerce"
+                                                required>
+                                            <label class="custom-control-label" for="edit-sync_ecommerce"></label>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            {{ errors[0] }}
+                                        </div>
+                                    </ValidationProvider>
+                                </div>
+                            </div>
                         </form>
                     </ValidationObserver>
                 </div>
@@ -76,6 +95,7 @@ export default {
         return {
             reservesStock: false,
             orderActive: false,
+            syncEcommerce: false,
         }
     },
 
@@ -87,6 +107,7 @@ export default {
         orderStatus: function(newVal) {
             this.reservesStock = newVal.reserves_stock
             this.orderActive = newVal.order_active
+            this.syncEcommerce = newVal.sync_ecommerce
         }
     },
 
@@ -97,6 +118,7 @@ export default {
             this.apiPutOrderStatus(this.orderStatus.id, {
                     reserves_stock: this.reservesStock,
                     order_active: this.orderActive,
+                    sync_ecommerce: this.syncEcommerce,
                 })
                 .then(({ data }) => {
                     this.$snotify.success('Order status updated.');

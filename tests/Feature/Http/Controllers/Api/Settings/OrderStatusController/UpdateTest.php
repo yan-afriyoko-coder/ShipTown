@@ -13,8 +13,18 @@ class UpdateTest extends TestCase
     use RefreshDatabase;
 
     private function simulationTest() {
-        $orderStatus = OrderStatus::create(['name' => 'testing', 'code' => 'testing', 'order_active' => 1, 'reserves_stock' => 1]);
-        $response = $this->put(route('api.settings.order-statuses.update', $orderStatus), ['order_active' => 0, 'reserves_stock' => 0]);
+        $orderStatus = OrderStatus::create([
+            'name' => 'testing',
+            'code' => 'testing',
+            'order_active' => 1,
+            'reserves_stock' => 1,
+            'sync_ecommerce' => 0,
+        ]);
+        $response = $this->put(route('api.settings.order-statuses.update', $orderStatus), [
+            'order_active'      => 0,
+            'reserves_stock'    => 0,
+            'sync_ecommerce'    => 0
+        ]);
 
         return $response;
     }

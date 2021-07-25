@@ -20,6 +20,7 @@ class OrderStatusResource extends JsonResource
             'code'              => $this->code,
             'reserves_stock'    => $this->reserves_stock,
             'order_active'      => $this->order_active,
+            'sync_ecommerce'    => $this->sync_ecommerce,
         ];
     }
 }
