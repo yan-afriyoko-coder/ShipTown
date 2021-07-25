@@ -67,6 +67,11 @@ class SyncOrderStatus implements ShouldQueue
             ->latest()
             ->first();
 
+        if ($orderImport->api2cart_order_id === 0) {
+            // this will refill api2cart_order_id field
+            $orderImport->save();
+        }
+
         Orders::update($orderImport->api2cartConnection->bridge_api_key, [
             'order_id' => $orderImport->api2cart_order_id,
             'order_status' => $this->order->status_code
