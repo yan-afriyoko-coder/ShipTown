@@ -37,7 +37,11 @@
                                         {{ $shipment['user']['name'] }}
                                     </a>
                                 </td>
-                                <td class="pr-4">{{ $shipment['shipping_number'] }}</td>
+                                <td class="pr-4">
+                                    <a href="{{ $shipment['tracking_url'] }}" target="_blank">
+                                        {{ $shipment['shipping_number'] }}
+                                    </a>
+                                </td>
                                 <td class="pr-5">
                                     <a href="{{ route('orders', ['search' => $shipment['order']['order_number'] ]) }}">
                                         #{{ $shipment['order']['order_number'] }}

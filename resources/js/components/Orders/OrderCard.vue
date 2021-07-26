@@ -166,7 +166,11 @@
                                           <td>
                                               {{ shipment['created_at'] | moment('MMM DD')  }} <small>@</small> {{ shipment['created_at'] | moment('H:mm')  }}:
                                           </td>
-                                          <td>{{ shipment['shipping_number'] }}</td>
+                                          <td>
+                                              <a :href="shipment['tracking_url']" target="_blank">
+                                                  {{ shipment['shipping_number'] }}
+                                              </a>
+                                          </td>
                                           <td>shipped by {{ shipment['user'] ? shipment['user']['name'] : ''}}</td>
                                       </tr>
                                   </template>
