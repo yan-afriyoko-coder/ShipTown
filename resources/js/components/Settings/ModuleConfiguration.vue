@@ -14,7 +14,7 @@
                         <tr v-for="module in modules" :key="module.id">
                             <td>
                                 <div><strong>{{ module.name }}</strong></div>
-                                <div>{{ module.description }}</div>
+                                <div class="text-secondary">{{ module.description }}</div>
                             </td>
                             <td class="text-right align-middle">
                                 <div class="custom-control custom-switch">
