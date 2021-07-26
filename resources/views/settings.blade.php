@@ -171,7 +171,7 @@
 
         .setting-desc{
             color: #6c757d;
-            font-size: 10pt;c
+            font-size: 10pt;
         }
     </style>
 @endsection

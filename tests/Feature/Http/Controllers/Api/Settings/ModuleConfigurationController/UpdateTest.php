@@ -3,21 +3,29 @@
 namespace Tests\Feature\Http\Controllers\Api\Settings\ModuleConfigurationController;
 
 use App\Models\Module;
+use App\Modules\BaseModuleServiceProvider;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Testing\TestResponse;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
+
+class TestModule extends BaseModuleServiceProvider {
+    public static string $module_name = 'Test Module';
+    public static string $module_description = "Test Description";
+}
 
 class UpdateTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function simulationTest()
+    private function simulationTest(): TestResponse
     {
-        $module = Module::create(['service_provider_class' => 'Test Module', 'enabled' => 1]);
-        $response = $this->put(route('api.settings.modules.update', $module));
+        TestModule::enableModule();
 
-        return $response;
+        $module = Module::where(['service_provider_class' => TestModule::class])->first();
+
+        return $this->put(route('api.settings.modules.update', $module));
     }
 
     /** @test */
