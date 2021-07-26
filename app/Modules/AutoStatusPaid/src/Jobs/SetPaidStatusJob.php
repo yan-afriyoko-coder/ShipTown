@@ -37,7 +37,7 @@ class SetPaidStatusJob implements ShouldQueue
     {
         $order = $this->order;
 
-        if ($order->isStatusCode('processing') and ($order->isPaid)) {
+        if ($order->isStatusCodeIn(['processing', 'awaiting_payment']) and ($order->isPaid)) {
             $order->log('Order paid in full, changing status to "paid"');
             $order->update(['status_code' => 'paid']);
         }

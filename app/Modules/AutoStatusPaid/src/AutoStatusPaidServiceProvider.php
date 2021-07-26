@@ -19,8 +19,8 @@ class AutoStatusPaidServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public string $module_description = 'Automatically changes status from "processing" to "paid" '.
-        'if order has been paid';
+    public string $module_description = 'Automatically changes status ' .
+        'from "processing" or "awaiting_payment" to "paid" if order has been paid';
 
     /**
      * @var bool
