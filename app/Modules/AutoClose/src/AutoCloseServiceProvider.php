@@ -13,12 +13,12 @@ class AutoCloseServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public string $module_name = 'AutoClose Order';
+    public static string $module_name = 'AutoClose Order';
 
     /**
      * @var string
      */
-    public string $module_description = 'Automatically opens/closes order when status changed';
+    public static string $module_description = 'Automatically opens/closes order when status changed';
 
     /**
      * @var bool

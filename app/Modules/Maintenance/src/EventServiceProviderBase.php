@@ -13,12 +13,12 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public string $module_name = 'Maintenance';
+    public static string $module_name = 'Maintenance';
 
     /**
      * @var string
      */
-    public string $module_description = 'Basic maintenance tasks';
+    public static string $module_description = 'Basic maintenance tasks';
 
     /**
      * @var bool
