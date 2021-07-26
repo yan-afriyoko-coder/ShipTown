@@ -16,12 +16,12 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public string $module_name = 'AutoTags';
+    public static string $module_name = 'AutoTags';
 
     /**
      * @var string
      */
-    public string $module_description = 'Automatically manages Out Of Stock & Oversold tags';
+    public static string $module_description = 'Automatically manages Out Of Stock & Oversold tags';
 
     /**
      * @var bool

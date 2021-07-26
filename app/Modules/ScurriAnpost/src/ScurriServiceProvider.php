@@ -9,12 +9,12 @@ class ScurriServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public string $module_name = 'An Post Ireland';
+    public static string $module_name = 'An Post Ireland';
 
     /**
      * @var string
      */
-    public string $module_description = 'Provides connectivity to AnPost.ie';
+    public static string $module_description = 'Provides connectivity to AnPost.ie';
 
     /**
      * @var bool
