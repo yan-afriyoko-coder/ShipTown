@@ -38,6 +38,18 @@ class Module extends Model
     ];
 
     protected $appends = [
-        'enabled' => false,
+        'enabled' => false
     ];
+
+    public function getNameAttribute()
+    {
+        $module = new $this->service_provider_class(null);
+        return $module->module_name;
+    }
+
+    public function getDescriptionAttribute()
+    {
+        $module = new $this->service_provider_class(null);
+        return $module->module_description;
+    }
 }
