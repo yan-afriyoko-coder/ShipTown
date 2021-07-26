@@ -25,6 +25,7 @@ class ToFollowStatusOrderCountWidget extends AbstractWidget
     {
         $order_status_counts = Order::query()
             ->select(['status_code', DB::raw('count(*) as order_count')])
+            ->where(['is_active' => 1])
             ->whereIn('status_code', OrderStatus::getToFollowStatusList())
             ->groupBy(['status_code'])
             ->get();
