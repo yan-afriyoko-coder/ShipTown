@@ -40,4 +40,14 @@ class Module extends Model
     protected $appends = [
         'enabled' => false,
     ];
+
+    public function getNameAttribute()
+    {
+        return $this->service_provider_class::$module_name;
+    }
+
+    public function getDescriptionAttribute()
+    {
+        return $this->service_provider_class::$module_description;
+    }
 }
