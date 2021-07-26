@@ -202,6 +202,7 @@ return [
 
         // Automations modules
         // order MIGHT be important!
+        App\Modules\AutoStatusAwaitingPayment\src\AutoStatusAwaitingPaymentServiceProvider::class,
         App\Modules\ShipmentConfirmationEmail\src\ServiceProvider::class,
         App\Modules\AutoPilot\src\AutoPilotServiceProvider::class,
         App\Modules\AutoTags\src\EventServiceProviderBase::class,
