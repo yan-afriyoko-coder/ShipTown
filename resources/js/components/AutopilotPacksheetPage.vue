@@ -71,15 +71,11 @@
 
         <filters-modal ref="filtersModal">
             <template v-slot:actions="slotScopes">
-                <button type="button" class="btn btn-info" @click.prevent="changeStatus('partially_shipped')">partially_shipped</button>
-                <button type="button" class="btn btn-info" @click.prevent="changeStatus('for_later')">for_later</button>
-                <button type="button" class="btn btn-info" @click.prevent="changeStatus('missing_item')">missing_item</button>
-                <button type="button" class="btn btn-info" @click.prevent="changeStatus('picking')">picking</button>
-                <button type="button" class="btn btn-info" @click.prevent="changeStatus('packing_warehouse')">packing_warehouse</button>
-                <button type="button" class="btn btn-info" @click.prevent="changeStatus('fabrics')">fabrics</button>
-                <button type="button" class="btn btn-info" @click.prevent="changeStatus('ready')">ready</button>
-                <button type="button" class="btn btn-info" @click.prevent="changeStatus('layaway')">layaway</button>
-                <button type="button" class="btn btn-info" @click.prevent="changeStatus('complete')">complete</button>
+                <select id="selectStatus" class="form-control" @change="changeStatus" v-model="selectedOrderStatus">
+                    <option value="" readonly>Change Status</option>
+                    <option v-for="orderStatus in orderStatuses" :value="orderStatus.code" :key="orderStatus.id">{{ orderStatus.name }}</option>
+                </select>
+
                 <button type="button" class="btn btn-info" @click.prevent="openPreviousOrder">Open Previous Order</button>
                 <button type="button" class="btn btn-info" @click.prevent="askForShippingNumber">Add Shipping Number</button>
                 <button type="button" class="btn btn-info" @click.prevent="printLabel('address_label')">Print Address Label</button>
@@ -133,6 +129,8 @@
                     packed: [],
                     somethingHasBeenPackedDuringThisSession: false,
                     autopilotEnabled: false,
+                    orderStatuses: [],
+                    selectedOrderStatus: '',
                 };
             },
 
@@ -141,6 +139,7 @@
                 if (this.order_number) {
                     this.loadOrder(this.order_number);
                 }
+                this.loadOrderStatuses()
             },
 
             watch: {
@@ -243,6 +242,13 @@
                         });
                 },
 
+                loadOrderStatuses(){
+                    this.apiGetOrderStatus()
+                        .then(({ data }) => {
+                            this.orderStatuses = data.data;
+                        })
+                },
+
                 completeOrder: async function () {
                     await this.markAsPacked();
                     await this.printLabelIfNeeded();
@@ -293,11 +299,11 @@
                     });
                 },
 
-                changeStatus(status_code) {
+                changeStatus() {
                     this.$refs.filtersModal.hide();
 
-                    return this.apiUpdateOrder(this.order['id'], {
-                            'status_code': status_code
+                    this.apiUpdateOrder(this.order['id'], {
+                            'status_code': this.selectedOrderStatus
                         })
                         .then(() => {
                             this.notifySuccess('Status changed')
@@ -305,6 +311,8 @@
                         .catch(() => {
                             this.notifyError('Error when changing status');
                         });
+
+                    this.selectedOrderStatus = '';
                 },
 
                 askForShippingNumberIfNeeded() {
@@ -473,6 +481,7 @@
                             });
                         });
                 },
+
                 openPreviousOrder: function (){
                     this.$refs.filtersModal.hide();
 
