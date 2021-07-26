@@ -14,12 +14,12 @@ class ServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public string $module_name = 'Shipment Confirmation Email';
+    public static string $module_name = 'Shipment Confirmation Email';
 
     /**
      * @var string
      */
-    public string $module_description = 'Sends email with shipping numbers';
+    public static string $module_description = 'Sends email with shipping numbers';
 
     /**
      * @var bool

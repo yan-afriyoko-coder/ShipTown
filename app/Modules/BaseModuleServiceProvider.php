@@ -15,12 +15,12 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
     /**
      * @var string
      */
-    public string $module_name;
+    public static string $module_name = '';
 
     /**
      * @var string
      */
-    public string $module_description;
+    public static string $module_description = '';
 
     /**
      * Should we automatically enable it
@@ -39,7 +39,7 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
      */
     public function boot()
     {
-        if (empty($this->module_name) or empty($this->module_description)) {
+        if (empty(static::$module_name) or empty(static::$module_description)) {
             throw new Exception('Module "'.get_called_class().'" missing name or description');
         }
 

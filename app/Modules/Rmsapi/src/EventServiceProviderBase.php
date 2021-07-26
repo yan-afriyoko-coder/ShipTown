@@ -10,12 +10,12 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public string $module_name = 'RMSAPI Integration';
+    public static string $module_name = 'RMSAPI Integration';
 
     /**
      * @var string
      */
-    public string $module_description = 'Provides connectivity to Microsoft RMS 2.0';
+    public static string $module_description = 'Provides connectivity to Microsoft RMS 2.0';
 
     /**
      * @var bool

@@ -14,12 +14,12 @@ class AutoStatusAwaitingPaymentServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public string $module_name = 'Auto awaiting_payment Status';
+    public static string $module_name = 'Auto awaiting_payment Status';
 
     /**
      * @var string
      */
-    public string $module_description = 'Automatically changes status from "processing" to "awaiting_payment" '.
+    public static string $module_description = 'Automatically changes status from "processing" to "awaiting_payment" '.
         'if order has not been paid yet';
 
     /**

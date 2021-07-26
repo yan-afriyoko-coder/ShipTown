@@ -19,12 +19,12 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public string $module_name = 'Webhooks';
+    public static string $module_name = 'Webhooks';
 
     /**
      * @var string
      */
-    public string $module_description = 'Amazon SNS integration to provide webhooks';
+    public static string $module_description = 'Amazon SNS integration to provide webhooks';
 
     /**
      * @var bool

@@ -17,12 +17,12 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public string $module_name = 'Inventory Reservations';
+    public static string $module_name = 'Inventory Reservations';
 
     /**
      * @var string
      */
-    public string $module_description = 'Reserves stock for open orders. Is using location 999';
+    public static string $module_description = 'Reserves stock for open orders. Is using location 999';
 
     /**
      * @var bool

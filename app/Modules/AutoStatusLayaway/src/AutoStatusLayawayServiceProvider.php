@@ -8,9 +8,9 @@ use App\Modules\BaseModuleServiceProvider;
 
 class AutoStatusLayawayServiceProvider extends BaseModuleServiceProvider
 {
-    public string $module_name = 'Auto "layaway" status';
+    public static string $module_name = 'Auto "layaway" status';
 
-    public string $module_description = 'Automatically changes status from paid to layaway';
+    public static string $module_description = 'Automatically changes status from paid to layaway';
 
     /**
      * @var bool
