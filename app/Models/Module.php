@@ -38,7 +38,7 @@ class Module extends Model
     ];
 
     protected $appends = [
-        'enabled' => false
+        'enabled' => false,
     ];
 
     public function getNameAttribute()
