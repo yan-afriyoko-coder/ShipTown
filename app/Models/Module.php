@@ -43,11 +43,11 @@ class Module extends Model
 
     public function getNameAttribute()
     {
-        return $this->service_provider_class::$name;
+        return $this->service_provider_class::$module_name;
     }
 
     public function getDescriptionAttribute()
     {
-        return $this->service_provider_class::$description;
+        return $this->service_provider_class::$module_description;
     }
 }

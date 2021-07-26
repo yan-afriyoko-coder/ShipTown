@@ -23,16 +23,6 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
     public static string $module_description = '';
 
     /**
-     * @var string
-     */
-    public static string $name;
-
-    /**
-     * @var string
-     */
-    public static string $description;
-
-    /**
      * Should we automatically enable it
      * When module first registered.
      *
@@ -52,9 +42,6 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
         if (empty(static::$module_name) or empty(static::$module_description)) {
             throw new Exception('Module "'.get_called_class().'" missing name or description');
         }
-
-        self::$name = $this->module_name;
-        self::$description = $this->module_description;
 
         if ($this->isEnabled()) {
             parent::boot();
