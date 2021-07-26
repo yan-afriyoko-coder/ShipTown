@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\AutoStatusPaid\src\Jobs;
+namespace App\Modules\AutoStatusAwaitingPayment\src\Jobs;
 
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
@@ -9,7 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class SetPaidStatusJob implements ShouldQueue
+class SetAwaitingPaymentStatusJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -35,11 +35,9 @@ class SetPaidStatusJob implements ShouldQueue
      */
     public function handle()
     {
-        $order = $this->order;
-
-        if ($order->isStatusCodeIn(['processing', 'awaiting_payment']) and ($order->isPaid)) {
-            $order->log('Order paid in full, changing status to "paid"');
-            $order->update(['status_code' => 'paid']);
+        if ($this->order->isStatusCode('processing') and ($this->order->isNotPaid)) {
+            $this->order->log('Order not paid in full, changing status to "awaiting_payment"');
+            $this->order->update(['status_code' => 'awaiting_payment']);
         }
     }
 }
