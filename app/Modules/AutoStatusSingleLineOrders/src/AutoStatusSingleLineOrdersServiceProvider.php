@@ -9,7 +9,7 @@ use App\Modules\BaseModuleServiceProvider;
 /**
  * Class EventServiceProviderBase.
  */
-class EventServiceProviderBase extends BaseModuleServiceProvider
+class AutoStatusSingleLineOrdersServiceProvider extends BaseModuleServiceProvider
 {
     /**
      * @var string
@@ -21,11 +21,6 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
      */
     public static string $module_description = 'Automatically changes status from "paid" to "single_line_orders" '.
         'if order has only 1 product ordered';
-
-    /**
-     * @var bool
-     */
-    public bool $autoEnable = true;
 
     /**
      * @var array

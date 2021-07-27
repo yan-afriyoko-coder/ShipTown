@@ -9,6 +9,8 @@ use App\Events\Order\ActiveOrderCheckEvent;
  */
 class SetStatusSingleLineOrders
 {
+    private string $newOrderStatus = 'single_line_orders';
+
     /**
      * Handle the event.
      *
@@ -18,17 +20,9 @@ class SetStatusSingleLineOrders
      */
     public function handle(ActiveOrderCheckEvent $event)
     {
-        $newOrderStatus = 'single_line_orders';
-
-        $order = $event->getOrder();
-
-        if ($order->status_code !== 'paid') {
-            return;
-        }
-
-        if ($order->product_line_count === 1) {
-            $order->log('Single line order detected, changing order status');
-            $order->update(['status_code' => $newOrderStatus]);
+        if (($event->order->status_code === 'paid') && ($event->order->product_line_count === 1)) {
+            $event->order->log('Single line order detected, changing order status');
+            $event->order->update(['status_code' => $this->newOrderStatus]);
         }
     }
 }
