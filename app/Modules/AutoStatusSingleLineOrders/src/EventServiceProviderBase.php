@@ -31,9 +31,9 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        OrderUpdatedEvent::class => [
-            Listeners\OrderUpdatedEvent\SetStatusSingleLineOrders::class,
-        ],
+//        OrderUpdatedEvent::class => [
+//            Listeners\OrderUpdatedEvent\SetStatusSingleLineOrders::class,
+//        ],
 
         ActiveOrderCheckEvent::class => [
             Listeners\ActiveOrdersCheckEvent\SetStatusSingleLineOrders::class,
