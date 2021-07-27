@@ -98,7 +98,11 @@ $factory->define(Api2cartOrderImports::class, function (Faker $faker) {
            },
            "shipping_methods":[
               {
-                 "name":""
+                "name": "Dublin  [ Level 2, Dundrum Town Centre, Dublin, D16  ]\n",
+                "additional_fields": {
+                    "code": "pickupatstore_pickupatstore_3",
+                    "provider_code": "pickupatstore"
+                }
               }
            ],
            "status":{
