@@ -272,7 +272,6 @@
                 this.statusMessageOrder = "Loading orders ..."
                 const params = {
                     'filter[product_id]': this.product['id'],
-                    'filter[has_stock_reserved]': true,
                     'filter[order.is_active]': true,
                     'sort': 'id',
                     'include': 'order'
