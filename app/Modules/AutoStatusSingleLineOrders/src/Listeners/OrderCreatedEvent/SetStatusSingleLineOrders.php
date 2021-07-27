@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Modules\AutoStatusSingleLineOrders\src\Listeners\OrderUpdatedEvent;
+namespace App\Modules\AutoStatusSingleLineOrders\src\Listeners\OrderCreatedEvent;
 
+use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 
 /**
@@ -14,11 +15,11 @@ class SetStatusSingleLineOrders
     /**
      * Handle the event.
      *
-     * @param OrderUpdatedEvent $event
+     * @param OrderCreatedEvent $event
      *
      * @return void
      */
-    public function handle(OrderUpdatedEvent $event)
+    public function handle(OrderCreatedEvent $event)
     {
         if (($event->order->status_code === 'paid') && ($event->order->product_line_count === 1)) {
             $event->order->log('Single line order detected, changing order status');

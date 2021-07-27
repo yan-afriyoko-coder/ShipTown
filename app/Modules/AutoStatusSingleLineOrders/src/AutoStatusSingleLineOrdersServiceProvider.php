@@ -3,6 +3,7 @@
 namespace App\Modules\AutoStatusSingleLineOrders\src;
 
 use App\Events\Order\ActiveOrderCheckEvent;
+use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
@@ -26,8 +27,8 @@ class AutoStatusSingleLineOrdersServiceProvider extends BaseModuleServiceProvide
      * @var array
      */
     protected $listen = [
-        OrderUpdatedEvent::class => [
-            Listeners\OrderUpdatedEvent\SetStatusSingleLineOrders::class,
+        OrderCreatedEvent::class => [
+            Listeners\OrderCreatedEvent\SetStatusSingleLineOrders::class,
         ],
 
         ActiveOrderCheckEvent::class => [
