@@ -7,23 +7,25 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 /**
  * App\Modules\Api2cart\src\Models\Api2cartOrderImports.
  *
- * @property int $id
- * @property int|null $connection_id
- * @property int|null $order_id
- * @property string|null $when_processed
- * @property string|null $order_number
- * @property integer|null $api2cart_order_id
- * @property array $raw_import
+ * @property int            $id
+ * @property int|null       $connection_id
+ * @property int|null       $order_id
+ * @property string|null    $when_processed
+ * @property string|null    $order_number
+ * @property integer|null   $api2cart_order_id
+ * @property string|null    $shipping_method_name
+ * @property string|null    $shipping_method_code
+ * @property array          $raw_import
+ * @property Carbon|null    $created_at
+ * @property Carbon|null    $updated_at
+ *
  * @property-read Api2cartConnection $api2cartConnection
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  *
  * @method static Builder|Api2cartOrderImports newModelQuery()
  * @method static Builder|Api2cartOrderImports newQuery()
@@ -77,6 +79,10 @@ class Api2cartOrderImports extends Model
     {
         $this->order_number = $this->raw_import['id'];
         $this->api2cart_order_id = $this->raw_import['order_id'];
+        $this->shipping_method_name = $this->raw_import['shipping_method']['name'];
+        if (Arr::has($this->raw_import['shipping_method'], 'additional_fields')) {
+            $this->shipping_method_code = $this->raw_import['shipping_method']['additional_fields']['code'];
+        }
 
         return parent::save($options);
     }

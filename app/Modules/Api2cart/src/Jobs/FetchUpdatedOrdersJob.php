@@ -109,6 +109,9 @@ class FetchUpdatedOrdersJob implements ShouldQueue
         }
 
         $orders = Orders::get($api2cartConnection->bridge_api_key, $params);
+
+        ray($orders);
+
         $this->queueData(['fetched_count' => count($orders)]);
 
         if (!$orders) {
