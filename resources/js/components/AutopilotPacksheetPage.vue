@@ -74,7 +74,6 @@
                 <div class="form-group">
                     <label class="form-label" for="selectStatus">Status</label>
                     <select id="selectStatus" class="form-control" @change="changeStatus" v-model="order.status_code">
-                        <option value="" readonly>Change Status</option>
                         <option v-for="orderStatus in orderStatuses" :value="orderStatus.code" :key="orderStatus.id">{{ orderStatus.name }}</option>
                     </select>
                 </div>
