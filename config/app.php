@@ -202,10 +202,14 @@ return [
 
         // Automations modules
         // order MIGHT be important!
-        App\Modules\AutoStatusAwaitingPayment\src\AutoStatusAwaitingPaymentServiceProvider::class,
         App\Modules\ShipmentConfirmationEmail\src\ServiceProvider::class,
         App\Modules\AutoPilot\src\AutoPilotServiceProvider::class,
         App\Modules\AutoTags\src\EventServiceProviderBase::class,
+        App\Modules\AutoClose\src\AutoCloseServiceProvider::class,
+
+        // AutoStatus modules
+        // order is important!
+        App\Modules\AutoStatusAwaitingPayment\src\AutoStatusAwaitingPaymentServiceProvider::class,
         App\Modules\AutoStatusPaid\src\AutoStatusPaidServiceProvider::class,
         App\Modules\AutoStatusPackingWarehouse\src\AutoPackingWarehouseServiceProvider::class,
         App\Modules\AutoStatusSingleLineOrders\src\EventServiceProviderBase::class,
@@ -213,7 +217,6 @@ return [
         App\Modules\AutoStatusPackingWeb\src\AutoPackingWebServiceProvider::class,
         App\Modules\AutoStatusReady\src\AutoStatusReadyServiceProvider::class,
         App\Modules\AutoStatusLayaway\src\AutoStatusLayawayServiceProvider::class,
-        App\Modules\AutoClose\src\AutoCloseServiceProvider::class,
 
         // 3rd party integrations
         // order SHOULD not be important

@@ -3,6 +3,7 @@
 namespace App\Modules\AutoStatusSingleLineOrders\src;
 
 use App\Events\Order\ActiveOrderCheckEvent;
+use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
@@ -19,7 +20,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
      * @var string
      */
     public static string $module_description = 'Automatically changes status from "paid" to "single_line_orders" '.
-    'if order has only 1 product ordered';
+        'if order has only 1 product ordered';
 
     /**
      * @var bool
@@ -30,6 +31,10 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
+        OrderUpdatedEvent::class => [
+            Listeners\OrderUpdatedEvent\SetStatusSingleLineOrders::class,
+        ],
+
         ActiveOrderCheckEvent::class => [
             Listeners\ActiveOrdersCheckEvent\SetStatusSingleLineOrders::class,
         ],
