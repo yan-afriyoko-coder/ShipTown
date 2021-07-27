@@ -9,7 +9,7 @@ use App\Modules\BaseModuleServiceProvider;
 /**
  * Class EventServiceProviderBase.
  */
-class EventServiceProviderBase extends BaseModuleServiceProvider
+class AutoStatusSingleLineOrdersServiceProvider extends BaseModuleServiceProvider
 {
     /**
      * @var string
