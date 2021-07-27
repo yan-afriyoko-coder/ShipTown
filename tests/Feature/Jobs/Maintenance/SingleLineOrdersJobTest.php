@@ -4,10 +4,14 @@ namespace Tests\Feature\Jobs\Maintenance;
 
 use App\Events\HourlyEvent;
 use App\Models\Order;
+use App\Modules\AutoStatusSingleLineOrders\src\EventServiceProviderBase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class SingleLineOrdersJobTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * A basic feature test example.
      *
@@ -15,6 +19,8 @@ class SingleLineOrdersJobTest extends TestCase
      */
     public function testIfJobMovesOrders()
     {
+        EventServiceProviderBase::enableModule();
+
         Order::query()->forceDelete();
 
         factory(Order::class)

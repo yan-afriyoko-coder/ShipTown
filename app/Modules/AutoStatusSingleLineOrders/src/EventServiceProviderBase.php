@@ -23,17 +23,12 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
         'if order has only 1 product ordered';
 
     /**
-     * @var bool
-     */
-    public bool $autoEnable = true;
-
-    /**
      * @var array
      */
     protected $listen = [
-//        OrderUpdatedEvent::class => [
-//            Listeners\OrderUpdatedEvent\SetStatusSingleLineOrders::class,
-//        ],
+        OrderUpdatedEvent::class => [
+            Listeners\OrderUpdatedEvent\SetStatusSingleLineOrders::class,
+        ],
 
         ActiveOrderCheckEvent::class => [
             Listeners\ActiveOrdersCheckEvent\SetStatusSingleLineOrders::class,
