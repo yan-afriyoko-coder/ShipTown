@@ -7,6 +7,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 /**
@@ -18,6 +19,7 @@ use Illuminate\Support\Collection;
  * @property string|null    $when_processed
  * @property string|null    $order_number
  * @property integer|null   $api2cart_order_id
+ * @property string|null    $shipping_method_name
  * @property string|null    $shipping_method_code
  * @property array          $raw_import
  * @property Carbon|null    $created_at
@@ -77,7 +79,10 @@ class Api2cartOrderImports extends Model
     {
         $this->order_number = $this->raw_import['id'];
         $this->api2cart_order_id = $this->raw_import['order_id'];
-        $this->shipping_method_code = $this->raw_import['shipping_methods'][0]['additional_fields']['code'];
+        $this->shipping_method_name = $this->raw_import['shipping_method']['name'];
+        if (Arr::has($this->raw_import['shipping_method'], 'additional_fields')) {
+            $this->shipping_method_code = $this->raw_import['shipping_method']['additional_fields']['code'];
+        }
 
         return parent::save($options);
     }

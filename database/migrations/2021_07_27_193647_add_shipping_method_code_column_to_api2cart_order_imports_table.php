@@ -14,7 +14,8 @@ class AddShippingMethodCodeColumnToApi2cartOrderImportsTable extends Migration
     public function up()
     {
         Schema::table('api2cart_order_imports', function (Blueprint $table) {
-            $table->string('shipping_method_code')->after('api2cart_order_id');
+            $table->string('shipping_method_name')->nullable(true)->after('api2cart_order_id');
+            $table->string('shipping_method_code')->nullable(true)->after('shipping_method_name');
         });
     }
 
