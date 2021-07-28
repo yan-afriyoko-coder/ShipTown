@@ -3,13 +3,14 @@
 namespace App\Modules\AutoStatusSingleLineOrders\src;
 
 use App\Events\Order\ActiveOrderCheckEvent;
+use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
  * Class EventServiceProviderBase.
  */
-class EventServiceProviderBase extends BaseModuleServiceProvider
+class AutoStatusSingleLineOrdersServiceProvider extends BaseModuleServiceProvider
 {
     /**
      * @var string
@@ -23,16 +24,11 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
         'if order has only 1 product ordered';
 
     /**
-     * @var bool
-     */
-    public bool $autoEnable = true;
-
-    /**
      * @var array
      */
     protected $listen = [
-        OrderUpdatedEvent::class => [
-            Listeners\OrderUpdatedEvent\SetStatusSingleLineOrders::class,
+        OrderCreatedEvent::class => [
+            Listeners\OrderCreatedEvent\SetStatusSingleLineOrders::class,
         ],
 
         ActiveOrderCheckEvent::class => [

@@ -126,6 +126,7 @@ class SnsController extends Controller
             Log::error('Could not publish SNS message', [
                 'code'           => $e->getStatusCode(),
                 'return_message' => $e->getMessage(),
+                'topic'          => $this->getTopicArn(),
                 'message'        => $notification,
             ]);
 
@@ -134,6 +135,7 @@ class SnsController extends Controller
             Log::error('Could not publish SNS message', [
                 'code'           => $e->getCode(),
                 'return_message' => $e->getMessage(),
+                'topic'          => $this->getTopicArn(),
                 'message'        => $notification,
             ]);
 
