@@ -6,6 +6,7 @@ use App;
 use App\Models\Module;
 use Exception;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
+use Log;
 
 /**
  * Class BaseModuleServiceProvider.
@@ -66,6 +67,9 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
         }
     }
 
+    /**
+     *
+     */
     public static function enableModule()
     {
         $module = Module::firstOrCreate(['service_provider_class' => get_called_class()], ['enabled' => false]);
@@ -81,6 +85,28 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
             ->boot();
     }
 
+    /**
+     * @return bool
+     */
+    public static function uninstallModule(): bool
+    {
+        try {
+            $module = Module::where(['service_provider_class' => get_called_class()])->first();
+
+            if ($module) {
+                $module->delete();
+            }
+
+            return true;
+        } catch (Exception $exception) {
+            Log::emergency($exception);
+            return false;
+        }
+    }
+
+    /**
+     *
+     */
     public static function disableModule()
     {
         $module = Module::firstOrCreate(['service_provider_class' => get_called_class()], ['enabled' => false]);
