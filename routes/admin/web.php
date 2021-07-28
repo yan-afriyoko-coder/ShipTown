@@ -25,6 +25,7 @@ Route::prefix('settings')->group(function () {
     Route::view('api2cart', 'settings/api2cart')->name('settings.api2cart');
     Route::view('api', 'settings/api')->name('settings.api');
     Route::view('users', 'users')->name('settings.users');
+    Route::view('mail-templates', 'settings/mail-templates')->name('settings.mail_templates');
 });
 
 Route::prefix('tools')->group(function () {

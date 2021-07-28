@@ -14,7 +14,7 @@ import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import { BootstrapVue } from 'bootstrap-vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCog, faQuestionCircle, faUserEdit, faBarcode, faUserMinus, faShareAlt, faChevronDown, faChevronUp, faExternalLinkAlt, faPrint, faCode, faTruck, faShoppingCart, faKey, faDesktop, faClipboardList, faPuzzlePiece, faBoxOpen, faEdit, faMinus, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faQuestionCircle, faUserEdit, faBarcode, faUserMinus, faShareAlt, faChevronDown, faChevronUp, faExternalLinkAlt, faPrint, faCode, faTruck, faShoppingCart, faKey, faDesktop, faClipboardList, faPuzzlePiece, faBoxOpen, faEdit, faMinus, faCheckCircle, faTimesCircle, faEnvelopeOpenText } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VueTippy, { TippyComponent } from "vue-tippy";
 import Snotify from 'vue-snotify';
@@ -42,6 +42,7 @@ library.add(faEdit);
 library.add(faMinus);
 library.add(faCheckCircle);
 library.add(faTimesCircle);
+library.add(faEnvelopeOpenText);
 Vue.config.productionTip = false;
 
 Vue.use(VueCountdownTimer);
@@ -114,6 +115,7 @@ Vue.component('auto-pilot-tuning-section', require('./components/Settings/AutoPi
 Vue.component('maintenance-section', require('./components/Settings/MaintenanceSection.vue').default);
 Vue.component('module-configuration', require('./components/Settings/ModuleConfiguration.vue').default);
 Vue.component('order-status-table', require('./components/Settings/OrderStatusTable.vue').default);
+Vue.component('mail-template-table', require('./components/Settings/MailTemplateTable.vue').default);
 Vue.component('api', require('./mixins/api').default);
 
 /**
