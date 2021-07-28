@@ -19,9 +19,9 @@ class OrderStatusController extends Controller
      */
     public function index() : AnonymousResourceCollection
     {
-        $modules = OrderStatus::all();
+        $orderStatuses = OrderStatus::all();
 
-        return OrderStatusResource::collection($modules);
+        return OrderStatusResource::collection($orderStatuses);
     }
 
     /**

@@ -29,7 +29,7 @@
                     </div>
                     <div class="setting-body">
                         <div class="setting-title">Users</div>
-                        <div class="setting-desc">Manage Users</div>
+                        <div class="setting-desc">Manage users</div>
                     </div>
                 </a>
 
@@ -39,10 +39,19 @@
                     </div>
                     <div class="setting-body">
                         <div class="setting-title">Order Statuses</div>
-                        <div class="setting-desc">Manage Order Statuses</div>
+                        <div class="setting-desc">Manage order statuses</div>
                     </div>
                 </a>
 
+                <a href="{{ route('settings.mail_templates') }}" class="setting-list">
+                    <div class="setting-icon">
+                        <font-awesome-icon icon="envelope-open-text" class="fas-sm"></font-awesome-icon>
+                    </div>
+                    <div class="setting-body">
+                        <div class="setting-title">Mail Templates</div>
+                        <div class="setting-desc">View and update templates</div>
+                    </div>
+                </a>
 
                 <a href="{{ route('settings.printnode') }}" class="setting-list">
                     <div class="setting-icon">

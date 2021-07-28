@@ -230,6 +230,14 @@ export default {
             apiPutOrderStatus: function (id, params) {
                 return axios.put('/api/settings/order-statuses/' + id, params);
             },
+
+            apiGetMailTemplate: function () {
+                return axios.get('/api/settings/mail-templates');
+            },
+
+            apiPutMailTemplate: function (id, params) {
+                return axios.put('/api/settings/mail-templates/' + id, params);
+            },
         }
     }
 </script>
