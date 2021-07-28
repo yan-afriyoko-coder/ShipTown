@@ -8,11 +8,14 @@ use App\Models\OrderAddress;
 use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Services\OrderService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class OrderServiceTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function testIfUpdatesProductsQuantitiesAreCorrect()
     {
         $orderFake = factory(Order::class)->make();
