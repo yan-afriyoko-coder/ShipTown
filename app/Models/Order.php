@@ -120,7 +120,6 @@ class Order extends BaseModel
         'order_closed_at',
         'status_code',
         'packer_user_id',
-        'raw_import',
         'total',
         'total_paid',
     ];
@@ -135,7 +134,6 @@ class Order extends BaseModel
 
     protected $casts = [
         'is_active'  => 'boolean',
-        'raw_import' => 'array',
     ];
 
     // we use attributes to set default values
@@ -145,7 +143,6 @@ class Order extends BaseModel
     protected $attributes = [
         'status_code' => 'processing',
         'is_active'   => 1,
-        'raw_import'  => '{}',
     ];
 
     protected $appends = [
