@@ -212,6 +212,8 @@ return [
         // order is important!
         App\Modules\AutoStatusAwaitingPayment\src\AutoStatusAwaitingPaymentServiceProvider::class,
         App\Modules\AutoStatusPaid\src\AutoStatusPaidServiceProvider::class,
+
+        App\Modules\AutoStatusLayawayStorePickup\src\AutoStatusStorePickupServiceProvider::class,
         App\Modules\AutoStatusPackingWarehouse\src\AutoPackingWarehouseServiceProvider::class,
         App\Modules\AutoStatusSingleLineOrders\src\AutoStatusSingleLineOrdersServiceProvider::class,
         App\Modules\AutoStatusPicking\src\AutoStatusPickingServiceProvider::class,

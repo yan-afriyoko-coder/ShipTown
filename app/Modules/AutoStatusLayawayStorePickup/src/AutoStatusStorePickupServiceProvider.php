@@ -3,13 +3,24 @@
 namespace App\Modules\AutoStatusLayawayStorePickup\src;
 
 use App\Events\Order\ActiveOrderCheckEvent;
+use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
+/**
+ * Class AutoStatusStorePickupServiceProvider
+ * @package App\Modules\AutoStatusLayawayStorePickup\src
+ */
 class AutoStatusStorePickupServiceProvider extends BaseModuleServiceProvider
 {
+    /**
+     * @var string
+     */
     public static string $module_name = 'Auto "layaway" status for Store Pickups';
 
+    /**
+     * @var string
+     */
     public static string $module_description = 'Automatically changes status from paid to layaway';
 
     /**
@@ -18,8 +29,8 @@ class AutoStatusStorePickupServiceProvider extends BaseModuleServiceProvider
     public bool $autoEnable = false;
 
     protected $listen = [
-        OrderUpdatedEvent::class => [
-            Listeners\OrderUpdatedListener::class
+        OrderCreatedEvent::class => [
+            Listeners\OrderCreatedListener::class
         ],
 
         ActiveOrderCheckEvent::class => [
