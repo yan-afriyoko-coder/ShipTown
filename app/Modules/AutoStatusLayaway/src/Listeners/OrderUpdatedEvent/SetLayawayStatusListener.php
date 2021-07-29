@@ -10,6 +10,7 @@ class SetLayawayStatusListener
 {
     public function handle(OrderUpdatedEvent $event)
     {
-        SetLayawayStatusJob::dispatch($event->order)->delay(now()->addMinutes(5));
+        SetLayawayStatusJob::dispatch($event->order)
+            ->delay(now()->addMinutes(5));
     }
 }
