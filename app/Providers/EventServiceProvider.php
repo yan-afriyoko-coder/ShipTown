@@ -29,10 +29,6 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-
-        HourlyEvent::class => [
-            FireActiveOrderCheckEventsListener::class,
-        ],
     ];
 
     /**

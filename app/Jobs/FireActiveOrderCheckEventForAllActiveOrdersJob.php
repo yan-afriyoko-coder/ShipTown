@@ -11,7 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 
-class FireActiveOrderCheckEventsJob implements ShouldQueue
+class FireActiveOrderCheckEventForAllActiveOrdersJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
