@@ -34,6 +34,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property string|null $packed_at
  * @property int|null    $packer_user_id
  * @property string      $total_quantity_ordered
+ * @property string      $shipping_method_code
+ * @property string      $shipping_method_name
  * @property array       $raw_import
  * @property string|null $deleted_at
  * @property Carbon|null $created_at
@@ -114,6 +116,8 @@ class Order extends BaseModel
         'picked_at',
         'shipping_number',
         'is_active',
+        'shipping_method_code',
+        'shipping_method_name',
         'shipping_address_id',
         'is_packed',
         'order_placed_at',

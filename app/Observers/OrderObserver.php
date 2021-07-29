@@ -24,7 +24,6 @@ class OrderObserver
 
     public function saving(Order $order)
     {
-        $order->setAttribute('total_quantity_ordered', $order->orderProducts()->sum('quantity_ordered'));
         $order->total_quantity_ordered = $order->orderProducts()->sum('quantity_ordered');
         $order->product_line_count = $order->orderProducts()->count('id');
         $order->is_active = $order->order_status->order_active ?? 1;
