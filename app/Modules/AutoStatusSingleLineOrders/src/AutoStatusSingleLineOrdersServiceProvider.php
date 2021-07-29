@@ -27,10 +27,6 @@ class AutoStatusSingleLineOrdersServiceProvider extends BaseModuleServiceProvide
      * @var array
      */
     protected $listen = [
-        OrderCreatedEvent::class => [
-            Listeners\OrderCreatedEvent\SetStatusSingleLineOrders::class,
-        ],
-
         ActiveOrderCheckEvent::class => [
             Listeners\ActiveOrdersCheckEvent\SetStatusSingleLineOrders::class,
         ],
