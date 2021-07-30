@@ -19,9 +19,11 @@ class OrderUpdatedListener
      */
     public function handle(OrderUpdatedEvent $event)
     {
-        if (($event->order->isAttributeChanged('is_packed')) and ($event->order->is_packed)) {
-            $event->order->log('Order fully packed, changing status to "complete"');
-            $event->order->update(['status_code' => 'complete']);
+        if (($event->order->isAttributeChanged('is_packed'))
+            and ($event->order->is_packed)
+            and ($event->order->status_code !== 'complete')) {
+                $event->order->log('Order fully packed, changing status to "complete"');
+                $event->order->update(['status_code' => 'complete']);
         }
     }
 }
