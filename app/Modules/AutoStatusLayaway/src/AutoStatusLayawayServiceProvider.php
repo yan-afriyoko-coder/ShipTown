@@ -10,7 +10,8 @@ class AutoStatusLayawayServiceProvider extends BaseModuleServiceProvider
 {
     public static string $module_name = 'Auto "layaway" status';
 
-    public static string $module_description = 'Automatically changes status from paid to layaway';
+    public static string $module_description = 'Automatically changes status from paid to layaway ' .
+        'if cannot fulfill from location 1';
 
     /**
      * @var bool

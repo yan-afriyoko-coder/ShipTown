@@ -4,6 +4,7 @@
 namespace App\Modules\AutoStatusLayaway\src\Jobs;
 
 use App\Models\Order;
+use App\Services\OrderService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -31,7 +32,7 @@ class SetLayawayStatusJob implements ShouldQueue
      */
     public function handle()
     {
-        if ($this->order->status_code === 'paid') {
+        if (($this->order->status_code === 'paid') and (OrderService::canNotFulfill($this->order, 1))) {
             $this->order->update(['status_code' => 'layaway']);
         }
     }
