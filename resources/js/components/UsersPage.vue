@@ -19,6 +19,7 @@
                             <th>ID</th>
                             <th>Email</th>
                             <th>Name</th>
+                            <th>Role Name</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -27,6 +28,7 @@
                             <td>{{ user.id }}</td>
                             <td>{{ user.email }}</td>
                             <td>{{ user.name }}</td>
+                            <td>{{ user.role_name }}</td>
                             <td>
                                 <a @click.prevent="onEditClick(user.id)">
                                     <font-awesome-icon icon="user-edit"></font-awesome-icon>
