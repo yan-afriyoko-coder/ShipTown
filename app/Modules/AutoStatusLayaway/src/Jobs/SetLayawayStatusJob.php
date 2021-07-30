@@ -33,6 +33,7 @@ class SetLayawayStatusJob implements ShouldQueue
     public function handle()
     {
         if (($this->order->status_code === 'paid') and (OrderService::canNotFulfill($this->order, 1))) {
+            $this->order->log('Cannot fulfill from location 1, changing to layaway');
             $this->order->update(['status_code' => 'layaway']);
         }
     }
