@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\AutoStatusReady\src\Listeners\OrderUpdatedEvent;
+namespace App\Modules\AutoStatusReady\src\Listeners;
 
 use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\AutoStatusReady\src\Jobs\SetReadyStatusWhenPackedJob;
@@ -8,7 +8,7 @@ use App\Modules\AutoStatusReady\src\Jobs\SetReadyStatusWhenPackedJob;
 /**
  * Class SetPackingWebStatus.
  */
-class SetReadyWhenPackedListener
+class OrderUpdatedListener
 {
     /**
      * Handle the event.
@@ -19,8 +19,9 @@ class SetReadyWhenPackedListener
      */
     public function handle(OrderUpdatedEvent $event)
     {
-        $order = $event->getOrder();
-
-        SetReadyStatusWhenPackedJob::dispatchNow($order);
+        if (($event->order->isAttributeChanged('is_packed')) and ($event->order->is_packed)) {
+            $event->order->log('Order fully packed, changing status to "complete"');
+            $event->order->update(['status_code' => 'complete']);
+        }
     }
 }
