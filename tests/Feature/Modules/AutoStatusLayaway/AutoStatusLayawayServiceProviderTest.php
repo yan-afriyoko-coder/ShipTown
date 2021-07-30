@@ -3,8 +3,11 @@
 namespace Tests\Feature\Modules\AutoStatusLayaway;
 
 use App\Events\Order\OrderUpdatedEvent;
+use App\Models\Inventory;
 use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Modules\AutoStatusLayaway\src\AutoStatusLayawayServiceProvider;
+use App\Modules\AutoStatusLayaway\src\Jobs\SetLayawayStatusJob;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -25,9 +28,19 @@ class AutoStatusLayawayServiceProviderTest extends TestCase
         $order = factory(Order::class)->make(['status_code' => 'paid', 'is_active' => true]);
         $order->save();
 
-        //        $order->update(['status_code' => 'paid']);
+        factory(OrderProduct::class)->create(['order_id' => $order->getKey()]);
 
-        OrderUpdatedEvent::dispatch($order);
+        // module moves order to layaway if can be fulfilled from location_id 1 and has status paid
+        $order->orderProducts->each(function (OrderProduct $orderProduct) {
+            Inventory::updateOrCreate([
+                    'location_id' => 1, // this is hardcoded location_id in module, to be changed
+                    'product_id' => $orderProduct->product_id
+                ], [
+                    'quantity' => 0
+                ]);
+        });
+
+        SetLayawayStatusJob::dispatchNow($order);
 
         /** @var Order $order */
         $order = $order->refresh();
