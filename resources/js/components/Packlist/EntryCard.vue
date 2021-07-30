@@ -47,6 +47,9 @@
         },
         computed: {
             productInventory() {
+                if (this.entry['inventory_source_quantity']) {
+                  return this.entry['inventory_source_quantity'];
+                }
                 return this.entry['product'] ? this.entry['product']['quantity'] : 0;
             },
             productSku() {

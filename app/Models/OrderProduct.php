@@ -117,7 +117,7 @@ class OrderProduct extends BaseModel
         'quantity_picked'         => 'float',
         'quantity_skipped_picking'=> 'float',
         'quantity_not_picked'     => 'float',
-        'quantity_shipped'        => 'float',
+        'inventory_source_quantity' => 'float',
     ];
 
     /**
