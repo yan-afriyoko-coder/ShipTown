@@ -151,13 +151,12 @@ export default {
 
         reloadPicks() {
             this.showLoading();
-
             this.picklist = [];
             const params = {
                 'include': 'product,product.aliases',
                 'sort': 'inventory_source_shelf_location,sku_ordered',
                 'per_page': this.getUrlParameter('per_page', 3),
-                'filter[in_stock_only]': this.getUrlFilter('in_stock_only', true),
+                'filter[in_stock_only]': this.getUrlParameter('in_stock_only', true),
                 'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id'),
                 'filter[current_shelf_location]': this.getUrlParameter('current_shelf_location'),
                 'filter[order.status_code]': this.getUrlParameter('order.status_code'),
