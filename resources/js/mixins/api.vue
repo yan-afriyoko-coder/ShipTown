@@ -220,7 +220,7 @@ export default {
             },
 
             apiGetOrderStatus: function () {
-                return axios.get('/api/settings/order-statuses');
+                return axios.get('/api/order-statuses');
             },
 
             apiPostOrderStatus: function (params) {

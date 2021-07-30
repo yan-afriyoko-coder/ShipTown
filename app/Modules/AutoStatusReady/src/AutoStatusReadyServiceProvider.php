@@ -13,12 +13,12 @@ class AutoStatusReadyServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'Auto "ready" status';
+    public static string $module_name = 'Auto "complete" status';
 
     /**
      * @var string
      */
-    public static string $module_description = 'Automatically changes status to "ready" when order is fully packed';
+    public static string $module_description = 'Automatically changes status to "complete" when order is fully packed';
 
     /**
      * @var bool
@@ -30,7 +30,7 @@ class AutoStatusReadyServiceProvider extends BaseModuleServiceProvider
      */
     protected $listen = [
         OrderUpdatedEvent::class => [
-            Listeners\OrderUpdatedEvent\SetReadyWhenPackedListener::class,
+            Listeners\OrderUpdatedListener::class,
         ],
     ];
 }

@@ -23,12 +23,14 @@ class AutoStatusReadyServiceProviderTest extends TestCase
     {
         AutoStatusReadyServiceProvider::enableModule();
 
-        Bus::fake();
-
+        /** @var Order $order */
         $order = factory(Order::class)->create();
 
-        OrderUpdatedEvent::dispatch($order);
+        $order->is_packed = true;
+        $order->save();
 
-        Bus::assertDispatched(SetReadyStatusWhenPackedJob::class);
+        $order = $order->refresh();
+
+        $this->assertEquals('complete', $order->status_code);
     }
 }
