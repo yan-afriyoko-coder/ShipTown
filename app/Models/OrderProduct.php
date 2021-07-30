@@ -112,6 +112,7 @@ class OrderProduct extends BaseModel
         'price'                   => 'float',
         'quantity_ordered'        => 'float',
         'quantity_reserved'       => 'float',
+        'quantity_shipped'        => 'float',
         'quantity_to_ship'        => 'float',
         'quantity_to_pick'        => 'float',
         'quantity_picked'         => 'float',
