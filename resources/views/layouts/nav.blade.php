@@ -59,7 +59,7 @@
                             {{ __('Packlist') }}<span class="caret"></span>
                         </a>
 
-                        <!-- Menu Items END -->
+                        <!-- Packlist Menu -->
                         <div class="dropdown-menu dropdown-menu-left text-center text-md-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ route('autopilot.packlist', ['inventory_source_location_id' => 100, 'status' => 'packing_web', 'is_picked' => 'true', 'sort' => 'order_placed_at,product_line_count,total_quantity_ordered']) }}">
                                 {{ __('Status: packing_web') }}
@@ -69,6 +69,9 @@
                             </a>
                             <a class="dropdown-item" href="{{ route('autopilot.packlist',  ['inventory_source_location_id' => 100, 'status' => 'single_line_orders', 'sort' => 'min_shelf_location,order_placed_at']) }}">
                                 {{ __('Status: single_line_orders') }}
+                            </a>
+                            <a class="dropdown-item" href="{{ route('autopilot.packlist',  ['inventory_source_location_id' => 1, 'status' => 'paid', 'sort' => 'min_shelf_location,order_placed_at']) }}">
+                                {{ __('Status: paid') }}
                             </a>
                         </div>
                     </li>
