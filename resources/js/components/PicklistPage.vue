@@ -73,19 +73,13 @@ export default {
         'picklist-configuration-modal': PicklistConfigurationModalNew   ,
     },
 
-    mounted() {
-        if(this.getUrlParameter('inventory_source_location_id') === null) {
-            this.setUrlParameter('inventory_source_location_id', 100);
-        }
-        this.reloadPicks();
-    },
-
     watch: {
         user: {
             handler() {
                 if(this.user['location_id']) {
                     this.setUrlParameter('inventory_source_location_id', this.user['location_id']);
                 }
+                this.reloadPicks();
             }
         },
 
