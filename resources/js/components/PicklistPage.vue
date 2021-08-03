@@ -81,6 +81,14 @@ export default {
     },
 
     watch: {
+        user: {
+            handler() {
+                if(this.user['location_id']) {
+                    this.setUrlParameter('inventory_source_location_id', this.user['location_id']);
+                }
+            }
+        },
+
         picklist: {
             handler() {
                 if (this.picklist.length === 0 && this.isLoading === false ) {

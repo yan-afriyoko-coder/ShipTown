@@ -24,6 +24,16 @@
             };
         },
 
+        watch: {
+            user: {
+                handler() {
+                    if(this.user['location_id']) {
+                        this.setUrlParameter('inventory_source_location_id', this.user['location_id']);
+                    }
+                }
+            },
+        },
+
         methods: {
             loadNextOrder() {
                 let params = {

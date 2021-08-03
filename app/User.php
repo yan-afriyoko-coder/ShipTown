@@ -29,6 +29,7 @@ use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
  * @property string      $address_label_template
  * @property string      $name
  * @property string      $email
+ * @property int         $location_id
  * @property Carbon|null $email_verified_at
  * @property string      $password
  * @property string|null $remember_token
