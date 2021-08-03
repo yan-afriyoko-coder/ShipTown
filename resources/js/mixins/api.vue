@@ -6,6 +6,19 @@
 export default {
         name: "api",
 
+        data: function () {
+            return {
+                user: null,
+            }
+        },
+
+        mounted() {
+            this.apiGetUserMe()
+                .then( ({data}) => {
+                    this.user = data.data;
+                });
+        },
+
         methods: {
             apiGetUserMe: function () {
                 return axios.get('/api/settings/user/me');
