@@ -67,7 +67,7 @@
                             <a class="dropdown-item" href="{{ route('autopilot.packlist', ['inventory_source_location_id' => 99, 'status' => 'packing_warehouse', 'sort' => 'order_placed_at']) }}">
                                 {{ __('Status: packing_warehouse') }}
                             </a>
-                            <a class="dropdown-item" href="{{ route('autopilot.packlist',  ['inventory_source_location_id' => 100, 'status' => 'single_line_orders', 'sort' => 'min_shelf_location']) }}">
+                            <a class="dropdown-item" href="{{ route('autopilot.packlist',  ['inventory_source_location_id' => 100, 'status' => 'single_line_orders', 'sort' => 'min_shelf_location,order_placed_at']) }}">
                                 {{ __('Status: single_line_orders') }}
                             </a>
                         </div>
