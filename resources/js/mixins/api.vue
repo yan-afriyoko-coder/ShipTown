@@ -253,7 +253,7 @@ export default {
             },
 
             apiGetNavigationMenu: function () {
-                return axios.get('/api/navigation-menu');
+                return axios.get('/api/settings/navigation-menu');
             },
 
             apiPostNavigationMenu: function (params) {
