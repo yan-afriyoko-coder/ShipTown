@@ -84,6 +84,7 @@ class StoreTest extends TestCase
             factory(User::class)->states('admin')->create()
         );
 
+        $this->simulationTest();
         $response = $this->simulationTest();
 
         $response->assertSessionHasErrors([
