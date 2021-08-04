@@ -20,7 +20,7 @@ class NavigationMenuSeeder extends Seeder
             ],
             [
                 'name' => 'Warehouse: paid,picking',
-                'url' => '/picklistorder.status_code=paid,picking&inventory_source_location_id=99',
+                'url' => '/picklist?order.status_code=paid,picking&inventory_source_location_id=99',
                 'group' => 'picklist',
             ],
             [

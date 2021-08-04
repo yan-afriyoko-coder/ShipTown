@@ -43,12 +43,11 @@
 
                         <!-- Menu Items END -->
                         <div class="dropdown-menu dropdown-menu-right text-center text-md-left" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('picklist') . '?order.status_code=picking&inventory_source_location_id=100'}}">
-                                {{ __('Web: picking') }}
-                            </a>
-                            <a class="dropdown-item" href="{{ route('picklist', ['order.status_code' => 'paid,picking', 'inventory_source_location_id' => '99', 'created_between' => '-1year,-1hour']) }}">
-                                {{ __('Warehouse: paid,picking') }}
-                            </a>
+                           @foreach ($navigationMenuPicklist as $menu)
+                                <a class="dropdown-item" href="{{ $menu->url }}">
+                                    {{ $menu->name }}
+                                </a>
+                            @endforeach
                         </div>
                     </li>
 
@@ -61,18 +60,11 @@
 
                         <!-- Packlist Menu -->
                         <div class="dropdown-menu dropdown-menu-left text-center text-md-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('autopilot.packlist', ['inventory_source_location_id' => 100, 'status' => 'packing_web', 'is_picked' => 'true', 'sort' => 'order_placed_at,product_line_count,total_quantity_ordered']) }}">
-                                {{ __('Status: packing_web') }}
-                            </a>
-                            <a class="dropdown-item" href="{{ route('autopilot.packlist', ['inventory_source_location_id' => 99, 'status' => 'packing_warehouse', 'sort' => 'order_placed_at']) }}">
-                                {{ __('Status: packing_warehouse') }}
-                            </a>
-                            <a class="dropdown-item" href="{{ route('autopilot.packlist',  ['inventory_source_location_id' => 100, 'status' => 'single_line_orders', 'sort' => 'min_shelf_location,order_placed_at']) }}">
-                                {{ __('Status: single_line_orders') }}
-                            </a>
-                            <a class="dropdown-item" href="{{ route('autopilot.packlist',  ['inventory_source_location_id' => 1, 'status' => 'paid', 'sort' => 'min_shelf_location,order_placed_at']) }}">
-                                {{ __('Status: paid') }}
-                            </a>
+                            @foreach ($navigationMenuPacklist as $menu)
+                                <a class="dropdown-item" href="{{ $menu->url }}">
+                                    {{ $menu->name }}
+                                </a>
+                            @endforeach
                         </div>
                     </li>
 
