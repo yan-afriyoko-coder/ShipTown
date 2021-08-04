@@ -53,6 +53,16 @@
                     </div>
                 </a>
 
+                <a href="{{ route('settings.navigation_menu') }}" class="setting-list">
+                    <div class="setting-icon">
+                        <font-awesome-icon icon="list-ul" class="fas-sm"></font-awesome-icon>
+                    </div>
+                    <div class="setting-body">
+                        <div class="setting-title">Navigation Menu</div>
+                        <div class="setting-desc">Manage navigation menu</div>
+                    </div>
+                </a>
+
                 <a href="{{ route('settings.printnode') }}" class="setting-list">
                     <div class="setting-icon">
                         <font-awesome-icon icon="print" class="fa-sm"></font-awesome-icon>

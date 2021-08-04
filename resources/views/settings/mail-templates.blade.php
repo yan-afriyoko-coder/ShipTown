@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('Products'))
+@section('title', __('Settings'))
 
 @section('content')
 <div class="container">
@@ -14,7 +14,7 @@
     </div>
     @endif
     <div class="row justify-content-center">
-        <div class="col-lg-12">
+        <div class="col-lg-8">
             <mail-template-table></mail-template-table>
         </div>
     </div>

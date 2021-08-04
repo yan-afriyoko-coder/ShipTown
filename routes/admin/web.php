@@ -26,6 +26,7 @@ Route::prefix('settings')->group(function () {
     Route::view('api', 'settings/api')->name('settings.api');
     Route::view('users', 'users')->name('settings.users');
     Route::view('mail-templates', 'settings/mail-templates')->name('settings.mail_templates');
+    Route::view('navigation-menu', 'settings/navigation-menu')->name('settings.navigation_menu');
 });
 
 Route::prefix('tools')->group(function () {
