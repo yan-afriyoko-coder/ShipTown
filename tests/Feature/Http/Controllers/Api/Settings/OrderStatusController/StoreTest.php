@@ -76,7 +76,6 @@ class StoreTest extends TestCase
             'reserves_stock',
             'sync_ecommerce',
         ]);
-        $response->assertSessionHasErrors();
     }
 
     public function test_name_and_code_cannot_duplicate()
@@ -85,13 +84,11 @@ class StoreTest extends TestCase
             factory(User::class)->states('admin')->create()
         );
 
-        $this->simulationTest();
         $response = $this->simulationTest();
 
         $response->assertSessionHasErrors([
             'name',
             'code',
         ]);
-        $response->assertSessionHasErrors();
     }
 }
