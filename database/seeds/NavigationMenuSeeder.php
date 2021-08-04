@@ -14,8 +14,8 @@ class NavigationMenuSeeder extends Seeder
     {
         $menu = [
             [
-                'name' => 'Web: picking',
-                'url' => '/picklist?order.status_code=picking&inventory_source_location_id=100',
+                'name'  => 'Web: picking',
+                'url'   => '/picklist?order.status_code=picking&inventory_source_location_id=100',
                 'group' => 'picklist',
             ],
             [
@@ -24,8 +24,23 @@ class NavigationMenuSeeder extends Seeder
                 'group' => 'picklist',
             ],
             [
+                'name' => 'Status: packing_web',
+                'url' => '/autopilot/packlist?inventory_source_location_id=100&status=packing_web&is_picked=true&sort=order_placed_at%2Cproduct_line_count%2Ctotal_quantity_ordered',
+                'group' => 'packlist'
+            ],
+            [
+                'name' => 'Status: packing_warehouse',
+                'url' => '/autopilot/packlist?inventory_source_location_id=99&status=packing_warehouse&sort=order_placed_at',
+                'group' => 'packlist'
+            ],
+            [
                 'name' => 'Status: single_line_orders',
-                'url' => '/packlist?inventory_source_location_id=100&status=single_line_orders&sort=min_shelf_location',
+                'url' => '/autopilot/packlist?inventory_source_location_id=100&status=single_line_orders&sort=min_shelf_location%2Corder_placed_at',
+                'group' => 'packlist'
+            ],
+            [
+                'name' => 'Status: paid',
+                'url' => '/autopilot/packlist?inventory_source_location_id=1&status=paid&sort=min_shelf_location%2Corder_placed_at',
                 'group' => 'packlist'
             ]
         ];
