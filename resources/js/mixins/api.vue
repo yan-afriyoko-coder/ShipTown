@@ -251,6 +251,22 @@ export default {
             apiPutMailTemplate: function (id, params) {
                 return axios.put('/api/settings/mail-templates/' + id, params);
             },
+
+            apiGetNavigationMenu: function () {
+                return axios.get('/api/settings/navigation-menu');
+            },
+
+            apiPostNavigationMenu: function (params) {
+                return axios.post('/api/settings/navigation-menu/', params);
+            },
+
+            apiPutNavigationMenu: function (id, params) {
+                return axios.put('/api/settings/navigation-menu/' + id, params);
+            },
+
+            apiDeleteNavigationMenu: function (id) {
+                return axios.delete('/api/settings/navigation-menu/' + id);
+            },
         }
     }
 </script>

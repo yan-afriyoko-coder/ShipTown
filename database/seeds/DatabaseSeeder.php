@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             ClosedOrdersSeeder::class,
             PicksSeeder::class,
             OrderShipmentsSeeder::class,
+            NavigationMenuSeeder::class,
 
             //            Api2CartOrderImportSeeder::class,
             //            RmsapiConnectionSeeder::class,

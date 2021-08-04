@@ -25,6 +25,7 @@ Route::group(['prefix' => 'settings', 'namespace' => 'Api\Settings', 'as' => 'ap
     Route::apiResource('modules', 'ModuleConfigurationController')->only(['index', 'update']);
     Route::apiResource('order-statuses', 'OrderStatusController')->only(['index', 'store', 'update']);
     Route::apiResource('mail-templates', 'MailTemplateController')->only(['index', 'update']);
+    Route::apiResource('navigation-menu', 'NavigationMenuController')->only(['index', 'store', 'update', 'destroy']);
 
     // modules
     Route::group(['prefix' => 'modules', 'namespace' => 'Module', 'as' => 'module.'], function () {
