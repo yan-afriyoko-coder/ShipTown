@@ -7,4 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class NavigationMenu extends Model
 {
     protected $table = 'navigation_menu';
+
+    protected $fillable = [
+        'name',
+        'group',
+        'url',
+    ];
 }
