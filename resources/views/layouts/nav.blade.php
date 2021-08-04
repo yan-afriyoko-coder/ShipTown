@@ -42,7 +42,7 @@
                         </a>
 
                         <!-- Menu Items END -->
-                        <div class="dropdown-menu dropdown-menu-right text-center text-md-left" aria-labelledby="navbarDropdown">
+                        <div class="dropdown-menu dropdown-menu-left text-center text-md-left" aria-labelledby="navbarDropdown">
                            @foreach ($navigationMenuPicklist as $menu)
                                 <a class="dropdown-item" href="{{ $menu->url }}">
                                     {{ $menu->name }}
@@ -59,7 +59,7 @@
                         </a>
 
                         <!-- Packlist Menu -->
-                        <div class="dropdown-menu dropdown-menu-left text-center text-md-right" aria-labelledby="navbarDropdown">
+                        <div class="dropdown-menu dropdown-menu-left text-center text-md-left" aria-labelledby="navbarDropdown">
                             @foreach ($navigationMenuPacklist as $menu)
                                 <a class="dropdown-item" href="{{ $menu->url }}">
                                     {{ $menu->name }}

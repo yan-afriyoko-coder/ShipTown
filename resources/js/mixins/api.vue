@@ -3,20 +3,31 @@
 </template>
 
 <script>
+import Vue from "vue";
+
 export default {
         name: "api",
 
         data: function () {
             return {
                 user: null,
+                loading_user: false,
             }
         },
 
         mounted() {
-            this.apiGetUserMe()
-                .then( ({data}) => {
-                    this.user = data.data;
-                });
+            if (Vue.prototype.$user) {
+                this.user = Vue.prototype.$user;
+            } else if (Vue.prototype.$user === undefined && Vue.prototype.$loading_user === undefined) {
+                Vue.prototype.$loading_user = true;
+
+                this.apiGetUserMe()
+                    .then( ({data}) => {
+                        Vue.prototype.$user = data.data;
+                        this.user = Vue.prototype.$user;
+                        console.log(Vue.prototype.$user, Vue.prototype.$loading_user);
+                    });
+            }
         },
 
         methods: {
