@@ -43,6 +43,7 @@
     import BarcodeInputField from "./SharedComponents/BarcodeInputField";
     import api from "../mixins/api";
     import helpers from "../mixins/helpers";
+    import Vue from "vue";
 
     export default {
         mixins: [loadingOverlay, url, api, helpers],
@@ -57,7 +58,6 @@
                 lastPageLoaded: 1,
                 lastPage: 1,
                 searchText: '',
-
                 orders: [],
             };
         },
@@ -68,6 +68,17 @@
             window.onscroll = () => this.loadMore();
 
             this.reloadOrders();
+        },
+
+        watch: {
+            user: {
+                handler() {
+                    if(this.user['location_id']) {
+                        this.setUrlParameter('inventory_source_location_id', this.user['location_id']);
+                        this.reloadOrders();
+                    }
+                }
+            },
         },
 
         methods: {
