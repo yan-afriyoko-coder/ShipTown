@@ -14,19 +14,19 @@ class DestroyTest extends TestCase
 
     private function simulationTest()
     {
-        $orderStatus = NavigationMenu::create([
+        $navigationMenu = NavigationMenu::create([
             'name'  => 'testing',
             'url'   => 'testing',
             'group' => 'picklist',
         ]);
 
-        $response = $this->delete(route('api.settings.navigation-menu.destroy', $orderStatus));
+        $response = $this->delete(route('api.settings.navigation-menu.destroy', $navigationMenu));
 
         return $response;
     }
 
     /** @test */
-    public function test_update_call_returns_ok()
+    public function test_delete_call_returns_ok()
     {
         Passport::actingAs(
             factory(User::class)->states('admin')->create()
@@ -37,7 +37,7 @@ class DestroyTest extends TestCase
         $response->assertSuccessful();
     }
 
-    public function test_store_call_should_be_loggedin()
+    public function test_delete_call_should_be_loggedin()
     {
         $response = $this->simulationTest();
 

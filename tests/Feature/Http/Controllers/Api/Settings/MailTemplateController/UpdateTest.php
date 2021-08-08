@@ -14,14 +14,14 @@ class UpdateTest extends TestCase
 
     private function simulationTest()
     {
-        $orderStatus = new MailTemplate();
-        $orderStatus->mailable = 'App\Mail\ShipmentConfirmationMail';
-        $orderStatus->subject = 'testing Subject';
-        $orderStatus->html_template = '<p>tes</p>';
-        $orderStatus->text_template = null;
-        $orderStatus->save();
+        $mailTemplate = new MailTemplate();
+        $mailTemplate->mailable = 'App\Mail\ShipmentConfirmationMail';
+        $mailTemplate->subject = 'testing Subject';
+        $mailTemplate->html_template = '<p>tes</p>';
+        $mailTemplate->text_template = null;
+        $mailTemplate->save();
 
-        $response = $this->put(route('api.settings.mail-templates.update', $orderStatus), [
+        $response = $this->put(route('api.settings.mail-templates.update', $mailTemplate), [
             'subject'      => 'update subject',
             'html_template'    => '<p>update html</p>',
             'text_template'    => 'update text',
