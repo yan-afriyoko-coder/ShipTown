@@ -11,8 +11,6 @@
 
             <printer-configuration></printer-configuration>
 
-            <printnode-configuration></printnode-configuration>
-
         </div>
     </div>
 </div>
