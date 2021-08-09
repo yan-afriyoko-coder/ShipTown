@@ -101,13 +101,14 @@
 
                         <!-- Menu Items END -->
                         <div class="dropdown-menu dropdown-menu-right text-center text-md-left" aria-labelledby="navbarDropdown">
+                            {{-- Profile --}}
+                            <a class="dropdown-item" href="{{ route('setting-profile') }}">
+                                {{ __('Profile') }}
+                            </a>
+
                             <!-- Settings -->
                             @hasrole('admin')
                                 <a class="dropdown-item" href="{{ route('settings') }}">
-                                    {{ __('Settings') }}
-                                </a>
-                            @else
-                                <a class="dropdown-item" href="{{ route('setting-profile') }}">
                                     {{ __('Settings') }}
                                 </a>
                             @endhasrole
