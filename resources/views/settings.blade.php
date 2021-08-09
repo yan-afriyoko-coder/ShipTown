@@ -29,7 +29,7 @@
                     </div>
                     <div class="setting-body">
                         <div class="setting-title">Profile</div>
-                        <div class="setting-desc">Setting profile</div>
+                        <div class="setting-desc">Shipping Labels Configuration & Printer Selection</div>
                     </div>
                 </a>
 
