@@ -14,7 +14,7 @@ import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import { BootstrapVue } from 'bootstrap-vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCog, faQuestionCircle, faUserEdit, faBarcode, faUserMinus, faShareAlt, faChevronDown, faChevronUp, faExternalLinkAlt, faPrint, faCode, faTruck, faShoppingCart, faKey, faDesktop, faClipboardList, faPuzzlePiece, faBoxOpen, faEdit, faMinus, faCheckCircle, faTimesCircle, faEnvelopeOpenText, faListUl, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faQuestionCircle, faUsers, faUserEdit, faBarcode, faUserMinus, faShareAlt, faChevronDown, faChevronUp, faExternalLinkAlt, faPrint, faCode, faTruck, faShoppingCart, faKey, faDesktop, faClipboardList, faPuzzlePiece, faBoxOpen, faEdit, faMinus, faCheckCircle, faTimesCircle, faEnvelopeOpenText, faListUl, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VueTippy, { TippyComponent } from "vue-tippy";
 import Snotify from 'vue-snotify';
@@ -22,6 +22,7 @@ import VueCountdownTimer from 'vuejs-countdown-timer';
 
 library.add(faCog);
 library.add(faQuestionCircle);
+library.add(faUsers);
 library.add(faUserEdit);
 library.add(faUserMinus);
 library.add(faBarcode);

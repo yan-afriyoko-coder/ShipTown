@@ -23,9 +23,19 @@
                     </div>
                 </a>
 
-                <a href="{{ route('settings.users') }}" class="setting-list">
+                <a href="{{ route('setting-profile') }}" class="setting-list">
                     <div class="setting-icon">
                         <font-awesome-icon icon="user-edit" class="fa-sm"></font-awesome-icon>
+                    </div>
+                    <div class="setting-body">
+                        <div class="setting-title">Profile</div>
+                        <div class="setting-desc">Setting profile</div>
+                    </div>
+                </a>
+
+                <a href="{{ route('settings.users') }}" class="setting-list">
+                    <div class="setting-icon">
+                        <font-awesome-icon icon="users" class="fa-sm"></font-awesome-icon>
                     </div>
                     <div class="setting-body">
                         <div class="setting-title">Users</div>
