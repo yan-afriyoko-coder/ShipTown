@@ -4,7 +4,7 @@
             <div class="card-header">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span>
-                        Printer Configuration
+                        Printer Selection
                     </span>
                 </div>
             </div>

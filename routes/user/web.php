@@ -13,6 +13,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::view('settings/profile', 'settings.profile')->name('setting-profile');
+
 Route::redirect('', 'dashboard');
 Route::view('dashboard', 'dashboard')->name('dashboard');
 Route::view('performance/dashboard', 'performance')->name('performance.dashboard');

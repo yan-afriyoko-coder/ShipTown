@@ -11,8 +11,6 @@
                     {{ session('status') }}
                 </div>
             @endif
-
-            <user-courier-integration-select></user-courier-integration-select>
             @role('admin')
                 <maintenance-section></maintenance-section>
                 <auto-pilot-tuning-section></auto-pilot-tuning-section>

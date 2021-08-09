@@ -106,6 +106,10 @@
                                 <a class="dropdown-item" href="{{ route('settings') }}">
                                     {{ __('Settings') }}
                                 </a>
+                            @else
+                                <a class="dropdown-item" href="{{ route('setting-profile') }}">
+                                    {{ __('Settings') }}
+                                </a>
                             @endhasrole
 
                             <a class="dropdown-item" href="https://www.youtube.com/channel/UCl04S5dRXop1ZdZsOqY3OnA" target="_blank">

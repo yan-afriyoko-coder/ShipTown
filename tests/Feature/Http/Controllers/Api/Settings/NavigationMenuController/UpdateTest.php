@@ -22,13 +22,13 @@ class UpdateTest extends TestCase
             ];
         }
 
-        $orderStatus = NavigationMenu::create([
+        $navigationMenu = NavigationMenu::create([
             'name'  => 'testing',
             'url'   => 'testing',
             'group' => 'picklist',
         ]);
 
-        $response = $this->put(route('api.settings.navigation-menu.update', $orderStatus), $body);
+        $response = $this->put(route('api.settings.navigation-menu.update', $navigationMenu), $body);
 
         return $response;
     }
