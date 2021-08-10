@@ -2,6 +2,7 @@
 
 namespace App\Modules\Webhooks\src;
 
+use App\Events\DailyEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Events\Product\ProductCreatedEvent;
@@ -40,6 +41,11 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
         SyncRequestedEvent::class => [
             PublishOrdersWebhooksJob::class,
             PublishProductsWebhooksListener::class,
+        ],
+
+        DailyEvent::class => [
+            Listeners\DailyEvent\AttachAwaitingPublishTagListener::class,
+
         ],
 
         ProductCreatedEvent::class => [
