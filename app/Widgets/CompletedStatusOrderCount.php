@@ -23,7 +23,7 @@ class CompletedStatusOrderCount extends AbstractDateSelectorWidget
     {
         $status_order_counts = Order::query()
             ->select(['status_code', DB::raw('count(*) as order_count')])
-            ->where(['is_active' => true])
+            ->where(['is_active' => false])
             ->whereBetween('order_closed_at', [
                 $this->getStartingDateTime(),
                 $this->getEndingDateTime(),
