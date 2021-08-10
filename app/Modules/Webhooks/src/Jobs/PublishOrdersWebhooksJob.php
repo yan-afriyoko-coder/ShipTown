@@ -11,6 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
+use Spatie\Activitylog\Models\Activity;
 
 /**
  * Class PublishOrdersWebhooksJob.
@@ -49,5 +50,11 @@ class PublishOrdersWebhooksJob implements ShouldQueue
 
             $order->detachTag(config('webhooks.tags.publishing.name'));
         });
+
+
+        Activity::query()->where('description', '"awaiting_webhook_publish" tag attached')->delete();
+        Activity::query()->where('description', '"awaiting_webhook_publish" tag detached')->delete();
+        Activity::query()->where('description', '"publishing_webhook" tag attached')->delete();
+        Activity::query()->where('description', '"publishing_webhook" tag detached')->delete();
     }
 }
