@@ -133,11 +133,14 @@ class Api2cartOrderImports extends Model
 
         foreach ($this->raw_import['order_products'] as $rawOrderProduct) {
             $result[] = [
-                //                'sku'               => null,
                 'sku_ordered' => $rawOrderProduct['model'],
                 'name_ordered' => $rawOrderProduct['name'],
                 'quantity_ordered' => $rawOrderProduct['quantity'],
-                'price' => $rawOrderProduct['price'],
+
+                // to take any discounts into consideration,
+                // we recalculate unit price based on lines total_price
+                // total_price has discounts already taken off
+                'price' => $rawOrderProduct['total_price'] / $rawOrderProduct['quantity'],
             ];
         }
 
