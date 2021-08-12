@@ -24,6 +24,8 @@ class SendOversoldProductNotificationListener
             ->where('mailable', 'App\Mail\OversoldProductMail')
             ->first();
 
-        Mail::to($mailTemplate->to)->send($template);
+        if ($mailTemplate->to) {
+            Mail::to($mailTemplate->to)->send($template);
+        }
     }
 }
