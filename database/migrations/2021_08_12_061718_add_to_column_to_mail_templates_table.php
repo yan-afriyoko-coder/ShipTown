@@ -14,7 +14,7 @@ class AddToColumnToMailTemplatesTable extends Migration
     public function up()
     {
         Schema::table('mail_templates', function (Blueprint $table) {
-            $table->string('to', 100)->nullable();
+            $table->string('to', 100)->nullable()->after('mailable');
         });
     }
 
