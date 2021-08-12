@@ -187,7 +187,7 @@ class OrderService
                     [
                         'order_id'   => $order->getKey(),
                         'product_id' => self::getProductId($orderProductAttributes),
-                        'price' => $orderProductAttributes->price,
+                        'price' => $orderProductAttributes['price'],
                     ]
                 );
 
