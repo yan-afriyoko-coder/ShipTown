@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             PicksSeeder::class,
             OrderShipmentsSeeder::class,
             NavigationMenuSeeder::class,
+            OversoldProductMailTemplateSeeder::class,
 
             //            Api2CartOrderImportSeeder::class,
             //            RmsapiConnectionSeeder::class,
