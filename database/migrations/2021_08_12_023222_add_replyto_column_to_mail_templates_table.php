@@ -14,7 +14,7 @@ class AddReplytoColumnToMailTemplatesTable extends Migration
     public function up()
     {
         Schema::table('mail_templates', function (Blueprint $table) {
-            $table->string('reply_to', 100)->nullable();
+            $table->string('reply_to', 100)->nullable()->after('mailable');
         });
     }
 
