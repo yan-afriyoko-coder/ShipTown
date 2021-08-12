@@ -11,6 +11,8 @@ class OversoldProductMail extends TemplateMailable
 {
     use Queueable, SerializesModels;
 
+    public array $variables;
+
     /**
      * Create a new message instance.
      *
@@ -30,8 +32,8 @@ class OversoldProductMail extends TemplateMailable
     {
         $template = MailTemplate::where('mailable', get_class($this))->first();
 
-        if ($template->to) {
-            $this->to($template->to);
+        if ($template->reply_to) {
+            $this->replyTo($template->reply_to);
         }
 
         return $this;

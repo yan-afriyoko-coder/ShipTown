@@ -4,17 +4,26 @@ namespace App\Modules\OversoldProductNotification\src\Listeners\OversoldProductA
 
 use App\Events\Product\ProductTagAttachedEvent;
 use App\Mail\OversoldProductMail;
+use App\Models\MailTemplate;
 use Mail;
 
 class SendOversoldProductNotificationListener
 {
     public function handle(ProductTagAttachedEvent $event)
     {
+        if ($event->tag() != 'oversold') {
+            return;
+        }
+
         $template = new OversoldProductMail([
             'product' => $event->product()->toArray(),
             'tag' => $event->tag(),
         ]);
 
-        Mail::send($template);
+        $mailTemplate = MailTemplate::select('to')
+            ->where('mailable', 'App\Mail\OversoldProductMail')
+            ->first();
+
+        Mail::to($mailTemplate->to)->send($template);
     }
 }
