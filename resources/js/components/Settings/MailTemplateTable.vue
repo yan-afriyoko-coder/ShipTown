@@ -4,26 +4,16 @@
             <div class="card-header">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span>
-                        Mail Template
+                        Mail Templates
                     </span>
                 </div>
             </div>
 
             <div class="card-body">
                 <table v-if="mailTemplates.length > 0" class="table table-borderless table-responsive mb-0">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Mail</th>
-                            <th>Subject</th>
-                            <th></th>
-                        </tr>
-                    </thead>
                     <tbody>
                         <tr v-for="(mailTemplate, i) in mailTemplates" :key="i">
-                            <td>{{ mailTemplate.id }}</td>
                             <td>{{ mailTemplate.name }}</td>
-                            <td>{{ mailTemplate.subject }}</td>
                             <td>
                                 <a @click.prevent="showEditForm(mailTemplate)">
                                     <font-awesome-icon icon="edit"></font-awesome-icon>
