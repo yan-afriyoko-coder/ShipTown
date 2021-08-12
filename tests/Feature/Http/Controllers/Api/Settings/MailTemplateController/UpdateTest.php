@@ -17,6 +17,7 @@ class UpdateTest extends TestCase
         $mailTemplate = new MailTemplate();
         $mailTemplate->mailable = 'App\Mail\ShipmentConfirmationMail';
         $mailTemplate->subject = 'testing Subject';
+        $mailTemplate->reply_to = 'test@example.com';
         $mailTemplate->html_template = '<p>tes</p>';
         $mailTemplate->text_template = null;
         $mailTemplate->save();

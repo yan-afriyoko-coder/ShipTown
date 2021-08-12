@@ -24,9 +24,10 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'subject'      => ['required', 'string', 'max:300'],
-            'html_template'    => ['required', 'string'],
-            'text_template'    => ['nullable', 'string'],
+            'subject'       => ['required', 'string', 'max:300'],
+            'html_template' => ['required', 'string'],
+            'text_template' => ['nullable', 'string'],
+            'reply_to'      => ['nullable', 'email']
         ];
     }
 }

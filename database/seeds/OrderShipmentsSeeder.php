@@ -12,6 +12,6 @@ class OrderShipmentsSeeder extends Seeder
      */
     public function run()
     {
-        factory(OrderShipment::class, rand(100, 200))->create();
+        factory(OrderShipment::class, rand(1, 3))->create();
     }
 }

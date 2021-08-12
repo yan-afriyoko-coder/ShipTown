@@ -24,6 +24,21 @@
                             </div>
 
                             <div class="form-group">
+                                <label class="form-label" for="reply_to">Reply To</label>
+                                <ValidationProvider vid="reply_to" name="reply_to" v-slot="{ errors }">
+                                    <input type="text"
+                                        id="edit-reply_to"
+                                        class="form-control"
+                                        :class="{'is-invalid' : errors.length}"
+                                        v-model="replyTo"
+                                        required>
+                                    <div class="invalid-feedback">
+                                        {{ errors[0] }}
+                                    </div>
+                                </ValidationProvider>
+                            </div>
+
+                            <div class="form-group">
                                 <label class="form-label" for="html_template">Html Template</label>
                                 <ValidationProvider vid="html_template" name="html_template" v-slot="{ errors }">
                                     <textarea
@@ -85,6 +100,7 @@ export default {
     data() {
         return {
             subject: "",
+            replyTo: "",
             htmlTemplate: "",
             textTemplate: "",
         }
@@ -97,6 +113,7 @@ export default {
     watch: {
         mailTemplate: function(newVal) {
             this.subject = newVal.subject
+            this.replyTo = newVal.reply_to
             this.htmlTemplate = newVal.html_template
             this.textTemplate = newVal.text_template
         }
@@ -108,6 +125,7 @@ export default {
             this.showLoading();
             this.apiPutMailTemplate(this.mailTemplate.id, {
                     subject: this.subject,
+                    reply_to: this.replyTo,
                     html_template: this.htmlTemplate,
                     text_template: this.textTemplate,
                 })
