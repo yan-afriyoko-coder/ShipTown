@@ -146,11 +146,10 @@
 
                     <div class="container" v-if="currentTab === 'orderDetails'">
                         <div class="row small">
-                            <div class="col-4">
+                            <div class="col">
                                 <div> date: <b> {{ order['order_placed_at'] | moment('MM/DD H:mm') }} </b> </div>
                                 <div> paid: <b> {{ order['total_paid'] }} </b> </div>
-                            </div>
-                            <div class="col">
+                                <div> shipping method: <b> {{ order['shipping_method_code'] }} </b> </div>
                                 <div> picked at: <b> {{ order['picked_at'] | moment('MM/DD H:mm') }} </b> </div>
                                 <div> packed at: <b> {{ order['packed_at'] | moment('MM/DD H:mm') }} </b> </div>
                                 <div> packed by: <b> {{ order['packer'] ? order['packer']['name'] : '&nbsp' }} </b> </div>
