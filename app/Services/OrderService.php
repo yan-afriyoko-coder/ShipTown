@@ -175,19 +175,19 @@ class OrderService
             $orderProduct = OrderProduct::where(['order_id' => $order->getKey()])
                 ->whereNotIn('id', $orderProductIdsToKeep)
                 ->updateOrCreate(
-                // attributes
+                    // attributes
                     collect($orderProductAttributes)
                         ->only([
                             'sku_ordered',
                             'name_ordered',
                             'quantity_ordered',
-                            'price',
                         ])
                         ->toArray(),
                     // values
                     [
                         'order_id'   => $order->getKey(),
                         'product_id' => self::getProductId($orderProductAttributes),
+                        'price' => $orderProductAttributes->price,
                     ]
                 );
 
