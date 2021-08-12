@@ -6,7 +6,7 @@ use App\BaseModel;
 
 class MailTemplate extends BaseModel
 {
-    protected $fillable = ['subject', 'html_template', 'text_template', 'reply_to'];
+    protected $fillable = ['subject', 'html_template', 'text_template', 'reply_to', 'to'];
 
     public function getNameAttribute()
     {

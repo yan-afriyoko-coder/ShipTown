@@ -17,8 +17,9 @@ class MailTemplateResource extends JsonResource
         return [
             'id'            => $this->getKey(),
             'name'          => $this->name,
-            'reply_to'      => $this->reply_to,
             'subject'       => $this->subject,
+            'reply_to'      => $this->reply_to,
+            'to'            => $this->to,
             'html_template' => $this->html_template,
             'text_template' => $this->text_template,
         ];

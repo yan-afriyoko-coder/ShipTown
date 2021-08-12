@@ -27,7 +27,8 @@ class UpdateRequest extends FormRequest
             'subject'       => ['required', 'string', 'max:300'],
             'html_template' => ['required', 'string'],
             'text_template' => ['nullable', 'string'],
-            'reply_to'      => ['nullable', 'email']
+            'reply_to'      => ['nullable', 'email'],
+            'to'            => ['nullable', 'email'],
         ];
     }
 }
