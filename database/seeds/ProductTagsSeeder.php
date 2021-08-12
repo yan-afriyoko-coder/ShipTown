@@ -13,11 +13,10 @@ class ProductTagsSeeder extends Seeder
      */
     public function run()
     {
-        Product::query()->inRandomOrder()->first()->attachTag('oversold');
-        // factory(Tag::class, Product::query()->count())
-        //     ->create()
-        //     ->each(function ($tag) {
-        //         Product::query()->inRandomOrder()->first()->attachTag($tag);
-        //     });
+        factory(Tag::class, Product::query()->count())
+            ->create()
+            ->each(function ($tag) {
+                Product::query()->inRandomOrder()->first()->attachTag($tag);
+            });
     }
 }
