@@ -76,7 +76,7 @@ export default {
                 })
                 .then(({ data }) => {
                     this.$snotify.success('User updated.');
-                    this.$emit('saved');
+                    this.$emit('onUpdated');
                 })
                 .catch((error) => {
                     if (error.response) {
