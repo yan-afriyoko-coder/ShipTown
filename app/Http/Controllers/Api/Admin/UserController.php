@@ -39,12 +39,23 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request): UserResource
     {
-        $user = User::create($request->all() + ['password' => bcrypt(Str::random(8))]);
-        $user->assignRole($request->role_id);
+        $user = User::where('email', $request->email)->onlyTrashed()->first();
+        if ($user) {
+            $user->restore();
+            $user->update($request->validated());
+        } else {
+            $this->validate($request, [
+                'email' => 'unique:users,email',
+                'name'  => 'unique:users,name'
+            ]);
 
-        Password::sendResetLink(
-            $request->only('email')
-        );
+            $user = User::create($request->validated() + ['password' => bcrypt(Str::random(8))]);
+            Password::sendResetLink(
+                $request->only('email')
+            );
+        }
+
+        $user->assignRole($request->role_id);
 
         return new UserResource($user);
     }
