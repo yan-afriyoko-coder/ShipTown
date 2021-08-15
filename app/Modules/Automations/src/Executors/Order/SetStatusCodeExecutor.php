@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Modules\Automations\src\Executors;
+namespace App\Modules\Automations\src\Executors\Order;
 
 use App\Events\Order\OrderCreatedEvent;
 
-class ChangeOrderStatusToExecutor
+class SetStatusCodeExecutor
 {
     private OrderCreatedEvent $event;
 

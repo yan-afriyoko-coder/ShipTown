@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Modules\Automations\src\Validators;
+namespace App\Modules\Automations\src\Validators\Order;
 
 use App\Events\Order\OrderCreatedEvent;
 
 /**
  *
  */
-class OrderShippingMethodCodeEqualsValidator
+class StatusCodeEqualsValidator
 {
     private OrderCreatedEvent $event;
 
@@ -22,6 +22,6 @@ class OrderShippingMethodCodeEqualsValidator
      */
     public function isValid($condition_value): bool
     {
-        return $this->event->order->shipping_method_code === $condition_value;
+        return $this->event->order->status_code === $condition_value;
     }
 }

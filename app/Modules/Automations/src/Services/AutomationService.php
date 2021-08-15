@@ -11,6 +11,7 @@ class AutomationService
     public static function runAllAutomations($event)
     {
         Automation::where('event_class', get_class($event))
+            ->where(['enabled' => true])
             ->get()
             ->each(function (Automation $automation) use ($event) {
                 AutomationService::runAutomation($automation, $event);

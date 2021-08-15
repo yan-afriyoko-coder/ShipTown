@@ -2,19 +2,16 @@
 
 namespace App\Modules\Automations\src\Listeners;
 
-use App\Events\Order\OrderCreatedEvent;
 use App\Modules\Automations\src\Services\AutomationService;
 
-/**
- *
- */
-class OrderCreatedListener
+class EventsListener
 {
     /**
-     * @param OrderCreatedEvent $event
+     * @param $event
      */
-    public function handle(OrderCreatedEvent $event)
+    public function handle($event)
     {
+        ray($event);
         AutomationService::runAllAutomations($event);
     }
 }
