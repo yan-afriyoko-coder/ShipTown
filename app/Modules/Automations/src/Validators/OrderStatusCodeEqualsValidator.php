@@ -7,7 +7,7 @@ use App\Events\Order\OrderCreatedEvent;
 /**
  *
  */
-class OrderStatusIsValidator
+class OrderStatusCodeEqualsValidator
 {
     private OrderCreatedEvent $event;
 

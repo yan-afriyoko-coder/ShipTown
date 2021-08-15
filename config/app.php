@@ -202,6 +202,7 @@ return [
         App\Modules\FireActiveOrderCheckEvent\src\ActiveOrderCheckEventServiceProvider::class,
 
         App\Modules\InventoryReservations\src\EventServiceProviderBase::class,
+        App\Modules\Automations\src\AutomationsServiceProvider::class,
 
         // Automations modules
         // order MIGHT be important!
