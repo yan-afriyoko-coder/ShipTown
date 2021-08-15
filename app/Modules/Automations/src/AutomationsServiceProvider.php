@@ -2,7 +2,10 @@
 
 namespace App\Modules\Automations\src;
 
+use App\Events\DailyEvent;
+use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\Order\OrderCreatedEvent;
+use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 class AutomationsServiceProvider extends BaseModuleServiceProvider
@@ -15,7 +18,7 @@ class AutomationsServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_description = 'Provides Order Automations';
+    public static string $module_description = 'Provides user specified automations';
 
     /**
      * @var bool
@@ -27,7 +30,15 @@ class AutomationsServiceProvider extends BaseModuleServiceProvider
      */
     protected $listen = [
         OrderCreatedEvent::class => [
-            Listeners\OrderCreatedListener::class
-        ]
+            Listeners\EventsListener::class
+        ],
+
+        OrderUpdatedEvent::class => [
+            Listeners\EventsListener::class
+        ],
+
+        InventoryUpdatedEvent::class => [
+            Listeners\EventsListener::class
+        ],
     ];
 }
