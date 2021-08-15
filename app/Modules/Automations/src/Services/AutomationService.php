@@ -38,7 +38,11 @@ class AutomationService
     {
         $validator = new $condition->validation_class($event);
 
-        return $validator->isValid($condition->condition_value);
+        $isValid = $validator->isValid($condition->condition_value);
+
+        ray($condition, $isValid);
+
+        return $isValid;
     }
 
     private static function executeAutomation(Execution $execution, $event): void

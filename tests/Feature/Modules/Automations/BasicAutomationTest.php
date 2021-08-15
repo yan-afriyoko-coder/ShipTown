@@ -10,7 +10,7 @@ use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
 use App\Modules\Automations\src\Models\Execution;
 use App\Modules\Automations\src\Services\AutomationService;
-use App\Modules\Automations\src\Validators\OrderStatusIsValidator;
+use App\Modules\Automations\src\Validators\OrderStatusCodeEqualsValidator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use phpDocumentor\Reflection\DocBlock\Tags\Author;
 use Tests\TestCase;
@@ -34,7 +34,7 @@ class basicModuleTest extends TestCase
 
         Condition::create([
             'automation_id' => $automation->getKey(),
-            'validation_class' => OrderStatusIsValidator::class,
+            'validation_class' => OrderStatusCodeEqualsValidator::class,
             'condition_value' => 'paid'
         ]);
 
