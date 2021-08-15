@@ -4,11 +4,11 @@ namespace Tests\Feature\Modules\Automations;
 
 use App\Events\Order\OrderCreatedEvent;
 use App\Models\Order;
-use App\Modules\Automations\src\Executors\ChangeOrderStatusToExecutor;
+use App\Modules\Automations\src\Executors\Order\SetStatusCodeExecutor;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
 use App\Modules\Automations\src\Models\Execution;
-use App\Modules\Automations\src\Validators\OrderStatusCodeEqualsValidator;
+use App\Modules\Automations\src\Validators\Order\StatusCodeEqualsValidator;
 use App\Modules\AutoStatusPackingWeb\src\AutoPackingWebServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -34,13 +34,13 @@ class BasicAutomationTest extends TestCase
 
         Condition::create([
             'automation_id' => $automation->getKey(),
-            'validation_class' => OrderStatusCodeEqualsValidator::class,
+            'validation_class' => StatusCodeEqualsValidator::class,
             'condition_value' => 'paid'
         ]);
 
         Execution::create([
             'automation_id' => $automation->getKey(),
-            'execution_class' => ChangeOrderStatusToExecutor::class,
+            'execution_class' => SetStatusCodeExecutor::class,
             'execution_value' => 'new_status'
         ]);
 
