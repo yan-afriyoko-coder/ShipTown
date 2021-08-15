@@ -24,10 +24,9 @@ class BasicAutomationTest extends TestCase
      */
     public function test_basic_automation()
     {
-        AutoPackingWebServiceProvider::disableModule();
-
         /** @var Automation $automation */
         $automation = Automation::create([
+            'enabled' => true,
             'name' => 'Paid to Picking',
             'event_class' => OrderCreatedEvent::class,
         ]);

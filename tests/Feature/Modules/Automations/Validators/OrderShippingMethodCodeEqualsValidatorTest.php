@@ -25,6 +25,7 @@ class OrderShippingMethodCodeEqualsValidatorTest extends TestCase
     {
         /** @var Automation $automation */
         $automation = Automation::create([
+            'enabled' => true,
             'name' => 'Paid to Picking',
             'event_class' => OrderCreatedEvent::class,
         ]);

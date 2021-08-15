@@ -20,8 +20,17 @@ class Automation extends BaseModel
      * @var string[]
      */
     protected $fillable = [
+        'enabled',
         'name',
         'event_class',
+    ];
+
+    protected $attributes = [
+        'enabled' => false
+    ];
+
+    protected $casts = [
+        'enabled' => 'boolean'
     ];
 
     /**
