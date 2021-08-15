@@ -9,7 +9,6 @@ use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
 use App\Modules\Automations\src\Models\Execution;
 use App\Modules\Automations\src\Validators\OrderShippingMethodCodeEqualsValidator;
-use App\Modules\Automations\src\Validators\OrderStatusCodeEqualsValidator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
