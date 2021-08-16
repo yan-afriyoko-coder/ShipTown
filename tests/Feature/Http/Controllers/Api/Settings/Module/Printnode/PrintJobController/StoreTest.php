@@ -2,13 +2,25 @@
 
 namespace Tests\Feature\Http\Controllers\Api\Settings\Module\Printnode\PrintJobController;
 
+use App\User;
 use Tests\TestCase;
 
 class StoreTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $admin = factory(User::class)->create()->assignRole('admin');
+        $this->actingAs($admin, 'api');
+    }
+
     /** @test */
     public function test_store_call_returns_ok()
     {
-        $this->markTestSkipped();
+        $response = $this->post(route('api.settings.module.printnode.printjobs.store'), [
+            'printer_id' => '1'
+        ]);
+
+        $response->assertStatus(200);
     }
 }
