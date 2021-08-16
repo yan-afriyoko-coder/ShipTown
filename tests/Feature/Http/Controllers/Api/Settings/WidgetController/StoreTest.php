@@ -2,13 +2,36 @@
 
 namespace Tests\Feature\Http\Controllers\Api\Settings\WidgetController;
 
+use App\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class StoreTest extends TestCase
 {
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $admin = factory(User::class)->create()->assignRole('admin');
+        $this->actingAs($admin, 'api');
+    }
+
     /** @test */
     public function test_store_call_returns_ok()
     {
-        $this->markTestSkipped();
+        $response = $this->post(route('widgets.store'), [
+            'name'   => 'Tes widget',
+            'config' => []
+        ]);
+
+        $response->assertStatus(201);
+        $response->assertJsonStructure([
+            'data' => [
+                'name',
+                'config' => [],
+                'id'
+            ],
+        ]);
     }
 }
