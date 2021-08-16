@@ -21,12 +21,7 @@ class DestroyTest extends TestCase
     /** @test */
     public function test_destroy_call_returns_ok()
     {
-        $api2cart = Api2cartConnection::create([
-            'location_id'   => '99',
-            'type'          => 'tes',
-            'url'           => 'tes',
-            'prefix'        => 'tes'
-        ]);
+        $api2cart = factory(Api2cartConnection::class)->create();
         $response = $this->delete(route('api.settings.module.api2cart.connections.destroy', $api2cart));
         $response->assertStatus(200);
     }
