@@ -3,10 +3,13 @@
 namespace Tests\Feature\Http\Controllers\Api\Settings\Module\Printnode\PrintJobController;
 
 use App\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class StoreTest extends TestCase
 {
+    use RefreshDatabase;
+
     protected function setUp(): void
     {
         parent::setUp();
