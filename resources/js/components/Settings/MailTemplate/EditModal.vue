@@ -9,13 +9,13 @@
                     <ValidationObserver ref="form">
                         <form class="form" @submit.prevent="submit" ref="loadingContainer">
                             <div class="form-group">
-                                <label class="form-label" for="subject">Subject</label>
-                                <ValidationProvider vid="subject" name="subject" v-slot="{ errors }">
+                                <label class="form-label" for="to">To</label>
+                                <ValidationProvider vid="to" name="to" v-slot="{ errors }">
                                     <input type="text"
-                                        id="edit-subject"
+                                        id="edit-to"
                                         class="form-control"
                                         :class="{'is-invalid' : errors.length}"
-                                        v-model="subject"
+                                        v-model="to"
                                         required>
                                     <div class="invalid-feedback">
                                         {{ errors[0] }}
@@ -27,11 +27,11 @@
                                 <label class="form-label" for="reply_to">Reply To</label>
                                 <ValidationProvider vid="reply_to" name="reply_to" v-slot="{ errors }">
                                     <input type="text"
-                                        id="edit-reply_to"
-                                        class="form-control"
-                                        :class="{'is-invalid' : errors.length}"
-                                        v-model="replyTo"
-                                        required>
+                                           id="edit-reply_to"
+                                           class="form-control"
+                                           :class="{'is-invalid' : errors.length}"
+                                           v-model="replyTo"
+                                           required>
                                     <div class="invalid-feedback">
                                         {{ errors[0] }}
                                     </div>
@@ -39,14 +39,14 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" for="to">To</label>
-                                <ValidationProvider vid="to" name="to" v-slot="{ errors }">
+                                <label class="form-label" for="subject">Subject</label>
+                                <ValidationProvider vid="subject" name="subject" v-slot="{ errors }">
                                     <input type="text"
-                                        id="edit-to"
-                                        class="form-control"
-                                        :class="{'is-invalid' : errors.length}"
-                                        v-model="to"
-                                        required>
+                                           id="edit-subject"
+                                           class="form-control"
+                                           :class="{'is-invalid' : errors.length}"
+                                           v-model="subject"
+                                           required>
                                     <div class="invalid-feedback">
                                         {{ errors[0] }}
                                     </div>
@@ -90,7 +90,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" @click="closeModal" class="btn btn-default">Cancel</button>
-                    <button type="button" @click="submit" class="btn btn-primary">Ok</button>
+                    <button type="button" @click="submit" class="btn btn-primary">Save</button>
                 </div>
             </div>
         </div>
