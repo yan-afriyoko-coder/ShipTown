@@ -27,6 +27,6 @@ class SendOversoldProductNotificationListener
 
         $to = $mailTemplate->to;
 
-        SendOversoldProductMailJob::dispatch($data, $to)->onConnection('database');
+        SendOversoldProductMailJob::dispatch($data, $to);
     }
 }
