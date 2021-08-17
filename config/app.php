@@ -209,6 +209,7 @@ return [
         App\Modules\ShipmentConfirmationEmail\src\ServiceProvider::class,
         App\Modules\AutoPilot\src\AutoPilotServiceProvider::class,
         App\Modules\AutoTags\src\EventServiceProviderBase::class,
+        App\Modules\OversoldProductNotification\src\OversoldProductNotificationServiceProvider::class,
 
         // AutoStatus modules
         // order is important!
