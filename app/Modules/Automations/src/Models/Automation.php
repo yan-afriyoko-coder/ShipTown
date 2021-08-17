@@ -20,6 +20,7 @@ class Automation extends BaseModel
      * @var string[]
      */
     protected $fillable = [
+        'priority',
         'enabled',
         'name',
         'event_class',
