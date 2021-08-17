@@ -13,6 +13,10 @@ class CreateModulesAutomationsConditionsTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('modules_automations_conditions')) {
+            return;
+        }
+
         Schema::create('modules_automations_conditions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('automation_id');
@@ -20,15 +24,5 @@ class CreateModulesAutomationsConditionsTable extends Migration
             $table->string('condition_value')->nullable(false)->default('');
             $table->timestamps();
         });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('modules_automations_conditions');
     }
 }

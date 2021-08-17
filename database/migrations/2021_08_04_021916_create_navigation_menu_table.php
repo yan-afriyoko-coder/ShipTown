@@ -13,6 +13,10 @@ class CreateNavigationMenuTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('navigation_menu')) {
+            return;
+        }
+
         Schema::create('navigation_menu', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
@@ -20,15 +24,5 @@ class CreateNavigationMenuTable extends Migration
             $table->string('group', 100);
             $table->timestamps();
         });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('navigation_menu');
     }
 }
