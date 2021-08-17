@@ -11,7 +11,6 @@ class EventsListener
      */
     public function handle($event)
     {
-        ray($event);
         AutomationService::runAllAutomations($event);
     }
 }

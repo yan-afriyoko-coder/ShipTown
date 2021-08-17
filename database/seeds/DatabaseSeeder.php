@@ -24,12 +24,7 @@ class DatabaseSeeder extends Seeder
             PicksSeeder::class,
             OrderShipmentsSeeder::class,
             NavigationMenuSeeder::class,
-
-            //            Api2CartOrderImportSeeder::class,
-            //            RmsapiConnectionSeeder::class,
-            //            RmsapiProductImportSeeder::class,
-            //            DpdSeeder::class,
-            //            PicksSeeder::class
+            AutomationsSeeder::class,
         ]);
 
         \App\Jobs\RunHourlyJobs::dispatchNow();
