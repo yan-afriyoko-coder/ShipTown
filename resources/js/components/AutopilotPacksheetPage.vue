@@ -364,12 +364,11 @@
                     }
                 },
 
-                setQuantityShipped(orderProduct, quantity) {
-                    this.somethingHasBeenPackedDuringThisSession = true;
-
-                    const request = this.apiUpdateOrderProduct(orderProduct.id, {
-                            'quantity_shipped': quantity
-                        })
+                shipOrderProduct(orderProduct, quantity) {
+                    const request = this.apiPostOrderProductShipment({
+                        'order_product_id': orderProduct.id,
+                        'quantity_shipped': quantity,
+                    })
                         .then(data => {
                             this.notifySuccess();
                         })
@@ -381,8 +380,28 @@
                         });
                 },
 
-                shipAll(pickedItem) {
-                    this.setQuantityShipped(pickedItem, pickedItem['quantity_ordered']);
+                setQuantityShipped(orderProduct, quantity) {
+                    this.somethingHasBeenPackedDuringThisSession = true;
+
+
+                    const request = this.apiUpdateOrderProduct(orderProduct.id, {
+                        'quantity_shipped': quantity
+                    })
+                        .then(data => {
+                            this.notifySuccess();
+                        })
+                        .catch(error => {
+                            this.notifyError('Error occurred when saving quantity shipped, try again');
+                        })
+                        .finally(() => {
+                            this.loadProducts();
+                        });
+                },
+
+                shipAll(orderProduct) {
+                    console.log(orderProduct['quantity_to_ship']);
+                    this.shipOrderProduct(orderProduct, orderProduct['quantity_to_ship']);
+                    this.setQuantityShipped(orderProduct, orderProduct['quantity_ordered']);
                 },
 
                 findEntry: function (barcode) {
@@ -436,6 +455,7 @@
                         return;
                     }
 
+                    this.shipOrderProduct(pickItem, 1);
                     this.setQuantityShipped(pickItem,pickItem['quantity_shipped'] + 1);
                 },
 

@@ -63,6 +63,10 @@ export default {
                 return axios.get('/api/order/products', {params: params});
             },
 
+            apiPostOrderProductShipment: function (data) {
+                return axios.post('/api/orders/products/shipments', data);
+            },
+
             apiUpdateOrderProduct: function (orderProduct_id, data) {
                 return axios.put('/api/order/products/' + orderProduct_id, data);
             },
