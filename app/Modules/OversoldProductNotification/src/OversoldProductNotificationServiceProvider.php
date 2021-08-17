@@ -9,7 +9,7 @@ use App\Modules\BaseModuleServiceProvider;
  * Class ServiceProvider
  * @package App\Modules\OversoldProductNotification\src
  */
-class ServiceProvider extends BaseModuleServiceProvider
+class OversoldProductNotificationServiceProvider extends BaseModuleServiceProvider
 {
     /**
      * @var string
