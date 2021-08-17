@@ -21,8 +21,11 @@ class CreateApi2cartOrderImportsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('connection_id')->nullable();
             $table->unsignedBigInteger('order_id')->nullable();
+            $table->string('shipping_method_name')->nullable(true);
+            $table->string('shipping_method_code')->nullable(true);
             $table->dateTime('when_processed')->nullable();
             $table->string('order_number')->nullable();
+            $table->integer('api2cart_order_id');
             $table->json('raw_import');
             $table->timestamps();
 

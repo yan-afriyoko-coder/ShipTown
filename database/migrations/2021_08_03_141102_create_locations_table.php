@@ -13,20 +13,14 @@ class CreateLocationsTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('locations')) {
+            return;
+        }
+
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->timestamps();
         });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('locations');
     }
 }

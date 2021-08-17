@@ -13,6 +13,10 @@ class CreateModulesAutomationsExecutionsTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('modules_automations_executions')) {
+            return;
+        }
+
         Schema::create('modules_automations_executions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('automation_id');
@@ -21,15 +25,5 @@ class CreateModulesAutomationsExecutionsTable extends Migration
             $table->string('execution_value')->nullable(false)->default('');
             $table->timestamps();
         });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('modules_automations_executions');
     }
 }

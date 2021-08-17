@@ -23,6 +23,7 @@ class CreateOrderAddressesTable extends Migration
             $table->string('gender')->default('');
             $table->string('first_name')->default('');
             $table->string('last_name')->default('');
+            $table->string('email')->default('');
             $table->string('address1')->default('');
             $table->string('address2')->default('');
             $table->string('postcode')->default('');
