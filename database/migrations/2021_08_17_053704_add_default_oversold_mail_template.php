@@ -1,16 +1,18 @@
 <?php
 
 use App\Models\MailTemplate;
-use Illuminate\Database\Seeder;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class OversoldProductMailTemplateSeeder extends Seeder
+class AddDefaultOversoldMailTemplate extends Migration
 {
     /**
-     * Run the database seeds.
+     * Run the migrations.
      *
      * @return void
      */
-    public function run()
+    public function up()
     {
         MailTemplate::updateOrCreate(
             ['mailable' => 'App\Mail\OversoldProductMail'],
@@ -159,7 +161,16 @@ class OversoldProductMailTemplateSeeder extends Seeder
 </body>
 </html>
                 '
-            ]
-        );
+]);
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        //
     }
 }
