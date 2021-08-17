@@ -1,0 +1,46 @@
+<?php
+
+return [
+    'when' => [
+        [
+            'class' => \App\Events\Order\OrderCreatedEvent::class,
+            'description' => 'Order is created',
+            'validators' => [
+                [
+                    'class' => \App\Modules\Automations\src\Validators\Order\ShippingMethodCodeEqualsValidator::class,
+                    'description' => 'Order Shipping Method Code equals',
+                ],
+                [
+                    'class' => \App\Modules\Automations\src\Validators\Order\StatusCodeEqualsValidator::class,
+                    'description' => 'Order Status Code equals',
+                ],
+            ],
+            'executors' => [
+                [
+                    'class' => \App\Modules\Automations\src\Executors\Order\SetStatusCodeExecutor::class,
+                    'description' => 'Set Order Status Code to',
+                ],
+            ]
+        ],
+        [
+            'class' => \App\Events\Order\OrderUpdatedEvent::class,
+            'description' => 'Order is updated',
+            'validators' => [
+                [
+                    'class' => \App\Modules\Automations\src\Validators\Order\ShippingMethodCodeEqualsValidator::class,
+                    'description' => 'Order Shipping Method Code equals',
+                ],
+                [
+                    'class' => \App\Modules\Automations\src\Validators\Order\StatusCodeEqualsValidator::class,
+                    'description' => 'Order Status Code equals',
+                ],
+            ],
+            'executors' => [
+                [
+                    'class' => \App\Modules\Automations\src\Executors\Order\SetStatusCodeExecutor::class,
+                    'description' => 'Set Order Status Code to',
+                ],
+            ]
+        ],
+    ],
+];
