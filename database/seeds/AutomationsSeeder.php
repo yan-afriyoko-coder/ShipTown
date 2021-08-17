@@ -18,11 +18,11 @@ class AutomationsSeeder extends Seeder
      */
     public function run()
     {
+        /** @var Automation $automation */
         $automation = Automation::create([
             'name' => 'Store Pickup',
             'priority' => 1,
             'event_class' => OrderCreatedEvent::class,
-            'enabled' => true,
         ]);
 
         Condition::create([
@@ -43,5 +43,7 @@ class AutomationsSeeder extends Seeder
             'execution_class' => SetStatusCodeExecutor::class,
             'execution_value' => 'store_pickup',
         ]);
+
+        $automation->update(['enabled' => true]);
     }
 }
