@@ -22,6 +22,7 @@ class CreateOrderStatusesTable extends Migration
             $table->string('name')->unique();
             $table->string('code')->unique();
             $table->boolean('order_active')->default(1);
+            $table->boolean('sync_ecommerce')->default(false);
             $table->timestamps();
         });
 

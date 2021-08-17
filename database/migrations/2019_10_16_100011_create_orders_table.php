@@ -24,6 +24,8 @@ class CreateOrdersTable extends Migration
             $table->string('status_code')->default('');
             $table->decimal('total', 10, 2)->default(0);
             $table->decimal('total_paid')->default(0);
+            $table->string('shipping_method_code')->default('')->nullable(true);
+            $table->string('shipping_method_name')->default('')->nullable(true);
             $table->dateTime('order_placed_at')->useCurrent()->nullable();
             $table->dateTime('order_closed_at')->nullable();
             $table->integer('product_line_count')->default(0);
@@ -31,7 +33,6 @@ class CreateOrdersTable extends Migration
             $table->timestamp('packed_at')->nullable();
             $table->unsignedBigInteger('packer_user_id')->nullable();
             $table->decimal('total_quantity_ordered', 10, 2)->default(0);
-            $table->json('raw_import');
             $table->softDeletes();
             $table->timestamps();
 

@@ -15,6 +15,7 @@ class CreateModulesAutomationsTable extends Migration
     {
         Schema::create('modules_automations', function (Blueprint $table) {
             $table->id();
+            $table->smallInteger('priority')->nullable(false)->default(0);
             $table->boolean('enabled')->nullable(false)->default(false);
             $table->string('name')->nullable(false);
             $table->string('event_class');
