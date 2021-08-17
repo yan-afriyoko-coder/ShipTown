@@ -48,10 +48,10 @@
         </div>
         <!-- The modals -->
         <b-modal ref="createModal" id="create-modal" title="Add User" @ok="handleAddOk">
-            <create-modal ref="createForm" :roles="roles" @saved=loadUsers></create-modal>
+            <create-modal ref="createForm" :roles="roles" @onCreated=addedUser></create-modal>
         </b-modal>
         <b-modal ref="editModal" id="edit-modal" title="Edit User" @ok="handleEditOk">
-            <edit-modal v-if="selectedId" :id="selectedId" :roles="roles" @saved=loadUsers ref="editForm"></edit-modal>
+            <edit-modal v-if="selectedId" :id="selectedId" :roles="roles" @onUpdated=updatedUser ref="editForm"></edit-modal>
         </b-modal>
     </div>
 </template>
@@ -106,20 +106,30 @@ export default {
                 });
         },
 
+        hideModal(ref) {
+            setTimeout(() => {
+                this.$refs[ref].hide();
+            }, 500);
+        },
+
+        addedUser(){
+            this.hideModal('createModal');
+            this.loadUsers();
+        },
+
+        updatedUser(){
+            this.hideModal('editModal');
+            this.loadUsers();
+        },
+
         handleAddOk(bvModalEvt) {
             bvModalEvt.preventDefault();
             this.$refs.createForm.submit();
-            setTimeout(() => {
-                this.$refs.createModal.hide();
-            }, 500);
         },
 
         handleEditOk(bvModalEvt) {
             bvModalEvt.preventDefault();
             this.$refs.editForm.submit();
-            setTimeout(() => {
-                this.$refs.editModal.hide();
-            }, 500);
         },
 
         onEditClick(id) {

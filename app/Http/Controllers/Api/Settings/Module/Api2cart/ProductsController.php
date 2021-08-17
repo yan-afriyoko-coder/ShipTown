@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api\Settings\Module\Api2cart;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Api2cart\src\Api\Products;
 use App\Modules\Api2cart\src\Exceptions\RequestException;
 use App\Modules\Api2cart\src\Http\Requests\ProductsIndexRequest;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
-use App\Modules\Api2cart\src\Products;
 
 class ProductsController extends Controller
 {

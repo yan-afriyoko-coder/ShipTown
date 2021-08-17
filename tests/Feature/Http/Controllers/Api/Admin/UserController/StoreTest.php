@@ -22,11 +22,25 @@ class StoreTest extends TestCase
     public function test_store_call_returns_ok()
     {
         $response = $this->post(route('users.store'), [
-            'name'              => 'Test User',
-            'email'              => 'testing@example.com',
-            'role_id'      => Role::first()->id,
+            'name'      => 'Test User',
+            'email'     => 'testing@example.com',
+            'role_id'   => Role::first()->id,
         ]);
 
         $response->assertStatus(201);
+    }
+
+    public function test_add_deleted_user_return_ok()
+    {
+        $user = factory(User::class)->create()->assignRole('user');
+        $user->delete();
+
+        $response = $this->post(route('users.store'), [
+            'name'      => $user->name,
+            'email'     => $user->email,
+            'role_id'   => Role::first()->id,
+        ]);
+
+        $response->assertStatus(200);
     }
 }

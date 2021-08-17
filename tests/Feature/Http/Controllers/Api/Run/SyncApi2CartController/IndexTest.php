@@ -2,13 +2,22 @@
 
 namespace Tests\Feature\Http\Controllers\Api\Run\SyncApi2CartController;
 
+use App\User;
 use Tests\TestCase;
 
 class IndexTest extends TestCase
 {
-    /** @test */
-    public function test_index_call_returns_ok()
+    protected function setUp(): void
     {
-        $this->markTestSkipped();
+        parent::setUp();
+        $admin = factory(User::class)->create()->assignRole('admin');
+        $this->actingAs($admin, 'api');
+    }
+
+    /** @test */
+    public function test_index_sync_api2cart_call_returns_ok()
+    {
+        $response = $this->get(route('api2cart.index'));
+        $response->assertStatus(200);
     }
 }
