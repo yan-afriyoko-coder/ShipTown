@@ -17,15 +17,13 @@ class AddDefaultOversoldMailTemplate extends Migration
         MailTemplate::updateOrCreate(
             ['mailable' => 'App\Mail\OversoldProductMail'],
             [
-                'to' => 'demo@products.management',
-                'subject' => 'New Prodduct Oversold',
-                'html_template' => '
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+                'subject' => 'Product Oversold',
+                'html_template' => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
 <head>
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>New Product Oversold!</title>
+    <title>Product Oversold!</title>
 
     <style>img {
         max-width: 100%;
@@ -159,18 +157,6 @@ class AddDefaultOversoldMailTemplate extends Migration
 </table>
 
 </body>
-</html>
-                '
-]);
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        //
+</html>']);
     }
 }
