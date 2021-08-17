@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Modules\OversoldProductNotification\src\Listeners\OversoldProductAttachedEvent;
+namespace App\Modules\OversoldProductNotification\src\Listeners;
 
 use App\Events\Product\ProductTagAttachedEvent;
 use App\Mail\OversoldProductMail;
 use App\Models\MailTemplate;
+use App\Modules\OversoldProductNotification\src\Jobs\SendOversoldProductMailJob;
 use Mail;
 
 class SendOversoldProductNotificationListener
@@ -15,17 +16,17 @@ class SendOversoldProductNotificationListener
             return;
         }
 
-        $template = new OversoldProductMail([
+        $data = [
             'product' => $event->product()->toArray(),
             'tag' => $event->tag(),
-        ]);
+        ];
 
         $mailTemplate = MailTemplate::select('to')
             ->where('mailable', 'App\Mail\OversoldProductMail')
             ->first();
 
-        if ($mailTemplate->to) {
-            Mail::to($mailTemplate->to)->send($template);
-        }
+        $to = $mailTemplate->to;
+
+        SendOversoldProductMailJob::dispatch($data, $to)->onConnection('database');
     }
 }
