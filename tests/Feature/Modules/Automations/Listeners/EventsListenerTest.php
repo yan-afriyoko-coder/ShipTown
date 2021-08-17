@@ -59,20 +59,4 @@ class EventsListenerTest extends TestCase
 
         $this->listener->shouldHaveReceived('handle', [OrderUpdatedEvent::class]);
     }
-
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function test_inventory_updated_event()
-    {
-        $this->listener->shouldReceive('handle')->once();
-
-        /** @var Inventory $inventory */
-        $inventory = factory(Inventory::class)->create();
-
-        $inventory->quantity = $inventory->quantity + 1;
-        $inventory->save();
-    }
 }
