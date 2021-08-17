@@ -12,6 +12,7 @@ class AutomationService
     {
         Automation::where('event_class', get_class($event))
             ->where(['enabled' => true])
+            ->orderBy('priority')
             ->get()
             ->each(function (Automation $automation) use ($event) {
                 AutomationService::runAutomation($automation, $event);
@@ -21,29 +22,30 @@ class AutomationService
     public static function runAutomation(Automation $automation, $event)
     {
         // check all conditions
-        $conditionsValid = $automation->conditions->every(function (Condition $condition) use ($event) {
-            return AutomationService::isConditionValid($condition, $event);
-        });
+        $allConditionsPass = $automation->conditions()
+            ->get()
+            ->every(function (Condition $condition) use ($event) {
+                return AutomationService::isConditionValid($condition, $event);
+            });
 
-        if ($conditionsValid === false) {
+        if ($allConditionsPass === false) {
             return;
         }
 
         // run all executions
-        $automation->executions->each(function (Execution $execution) use ($event) {
-            AutomationService::executeAutomation($execution, $event);
-        });
+        $automation->executions()
+            ->orderBy('priority')
+            ->get()
+            ->each(function (Execution $execution) use ($event) {
+                AutomationService::executeAutomation($execution, $event);
+            });
     }
 
     private static function isConditionValid(Condition $condition, $event): bool
     {
         $validator = new $condition->validation_class($event);
 
-        $isValid = $validator->isValid($condition->condition_value);
-
-        ray($condition, $isValid);
-
-        return $isValid;
+        return $validator->isValid($condition->condition_value);
     }
 
     private static function executeAutomation(Execution $execution, $event): void

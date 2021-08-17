@@ -39,7 +39,7 @@ class Automation extends BaseModel
      */
     public function conditions(): HasMany
     {
-        return $this->hasMany(Condition::class)->latest();
+        return $this->hasMany(Condition::class);
     }
 
     /**
@@ -47,6 +47,6 @@ class Automation extends BaseModel
      */
     public function executions(): HasMany
     {
-        return $this->hasMany(Execution::class)->latest();
+        return $this->hasMany(Execution::class);
     }
 }
