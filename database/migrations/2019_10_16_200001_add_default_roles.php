@@ -13,6 +13,10 @@ class AddDefaultRoles extends Migration
      */
     public function up()
     {
+        if (Role::query()->exists()) {
+            return;
+        }
+
         $admin = Role::firstOrCreate(['name' => 'admin']);
 
         $defaultAdminPermissions = ['manage users', 'list users', 'invite users', 'list roles'];
