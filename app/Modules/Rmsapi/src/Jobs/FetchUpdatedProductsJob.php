@@ -86,6 +86,8 @@ class FetchUpdatedProductsJob implements ShouldQueue
             'location_id' => $this->rmsapiConnection->location_id,
             'count'       => $response->asArray()['total'],
         ]);
+
+        return true;
     }
 
     public function saveImportedProducts(array $productList)
