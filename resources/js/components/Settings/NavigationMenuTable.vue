@@ -110,7 +110,7 @@ export default {
             this.apiDeleteNavigationMenu(id)
                 .then(() => {
                     Vue.delete(this.navigations, index);
-                    this.$snotify.success('Navigation menun deleted.');
+                    this.$snotify.success('Navigation menu deleted.');
                 });
         }
     },
