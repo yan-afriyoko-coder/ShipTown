@@ -5,6 +5,7 @@ namespace App\Modules\Automations\src\Services;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
 use App\Modules\Automations\src\Models\Execution;
+use Log;
 
 class AutomationService
 {
@@ -27,6 +28,12 @@ class AutomationService
             ->every(function (Condition $condition) use ($event) {
                 return AutomationService::isConditionValid($condition, $event);
             });
+
+        Log::debug('Ran automation', [
+            'class' => class_basename($automation),
+            'name' => $automation->name,
+            'conditions_passed' => $allConditionsPass
+        ]);
 
         if ($allConditionsPass === false) {
             return;
