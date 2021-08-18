@@ -3,6 +3,7 @@
 namespace App\Modules\Automations\src\Validators\Order;
 
 use App\Events\Order\OrderCreatedEvent;
+use Log;
 
 /**
  *
@@ -22,6 +23,15 @@ class ShippingMethodCodeEqualsValidator
      */
     public function isValid($condition_value): bool
     {
-        return $this->event->order->shipping_method_code === $condition_value;
+        $result = $this->event->order->shipping_method_code === $condition_value;
+
+        Log::debug('Validating condition', [
+            'class' => self::class,
+            'order_number' => $this->event->order->order_number,
+            'expected_shipping_method_code' => $condition_value,
+            'actual_shipping_method_code' => $this->event->order->shipping_method_code,
+        ]);
+
+        return $result;
     }
 }
