@@ -175,6 +175,13 @@ class Api2cartProductLink extends BaseModel
                 return false;
         }
 
+        // if product data is null, product does not exist on eCommerce
+        // we will delete link
+        if (is_null($product_now)) {
+            $this->delete();
+            return false;
+        }
+
         $this->last_fetched_data = $product_now;
 
         $differences = $this->getDifferences($product_data, $product_now);
