@@ -115,7 +115,7 @@ class AddDefaultOversoldMailTemplate extends Migration
                                                                 SKU
                                                             </td>
                                                             <td class="alignright" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 0;" align="right" valign="top">
-                                                                {{ variables.product.sku }}
+                                                                <a href="/products?search={{ variables.product.sku }}">{{ variables.product.sku }}</a>
                                                             </td>
                                                         </tr>
 
@@ -137,11 +137,8 @@ class AddDefaultOversoldMailTemplate extends Migration
                                 <tr style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
                                     <td class="content-block" style="text-align: center; align-content: center; font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0 0 20px;" valign="top">
                                         <p>
-                                            If you have any questions, please feel free <br>
-                                            to email us at <a href="mailto:support@ship.town?subject=Order #{{ variables.order.order_number }} Enquiry">no-reply@products.management</a></br>
-                                            or call us on <b>+353 (1) 1234567</b><br>
+                                            <!-------- footer -------->
                                         </p>
-                                        <p>Thank you again for your business.</p>
                                     </td>
                                 </tr>
                             </table>
