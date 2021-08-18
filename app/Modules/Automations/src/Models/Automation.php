@@ -6,6 +6,10 @@ use App\BaseModel;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * @property integer priority
+ * @property boolean enabled
+ * @property string name
+ * @property string event_class
  * @property mixed conditions
  * @property mixed executions
  */
