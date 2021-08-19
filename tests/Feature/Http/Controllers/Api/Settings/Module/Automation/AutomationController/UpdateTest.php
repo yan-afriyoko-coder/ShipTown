@@ -32,7 +32,7 @@ class UpdateTest extends TestCase
             'name' => 'Test Automation',
             'event_class' => 'App\Events\Order\OrderCreatedEvent',
             'enabled' => true,
-            'prioriry' => 1,
+            'priority' => 1,
             'conditions' => [
                 [
                     'validation_class' => 'App\Modules\Automations\src\Validators\Order\StatusCodeEqualsValidator',
