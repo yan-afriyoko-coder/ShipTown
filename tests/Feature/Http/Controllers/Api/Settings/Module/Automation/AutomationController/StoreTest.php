@@ -24,7 +24,7 @@ class StoreTest extends TestCase
             'name' => 'Test Automation',
             'event_class' => 'App\Events\Order\OrderCreatedEvent',
             'enabled' => true,
-            'prioriry' => 1,
+            'priority' => 1,
             'conditions' => [
                 [
                     'validation_class' => 'App\Modules\Automations\src\Validators\Order\StatusCodeEqualsValidator',
@@ -44,6 +44,7 @@ class StoreTest extends TestCase
             ]
         ];
         $response = $this->post(route('api.settings.module.automations.store'), $data);
+        ray($response);
         $response->assertStatus(201);
         $response->assertJsonStructure([
             'data' => [
