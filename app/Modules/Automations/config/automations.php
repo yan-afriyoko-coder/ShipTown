@@ -14,6 +14,14 @@ return [
                     'class' => \App\Modules\Automations\src\Validators\Order\StatusCodeEqualsValidator::class,
                     'description' => 'Order Status Code equals',
                 ],
+                [
+                    'class' => \App\Modules\Automations\src\Validators\Order\CanFulfillFromLocationValidator::class,
+                    'description' => 'Can Fulfill from location',
+                ],
+                [
+                    'class' => \App\Modules\Automations\src\Validators\Order\CanNotFulfillFromLocationValidator::class,
+                    'description' => 'Can NOT Fulfill from location',
+                ],
             ],
             'executors' => [
                 [
@@ -33,6 +41,14 @@ return [
                 [
                     'class' => \App\Modules\Automations\src\Validators\Order\StatusCodeEqualsValidator::class,
                     'description' => 'Order Status Code equals',
+                ],
+                [
+                    'class' => \App\Modules\Automations\src\Validators\Order\CanFulfillFromLocationValidator::class,
+                    'description' => 'Can Fulfill from location',
+                ],
+                [
+                    'class' => \App\Modules\Automations\src\Validators\Order\CanNotFulfillFromLocationValidator::class,
+                    'description' => 'Can NOT Fulfill from location',
                 ],
             ],
             'executors' => [
