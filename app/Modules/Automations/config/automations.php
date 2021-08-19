@@ -28,6 +28,10 @@ return [
                     'class' => \App\Modules\Automations\src\Executors\Order\SetStatusCodeExecutor::class,
                     'description' => 'Set Order Status Code to',
                 ],
+                [
+                    'class' => \App\Modules\Automations\src\Executors\Order\LogMessageExecutor::class,
+                    'description' => 'Log order message',
+                ],
             ]
         ],
         [
