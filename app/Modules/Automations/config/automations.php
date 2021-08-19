@@ -22,6 +22,10 @@ return [
                     'class' => \App\Modules\Automations\src\Validators\Order\CanNotFulfillFromLocationValidator::class,
                     'description' => 'Can NOT Fulfill from location',
                 ],
+                [
+                    'class' => \App\Modules\Automations\src\Validators\Order\LineCountEqualsValidator::class,
+                    'description' => 'Line count equals',
+                ],
             ],
             'executors' => [
                 [
@@ -31,10 +35,6 @@ return [
                 [
                     'class' => \App\Modules\Automations\src\Executors\Order\LogMessageExecutor::class,
                     'description' => 'Log order message',
-                ],
-                [
-                    'class' => \App\Modules\Automations\src\Validators\Order\LineCountEqualsValidator::class,
-                    'description' => 'Line count equals',
                 ],
             ]
         ],
