@@ -6,7 +6,7 @@ use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
 use App\Modules\Automations\src\Models\Execution;
 use App\Modules\Automations\src\Validators\Order\ShippingMethodCodeEqualsValidator;
-use App\Modules\Automations\src\Validators\Order\StatusCodeEqualsValidator;
+use App\Modules\Automations\src\Validators\Order\CanFulfillFromLocationValidator;
 use Illuminate\Database\Seeder;
 
 class AutomationsSeeder extends Seeder
@@ -27,7 +27,7 @@ class AutomationsSeeder extends Seeder
 
         Condition::create([
             'automation_id' => $automation->getKey(),
-            'validation_class' => StatusCodeEqualsValidator::class,
+            'validation_class' => CanFulfillFromLocationValidator::class,
             'condition_value' => 'paid'
         ]);
 
