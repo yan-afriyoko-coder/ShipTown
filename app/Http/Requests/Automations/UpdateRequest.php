@@ -41,7 +41,7 @@ class UpdateRequest extends FormRequest
                 Rule::in($availableEvent),
             ],
             'enabled' => 'required|boolean',
-            'prioriry' => 'required|numeric',
+            'priority' => 'required|numeric',
 
             // Conditions
             'conditions.*.validation_class' => [

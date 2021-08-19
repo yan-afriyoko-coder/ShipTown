@@ -7,7 +7,9 @@ use App\Http\Requests\Automations\StoreRequest;
 use App\Http\Requests\Automations\UpdateRequest;
 use App\Http\Resources\AutomationResource;
 use App\Modules\Automations\src\Models\Automation;
+use App\Modules\Automations\src\Models\Condition;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AutomationController extends Controller
 {
@@ -44,11 +46,19 @@ class AutomationController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        $dataAutomation = $request->only(['name', 'event_class', 'enabled', 'prioriry']);
+        try {
+            DB::beginTransaction();
 
-        $automation = Automation::create($dataAutomation);
-        $automation->conditions()->createMany($request->conditions);
-        $automation->executions()->createMany($request->executions);
+            $dataAutomation = $request->only(['name', 'event_class', 'enabled', 'priority']);
+            $automation = Automation::create($dataAutomation);
+            $automation->conditions()->createMany($request->conditions);
+            $automation->executions()->createMany($request->executions);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            abort(500, "Something wrong");
+        }
 
         return new AutomationResource($automation);
     }
@@ -61,6 +71,8 @@ class AutomationController extends Controller
      */
     public function show(Automation $automation)
     {
+        $automation->load('conditions', 'executions');
+
         return new AutomationResource($automation);
     }
 
@@ -73,8 +85,24 @@ class AutomationController extends Controller
      */
     public function update(UpdateRequest $request, Automation $automation)
     {
-        $automation->fill($request->validated());
-        $automation->save();
+        try {
+            DB::beginTransaction();
+            $dataAutomation = $request->only(['name', 'event_class', 'enabled', 'priority']);
+            $automation->update($dataAutomation);
+
+            // Delete current data
+            $automation->conditions()->delete();
+            $automation->executions()->delete();
+
+            // Insert new
+            $automation->conditions()->createMany($request->conditions);
+            $automation->executions()->createMany($request->executions);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            abort(500, "Something wrong");
+        }
 
         return new AutomationResource($automation);
     }

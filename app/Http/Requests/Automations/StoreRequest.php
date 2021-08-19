@@ -41,7 +41,7 @@ class StoreRequest extends FormRequest
                 Rule::in($availableEvent),
             ],
             'enabled' => 'required|boolean',
-            'prioriry' => 'required|numeric',
+            'priority' => 'required|numeric',
 
             // Conditions
             'conditions.*.validation_class' => [
@@ -58,6 +58,21 @@ class StoreRequest extends FormRequest
                 Rule::in($availableExecution),
             ],
             'executions.*.execution_value' => 'required|string'
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'conditions.*.validation_class' => 'condition',
+            'conditions.*.condition_value' => 'condition value',
+            'executions.*.execution_class'  => 'action value',
+            'executions.*.execution_value'  => 'action value',
         ];
     }
 }

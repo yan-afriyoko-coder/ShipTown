@@ -121,6 +121,7 @@ Vue.component('module-configuration', require('./components/Settings/ModuleConfi
 Vue.component('order-status-table', require('./components/Settings/OrderStatusTable.vue').default);
 Vue.component('mail-template-table', require('./components/Settings/MailTemplateTable.vue').default);
 Vue.component('navigation-menu-table', require('./components/Settings/NavigationMenuTable.vue').default);
+Vue.component('automation-table', require('./components/Settings/AutomationTable.vue').default);
 Vue.component('api', require('./mixins/api').default);
 
 /**
