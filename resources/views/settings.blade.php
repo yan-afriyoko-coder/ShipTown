@@ -73,6 +73,16 @@
                     </div>
                 </a>
 
+                <a href="{{ route('settings.automations') }}" class="setting-list">
+                    <div class="setting-icon">
+                        <font-awesome-icon icon="magic" class="fas-sm"></font-awesome-icon>
+                    </div>
+                    <div class="setting-body">
+                        <div class="setting-title">Automation</div>
+                        <div class="setting-desc">Automations management feature</div>
+                    </div>
+                </a>
+
                 <a href="{{ route('settings.rmsapi') }}" class="setting-list">
                     <div class="setting-icon">
                         <font-awesome-icon icon="code" class="fa-sm"></font-awesome-icon>

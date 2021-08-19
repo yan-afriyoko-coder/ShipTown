@@ -4,7 +4,7 @@
             <div class="card-header">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span>
-                        Navigation Menu
+                        Automations
                     </span>
                     <button type="button" class="action-link btn btn-sm btn-light" @click="showCreateForm()">
                         Add New
@@ -13,25 +13,27 @@
             </div>
 
             <div class="card-body">
-                <table v-if="navigations.length > 0" class="table table-borderless table-responsive mb-0">
+                <table v-if="automations.length > 0" class="table table-borderless table-responsive mb-0">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Name</th>
-                            <th>Group</th>
+                            <th>Priority</th>
+                            <th>Enable</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(navigationMenu, i) in navigations" :key="i">
-                            <td>{{ navigationMenu.id }}</td>
-                            <td>{{ navigationMenu.name }}</td>
-                            <td>{{ navigationMenu.group }}</td>
+                        <tr v-for="(automation, i) in automations" :key="i">
+                            <td>{{ automation.name }}</td>
+                            <td>{{ automation.priority }}</td>
+                            <td align="center">
+                                <status-icon :status="automation.enabled" />
+                            </td>
                             <td>
-                                <a @click.prevent="showEditForm(navigationMenu)">
+                                <a @click.prevent="showEditForm(automation)">
                                     <font-awesome-icon icon="edit"></font-awesome-icon>
                                 </a>
-                                <a @click.prevent="confirmDelete(navigationMenu)">
+                                <a @click.prevent="confirmDelete(automation)">
                                     <font-awesome-icon icon="trash"></font-awesome-icon>
                                 </a>
                             </td>
@@ -40,20 +42,21 @@
                 </table>
 
                 <p v-else class="mb-0">
-                    No navigation menu found.
+                    No automations found.
                 </p>
             </div>
         </div>
         <!-- The modals -->
-        <create-modal id="createForm" @onCreated="addNavigationMenu"></create-modal>
-        <edit-modal :navigationMenu="selectedNavigationMenu" id="editForm" @onUpdated="updateNavigationMenu"></edit-modal>
+        <create-modal id="createForm" @onCreated="addAutomations" :events="events"></create-modal>
+        <edit-modal id="editForm" :selectedAutomation="selectedAutomation" @onUpdated="updateAutomations" :events="events"></edit-modal>
     </div>
 </template>
 
 <script>
 
-import CreateModal from './NavigationMenu/CreateModal';
-import EditModal from './NavigationMenu/EditModal';
+import CreateModal from './Automations/CreateModal';
+import EditModal from './Automations/EditModal';
+import StatusIcon from './Automations/StatusIcon';
 import api from "../../mixins/api.vue";
 
 export default {
@@ -61,44 +64,51 @@ export default {
     components: {
         'create-modal': CreateModal,
         'edit-modal': EditModal,
+        'status-icon': StatusIcon
     },
 
     mounted() {
-        this.apiGetNavigationMenu()
+        this.apiGetAutomations()
             .then(({ data }) => {
-                this.navigations = data.data;
+                this.automations = data.data;
+            })
+
+        this.apiGetAutomationConfig()
+            .then(({ data }) => {
+                this.events = data.when;
             })
     },
 
     data: () => ({
-        navigations: [],
-        selectedNavigationMenu: {}
+        automations: [],
+        selectedAutomation: {},
+        events: [],
     }),
 
     methods: {
         showCreateForm(){
             $('#createForm').modal('show');
         },
-        showEditForm(navigationMenu) {
-            this.selectedNavigationMenu = navigationMenu;
+        showEditForm(automation) {
+            this.selectedAutomation = automation;
             $('#editForm').modal('show');
         },
-        addNavigationMenu(orderStatus){
-            this.navigations.push(orderStatus)
+        addAutomations(orderStatus){
+            this.automations.push(orderStatus)
         },
-        updateNavigationMenu(newValue) {
-            const indexNavigationMenu = this.navigations.findIndex(navigationMenu => navigationMenu.id == newValue.id)
-            this.$set(this.navigations, indexNavigationMenu, newValue)
+        updateAutomations(newValue) {
+            const indexAutomations = this.automations.findIndex(automation => automation.id == newValue.id)
+            this.$set(this.automations, indexAutomations, newValue)
         },
-        confirmDelete(navigationMenu) {
-            const indexNavigationMenu = this.navigations.findIndex(menu => navigationMenu.id == menu.id)
+        confirmDelete(automation) {
+            const indexAutomations = this.automations.findIndex(automation => automation.id == automation.id)
             this.$snotify.confirm('After delete data cannot restored', 'Are you sure?', {
                 position: 'centerCenter',
                 buttons: [
                     {
                         text: 'Yes',
                         action: (toast) => {
-                            this.delete(navigationMenu.id, indexNavigationMenu)
+                            this.delete(automation.id, indexAutomations)
                             this.$snotify.remove(toast.id);
                         }
                     },
@@ -107,10 +117,10 @@ export default {
             });
         },
         delete(id, index) {
-            this.apiDeleteNavigationMenu(id)
+            this.apiDeleteAutomations(id)
                 .then(() => {
-                    Vue.delete(this.navigations, index);
-                    this.$snotify.success('Navigation menu deleted.');
+                    Vue.delete(this.automations, index);
+                    this.$snotify.success('Automation deleted.');
                 });
         }
     },

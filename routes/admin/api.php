@@ -50,5 +50,9 @@ Route::group(['prefix' => 'settings', 'namespace' => 'Api\Settings', 'as' => 'ap
         Route::group(['prefix' => 'rms_api', 'namespace' => 'Rmsapi', 'as' => 'rmsapi.'], function () {
             Route::apiResource('connections', 'RmsapiConnectionController')->only(['index', 'store', 'destroy']);
         });
+
+        // Automations
+        Route::get('automations/config', 'Automation\AutomationController@getConfig')->name('automations.config');
+        Route::apiResource('automations', 'Automation\AutomationController')->only(['index', 'store', 'show', 'update', 'destroy']);
     });
 });
