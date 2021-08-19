@@ -3,10 +3,8 @@
 namespace App\Modules\OversoldProductNotification\src\Listeners;
 
 use App\Events\Product\ProductTagAttachedEvent;
-use App\Mail\OversoldProductMail;
 use App\Models\MailTemplate;
 use App\Modules\OversoldProductNotification\src\Jobs\SendOversoldProductMailJob;
-use Mail;
 
 class SendOversoldProductNotificationListener
 {
@@ -24,9 +22,13 @@ class SendOversoldProductNotificationListener
         $mailTemplate = MailTemplate::select('to')
             ->where('mailable', 'App\Mail\OversoldProductMail')
             ->first();
-
-        $to = $mailTemplate->to;
-
-        SendOversoldProductMailJob::dispatch($data, $to);
+        if ($mailTemplate->to) {
+            $listMail = explode(", ", $mailTemplate->to);
+            foreach ($listMail as $mail) {
+                if ($mail) {
+                    SendOversoldProductMailJob::dispatch($data, $mail);
+                }
+            }
+        }
     }
 }
