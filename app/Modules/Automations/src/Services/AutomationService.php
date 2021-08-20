@@ -50,7 +50,7 @@ class AutomationService
 
     private static function isConditionValid(Condition $condition, $event): bool
     {
-        $validator = new $condition->validation_class($event);
+        $validator = new $condition->condition_class($event);
 
         return $validator->isValid($condition->condition_value);
     }

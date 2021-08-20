@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Automations\src\Validators\Order;
+namespace App\Modules\Automations\src\Conditions\Order;
 
 use App\Events\Order\OrderCreatedEvent;
 use Log;
@@ -8,7 +8,7 @@ use Log;
 /**
  *
  */
-class ShippingMethodCodeEqualsValidator
+class LineCountEqualsCondition
 {
     private OrderCreatedEvent $event;
 
@@ -23,13 +23,13 @@ class ShippingMethodCodeEqualsValidator
      */
     public function isValid($condition_value): bool
     {
-        $result = $this->event->order->shipping_method_code === $condition_value;
+        $result = $this->event->order->order_products_count === $condition_value;
 
-        Log::debug('Validating condition', [
-            'class' => self::class,
+        Log::debug('Line Count Equals', [
             'order_number' => $this->event->order->order_number,
-            'expected_shipping_method_code' => $condition_value,
-            'actual_shipping_method_code' => $this->event->order->shipping_method_code,
+            'expected' => $condition_value,
+            'actual' => $this->event->order->order_products_count,
+            'class' => self::class,
         ]);
 
         return $result;

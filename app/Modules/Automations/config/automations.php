@@ -5,7 +5,7 @@ return [
         [
             'class' => \App\Events\Order\OrderCreatedEvent::class,
             'description' => 'Order is created',
-            'validators' => [
+            'conditions' => [
                 [
                     'class' => \App\Modules\Automations\src\Validators\Order\ShippingMethodCodeEqualsValidator::class,
                     'description' => 'Order Shipping Method Code equals',
@@ -41,7 +41,7 @@ return [
         [
             'class' => \App\Events\Order\OrderUpdatedEvent::class,
             'description' => 'Order is updated',
-            'validators' => [
+            'conditions' => [
                 [
                     'class' => \App\Modules\Automations\src\Validators\Order\ShippingMethodCodeEqualsValidator::class,
                     'description' => 'Order Shipping Method Code equals',
