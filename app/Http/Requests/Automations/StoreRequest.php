@@ -18,7 +18,7 @@ class StoreRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Get the condition rules that apply to the request.
      *
      * @return array
      */
@@ -27,7 +27,7 @@ class StoreRequest extends FormRequest
         $config = collect(config('automations.when'));
         $availableEvent = $config->pluck('class');
         $availableValidation = $config->where('class', $this->event_class)
-                            ->pluck('validators')
+                            ->pluck('conditions')
                             ->collapse()->pluck('class')
                             ->unique();
         $availableActions = $config->where('class', $this->event_class)
@@ -44,7 +44,7 @@ class StoreRequest extends FormRequest
             'priority' => 'required|numeric',
 
             // Conditions
-            'conditions.*.validation_class' => [
+            'conditions.*.condition_class' => [
                 'required',
                 'distinct',
                 Rule::in($availableValidation),
@@ -69,7 +69,7 @@ class StoreRequest extends FormRequest
     public function attributes()
     {
         return [
-            'conditions.*.validation_class' => 'condition',
+            'conditions.*.condition_class' => 'condition',
             'conditions.*.condition_value' => 'condition value',
             'actions.*.action_class'  => 'action value',
             'actions.*.action_value'  => 'action value',

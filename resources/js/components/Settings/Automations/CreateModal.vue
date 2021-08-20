@@ -87,14 +87,14 @@
                                         <div class="block-title" v-if="!index">If</div>
                                     </div>
                                     <div class="col-md-5">
-                                        <ValidationProvider :vid="`conditions.${index}.validation_class`" :name="`conditions.${index}.validation_class`" v-slot="{ errors }">
-                                            <select v-model="condition.validation_class" :class="{
+                                        <ValidationProvider :vid="`conditions.${index}.condition_class`" :name="`conditions.${index}.condition_class`" v-slot="{ errors }">
+                                            <select v-model="condition.condition_class" :class="{
                                                     'form-control': true,
                                                     'is-invalid': errors.length > 0,
                                                 }"
                                             >
                                                 <template v-if="selectedEvent">
-                                                    <option v-for="validation, indexOption in selectedEvent.validators" :key="indexOption" :value="validation.class">{{ validation.description }}</option>
+                                                    <option v-for="condition, indexOption in selectedEvent.conditions" :key="indexOption" :value="condition.class">{{ condition.description }}</option>
                                                 </template>
                                             </select>
                                             <div class="invalid-feedback">
@@ -230,7 +230,7 @@ export default {
         addCondition(){
             this.automation.conditions.push({
                 id: Date.now(),
-                validation_class: '',
+                condition_class: '',
                 condition_value: ''
             });
         },

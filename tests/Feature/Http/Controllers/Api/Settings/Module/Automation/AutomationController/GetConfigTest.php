@@ -28,7 +28,7 @@ class GetConfigTest extends TestCase
                 '*' => [
                     'class',
                     'description',
-                    'validators' => [
+                    'conditions' => [
                         '*' => [
                             'class',
                             'description'
