@@ -4,10 +4,10 @@ namespace Tests\Feature\Modules\Automations;
 
 use App\Events\Order\OrderCreatedEvent;
 use App\Models\Order;
-use App\Modules\Automations\src\Executors\Order\SetStatusCodeExecutor;
+use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
+use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
-use App\Modules\Automations\src\Models\Execution;
 use App\Modules\Automations\src\Validators\Order\CanFulfillFromLocationValidator;
 use App\Modules\AutoStatusPackingWeb\src\AutoPackingWebServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -37,10 +37,10 @@ class BasicAutomationTest extends TestCase
             'condition_value' => 'paid'
         ]);
 
-        Execution::create([
+        Action::create([
             'automation_id' => $automation->getKey(),
-            'execution_class' => SetStatusCodeExecutor::class,
-            'execution_value' => 'new_status'
+            'action_class' => SetStatusCodeAction::class,
+            'action_value' => 'new_status'
         ]);
 
         /** @var Order $order */

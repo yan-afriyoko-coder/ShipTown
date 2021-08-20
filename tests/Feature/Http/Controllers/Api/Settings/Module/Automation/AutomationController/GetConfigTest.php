@@ -33,6 +33,12 @@ class GetConfigTest extends TestCase
                             'class',
                             'description'
                         ]
+                    ],
+                    'actions' => [
+                        '*' => [
+                            'class',
+                            'description'
+                        ]
                     ]
                 ]
             ]

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string name
  * @property string event_class
  * @property mixed conditions
- * @property mixed executions
+ * @property mixed actions
  */
 class Automation extends BaseModel
 {
@@ -49,8 +49,8 @@ class Automation extends BaseModel
     /**
      * @return HasMany
      */
-    public function executions(): HasMany
+    public function actions(): HasMany
     {
-        return $this->hasMany(Execution::class);
+        return $this->hasMany(Action::class);
     }
 }

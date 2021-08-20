@@ -31,7 +31,7 @@ class UpdateRequest extends FormRequest
             ->collapse()->pluck('class')
             ->unique();
         $availableExecution = $config->where('class', $this->event_class)
-            ->pluck('executors')
+            ->pluck('actions')
             ->collapse()->pluck('class')
             ->unique();
         return [
@@ -51,11 +51,11 @@ class UpdateRequest extends FormRequest
             'conditions.*.condition_value' => 'required|string',
 
             // Executions
-            'executions.*.execution_class' => [
+            'actions.*.action_class' => [
                 'required',
                 Rule::in($availableExecution),
             ],
-            'executions.*.execution_value' => 'required|string'
+            'actions.*.action_value' => 'required|string'
         ];
     }
 }

@@ -51,12 +51,14 @@ class AutomationController extends Controller
 
             $dataAutomation = $request->only(['name', 'event_class', 'enabled', 'priority']);
             $automation = Automation::create($dataAutomation);
+            ray($request);
             $automation->conditions()->createMany($request->conditions);
-            $automation->executions()->createMany($request->executions);
+            $automation->actions()->createMany($request->actions);
 
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
+            ray($e);
             abort(500, "Something wrong");
         }
 
@@ -71,7 +73,7 @@ class AutomationController extends Controller
      */
     public function show(Automation $automation)
     {
-        $automation->load('conditions', 'executions');
+        $automation->load('conditions', 'actions');
 
         return new AutomationResource($automation);
     }
@@ -92,11 +94,11 @@ class AutomationController extends Controller
 
             // Delete current data
             $automation->conditions()->delete();
-            $automation->executions()->delete();
+            $automation->actions()->delete();
 
             // Insert new
             $automation->conditions()->createMany($request->conditions);
-            $automation->executions()->createMany($request->executions);
+            $automation->actions()->createMany($request->actions);
 
             DB::commit();
         } catch (\Exception $e) {

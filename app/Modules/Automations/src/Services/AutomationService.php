@@ -4,7 +4,7 @@ namespace App\Modules\Automations\src\Services;
 
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
-use App\Modules\Automations\src\Models\Execution;
+use App\Modules\Automations\src\Models\Action;
 use Log;
 
 class AutomationService
@@ -39,12 +39,12 @@ class AutomationService
             return;
         }
 
-        // run all executions
-        $automation->executions()
+        // run all actions
+        $automation->actions()
             ->orderBy('priority')
             ->get()
-            ->each(function (Execution $execution) use ($event) {
-                AutomationService::executeAutomation($execution, $event);
+            ->each(function (Action $action) use ($event) {
+                AutomationService::runAction($action, $event);
             });
     }
 
@@ -55,10 +55,10 @@ class AutomationService
         return $validator->isValid($condition->condition_value);
     }
 
-    private static function executeAutomation(Execution $execution, $event): void
+    private static function runAction(Action $action, $event): void
     {
-        $executor = new $execution->execution_class($event);
+        $runAction = new $action->action_class($event);
 
-        $executor->handle($execution->execution_value);
+        $runAction->handle($action->action_value);
     }
 }
