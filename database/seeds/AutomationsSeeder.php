@@ -1,10 +1,10 @@
 <?php
 
 use App\Events\Order\OrderCreatedEvent;
-use App\Modules\Automations\src\Executors\Order\SetStatusCodeExecutor;
+use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
+use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
-use App\Modules\Automations\src\Models\Execution;
 use App\Modules\Automations\src\Validators\Order\ShippingMethodCodeEqualsValidator;
 use App\Modules\Automations\src\Validators\Order\CanFulfillFromLocationValidator;
 use Illuminate\Database\Seeder;
@@ -37,11 +37,11 @@ class AutomationsSeeder extends Seeder
             'condition_value' => 'store_pickup'
         ]);
 
-        Execution::create([
+        Action::create([
             'automation_id' => $automation->getKey(),
             'priority' => 1,
-            'execution_class' => SetStatusCodeExecutor::class,
-            'execution_value' => 'store_pickup',
+            'action_class' => SetStatusCodeAction::class,
+            'action_value' => 'store_pickup',
         ]);
 
         $automation->update(['enabled' => true]);
