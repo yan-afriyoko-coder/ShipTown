@@ -50,7 +50,7 @@ class SyncProductStockJob implements ShouldQueue
         }
 
         if ($this->syncProductStock($this->product)->ok()) {
-            $this->product->log('Stock synced with Magento API');
+//            $this->product->log('Stock synced with Magento API');
             $this->product->detachTag('CHECK FAILED');
         }
     }

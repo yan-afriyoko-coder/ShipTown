@@ -27,7 +27,9 @@ class ResyncCheckFailedTaggedJob implements ShouldQueue
     {
         Product::withAllTags(['CHECK FAILED'])
             ->each(function (Product $product) {
-                $product->attachTag('Not Synced');
+                activity()->withoutLogs(function () use ($product) {
+                    $product->attachTag('Not Synced');
+                });
             });
     }
 }
