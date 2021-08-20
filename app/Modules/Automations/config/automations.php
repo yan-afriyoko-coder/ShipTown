@@ -27,13 +27,13 @@ return [
                     'description' => 'Line count equals',
                 ],
             ],
-            'executors' => [
+            'actions' => [
                 [
-                    'class' => \App\Modules\Automations\src\Executors\Order\SetStatusCodeExecutor::class,
+                    'class' => \App\Modules\Automations\src\Actions\Order\SetStatusCodeAction::class,
                     'description' => 'Set Order Status Code to',
                 ],
                 [
-                    'class' => \App\Modules\Automations\src\Executors\Order\LogMessageExecutor::class,
+                    'class' => \App\Modules\Automations\src\Actions\Order\LogMessageAction::class,
                     'description' => 'Log order message',
                 ],
             ]
@@ -63,13 +63,13 @@ return [
                     'description' => 'Line count equals',
                 ],
             ],
-            'executors' => [
+            'actions' => [
                 [
-                    'class' => \App\Modules\Automations\src\Executors\Order\SetStatusCodeExecutor::class,
+                    'class' => \App\Modules\Automations\src\Actions\Order\SetStatusCodeAction::class,
                     'description' => 'Set Order Status Code to',
                 ],
                 [
-                    'class' => \App\Modules\Automations\src\Executors\Order\LogMessageExecutor::class,
+                    'class' => \App\Modules\Automations\src\Actions\Order\LogMessageAction::class,
                     'description' => 'Log order message',
                 ],
             ]

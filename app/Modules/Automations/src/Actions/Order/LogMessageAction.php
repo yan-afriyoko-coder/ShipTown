@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Modules\Automations\src\Executors\Order;
+namespace App\Modules\Automations\src\Actions\Order;
 
 use App\Events\Order\OrderCreatedEvent;
 use Log;
 
-class LogMessageExecutor
+class LogMessageAction
 {
     private OrderCreatedEvent $event;
 
