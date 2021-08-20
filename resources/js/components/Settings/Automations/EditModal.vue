@@ -140,7 +140,7 @@
                                                 }"
                                             >
                                                 <template v-if="selectedEvent">
-                                                    <option v-for="executor, indexOption in selectedEvent.executors" :key="indexOption" :value="executor.class">{{ executor.description }}</option>
+                                                    <option v-for="action, indexOption in selectedEvent.actions" :key="indexOption" :value="action.class">{{ action.description }}</option>
                                                 </template>
                                             </select>
                                             <div class="invalid-feedback">
