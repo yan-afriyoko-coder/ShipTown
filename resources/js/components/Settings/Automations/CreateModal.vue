@@ -128,13 +128,13 @@
                             </div>
 
                             <div class="block">
-                                <div class="row" v-for="execution, index in automation.executions" :key="execution.id">
+                                <div class="row" v-for="action, index in automation.actions" :key="action.id">
                                     <div class="col-md-2">
                                         <div class="block-title" v-if="!index">Then</div>
                                     </div>
                                     <div class="col-md-5">
-                                        <ValidationProvider :vid="`executions.${index}.execution_class`" :name="`executions.${index}.execution_class`" v-slot="{ errors }">
-                                            <select v-model="execution.execution_class" :class="{
+                                        <ValidationProvider :vid="`actions.${index}.action_class`" :name="`actions.${index}.action_class`" v-slot="{ errors }">
+                                            <select v-model="action.action_class" :class="{
                                                     'form-control': true,
                                                     'is-invalid': errors.length > 0,
                                                 }"
@@ -149,9 +149,9 @@
                                         </ValidationProvider>
                                     </div>
                                     <div class="col-md-5">
-                                        <ValidationProvider :vid="`executions.${index}.execution_value`" :name="`executions.${index}.execution_value`" v-slot="{ errors }">
+                                        <ValidationProvider :vid="`actions.${index}.action_value`" :name="`actions.${index}.action_value`" v-slot="{ errors }">
                                             <div class="input-group mb-1">
-                                                <input v-model="execution.execution_value" :class="{
+                                                <input v-model="action.action_value" :class="{
                                                     'form-control': true,
                                                     'is-invalid': errors.length > 0,
                                                 }">
@@ -209,7 +209,7 @@ export default {
                 enabled: true,
                 priority: 1,
                 conditions: [],
-                executions: []
+                actions: []
             },
         }
     },
@@ -236,10 +236,10 @@ export default {
         },
 
         addAction(){
-            this.automation.executions.push({
+            this.automation.actions.push({
                 id: Date.now(),
-                execution_class: '',
-                execution_value: ''
+                action_class: '',
+                action_value: ''
             });
         },
 
@@ -251,8 +251,8 @@ export default {
         },
 
         removeAction(index){
-            this.automation.executions.splice(index, 1);
-            if(!this.automation.executions.length){
+            this.automation.actions.splice(index, 1);
+            if(!this.automation.actions.length){
                 this.addAction();
             }
         },
@@ -283,7 +283,7 @@ export default {
                 enabled: true,
                 priority: 1,
                 conditions: [],
-                executions: []
+                actions: []
             }
         },
 

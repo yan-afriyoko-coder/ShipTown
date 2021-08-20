@@ -35,7 +35,9 @@ class ShowTest extends TestCase
             'data' => [
                 'id',
                 'name',
-                'enabled'
+                'enabled',
+                'actions',
+                'conditions'
             ]
         ]);
     }

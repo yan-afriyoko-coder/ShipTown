@@ -35,16 +35,15 @@ class StoreTest extends TestCase
                     'condition_value' => 'paid'
                 ]
             ],
-            'executions' => [
+            'actions' => [
                 [
                     'priority' => 1,
-                    'execution_class' => 'App\Modules\Automations\src\Executors\Order\SetStatusCodeExecutor',
-                    'execution_value' => 'store_pickup',
+                    'action_class' => 'App\Modules\Automations\src\Actions\Order\SetStatusCodeAction',
+                    'action_value' => 'store_pickup',
                 ]
             ]
         ];
         $response = $this->post(route('api.settings.module.automations.store'), $data);
-        ray($response);
         $response->assertStatus(201);
         $response->assertJsonStructure([
             'data' => [

@@ -30,8 +30,8 @@ class StoreRequest extends FormRequest
                             ->pluck('validators')
                             ->collapse()->pluck('class')
                             ->unique();
-        $availableExecution = $config->where('class', $this->event_class)
-                            ->pluck('executors')
+        $availableActions = $config->where('class', $this->event_class)
+                            ->pluck('actions')
                             ->collapse()->pluck('class')
                             ->unique();
         return [
@@ -51,13 +51,13 @@ class StoreRequest extends FormRequest
             ],
             'conditions.*.condition_value' => 'required|string',
 
-            // Executions
-            'executions.*.execution_class' => [
+            // Actions
+            'actions.*.action_class' => [
                 'required',
                 'distinct',
-                Rule::in($availableExecution),
+                Rule::in($availableActions),
             ],
-            'executions.*.execution_value' => 'required|string'
+            'actions.*.action_value' => 'required|string'
         ];
     }
 
@@ -71,8 +71,8 @@ class StoreRequest extends FormRequest
         return [
             'conditions.*.validation_class' => 'condition',
             'conditions.*.condition_value' => 'condition value',
-            'executions.*.execution_class'  => 'action value',
-            'executions.*.execution_value'  => 'action value',
+            'actions.*.action_class'  => 'action value',
+            'actions.*.action_value'  => 'action value',
         ];
     }
 }
