@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Automations\src\Validators\Order;
+namespace App\Modules\Automations\src\Conditions\Order;
 
 use App\Events\Order\OrderCreatedEvent;
 use Log;
@@ -8,7 +8,7 @@ use Log;
 /**
  *
  */
-class StatusCodeEqualsValidator
+class ShippingMethodCodeEqualsCondition
 {
     private OrderCreatedEvent $event;
 
@@ -23,13 +23,13 @@ class StatusCodeEqualsValidator
      */
     public function isValid($condition_value): bool
     {
-        $result = $this->event->order->status_code === $condition_value;
+        $result = $this->event->order->shipping_method_code === $condition_value;
 
         Log::debug('Validating condition', [
             'class' => self::class,
             'order_number' => $this->event->order->order_number,
-            'expected_status' => $condition_value,
-            'actual_status' => $this->event->order->status_code,
+            'expected_shipping_method_code' => $condition_value,
+            'actual_shipping_method_code' => $this->event->order->shipping_method_code,
         ]);
 
         return $result;

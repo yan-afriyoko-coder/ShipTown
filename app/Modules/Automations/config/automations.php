@@ -5,25 +5,25 @@ return [
         [
             'class' => \App\Events\Order\OrderCreatedEvent::class,
             'description' => 'Order is created',
-            'validators' => [
+            'conditions' => [
                 [
-                    'class' => \App\Modules\Automations\src\Validators\Order\ShippingMethodCodeEqualsValidator::class,
+                    'class' => \App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition::class,
                     'description' => 'Order Shipping Method Code equals',
                 ],
                 [
-                    'class' => \App\Modules\Automations\src\Validators\Order\StatusCodeEqualsValidator::class,
+                    'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition::class,
                     'description' => 'Order Status Code equals',
                 ],
                 [
-                    'class' => \App\Modules\Automations\src\Validators\Order\CanFulfillFromLocationValidator::class,
+                    'class' => \App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition::class,
                     'description' => 'Can Fulfill from location',
                 ],
                 [
-                    'class' => \App\Modules\Automations\src\Validators\Order\CanNotFulfillFromLocationValidator::class,
+                    'class' => \App\Modules\Automations\src\Conditions\Order\CanNotFulfillFromLocationCondition::class,
                     'description' => 'Can NOT Fulfill from location',
                 ],
                 [
-                    'class' => \App\Modules\Automations\src\Validators\Order\LineCountEqualsValidator::class,
+                    'class' => \App\Modules\Automations\src\Conditions\Order\LineCountEqualsCondition::class,
                     'description' => 'Line count equals',
                 ],
             ],
@@ -41,25 +41,25 @@ return [
         [
             'class' => \App\Events\Order\OrderUpdatedEvent::class,
             'description' => 'Order is updated',
-            'validators' => [
+            'conditions' => [
                 [
-                    'class' => \App\Modules\Automations\src\Validators\Order\ShippingMethodCodeEqualsValidator::class,
+                    'class' => \App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition::class,
                     'description' => 'Order Shipping Method Code equals',
                 ],
                 [
-                    'class' => \App\Modules\Automations\src\Validators\Order\StatusCodeEqualsValidator::class,
+                    'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition::class,
                     'description' => 'Order Status Code equals',
                 ],
                 [
-                    'class' => \App\Modules\Automations\src\Validators\Order\CanFulfillFromLocationValidator::class,
+                    'class' => \App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition::class,
                     'description' => 'Can Fulfill from location',
                 ],
                 [
-                    'class' => \App\Modules\Automations\src\Validators\Order\CanNotFulfillFromLocationValidator::class,
+                    'class' => \App\Modules\Automations\src\Conditions\Order\CanNotFulfillFromLocationCondition::class,
                     'description' => 'Can NOT Fulfill from location',
                 ],
                 [
-                    'class' => \App\Modules\Automations\src\Validators\Order\LineCountEqualsValidator::class,
+                    'class' => \App\Modules\Automations\src\Conditions\Order\LineCountEqualsCondition::class,
                     'description' => 'Line count equals',
                 ],
             ],

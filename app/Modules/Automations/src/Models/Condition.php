@@ -15,7 +15,7 @@ class Condition extends BaseModel
 
     protected $fillable = [
         'automation_id',
-        'validation_class',
+        'condition_class',
         'condition_value',
     ];
 }

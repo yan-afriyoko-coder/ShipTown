@@ -8,7 +8,7 @@ use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
-use App\Modules\Automations\src\Validators\Order\CanFulfillFromLocationValidator;
+use App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition;
 use App\Modules\AutoStatusPackingWeb\src\AutoPackingWebServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -33,7 +33,7 @@ class BasicAutomationTest extends TestCase
 
         Condition::create([
             'automation_id' => $automation->getKey(),
-            'validation_class' => CanFulfillFromLocationValidator::class,
+            'condition_class' => CanFulfillFromLocationCondition::class,
             'condition_value' => 'paid'
         ]);
 
