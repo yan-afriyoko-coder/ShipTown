@@ -18,10 +18,10 @@ class RenameColumnValidationToConditionTableModulesAutomationsConditions extends
             $table->renameColumn('validation_class', 'condition_class');
         });
 
-        Condition::query()->get()->each(function (Condition $action) {
-            $action->condition_class = Str::replaceFirst('Validators', 'Conditions', $action->condition_class);
-            $action->condition_class = Str::replaceFirst('Validator', 'Condition', $action->condition_class);
-            $action->save();
+        Condition::query()->get()->each(function (Condition $condition) {
+            $condition->condition_class = Str::replaceFirst('Validators', 'Conditions', $condition->condition_class);
+            $condition->condition_class = Str::replaceFirst('Validator', 'Condition', $condition->condition_class);
+            $condition->save();
         });
     }
 

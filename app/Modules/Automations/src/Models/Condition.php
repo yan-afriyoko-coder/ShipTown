@@ -6,7 +6,7 @@ use App\BaseModel;
 
 /**
  * @property integer automation_id
- * @property string validation_class
+ * @property string condition_class
  * @property string condition_value
  */
 class Condition extends BaseModel
