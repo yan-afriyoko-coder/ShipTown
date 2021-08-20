@@ -18,6 +18,8 @@ class AttachAwaitingPublishTagListener
      */
     public function handle(OrderCreatedEvent $event)
     {
-        $event->getOrder()->attachTag(config('webhooks.tags.awaiting.name'));
+        activity()->withoutLogs(function () use ($event) {
+            $event->getOrder()->attachTag(config('webhooks.tags.awaiting.name'));
+        });
     }
 }

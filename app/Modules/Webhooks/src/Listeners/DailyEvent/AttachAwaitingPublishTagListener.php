@@ -20,10 +20,11 @@ class AttachAwaitingPublishTagListener
      */
     public function handle(DailyEvent $event)
     {
-        $orders = Order::where('updated_at', '>', now()->subDay())->get();
-
-        $orders->each(function (Order $order) {
-            $order->attachTag(config('webhooks.tags.awaiting.name'));
+        activity()->withoutLogs(function () use ($event) {
+            $orders = Order::where('updated_at', '>', now()->subDay())->get();
+            $orders->each(function (Order $order) {
+                $order->attachTag(config('webhooks.tags.awaiting.name'));
+            });
         });
     }
 }

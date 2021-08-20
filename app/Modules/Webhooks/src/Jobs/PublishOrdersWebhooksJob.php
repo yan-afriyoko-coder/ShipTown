@@ -31,24 +31,26 @@ class PublishOrdersWebhooksJob implements ShouldQueue
      */
     public function handle()
     {
-        $awaiting_publish_tag = config('webhooks.tags.awaiting.name');
+        activity()->withoutLogs(function () {
+            $awaiting_publish_tag = config('webhooks.tags.awaiting.name');
 
-        $orders = Order::withAllTags($awaiting_publish_tag)
-            ->with('orderProducts')
-            ->get();
+            $orders = Order::withAllTags($awaiting_publish_tag)
+                ->with('orderProducts')
+                ->get();
 
-        $this->queueData(['orders_count' => $orders->count()]);
+            $this->queueData(['orders_count' => $orders->count()]);
 
-        $orders->each(function (Order $order) {
-            $order->attachTag(config('webhooks.tags.publishing.name'));
-            $order->detachTag(config('webhooks.tags.awaiting.name'));
+            $orders->each(function (Order $order) {
+                $order->attachTag(config('webhooks.tags.publishing.name'));
+                $order->detachTag(config('webhooks.tags.awaiting.name'));
 
-            $orderResource = new OrderResource($order);
-            if (!AwsSns::publish('orders_events', $orderResource->toJson())) {
-                $order->attachTag(config('webhooks.tags.awaiting.name'));
-            }
+                $orderResource = new OrderResource($order);
+                if (!AwsSns::publish('orders_events', $orderResource->toJson())) {
+                    $order->attachTag(config('webhooks.tags.awaiting.name'));
+                }
 
-            $order->detachTag(config('webhooks.tags.publishing.name'));
+                $order->detachTag(config('webhooks.tags.publishing.name'));
+            });
         });
     }
 }

@@ -14,24 +14,6 @@ class CreateModulesAutomationsActionsTable extends Migration
      */
     public function up()
     {
-        if (Schema::hasTable('modules_automations_executions')) {
-            Schema::rename('modules_automations_executions', 'modules_automations_actions');
-
-            Schema::table('modules_automations_actions', function (Blueprint $table) {
-                $table->renameColumn('execution_class', 'action_class');
-                $table->renameColumn('execution_value', 'action_value');
-
-            });
-
-            Action::query()->get()->each(function (Action $action) {
-                $action->action_class = Str::replaceFirst('Executors', 'Actions', $action->action_class);
-                $action->action_class = Str::replaceFirst('Executor', 'Action', $action->action_class);
-                $action->save();
-            });
-
-            return;
-        }
-
         if (Schema::hasTable('modules_automations_actions')) {
             return;
         }
