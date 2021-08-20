@@ -33,6 +33,26 @@
                     </div>
                 </a>
 
+                <a href="{{ route('settings.automations') }}" class="setting-list">
+                    <div class="setting-icon">
+                        <font-awesome-icon icon="magic" class="fas-sm"></font-awesome-icon>
+                    </div>
+                    <div class="setting-body">
+                        <div class="setting-title">Automations</div>
+                        <div class="setting-desc">Automate order workflows</div>
+                    </div>
+                </a>
+
+                <a href="{{ route('settings.mail_templates') }}" class="setting-list">
+                    <div class="setting-icon">
+                        <font-awesome-icon icon="envelope-open-text" class="fas-sm"></font-awesome-icon>
+                    </div>
+                    <div class="setting-body">
+                        <div class="setting-title">Notifications</div>
+                        <div class="setting-desc">Manage Email notification templates</div>
+                    </div>
+                </a>
+
                 <a href="{{ route('settings.order_statuses') }}" class="setting-list">
                     <div class="setting-icon">
                         <font-awesome-icon icon="box-open" class="fa-sm"></font-awesome-icon>
@@ -43,23 +63,23 @@
                     </div>
                 </a>
 
-                <a href="{{ route('settings.mail_templates') }}" class="setting-list">
-                    <div class="setting-icon">
-                        <font-awesome-icon icon="envelope-open-text" class="fas-sm"></font-awesome-icon>
-                    </div>
-                    <div class="setting-body">
-                        <div class="setting-title">Mail Templates</div>
-                        <div class="setting-desc">View and update templates</div>
-                    </div>
-                </a>
-
                 <a href="{{ route('settings.navigation_menu') }}" class="setting-list">
                     <div class="setting-icon">
                         <font-awesome-icon icon="list-ul" class="fas-sm"></font-awesome-icon>
                     </div>
                     <div class="setting-body">
-                        <div class="setting-title">Navigation Menu</div>
-                        <div class="setting-desc">Manage navigation menu</div>
+                        <div class="setting-title">Navigation</div>
+                        <div class="setting-desc">Manage navigation menu items</div>
+                    </div>
+                </a>
+
+                <a href="{{ route('settings.modules') }}" class="setting-list">
+                    <div class="setting-icon">
+                        <font-awesome-icon icon="puzzle-piece" class="fa-sm"></font-awesome-icon>
+                    </div>
+                    <div class="setting-body">
+                        <div class="setting-title">Modules</div>
+                        <div class="setting-desc">Manage Modules</div>
                     </div>
                 </a>
 
@@ -69,17 +89,7 @@
                     </div>
                     <div class="setting-body">
                         <div class="setting-title">PrintNode</div>
-                        <div class="setting-desc">View and update PrintNode integration  settings</div>
-                    </div>
-                </a>
-
-                <a href="{{ route('settings.automations') }}" class="setting-list">
-                    <div class="setting-icon">
-                        <font-awesome-icon icon="magic" class="fas-sm"></font-awesome-icon>
-                    </div>
-                    <div class="setting-body">
-                        <div class="setting-title">Automation</div>
-                        <div class="setting-desc">Automations management feature</div>
+                        <div class="setting-desc">View and update PrintNode integration settings</div>
                     </div>
                 </a>
 
@@ -103,16 +113,6 @@
                     </div>
                 </a>
 
-                <a href="{{ route('settings.modules') }}" class="setting-list">
-                    <div class="setting-icon">
-                        <font-awesome-icon icon="puzzle-piece" class="fa-sm"></font-awesome-icon>
-                    </div>
-                    <div class="setting-body">
-                        <div class="setting-title">Modules</div>
-                        <div class="setting-desc">Manage Modules</div>
-                    </div>
-                </a>
-
                 <a href="{{ route('settings.api2cart') }}" class="setting-list">
                     <div class="setting-icon">
                         <font-awesome-icon icon="shopping-cart" class="fa-sm"></font-awesome-icon>
@@ -129,7 +129,7 @@
                     </div>
                     <div class="setting-body">
                         <div class="setting-title">API</div>
-                        <div class="setting-desc">View and update application API settings and tokens</div>
+                        <div class="setting-desc">View and update application API tokens and OAuth clients</div>
                     </div>
                 </a>
 
