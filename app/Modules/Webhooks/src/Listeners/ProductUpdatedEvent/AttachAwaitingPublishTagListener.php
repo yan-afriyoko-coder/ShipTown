@@ -15,6 +15,8 @@ class AttachAwaitingPublishTagListener
      */
     public function handle(ProductUpdatedEvent $event)
     {
-        $event->getProduct()->attachTag(config('webhooks.tags.awaiting.name'));
+        activity()->withoutLogs(function () use ($event) {
+            $event->getProduct()->attachTag(config('webhooks.tags.awaiting.name'));
+        });
     }
 }
