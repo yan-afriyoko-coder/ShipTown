@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Modules\Automations\Validators;
+namespace Tests\Feature\Modules\Automations\Conditions;
 
 use App\Events\Order\OrderCreatedEvent;
 use App\Models\Order;
@@ -8,11 +8,11 @@ use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
-use App\Modules\Automations\src\Validators\Order\ShippingMethodCodeEqualsValidator;
+use App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class OrderShippingMethodCodeEqualsValidatorTest extends TestCase
+class OrderShippingMethodCodeEqualsConditionTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -33,7 +33,7 @@ class OrderShippingMethodCodeEqualsValidatorTest extends TestCase
         /** @var Condition $condition */
         Condition::create([
             'automation_id' => $automation->getKey(),
-            'validation_class' => ShippingMethodCodeEqualsValidator::class,
+            'condition_class' => ShippingMethodCodeEqualsCondition::class,
             'condition_value' => 'store_pickup'
         ]);
 
