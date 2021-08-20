@@ -57,8 +57,8 @@ class AutomationService
 
     private static function runAction(Action $action, $event): void
     {
-        $action = new $action->action_class($event);
+        $runAction = new $action->action_class($event);
 
-        $action->handle($action->action_value);
+        $runAction->handle($action->action_value);
     }
 }
