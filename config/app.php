@@ -217,7 +217,7 @@ return [
         App\Modules\AutoStatusPaid\src\AutoStatusPaidServiceProvider::class,
 
         App\Modules\AutoStatusLayawayStorePickup\src\AutoStatusStorePickupServiceProvider::class,
-        App\Modules\AutoStatusPackingWarehouse\src\AutoPackingWarehouseServiceProvider::class,
+//        App\Modules\AutoStatusPackingWarehouse\src\AutoPackingWarehouseServiceProvider::class,
         App\Modules\AutoStatusSingleLineOrders\src\AutoStatusSingleLineOrdersServiceProvider::class,
         App\Modules\AutoStatusPicking\src\AutoStatusPickingServiceProvider::class,
         App\Modules\AutoStatusPackingWeb\src\AutoPackingWebServiceProvider::class,
