@@ -23,12 +23,12 @@ class LineCountEqualsCondition
      */
     public function isValid($condition_value): bool
     {
-        $result = $this->event->order->order_products_count === $condition_value;
+        $result = $this->event->order->product_line_count === $condition_value;
 
         Log::debug('Line Count Equals', [
             'order_number' => $this->event->order->order_number,
             'expected' => $condition_value,
-            'actual' => $this->event->order->order_products_count,
+            'actual' => $this->event->order->product_line_count,
             'class' => self::class,
         ]);
 
