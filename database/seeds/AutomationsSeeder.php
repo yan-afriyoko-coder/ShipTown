@@ -5,8 +5,8 @@ use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
-use App\Modules\Automations\src\Validators\Order\ShippingMethodCodeEqualsValidator;
-use App\Modules\Automations\src\Validators\Order\CanFulfillFromLocationValidator;
+use App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition;
+use App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition;
 use Illuminate\Database\Seeder;
 
 class AutomationsSeeder extends Seeder
@@ -27,13 +27,13 @@ class AutomationsSeeder extends Seeder
 
         Condition::create([
             'automation_id' => $automation->getKey(),
-            'validation_class' => CanFulfillFromLocationValidator::class,
+            'condition_class' => CanFulfillFromLocationCondition::class,
             'condition_value' => 'paid'
         ]);
 
         Condition::create([
             'automation_id' => $automation->getKey(),
-            'validation_class' => ShippingMethodCodeEqualsValidator::class,
+            'condition_class' => ShippingMethodCodeEqualsCondition::class,
             'condition_value' => 'store_pickup'
         ]);
 
