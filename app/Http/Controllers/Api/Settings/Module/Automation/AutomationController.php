@@ -9,7 +9,9 @@ use App\Http\Resources\AutomationResource;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class AutomationController extends Controller
 {
@@ -29,11 +31,13 @@ class AutomationController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return AutomationResource
+     * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
-        $automations = Automation::all();
+        $automations = Automation::query()
+            ->orderBy('priority')
+            ->get();
 
         return AutomationResource::collection($automations);
     }
@@ -41,8 +45,9 @@ class AutomationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  StoreRequest  $request
+     * @param StoreRequest $request
      * @return AutomationResource
+     * @throws Throwable
      */
     public function store(StoreRequest $request)
     {
@@ -51,7 +56,6 @@ class AutomationController extends Controller
 
             $dataAutomation = $request->only(['name', 'event_class', 'enabled', 'priority']);
             $automation = Automation::create($dataAutomation);
-            ray($request);
             $automation->conditions()->createMany($request->conditions);
             $automation->actions()->createMany($request->actions);
 
