@@ -18,16 +18,28 @@ class LineCountEqualsCondition
     }
 
     /**
-     * @param $condition_value
+     * @param string $condition_value
      * @return bool
      */
-    public function isValid($condition_value): bool
+    public function isValid(string $condition_value): bool
     {
-        $result = $this->event->order->product_line_count === $condition_value;
+        if (!is_integer($condition_value)) {
+            Log::debug('Incorrect condition value, number expected', [
+                'order_number' => $this->event->order->order_number,
+                'value' => $condition_value,
+                'class' => self::class,
+            ]);
+
+            return false;
+        }
+
+        $numericValue = intval($condition_value);
+
+        $result = $this->event->order->product_line_count === $numericValue;
 
         Log::debug('Line Count Equals', [
             'order_number' => $this->event->order->order_number,
-            'expected' => $condition_value,
+            'expected' => $numericValue,
             'actual' => $this->event->order->product_line_count,
             'class' => self::class,
         ]);
