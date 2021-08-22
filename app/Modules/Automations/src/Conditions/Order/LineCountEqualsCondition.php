@@ -23,7 +23,7 @@ class LineCountEqualsCondition
      */
     public function isValid(string $condition_value): bool
     {
-        if (!is_integer($condition_value)) {
+        if (!is_numeric($condition_value)) {
             Log::warning('Incorrect condition value, number expected', [
                 'order_number' => $this->event->order->order_number,
                 'value' => $condition_value,
