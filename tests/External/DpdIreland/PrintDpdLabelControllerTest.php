@@ -26,14 +26,15 @@ class PrintDpdLabelControllerTest extends TestCase
         ]);
 
         $address = factory(OrderAddress::class)->create([
-            'company'      => 'test',
-            'address1'     => 'test',
-            'address2'     => 'test',
+            'company'      => 'TEST COMPANY',
+            'address1'     => 'ATHLONE BUISNESS PARK',
+            'address2'     => 'DUBLIN ROAD',
             'phone'        => '12345678901',
             'city'         => 'Dublin',
             'state_name'   => 'Co. Dublin',
-            'postcode'     => 'ABC1234',
+            'postcode'     => 'N37KD81',
             'country_code' => 'IRL',
+            'country_name' => 'Ireland',
         ]);
 
         $order = factory(Order::class)->create([
@@ -44,7 +45,8 @@ class PrintDpdLabelControllerTest extends TestCase
             // TODO: send request data
         ]);
 
-        $response->assertOk();
+        $this->assertTrue($response->getStatusCode() === 200, $response->json('message') ?? '');
+
         $response->assertJsonStructure([
             // TODO: compare expected response data
         ]);
