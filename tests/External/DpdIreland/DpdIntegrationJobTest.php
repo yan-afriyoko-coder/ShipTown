@@ -14,7 +14,7 @@ use Tests\TestCase;
 class DpdIntegrationJobTest extends TestCase
 {
     use RefreshDatabase;
-    use SeedConfiguration;
+    use SeedDpdTestConfiguration;
 
     /**
      * @test

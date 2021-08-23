@@ -14,43 +14,53 @@ use Tests\TestCase;
 class PrintDpdLabelControllerTest extends TestCase
 {
     use RefreshDatabase;
-    use SeedConfiguration;
+    use SeedDpdTestConfiguration;
 
     /**
      * @test
      */
     public function storeReturnsOkResponse()
     {
-        $user = factory(User::class)->create([
-            'address_label_template' => 'dpd_label',
-        ]);
-
         $address = factory(OrderAddress::class)->create([
-            'company'      => 'test',
-            'address1'     => 'test',
-            'address2'     => 'test',
+            'company'      => 'TEST COMPANY',
+            'address1'     => 'ATHLONE BUISNESS PARK',
+            'address2'     => 'DUBLIN ROAD',
             'phone'        => '12345678901',
             'city'         => 'Dublin',
             'state_name'   => 'Co. Dublin',
-            'postcode'     => 'ABC1234',
+            'postcode'     => 'N37KD81',
             'country_code' => 'IRL',
+            'country_name' => 'Ireland',
         ]);
 
+        /** @var Order $order */
         $order = factory(Order::class)->create([
             'shipping_address_id' => $address->getKey(),
         ]);
 
-        $response = $this->actingAs($user, 'api')->putJson('api/print/order/'.$order->order_number.'/dpd_label', [
-            // TODO: send request data
+        $user = factory(User::class)->create([
+            'address_label_template' => 'dpd_label',
         ]);
 
-        $response->assertOk();
+        $response = $this->actingAs($user, 'api')
+            ->putJson('api/print/order/'.$order->order_number.'/dpd_label', []);
+
+        $this->assertTrue(
+            $response->getStatusCode() === 200,
+            $response->json('message') ?? ''
+        );
+
         $response->assertJsonStructure([
-            // TODO: compare expected response data
+            'data' => [
+                '*' => [
+                    'Status',
+                    'Consignment' => [
+                        'RecordID',
+                        'TrackingNumber',
+                        'LabelImage',
+                    ]
+                ]
+            ]
         ]);
-
-        // TODO: perform additional assertions
     }
-
-    // test cases...
 }
