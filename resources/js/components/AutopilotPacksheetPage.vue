@@ -210,8 +210,6 @@
                 loadProducts: function() {
                     // this.showLoading();
 
-                    // this.packed = [];
-
                     const params = {
                         'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id', null),
                         'filter[order_id]': this.order.id,
@@ -230,6 +228,7 @@
                                 const newPacklist = data.data.filter(
                                     orderProduct => Number(orderProduct['quantity_shipped']) < Number(orderProduct['quantity_ordered'])
                                 );
+
                                 this.packed = newPackedList;
                                 this.packlist = newPacklist;
                             }
@@ -287,6 +286,7 @@
                                     }
 
                                     this.$snotify.remove(toast.id);
+                                    this.shipOrderProduct(orderProduct, Number(toast.value));
                                     this.setQuantityShipped(orderProduct, Number(orderProduct['quantity_shipped']) + Number(toast.value));
                                 }
                             },
@@ -364,12 +364,11 @@
                     }
                 },
 
-                setQuantityShipped(orderProduct, quantity) {
-                    this.somethingHasBeenPackedDuringThisSession = true;
-
-                    const request = this.apiUpdateOrderProduct(orderProduct.id, {
-                            'quantity_shipped': quantity
-                        })
+                shipOrderProduct(orderProduct, quantity) {
+                    const request = this.apiPostOrderProductShipment({
+                        'order_product_id': orderProduct.id,
+                        'quantity_shipped': quantity,
+                    })
                         .then(data => {
                             this.notifySuccess();
                         })
@@ -381,8 +380,26 @@
                         });
                 },
 
-                shipAll(pickedItem) {
-                    this.setQuantityShipped(pickedItem, pickedItem['quantity_ordered']);
+                setQuantityShipped(orderProduct, quantity) {
+                    this.somethingHasBeenPackedDuringThisSession = true;
+
+                    const request = this.apiUpdateOrderProduct(orderProduct.id, {
+                        'quantity_shipped': quantity
+                    })
+                        .then(data => {
+                            this.notifySuccess();
+                        })
+                        .catch(error => {
+                            this.notifyError('Error occurred when saving quantity shipped, try again');
+                        })
+                        .finally(() => {
+                            this.loadProducts();
+                        });
+                },
+
+                shipAll(orderProduct) {
+                    this.shipOrderProduct(orderProduct, orderProduct['quantity_to_ship']);
+                    this.setQuantityShipped(orderProduct, orderProduct['quantity_ordered']);
                 },
 
                 findEntry: function (barcode) {
@@ -436,6 +453,7 @@
                         return;
                     }
 
+                    this.shipOrderProduct(pickItem, 1);
                     this.setQuantityShipped(pickItem,pickItem['quantity_shipped'] + 1);
                 },
 

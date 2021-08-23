@@ -46,7 +46,6 @@
             const swipedLeftIndex = 2;
 
             const self = this;
-            const pickedItem = this.picklistItem;
 
                 // Initialize Swiper
             const swiper = new Swiper('#' + this.getElementId, {
@@ -64,10 +63,10 @@
             swiper.on('transitionEnd', function() {
 
                 if (this.activeIndex === swipedLeftIndex) {
-                    self.$emit('swipeLeft', pickedItem);
+                    self.$emit('swipeLeft', self.picklistItem);
 
                 } else if (this.activeIndex === swipedRightIndex) {
-                    self.$emit('swipeRight', pickedItem);
+                    self.$emit('swipeRight', self.picklistItem);
                 }
 
                 this.slideTo(1,0,false);
@@ -81,9 +80,6 @@
                 return `picklist-item-${this.picklistItem.id}`;
             }
         },
-
-
-
     }
 </script>
 

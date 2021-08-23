@@ -23,16 +23,6 @@ class RecalculateProductQuantityReservedJob implements ShouldQueue
     use SerializesModels;
 
     /**
-     * @var int
-     */
-    private int $locationId = 999;
-
-    /**
-     * @var int
-     */
-    private int $maxPerJob = 200;
-
-    /**
      * Execute the job.
      *
      * @return void

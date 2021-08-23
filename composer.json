@@ -95,7 +95,6 @@
             "@install-hooks"
         ],
         "post-install-cmd": [
-            "@php artisan app:install"
         ]
     }
 }

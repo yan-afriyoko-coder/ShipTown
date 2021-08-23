@@ -2,14 +2,18 @@
 
 namespace Tests\Feature\Jobs\Maintenance;
 
+use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Modules\Maintenance\src\Jobs\Products\RecalculateProductQuantityReservedJob;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class RecalculateProductQuantityReservedJobTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * A basic feature test example.
      *
@@ -17,20 +21,21 @@ class RecalculateProductQuantityReservedJobTest extends TestCase
      */
     public function testExample()
     {
-        Product::query()->forceDelete();
-        Order::query()->forceDelete();
-        OrderProduct::query()->forceDelete();
+        $product = factory(Product::class)->create();
 
-        factory(Order::class)
-            ->with('orderProducts', 2)
-            ->create(['status_code' => 'paid']);
+        Inventory::updateOrCreate([
+            'product_id' => $product->getKey(),
+            'location_id' => rand(1,20)
+        ], [
+            'quantity_reserved' => rand(10,100)
+        ]);
 
-        Product::query()->update([
+        $product->update([
             'quantity_reserved' => 0,
         ]);
 
         RecalculateProductQuantityReservedJob::dispatchNow();
 
-        $this->markTestIncomplete();
+        $this->assertEquals(Inventory::sum('quantity_reserved'), Product::sum('quantity_reserved'));
     }
 }

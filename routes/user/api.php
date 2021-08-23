@@ -34,6 +34,7 @@ Route::apiResource('product/tags', 'Api\Product\ProductTagController')->only(['i
 
 Route::apiResource('orders', 'Api\OrderController')->except('destroy');
 Route::apiResource('order/products', 'Api\Order\OrderProductController', ['as' => 'order'])->only(['index', 'update']);
+Route::apiResource('orders/products/shipments', 'Api\Order\OrderProductShipmentController')->only(['store']);
 Route::apiResource('order/shipments', 'Api\Order\OrderShipmentController')->only(['index', 'store']);
 Route::apiResource('order/comments', 'Api\Order\OrderCommentController')->only(['index', 'store']);
 Route::apiResource('order-statuses', 'Api\OrderStatusController')->only(['index']);
