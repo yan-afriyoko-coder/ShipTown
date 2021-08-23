@@ -6,7 +6,7 @@ use App\BaseModel;
 
 /**
  * @property integer automation_id
- * @property string validation_class
+ * @property string condition_class
  * @property string condition_value
  */
 class Condition extends BaseModel
@@ -15,7 +15,7 @@ class Condition extends BaseModel
 
     protected $fillable = [
         'automation_id',
-        'validation_class',
+        'condition_class',
         'condition_value',
     ];
 }

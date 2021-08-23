@@ -6,8 +6,12 @@ use App\BaseModel;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * @property integer priority
+ * @property boolean enabled
+ * @property string name
+ * @property string event_class
  * @property mixed conditions
- * @property mixed executions
+ * @property mixed actions
  */
 class Automation extends BaseModel
 {
@@ -39,14 +43,14 @@ class Automation extends BaseModel
      */
     public function conditions(): HasMany
     {
-        return $this->hasMany(Condition::class)->latest();
+        return $this->hasMany(Condition::class);
     }
 
     /**
      * @return HasMany
      */
-    public function executions(): HasMany
+    public function actions(): HasMany
     {
-        return $this->hasMany(Execution::class)->latest();
+        return $this->hasMany(Action::class);
     }
 }

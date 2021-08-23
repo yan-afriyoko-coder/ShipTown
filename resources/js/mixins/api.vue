@@ -282,6 +282,30 @@ export default {
             apiDeleteNavigationMenu: function (id) {
                 return axios.delete('/api/settings/navigation-menu/' + id);
             },
+
+            apiGetAutomationConfig: function() {
+                return axios.get('/api/settings/modules/automations/config');
+            },
+
+            apiGetAutomations: function () {
+                return axios.get('/api/settings/modules/automations');
+            },
+
+            apiShowAutomations: function (id) {
+                return axios.get('/api/settings/modules/automations/' + id);
+            },
+
+            apiPostAutomations: function (params) {
+                return axios.post('/api/settings/modules/automations/', params);
+            },
+
+            apiPutAutomations: function (id, params) {
+                return axios.put('/api/settings/modules/automations/' + id, params);
+            },
+
+            apiDeleteAutomations: function (id) {
+                return axios.delete('/api/settings/modules/automations/' + id);
+            },
         }
     }
 </script>

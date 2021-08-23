@@ -5,40 +5,72 @@ return [
         [
             'class' => \App\Events\Order\OrderCreatedEvent::class,
             'description' => 'Order is created',
-            'validators' => [
+            'conditions' => [
                 [
-                    'class' => \App\Modules\Automations\src\Validators\Order\ShippingMethodCodeEqualsValidator::class,
+                    'class' => \App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition::class,
                     'description' => 'Order Shipping Method Code equals',
                 ],
                 [
-                    'class' => \App\Modules\Automations\src\Validators\Order\StatusCodeEqualsValidator::class,
+                    'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition::class,
                     'description' => 'Order Status Code equals',
                 ],
-            ],
-            'executors' => [
                 [
-                    'class' => \App\Modules\Automations\src\Executors\Order\SetStatusCodeExecutor::class,
+                    'class' => \App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition::class,
+                    'description' => 'Can Fulfill from location',
+                ],
+                [
+                    'class' => \App\Modules\Automations\src\Conditions\Order\CanNotFulfillFromLocationCondition::class,
+                    'description' => 'Can NOT Fulfill from location',
+                ],
+                [
+                    'class' => \App\Modules\Automations\src\Conditions\Order\LineCountEqualsCondition::class,
+                    'description' => 'Line count equals',
+                ],
+            ],
+            'actions' => [
+                [
+                    'class' => \App\Modules\Automations\src\Actions\Order\SetStatusCodeAction::class,
                     'description' => 'Set Order Status Code to',
+                ],
+                [
+                    'class' => \App\Modules\Automations\src\Actions\Order\LogMessageAction::class,
+                    'description' => 'Log order message',
                 ],
             ]
         ],
         [
             'class' => \App\Events\Order\OrderUpdatedEvent::class,
             'description' => 'Order is updated',
-            'validators' => [
+            'conditions' => [
                 [
-                    'class' => \App\Modules\Automations\src\Validators\Order\ShippingMethodCodeEqualsValidator::class,
+                    'class' => \App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition::class,
                     'description' => 'Order Shipping Method Code equals',
                 ],
                 [
-                    'class' => \App\Modules\Automations\src\Validators\Order\StatusCodeEqualsValidator::class,
+                    'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition::class,
                     'description' => 'Order Status Code equals',
                 ],
-            ],
-            'executors' => [
                 [
-                    'class' => \App\Modules\Automations\src\Executors\Order\SetStatusCodeExecutor::class,
+                    'class' => \App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition::class,
+                    'description' => 'Can Fulfill from location',
+                ],
+                [
+                    'class' => \App\Modules\Automations\src\Conditions\Order\CanNotFulfillFromLocationCondition::class,
+                    'description' => 'Can NOT Fulfill from location',
+                ],
+                [
+                    'class' => \App\Modules\Automations\src\Conditions\Order\LineCountEqualsCondition::class,
+                    'description' => 'Line count equals',
+                ],
+            ],
+            'actions' => [
+                [
+                    'class' => \App\Modules\Automations\src\Actions\Order\SetStatusCodeAction::class,
                     'description' => 'Set Order Status Code to',
+                ],
+                [
+                    'class' => \App\Modules\Automations\src\Actions\Order\LogMessageAction::class,
+                    'description' => 'Log order message',
                 ],
             ]
         ],

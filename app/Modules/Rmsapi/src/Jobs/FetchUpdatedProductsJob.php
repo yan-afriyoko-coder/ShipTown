@@ -6,11 +6,13 @@ use App\Models\RmsapiConnection;
 use App\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Api\Client as RmsapiClient;
 use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Log;
 use Ramsey\Uuid\Uuid;
 
 class FetchUpdatedProductsJob implements ShouldQueue
@@ -46,11 +48,10 @@ class FetchUpdatedProductsJob implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @throws Exception
+     * @return boolean
      *
-     * @return void
      */
-    public function handle()
+    public function handle(): bool
     {
         logger('Starting Rmsapi FetchUpdatedProductsJob', ['connection_id' => $this->rmsapiConnection->getKey()]);
 
@@ -60,7 +61,16 @@ class FetchUpdatedProductsJob implements ShouldQueue
             'min:db_change_stamp' => $this->rmsapiConnection->products_last_timestamp,
         ];
 
-        $response = RmsapiClient::GET($this->rmsapiConnection, 'api/products', $params);
+        try {
+            $response = RmsapiClient::GET($this->rmsapiConnection, 'api/products', $params);
+        } catch (GuzzleException $e) {
+            Log::warning('Failed RMSAPI product fetch', [
+                'code' => $e->getCode(),
+                'message' => $e->getMessage(),
+            ]);
+
+            return false;
+        }
 
         if ($response->getResult()) {
             $this->saveImportedProducts($response->getResult());
@@ -76,6 +86,8 @@ class FetchUpdatedProductsJob implements ShouldQueue
             'location_id' => $this->rmsapiConnection->location_id,
             'count'       => $response->asArray()['total'],
         ]);
+
+        return true;
     }
 
     public function saveImportedProducts(array $productList)

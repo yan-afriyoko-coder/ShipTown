@@ -32,8 +32,10 @@ class MailTemplateController extends Controller
      */
     public function update(UpdateRequest $request, MailTemplate $mailTemplate)
     {
-        $mailTemplate->fill($request->validated());
-        $mailTemplate->save();
+        $data = $request->validated();
+        $data['to'] = implode(", ", $data['to']);
+
+        $mailTemplate->update($data);
 
         return MailTemplateResource::make($mailTemplate);
     }

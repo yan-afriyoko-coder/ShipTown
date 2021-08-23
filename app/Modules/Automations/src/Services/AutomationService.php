@@ -4,7 +4,8 @@ namespace App\Modules\Automations\src\Services;
 
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
-use App\Modules\Automations\src\Models\Execution;
+use App\Modules\Automations\src\Models\Action;
+use Log;
 
 class AutomationService
 {
@@ -12,6 +13,7 @@ class AutomationService
     {
         Automation::where('event_class', get_class($event))
             ->where(['enabled' => true])
+            ->orderBy('priority')
             ->get()
             ->each(function (Automation $automation) use ($event) {
                 AutomationService::runAutomation($automation, $event);
@@ -21,35 +23,42 @@ class AutomationService
     public static function runAutomation(Automation $automation, $event)
     {
         // check all conditions
-        $conditionsValid = $automation->conditions->every(function (Condition $condition) use ($event) {
-            return AutomationService::isConditionValid($condition, $event);
-        });
+        $allConditionsPass = $automation->conditions()
+            ->get()
+            ->every(function (Condition $condition) use ($event) {
+                return AutomationService::isConditionValid($condition, $event);
+            });
 
-        if ($conditionsValid === false) {
+        Log::debug('Ran automation', [
+            'class' => class_basename($automation),
+            'name' => $automation->name,
+            'conditions_passed' => $allConditionsPass
+        ]);
+
+        if ($allConditionsPass === false) {
             return;
         }
 
-        // run all executions
-        $automation->executions->each(function (Execution $execution) use ($event) {
-            AutomationService::executeAutomation($execution, $event);
-        });
+        // run all actions
+        $automation->actions()
+            ->orderBy('priority')
+            ->get()
+            ->each(function (Action $action) use ($event) {
+                AutomationService::runAction($action, $event);
+            });
     }
 
     private static function isConditionValid(Condition $condition, $event): bool
     {
-        $validator = new $condition->validation_class($event);
+        $validator = new $condition->condition_class($event);
 
-        $isValid = $validator->isValid($condition->condition_value);
-
-        ray($condition, $isValid);
-
-        return $isValid;
+        return $validator->isValid($condition->condition_value);
     }
 
-    private static function executeAutomation(Execution $execution, $event): void
+    private static function runAction(Action $action, $event): void
     {
-        $executor = new $execution->execution_class($event);
+        $runAction = new $action->action_class($event);
 
-        $executor->handle($execution->execution_value);
+        $runAction->handle($action->action_value);
     }
 }

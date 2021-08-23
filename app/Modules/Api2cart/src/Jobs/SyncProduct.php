@@ -41,14 +41,18 @@ class SyncProduct implements ShouldQueue
      * Execute the job.
      *
      * @return void
-     *
+     * @throws GuzzleException
+     * @throws RequestException
      */
     public function handle()
     {
         if ($this->product_link->postProductUpdate() && $this->verifyProductUpdate()) {
-            $this->product_link->product->log('eCommerce: Product synced');
-            $this->product_link->product->detachTag('Not Synced');
-            $this->product_link->product->detachTag('SYNC ERROR');
+            $product = $this->product_link->product;
+            activity()->withoutLogs(function () use ($product) {
+                $product->detachTag('Not Synced');
+            });
+
+            $product->detachTag('SYNC ERROR');
             return;
         }
 

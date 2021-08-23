@@ -18,7 +18,9 @@ class AddNotSyncedTagListener
         $product = $event->getInventory()->product;
 
         if ($product->hasTags(['Available Online'])) {
-            $product->attachTag('Not Synced');
+            activity()->withoutLogs(function () use ($product) {
+                $product->attachTag('Not Synced');
+            });
         }
     }
 }

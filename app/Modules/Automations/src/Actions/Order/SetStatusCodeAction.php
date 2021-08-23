@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Modules\Automations\src\Executors\Order;
+namespace App\Modules\Automations\src\Actions\Order;
 
 use App\Events\Order\OrderCreatedEvent;
+use Log;
 
-class SetStatusCodeExecutor
+class SetStatusCodeAction
 {
     private OrderCreatedEvent $event;
 
@@ -19,6 +20,12 @@ class SetStatusCodeExecutor
     public function handle($value)
     {
         $order = $this->event->order;
+
+        Log::debug('Set Status Code', [
+            'class' => self::class,
+            'order_number' => $this->event->order->order_number,
+            'new_status' => $value,
+        ]);
 
         $order->update(['status_code' => $value]);
     }

@@ -24,9 +24,11 @@ class UpdateTest extends TestCase
         $mailTemplate->save();
 
         $response = $this->put(route('api.settings.mail-templates.update', $mailTemplate), [
-            'subject'      => 'update subject',
-            'html_template'    => '<p>update html</p>',
-            'text_template'    => 'update text',
+            'subject'       => 'update subject',
+            'html_template' => '<p>update html</p>',
+            'text_template' => 'update text',
+            'to'            => 'test@example.com',
+            'reply_to'      => 'test@example.com'
         ]);
 
         return $response;
