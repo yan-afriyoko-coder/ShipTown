@@ -57,7 +57,7 @@ class Scurri
         // we need to refresh it in order to obtain shipping number
         $consignment = Client::getSingleConsignment($consignment_id)->json();
 
-        return new OrderShipment([
+        $orderShipment = new OrderShipment([
             'order_id' => $order->getKey(),
             'carrier' => 'AnPost',
             'service' => $consignment['service'],
@@ -65,5 +65,9 @@ class Scurri
             'tracking_url' => 'https://www.anpost.com/Commerce/Track?item=' . $consignment['tracking_url'],
             'base64_pdf_labels' => base64_encode($documents->getLabels()),
         ]);
+
+        $orderShipment->save();
+
+        return $orderShipment;
     }
 }
