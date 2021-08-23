@@ -64,10 +64,10 @@
             swiper.on('transitionEnd', function() {
 
                 if (this.activeIndex === swipedLeftIndex) {
-                    self.$emit('swipeLeft', pickedItem);
+                    self.$emit('swipeLeft', self.picklistItem);
 
                 } else if (this.activeIndex === swipedRightIndex) {
-                    self.$emit('swipeRight', pickedItem);
+                    self.$emit('swipeRight', self.picklistItem);
                 }
 
                 this.slideTo(1,0,false);

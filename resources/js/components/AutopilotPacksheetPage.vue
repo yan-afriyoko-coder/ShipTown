@@ -210,8 +210,6 @@
                 loadProducts: function() {
                     // this.showLoading();
 
-                    // this.packed = [];
-
                     const params = {
                         'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id', null),
                         'filter[order_id]': this.order.id,
@@ -230,6 +228,7 @@
                                 const newPacklist = data.data.filter(
                                     orderProduct => Number(orderProduct['quantity_shipped']) < Number(orderProduct['quantity_ordered'])
                                 );
+
                                 this.packed = newPackedList;
                                 this.packlist = newPacklist;
                             }
@@ -287,6 +286,7 @@
                                     }
 
                                     this.$snotify.remove(toast.id);
+                                    this.shipOrderProduct(orderProduct, Number(toast.value));
                                     this.setQuantityShipped(orderProduct, Number(orderProduct['quantity_shipped']) + Number(toast.value));
                                 }
                             },
@@ -383,7 +383,6 @@
                 setQuantityShipped(orderProduct, quantity) {
                     this.somethingHasBeenPackedDuringThisSession = true;
 
-
                     const request = this.apiUpdateOrderProduct(orderProduct.id, {
                         'quantity_shipped': quantity
                     })
@@ -399,7 +398,6 @@
                 },
 
                 shipAll(orderProduct) {
-                    console.log(orderProduct['quantity_to_ship']);
                     this.shipOrderProduct(orderProduct, orderProduct['quantity_to_ship']);
                     this.setQuantityShipped(orderProduct, orderProduct['quantity_ordered']);
                 },
