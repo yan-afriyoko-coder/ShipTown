@@ -2,6 +2,7 @@
 
 namespace App\Modules\DpdIreland\src;
 
+use App\Modules\DpdIreland\src\Exceptions\AuthorizationException;
 use App\Modules\DpdIreland\src\Models\DpdIreland;
 use Carbon\Carbon;
 use GuzzleHttp\Client as GuzzleClient;
@@ -105,6 +106,7 @@ class Client
 
     /**
      * @return array
+     * @throws AuthorizationException
      */
     private static function getAuthorization(): array
     {
@@ -129,10 +131,16 @@ class Client
             'json'    => $body,
         ]);
 
+        $authorization = json_decode($authorizationResponse->getBody()->getContents(), true);
+
+        if ($authorization['Status'] === 'FAIL') {
+            throw new AuthorizationException($authorization['Code'].' : '.$authorization['Reason']);
+        }
+
         return [
             'from_cache'             => false,
             'authorization_time'     => Carbon::now(),
-            'authorization_response' => json_decode($authorizationResponse->getBody()->getContents(), true),
+            'authorization_response' => $authorization,
         ];
     }
 

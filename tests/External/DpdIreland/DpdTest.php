@@ -19,9 +19,9 @@ class DpdTest extends TestCase
      */
     public function if_env_variables_are_set()
     {
-        $this->assertNotEmpty(config('dpd.token'), 'DPD_TOKEN is not set');
-        $this->assertNotEmpty(config('dpd.user'), 'DPD_USER is not set');
-        $this->assertNotEmpty(config('dpd.password'), 'DPD_PASSWORD is not set');
+        $this->assertNotEmpty(config('dpd.test_token'), 'TEST_DPD_TOKEN is not set');
+        $this->assertNotEmpty(config('dpd.test_user'), 'TEST_DPD_USER is not set');
+        $this->assertNotEmpty(config('dpd.test_password'), 'TEST_DPD_PASSWORD is not set');
     }
 
     /**

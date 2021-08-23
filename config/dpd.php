@@ -2,9 +2,17 @@
 
 return [
     'live'               => env('DPD_LIVE', false),
+
+    // live credentials
     'token'              => env('DPD_TOKEN', ''),
     'user'               => env('DPD_USER', ''),
     'password'           => env('DPD_PASSWORD', ''),
+
+    // testing credentials
+    'test_token'         => env('TEST_DPD_TOKEN', ''),
+    'test_user'          => env('TEST_DPD_USER', ''),
+    'test_password'      => env('TEST_DPD_PASSWORD', ''),
+
     'collection_address' => [
         'contact'           => env('DPD_COLLECTION_CONTACT', ''),
         'contact_telephone' => env('DPD_COLLECTION_CONTACT_TELEPHONE', ''),
