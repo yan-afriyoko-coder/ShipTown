@@ -8,7 +8,7 @@ use Tests\TestCase;
 
 class NormalOvernightTest extends TestCase
 {
-    use SeedConfiguration;
+    use SeedDpdTestConfiguration;
 
     /**
      * @test

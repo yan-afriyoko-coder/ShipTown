@@ -12,7 +12,7 @@ use Tests\TestCase;
 class DpdTest extends TestCase
 {
     use RefreshDatabase;
-    use SeedConfiguration;
+    use SeedDpdTestConfiguration;
 
     /**
      * @test
