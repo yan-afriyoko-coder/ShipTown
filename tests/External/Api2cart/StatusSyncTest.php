@@ -5,6 +5,7 @@ namespace Tests\External\Api2cart;
 use App\Models\Order;
 use App\Modules\Api2cart\src\Api\Orders;
 use App\Modules\Api2cart\src\Api\OrderStatus;
+use App\Modules\Api2cart\src\Api2cartServiceProvider;
 use App\Modules\Api2cart\src\Exceptions\RequestException;
 use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
@@ -20,11 +21,24 @@ class StatusSyncTest extends TestCase
      * A basic feature test example.
      *
      * @return void
+     */
+    public function test_if_store_key_is_configured()
+    {
+        $this->assertNotEmpty(env('API2CART_API_KEY'), 'API2CART_API_KEY env key not set');
+        $this->assertNotEmpty(config('api2cart.api2cart_test_store_key'), 'TEST_API2CART_STORE_KEY env key not set');
+    }
+
+    /**
+     * A basic feature test example.
+     *
+     * @return void
      * @throws RequestException
      * @throws GuzzleException
      */
     public function test_if_syncs_status()
     {
+        Api2cartServiceProvider::enableModule();
+
         // we set key to api2cart demo store
         $api2cartConnection = new Api2cartConnection([
             'location_id'    => '99',
@@ -70,6 +84,8 @@ class StatusSyncTest extends TestCase
      */
     public function test_if_not_syncs_status_when_disabled()
     {
+        Api2cartServiceProvider::enableModule();
+
         // we set key to api2cart demo store
         $api2cartConnection = new Api2cartConnection([
             'location_id'    => '99',
@@ -79,12 +95,12 @@ class StatusSyncTest extends TestCase
         ]);
         $api2cartConnection->save();
 
-        DispatchImportOrdersJobs::dispatchNow();
 
         $response = OrderStatus::list($api2cartConnection->bridge_api_key);
 
         $orderStatusList = $response->getResult()['cart_order_statuses'];
 
+        DispatchImportOrdersJobs::dispatchNow();
         $order = Order::first();
 
         do {

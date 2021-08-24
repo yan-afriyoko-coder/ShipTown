@@ -13,6 +13,10 @@ class CreateOrdersProductsShipmentsTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('orders_products_shipments')) {
+            return;
+        }
+
         Schema::create('orders_products_shipments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_product_id');

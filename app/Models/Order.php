@@ -55,7 +55,6 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property-read Collection|Packlist[] $packlist
  * @property-read int|null $packlist_count
  * @property-read OrderAddress|null $shippingAddress
- * @property-read OrderStats|null $stats
  * @property-read OrderStatus $order_status
  * @property-read bool isPaid
  * @property-read bool isNotPaid
@@ -476,14 +475,6 @@ class Order extends BaseModel
     public function orderShipments()
     {
         return $this->hasMany(OrderShipment::class)->latest();
-    }
-
-    /**
-     * @return HasOne
-     */
-    public function stats()
-    {
-        return $this->hasOne(OrderStats::class);
     }
 
     /**

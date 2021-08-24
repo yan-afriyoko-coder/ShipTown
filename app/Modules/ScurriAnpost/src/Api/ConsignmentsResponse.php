@@ -29,8 +29,6 @@ class ConsignmentsResponse
     {
         $this->response = $response;
         $this->body = $response->json();
-
-        dd($this->body);
         $this->errors = collect($this->body['errors']);
         $this->success = collect($this->body['success']);
     }

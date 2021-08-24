@@ -365,18 +365,18 @@
                 },
 
                 shipOrderProduct(orderProduct, quantity) {
-                    const request = this.apiPostOrderProductShipment({
+                    this.apiPostOrderProductShipment({
                         'order_product_id': orderProduct.id,
                         'quantity_shipped': quantity,
                     })
                         .then(data => {
-                            this.notifySuccess();
+                            // this.notifySuccess();
                         })
                         .catch(error => {
-                            this.notifyError('Error occurred when saving quantity shipped, try again');
+                            // this.notifyError('Error occurred when saving quantity shipped, try again');
                         })
                         .finally(() => {
-                            this.loadProducts();
+                            // this.loadProducts();
                         });
                 },
 
