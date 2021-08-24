@@ -306,6 +306,14 @@ export default {
             apiDeleteAutomations: function (id) {
                 return axios.delete('/api/settings/modules/automations/' + id);
             },
+
+            apiGetConfigurations: function (params) {
+                return axios.get('/api/settings/configurations/', {params: params});
+            },
+
+            apiBulkUpdateConfigurations: function (params) {
+                return axios.put('/api/settings/configurations/bulk-update', params);
+            },
         }
     }
 </script>
