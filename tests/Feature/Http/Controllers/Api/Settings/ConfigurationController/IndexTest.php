@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Http\Controllers\Api\Settings\ConfigurationController;
 
-use App\Models\Configuration;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -21,7 +20,7 @@ class IndexTest extends TestCase
     /** @test */
     public function test_index_call_returns_ok()
     {
-        $response = $this->call('GET', route('api.settings.configurations.index'));
+        $response = $this->get(route('api.settings.configurations.index'));
         $response->assertOk();
         $response->assertJsonStructure([
             'data' => [

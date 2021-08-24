@@ -308,11 +308,11 @@ export default {
             },
 
             apiGetConfiguration: function () {
-                return axios.get('/api/settings/configuration/');
+                return axios.get('/api/settings/configurations/');
             },
 
-            apiUpdateConfiguration: function (params) {
-                return axios.put('/api/settings/configuration/update', params);
+            apiSaveConfiguration: function (params) {
+                return axios.post('/api/settings/configurations/', params);
             },
         }
     }

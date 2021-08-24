@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Settings;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Configuration\UpdateRequest;
+use App\Http\Requests\Configuration\StoreRequest;
 use App\Http\Resources\ConfigurationResource;
 use App\Models\Configuration;
 
@@ -24,10 +24,10 @@ class ConfigurationController extends Controller
     /**
      * Update bulk resource in storage.
      *
-     * @param UpdateRequest $request
+     * @param StoreRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateRequest $request)
+    public function store(StoreRequest $request)
     {
         $configuration = Configuration::first();
         $configuration->update($request->validated());

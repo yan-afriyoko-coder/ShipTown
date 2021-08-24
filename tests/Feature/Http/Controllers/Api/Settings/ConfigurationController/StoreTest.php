@@ -7,7 +7,7 @@ use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class UpdateTest extends TestCase
+class StoreTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -25,7 +25,7 @@ class UpdateTest extends TestCase
             'business_name' => 'Some name',
         ]);
 
-        $response = $this->put(route('api.settings.configurations.update'), [
+        $response = $this->post(route('api.settings.configurations.store'), [
             'business_name' => 'new name',
         ]);
         $response->assertOk();

@@ -66,7 +66,7 @@ export default {
     methods: {
         updateConfiguration() {
             this.btnSave = false;
-            this.apiUpdateConfiguration(this.configuration)
+            this.apiSaveConfiguration(this.configuration)
                 .then(() => {
                     this.$snotify.success('Configuration updated');
                 })
