@@ -52,17 +52,12 @@ export default {
     data: function () {
         return {
             btnSave: true,
-            configuration: {
-                business_name: ''
-            },
-            filterConfig: ['business_name']
+            configuration: {}
         }
     },
 
     created() {
-        this.apiGetConfigurations({
-                filterKeys: this.filterConfig
-            })
+        this.apiGetConfiguration()
             .then(({ data }) => {
                 this.configuration = data.data;
             });
@@ -71,9 +66,7 @@ export default {
     methods: {
         updateConfiguration() {
             this.btnSave = false;
-            this.apiBulkUpdateConfigurations({
-                    configs: this.configuration
-                })
+            this.apiUpdateConfiguration(this.configuration)
                 .then(() => {
                     this.$snotify.success('Configuration updated');
                 })

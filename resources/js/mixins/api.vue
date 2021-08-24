@@ -307,12 +307,12 @@ export default {
                 return axios.delete('/api/settings/modules/automations/' + id);
             },
 
-            apiGetConfigurations: function (params) {
-                return axios.get('/api/settings/configurations/', {params: params});
+            apiGetConfiguration: function () {
+                return axios.get('/api/settings/configuration/');
             },
 
-            apiBulkUpdateConfigurations: function (params) {
-                return axios.put('/api/settings/configurations/bulk-update', params);
+            apiUpdateConfiguration: function (params) {
+                return axios.put('/api/settings/configuration/update', params);
             },
         }
     }
