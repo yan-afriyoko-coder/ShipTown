@@ -20,7 +20,7 @@ class CreateModulesAutomationsConditionsTable extends Migration
         Schema::create('modules_automations_conditions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('automation_id');
-            $table->string('validation_class')->nullable(false);
+            $table->string('condition_class')->nullable(false);
             $table->string('condition_value')->nullable(false)->default('');
             $table->timestamps();
         });
