@@ -53,6 +53,5 @@ class AppServiceProvider extends ServiceProvider
         Configuration::get()->each(function (Configuration $config) {
             Config::set('configuration.' . $config->key, $config->value);
         });
-        ray(config('configuration'));
     }
 }
