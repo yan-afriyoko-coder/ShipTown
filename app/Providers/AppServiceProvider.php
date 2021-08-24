@@ -42,16 +42,5 @@ class AppServiceProvider extends ServiceProvider
 
         // Modules
         Api2cartOrderImports::observe(Api2cartOrderImportsObserver::class);
-
-        // sync new config to database
-        $configurations = collect(config('configuration'));
-        $configurations->each(function ($item, $key) {
-            Configuration::firstOrCreate(['key' => $key], ['value' => '']);
-        });
-
-        // Create config from database
-        Configuration::get()->each(function (Configuration $config) {
-            Config::set('configuration.' . $config->key, $config->value);
-        });
     }
 }
