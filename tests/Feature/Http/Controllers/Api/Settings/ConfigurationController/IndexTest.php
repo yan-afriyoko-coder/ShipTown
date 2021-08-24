@@ -25,9 +25,7 @@ class IndexTest extends TestCase
         $response->assertOk();
         $response->assertJsonStructure([
             'data' => [
-                '*' => [
-                    'business_name'
-                ]
+                'business_name'
             ],
         ]);
     }
