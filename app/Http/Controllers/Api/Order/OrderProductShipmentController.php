@@ -23,7 +23,8 @@ class OrderProductShipmentController extends Controller
      */
     public function store(StoreRequest $request): OrderProductShipmentResource
     {
-        $orderProductShipment = OrderProductShipment::create($request->validated());
+        $orderProductShipment = new OrderProductShipment($request->validated());
+        $orderProductShipment->save();
 
         return new OrderProductShipmentResource($orderProductShipment);
     }
