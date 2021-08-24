@@ -4,7 +4,7 @@ namespace App\Http\Requests\Configuration;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class IndexRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class IndexRequest extends FormRequest
     public function rules()
     {
         return [
-            'filterKeys' => 'sometimes|array'
+            'business_name' => 'required|string|max:200'
         ];
     }
 }

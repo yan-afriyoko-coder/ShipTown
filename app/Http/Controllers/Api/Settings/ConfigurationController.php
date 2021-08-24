@@ -3,50 +3,35 @@
 namespace App\Http\Controllers\Api\Settings;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Configuration\BulkUpdateRequest;
-use App\Http\Requests\Configuration\IndexRequest;
+use App\Http\Requests\Configuration\UpdateRequest;
 use App\Http\Resources\ConfigurationResource;
 use App\Models\Configuration;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ConfigurationController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param IndexRequest $request
      * @return ConfigurationResource
      */
-    public function index(IndexRequest $request)
+    public function index(): ConfigurationResource
     {
-        $configurations = Configuration::query();
-        if ($request->filterKeys) {
-            $configurations->whereIn('key', $request->filterKeys);
-        }
+        $configuration = Configuration::first();
 
-        $configurations = $configurations->get();
-        return ConfigurationResource::collection($configurations->keyBy->key);
+        return new ConfigurationResource($configuration);
     }
 
     /**
      * Update bulk resource in storage.
      *
-     * @param BulkUpdateRequest $request
+     * @param UpdateRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function bulkUpdate(BulkUpdateRequest $request)
+    public function update(UpdateRequest $request)
     {
-        $configs = $request->configs;
+        $configuration = Configuration::first();
+        $configuration->update($request->validated());
 
-        foreach ($configs as $configKey => $configValue) {
-            $config = Configuration::where('key', $configKey)->first();
-            if ($config) {
-                $config->value = $configValue;
-                $config->save();
-            }
-        }
-
-        return true;
+        return new ConfigurationResource($configuration);
     }
 }

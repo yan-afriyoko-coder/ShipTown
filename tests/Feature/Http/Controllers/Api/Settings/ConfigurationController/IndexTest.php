@@ -21,17 +21,13 @@ class IndexTest extends TestCase
     /** @test */
     public function test_index_call_returns_ok()
     {
-        Configuration::create(['key' => 'test', 'value' => 'value']);
-        Configuration::create(['key' => 'test2', 'value' => 'value']);
-        $response = $this->call('GET', route('api.settings.configurations.index'), [
-            'filterKeys' => [
-                'test'
-            ]
-        ]);
+        $response = $this->call('GET', route('api.settings.configurations.index'));
         $response->assertOk();
         $response->assertJsonStructure([
             'data' => [
-                'test',
+                '*' => [
+                    'business_name'
+                ]
             ],
         ]);
     }

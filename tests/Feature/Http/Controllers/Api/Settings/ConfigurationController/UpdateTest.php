@@ -7,7 +7,7 @@ use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class BulkUpdateTest extends TestCase
+class UpdateTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -21,17 +21,16 @@ class BulkUpdateTest extends TestCase
     /** @test */
     public function test_bulkupdate_call_returns_ok()
     {
-        Configuration::create(['key' => 'test', 'value' => 'value']);
+        Configuration::create([
+            'business_name' => 'Some name',
+        ]);
 
-        $response = $this->put(route('api.settings.configurations.bulk-update'), [
-            'configs' => [
-                'test' => 'new value',
-                'not_exist' => 'value'
-            ]
+        $response = $this->put(route('api.settings.configurations.update'), [
+            'business_name' => 'new name',
         ]);
         $response->assertOk();
 
-        $config = Configuration::where('key', 'test')->first();
-        $this->assertEquals($config->value, 'new value');
+        $config = Configuration::first();
+        $this->assertEquals($config->business_name, 'new name');
     }
 }
