@@ -28,7 +28,7 @@ Route::group(['prefix' => 'settings', 'namespace' => 'Api\Settings', 'as' => 'ap
     Route::apiResource('navigation-menu', 'NavigationMenuController')->only(['index', 'store', 'update', 'destroy']);
 
     Route::get('configurations', 'ConfigurationController@index')->name('configurations.index');
-    Route::put('configurations/bulk-update', 'ConfigurationController@bulkUpdate')->name('configurations.update-bulk');
+    Route::put('configurations/bulk-update', 'ConfigurationController@bulkUpdate')->name('configurations.bulk-update');
 
     // modules
     Route::group(['prefix' => 'modules', 'namespace' => 'Module', 'as' => 'module.'], function () {

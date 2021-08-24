@@ -7,7 +7,7 @@ use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class IndexTest extends TestCase
+class BulkUpdateTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -19,20 +19,19 @@ class IndexTest extends TestCase
     }
 
     /** @test */
-    public function test_index_call_returns_ok()
+    public function test_bulkupdate_call_returns_ok()
     {
         Configuration::create(['key' => 'test', 'value' => 'value']);
-        Configuration::create(['key' => 'test2', 'value' => 'value']);
-        $response = $this->call('GET', route('api.settings.configurations.index'), [
-            'filterKeys' => [
-                'test'
+
+        $response = $this->put(route('api.settings.configurations.bulk-update'), [
+            'configs' => [
+                'test' => 'new value',
+                'not_exist' => 'value'
             ]
         ]);
         $response->assertOk();
-        $response->assertJsonStructure([
-            'data' => [
-                'test',
-            ],
-        ]);
+
+        $config = Configuration::where('key', 'test')->first();
+        $this->assertEquals($config->value, 'new value');
     }
 }

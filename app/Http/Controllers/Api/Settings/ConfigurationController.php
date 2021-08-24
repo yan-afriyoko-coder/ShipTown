@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Settings;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Configuration\BulkUpdateRequest;
 use App\Http\Requests\Configuration\IndexRequest;
 use App\Http\Resources\ConfigurationResource;
 use App\Models\Configuration;
@@ -20,7 +21,6 @@ class ConfigurationController extends Controller
     public function index(IndexRequest $request)
     {
         $configurations = Configuration::query();
-        ray($request->validated());
         if ($request->filterKeys) {
             $configurations->whereIn('key', $request->filterKeys);
         }
@@ -32,11 +32,21 @@ class ConfigurationController extends Controller
     /**
      * Update bulk resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param BulkUpdateRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function bulkUpdate(Request $request)
+    public function bulkUpdate(BulkUpdateRequest $request)
     {
-        //
+        $configs = $request->configs;
+
+        foreach ($configs as $configKey => $configValue) {
+            $config = Configuration::where('key', $configKey)->first();
+            if ($config) {
+                $config->value = $configValue;
+                $config->save();
+            }
+        }
+
+        return true;
     }
 }
