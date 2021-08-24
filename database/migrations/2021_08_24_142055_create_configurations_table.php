@@ -20,7 +20,7 @@ class CreateConfigurationsTable extends Migration
             $table->timestamps();
         });
 
-        Configuration::create(['business_name' => '']);
+        Configuration::create(['business_name' => config('app.tenant_name')]);
     }
 
     /**
