@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Configuration;
 use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
@@ -18,6 +19,7 @@ use App\Observers\OrderShipmentObserver;
 use App\Observers\OrderStatusObserver;
 use App\Observers\ProductObserver;
 use App\Observers\ProductPriceObserver;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -40,5 +42,17 @@ class AppServiceProvider extends ServiceProvider
 
         // Modules
         Api2cartOrderImports::observe(Api2cartOrderImportsObserver::class);
+
+        // sync new config to database
+        $configurations = collect(config('configuration'));
+        $configurations->each(function ($item, $key) {
+            Configuration::firstOrCreate(['key' => $key], ['value' => '']);
+        });
+
+        // Create config from database
+        Configuration::get()->each(function (Configuration $config) {
+            Config::set('configuration.' . $config->key, $config->value);
+        });
+        ray(config('configuration'));
     }
 }
