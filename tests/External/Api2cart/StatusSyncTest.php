@@ -5,6 +5,7 @@ namespace Tests\External\Api2cart;
 use App\Models\Order;
 use App\Modules\Api2cart\src\Api\Orders;
 use App\Modules\Api2cart\src\Api\OrderStatus;
+use App\Modules\Api2cart\src\Api2cartServiceProvider;
 use App\Modules\Api2cart\src\Exceptions\RequestException;
 use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
@@ -25,6 +26,8 @@ class StatusSyncTest extends TestCase
      */
     public function test_if_syncs_status()
     {
+        Api2cartServiceProvider::enableModule();
+
         // we set key to api2cart demo store
         $api2cartConnection = new Api2cartConnection([
             'location_id'    => '99',
