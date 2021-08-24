@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\BaseModel;
 use App\Traits\LogsActivityTrait;
+use App\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
@@ -29,6 +31,7 @@ class OrderProductShipment extends BaseModel
     protected $table = 'orders_products_shipments';
 
     protected $fillable = [
+        'user_id',
         'order_product_id',
         'quantity_shipped',
         'order_shipment_id',
@@ -37,4 +40,12 @@ class OrderProductShipment extends BaseModel
     protected $casts = [
         'quantity_shipped' => 'float',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
