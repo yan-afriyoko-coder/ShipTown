@@ -27,8 +27,6 @@ class OrderProductShipmentController extends Controller
         $orderProductShipment->user()->associate($request->user());
         $orderProductShipment->save();
 
-        dd($orderProductShipment);
-
         return new OrderProductShipmentResource($orderProductShipment);
     }
 }
