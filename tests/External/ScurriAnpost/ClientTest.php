@@ -2,7 +2,6 @@
 
 namespace Tests\External\ScurriAnpost;
 
-use App\Modules\ScurriAnpost\src\Api\Client;
 use Exception;
 use Tests\TestCase;
 
