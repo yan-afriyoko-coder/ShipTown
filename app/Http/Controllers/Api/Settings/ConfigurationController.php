@@ -22,7 +22,7 @@ class ConfigurationController extends Controller
     }
 
     /**
-     * Update bulk resource in storage.
+     * Update resource in storage.
      *
      * @param StoreRequest $request
      * @return \Illuminate\Http\Response
