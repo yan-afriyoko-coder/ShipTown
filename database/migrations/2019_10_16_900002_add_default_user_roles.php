@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-class AddDefaultRoles extends Migration
+class AddDefaultUserRoles extends Migration
 {
     /**
      * Run the migrations.
