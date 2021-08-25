@@ -33,7 +33,7 @@
                     </ValidationProvider>
                 </div>
             </div>
-            <div v-if="!isCurrentUser" class="form-group row">
+            <div class="form-group row">
                 <label for="create-warehouse_id" class="col-sm-3 col-form-label">Warehouse</label>
                 <div class="col-sm-9">
                     <ValidationProvider vid="warehouse_id" name="warehouse_id" v-slot="{ errors }">
