@@ -59,10 +59,10 @@ class Scurri
 
         $orderShipment = new OrderShipment([
             'order_id' => $order->getKey(),
-            'carrier' => 'AnPost',
+            'carrier' => $consignment['carrier'],
             'service' => $consignment['service'],
             'shipping_number' => $consignment['consignment_number'],
-            'tracking_url' => 'https://www.anpost.com/Commerce/Track?item=' . $consignment['tracking_url'],
+            'tracking_url' => $consignment['tracking_url'],
             'base64_pdf_labels' => base64_encode($documents->getLabels()),
         ]);
 
