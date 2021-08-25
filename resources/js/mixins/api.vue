@@ -321,7 +321,8 @@ export default {
 
             apiDeleteWarehouse: function (id) {
                 return axios.delete('/api/settings/warehouses/' + id);
-                
+            },
+
             apiGetConfiguration: function () {
                 return axios.get('/api/settings/configurations/');
             },
