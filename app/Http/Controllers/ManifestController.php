@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Configuration;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 
@@ -15,9 +16,11 @@ class ManifestController extends Controller
      */
     public function index(): JsonResponse
     {
+        $config = Configuration::first();
+
         return response()->json([
-            'name'       => ' Product Management '.Str::ucfirst(config('app.tenant_name')),
-            'short_name' => 'PM '.Str::ucfirst(config('app.tenant_name')),
+            'name'       => 'Product Management ' . $config->business_name,
+            'short_name' => 'PM ' . $config->business_name,
             'icons'      => [
                 [
                     'src'   => '/img/icons/android-chrome-192x192.png',

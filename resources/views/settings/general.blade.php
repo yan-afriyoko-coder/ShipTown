@@ -14,6 +14,7 @@
             @role('admin')
                 <maintenance-section></maintenance-section>
                 <auto-pilot-tuning-section></auto-pilot-tuning-section>
+                <configuration-section></configuration-section>
             @endrole
         </div>
     </div>

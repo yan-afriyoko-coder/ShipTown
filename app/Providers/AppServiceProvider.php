@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Configuration;
 use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
@@ -18,6 +19,7 @@ use App\Observers\OrderShipmentObserver;
 use App\Observers\OrderStatusObserver;
 use App\Observers\ProductObserver;
 use App\Observers\ProductPriceObserver;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

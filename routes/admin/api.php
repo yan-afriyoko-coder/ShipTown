@@ -27,6 +27,8 @@ Route::group(['prefix' => 'settings', 'namespace' => 'Api\Settings', 'as' => 'ap
     Route::apiResource('mail-templates', 'MailTemplateController')->only(['index', 'update']);
     Route::apiResource('navigation-menu', 'NavigationMenuController')->only(['index', 'store', 'update', 'destroy']);
 
+    Route::apiResource('configurations', 'ConfigurationController')->only(['index', 'store']);
+
     // modules
     Route::group(['prefix' => 'modules', 'namespace' => 'Module', 'as' => 'module.'], function () {
         // api2cart
