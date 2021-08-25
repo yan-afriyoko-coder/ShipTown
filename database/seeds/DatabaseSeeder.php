@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             OrderShipmentsSeeder::class,
             NavigationMenuSeeder::class,
             AutomationsSeeder::class,
+            WarehouseSeeder::class,
         ]);
 
         \App\Jobs\RunHourlyJobs::dispatchNow();
