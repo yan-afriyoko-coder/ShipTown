@@ -26,9 +26,10 @@ class UserStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'       => ['required', 'string', 'max:255'],
-            'email'      => ['required', 'string', 'email', 'max:255'],
-            'role_id'    => ['required', 'exists:roles,id'],
+            'name'          => ['required', 'string', 'max:255'],
+            'email'         => ['required', 'string', 'email', 'max:255'],
+            'role_id'       => ['required', 'exists:roles,id'],
+            'warehouse_id'  => ['nullable', 'exists:warehouses,id'],
         ];
     }
 }

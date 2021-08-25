@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Api\Admin\UserController;
 
+use App\Models\Warehouse;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
@@ -21,10 +22,13 @@ class StoreTest extends TestCase
     /** @test */
     public function test_store_call_returns_ok()
     {
+        $warehouse = factory(Warehouse::class)->create();
+
         $response = $this->post(route('users.store'), [
-            'name'      => 'Test User',
-            'email'     => 'testing@example.com',
-            'role_id'   => Role::first()->id,
+            'name'          => 'Test User',
+            'email'         => 'testing@example.com',
+            'role_id'       => Role::first()->id,
+            'warehouse_id'  => $warehouse->id
         ]);
 
         $response->assertStatus(201);
