@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Settings;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Warehouse\StoreRequest;
 use App\Http\Resources\WarehouseResource;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
@@ -25,12 +26,16 @@ class WarehouseController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param StoreRequest $request
+     * @return WarehouseResource
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        //
+        $warehouse = new Warehouse;
+        $warehouse->fill($request->validated());
+        $warehouse->save();
+
+        return new WarehouseResource($warehouse);
     }
 
     /**
