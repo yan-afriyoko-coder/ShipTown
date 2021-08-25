@@ -75,7 +75,7 @@ export default {
 
         submit() {
             this.showLoading();
-            this.apiPostWarehouse({
+            this.apiPostWarehouses({
                     name: this.name,
                     code: this.code,
                 })
