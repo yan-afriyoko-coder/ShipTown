@@ -17,16 +17,16 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
                             <th>Code</th>
+                            <th>Name</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(warehouse, i) in warehouses" :key="i">
                             <td>{{ warehouse.id }}</td>
-                            <td>{{ warehouse.name }}</td>
                             <td>{{ warehouse.code }}</td>
+                            <td>{{ warehouse.name }}</td>
                             <td>
                                 <a @click.prevent="showEditForm(warehouse)">
                                     <font-awesome-icon icon="edit"></font-awesome-icon>
@@ -40,7 +40,7 @@
                 </table>
 
                 <p v-else class="mb-0">
-                    No navigation menu found.
+                    No warehouses found...
                 </p>
             </div>
         </div>

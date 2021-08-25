@@ -9,21 +9,6 @@
                     <ValidationObserver ref="form">
                         <form class="form" @submit.prevent="submit" ref="loadingContainer">
                             <div class="form-group row">
-                                <label class="col-sm-3 col-form-label" for="name">Name</label>
-                                <div class="col-sm-9">
-                                    <ValidationProvider vid="name" name="name" v-slot="{ errors }">
-                                        <input v-model="name" :class="{
-                                            'form-control': true,
-                                            'is-invalid': errors.length > 0,
-                                        }" id="create-name" required>
-                                        <div class="invalid-feedback">
-                                            {{ errors[0] }}
-                                        </div>
-                                    </ValidationProvider>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
                                 <label class="col-sm-3 col-form-label" for="code">Code</label>
                                 <div class="col-sm-9">
                                     <ValidationProvider vid="code" name="code" v-slot="{ errors }">
@@ -35,6 +20,22 @@
                                             {{ errors[0] }}
                                         </div>
                                     </ValidationProvider>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                              <label class="col-sm-3 col-form-label" for="name">Name</label>
+                                <div class="col-sm-9">
+                                  <ValidationProvider vid="name" name="name" v-slot="{ errors }">
+                                    <input v-model="name" :class="{
+                                                'form-control': true,
+                                                'is-invalid': errors.length > 0,
+                                            }" id="create-name" required>
+                                    <div class="invalid-feedback">
+                                      {{ errors[0] }}
+                                    </div>
+                                  </ValidationProvider>
                                 </div>
                             </div>
                         </form>
