@@ -86,7 +86,7 @@ export default {
 
         submit() {
             this.showLoading();
-            this.apiPutWarehouse(this.warehouse.id, {
+            this.apiPutWarehouses(this.warehouse.id, {
                     name: this.name,
                     code: this.code,
                 })

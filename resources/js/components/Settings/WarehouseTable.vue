@@ -64,7 +64,7 @@ export default {
     },
 
     mounted() {
-        this.apiGetWarehouse()
+        this.apiGetWarehouses()
             .then(({ data }) => {
                 this.warehouses = data.data;
             })
@@ -107,7 +107,7 @@ export default {
             });
         },
         delete(id, index) {
-            this.apiDeleteWarehouse(id)
+            this.apiDeleteWarehouses(id)
                 .then(() => {
                     Vue.delete(this.warehouses, index);
                     this.$snotify.success('Warehouse deleted.');

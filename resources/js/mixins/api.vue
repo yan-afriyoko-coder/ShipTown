@@ -307,19 +307,19 @@ export default {
                 return axios.delete('/api/settings/modules/automations/' + id);
             },
 
-            apiGetWarehouse: function () {
+            apiGetWarehouses: function () {
                 return axios.get('/api/settings/warehouses');
             },
 
-            apiPostWarehouse: function (params) {
+            apiPostWarehouses: function (params) {
                 return axios.post('/api/settings/warehouses/', params);
             },
 
-            apiPutWarehouse: function (id, params) {
+            apiPutWarehouses: function (id, params) {
                 return axios.put('/api/settings/warehouses/' + id, params);
             },
 
-            apiDeleteWarehouse: function (id) {
+            apiDeleteWarehouses: function (id) {
                 return axios.delete('/api/settings/warehouses/' + id);
             },
 

@@ -25,10 +25,11 @@ class UserUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'       => ['sometimes', 'required', 'string', 'max:255', 'unique:users,name,'.$this->user->id],
-            'email'      => ['sometimes', 'required', 'string', 'email', 'max:255', 'unique:users,email,'.$this->user->id],
-            'role_id'    => ['sometimes', 'exists:roles,id'],
-            'printer_id' => ['sometimes', 'numeric'],
+            'name'          => ['sometimes', 'required', 'string', 'max:255', 'unique:users,name,'.$this->user->id],
+            'email'         => ['sometimes', 'required', 'string', 'email', 'max:255', 'unique:users,email,'.$this->user->id],
+            'role_id'       => ['sometimes', 'exists:roles,id'],
+            'printer_id'    => ['sometimes', 'numeric'],
+            'warehouse_id'  => ['nullable', 'exists:warehouses,id'],
         ];
     }
 }

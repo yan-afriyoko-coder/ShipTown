@@ -48,10 +48,24 @@
         </div>
         <!-- The modals -->
         <b-modal ref="createModal" id="create-modal" title="Add User" @ok="handleAddOk">
-            <create-modal ref="createForm" :roles="roles" @onCreated=addedUser></create-modal>
+            <create-modal
+                ref="createForm"
+                :roles="roles"
+                :warehouses="warehouses"
+                @onCreated=addedUser
+            >
+            </create-modal>
         </b-modal>
         <b-modal ref="editModal" id="edit-modal" title="Edit User" @ok="handleEditOk">
-            <edit-modal v-if="selectedId" :id="selectedId" :roles="roles" @onUpdated=updatedUser ref="editForm"></edit-modal>
+            <edit-modal
+                ref="editForm"
+                v-if="selectedId"
+                :id="selectedId"
+                :roles="roles"
+                :warehouses="warehouses"
+                @onUpdated=updatedUser
+            >
+            </edit-modal>
         </b-modal>
     </div>
 </template>
@@ -80,12 +94,14 @@ export default {
     mounted() {
         this.loadUsers();
         this.loadRoles();
+        this.loadWarehouses();
     },
 
     data: () => ({
         currentUser: {},
         users: [],
         roles: [],
+        warehouses: [],
         selectedId: null,
     }),
 
@@ -103,6 +119,13 @@ export default {
             this.apiGetUserRoles()
                 .then(({ data }) => {
                     this.roles = data.data;
+                });
+        },
+
+        loadWarehouses() {
+            this.apiGetWarehouses()
+                .then(({ data }) => {
+                    this.warehouses = data.data;
                 });
         },
 
