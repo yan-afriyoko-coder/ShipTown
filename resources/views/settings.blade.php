@@ -33,6 +33,16 @@
                     </div>
                 </a>
 
+                <a href="{{ route('settings.warehouses') }}" class="setting-list">
+                    <div class="setting-icon">
+                        <font-awesome-icon icon="warehouse" class="fa-sm"></font-awesome-icon>
+                    </div>
+                    <div class="setting-body">
+                        <div class="setting-title">Warehouses</div>
+                        <div class="setting-desc">Manage warehouses</div>
+                    </div>
+                </a>
+
                 <a href="{{ route('settings.automations') }}" class="setting-list">
                     <div class="setting-icon">
                         <font-awesome-icon icon="magic" class="fas-sm"></font-awesome-icon>

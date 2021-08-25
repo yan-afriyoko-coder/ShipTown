@@ -28,6 +28,7 @@ Route::prefix('settings')->group(function () {
     Route::view('mail-templates', 'settings/mail-templates')->name('settings.mail_templates');
     Route::view('navigation-menu', 'settings/navigation-menu')->name('settings.navigation_menu');
     Route::view('automations', 'settings/automations')->name('settings.automations');
+    Route::view('warehouses', 'settings/warehouses')->name('settings.warehouses');
 });
 
 Route::prefix('tools')->group(function () {

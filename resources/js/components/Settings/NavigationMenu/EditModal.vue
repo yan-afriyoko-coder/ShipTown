@@ -9,13 +9,13 @@
                     <ValidationObserver ref="form">
                         <form class="form" @submit.prevent="submit" ref="loadingContainer">
                             <div class="form-group row">
-                                <label class="col-sm-3 col-form-label" for="name">Name</label>
+                                <label class="col-sm-3 col-form-label" for="edit-name">Name</label>
                                 <div class="col-sm-9">
                                     <ValidationProvider vid="name" name="name" v-slot="{ errors }">
                                         <input v-model="name" :class="{
                                             'form-control': true,
                                             'is-invalid': errors.length > 0,
-                                        }" id="create-name" required>
+                                        }" id="edit-name" required>
                                         <div class="invalid-feedback">
                                             {{ errors[0] }}
                                         </div>
@@ -24,11 +24,11 @@
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-sm-3 col-form-label" for="group">Group</label>
+                                <label class="col-sm-3 col-form-label" for="edit-group">Group</label>
                                 <div class="col-sm-9">
                                     <ValidationProvider vid="group" name="group" v-slot="{ errors }">
                                         <select
-                                            id="create-group"
+                                            id="edit-group"
                                             :class="{
                                                 'form-control': true,
                                                 'is-invalid': errors.length > 0,
@@ -64,7 +64,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" @click="closeModal" class="btn btn-default">Cancel</button>
-                    <button type="button" @click="submit" class="btn btn-primary">Ok</button>
+                    <button type="button" @click="submit" class="btn btn-primary">Save</button>
                 </div>
             </div>
         </div>
