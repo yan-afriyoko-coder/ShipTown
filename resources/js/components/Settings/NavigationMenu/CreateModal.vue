@@ -9,7 +9,7 @@
                     <ValidationObserver ref="form">
                         <form class="form" @submit.prevent="submit" ref="loadingContainer">
                             <div class="form-group row">
-                                <label class="col-sm-3 col-form-label" for="name">Name</label>
+                                <label class="col-sm-3 col-form-label" for="create-name">Name</label>
                                 <div class="col-sm-9">
                                     <ValidationProvider vid="name" name="name" v-slot="{ errors }">
                                         <input v-model="name" :class="{
@@ -26,7 +26,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label" for="group">Group</label>
                                 <div class="col-sm-9">
-                                    <ValidationProvider vid="group" name="group" v-slot="{ errors }">
+                                    <ValidationProvider vid="group" name="create-group" v-slot="{ errors }">
                                         <select
                                             id="create-group"
                                             :class="{
