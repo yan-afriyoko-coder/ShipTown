@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Settings;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Warehouse\StoreRequest;
+use App\Http\Requests\Warehouse\UpdateRequest;
 use App\Http\Resources\WarehouseResource;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
@@ -41,13 +42,15 @@ class WarehouseController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Warehouse  $warehouse
-     * @return \Illuminate\Http\Response
+     * @param UpdateRequest $request
+     * @param Warehouse $warehouse
+     * @return WarehouseResource
      */
-    public function update(Request $request, Warehouse $warehouse)
+    public function update(UpdateRequest $request, Warehouse $warehouse)
     {
-        //
+        $warehouse->update($request->validated());
+
+        return new WarehouseResource($warehouse);
     }
 
     /**
