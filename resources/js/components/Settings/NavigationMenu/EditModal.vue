@@ -64,7 +64,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" @click="closeModal" class="btn btn-default">Cancel</button>
-                    <button type="button" @click="submit" class="btn btn-primary">Ok</button>
+                    <button type="button" @click="submit" class="btn btn-primary">Save</button>
                 </div>
             </div>
         </div>
