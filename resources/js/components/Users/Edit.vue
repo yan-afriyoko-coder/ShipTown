@@ -2,13 +2,13 @@
     <ValidationObserver ref="form">
         <form class="form" @submit.prevent="submit" ref="loadingContainer">
             <div class="form-group row">
-                <label class="col-sm-3 col-form-label" for="name">Name</label>
+                <label class="col-sm-3 col-form-label" for="edit-name">Name</label>
                 <div class="col-sm-9">
                     <ValidationProvider vid="name" name="name" v-slot="{ errors }">
                         <input v-model="name" :class="{
                             'form-control': true,
                             'is-invalid': errors.length > 0,
-                        }" id="name" required>
+                        }" id="edit-name" required>
                         <div class="invalid-feedback">
                             {{ errors[0] }}
                         </div>
@@ -16,14 +16,41 @@
                 </div>
             </div>
             <div v-if="!isCurrentUser" class="form-group row">
-                <label for="role_id" class="col-sm-3 col-form-label">Role</label>
+                <label for="edit-role_id" class="col-sm-3 col-form-label">Role</label>
                 <div class="col-sm-9">
-                    <select class="form-control" v-model="roleId" name="role_id" id="role_id">
-                        <option value="" disabled>Select role</option>
-                        <option v-for="(role, i) in roles" :key="i" :value="role.id">
-                            {{ role.name }}
-                        </option>
-                    </select>
+                    <ValidationProvider vid="role_id" name="role_id" v-slot="{ errors }">
+                        <select v-model="roleId" :class="{
+                                'form-control': true,
+                                'is-invalid': errors.length > 0,
+                            }"
+                            name="role_id"
+                            id="edit-role_id">
+                            <option value="" disabled>Select role</option>
+                            <option v-for="(role, i) in roles" :key="i" :value="role.id">
+                                {{ role.name }}
+                            </option>
+                        </select>
+                    </ValidationProvider>
+                </div>
+            </div>
+            <div v-if="!isCurrentUser" class="form-group row">
+                <label for="create-warehouse_id" class="col-sm-3 col-form-label">Warehouse</label>
+                <div class="col-sm-9">
+                    <ValidationProvider vid="warehouse_id" name="warehouse_id" v-slot="{ errors }">
+                        <select v-model="warehouseId" :class="{
+                                'form-control': true,
+                                'is-invalid': errors.length > 0,
+                            }"
+                            id="create-warehouse_id" required>
+                            <option value=""></option>
+                            <option v-for="warehouse in warehouses" :key="warehouse.id" :value="warehouse.id">
+                                {{ warehouse.name }}
+                            </option>
+                        </select>
+                        <div class="invalid-feedback">
+                            {{ errors[0] }}
+                        </div>
+                    </ValidationProvider>
                 </div>
             </div>
         </form>
@@ -52,18 +79,21 @@ export default {
                 const user = data.data[0];
                 this.name = user.name;
                 this.roleId = user.role_id;
+                this.warehouseId = user.warehouse_id;
             })
             .finally(this.hideLoading);
     },
 
     props: {
         id: Number,
-        roles: Array
+        roles: Array,
+        warehouses: Array
     },
 
     data: () => ({
         name: null,
         roleId: null,
+        warehouseId: null
     }),
 
     methods: {
@@ -73,6 +103,7 @@ export default {
             this.apiPostUserUpdate(this.id, {
                     name: this.name,
                     role_id: this.roleId,
+                    warehouse_id: this.warehouseId,
                 })
                 .then(({ data }) => {
                     this.$snotify.success('User updated.');

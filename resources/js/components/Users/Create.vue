@@ -16,13 +16,13 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-sm-3 col-form-label" for="email">Email</label>
+                <label class="col-sm-3 col-form-label" for="create-email">Email</label>
                 <div class="col-sm-9">
                     <ValidationProvider vid="email" name="email" v-slot="{ errors }">
                         <input type="email" v-model="email" :class="{
                             'form-control': true,
                             'is-invalid': errors.length > 0,
-                        }" id="email" placeholder="foo@bar.com" required>
+                        }" id="create-email" placeholder="foo@bar.com" required>
                         <div class="invalid-feedback">
                             {{ errors[0] }}
                         </div>
@@ -49,6 +49,26 @@
                     </ValidationProvider>
                 </div>
             </div>
+            <div class="form-group row">
+                <label for="create-warehouse_id" class="col-sm-3 col-form-label">Warehouse</label>
+                <div class="col-sm-9">
+                    <ValidationProvider vid="warehouse_id" name="warehouse_id" v-slot="{ errors }">
+                        <select v-model="warehouseId" :class="{
+                                'form-control': true,
+                                'is-invalid': errors.length > 0,
+                            }"
+                            id="create-warehouse_id" required>
+                            <option value=""></option>
+                            <option v-for="warehouse in warehouses" :key="warehouse.id" :value="warehouse.id">
+                                {{ warehouse.name }}
+                            </option>
+                        </select>
+                        <div class="invalid-feedback">
+                            {{ errors[0] }}
+                        </div>
+                    </ValidationProvider>
+                </div>
+            </div>
         </form>
     </ValidationObserver>
 </template>
@@ -65,7 +85,8 @@ export default {
     },
 
     props: {
-        roles: Array
+        roles: Array,
+        warehouses: Array
     },
 
     mixins: [api, Loading],
@@ -73,7 +94,8 @@ export default {
     data: () => ({
         name: null,
         email: null,
-        roleId: null
+        roleId: null,
+        warehouseId: null
     }),
 
     methods: {
@@ -84,6 +106,7 @@ export default {
                 name: this.name,
                 email: this.email,
                 role_id: this.roleId,
+                warehouse_id: this.warehouseId
             };
             this.apiPostUserStore(data)
                 .then(({ data }) => {
