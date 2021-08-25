@@ -118,6 +118,7 @@ Vue.component('user-courier-integration-select', require('./components/Settings/
 Vue.component('picks-table', require('./components/PicklistPage.vue').default);
 Vue.component('auto-pilot-tuning-section', require('./components/Settings/AutoPilotTuningSection.vue').default);
 Vue.component('maintenance-section', require('./components/Settings/MaintenanceSection.vue').default);
+Vue.component('configuration-section', require('./components/Settings/ConfigurationSection.vue').default);
 Vue.component('module-configuration', require('./components/Settings/ModuleConfiguration.vue').default);
 Vue.component('order-status-table', require('./components/Settings/OrderStatusTable.vue').default);
 Vue.component('mail-template-table', require('./components/Settings/MailTemplateTable.vue').default);
