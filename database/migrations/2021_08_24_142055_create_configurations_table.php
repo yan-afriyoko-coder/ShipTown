@@ -14,13 +14,17 @@ class CreateConfigurationsTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('configurations')) {
+            return;
+        }
+
         Schema::create('configurations', function (Blueprint $table) {
             $table->id();
             $table->string('business_name')->default('');
             $table->timestamps();
         });
 
-        Configuration::create(['business_name' => config('app.tenant_name')]);
+        Configuration::create([]);
     }
 
     /**
