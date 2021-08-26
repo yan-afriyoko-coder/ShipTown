@@ -16,6 +16,7 @@ class UninstallModules extends Migration
         \App\Modules\AutoStatusLayawayStorePickup\src\AutoStatusStorePickupServiceProvider::uninstallModule();
         \App\Modules\AutoStatusPackingWarehouse\src\AutoPackingWarehouseServiceProvider::uninstallModule();
         \App\Modules\AutoStatusSingleLineOrders\src\AutoStatusSingleLineOrdersServiceProvider::uninstallModule();
+        \App\Modules\AutoStatusLayaway\src\AutoStatusLayawayServiceProvider::uninstallModule();
     }
 
     /**
