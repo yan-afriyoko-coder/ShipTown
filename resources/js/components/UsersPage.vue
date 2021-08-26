@@ -13,7 +13,7 @@
             </div>
 
             <div class="card-body">
-                <table v-if="users.length > 0" class="table mb-0">
+                <table v-if="users.length > 0" class="table table-borderless table-responsive mb-0">
                     <tbody>
                         <tr v-for="(user, i) in users" :key="i">
                             <td>
@@ -21,6 +21,7 @@
                                 <br>
                                 {{ user.email }}
                             </td>
+                            <td style="vertical-align:middle">{{ user.role_name }}</td>
                             <td style="vertical-align:middle">
                                 <a @click.prevent="onEditClick(user.id)">
                                     <font-awesome-icon icon="user-edit"></font-awesome-icon>
