@@ -32,6 +32,7 @@ use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
  * @property int         $location_id
  * @property Carbon|null $email_verified_at
  * @property string      $password
+ * @property int|null    $warehouse_id
  * @property string|null $remember_token
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
