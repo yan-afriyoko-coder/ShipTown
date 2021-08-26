@@ -33,7 +33,10 @@ class MailTemplateController extends Controller
     public function update(UpdateRequest $request, MailTemplate $mailTemplate)
     {
         $data = $request->validated();
-        $data['to'] = implode(", ", $data['to']);
+        ray($data);
+        if (isset($data['to'])) {
+            $data['to'] = implode(", ", $data['to']);
+        }
 
         $mailTemplate->update($data);
 

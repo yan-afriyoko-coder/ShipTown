@@ -27,7 +27,7 @@ class UpdateTest extends TestCase
             'subject'       => 'update subject',
             'html_template' => '<p>update html</p>',
             'text_template' => 'update text',
-            'to'            => 'test@example.com',
+            'to'            => '',
             'reply_to'      => 'test@example.com'
         ]);
 
