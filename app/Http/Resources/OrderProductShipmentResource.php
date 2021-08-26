@@ -17,6 +17,7 @@ class OrderProductShipmentResource extends JsonResource
     {
         return [
             'id'                              => $this->id,
+            'warehouse_id'                    => $this->warehouse_id,
             'order_product_id'                => $this->order_product_id,
             'quantity_shipped'                => $this->quantity_shipped,
             'order_product_shipment_id'       => $this->order_product_shipment_id,

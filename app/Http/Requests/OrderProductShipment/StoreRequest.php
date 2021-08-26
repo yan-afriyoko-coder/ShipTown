@@ -25,6 +25,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'order_product_id'  => ['sometimes', 'integer', 'exists:order_products,id'],
+            'warehouse_id'      => ['sometimes', 'integer', 'exists:warehouses,id'],
             'quantity_shipped'  => ['sometimes', 'numeric'],
             'order_shipment_id' => ['sometimes', 'integer', 'exists:orders_products_shipments,id'],
         ];
