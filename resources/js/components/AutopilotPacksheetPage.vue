@@ -103,6 +103,7 @@
     import SetShippingNumberModal from "./Packlist/ShippingNumberModal";
     import api from "../mixins/api";
     import helpers from "../mixins/helpers";
+    import Vue from "vue";
 
     export default {
             mixins: [loadingOverlay, beep, url, api, helpers],
@@ -125,7 +126,6 @@
                     previousOrderNumber: null,
                     canClose: true,
                     isPrintingLabel: false,
-                    user: null,
                     order: null,
                     packlist: null,
                     packed: [],
@@ -136,7 +136,6 @@
             },
 
             mounted() {
-                this.loadUser();
                 if (this.order_number) {
                     this.loadOrder(this.order_number);
                 }
@@ -170,12 +169,6 @@
             },
 
             methods: {
-                loadUser() {
-                    this.apiGetUserMe()
-                        .then(({data}) => {
-                            this.user = (data.data);
-                        });
-                },
 
                 loadOrder: function (orderNumber) {
                     this.showLoading();

@@ -9,6 +9,7 @@
 
     @auth
     <meta name="user-id" content="{{ Auth::user()->id }}">
+    <meta name="current-user" content="{{ \App\Http\Resources\UserResource::make(Auth::user())->toJson() }}">
     @endauth
 
     <title>PM @yield('title')</title>

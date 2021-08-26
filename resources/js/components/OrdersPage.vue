@@ -64,21 +64,11 @@
 
         mounted() {
             this.searchText = this.getUrlParameter('search');
+            this.setUrlParameter('inventory_source_location_id', this.user['location_id']);
 
             window.onscroll = () => this.loadMore();
 
             this.reloadOrders();
-        },
-
-        watch: {
-            user: {
-                handler() {
-                    if(this.user['location_id']) {
-                        this.setUrlParameter('inventory_source_location_id', this.user['location_id']);
-                        this.reloadOrders();
-                    }
-                }
-            },
         },
 
         methods: {

@@ -11,23 +11,12 @@ export default {
         data: function () {
             return {
                 user: null,
-                loading_user: false,
             }
         },
 
         mounted() {
-            if (Vue.prototype.$user) {
-                this.user = Vue.prototype.$user;
-            } else if (Vue.prototype.$user === undefined && Vue.prototype.$loading_user === undefined) {
-                Vue.prototype.$loading_user = true;
-
-                this.apiGetUserMe()
-                    .then( ({data}) => {
-                        Vue.prototype.$user = data.data;
-                        this.user = Vue.prototype.$user;
-                        console.log(Vue.prototype.$user, Vue.prototype.$loading_user);
-                    });
-            }
+            Vue.prototype.$currentUser = JSON.parse(document.querySelector("meta[name='current-user']").getAttribute('content'));
+            this.user = Vue.prototype.$currentUser;
         },
 
         methods: {
