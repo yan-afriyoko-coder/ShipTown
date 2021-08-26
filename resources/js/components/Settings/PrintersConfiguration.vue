@@ -9,19 +9,19 @@
                 </div>
             </div>
             <div class="card-body">
-                <table class="table">
+                <table class="table table-borderless table-responsive mb-0">
                     <thead>
                         <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Computer</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Action</th>
+                            <th>ID</th>
+                            <th>Computer</th>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-if="error || (!error && printers.length === 0)">
-                            <td colspan="4">No printers found.</td>
+                            <td colspan="5">No printers found.</td>
                         </tr>
                         <tr v-for="printer in printers" :key="printer.id" :class="{
                             'table-primary': isDefaultPrinter(printer.id)
