@@ -5,6 +5,7 @@ namespace App\Models;
 use App\BaseModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
 /**
@@ -33,6 +34,8 @@ use Illuminate\Support\Carbon;
  */
 class OrderStatus extends BaseModel
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'name',
         'code',
