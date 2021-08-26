@@ -21,7 +21,7 @@
                                 <br>
                                 {{ user.email }}
                             </td>
-                            <td>
+                            <td style="vertical-align:middle">
                                 <a @click.prevent="onEditClick(user.id)">
                                     <font-awesome-icon icon="user-edit"></font-awesome-icon>
                                 </a>
