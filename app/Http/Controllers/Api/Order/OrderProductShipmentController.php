@@ -24,7 +24,8 @@ class OrderProductShipmentController extends Controller
     public function store(StoreRequest $request): OrderProductShipmentResource
     {
         $orderProductShipment = new OrderProductShipment($request->validated());
-        $orderProductShipment->user()->associate($request->user());
+        $orderProductShipment->user_id = $request->user()->getKey();
+        $orderProductShipment->warehouse_id = $orderProductShipment->user->warehouse_id;
         $orderProductShipment->save();
 
         return new OrderProductShipmentResource($orderProductShipment);

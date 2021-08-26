@@ -17,12 +17,16 @@ use Spatie\Activitylog\Models\Activity;
  * App\Models\OrderProduct.
  *
  * @property int         $id
+ * @property int|null    $user_id
+ * @property int|null    $warehouse_id
  * @property int|null    $order_id
  * @property int|null    $product_id
  * @property float       $quantity_shipped
  * @property float       $quantity_to_ship
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
+ * @property User|null   $user
  *
  * @mixin Eloquent
  */
