@@ -13,22 +13,14 @@
             </div>
 
             <div class="card-body">
-                <table v-if="users.length > 0" class="table table-borderless table-responsive mb-0">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Email</th>
-                            <th>Name</th>
-                            <th>Role Name</th>
-                            <th></th>
-                        </tr>
-                    </thead>
+                <table v-if="users.length > 0" class="table mb-0">
                     <tbody>
                         <tr v-for="(user, i) in users" :key="i">
-                            <td>{{ user.id }}</td>
-                            <td>{{ user.email }}</td>
-                            <td>{{ user.name }}</td>
-                            <td>{{ user.role_name }}</td>
+                            <td>
+                                <strong>{{ user.name }}</strong>
+                                <br>
+                                {{ user.email }}
+                            </td>
                             <td>
                                 <a @click.prevent="onEditClick(user.id)">
                                     <font-awesome-icon icon="user-edit"></font-awesome-icon>
