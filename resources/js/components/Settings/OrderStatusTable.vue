@@ -43,6 +43,9 @@
                                 <a @click.prevent="showEditForm(orderStatus)">
                                     <font-awesome-icon icon="edit"></font-awesome-icon>
                                 </a>
+                                <a @click.prevent="confirmDelete(orderStatus)">
+                                    <font-awesome-icon icon="archive"></font-awesome-icon>
+                                </a>
                             </td>
                         </tr>
                     </tbody>
@@ -100,6 +103,29 @@ export default {
         },
         addOrderStatus(orderStatus){
             this.orderStatuses.push(orderStatus)
+        },
+        confirmDelete(orderStatus) {
+            const indexOrderStatuses = this.orderStatuses.findIndex(status => status.id == orderStatus.id)
+            this.$snotify.confirm(`wants to archive ${orderStatus.name}`, 'Are you sure?', {
+                position: 'centerCenter',
+                buttons: [
+                    {
+                        text: 'Yes',
+                        action: (toast) => {
+                            this.delete(orderStatus.id, indexOrderStatuses)
+                            this.$snotify.remove(toast.id);
+                        }
+                    },
+                    {text: 'Cancel'},
+                ]
+            });
+        },
+        delete(id, index) {
+            this.apiDeleteOrderStatus(id)
+                .then(() => {
+                    Vue.delete(this.orderStatuses, index);
+                    this.$snotify.success('Automation archived.');
+                });
         }
     },
 }
