@@ -84,11 +84,12 @@ import { ValidationObserver, ValidationProvider } from "vee-validate";
 
 import Loading from "../../../mixins/loading-overlay";
 import api from "../../../mixins/api";
+import helpers from "../../../mixins/helpers";
 
 export default {
     name: "EditModal",
 
-    mixins: [api, Loading],
+    mixins: [api, Loading, helpers],
 
     components: {
         ValidationObserver, ValidationProvider
@@ -115,7 +116,6 @@ export default {
     },
 
     methods: {
-
         submit() {
             this.showLoading();
             this.apiPutOrderStatus(this.orderStatus.id, {
@@ -135,10 +135,33 @@ export default {
                     }
                 })
                 .finally(this.hideLoading);
+
+            this.closeModal();
         },
 
         confirmDelete() {
-            this.$snotify.confirm(`wants to archive ${this.orderStatus.name}`, 'Are you sure?', {
+            if(this.reservesStock) {
+              this.showError('Status cannot be archived when "Reserves Stock" enabled');
+              return;
+            }
+
+            if(this.orderActive) {
+              this.showError('Status cannot be archived when "Order Active" enabled');
+              return;
+            }
+
+            if(this.syncEcommerce) {
+              this.showError('Status cannot be archived when "Sync eCommerce" enabled');
+              return;
+            }
+
+
+            if(this.isModified) {
+              this.showError('Please save changes before archiving');
+              return;
+            }
+
+            this.$snotify.confirm(`Do you want to archive this status?`,  {
                 position: 'centerCenter',
                 buttons: [
                     {
@@ -154,6 +177,8 @@ export default {
         },
 
         delete(id, index) {
+            this.submit();
+
             this.apiDeleteOrderStatus(id)
                 .then(() => {
                     this.closeModal();
