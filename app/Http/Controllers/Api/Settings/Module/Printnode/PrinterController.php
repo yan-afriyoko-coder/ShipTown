@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\Settings\Module\Printnode;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PrintNode\PrinterController\IndexRequest;
 use App\Modules\PrintNode\src\PrintNode;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -13,11 +13,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class PrinterController extends Controller
 {
     /**
-     * @param Request $request
+     * @param IndexRequest $request
      *
      * @return JsonResource
      */
-    public function index(Request $request): JsonResource
+    public function index(IndexRequest $request): JsonResource
     {
         return new JsonResource(PrintNode::getPrinters());
     }

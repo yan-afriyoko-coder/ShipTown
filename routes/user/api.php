@@ -49,3 +49,8 @@ Route::apiResource('packlist/order', 'Api\PacklistOrderController', ['as' => 'pa
 Route::apiResource('settings/user/me', 'Api\Settings\UserMeController')->only(['index', 'store']);
 Route::apiResource('settings/widgets', 'Api\Settings\WidgetController')->only(['store', 'update']);
 Route::apiResource('navigation-menu', 'Api\Settings\NavigationMenuController')->only(['index']);
+
+Route::apiResource(
+    'modules/printnode/printers',
+    'Api\Settings\Module\Printnode\PrinterController'
+)->only(['index']);

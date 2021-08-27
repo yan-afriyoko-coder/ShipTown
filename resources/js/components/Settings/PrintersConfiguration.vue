@@ -20,7 +20,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-if="error || (!error && printers.length === 0)">
+                        <tr v-if="errorMessage">
+                            <td colspan="5" class="alert-danger">{{ errorMessage }}</td>
+                        </tr>
+                        <tr v-if="(!errorMessage && printers.length === 0)">
                             <td colspan="5">No printers found.</td>
                         </tr>
                         <tr v-for="printer in printers" :key="printer.id" :class="{
@@ -44,28 +47,28 @@
 
 <script>
 import api from "../../mixins/api";
+import Vue from "vue";
+import helpers from "../../mixins/helpers";
 
 export default {
-    mixins: [api],
+    mixins: [api, helpers],
 
-    created() {
-        this.apiGetUserMe()
-            .then(({ data }) => {
-                this.defaultPrinter = data.data.printer_id;
-            });
+    mounted() {
+        this.defaultPrinter = Vue.prototype.$currentUser['printer_id'];
 
         this.apiGetPrintNodePrinters()
             .then(({ data }) => {
                 this.printers = data.data;
             }).catch(e => {
-                this.error = true;
+                this.errorMessage = e.message;
+                this.showError('Request failed: ' + e.message);
             });
     },
 
     data: () => ({
         defaultPrinter: null,
         printers: [],
-        error: false,
+        errorMessage: null,
     }),
 
     methods: {
