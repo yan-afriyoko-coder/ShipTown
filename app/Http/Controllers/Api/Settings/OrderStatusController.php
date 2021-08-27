@@ -53,4 +53,21 @@ class OrderStatusController extends Controller
 
         return OrderStatusResource::make($orderStatus);
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  OrderStatus $orderStatus
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(OrderStatus $orderStatus)
+    {
+        if ($orderStatus->order_active || $orderStatus->reserves_stock || $orderStatus->sync_ecommerce) {
+            abort(401, "This order statuses cannot archived");
+        }
+
+        $orderStatus->delete();
+
+        return true;
+    }
 }
