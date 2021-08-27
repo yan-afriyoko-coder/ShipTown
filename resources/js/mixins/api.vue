@@ -247,6 +247,10 @@ export default {
                 return axios.put('/api/settings/order-statuses/' + id, params);
             },
 
+            apiDeleteOrderStatus: function (id, params) {
+                return axios.delete('/api/settings/order-statuses/' + id);
+            },
+
             apiGetMailTemplate: function () {
                 return axios.get('/api/settings/mail-templates');
             },

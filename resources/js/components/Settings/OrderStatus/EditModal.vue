@@ -67,9 +67,12 @@
                         </form>
                     </ValidationObserver>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" @click="closeModal" class="btn btn-default">Cancel</button>
-                    <button type="button" @click="submit" class="btn btn-primary">Ok</button>
+                <div class="modal-footer" style="justify-content:space-between">
+                    <button type="button" @click="confirmDelete" class="btn btn-outline-danger float-left">Archive</button>
+                    <div>
+                        <button type="button" @click="closeModal" class="btn btn-default">Cancel</button>
+                        <button type="button" @click="submit" class="btn btn-primary">Save</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -122,7 +125,6 @@ export default {
                 })
                 .then(({ data }) => {
                     this.$snotify.success('Order status updated.');
-                    this.closeModal();
                     this.$emit('onUpdated', data.data);
                 })
                 .catch((error) => {
@@ -133,6 +135,38 @@ export default {
                     }
                 })
                 .finally(this.hideLoading);
+        },
+
+        confirmDelete() {
+            this.$snotify.confirm(`wants to archive ${this.orderStatus.name}`, 'Are you sure?', {
+                position: 'centerCenter',
+                buttons: [
+                    {
+                        text: 'Yes',
+                        action: (toast) => {
+                            this.delete(this.orderStatus.id)
+                            this.$snotify.remove(toast.id);
+                        }
+                    },
+                    {text: 'Cancel'},
+                ]
+            });
+        },
+
+        delete(id, index) {
+            this.apiDeleteOrderStatus(id)
+                .then(() => {
+                    this.closeModal();
+                    this.$emit('onDeleted', id);
+                    this.$snotify.success('Order status archived.');
+                })
+                .catch(error => {
+                    if (error.response) {
+                        if (error.response.status === 401) {
+                            this.$snotify.error(error.response.data.message);
+                        }
+                    }
+                });
         },
 
         closeModal() {

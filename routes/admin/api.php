@@ -23,7 +23,7 @@ Route::apiResource('modules/autostatus/picking/configuration', 'Api\Modules\Auto
 
 Route::group(['prefix' => 'settings', 'namespace' => 'Api\Settings', 'as' => 'api.settings.'], function () {
     Route::apiResource('modules', 'ModuleConfigurationController')->only(['index', 'update']);
-    Route::apiResource('order-statuses', 'OrderStatusController')->only(['index', 'store', 'update']);
+    Route::apiResource('order-statuses', 'OrderStatusController')->only(['index', 'store', 'update', 'destroy']);
     Route::apiResource('mail-templates', 'MailTemplateController')->only(['index', 'update']);
     Route::apiResource('navigation-menu', 'NavigationMenuController')->only(['index', 'store', 'update', 'destroy']);
     Route::apiResource('warehouses', 'WarehouseController')->only(['index', 'store', 'update', 'destroy']);

@@ -92,4 +92,33 @@ class StoreTest extends TestCase
             'code',
         ]);
     }
+
+    public function test_add_deleted_status_return_ok()
+    {
+        Passport::actingAs(
+            factory(User::class)->states('admin')->create()
+        );
+
+        $orderStatus = OrderStatus::create([
+            'name' => 'testing',
+            'code' => 'testing',
+            'order_active' => 1,
+            'reserves_stock' => 1,
+            'sync_ecommerce' => 0,
+        ]);
+
+        $orderStatus->delete();
+
+        $response = $this->post(route('api.settings.order-statuses.store'), [
+            'name'              => $orderStatus->name,
+            'code'              => $orderStatus->code,
+            'order_active'      => 0,
+            'reserves_stock'    => 0,
+            'sync_ecommerce'    => 0,
+        ]);
+
+        ray($response);
+
+        $response->assertStatus(200);
+    }
 }

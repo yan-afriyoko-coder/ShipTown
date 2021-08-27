@@ -285,6 +285,9 @@ export default {
                 conditions: [],
                 actions: []
             }
+
+            this.addCondition();
+            this.addAction();
         },
 
         closeModal() {

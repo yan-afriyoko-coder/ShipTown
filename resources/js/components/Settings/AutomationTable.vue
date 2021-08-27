@@ -100,15 +100,15 @@ export default {
             const indexAutomations = this.automations.findIndex(automation => automation.id == newValue.id)
             this.$set(this.automations, indexAutomations, newValue)
         },
-        confirmDelete(automation) {
-            const indexAutomations = this.automations.findIndex(automation => automation.id == automation.id)
+        confirmDelete(selectedAutomation) {
+            const indexAutomations = this.automations.findIndex(automation => automation.id == selectedAutomation.id)
             this.$snotify.confirm('After delete data cannot restored', 'Are you sure?', {
                 position: 'centerCenter',
                 buttons: [
                     {
                         text: 'Yes',
                         action: (toast) => {
-                            this.delete(automation.id, indexAutomations)
+                            this.delete(selectedAutomation.id, indexAutomations)
                             this.$snotify.remove(toast.id);
                         }
                     },

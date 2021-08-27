@@ -24,8 +24,8 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'              => ['required', 'string', 'max:100', 'unique:order_statuses,name'],
-            'code'              => ['required', 'string', 'max:100', 'unique:order_statuses,code'],
+            'name'              => ['required', 'string', 'max:100'],
+            'code'              => ['required', 'string', 'max:100'],
             'order_active'      => ['required', 'boolean'],
             'reserves_stock'    => ['required', 'boolean'],
             'sync_ecommerce'    => ['required', 'boolean'],

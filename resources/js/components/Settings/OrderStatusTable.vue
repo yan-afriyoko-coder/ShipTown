@@ -55,7 +55,7 @@
         </div>
         <!-- The modals -->
         <create-modal id="createForm" @onCreated="addOrderStatus"></create-modal>
-        <edit-modal :orderStatus="selectedOrderStatus" id="editForm" @onUpdated="updateOrderStatus"></edit-modal>
+        <edit-modal :orderStatus="selectedOrderStatus" id="editForm" @onUpdated="updateOrderStatus" @onDeleted="removeOrderStatus"></edit-modal>
     </div>
 </template>
 
@@ -100,7 +100,11 @@ export default {
         },
         addOrderStatus(orderStatus){
             this.orderStatuses.push(orderStatus)
-        }
+        },
+        removeOrderStatus(id){
+            const indexOrderStatuses = this.orderStatuses.findIndex(status => status.id == id)
+            Vue.delete(this.orderStatuses, indexOrderStatuses);
+        },
     },
 }
 </script>

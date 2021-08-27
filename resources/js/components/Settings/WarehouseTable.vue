@@ -90,15 +90,15 @@ export default {
             const indexWarehouse = this.warehouses.findIndex(warehouse => warehouse.id == newValue.id)
             this.$set(this.warehouses, indexWarehouse, newValue)
         },
-        confirmDelete(warehouse) {
-            const indexWarehouse = this.warehouses.findIndex(menu => warehouse.id == menu.id)
+        confirmDelete(selectedWarehouse) {
+            const indexWarehouse = this.warehouses.findIndex(warehouse => warehouse.id == selectedWarehouse.id)
             this.$snotify.confirm('After delete data cannot restored', 'Are you sure?', {
                 position: 'centerCenter',
                 buttons: [
                     {
                         text: 'Yes',
                         action: (toast) => {
-                            this.delete(warehouse.id, indexWarehouse)
+                            this.delete(selectedWarehouse.id, indexWarehouse)
                             this.$snotify.remove(toast.id);
                         }
                     },
