@@ -125,6 +125,13 @@ export default {
                 .then(() => {
                     Vue.delete(this.orderStatuses, index);
                     this.$snotify.success('Automation archived.');
+                })
+                .catch(error => {
+                    if (error.response) {
+                        if (error.response.status === 401) {
+                            this.$snotify.error(error.response.data.message);
+                        }
+                    }
                 });
         }
     },
