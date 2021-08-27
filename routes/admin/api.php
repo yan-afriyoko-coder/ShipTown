@@ -45,7 +45,6 @@ Route::group(['prefix' => 'settings', 'namespace' => 'Api\Settings', 'as' => 'ap
 
         // printnode
         Route::group(['prefix' => 'printnode', 'namespace' => 'Printnode', 'as' => 'printnode.'], function () {
-            Route::apiResource('printers', 'PrinterController')->only(['index']);
             Route::apiResource('printjobs', 'PrintJobController')->only(['store']);
             Route::apiResource('clients', 'ClientController')->only(['index', 'store', 'destroy']);
         });

@@ -177,7 +177,7 @@ export default {
             },
 
             apiGetPrintNodePrinters: function () {
-                return axios.get('/api/settings/modules/printnode/printers');
+                return axios.get('/api/modules/printnode/printers');
             },
 
             apiPostPrintnodePrintJob: function (data) {
