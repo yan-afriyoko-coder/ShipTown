@@ -269,7 +269,6 @@ export default {
                 .then(({ data }) => {
                     this.$snotify.success('Automation editd.');
                     this.closeModal();
-                    this.resetForm()
                     this.$emit('onUpdated', data.data);
                 })
                 .catch((error) => {
@@ -280,17 +279,6 @@ export default {
                     }
                 })
                 .finally(this.hideLoading);
-        },
-
-        resetForm(){
-            this.automation = {
-                name: '',
-                event_class: '',
-                enabled: true,
-                priority: 1,
-                conditions: [],
-                actions: []
-            }
         },
 
         closeModal() {
