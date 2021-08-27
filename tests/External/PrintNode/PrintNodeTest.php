@@ -42,7 +42,7 @@ class PrintNodeTest extends TestCase
 
         Client::query()->updateOrCreate([], ['api_key' => $apiKey]);
 
-        $response = $this->get('api/settings/modules/printnode/printers');
+        $response = $this->get('api/modules/printnode/printers');
 
         $response->assertSuccessful();
     }
