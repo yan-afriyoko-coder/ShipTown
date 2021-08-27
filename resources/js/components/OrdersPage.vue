@@ -64,7 +64,7 @@
 
         mounted() {
             this.searchText = this.getUrlParameter('search');
-            this.setUrlParameter('inventory_source_location_id', this.user['location_id']);
+            this.setUrlParameter('inventory_source_location_id', Vue.prototype.$currentUser['location_id']);
 
             window.onscroll = () => this.loadMore();
 

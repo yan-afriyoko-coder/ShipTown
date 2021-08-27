@@ -246,7 +246,7 @@
                     await this.markAsPacked();
                     await this.printLabelIfNeeded();
 
-                    if (this.user['ask_for_shipping_number'] === true) {
+                    if (Vue.prototype.$currentUser['ask_for_shipping_number'] === true) {
                         this.askForShippingNumberIfNeeded();
                         return;
                     }
@@ -309,7 +309,7 @@
                 },
 
                 askForShippingNumberIfNeeded() {
-                    if (this.user['ask_for_shipping_number'] !== true) {
+                    if (Vue.prototype.$currentUser['ask_for_shipping_number'] !== true) {
                         return;
                     }
                     this.askForShippingNumber();
@@ -451,11 +451,11 @@
                 },
 
                 printLabelIfNeeded: async function() {
-                    if (!this.user.address_label_template) {
+                    if (!Vue.prototype.$currentUser.address_label_template) {
                         return ;
                     }
 
-                    let template = this.user.address_label_template;
+                    let template = Vue.prototype.$currentUser.address_label_template;
 
                     return await this.printLabel(template);
                 },
@@ -512,11 +512,7 @@
                         return false;
                     }
 
-                    if (this.user === null) {
-                        return false;
-                    }
-
-                    return (this.order['packer_user_id']  && this.order['packer_user_id'] !== this.user['id']);
+                    return (this.order['packer_user_id']  && this.order['packer_user_id'] !== Vue.prototype.$currentUser['id']);
                 }
             }
         }

@@ -14,9 +14,8 @@ export default {
             }
         },
 
-        mounted() {
+        created() {
             Vue.prototype.$currentUser = JSON.parse(document.querySelector("meta[name='current-user']").getAttribute('content'));
-            this.user = Vue.prototype.$currentUser;
         },
 
         methods: {

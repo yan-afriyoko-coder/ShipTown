@@ -61,6 +61,7 @@ import PicklistConfigurationModalNew from './Picks/ConfigurationModal.vue';
 import url from "../mixins/url";
 import beep from "../mixins/beep";
 import api from "../mixins/api";
+import Vue from "vue";
 
 export default {
     name: "PicksTable",
@@ -73,16 +74,13 @@ export default {
         'picklist-configuration-modal': PicklistConfigurationModalNew   ,
     },
 
-    watch: {
-        user: {
-            handler() {
-                if(this.user['location_id']) {
-                    this.setUrlParameter('inventory_source_location_id', this.user['location_id']);
-                }
-                this.reloadPicks();
-            }
-        },
+    mounted() {
+        if(Vue.prototype.$currentUser['location_id']) {
+            this.setUrlParameter('inventory_source_location_id', Vue.prototype.$currentUser['location_id']);
+        }
+    },
 
+    watch: {
         picklist: {
             handler() {
                 if (this.picklist.length === 0 && this.isLoading === false ) {

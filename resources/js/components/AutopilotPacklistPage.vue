@@ -14,6 +14,7 @@
     import url from "../mixins/url";
     import api from "../mixins/api";
     import beep from "../mixins/beep";
+    import Vue from "vue";
 
     export default {
         mixins: [api, beep, url],
@@ -27,8 +28,8 @@
         watch: {
             user: {
                 handler() {
-                    if(this.user['location_id']) {
-                        this.setUrlParameter('inventory_source_location_id', this.user['location_id']);
+                    if(Vue.prototype.$currentUser['location_id']) {
+                        this.setUrlParameter('inventory_source_location_id', Vue.prototype.$currentUser['location_id']);
                     }
                 }
             },

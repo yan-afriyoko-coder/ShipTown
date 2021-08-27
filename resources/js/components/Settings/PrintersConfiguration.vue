@@ -86,7 +86,12 @@ export default {
                 'printer_id': printer.id,
                 'pdf_url': 'https://api.printnode.com/static/test/pdf/label_4in_x_6in.pdf'
             };
-            this.apiPostPrintnodePrintJob(data);
+
+            this.apiPostPrintnodePrintJob(data)
+                .catch(e => {
+                    this.errorMessage = e.message;
+                    this.showError('Request failed: ' + e.message);
+                });
         },
 
         isDefaultPrinter(printerId) {

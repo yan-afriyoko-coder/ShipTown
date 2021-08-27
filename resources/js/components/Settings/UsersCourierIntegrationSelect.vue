@@ -39,35 +39,38 @@
 
 <script>
 import api from "../../mixins/api";
+import Vue from "vue";
 
 export default {
     mixins: [api],
 
-    created() {
-        this.apiGetUserMe()
-            .then(({ data }) => {
-                this.selected_address_label_template = data.data.address_label_template;
-                this.selected_ask_for_shipping_number = data.data.ask_for_shipping_number;
-            });
+    mounted() {
+        this.selected_address_label_template = Vue.prototype.$currentUser.address_label_template;
+        this.selected_ask_for_shipping_number = Vue.prototype.$currentUser.ask_for_shipping_number;
     },
 
     data: () => ({
         selected_address_label_template: "",
         selected_ask_for_shipping_number: false,
-        error: false,
     }),
 
     methods: {
         updateUsersAddressLabelTemplate() {
             this.apiPostUserMe({
-                'address_label_template': this.selected_address_label_template
-            });
+                    'address_label_template': this.selected_address_label_template
+                })
+                .catch(e => {
+                    this.showError('Request failed: ' + e.message);
+                });
         },
 
         saveAskForShippingNumberValue() {
             this.apiPostUserMe({
-                'ask_for_shipping_number': this.selected_ask_for_shipping_number
-            });
+                    'ask_for_shipping_number': this.selected_ask_for_shipping_number
+                })
+                .catch(e => {
+                    this.showError('Request failed: ' + e.message);
+                });
         }
     }
 }

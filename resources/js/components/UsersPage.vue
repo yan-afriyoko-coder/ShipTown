@@ -64,24 +64,16 @@
 </template>
 
 <script>
-import { find } from 'lodash';
-
 import Create from './Users/Create';
 import Edit from './Users/Edit';
 import api from "../mixins/api";
+import Vue from "vue";
 
 export default {
     mixins: [api],
     components: {
         'create-modal': Create,
         'edit-modal': Edit,
-    },
-
-    created() {
-        this.apiGetUserMe()
-            .then(({ data }) => {
-                this.currentUser = data.data;
-            })
     },
 
     mounted() {
@@ -91,7 +83,6 @@ export default {
     },
 
     data: () => ({
-        currentUser: {},
         users: [],
         roles: [],
         warehouses: [],
@@ -119,6 +110,9 @@ export default {
             this.apiGetWarehouses()
                 .then(({ data }) => {
                     this.warehouses = data.data;
+                })
+                .catch(e => {
+                    this.showError('Request failed: ' + e.message);
                 });
         },
 
@@ -164,15 +158,15 @@ export default {
                             });
                     }
                 })
-                .catch(err => {
-                    console.log(err);
+                .catch(e => {
+                    this.showError('Request failed: ' + e.message);
                 });
         },
     },
 
     computed: {
         isNotSelf() {
-            return (id) => this.currentUser.id !== id;
+            return (id) => Vue.prototype.$currentUser.id !== id;
         }
     }
 }
