@@ -32,9 +32,20 @@ class OrderStatusController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        $orderStatus = new OrderStatus;
-        $orderStatus->fill($request->validated());
-        $orderStatus->save();
+        $orderStatus = OrderStatus::where('code', $request->code)->onlyTrashed()->first();
+        if ($orderStatus) {
+            $orderStatus->restore();
+            $orderStatus->update($request->validated());
+        } else {
+            $this->validate($request, [
+                'name' => 'unique:order_statuses,name',
+                'code' => 'unique:order_statuses,code',
+            ]);
+
+            $orderStatus = new OrderStatus;
+            $orderStatus->fill($request->validated());
+            $orderStatus->save();
+        }
 
         return OrderStatusResource::make($orderStatus);
     }
