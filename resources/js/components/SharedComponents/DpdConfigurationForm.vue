@@ -6,7 +6,7 @@
                 <div class="col-sm-9">
                     <ValidationProvider name="user" v-slot="{ errors }">
                         <input
-                            v-model="user"
+                            v-model="api_username"
                             :class="{
                                 'form-control': true,
                                 'is-invalid': errors.length > 0,
@@ -291,8 +291,7 @@
 
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label" for="country_code"
-                    >Country Code</label
-                >
+                    >Country Code</label>
                 <div class="col-sm-9">
                     <ValidationProvider name="country_code" v-slot="{ errors }">
                         <select
@@ -364,7 +363,7 @@ export default {
         address_line_4: null,
         country_code: null,
         token: null,
-        user: null,
+        api_username: null,
         password: null,
     }),
 
@@ -377,7 +376,7 @@ export default {
 
     methods: {
         populateConfiguration() {
-            this.user = this.configuration.api_username;
+            this.api_username = this.configuration.api_username;
             this.live = this.configuration.api_live;
             this.contact = this.configuration.collection_contact;
             this.contact_telephone = this.configuration.collection_telephone;
@@ -394,7 +393,7 @@ export default {
             this.showLoading();
 
             let data = {
-                user: this.user,
+                user: this.api_username,
                 live: this.live,
                 contact: this.contact,
                 contact_telephone: this.contact_telephone,
@@ -423,7 +422,7 @@ export default {
                 .then(() => {
                     this.$emit("saved", {
                             api_live: this.live,
-                            api_username: this.user,
+                            user: this.api_username,
                             collection_contact: this.contact,
                             collection_telephone: this.contact_telephone,
                             collection_email: this.contact_email,
