@@ -50,7 +50,7 @@ Route::apiResource('settings/user/me', 'Api\Settings\UserMeController')->only(['
 Route::apiResource('settings/widgets', 'Api\Settings\WidgetController')->only(['store', 'update']);
 Route::apiResource('navigation-menu', 'Api\Settings\NavigationMenuController')->only(['index']);
 
-Route::apiResource(
+Route::resource(
     'modules/printnode/printers',
     'Api\Settings\Module\Printnode\PrinterController'
 )->only(['index']);
