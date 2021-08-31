@@ -438,7 +438,6 @@
 
                     return this.apiPrintLabel(orderNumber, template)
                         .catch((error) => {
-
                             this.canClose = false;
                             let errorMsg = 'Error occurred when printing label';
 
