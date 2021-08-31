@@ -202,10 +202,11 @@
                 loadOrder: function (orderNumber) {
                     this.showLoading();
 
-                    this.canClose = true;
                     if(this.order && this.order['order_number'] !== orderNumber) {
                         this.previousOrderNumber = this.order['order_number'];
                     }
+
+                    this.canClose = true;
                     this.order = null;
                     this.packlist = [];
                     this.packed = [];
