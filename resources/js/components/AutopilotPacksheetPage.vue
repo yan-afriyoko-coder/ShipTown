@@ -136,10 +136,11 @@
             },
 
             mounted() {
+                this.loadOrderStatuses();
+
                 if (this.order_number) {
                     this.loadOrder(this.order_number);
                 }
-                this.loadOrderStatuses()
             },
 
             watch: {
@@ -192,7 +193,7 @@
                         .then(({data}) => {
                                 this.order = data.meta.total > 0 ? data.data[0] : null;
                         })
-                        .catch((error) => {
+                        .catch(() => {
                             this.notifyError('Error occurred while loading order');
                         })
                         .finally(() => {
@@ -201,8 +202,6 @@
                 },
 
                 loadProducts: function() {
-                    // this.showLoading();
-
                     const params = {
                         'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id', null),
                         'filter[order_id]': this.order.id,
@@ -226,12 +225,8 @@
                                 this.packlist = newPacklist;
                             }
                         })
-                        .catch( error => {
+                        .catch(() => {
                             this.notifyError('Error occurred while loading packlist');
-
-                        })
-                        .finally(() => {
-                            // this.hideLoading();
                         });
                 },
 
@@ -266,8 +261,8 @@
                                 text: 'Ship',
                                 action: (toast) => {
 
-                                    const maxQuantityAllowed = orderProduct['quantity_ordered'] - orderProduct['quantity_shipped'];
-                                    const minQuantityAllowed = -1 * orderProduct['quantity_shipped'];
+                                    const maxQuantityAllowed = orderProduct['quantity_to_ship'];
+                                    const minQuantityAllowed = orderProduct['quantity_shipped'] * (-1);
 
                                     if (
                                         isNaN(toast.value)
@@ -296,9 +291,7 @@
                 changeStatus() {
                     this.$refs.filtersModal.hide();
 
-                    this.apiUpdateOrder(this.order['id'], {
-                            'status_code': this.order.status_code
-                        })
+                    this.apiUpdateOrder(this.order['id'], {'status_code': this.order.status_code})
                         .then((response) => {
                             this.order = response.data.data
                             this.notifySuccess('Status changed')
@@ -332,7 +325,7 @@
                             }
                             this.notifySuccess('Shipping number saved');
                         })
-                        .catch( error => {
+                        .catch(() => {
                             this.notifyError('Error saving shipping number, try again');
                         })
                 },
@@ -361,28 +354,17 @@
                     this.apiPostOrderProductShipment({
                         'order_product_id': orderProduct.id,
                         'quantity_shipped': quantity,
-                    })
-                        .then(data => {
-                            // this.notifySuccess();
-                        })
-                        .catch(error => {
-                            // this.notifyError('Error occurred when saving quantity shipped, try again');
-                        })
-                        .finally(() => {
-                            // this.loadProducts();
-                        });
+                    });
                 },
 
                 setQuantityShipped(orderProduct, quantity) {
                     this.somethingHasBeenPackedDuringThisSession = true;
 
-                    const request = this.apiUpdateOrderProduct(orderProduct.id, {
-                        'quantity_shipped': quantity
-                    })
-                        .then(data => {
+                    this.apiUpdateOrderProduct(orderProduct.id, {'quantity_shipped': quantity})
+                        .then(() => {
                             this.notifySuccess();
                         })
-                        .catch(error => {
+                        .catch(() => {
                             this.notifyError('Error occurred when saving quantity shipped, try again');
                         })
                         .finally(() => {
@@ -426,6 +408,7 @@
 
 
                     }
+
                     return null;
                 },
 
@@ -441,7 +424,7 @@
                         return;
                     }
 
-                    if (pickItem['quantity_ordered'] - pickItem['quantity_shipped'] < 1) {
+                    if (pickItem['quantity_to_ship'] === 0) {
                         this.notifyError(`SKU already shipped`);
                         return;
                     }
