@@ -185,6 +185,20 @@
             },
 
             methods: {
+                completeOrder: async function () {
+                    await this.markAsPacked();
+                    await this.printLabelIfNeeded();
+
+                    if (Vue.prototype.$currentUser['ask_for_shipping_number'] === true) {
+                        this.askForShippingNumber();
+                        return;
+                    }
+
+                    if(this.order['is_packed'] && this.canClose) {
+                        this.$emit('orderCompleted')
+                    }
+                },
+
                 loadOrder: function (orderNumber) {
                     this.showLoading();
 
@@ -242,20 +256,6 @@
                         })
                 },
 
-                completeOrder: async function () {
-                    await this.markAsPacked();
-                    await this.printLabelIfNeeded();
-
-                    if (Vue.prototype.$currentUser['ask_for_shipping_number'] === true) {
-                        this.askForShippingNumberIfNeeded();
-                        return;
-                    }
-
-                    if(this.order['is_packed'] && this.canClose) {
-                        this.$emit('orderCompleted')
-                    }
-                },
-
                 shipPartialSwiped(orderProduct) {
                     this.$snotify.prompt('Partial shipment', {
                         placeholder: 'Enter quantity to ship:',
@@ -304,13 +304,6 @@
                         .catch(() => {
                             this.notifyError('Error when changing status');
                         });
-                },
-
-                askForShippingNumberIfNeeded() {
-                    if (Vue.prototype.$currentUser['ask_for_shipping_number'] !== true) {
-                        return;
-                    }
-                    this.askForShippingNumber();
                 },
 
                 askForShippingNumber() {
