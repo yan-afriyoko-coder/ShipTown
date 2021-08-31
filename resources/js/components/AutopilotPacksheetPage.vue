@@ -123,15 +123,18 @@
 
             data: function() {
                 return {
+                    order: null,
+                    orderProducts: [],
+                    orderStatuses: [],
+
+                    packlist: null,
+                    packed: [],
+
                     previousOrderNumber: null,
                     canClose: true,
                     isPrintingLabel: false,
-                    order: null,
-                    packlist: null,
-                    packed: [],
                     somethingHasBeenPackedDuringThisSession: false,
                     autopilotEnabled: false,
-                    orderStatuses: [],
                 };
             },
 
@@ -149,9 +152,21 @@
                 },
 
                 order() {
-                    if(this.order) {
-                        this.loadProducts();
+                    if(!this.order) {
+                        return;
                     }
+
+                    this.loadOrderProducts();
+                },
+
+                orderProducts() {
+                    if(this.orderProducts.length === 0) {
+                        this.packed = [];
+                        this.packlist = [];
+                    }
+
+                    this.packed = this.orderProducts.filter(orderProduct => Number(orderProduct['quantity_to_ship']) === 0);
+                    this.packlist = this.orderProducts.filter(orderProduct => Number(orderProduct['quantity_to_ship']) > 0);
                 },
 
                 packlist() {
@@ -170,11 +185,9 @@
             },
 
             methods: {
-
                 loadOrder: function (orderNumber) {
                     this.showLoading();
 
-                    this.pendingRequests = [];
                     this.canClose = true;
                     if(this.order && this.order['order_number'] !== orderNumber) {
                         this.previousOrderNumber = this.order['order_number'];
@@ -186,12 +199,13 @@
 
                     const params = {
                         'filter[order_number]': orderNumber,
-                        'include': 'order_comments,order_comments.user',
+                        'include': 'order_comments,' +
+                            'order_comments.user',
                     };
 
                     return this.apiGetOrders(params)
                         .then(({data}) => {
-                                this.order = data.meta.total > 0 ? data.data[0] : null;
+                            this.order = data.meta.total > 0 ? data.data[0] : null;
                         })
                         .catch(() => {
                             this.notifyError('Error occurred while loading order');
@@ -201,29 +215,20 @@
                         })
                 },
 
-                loadProducts: function() {
+                loadOrderProducts: function() {
                     const params = {
-                        'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id', null),
                         'filter[order_id]': this.order.id,
-                        'sort': 'inventory_source_shelf_location,sku_ordered',
-                        'include': 'product,product.aliases',
+                        'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id'),
+                        'sort': 'inventory_source_shelf_location,' +
+                            'sku_ordered',
+                        'include': 'product,' +
+                            'product.aliases',
                         'per_page': 999,
                     };
 
                     this.apiGetOrderProducts(params)
                         .then(({ data }) => {
-                            if(data.meta.total > 0) {
-                                const newPackedList = data.data.filter(
-                                    orderProduct => Number(orderProduct['quantity_shipped']) >= Number(orderProduct['quantity_ordered'])
-                                );
-
-                                const newPacklist = data.data.filter(
-                                    orderProduct => Number(orderProduct['quantity_shipped']) < Number(orderProduct['quantity_ordered'])
-                                );
-
-                                this.packed = newPackedList;
-                                this.packlist = newPacklist;
-                            }
+                            this.orderProducts = data.data;
                         })
                         .catch(() => {
                             this.notifyError('Error occurred while loading packlist');
@@ -333,12 +338,9 @@
                 markAsPacked: async function () {
                     this.order['is_packed'] = true;
 
-                    this.apiUpdateOrder(this.order['id'],{
-                            'is_packed': true,
-                        })
+                    this.apiUpdateOrder(this.order['id'],{'is_packed': true})
                         .catch((error) => {
-                            let errorMsg = 'Error'+error.response.message;
-                            this.notifyError(errorMsg);
+                            this.notifyError('Error: '+error.response.message);
                         });
                 },
 
@@ -360,7 +362,7 @@
                             this.notifyError('Error occurred when saving quantity shipped, try again');
                         })
                         .finally(() => {
-                            this.loadProducts();
+                            this.loadOrderProducts();
                         });
                 },
 
