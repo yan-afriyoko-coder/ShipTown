@@ -2,12 +2,15 @@
 
 namespace Tests\Feature\Http\Controllers\Api;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class RoutesCoverageTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * A basic test to make sure all routes have minimum one test file.
      *
@@ -18,6 +21,8 @@ class RoutesCoverageTest extends TestCase
         Artisan::call('route:list --json --path=api/ --env=production');
 
         $routes = collect(json_decode(Artisan::output()));
+
+        $this->assertNotEmpty($routes, 'Artisan route:list command did not return any routes');
 
         $routes->each(function ($route) {
             $testName = $this->getTestName($route);
