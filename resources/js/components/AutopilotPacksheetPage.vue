@@ -342,14 +342,6 @@
                         });
                 },
 
-                addToLists: function (orderProduct) {
-                    if (Number(orderProduct['quantity_ordered']) > Number(orderProduct['quantity_shipped'])) {
-                        this.packlist.unshift(orderProduct);
-                    } else {
-                        this.packed.unshift(orderProduct);
-                    }
-                },
-
                 shipOrderProduct(orderProduct, quantity) {
                     this.apiPostOrderProductShipment({
                         'order_product_id': orderProduct.id,
