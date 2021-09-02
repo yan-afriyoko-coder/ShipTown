@@ -11,10 +11,34 @@
             </div>
 
             <div class="card-body">
-                <button :disabled="!btnRunHourlyJobsEnabled" @click.prevent="runHourlyJobs">Run Hourly Jobs</button>
-                <button :disabled="!btnRunDailyJobsEnabled" @click.prevent="runDailyJobs">Run Daily Jobs</button>
-                <button :disabled="!btnRunApi2cartSyncEnabled" @click.prevent="runApi2cartSync">Run Api2cart Sync</button>
-                <button :disabled="!btnRunSyncEnabled" @click.prevent="runSync">Run Sync</button>
+                <button
+                    :disabled="!btnRunHourlyJobsEnabled"
+                    @click.prevent="runHourlyJobs"
+                    class="btn btn-primary mb-2"
+                >
+                    Run Hourly Jobs
+                </button>
+                <button
+                    :disabled="!btnRunDailyJobsEnabled"
+                    @click.prevent="runDailyJobs"
+                    class="btn btn-primary mb-2"
+                >
+                    Run Daily Jobs
+                </button>
+                <button
+                    :disabled="!btnRunApi2cartSyncEnabled"
+                    @click.prevent="runApi2cartSync"
+                    class="btn btn-primary mb-2"
+                >
+                    Run Api2cart Sync
+                </button>
+                <button
+                    :disabled="!btnRunSyncEnabled"
+                    @click.prevent="runSync"
+                    class="btn btn-primary mb-2"
+                >
+                    Run Sync
+                </button>
             </div>
         </div>
 

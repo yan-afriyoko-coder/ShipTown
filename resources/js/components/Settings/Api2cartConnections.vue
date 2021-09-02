@@ -54,11 +54,27 @@
         <!-- The modal -->
         <b-modal ref="formModal" id="api2cart-connection-modal" title="Configure Connection" @ok="handleModalOk">
             <api-configuration-form ref="form" @saved="handleSaved" />
+            <template #modal-footer="{ ok, cancel }">
+                <b-button @click="cancel()">
+                    Cancel
+                </b-button>
+                <b-button variant="primary" @click="ok()">
+                    Save
+                </b-button>
+            </template>
         </b-modal>
 
         <!-- The modal -->
         <b-modal ref="formModal" id="sku_details_modal" title="SKU Lookup">
             {{ sku_details }}
+            <template #modal-footer="{ ok, cancel }">
+                <b-button @click="cancel()">
+                    Cancel
+                </b-button>
+                <b-button variant="primary" @click="ok()">
+                    Save
+                </b-button>
+            </template>
         </b-modal>
     </div>
 </template>
