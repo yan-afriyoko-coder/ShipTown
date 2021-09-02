@@ -123,23 +123,27 @@
 
             data: function() {
                 return {
+                    order: null,
+                    orderProducts: [],
+                    orderStatuses: [],
+
+                    packlist: null,
+                    packed: [],
+
                     previousOrderNumber: null,
                     canClose: true,
                     isPrintingLabel: false,
-                    order: null,
-                    packlist: null,
-                    packed: [],
                     somethingHasBeenPackedDuringThisSession: false,
                     autopilotEnabled: false,
-                    orderStatuses: [],
                 };
             },
 
             mounted() {
+                this.loadOrderStatuses();
+
                 if (this.order_number) {
                     this.loadOrder(this.order_number);
                 }
-                this.loadOrderStatuses()
             },
 
             watch: {
@@ -148,9 +152,21 @@
                 },
 
                 order() {
-                    if(this.order) {
-                        this.loadProducts();
+                    if(!this.order) {
+                        return;
                     }
+
+                    this.loadOrderProducts();
+                },
+
+                orderProducts() {
+                    if(this.orderProducts.length === 0) {
+                        this.packed = [];
+                        this.packlist = [];
+                    }
+
+                    this.packed = this.orderProducts.filter(orderProduct => Number(orderProduct['quantity_to_ship']) === 0);
+                    this.packlist = this.orderProducts.filter(orderProduct => Number(orderProduct['quantity_to_ship']) > 0);
                 },
 
                 packlist() {
@@ -169,15 +185,28 @@
             },
 
             methods: {
+                completeOrder: async function () {
+                    await this.markAsPacked();
+                    await this.printLabelIfNeeded();
+
+                    if (Vue.prototype.$currentUser['ask_for_shipping_number'] === true) {
+                        this.askForShippingNumber();
+                        return;
+                    }
+
+                    if(this.order['is_packed'] && this.canClose) {
+                        this.$emit('orderCompleted')
+                    }
+                },
 
                 loadOrder: function (orderNumber) {
                     this.showLoading();
 
-                    this.pendingRequests = [];
-                    this.canClose = true;
                     if(this.order && this.order['order_number'] !== orderNumber) {
                         this.previousOrderNumber = this.order['order_number'];
                     }
+
+                    this.canClose = true;
                     this.order = null;
                     this.packlist = [];
                     this.packed = [];
@@ -185,14 +214,15 @@
 
                     const params = {
                         'filter[order_number]': orderNumber,
-                        'include': 'order_comments,order_comments.user',
+                        'include': 'order_comments,' +
+                            'order_comments.user',
                     };
 
                     return this.apiGetOrders(params)
                         .then(({data}) => {
-                                this.order = data.meta.total > 0 ? data.data[0] : null;
+                            this.order = data.meta.total > 0 ? data.data[0] : null;
                         })
-                        .catch((error) => {
+                        .catch(() => {
                             this.notifyError('Error occurred while loading order');
                         })
                         .finally(() => {
@@ -200,38 +230,23 @@
                         })
                 },
 
-                loadProducts: function() {
-                    // this.showLoading();
-
+                loadOrderProducts: function() {
                     const params = {
-                        'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id', null),
                         'filter[order_id]': this.order.id,
-                        'sort': 'inventory_source_shelf_location,sku_ordered',
-                        'include': 'product,product.aliases',
+                        'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id'),
+                        'sort': 'inventory_source_shelf_location,' +
+                            'sku_ordered',
+                        'include': 'product,' +
+                            'product.aliases',
                         'per_page': 999,
                     };
 
                     this.apiGetOrderProducts(params)
                         .then(({ data }) => {
-                            if(data.meta.total > 0) {
-                                const newPackedList = data.data.filter(
-                                    orderProduct => Number(orderProduct['quantity_shipped']) >= Number(orderProduct['quantity_ordered'])
-                                );
-
-                                const newPacklist = data.data.filter(
-                                    orderProduct => Number(orderProduct['quantity_shipped']) < Number(orderProduct['quantity_ordered'])
-                                );
-
-                                this.packed = newPackedList;
-                                this.packlist = newPacklist;
-                            }
+                            this.orderProducts = data.data;
                         })
-                        .catch( error => {
+                        .catch(() => {
                             this.notifyError('Error occurred while loading packlist');
-
-                        })
-                        .finally(() => {
-                            // this.hideLoading();
                         });
                 },
 
@@ -240,20 +255,6 @@
                         .then(({ data }) => {
                             this.orderStatuses = data.data;
                         })
-                },
-
-                completeOrder: async function () {
-                    await this.markAsPacked();
-                    await this.printLabelIfNeeded();
-
-                    if (Vue.prototype.$currentUser['ask_for_shipping_number'] === true) {
-                        this.askForShippingNumberIfNeeded();
-                        return;
-                    }
-
-                    if(this.order['is_packed'] && this.canClose) {
-                        this.$emit('orderCompleted')
-                    }
                 },
 
                 shipPartialSwiped(orderProduct) {
@@ -266,8 +267,8 @@
                                 text: 'Ship',
                                 action: (toast) => {
 
-                                    const maxQuantityAllowed = orderProduct['quantity_ordered'] - orderProduct['quantity_shipped'];
-                                    const minQuantityAllowed = -1 * orderProduct['quantity_shipped'];
+                                    const maxQuantityAllowed = orderProduct['quantity_to_ship'];
+                                    const minQuantityAllowed = orderProduct['quantity_shipped'] * (-1);
 
                                     if (
                                         isNaN(toast.value)
@@ -296,9 +297,7 @@
                 changeStatus() {
                     this.$refs.filtersModal.hide();
 
-                    this.apiUpdateOrder(this.order['id'], {
-                            'status_code': this.order.status_code
-                        })
+                    this.apiUpdateOrder(this.order['id'], {'status_code': this.order.status_code})
                         .then((response) => {
                             this.order = response.data.data
                             this.notifySuccess('Status changed')
@@ -306,13 +305,6 @@
                         .catch(() => {
                             this.notifyError('Error when changing status');
                         });
-                },
-
-                askForShippingNumberIfNeeded() {
-                    if (Vue.prototype.$currentUser['ask_for_shipping_number'] !== true) {
-                        return;
-                    }
-                    this.askForShippingNumber();
                 },
 
                 askForShippingNumber() {
@@ -332,7 +324,7 @@
                             }
                             this.notifySuccess('Shipping number saved');
                         })
-                        .catch( error => {
+                        .catch(() => {
                             this.notifyError('Error saving shipping number, try again');
                         })
                 },
@@ -340,53 +332,31 @@
                 markAsPacked: async function () {
                     this.order['is_packed'] = true;
 
-                    this.apiUpdateOrder(this.order['id'],{
-                            'is_packed': true,
-                        })
+                    this.apiUpdateOrder(this.order['id'],{'is_packed': true})
                         .catch((error) => {
-                            let errorMsg = 'Error'+error.response.message;
-                            this.notifyError(errorMsg);
+                            this.notifyError('Error: '+error.response.message);
                         });
-                },
-
-                addToLists: function (orderProduct) {
-                    if (Number(orderProduct['quantity_ordered']) > Number(orderProduct['quantity_shipped'])) {
-                        this.packlist.unshift(orderProduct);
-                    } else {
-                        this.packed.unshift(orderProduct);
-                    }
                 },
 
                 shipOrderProduct(orderProduct, quantity) {
                     this.apiPostOrderProductShipment({
                         'order_product_id': orderProduct.id,
                         'quantity_shipped': quantity,
-                    })
-                        .then(data => {
-                            // this.notifySuccess();
-                        })
-                        .catch(error => {
-                            // this.notifyError('Error occurred when saving quantity shipped, try again');
-                        })
-                        .finally(() => {
-                            // this.loadProducts();
-                        });
+                    });
                 },
 
                 setQuantityShipped(orderProduct, quantity) {
                     this.somethingHasBeenPackedDuringThisSession = true;
 
-                    const request = this.apiUpdateOrderProduct(orderProduct.id, {
-                        'quantity_shipped': quantity
-                    })
-                        .then(data => {
+                    this.apiUpdateOrderProduct(orderProduct.id, {'quantity_shipped': quantity})
+                        .then(() => {
                             this.notifySuccess();
                         })
-                        .catch(error => {
+                        .catch(() => {
                             this.notifyError('Error occurred when saving quantity shipped, try again');
                         })
                         .finally(() => {
-                            this.loadProducts();
+                            this.loadOrderProducts();
                         });
                 },
 
@@ -426,6 +396,7 @@
 
 
                     }
+
                     return null;
                 },
 
@@ -441,7 +412,7 @@
                         return;
                     }
 
-                    if (pickItem['quantity_ordered'] - pickItem['quantity_shipped'] < 1) {
+                    if (pickItem['quantity_to_ship'] === 0) {
                         this.notifyError(`SKU already shipped`);
                         return;
                     }
@@ -467,7 +438,6 @@
 
                     return this.apiPrintLabel(orderNumber, template)
                         .catch((error) => {
-
                             this.canClose = false;
                             let errorMsg = 'Error occurred when printing label';
 
