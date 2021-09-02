@@ -48,6 +48,14 @@
                 @onCreated=addedUser
             >
             </create-modal>
+            <template #modal-footer="{ ok, cancel }">
+                <b-button @click="cancel()">
+                    Cancel
+                </b-button>
+                <b-button variant="primary" @click="ok()">
+                    Save
+                </b-button>
+            </template>
         </b-modal>
         <b-modal ref="editModal" id="edit-modal" title="Edit User" @ok="handleEditOk">
             <edit-modal
@@ -59,6 +67,14 @@
                 @onUpdated=updatedUser
             >
             </edit-modal>
+            <template #modal-footer="{ ok, cancel }">
+                <b-button @click="cancel()">
+                    Cancel
+                </b-button>
+                <b-button variant="primary" @click="ok()">
+                    Save
+                </b-button>
+            </template>
         </b-modal>
     </div>
 </template>
