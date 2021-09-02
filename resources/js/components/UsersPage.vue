@@ -148,18 +148,30 @@ export default {
         },
 
         onDeleteClick(id) {
-            this.$bvModal.msgBoxConfirm('Deactivate this user?')
-                .then(value => {
-                    if (value === true) {
-                        this.apiDeleteUser(id)
-                            .then(() => {
-                                this.$snotify.success('User deactivated.');
-                                this.loadUsers()
-                            });
-                    }
-                })
-                .catch(e => {
-                    this.showError('Request failed: ' + e.message);
+            this.confirmDelete(id)
+        },
+
+        confirmDelete(id) {
+            this.$snotify.confirm('Deactivate this user', 'Are you sure?', {
+                position: 'centerCenter',
+                buttons: [
+                    {
+                        text: 'Yes',
+                        action: (toast) => {
+                            this.delete(id)
+                            this.$snotify.remove(toast.id);
+                        }
+                    },
+                    {text: 'Cancel'},
+                ]
+            });
+        },
+
+        delete(id) {
+            this.apiDeleteUser(id)
+                .then(() => {
+                    this.$snotify.success('User deactivated.');
+                    this.loadUsers()
                 });
         },
     },
