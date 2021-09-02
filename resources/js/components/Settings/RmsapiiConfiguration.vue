@@ -43,6 +43,14 @@
         <!-- The modal -->
         <b-modal ref="formModal" id="connection-modal" title="Configure Connection" @ok="handleModalOk">
             <rms-api-configuration-form ref="form" @saved="handleSaved" />
+            <template #modal-footer="{ ok, cancel }">
+                <b-button @click="cancel()">
+                    Cancel
+                </b-button>
+                <b-button variant="primary" @click="ok()">
+                    Save
+                </b-button>
+            </template>
         </b-modal>
     </div>
 </template>

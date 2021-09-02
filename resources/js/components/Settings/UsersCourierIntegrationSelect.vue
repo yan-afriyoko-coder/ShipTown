@@ -9,12 +9,12 @@
                 </div>
             </div>
             <div class="card-body">
-                <table class="table">
+                <table class="table table-responsive table-borderless">
                     <tbody>
                         <tr>
                             <td>When last item scanned, Automatically Print:</td>
                             <td class="text-right">
-                                <select class="w-100" @change="updateUsersAddressLabelTemplate" v-model="selected_address_label_template">
+                                <select class="form-control w-100" @change="updateUsersAddressLabelTemplate" v-model="selected_address_label_template">
                                     <option value=""></option>
                                     <option value="address_label">address_label</option>
                                     <option value="dpd_label">dpd_label</option>

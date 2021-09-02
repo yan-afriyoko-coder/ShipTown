@@ -11,12 +11,16 @@
             </div>
 
             <div class="card-body" v-if="configuration !== null">
-                <div>Max Batch Size (picking)</div>
-                <input class="form-control" type="number" :placeholder="''" v-model="configuration['max_batch_size']"/>
-                <div>Max Order Age Allowed</div>
-                <input class="form-control" type="number" :placeholder="''" v-model="configuration['max_order_age']"/>
+                <div class="form-group">
+                    <label>Max Batch Size (picking)</label>
+                    <input class="form-control" type="number" :placeholder="''" v-model="configuration['max_batch_size']"/>
+                </div>
+                <div class="form-group">
+                    <label>Max Order Age Allowed</label>
+                    <input class="form-control" type="number" :placeholder="''" v-model="configuration['max_order_age']"/>
+                </div>
 
-                <button :disabled="!btnSaveAutoPilotTuningSettings" @click.prevent="saveAutoPilotTuningSettings">Save</button>
+                <button class="btn btn-primary" :disabled="!btnSaveAutoPilotTuningSettings" @click.prevent="saveAutoPilotTuningSettings">Save</button>
             </div>
         </div>
 

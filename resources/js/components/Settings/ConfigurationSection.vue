@@ -26,7 +26,7 @@
                             </ValidationProvider>
                         </div>
 
-                        <button :disabled="!btnSave" @click.prevent="updateConfiguration">Save</button>
+                        <button class="btn btn-primary" :disabled="!btnSave" @click.prevent="updateConfiguration">Save</button>
                     </form>
                 </ValidationObserver>
             </div>

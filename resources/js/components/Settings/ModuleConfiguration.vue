@@ -9,7 +9,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <table class="table">
+                <table class="table table-borderless">
                     <tbody>
                         <tr v-for="module in modules" :key="module.id">
                             <td>
