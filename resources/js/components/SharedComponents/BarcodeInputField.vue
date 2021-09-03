@@ -44,7 +44,9 @@
             },
 
             simulateSelectAll() {
-                setTimeout(() => { document.execCommand('selectall', null, false); });
+                setTimeout(() => {
+                    document.execCommand('selectall', null, false);
+                }, 1);
             },
 
         }
