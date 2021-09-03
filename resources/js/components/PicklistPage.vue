@@ -4,7 +4,7 @@
         <div class="row mb-3">
             <div class="col-8">
                 <div class="pl-1 pr-1">
-                    <barcode-input-field @barcodeScanned="pickByBarcode"/>
+                    <barcode-input-field @barcodeScanned="pickByBarcode" placeholder="Enter sku or alias to pick products"/>
                 </div>
             </div>
             <div class="col-4">
@@ -104,22 +104,22 @@ export default {
 
     methods: {
         pickByBarcode(barcode) {
-            if(barcode === '') {
-                return;
-            }
-
             let pickItem = this.findPickItem(barcode);
 
-            if(pickItem) {
-                this.pickAll(pickItem);
+            if(!pickItem) {
+                this.$snotify.error(`"${barcode}" not found on picklist!`);
+                this.errorBeep();
                 return;
             }
 
-            this.$snotify.error(`"${barcode}" not found on picklist!`);
-            this.errorBeep();
+            this.pickAll(pickItem);
         },
 
         findPickItem: function (barcode) {
+            if(barcode === '') {
+                return null;
+            }
+
             for (let element of this.picklist) {
 
                 if(element['sku_ordered'] === barcode) {

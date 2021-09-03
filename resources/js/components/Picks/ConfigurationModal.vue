@@ -21,7 +21,6 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-<!--                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>-->
                     <button type="button" @click.prevent="handleSubmit" class="btn btn-primary">OK</button>
                 </div>
             </div>
@@ -31,6 +30,7 @@
 
 <script>
 import url from "../../mixins/url";
+import Vue from "vue";
 
 export default {
 
@@ -52,13 +52,8 @@ export default {
         }
     },
 
-    watch: {
-        picklistFilters: {
-            handler() {
-                // this.updateUrl(this.picklistFilters)
-            },
-            deep: true
-        }
+    mounted() {
+        this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id'])
     },
 
     computed: {
@@ -71,11 +66,8 @@ export default {
         handleSubmit() {
             for (let urlFilter in this.urlFilters) {
                 this.setUrlParameter(urlFilter, this.urlFilters[urlFilter])
-                // this.setUrlFilter(urlFilter, this.urlFilters[urlFilter]);
             }
-            // this.updateUrl(this.urlFilters);
             this.$emit('btnSaveClicked');
-
             $(this.$el).modal('hide');
         }
     }
