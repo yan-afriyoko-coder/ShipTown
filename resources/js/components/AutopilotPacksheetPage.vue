@@ -30,7 +30,7 @@
             </template>
             <div class="row mb-3">
                 <div class="col-11">
-                    <barcode-input-field @barcodeScanned="packBarcode"/>
+                    <barcode-input-field @barcodeScanned="packBarcode" placeholder="Enter sku or alias to ship 1 piece" ref="barcode"/>
                 </div>
                 <div class="col-1">
                     <button type="button" class="btn btn-light" data-toggle="modal" data-target="#filterConfigurationModal" href="#"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
@@ -106,7 +106,7 @@
     import Vue from "vue";
 
     export default {
-            mixins: [loadingOverlay, beep, url, api, helpers],
+            mixins: [loadingOverlay, beep, url, api, helpers, BarcodeInputField],
 
             components: {
                 PacklistEntry,
@@ -282,12 +282,14 @@
                                     this.$snotify.remove(toast.id);
                                     this.shipOrderProduct(orderProduct, Number(toast.value));
                                     this.setQuantityShipped(orderProduct, Number(orderProduct['quantity_shipped']) + Number(toast.value));
+                                    this.setFocusOnBarcodeInput();
                                 }
                             },
                             {
                                 text: 'Cancel',
                                 action: (toast) => {
-                                    this.$snotify.remove(toast.id)
+                                    this.$snotify.remove(toast.id);
+                                    this.setFocusOnBarcodeInput();
                                 }
                             },
                         ],
@@ -296,6 +298,7 @@
 
                 changeStatus() {
                     this.$refs.filtersModal.hide();
+                    this.setFocusOnBarcodeInput(500);
 
                     this.apiUpdateOrder(this.order['id'], {'status_code': this.order.status_code})
                         .then((response) => {
@@ -340,9 +343,12 @@
 
                 shipOrderProduct(orderProduct, quantity) {
                     this.apiPostOrderProductShipment({
-                        'order_product_id': orderProduct.id,
-                        'quantity_shipped': quantity,
-                    });
+                            'order_product_id': orderProduct.id,
+                            'quantity_shipped': quantity,
+                        })
+                        .then((data) => {
+                            this.displayPackedNotification(data.data);
+                        });
                 },
 
                 setQuantityShipped(orderProduct, quantity) {
@@ -363,9 +369,14 @@
                 shipAll(orderProduct) {
                     this.shipOrderProduct(orderProduct, orderProduct['quantity_to_ship']);
                     this.setQuantityShipped(orderProduct, orderProduct['quantity_ordered']);
+                    this.setFocusOnBarcodeInput();
                 },
 
                 findEntry: function (barcode) {
+                    if(barcode === '') {
+                        return null;
+                    }
+
                     for (let element of this.packlist) {
 
                         if(element.sku_ordered === barcode) {
@@ -401,10 +412,6 @@
                 },
 
                 packBarcode: function (barcode) {
-                    if(barcode === '') {
-                        return;
-                    }
-
                     let pickItem = this.findEntry(barcode);
 
                     if(!pickItem) {
@@ -435,6 +442,7 @@
                     let orderNumber = this.order['order_number'];
 
                     this.$refs.filtersModal.hide();
+                    this.setFocusOnBarcodeInput();
 
                     return this.apiPrintLabel(orderNumber, template)
                         .catch((error) => {
@@ -473,7 +481,18 @@
 
                     this.loadOrder(this.previousOrderNumber);
                     this.notifySuccess(this.previousOrderNumber);
-                }
+                },
+
+                displayPackedNotification: function (order_product_shipment) {
+                    const msg =  order_product_shipment.data.quantity_shipped + ' x ' + '' + ' shipped';
+                    this.$snotify.confirm(msg, {
+                        timeout: 3000,
+                        showProgressBar: false,
+                        pauseOnHover: true,
+                        icon: false,
+                        buttons: []
+                    });
+                },
             },
 
             computed: {

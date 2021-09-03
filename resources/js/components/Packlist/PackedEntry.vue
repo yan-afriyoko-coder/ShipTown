@@ -19,7 +19,7 @@
 
             <div class="swiper-slide bg-warning">
                 <div class="swipe-action-container swipe-action-container--left text-black-50 font-weight-bold">
-                    <div>SHIP PARTIAL</div>
+                    <div>SHIP PARTIAL / UNDO</div>
                 </div>
             </div>
 
