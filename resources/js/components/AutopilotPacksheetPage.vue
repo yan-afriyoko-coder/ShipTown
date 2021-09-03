@@ -106,7 +106,7 @@
     import Vue from "vue";
 
     export default {
-            mixins: [loadingOverlay, beep, url, api, helpers],
+            mixins: [loadingOverlay, beep, url, api, helpers, BarcodeInputField],
 
             components: {
                 PacklistEntry,
@@ -282,12 +282,14 @@
                                     this.$snotify.remove(toast.id);
                                     this.shipOrderProduct(orderProduct, Number(toast.value));
                                     this.setQuantityShipped(orderProduct, Number(orderProduct['quantity_shipped']) + Number(toast.value));
+                                    this.setFocusOnBarcodeInput();
                                 }
                             },
                             {
                                 text: 'Cancel',
                                 action: (toast) => {
-                                    this.$snotify.remove(toast.id)
+                                    this.$snotify.remove(toast.id);
+                                    this.setFocusOnBarcodeInput();
                                 }
                             },
                         ],
@@ -296,6 +298,7 @@
 
                 changeStatus() {
                     this.$refs.filtersModal.hide();
+                    this.setFocusOnBarcodeInput(500);
 
                     this.apiUpdateOrder(this.order['id'], {'status_code': this.order.status_code})
                         .then((response) => {
@@ -366,6 +369,7 @@
                 shipAll(orderProduct) {
                     this.shipOrderProduct(orderProduct, orderProduct['quantity_to_ship']);
                     this.setQuantityShipped(orderProduct, orderProduct['quantity_ordered']);
+                    this.setFocusOnBarcodeInput();
                 },
 
                 findEntry: function (barcode) {
@@ -438,6 +442,7 @@
                     let orderNumber = this.order['order_number'];
 
                     this.$refs.filtersModal.hide();
+                    this.setFocusOnBarcodeInput();
 
                     return this.apiPrintLabel(orderNumber, template)
                         .catch((error) => {

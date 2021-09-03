@@ -1,6 +1,6 @@
 <template>
     <div>
-        <input ref="barcode" class="form-control" :placeholder="placeholder"
+        <input ref="barcode" id="barcodeInput" class="form-control" :placeholder="placeholder"
                v-model="barcode"
                @focus="simulateSelectAll"
                @keyup.enter="barcodeScanned(barcode)"/>
@@ -8,7 +8,6 @@
 </template>
 
 <script>
-    import VueObserveVisibilityPlugin from 'vue-observe-visibility';
     import helpers from "../../mixins/helpers";
 
     export default {
@@ -28,10 +27,7 @@
         },
 
         mounted() {
-            setTimeout(() => { this.setFocusOnBarcodeInput() }, 500);
-        },
-
-        created() {
+            this.setFocusOnBarcodeInput(500);
         },
 
         methods: {
@@ -41,8 +37,10 @@
                 this.simulateSelectAll();
             },
 
-            setFocusOnBarcodeInput() {
-                this.setFocus(this.$refs.barcode, true,true)
+            setFocusOnBarcodeInput(delay = 1) {
+                setTimeout(() => {
+                    this.setFocus(document.getElementById('barcodeInput'), true,true)
+                }, delay);
             },
 
             simulateSelectAll() {

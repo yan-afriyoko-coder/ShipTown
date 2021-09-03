@@ -31,11 +31,7 @@
 
         <div v-else>
             <template v-for="pick in picklist">
-                <pick-card
-                    :pick="pick"
-                    :id="`pick-card-${ picklist.indexOf(pick)}`"
-                    @swipeRight="pickAll"
-                    @swipeLeft="partialPickSwiped"/>
+                <pick-card :pick="pick" :id="`pick-card-${ picklist.indexOf(pick)}`" @swipeRight="pickAll" @swipeLeft="partialPickSwiped"/>
             </template>
         </div>
 
@@ -66,7 +62,7 @@ import Vue from "vue";
 export default {
     name: "PicksTable",
 
-    mixins: [loadingOverlay, url, beep, api],
+    mixins: [loadingOverlay, url, beep, api, BarcodeInputField],
 
     components: {
         'pick-card': PickCard,
@@ -150,7 +146,10 @@ export default {
         },
 
         reloadPicks() {
+            this.setFocusOnBarcodeInput(500);
+
             this.showLoading();
+
             this.picklist = [];
             const params = {
                 'include': 'product,product.aliases',
@@ -172,7 +171,6 @@ export default {
                 })
                 .finally( () => {
                         this.hideLoading();
-                        this.setFocusOnBarcodeInput();
                 });
         },
 
@@ -210,6 +208,7 @@ export default {
                     this.beep();
                     this.removeFromPicklist(pick);
                 });
+            this.setFocusOnBarcodeInput();
         },
 
         deletePick: function (pick) {
@@ -247,6 +246,7 @@ export default {
                         action: (toast) => {
                             this.$snotify.remove(toast.id)
                             this.deletePick(pick);
+                            this.setFocusOnBarcodeInput();
                         }
                     },
                     {
@@ -259,12 +259,14 @@ export default {
 
                             this.$snotify.remove(toast.id);
                             this.makePartialPick(pick, toast.value);
+                            this.setFocusOnBarcodeInput();
                         }
                     },
                     {
                         text: 'Cancel',
                         action: (toast) => {
-                            this.$snotify.remove(toast.id)
+                            this.$snotify.remove(toast.id);
+                            this.setFocusOnBarcodeInput();
                         }
                     },
                 ],
