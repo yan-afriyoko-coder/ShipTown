@@ -153,9 +153,13 @@ export default {
                     this.$emit('onUpdated', data.data);
                 })
                 .catch((error) => {
-                    if (error.response) {
-                        if (error.response.status === 422) {
-                            this.$refs.form.setErrors(error.response.data.errors);
+                    let response = error.response;
+
+                    if (response) {
+                        if (response.status === 422) {
+                          this.$refs.form.setErrors(response.data.errors);
+                        } else {
+                          this.$snotify.error('Error saving template: ' + response.status + ' ' + response.data.message);
                         }
                     }
                 })
