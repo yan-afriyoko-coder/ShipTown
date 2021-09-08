@@ -74,6 +74,8 @@ export default {
         if(Vue.prototype.$currentUser['location_id']) {
             this.setUrlParameter('inventory_source_location_id', Vue.prototype.$currentUser['location_id']);
         }
+
+        this.reloadPicks();
     },
 
     watch: {
