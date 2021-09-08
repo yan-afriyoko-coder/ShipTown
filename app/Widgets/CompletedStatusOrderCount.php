@@ -29,6 +29,7 @@ class CompletedStatusOrderCount extends AbstractDateSelectorWidget
                 $this->getEndingDateTime(),
             ])
             ->groupBy(['status_code'])
+            ->orderByDesc('order_count')
             ->get();
 
         $total_count = $status_order_counts->sum(function ($day) {

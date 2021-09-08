@@ -28,6 +28,7 @@ class ProductsPickedCountsWidget extends AbstractDateSelectorWidget
             ])
             ->leftJoin('users', 'user_id', '=', 'users.id')
             ->groupBy(['user_id'])
+            ->orderByDesc('total')
             ->get();
 
         $total_count = 0;
