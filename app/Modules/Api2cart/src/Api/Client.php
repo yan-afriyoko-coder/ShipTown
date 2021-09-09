@@ -15,7 +15,6 @@ class Client
      * @param array  $params
      *
      * @throws RequestException
-     * @throws GuzzleException
      *
      * @return RequestResponse
      */
@@ -28,9 +27,21 @@ class Client
 
         $query = array_merge($query, $params);
 
-        $response = new RequestResponse(
-            self::getGuzzleClient()->get($uri, ['query' => $query])
-        );
+        try {
+            $response = new RequestResponse(
+                self::getGuzzleClient()->get($uri, ['query' => $query])
+            );
+        } catch (GuzzleException $exception) {
+            Log::warning('Api2cart: GET failed', [
+                'uri' => $uri,
+                'exception' => [
+                    'code' => $exception->getCode(),
+                    'message' => $exception->getMessage(),
+                ],
+                'query' => $query
+            ]);
+        }
+
 
         // hide sensitive information
         $query['api_key'] = '***';
