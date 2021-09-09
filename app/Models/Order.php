@@ -183,8 +183,9 @@ class Order extends BaseModel
     public function orderStatus(): OrderStatus
     {
         return OrderStatus::firstOrCreate([
+            'code' => $this->status_code
+        ], [
             'name' => $this->status_code,
-            'code' => $this->status_code,
         ]);
     }
 
