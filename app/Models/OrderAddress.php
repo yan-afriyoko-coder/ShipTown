@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Barryvdh\LaravelIdeHelper\Eloquent;
+use Crypt;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use function Symfony\Component\Translation\t;
 
 /**
  * App\Models\OrderAddress.
@@ -33,6 +35,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Order|null $order
+ * @property boolean encrypted
  *
  * @method static Builder|OrderAddress newModelQuery()
  * @method static Builder|OrderAddress newQuery()
@@ -80,6 +83,33 @@ class OrderAddress extends Model
         'website',
         'region',
     ];
+
+    public function getFirstNameAttribute(): string
+    {
+        if ($this->encrypted) {
+            return  Crypt::decryptString($this->attributes['first_name']);
+        }
+
+        return $this->attributes['first_name'];
+    }
+
+    public function getLastNameAttribute(): string
+    {
+        if ($this->encrypted) {
+            return  Crypt::decryptString($this->attributes['last_name']);
+        }
+
+        return $this->attributes['last_name'];
+    }
+
+    public function getPhoneAttribute(): string
+    {
+        if ($this->encrypted) {
+            return  Crypt::decryptString($this->attributes['phone']);
+        }
+
+        return $this->attributes['phone'];
+    }
 
     /**
      * @return string
