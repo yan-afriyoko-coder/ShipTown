@@ -96,6 +96,11 @@ Vue.component('passport-clients', require('./components/Settings/OauthClients.vu
 Vue.component('passport-authorized-clients', require('./components/Settings/AuthorizedClients.vue').default);
 Vue.component('passport-personal-access-tokens', require('./components/Settings/PersonalAccessTokens.vue').default);
 
+/**
+ * Widget
+ */
+Vue.component('date-selector-widget', require('./components/Widgets/DateSelectorWidget.vue').default);
+
 Vue.component('autopilot-packlist-page', require('./components/AutopilotPacklistPage.vue').default);
 Vue.component('dpd-configuration', require('./components/Settings/DpdConfiguration').default);
 
