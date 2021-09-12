@@ -8,11 +8,11 @@
                 Date Filter
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownDateRange">
-                <a class="dropdown-item" href="?today,now">Today</a>
-                <a class="dropdown-item" href="?yesterday,today">Yesterday</a>
-                <a class="dropdown-item" href="?-7days,now">Last 7 days</a>
-                <a class="dropdown-item" href="?this week monday,now">This week</a>
-                <a class="dropdown-item" href="?last week monday,this week monday">Last Week</a>
+                <a class="dropdown-item" href="?between_dates=today,now">Today</a>
+                <a class="dropdown-item" href="?between_dates=yesterday,today">Yesterday</a>
+                <a class="dropdown-item" href="?between_dates=-7days,now">Last 7 days</a>
+                <a class="dropdown-item" href="?between_dates=this week monday,now">This week</a>
+                <a class="dropdown-item" href="?between_dates=last week monday,this week monday">Last Week</a>
                 <a class="dropdown-item" href="#" @click="showModal">Custom Date</a>
             </div>
         </div>
@@ -52,6 +52,8 @@ export default {
     props: ['dates'],
     data(){
         return {
+            formated_starting_date: null,
+            formated_ending_date: null,
             starting_date: null,
             ending_date: null,
             between_dates: null
@@ -71,7 +73,10 @@ export default {
     },
     methods: {
         applyFilter(range){
-            location.href = '?between_dates='+range;
+
+            let href = '?between_dates='+range;
+            console.log(href);
+            location.href = href;
         },
         validateFilter(){
             if (this.starting_date > this.ending_date) {
