@@ -343,6 +343,7 @@
 
                 shipOrderProduct(orderProduct, quantity) {
                     this.apiPostOrderProductShipment({
+                            'order_id': orderProduct.order_id,
                             'order_product_id': orderProduct.id,
                             'quantity_shipped': quantity,
                         })

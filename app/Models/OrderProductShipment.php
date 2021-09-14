@@ -27,6 +27,7 @@ use Spatie\Activitylog\Models\Activity;
  * @property Carbon|null $updated_at
  *
  * @property User|null   $user
+ * @property Order|null  $order
  *
  * @mixin Eloquent
  */
@@ -37,6 +38,7 @@ class OrderProductShipment extends BaseModel
     protected $fillable = [
         'user_id',
         'warehouse_id',
+        'order_id',
         'order_product_id',
         'quantity_shipped',
         'order_shipment_id',
@@ -52,5 +54,13 @@ class OrderProductShipment extends BaseModel
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class);
     }
 }
