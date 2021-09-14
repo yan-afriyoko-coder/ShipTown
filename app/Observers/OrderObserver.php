@@ -4,6 +4,8 @@ namespace App\Observers;
 
 use App\Events\Order\OrderUpdatedEvent;
 use App\Models\Order;
+use App\Models\OrderProductShipment;
+use App\Models\OrderShipment;
 
 class OrderObserver
 {
@@ -29,6 +31,15 @@ class OrderObserver
         $order->is_active = $order->order_status->order_active ?? 1;
         if ($order->isAttributeChanged('is_active')) {
             $order->order_closed_at = $order->is_active ? null : now();
+
+            /** @var OrderShipment $last_shipment */
+            $last_shipment = OrderShipment::query()->where(['order_id' => $order->getKey()])->latest()->first();
+
+            if ($last_shipment) {
+                OrderProductShipment::where(['order_id' => $order->getKey()])
+                    ->whereNull('order_shipment_id')
+                    ->update(['order_shipment_id' => $last_shipment->getKey()]);
+            }
         }
     }
 
