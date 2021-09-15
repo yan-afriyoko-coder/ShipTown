@@ -58,7 +58,7 @@
                             <ul class="nav nav-tabs">
                                 <li class="nav-item">
                                     <a class="nav-link p-0 pl-2 pr-2 active" @click.prevent="currentTab = 'pendingOrders'" data-toggle="tab" href="#t">
-                                        Pending Orders
+                                        Orders
                                     </a>
                                 </li>
                                 <li class="nav-item">
