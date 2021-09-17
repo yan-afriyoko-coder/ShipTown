@@ -205,7 +205,7 @@
                     case 'orders':
                         if(!this.activeOrderProducts.length){
                             this.loadActiveOrders();
-                            this.loadInavtiveOrders();
+                            this.loadInactiveOrders();
                         }
                         break;
                     case 'activityLog':
@@ -294,7 +294,7 @@
                     });
             },
 
-            loadInavtiveOrders: function () {
+            loadInactiveOrders: function () {
                 this.statusMessageOrder = "Loading orders ..."
                 const params = {
                     'filter[product_id]': this.product['id'],
