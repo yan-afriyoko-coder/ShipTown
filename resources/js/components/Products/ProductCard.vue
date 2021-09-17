@@ -57,8 +57,8 @@
                         <div class="row tabs-container mb-2">
                             <ul class="nav nav-tabs">
                                 <li class="nav-item">
-                                    <a class="nav-link p-0 pl-2 pr-2 active" @click.prevent="currentTab = 'pendingOrders'" data-toggle="tab" href="#t">
-                                        Pending Orders
+                                    <a class="nav-link p-0 pl-2 pr-2 active" @click.prevent="currentTab = 'orders'" data-toggle="tab" href="#t">
+                                        Orders
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -79,11 +79,14 @@
                             </ul>
                         </div>
 
-                        <template v-if="currentTab === 'pendingOrders'">
+                        <template v-if="currentTab === 'orders'">
                             <div>
                                 {{ statusMessageOrder }}
                             </div>
-                           <div v-for="orderProduct in orderProducts" :key="orderProduct.id">
+                            <div v-if="!orders.length">
+                                No orders found
+                            </div>
+                           <div v-for="orderProduct in orders" :key="orderProduct.id">
                                <div class="row text-left mb-2">
                                    <div class="col">
                                        <div>
@@ -199,9 +202,10 @@
         watch: {
             currentTab() {
                 switch (this.currentTab) {
-                    case 'pendingOrders':
-                        if(!this.orderProducts.length){
-                            this.loadOrders();
+                    case 'orders':
+                        if(!this.activeOrderProducts.length){
+                            this.loadActiveOrders();
+                            this.loadInavtiveOrders();
                         }
                         break;
                     case 'activityLog':
@@ -222,8 +226,15 @@
                 activityLog: [],
                 currentTab: '',
                 showOrders: false,
-                orderProducts: [],
+                activeOrderProducts: [],
+                inactiveOrderProducts: []
             };
+        },
+
+        computed: {
+            orders() {
+                return this.activeOrderProducts.concat(this.inactiveOrderProducts)
+            }
         },
 
         created: function () {
@@ -260,7 +271,7 @@
                 this.showOrders = !this.showOrders;
 
                 if ((this.showOrders) && (this.currentTab === '')) {
-                    this.currentTab = 'pendingOrders';
+                    this.currentTab = 'orders';
                 }
             },
 
@@ -268,7 +279,7 @@
                 this.apiKickProduct(this.product['sku']);
             },
 
-            loadOrders: function () {
+            loadActiveOrders: function () {
                 this.statusMessageOrder = "Loading orders ..."
                 const params = {
                     'filter[product_id]': this.product['id'],
@@ -279,10 +290,23 @@
                 this.apiGetOrderProducts(params)
                     .then(({data}) => {
                         this.statusMessageOrder = '';
-                        this.orderProducts = data.data;
-                        if (this.orderProducts.length === 0) {
-                            this.statusMessageOrder = 'No orders found';
-                        }
+                        this.activeOrderProducts = data.data;
+                    });
+            },
+
+            loadInavtiveOrders: function () {
+                this.statusMessageOrder = "Loading orders ..."
+                const params = {
+                    'filter[product_id]': this.product['id'],
+                    'filter[order.is_active]': false,
+                    'sort': 'id',
+                    'include': 'order',
+                    'per_page': 5
+                }
+                this.apiGetOrderProducts(params)
+                    .then(({data}) => {
+                        this.statusMessageOrder = '';
+                        this.inactiveOrderProducts = data.data;
                     });
             },
 
