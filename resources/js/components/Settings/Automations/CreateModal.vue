@@ -206,7 +206,7 @@ export default {
             automation: {
                 name: '',
                 event_class: '',
-                enabled: true,
+                enabled: false,
                 priority: 1,
                 conditions: [],
                 actions: []
@@ -280,7 +280,7 @@ export default {
             this.automation = {
                 name: '',
                 event_class: '',
-                enabled: true,
+                enabled: false,
                 priority: 1,
                 conditions: [],
                 actions: []
