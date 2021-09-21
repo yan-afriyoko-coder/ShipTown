@@ -2,9 +2,7 @@
 
 namespace App\Modules\Automations\src\Conditions\Order;
 
-use App\Events\Order\OrderCreatedEvent;
-use App\Events\Order\OrderUpdatedEvent;
-use App\Services\OrderService;
+use App\Events\Order\ActiveOrderCheckEvent;
 use Log;
 
 /**
@@ -12,18 +10,18 @@ use Log;
  */
 class IsFullyPaidCondition
 {
-    private OrderUpdatedEvent $event;
+    private ActiveOrderCheckEvent $event;
 
-    public function __construct(OrderUpdatedEvent $event)
+    public function __construct(ActiveOrderCheckEvent $event)
     {
         $this->event = $event;
     }
 
     /**
-     * @param $condition_value
+     * @param bool $condition_value
      * @return bool
      */
-    public function isValid($condition_value): bool
+    public function isValid(bool $condition_value): bool
     {
         $result = $this->event->order->isPaid === $condition_value;
 

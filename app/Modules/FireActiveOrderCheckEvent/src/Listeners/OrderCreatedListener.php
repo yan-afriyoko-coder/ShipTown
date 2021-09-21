@@ -21,6 +21,10 @@ class OrderCreatedListener
     public function handle(OrderCreatedEvent $event)
     {
         FireActiveOrderCheckEventJob::dispatch($event->order)
-            ->delay(now()->addMinutes(5));
+            // we let things settle down
+            // set 5min cool down period
+            ->delay(
+                now()->addMinutes(5)
+            );
     }
 }
