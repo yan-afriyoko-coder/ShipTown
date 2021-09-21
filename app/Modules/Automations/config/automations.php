@@ -26,6 +26,10 @@ return [
                     'class' => \App\Modules\Automations\src\Conditions\Order\LineCountEqualsCondition::class,
                     'description' => 'Line count equals',
                 ],
+                [
+                    'class' => \App\Modules\Automations\src\Conditions\Order\IsFullyPaidCondition::class,
+                    'description' => 'Is Fully Paid',
+                ],
             ],
             'actions' => [
                 [
@@ -61,6 +65,10 @@ return [
                 [
                     'class' => \App\Modules\Automations\src\Conditions\Order\LineCountEqualsCondition::class,
                     'description' => 'Line count equals',
+                ],
+                [
+                    'class' => \App\Modules\Automations\src\Conditions\Order\IsFullyPaidCondition::class,
+                    'description' => 'Is Fully Paid',
                 ],
             ],
             'actions' => [
