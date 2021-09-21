@@ -24,16 +24,20 @@ class CanNotFulfillFromLocationCondition
     }
 
     /**
-     * @param $condition_value
+     * @param $location_id
      * @return bool
      */
-    public function isValid($condition_value): bool
+    public function isValid($location_id): bool
     {
-        $result = OrderService::canNotFulfill($this->event->order, $condition_value);
+        if ($location_id === 0) {
+            $location_id = null;
+        }
+
+        $result = OrderService::canNotFulfill($this->event->order, $location_id);
 
         Log::debug('Validating condition', [
             'order_number' => $this->event->order->order_number,
-            'location_id' => $condition_value,
+            'location_id' => $location_id,
             'can_NOT_fulfill' => $result,
             'class' => self::class,
         ]);
