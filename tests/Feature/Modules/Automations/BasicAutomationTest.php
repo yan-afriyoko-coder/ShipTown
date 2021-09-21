@@ -5,6 +5,7 @@ namespace Tests\Feature\Modules\Automations;
 use App\Events\Order\OrderCreatedEvent;
 use App\Models\Order;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
+use App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
@@ -33,7 +34,7 @@ class BasicAutomationTest extends TestCase
 
         Condition::create([
             'automation_id' => $automation->getKey(),
-            'condition_class' => CanBeFulfilledCondition::class,
+            'condition_class' => CanFulfillFromLocationCondition::class,
             'condition_value' => 'paid'
         ]);
 
