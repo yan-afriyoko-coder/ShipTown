@@ -2,7 +2,9 @@
 
 namespace App\Modules\Automations\src\Conditions\Order;
 
+use App\Events\Order\ActiveOrderCheckEvent;
 use App\Events\Order\OrderCreatedEvent;
+use App\Events\Order\OrderUpdatedEvent;
 use Log;
 
 /**
@@ -10,9 +12,12 @@ use Log;
  */
 class StatusCodeEqualsCondition
 {
-    private OrderCreatedEvent $event;
+    /**
+     * @var ActiveOrderCheckEvent|OrderCreatedEvent|OrderUpdatedEvent
+     */
+    private $event;
 
-    public function __construct(OrderCreatedEvent $event)
+    public function __construct($event)
     {
         $this->event = $event;
     }
