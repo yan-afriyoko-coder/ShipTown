@@ -82,16 +82,12 @@ class OrderController extends Controller
                 $this->respondNotAllowed405('Order already packed!');
             }
 
-//            if ($order->packer_user_id != $request->user()->getKey()) {
-//                $this->respondNotAllowed405('Order is being packed by another user');
-//            }
-
             $updates = Arr::add($updates, 'packer_user_id', $request->user()->getKey());
         }
 
         $order->update($updates);
 
-        return new JsonResource($order);
+        return OrderResource::make($order);
     }
 
     /**
