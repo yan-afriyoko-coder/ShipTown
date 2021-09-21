@@ -270,6 +270,7 @@
 
         methods: {
             kickOrder: function () {
+                this.apiPostOrderCheckRequest({'order_id': this.order['id']});
                 this.apiUpdateOrder(this.order['id'],{'status_code': this.order['status_code']});
             },
 

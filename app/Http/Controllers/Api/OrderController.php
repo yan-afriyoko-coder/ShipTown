@@ -85,7 +85,7 @@ class OrderController extends Controller
             $updates = Arr::add($updates, 'packer_user_id', $request->user()->getKey());
         }
 
-        $order->update($updates);
+        $order->fill($updates)->save();
 
         return OrderResource::make($order);
     }

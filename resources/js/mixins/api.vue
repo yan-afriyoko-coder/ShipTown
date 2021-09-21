@@ -43,6 +43,10 @@ export default {
                 return axios.get('/api/orders', {params: params});
             },
 
+            apiPostOrderCheckRequest: function (data) {
+                return axios.post('/api/order-check-request', data);
+            },
+
             apiUpdateOrder: function (order_id, data) {
                 return axios.put('/api/orders/' + order_id, data);
             },

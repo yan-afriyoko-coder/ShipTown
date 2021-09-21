@@ -82,5 +82,25 @@ return [
                 ],
             ]
         ],
+        [
+            'class' => \App\Events\Order\ActiveOrderCheckEvent::class,
+            'description' => 'Order Automation',
+            'conditions' => [
+                [
+                    'class' => \App\Modules\Automations\src\Conditions\Order\IsFullyPaidCondition::class,
+                    'description' => 'Is Fully Paid',
+                ],
+            ],
+            'actions' => [
+                [
+                    'class' => \App\Modules\Automations\src\Actions\Order\SetStatusCodeAction::class,
+                    'description' => 'Set Order Status Code to',
+                ],
+                [
+                    'class' => \App\Modules\Automations\src\Actions\Order\LogMessageAction::class,
+                    'description' => 'Log order message',
+                ],
+            ]
+        ],
     ],
 ];
