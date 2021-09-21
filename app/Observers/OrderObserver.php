@@ -52,7 +52,6 @@ class OrderObserver
      */
     public function updated(Order $order)
     {
-        dd("order updated event");
         OrderUpdatedEvent::dispatch($order);
     }
 }
