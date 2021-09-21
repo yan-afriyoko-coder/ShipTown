@@ -27,7 +27,7 @@ class StoreTest extends TestCase
             'priority' => 1,
             'conditions' => [
                 [
-                    'condition_class' => 'App\Modules\Automations\src\Conditions\Order\CanBeFulfilledCondition',
+                    'condition_class' => 'App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition',
                     'condition_value' => 'paid'
                 ],
                 [
