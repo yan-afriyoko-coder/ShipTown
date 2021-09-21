@@ -270,7 +270,7 @@
 
         methods: {
             kickOrder: function () {
-                this.apiUpdateOrder(this.order['id'],{'status_code': this.order['status_code']+'a'});
+                this.apiUpdateOrder(this.order['id'],{'status_code': this.order['status_code']});
             },
 
             sharingAvailable() {
