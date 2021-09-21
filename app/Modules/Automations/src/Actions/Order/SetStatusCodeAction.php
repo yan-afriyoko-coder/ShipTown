@@ -14,7 +14,7 @@ class SetStatusCodeAction
     */
     private $event;
 
-    public function __construct(OrderCreatedEvent $event)
+    public function __construct($event)
     {
         $this->event = $event;
     }
