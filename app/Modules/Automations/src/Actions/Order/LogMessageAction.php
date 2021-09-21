@@ -4,12 +4,13 @@ namespace App\Modules\Automations\src\Actions\Order;
 
 use App\Events\Order\ActiveOrderCheckEvent;
 use App\Events\Order\OrderCreatedEvent;
+use App\Events\Order\OrderUpdatedEvent;
 use Log;
 
 class LogMessageAction
 {
     /**
-     * @var ActiveOrderCheckEvent|OrderCreatedEvent
+     * @var ActiveOrderCheckEvent|OrderCreatedEvent|OrderUpdatedEvent
      */
     private $event;
 

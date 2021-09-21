@@ -2,12 +2,17 @@
 
 namespace App\Modules\Automations\src\Actions\Order;
 
+use App\Events\Order\ActiveOrderCheckEvent;
 use App\Events\Order\OrderCreatedEvent;
+use App\Events\Order\OrderUpdatedEvent;
 use Log;
 
 class SetStatusCodeAction
 {
-    private OrderCreatedEvent $event;
+    /**
+    * @var ActiveOrderCheckEvent|OrderCreatedEvent|OrderUpdatedEvent
+    */
+    private $event;
 
     public function __construct(OrderCreatedEvent $event)
     {

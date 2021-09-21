@@ -84,8 +84,28 @@ return [
         ],
         [
             'class' => \App\Events\Order\ActiveOrderCheckEvent::class,
-            'description' => 'Order Automation',
+            'description' => 'On Order Check Event',
             'conditions' => [
+                [
+                    'class' => \App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition::class,
+                    'description' => 'Order Shipping Method Code equals',
+                ],
+                [
+                    'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition::class,
+                    'description' => 'Order Status Code equals',
+                ],
+                [
+                    'class' => \App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition::class,
+                    'description' => 'Can Fulfill from location',
+                ],
+                [
+                    'class' => \App\Modules\Automations\src\Conditions\Order\CanNotFulfillFromLocationCondition::class,
+                    'description' => 'Can NOT Fulfill from location',
+                ],
+                [
+                    'class' => \App\Modules\Automations\src\Conditions\Order\LineCountEqualsCondition::class,
+                    'description' => 'Line count equals',
+                ],
                 [
                     'class' => \App\Modules\Automations\src\Conditions\Order\IsFullyPaidCondition::class,
                     'description' => 'Is Fully Paid',
