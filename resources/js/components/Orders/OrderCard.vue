@@ -44,7 +44,7 @@
                     </div>
 
                     <div class="col-12 small" v-if="order['order_comments'].length > 0 && orderDetailsVisible === false">
-                        <b>{{ order['order_comments'][0]['user']['name'] }}: </b>{{ order['order_comments'][0]['comment'] }}
+                        <b>{{ order['order_comments'][0]['user'] ? order['order_comments'][0]['user']['name'] + ': ' : '' }}</b>{{ order['order_comments'][0]['comment'] }}
                     </div>
 
                 </div>
@@ -71,7 +71,7 @@
                     <template v-for="order_comment in order['order_comments']">
                         <div class="row mb-2">
                             <div class="col">
-                                <b>{{ order_comment['user']['name'] }}: </b>{{ order_comment['comment'] }}
+                                <b>{{ order_comment['user'] ? order_comment['user']['name'] + ':': '' }} </b>{{ order_comment['comment'] }}
                             </div>
                         </div>
                     </template>

@@ -121,8 +121,12 @@ return [
                     'description' => 'Set Order Status Code to',
                 ],
                 [
+                    'class' => \App\Modules\Automations\src\Actions\Order\AddOrderCommentAction::class,
+                    'description' => 'Add order comment',
+                ],
+                [
                     'class' => \App\Modules\Automations\src\Actions\Order\LogMessageAction::class,
-                    'description' => 'Log order message',
+                    'description' => 'Add log message',
                 ],
             ]
         ],
