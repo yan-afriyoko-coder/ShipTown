@@ -111,7 +111,7 @@ return [
                     'description' => 'Is Fully Paid',
                 ],
                 [
-                    'class' => \App\Modules\Automations\src\Conditions\Order\IsFullyPaidCondition::class,
+                    'class' => \App\Modules\Automations\src\Conditions\Order\IsFullyPackedCondition::class,
                     'description' => 'Is Fully Packed',
                 ],
             ],
