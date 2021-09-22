@@ -95,6 +95,10 @@ return [
                     'description' => 'Order Status Code equals',
                 ],
                 [
+                    'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeNotInCondition::class,
+                    'description' => 'Order Status Code Not In',
+                ],
+                [
                     'class' => \App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition::class,
                     'description' => 'Can Fulfill from location (0 for all)',
                 ],
