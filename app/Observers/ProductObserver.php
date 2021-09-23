@@ -105,7 +105,7 @@ class ProductObserver
      */
     private function insertPricingRecords(Product $product): void
     {
-        $productPriceRecords = Warehouse::all('id')
+        $productPriceRecords = Warehouse::all(['id','code'])
             ->map(function (Warehouse $warehouse) use ($product) {
                 return [
                     'product_id'  => $product->getKey(),
