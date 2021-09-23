@@ -77,8 +77,7 @@ export default {
             return;
         }
 
-        this.$snotify.warning('User does not have warehouse specified', {timeout: 50000});
-
+        this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
     },
 
     watch: {
