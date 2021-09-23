@@ -164,7 +164,7 @@ class OrderProduct extends BaseModel
         return QueryBuilder::for(OrderProduct::class)
             ->allowedFilters([
                 AllowedFilter::scope('has_stock_reserved', 'whereHasStockReserved'),
-                AllowedFilter::scope('warehouse_id', 'addWarehouseSource'),
+                AllowedFilter::scope('warehouse_id', 'addWarehouseSource')->default(0),
                 AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->default(100),
                 AllowedFilter::scope('in_stock_only', 'whereInStock'),
 

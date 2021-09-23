@@ -3,16 +3,21 @@
 namespace Tests\Feature\Http\Controllers\Api\PicklistController;
 
 use App\Models\OrderProduct;
+use App\Models\Warehouse;
 use App\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class IndexTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function test_index_call_returns_ok()
     {
-        OrderProduct::query()->forceDelete();
-        factory(OrderProduct::class)->create();
+        $warehouse = factory(Warehouse::class)->create();
+//        OrderProduct::query()->forceDelete();
+        $orderProduct = factory(OrderProduct::class)->create();
 
         $user = factory(User::class)->create();
 
