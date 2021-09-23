@@ -29,7 +29,7 @@ class CanFulfillFromLocationCondition
      */
     public function isValid($location_id): bool
     {
-        if ($location_id === 0) {
+        if ($location_id === '0') {
             $location_id = null;
         }
 
