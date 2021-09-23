@@ -18,4 +18,11 @@ class Condition extends BaseModel
         'condition_class',
         'condition_value',
     ];
+
+    public function isTrue($event): bool
+    {
+        $validator = new $this->condition_class($event);
+
+        return $validator->isValid($this->condition_value);
+    }
 }
