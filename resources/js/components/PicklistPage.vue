@@ -71,11 +71,14 @@ export default {
     },
 
     mounted() {
-        if(Vue.prototype.$currentUser['location_id']) {
-            this.setUrlParameter('inventory_source_location_id', Vue.prototype.$currentUser['location_id']);
+        if (Vue.prototype.$currentUser['warehouse_id']) {
+            this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
+            this.reloadPicks();
+            return;
         }
 
-        this.reloadPicks();
+        this.$snotify.warning('User does not have warehouse specified', {timeout: 50000});
+
     },
 
     watch: {
@@ -158,7 +161,7 @@ export default {
                 'sort': 'inventory_source_shelf_location,sku_ordered',
                 'per_page': this.getUrlParameter('per_page', 3),
                 'filter[in_stock_only]': this.getUrlParameter('in_stock_only', true),
-                'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id'),
+                'filter[warehouse_id]': this.getUrlParameter('warehouse_id'),
                 'filter[current_shelf_location]': this.getUrlParameter('current_shelf_location'),
                 'filter[order.status_code]': this.getUrlParameter('order.status_code'),
                 'filter[created_between]': this.getUrlParameter('created_between'),

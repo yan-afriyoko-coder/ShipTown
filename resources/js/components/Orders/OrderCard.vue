@@ -222,6 +222,7 @@
     import api from "../../mixins/api";
     import helpers from "../../mixins/helpers";
     import url from "../../mixins/url";
+    import Vue from "vue";
 
     export default {
         mixins: [api, helpers, url],
@@ -248,7 +249,7 @@
         },
 
         mounted() {
-            // we pre creating array of empty products so UI will display 4 empty rows
+            // we pre creating array of empty products so UI will display empty row for each orderProduct
             // its simply more pleasant to eye and card doesnt "jump"
             for (let i = 0; i < this.order['product_line_count']; i++)
                 this.order_products.unshift([]);
@@ -299,7 +300,7 @@
 
             loadOrderProducts() {
                 let params = {
-                    'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id'),
+                    'filter[warehouse_id]': this.getUrlParameter('warehouse_id'),
                     'filter[order_id]': this.order['id'],
                     'include': 'product',
                     'per_page': '999',
@@ -399,7 +400,7 @@
             },
 
             getProductQuantity(orderProduct) {
-                if(this.getUrlParameter('inventory_source_location_id')) {
+                if(this.getUrlParameter('warehouse_id')) {
                     return orderProduct['inventory_source_quantity']
                 }
                 return orderProduct['product'] ? Number(orderProduct['product']['quantity']) : 0;

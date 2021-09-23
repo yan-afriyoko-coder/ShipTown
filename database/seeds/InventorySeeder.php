@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Inventory;
+use App\Models\Warehouse;
 use Illuminate\Database\Seeder;
 
 class InventorySeeder extends Seeder
@@ -11,24 +13,17 @@ class InventorySeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\Product::query()
-            ->get()
-            ->each(function (\App\Models\Product $product) {
-                factory(\App\Models\Inventory::class)
-                    ->create([
+        $warehouses = Warehouse::all()->each(function (Warehouse $warehouse) {
+            \App\Models\Product::query()
+                ->get()
+                ->each(function (\App\Models\Product $product) use ($warehouse) {
+                    Inventory::updateOrCreate([
                         'product_id'  => $product->id,
-                        'location_id' => 99,
+                        'location_id' => $warehouse->code,
+                    ],[
+                        'quantity' => rand(0, 100)
                     ]);
-            });
-
-        \App\Models\Product::query()
-            ->get()
-            ->each(function (\App\Models\Product $product) {
-                factory(\App\Models\Inventory::class)
-                    ->create([
-                        'product_id'  => $product->id,
-                        'location_id' => 100,
-                    ]);
-            });
+                });
+        });
     }
 }

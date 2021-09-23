@@ -141,9 +141,16 @@
             mounted() {
                 this.loadOrderStatuses();
 
-                if (this.order_number) {
-                    this.loadOrder(this.order_number);
+                if (Vue.prototype.$currentUser['warehouse_id']) {
+                    this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
+
+                    if (this.order_number) {
+                        this.loadOrder(this.order_number);
+                    }
+                    return;
                 }
+
+                this.$snotify.warning('User does not have warehouse specified', {timeout: 50000});
             },
 
             watch: {
@@ -233,7 +240,7 @@
                 loadOrderProducts: function() {
                     const params = {
                         'filter[order_id]': this.order.id,
-                        'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id'),
+                        'filter[warehouse_id]': this.getUrlParameter('warehouse_id'),
                         'sort': 'inventory_source_shelf_location,' +
                             'sku_ordered',
                         'include': 'product,' +

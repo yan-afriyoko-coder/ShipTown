@@ -81,6 +81,20 @@ class Inventory extends BaseModel
         'quantity_reserved' => 'float',
     ];
 
+    public function save(array $options = [])
+    {
+        if ($this->warehouse_id === null) {
+            if ($this->location_id) {
+                $warehouse = Warehouse::whereCode($this->location_id)->first();
+                if ($warehouse) {
+                    $this->warehouse_id = $warehouse->getKey();
+                }
+            }
+        }
+
+        return parent::save($options);
+    }
+
     public function getQuantityAvailableAttribute()
     {
         $quantity_available = $this->quantity - $this->quantity_reserved;

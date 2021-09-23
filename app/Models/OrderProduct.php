@@ -164,6 +164,7 @@ class OrderProduct extends BaseModel
         return QueryBuilder::for(OrderProduct::class)
             ->allowedFilters([
                 AllowedFilter::scope('has_stock_reserved', 'whereHasStockReserved'),
+                AllowedFilter::scope('warehouse_id', 'addWarehouseSource'),
                 AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->default(100),
                 AllowedFilter::scope('in_stock_only', 'whereInStock'),
 
@@ -262,25 +263,50 @@ class OrderProduct extends BaseModel
 
     /**
      * @param Builder $query
+     * @param int     $warehouse_id
+     *
+     * @return Builder
+     */
+    public function scopeAddWarehouseSource($query, $warehouse_id)
+    {
+        $source_inventory = Inventory::query()
+            ->select([
+                'warehouse_id as inventory_source_warehouse_id',
+                'location_id as inventory_source_location_id',
+                'shelve_location as inventory_source_shelf_location',
+                'quantity as inventory_source_quantity',
+                'product_id as inventory_source_product_id',
+            ])
+            ->where(['warehouse_id' => $warehouse_id])
+            ->toBase();
+
+        return $query->leftJoinSub($source_inventory, 'inventory_source', function ($join) {
+            $join->on('order_products.product_id', '=', 'inventory_source_product_id');
+        });
+    }
+
+    /**
+     * @param Builder $query
      * @param int     $inventory_location_id
      *
      * @return Builder
      */
     public function scopeAddInventorySource($query, $inventory_location_id)
     {
-        $source_inventory = Inventory::query()
-            ->select([
-                'location_id as inventory_source_location_id',
-                'shelve_location as inventory_source_shelf_location',
-                'quantity as inventory_source_quantity',
-                'product_id as inventory_source_product_id',
-            ])
-            ->where(['location_id'=>$inventory_location_id])
-            ->toBase();
-
-        return $query->leftJoinSub($source_inventory, 'inventory_source', function ($join) {
-            $join->on('order_products.product_id', '=', 'inventory_source_product_id');
-        });
+        return $query;
+//        $source_inventory = Inventory::query()
+//            ->select([
+//                'location_id as inventory_source_location_id',
+//                'shelve_location as inventory_source_shelf_location',
+//                'quantity as inventory_source_quantity',
+//                'product_id as inventory_source_product_id',
+//            ])
+//            ->where(['location_id'=>$inventory_location_id])
+//            ->toBase();
+//
+//        return $query->leftJoinSub($source_inventory, 'inventory_source', function ($join) {
+//            $join->on('order_products.product_id', '=', 'inventory_source_product_id');
+//        });
     }
 
     /**
