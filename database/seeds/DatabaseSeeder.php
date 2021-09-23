@@ -13,20 +13,24 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             ConfigurationSeeder::class,
+            NavigationMenuSeeder::class,
+            WarehouseSeeder::class,
+            AutomationsSeeder::class,
+
             UsersSeeder::class,
+
             ProductsSeeder::class,
             ProductAliasSeeder::class,
             ProductTagsSeeder::class,
             ProductPriceSeeder::class,
+
             InventorySeeder::class,
+
             OrdersSeeder::class,
             UnpaidOrdersSeeder::class,
             ClosedOrdersSeeder::class,
             PicksSeeder::class,
             OrderShipmentsSeeder::class,
-            NavigationMenuSeeder::class,
-            AutomationsSeeder::class,
-            WarehouseSeeder::class,
         ]);
 
         \App\Jobs\RunHourlyJobs::dispatchNow();

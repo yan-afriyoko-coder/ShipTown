@@ -14,10 +14,6 @@
                             <input v-model="urlFilters['in_stock_only']" type="checkbox" class="form-check-input" />
                             <label class="form-check-label" >In stock only</label>
                         </div>
-                        <div class="form-group form-check">
-                        <div>Inventory Location ID</div>
-                            <input v-model="urlFilters['inventory_source_location_id']" type="number" class="form-check-input" />
-                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">

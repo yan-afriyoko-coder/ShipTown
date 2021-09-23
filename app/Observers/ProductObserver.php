@@ -86,12 +86,14 @@ class ProductObserver
      */
     private function insertInventoryRecords(Product $product): void
     {
-        $warehouse_ids = Warehouse::all('id')
-            ->map(function ($warehouse) use ($product) {
+        $warehouse_ids = Warehouse::all(['id','code'])
+            ->map(function (Warehouse $warehouse) use ($product) {
                 return [
                     'warehouse_id' => $warehouse->getKey(),
                     'product_id'   => $product->getKey(),
-                    'location_id'  => $warehouse->getKey(),
+                    'location_id'  => $warehouse->code,
+                    'created_at'  => now(),
+                    'updated_at'  => now(),
                 ];
             });
 
@@ -103,11 +105,13 @@ class ProductObserver
      */
     private function insertPricingRecords(Product $product): void
     {
-        $productPriceRecords = Warehouse::all('id')
-            ->map(function ($record) use ($product) {
+        $productPriceRecords = Warehouse::all(['id','code'])
+            ->map(function (Warehouse $warehouse) use ($product) {
                 return [
                     'product_id'  => $product->getKey(),
-                    'location_id' => $record->getKey(),
+                    'location_id' => $warehouse->code,
+                    'created_at'  => now(),
+                    'updated_at'  => now(),
                 ];
             });
 
