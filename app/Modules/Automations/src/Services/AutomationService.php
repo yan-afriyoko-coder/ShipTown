@@ -23,19 +23,15 @@ class AutomationService
     public static function runAutomation(Automation $automation, $event)
     {
         // check all conditions
-        $allConditionsPass = $automation->conditions()
-            ->get()
-            ->every(function (Condition $condition) use ($event) {
-                return AutomationService::isConditionValid($condition, $event);
-            });
+        $allConditionsTrue = $automation->allConditionsTrue($event);
 
         Log::debug('Ran automation', [
             'class' => class_basename($automation),
             'name' => $automation->name,
-            'conditions_passed' => $allConditionsPass
+            'conditions_passed' => $allConditionsTrue
         ]);
 
-        if ($allConditionsPass === false) {
+        if ($allConditionsTrue === false) {
             return;
         }
 
@@ -46,13 +42,6 @@ class AutomationService
             ->each(function (Action $action) use ($event) {
                 AutomationService::runAction($action, $event);
             });
-    }
-
-    private static function isConditionValid(Condition $condition, $event): bool
-    {
-        $validator = new $condition->condition_class($event);
-
-        return $validator->isValid($condition->condition_value);
     }
 
     private static function runAction(Action $action, $event): void

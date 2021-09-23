@@ -5,23 +5,19 @@ namespace App\Modules\Automations\src\Conditions\Order;
 use App\Events\Order\ActiveOrderCheckEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
+use App\Modules\Automations\src\Conditions\BaseCondition;
 use App\Services\OrderService;
 use Log;
 
 /**
  *
  */
-class CanFulfillFromLocationCondition
+class CanFulfillFromLocationCondition extends BaseCondition
 {
     /**
      * @var ActiveOrderCheckEvent|OrderCreatedEvent|OrderUpdatedEvent
      */
-    private $event;
-
-    public function __construct($event)
-    {
-        $this->event = $event;
-    }
+    protected $event;
 
     /**
      * @param $location_id

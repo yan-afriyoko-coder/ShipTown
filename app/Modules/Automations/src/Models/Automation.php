@@ -38,6 +38,20 @@ class Automation extends BaseModel
         'enabled' => 'boolean'
     ];
 
+
+    /**
+     * @param $event
+     * @return bool
+     */
+    public function allConditionsTrue($event): bool
+    {
+        return $this->conditions()
+            ->get()
+            ->every(function (Condition $condition) use ($event) {
+                return $condition->isTrue($event);
+            });
+    }
+
     /**
      * @return HasMany
      */
