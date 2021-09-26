@@ -37,6 +37,7 @@ class UpdateRequest extends FormRequest
             ->unique();
         return [
             'name' => 'required|min:3|max:200',
+            'description' => 'nullable|string',
             'event_class' => [
                 'nullable',
                 Rule::in($availableEvent),

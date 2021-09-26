@@ -54,7 +54,7 @@ class AutomationController extends Controller
         try {
             DB::beginTransaction();
 
-            $dataAutomation = $request->only(['name', 'event_class', 'enabled', 'priority']);
+            $dataAutomation = $request->only(['name', 'event_class', 'enabled', 'priority', 'description']);
             $automation = Automation::create($dataAutomation);
 
             $conditions = collect($request->conditions)
@@ -109,7 +109,7 @@ class AutomationController extends Controller
     {
         try {
             DB::beginTransaction();
-            $dataAutomation = $request->only(['name', 'event_class', 'enabled', 'priority']);
+            $dataAutomation = $request->only(['name', 'event_class', 'enabled', 'priority', 'description']);
             $automation->update($dataAutomation);
 
             // Delete current data
