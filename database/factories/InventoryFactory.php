@@ -11,6 +11,7 @@ $factory->define(Inventory::class, function (Faker $faker) {
     $shelveLocation = \Illuminate\Support\Str::upper($faker->randomLetter) . $faker->numberBetween(1, 20);
 
     return [
+        'warehouse_id'      => null,
         'location_id'       => $faker->numberBetween(1, 100),
         'product_id'        => $product->getKey(),
         'shelve_location'   => $shelveLocation,
