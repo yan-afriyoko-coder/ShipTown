@@ -56,8 +56,24 @@ class AutomationController extends Controller
 
             $dataAutomation = $request->only(['name', 'event_class', 'enabled', 'priority']);
             $automation = Automation::create($dataAutomation);
-            $automation->conditions()->createMany($request->conditions);
-            $automation->actions()->createMany($request->actions);
+
+            $conditions = collect($request->conditions)
+                ->filter(function ($condition) {
+                    return $condition['condition_class'] != "";
+                });
+
+            $actions = collect($request->actions)
+                ->filter(function ($action) {
+                    return $action['action_class'] != "";
+                });
+
+            if (count($conditions)) {
+                $automation->conditions()->createMany($request->conditions);
+            }
+
+            if (count($actions)) {
+                $automation->actions()->createMany($request->actions);
+            }
 
             DB::commit();
         } catch (\Exception $e) {

@@ -37,7 +37,7 @@ class StoreRequest extends FormRequest
         return [
             'name' => 'required|min:3|max:200',
             'event_class' => [
-                'required',
+                'nullable',
                 Rule::in($availableEvent),
             ],
             'enabled' => 'required|boolean',
@@ -45,19 +45,17 @@ class StoreRequest extends FormRequest
 
             // Conditions
             'conditions.*.condition_class' => [
-                'required',
-                'distinct',
+                'nullable',
                 Rule::in($availableValidation),
             ],
-            'conditions.*.condition_value' => 'required|string',
+            'conditions.*.condition_value' => 'nullable|string',
 
             // Actions
             'actions.*.action_class' => [
-                'required',
-                'distinct',
+                'nullable',
                 Rule::in($availableActions),
             ],
-            'actions.*.action_value' => 'required|string'
+            'actions.*.action_value' => 'nullable|string'
         ];
     }
 
