@@ -40,16 +40,31 @@
                                 </div>
 
                                 <div class="col-md-2">
-                                    <div class="form-group float-right">
+                                    <div class="form-group">
                                         <label for="edit-enabled">Enabled</label>
                                         <ValidationProvider vid="enabled" name="enabled" v-slot="{ errors }">
-                                            <div class="custom-control custom-switch mt-2" :class="{'is-invalid' : errors.length}">
+                                            <div class="custom-control custom-switch float-right" :class="{'is-invalid' : errors.length}">
                                                 <input type="checkbox" v-model="automation.enabled"
                                                     id="edit-enabled"
                                                     class="custom-control-input"
                                                     required>
                                                 <label class="custom-control-label" for="edit-enabled"></label>
                                             </div>
+                                            <div class="invalid-feedback">
+                                                {{ errors[0] }}
+                                            </div>
+                                        </ValidationProvider>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="create-description">Automation Description</label>
+                                        <ValidationProvider vid="description" name="description" v-slot="{ errors }">
+                                            <textarea v-model="automation.description" :class="{
+                                                'form-control': true,
+                                                'is-invalid': errors.length > 0,
+                                            }" id="create-description"></textarea>
                                             <div class="invalid-feedback">
                                                 {{ errors[0] }}
                                             </div>
@@ -71,6 +86,7 @@
                                                     'is-invalid': errors.length > 0,
                                                 }"
                                             >
+                                                <option value=""></option>
                                                 <option v-for="event, index in events" :key="index" :value="event.class">{{ event.description }}</option>
                                             </select>
                                             <div class="invalid-feedback">
@@ -93,6 +109,7 @@
                                                     'is-invalid': errors.length > 0,
                                                 }"
                                             >
+                                                <option value="">-</option>
                                                 <template v-if="selectedEvent">
                                                     <option v-for="condition, indexOption in selectedEvent.conditions" :key="indexOption" :value="condition.class">{{ condition.description }}</option>
                                                 </template>
@@ -139,6 +156,7 @@
                                                     'is-invalid': errors.length > 0,
                                                 }"
                                             >
+                                                <option value="">-</option>
                                                 <template v-if="selectedEvent">
                                                     <option v-for="action, indexOption in selectedEvent.actions" :key="indexOption" :value="action.class">{{ action.description }}</option>
                                                 </template>
@@ -204,6 +222,17 @@ export default {
     watch: {
         selectedAutomation: function(newVal) {
             this.getAutomation(newVal.id)
+        },
+        "automation.event_class": function(newValue) {
+            if(newValue == ""){
+                this.automation.conditions.forEach(condition => {
+                    condition.condition_class = ""
+                });
+
+                this.automation.actions.forEach(condition => {
+                    condition.action_class = ""
+                });
+            }
         }
     },
 

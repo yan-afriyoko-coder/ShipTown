@@ -30,14 +30,16 @@ class UpdateRequest extends FormRequest
             ->pluck('conditions')
             ->collapse()->pluck('class')
             ->unique();
+
         $availableExecution = $config->where('class', $this->event_class)
             ->pluck('actions')
             ->collapse()->pluck('class')
             ->unique();
         return [
             'name' => 'required|min:3|max:200',
+            'description' => 'nullable|string',
             'event_class' => [
-                'required',
+                'nullable',
                 Rule::in($availableEvent),
             ],
             'enabled' => 'required|boolean',
@@ -45,17 +47,17 @@ class UpdateRequest extends FormRequest
 
             // Conditions
             'conditions.*.condition_class' => [
-                'required',
+                'nullable',
                 Rule::in($availableValidation),
             ],
-            'conditions.*.condition_value' => 'required|string',
+            'conditions.*.condition_value' => 'nullable|string',
 
             // Executions
             'actions.*.action_class' => [
-                'required',
+                'nullable',
                 Rule::in($availableExecution),
             ],
-            'actions.*.action_value' => 'required|string'
+            'actions.*.action_value' => 'nullable|string'
         ];
     }
 }

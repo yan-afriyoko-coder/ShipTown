@@ -28,6 +28,7 @@ class Automation extends BaseModel
         'enabled',
         'name',
         'event_class',
+        'description'
     ];
 
     protected $attributes = [

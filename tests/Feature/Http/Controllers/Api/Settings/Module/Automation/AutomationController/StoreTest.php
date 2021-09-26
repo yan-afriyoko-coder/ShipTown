@@ -24,6 +24,7 @@ class StoreTest extends TestCase
             'name' => 'Test Automation',
             'event_class' => 'App\Events\Order\OrderCreatedEvent',
             'enabled' => true,
+            'description' => 'Some description',
             'priority' => 1,
             'conditions' => [
                 [
