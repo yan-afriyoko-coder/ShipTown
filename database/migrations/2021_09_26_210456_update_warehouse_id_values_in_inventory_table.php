@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class FixWarehouseIdValuesInInventoryTable extends Migration
+class UpdateWarehouseIdValuesInInventoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -29,18 +29,6 @@ class FixWarehouseIdValuesInInventoryTable extends Migration
                 Inventory::where(['location_id' => $warehouse->code])
                     ->update(['warehouse_id' => $warehouse->getKey()]);
             });
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('inventory', function (Blueprint $table) {
-            //
         });
     }
 }
