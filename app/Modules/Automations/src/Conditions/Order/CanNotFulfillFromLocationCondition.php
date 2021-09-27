@@ -34,8 +34,8 @@ class CanNotFulfillFromLocationCondition extends BaseCondition
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
             'class' => class_basename(self::class),
+            'result' => $result,
             'location_id' => $location_id,
-            'can_NOT_fulfill' => $result,
         ]);
 
         return $result;

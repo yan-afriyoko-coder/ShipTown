@@ -33,6 +33,7 @@ class ShippingMethodCodeEqualsCondition
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
             'class' => class_basename(self::class),
+            'result' => $result,
             'expected_shipping_method_code' => $condition_value,
             'actual_shipping_method_code' => $this->event->order->shipping_method_code,
         ]);

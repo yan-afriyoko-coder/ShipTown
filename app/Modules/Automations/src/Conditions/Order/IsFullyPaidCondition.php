@@ -33,6 +33,7 @@ class IsFullyPaidCondition
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
             'class' => class_basename(self::class),
+            'result' => $result,
             'isPaid' => $this->event->order->isPaid,
         ]);
 
