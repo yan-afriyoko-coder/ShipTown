@@ -27,8 +27,8 @@ class SetStatusCodeAction
         $order = $this->event->order;
 
         Log::debug('Set Status Code', [
-            'class' => self::class,
             'order_number' => $this->event->order->order_number,
+            'class' => self::class,
             'new_status' => $value,
         ]);
 
