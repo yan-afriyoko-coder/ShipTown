@@ -22,6 +22,20 @@ class SplitOrderToWarehouseCodeActionTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_when_splitting_product_not_possible()
+    {
+        $this->markAsRisky();
+    }
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
+    public function test_splitting_one_product_between_warehouses()
+    {
+        $this->markAsRisky();
+    }
+
     /**
      * A basic feature test example.
      *
@@ -39,11 +53,11 @@ class SplitOrderToWarehouseCodeActionTest extends TestCase
         $warehouses->each(function (Warehouse $warehouse) use ($products) {
             $product = $products->shift();
             Inventory::updateOrCreate([
-               'product_id' => $product->getKey(),
-               'warehouse_id' => $warehouse->getKey(),
-               'location_id' => $warehouse->code,
+                'product_id' => $product->getKey(),
+                'warehouse_id' => $warehouse->getKey(),
+                'location_id' => $warehouse->code,
             ],[
-               'quantity' => 100
+                'quantity' => 100
             ]);
         });
 

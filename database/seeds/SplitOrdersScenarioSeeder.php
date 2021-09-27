@@ -39,7 +39,8 @@ class SplitOrdersScenarioSeeder extends Seeder
         $this->createSampleWarehouses(3);
         $this->createWarehouseAutomations();
         $this->createSampleProducts(3);
-        $this->createSampleOrders(4);
+        $this->createSampleSplitOrders(4);
+        $this->createSampleSplitSingleProductsOrders(4);
     }
 
     /**
@@ -99,7 +100,7 @@ class SplitOrdersScenarioSeeder extends Seeder
     /**
      *
      */
-    private function createSampleOrders($count)
+    private function createSampleSplitOrders($count)
     {
         /** @var Order $order */
         $orders = factory(Order::class, $count)->make();
@@ -130,6 +131,53 @@ class SplitOrdersScenarioSeeder extends Seeder
                 $orderProduct->sku_ordered = $product->sku;
                 $orderProduct->price = $product->price;
                 $orderProduct->quantity_ordered = 1;
+                $orderProduct->save();
+            });
+        });
+    }
+
+    private function createSampleSplitSingleProductsOrders(int $count)
+    {
+        /** @var Order $order */
+        $orders = factory(Order::class, $count)->make();
+
+        $orders->each(function (Order $order) {
+            $order->status_code = 'packing';
+            $order->order_number .= 'SPLITSINGLE';
+            $order->save();
+
+            // we will duplicate collection each time
+            $warehouses = collect($this->sampleWarehouses);
+
+            $this->sampleProducts->each(function (Product $product) use ($order, $warehouses) {
+
+                $warehouse = $warehouses->first();
+
+                Inventory::updateOrCreate([
+                    'product_id' => $product->getKey(),
+                    'warehouse_id' => $warehouse->getKey(),
+                    'location_id' => $warehouse->code,
+                ], [
+                    'quantity' => 3
+                ]);
+
+                $warehouse = $warehouses->last();
+
+                Inventory::updateOrCreate([
+                    'product_id' => $product->getKey(),
+                    'warehouse_id' => $warehouse->getKey(),
+                    'location_id' => $warehouse->code,
+                ], [
+                    'quantity' => 3
+                ]);
+
+                $orderProduct = new OrderProduct();
+                $orderProduct->order_id = $order->getKey();
+                $orderProduct->product_id = $product->getKey();
+                $orderProduct->name_ordered = $product->name;
+                $orderProduct->sku_ordered = $product->sku;
+                $orderProduct->price = $product->price;
+                $orderProduct->quantity_ordered = 5;
                 $orderProduct->save();
             });
         });
