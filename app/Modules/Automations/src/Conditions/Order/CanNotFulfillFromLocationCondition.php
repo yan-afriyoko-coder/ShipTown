@@ -33,9 +33,9 @@ class CanNotFulfillFromLocationCondition extends BaseCondition
 
         Log::debug('Validating condition', [
             'order_number' => $this->event->order->order_number,
+            'class' => class_basename(self::class),
             'location_id' => $location_id,
             'can_NOT_fulfill' => $result,
-            'class' => self::class,
         ]);
 
         return $result;

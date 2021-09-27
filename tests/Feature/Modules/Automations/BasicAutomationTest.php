@@ -2,15 +2,15 @@
 
 namespace Tests\Feature\Modules\Automations;
 
-use App\Events\Order\OrderCreatedEvent;
+use App\Events\Order\ActiveOrderCheckEvent;
 use App\Models\Order;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
+use App\Modules\Automations\src\AutomationsServiceProvider;
 use App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition;
+use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
-use App\Modules\Automations\src\Conditions\Order\CanBeFulfilledCondition;
-use App\Modules\AutoStatusPackingWeb\src\AutoPackingWebServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -25,16 +25,18 @@ class BasicAutomationTest extends TestCase
      */
     public function test_basic_automation()
     {
+        AutomationsServiceProvider::enableModule();
+
         /** @var Automation $automation */
         $automation = Automation::create([
-            'enabled' => true,
+            'enabled' => false,
             'name' => 'Paid to Picking',
-            'event_class' => OrderCreatedEvent::class,
+            'event_class' => ActiveOrderCheckEvent::class,
         ]);
 
         Condition::create([
             'automation_id' => $automation->getKey(),
-            'condition_class' => CanFulfillFromLocationCondition::class,
+            'condition_class' => StatusCodeEqualsCondition::class,
             'condition_value' => 'paid'
         ]);
 
@@ -44,10 +46,13 @@ class BasicAutomationTest extends TestCase
             'action_value' => 'new_status'
         ]);
 
+        $automation->enabled = true;
+        $automation->save();
+
         /** @var Order $order */
         $order = factory(Order::class)->create(['status_code' => 'paid']);
 
-        OrderCreatedEvent::dispatch($order);
+        ActiveOrderCheckEvent::dispatch($order);
 
         $order = $order->refresh();
 

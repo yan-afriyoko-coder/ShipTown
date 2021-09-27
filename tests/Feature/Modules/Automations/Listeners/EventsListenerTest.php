@@ -2,11 +2,13 @@
 
 namespace Tests\Feature\Modules\Automations\Listeners;
 
+use App\Events\Order\ActiveOrderCheckEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
-use App\Models\Inventory;
 use App\Models\Order;
+use App\Modules\Automations\src\AutomationsServiceProvider;
 use App\Modules\Automations\src\Listeners\EventsListener;
+use App\Modules\Automations\src\Services\AutomationService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery;
 use Tests\TestCase;
@@ -21,6 +23,12 @@ class EventsListenerTest extends TestCase
     {
         parent::setUp();
 
+//        $this->listener = Mockery::mock(AutomationService::class);
+//        app()->instance(AutomationService::class, $this->listener);
+
+        AutomationsServiceProvider::enableModule();
+
+
         $this->listener = Mockery::mock(EventsListener::class);
         app()->instance(EventsListener::class, $this->listener);
     }
@@ -30,16 +38,16 @@ class EventsListenerTest extends TestCase
      *
      * @return void
      */
-    public function test_order_created_event()
+    public function test_if_automations_are_fired_on_active_order_check_event()
     {
         $this->listener->shouldReceive('handle');
 
         /** @var Order $order */
         $order = factory(Order::class)->create();
 
-        OrderCreatedEvent::dispatch($order);
+        ActiveOrderCheckEvent::dispatch($order);
 
-        $this->listener->shouldHaveReceived('handle', [OrderCreatedEvent::class]);
+        $this->listener->shouldHaveReceived('handle', [ActiveOrderCheckEvent::class]);
     }
 
     /**
@@ -47,16 +55,15 @@ class EventsListenerTest extends TestCase
      *
      * @return void
      */
-    public function test_order_updated_event()
+    public function test_if_automations_are_fired_on_order_updated_event()
     {
         $this->listener->shouldReceive('handle');
 
         /** @var Order $order */
         $order = factory(Order::class)->create(['status_code' => 'paid']);
-
         $order->status_code = 'new_status';
         $order->save();
 
-        $this->listener->shouldHaveReceived('handle', [OrderUpdatedEvent::class]);
+        $this->listener->shouldHaveReceived('handle', [ActiveOrderCheckEvent::class]);
     }
 }
