@@ -26,7 +26,10 @@ class FireActiveOrderCheckEventForAllActiveOrdersJob implements ShouldQueue
      */
     public function handle()
     {
-        $orders = Order::where(['is_active' => true])->get();
+        $orders = Order::where([
+                'is_active' => true,
+                'is_editing' => false
+            ])->get();
 
         $orders->each(function (Order $order) {
             ActiveOrderCheckEvent::dispatch($order);

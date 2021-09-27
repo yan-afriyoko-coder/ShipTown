@@ -117,6 +117,9 @@ class OrderService
 
         OrderCreatedEvent::dispatch($order);
 
+        $order->is_editing = false;
+        $order->save();
+
         return $order;
     }
 

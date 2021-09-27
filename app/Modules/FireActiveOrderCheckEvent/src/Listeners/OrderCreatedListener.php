@@ -20,6 +20,10 @@ class OrderCreatedListener
      */
     public function handle(OrderCreatedEvent $event)
     {
+        if ($event->order->is_editing) {
+            return;
+        }
+
         FireActiveOrderCheckEventJob::dispatch($event->order)
             // we let things settle down
             // set 5min cool down period

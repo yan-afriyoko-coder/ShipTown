@@ -19,6 +19,10 @@ class OrderUpdatedListener
      */
     public function handle(OrderUpdatedEvent $event)
     {
+        if ($event->order->is_editing) {
+            return;
+        }
+
         FireActiveOrderCheckEventJob::dispatch($event->order);
     }
 }
