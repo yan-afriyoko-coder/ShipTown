@@ -12,17 +12,19 @@ use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 
 class SplitOrdersScenarioSeeder extends Seeder
 {
     /**
-     * @var \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|mixed
+     * @var Collection|Model|mixed
      */
     private $sampleProducts;
 
     /**
-     * @var \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|mixed
+     * @var Collection|Warehouse
      */
     private $sampleWarehouses;
 
@@ -77,7 +79,7 @@ class SplitOrdersScenarioSeeder extends Seeder
 
     /**
      * @param int $count
-     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|mixed
+     * @return Collection|Model|mixed
      */
     private function createSampleWarehouses(int $count)
     {
@@ -107,7 +109,8 @@ class SplitOrdersScenarioSeeder extends Seeder
             $order->order_number .= 'SPLIT';
             $order->save();
 
-            $warehouses = $this->sampleWarehouses;
+            // we will duplicate collection each time
+            $warehouses = collect($this->sampleWarehouses);
 
             $this->sampleProducts->each(function (Product $product) use ($order, $warehouses) {
                 $warehouse = $warehouses->shift();
