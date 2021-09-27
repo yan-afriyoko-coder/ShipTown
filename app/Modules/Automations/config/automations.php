@@ -132,6 +132,10 @@ return [
                     'class' => \App\Modules\Automations\src\Actions\Order\LogMessageAction::class,
                     'description' => 'Add log message',
                 ],
+                [
+                    'class' => \App\Modules\Automations\src\Actions\Order\SplitOrderToWarehouseCodeAction::class,
+                    'description' => 'Split Order to warehouse code',
+                ],
             ]
         ],
     ],
