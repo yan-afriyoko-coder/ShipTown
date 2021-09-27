@@ -25,8 +25,8 @@ class LogMessageAction
     public function handle($value)
     {
         Log::debug('Adding order log message', [
-            'class' => self::class,
             'order_number' => $this->event->order->order_number,
+            'class' => self::class,
             'message' => $value,
         ]);
 

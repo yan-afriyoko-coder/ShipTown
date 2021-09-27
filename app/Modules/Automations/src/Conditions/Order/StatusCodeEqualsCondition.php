@@ -31,8 +31,8 @@ class StatusCodeEqualsCondition
         $result = $this->event->order->status_code === $condition_value;
 
         Log::debug('Validating condition', [
-            'class' => self::class,
             'order_number' => $this->event->order->order_number,
+            'class' => self::class,
             'expected_status' => $condition_value,
             'actual_status' => $this->event->order->status_code,
         ]);
