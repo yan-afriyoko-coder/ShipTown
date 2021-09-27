@@ -31,7 +31,7 @@ class CanFulfillFromLocationCondition extends BaseCondition
 
         $result = OrderService::canFulfill($this->event->order, $location_id);
 
-        Log::debug('Validating condition', [
+        Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
             'class' => class_basename(self::class),
             'location_id' => $location_id,

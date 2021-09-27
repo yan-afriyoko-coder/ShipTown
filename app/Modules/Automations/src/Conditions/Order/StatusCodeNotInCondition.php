@@ -32,7 +32,7 @@ class StatusCodeNotInCondition
 
         $result = in_array($this->event->order->status_code, $expectedStatuses) === false;
 
-        Log::debug('Validating condition', [
+        Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
             'class' => class_basename(self::class),
             'expected_statuses' => $condition_value,
