@@ -31,8 +31,8 @@ class LineCountEqualsCondition
         if (!is_numeric($condition_value)) {
             Log::warning('Incorrect condition value, number expected', [
                 'order_number' => $this->event->order->order_number,
+                'class' => class_basename(self::class),
                 'value' => $condition_value,
-                'class' => self::class,
             ]);
 
             return false;

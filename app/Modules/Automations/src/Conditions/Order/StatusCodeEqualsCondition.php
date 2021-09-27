@@ -32,7 +32,7 @@ class StatusCodeEqualsCondition
 
         Log::debug('Validating condition', [
             'order_number' => $this->event->order->order_number,
-            'class' => self::class,
+            'class' => class_basename(self::class),
             'expected_status' => $condition_value,
             'actual_status' => $this->event->order->status_code,
         ]);

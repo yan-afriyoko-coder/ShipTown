@@ -34,7 +34,7 @@ class StatusCodeNotInCondition
 
         Log::debug('Validating condition', [
             'order_number' => $this->event->order->order_number,
-            'class' => self::class,
+            'class' => class_basename(self::class),
             'expected_statuses' => $condition_value,
             'actual_status' => $this->event->order->status_code,
             'result' => $result,

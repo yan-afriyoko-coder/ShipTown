@@ -32,8 +32,8 @@ class IsFullyPaidCondition
 
         Log::debug('Validating condition', [
             'order_number' => $this->event->order->order_number,
+            'class' => class_basename(self::class),
             'isPaid' => $this->event->order->isPaid,
-            'class' => self::class,
         ]);
 
         return $result;
