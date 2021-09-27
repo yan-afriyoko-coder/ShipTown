@@ -30,7 +30,7 @@ class IsFullyPackedCondition
     {
         $result = $this->event->order->is_packed === $condition_value;
 
-        Log::debug('Validating condition', [
+        Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
             'class' => class_basename(self::class),
             'is_packed' => $this->event->order->is_packed,

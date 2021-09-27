@@ -30,7 +30,7 @@ class ShippingMethodCodeEqualsCondition
     {
         $result = $this->event->order->shipping_method_code === $condition_value;
 
-        Log::debug('Validating condition', [
+        Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
             'class' => class_basename(self::class),
             'expected_shipping_method_code' => $condition_value,

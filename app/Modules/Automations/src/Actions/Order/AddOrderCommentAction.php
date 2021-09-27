@@ -25,7 +25,7 @@ class AddOrderCommentAction
      */
     public function handle($value)
     {
-        Log::debug('Adding order comment', [
+        Log::debug('Automation Action', [
             'order_number' => $this->event->order->order_number,
             'class' => class_basename(self::class),
             'comment' => $value,
