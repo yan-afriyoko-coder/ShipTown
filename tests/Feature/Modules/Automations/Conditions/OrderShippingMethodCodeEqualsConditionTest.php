@@ -32,7 +32,7 @@ class OrderShippingMethodCodeEqualsConditionTest extends TestCase
         /** @var Automation $automation */
         $automation = Automation::create([
             'enabled' => true,
-            'name' => 'Paid to Picking',
+            'name' => 'paid to store_pickup',
             'event_class' => ActiveOrderCheckEvent::class,
         ]);
 
