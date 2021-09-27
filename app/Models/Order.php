@@ -93,6 +93,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property-read bool $is_not_paid
  * @property Collection|\Spatie\Tags\Tag[] $tags
  * @property-read int|null $tags_count
+ * @property bool is_editing
  *
  * @method static Builder|Order hasTags($tags)
  * @method static Builder|Order whereIsActive()
@@ -115,6 +116,7 @@ class Order extends BaseModel
         'picked_at',
         'shipping_number',
         'is_active',
+        'is_editing',
         'shipping_method_code',
         'shipping_method_name',
         'shipping_address_id',
@@ -137,6 +139,7 @@ class Order extends BaseModel
 
     protected $casts = [
         'is_active'  => 'boolean',
+        'is_editing'  => 'boolean',
     ];
 
     // we use attributes to set default values
