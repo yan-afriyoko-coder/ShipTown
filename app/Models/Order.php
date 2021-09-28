@@ -149,6 +149,7 @@ class Order extends BaseModel
     protected $attributes = [
         'status_code' => 'processing',
         'is_active'   => 1,
+        'is_editing'   => 0,
     ];
 
     protected $appends = [

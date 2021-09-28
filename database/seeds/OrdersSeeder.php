@@ -12,19 +12,19 @@ class OrdersSeeder extends Seeder
      */
     public function run()
     {
-        factory(Order::class, 100)
+        factory(Order::class, 10)
             ->with('orderProducts', 1)
             ->create(['status_code' => 'processing']);
-//
-        factory(Order::class, 100)
+
+        factory(Order::class, 10)
             ->with('orderProducts', 2)
             ->create(['status_code' => 'processing']);
 
-        factory(Order::class, 100)
+        factory(Order::class, 10)
             ->with('orderProducts', 3)
             ->create(['status_code' => 'processing']);
 
-        factory(Order::class, 100)
+        factory(Order::class, 10)
             ->with('orderProducts', 4)
             ->create(['status_code' => 'processing']);
 

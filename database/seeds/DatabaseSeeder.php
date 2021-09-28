@@ -26,11 +26,14 @@ class DatabaseSeeder extends Seeder
 
             InventorySeeder::class,
 
+            SplitOrdersScenarioSeeder::class,
+
             OrdersSeeder::class,
             UnpaidOrdersSeeder::class,
             ClosedOrdersSeeder::class,
             PicksSeeder::class,
             OrderShipmentsSeeder::class,
+
         ]);
 
         \App\Jobs\RunHourlyJobs::dispatchNow();

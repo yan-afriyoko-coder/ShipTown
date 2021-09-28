@@ -53,19 +53,7 @@ class OrderService
         $orderProducts = $order->orderProducts()->get();
 
         foreach ($orderProducts as $orderProduct) {
-            $query = Inventory::where('product_id', $orderProduct->product_id);
-
-            if ($sourceLocationId) {
-                $query->where('location_id', $sourceLocationId);
-            }
-
-            $quantity_available = $query->sum(\DB::raw('(quantity)'));
-
-            if (!$quantity_available) {
-                return false;
-            }
-
-            if ((float) $quantity_available < (float) $orderProduct->quantity_to_ship) {
+            if (self::canNotFulfillOrderProduct($orderProduct, $sourceLocationId)) {
                 return false;
             }
         }
@@ -107,7 +95,9 @@ class OrderService
     public static function updateOrCreate(array $orderAttributes)
     {
         $order = Order::updateOrCreate(
-            ['order_number' => $orderAttributes['order_number']],
+            [
+                'order_number' => $orderAttributes['order_number']
+            ],
             $orderAttributes
         );
 
@@ -202,5 +192,41 @@ class OrderService
             ->delete();
 
         return $order->refresh();
+    }
+
+    /**
+     * @param OrderProduct $orderProduct
+     * @param null $sourceLocationId
+     * @return bool
+     */
+    public static function canFulfillOrderProduct(OrderProduct $orderProduct, $sourceLocationId = null): bool
+    {
+        $query = Inventory::where('product_id', $orderProduct->product_id);
+
+        if ($sourceLocationId) {
+            $query->where('location_id', $sourceLocationId);
+        }
+
+        $quantity_available = $query->sum(\DB::raw('(quantity)'));
+
+        if (!$quantity_available) {
+            return false;
+        }
+
+        if ((float) $quantity_available < $orderProduct->quantity_to_ship) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param OrderProduct $orderProduct
+     * @param null $sourceLocationId
+     * @return bool
+     */
+    public static function canNotFulfillOrderProduct(OrderProduct $orderProduct, $sourceLocationId = null): bool
+    {
+        return !self::canFulfillOrderProduct($orderProduct, $sourceLocationId);
     }
 }

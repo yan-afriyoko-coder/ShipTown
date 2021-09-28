@@ -1,6 +1,8 @@
 <?php
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
+
+use App\Models\Warehouse;
 use App\User;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
@@ -17,8 +19,11 @@ use Illuminate\Support\Str;
 */
 
 $factory->define(User::class, function (Faker $faker) {
+    $warehouse = Warehouse::query()->inRandomOrder()->first() ?? factory(Warehouse::class)->create();
+
     return [
         'name'              => $faker->name,
+        'warehouse_id'      => $warehouse->getKey(),
         'email'             => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
         'password'          => bcrypt('secret123'), // password

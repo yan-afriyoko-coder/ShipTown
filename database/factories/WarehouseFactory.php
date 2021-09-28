@@ -7,6 +7,6 @@ use Faker\Generator as Faker;
 $factory->define(\App\Models\Warehouse::class, function (Faker $faker) {
     return [
         'name'  => $faker->city,
-        'code'  => rand(1,100),
+        'code'  => rand(1, 1000),
     ];
 });

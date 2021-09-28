@@ -5,6 +5,7 @@ namespace App\Modules\Automations\src\Models;
 use App\BaseModel;
 
 /**
+ * @property integer automation_id
  * @property string action_class
  * @property string action_value
  */
