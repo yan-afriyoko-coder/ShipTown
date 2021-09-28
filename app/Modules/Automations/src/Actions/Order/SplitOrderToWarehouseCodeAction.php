@@ -5,8 +5,10 @@ namespace App\Modules\Automations\src\Actions\Order;
 use App\Events\Order\ActiveOrderCheckEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
+use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\Warehouse;
 use App\Services\OrderService;
 use Log;
 
@@ -27,6 +29,8 @@ class SplitOrderToWarehouseCodeAction
      */
     public function handle($warehouse_code)
     {
+        $warehouse = Warehouse::whereCode($warehouse_code)->first();
+
         Log::debug('Automation Action', [
             'order_number' => $this->event->order->order_number,
             'class' => class_basename(self::class),
@@ -35,22 +39,41 @@ class SplitOrderToWarehouseCodeAction
         $order = $this->event->order;
 
         /** @var Order $newOrder */
-        $newOrder = null;
+        $newOrder = Order::where(['order_number' => $this->event->order->order_number . '-' . $warehouse_code])
+            ->first();
 
-        $order->orderProducts->each(function (OrderProduct $orderProduct) use ($order, $warehouse_code, $newOrder) {
-            if (OrderService::canFulfillOrderProduct($orderProduct, $warehouse_code)) {
+        $order->orderProducts->each(function (OrderProduct $orderProduct) use ($order, $warehouse, $newOrder) {
+
+            if ($orderProduct->quantity_to_ship === 0.00) {
+                return true;
+            }
+
+            /** @var Inventory inventory */
+            $inventory = Inventory::query()->firstOrCreate([
+                'product_id' => $orderProduct->product_id,
+                'warehouse_id' => $warehouse->getKey(),
+            ], [
+                'location_id' => $warehouse->code
+            ]);
+
+            if ($inventory->quantity_available > 0) {
+                $quantity = min($orderProduct->quantity_to_ship, $inventory->quantity_available);
+
                 $order->is_editing = true;
                 $order->save();
 
-                if ($newOrder === null) {
-                    $newOrder = $this->replicateOriginalOrder($warehouse_code);
-                }
+                $inventory->quantity_reserved += $quantity;
+                $inventory->save();
+
+                $orderProduct->quantity_ordered -= $quantity;
+                $orderProduct->save();
+
+                $newOrder = $newOrder ?? $this->replicateOriginalOrder($warehouse->code);
 
                 $newOrderProduct = $orderProduct->replicate();
+                $newOrderProduct->quantity_ordered = $quantity;
                 $newOrderProduct->order_id = $newOrder->getKey();
                 $newOrderProduct->save();
-
-                $orderProduct->delete();
             }
         });
 

@@ -39,8 +39,8 @@ class SplitOrdersScenarioSeeder extends Seeder
         $this->createSampleWarehouses(3);
         $this->createWarehouseAutomations();
         $this->createSampleProducts(3);
-        $this->createSampleSplitOrders(4);
-        $this->createSampleSplitSingleProductsOrders(4);
+        $this->createSampleSplitOrders(1);
+        $this->createSampleSplitSingleProductsOrders(1);
     }
 
     /**

@@ -18,55 +18,45 @@ use App\Modules\Automations\src\Models\Condition;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class SplitOrderToWarehouseCodeActionTest extends TestCase
+class SplitOrderToWarehouseCodeAction_SplitSingleProductTest extends TestCase
 {
     use RefreshDatabase;
-
-//    public function test_when_splitting_product_not_possible()
-//    {
-//        // when ordered is 10 but only 8 available in total
-//        // we should change status
-//        $this->markAsRisky();
-//    }
 
     /**
      * A basic feature test example.
      *
      * @return void
      */
-    public function testExample()
+    public function test_splitting_one_product_between_warehouses()
     {
-        $random_number = rand(2,4);
-
         AutomationsServiceProvider::enableModule();
 
-        $products = factory(Product::class, $random_number)->create();
-        $warehouses = factory(Warehouse::class, $random_number)->create();
+        /** @var Product $product */
+        $product = factory(Product::class)->create();
 
-        $warehouses->each(function (Warehouse $warehouse) use ($products) {
-            $product = $products->shift();
+        $warehouses = factory(Warehouse::class, 3)->create();
+
+        $warehouses->each(function (Warehouse $warehouse) use ($product) {
             Inventory::updateOrCreate([
                 'product_id' => $product->getKey(),
                 'warehouse_id' => $warehouse->getKey(),
-            ],[
-                'quantity' => 100,
                 'location_id' => $warehouse->code,
+            ],[
+                'quantity' => 1
             ]);
         });
 
         /** @var  $order */
         $order = factory(Order::class)->create(['status_code' => 'packing']);
 
-        Product::all()->each(function (Product $product) use ($order) {
-            $orderProduct = new OrderProduct();
-            $orderProduct->order_id = $order->getKey();
-            $orderProduct->product_id = $product->getKey();
-            $orderProduct->name_ordered = $product->name;
-            $orderProduct->sku_ordered = $product->sku;
-            $orderProduct->price = $product->price;
-            $orderProduct->quantity_ordered = 1;
-            $orderProduct->save();
-        });
+        $orderProduct = new OrderProduct();
+        $orderProduct->order_id = $order->getKey();
+        $orderProduct->product_id = $product->getKey();
+        $orderProduct->name_ordered = $product->name;
+        $orderProduct->sku_ordered = $product->sku;
+        $orderProduct->price = $product->price;
+        $orderProduct->quantity_ordered = 3;
+        $orderProduct->save();
 
         $warehouses->each(function (Warehouse $warehouse) {
             $status_code_name = 'packing_'.$warehouse->code;
@@ -96,7 +86,7 @@ class SplitOrderToWarehouseCodeActionTest extends TestCase
         FireActiveOrderCheckEventForAllActiveOrdersJob::dispatch();
 
         // we will have original order left + X new ones
-        $this->assertEquals(1 + $random_number, Order::count());
-        $this->assertEquals($random_number * 2, OrderProduct::count());
+        $this->assertEquals(4, Order::count());
+        $this->assertEquals(3, OrderProduct::sum('quantity_ordered'));
     }
 }
