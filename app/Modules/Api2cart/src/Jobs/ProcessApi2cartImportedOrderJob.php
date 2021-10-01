@@ -42,7 +42,7 @@ class ProcessApi2cartImportedOrderJob implements ShouldQueue
     {
         $orderAttributes = [
             'order_number'          => $this->orderImport->raw_import['id'],
-            'shipping_charge'       => $this->orderImport->raw_import['totals']['shipping'] ?? 0,
+            'total_shipping'        => $this->orderImport->raw_import['totals']['shipping'] ?? 0,
             'total'                 => $this->orderImport->raw_import['total']['total'] ?? 0,
             'total_paid'            => $this->orderImport->raw_import['total']['total_paid'] ?? 0,
             'shipping_method_code'  => $this->orderImport->shipping_method_code,

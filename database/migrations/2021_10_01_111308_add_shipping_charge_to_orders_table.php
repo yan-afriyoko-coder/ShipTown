@@ -14,7 +14,7 @@ class AddShippingChargeToOrdersTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->decimal('shipping_charge')->after('is_editing')->default(0);
+            $table->decimal('total_shipping')->after('is_editing')->default(0);
         });
     }
 }

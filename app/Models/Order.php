@@ -25,6 +25,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property string      $order_number
  * @property string      $status_code
  * @property bool        $is_active
+ * @property float       $total_products
+ * @property float       $total_shipping
  * @property string      $total
  * @property string      $total_paid
  * @property string|null $order_placed_at
