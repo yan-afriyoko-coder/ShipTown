@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
@@ -27,15 +26,15 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property bool        $is_active
  * @property float       $total_products
  * @property float       $total_shipping
- * @property string      $total
- * @property string      $total_paid
- * @property string|null $order_placed_at
- * @property string|null $order_closed_at
+ * @property float       $total
+ * @property float       $total_paid
+ * @property Carbon|null $order_placed_at
+ * @property Carbon|null $order_closed_at
  * @property int         $product_line_count
  * @property string|null $picked_at
  * @property string|null $packed_at
  * @property int|null    $packer_user_id
- * @property string      $total_quantity_ordered
+ * @property float      $total_quantity_ordered
  * @property string      $shipping_method_code
  * @property string      $shipping_method_name
  * @property array       $raw_import
@@ -44,9 +43,9 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property Carbon|null $updated_at
  * @property-read Collection|Activity[] $activities
  * @property-read int|null $activities_count
- * @property mixed $is_packed
- * @property-read mixed $is_paid
- * @property mixed $is_picked
+ * @property boolean $is_packed
+ * @property-read boolean $is_paid
+ * @property boolean $is_picked
  * @property-read Collection|OrderComment[] $orderComments
  * @property-read int|null $order_comments_count
  * @property-read Collection|OrderProduct[] $orderProducts
@@ -128,6 +127,7 @@ class Order extends BaseModel
         'status_code',
         'packer_user_id',
         'total',
+        'total_shipping',
         'total_paid',
     ];
 
