@@ -127,6 +127,7 @@ class Order extends BaseModel
         'status_code',
         'packer_user_id',
         'total',
+        'total_products',
         'total_shipping',
         'total_paid',
     ];
