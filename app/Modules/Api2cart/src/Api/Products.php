@@ -357,11 +357,11 @@ class Products extends Entity
      * @param string $store_key
      * @param array  $variant_data
      *
-     * @return RequestResponse
+     * @return RequestResponse|null
      * @throws Exception|GuzzleException
      *
      */
-    public static function updateVariant(string $store_key, array $variant_data): RequestResponse
+    public static function updateVariant(string $store_key, array $variant_data): ?RequestResponse
     {
         $properties = collect($variant_data)
             ->only(self::PRODUCT_ALLOWED_KEYS)
@@ -372,7 +372,22 @@ class Products extends Entity
             ])
             ->toArray();
 
-        return Client::GET($store_key, 'product.variant.update.json', $properties);
+        try {
+            $response = Client::GET($store_key, 'product.variant.update.json', $properties);
+
+            if ($response->isSuccess()) {
+                logger('Variant updated', $properties);
+                return $response;
+            }
+        } catch (RequestException $exception) {
+            switch ($exception->getCode()) {
+                case RequestResponse::RETURN_CODE_MODEL_NOT_FOUND:
+                    Products::assignStore($store_key, $properties['id'], $properties['store_id']);
+                    return self::updateSimpleProduct($store_key, $properties);
+            }
+        }
+
+        return null;
     }
 
     /**
