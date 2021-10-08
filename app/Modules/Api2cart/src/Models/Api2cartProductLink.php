@@ -121,18 +121,18 @@ class Api2cartProductLink extends BaseModel
 
     /**
      * @return bool
+     * @throws GuzzleException
+     * @throws RequestException
      */
     public function postProductUpdate(): bool
     {
-        $requestResponse = null;
-
         try {
             $product_data = $this->getProductData();
 
             $requestResponse = $this->updateOrCreate($product_data);
 
             return $requestResponse->isSuccess();
-        } catch (Exception | GuzzleException $exception) {
+        } catch (Exception $exception) {
             $this->api2cart_product_type = null;
             $this->api2cart_product_id = null;
             $this->save();
@@ -140,13 +140,13 @@ class Api2cartProductLink extends BaseModel
             Log::warning('Api2cart: postProductUpdate failed', [
                 'sku' => $this->product->sku,
                 'response' => [
-                    'code' => $requestResponse ? $requestResponse->getReturnCode() : '',
-                    'message' => $requestResponse ? $requestResponse->getReturnMessage() : '',
+                    'code' => $exception->getCode(),
+                    'message' => $exception->getMessage(),
                 ],
             ]);
-        }
 
-        return false;
+            throw $exception;
+        }
     }
 
     /**
