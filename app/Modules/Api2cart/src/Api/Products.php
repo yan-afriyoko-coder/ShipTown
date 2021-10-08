@@ -314,22 +314,21 @@ class Products extends Entity
             ])
             ->toArray();
 
-        $response = Client::GET($store_key, 'product.update.json', $product);
+        try {
+            $response = Client::GET($store_key, 'product.update.json', $product);
 
-        if ($response->isSuccess()) {
-            logger('Product updated', $product);
-
-            return $response;
+            if ($response->isSuccess()) {
+                logger('Product updated', $product);
+                return $response;
+            }
+        } catch (RequestException $exception) {
+            Log::error('product.update.json failed', $response->asArray());
+            switch ($exception->getCode()) {
+                case RequestResponse::RETURN_CODE_MODEL_NOT_FOUND:
+                    Products::assignStore($store_key, $product_data['id'], $product_data['store_id']);
+                    return self::updateSimpleProduct($store_key, $product_data);
+            }
         }
-
-        switch ($response->getReturnCode()) {
-            case RequestResponse::RETURN_CODE_MODEL_NOT_FOUND:
-                Products::assignStore($store_key, $product_data['id'], $product_data['store_id']);
-
-                return self::updateSimpleProduct($store_key, $product_data);
-        }
-
-        Log::error('product.update.json failed', $response->asArray());
 
         return $response;
     }
