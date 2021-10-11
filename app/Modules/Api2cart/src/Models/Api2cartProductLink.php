@@ -127,11 +127,7 @@ class Api2cartProductLink extends BaseModel
     public function postProductUpdate(): bool
     {
         try {
-            $product_data = $this->getProductData();
-
-            $requestResponse = $this->updateOrCreate($product_data);
-
-            return $requestResponse->isSuccess();
+            return $this->updateOrCreate($this->getProductData())->isSuccess();
         } catch (Exception $exception) {
             $this->api2cart_product_type = null;
             $this->api2cart_product_id = null;

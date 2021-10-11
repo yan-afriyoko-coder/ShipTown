@@ -322,8 +322,7 @@ class Products extends Entity
                     Products::assignStore($store_key, $product_data['id'], $product_data['store_id']);
                     return self::updateSimpleProduct($store_key, $product_data);
                 default:
-                    Log::error('product.update.json failed');
-                    return null;
+                    throw $exception;
             }
         }
     }
@@ -374,10 +373,10 @@ class Products extends Entity
                 case RequestResponse::RETURN_CODE_MODEL_NOT_FOUND:
                     Products::assignStore($store_key, $properties['id'], $properties['store_id']);
                     return self::updateSimpleProduct($store_key, $properties);
+                default:
+                    throw $exception;
             }
         }
-
-        return null;
     }
 
     /**
