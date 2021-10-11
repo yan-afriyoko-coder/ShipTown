@@ -297,15 +297,15 @@ class Products extends Entity
 
     /**
      * @param string $store_key
-     * @param array  $product_data
-     *
+     * @param array $data
+     * @param bool $recursive
      * @return RequestResponse|null
-     * @throws Exception|GuzzleException
-     *
+     * @throws GuzzleException
+     * @throws RequestException
      */
-    public static function updateSimpleProduct(string $store_key, array $product_data): ?RequestResponse
+    public static function updateSimpleProduct(string $store_key, array $data, bool $recursive = true): ?RequestResponse
     {
-        $product = collect($product_data)
+        $product = collect($data)
             ->only(self::PRODUCT_ALLOWED_KEYS)
             ->except(self::PRODUCT_DONT_UPDATE_KEYS)
             ->merge([
@@ -317,13 +317,17 @@ class Products extends Entity
         try {
             return Client::GET($store_key, 'product.update.json', $product);
         } catch (RequestException $exception) {
-            switch ($exception->getCode()) {
-                case RequestResponse::RETURN_CODE_MODEL_NOT_FOUND:
-                    Products::assignStore($store_key, $product_data['id'], $product_data['store_id']);
-                    return self::updateSimpleProduct($store_key, $product_data);
-                default:
-                    throw $exception;
+            if ($exception->getCode() === RequestResponse::RETURN_CODE_MODEL_NOT_FOUND) {
+                Products::assignStore($store_key, $data['id'], $data['store_id']);
+
+                if ($recursive) {
+                    return self::updateSimpleProduct($store_key, $data, false);
+                }
+
+                return null;
             }
+
+            throw $exception;
         }
     }
 
@@ -349,15 +353,15 @@ class Products extends Entity
      * This will only update variant product, will not update simple product.
      *
      * @param string $store_key
-     * @param array  $variant_data
+     * @param array  $data
      *
      * @return RequestResponse|null
      * @throws Exception|GuzzleException
      *
      */
-    public static function updateVariant(string $store_key, array $variant_data): ?RequestResponse
+    public static function updateVariant(string $store_key, array $data, $recursive = true): ?RequestResponse
     {
-        $properties = collect($variant_data)
+        $properties = collect($data)
             ->only(self::PRODUCT_ALLOWED_KEYS)
             ->except(self::PRODUCT_DONT_UPDATE_KEYS)
             ->merge([
@@ -369,13 +373,17 @@ class Products extends Entity
         try {
             return Client::GET($store_key, 'product.variant.update.json', $properties);
         } catch (RequestException $exception) {
-            switch ($exception->getCode()) {
-                case RequestResponse::RETURN_CODE_MODEL_NOT_FOUND:
-                    Products::assignStore($store_key, $properties['id'], $properties['store_id']);
-                    return self::updateVariant($store_key, $properties);
-                default:
-                    throw $exception;
+            if ($exception->getCode() === RequestResponse::RETURN_CODE_MODEL_NOT_FOUND) {
+                Products::assignStore($store_key, $properties['id'], $properties['store_id']);
+
+                if ($recursive) {
+                    return self::updateVariant($store_key, $properties, false);
+                }
+
+                return null;
             }
+
+            throw $exception;
         }
     }
 
