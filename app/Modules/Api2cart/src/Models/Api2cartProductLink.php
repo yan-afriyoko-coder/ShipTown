@@ -127,7 +127,22 @@ class Api2cartProductLink extends BaseModel
     public function postProductUpdate(): bool
     {
         try {
-            return $this->updateOrCreate($this->getProductData())->isSuccess();
+            return $this->updateOrCreate($this->getProductData())
+                ->isSuccess();
+        } catch (RequestException $requestException) {
+            switch ($requestException->getCode()) {
+                case RequestResponse::RETURN_CODE_EXCEEDED_CONCURRENT_API_REQUESTS_PER_STORE:
+                    Log::warning('Api2cart: postProductUpdate failed', [
+                        'sku' => $this->product->sku,
+                        'response' => [
+                            'code' => $requestException->getCode(),
+                            'message' => $requestException->getMessage(),
+                        ],
+                    ]);
+                    return false;
+                default:
+                    throw $requestException;
+            }
         } catch (Exception $exception) {
             $this->api2cart_product_type = null;
             $this->api2cart_product_id = null;
