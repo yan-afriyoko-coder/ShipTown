@@ -304,9 +304,12 @@ class Order extends BaseModel
         });
     }
 
-    public function getIsPaidAttribute()
+    /**
+     * @return bool
+     */
+    public function getIsPaidAttribute(): bool
     {
-        return ($this->total > 0) && ($this->total === $this->total_paid);
+        return ($this->total_paid > 0) && ($this->total_paid >= $this->total);
     }
 
     public function getIsNotPaidAttribute(): bool
