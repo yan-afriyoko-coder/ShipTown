@@ -372,7 +372,7 @@ class Products extends Entity
             switch ($exception->getCode()) {
                 case RequestResponse::RETURN_CODE_MODEL_NOT_FOUND:
                     Products::assignStore($store_key, $properties['id'], $properties['store_id']);
-                    return self::updateSimpleProduct($store_key, $properties);
+                    return self::updateVariant($store_key, $properties);
                 default:
                     throw $exception;
             }
