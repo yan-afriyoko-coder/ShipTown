@@ -299,11 +299,11 @@ class Products extends Entity
      * @param string $store_key
      * @param array  $product_data
      *
-     * @return RequestResponse
+     * @return RequestResponse|null
      * @throws Exception|GuzzleException
      *
      */
-    public static function updateSimpleProduct(string $store_key, array $product_data): RequestResponse
+    public static function updateSimpleProduct(string $store_key, array $product_data): ?RequestResponse
     {
         $product = collect($product_data)
             ->only(self::PRODUCT_ALLOWED_KEYS)
@@ -315,22 +315,17 @@ class Products extends Entity
             ->toArray();
 
         try {
-            $response = Client::GET($store_key, 'product.update.json', $product);
-
-            if ($response->isSuccess()) {
-                logger('Product updated', $product);
-                return $response;
-            }
+            return Client::GET($store_key, 'product.update.json', $product);
         } catch (RequestException $exception) {
-            Log::error('product.update.json failed', $response->asArray());
             switch ($exception->getCode()) {
                 case RequestResponse::RETURN_CODE_MODEL_NOT_FOUND:
                     Products::assignStore($store_key, $product_data['id'], $product_data['store_id']);
                     return self::updateSimpleProduct($store_key, $product_data);
+                default:
+                    Log::error('product.update.json failed');
+                    return null;
             }
         }
-
-        return $response;
     }
 
     /**
@@ -373,12 +368,7 @@ class Products extends Entity
             ->toArray();
 
         try {
-            $response = Client::GET($store_key, 'product.variant.update.json', $properties);
-
-            if ($response->isSuccess()) {
-                logger('Variant updated', $properties);
-                return $response;
-            }
+            return Client::GET($store_key, 'product.variant.update.json', $properties);
         } catch (RequestException $exception) {
             switch ($exception->getCode()) {
                 case RequestResponse::RETURN_CODE_MODEL_NOT_FOUND:
