@@ -34,8 +34,8 @@
                             <td>{{ printer.name }}</td>
                             <td>{{ printer.state }}</td>
                             <td>
-                                <a href="#" @click.prevent="setUserPrinter(printer.id)" v-if="!isDefaultPrinter(printer.id)">Use</a>
-                                <a href="#" @click.prevent="printTestPage(printer)">Print Test</a>
+                                <button type="button" @click.prevent="printTestPage(printer)" class="btn btn-primary btn-sm">Print Test</button>
+                                <button type="button" @click.prevent="setUserPrinter(printer.id)" v-if="!isDefaultPrinter(printer.id)" class="btn btn-primary btn-sm">Use</button>
                             </td>
                         </tr>
                     </tbody>
@@ -88,6 +88,9 @@ export default {
             };
 
             this.apiPostPrintnodePrintJob(data)
+                .then(() => {
+                    this.$snotify.info('Test page sent to PrintNode');
+                })
                 .catch(e => {
                     this.errorMessage = e.message;
                     this.showError('Request failed: ' + e.message);
