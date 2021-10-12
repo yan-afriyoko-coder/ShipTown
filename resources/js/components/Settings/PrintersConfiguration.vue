@@ -34,8 +34,8 @@
                             <td>{{ printer.name }}</td>
                             <td>{{ printer.state }}</td>
                             <td>
-                                <a v-if="!isDefaultPrinter(printer.id)" href="#" @click.prevent="setDefault(printer.id)">Use</a>
-                                <a href="#" @click.prevent="printTest(printer)">Print Test</a>
+                                <a href="#" @click.prevent="setDefault(printer.id)" v-if="!isDefaultPrinter(printer.id)">Use</a>
+                                <a href="#" @click.prevent="printTestPage(printer)">Print Test</a>
                             </td>
                         </tr>
                     </tbody>
@@ -81,7 +81,7 @@ export default {
                 });
         },
 
-        printTest(printer) {
+        printTestPage(printer) {
             let data = {
                 'printer_id': printer.id,
                 'pdf_url': 'https://api.printnode.com/static/test/pdf/label_4in_x_6in.pdf'
