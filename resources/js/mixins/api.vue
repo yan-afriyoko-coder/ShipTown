@@ -184,7 +184,7 @@ export default {
             },
 
             apiPostPrintnodePrintJob: function (data) {
-                return axios.post('/api/settings/modules/printnode/printjobs', data);
+                return axios.post('/api/modules/printnode/printjobs', data);
             },
 
             apiPostRmsapiConnections: function (data) {
