@@ -34,7 +34,7 @@
                             <td>{{ printer.name }}</td>
                             <td>{{ printer.state }}</td>
                             <td>
-                                <a href="#" @click.prevent="setDefault(printer.id)" v-if="!isDefaultPrinter(printer.id)">Use</a>
+                                <a href="#" @click.prevent="setUserPrinter(printer.id)" v-if="!isDefaultPrinter(printer.id)">Use</a>
                                 <a href="#" @click.prevent="printTestPage(printer)">Print Test</a>
                             </td>
                         </tr>
@@ -72,7 +72,7 @@ export default {
     }),
 
     methods: {
-        setDefault(printerId) {
+        setUserPrinter(printerId) {
             this.apiPostUserMe({
                     'printer_id': printerId
                 })
