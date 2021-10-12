@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             PicksSeeder::class,
             OrderShipmentsSeeder::class,
 
+            PrintNodeClientSeeder::class,
         ]);
 
         \App\Jobs\RunHourlyJobs::dispatchNow();
