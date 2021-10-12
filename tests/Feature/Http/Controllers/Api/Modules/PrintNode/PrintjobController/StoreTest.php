@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Modules\PrintNode\PrintJobController;
+namespace Tests\Feature\Http\Controllers\Api\Modules\PrintNode\PrintjobController;
 
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
