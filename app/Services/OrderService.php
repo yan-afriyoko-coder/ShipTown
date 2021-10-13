@@ -207,7 +207,7 @@ class OrderService
             $query->where('location_id', $sourceLocationId);
         }
 
-        $quantity_available = $query->sum(\DB::raw('(quantity)'));
+        $quantity_available = $query->sum(\DB::raw('(quantity - quantity_reserved)'));
 
         if (!$quantity_available) {
             return false;
