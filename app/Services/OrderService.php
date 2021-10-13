@@ -201,7 +201,8 @@ class OrderService
      */
     public static function canFulfillOrderProduct(OrderProduct $orderProduct, $sourceLocationId = null): bool
     {
-        $query = Inventory::where('product_id', $orderProduct->product_id);
+        $query = Inventory::where('product_id', $orderProduct->product_id)
+            ->where('location_id', '!=', '999');
 
         if ($sourceLocationId) {
             $query->where('location_id', $sourceLocationId);
