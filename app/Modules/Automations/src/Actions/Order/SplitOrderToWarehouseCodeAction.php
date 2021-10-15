@@ -59,6 +59,7 @@ class SplitOrderToWarehouseCodeAction
         $originalOrder->orderProducts->each(
             function (OrderProduct $orderProduct) use ($warehouse, &$orderProductsToExtract, &$originalOrder) {
                 if ($orderProduct->quantity_to_ship <= 0) {
+                    Log::debug('nothing to ship');
                     return;
                 }
 
@@ -70,6 +71,7 @@ class SplitOrderToWarehouseCodeAction
                 $quantityToExtract = min($inventory->quantity_available, $orderProduct->quantity_to_ship);
 
                 if ($quantityToExtract <= 0.00) {
+                    Log::debug('nothing to extract');
                     return;
                 }
 
