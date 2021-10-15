@@ -72,7 +72,7 @@ class SplitOrderToWarehouseCodeAction
 
                 if ($quantityToExtract <= 0.00) {
                     Log::debug('nothing to extract', [
-                        $quantityToExtract,$inventory->quantity_available, $orderProduct->quantity_to_ship]);
+                        $quantityToExtract,$inventory->quantity_available, $orderProduct->quantity_to_ship, $inventory]);
                     return true; // return true to continue loop
                 }
 
