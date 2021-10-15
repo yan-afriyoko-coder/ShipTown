@@ -37,6 +37,7 @@ class SplitOrderToWarehouseCodeAction
         Log::debug('Automation Action', [
             'order_number' => $this->event->order->order_number,
             'class' => class_basename(self::class),
+            '$options' => $options,
         ]);
 
         $order = $this->event->order->refresh();
