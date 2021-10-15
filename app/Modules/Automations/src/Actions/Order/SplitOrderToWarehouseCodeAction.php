@@ -60,7 +60,7 @@ class SplitOrderToWarehouseCodeAction
             function (OrderProduct $orderProduct) use ($warehouse, &$orderProductsToExtract, &$originalOrder) {
                 if ($orderProduct->quantity_to_ship <= 0) {
                     Log::debug('nothing to ship');
-                    return;
+                    return true; // return true to continue loop
                 }
 
                 /** @var Inventory $inventory */
@@ -73,7 +73,7 @@ class SplitOrderToWarehouseCodeAction
                 if ($quantityToExtract <= 0.00) {
                     Log::debug('nothing to extract', [
                         $quantityToExtract,$inventory->quantity_available, $orderProduct->quantity_to_ship]);
-                    return;
+                    return true; // return true to continue loop
                 }
 
                 if ($originalOrder->is_editing === false) {
