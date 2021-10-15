@@ -79,7 +79,7 @@ class SplitOrderToWarehouseCodeActionTest extends TestCase
             $action = new Action();
             $action->automation_id = $automation->getKey();
             $action->action_class = SplitOrderToWarehouseCodeAction::class;
-            $action->action_value = $warehouse->code;
+            $action->action_value = $warehouse->code .',packing_web';
             $action->save();
 
             $automation->enabled = true;
