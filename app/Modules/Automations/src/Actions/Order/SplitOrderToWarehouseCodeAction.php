@@ -37,6 +37,7 @@ class SplitOrderToWarehouseCodeAction
         Log::debug('Automation Action', [
             'order_number' => $this->event->order->order_number,
             'class' => class_basename(self::class),
+            '$options' => $options,
         ]);
 
         $order = $this->event->order->refresh();
@@ -59,7 +60,7 @@ class SplitOrderToWarehouseCodeAction
         $originalOrder->orderProducts->each(
             function (OrderProduct $orderProduct) use ($warehouse, &$orderProductsToExtract, &$originalOrder) {
                 if ($orderProduct->quantity_to_ship <= 0) {
-                    return;
+                    return true; // return true to continue loop
                 }
 
                 /** @var Inventory $inventory */
@@ -70,7 +71,7 @@ class SplitOrderToWarehouseCodeAction
                 $quantityToExtract = min($inventory->quantity_available, $orderProduct->quantity_to_ship);
 
                 if ($quantityToExtract <= 0.00) {
-                    return;
+                    return true; // return true to continue loop
                 }
 
                 if ($originalOrder->is_editing === false) {
