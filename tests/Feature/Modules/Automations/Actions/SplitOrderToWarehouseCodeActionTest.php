@@ -48,7 +48,7 @@ class SplitOrderToWarehouseCodeActionTest extends TestCase
         });
 
         /** @var  $order */
-        $order = factory(Order::class)->create(['status_code' => 'packing']);
+        $order = factory(Order::class)->create(['status_code' => 'split_order']);
 
         Product::all()->each(function (Product $product) use ($order) {
             $orderProduct = new OrderProduct();
@@ -73,7 +73,7 @@ class SplitOrderToWarehouseCodeActionTest extends TestCase
             $condition = new Condition();
             $condition->automation_id = $automation->getKey();
             $condition->condition_class = StatusCodeEqualsCondition::class;
-            $condition->condition_value = 'packing';
+            $condition->condition_value = 'split_order';
             $condition->save();
 
             $action = new Action();

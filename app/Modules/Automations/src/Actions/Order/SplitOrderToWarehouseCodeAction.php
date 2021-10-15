@@ -38,6 +38,7 @@ class SplitOrderToWarehouseCodeAction
 
         $warehouse = Warehouse::whereCode($warehouse_code)->first();
 
+        ray($order->orderProducts);
         $this->extractFulfillableProducts($order, $warehouse);
     }
 
