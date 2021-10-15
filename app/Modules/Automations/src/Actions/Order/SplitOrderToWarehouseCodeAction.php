@@ -86,9 +86,9 @@ class SplitOrderToWarehouseCodeAction
         );
 
         if ($orderProductsToExtract) {
-            $newOrder = $originalOrder->replicate();
+            $newOrder = $originalOrder->replicate(['status_code']);
             $newOrder->is_editing = true;
-            $newOrder->status_code = 'paid';
+            $newOrder->status_code = 'packing';
             $newOrder->order_number .= '-PARTIAL-' . $warehouse->code;
             $newOrder->save();
 
