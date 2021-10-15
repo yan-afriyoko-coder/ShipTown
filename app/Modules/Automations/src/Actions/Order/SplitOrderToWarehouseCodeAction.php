@@ -71,7 +71,7 @@ class SplitOrderToWarehouseCodeAction
                 $quantityToExtract = min($inventory->quantity_available, $orderProduct->quantity_to_ship);
 
                 if ($quantityToExtract <= 0.00) {
-                    Log::debug('nothing to extract');
+                    Log::debug('nothing to extract', $quantityToExtract);
                     return;
                 }
 
