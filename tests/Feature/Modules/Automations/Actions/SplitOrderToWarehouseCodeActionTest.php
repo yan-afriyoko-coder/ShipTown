@@ -22,13 +22,6 @@ class SplitOrderToWarehouseCodeActionTest extends TestCase
 {
     use RefreshDatabase;
 
-//    public function test_when_splitting_product_not_possible()
-//    {
-//        // when ordered is 10 but only 8 available in total
-//        // we should change status
-//        $this->markAsRisky();
-//    }
-
     /**
      * A basic feature test example.
      *
@@ -40,8 +33,8 @@ class SplitOrderToWarehouseCodeActionTest extends TestCase
 
         AutomationsServiceProvider::enableModule();
 
-        $products = factory(Product::class, $random_number)->create();
         $warehouses = factory(Warehouse::class, $random_number)->create();
+        $products = factory(Product::class, $random_number)->create();
 
         $warehouses->each(function (Warehouse $warehouse) use ($products) {
             $product = $products->shift();

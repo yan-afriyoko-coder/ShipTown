@@ -10,6 +10,7 @@ use App\Models\OrderProduct;
 use App\Modules\Api2cart\src\Jobs\ImportShippingAddressJob;
 use Exception;
 use Illuminate\Support\Str;
+use phpDocumentor\Reflection\Types\Integer;
 use phpseclib\Math\BigInteger;
 
 class OrderService
@@ -201,7 +202,36 @@ class OrderService
      */
     public static function canFulfillOrderProduct(OrderProduct $orderProduct, $sourceLocationId = null): bool
     {
-        $query = Inventory::where('product_id', $orderProduct->product_id)
+        if ($orderProduct->product_id) {
+            return self::canFulfillProduct(
+                $orderProduct->product_id,
+                $orderProduct->quantity_to_ship,
+                $sourceLocationId
+            );
+        }
+
+        return false;
+    }
+
+    /**
+     * @param OrderProduct $orderProduct
+     * @param null $sourceLocationId
+     * @return bool
+     */
+    public static function canNotFulfillOrderProduct(OrderProduct $orderProduct, $sourceLocationId = null): bool
+    {
+        return !self::canFulfillOrderProduct($orderProduct, $sourceLocationId);
+    }
+
+    /**
+     * @param int $product_id
+     * @param float $quantity
+     * @param $sourceLocationId
+     * @return bool
+     */
+    public static function canFulfillProduct(int $product_id, float $quantity, $sourceLocationId): bool
+    {
+        $query = Inventory::where('product_id', $product_id)
             ->where('location_id', '!=', '999');
 
         if ($sourceLocationId) {
@@ -214,20 +244,10 @@ class OrderService
             return false;
         }
 
-        if ((float) $quantity_available < $orderProduct->quantity_to_ship) {
+        if ((float)$quantity_available < $quantity) {
             return false;
         }
 
         return true;
-    }
-
-    /**
-     * @param OrderProduct $orderProduct
-     * @param null $sourceLocationId
-     * @return bool
-     */
-    public static function canNotFulfillOrderProduct(OrderProduct $orderProduct, $sourceLocationId = null): bool
-    {
-        return !self::canFulfillOrderProduct($orderProduct, $sourceLocationId);
     }
 }
