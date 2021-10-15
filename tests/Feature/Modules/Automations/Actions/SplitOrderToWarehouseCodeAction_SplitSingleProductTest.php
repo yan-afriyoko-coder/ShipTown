@@ -31,10 +31,11 @@ class SplitOrderToWarehouseCodeAction_SplitSingleProductTest extends TestCase
     {
         AutomationsServiceProvider::enableModule();
 
+        $warehouses = factory(Warehouse::class, 3)->create();
+
         /** @var Product $product */
         $product = factory(Product::class)->create();
 
-        $warehouses = factory(Warehouse::class, 3)->create();
 
         $warehouses->each(function (Warehouse $warehouse) use ($product) {
             Inventory::updateOrCreate([
