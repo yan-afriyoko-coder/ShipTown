@@ -25,10 +25,15 @@ class SplitOrderToWarehouseCodeAction
     }
 
     /**
-     * @param $warehouse_code
+     * @param $options
      */
-    public function handle($warehouse_code)
+    public function handle($options)
     {
+        $optionsSeparated = explode(',', $options);
+
+        $warehouse_code = $optionsSeparated[0];
+        $newOrderStatus = $optionsSeparated[1];
+
         Log::debug('Automation Action', [
             'order_number' => $this->event->order->order_number,
             'class' => class_basename(self::class),
@@ -38,7 +43,7 @@ class SplitOrderToWarehouseCodeAction
 
         $warehouse = Warehouse::whereCode($warehouse_code)->first();
 
-        $this->extractFulfillableProducts($order, $warehouse);
+        $this->extractFulfillableProducts($order, $warehouse, $newOrderStatus);
     }
 
     /**
@@ -46,7 +51,7 @@ class SplitOrderToWarehouseCodeAction
      * @param Warehouse $warehouse
      * @return Order|null
      */
-    public static function extractFulfillableProducts(Order $originalOrder, Warehouse $warehouse): ?Order
+    public static function extractFulfillableProducts(Order $originalOrder, Warehouse $warehouse, string $newOrderStatus): ?Order
     {
         $newOrder = null;
         $orderProductsToExtract = [];
@@ -88,7 +93,7 @@ class SplitOrderToWarehouseCodeAction
         if ($orderProductsToExtract) {
             $newOrder = $originalOrder->replicate(['status_code']);
             $newOrder->is_editing = true;
-            $newOrder->status_code = 'packing';
+            $newOrder->status_code = $newOrderStatus;
             $newOrder->order_number .= '-PARTIAL-' . $warehouse->code;
             $newOrder->save();
 
