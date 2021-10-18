@@ -66,7 +66,7 @@ class SplitOrderToWarehouseCodeActionTest extends TestCase
 
             $automation = new Automation();
             $automation->enabled = false;
-            $automation->name = 'packing to '.$status_code_name;
+            $automation->name = 'split_order to '.$status_code_name;
             $automation->event_class = ActiveOrderCheckEvent::class;
             $automation->save();
 

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use phpDocumentor\Reflection\Types\Mixed_;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -25,7 +26,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property string      $name_ordered
  * @property float       $price
  * @property float       $quantity_ordered
- * @property float       $quantity_reserved
+ * @property float       $quantity_split
  * @property float       $quantity_shipped
  * @property float       $quantity_to_ship
  * @property float       $quantity_to_pick
@@ -85,8 +86,9 @@ class OrderProduct extends BaseModel
      */
     protected $touches = ['order'];
 
-    protected static $logAttributes = [
+    protected static array $logAttributes = [
         'quantity_ordered',
+        'quantity_split',
         'quantity_shipped',
         'quantity_to_ship',
         'quantity_to_pick',
@@ -102,6 +104,7 @@ class OrderProduct extends BaseModel
         'name_ordered',
         'price',
         'quantity_ordered',
+        'quantity_split',
         'quantity_picked',
         'quantity_skipped_picking',
         'quantity_not_picked',
@@ -111,7 +114,7 @@ class OrderProduct extends BaseModel
     protected $casts = [
         'price'                   => 'float',
         'quantity_ordered'        => 'float',
-        'quantity_reserved'       => 'float',
+        'quantity_split'          => 'float',
         'quantity_shipped'        => 'float',
         'quantity_to_ship'        => 'float',
         'quantity_to_pick'        => 'float',
@@ -126,10 +129,10 @@ class OrderProduct extends BaseModel
      *
      * @return bool
      */
-    public function save(array $options = [])
+    public function save(array $options = []): bool
     {
-        $this->quantity_to_ship = $this->quantity_ordered - $this->quantity_shipped;
-        $this->quantity_to_pick = $this->quantity_ordered - $this->quantity_picked - $this->quantity_skipped_picking;
+        $this->quantity_to_ship = $this->quantity_ordered - $this->quantity_split - $this->quantity_shipped;
+        $this->quantity_to_pick = $this->quantity_ordered - $this->quantity_split - $this->quantity_picked - $this->quantity_skipped_picking;
 
         return parent::save($options);
     }
@@ -194,6 +197,11 @@ class OrderProduct extends BaseModel
             ]);
     }
 
+    public function getQuantityToShipAttribute(): float
+    {
+        return $this->quantity_ordered - $this->quantity_split - $this->quantity_shipped;
+    }
+
     /**
      * @param Builder $query
      * @param string  $currentLocation
@@ -206,12 +214,10 @@ class OrderProduct extends BaseModel
     }
 
     /**
-     * @param Builder $query
-     * @param array   $statusCodeArray
-     *
+     * @param mixed $query
      * @return Builder|mixed
      */
-    public function scopeWhereHasStockReserved($query, $statusCodeArray)
+    public function scopeWhereHasStockReserved($query)
     {
         return $query->where('quantity_to_ship', '>', 0)
             ->whereHas('order', function ($query) {

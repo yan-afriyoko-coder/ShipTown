@@ -88,6 +88,7 @@ class SplitOrderToWarehouseCodeAction_SplitSingleProductTest extends TestCase
 
         // we will have original order left + X new ones
         $this->assertEquals(4, Order::count());
-        $this->assertEquals(3, OrderProduct::sum('quantity_ordered'));
+        $this->assertEquals(6, OrderProduct::sum('quantity_ordered'));
+        $this->assertEquals(3, OrderProduct::sum('quantity_split'));
     }
 }
