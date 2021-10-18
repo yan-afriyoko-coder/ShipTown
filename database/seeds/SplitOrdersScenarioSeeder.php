@@ -48,11 +48,9 @@ class SplitOrdersScenarioSeeder extends Seeder
     private function createWarehouseAutomations(): void
     {
         $this->sampleWarehouses->each(function (Warehouse $warehouse) {
-            $status_code_name = 'packing_' . $warehouse->code;
-
             $automation = new Automation();
             $automation->enabled = false;
-            $automation->name = 'packing to ' . $status_code_name;
+            $automation->name = 'packing to packing_' . $warehouse->code;
             $automation->event_class = ActiveOrderCheckEvent::class;
             $automation->save();
 
@@ -65,7 +63,7 @@ class SplitOrdersScenarioSeeder extends Seeder
             $action = new Action();
             $action->automation_id = $automation->getKey();
             $action->action_class = SplitOrderToWarehouseCodeAction::class;
-            $action->action_value = $warehouse->code;
+            $action->action_value = $warehouse->code.',packing_' . $warehouse->code;
             $action->save();
 
             $automation->enabled = true;
@@ -92,22 +90,23 @@ class SplitOrdersScenarioSeeder extends Seeder
     /**
      * @param int $count
      */
-    private function createSampleProducts(int $count)
+    protected function createSampleProducts(int $count)
     {
         $this->sampleProducts = factory(Product::class, $count)->create();
     }
 
     /**
-     *
+     * @param int $count
      */
-    private function createSampleSplitOrders($count)
+    protected function createSampleSplitOrders(int $count)
     {
         /** @var Order $order */
         $orders = factory(Order::class, $count)->make();
 
         $orders->each(function (Order $order) {
+            $order->is_editing = true;
             $order->status_code = 'packing';
-            $order->order_number .= 'SPLIT';
+            $order->order_number .= '-SPLIT';
             $order->save();
 
             // we will duplicate collection each time
@@ -133,26 +132,31 @@ class SplitOrdersScenarioSeeder extends Seeder
                 $orderProduct->quantity_ordered = 1;
                 $orderProduct->save();
             });
+
+            $order->is_editing = false;
+            $order->save();
         });
     }
 
-    private function createSampleSplitSingleProductsOrders(int $count)
+    /**
+     * @param int $count
+     */
+    protected function createSampleSplitSingleProductsOrders(int $count)
     {
         /** @var Order $order */
         $orders = factory(Order::class, $count)->make();
 
         $orders->each(function (Order $order) {
+            $order->is_editing = true;
             $order->status_code = 'packing';
-            $order->order_number .= 'SPLITSINGLE';
+            $order->order_number .= '-SPLIT-SINGLE';
             $order->save();
 
             // we will duplicate collection each time
             $warehouses = collect($this->sampleWarehouses);
 
             $this->sampleProducts->each(function (Product $product) use ($order, $warehouses) {
-
                 $warehouse = $warehouses->first();
-
                 Inventory::updateOrCreate([
                     'product_id' => $product->getKey(),
                     'warehouse_id' => $warehouse->getKey(),
@@ -162,7 +166,6 @@ class SplitOrdersScenarioSeeder extends Seeder
                 ]);
 
                 $warehouse = $warehouses->last();
-
                 Inventory::updateOrCreate([
                     'product_id' => $product->getKey(),
                     'warehouse_id' => $warehouse->getKey(),
@@ -180,6 +183,9 @@ class SplitOrdersScenarioSeeder extends Seeder
                 $orderProduct->quantity_ordered = 5;
                 $orderProduct->save();
             });
+
+            $order->is_editing = false;
+            $order->save();
         });
     }
 }

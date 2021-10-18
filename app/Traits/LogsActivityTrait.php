@@ -8,10 +8,10 @@ trait LogsActivityTrait
 {
     use LogsActivity;
 
-    protected static $logOnlyDirty = true;
-    protected static $submitEmptyLogs = false;
+    protected static bool $logOnlyDirty = true;
+    protected static bool $submitEmptyLogs = false;
 
-    public function log($message)
+    public function log($message): self
     {
         activity()->on($this)->log($message);
 

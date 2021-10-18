@@ -9,7 +9,6 @@ use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Warehouse;
-use App\Services\OrderService;
 use Log;
 
 class SplitOrderToWarehouseCodeAction
@@ -18,6 +17,21 @@ class SplitOrderToWarehouseCodeAction
     * @var ActiveOrderCheckEvent|OrderCreatedEvent|OrderUpdatedEvent
     */
     private $event;
+
+    /**
+     * @var Warehouse
+     */
+    private Warehouse $warehouse;
+
+    /**
+     * @var Order|null
+     */
+    private ?Order $newOrder = null;
+    /**
+     * @var mixed|string
+     */
+    private $newOrderStatus;
+    private Order $originalOrder;
 
     public function __construct($event)
     {
@@ -29,91 +43,87 @@ class SplitOrderToWarehouseCodeAction
      */
     public function handle($options)
     {
-        $optionsSeparated = explode(',', $options);
-
-        $warehouse_code = $optionsSeparated[0];
-        $newOrderStatus = $optionsSeparated[1];
-
         Log::debug('Automation Action', [
             'order_number' => $this->event->order->order_number,
             'class' => class_basename(self::class),
             '$options' => $options,
         ]);
 
-        $order = $this->event->order->refresh();
+        $optionsSeparated   = explode(',', $options);
+        $this->warehouse    = Warehouse::whereCode($optionsSeparated[0])->first();
+        $this->newOrderStatus     = $optionsSeparated[1];
 
-        $warehouse = Warehouse::whereCode($warehouse_code)->first();
+        $this->originalOrder = $this->event->order->refresh();
 
-        $this->extractFulfillableProducts($order, $warehouse, $newOrderStatus);
+        $this->extractFulfillableProducts();
     }
 
     /**
-     * @param Order $originalOrder
-     * @param Warehouse $warehouse
      * @return Order|null
      */
-    public static function extractFulfillableProducts(Order $originalOrder, Warehouse $warehouse, string $newOrderStatus): ?Order
+    public function extractFulfillableProducts(): ?Order
     {
-        $newOrder = null;
-        $orderProductsToExtract = [];
-
-        $originalOrder->orderProducts->each(
-            function (OrderProduct $orderProduct) use ($warehouse, &$orderProductsToExtract, &$originalOrder) {
-                if ($orderProduct->quantity_to_ship <= 0) {
-                    return true; // return true to continue loop
-                }
-
+        $this->originalOrder->orderProducts
+            ->filter(function (OrderProduct $orderProductOriginal) {
+                return $orderProductOriginal->quantity_to_ship > 0;
+            })
+            ->each(function (OrderProduct $orderProductOriginal) use (&$orderProductsToExtract) {
                 /** @var Inventory $inventory */
-                $inventory = $orderProduct->product->inventory()
-                    ->where(['warehouse_id' => $warehouse->getKey()])
+                $inventory = $orderProductOriginal->product->inventory()
+                    ->where(['warehouse_id' => $this->warehouse->getKey()])
                     ->first();
 
-                $quantityToExtract = min($inventory->quantity_available, $orderProduct->quantity_to_ship);
+                $quantityToExtract = min($inventory->quantity_available, $orderProductOriginal->quantity_to_ship);
 
                 if ($quantityToExtract <= 0.00) {
                     return true; // return true to continue loop
                 }
 
-                if ($originalOrder->is_editing === false) {
-                    $originalOrder->is_editing = true;
-                    $originalOrder->save();
-                }
+                $inventory->increment('quantity_reserved', $quantityToExtract);
 
-                $inventory->quantity_reserved += $quantityToExtract;
-                $inventory->save();
+                $orderProductNew = $orderProductOriginal->replicate();
+                $orderProductNew->order_id = $this->getOrderOrCreate()->getKey();
+                $orderProductNew->quantity_ordered = $quantityToExtract;
+                $orderProductNew->quantity_split = 0;
+                $orderProductNew->quantity_picked = 0;
+                $orderProductNew->quantity_skipped_picking = 0;
+                $orderProductNew->save();
 
-                $newOrderProduct = $orderProduct->replicate(['order_id']);
-                $newOrderProduct->quantity_ordered = $quantityToExtract;
-                $orderProductsToExtract[] = $newOrderProduct;
+                $orderProductOriginal->increment('quantity_split', $quantityToExtract);
 
-                $orderProduct->quantity_ordered -= $quantityToExtract;
-                $orderProduct->save();
-            }
-        );
-
-        if ($orderProductsToExtract) {
-            $newOrder = $originalOrder->replicate(['status_code']);
-            $newOrder->is_editing = true;
-            $newOrder->status_code = $newOrderStatus;
-            $newOrder->order_number .= '-PARTIAL-' . $warehouse->code;
-            $newOrder->save();
-
-            collect($orderProductsToExtract)->each(function (OrderProduct $orderProduct) use ($newOrder) {
-                $orderProduct->order()->associate($newOrder);
-                $orderProduct->save();
+                return true;
             });
+
+        if ($this->newOrder) {
+            $this->originalOrder->is_editing = false;
+            $this->originalOrder->save();
+
+            $this->newOrder->is_editing = false;
+            $this->newOrder->save();
+            return $this->newOrder;
         }
 
-        if ($originalOrder->is_editing) {
-            $originalOrder->is_editing = false;
-            $originalOrder->save();
+        return null;
+    }
+
+    /**
+     * @return Order
+     */
+    private function getOrderOrCreate(): Order
+    {
+        if ($this->newOrder) {
+            return $this->newOrder;
         }
 
-        if ($newOrder and $newOrder->is_editing) {
-            $newOrder->is_editing = false;
-            $newOrder->save();
-        }
+        $this->originalOrder->is_editing = true;
+        $this->originalOrder->save();
 
-        return $newOrder;
+        $this->newOrder = $this->originalOrder->replicate();
+        $this->newOrder->status_code = $this->newOrderStatus;
+        $this->newOrder->is_editing = true;
+        $this->newOrder->order_number .= '-PARTIAL-' . $this->warehouse->code;
+        $this->newOrder->save();
+
+        return $this->newOrder;
     }
 }

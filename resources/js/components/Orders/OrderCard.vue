@@ -119,6 +119,10 @@
                                             <small> ordered </small>
                                             <h4>{{ toNumberOrDash(order_product['quantity_ordered']) }}</h4>
                                         </div>
+                                        <div class="col" v-if="order_product['quantity_split']">
+                                            <small> split </small>
+                                            <h4>{{ toNumberOrDash(order_product['quantity_split']) }}</h4>
+                                        </div>
                                         <div class="col">
                                             <small> picked </small>
                                             <h4>{{ toNumberOrDash(order_product['quantity_picked']) }}</h4>
