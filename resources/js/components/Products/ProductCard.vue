@@ -72,6 +72,11 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
+                                    <a class="nav-link p-0 pl-2 pr-2"  @click.prevent="currentTab = 'aliases'" data-toggle="tab" href="#">
+                                        Aliases
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a v-if="sharingAvailable()" @click.prevent="shareLink" class="nav-link p-0 pl-2 pr-2" href="#">
                                         <font-awesome-icon icon="share-alt" class="fas fa-sm"></font-awesome-icon>
                                     </a>
@@ -174,6 +179,11 @@
                             </div>
                         </template>
 
+                        <template v-if="currentTab === 'aliases'">
+                            <div class="container small">
+                                <span class="badge badge-light" v-for="alias in product.aliases" :key="alias.id">{{ alias.alias }}</span>
+                            </div>
+                        </template>
                     </div>
                 </div>
 
