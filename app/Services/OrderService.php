@@ -95,12 +95,10 @@ class OrderService
      */
     public static function updateOrCreate(array $orderAttributes)
     {
-        $order = Order::updateOrCreate(
-            [
-                'order_number' => $orderAttributes['order_number']
-            ],
-            $orderAttributes
-        );
+        $order = Order::whereOrderNumber($orderAttributes['order_number'])->firstOrNew();
+        $order->fill($orderAttributes);
+        $order->is_editing = true;
+        $order->save();
 
         self::updateOrCreateShippingAddress($order, $orderAttributes['shipping_address']);
 
