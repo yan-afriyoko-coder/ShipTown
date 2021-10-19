@@ -373,7 +373,15 @@ class Products extends Entity
         try {
             return Client::GET($store_key, 'product.variant.update.json', $properties);
         } catch (RequestException $exception) {
-            if ($exception->getCode() === RequestResponse::RETURN_CODE_MODEL_NOT_FOUND) {
+            if ($exception->getCode() === RequestResponse::RETURN_CODE_STORE_ID_NOT_SUPPORTED) {
+                Products::assignStore($store_key, $properties['id'], $properties['store_id']);
+
+                if ($recursive) {
+                    return self::updateVariant($store_key, $properties, false);
+                }
+
+                return null;
+            } elseif ($exception->getCode() === RequestResponse::RETURN_CODE_MODEL_NOT_FOUND) {
                 Products::assignStore($store_key, $properties['id'], $properties['store_id']);
 
                 if ($recursive) {
