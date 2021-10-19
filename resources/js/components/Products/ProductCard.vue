@@ -309,7 +309,7 @@
                 const params = {
                     'filter[product_id]': this.product['id'],
                     'filter[order.is_active]': false,
-                    'sort': 'id',
+                    'sort': '-id',
                     'include': 'order',
                     'per_page': 5
                 }
