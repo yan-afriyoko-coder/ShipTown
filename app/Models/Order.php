@@ -152,9 +152,9 @@ class Order extends BaseModel
     // as this is then not populated
     // correctly to events
     protected $attributes = [
-        'status_code' => 'processing',
-        'is_active'   => 1,
-        'is_editing'   => 0,
+        'status_code'   => 'processing',
+        'is_active'     => 1,
+        'is_editing'    => 0,
     ];
 
     protected $appends = [
