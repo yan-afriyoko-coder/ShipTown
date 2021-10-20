@@ -152,14 +152,15 @@
                     </div>
 
                     <div class="container" v-if="currentTab === 'orderDetails'">
-                        <div class="row small">
-                            <div class="col">
-                                <div> date: <b> {{ order['order_placed_at'] | moment('MM/DD H:mm') }} </b> </div>
-                                <div> paid: <b> {{ order['total_paid'] }} </b> </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div> date: <b> {{ order['order_placed_at'] | moment('MMM DD H:mm') }} </b> </div>
                                 <div> shipping method: <b> {{ order['shipping_method_code'] }} </b> </div>
-                                <div> picked at: <b> {{ order['picked_at'] | moment('MM/DD H:mm') }} </b> </div>
-                                <div> packed at: <b> {{ order['packed_at'] | moment('MM/DD H:mm') }} </b> </div>
+                                <div> paid: <b> {{ order['total_paid'] }} </b> </div>
+                                <div> picked at: <b> {{ order['picked_at'] | moment('MMM DD H:mm') }} </b> </div>
+                                <div> packed at: <b> {{ (order['packed_at']) | moment('MMM DD H:mm') }} </b> </div>
                                 <div> packed by: <b> {{ order['packer'] ? order['packer']['name'] : '&nbsp' }} </b> </div>
+                                <div>.</div>
                             </div>
                         </div>
 
@@ -170,7 +171,9 @@
                                   <template v-for="shipment in order_shipments">
                                       <tr>
                                           <td>
-                                              {{ shipment['created_at'] | moment('MMM DD')  }} <small>@</small> {{ shipment['created_at'] | moment('H:mm')  }}:
+                                              <b>
+                                                {{ shipment['created_at'] | moment('MMM DD')  }} <small>@</small> {{ shipment['created_at'] | moment('H:mm')  }}:
+                                              </b>
                                           </td>
                                           <td>
                                               <a :href="shipment['tracking_url']" target="_blank">

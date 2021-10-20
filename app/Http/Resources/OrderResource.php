@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderResource extends JsonResource
@@ -30,12 +31,15 @@ class OrderResource extends JsonResource
             'product_line_count'    => (integer) $this->product_line_count,
             'total_quantity_ordered'=> (double) $this->total_quantity_ordered,
             'status_code'           => $this->status_code,
-            'picked_at'             => $this->picked_at,
-            'packed_at'             => $this->packed_at,
+
             'packer_user_id'        => $this->packer_user_id,
-            'deleted_at'            => $this->deleted_at,
-            'created_at'            => $this->created_at,
-            'updated_at'            => $this->updated_at,
+
+            'picked_at'             => new Carbon($this->picked_at),
+            'packed_at'             => new Carbon($this->packed_at),
+            'deleted_at'            => new Carbon($this->deleted_at),
+            'created_at'            => new Carbon($this->created_at),
+            'updated_at'            => new Carbon($this->updated_at),
+
             'raw_import'            => $this->raw_import,
             'order_id'              => $this->order_id,
             'min_shelf_location'    => $this->min_shelf_location,
