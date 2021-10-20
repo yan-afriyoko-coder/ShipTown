@@ -199,6 +199,7 @@ return [
 
         // misc modules
         App\Modules\Maintenance\src\EventServiceProviderBase::class,
+        App\Modules\StockControl\src\StockControlServiceProvider::class,
         App\Modules\FireActiveOrderCheckEvent\src\ActiveOrderCheckEventServiceProvider::class,
 
         App\Modules\InventoryReservations\src\EventServiceProviderBase::class,
