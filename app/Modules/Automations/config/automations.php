@@ -111,6 +111,10 @@ return [
                     'description' => 'Line count equals',
                 ],
                 [
+                    'class' => \App\Modules\Automations\src\Conditions\Order\TotalQuantityToShipEqualsCondition::class,
+                    'description' => 'Total Quantity To Ship',
+                ],
+                [
                     'class' => \App\Modules\Automations\src\Conditions\Order\IsFullyPaidCondition::class,
                     'description' => 'Is Fully Paid',
                 ],

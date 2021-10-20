@@ -17,8 +17,6 @@ class OrderProductObserver
      */
     public function created(OrderProduct $orderProduct)
     {
-        $orderProduct->order->recalculateTotals()->save();
-
         OrderProductCreatedEvent::dispatch($orderProduct);
     }
 
@@ -31,46 +29,9 @@ class OrderProductObserver
      */
     public function updated(OrderProduct $orderProduct)
     {
-        $orderProduct->order->recalculateTotals()->save();
         $this->setOrdersPickedAtIfAllPicked($orderProduct);
 
         OrderProductUpdatedEvent::dispatch($orderProduct);
-    }
-
-    /**
-     * Handle the order product "deleted" event.
-     *
-     * @param OrderProduct $orderProduct
-     *
-     * @return void
-     */
-    public function deleted(OrderProduct $orderProduct)
-    {
-        $orderProduct->order->recalculateTotals()->save();
-    }
-
-    /**
-     * Handle the order product "restored" event.
-     *
-     * @param OrderProduct $orderProduct
-     *
-     * @return void
-     */
-    public function restored(OrderProduct $orderProduct)
-    {
-        $orderProduct->order->recalculateTotals()->save();
-    }
-
-    /**
-     * Handle the order product "force deleted" event.
-     *
-     * @param OrderProduct $orderProduct
-     *
-     * @return void
-     */
-    public function forceDeleted(OrderProduct $orderProduct)
-    {
-        $orderProduct->order->recalculateTotals()->save();
     }
 
     /**
