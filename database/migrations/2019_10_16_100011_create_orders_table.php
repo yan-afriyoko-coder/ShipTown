@@ -26,8 +26,8 @@ class CreateOrdersTable extends Migration
             $table->decimal('total_paid')->default(0);
             $table->string('shipping_method_code')->default('')->nullable(true);
             $table->string('shipping_method_name')->default('')->nullable(true);
-            $table->dateTime('order_placed_at')->useCurrent()->nullable();
-            $table->dateTime('order_closed_at')->nullable();
+            $table->timestamp('order_placed_at')->useCurrent()->nullable();
+            $table->timestamp('order_closed_at')->nullable();
             $table->integer('product_line_count')->default(0);
             $table->timestamp('picked_at')->nullable();
             $table->timestamp('packed_at')->nullable();
