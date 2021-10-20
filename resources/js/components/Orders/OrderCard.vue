@@ -153,38 +153,49 @@
 
                     <div class="container" v-if="currentTab === 'orderDetails'">
                         <div class="row">
-                            <div class="col-6">
-                                <div> date: <b> {{ order['order_placed_at'] | moment('MMM DD H:mm') }} </b> </div>
-                                <div> shipping method: <b> {{ order['shipping_method_code'] }} </b> </div>
-                                <div> paid: <b> {{ order['total_paid'] }} </b> </div>
-                                <div> picked at: <b> {{ order['picked_at'] | moment('MMM DD H:mm') }} </b> </div>
-                                <div> packed at: <b> {{ (order['packed_at']) | moment('MMM DD H:mm') }} </b> </div>
-                                <div> packed by: <b> {{ order['packer'] ? order['packer']['name'] : '&nbsp' }} </b> </div>
+                            <div class="col-md-6">
+                              <table class="table table-hover">
+                                <tr>
+                                  <td> date: </td>
+                                  <td><b> {{ order['order_placed_at'] | moment('MMM DD H:mm') }} </b> </td>
+                                </tr>
+                                <tr>
+                                  <td> shipping method: </td><td><b> {{ order['shipping_method_code'] }} </b> </td>
+                                </tr>
+                                <tr>
+                                  <td> paid: </td><td><b> {{ order['total_paid'] }} </b> </td>
+                                </tr>
+                                <tr>
+                                  <td> picked at: </td><td><b> {{ order['picked_at'] | moment('MMM DD H:mm') }} </b> </td>
+                                </tr>
+                                <tr>
+                                  <td> packed at: </td><td><b> {{ (order['packed_at']) | moment('MMM DD H:mm') }} </b> </td>
+                                </tr>
+                                <tr>
+                                  <td> packed by: </td><td><b> {{ order['packer'] ? order['packer']['name'] : '&nbsp' }} </b> </td>
+                                </tr>
+                                <tr>
+                                  <td>.</td><td></td>
+                                </tr>
+                                <tr>
+                                  <td colspan="2"> Shipping Numbers: </td>
+                                </tr>
+                                <template v-for="shipment in order_shipments">
+                                  <tr>
+                                    <td colspan="2">
+                                      <b>
+                                        {{ shipment['created_at'] | moment('MMM DD')  }} <small>@</small> {{ shipment['created_at'] | moment('H:mm')  }}:
+                                      </b>
+                                      <a :href="shipment['tracking_url']" target="_blank">
+                                        {{ shipment['shipping_number'] }}
+                                      </a>
+                                      by {{ shipment['user'] ? shipment['user']['name'] : ''}}
+                                    </td>
+                                  </tr>
+                                </template>
+                              </table>
                                 <div>.</div>
                             </div>
-                        </div>
-
-                        <div class="row">
-                          <div class="col-12">
-                              Shipping Numbers:
-                              <table>
-                                  <template v-for="shipment in order_shipments">
-                                      <tr>
-                                          <td>
-                                              <b>
-                                                {{ shipment['created_at'] | moment('MMM DD')  }} <small>@</small> {{ shipment['created_at'] | moment('H:mm')  }}:
-                                              </b>
-                                          </td>
-                                          <td>
-                                              <a :href="shipment['tracking_url']" target="_blank">
-                                                  {{ shipment['shipping_number'] }}
-                                              </a>
-                                          </td>
-                                          <td>shipped by {{ shipment['user'] ? shipment['user']['name'] : ''}}</td>
-                                      </tr>
-                                  </template>
-                              </table>
-                          </div>
                         </div>
                     </div>
 
