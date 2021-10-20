@@ -34,7 +34,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property string|null $picked_at
  * @property string|null $packed_at
  * @property int|null    $packer_user_id
- * @property float      $total_quantity_ordered
+ * @property float       $total_quantity_ordered
+ * @property float       $total_quantity_to_ship
  * @property string      $shipping_method_code
  * @property string      $shipping_method_name
  * @property array       $raw_import
@@ -173,6 +174,7 @@ class Order extends BaseModel
     public function recalculateTotals(): Order
     {
         $this->total_quantity_ordered = $this->orderProducts()->sum('quantity_ordered');
+        $this->total_quantity_to_ship = $this->orderProducts()->sum('total_quantity_to_ship');
         $this->product_line_count = $this->orderProducts()->count('id');
 
         return $this;
