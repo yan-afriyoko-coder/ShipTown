@@ -271,7 +271,7 @@ class Product extends BaseModel
     }
 
     /**
-     * @return HasMany
+     * @return HasMany|Inventory
      */
     public function inventory(): HasMany
     {
