@@ -157,7 +157,6 @@ class Order extends BaseModel
         'is_editing'        => 'boolean',
         'total_shipping'    => 'float',
         'total_paid'        => 'float',
-//        'order_picked_at'   => 'datetime',
     ];
 
     // we use attributes to set default values
@@ -177,8 +176,9 @@ class Order extends BaseModel
     ];
 
     protected $dates = [
-//        'order_picked_at',
-//        'order_packed_at',
+        'picked_at',
+        'packed_at',
+        'order_placed_at',
         'order_closed_at',
     ];
 
