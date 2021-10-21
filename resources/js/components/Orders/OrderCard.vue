@@ -156,7 +156,7 @@
                             <div class="col-md-6">
                               <table class="table table-hover">
                                 <tr>
-                                  <td> date: </td>
+                                  <td> placed at: </td>
                                   <td><b> {{ order['order_placed_at'] | moment('MMM DD H:mm') }} </b> </td>
                                 </tr>
                                 <tr>
@@ -173,6 +173,9 @@
                                 </tr>
                                 <tr>
                                   <td> packed by: </td><td><b> {{ order['packer'] ? order['packer']['name'] : '&nbsp' }} </b> </td>
+                                </tr>
+                                <tr>
+                                  <td> closed at: </td><td><b> {{ (order['order_closed_at']) | moment('MMM DD H:mm') }} </b> </td>
                                 </tr>
                                 <tr>
                                   <td>.</td><td></td>
@@ -211,7 +214,7 @@
                                 </div>
                                 <div class="pl-sm-0 pl-md-1">
                                     <b>
-                                        {{ activity['causer'] === null ? 'AutoStatus' : activity['causer']['name'] }}
+                                        {{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }}:
                                     </b>
                                     {{ activity['description'] }} {{ activity['changes'] }}
                                 </div>

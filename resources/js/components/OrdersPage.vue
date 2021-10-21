@@ -100,7 +100,7 @@
                     'filter[packer_user_id]': this.getUrlParameter('packer_user_id'),
                     'sort': this.getUrlParameter('sort','-order_placed_at'),
                     'per_page': this.getUrlParameter('per_page', 20),
-                    'include': 'order_comments,order_comments.user',
+                    'include': 'order_comments,order_comments.user,packer',
                     'page': page,
                 };
 
