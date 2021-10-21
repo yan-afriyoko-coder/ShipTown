@@ -154,7 +154,7 @@
                     <div class="container" v-if="currentTab === 'orderDetails'">
                         <div class="row">
                             <div class="col-md-6">
-                              <table class="table table-hover">
+                              <table class="table-borderless table-hover border-0">
                                 <tr>
                                   <td> placed at: </td>
                                   <td><b> {{ order['order_placed_at'] | moment('MMM DD H:mm') }} </b> </td>
