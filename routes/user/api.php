@@ -21,6 +21,9 @@ Route::put('print/order/{order_number}/{view}', 'Api\PrintOrderController@store'
 Route::get('modules/consignments/{consignment_id}/labels', 'Api\Modules\Scurri\LabelsController@store')
     ->name('modules.scurri.consignments.labels');
 
+Route::post('settings/modules/automations/{automation_id}/run', 'Api\Settings\Modules\RunAutomationController@store')
+    ->name('settings.modules.automations.run');
+
 Route::apiResource('run/sync', 'Api\Run\SyncController')->only('index');
 Route::apiResource('run/sync/api2cart', 'Api\Run\SyncApi2CartController')->only('index');
 Route::apiResource('run/hourly/jobs', 'Api\Run\HourlyJobsController', ['as' => 'run.hourly'])->only('index');
