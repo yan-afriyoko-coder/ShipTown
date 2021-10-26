@@ -300,7 +300,9 @@ export default {
             },
 
             apiRunAutomation: function (id) {
-                return axios.post('/api/settings/modules/automations/'+id+'/run');
+                return axios.post('/api/settings/modules/automations/run', {
+                    'automation_id': id
+                });
             },
 
             apiDeleteAutomations: function (id) {

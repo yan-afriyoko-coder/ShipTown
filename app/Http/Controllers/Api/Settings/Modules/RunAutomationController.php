@@ -8,6 +8,7 @@ use App\Http\Requests\RunAutomationRequest;
 use App\Models\Order;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Services\AutomationService;
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -17,13 +18,12 @@ class RunAutomationController extends Controller
 {
     /**
      * @param RunAutomationRequest $request
-     * @param int $automation_id
      * @return JsonResource
      */
-    public function store(RunAutomationRequest $request, int $automation_id): JsonResource
+    public function store(RunAutomationRequest $request): JsonResource
     {
         /** @var Automation $automation */
-        $automation = Automation::findOrFail($automation_id);
+        $automation = Automation::findOrFail($request->get('automation_id'));
 
         Order::where(['is_active' => true])
             ->get()
@@ -33,6 +33,9 @@ class RunAutomationController extends Controller
                 AutomationService::runAutomation($automation, $event);
             });
 
-        return JsonResource::make($automation);
+        return JsonResource::make([
+            'automation_id' => $automation->getKey(),
+            'time' => Carbon::now(),
+        ]);
     }
 }

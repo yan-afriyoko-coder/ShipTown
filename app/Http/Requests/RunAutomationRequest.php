@@ -24,7 +24,7 @@ class RunAutomationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'automation_id' => 'required|integer|exists:modules_automations,id'
         ];
     }
 }
