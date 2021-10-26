@@ -299,6 +299,12 @@ export default {
                 return axios.put('/api/settings/modules/automations/' + id, params);
             },
 
+            apiRunAutomation: function (id) {
+                return axios.post('/api/settings/modules/automations/run', {
+                    'automation_id': id
+                });
+            },
+
             apiDeleteAutomations: function (id) {
                 return axios.delete('/api/settings/modules/automations/' + id);
             },
