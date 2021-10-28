@@ -1,0 +1,24 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Http\Resources\HeartbeatResources;
+use App\Models\Heartbeat;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+
+class HeartbeatsController extends Controller
+{
+    /**
+     * @param Request $request
+     *
+     * @return AnonymousResourceCollection
+     */
+    public function index(): AnonymousResourceCollection
+    {
+        $heartbeats = Heartbeat::active()->get();
+
+        return HeartbeatResources::collection($heartbeats);
+    }
+}

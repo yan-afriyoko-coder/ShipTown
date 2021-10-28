@@ -333,6 +333,10 @@ export default {
                 return axios.post('/api/settings/configurations/', params);
 
             },
+
+            apiGetHeartbeats: function () {
+                return axios.get('/api/heartbeats/');
+            },
         }
     }
 </script>
