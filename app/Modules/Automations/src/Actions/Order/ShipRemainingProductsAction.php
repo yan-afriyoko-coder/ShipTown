@@ -8,6 +8,7 @@ use App\Events\Order\OrderUpdatedEvent;
 use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\OrderProductShipment;
 use App\Models\Warehouse;
 use App\Modules\SplitOrder\src\SplitOrderService;
 use Log;
@@ -38,9 +39,17 @@ class ShipRemainingProductsAction
         $order = $this->event->order->refresh();
 
         $order->orderProducts()->each(function (OrderProduct $orderProduct) {
+
+            $orderProductShipment = new OrderProductShipment();
+            $orderProductShipment->product_id = $orderProduct->product_id;
+            $orderProductShipment->order_product_id = $orderProduct->getKey();
+            $orderProductShipment->quantity_shipped = $orderProduct->quantity_to_ship;
+            $orderProductShipment->save();
+
             $orderProduct->quantity_shipped += $orderProduct->quantity_to_ship;
             $orderProduct->save();
         });
+
 
         activity()->causedByAnonymous()->performedOn($order)->log('Automatically shipped all products');
     }
