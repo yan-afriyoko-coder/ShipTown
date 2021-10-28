@@ -19,6 +19,8 @@ export default {
         }
     },
     mounted(){
+        this.getHeartbeats();
+
         setInterval(() => {
             this.getHeartbeats();
         }, 60 * 1000);
