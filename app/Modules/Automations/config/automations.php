@@ -140,6 +140,10 @@ return [
                     'class' => \App\Modules\Automations\src\Actions\Order\SplitOrderToWarehouseCodeAction::class,
                     'description' => 'Split Order to warehouse code',
                 ],
+                [
+                    'class' => \App\Modules\Automations\src\Actions\Order\ShipRemainingProductsAction::class,
+                    'description' => 'Mark remaining products as shipped',
+                ],
             ]
         ],
     ],
