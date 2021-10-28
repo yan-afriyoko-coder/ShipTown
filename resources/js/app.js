@@ -131,6 +131,7 @@ Vue.component('mail-template-table', require('./components/Settings/MailTemplate
 Vue.component('navigation-menu-table', require('./components/Settings/NavigationMenuTable.vue').default);
 Vue.component('automation-table', require('./components/Settings/AutomationTable.vue').default);
 Vue.component('warehouse-table', require('./components/Settings/WarehouseTable.vue').default);
+Vue.component('heartbeats', require('./components/Heartbeats.vue').default);
 Vue.component('api', require('./mixins/api').default);
 
 /**
