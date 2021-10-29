@@ -229,6 +229,10 @@ class OrderService
      */
     public static function canFulfillProduct(int $product_id, float $quantity, $sourceLocationId): bool
     {
+        if ($quantity <= 0) {
+            return true;
+        }
+
         $query = Inventory::where('product_id', $product_id)
             ->where('location_id', '!=', '999');
 
