@@ -31,7 +31,7 @@ class ActiveOrdersWidget extends AbstractWidget
             ->where(['is_active' => true])
             ->whereNotIn('status_code', OrderStatus::getToFollowStatusList())
             ->groupBy(['status_code'])
-            ->orderByDesc('order_count')
+            ->orderBy('status_code')
             ->get();
 
         $total_count = 0;
