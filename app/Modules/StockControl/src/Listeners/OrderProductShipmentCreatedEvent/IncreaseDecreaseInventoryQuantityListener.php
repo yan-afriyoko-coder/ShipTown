@@ -20,6 +20,10 @@ class IncreaseDecreaseInventoryQuantityListener
             return true;
         }
 
+        if ($orderProductShipment->warehouse_id === null) {
+            return true;
+        }
+
         $inventory = Inventory::firstOrCreate([
                 'product_id' => $orderProductShipment->product_id,
                 'warehouse_id' => $orderProductShipment->warehouse_id,
