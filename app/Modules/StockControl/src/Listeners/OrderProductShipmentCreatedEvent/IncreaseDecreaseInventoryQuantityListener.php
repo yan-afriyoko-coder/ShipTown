@@ -4,6 +4,7 @@
 namespace App\Modules\StockControl\src\Listeners\OrderProductShipmentCreatedEvent;
 
 use App\Events\OrderProductShipmentCreatedEvent;
+use App\Models\Inventory;
 use Exception;
 
 class IncreaseDecreaseInventoryQuantityListener
@@ -19,9 +20,12 @@ class IncreaseDecreaseInventoryQuantityListener
             return true;
         }
 
-        $inventory = $orderProductShipment->product
-            ->inventory()->whereWarehouseId($orderProductShipment->warehouse_id)
-            ->first();
+        $inventory = Inventory::firstOrCreate([
+                'product_id' => $orderProductShipment->product_id,
+                'warehouse_id' => $orderProductShipment->warehouse_id,
+            ], [
+                'location_id' => $orderProductShipment->warehouse->code
+            ]);
 
         $inventory->quantity = $inventory->quantity - $orderProductShipment->quantity_shipped;
         $inventory->save();
