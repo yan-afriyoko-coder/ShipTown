@@ -2,6 +2,7 @@
 
 namespace App\Modules\DpdUk\src;
 
+use App\Events\OrderShipment\OrderShipmentCreatedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
@@ -17,7 +18,7 @@ class DpdUkServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_description = '';
+    public static string $module_description = 'Provides seamless integration with DPD UK';
 
     /**
      * @var bool
@@ -30,6 +31,9 @@ class DpdUkServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
+        OrderShipmentCreatedEvent::class => [
+            Listeners\OrderShipmentCreatedEvent\DispatchNowGenerateLabelJobListener::class,
+        ]
 
     ];
 }
