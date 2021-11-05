@@ -18,12 +18,16 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property int         $id
  * @property int         $order_id
  * @property string      $shipping_number
+ * @property string      $carrier
+ * @property string      $service
  * @property int|null    $user_id
- * @property string|null    $base64_pdf_labels
+ * @property string|null $base64_pdf_labels
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @property-read Order $order
  * @property-read User|null $user
+ * @property-read int $age_in_days
  *
  * @method static Builder|OrderShipment newModelQuery()
  * @method static Builder|OrderShipment newQuery()
@@ -34,11 +38,9 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static Builder|OrderShipment whereShippingNumber($value)
  * @method static Builder|OrderShipment whereUpdatedAt($value)
  * @method static Builder|OrderShipment whereUserId($value)
+ * @method static Builder|OrderShipment whereAgeInDaysBetween($ageInDaysFrom, $ageInDaysTo)
  * @mixin Eloquent
  *
- * @property-read mixed $age_in_days
- *
- * @method static Builder|OrderShipment whereAgeInDaysBetween($ageInDaysFrom, $ageInDaysTo)
  */
 class OrderShipment extends BaseModel
 {
@@ -56,7 +58,7 @@ class OrderShipment extends BaseModel
     ];
 
     // we use attributes to set default values
-    // we wont use database default values
+    // we won't use database default values
     // as this is then not populated
     // correctly to events
     protected $attributes = [

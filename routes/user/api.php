@@ -18,6 +18,8 @@ Route::put('print/order/{order_number}/dpd_label', 'Api\Modules\DpdIreland\Print
 Route::put('print/order/{order_number}/an_post', 'Api\Modules\Scurri\ShipmentsController@store');
 Route::put('print/order/{order_number}/{view}', 'Api\PrintOrderController@store');
 
+Route::apiResource('shipments', 'Api\ShipmentControllerNew', ['as' => 'new'])->only(['store']);
+
 Route::get('modules/consignments/{consignment_id}/labels', 'Api\Modules\Scurri\LabelsController@store')
     ->name('modules.scurri.consignments.labels');
 

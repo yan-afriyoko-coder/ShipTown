@@ -67,6 +67,10 @@ export default {
                 return axios.get('/api/order/comments', {params: params});
             },
 
+            apiPostShipment: function(data) {
+                return axios.post('/api/shipments', data);
+            },
+
             apiGetOrderShipments: function(params) {
                 return axios.get('/api/order/shipments', {params: params});
             },
