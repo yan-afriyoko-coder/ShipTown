@@ -229,6 +229,7 @@ return [
         App\Modules\Rmsapi\src\EventServiceProviderBase::class,
         App\Modules\MagentoApi\src\EventServiceProviderBase::class,
         App\Modules\ScurriAnpost\src\ScurriServiceProvider::class,
+        App\Modules\DpdUk\src\DpdUkServiceProvider::class,
     ],
 
     /*

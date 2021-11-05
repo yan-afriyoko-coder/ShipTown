@@ -2,7 +2,7 @@
 
 namespace App\Modules\DpdUk\src\Jobs;
 
-use App\Events\OrderShipment\OrderShipmentCreatedEvent;
+use App\Models\OrderShipment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -13,16 +13,16 @@ class GenerateLabelDocumentJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private OrderShipmentCreatedEvent $event;
+    private OrderShipment $orderShipment;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(OrderShipmentCreatedEvent $event)
+    public function __construct(OrderShipment $orderShipment)
     {
-        $this->event = $event;
+        $this->orderShipment = $orderShipment;
     }
 
     /**
@@ -32,6 +32,6 @@ class GenerateLabelDocumentJob implements ShouldQueue
      */
     public function handle()
     {
-        //
+        ray($this->orderShipment);
     }
 }

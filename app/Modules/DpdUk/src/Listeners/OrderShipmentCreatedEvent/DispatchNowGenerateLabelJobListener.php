@@ -9,6 +9,8 @@ class DispatchNowGenerateLabelJobListener
 {
     public function handle(OrderShipmentCreatedEvent $event)
     {
-        GenerateLabelDocumentJob::dispatchNow($event);
+        if ($event->orderShipment->carrier = 'dpd_uk') {
+            GenerateLabelDocumentJob::dispatchNow($event->orderShipment);
+        }
     }
 }
