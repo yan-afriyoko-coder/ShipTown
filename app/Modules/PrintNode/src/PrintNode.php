@@ -8,21 +8,20 @@ use App\Modules\PrintNode\src\Models\PrintJob;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
+/**
+ *
+ */
 class PrintNode
 {
-    public static function printPdfFromUrl(int $printer_id, string $url): int
+    /**
+     * Noop: Quick "ping" to see if communication and authentication works
+     *
+     * @param Client|null $printNodeClient
+     * @return bool
+     */
+    public static function noop(Client $printNodeClient = null): bool
     {
-        $printJob = new PrintJob();
-        $printJob->printer_id = $printer_id;
-        $printJob->title = 'Url Print';
-        $printJob->pdf_url = $url;
-
-        return PrintNode::print($printJob);
-    }
-
-    public static function noop(Client $printNodeClient): bool
-    {
-        $client = $printNodeClient ?: self::getPrintNodeClient();
+        $client = $printNodeClient ?: self::getFirstPrintNodeClient();
 
         try {
             $response = $client->getRequest('noop');
@@ -33,9 +32,29 @@ class PrintNode
         }
     }
 
+    /**
+     * @return array
+     */
+    public static function getPrinters(): array
+    {
+        $printNodeClient = self::getFirstPrintNodeClient();
+
+        if (!$printNodeClient) {
+            return [];
+        }
+
+        $response = $printNodeClient->getRequest('printers');
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    /**
+     * @param PrintJob $printJob
+     * @return int
+     */
     public static function print(PrintJob $printJob): int
     {
-        $printNodeClient = self::getPrintNodeClient();
+        $printNodeClient = self::getFirstPrintNodeClient();
 
         if (!$printNodeClient) {
             Log::warning('Print job failed, no PrintNode clients configured');
@@ -48,23 +67,78 @@ class PrintNode
         return (int) $response->getBody()->getContents();
     }
 
-    public static function getPrinters(): array
+    /**
+     * @param string $url
+     * @param int $printerId
+     * @return int
+     */
+    public static function printPdfFromUrl(string $url, int $printerId): int
     {
-        $printNodeClient = self::getPrintNodeClient();
+        $printJob = new PrintJob();
+        $printJob->title = 'Url Print';
+        $printJob->pdf_url = $url;
 
-        if (!$printNodeClient) {
-            return [];
+        if ($printerId) {
+            $printJob->printer_id = $printerId;
+        } elseif (isset(auth()->user()->printer_id)) {
+            $printJob->printer_id = auth()->user()->printer_id;
         }
 
-        $response = $printNodeClient->getRequest('printers');
+        $printJob->save();
 
-        return json_decode($response->getBody()->getContents(), true);
+        return PrintNode::print($printJob);
+    }
+
+    /**
+     * @param string $base64PdfString
+     * @param int|null $printerId
+     * @return int
+     */
+    public static function printBase64Pdf(string $base64PdfString, int $printerId = null): int
+    {
+        $printJob = new PrintJob();
+        $printJob->title = 'Url Print';
+        $printJob->content_type = 'pdf_base64';
+        $printJob->content = $base64PdfString;
+
+        if ($printerId) {
+            $printJob->printer_id = $printerId;
+        } elseif (isset(auth()->user()->printer_id)) {
+            $printJob->printer_id = auth()->user()->printer_id;
+        }
+
+        $printJob->save();
+
+        return self::print($printJob);
+    }
+
+    /**
+     * @param string $base64_content
+     * @param int|null $printerId
+     * @return int
+     */
+    public static function printRaw(string $base64_content, int $printerId = null): int
+    {
+        $printJob = new PrintJob();
+        $printJob->title = 'Raw Print';
+        $printJob->content_type = 'raw_base64';
+        $printJob->content = $base64_content;
+
+        if ($printerId) {
+            $printJob->printer_id = $printerId;
+        } elseif (isset(auth()->user()->printer_id)) {
+            $printJob->printer_id = auth()->user()->printer_id;
+        }
+
+        $printJob->save();
+
+        return self::print($printJob);
     }
 
     /**
      * @return Client|null
      */
-    public static function getPrintNodeClient(): ?Client
+    public static function getFirstPrintNodeClient(): ?Client
     {
         $clients = Client::all();
 
@@ -73,23 +147,5 @@ class PrintNode
         }
 
         return $clients->first();
-    }
-
-
-    /**
-     * @param string $base64PdfString
-     * @param int $printerId
-     * @return int
-     */
-    public static function printBase64Pdf(string $base64PdfString, int $printerId): int
-    {
-        $printJob = new PrintJob();
-        $printJob->title = 'Url Print';
-        $printJob->printer_id = $printerId;
-        $printJob->content_type = 'pdf_base64';
-        $printJob->content = $base64PdfString;
-        $printJob->save();
-
-        return self::print($printJob);
     }
 }

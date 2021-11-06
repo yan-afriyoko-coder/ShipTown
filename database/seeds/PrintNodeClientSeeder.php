@@ -1,6 +1,7 @@
 <?php
 
 use App\Modules\PrintNode\src\Models\Client;
+use App\User;
 use Illuminate\Database\Seeder;
 
 class PrintNodeClientSeeder extends Seeder
@@ -12,12 +13,14 @@ class PrintNodeClientSeeder extends Seeder
      */
     public function run()
     {
-       $test_printnode_key = env('TEST_PRINTNODE_KEY');
-
-       if ($test_printnode_key) {
+       if (env('TEST_PRINTNODE_KEY')) {
            $client = Client::firstOrNew();
-           $client->api_key = $test_printnode_key;
+           $client->api_key = env('TEST_PRINTNODE_KEY');
            $client->save();
+       }
+
+       if (env('TEST_PRINTNODE_PRINTER_ID')) {
+           User::query()->update(['printer_id' => env('TEST_PRINTNODE_PRINTER_ID')]);
        }
     }
 }

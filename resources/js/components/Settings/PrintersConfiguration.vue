@@ -35,6 +35,7 @@
                             <td>{{ printer.state }}</td>
                             <td>
                                 <button type="button" @click.prevent="printTestPage(printer)" class="btn btn-primary btn-sm">Print Test</button>
+                                <button type="button" @click.prevent="printEplTestPage(printer)" class="btn btn-primary btn-sm">Print EPL Test</button>
                                 <button type="button" @click.prevent="setUserPrinter(printer.id)" v-if="!isDefaultPrinter(printer.id)" class="btn btn-primary btn-sm">Use</button>
                             </td>
                         </tr>
@@ -85,6 +86,23 @@ export default {
             let data = {
                 'printer_id': printer.id,
                 'pdf_url': 'https://api.printnode.com/static/test/pdf/label_4in_x_6in.pdf'
+            };
+
+            this.apiPostPrintnodePrintJob(data)
+                .then(() => {
+                    this.$snotify.info('Test page sent to PrintNode');
+                })
+                .catch(e => {
+                    this.errorMessage = e.message;
+                    this.showError('Request failed: ' + e.message);
+                });
+        },
+
+        printEplTestPage(printer) {
+            let data = {
+                'printer_id': printer.id,
+                'content_type': 'raw_base64',
+                'base64raw_url': 'http://management.products.api.test/label_4in_x_6in.epl'
             };
 
             this.apiPostPrintnodePrintJob(data)

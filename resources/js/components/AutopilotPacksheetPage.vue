@@ -83,6 +83,7 @@
                 <button type="button" class="btn mb-1 btn-info" @click.prevent="printLabel('address_label')">Print Address Label</button>
                 <button type="button" class="btn mb-1 btn-info" @click.prevent="printLabel('dpd_label')">Print DPD Label</button>
                 <button type="button" class="btn mb-1 btn-info" @click.prevent="printLabel('an_post')">Print An Post Label</button>
+                <button type="button" class="btn mb-1 btn-info" @click.prevent="createShipment('dpd_uk')">Print DPD UK Label</button>
             </template>
         </filters-modal>
 
@@ -412,8 +413,6 @@
                                 return element;
                             }
                         }
-
-
                     }
 
                     return null;
@@ -446,10 +445,34 @@
                     return await this.printLabel(template);
                 },
 
+                createShipment: async function(carrier) {
+                    let shipment = {
+                        'order_id': this.order.id,
+                        'shipping_number': 'pending',
+                        'carrier': carrier,
+                        'service': 'overnight',
+                    };
+
+                    this.$refs.filtersModal.hide();
+
+                    return this.apiPostShipment(shipment)
+                        .catch((error) => {
+                            this.canClose = false;
+                            let errorMsg = 'Error: ' + error.response.data.message;
+
+                            this.notifyError(errorMsg, {
+                                closeOnClick: true,
+                                timeout: 0,
+                                buttons: [
+                                    {text: 'OK', action: null},
+                                ]
+                            });
+                        });
+                },
+
                 printLabel: async function(template) {
                     let orderNumber = this.order['order_number'];
 
-                    this.$refs.filtersModal.hide();
                     this.setFocusOnBarcodeInput();
 
                     return this.apiPrintLabel(orderNumber, template)
