@@ -17,6 +17,9 @@ class GenerateLabelDocumentJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    /**
+     * @var OrderShipment
+     */
     private OrderShipment $orderShipment;
 
     /**
@@ -54,8 +57,11 @@ class GenerateLabelDocumentJob implements ShouldQueue
         }
     }
 
-    private function getCollectionAddress()
+    /**
+     * @return OrderAddress
+     */
+    private function getCollectionAddress(): OrderAddress
     {
-        return new OrderAddress();
+        return OrderAddress::query()->create();
     }
 }
