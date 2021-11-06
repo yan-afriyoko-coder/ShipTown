@@ -36,12 +36,16 @@ class GenerateLabelDocumentJob implements ShouldQueue
      */
     public function handle()
     {
-        /** @var Connection $connection */
-        $connection = Connection::query()->firstOrCreate([], [
-            'username' => env('TEST_DPDUK_USERNAME'),
-            'password' => env('TEST_DPDUK_PASSWORD'),
-            'account_number' => env('TEST_DPDUK_ACCNUMBER'),
-        ]);
+        if (env('TEST_DPDUK_USERNAME')) {
+            /** @var Connection $connection */
+            $connection = Connection::query()->firstOrCreate([], [
+                'username' => env('TEST_DPDUK_USERNAME'),
+                'password' => env('TEST_DPDUK_PASSWORD'),
+                'account_number' => env('TEST_DPDUK_ACCNUMBER'),
+            ]);
+        } else {
+            $connection = Connection::first();
+        }
 
         if ($connection) {
             DpdUkService::printNewLabel($this->orderShipment, $connection);
