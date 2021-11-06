@@ -2,6 +2,7 @@
 
 namespace App\Modules\DpdUk\src\Jobs;
 
+use App\Models\OrderAddress;
 use App\Models\OrderShipment;
 use App\Modules\DpdUk\src\Models\Connection;
 use App\Modules\DpdUk\src\Services\DpdUkService;
@@ -42,6 +43,7 @@ class GenerateLabelDocumentJob implements ShouldQueue
                 'username' => env('TEST_DPDUK_USERNAME'),
                 'password' => env('TEST_DPDUK_PASSWORD'),
                 'account_number' => env('TEST_DPDUK_ACCNUMBER'),
+                'collection_address_id' => $this->getCollectionAddress()->getKey(),
             ]);
         } else {
             $connection = Connection::first();
@@ -50,5 +52,10 @@ class GenerateLabelDocumentJob implements ShouldQueue
         if ($connection) {
             DpdUkService::printNewLabel($this->orderShipment, $connection);
         }
+    }
+
+    private function getCollectionAddress()
+    {
+        return new OrderAddress();
     }
 }
