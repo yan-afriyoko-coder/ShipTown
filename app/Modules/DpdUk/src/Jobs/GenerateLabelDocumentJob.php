@@ -3,6 +3,9 @@
 namespace App\Modules\DpdUk\src\Jobs;
 
 use App\Models\OrderShipment;
+use App\Modules\DpdUk\src\Models\Connection;
+use App\Modules\DpdUk\src\Services\DpdUkService;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -29,9 +32,14 @@ class GenerateLabelDocumentJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws GuzzleException
      */
     public function handle()
     {
-        ray($this->orderShipment);
+        $connection = Connection::first();
+
+        if ($connection) {
+            DpdUkService::printNewLabel($this->orderShipment, $connection);
+        }
     }
 }
