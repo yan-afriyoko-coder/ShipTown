@@ -44,4 +44,15 @@ class GenerateLabelDocumentJobTest extends TestCase
 
         $this->assertNotNull(DpdUkService::printNewLabel($shipment, $connection));
     }
+
+    public function test_if_job_dispatches()
+    {
+        DpdUkServiceProvider::enableModule();
+
+        Bus::fake();
+
+        OrderShipmentCreatedEvent::dispatch(factory(OrderShipment::class)->create());
+
+        Bus::assertDispatched(GenerateLabelDocumentJob::class);
+    }
 }
