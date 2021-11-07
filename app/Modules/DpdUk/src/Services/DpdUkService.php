@@ -130,8 +130,6 @@ class DpdUkService
         $orderShipment->tracking_url = self::generateTrackingUrl($orderShipment);
         $orderShipment->save();
 
-        ray($shipmentResponse->content);
-
         if ($shipmentResponse->errors()) {
             $shipmentResponse->errors()->each(function ($error) {
                 throw new Exception(
