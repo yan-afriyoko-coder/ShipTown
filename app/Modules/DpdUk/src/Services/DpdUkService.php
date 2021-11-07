@@ -127,7 +127,7 @@ class DpdUkService
         $shipmentResponse = $dpd->createShipment($payload);
 
         $orderShipment->shipping_number = $shipmentResponse->getConsignmentNumber();
-        $orderShipment->tracking_url = 'https://track.dpd.co.uk/search?reference=' . $orderShipment->shipping_number;
+        $orderShipment->tracking_url = self::generateTrackingUrl($orderShipment);
         $orderShipment->save();
 
         ray($shipmentResponse->content);
@@ -142,5 +142,18 @@ class DpdUkService
         }
 
         return $dpd->getShipmentLabel($shipmentResponse->getShipmentId());
+    }
+
+    /**
+     * @param OrderShipment $orderShipment
+     * @return string
+     */
+    private static function generateTrackingUrl(OrderShipment $orderShipment): string
+    {
+        $baseUlr = 'https://track.dpd.co.uk/search';
+        $referenceParam = 'reference=' . $orderShipment->shipping_number;
+        $postcodeParam = 'postcode=' . $orderShipment->order->shippingAddress->postcode;
+
+        return $baseUlr .'?'. $referenceParam .'&'. $postcodeParam;
     }
 }
