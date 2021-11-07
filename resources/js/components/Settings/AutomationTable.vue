@@ -13,26 +13,19 @@
             </div>
 
             <div class="card-body">
-                <table v-if="automations.length > 0" class="table table-borderless table-responsive mb-0">
+                <table v-if="automations.length > 0" class="table table-borderless table-responsive table-hover mb-0">
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Priority</th>
-                            <th>Enable</th>
+                            <th></th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(automation, i) in automations" :key="i">
-                            <td>{{ automation.name }}</td>
+                        <tr v-for="(automation, i) in automations" :key="i" @click.prevent="showEditForm(automation)">
+                            <td> <status-icon :status="automation.enabled" class="small" /> {{ automation.name }}</td>
                             <td>{{ automation.priority }}</td>
-                            <td align="center">
-                                <status-icon :status="automation.enabled" />
-                            </td>
-                            <td>
-                                <a @click.prevent="showEditForm(automation)">
-                                    <font-awesome-icon icon="edit"></font-awesome-icon>
-                                </a>
+                            <td class="text-right">
                                 <a @click.prevent="confirmDelete(automation)">
                                     <font-awesome-icon icon="trash"></font-awesome-icon>
                                 </a>

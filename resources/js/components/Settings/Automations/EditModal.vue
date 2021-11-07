@@ -226,8 +226,9 @@ export default {
         selectedAutomation: function(newVal) {
             this.getAutomation(newVal.id)
         },
+
         "automation.event_class": function(newValue) {
-            if(newValue == ""){
+            if(newValue === ""){
                 this.automation.conditions.forEach(condition => {
                     condition.condition_class = ""
                 });
@@ -236,7 +237,25 @@ export default {
                     condition.action_class = ""
                 });
             }
-        }
+        },
+
+        confirmDelete(selectedAutomation) {
+          const indexAutomations = this.automation;
+          this.$snotify.confirm('After delete data cannot restored', 'Are you sure?', {
+            position: 'centerCenter',
+            buttons: [
+              {
+                text: 'Yes',
+                action: (toast) => {
+                  this.delete(selectedAutomation.id, indexAutomations)
+                  this.$snotify.remove(toast.id);
+                }
+              },
+              {text: 'Cancel'},
+            ]
+          });
+        },
+
     },
 
     data() {
