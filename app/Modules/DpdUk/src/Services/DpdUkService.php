@@ -41,7 +41,7 @@ class DpdUkService
                         ],
                         "address" => [
                             "organisation"  => $collectionAddress->company,
-                            "countryCode"   => $collectionAddress->country_code,
+                            "countryCode"   => self::replaceArray(['GBR' => "GB"], $collectionAddress->country_code),
                             "postcode"      => $collectionAddress->postcode,
                             "street"        => $collectionAddress->address1,
                             "locality"      => $collectionAddress->address2,
@@ -56,7 +56,7 @@ class DpdUkService
                         ],
                         "address" => [
                             "organisation"  => $shippingAddress->company,
-                            "countryCode"   => $shippingAddress->country_code,
+                            "countryCode"   => self::replaceArray(['GBR' => "GB"], $shippingAddress->country_code),
                             "postcode"      => $shippingAddress->postcode,
                             "street"        => $shippingAddress->address1,
                             "locality"      => $shippingAddress->address2,
@@ -82,6 +82,11 @@ class DpdUkService
                 ],
             ],
         ];
+    }
+
+    public static function replaceArray(array $replaceArray, string $subject)
+    {
+        return str_replace(array_keys($replaceArray), array_values($replaceArray), $subject);
     }
 
     /**
@@ -120,6 +125,12 @@ class DpdUkService
         $payload = self::generatePayload($orderShipment, $connection);
 
         $shipmentResponse = $dpd->createShipment($payload);
+
+        $orderShipment->shipping_number = $shipmentResponse->getConsignmentNumber();
+        $orderShipment->tracking_url = 'https://track.dpd.co.uk/search?reference=' . $orderShipment->shipping_number;
+        $orderShipment->save();
+
+        ray($shipmentResponse->content);
 
         if ($shipmentResponse->errors()) {
             $shipmentResponse->errors()->each(function ($error) {

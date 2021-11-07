@@ -59,9 +59,8 @@ class Client
     public function createShipment(array $payload): CreateShipmentResponse
     {
         $payload['consignment'][0]['networkCode'] = $this->getNetworkCode($payload);
-        $payload['consignment'][0]['deliveryDetails']['address']['countryCode'] = $this->replaceDeliveryAddressCountryCodes($payload);
 
-        return new CreateShipmentResponse(
+        $createShipmentResponse = new CreateShipmentResponse(
             $this->request('POST', 'shipping/shipment', [
                 'headers' => [
                     'GeoSession' => $this->getGeoSession()
@@ -69,6 +68,10 @@ class Client
                 'json' => $payload
             ])
         );
+
+        Log::debug('DPD UK create.shipment', ['payload' => $payload, 'response' => $createShipmentResponse->content]);
+
+        return $createShipmentResponse;
     }
 
     /**
@@ -140,12 +143,5 @@ class Client
         ]);
 
         return "1^12";
-    }
-
-    private function replaceDeliveryAddressCountryCodes(array $payload)
-    {
-        $countryCode = $payload['consignment'][0]['deliveryDetails']['address']['countryCode'];
-
-        return str_replace('GBR', 'GB', $countryCode);
     }
 }
