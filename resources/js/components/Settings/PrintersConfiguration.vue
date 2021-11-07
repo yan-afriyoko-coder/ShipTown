@@ -12,11 +12,8 @@
                 <table class="table table-borderless table-responsive mb-0">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Computer</th>
                             <th>Name</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th class="w-100 text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -26,17 +23,18 @@
                         <tr v-if="(!errorMessage && printers.length === 0)">
                             <td colspan="5">No printers found.</td>
                         </tr>
-                        <tr v-for="printer in printers" :key="printer.id" :class="{
-                            'table-primary': isDefaultPrinter(printer.id)
-                        }">
-                            <td>{{ printer.id }}</td>
-                            <td>{{ printer.computer.name }}</td>
-                            <td>{{ printer.name }}</td>
-                            <td>{{ printer.state }}</td>
+                        <tr v-for="printer in printers" :key="printer.id" :class="{'table-primary': isDefaultPrinter(printer.id)}">
                             <td>
-                                <button type="button" @click.prevent="printTestPage(printer)" class="btn btn-primary btn-sm">Print Test</button>
-                                <button type="button" @click.prevent="printEplTestPage(printer)" class="btn btn-primary btn-sm">Print EPL Test</button>
-                                <button type="button" @click.prevent="setUserPrinter(printer.id)" v-if="!isDefaultPrinter(printer.id)" class="btn btn-primary btn-sm">Use</button>
+                                {{ printer.name }} <br>
+                                <span class="small text-secondary">
+                                    {{ printer.computer.name }}<br>
+                                    <status-icon :status="printer.state === 'online'" class="small" /> {{ printer.id }}
+                                </span>
+                            </td>
+                            <td class="text-right">
+                                <button type="button" @click.prevent="printTestPage(printer)" class="btn btn-primary btn-sm mb-1">PDF Test</button>
+                                <button type="button" @click.prevent="printEplTestPage(printer)" class="btn btn-primary btn-sm mb-1">EPL Test</button>
+                                <button type="button" @click.prevent="setUserPrinter(printer.id)" v-if="!isDefaultPrinter(printer.id)" class="btn btn-primary btn-sm mb-1">Use</button>
                             </td>
                         </tr>
                     </tbody>
@@ -50,8 +48,13 @@
 import api from "../../mixins/api";
 import Vue from "vue";
 import helpers from "../../mixins/helpers";
+import StatusIcon from "./Automations/StatusIcon";
 
 export default {
+    components: {
+        'status-icon': StatusIcon
+    },
+
     mixins: [api, helpers],
 
     mounted() {
