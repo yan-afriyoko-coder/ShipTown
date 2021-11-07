@@ -6,6 +6,7 @@ use Barryvdh\LaravelIdeHelper\Eloquent;
 use Crypt;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use function Symfony\Component\Translation\t;
 
@@ -119,7 +120,17 @@ class OrderAddress extends Model
         return $this->first_name.' '.$this->last_name;
     }
 
-    public function order()
+    /**
+     * @param string $value
+     * @return void
+     */
+    protected function setFullNameAttribute(string $value): void
+    {
+        $this->first_name = explode(' ', $value)[0];
+        $this->last_name = explode(' ', $value)[1];
+    }
+
+    public function order(): HasOne
     {
         return $this->hasOne(Order::class);
     }
