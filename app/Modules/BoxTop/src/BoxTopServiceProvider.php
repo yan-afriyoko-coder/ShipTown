@@ -17,7 +17,7 @@ class BoxTopServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_description = 'Integrates with https://api.boxtrax.com/Help';
+    public static string $module_description = 'Seamless integration with https://api.boxtrax.com/Help';
 
     /**
      * @var bool
