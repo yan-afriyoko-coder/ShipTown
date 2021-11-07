@@ -10,11 +10,12 @@ class CreateShipmentResponse
     /**
      * @var ResponseInterface
      */
-    private ResponseInterface $response;
+    public ResponseInterface $response;
+
     /**
      * @var array
      */
-    private array $content;
+    public array $content;
 
     /**
      * @param ResponseInterface $response
@@ -33,5 +34,15 @@ class CreateShipmentResponse
     public function errors(): Collection
     {
         return collect($this->content['error']);
+    }
+
+    public function getConsignmentNumber()
+    {
+        return $this->content['data']['consignmentDetail'][0]['consignmentNumber'];
+    }
+
+    public function getConsignmentParcelNumber()
+    {
+        return $this->content['data']['consignmentDetail'][0]['parcelNumbers'][0]['parcelNumbers'];
     }
 }

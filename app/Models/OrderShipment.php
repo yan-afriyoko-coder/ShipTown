@@ -20,6 +20,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property string      $shipping_number
  * @property string      $carrier
  * @property string      $service
+ * @property string      $tracking_url
  * @property int|null    $user_id
  * @property string|null $base64_pdf_labels
  * @property Carbon|null $created_at

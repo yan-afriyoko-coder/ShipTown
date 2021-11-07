@@ -14,7 +14,9 @@ class ShipmentControllerNew
      */
     public function store(ShipmentStoreRequestNew $request): ShipmentResource
     {
-        $shipment = OrderShipment::create($request->validated());
+        $shipment = new OrderShipment($request->validated());
+        $shipment->user_id = $request->user()->getKey();
+        $shipment->save();
 
         return ShipmentResource::make($shipment);
     }
