@@ -59,7 +59,7 @@ class Client
     public function createShipment(array $payload): CreateShipmentResponse
     {
         $payload['consignment'][0]['networkCode'] = $this->getNetworkCode($payload);
-        $payload['consignment'][0]['deliveryAddress']['countryCode'] = $this->replaceDeliveryAddressCountryCodes($payload);
+        $payload['consignment'][0]['deliveryDetails']['address']['countryCode'] = $this->replaceDeliveryAddressCountryCodes($payload);
 
         return new CreateShipmentResponse(
             $this->request('POST', 'shipping/shipment', [
@@ -144,7 +144,7 @@ class Client
 
     private function replaceDeliveryAddressCountryCodes(array $payload)
     {
-        $countryCode = $payload['consignment'][0]['deliveryAddress']['countryCode'];
+        $countryCode = $payload['consignment'][0]['deliveryDetails']['address']['countryCode'];
 
         return str_replace('GBR', 'GB', $countryCode);
     }
