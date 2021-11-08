@@ -48,7 +48,7 @@ class BasicIntegrationTest extends TestCase
         $result = BoxTopService::postOrder($order, $randomProduct['Warehouse']);
 
         // well... it will be failing for the moment... so its... just ok....
-        $this->assertFalse($result);
+        $this->assertTrue($result);
     }
 
     /**

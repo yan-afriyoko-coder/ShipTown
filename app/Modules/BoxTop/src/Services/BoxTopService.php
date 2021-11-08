@@ -14,7 +14,7 @@ use GuzzleHttp\Exception\ClientException;
 class BoxTopService
 {
     /**
-     * @param Order $orderØ
+     * @param Order $order
      * @param string $warehouse
      * @return bool
      */
@@ -24,7 +24,7 @@ class BoxTopService
 
         try {
             $apiClient = new ApiClient();
-            return 200 === $apiClient->createWarehousePick($data)->http_response->getStatusCode();
+            return 201 === $apiClient->createWarehousePick($data)->http_response->getStatusCode();
         } catch (ClientException $exception) {
             ray($exception->getResponse()->getBody()->getContents());
         }
@@ -46,21 +46,21 @@ class BoxTopService
 
             return [
                 "Warehouse"     => $warehouse,
-                "SKUGroupID"    => "Bella Baby",
+                "SKUGroupID"    => null,
                 "SKUNumber"     => $orderProduct->sku_ordered,
                 "SKUName"       => $orderProduct->name_ordered,
                 "Quantity"      => 1,
                 "Add1"          => "",
                 "Add2"          => "",
                 "Add3"          => "",
-                "Add4"          => null,
-                "Add5"          => null,
-                "Add6"          => null,
+                "Add4"          => "",
+                "Add5"          => "",
+                "Add6"          => "",
                 "Comments"      => ""
             ];
         })->toArray();
 
-        return [[
+        return [
             "DeliveryCompanyName"   => $order->shippingAddress->company,
             "DeliveryAddress1"      => $order->shippingAddress->address1,
             "DeliveryAddress2"      => $order->shippingAddress->address2,
@@ -74,15 +74,15 @@ class BoxTopService
             "ReleaseDate"           => Carbon::today()->addDays(2),
             "DeliveryDate"          => Carbon::today()->addDays(2),
             "DeliveryTime"          => "",
-            "Haulier"               => null,
+            "Haulier"               => "",
             "PickItems"             => $pickItems,
-            "BranchID"              => $warehouse,
+            "BranchID"              => 513,
             "CustomerID"            => "BELLABAB",
             "NOP"                   => 1,
             "Weight"                => 1,
             "Cube"                  => 1,
             "CustRef"               => "WEB_". $order->order_number,
             "Remarks"               => ""
-        ]];
+        ];
     }
 }
