@@ -471,6 +471,10 @@
                 },
 
                 printLabel: async function(template) {
+                    if (template === 'dpd_uk') {
+                        return this.createShipment(template);
+                    }
+
                     let orderNumber = this.order['order_number'];
 
                     this.setFocusOnBarcodeInput();

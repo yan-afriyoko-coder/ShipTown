@@ -18,6 +18,7 @@
                                     <option value=""></option>
                                     <option value="address_label">address_label</option>
                                     <option value="dpd_label">dpd_label</option>
+                                    <option value="dpd_uk">dpd_uk_label</option>
                                 </select>
                             </td>
                         </tr>
@@ -40,9 +41,10 @@
 <script>
 import api from "../../mixins/api";
 import Vue from "vue";
+import helpers from "../../mixins/helpers";
 
 export default {
-    mixins: [api],
+    mixins: [api, helpers],
 
     mounted() {
         this.selected_address_label_template = Vue.prototype.$currentUser.address_label_template;
@@ -60,7 +62,7 @@ export default {
                     'address_label_template': this.selected_address_label_template
                 })
                 .catch(e => {
-                    this.showError('Request failed: ' + e.message);
+                    this.showException(e);
                 });
         },
 
