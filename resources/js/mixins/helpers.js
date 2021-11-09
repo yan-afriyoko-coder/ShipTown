@@ -45,6 +45,18 @@ export default {
 
         getValueOrDefault,
 
+        showException: function (exception, options) {
+            const defaultOptions = {
+                closeOnClick: true,
+                timeout: 0,
+                buttons: [
+                    {text: 'OK', action: null},
+                ]
+            };
+
+            this.$snotify.error(exception.response.data, options ?? defaultOptions);
+        },
+
         showError: function (message, options) {
             const defaultOptions = {
                 timeout: 5000

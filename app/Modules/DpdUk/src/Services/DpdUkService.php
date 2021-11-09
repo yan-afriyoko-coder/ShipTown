@@ -18,7 +18,7 @@ class DpdUkService
      * @param Connection $connection
      * @return array
      */
-    private static function generatePayload(OrderShipment $orderShipment, Connection $connection): array
+    private static function convertToDpdUkFormat(OrderShipment $orderShipment, Connection $connection): array
     {
         $collectionAddress = $connection->collectionAddress;
         $shippingAddress = $orderShipment->order->shippingAddress;
@@ -122,7 +122,7 @@ class DpdUkService
     {
         $dpd = new Client($connection);
 
-        $payload = self::generatePayload($orderShipment, $connection);
+        $payload = self::convertToDpdUkFormat($orderShipment, $connection);
 
         $shipmentResponse = $dpd->createShipment($payload);
 
