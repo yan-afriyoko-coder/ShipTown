@@ -36,4 +36,15 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    /**
+     * Action after user logged in.
+     *
+     * @return void
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        $user->generateTwoFactorCode();
+        $user->notify(new TwoFactorCode());
+    }
 }
