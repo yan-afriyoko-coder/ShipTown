@@ -40,8 +40,11 @@ class ApiClient
         $options['headers']['Accept'] = 'application/json';
         $options['query']['custaccnum'] = env('TEST_BOXTOP_CUSTACCNUM');
 
+
+        $finalUri = str_replace('{siteCode}', env('TEST_BOXTOP_SITE_CODE'), $uri);
+
         try {
-            $response = new ApiResponse($this->guzzleClient->request($method, $uri, $options));
+            $response = new ApiResponse($this->guzzleClient->request($method, $finalUri, $options));
         } catch (GuzzleException $guzzleException) {
             Log::error($guzzleException->getMessage(), [
                 $guzzleException->getCode()
@@ -52,7 +55,7 @@ class ApiClient
             'service' => 'BoxTop',
             'request' => [
                 'method' => $method,
-                'uri' => $uri,
+                'uri' => $finalUri,
                 'options' => $options
             ],
             'response' => [
@@ -69,14 +72,14 @@ class ApiClient
      */
     public function getAllProducts(): ApiResponse
     {
-        return $this->request('GET', 'api/513/Warehouse/getallproducts');
+        return $this->request('GET', 'api/{siteCode}/Warehouse/GetAllProducts');
     }
 
     /**
      */
     public function createWarehousePick(array $data): ApiResponse
     {
-        return $this->request('POST', 'api/513/Warehouse/CreateWarehousePick', [
+        return $this->request('POST', 'api/{siteCode}/Warehouse/CreateWarehousePick', [
             'query' => [
                 'fullResponse' => 'true'
             ],
@@ -90,7 +93,7 @@ class ApiClient
      */
     public function getSkuQuantity(string $sku): ApiResponse
     {
-        return $this->request('GET', 'api/513/Warehouse/GetSKUQuantity', [
+        return $this->request('GET', 'api/{siteCode}/Warehouse/GetSKUQuantity', [
             'query' => [
                 'skuNumber' => $sku
             ]
@@ -102,6 +105,6 @@ class ApiClient
      */
     public function getStockCheckByWarehouse(): ApiResponse
     {
-        return $this->request('GET', 'api/513/Warehouse/GetStockCheckByWarehouse', []);
+        return $this->request('GET', 'api/{siteCode}/Warehouse/GetStockCheckByWarehouse', []);
     }
 }
