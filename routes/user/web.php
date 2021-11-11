@@ -37,4 +37,4 @@ Route::get('csv/ready_order_shipments', 'Csv\ReadyOrderShipmentController@index'
 Route::get('csv/order_shipments', 'Csv\PartialOrderShipmentController@index')->name('partial_order_shipments_as_csv');
 Route::get('csv/products/picked', 'Csv\ProductsPickedInWarehouse@index')->name('warehouse_picks.csv');
 Route::get('csv/products/shipped', 'Csv\ProductsShippedFromWarehouseController@index')->name('warehouse_shipped.csv');
-Route::get('csv/boxtop/stock', 'Csv\BoxTopStockController@index')->name('warehouse_shipped.csv');
+Route::get('csv/boxtop/stock', 'Csv\BoxTopStockController@index')->name('boxtop-warehouse-stock.csv');
