@@ -4,6 +4,7 @@ namespace App\Modules\Automations\src\Actions;
 
 use App\Modules\Automations\src\BaseOrderAction;
 use App\Modules\BoxTop\src\Services\BoxTopService;
+use Exception;
 
 class PushToBoxTopOrderAction extends BaseOrderAction
 {
@@ -11,16 +12,20 @@ class PushToBoxTopOrderAction extends BaseOrderAction
     {
         parent::handle($options);
 
-        $response = BoxTopService::postOrder($this->order);
+        try {
+            $response = BoxTopService::postOrder($this->order);
 
-        if (201 === $response->http_response->getStatusCode()) {
-            $this->order->log('SureFreight pick created - '. $response->content);
+            if (201 === $response->http_response->getStatusCode()) {
+                $this->order->log('BoxTop pick created - '. $response->content);
 
-            $this->order->status_code = 'complete_twickenham';
-            $this->order->save();
-            return;
+                $this->order->status_code = 'complete_twickenham';
+                $this->order->save();
+                return;
+            }
+
+            $this->order->log('BoxTop pick FAILED - '. $response->content);
+        } catch (Exception $exception) {
+            $this->order->log('BoxTop pick FAILED - '. $exception->getMessage());
         }
-
-        $this->order->log('SureFreight pick FAILED - '. $response->content);
     }
 }
