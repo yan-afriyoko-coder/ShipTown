@@ -5,7 +5,14 @@ namespace App\Modules\BoxTop\src\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property string SKUGroup
+ * @property string SKUNumber
+ * @property string SKUName
  * @property string Warehouse
+ * @property array Attributes
+ * @property string WarehouseQuantity
+ * @property string AllocatedAllocated
+ * @property string Available
  *
  */
 class WarehouseStock extends Model

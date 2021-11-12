@@ -41,7 +41,7 @@ class ApiClient
         $options['query']['custaccnum'] = env('TEST_BOXTOP_CUSTACCNUM');
 
 
-        $finalUri = str_replace('{siteCode}', env('TEST_BOXTOP_SITE_CODE'), $uri);
+        $finalUri = str_replace('{siteCode}', env('TEST_BOXTOP_SITE_CODE', '000'), $uri);
 
         try {
             $response = new ApiResponse($this->guzzleClient->request($method, $finalUri, $options));
@@ -53,15 +53,15 @@ class ApiClient
 
         Log::debug('API REQUEST', [
             'service' => 'BoxTop',
+            'response' => [
+                'status_code' => $response->http_response->getStatusCode(),
+                'message' => Str::substr($response->content, 0, 1024)
+            ],
             'request' => [
                 'method' => $method,
                 'uri' => $finalUri,
                 'options' => $options
             ],
-            'response' => [
-                'status_code' => $response->http_response->getStatusCode(),
-                'message' => Str::substr($response->content, 0, 1024)
-            ]
         ]);
 
         return $response;
