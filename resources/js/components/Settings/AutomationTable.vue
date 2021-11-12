@@ -4,7 +4,7 @@
             <div class="card-header">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span>
-                        Automations
+                        Order Automations
                     </span>
                     <button type="button" class="action-link btn btn-sm btn-light" @click="showCreateForm()">
                         Add New
