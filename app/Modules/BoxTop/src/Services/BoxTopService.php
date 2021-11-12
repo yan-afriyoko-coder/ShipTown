@@ -71,7 +71,7 @@ class BoxTopService
                 "Warehouse"     => $warehouseStock->Warehouse,
                 "SKUGroupID"    => null,
                 "SKUNumber"     => $warehouseStock->SKUNumber,
-                "SKUName"       => $orderProduct->name_ordered,
+                "SKUName"       => $warehouseStock->SKUName,
                 "Quantity"      => $orderProduct->quantity_ordered,
                 "Add1"          => "",
                 "Add2"          => "",
