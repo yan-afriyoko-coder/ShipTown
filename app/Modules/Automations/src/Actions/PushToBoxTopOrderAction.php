@@ -14,9 +14,10 @@ class PushToBoxTopOrderAction extends BaseOrderAction
         $response = BoxTopService::postOrder($this->order);
 
         if (201 === $response->http_response->getStatusCode()) {
+            $this->order->log('SureFreight pick created - '. $response->content);
+
             $this->order->status_code = 'complete_twickenham';
             $this->order->save();
-            $this->order->log('SureFreight pick created - '. $response->content);
             return;
         }
 
