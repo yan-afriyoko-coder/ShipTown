@@ -5,6 +5,7 @@ namespace App\Modules\BoxTop\src\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property string SKUNumber
  * @property string Warehouse
  *
  */

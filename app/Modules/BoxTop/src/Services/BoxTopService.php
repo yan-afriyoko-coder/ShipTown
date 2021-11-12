@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Modules\BoxTop\src\Api\ApiClient;
 use App\Modules\BoxTop\src\Api\ApiResponse;
+use App\Modules\BoxTop\src\Exceptions\ProductOutOfStockException;
 use App\Modules\BoxTop\src\Models\WarehouseStock;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\ClientException;
@@ -21,6 +22,8 @@ class BoxTopService
      */
     public static function postOrder(Order $order): ApiResponse
     {
+        self::refreshBoxTopWarehouseStock();
+
         $data = self::convertToBoxTopFormat($order);
 
         try {
@@ -49,16 +52,25 @@ class BoxTopService
             $apiClient = new ApiClient();
             $apiClient->getSkuQuantity($orderProduct->sku_ordered);
 
+            $possibleSkus = [];
+            $possibleSkus += [$orderProduct->sku_ordered];
+            $possibleSkus += [$orderProduct->product->sku];
+            $possibleSkus += $orderProduct->product->aliases()->get(['alias'])->toArray();
+
             /** @var WarehouseStock $warehouseStock */
             $warehouseStock = WarehouseStock::query()
-                ->where(['SKUNumber' => $orderProduct->sku_ordered])
-                ->where('Available', '>', '0')
+                ->whereIn('SKUNumber', $possibleSkus)
+                ->where('Available', '>', $orderProduct->quantity_ordered)
                 ->first();
 
+            if ($warehouseStock === null) {
+                throw new ProductOutOfStockException('Insufficient quantity available: '.$orderProduct->sku_ordered);
+            }
+
             return [
-                "Warehouse"     => $warehouseStock ? $warehouseStock->Warehouse : null,
+                "Warehouse"     => $warehouseStock->Warehouse,
                 "SKUGroupID"    => null,
-                "SKUNumber"     => $orderProduct->sku_ordered,
+                "SKUNumber"     => $warehouseStock->SKUNumber,
                 "SKUName"       => $orderProduct->name_ordered,
                 "Quantity"      => $orderProduct->quantity_ordered,
                 "Add1"          => "",
@@ -95,5 +107,19 @@ class BoxTopService
             "CustRef"               => "WEB_". $order->order_number,
             "Remarks"               => ""
         ];
+    }
+
+    public static function refreshBoxTopWarehouseStock()
+    {
+        $response = BoxTopService::apiClient()->getStockCheckByWarehouse();
+        $stockRecords = collect($response->toArray());
+
+        $stockRecords = $stockRecords->map(function ($record) {
+            $record['Attributes'] = json_encode($record['Attributes']);
+            return $record;
+        });
+
+        WarehouseStock::query()->delete();
+        WarehouseStock::query()->insert($stockRecords->toArray());
     }
 }
