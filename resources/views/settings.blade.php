@@ -48,8 +48,8 @@
                         <font-awesome-icon icon="magic" class="fas-sm"></font-awesome-icon>
                     </div>
                     <div class="setting-body">
-                        <div class="setting-title">Automations</div>
-                        <div class="setting-desc">Automate order workflows</div>
+                        <div class="setting-title">Order Automations</div>
+                        <div class="setting-desc">Automate Order Workflows</div>
                     </div>
                 </a>
 
