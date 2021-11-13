@@ -4,7 +4,6 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-
 require('./bootstrap');
 
 require('./registerServiceWorker');
@@ -14,7 +13,39 @@ import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import { BootstrapVue } from 'bootstrap-vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCog, faQuestionCircle, faUsers, faUserEdit, faBarcode, faUserMinus, faShareAlt, faChevronDown, faChevronUp, faExternalLinkAlt, faPrint, faCode, faTruck, faShoppingCart, faKey, faDesktop, faClipboardList, faPuzzlePiece, faBoxOpen, faEdit, faMinus, faCheckCircle, faTimesCircle, faEnvelopeOpenText, faListUl, faTrash, faMagic, faWarehouse, faArchive } from '@fortawesome/free-solid-svg-icons';
+import {
+    faCog,
+    faQuestionCircle,
+    faUsers,
+    faUserEdit,
+    faBarcode,
+    faUserMinus,
+    faShareAlt,
+    faChevronDown,
+    faChevronUp,
+    faExternalLinkAlt,
+    faPrint,
+    faCode,
+    faTruck,
+    faShoppingCart,
+    faKey,
+    faDesktop,
+    faClipboardList,
+    faPuzzlePiece,
+    faBoxOpen,
+    faEdit,
+    faMinus,
+    faCheckCircle,
+    faTimesCircle,
+    faEnvelopeOpenText,
+    faListUl,
+    faTrash,
+    faMagic,
+    faWarehouse,
+    faArchive,
+    faCopy,
+} from '@fortawesome/free-solid-svg-icons';
+
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VueTippy, { TippyComponent } from "vue-tippy";
 import Snotify from 'vue-snotify';
@@ -47,8 +78,10 @@ library.add(faEnvelopeOpenText);
 library.add(faListUl);
 library.add(faTrash);
 library.add(faMagic);
-library.add(faWarehouse)
-library.add(faArchive)
+library.add(faWarehouse);
+library.add(faArchive);
+library.add(faCopy);
+
 Vue.config.productionTip = false;
 
 Vue.use(VueCountdownTimer);

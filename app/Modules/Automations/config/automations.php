@@ -87,10 +87,6 @@ return [
             'description' => 'On Order Check Event',
             'conditions' => [
                 [
-                    'class' => \App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition::class,
-                    'description' => 'Order Shipping Method Code equals',
-                ],
-                [
                     'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition::class,
                     'description' => 'Order Status Code equals',
                 ],
@@ -105,6 +101,10 @@ return [
                 [
                     'class' => \App\Modules\Automations\src\Conditions\Order\CanNotFulfillFromLocationCondition::class,
                     'description' => 'Can NOT Fulfill from location (0 for all)',
+                ],
+                [
+                    'class' => \App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition::class,
+                    'description' => 'Order Shipping Method Code equals',
                 ],
                 [
                     'class' => \App\Modules\Automations\src\Conditions\Order\LineCountEqualsCondition::class,
@@ -143,6 +143,10 @@ return [
                 [
                     'class' => \App\Modules\Automations\src\Actions\Order\ShipRemainingProductsAction::class,
                     'description' => 'Mark remaining products as shipped',
+                ],
+                [
+                    'class' => \App\Modules\Automations\src\Actions\PushToBoxTopOrderAction::class,
+                    'description' => 'Create Warehouse Shipment in BoxTop Software',
                 ],
             ]
         ],
