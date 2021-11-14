@@ -14,10 +14,10 @@
               <div class="col p-2 pl-2 rounded">
                 <div class="row">
 
-                    <div class="col-5 col-md-4 col-lg-3">
+                    <div class="col-5 col-md-4 col-lg-3 align-text-top">
                         <h5 class="text-primary">
-                            <font-awesome-icon icon="copy" class="" role="button" @click="copyToClipBoard(order['order_number'])"></font-awesome-icon>
-                            <a :href="'/orders/?search=' + order['order_number']">#{{ order['order_number'] }}</a>
+                            <font-awesome-icon icon="copy" class="fa-xs" role="button" @click="copyToClipBoard(order['order_number'])"></font-awesome-icon>
+                            <a :href="'/orders/?search=' + order['order_number']">{{ order['order_number'] }}</a>
                             <a @click="kickOrder" class="text-white">o</a>
                         </h5>
                         <div class="small"> <b> {{ order['status_code'] }} </b> </div>
@@ -292,17 +292,6 @@
         },
 
         methods: {
-            copyToClipBoard(textToCopy){
-                const tmpTextField = document.createElement("textarea")
-                tmpTextField.textContent = textToCopy
-                tmpTextField.setAttribute("style","position:absolute; right:200%;")
-                document.body.appendChild(tmpTextField)
-                tmpTextField.select()
-                tmpTextField.setSelectionRange(0, 99999) /*For mobile devices*/
-                document.execCommand("copy")
-                tmpTextField.remove()
-            },
-
             kickOrder: function () {
                 this.apiPostOrderCheckRequest({'order_id': this.order['id']});
             },
