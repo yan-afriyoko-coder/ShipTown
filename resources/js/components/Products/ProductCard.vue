@@ -5,8 +5,13 @@
             <div class="col p-2 pl-3">
                 <div class="row text-left">
                     <div class="col-md-6">
-                        <div class="text-primary h5">{{ product.name }} <a @click="kickProduct" class="text-white">o</a></div>
-                        <div>sku: <b> <a :href="'/products?search=' + product['sku']">{{ product['sku'] }}</a></b></div>
+                        <div class="text-primary h5">
+                            {{ product.name }} <a @click="kickProduct" class="text-white">o</a>
+                        </div>
+                        <div>
+                            sku:
+                            <font-awesome-icon icon="copy" class="fa-xs btn-link" role="button" @click="copyToClipBoard(product['sku'])"></font-awesome-icon>
+                            <b> <a :href="'/products?search=' + product['sku']">{{ product['sku'] }}</a></b></div>
                         <div>
                             <template v-for="tag in product.tags">
                                 <a class="badge text-uppercase" :key="tag.id" :href="'products?has_tags=' + Object.values(tag.name)[0]"> {{ Object.values(tag.name)[0] }} </a>
@@ -198,11 +203,12 @@
 
 <script>
     import api from "../../mixins/api";
+    import helpers from "../../mixins/helpers";
 
     export default {
         name: "ProductCard",
 
-        mixins: [api],
+        mixins: [api, helpers],
 
         props: {
             product: Object,
