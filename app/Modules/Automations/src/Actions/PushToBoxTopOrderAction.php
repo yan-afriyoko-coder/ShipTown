@@ -41,8 +41,10 @@ class PushToBoxTopOrderAction extends BaseOrderAction
                 return;
             }
 
+            $shipment->delete();
             $this->order->log('BoxTop pick FAILED - '. $response->content);
         } catch (Exception $exception) {
+            $shipment->delete();
             $this->order->log('BoxTop pick FAILED - '. $exception->getMessage());
         }
     }
