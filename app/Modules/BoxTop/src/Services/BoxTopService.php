@@ -11,6 +11,7 @@ use App\Modules\BoxTop\src\Exceptions\ProductOutOfStockException;
 use App\Modules\BoxTop\src\Models\WarehouseStock;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\ClientException;
+use Log;
 use function Aws\map;
 
 /**
@@ -54,13 +55,20 @@ class BoxTopService
             $apiClient = new ApiClient();
             $apiClient->getSkuQuantity($orderProduct->sku_ordered);
 
-            $possibleSkus = [$orderProduct->sku_ordered];
-            $possibleSkus += [$orderProduct->product->sku];
-            $possibleSkus += $orderProduct->product->aliases()
+
+            $aliases = $orderProduct->product->aliases()
                 ->get('alias')
                 ->map(function (ProductAlias $alias) {
                     return $alias->alias;
                 })->toArray();
+
+            Log::debug('$aliases', $aliases);
+
+            $possibleSkus = [$orderProduct->sku_ordered];
+            $possibleSkus += [$orderProduct->product->sku];
+            $possibleSkus += $aliases;
+
+            Log::debug('possibleSkus', $possibleSkus);
 
             /** @var WarehouseStock $warehouseStock */
             $warehouseStock = WarehouseStock::query()
