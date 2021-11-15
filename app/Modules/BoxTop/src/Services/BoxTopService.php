@@ -4,12 +4,14 @@ namespace App\Modules\BoxTop\src\Services;
 
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\ProductAlias;
 use App\Modules\BoxTop\src\Api\ApiClient;
 use App\Modules\BoxTop\src\Api\ApiResponse;
 use App\Modules\BoxTop\src\Exceptions\ProductOutOfStockException;
 use App\Modules\BoxTop\src\Models\WarehouseStock;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\ClientException;
+use function Aws\map;
 
 /**
  *
@@ -52,15 +54,18 @@ class BoxTopService
             $apiClient = new ApiClient();
             $apiClient->getSkuQuantity($orderProduct->sku_ordered);
 
-            $possibleSkus = [];
-            $possibleSkus += [$orderProduct->sku_ordered];
+            $possibleSkus = [$orderProduct->sku_ordered];
             $possibleSkus += [$orderProduct->product->sku];
-            $possibleSkus += $orderProduct->product->aliases()->get(['alias'])->toArray();
+            $possibleSkus += $orderProduct->product->aliases()
+                ->get('alias')
+                ->map(function (ProductAlias $alias) {
+                    return $alias->alias;
+                })->toArray();
 
             /** @var WarehouseStock $warehouseStock */
             $warehouseStock = WarehouseStock::query()
                 ->whereIn('SKUNumber', $possibleSkus)
-                ->where('Available', '>', $orderProduct->quantity_ordered)
+                ->where('Available', '>=', $orderProduct->quantity_ordered)
                 ->first();
 
             if ($warehouseStock === null) {
