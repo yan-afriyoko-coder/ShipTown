@@ -64,9 +64,7 @@ class BoxTopService
 
             Log::debug('$aliases', $aliases);
 
-            $possibleSkus = [$orderProduct->sku_ordered];
-            $possibleSkus += [$orderProduct->product->sku];
-            $possibleSkus += $aliases;
+            $possibleSkus = array_merge([$orderProduct->sku_ordered, $orderProduct->product->sku], $aliases);
 
             Log::debug('possibleSkus', $possibleSkus);
 
