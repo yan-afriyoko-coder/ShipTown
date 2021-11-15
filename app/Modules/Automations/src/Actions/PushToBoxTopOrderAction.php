@@ -36,7 +36,7 @@ class PushToBoxTopOrderAction extends BaseOrderAction
 
                 $this->order->log('BoxTop pick created - '. $response->content);
 
-                $this->order->status_code = 'complete_twickenham';
+                $this->order->status_code = 'packing_surefreight_pick_created';
                 $this->order->save();
                 return;
             }
