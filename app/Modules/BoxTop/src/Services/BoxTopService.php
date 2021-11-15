@@ -95,7 +95,7 @@ class BoxTopService
             "DeliveryContact"       => $order->shippingAddress->full_name . ' ' .$order->shippingAddress->email,
             "OutboundRef"           => "WEB_". $order->order_number,
             "ReleaseDate"           => Carbon::today(),
-            "DeliveryDate"          => Carbon::today(),
+            "DeliveryDate"          => "",
             "DeliveryTime"          => "",
             "Haulier"               => "",
             "PickItems"             => $pickItems,
