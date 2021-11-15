@@ -43,12 +43,13 @@ class BasicIntegrationTest extends TestCase
             'order_id' => $order->getKey(),
             'sku_ordered' => $randomProduct['SKUNumber'],
             'name_ordered' => $randomProduct['SKUName'],
+            'quantity_ordered' => 1,
         ]);
 
         $result = BoxTopService::postOrder($order, $randomProduct['Warehouse']);
 
         // well... it will be failing for the moment... so its... just ok....
-        $this->assertTrue($result);
+        $this->assertTrue($result->http_response->getStatusCode() == 201);
     }
 
     /**
