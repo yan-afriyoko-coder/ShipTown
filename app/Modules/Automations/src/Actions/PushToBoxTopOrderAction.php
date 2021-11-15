@@ -13,6 +13,8 @@ class PushToBoxTopOrderAction extends BaseOrderAction
     {
         parent::handle($options);
 
+        $newStatusCode = $options;
+
         try {
             $shipment = OrderShipment::whereOrderId($this->order->getKey())->first();
 
@@ -36,7 +38,7 @@ class PushToBoxTopOrderAction extends BaseOrderAction
 
                 $this->order->log('BoxTop pick created - '. $response->content);
 
-                $this->order->status_code = 'packing_surefreight_pick_created';
+                $this->order->status_code = $newStatusCode;
                 $this->order->save();
                 return;
             }
