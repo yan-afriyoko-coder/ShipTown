@@ -23,7 +23,8 @@ class PushToBoxTopOrderAction extends BaseOrderAction
 
             /** @var OrderShipment $shipment */
             $shipment = OrderShipment::create([
-                'order_id' => $this->order->getKey()
+                'order_id' => $this->order->getKey(),
+                'shipping_number' => '',
             ]);
 
             $response = BoxTopService::postOrder($this->order);
