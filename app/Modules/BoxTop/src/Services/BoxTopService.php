@@ -62,8 +62,6 @@ class BoxTopService
                     return $alias->alias;
                 })->toArray();
 
-            dd($possibleSkus);
-
             /** @var WarehouseStock $warehouseStock */
             $warehouseStock = WarehouseStock::query()
                 ->whereIn('SKUNumber', $possibleSkus)
