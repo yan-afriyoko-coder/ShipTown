@@ -95,7 +95,8 @@ class BoxTopService
             ];
         })->toArray();
 
-        $contactName = Str::substr($order->shippingAddress->full_name . ' ' . $order->shippingAddress->email, 0, 50);
+        $contactName = Str::substr($order->shippingAddress->full_name . ' ' . $order->shippingAddress->email, 0, 49);
+
         return [
             "DeliveryCompanyName"   => $order->shippingAddress->company,
             "DeliveryAddress1"      => $order->shippingAddress->address1,
