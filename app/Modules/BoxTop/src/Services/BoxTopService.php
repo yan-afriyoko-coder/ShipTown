@@ -11,6 +11,7 @@ use App\Modules\BoxTop\src\Exceptions\ProductOutOfStockException;
 use App\Modules\BoxTop\src\Models\WarehouseStock;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\ClientException;
+use Illuminate\Support\Str;
 use Log;
 use function Aws\map;
 
@@ -94,6 +95,7 @@ class BoxTopService
             ];
         })->toArray();
 
+        $contactName = Str::substr($order->shippingAddress->full_name . ' ' . $order->shippingAddress->email, 0, 50);
         return [
             "DeliveryCompanyName"   => $order->shippingAddress->company,
             "DeliveryAddress1"      => $order->shippingAddress->address1,
@@ -103,7 +105,7 @@ class BoxTopService
             "DeliveryPostCode"      => $order->shippingAddress->postcode,
             "DeliveryCountry"       => $order->shippingAddress->country_code,
             "DeliveryPhone"         => $order->shippingAddress->phone,
-            "DeliveryContact"       => $order->shippingAddress->full_name . ' ' .$order->shippingAddress->email,
+            "DeliveryContact"       => $contactName,
             "OutboundRef"           => "WEB_". $order->order_number,
             "ReleaseDate"           => Carbon::today(),
             "DeliveryDate"          => "",
