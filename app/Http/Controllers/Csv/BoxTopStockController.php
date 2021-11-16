@@ -39,12 +39,15 @@ LEFT JOIN products
 ORDER BY SKU_RMS, SKUName ASC
 ");
 
-        dd($query);
+//        dd($query);
         $vars = collect($query)->map(function ($record) {
+            dd($record);
             $record['Attributes'] = json_encode($record['Attributes']);
             return $record;
         });
-//
+
+        dd($vars->toArray());
+
 //        WarehouseStock::query()->delete();
 //        WarehouseStock::query()->insert($vars->toArray());
 //
