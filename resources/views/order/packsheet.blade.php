@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('Packlist'))
+@section('title', __('Packsheet'))
 
 @section('content')
     <div class="container">
