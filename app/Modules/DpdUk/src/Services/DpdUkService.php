@@ -3,9 +3,9 @@
 namespace App\Modules\DpdUk\src\Services;
 
 use App\Models\OrderShipment;
-use App\Modules\DpdUk\src\Api\Client;
+use App\Modules\DpdUk\src\Api\ApiClient;
 use App\Modules\DpdUk\src\Models\Connection;
-use App\Modules\DpdUk\src\Models\GetShippingLabelResponse;
+use App\Modules\DpdUk\src\Api\GetShippingLabelResponse;
 use App\Modules\PrintNode\src\PrintNode;
 use Carbon\Carbon;
 use Exception;
@@ -99,11 +99,9 @@ class DpdUkService
     {
         $labelResponse = self::makeNewLabel($connection, $orderShipment);
 
-        ray(base64_encode($labelResponse->getContent()));
-
         if (isset(auth()->user()->printer_id)) {
             return PrintNode::printRaw(
-                base64_encode($labelResponse->getContent()),
+                base64_encode($labelResponse->response->content),
                 auth()->user()->printer_id
             );
         }
@@ -120,11 +118,12 @@ class DpdUkService
      */
     private static function makeNewLabel(Connection $connection, OrderShipment $orderShipment): GetShippingLabelResponse
     {
-        $dpd = new Client($connection);
+        $dpd = new ApiClient($connection);
 
         $payload = self::convertToDpdUkFormat($orderShipment, $connection);
 
         $shipmentResponse = $dpd->createShipment($payload);
+
 
         $orderShipment->shipping_number = $shipmentResponse->getConsignmentNumber();
         $orderShipment->tracking_url = self::generateTrackingUrl($orderShipment);
