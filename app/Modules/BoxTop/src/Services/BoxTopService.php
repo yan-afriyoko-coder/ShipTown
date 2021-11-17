@@ -107,7 +107,7 @@ class BoxTopService
             "DeliveryCountry"       => $order->shippingAddress->country_code,
             "DeliveryPhone"         => $order->shippingAddress->phone,
             "DeliveryContact"       => $contactName,
-            "OutboundRef"           => "WEB_". $order->order_number,
+            "OutboundRef"           => $order->order_number,
             "ReleaseDate"           => Carbon::today(),
             "DeliveryDate"          => "",
             "DeliveryTime"          => "",
@@ -118,7 +118,7 @@ class BoxTopService
             "NOP"                   => 1,
             "Weight"                => 1,
             "Cube"                  => 1,
-            "CustRef"               => "WEB_". $order->order_number,
+            "CustRef"               => $order->order_number,
             "Remarks"               => ""
         ];
     }
