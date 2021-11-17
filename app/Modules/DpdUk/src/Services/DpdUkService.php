@@ -124,7 +124,6 @@ class DpdUkService
 
         $shipmentResponse = $dpd->createShipment($payload);
 
-
         $orderShipment->shipping_number = $shipmentResponse->getConsignmentNumber();
         $orderShipment->tracking_url = self::generateTrackingUrl($orderShipment);
         $orderShipment->save();
