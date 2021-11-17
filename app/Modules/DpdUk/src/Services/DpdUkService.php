@@ -71,7 +71,7 @@ class DpdUkService
                     "networkCode" => "1^12",
                     "numberOfParcels" => 1,
                     "totalWeight" => 10,
-                    "shippingRef1" => "TEST_#" . $orderShipment->order->order_number,
+                    "shippingRef1" => "#" . $orderShipment->order->order_number,
                     "shippingRef2" => "",
                     "shippingRef3" => "",
                     "customsValue" => null,
