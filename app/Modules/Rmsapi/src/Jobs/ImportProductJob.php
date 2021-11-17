@@ -142,6 +142,8 @@ class ImportProductJob implements ShouldQueue
     {
         if ($importedProduct->raw_import['is_web_item']) {
             $product->attachTag('Available Online');
+        } else {
+            $product->detachTag('Available Online');
         }
     }
 }
