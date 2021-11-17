@@ -15,6 +15,10 @@ class SendShipmentConfirmationMailListener
             return;
         }
 
+        if ($event->orderShipment->shipping_number === 'pending') {
+            return;
+        }
+
         $template = new ShipmentConfirmationMail([
             'order' => $event->orderShipment->order->toArray(),
             'shipments' => $event->orderShipment->order->orderShipments->toArray(),
