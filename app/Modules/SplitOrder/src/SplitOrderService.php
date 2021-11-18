@@ -67,6 +67,7 @@ class SplitOrderService
                     'order_id',
                     'quantity_ordered',
                     'quantity_split',
+                    'quantity_to_ship',
                     'quantity_picked',
                     'quantity_skipped_picking',
                 ]);

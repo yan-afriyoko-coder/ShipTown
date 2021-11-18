@@ -116,7 +116,7 @@ class OrderProduct extends BaseModel
         'quantity_ordered'        => 'float',
         'quantity_split'          => 'float',
         'quantity_shipped'        => 'float',
-        'quantity_to_ship'        => 'float',
+//        'quantity_to_ship'        => 'float',
         'quantity_to_pick'        => 'float',
         'quantity_picked'         => 'float',
         'quantity_skipped_picking'=> 'float',
@@ -125,7 +125,7 @@ class OrderProduct extends BaseModel
     ];
 
     protected $appends = [
-        'quantity_to_ship'
+//        'quantity_to_ship'
     ];
 
     /**
