@@ -42,38 +42,42 @@ class SplitOrderService
     }
 
     /**
-     * @return Order|null
+     * @return void
      */
-    private function extractFulfillableProducts(): ?Order
+    private function extractFulfillableProducts(): void
     {
         $this->originalOrder->orderProducts
             ->filter(function (OrderProduct $orderProductOriginal) {
                 return $orderProductOriginal->quantity_to_ship > 0;
             })
-            ->each(function (OrderProduct $orderProductOriginal) use (&$orderProductsToExtract) {
+            ->each(function (OrderProduct $original) use (&$orderProductsToExtract) {
                 /** @var Inventory $inventory */
-                $inventory = $orderProductOriginal->product->inventory()
+                $inventory = $original->product->inventory()
                     ->where(['warehouse_id' => $this->warehouse->getKey()])
                     ->first();
 
-                $quantityToExtract = min($inventory->quantity_available, $orderProductOriginal->quantity_to_ship);
+                $quantityToExtract = min($inventory->quantity_available, $original->quantity_to_ship);
 
                 if ($quantityToExtract <= 0.00) {
-                    return true; // return true to continue loop
+                    // return true to continue Eloquent each loop
+                    return true;
                 }
 
+                $new = $original->replicate([
+                    'order_id',
+                    'quantity_ordered',
+                    'quantity_split',
+                    'quantity_picked',
+                    'quantity_skipped_picking',
+                ]);
+                $new->order()->associate($this->getOrderOrCreate());
+                $new->save();
+
+                $original->increment('quantity_split', $quantityToExtract);
+                $new->increment('quantity_ordered', $quantityToExtract);
                 $inventory->increment('quantity_reserved', $quantityToExtract);
 
-                $orderProductNew = $orderProductOriginal->replicate();
-                $orderProductNew->order_id = $this->getOrderOrCreate()->getKey();
-                $orderProductNew->quantity_ordered = $quantityToExtract;
-                $orderProductNew->quantity_split = 0;
-                $orderProductNew->quantity_picked = 0;
-                $orderProductNew->quantity_skipped_picking = 0;
-                $orderProductNew->save();
-
-                $orderProductOriginal->increment('quantity_split', $quantityToExtract);
-
+                // return true to continue Eloquent each loop
                 return true;
             });
 
@@ -83,10 +87,7 @@ class SplitOrderService
 
             $this->newOrder->is_editing = false;
             $this->newOrder->save();
-            return $this->newOrder;
         }
-
-        return null;
     }
 
     /**
