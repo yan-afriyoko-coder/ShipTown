@@ -73,9 +73,19 @@ class SplitOrderService
                 $new->order()->associate($this->getOrderOrCreate());
                 $new->save();
 
-                $original->increment('quantity_split', $quantityToExtract);
-                $new->increment('quantity_ordered', $quantityToExtract);
-                $inventory->increment('quantity_reserved', $quantityToExtract);
+
+                $recordsUpdatedCount = OrderProduct::query()
+                    ->whereId($original->getKey())
+                    ->whereUpdatedAt($original->updated_at)
+                    ->update([
+                        'quantity_split' => $original->quantity_split + $quantityToExtract,
+                        'updated_at' => now(),
+                    ]);
+
+                if ($recordsUpdatedCount === 1) {
+                    $new->increment('quantity_ordered', $quantityToExtract);
+                    $inventory->increment('quantity_reserved', $quantityToExtract);
+                }
 
                 // return true to continue Eloquent each loop
                 return true;
