@@ -22,6 +22,7 @@ use Spatie\Activitylog\Models\Activity;
  * @property int|null    $warehouse_id
  * @property int|null    $order_id
  * @property int|null    $order_product_id
+ * @property string      $sku_shipped
  * @property float       $quantity_shipped
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -44,8 +45,9 @@ class OrderProductShipment extends BaseModel
         'warehouse_id',
         'order_id',
         'order_product_id',
-        'quantity_shipped',
         'order_shipment_id',
+        'sku_shipped',
+        'quantity_shipped',
     ];
 
     protected $casts = [

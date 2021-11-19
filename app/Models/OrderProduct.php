@@ -116,12 +116,16 @@ class OrderProduct extends BaseModel
         'quantity_ordered'        => 'float',
         'quantity_split'          => 'float',
         'quantity_shipped'        => 'float',
-        'quantity_to_ship'        => 'float',
+//        'quantity_to_ship'        => 'float',
         'quantity_to_pick'        => 'float',
         'quantity_picked'         => 'float',
         'quantity_skipped_picking'=> 'float',
         'quantity_not_picked'     => 'float',
         'inventory_source_quantity' => 'float',
+    ];
+
+    protected $appends = [
+//        'quantity_to_ship'
     ];
 
     /**
@@ -131,7 +135,6 @@ class OrderProduct extends BaseModel
      */
     public function save(array $options = []): bool
     {
-        $this->quantity_to_ship = $this->quantity_ordered - $this->quantity_split - $this->quantity_shipped;
         $this->quantity_to_pick = $this->quantity_ordered - $this->quantity_split - $this->quantity_picked - $this->quantity_skipped_picking;
 
         return parent::save($options);
