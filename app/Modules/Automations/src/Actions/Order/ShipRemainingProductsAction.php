@@ -41,6 +41,7 @@ class ShipRemainingProductsAction
         $order->orderProducts()->each(function (OrderProduct $orderProduct) {
 
             $orderProductShipment = new OrderProductShipment();
+            $orderProductShipment->order_id = $orderProduct->order_id;
             $orderProductShipment->product_id = $orderProduct->product_id;
             $orderProductShipment->order_product_id = $orderProduct->getKey();
             $orderProductShipment->quantity_shipped = $orderProduct->quantity_to_ship;
