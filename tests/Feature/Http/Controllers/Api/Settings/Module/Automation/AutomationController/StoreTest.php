@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Api\Settings\Module\Automation\AutomationController;
 
+use App\Events\Order\ActiveOrderCheckEvent;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -22,7 +23,7 @@ class StoreTest extends TestCase
     {
         $data = [
             'name' => 'Test Automation',
-            'event_class' => 'App\Events\Order\OrderCreatedEvent',
+            'event_class' => ActiveOrderCheckEvent::class,
             'enabled' => true,
             'description' => 'Some description',
             'priority' => 1,
@@ -45,6 +46,7 @@ class StoreTest extends TestCase
             ]
         ];
         $response = $this->post(route('api.settings.module.automations.store'), $data);
+
         $response->assertStatus(201);
         $response->assertJsonStructure([
             'data' => [

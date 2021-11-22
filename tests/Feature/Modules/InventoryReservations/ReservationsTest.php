@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Modules\InventoryReservations;
 
+use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,7 +14,10 @@ class ReservationsTest extends TestCase
 
     public function test_if_reserves_correctly()
     {
+        /** @var Order $product */
         $product = factory(Product::class)->create();
+
+        /** @var OrderProduct $orderProduct */
         $orderProduct = factory(OrderProduct::class)->create(['product_id' => $product->getKey()]);
 
         $this->assertEquals(
@@ -21,7 +25,7 @@ class ReservationsTest extends TestCase
             $orderProduct->product->inventory()->where(['location_id' => 999])->first()->quantity_reserved
         );
 
-        $orderProduct->quantity_to_ship = 0;
+        $orderProduct->quantity_ordered = 0;
         $orderProduct->save();
 
         $this->assertEquals(

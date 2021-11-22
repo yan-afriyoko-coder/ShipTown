@@ -3,6 +3,7 @@
 namespace Tests\Feature\Modules\StockControl;
 
 use App\Models\Inventory;
+use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\OrderProductShipment;
 use App\Models\Product;
@@ -24,12 +25,16 @@ class DecreaseQuantityTest extends TestCase
         /** @var Product $product */
         $product = factory(Product::class)->create();
 
+        /** @var Order $order */
+        $order = factory(Order::class)->create();
+
         /** @var OrderProduct $orderProduct */
         $orderProduct = factory(OrderProduct::class)->create();
 
         StockControlServiceProvider::enableModule();
 
         $orderProductShipment = new OrderProductShipment();
+        $orderProductShipment->order_id = $order->getKey();
         $orderProductShipment->quantity_shipped = $orderProduct->quantity_to_ship;
         $orderProductShipment->product()->associate($product);
         $orderProductShipment->warehouse()->associate($warehouse);
