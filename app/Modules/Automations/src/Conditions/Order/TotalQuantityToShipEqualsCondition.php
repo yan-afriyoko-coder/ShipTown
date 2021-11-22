@@ -31,18 +31,18 @@ class TotalQuantityToShipEqualsCondition
         if (! is_numeric($condition_value)) {
             $result = false;
         } else {
-            $numericValue = floatval($condition_value);
+            $conditionFloatValue = floatval($condition_value);
 
-            $totalQuantityToShip = $this->event->order->orderProducts()->sum('quantity_to_ship');
+            $totalQuantityToShip = floatval($this->event->order->orderProducts()->sum('quantity_to_ship'));
 
-            $result = $totalQuantityToShip === $numericValue;
+            $result = $totalQuantityToShip === $conditionFloatValue;
         }
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
             'result' => $result,
             'class' => class_basename(self::class),
-            'expected' => $numericValue ?? '',
+            'expected' => $conditionFloatValue ?? '',
             'actual' => $totalQuantityToShip ?? '',
         ]);
 
