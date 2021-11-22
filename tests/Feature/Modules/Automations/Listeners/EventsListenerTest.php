@@ -7,7 +7,7 @@ use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Models\Order;
 use App\Modules\Automations\src\AutomationsServiceProvider;
-use App\Modules\Automations\src\Listeners\EventsListener;
+use App\Modules\Automations\src\Listeners\ActiveOrderCheckEventListener;
 use App\Modules\Automations\src\Services\AutomationService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery;
@@ -29,8 +29,8 @@ class EventsListenerTest extends TestCase
         AutomationsServiceProvider::enableModule();
 
 
-        $this->listener = Mockery::mock(EventsListener::class);
-        app()->instance(EventsListener::class, $this->listener);
+        $this->listener = Mockery::mock(ActiveOrderCheckEventListener::class);
+        app()->instance(ActiveOrderCheckEventListener::class, $this->listener);
     }
 
     /**

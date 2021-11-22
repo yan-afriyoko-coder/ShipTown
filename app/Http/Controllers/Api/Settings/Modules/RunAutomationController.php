@@ -30,7 +30,7 @@ class RunAutomationController extends Controller
             ->each(function (Order $order) use ($automation) {
                 $event = new ActiveOrderCheckEvent($order);
 
-                AutomationService::runAutomation($automation, $event);
+                AutomationService::validateAndRunAutomation($automation, $event);
             });
 
         return JsonResource::make([

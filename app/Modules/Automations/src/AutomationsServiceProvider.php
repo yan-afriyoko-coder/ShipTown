@@ -27,7 +27,7 @@ class AutomationsServiceProvider extends BaseModuleServiceProvider
      */
     protected $listen = [
         ActiveOrderCheckEvent::class => [
-            Listeners\EventsListener::class
+            Listeners\ActiveOrderCheckEventListener::class
         ],
     ];
 
