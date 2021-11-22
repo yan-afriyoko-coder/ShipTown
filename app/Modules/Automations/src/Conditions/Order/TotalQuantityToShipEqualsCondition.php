@@ -43,7 +43,7 @@ class TotalQuantityToShipEqualsCondition
             'result' => $result,
             'class' => class_basename(self::class),
             'expected' => $numericValue ?? '',
-            'actual' => $this->event->order->total_quantity_to_ship,
+            'actual' => $totalQuantityToShip ?? '',
         ]);
 
         return $result;
