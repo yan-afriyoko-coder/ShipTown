@@ -2,13 +2,20 @@
 
 namespace App\Modules\Automations\src\Services;
 
+use App\Events\Order\ActiveOrderCheckEvent;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use Log;
 
+/**
+ *
+ */
 class AutomationService
 {
-    public static function runAllAutomations($event)
+    /**
+     * @param ActiveOrderCheckEvent $event
+     */
+    public static function runAllAutomations(ActiveOrderCheckEvent $event)
     {
         Automation::where('event_class', get_class($event))
             ->where(['enabled' => true])
@@ -19,7 +26,11 @@ class AutomationService
             });
     }
 
-    public static function validateAndRunAutomation(Automation $automation, $event)
+    /**
+     * @param Automation $automation
+     * @param ActiveOrderCheckEvent $event
+     */
+    public static function validateAndRunAutomation(Automation $automation, ActiveOrderCheckEvent $event)
     {
         $allConditionsPassed = $automation->allConditionsTrue($event);
 
@@ -39,7 +50,11 @@ class AutomationService
         ]);
     }
 
-    private static function runAction(Action $action, $event): void
+    /**
+     * @param Action $action
+     * @param ActiveOrderCheckEvent $event
+     */
+    private static function runAction(Action $action, ActiveOrderCheckEvent $event): void
     {
         $runAction = new $action->action_class($event);
 

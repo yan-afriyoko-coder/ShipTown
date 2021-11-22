@@ -3,9 +3,11 @@
 namespace App\Modules\Automations\src\Models;
 
 use App\BaseModel;
+use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ *
  * @property integer priority
  * @property boolean enabled
  * @property string name
@@ -13,7 +15,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property mixed conditions
  * @property mixed actions
  *
- * @method static where(string $string, string $get_class)
  */
 class Automation extends BaseModel
 {

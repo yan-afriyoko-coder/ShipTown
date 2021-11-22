@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -10,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static create(array $array)
  * @method static firstOrCreate(array $array, array $array)
  * @method static findOrFail($id)
+ *
+ * @mixin Eloquent
  */
 abstract class BaseModel extends Model
 {
