@@ -85,8 +85,8 @@ class FetchUpdatedProductsJob implements ShouldQueue
 
         Heartbeat::query()->updateOrCreate([
             'code' => 'models_rmsapi_successful_fetch_warehouseId_'.$this->rmsapiConnection->location_id,
-            'error_message' => 'RMSAPI not synced for last hour (Warehouse ID: ' . $this->rmsapiConnection->location_id . ')',
         ], [
+            'error_message' => 'RMSAPI not synced for last hour WarehouseID: '.$this->rmsapiConnection->location_id,
             'expired_at' => now()->addHour()
         ]);
 

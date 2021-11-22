@@ -26,8 +26,8 @@ class HeartbeatJob implements ShouldQueue
     {
         Heartbeat::query()->updateOrCreate([
             'code' => 'heartbeat_job',
-            'error_message' => 'Job heartbeat missed, please contact support'
         ], [
+            'error_message' => 'Job heartbeat missed, please contact support',
             'expired_at' => now()->addHour()
         ]);
 
