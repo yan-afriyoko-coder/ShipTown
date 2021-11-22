@@ -26,7 +26,7 @@ class FetchUpdatedProductsJob implements ShouldQueue
     /**
      * @var RmsapiConnection
      */
-    private $rmsapiConnection;
+    private RmsapiConnection $rmsapiConnection;
 
     /**
      * @var string
@@ -84,8 +84,8 @@ class FetchUpdatedProductsJob implements ShouldQueue
         }
 
         Heartbeat::query()->updateOrCreate([
-            'code' => "models_rmsapi_successful_fetch_warehouseId_$this->rmsapiConnection",
-            'Error message' => "Successful RMSAPI not synced for last hour (Warehouse ID: $this->rmsapiConnection)",
+            'code' => 'models_rmsapi_successful_fetch_warehouseId_'.$this->rmsapiConnection->location_id,
+            'error_message' => 'RMSAPI not synced for last hour (Warehouse ID: ' . $this->rmsapiConnection->location_id . ')',
         ], [
             'expired_at' => now()->addHour()
         ]);
