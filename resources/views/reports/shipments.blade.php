@@ -34,7 +34,7 @@
                                 <td class="pr-2">{{  \Carbon\Carbon::parse($shipment['created_at'])->format('M d, H:i') }}</td>
                                 <td class="pr-4">
                                     <a href="{{ route('reports.shipments', ['filter[user_id]' => $shipment['user_id']], true) }}">
-                                        {{ $shipment['user']['name'] }}
+                                        {{ data_get($shipment,'user.name', 'AutoPilot') }}
                                     </a>
                                 </td>
                                 <td class="pr-4">
