@@ -2,9 +2,8 @@
 
 namespace App\Modules\Automations\src\Services;
 
-use App\Modules\Automations\src\Models\Automation;
-use App\Modules\Automations\src\Models\Condition;
 use App\Modules\Automations\src\Models\Action;
+use App\Modules\Automations\src\Models\Automation;
 use Log;
 
 class AutomationService
@@ -16,32 +15,28 @@ class AutomationService
             ->orderBy('priority')
             ->get()
             ->each(function (Automation $automation) use ($event) {
-                AutomationService::runAutomation($automation, $event);
+                AutomationService::validateAndRunAutomation($automation, $event);
             });
     }
 
-    public static function runAutomation(Automation $automation, $event)
+    public static function validateAndRunAutomation(Automation $automation, $event)
     {
-        // check all conditions
-        $allConditionsTrue = $automation->allConditionsTrue($event);
+        $allConditionsPassed = $automation->allConditionsTrue($event);
+
+        if ($allConditionsPassed === true) {
+            $automation->actions()
+                ->orderBy('priority')
+                ->get()
+                ->each(function (Action $action) use ($event) {
+                    AutomationService::runAction($action, $event);
+                });
+        }
 
         Log::debug('Ran automation', [
             'class' => class_basename($automation),
             'name' => $automation->name,
-            'conditions_passed' => $allConditionsTrue
+            'all_conditions_passed' => $allConditionsPassed
         ]);
-
-        if ($allConditionsTrue === false) {
-            return;
-        }
-
-        // run all actions
-        $automation->actions()
-            ->orderBy('priority')
-            ->get()
-            ->each(function (Action $action) use ($event) {
-                AutomationService::runAction($action, $event);
-            });
     }
 
     private static function runAction(Action $action, $event): void
