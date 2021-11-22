@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string event_class
  * @property mixed conditions
  * @property mixed actions
+ *
+ * @method static where(string $string, string $get_class)
  */
 class Automation extends BaseModel
 {
