@@ -21,10 +21,12 @@ class IndexTest extends TestCase
     /** @test */
     public function test_index_call_returns_ok()
     {
-        Heartbeat::updateOrCreate(
-            ['code' => 'somealert'],
+        // add expired heartbeatgc
+        Heartbeat::updateOrCreate([
+                'code' => 'somealert'
+            ],
             [
-                'expired_at' => now()->addMinutes(5),
+                'expired_at' => now()->subMinutes(10),
                 'error_message' => 'Some error message'
             ]
         );
