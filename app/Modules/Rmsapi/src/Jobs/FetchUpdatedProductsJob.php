@@ -2,6 +2,7 @@
 
 namespace App\Modules\Rmsapi\src\Jobs;
 
+use App\Models\Heartbeat;
 use App\Models\RmsapiConnection;
 use App\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Api\Client as RmsapiClient;
@@ -81,6 +82,13 @@ class FetchUpdatedProductsJob implements ShouldQueue
                 FetchUpdatedProductsJob::dispatch($this->rmsapiConnection->getKey());
             }
         }
+
+        Heartbeat::query()->updateOrCreate([
+            'code' => "models_rmsapi_successful_fetch_warehouseId_$this->rmsapiConnection",
+            'Error message' => "Successful RMSAPI not synced for last hour (Warehouse ID: $this->rmsapiConnection)",
+        ], [
+            'expired_at' => now()->addHour()
+        ]);
 
         info('Imported RMSAPI products', [
             'location_id' => $this->rmsapiConnection->location_id,

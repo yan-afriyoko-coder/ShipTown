@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Api\Order\OrderProductShipmentController;
 
+use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\OrderProductShipment;
 use App\User;
@@ -22,10 +23,14 @@ class StoreTest extends TestCase
     /** @test */
     public function test_store_call_returns_ok()
     {
+        /** @var Order $order */
+        $order = factory(Order::class)->create();
+
         /** @var OrderProduct $orderProduct */
-        $orderProduct = factory(OrderProduct::class)->create();
+        $orderProduct = factory(OrderProduct::class)->create(['order_id' => $order->getKey()]);
 
         $response = $this->postJson('/api/orders/products/shipments', [
+            'order_id'         => $orderProduct->order_id,
             'order_product_id' => $orderProduct->getKey(),
             'quantity_shipped' => $orderProduct->quantity_to_ship,
         ]);
