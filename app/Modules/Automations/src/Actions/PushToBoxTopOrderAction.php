@@ -4,6 +4,7 @@ namespace App\Modules\Automations\src\Actions;
 
 use App\Models\OrderShipment;
 use App\Modules\Automations\src\BaseOrderAction;
+use App\Modules\BoxTop\src\Models\OrderLock;
 use App\Modules\BoxTop\src\Services\BoxTopService;
 use Exception;
 
@@ -16,6 +17,9 @@ class PushToBoxTopOrderAction extends BaseOrderAction
         $newStatusCode = $options;
 
         try {
+            // we create this record to make sure that multiple shipments are not created at the same time
+            $lock = OrderLock::create(['order_id' => $this->order->getKey()]);
+
             $shipment = OrderShipment::whereOrderId($this->order->getKey())->first();
 
             if ($shipment) {
@@ -44,9 +48,15 @@ class PushToBoxTopOrderAction extends BaseOrderAction
             }
 
             $shipment->delete();
+            $lock->delete();
             $this->order->log('BoxTop pick FAILED - '. $response->content);
         } catch (Exception $exception) {
-            $shipment->delete();
+            if (isset($lock)) {
+                $lock->forceDelete();
+            }
+            if (isset($shipment)) {
+                $shipment->forceDelete();
+            }
             $this->order->log('BoxTop pick FAILED - '. $exception->getMessage());
         }
     }
