@@ -19,9 +19,10 @@ class AutomationService
      */
     public static function runAllAutomations(ActiveOrderCheckEvent $event)
     {
+        // this will prevent two automation processes running on same order
         try {
-            // this will prevent two automation processes running on same order
-            OrderLock::where('created_at', '<', now()->subMinutes(10));
+            OrderLock::where('created_at', '<', now()->subMinutes(10))
+                ->forceDelete();
 
             /** @var OrderLock $lock */
             $lock = OrderLock::create(['order_id' => $event->order->getKey()]);
@@ -38,9 +39,7 @@ class AutomationService
                 AutomationService::validateAndRunAutomation($automation, $event);
             });
 
-        if ($lock) {
-            $lock->forceDelete();
-        }
+        $lock->forceDelete();
     }
 
     /**
