@@ -5,6 +5,8 @@ namespace App\Modules\Automations\src\Services;
 use App\Events\Order\ActiveOrderCheckEvent;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
+use App\Modules\Automations\src\Models\OrderLock;
+use Exception;
 use Log;
 
 /**
@@ -17,6 +19,17 @@ class AutomationService
      */
     public static function runAllAutomations(ActiveOrderCheckEvent $event)
     {
+        try {
+            // this will prevent two automation processes running on same order
+            OrderLock::where('created_at', '<', now()->subMinutes(10));
+
+            /** @var OrderLock $lock */
+            $lock = OrderLock::create(['order_id' => $event->order->getKey()]);
+        } catch (Exception $exception) {
+            // early exit, cannot lock order, automation is already running for it
+            return;
+        }
+
         Automation::where('event_class', get_class($event))
             ->where(['enabled' => true])
             ->orderBy('priority')
@@ -24,6 +37,10 @@ class AutomationService
             ->each(function (Automation $automation) use ($event) {
                 AutomationService::validateAndRunAutomation($automation, $event);
             });
+
+        if ($lock) {
+            $lock->forceDelete();
+        }
     }
 
     /**
