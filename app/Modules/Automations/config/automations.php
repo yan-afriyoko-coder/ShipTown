@@ -35,6 +35,10 @@ return [
                     'description' => 'Total Quantity To Ship',
                 ],
                 [
+                    'class' => \App\Modules\Automations\src\Conditions\Order\IsPartiallyPaidCondition::class,
+                    'description' => 'Is Partially Paid',
+                ],
+                [
                     'class' => \App\Modules\Automations\src\Conditions\Order\IsFullyPaidCondition::class,
                     'description' => 'Is Fully Paid',
                 ],
