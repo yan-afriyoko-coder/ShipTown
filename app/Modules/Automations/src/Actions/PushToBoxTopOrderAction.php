@@ -18,7 +18,12 @@ class PushToBoxTopOrderAction extends BaseOrderAction
 
         try {
             // we create this record to make sure that multiple shipments are not created at the same time
-            $lock = OrderLock::create(['order_id' => $this->order->getKey()]);
+            try {
+                $lock = OrderLock::create(['order_id' => $this->order->getKey()]);
+            } catch (\Exception $exception) {
+                // cannot lock it so another action is already running
+                return;
+            }
 
             $shipment = OrderShipment::whereOrderId($this->order->getKey())->first();
 
