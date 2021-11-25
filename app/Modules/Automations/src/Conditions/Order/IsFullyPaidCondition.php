@@ -28,13 +28,14 @@ class IsFullyPaidCondition
      */
     public function isValid(bool $condition_value): bool
     {
-        $result = $this->event->order->isPaid >= $condition_value;
+        $result = $this->event->order->isPaid === $condition_value;
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
             'result' => $result,
             'class' => class_basename(self::class),
-            'isPaid' => $this->event->order->isPaid,
+            'expected_isPaid' => $condition_value,
+            'actual_isPaid' => $this->event->order->isPaid,
         ]);
 
         return $result;
