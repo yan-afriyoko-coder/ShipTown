@@ -10,7 +10,7 @@ use Exception;
 
 class PushToBoxTopOrderAction extends BaseOrderAction
 {
-    public function handle($options)
+    public function handle($options = '')
     {
         parent::handle($options);
 
