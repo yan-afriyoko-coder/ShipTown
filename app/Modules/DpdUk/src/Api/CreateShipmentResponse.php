@@ -43,7 +43,7 @@ class CreateShipmentResponse
      */
     public function getConsignmentNumber()
     {
-        return $this->apiResponse->toArray()['data']['consignmentDetail'][0]['consignmentNumber'];
+        return data_get($this->apiResponse->toArray(), 'data.consignmentDetail.0.consignmentNumber');
     }
 
     /**
