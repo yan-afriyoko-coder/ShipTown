@@ -126,9 +126,11 @@ class DpdUkService
 
         $orderShipment->shipping_number = $shipmentResponse->getConsignmentNumber();
         $orderShipment->tracking_url = self::generateTrackingUrl($orderShipment);
-        $orderShipment->save();
 
-        if ($shipmentResponse->errors()) {
+        if ($orderShipment->shipping_number) {
+            $orderShipment->save();
+            return $dpd->getShipmentLabel($shipmentResponse->getShipmentId());
+        } elseif ($shipmentResponse->errors()) {
             $shipmentResponse->errors()->each(function ($error) {
                 throw new Exception(
                     $error['obj'] . ': ' . $error['errorMessage'],

@@ -20,7 +20,8 @@ class DpdUkTestConnectionSeeder extends Seeder
             DpdUkServiceProvider::enableModule();
 
             $testAddress = $this->createTestOrder();
-            $testAddress = $this->createOrderWithWrongPostCode();
+            $this->createOrderWithWrongPostCode();
+            $this->createOrderWithTooLongStreetAddress();
 
             /** @var Connection $connection */
             $connection = factory(Connection::class)->make();
@@ -58,9 +59,36 @@ class DpdUkTestConnectionSeeder extends Seeder
     }
 
     /**
-     * @return OrderAddress
+     * @return void
      */
-    private function createOrderWithWrongPostCode(): OrderAddress
+    private function createOrderWithTooLongStreetAddress(): void
+    {
+        /** @var OrderAddress $testAddress */
+        $testAddress = factory(OrderAddress::class)->make();
+        $testAddress->first_name = 'My';
+        $testAddress->last_name = 'Contact';
+        $testAddress->phone = '0121 500 2500';
+        $testAddress->company = "DPD Group Ltd";
+        $testAddress->country_code = "GB";
+        $testAddress->postcode = "B66 1BY";
+        $testAddress->address1 = "Roebuck Lane blue black red 1b";
+        $testAddress->address2 = "Smethwick";
+        $testAddress->city = "Birmingham";
+        $testAddress->state_code = "West Midlands";
+        $testAddress->save();
+
+        /** @var Order $order */
+        $order = factory(Order::class)->make();
+        $order->order_number .= '-DPDUK-ADDRESS1-TOO-LONG';
+        $order->shippingAddress()->associate($testAddress);
+        $order->save();
+        factory(OrderProduct::class, 3)->create(['order_id' => $order->getKey()]);
+    }
+
+    /**
+     * @return void
+     */
+    private function createOrderWithWrongPostCode(): void
     {
         /** @var OrderAddress $testAddress */
         $testAddress = factory(OrderAddress::class)->make();
@@ -82,6 +110,5 @@ class DpdUkTestConnectionSeeder extends Seeder
         $order->shippingAddress()->associate($testAddress);
         $order->save();
         factory(OrderProduct::class, 3)->create(['order_id' => $order->getKey()]);
-        return $testAddress;
     }
 }
