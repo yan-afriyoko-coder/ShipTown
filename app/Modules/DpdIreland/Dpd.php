@@ -11,6 +11,7 @@ use App\Modules\DpdIreland\src\Exceptions\PreAdviceRequestException;
 use App\Modules\DpdIreland\src\Responses\PreAdvice;
 use App\User;
 use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -51,16 +52,15 @@ class Dpd
     /**
      * @param Consignment $consignment
      *
-     * @throws PreAdviceRequestException
-     * @throws AuthorizationException
-     *
      * @return PreAdvice
+     *
+     * @throws PreAdviceRequestException|GuzzleException|AuthorizationException
      */
     public static function getPreAdvice(Consignment $consignment): PreAdvice
     {
         $response = Client::postXml($consignment->toXml());
 
-        $preAdvice = new PreAdvice($response->getBody()->getContents());
+        $preAdvice = new PreAdvice($response);
 
         if ($preAdvice->isNotSuccess()) {
             Log::error('DPD PreAdvice request failed', [

@@ -6,7 +6,9 @@ use App\Modules\DpdIreland\src\Exceptions\AuthorizationException;
 use App\Modules\DpdIreland\src\Models\DpdIreland;
 use Carbon\Carbon;
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Cache;
+use Log;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -49,9 +51,10 @@ class Client
     /**
      * @param string $xml
      *
-     * @return ResponseInterface
+     * @return string
+     * @throws GuzzleException
      */
-    public static function postXml(string $xml): ResponseInterface
+    public static function postXml(string $xml): string
     {
         $options = [
             'headers' => [
@@ -62,7 +65,16 @@ class Client
             'body' => $xml,
         ];
 
-        return self::getGuzzleClient()->post(self::COMMON_API_PREADVICE, $options);
+        $response = self::getGuzzleClient()->post(self::COMMON_API_PREADVICE, $options);
+        $response_content = $response->getBody()->getContents();
+
+        Log::debug('API REQUEST', [
+            'service' => 'DPD-IRL',
+            'response' => $response_content,
+            'request' => $options
+        ]);
+
+        return $response_content;
     }
 
     /**
