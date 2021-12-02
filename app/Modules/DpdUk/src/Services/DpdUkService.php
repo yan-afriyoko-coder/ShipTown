@@ -7,6 +7,7 @@ use App\Modules\DpdUk\src\Api\ApiClient;
 use App\Modules\DpdUk\src\Models\Connection;
 use App\Modules\DpdUk\src\Api\GetShippingLabelResponse;
 use App\Modules\PrintNode\src\PrintNode;
+use App\User;
 use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
@@ -20,7 +21,19 @@ class DpdUkService
      */
     private static function convertToDpdUkFormat(OrderShipment $orderShipment, Connection $connection): array
     {
-        $collectionAddress = $connection->collectionAddress;
+        try {
+            /** @var User $user */
+            $user = auth()->user();
+
+            if ($user && isset($user->warehouse->address)) {
+                $collectionAddress = $user->warehouse->address;
+            } else {
+                $collectionAddress = $connection->collectionAddress;
+            }
+        } catch (Exception $exception) {
+            $collectionAddress = $connection->collectionAddress;
+        }
+
         $shippingAddress = $orderShipment->order->shippingAddress;
 
         return [

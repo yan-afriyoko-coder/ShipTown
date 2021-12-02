@@ -5,17 +5,21 @@ namespace App\Models;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Warehouse.
  *
- * @property int         $id
- * @property string      $code
- * @property string      $name
- * @property string|null $deleted_at
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property int                $id
+ * @property string             $code
+ * @property string             $name
+ * @property int|null           $address_id
+ * @property string|null        $deleted_at
+ * @property Carbon|null        $created_at
+ * @property Carbon|null        $updated_at
+ *
+ * @property OrderAddress|null  $address
  *
  * @method static Builder|Warehouse newModelQuery()
  * @method static Builder|Warehouse newQuery()
@@ -33,5 +37,14 @@ class Warehouse extends Model
     protected $fillable = [
         'code',
         'name',
+        'address_id',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function address(): BelongsTo
+    {
+        return $this->belongsTo(OrderAddress::class);
+    }
 }
