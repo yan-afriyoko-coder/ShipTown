@@ -2,8 +2,10 @@
 
 namespace App;
 
+use App\Models\Warehouse;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -32,7 +34,8 @@ use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
  * @property int         $location_id
  * @property Carbon|null $email_verified_at
  * @property string      $password
- * @property int|null    $warehouse_id
+ * @property int|null       $warehouse_id
+ * @property Warehouse|null $warehouse
  * @property string|null $remember_token
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
@@ -123,5 +126,13 @@ class User extends Authenticatable
             ])
             ->allowedSorts([
             ]);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function warehouse(): BelongsTo
+    {
+        return $this->belongsTo(Warehouse::class);
     }
 }
