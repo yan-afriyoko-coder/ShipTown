@@ -2,6 +2,7 @@
 
 namespace App\Modules\Automations\src\Actions;
 
+use App\Models\Order;
 use App\Models\OrderShipment;
 use App\Modules\Automations\src\BaseOrderAction;
 use App\Modules\BoxTop\src\Models\OrderLock;
@@ -19,6 +20,8 @@ class PushToBoxTopOrderAction extends BaseOrderAction
         try {
             // we create this record to make sure that multiple shipments are not created at the same time
             try {
+                OrderLock::where('created_at', '<', now()->subMinutes(5))->forceDelete();
+
                 $lock = OrderLock::create(['order_id' => $this->order->getKey()]);
             } catch (\Exception $exception) {
                 // cannot lock it so another action is already running
