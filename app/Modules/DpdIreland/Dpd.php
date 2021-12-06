@@ -3,7 +3,7 @@
 namespace App\Modules\DpdIreland;
 
 use App\Models\Order;
-use App\Models\OrderAddress;
+use App\Models\OrderShipment;
 use App\Modules\DpdIreland\src\Client;
 use App\Modules\DpdIreland\src\Consignment;
 use App\Modules\DpdIreland\src\Exceptions\AuthorizationException;
@@ -23,15 +23,16 @@ class Dpd
     const NOT_AUTH = 'NOT_AUTH';
 
     /**
-     * @param Order     $order
+     * @param Order $order
      * @param User|null $user
      *
-     * @throws PreAdviceRequestException
+     * @return PreAdvice
      * @throws src\Exceptions\ConsignmentValidationException
      * @throws Exception
      * @throws AuthorizationException
+     * @throws GuzzleException
      *
-     * @return PreAdvice
+     * @throws PreAdviceRequestException|GuzzleException
      */
     public static function shipOrder(Order $order, User $user = null): PreAdvice
     {
@@ -39,11 +40,12 @@ class Dpd
 
         $preAdvice = self::getPreAdvice($consignment);
 
-        self::saveOrderShipment($order, $preAdvice, $user);
+        $shipment = self::saveOrderShipment($order, $preAdvice, $user);
 
         logger('DPD PreAdvice generated', [
             'consignment' => $consignment->toArray(),
             'preAdvice'   => $preAdvice->toArray(),
+            'shipment'   => $shipment->toArray(),
         ]);
 
         return $preAdvice;
@@ -62,42 +64,21 @@ class Dpd
 
         $preAdvice = new PreAdvice($response);
 
-        if ($preAdvice->isNotSuccess()) {
-            Log::error('DPD PreAdvice request failed', [
-                'xml_received' => $preAdvice->toString(),
-                'xml_sent'     => $consignment->toString(),
-            ]);
-
-            if ($preAdvice->getPreAdviceErrorCode() === self::NOT_AUTH) {
-                Client::clearCache();
-
-                throw new AuthorizationException($preAdvice->getPreAdviceErrorDetails());
-            } else {
-                throw new PreAdviceRequestException($preAdvice->consignment()['RecordErrorDetails']);
-            }
+        if ($preAdvice->isSuccess()) {
+            return $preAdvice;
         }
 
-        return $preAdvice;
-    }
+        Log::error('DPD PreAdvice request failed', [
+            'xml_received' => $preAdvice->toString(),
+            'xml_sent'     => $consignment->toString(),
+        ]);
 
-    /**
-     * @param OrderAddress $shipping_address
-     *
-     * @return array
-     */
-    private static function getDeliveryAddress(OrderAddress $shipping_address): array
-    {
-        return [
-            'Contact'          => $shipping_address->full_name,
-            'ContactTelephone' => $shipping_address->phone,
-            'ContactEmail'     => '',
-            'AddressLine1'     => $shipping_address->address1,
-            'AddressLine2'     => $shipping_address->address2,
-            'AddressLine3'     => $shipping_address->city,
-            'AddressLine4'     => $shipping_address->state_name ?: $shipping_address->city,
-            'PostCode'         => Str::length($shipping_address->postcode) === 7 ? $shipping_address->postcode : '',
-            'CountryCode'      => $shipping_address->country_code,
-        ];
+        if ($preAdvice->getPreAdviceErrorCode() === self::NOT_AUTH) {
+            Client::clearCache();
+            throw new AuthorizationException($preAdvice->getPreAdviceErrorDetails());
+        } else {
+            throw new PreAdviceRequestException($preAdvice->consignment()['RecordErrorDetails']);
+        }
     }
 
     /**
@@ -113,8 +94,18 @@ class Dpd
 
         return new Consignment([
             'RecordID'             => $order->order_number,
-            'DeliveryAddress'      => self::getDeliveryAddress($shipping_address),
             'ConsignmentReference' => $order->order_number,
+            'DeliveryAddress'      => [
+                'Contact'          => $shipping_address->full_name,
+                'ContactTelephone' => $shipping_address->phone,
+                'ContactEmail'     => $shipping_address->email,
+                'AddressLine1'     => $shipping_address->address1,
+                'AddressLine2'     => $shipping_address->address2,
+                'AddressLine3'     => $shipping_address->city,
+                'AddressLine4'     => $shipping_address->state_name ?: $shipping_address->city,
+                'PostCode'         => Str::length($shipping_address->postcode) === 7 ? $shipping_address->postcode : '',
+                'CountryCode'      => $shipping_address->country_code,
+            ],
             'References'           => [
                 'Reference' => [
                     'ReferenceName'  => 'Order',
@@ -126,16 +117,17 @@ class Dpd
     }
 
     /**
-     * @param Order     $order
+     * @param Order $order
      * @param PreAdvice $preAdvice
      * @param User|null $user
      *
+     * @return OrderShipment
      * @throws Exception
      */
-    private static function saveOrderShipment(Order $order, PreAdvice $preAdvice, ?User $user): void
+    public static function saveOrderShipment(Order $order, PreAdvice $preAdvice, ?User $user): OrderShipment
     {
-        retry(15, function () use ($order, $preAdvice, $user) {
-            $order->orderShipments()->create([
+        return retry(15, function () use ($order, $preAdvice, $user) {
+            return $order->orderShipments()->create([
                 'user_id'         => $user ? $user->getKey() : null,
                 'carrier'         => 'DPD Ireland',
                 'shipping_number' => $preAdvice->trackingNumber(),

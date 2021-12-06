@@ -27,7 +27,10 @@ class Consignment
     const SERVICE_TYPE_CANCELLED_ON_ARRIVAL = 5;
     const SERVICE_TYPE_2_DAY_SERVICE = 6;
 
-    public $rules = [
+    /**
+     * @var array
+     */
+    public array $rules = [
         'RecordID'                         => 'sometimes',
         'DeliveryAddress.Contact'          => 'required',
         'DeliveryAddress.ContactTelephone' => 'required',
@@ -44,7 +47,7 @@ class Consignment
     /**
      * @var array
      */
-    private $templateArray = [
+    private array $templateArray = [
         'RecordID'             => 1,
         'CustomerAccount'      => '',
         'TotalParcels'         => 1,
@@ -88,7 +91,7 @@ class Consignment
     /**
      * @var Collection
      */
-    private $consignment;
+    private $payload;
 
     /**
      * @var Validator
@@ -103,16 +106,16 @@ class Consignment
     /**
      * Shipment constructor.
      *
-     * @param array $consignment
+     * @param array $payload
      *
      * @throws ConsignmentValidationException
      * @throws ModelNotFoundException
      */
-    public function __construct(array $consignment)
+    public function __construct(array $payload)
     {
-        $this->consignment = collect($consignment);
+        $this->payload = collect($payload);
 
-        $this->validator = Validator::make($consignment, $this->rules);
+        $this->validator = Validator::make($payload, $this->rules);
 
         if ($this->validator->fails()) {
             throw new ConsignmentValidationException($this->validator->errors());
@@ -157,13 +160,13 @@ class Consignment
     {
         $fixedValues = collect([
             'CustomerAccount'   => $this->config->user,
-            'DeliveryAddress'   => (new DpdAddress($this->consignment['DeliveryAddress']))->toArray(),
+            'DeliveryAddress'   => (new DpdAddress($this->payload['DeliveryAddress']))->toArray(),
             'CollectionAddress' => $this->getCollectionAddress(),
         ]);
 
         $template = collect($this->templateArray);
 
-        return $template->merge($this->consignment)
+        return $template->merge($this->payload)
             ->merge($fixedValues)
             ->only($template->keys())
             ->toArray();
@@ -174,7 +177,7 @@ class Consignment
      */
     private function getCollectionAddress(): array
     {
-        $CollectionAddress = $this->config->getCollectionAddress();
+        $CollectionAddress = data_get($this->payload, 'CollectionAddress', $this->config->getCollectionAddress());
 
         $address = new DpdAddress($CollectionAddress);
 

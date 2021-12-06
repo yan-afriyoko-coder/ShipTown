@@ -53,6 +53,7 @@ class Client
      *
      * @return string
      * @throws GuzzleException
+     * @throws AuthorizationException
      */
     public static function postXml(string $xml): string
     {
@@ -71,7 +72,7 @@ class Client
         Log::debug('API REQUEST', [
             'service' => 'DPD-IRL',
             'response' => $response_content,
-            'request' => $options
+            'request' => str_replace("\n", '', $xml),
         ]);
 
         return $response_content;
@@ -79,6 +80,7 @@ class Client
 
     /**
      * @return mixed
+     * @throws AuthorizationException
      */
     private static function getAuthorizationToken()
     {
@@ -91,6 +93,7 @@ class Client
      * Using cache we will not need to reauthorize every time.
      *
      * @return array
+     * @throws AuthorizationException
      */
     public static function getCachedAuthorization(): array
     {
@@ -109,6 +112,9 @@ class Client
         return $authorization;
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public static function forceAuthorization(): array
     {
         self::clearCache();

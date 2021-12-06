@@ -2,6 +2,7 @@
 
 namespace App\Modules\DpdIreland\src\Models;
 
+use App\BaseModel;
 use App\Models\OrderAddress;
 use App\Traits\Encryptable;
 use App\User;
@@ -56,7 +57,7 @@ use Log;
  * @method static Builder|DpdIreland whereUpdatedAt($value)
  * @method static Builder|DpdIreland whereUser($value)
  */
-class DpdIreland extends Model
+class DpdIreland extends BaseModel
 {
     use Encryptable;
 

@@ -13,7 +13,7 @@ class DpdAddress
     /**
      * @var Collection
      */
-    private $address;
+    private Collection $address;
 
     /**
      * Shipment constructor.

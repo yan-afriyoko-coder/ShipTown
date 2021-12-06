@@ -118,6 +118,6 @@ class DpdTest extends TestCase
 
         $preAdvice = Dpd::getPreAdvice($consignment);
 
-        $this->assertTrue($preAdvice->responseIsSuccess());
+        $this->assertTrue($preAdvice->isSuccess());
     }
 }

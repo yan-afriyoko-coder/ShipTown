@@ -12,13 +12,13 @@ class PreAdvice extends XmlResponse
      */
     public function isNotSuccess(): bool
     {
-        return !$this->responseIsSuccess();
+        return !$this->isSuccess();
     }
 
     /**
      * @return bool
      */
-    public function responseIsSuccess(): bool
+    public function isSuccess(): bool
     {
         return ($this->status() === 'OK') && ($this->receivedConsignmentsNumber() > 0);
     }
