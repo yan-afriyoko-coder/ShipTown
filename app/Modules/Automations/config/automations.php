@@ -76,6 +76,10 @@ return [
                     'class' => \App\Modules\Automations\src\Actions\SendEmailToCustomerAction::class,
                     'description' => 'Send shipment email to customer',
                 ],
+                [
+                    'class' => \App\Modules\Automations\src\Actions\ForEachSkuAddSkuAction::class,
+                    'description' => 'Split bundle SKU (format: BundleSKU,SKU1,SKU2...)',
+                ],
             ]
         ],
     ],
