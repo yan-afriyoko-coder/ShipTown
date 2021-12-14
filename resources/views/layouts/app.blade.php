@@ -31,6 +31,7 @@
 <body>
     <div id="app">
         <heartbeats></heartbeats>
+
         @include('layouts.nav');
 
         <main class="py-0 pl-1 pr-2">

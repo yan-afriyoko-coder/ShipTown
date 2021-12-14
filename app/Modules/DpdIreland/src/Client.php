@@ -6,7 +6,9 @@ use App\Modules\DpdIreland\src\Exceptions\AuthorizationException;
 use App\Modules\DpdIreland\src\Models\DpdIreland;
 use Carbon\Carbon;
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Cache;
+use Log;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -49,9 +51,11 @@ class Client
     /**
      * @param string $xml
      *
-     * @return ResponseInterface
+     * @return string
+     * @throws GuzzleException
+     * @throws AuthorizationException
      */
-    public static function postXml(string $xml): ResponseInterface
+    public static function postXml(string $xml): string
     {
         $options = [
             'headers' => [
@@ -62,11 +66,21 @@ class Client
             'body' => $xml,
         ];
 
-        return self::getGuzzleClient()->post(self::COMMON_API_PREADVICE, $options);
+        $response = self::getGuzzleClient()->post(self::COMMON_API_PREADVICE, $options);
+        $response_content = $response->getBody()->getContents();
+
+        Log::debug('API REQUEST', [
+            'service' => 'DPD-IRL',
+            'response' => $response_content,
+            'request' => str_replace("\n", '', $xml),
+        ]);
+
+        return $response_content;
     }
 
     /**
      * @return mixed
+     * @throws AuthorizationException
      */
     private static function getAuthorizationToken()
     {
@@ -79,6 +93,7 @@ class Client
      * Using cache we will not need to reauthorize every time.
      *
      * @return array
+     * @throws AuthorizationException
      */
     public static function getCachedAuthorization(): array
     {
@@ -97,6 +112,9 @@ class Client
         return $authorization;
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public static function forceAuthorization(): array
     {
         self::clearCache();

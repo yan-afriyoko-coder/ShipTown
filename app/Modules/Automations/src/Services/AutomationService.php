@@ -19,6 +19,21 @@ class AutomationService
      */
     public static function runAllAutomations(ActiveOrderCheckEvent $event)
     {
+        Automation::where('event_class', get_class($event))
+            ->where(['enabled' => true])
+            ->orderBy('priority')
+            ->get()
+            ->each(function (Automation $automation) use ($event) {
+                AutomationService::validateAndRunAutomation($automation, $event);
+            });
+    }
+
+    /**
+     * @param Automation $automation
+     * @param ActiveOrderCheckEvent $event
+     */
+    public static function validateAndRunAutomation(Automation $automation, ActiveOrderCheckEvent $event)
+    {
         // this will prevent two automation processes running on same order
         try {
             OrderLock::where('created_at', '<', now()->subMinutes(10))
@@ -31,23 +46,6 @@ class AutomationService
             return;
         }
 
-        Automation::where('event_class', get_class($event))
-            ->where(['enabled' => true])
-            ->orderBy('priority')
-            ->get()
-            ->each(function (Automation $automation) use ($event) {
-                AutomationService::validateAndRunAutomation($automation, $event);
-            });
-
-        $lock->forceDelete();
-    }
-
-    /**
-     * @param Automation $automation
-     * @param ActiveOrderCheckEvent $event
-     */
-    public static function validateAndRunAutomation(Automation $automation, ActiveOrderCheckEvent $event)
-    {
         $allConditionsPassed = $automation->allConditionsTrue($event);
 
         if ($allConditionsPassed === true) {
@@ -64,6 +62,8 @@ class AutomationService
             'name' => $automation->name,
             'all_conditions_passed' => $allConditionsPassed
         ]);
+
+        $lock->forceDelete();
     }
 
     /**

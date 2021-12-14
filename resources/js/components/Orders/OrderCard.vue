@@ -120,6 +120,10 @@
                                             <small> ordered </small>
                                             <h4>{{ toNumberOrDash(order_product['quantity_ordered']) }}</h4>
                                         </div>
+                                        <div class="col d-none d-sm-block">
+                                            <small> price</small>
+                                            <h4>{{ toNumberOrDash(order_product['price']) }}</h4>
+                                        </div>
                                         <div class="col bg-warning" v-if="Number(order_product['quantity_split']) > 0">
                                             <small> split </small>
                                             <h4>{{ toNumberOrDash(order_product['quantity_split']) }}</h4>
