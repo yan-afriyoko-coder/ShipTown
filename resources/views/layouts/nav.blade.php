@@ -1,25 +1,24 @@
 @auth
 {{--    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm mb-0">--}}
-    <nav class="navbar navbar-expand-md navbar-light bg-dark mb-0 p-0">
-        <div class="container">
+    <nav class="navbar navbar-expand-md navbar-light bg-secondary mb-0 p-0 bg-white">
+        <div class="container text-white">
             <a class="navbar-brand d-none d-md-block" href="{{ url('/') }}">
                 PM
                 @yield('title')
             </a>
 
-            <div class="d-block d-md-none mb-0">
+            <div class="d-block d-md-none mb-0 navbar-dark w-100 bg-secondary">
                 <div class="btn-group" role="group" aria-label="Basic example">
-                    <a type="button" class="btn btn-secondary" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
-                    <a type="button" class="btn btn-secondary" href="{{ route('products') }}">{{ __('Products') }}</a>
-                    <a type="button" class="btn btn-secondary" href="{{ route('orders') }}">{{ __('Orders') }}</a>
+                    <a type="button" class="btn btn-secondary bg-secondary" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
+                    <a type="button" class="btn btn-secondary bg-secondary " href="{{ route('products') }}">{{ __('Products') }}</a>
+                    <a type="button" class="btn btn-secondary bg-secondary" href="{{ route('orders') }}">{{ __('Orders') }}</a>
                 </div>
+                <button class="navbar-toggler navbar-light float-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                    <span class="navbar-toggler-icon text-white"></span>
+                </button>
             </div>
 
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse bg-white" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav mr-auto text-center text-md-left">
                     <li class="nav-item d-none d-md-inline d-md-block">
@@ -43,7 +42,7 @@
                         </a>
 
                         <!-- Menu Items END -->
-                        <div class="dropdown-menu dropdown-menu-left text-center text-md-left" aria-labelledby="navbarDropdown">
+                        <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
                            @foreach ($navigationMenuPicklist as $menu)
                                 <a class="dropdown-item" href="{{ $menu->url }}">
                                     {{ $menu->name }}
@@ -60,7 +59,7 @@
                         </a>
 
                         <!-- Packlist Menu -->
-                        <div class="dropdown-menu dropdown-menu-left text-center text-md-left" aria-labelledby="navbarDropdown">
+                        <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
                             @foreach ($navigationMenuPacklist as $menu)
                                 <a class="dropdown-item" href="{{ $menu->url }}">
                                     {{ $menu->name }}
@@ -77,7 +76,7 @@
                         </a>
 
                         <!-- Menu Items END -->
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ route('performance.dashboard') .'?between_dates=-7days,now' }}">{{ __('Performance Dashboard') }}</a>
                             <a class="dropdown-item" href="{{ route('reports.picks') }}">{{ __('Picks') }}</a>
                             <a class="dropdown-item" href="{{ route('reports.shipments') }}">{{ __('Shipments') }}</a>
