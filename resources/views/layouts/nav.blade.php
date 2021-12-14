@@ -1,12 +1,13 @@
 @auth
-    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm mb-0">
+{{--    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm mb-0">--}}
+    <nav class="navbar navbar-expand-md navbar-light bg-dark mb-0 p-0">
         <div class="container">
             <a class="navbar-brand d-none d-md-block" href="{{ url('/') }}">
                 PM
                 @yield('title')
             </a>
 
-            <div class="d-block d-md-none">
+            <div class="d-block d-md-none mb-0">
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <a type="button" class="btn btn-secondary" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
                     <a type="button" class="btn btn-secondary" href="{{ route('products') }}">{{ __('Products') }}</a>

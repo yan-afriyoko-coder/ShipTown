@@ -15,6 +15,12 @@
                     <div >
                         ordered: <b>{{ dashIfZero(Number(entry['quantity_ordered'])) }}</b>
                     </div>
+                    <div >
+                        price: <b>{{ dashIfZero(Number(entry['price'])) }}</b>
+                    </div>
+                    <div class="bg-warning" v-if="Number(entry['quantity_split']) > 0">
+                        split: <b>{{ dashIfZero(Number(entry['quantity_split'])) }}</b>
+                    </div>
                     <div>
                         picked: <b>{{ dashIfZero(Number(entry['quantity_picked'])) }}</b>
                     </div>
