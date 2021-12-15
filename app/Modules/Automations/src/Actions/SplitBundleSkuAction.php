@@ -92,16 +92,16 @@ class SplitBundleSkuAction extends BaseOrderAction
         $skusToAdd = collect($skus);
 
         $orderProducts->each(function (OrderProduct $originalOrderProduct) use ($skusToAdd) {
-            $quantity_to_ship = $originalOrderProduct->quantity_to_ship;
             Log::debug('Splitting order product', [
                 'sku_ordered' => $originalOrderProduct->sku_ordered,
-                'quantity_to_ship' => $quantity_to_ship
+                'quantity_to_ship' => $originalOrderProduct->quantity_to_ship
             ]);
 
-            $originalOrderProduct->update(['quantity_split' => $quantity_to_ship]);
+            $quantity_to_ship = $originalOrderProduct->quantity_to_ship;
             $this->productsAdded = new Collection();
             $newOrderProducts_totalPrice = 0;
 
+            $originalOrderProduct->update(['quantity_split' => $quantity_to_ship]);
             $skusToAdd->each(function (string $sku) use ($originalOrderProduct, $quantity_to_ship, &$newOrderProducts_totalPrice) {
                 $product = Product::skuOrAlias($sku)->first();
                 $newOrderProduct = new OrderProduct([]);
@@ -109,7 +109,7 @@ class SplitBundleSkuAction extends BaseOrderAction
                 $newOrderProduct->order_id = $originalOrderProduct->order_id;
                 $newOrderProduct->product_id = $product->id;
                 $newOrderProduct->name_ordered = $product->name;
-                $newOrderProduct->price = $product->price;
+                $newOrderProduct->price = $product->price ?: $product->prices()->max('price');
                 $newOrderProduct->quantity_ordered = $quantity_to_ship;
 
                 $newOrderProducts_totalPrice += $newOrderProduct->price;
@@ -118,8 +118,8 @@ class SplitBundleSkuAction extends BaseOrderAction
 
             $priceMultiplier = $newOrderProducts_totalPrice / $originalOrderProduct->price;
 
-            $this->productsAdded->each(function (OrderProduct $orderProduct) use (&$newOrderProducts_totalPrice, $priceMultiplier) {
-                $orderProduct->price = $orderProduct->price / $priceMultiplier;
+            $this->productsAdded->each(function (OrderProduct $orderProduct) use ($priceMultiplier) {
+                $orderProduct->price = $priceMultiplier>0 ? $orderProduct->price / $priceMultiplier : 0;
                 $orderProduct->save();
             });
         });

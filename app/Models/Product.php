@@ -280,7 +280,7 @@ class Product extends BaseModel
     }
 
     /**
-     * @return mixed|ProductPrice
+     * @return mixed|hasMany
      */
     public function prices()
     {
