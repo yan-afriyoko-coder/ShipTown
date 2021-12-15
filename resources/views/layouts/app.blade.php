@@ -32,7 +32,7 @@
     <div id="app">
         <heartbeats></heartbeats>
 
-        @include('layouts.nav');
+        @include('layouts.nav')
 
         <main class="py-0 pl-1 pr-2">
             @yield('content')

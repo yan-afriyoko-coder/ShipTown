@@ -13,7 +13,7 @@
                     <a type="button" class="btn btn-secondary bg-secondary " href="{{ route('products') }}">{{ __('Products') }}</a>
                     <a type="button" class="btn btn-secondary bg-secondary" href="{{ route('orders') }}">{{ __('Orders') }}</a>
                 </div>
-                <button class="navbar-toggler navbar-light float-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                <button class="navbar-toggler navbar-light float-right border-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon text-white"></span>
                 </button>
             </div>
