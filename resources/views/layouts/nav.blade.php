@@ -1,6 +1,6 @@
 @auth
 {{--    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm mb-0">--}}
-    <nav class="navbar navbar-expand-md navbar-light bg-secondary mb-0 p-0 bg-white">
+    <nav class="navbar navbar-expand-md navbar-light bg-secondary mb-2 p-0 bg-white">
         <div class="container text-white">
             <a class="navbar-brand d-none d-md-block" href="{{ url('/') }}">
                 PM
