@@ -18,7 +18,14 @@
                 </button>
             </div>
 
-            <div class="collapse navbar-collapse bg-white" id="navbarSupportedContent">
+            <style>
+                .collapsing {
+                    -webkit-transition: none;
+                    transition: none;
+                    display: none;
+                }
+            </style>
+            <div class="collapse navbar-collapse bg-white" id="navbarSupportedContent" style="transition: none !important;">
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav mr-auto text-center text-md-left">
                     <li class="nav-item d-none d-md-inline d-md-block">
