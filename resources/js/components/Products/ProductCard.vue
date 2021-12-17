@@ -68,7 +68,7 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link p-0 pl-2 pr-2"  @click.prevent="currentTab = 'activityLog'" data-toggle="tab" href="#">
-                                        Activity Log
+                                        Activity
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -263,7 +263,7 @@
             numberFormat: (x) => {
                 x = parseInt(x).toString();
 
-                if (x == '0') return '-';
+                if (x ==='0') return '-';
 
                 var pattern = /(-?\d+)(\d{3})/;
                 while (pattern.test(x)) x = x.replace(pattern, "$1 $2");
@@ -349,15 +349,15 @@
             dashIfZero(value) {
                 return value === 0 ? '-' : value;
             },
-            showHideProducts() {
-                this.showProducts = ! this.showProducts;
-            },
+
             getProductLink(orderProduct) {
                 return '/orders?search=' + orderProduct['order']['order_number'];
             },
+
             getProductQuantity(orderProduct) {
                 return orderProduct['product'] ? Number(orderProduct['product']['quantity']) : -1;
             },
+
             ifHasEnoughStock(orderProduct) {
                 return this.getProductQuantity(orderProduct) < Number(orderProduct['quantity_ordered']);
             }
