@@ -17,10 +17,10 @@ class Orders extends Entity
      * @param array $params
      *
      * @return array|null
-     * @throws Exception|GuzzleException
+     * @throws Exception
      *
      */
-    public static function get(string $store_key, array $params)
+    public static function get(string $store_key, array $params): ?array
     {
         $response = Client::GET($store_key, 'order.list.json', $params);
 
@@ -60,6 +60,7 @@ class Orders extends Entity
 
     /**
      *
+     * @throws RequestException
      */
     public static function statuses($store_key, $params): RequestResponse
     {
