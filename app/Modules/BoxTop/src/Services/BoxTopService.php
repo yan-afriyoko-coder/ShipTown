@@ -56,18 +56,13 @@ class BoxTopService
             $apiClient = new ApiClient();
             $apiClient->getSkuQuantity($orderProduct->sku_ordered);
 
-
             $aliases = $orderProduct->product->aliases()
                 ->get('alias')
                 ->map(function (ProductAlias $alias) {
                     return $alias->alias;
                 })->toArray();
 
-            Log::debug('$aliases', $aliases);
-
             $possibleSkus = array_merge([$orderProduct->sku_ordered, $orderProduct->product->sku], $aliases);
-
-            Log::debug('possibleSkus', $possibleSkus);
 
             /** @var WarehouseStock $warehouseStock */
             $warehouseStock = WarehouseStock::query()

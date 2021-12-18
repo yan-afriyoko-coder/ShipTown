@@ -40,7 +40,6 @@ class ApiClient
         $options['headers']['Accept'] = 'application/json';
         $options['query']['custaccnum'] = env('TEST_BOXTOP_CUSTACCNUM');
 
-
         $finalUri = str_replace('{siteCode}', env('TEST_BOXTOP_SITE_CODE', '000'), $uri);
 
         try {

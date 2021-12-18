@@ -4,7 +4,9 @@ namespace Tests\External\BoxTop;
 
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\Product;
 use App\Modules\BoxTop\src\Api\ApiClient;
+use App\Modules\BoxTop\src\Models\WarehouseStock;
 use App\Modules\BoxTop\src\Services\BoxTopService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -33,16 +35,25 @@ class BasicIntegrationTest extends TestCase
         $order->shippingAddress->phone = "+44 20 8400 2000";
         $order->shippingAddress->save();
 
-        // we will pick one random product in stock
-        $randomProduct = (new ApiClient())->getStockCheckByWarehouse()
-            ->toCollection()
-            ->random(1)
+        BoxTopService::refreshBoxTopWarehouseStock();
+
+        /** @var WarehouseStock $randomProduct */
+        $randomProduct = WarehouseStock::query()
+            ->where('WarehouseQuantity', '>', 0)
+            ->inRandomOrder()
             ->first();
+
+        /** @var Product $product */
+        $product = factory(Product::class)->create([
+            'sku' => $randomProduct->SKUNumber,
+            'name' => $randomProduct->SKUName,
+        ]);
 
         factory(OrderProduct::class)->create([
             'order_id' => $order->getKey(),
-            'sku_ordered' => $randomProduct['SKUNumber'],
-            'name_ordered' => $randomProduct['SKUName'],
+            'product_id' => $product->getKey(),
+            'sku_ordered' => $product->sku,
+            'name_ordered' => $product->name,
             'quantity_ordered' => 1,
         ]);
 
