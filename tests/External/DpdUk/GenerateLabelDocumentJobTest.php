@@ -21,7 +21,7 @@ class GenerateLabelDocumentJobTest extends TestCase
     /**
      * @var string
      */
-    private string $test_disabled = '01 Jan 2022';
+    private string $test_disabled = '01 Jan 2021';
 
     public function test_print_new_label()
     {
