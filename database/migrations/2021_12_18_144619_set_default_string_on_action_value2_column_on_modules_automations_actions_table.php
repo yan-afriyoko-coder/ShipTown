@@ -18,7 +18,6 @@ class SetDefaultStringOnActionValue2ColumnOnModulesAutomationsActionsTable exten
 
         Schema::table('modules_automations_actions', function (Blueprint $table) {
             $table->string('action_value')->nullable(false)->default('')->change();
-            $table->string('action_class')->nullable(false)->default('')->change();
         });
     }
 
