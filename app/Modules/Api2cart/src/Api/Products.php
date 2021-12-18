@@ -4,6 +4,7 @@ namespace App\Modules\Api2cart\src\Api;
 
 use App\Modules\Api2cart\src\Exceptions\RequestException;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
+use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
@@ -312,6 +313,8 @@ class Products extends Entity
         try {
             return Client::GET($store_key, 'product.update.json', $product);
         } catch (RequestException $exception) {
+            Api2cartProductLink::where(['api2cart_product_id' => $data['id']])->forceDelete();
+
             if ($exception->getCode() === RequestResponse::RETURN_CODE_MODEL_NOT_FOUND) {
                 Products::assignStore($store_key, $data['id'], $data['store_id']);
 
