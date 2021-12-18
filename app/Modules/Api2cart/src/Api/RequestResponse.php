@@ -17,11 +17,11 @@ class RequestResponse
     /**
      * @var ResponseInterface
      */
-    private $response;
+    private ResponseInterface $response;
     /**
      * @var string
      */
-    private $response_content;
+    private string $response_content;
 
     /**
      * Api2CartResponse constructor.
@@ -40,7 +40,7 @@ class RequestResponse
     /**
      * @return string
      */
-    public function getAsJson()
+    public function getAsJson(): string
     {
         return $this->response_content;
     }
@@ -48,7 +48,7 @@ class RequestResponse
     /**
      * @return ResponseInterface
      */
-    public function getResponseRaw()
+    public function getResponseRaw(): ResponseInterface
     {
         return $this->response;
     }
@@ -56,7 +56,7 @@ class RequestResponse
     /**
      * @return bool
      */
-    public function isSuccess()
+    public function isSuccess(): bool
     {
         return ($this->response->getStatusCode() == 200) && ($this->isReturnCodeOK());
     }
@@ -64,7 +64,7 @@ class RequestResponse
     /**
      * @return bool
      */
-    public function isNotSuccess()
+    public function isNotSuccess(): bool
     {
         return !$this->isSuccess();
     }
@@ -72,7 +72,7 @@ class RequestResponse
     /**
      * @return array
      */
-    public function asArray()
+    public function asArray(): array
     {
         return json_decode($this->response_content, true);
     }
@@ -80,7 +80,7 @@ class RequestResponse
     /**
      * @return int
      */
-    public function getReturnCode()
+    public function getReturnCode(): int
     {
         return $this->asArray()['return_code'];
     }
@@ -88,7 +88,7 @@ class RequestResponse
     /**
      * @return string
      */
-    public function getReturnMessage()
+    public function getReturnMessage(): string
     {
         return $this->asArray()['return_message'];
     }
@@ -96,7 +96,7 @@ class RequestResponse
     /**
      * @return array
      */
-    public function getResult()
+    public function getResult(): array
     {
         return $this->asArray()['result'];
     }
@@ -106,7 +106,7 @@ class RequestResponse
      *
      * @return bool
      */
-    public function isReturnCode(int $return_code)
+    public function isReturnCode(int $return_code): bool
     {
         return $this->getReturnCode() == $return_code;
     }
@@ -114,7 +114,7 @@ class RequestResponse
     /**
      * @return bool
      */
-    public function isReturnCodeOK()
+    public function isReturnCodeOK(): bool
     {
         return $this->isReturnCode(self::RETURN_CODE_OK);
     }
@@ -122,7 +122,7 @@ class RequestResponse
     /**
      * @return bool
      */
-    public function isReturnCodeModelNotFound()
+    public function isReturnCodeModelNotFound(): bool
     {
         return $this->isReturnCode(self::RETURN_CODE_MODEL_NOT_FOUND);
     }
@@ -130,7 +130,7 @@ class RequestResponse
     /**
      * @return bool
      */
-    public function isReturnCodeProductSkuMustBeUnique()
+    public function isReturnCodeProductSkuMustBeUnique(): bool
     {
         return $this->isReturnCode(self::RETURN_CODE_PRODUCT_SKU_MUST_BE_UNIQUE);
     }

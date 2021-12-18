@@ -53,6 +53,7 @@ class Client
             'query'    => $query,
             'response' => [
                 'status_code' => $response->getResponseRaw()->getStatusCode(),
+                'content' => $response->getAsJson(),
             ],
         ]);
 
