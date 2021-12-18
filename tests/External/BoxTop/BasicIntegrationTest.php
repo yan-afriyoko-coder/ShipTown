@@ -41,7 +41,7 @@ class BasicIntegrationTest extends TestCase
 
         /** @var WarehouseStock $randomProduct */
         $randomProduct = WarehouseStock::query()
-            ->where('WarehouseQuantity', '>', 1)
+            ->where('Available', '>', 1)
             ->inRandomOrder()
             ->first();
 
