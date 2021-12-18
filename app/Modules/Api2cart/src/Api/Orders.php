@@ -17,15 +17,13 @@ class Orders extends Entity
      * @param array $params
      *
      * @return array|null
-     * @throws Exception
-     *
      */
     public static function get(string $store_key, array $params): ?array
     {
         $response = Client::GET($store_key, 'order.list.json', $params);
 
         if ($response->isSuccess()) {
-            logger('Fetched orders', [
+            Log::debug('Fetched orders', [
                 'source' => 'API2CART',
                 'count' => $response->getResult()['orders_count'],
             ]);
@@ -33,13 +31,13 @@ class Orders extends Entity
             return $response->getResult()['order'];
         }
 
-        Log::error('order.list.json call failed', $response->asArray());
-
-        throw new Exception('order.list.json call failed - ' . $response->getReturnMessage());
+        return null;
     }
 
     /**
-     * @throws GuzzleException|RequestException
+     * @param string $store_key
+     * @param array $params
+     * @return RequestResponse
      */
     public static function list(string $store_key, array $params): RequestResponse
     {
@@ -59,8 +57,9 @@ class Orders extends Entity
     }
 
     /**
-     *
-     * @throws RequestException
+     * @param $store_key
+     * @param $params
+     * @return RequestResponse
      */
     public static function statuses($store_key, $params): RequestResponse
     {

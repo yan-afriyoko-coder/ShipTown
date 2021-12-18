@@ -12,62 +12,37 @@ class Client
     /**
      * @param string $store_key
      * @param string $uri
-     * @param array  $params
-     *
-     * @throws RequestException
+     * @param array $params
      *
      * @return RequestResponse
      */
     public static function GET(string $store_key, string $uri, array $params): RequestResponse
     {
-        $query = [
+        $query = array_merge($params, [
             'api_key'   => self::getApiKey(),
             'store_key' => $store_key,
-        ];
+        ]);
 
-        $query = array_merge($query, $params);
-
-        try {
-            $response = new RequestResponse(
-                self::getGuzzleClient()->get($uri, ['query' => $query])
-            );
-        } catch (GuzzleException $exception) {
-            Log::warning('Api2cart: GET failed', [
-                'uri' => $uri,
-                'exception' => [
-                    'code' => $exception->getCode(),
-                    'message' => $exception->getMessage(),
-                ],
+        $response = new RequestResponse(
+            self::getGuzzleClient()->get($uri, [
                 'query' => $query
-            ]);
-        }
-
+            ])
+        );
 
         // hide sensitive information
         $query['api_key'] = '***';
         $query['store_key'] = '***';
 
         // log query
-        logger('GET', [
+        Log::debug('API2CART GET', [
             'uri'      => $uri,
-            'query'    => $query,
+            'success'  => $response->isNotSuccess(),
             'response' => [
                 'status_code' => $response->getResponseRaw()->getStatusCode(),
                 'content' => $response->getAsJson(),
             ],
+            'query'    => $query,
         ]);
-
-        if ($response->isNotSuccess()) {
-            Log::warning('Api2cart: GET failed', [
-                'uri' => $uri,
-                'response' => [
-                    'code' => $response->getReturnCode(),
-                    'message' => $response->getReturnMessage(),
-                ],
-                'query' => $query
-            ]);
-            throw new RequestException($response->getReturnMessage(), $response->getReturnCode());
-        }
 
         return $response;
     }
@@ -147,7 +122,7 @@ class Client
         return new GuzzleClient([
             'base_uri'   => 'https://api.api2cart.com/v1.1/',
             'timeout'    => 60,
-            'exceptions' => true,
+            'exceptions' => false,
         ]);
     }
 
