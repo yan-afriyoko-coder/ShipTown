@@ -41,8 +41,6 @@ class Products extends Entity
      * @param array $params
      *
      * @return RequestResponse
-     * @throws GuzzleException
-     *
      * @throws RequestException
      */
     public static function getProductList(string $store_key, array $params): RequestResponse
@@ -56,7 +54,6 @@ class Products extends Entity
      * @param array|null $fields
      *
      * @return array|null
-     * @throws GuzzleException
      * @throws RequestException
      */
     public static function getSimpleProductInfo(Api2cartConnection $conn, string $sku, array $fields = null): ?array
@@ -110,7 +107,6 @@ class Products extends Entity
      * @param array|null $fields
      *
      * @return array|null
-     * @throws GuzzleException
      * @throws RequestException
      *
      */
@@ -179,7 +175,7 @@ class Products extends Entity
      * @param string $sku
      *
      * @return int|null
-     * @throws RequestException|GuzzleException
+     * @throws RequestException
      *
      */
     public static function getSimpleProductID(string $store_key, string $sku): ?int
@@ -222,7 +218,6 @@ class Products extends Entity
      * @param string $sku
      *
      * @return int|null
-     * @throws GuzzleException
      */
     public static function getVariantID(string $store_key, string $sku): ?int
     {
@@ -353,13 +348,13 @@ class Products extends Entity
      * This will only update variant product, will not update simple product.
      *
      * @param string $store_key
-     * @param array  $data
-     *
+     * @param array $data
+     * @param bool $recursive
      * @return RequestResponse|null
-     * @throws Exception|GuzzleException
-     *
+     * @throws GuzzleException
+     * @throws RequestException
      */
-    public static function updateVariant(string $store_key, array $data, $recursive = true): ?RequestResponse
+    public static function updateVariant(string $store_key, array $data, bool $recursive = true): ?RequestResponse
     {
         $properties = collect($data)
             ->only(self::PRODUCT_ALLOWED_KEYS)
