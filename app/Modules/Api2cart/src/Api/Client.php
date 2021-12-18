@@ -2,9 +2,7 @@
 
 namespace App\Modules\Api2cart\src\Api;
 
-use App\Modules\Api2cart\src\Exceptions\RequestException;
 use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
 
 class Client
@@ -33,15 +31,12 @@ class Client
         $query['api_key'] = '***';
         $query['store_key'] = '***';
 
-        // log query
         Log::debug('API2CART GET', [
-            'uri'      => $uri,
-            'success'  => $response->isNotSuccess(),
-            'response' => [
-                'status_code' => $response->getResponseRaw()->getStatusCode(),
-                'content' => $response->getAsJson(),
-            ],
-            'query'    => $query,
+            'success'           => $response->isSuccess(),
+            'uri'               => $uri,
+            'response_message'  => $response->asArray(),
+            'response_code'     => $response->getResponseRaw()->getStatusCode(),
+            'query'             => $query,
         ]);
 
         return $response;
@@ -51,8 +46,6 @@ class Client
      * @param string $store_key
      * @param string $uri
      * @param array  $data
-     *
-     * @throws RequestException|GuzzleException
      *
      * @return RequestResponse
      */
@@ -70,22 +63,17 @@ class Client
             ])
         );
 
-        if ($response->isNotSuccess()) {
-            throw new RequestException($response->getReturnMessage(), $response->getReturnCode());
-        }
-
         // hide sensitive information
         $query['api_key'] = '***';
         $query['store_key'] = '***';
 
-        // log query
-        logger('POST', [
-            'uri'      => $uri,
-            'query'    => $query,
-            'json'     => $data,
-            'response' => [
-                'status_code' => $response->getResponseRaw()->getStatusCode(),
-            ],
+        Log::debug('API2CART POST', [
+            'success'           => $response->isSuccess(),
+            'uri'               => $uri,
+            'response_message'  => $response->asArray(),
+            'response_code'     => $response->getResponseRaw()->getStatusCode(),
+            'query'             => $query,
+            'json'              => $data,
         ]);
 
         return $response;
@@ -95,8 +83,6 @@ class Client
      * @param string $store_key
      * @param string $uri
      * @param array  $params
-     *
-     * @throws GuzzleException
      *
      * @return RequestResponse
      */

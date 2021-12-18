@@ -62,6 +62,5 @@ class SyncProductsJob implements ShouldQueue
         ], []);
 
         SyncProduct::dispatch($productLink);
-        SyncProductStockJob::dispatch($productLink->product);
     }
 }

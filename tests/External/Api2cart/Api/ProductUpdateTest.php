@@ -63,10 +63,6 @@ class ProductUpdateTest extends TestCase
         $this->api2cart_product_link->api2cartConnection()->associate($api2cart_connection);
     }
 
-//    public function test_product_data() {
-//        $product_data = $this->api2cart_product_link->getProductData();
-//    }
-
     /**
      */
     public function test_if_updates_stock_if_no_location_source_specified()

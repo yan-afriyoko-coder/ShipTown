@@ -6,9 +6,9 @@ use App\BaseModel;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductPrice;
-use App\Modules\Api2cart\src\Api\Products;
 use App\Modules\Api2cart\src\Api\RequestResponse;
 use App\Modules\Api2cart\src\Exceptions\RequestException;
+use App\Modules\Api2cart\src\Services\Api2cartService;
 use Eloquent;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
@@ -126,43 +126,25 @@ class Api2cartProductLink extends BaseModel
      */
     public function postProductUpdate(): bool
     {
-        try {
-            return $this->updateOrCreate($this->getProductData())
-                ->isSuccess();
-        } catch (RequestException $requestException) {
-            switch ($requestException->getCode()) {
-                case RequestResponse::RETURN_CODE_EXCEEDED_CONCURRENT_API_REQUESTS_PER_STORE:
-                    Log::warning('Api2cart: postProductUpdate failed', [
-                        'sku' => $this->product->sku,
-                        'response' => [
-                            'code' => $requestException->getCode(),
-                            'message' => $requestException->getMessage(),
-                        ],
-                    ]);
-                    return false;
-                default:
-                    throw $requestException;
-            }
-        } catch (Exception $exception) {
-            $this->api2cart_product_type = null;
-            $this->api2cart_product_id = null;
-            $this->save();
+        $store_key = $this->api2cartConnection->bridge_api_key;
 
-            Log::warning('Api2cart: postProductUpdate failed', [
-                'sku' => $this->product->sku,
-                'response' => [
-                    'code' => $exception->getCode(),
-                    'message' => $exception->getMessage(),
-                ],
-            ]);
-
-            throw $exception;
+        if ($this->api2cart_product_id === null) {
+            $this->updateTypeAndId();
         }
+
+        if ($this->api2cart_product_id === null) {
+            $response = Api2cartService::createSimpleProduct($store_key, $this->getProductData());
+            if ($response->isNotSuccess()) {
+                return false;
+            }
+            $this->updateTypeAndId();
+        }
+
+        return Api2cartService::updateProduct($store_key, $this->getProductData())->isSuccess();
     }
 
     /**
      * @throws RequestException
-     * @throws GuzzleException
      */
     public function isInSync(): bool
     {
@@ -176,10 +158,10 @@ class Api2cartProductLink extends BaseModel
 
         switch ($this->api2cart_product_type) {
             case 'product':
-                $product_now = Products::getSimpleProductInfo($this->api2cartConnection, $this->product->sku);
+                $product_now = Api2cartService::getSimpleProductInfo($this->api2cartConnection, $this->product->sku);
                 break;
             case 'variant':
-                $product_now = Products::getVariantInfo($this->api2cartConnection, $this->product->sku);
+                $product_now = Api2cartService::getVariantInfo($this->api2cartConnection, $this->product->sku);
                 break;
             default:
                 Log::warning('Update Check FAILED - Could not find product', ['sku' => $product_data['sku']]);
@@ -189,7 +171,7 @@ class Api2cartProductLink extends BaseModel
         // if product data is null, product does not exist on eCommerce
         // we will delete link
         if (is_null($product_now)) {
-            $this->delete();
+            $this->forceDelete();
             return false;
         }
 
@@ -291,40 +273,17 @@ class Api2cartProductLink extends BaseModel
     }
 
     /**
-     * @throws RequestException|GuzzleException
      */
     public function updateTypeAndId(): Api2cartProductLink
     {
-        $response = Products::getProductTypeAndId($this->api2cartConnection->bridge_api_key, $this->product->sku);
+        $store_key = $this->api2cartConnection->bridge_api_key;
+
+        $response = Api2cartService::getProductTypeAndId($store_key, $this->product->sku);
 
         $this->api2cart_product_type = $response['type'];
         $this->api2cart_product_id = $response['id'];
 
         return $this;
-    }
-
-    /**
-     * @throws RequestException
-     * @throws GuzzleException
-     */
-    public function updateOrCreate($product_data): RequestResponse
-    {
-        if ($this->api2cart_product_type === null) {
-            $this->updateTypeAndId()->save();
-        }
-
-        switch ($this->api2cart_product_type) {
-            case 'product':
-                $properties = array_merge($product_data, ['id' => $this->api2cart_product_id]);
-                return Products::updateSimpleProduct($this->api2cartConnection->bridge_api_key, $properties);
-            case 'variant':
-                $properties = array_merge($product_data, ['id' => $this->api2cart_product_id]);
-                return Products::updateVariant($this->api2cartConnection->bridge_api_key, $properties);
-            default:
-                // when product_type is null we need to create product and then update it
-                Products::createSimpleProduct($this->api2cartConnection->bridge_api_key, $product_data);
-                return $this->updateOrCreate($product_data);
-        }
     }
 
     /**
