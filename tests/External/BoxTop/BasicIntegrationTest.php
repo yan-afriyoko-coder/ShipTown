@@ -37,9 +37,11 @@ class BasicIntegrationTest extends TestCase
 
         BoxTopService::refreshBoxTopWarehouseStock();
 
+        $this->assertTrue(WarehouseStock::query()->exists(), 'No warehouse records fetched');
+
         /** @var WarehouseStock $randomProduct */
         $randomProduct = WarehouseStock::query()
-            ->where('WarehouseQuantity', '>', 0)
+            ->where('WarehouseQuantity', '>', 1)
             ->inRandomOrder()
             ->first();
 
