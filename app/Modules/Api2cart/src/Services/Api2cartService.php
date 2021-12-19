@@ -207,7 +207,15 @@ class Api2cartService
             case 'variant':
                 return self::updateVariant($store_key, $properties);
             default:
-                return self::updateSimpleProduct($store_key, $properties);
+                $response = self::updateSimpleProduct($store_key, $properties);
+                switch ($response->getReturnCode()) {
+                    case RequestResponse::RETURN_CODE_MODEL_NOT_FOUND:
+                        $product_link->update([
+                            'api2cart_product_type' => null,
+                            'api2cart_product_id' => null
+                        ]);
+                }
+                return $response;
         }
     }
 
