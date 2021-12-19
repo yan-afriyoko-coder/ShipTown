@@ -79,7 +79,7 @@ class Api2cartService
      * @return RequestResponse
      *
      */
-    public static function createSimpleProduct(string $store_key, array $product_data): RequestResponse
+    private static function createSimpleProduct(string $store_key, array $product_data): RequestResponse
     {
         $fields = [
             'sku',
@@ -109,7 +109,7 @@ class Api2cartService
      * @param bool $recursive
      * @return RequestResponse
      */
-    public static function updateSimpleProduct(string $store_key, array $data, bool $recursive = true): RequestResponse
+    private static function updateSimpleProduct(string $store_key, array $data, bool $recursive = true): RequestResponse
     {
         $product = collect($data)
             ->only(self::PRODUCT_ALLOWED_KEYS)
@@ -147,7 +147,7 @@ class Api2cartService
      * @param bool $recursive
      * @return RequestResponse
      */
-    public static function updateVariant(string $store_key, array $data, bool $recursive = true): RequestResponse
+    private static function updateVariant(string $store_key, array $data, bool $recursive = true): RequestResponse
     {
         $properties = collect($data)
             ->only(self::PRODUCT_ALLOWED_KEYS)
@@ -184,34 +184,6 @@ class Api2cartService
     }
 
     /**
-     * @param string $store_key
-     * @param array  $product_data
-     *
-     * @return RequestResponse|null
-     * @throws Exception|GuzzleException
-     *
-     */
-    public static function updateProduct(string $store_key, array $product_data): ?RequestResponse
-    {
-        $product = self::getProductTypeAndId($store_key, $product_data['sku']);
-
-        switch ($product['type']) {
-            case 'product':
-                $properties = array_merge($product_data, ['id' => $product['id']]);
-                return self::updateSimpleProduct($store_key, $properties);
-            case 'variant':
-                $properties = array_merge($product_data, ['id' => $product['id']]);
-                return self::updateVariant($store_key, $properties);
-            default:
-                logger('Cannot update - SKU not found', [$product_data['sku']]);
-                break;
-        }
-
-        return null;
-    }
-
-
-    /**
      * @param Api2cartProductLink $product_link
      * @return RequestResponse
      */
@@ -220,16 +192,22 @@ class Api2cartService
         $product_data = $product_link->getProductData();
         $store_key = $product_link->api2cartConnection->bridge_api_key;
 
+        if ($product_link->api2cart_product_type === null) {
+            $response = self::createSimpleProduct($store_key, $product_data);
+
+            $product_link->update([
+                'api2cart_product_type' => 'product',
+                'api2cart_product_id' => data_get($response->asArray(), 'result.product_id')
+            ]);
+        }
+
+        $properties = array_merge($product_data, ['id' => $product_link->api2cart_product_id]);
+
         switch ($product_link->api2cart_product_type) {
-            case 'product':
-                $properties = array_merge($product_data, ['id' => $product_link->api2cart_product_id]);
-                return self::updateSimpleProduct($store_key, $properties);
             case 'variant':
-                $properties = array_merge($product_data, ['id' => $product_link->api2cart_product_id]);
                 return self::updateVariant($store_key, $properties);
             default:
-                self::createSimpleProduct($store_key, $product_data);
-                return self::updateSimpleProduct($store_key, $product_data);
+                return self::updateSimpleProduct($store_key, $properties);
         }
     }
 

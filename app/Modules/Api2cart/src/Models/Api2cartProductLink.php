@@ -120,29 +120,6 @@ class Api2cartProductLink extends BaseModel
     }
 
     /**
-     * @return bool
-     * @throws GuzzleException
-     */
-    public function postProductUpdate(): bool
-    {
-        $store_key = $this->api2cartConnection->bridge_api_key;
-
-        if ($this->api2cart_product_id === null) {
-            $response = Api2cartService::createSimpleProduct($store_key, $this->getProductData());
-            if ($response->isNotSuccess()) {
-                return false;
-            }
-            $this->updateTypeAndId();
-        }
-
-        if ($this->api2cart_product_id === null) {
-            return false;
-        }
-
-        return Api2cartService::updateProduct($store_key, $this->getProductData())->isSuccess();
-    }
-
-    /**
      * @throws RequestException
      */
     public function isInSync(): bool
