@@ -21,11 +21,11 @@ class GenerateLabelDocumentJobTest extends TestCase
     /**
      * @var string
      */
-    private string $test_disabled = '01 Jan 2021';
+    private string $testSkippingExpiryDate = '01 Jan 2022';
 
     public function test_print_new_label()
     {
-        if (Carbon::make($this->test_disabled)->isFuture()) {
+        if (Carbon::make($this->testSkippingExpiryDate)->isFuture()) {
             $this->markTestSkipped();
         }
 
@@ -57,7 +57,7 @@ class GenerateLabelDocumentJobTest extends TestCase
 
     public function test_if_job_dispatches()
     {
-        if ($this->test_disabled) {
+        if ($this->testSkippingExpiryDate) {
             $this->markTestSkipped();
         }
 
