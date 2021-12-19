@@ -128,10 +128,6 @@ class Api2cartProductLink extends BaseModel
         $store_key = $this->api2cartConnection->bridge_api_key;
 
         if ($this->api2cart_product_id === null) {
-            $this->updateTypeAndId();
-        }
-
-        if ($this->api2cart_product_id === null) {
             $response = Api2cartService::createSimpleProduct($store_key, $this->getProductData());
             if ($response->isNotSuccess()) {
                 return false;

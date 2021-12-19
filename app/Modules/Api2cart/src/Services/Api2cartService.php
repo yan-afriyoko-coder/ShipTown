@@ -81,7 +81,6 @@ class Api2cartService
      */
     public static function createSimpleProduct(string $store_key, array $product_data): RequestResponse
     {
-//        dd($product_data);
         $fields = [
             'sku',
             'model',
@@ -108,11 +107,9 @@ class Api2cartService
      * @param string $store_key
      * @param array $data
      * @param bool $recursive
-     * @return RequestResponse|null
-     * @throws GuzzleException
-     * @throws RequestException
+     * @return RequestResponse
      */
-    public static function updateSimpleProduct(string $store_key, array $data, bool $recursive = true): ?RequestResponse
+    public static function updateSimpleProduct(string $store_key, array $data, bool $recursive = true): RequestResponse
     {
         $product = collect($data)
             ->only(self::PRODUCT_ALLOWED_KEYS)
@@ -123,23 +120,23 @@ class Api2cartService
             ])
             ->toArray();
 
-        try {
             return Client::GET($store_key, 'product.update.json', $product);
-        } catch (RequestException $exception) {
-            Api2cartProductLink::where(['api2cart_product_id' => $data['id']])->forceDelete();
-
-            if ($exception->getCode() === RequestResponse::RETURN_CODE_MODEL_NOT_FOUND) {
-                Products::assignStore($store_key, $data['id'], $data['store_id']);
-
-                if ($recursive) {
-                    return self::updateSimpleProduct($store_key, $data, false);
-                }
-
-                return null;
-            }
-
-            throw $exception;
-        }
+//
+//        } catch (RequestException $exception) {
+//            Api2cartProductLink::where(['api2cart_product_id' => $data['id']])->forceDelete();
+//
+//            if ($exception->getCode() === RequestResponse::RETURN_CODE_MODEL_NOT_FOUND) {
+//                Products::assignStore($store_key, $data['id'], $data['store_id']);
+//
+//                if ($recursive) {
+//                    return self::updateSimpleProduct($store_key, $data, false);
+//                }
+//
+//                return null;
+//            }
+//
+//            throw $exception;
+//        }
     }
 
     /**
@@ -148,11 +145,9 @@ class Api2cartService
      * @param string $store_key
      * @param array $data
      * @param bool $recursive
-     * @return RequestResponse|null
-     * @throws GuzzleException
-     * @throws RequestException
+     * @return RequestResponse
      */
-    public static function updateVariant(string $store_key, array $data, bool $recursive = true): ?RequestResponse
+    public static function updateVariant(string $store_key, array $data, bool $recursive = true): RequestResponse
     {
         $properties = collect($data)
             ->only(self::PRODUCT_ALLOWED_KEYS)
@@ -163,29 +158,29 @@ class Api2cartService
             ])
             ->toArray();
 
-        try {
+//        try {
             return Client::GET($store_key, 'product.variant.update.json', $properties);
-        } catch (RequestException $exception) {
-            if ($exception->getCode() === RequestResponse::RETURN_CODE_STORE_ID_NOT_SUPPORTED) {
-                Products::assignStore($store_key, $properties['id'], $properties['store_id']);
-
-                if ($recursive) {
-                    return self::updateVariant($store_key, $properties, false);
-                }
-
-                return null;
-            } elseif ($exception->getCode() === RequestResponse::RETURN_CODE_MODEL_NOT_FOUND) {
-                Products::assignStore($store_key, $properties['id'], $properties['store_id']);
-
-                if ($recursive) {
-                    return self::updateVariant($store_key, $properties, false);
-                }
-
-                return null;
-            }
-
-            throw $exception;
-        }
+//        } catch (RequestException $exception) {
+//            if ($exception->getCode() === RequestResponse::RETURN_CODE_STORE_ID_NOT_SUPPORTED) {
+//                Products::assignStore($store_key, $properties['id'], $properties['store_id']);
+//
+//                if ($recursive) {
+//                    return self::updateVariant($store_key, $properties, false);
+//                }
+//
+//                return null;
+//            } elseif ($exception->getCode() === RequestResponse::RETURN_CODE_MODEL_NOT_FOUND) {
+//                Products::assignStore($store_key, $properties['id'], $properties['store_id']);
+//
+//                if ($recursive) {
+//                    return self::updateVariant($store_key, $properties, false);
+//                }
+//
+//                return null;
+//            }
+//
+//            throw $exception;
+//        }
     }
 
     /**
@@ -217,29 +212,24 @@ class Api2cartService
 
 
     /**
-     * @param Api2cartConnection $connection
-     * @param array              $product_data
-     *
+     * @param Api2cartProductLink $product_link
      * @return RequestResponse
-     * @throws Exception|GuzzleException
-     *
-     * @throws RequestException
      */
-    public static function productUpdateOrCreate(Api2cartConnection $connection, array $product_data): RequestResponse
+    public static function productUpdateOrCreate(Api2cartProductLink $product_link): RequestResponse
     {
-        $product = self::getProductTypeAndId($connection->bridge_api_key, $product_data['sku']);
+        $product_data = $product_link->getProductData();
+        $store_key = $product_link->api2cartConnection->bridge_api_key;
 
-        switch ($product['type']) {
+        switch ($product_link->api2cart_product_type) {
             case 'product':
-                $properties = array_merge($product_data, ['id' => $product['id']]);
-                return self::updateSimpleProduct($connection->bridge_api_key, $properties);
+                $properties = array_merge($product_data, ['id' => $product_link->api2cart_product_id]);
+                return self::updateSimpleProduct($store_key, $properties);
             case 'variant':
-                $properties = array_merge($product_data, ['id' => $product['id']    ]);
-                return self::updateVariant($connection->bridge_api_key, $properties);
+                $properties = array_merge($product_data, ['id' => $product_link->api2cart_product_id]);
+                return self::updateVariant($store_key, $properties);
             default:
-                self::createSimpleProduct($connection->bridge_api_key, $product_data)->isSuccess();
-
-                return self::updateSimpleProduct($connection->bridge_api_key, $product_data);
+                self::createSimpleProduct($store_key, $product_data);
+                return self::updateSimpleProduct($store_key, $product_data);
         }
     }
 
@@ -499,5 +489,26 @@ class Api2cartService
         $product['special_price'] = $product['special_price']['value'];
 
         return $product;
+    }
+
+    /**
+     * @param Api2cartProductLink $product_link
+     * @return bool
+     */
+    public static function updateSku(Api2cartProductLink $product_link): bool
+    {
+        $store_key = $product_link->api2cartConnection->bridge_api_key;
+
+        if ($product_link->api2cart_product_type === null) {
+            $typeAndId = self::getProductTypeAndId($store_key, $product_link->product->sku);
+            $product_link->update([
+                'api2cart_product_type' => $typeAndId['type'],
+                'api2cart_product_id' => $typeAndId['id'],
+            ]);
+        }
+
+        $response = self::productUpdateOrCreate($product_link);
+
+        return $response->isSuccess();
     }
 }
