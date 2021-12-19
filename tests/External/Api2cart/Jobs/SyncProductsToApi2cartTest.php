@@ -14,16 +14,6 @@ class SyncProductsToApi2cartTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        Api2cartConnection::query()->forceDelete();
-        Inventory::query()->forceDelete();
-        Product::query()->forceDelete();
-        Tag::query()->forceDelete();
-    }
-
     /**
      * A basic feature test example.
      *
@@ -45,7 +35,5 @@ class SyncProductsToApi2cartTest extends TestCase
         $this->assertTrue(Product::withAllTags(['Not Synced'])->exists());
 
         SyncProductsJob::dispatchNow();
-
-//        $this->assertFalse(Product::withAllTags(['Not Synced'])->exists(), 'Sync tag still attached');
     }
 }

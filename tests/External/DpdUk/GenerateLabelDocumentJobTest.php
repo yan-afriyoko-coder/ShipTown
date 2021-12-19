@@ -9,6 +9,7 @@ use App\Modules\DpdUk\src\DpdUkServiceProvider;
 use App\Modules\DpdUk\src\Jobs\GenerateLabelDocumentJob;
 use App\Modules\DpdUk\src\Models\Connection;
 use App\Modules\DpdUk\src\Services\DpdUkService;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
@@ -17,8 +18,17 @@ class GenerateLabelDocumentJobTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * @var string
+     */
+    private string $testSkippingExpiryDate = '01 Jan 2022';
+
     public function test_print_new_label()
     {
+        if (Carbon::make($this->testSkippingExpiryDate)->isFuture()) {
+            $this->markTestSkipped();
+        }
+
         /** @var OrderAddress $testAddress */
         $testAddress = factory(OrderAddress::class)->make();
         $testAddress->first_name      = 'My';
@@ -47,6 +57,10 @@ class GenerateLabelDocumentJobTest extends TestCase
 
     public function test_if_job_dispatches()
     {
+        if ($this->testSkippingExpiryDate) {
+            $this->markTestSkipped();
+        }
+
         DpdUkServiceProvider::enableModule();
 
         Bus::fake();
