@@ -122,7 +122,6 @@ class Api2cartProductLink extends BaseModel
     /**
      * @return bool
      * @throws GuzzleException
-     * @throws RequestException
      */
     public function postProductUpdate(): bool
     {
@@ -138,6 +137,10 @@ class Api2cartProductLink extends BaseModel
                 return false;
             }
             $this->updateTypeAndId();
+        }
+
+        if ($this->api2cart_product_id === null) {
+            return false;
         }
 
         return Api2cartService::updateProduct($store_key, $this->getProductData())->isSuccess();
