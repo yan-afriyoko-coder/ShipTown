@@ -189,9 +189,20 @@ class Api2cartService
      */
     public static function productUpdateOrCreate(Api2cartProductLink $product_link): RequestResponse
     {
-        $product_data = $product_link->getProductData();
         $store_key = $product_link->api2cartConnection->bridge_api_key;
+        $product_data = $product_link->getProductData();
 
+        // fetch api2cart product type and id
+        if ($product_link->api2cart_product_type === null) {
+            $typeAndId = self::getProductTypeAndId($store_key, $product_link->product->sku);
+
+            $product_link->update([
+                'api2cart_product_type' => $typeAndId['type'],
+                'api2cart_product_id' => $typeAndId['id'],
+            ]);
+        }
+
+        // if product not found by previous search, create new
         if ($product_link->api2cart_product_type === null) {
             $response = self::createSimpleProduct($store_key, $product_data);
 
@@ -218,6 +229,15 @@ class Api2cartService
                 $response = self::updateSimpleProduct($store_key, $properties);
                 switch ($response->getReturnCode()) {
                     case RequestResponse::RETURN_CODE_MODEL_NOT_FOUND:
+                        // product might not be assigned to store, we try it
+                        if (data_get($properties, 'store_id')) {
+                            Products::assignStore(
+                                $store_key,
+                                data_get($properties, 'id'),
+                                data_get($properties, 'store_id')
+                            );
+                        }
+
                         $product_link->update([
                             'api2cart_product_type' => null,
                             'api2cart_product_id' => null
@@ -491,18 +511,6 @@ class Api2cartService
      */
     public static function updateSku(Api2cartProductLink $product_link): bool
     {
-        $store_key = $product_link->api2cartConnection->bridge_api_key;
-
-        if ($product_link->api2cart_product_type === null) {
-            $typeAndId = self::getProductTypeAndId($store_key, $product_link->product->sku);
-            $product_link->update([
-                'api2cart_product_type' => $typeAndId['type'],
-                'api2cart_product_id' => $typeAndId['id'],
-            ]);
-        }
-
-        $response = self::productUpdateOrCreate($product_link);
-
-        return $response->isSuccess();
+        return self::productUpdateOrCreate($product_link)->isSuccess();
     }
 }
