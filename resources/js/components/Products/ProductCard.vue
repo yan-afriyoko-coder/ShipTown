@@ -221,7 +221,7 @@
                     case 'orders':
                         if(!this.activeOrderProducts.length){
                             this.loadActiveOrders();
-                            this.loadInactiveOrders();
+                            this.loadCompletedOrders(10);
                         }
                         break;
                     case 'activityLog':
@@ -243,13 +243,13 @@
                 currentTab: '',
                 showOrders: false,
                 activeOrderProducts: [],
-                inactiveOrderProducts: []
+                completeOrderProducts: []
             };
         },
 
         computed: {
             orders() {
-                return this.activeOrderProducts.concat(this.inactiveOrderProducts)
+                return this.activeOrderProducts.concat(this.completeOrderProducts)
             }
         },
 
@@ -310,19 +310,19 @@
                     });
             },
 
-            loadInactiveOrders: function () {
+            loadCompletedOrders: function (count = 5) {
                 this.statusMessageOrder = "Loading orders ..."
                 const params = {
                     'filter[product_id]': this.product['id'],
                     'filter[order.is_active]': false,
                     'sort': '-id',
                     'include': 'order',
-                    'per_page': 5
+                    'per_page': count
                 }
                 this.apiGetOrderProducts(params)
                     .then(({data}) => {
                         this.statusMessageOrder = '';
-                        this.inactiveOrderProducts = data.data;
+                        this.completeOrderProducts = data.data;
                     });
             },
 
