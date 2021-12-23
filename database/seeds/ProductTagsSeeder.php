@@ -13,10 +13,12 @@ class ProductTagsSeeder extends Seeder
      */
     public function run()
     {
-        factory(Tag::class, Product::query()->count())
-            ->create()
-            ->each(function ($tag) {
-                Product::query()->inRandomOrder()->first()->attachTag($tag);
-            });
+        factory(Tag::class)->create(['name' => 'slow']);
+        factory(Tag::class)->create(['name' => 'discontinued']);
+        factory(Tag::class)->create(['name' => 'best seller']);
+
+        Tag::all()->each(function ($tag) {
+            Product::query()->inRandomOrder()->first()->attachTag($tag);
+        });
     }
 }

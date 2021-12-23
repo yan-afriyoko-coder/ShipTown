@@ -24,11 +24,6 @@ class SplitOrdersScenarioSeeder extends Seeder
     private $sampleProducts;
 
     /**
-     * @var Collection|Warehouse
-     */
-    private $sampleWarehouses;
-
-    /**
      * Run the database seeds.
      *
      * @return void
@@ -36,7 +31,7 @@ class SplitOrdersScenarioSeeder extends Seeder
     public function run()
     {
         $this->ensurePackingStatusExists();
-        $this->createSampleWarehouses(3);
+//        $this->createSampleWarehouses(3);
         $this->createWarehouseAutomations();
         $this->createSampleProducts(3);
         $this->createSampleSplitOrders(1);
@@ -47,7 +42,7 @@ class SplitOrdersScenarioSeeder extends Seeder
      */
     private function createWarehouseAutomations(): void
     {
-        $this->sampleWarehouses->each(function (Warehouse $warehouse) {
+        Warehouse::all()->each(function (Warehouse $warehouse) {
             $automation = new Automation();
             $automation->enabled = false;
             $automation->name = 'packing to packing_' . $warehouse->code;
@@ -78,17 +73,6 @@ class SplitOrdersScenarioSeeder extends Seeder
 
     /**
      * @param int $count
-     * @return Collection|Model|mixed
-     */
-    private function createSampleWarehouses(int $count)
-    {
-        $this->sampleWarehouses = factory(Warehouse::class, $count)->create();
-
-        return $this->sampleWarehouses;
-    }
-
-    /**
-     * @param int $count
      */
     protected function createSampleProducts(int $count)
     {
@@ -106,11 +90,11 @@ class SplitOrdersScenarioSeeder extends Seeder
         $orders->each(function (Order $order) {
             $order->is_editing = true;
             $order->status_code = 'packing';
-            $order->order_number .= '-SPLIT';
+            $order->order_number .= '-SAMPLE-SPLIT';
             $order->save();
 
             // we will duplicate collection each time
-            $warehouses = collect($this->sampleWarehouses);
+            $warehouses = collect(Warehouse::all());
 
             $this->sampleProducts->each(function (Product $product) use ($order, $warehouses) {
                 $warehouse = $warehouses->shift();
@@ -149,11 +133,11 @@ class SplitOrdersScenarioSeeder extends Seeder
         $orders->each(function (Order $order) {
             $order->is_editing = true;
             $order->status_code = 'packing';
-            $order->order_number .= '-SPLIT-SINGLE';
+            $order->order_number .= '-SAMPLE-SPLIT';
             $order->save();
 
             // we will duplicate collection each time
-            $warehouses = collect($this->sampleWarehouses);
+            $warehouses = Warehouse::all();
 
             $this->sampleProducts->each(function (Product $product) use ($order, $warehouses) {
                 $warehouse = $warehouses->first();
