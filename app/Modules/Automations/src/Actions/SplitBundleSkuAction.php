@@ -109,7 +109,7 @@ class SplitBundleSkuAction extends BaseOrderAction
                 $newOrderProduct->order_id = $originalOrderProduct->order_id;
                 $newOrderProduct->product_id = $product->id;
                 $newOrderProduct->name_ordered = $product->name;
-                $newOrderProduct->price = $product->price ?: $product->prices()->max('price');
+                $newOrderProduct->price = $product->prices()->max('price');
                 $newOrderProduct->quantity_ordered = $quantity_to_ship;
 
                 $newOrderProducts_totalPrice += $newOrderProduct->price;
