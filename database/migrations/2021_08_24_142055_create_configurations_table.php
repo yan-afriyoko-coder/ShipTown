@@ -26,14 +26,4 @@ class CreateConfigurationsTable extends Migration
 
         Configuration::create([]);
     }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('configurations');
-    }
 }
