@@ -20,7 +20,7 @@ class CreateProductPricesTable extends Migration
         Schema::create('product_prices', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('product_id')->index();
-            $table->unsignedBigInteger('location_id');
+            $table->string('location_id')->default('');
             $table->decimal('price', 10, 2)->default(99999);
             $table->decimal('sale_price', 10, 2)->default(99999);
             $table->date('sale_price_start_date')->default('1899-01-01');

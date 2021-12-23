@@ -21,7 +21,7 @@ class CreateInventoryTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('warehouse_id')->nullable();
             $table->unsignedBigInteger('product_id')->index();
-            $table->unsignedBigInteger('location_id');
+            $table->string('location_id')->default('');
             $table->string('shelve_location')->default('');
             $table->decimal('quantity', 10, 2)->default(0);
             $table->decimal('quantity_reserved', 10, 2)->default(0);

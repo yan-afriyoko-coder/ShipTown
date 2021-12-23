@@ -23,7 +23,7 @@ class CreateModulesAutomationsActionsTable extends Migration
             $table->foreignId('automation_id');
             $table->smallInteger('priority')->nullable(false)->default(0);
             $table->string('action_class')->nullable();
-            $table->string('action_value')->nullable()->default('');
+            $table->string('action_value')->nullable(false)->default('');
             $table->timestamps();
         });
     }

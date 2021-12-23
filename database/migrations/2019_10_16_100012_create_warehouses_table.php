@@ -21,8 +21,14 @@ class CreateWarehousesTable extends Migration
             $table->bigIncrements('id');
             $table->string('code')->unique();
             $table->string('name');
+            $table->foreignId('address_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('address_id')
+                ->references('id')
+                ->on('order_addresses')
+                ->onDelete('CASCADE');
         });
     }
 
