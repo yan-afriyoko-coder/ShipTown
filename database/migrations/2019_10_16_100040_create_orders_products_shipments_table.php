@@ -20,10 +20,19 @@ class CreateOrdersProductsShipmentsTable extends Migration
         Schema::create('orders_products_shipments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable(true);
+            $table->foreignId('warehouse_id')->nullable(true);
+            $table->foreignId('order_id')->nullable(true);
             $table->foreignId('order_product_id');
             $table->decimal('quantity_shipped', 10);
             $table->foreignId('order_shipment_id')->nullable(true);
             $table->timestamps();
+
+            $table->foreign('order_id')
+                ->on('orders')
+                ->references('id')
+                ->onDelete('SET NULL');
         });
+
+
     }
 }

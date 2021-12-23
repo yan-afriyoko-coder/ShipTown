@@ -19,6 +19,7 @@ class CreateOrderAddressesTable extends Migration
 
         Schema::create('order_addresses', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->boolean('encrypted')->default(false);
             $table->string('company')->default('');
             $table->string('gender')->default('');
             $table->string('first_name')->default('');
