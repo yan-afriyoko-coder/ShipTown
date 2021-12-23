@@ -151,7 +151,7 @@
                                     </div>
                                     <div class="small pl-sm-0 pl-md-1">
                                         <b>
-                                            {{ activity['causer'] === null ? 'AutoStatus' : activity['causer']['name'] }}
+                                            {{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }}
                                         </b>
                                         {{ activity['description'] }} {{ activity['changes'] }}
                                     </div>
