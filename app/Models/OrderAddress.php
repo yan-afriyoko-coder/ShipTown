@@ -85,6 +85,10 @@ class OrderAddress extends Model
         'region',
     ];
 
+    protected $casts = [
+        'phone_encrypted' => 'encrypted'
+    ];
+
     public function getFirstNameAttribute(): string
     {
         if ($this->encrypted) {
@@ -105,11 +109,36 @@ class OrderAddress extends Model
 
     public function getPhoneAttribute(): string
     {
-        if ($this->encrypted) {
-            return  Crypt::decryptString($this->attributes['phone']);
+        if ($this->attributes['phone']) {
+            $this->update([
+                'phone' => null,
+                'phone_encrypted' => Crypt::encryptString($this->attributes['phone'])
+            ]);
         }
 
-        return $this->attributes['phone'];
+        return Crypt::decryptString($this->attributes['phone_encrypted']);
+    }
+
+    public function setPhoneAttribute($value): void
+    {
+        $this->attributes['phone_encrypted'] = Crypt::encryptString($value);
+    }
+
+    public function getEmailAttribute(): string
+    {
+        if ($this->attributes['phone']) {
+            $this->update([
+                'email' => null,
+                'email_encrypted' => Crypt::encryptString($this->attributes['email'])
+            ]);
+        }
+
+        return Crypt::decryptString($this->attributes['email_encrypted']);
+    }
+
+    public function setEmailAttribute($value): void
+    {
+        $this->attributes['email_encrypted'] = Crypt::encryptString($value);
     }
 
     /**
