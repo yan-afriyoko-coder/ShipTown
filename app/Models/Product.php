@@ -10,12 +10,15 @@ use App\Traits\LogsActivityTrait;
 use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use phpDocumentor\Reflection\Types\This;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -173,6 +176,7 @@ class Product extends BaseModel
                 'aliases',
                 'tags',
                 'prices',
+                'inventory.warehouse',
             ]);
     }
 

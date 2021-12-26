@@ -113,4 +113,12 @@ class Inventory extends BaseModel
     {
         return $this->belongsTo(Product::class);
     }
+
+    /**
+     * @return BelongsTo
+     */
+    public function warehouse(): BelongsTo
+    {
+        return $this->belongsTo(Warehouse::class);
+    }
 }

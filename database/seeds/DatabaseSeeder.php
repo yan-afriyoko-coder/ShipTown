@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\RunHourlyJobs;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,6 +13,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+
             ConfigurationSeeder::class,
             NavigationMenuSeeder::class,
             WarehouseSeeder::class,
@@ -38,6 +40,6 @@ class DatabaseSeeder extends Seeder
             DpdUkTestConnectionSeeder::class,
         ]);
 
-        \App\Jobs\RunHourlyJobs::dispatchNow();
+        RunHourlyJobs::dispatchNow();
     }
 }

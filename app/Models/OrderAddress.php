@@ -85,31 +85,76 @@ class OrderAddress extends Model
         'region',
     ];
 
+    protected $casts = [
+        'phone_encrypted' => 'encrypted'
+    ];
+
     public function getFirstNameAttribute(): string
     {
-        if ($this->encrypted) {
-            return  Crypt::decryptString($this->attributes['first_name']);
+        if (data_get($this->attributes, 'first_name')) {
+            $this->update([
+                'first_name' => null,
+                'first_name_encrypted' => Crypt::encryptString(data_get($this->attributes, 'first_name'))
+            ]);
         }
 
-        return $this->attributes['first_name'];
+        return Crypt::decryptString($this->attributes['first_name_encrypted']);
+    }
+
+    public function setFirstNameAttribute($value): void
+    {
+        $this->attributes['first_name_encrypted'] = Crypt::encryptString($value);
     }
 
     public function getLastNameAttribute(): string
     {
-        if ($this->encrypted) {
-            return  Crypt::decryptString($this->attributes['last_name']);
+        if (data_get($this->attributes, 'last_name')) {
+            $this->update([
+                'last_name' => null,
+                'last_name_encrypted' => Crypt::encryptString(data_get($this->attributes, 'last_name'))
+            ]);
         }
 
-        return $this->attributes['last_name'];
+        return Crypt::decryptString($this->attributes['last_name_encrypted']);
+    }
+
+    public function setLastNameAttribute($value): void
+    {
+        $this->attributes['last_name_encrypted'] = Crypt::encryptString($value);
     }
 
     public function getPhoneAttribute(): string
     {
-        if ($this->encrypted) {
-            return  Crypt::decryptString($this->attributes['phone']);
+        if (data_get($this->attributes, 'phone')) {
+            $this->update([
+                'phone' => null,
+                'phone_encrypted' => Crypt::encryptString($this->attributes['phone'])
+            ]);
         }
 
-        return $this->attributes['phone'];
+        return Crypt::decryptString($this->attributes['phone_encrypted']);
+    }
+
+    public function setPhoneAttribute($value): void
+    {
+        $this->attributes['phone_encrypted'] = Crypt::encryptString($value);
+    }
+
+    public function getEmailAttribute(): string
+    {
+        if (data_get($this->attributes, 'email')) {
+            $this->update([
+                'email' => null,
+                'email_encrypted' => Crypt::encryptString($this->attributes['email'])
+            ]);
+        }
+
+        return Crypt::decryptString($this->attributes['email_encrypted']);
+    }
+
+    public function setEmailAttribute($value): void
+    {
+        $this->attributes['email_encrypted'] = Crypt::encryptString($value);
     }
 
     /**

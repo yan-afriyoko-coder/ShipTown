@@ -22,6 +22,10 @@ class CreateOrdersTable extends Migration
             $table->unsignedBigInteger('shipping_address_id')->nullable();
             $table->string('order_number')->unique();
             $table->string('status_code')->default('');
+            $table->boolean('is_active')->nullable(false)->default(0);
+            $table->boolean('is_editing')->default(0);
+            $table->decimal('total_products')->default(0);
+            $table->decimal('total_shipping')->default(0);
             $table->decimal('total', 10, 2)->default(0);
             $table->decimal('total_paid')->default(0);
             $table->string('shipping_method_code')->default('')->nullable(true);
@@ -33,6 +37,7 @@ class CreateOrdersTable extends Migration
             $table->timestamp('packed_at')->nullable();
             $table->unsignedBigInteger('packer_user_id')->nullable();
             $table->decimal('total_quantity_ordered', 10, 2)->default(0);
+            $table->decimal('total_quantity_to_ship')->default(0);
             $table->softDeletes();
             $table->timestamps();
 
@@ -45,13 +50,6 @@ class CreateOrdersTable extends Migration
                 ->references('id')
                 ->on('users')
                 ->onDelete('SET NULL');
-        });
-
-        Schema::table('orders', function (Blueprint $table) {
-            $table->boolean('is_active')
-                ->after('status_code')
-                ->nullable(false)
-                ->default(0);
         });
     }
 
