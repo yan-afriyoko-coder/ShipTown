@@ -149,10 +149,14 @@ class Client
 
         $authorizationResponse = self::getGuzzleClient()->post(self::COMMON_API_AUTHORIZE, $options);
 
-        $response_message = $authorizationResponse->getBody()->getContents();
-        $authorization = json_decode($response_message, true);
+        $response_content = $authorizationResponse->getBody()->getContents();
+        $authorization = json_decode($response_content, true);
 
         if ($authorization['Status'] === 'FAIL') {
+            Log::debug('API REQUEST', [
+                'service' => 'DPD-IRL',
+                'response' => $response_content,
+            ]);
             throw new AuthorizationException($authorization['Code'].' : '.$authorization['Reason']);
         }
 
