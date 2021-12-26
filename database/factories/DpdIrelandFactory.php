@@ -9,7 +9,7 @@ $factory->define(App\Modules\DpdIreland\src\Models\DpdIreland::class, function (
         'live'              => false,
         'token'             => env('TEST_DPD_TOKEN', $faker->randomNumber(9)),
         'user'              => env('TEST_DPD_USER', $faker->randomNumber(6)),
-        'password'          => env('TEST_DPD_USER', $faker->randomNumber(6)),
+        'password'          => env('TEST_DPD_PASSWORD', $faker->randomNumber(6)),
         'contact'           => 'John Smith',
         'contact_telephone' => '12345678901',
         'contact_email'     => 'john.smith@dpd.ie',
