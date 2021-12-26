@@ -21,24 +21,24 @@ class DatabaseSeeder extends Seeder
 
             UsersSeeder::class,
 
-//            ProductsSeeder::class,
-//            ProductAliasSeeder::class,
-//            ProductTagsSeeder::class,
-//            ProductPriceSeeder::class,
-//
-//            InventorySeeder::class,
-//
-//            SplitOrdersScenarioSeeder::class,
-//
-//            OrdersSeeder::class,
-//            UnpaidOrdersSeeder::class,
-//            ClosedOrdersSeeder::class,
-//            PicksSeeder::class,
-//            OrderShipmentsSeeder::class,
-//
-//            PrintNodeClientSeeder::class,
-//            DpdUkTestConnectionSeeder::class,
-            DpdIrelandSeeder::class
+            PrintNodeClientSeeder::class,
+            DpdUkTestConnectionSeeder::class,
+            DpdIrelandSeeder::class,
+
+            ProductsSeeder::class,
+            ProductAliasSeeder::class,
+            ProductTagsSeeder::class,
+            ProductPriceSeeder::class,
+
+            InventorySeeder::class,
+
+            SplitOrdersScenarioSeeder::class,
+
+            OrdersSeeder::class,
+            UnpaidOrdersSeeder::class,
+            ClosedOrdersSeeder::class,
+            PicksSeeder::class,
+            OrderShipmentsSeeder::class,
         ]);
 
         RunHourlyJobs::dispatchNow();
