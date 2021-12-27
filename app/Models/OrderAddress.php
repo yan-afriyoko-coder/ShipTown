@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Crypt;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -95,7 +96,11 @@ class OrderAddress extends Model
             return $this->getRawOriginal('first_name');
         }
 
-        return Crypt::decryptString($this->attributes['first_name_encrypted']);
+        try {
+            return Crypt::decryptString($this->attributes['first_name_encrypted']);
+        } catch (Exception $exception) {
+            return '';
+        }
     }
 
     public function setFirstNameAttribute($value): void
@@ -109,8 +114,11 @@ class OrderAddress extends Model
             return $this->getRawOriginal('last_name');
         }
 
-
-        return Crypt::decryptString($this->attributes['last_name_encrypted']);
+        try {
+            return Crypt::decryptString($this->attributes['last_name_encrypted']);
+        } catch (Exception $exception) {
+            return '';
+        }
     }
 
     public function setLastNameAttribute($value): void
@@ -124,7 +132,11 @@ class OrderAddress extends Model
             return $this->getRawOriginal('phone');
         }
 
-        return Crypt::decryptString($this->attributes['phone_encrypted']);
+        try {
+            return Crypt::decryptString($this->attributes['phone_encrypted']);
+        } catch (Exception $exception) {
+            return '';
+        }
     }
 
     public function setPhoneAttribute($value): void
@@ -138,7 +150,11 @@ class OrderAddress extends Model
             return $this->getRawOriginal('email');
         }
 
-        return Crypt::decryptString($this->attributes['email_encrypted']);
+        try {
+            return Crypt::decryptString($this->attributes['email_encrypted']);
+        } catch (Exception $exception) {
+            return '';
+        }
     }
 
     public function setEmailAttribute($value): void
