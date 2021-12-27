@@ -66,6 +66,11 @@ class Client
             'body' => $xml,
         ];
 
+        Log::debug('API REQUEST', [
+            'service' => 'DPD-IRL',
+            'request' => str_replace("\n", '', $xml),
+        ]);
+
         $response = self::getGuzzleClient()->post(self::COMMON_API_PREADVICE, $options);
         $response_content = $response->getBody()->getContents();
 
@@ -124,7 +129,7 @@ class Client
 
     /**
      * @return array
-     * @throws AuthorizationException
+     * @throws AuthorizationException|GuzzleException
      */
     private static function getAuthorization(): array
     {
