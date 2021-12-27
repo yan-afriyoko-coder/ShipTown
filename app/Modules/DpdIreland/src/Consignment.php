@@ -68,7 +68,7 @@ class Consignment
             'CountryCode'      => '',
         ],
         'CollectionAddress' => [
-            'Contact'          => 'John ',
+            'Contact'          => '',
             'ContactTelephone' => '',
             'ContactEmail'     => '',
             'BusinessName'     => '',
