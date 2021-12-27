@@ -138,20 +138,25 @@ class Client
             'Type'     => 'CUST',
         ];
 
-        $headers = [
-            'Authorization' => 'Bearer '.$config->token,
-            'Content-Type'  => 'application/json',
-            'Accept'        => 'application/json',
+        $options = [
+            'headers' => [
+                'Authorization' => 'Bearer '.$config->token,
+                'Content-Type'  => 'application/json',
+                'Accept'        => 'application/json',
+            ],
+            'json' => $body,
         ];
 
-        $authorizationResponse = self::getGuzzleClient()->post(self::COMMON_API_AUTHORIZE, [
-            'headers' => $headers,
-            'json'    => $body,
-        ]);
+        $authorizationResponse = self::getGuzzleClient()->post(self::COMMON_API_AUTHORIZE, $options);
 
-        $authorization = json_decode($authorizationResponse->getBody()->getContents(), true);
+        $response_content = $authorizationResponse->getBody()->getContents();
+        $authorization = json_decode($response_content, true);
 
         if ($authorization['Status'] === 'FAIL') {
+            Log::debug('API REQUEST', [
+                'service' => 'DPD-IRL',
+                'response' => $response_content,
+            ]);
             throw new AuthorizationException($authorization['Code'].' : '.$authorization['Reason']);
         }
 

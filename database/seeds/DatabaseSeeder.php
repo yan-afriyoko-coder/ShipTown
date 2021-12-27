@@ -21,6 +21,10 @@ class DatabaseSeeder extends Seeder
 
             UsersSeeder::class,
 
+            PrintNodeClientSeeder::class,
+            DpdUkTestConnectionSeeder::class,
+            DpdIrelandSeeder::class,
+
             ProductsSeeder::class,
             ProductAliasSeeder::class,
             ProductTagsSeeder::class,
@@ -35,9 +39,6 @@ class DatabaseSeeder extends Seeder
             ClosedOrdersSeeder::class,
             PicksSeeder::class,
             OrderShipmentsSeeder::class,
-
-            PrintNodeClientSeeder::class,
-            DpdUkTestConnectionSeeder::class,
         ]);
 
         RunHourlyJobs::dispatchNow();
