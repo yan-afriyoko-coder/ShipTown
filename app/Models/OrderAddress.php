@@ -91,11 +91,8 @@ class OrderAddress extends Model
 
     public function getFirstNameAttribute(): string
     {
-        if (data_get($this->attributes, 'first_name')) {
-            $this->update([
-                'first_name' => null,
-                'first_name_encrypted' => Crypt::encryptString(data_get($this->attributes, 'first_name'))
-            ]);
+        if ($this->getRawOriginal('first_name') != '') {
+            return $this->getRawOriginal('first_name');
         }
 
         return Crypt::decryptString($this->attributes['first_name_encrypted']);
@@ -108,12 +105,10 @@ class OrderAddress extends Model
 
     public function getLastNameAttribute(): string
     {
-        if (data_get($this->attributes, 'last_name')) {
-            $this->update([
-                'last_name' => null,
-                'last_name_encrypted' => Crypt::encryptString(data_get($this->attributes, 'last_name'))
-            ]);
+        if ($this->getRawOriginal('last_name') != '') {
+            return $this->getRawOriginal('last_name');
         }
+
 
         return Crypt::decryptString($this->attributes['last_name_encrypted']);
     }
@@ -125,11 +120,8 @@ class OrderAddress extends Model
 
     public function getPhoneAttribute(): string
     {
-        if (data_get($this->attributes, 'phone')) {
-            $this->update([
-                'phone' => null,
-                'phone_encrypted' => Crypt::encryptString($this->attributes['phone'])
-            ]);
+        if ($this->getRawOriginal('phone') != '') {
+            return $this->getRawOriginal('phone');
         }
 
         return Crypt::decryptString($this->attributes['phone_encrypted']);
@@ -142,11 +134,8 @@ class OrderAddress extends Model
 
     public function getEmailAttribute(): string
     {
-        if (data_get($this->attributes, 'email')) {
-            $this->update([
-                'email' => null,
-                'email_encrypted' => Crypt::encryptString($this->attributes['email'])
-            ]);
+        if ($this->getRawOriginal('email') != '') {
+            return $this->getRawOriginal('email');
         }
 
         return Crypt::decryptString($this->attributes['email_encrypted']);
