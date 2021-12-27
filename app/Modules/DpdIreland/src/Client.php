@@ -9,13 +9,15 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Cache;
 use Log;
-use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class Client.
  */
 class Client
 {
+    /**
+     * DPD LIVE API URL.
+     */
     const API_URL_LIVE = 'https://papi.dpd.ie';
 
     /**
@@ -85,7 +87,7 @@ class Client
 
     /**
      * @return mixed
-     * @throws AuthorizationException
+     * @throws AuthorizationException|GuzzleException
      */
     private static function getAuthorizationToken()
     {
@@ -98,7 +100,7 @@ class Client
      * Using cache we will not need to reauthorize every time.
      *
      * @return array
-     * @throws AuthorizationException
+     * @throws AuthorizationException|GuzzleException
      */
     public static function getCachedAuthorization(): array
     {
@@ -115,16 +117,6 @@ class Client
         Cache::put(self::AUTHORIZATION_CACHE_KEY, $authorization, 86400);
 
         return $authorization;
-    }
-
-    /**
-     * @throws AuthorizationException
-     */
-    public static function forceAuthorization(): array
-    {
-        self::clearCache();
-
-        return self::getCachedAuthorization();
     }
 
     /**
@@ -180,7 +172,7 @@ class Client
         return new GuzzleClient([
             'base_uri'   => self::getBaseUrl(),
             'timeout'    => 60,
-            'exceptions' => true,
+            'exceptions' => false,
         ]);
     }
 
