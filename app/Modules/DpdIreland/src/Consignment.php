@@ -7,6 +7,7 @@ use App\Modules\DpdIreland\src\Models\DpdIreland;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
+use Log;
 use Spatie\ArrayToXml\ArrayToXml;
 
 /**
@@ -118,6 +119,7 @@ class Consignment
         $this->validator = Validator::make($payload, $this->rules);
 
         if ($this->validator->fails()) {
+            Log::warning('Consignment validation fails', $payload);
             throw new ConsignmentValidationException($this->validator->errors());
         }
 
