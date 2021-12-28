@@ -215,8 +215,8 @@ return [
 
         // AutoStatus modules
         // order is important!
-        App\Modules\AutoStatusAwaitingPayment\src\AutoStatusAwaitingPaymentServiceProvider::class,
-        App\Modules\AutoStatusPaid\src\AutoStatusPaidServiceProvider::class,
+//        App\Modules\AutoStatusAwaitingPayment\src\AutoStatusAwaitingPaymentServiceProvider::class,
+//        App\Modules\AutoStatusPaid\src\AutoStatusPaidServiceProvider::class,
 
         App\Modules\AutoStatusPicking\src\AutoStatusPickingServiceProvider::class,
         App\Modules\AutoStatusPackingWeb\src\AutoPackingWebServiceProvider::class,
