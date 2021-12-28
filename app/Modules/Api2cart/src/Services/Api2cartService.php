@@ -282,13 +282,9 @@ class Api2cartService
             ),
         ];
 
-        \Log::debug('magento_store_id', [$conn->magento_store_id]);
-
-        if ($conn->magento_store_id != null) {
+        if ($conn->magento_store_id !== null) {
             $params['store_id'] = $conn->magento_store_id;
         }
-
-        \Log::debug('params', $params);
 
         $response = Client::GET($conn->bridge_api_key, 'product.info.json', $params);
 
@@ -338,7 +334,7 @@ class Api2cartService
             ),
         ];
 
-        if ($connection->magento_store_id != null) {
+        if ($connection->magento_store_id !== null) {
             $params['store_id'] = $connection->magento_store_id;
         }
 
