@@ -282,6 +282,8 @@ class Api2cartService
             ),
         ];
 
+        \Log::debug('magento_store_id', [$conn->magento_store_id]);
+
         if ($conn->magento_store_id != null) {
             $params['store_id'] = $conn->magento_store_id;
         }
