@@ -282,7 +282,7 @@ class Api2cartService
             ),
         ];
 
-        if ($conn->magento_store_id) {
+        if ($conn->magento_store_id != null) {
             $params['store_id'] = $conn->magento_store_id;
         }
 
@@ -334,7 +334,7 @@ class Api2cartService
             ),
         ];
 
-        if ($connection->magento_store_id) {
+        if ($connection->magento_store_id != null) {
             $params['store_id'] = $connection->magento_store_id;
         }
 
