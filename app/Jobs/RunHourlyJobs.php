@@ -33,23 +33,5 @@ class RunHourlyJobs implements ShouldQueue
         HourlyEvent::dispatch();
 
         Log::info('Hourly event - dispatched successfully');
-
-        OrderAddress::query()
-            ->whereNull('first_name_encrypted')
-            ->orderBy('id')
-            ->limit(10000)
-            ->get()
-            ->each(function (OrderAddress $address) {
-                OrderAddress::query()->where(['id' => $address->getKey()])->toBase()->update([
-                    'first_name' => '',
-                    'first_name_encrypted' => \Crypt::encryptString($address->first_name),
-                    'last_name' => '',
-                    'last_name_encrypted' => \Crypt::encryptString($address->last_name),
-                    'phone' => '',
-                    'phone_encrypted' => \Crypt::encryptString($address->phone),
-                    'email' => '',
-                    'email_encrypted' => \Crypt::encryptString($address->email),
-                ]);
-            });
     }
 }
