@@ -288,6 +288,8 @@ class Api2cartService
             $params['store_id'] = $conn->magento_store_id;
         }
 
+        \Log::debug('params', $params);
+
         $response = Client::GET($conn->bridge_api_key, 'product.info.json', $params);
 
         if ($response->isNotSuccess()) {
