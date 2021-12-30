@@ -26,15 +26,17 @@ class IsFullyPaidCondition
      * @param bool $condition_value
      * @return bool
      */
-    public function isValid(bool $condition_value): bool
+    public function isValid(string $condition_value): bool
     {
-        $result = $this->event->order->isPaid === $condition_value;
+        $expectedBoolValue = filter_var($condition_value, FILTER_VALIDATE_BOOL);
+
+        $result = $this->event->order->isPaid === $expectedBoolValue;
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
             'result' => $result,
             'class' => class_basename(self::class),
-            'expected_isPaid' => $condition_value,
+            'expected_isPaid' => $expectedBoolValue,
             'actual_isPaid' => $this->event->order->isPaid,
         ]);
 
