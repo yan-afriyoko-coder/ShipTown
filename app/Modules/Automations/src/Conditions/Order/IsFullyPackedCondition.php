@@ -28,7 +28,7 @@ class IsFullyPackedCondition
      */
     public function isValid(bool $condition_value): bool
     {
-        $result = $this->event->order->is_packed === $condition_value;
+        $result = $this->event->order->is_packed === filter_var($condition_value, FILTER_VALIDATE_BOOL);
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
