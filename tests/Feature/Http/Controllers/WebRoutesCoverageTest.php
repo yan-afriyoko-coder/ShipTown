@@ -36,7 +36,7 @@ class WebRoutesCoverageTest extends TestCase
         $routes->each(function ($route) {
             $testName = $this->getTestName($route);
 
-            $fileName = app()->basePath().'/tests/Routes/Web/'.$testName.'Test.php';
+            $fileName = app()->basePath().'/tests/Feature/Routes/Web/'.$testName.'.php';
 
             $this->assertFileExists(
                 $fileName,
@@ -52,6 +52,13 @@ class WebRoutesCoverageTest extends TestCase
      */
     public function getTestName($route): string
     {
-        return $route->uri.'Test';
+        $routeName = $route->uri . 'Test';
+
+        $routeName = str_replace('-', '_', $routeName);
+        $routeName = str_replace('.', '_', $routeName);
+        $routeName = str_replace('{', '', $routeName);
+        $routeName = str_replace('}', '', $routeName);
+
+        return Str::ucfirst($routeName);
     }
 }

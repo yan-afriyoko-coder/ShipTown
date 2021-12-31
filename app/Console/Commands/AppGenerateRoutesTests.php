@@ -110,6 +110,13 @@ class AppGenerateRoutesTests extends Command
      */
     private function getWebRouteTestName($route): string
     {
-        return $route->uri.'Test';
+        $routeName = $route->uri . 'Test';
+
+        $routeName = str_replace('-', '_', $routeName);
+        $routeName = str_replace('.', '_', $routeName);
+        $routeName = str_replace('{', '', $routeName);
+        $routeName = str_replace('}', '', $routeName);
+
+        return Str::ucfirst($routeName);
     }
 }
