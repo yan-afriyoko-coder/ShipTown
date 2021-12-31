@@ -137,11 +137,6 @@ Vue.component('date-selector-widget', require('./components/Widgets/DateSelector
 Vue.component('autopilot-packlist-page', require('./components/AutopilotPacklistPage.vue').default);
 Vue.component('dpd-configuration', require('./components/Settings/DpdConfiguration').default);
 
-
-
-Vue.component('create-topic', require('./components/misc/CreateTopic.vue').default);
-Vue.component('subscribe-topic', require('./components/misc/SubscribeTopic.vue').default);
-Vue.component('missing-table', require('./components/misc/Missing.vue').default);
 Vue.component('products-table', require('./components/ProductsPage.vue').default);
 Vue.component('orders-table', require('./components/OrdersPage.vue').default);
 Vue.component('api2cart-configuration', require('./components/Settings/Api2cartConnections.vue').default);
