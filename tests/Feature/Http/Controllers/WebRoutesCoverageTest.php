@@ -59,6 +59,8 @@ class WebRoutesCoverageTest extends TestCase
         $routeName = str_replace('{', '', $routeName);
         $routeName = str_replace('}', '', $routeName);
 
-        return Str::ucfirst($routeName);
+        return implode('/', collect(explode('/', $routeName))->map(function ($part) {
+            return Str::ucfirst($part);
+        })->toArray());
     }
 }
