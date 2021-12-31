@@ -6,6 +6,9 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 
+/**
+ *
+ */
 class AppGenerateRoutesTests extends Command
 {
     /**
@@ -13,7 +16,7 @@ class AppGenerateRoutesTests extends Command
      *
      * @var string
      */
-    protected $signature = 'app:generate-api-routes-tests';
+    protected $signature = 'app:generate-routes-tests';
 
     /**
      * The console command description.
@@ -30,15 +33,8 @@ class AppGenerateRoutesTests extends Command
      */
     public function handle(): int
     {
-        Artisan::call('route:list --json --path=api --env=production');
-
-        $routes = collect(json_decode(Artisan::output()));
-
-        $routes->each(function ($route) {
-            $testName = $this->getTestName($route);
-
-            $this->generateTest($testName);
-        });
+        $this->generateApiRoutesTestsFiles();
+        $this->generateWebRoutesTestsFiles();
 
         return 0;
     }
@@ -67,5 +63,53 @@ class AppGenerateRoutesTests extends Command
 
         // $sample_output = 'Http/Controllers/Api/Settings/UserMeController/IndexTest'
         return str_replace('\\', '/', $testName);
+    }
+
+    /**
+     *
+     */
+    private function generateApiRoutesTestsFiles(): void
+    {
+        Artisan::call('route:list --json --path=api --env=production');
+
+        $routes = collect(json_decode(Artisan::output()));
+
+        $routes->each(function ($route) {
+            $testName = $this->getTestName($route);
+
+            $this->generateTest($testName);
+        });
+    }
+
+    /**
+     *
+     */
+    private function generateWebRoutesTestsFiles(): void
+    {
+        Artisan::call('route:list --json --env=production');
+
+        $routes = collect(json_decode(Artisan::output()))
+            ->filter(function ($route) {
+                $isNotApiRoute = ! Str::startsWith($route->uri, 'api');
+                $isGetMethod = $route->method === 'GET|HEAD';
+                $isNotDevRoute = ! Str::startsWith($route->uri, '_');
+
+                return $isNotApiRoute && $isGetMethod && $isNotDevRoute;
+            });
+
+        $routes->each(function ($route) {
+            $testName = 'Routes/Web/'.$this->getWebRouteTestName($route);
+
+            $this->generateTest($testName);
+        });
+    }
+
+    /**
+     * @param $route
+     * @return string
+     */
+    private function getWebRouteTestName($route): string
+    {
+        return $route->uri.'Test';
     }
 }
