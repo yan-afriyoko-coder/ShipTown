@@ -207,10 +207,6 @@ export default {
                 return axios.post('/api/settings/modules/api2cart/connections', data);
             },
 
-            apiPostUserInvite: function (data) {
-                return axios.post('/api/admin/user/invites', data);
-            },
-
             apiPostWidget: function (data) {
                 return axios.post('/api/widgets', data);
             },

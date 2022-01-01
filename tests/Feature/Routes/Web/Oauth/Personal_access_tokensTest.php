@@ -9,7 +9,7 @@ use Tests\TestCase;
 /**
  *
  */
-class PersonalAccessTokensTest extends TestCase
+class Personal_access_tokensTest extends TestCase
 {
     use RefreshDatabase;
 

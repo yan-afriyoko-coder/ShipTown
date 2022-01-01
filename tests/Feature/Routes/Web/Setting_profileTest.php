@@ -9,7 +9,7 @@ use Tests\TestCase;
 /**
  *
  */
-class SettingProfileTest extends TestCase
+class Setting_profileTest extends TestCase
 {
     use RefreshDatabase;
 

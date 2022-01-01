@@ -2,14 +2,6 @@
 
 namespace App\Providers;
 
-use App\Events\HourlyEvent;
-use App\Events\Product\ProductCreatedEvent;
-use App\Events\Product\ProductUpdatedEvent;
-use App\Listeners\HourlyEvent\FireActiveOrderCheckEventsListener;
-use App\Listeners\Product\ProductCreatedListener;
-use App\Listeners\Product\ProductUpdatedListener;
-use App\Models\Product;
-use App\Observers\ProductObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;

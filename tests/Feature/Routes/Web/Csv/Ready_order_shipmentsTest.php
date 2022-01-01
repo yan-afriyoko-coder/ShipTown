@@ -9,7 +9,7 @@ use Tests\TestCase;
 /**
  *
  */
-class ReadyOrderShipmentsTest extends TestCase
+class Ready_order_shipmentsTest extends TestCase
 {
     use RefreshDatabase;
 

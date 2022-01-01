@@ -10,7 +10,6 @@ use App\Models\OrderProduct;
 use App\Modules\Api2cart\src\Jobs\ImportShippingAddressJob;
 use Exception;
 use Illuminate\Support\Str;
-use phpDocumentor\Reflection\Types\Integer;
 use phpseclib\Math\BigInteger;
 
 class OrderService
