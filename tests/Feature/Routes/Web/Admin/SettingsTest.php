@@ -30,7 +30,24 @@ class SettingsTest extends TestCase
     {
         parent::setUp();
         $this->user = factory(User::class)->create();
+    }
+
+    /** @test */
+    public function test_guest_call()
+    {
+        $response = $this->get($this->uri);
+
+        $response->assertRedirect('/login');
+    }
+
+    /** @test */
+    public function test_user_call()
+    {
         $this->actingAs($this->user, 'web');
+
+        $response = $this->get($this->uri);
+
+        $response->assertForbidden();
     }
 
     /** @test */
@@ -38,16 +55,16 @@ class SettingsTest extends TestCase
     {
         $this->user->assignRole('admin');
 
+        $this->actingAs($this->user, 'web');
+
         $response = $this->get($this->uri);
 
         $response->assertSuccessful();
     }
 
     /** @test */
-    public function test_user_call()
+    public function test_if_uri_set()
     {
-        $response = $this->get($this->uri);
-
-        $response->assertForbidden();
+        $this->assertNotEmpty($this->uri);
     }
 }
