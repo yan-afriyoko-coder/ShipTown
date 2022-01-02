@@ -20,18 +20,21 @@ class IsPartiallyPaidCondition extends BaseCondition
     protected $event;
 
     /**
-     * @param $location_id
+     * @param string $condition_value
      * @return bool
      */
-    public function isValid($location_id): bool
+    public function isValid(string $condition_value): bool
     {
-        $result = $this->event->order->total_paid > 0;
+        $expectedBoolValue = filter_var($condition_value, FILTER_VALIDATE_BOOL);
+
+        $result = ($this->event->order->total_paid > 0) === $expectedBoolValue;
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
-            'result' => $result,
             'class' => class_basename(self::class),
             'total_paid' => $this->event->order->total_paid,
+            'expected' => $expectedBoolValue,
+            'actual' => $result,
         ]);
 
         return $result;

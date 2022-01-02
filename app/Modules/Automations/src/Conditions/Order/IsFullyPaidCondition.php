@@ -23,7 +23,7 @@ class IsFullyPaidCondition
     }
 
     /**
-     * @param bool $condition_value
+     * @param string $condition_value
      * @return bool
      */
     public function isValid(string $condition_value): bool
