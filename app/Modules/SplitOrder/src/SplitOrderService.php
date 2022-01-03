@@ -6,6 +6,7 @@ use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Warehouse;
+use Exception;
 
 /**
  *
@@ -71,7 +72,11 @@ class SplitOrderService
                     'quantity_picked',
                     'quantity_skipped_picking',
                 ]);
-                $new->order()->associate($this->getOrderOrCreate());
+                try {
+                    $new->order()->associate($this->getOrderOrCreate());
+                } catch (Exception $exception) {
+                    return true;
+                }
                 $new->save();
 
 

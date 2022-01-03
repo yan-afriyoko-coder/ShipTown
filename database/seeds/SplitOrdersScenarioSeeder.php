@@ -68,7 +68,9 @@ class SplitOrdersScenarioSeeder extends Seeder
 
     private function ensurePackingStatusExists(): void
     {
-        factory(OrderStatus::class)->create(['name' => 'packing', 'code' => 'packing']);
+        /** @var OrderStatus $newStatus */
+        $newStatus = factory(OrderStatus::class)->make(['name' => 'packing', 'code' => 'packing']);
+        OrderStatus::firstOrCreate(['code' => 'packing'], $newStatus->toArray());
     }
 
     /**
