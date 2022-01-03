@@ -43,6 +43,10 @@ return [
                     'description' => 'Is Fully Paid',
                 ],
                 [
+                    'class' => \App\Modules\Automations\src\Conditions\IsFullyPickedCondition::class,
+                    'description' => 'Is Fully Picked',
+                ],
+                [
                     'class' => \App\Modules\Automations\src\Conditions\Order\IsFullyPackedCondition::class,
                     'description' => 'Is Fully Packed',
                 ],
