@@ -183,6 +183,44 @@ class Order extends BaseModel
     ];
 
     /**
+     * @return bool
+     */
+    public function lockForEditing(): bool
+    {
+        // this should be used in places where order has to be updated by only single action
+        // for example multiple jobs can be run at the same time but only one at a time should be allowed
+        // successful update means order is not currently updating by any other action
+        // when editing finished, you should unlock
+        $recordsUpdated = Order::where([
+                'id' => $this->getKey(),
+                'is_editing' => false
+            ])
+            ->update(['is_editing' => true]);
+
+        if ($recordsUpdated !== 1) {
+            return false;
+        }
+
+        $this->is_editing = true;
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function unlockFromEditing(): bool
+    {
+        $recordsUpdated = Order::whereId([$this->getKey()])->update(['is_editing' => false]);
+
+        if ($recordsUpdated !== 1) {
+            return false;
+        }
+
+        $this->is_editing = false;
+        return true;
+    }
+
+    /**
      * @return $this
      */
     public function recalculateTotals(): Order

@@ -35,11 +35,14 @@ class SplitOrderService
 
     public function split(Order $order, Warehouse $warehouse, string $newOrderStatus)
     {
-        $this->originalOrder = $order;
         $this->newOrderStatus = $newOrderStatus;
         $this->warehouse = $warehouse;
 
-        self::extractFulfillableProducts();
+        if ($order->lockForEditing()) {
+            $this->originalOrder = $order->refresh();
+            $this->extractFulfillableProducts();
+            $order->unlockFromEditing();
+        }
     }
 
     /**
@@ -51,79 +54,80 @@ class SplitOrderService
             ->filter(function (OrderProduct $orderProductOriginal) {
                 return $orderProductOriginal->quantity_to_ship > 0;
             })
-            ->each(function (OrderProduct $original) use (&$orderProductsToExtract) {
+            ->each(function (OrderProduct $orderProduct) {
                 /** @var Inventory $inventory */
-                $inventory = $original->product->inventory()
+                $inventory = $orderProduct->product->inventory()
                     ->where(['warehouse_id' => $this->warehouse->getKey()])
                     ->first();
 
-                $quantityToExtract = min($inventory->quantity_available, $original->quantity_to_ship);
+                $quantityToExtract = min($inventory->quantity_available, $orderProduct->quantity_to_ship);
 
                 if ($quantityToExtract <= 0.00) {
-                    // return true to continue Eloquent each loop
                     return true;
                 }
 
-                $new = $original->replicate([
-                    'order_id',
-                    'quantity_ordered',
-                    'quantity_split',
-                    'quantity_to_ship',
-                    'quantity_picked',
-                    'quantity_skipped_picking',
-                ]);
-                try {
-                    $new->order()->associate($this->getOrderOrCreate());
-                } catch (Exception $exception) {
-                    return true;
-                }
-                $new->save();
-
-
-                $recordsUpdatedCount = OrderProduct::query()
-                    ->whereId($original->getKey())
-                    ->whereUpdatedAt($original->updated_at)
-                    ->update([
-                        'quantity_split' => $original->quantity_split + $quantityToExtract,
-                        'updated_at' => now(),
-                    ]);
-
-                if ($recordsUpdatedCount === 1) {
-                    $new->increment('quantity_ordered', $quantityToExtract);
-                    $inventory->increment('quantity_reserved', $quantityToExtract);
-                }
-
-                // return true to continue Eloquent each loop
+                $this->extractOrderProduct($orderProduct, $quantityToExtract, $inventory);
                 return true;
             });
 
         if ($this->newOrder) {
-            $this->originalOrder->is_editing = false;
-            $this->originalOrder->save();
-
-            $this->newOrder->is_editing = false;
-            $this->newOrder->save();
+            $this->newOrder->unlockFromEditing();
         }
     }
 
     /**
      * @return Order
      */
-    private function getOrderOrCreate(): Order
+    private function getNewOrderOrCreate(): Order
     {
-        if ($this->newOrder) {
-            return $this->newOrder;
+        if ($this->newOrder === null) {
+            $newOrderNumber = $this->originalOrder->order_number . '-PARTIAL-' . $this->warehouse->code;
+
+            $this->newOrder = $this->originalOrder->replicate();
+            $this->newOrder->status_code = $this->newOrderStatus;
+            $this->newOrder->is_editing = true;
+            $this->newOrder->order_number = $newOrderNumber;
+
+            try {
+                $this->newOrder->save();
+            } catch (Exception $exception) {
+                $this->newOrder = Order::whereOrderNumber($newOrderNumber)->first();
+            }
         }
 
-        $this->originalOrder->is_editing = true;
-        $this->originalOrder->save();
-
-        $this->newOrder = $this->originalOrder->replicate();
-        $this->newOrder->status_code = $this->newOrderStatus;
-        $this->newOrder->is_editing = true;
-        $this->newOrder->order_number .= '-PARTIAL-' . $this->warehouse->code;
-        $this->newOrder->save();
-
         return $this->newOrder;
+    }
+
+    /**
+     * @param OrderProduct $orderProduct
+     * @param int $quantity
+     * @param Inventory $inventory
+     */
+    private function extractOrderProduct(OrderProduct $orderProduct, int$quantity, Inventory $inventory): void
+    {
+        $newOrderProduct = $orderProduct->replicate([
+            'order_id',
+            'quantity_ordered',
+            'quantity_split',
+            'quantity_to_ship',
+            'quantity_picked',
+            'quantity_skipped_picking',
+        ]);
+
+        $newOrderProduct->order()->associate($this->getNewOrderOrCreate());
+        $newOrderProduct->save();
+
+        $recordsUpdatedCount = OrderProduct::query()
+            ->whereId($orderProduct->getKey())
+            ->whereUpdatedAt($orderProduct->updated_at)
+            ->update([
+                'quantity_split' => $orderProduct->quantity_split + $quantity,
+                'updated_at' => now(),
+            ]);
+
+        if ($recordsUpdatedCount === 1) {
+            $newOrderProduct->increment('quantity_ordered', $quantity);
+            $inventory->increment('quantity_reserved', $quantity);
+        }
     }
 }
