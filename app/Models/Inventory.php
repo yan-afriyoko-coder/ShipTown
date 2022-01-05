@@ -27,6 +27,7 @@ use Spatie\Activitylog\Models\Activity;
  * @property-read float $quantity_available
  * @property-read Product $product
  *
+ * @method static Builder|Inventory increment($column, $quantity)
  * @method static Builder|Inventory newModelQuery()
  * @method static Builder|Inventory newQuery()
  * @method static Builder|Inventory query()

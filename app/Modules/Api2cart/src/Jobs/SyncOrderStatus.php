@@ -67,6 +67,10 @@ class SyncOrderStatus implements ShouldQueue
             ->latest()
             ->first();
 
+        if ($orderImport === null) {
+            return true;
+        }
+
         if ($orderImport->api2cart_order_id === 0) {
             // this will refill api2cart_order_id field
             $orderImport->save();

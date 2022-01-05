@@ -4,6 +4,7 @@ namespace App\Modules\Api2cart\src\Api;
 
 use App\Modules\Api2cart\src\Exceptions\RequestException;
 use Exception;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
 
@@ -20,7 +21,14 @@ class Orders extends Entity
      */
     public static function get(string $store_key, array $params): ?array
     {
-        $response = Client::GET($store_key, 'order.list.json', $params);
+        try {
+            $response = Client::GET($store_key, 'order.list.json', $params);
+        } catch (ConnectException $connectException) {
+            Log::warning('Failed to connect to API2CART', [
+                $connectException->getMessage()
+            ]);
+            return null;
+        }
 
         if ($response->isSuccess()) {
             Log::debug('Fetched orders', [

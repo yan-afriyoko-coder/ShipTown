@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\BaseModel;
 use App\Traits\LogsActivityTrait;
+use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -41,6 +42,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property-read Order|null $order
  * @property-read Product|null $product
  *
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct increment($column, $quantity)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct addInventorySource($inventory_location_id)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct minimumShelfLocation($currentLocation)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct newModelQuery()
@@ -74,7 +76,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityOutstanding($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct createdBetween($min, $max)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereStatusCodeNotIn($statusCodeArray)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class OrderProduct extends BaseModel
 {
