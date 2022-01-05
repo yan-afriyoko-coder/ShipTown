@@ -110,6 +110,7 @@ class SplitOrderService
             'quantity_ordered',
             'quantity_split',
             'quantity_to_ship',
+            'quantity_to_pick',
             'quantity_picked',
             'quantity_skipped_picking',
         ]);
