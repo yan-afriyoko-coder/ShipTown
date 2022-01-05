@@ -101,7 +101,6 @@ class AppGenerateRoutesTests extends Command
             $testName = 'Routes/Web/'.$this->getWebRouteTestName($route);
 
             Artisan::call('generate:test '.$testName.' --stub=test_web_route');
-            $this->generateTest($testName);
         });
     }
 
