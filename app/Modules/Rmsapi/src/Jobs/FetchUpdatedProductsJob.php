@@ -87,7 +87,7 @@ class FetchUpdatedProductsJob implements ShouldQueue
             'code' => 'models_rmsapi_successful_fetch_warehouseId_'.$this->rmsapiConnection->location_id,
         ], [
             'error_message' => 'RMSAPI not synced for last hour WarehouseID: '.$this->rmsapiConnection->location_id,
-            'expired_at' => now()->addHour()
+            'expires_at' => now()->addHour()
         ]);
 
         info('Imported RMSAPI products', [
