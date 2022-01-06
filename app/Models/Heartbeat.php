@@ -10,10 +10,14 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Heartbeat extends Model
 {
-    protected $fillable = ['code', 'error_message', 'expired_at'];
+    protected $fillable = [
+        'code',
+        'error_message',
+        'expires_at'
+    ];
 
     public function scopeExpired($query)
     {
-        return $query->where('expired_at', "<", now());
+        return $query->where('expires_at', "<", now());
     }
 }
