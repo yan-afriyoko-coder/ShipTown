@@ -168,13 +168,13 @@
                                   <td><b> {{ order['order_placed_at'] | moment('MMM DD H:mm') }} </b> </td>
                                 </tr>
                                 <tr>
-                                  <td> shipping method: </td><td><b> {{ order['shipping_method_code'] }} </b> </td>
+                                  <td> shipping_method: </td><td><b> {{ order['shipping_method_code'] }} </b> </td>
                                 </tr>
                                 <tr>
-                                  <td> total products: </td><td><b> {{ order['total_products'] }} </b> </td>
+                                  <td> total_products: </td><td><b> {{ order['total_products'] }} </b> </td>
                                 </tr>
                                 <tr>
-                                  <td> total shipping: </td><td><b> {{ order['total_shipping'] }} </b> </td>
+                                  <td> total_shipping: </td><td><b> {{ order['total_shipping'] }} </b> </td>
                                 </tr>
                                 <tr>
                                   <td> total: </td><td><b> {{ order['total'] }} </b> </td>
