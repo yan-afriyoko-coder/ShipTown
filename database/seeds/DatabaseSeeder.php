@@ -35,6 +35,8 @@ class DatabaseSeeder extends Seeder
             SplitOrdersScenarioSeeder::class,
 
             OrdersSeeder::class,
+            Orders_PackingWebDemoSeeder::class,
+            Orders_StorePickupDemoSeeder::class,
             UnpaidOrdersSeeder::class,
             ClosedOrdersSeeder::class,
             PicksSeeder::class,

@@ -453,7 +453,9 @@
                 autoPrintLabelIfNeeded: async function() {
                     let template = this.getAddressLabelTemplateName();
 
-                    return await this.printLabel(template);
+                    if (template) {
+                        return await this.printLabel(template);
+                    }
                 },
 
                 createShipment: async function(carrier) {
