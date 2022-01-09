@@ -98,7 +98,7 @@
                     'filter[is_active]': this.getUrlParameter('is_active'),
                     'filter[packed_between]': this.getUrlParameter('packed_between'),
                     'filter[packer_user_id]': this.getUrlParameter('packer_user_id'),
-                    'filter[shipping_method]': this.getUrlParameter('shipping_method'),
+                    'filter[shipping_method_code]': this.getUrlParameter('shipping_method'),
                     'sort': this.getUrlParameter('sort','-order_placed_at'),
                     'per_page': this.getUrlParameter('per_page', 20),
                     'include': 'order_comments,order_comments.user,packer',
