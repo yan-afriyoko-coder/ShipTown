@@ -170,6 +170,12 @@
                                   <td> shipping method: </td><td><b> {{ order['shipping_method_code'] }} </b> </td>
                                 </tr>
                                 <tr>
+                                  <td> total products: </td><td><b> {{ order['total_products'] }} </b> </td>
+                                </tr>
+                                <tr>
+                                  <td> total shipping: </td><td><b> {{ order['total_shipping'] }} </b> </td>
+                                </tr>
+                                <tr>
                                   <td> total: </td><td><b> {{ order['total'] }} </b> </td>
                                 </tr>
                                 <tr>

@@ -27,14 +27,20 @@ class IsPartiallyPaidCondition extends BaseCondition
     {
         $expectedBoolValue = filter_var($condition_value, FILTER_VALIDATE_BOOL);
 
-        $result = ($this->event->order->total_paid > 0) === $expectedBoolValue;
+        $isAnythingPaid = $this->event->order->total_paid > 0;
+        $isNotFullyPaid = !$this->event->order->isPaid;
+
+        $isPartiallyPaid = $isNotFullyPaid && $isAnythingPaid;
+
+        $result = $isPartiallyPaid === $expectedBoolValue;
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
+            'result' => $result,
             'class' => class_basename(self::class),
             'total_paid' => $this->event->order->total_paid,
             'expected' => $expectedBoolValue,
-            'actual' => $result,
+            'actual' => $result
         ]);
 
         return $result;
