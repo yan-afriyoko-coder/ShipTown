@@ -31,10 +31,10 @@ class IsPartiallyPaidCondition extends BaseCondition
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
+            'result' => $result,
             'class' => class_basename(self::class),
             'total_paid' => $this->event->order->total_paid,
-            'expected' => $expectedBoolValue,
-            'actual' => $result,
+            'expected' => $expectedBoolValue
         ]);
 
         return $result;
