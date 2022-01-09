@@ -13,7 +13,7 @@
                     'sort' => '-packed_at',
                     'packed_between' => $config['starting_date']->toDateTimeString() . ',' .$config['ending_date']->toDateTimeString(),
                     'packer_user_id' =>  $count['packer_user_id'],
-                    ]) }}" target="_blank">
+                    ]) }}">
                     {{ $count['name'] }}
                 </a>
             </td>
