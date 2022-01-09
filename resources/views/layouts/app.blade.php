@@ -32,7 +32,10 @@
     <div id="app">
         <heartbeats></heartbeats>
 
-        @include('layouts.nav')
+
+        @if((request()->input('hide_nav_bar', false) === false))
+            @include('layouts.nav')
+        @endif
 
         <main class="py-0 pl-1 pr-2">
             @yield('content')
