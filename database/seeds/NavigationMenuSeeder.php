@@ -42,6 +42,11 @@ class NavigationMenuSeeder extends Seeder
                 'name' => 'Status: paid',
                 'url' => '/autopilot/packlist?inventory_source_location_id=1&status=paid&sort=min_shelf_location%2Corder_placed_at',
                 'group' => 'packlist'
+            ],
+            [
+                'name' => 'Status: store_pickup',
+                'url' => '/autopilot/packlist?inventory_source_location_id=1&status=paid&sort=min_shelf_location%2Corder_placed_at&address_label_template=address_label',
+                'group' => 'packlist'
             ]
         ];
 

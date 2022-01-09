@@ -195,7 +195,7 @@
             methods: {
                 completeOrder: async function () {
                     await this.markAsPacked();
-                    await this.printLabelIfNeeded();
+                    await this.autoPrintLabelIfNeeded();
 
                     if (Vue.prototype.$currentUser['ask_for_shipping_number'] === true) {
                         this.askForShippingNumber();
@@ -436,12 +436,22 @@
                     this.setQuantityShipped(pickItem,pickItem['quantity_shipped'] + 1);
                 },
 
-                printLabelIfNeeded: async function() {
-                    if (!Vue.prototype.$currentUser.address_label_template) {
-                        return ;
+                getAddressLabelTemplateName: function () {
+                    let templateName = this.getUrlParameter('address_label_template');
+
+                    if (templateName) {
+                        return templateName;
                     }
 
-                    let template = Vue.prototype.$currentUser.address_label_template;
+                    if (Vue.prototype.$currentUser.address_label_template) {
+                        return Vue.prototype.$currentUser.address_label_template;;
+                    }
+
+                    return '';
+                },
+
+                autoPrintLabelIfNeeded: async function() {
+                    let template = this.getAddressLabelTemplateName();
 
                     return await this.printLabel(template);
                 },
