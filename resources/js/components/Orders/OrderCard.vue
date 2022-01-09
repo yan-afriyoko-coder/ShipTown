@@ -78,6 +78,7 @@
                             </div>
                         </div>
                     </template>
+
                     <div class="row tabs-container mb-2">
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
@@ -433,7 +434,7 @@
 
             getProductLink(orderProduct) {
                 const searchTerm = orderProduct['product'] ? orderProduct['product']['sku'] : orderProduct['sku_ordered'];
-                return '/products?search=' + searchTerm;
+                return '/products?search=' + searchTerm + '&hide_nav_bar=true';
             },
 
             getProductQuantity(orderProduct) {
