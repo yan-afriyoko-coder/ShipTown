@@ -16,27 +16,30 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col">
         <dialog id="modal-date-selector-widget" class="m-auto border-light rounded">
-                <div class="text-secondary h5">Custom Date Filter</div>
-                <form class="form" @submit.prevent="">
-                    <div class="form-group">
-                        <label class="form-label" for="starting_date">From</label>
-                        <input class="form-control" id="starting_date" type="datetime-local" v-model="starting_date">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="ending_date">To</label>
-                        <input class="form-control" id="ending_date" type="datetime-local" v-model="ending_date">
-                    </div>
-                </form>
-                <div>
-                    <button type="button" @click="closeModal" class="btn btn-default">Cancel</button>
-                    <button type="button" @click="validateFilter" class="btn btn-primary">Apply</button>
+            <div class="row">
+                <div class="col">
+                    <form class="form" @submit.prevent="">
+                        <div class="form-group">
+                            <label class="form-label" for="starting_date">From</label>
+                            <input class="form-control" id="starting_date" type="datetime-local" v-model="starting_date">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="ending_date">To</label>
+                            <input class="form-control" id="ending_date" type="datetime-local" v-model="ending_date">
+                        </div>
+                    </form>
                 </div>
+            </div>
+            <div class="row">
+                <div class="col text-right">
+                    <div>
+                        <button type="button" @click="closeModal" class="btn btn-default">Cancel</button>
+                        <button type="button" @click="validateFilter" class="btn btn-primary">Apply</button>
+                    </div>
+                </div>
+            </div>
         </dialog>
-        </div>
-    </div>
 
 </div>
 </template>
