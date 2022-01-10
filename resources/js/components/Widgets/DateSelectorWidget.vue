@@ -13,41 +13,37 @@
                 <a class="dropdown-item" href="?between_dates=-7days,now">Last 7 days</a>
                 <a class="dropdown-item" href="?between_dates=this week monday,now">This week</a>
                 <a class="dropdown-item" href="?between_dates=last week monday,this week monday">Last Week</a>
-                <a class="dropdown-item" href="#" @click="showModal">Custom Date</a>
+                <a class="dropdown-item" @click.prevent="showModal">Custom Date</a>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="modal-date-selector-widget">
-        <div class="modal-dialog modal-dialog-centered">
-            <div ref="loadingContainer2" class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Custom Date Filter</h5>
-                </div>
-                <div class="modal-body">
-                    <form class="form" @submit.prevent="submit">
-                        <div class="form-group">
-                            <label class="form-label" for="starting_date">From</label>
-                            <input class="form-control" id="starting_date" type="datetime-local" v-model="starting_date">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="ending_date">To</label>
-                            <input class="form-control" id="ending_date" type="datetime-local" v-model="ending_date">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" @click="closeModal" class="btn btn-default">Cancel</button>
-                    <button type="button" @click="validateFilter" class="btn btn-primary">Apply</button>
-                </div>
+    <dialog id="modal-date-selector-widget" class="border-light">
+        <div class="card">
+                <div class="text-secondary h5">Custom Date Filter</div>
+                <form class="form" @submit.prevent="">
+                    <div class="form-group">
+                        <label class="form-label" for="starting_date">From</label>
+                        <input class="form-control" id="starting_date" type="datetime-local" v-model="starting_date">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="ending_date">To</label>
+                        <input class="form-control" id="ending_date" type="datetime-local" v-model="ending_date">
+                    </div>
+                </form>
+            <div class="modal-footer">
+                <button type="button" @click="closeModal" class="btn btn-default">Cancel</button>
+                <button type="button" @click="validateFilter" class="btn btn-primary">Apply</button>
             </div>
         </div>
-    </div>
+    </dialog>
+
 </div>
 </template>
 
 <script>
 import moment from "moment"
+
 export default {
     props: ['dates'],
     data(){
@@ -73,10 +69,7 @@ export default {
     },
     methods: {
         applyFilter(range){
-
-            let href = '?between_dates='+range;
-            console.log(href);
-            location.href = href;
+            location.href = '?between_dates=' + range;
         },
         validateFilter(){
             if (this.starting_date > this.ending_date) {
@@ -87,11 +80,11 @@ export default {
         },
 
         showModal() {
-            $('#modal-date-selector-widget').modal('show');
+            document.getElementById('modal-date-selector-widget').showModal()
         },
 
         closeModal() {
-            $('#modal-date-selector-widget').modal('hide');
+            document.getElementById('modal-date-selector-widget').close();
         }
     }
 }
