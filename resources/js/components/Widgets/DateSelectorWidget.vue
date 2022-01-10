@@ -18,8 +18,9 @@
         </div>
     </div>
 
-    <dialog id="modal-date-selector-widget" class="border-light">
-        <div class="card">
+    <div class="row">
+        <div class="col">
+        <dialog id="modal-date-selector-widget" class="m-auto border-light rounded">
                 <div class="text-secondary h5">Custom Date Filter</div>
                 <form class="form" @submit.prevent="">
                     <div class="form-group">
@@ -31,12 +32,13 @@
                         <input class="form-control" id="ending_date" type="datetime-local" v-model="ending_date">
                     </div>
                 </form>
-            <div class="modal-footer">
-                <button type="button" @click="closeModal" class="btn btn-default">Cancel</button>
-                <button type="button" @click="validateFilter" class="btn btn-primary">Apply</button>
-            </div>
+                <div>
+                    <button type="button" @click="closeModal" class="btn btn-default">Cancel</button>
+                    <button type="button" @click="validateFilter" class="btn btn-primary">Apply</button>
+                </div>
+        </dialog>
         </div>
-    </dialog>
+    </div>
 
 </div>
 </template>
