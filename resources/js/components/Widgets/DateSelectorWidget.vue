@@ -1,11 +1,9 @@
 <template>
 <div>
     <div class="text-right">
-        from <b>{{ formated_starting_date }}</b>
-        to <b>{{ formated_ending_date }}</b>
         <div class="dropdown">
-            <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="dropdownDateRange" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Date Filter
+            <button class="btn btn-sm btn-outline-primary dropdown-toggle font-weight-bold" type="button" id="dropdownDateRange" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ formated_starting_date }} - {{ formated_ending_date }}
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownDateRange">
                 <a class="dropdown-item" href="?between_dates=today,now">Today</a>
