@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Events\DailyEvent;
+use App\Models\Heartbeat;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -27,6 +28,13 @@ class RunDailyJobs implements ShouldQueue
         Log::debug('Daily event - dispatching');
 
         DailyEvent::dispatch();
+
+        Heartbeat::query()->updateOrCreate([
+            'code' => self::class,
+        ], [
+            'error_message' => 'Daily jobs dispatched heartbeat missed',
+            'expires_at' => now()->addDay()
+        ]);
 
         Log::info('Daily event - dispatched successfully');
     }

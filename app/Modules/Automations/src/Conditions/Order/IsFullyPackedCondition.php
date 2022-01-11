@@ -23,18 +23,21 @@ class IsFullyPackedCondition
     }
 
     /**
-     * @param bool $condition_value
+     * @param string $condition_value
      * @return bool
      */
-    public function isValid(bool $condition_value): bool
+    public function isValid(string $condition_value): bool
     {
-        $result = $this->event->order->is_packed === $condition_value;
+        $expectedBoolValue = filter_var($condition_value, FILTER_VALIDATE_BOOL);
+
+        $result = $this->event->order->is_packed === $expectedBoolValue;
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
-            'result' => $result,
             'class' => class_basename(self::class),
             'is_packed' => $this->event->order->is_packed,
+            'expected' => $expectedBoolValue,
+            'actual' => $result,
         ]);
 
         return $result;

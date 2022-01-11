@@ -3,10 +3,11 @@
 namespace App\Modules\DpdUk\src\Services;
 
 use App\Models\OrderShipment;
-use App\Modules\DpdUk\src\Api\Client;
+use App\Modules\DpdUk\src\Api\ApiClient;
 use App\Modules\DpdUk\src\Models\Connection;
-use App\Modules\DpdUk\src\Models\GetShippingLabelResponse;
+use App\Modules\DpdUk\src\Api\GetShippingLabelResponse;
 use App\Modules\PrintNode\src\PrintNode;
+use App\User;
 use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
@@ -20,7 +21,19 @@ class DpdUkService
      */
     private static function convertToDpdUkFormat(OrderShipment $orderShipment, Connection $connection): array
     {
-        $collectionAddress = $connection->collectionAddress;
+        try {
+            /** @var User $user */
+            $user = auth()->user();
+
+            if ($user && isset($user->warehouse->address)) {
+                $collectionAddress = $user->warehouse->address;
+            } else {
+                $collectionAddress = $connection->collectionAddress;
+            }
+        } catch (Exception $exception) {
+            $collectionAddress = $connection->collectionAddress;
+        }
+
         $shippingAddress = $orderShipment->order->shippingAddress;
 
         return [
@@ -71,7 +84,7 @@ class DpdUkService
                     "networkCode" => "1^12",
                     "numberOfParcels" => 1,
                     "totalWeight" => 10,
-                    "shippingRef1" => "TEST_#" . $orderShipment->order->order_number,
+                    "shippingRef1" => "#" . $orderShipment->order->order_number,
                     "shippingRef2" => "",
                     "shippingRef3" => "",
                     "customsValue" => null,
@@ -99,11 +112,9 @@ class DpdUkService
     {
         $labelResponse = self::makeNewLabel($connection, $orderShipment);
 
-        ray(base64_encode($labelResponse->getContent()));
-
         if (isset(auth()->user()->printer_id)) {
             return PrintNode::printRaw(
-                base64_encode($labelResponse->getContent()),
+                base64_encode($labelResponse->response->content),
                 auth()->user()->printer_id
             );
         }
@@ -120,7 +131,7 @@ class DpdUkService
      */
     private static function makeNewLabel(Connection $connection, OrderShipment $orderShipment): GetShippingLabelResponse
     {
-        $dpd = new Client($connection);
+        $dpd = new ApiClient($connection);
 
         $payload = self::convertToDpdUkFormat($orderShipment, $connection);
 
@@ -128,9 +139,11 @@ class DpdUkService
 
         $orderShipment->shipping_number = $shipmentResponse->getConsignmentNumber();
         $orderShipment->tracking_url = self::generateTrackingUrl($orderShipment);
-        $orderShipment->save();
 
-        if ($shipmentResponse->errors()) {
+        if ($orderShipment->shipping_number) {
+            $orderShipment->save();
+            return $dpd->getShipmentLabel($shipmentResponse->getShipmentId());
+        } elseif ($shipmentResponse->errors()) {
             $shipmentResponse->errors()->each(function ($error) {
                 throw new Exception(
                     $error['obj'] . ': ' . $error['errorMessage'],

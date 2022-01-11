@@ -7,7 +7,7 @@ class Entity
     /**
      * @var Client
      */
-    private $client;
+    private Client $client;
 
     /**
      * Entity constructor.
@@ -23,7 +23,7 @@ class Entity
     /**
      * @return Client
      */
-    public function client()
+    public function client(): Client
     {
         return $this->client;
     }

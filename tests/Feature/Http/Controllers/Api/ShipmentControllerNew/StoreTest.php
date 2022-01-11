@@ -29,7 +29,7 @@ class StoreTest extends TestCase
             'service' => 'overnight',
         ]);
 
-        $this->assertEquals(201, $response->getStatusCode(), $response->getContent());
+        $this->assertEquals(200, $response->getStatusCode(), $response->getContent());
     }
 
     /** @test */

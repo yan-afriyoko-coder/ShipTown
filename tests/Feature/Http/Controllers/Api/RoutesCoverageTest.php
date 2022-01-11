@@ -31,7 +31,7 @@ class RoutesCoverageTest extends TestCase
 
             $this->assertFileExists(
                 $fileName,
-                'Route test missing. Please run "php artisan app:generate-api-routes-tests"'
+                'Route test missing. Please run "php artisan app:generate-routes-tests"'
             );
         });
     }

@@ -29,9 +29,9 @@ abstract class BaseOrderAction
     }
 
     /**
-     * @param $options
+     * @param string $options
      */
-    public function handle($options)
+    public function handle(string $options = '')
     {
         Log::debug('automation.action.executing', [
             'order_number' => $this->event->order->order_number,

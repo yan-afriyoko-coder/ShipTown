@@ -8,6 +8,7 @@ use App\Models\ProductPrice;
 use App\Modules\Api2cart\src\Exceptions\RequestException;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
+use App\Modules\Api2cart\src\Services\Api2cartService;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -63,16 +64,12 @@ class ProductUpdateTest extends TestCase
         $this->api2cart_product_link->api2cartConnection()->associate($api2cart_connection);
     }
 
-//    public function test_product_data() {
-//        $product_data = $this->api2cart_product_link->getProductData();
-//    }
-
     /**
      */
     public function test_if_updates_stock_if_no_location_source_specified()
     {
-        $this->api2cart_product_link->postProductUpdate();
-
+        Api2cartService::updateSku($this->api2cart_product_link);
+        
         $this->assertTrue($this->api2cart_product_link->isInSync());
     }
 }

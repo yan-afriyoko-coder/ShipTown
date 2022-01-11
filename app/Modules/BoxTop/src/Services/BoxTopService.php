@@ -4,12 +4,16 @@ namespace App\Modules\BoxTop\src\Services;
 
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\ProductAlias;
 use App\Modules\BoxTop\src\Api\ApiClient;
 use App\Modules\BoxTop\src\Api\ApiResponse;
 use App\Modules\BoxTop\src\Exceptions\ProductOutOfStockException;
 use App\Modules\BoxTop\src\Models\WarehouseStock;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\ClientException;
+use Illuminate\Support\Str;
+use Log;
+use function Aws\map;
 
 /**
  *
@@ -52,15 +56,18 @@ class BoxTopService
             $apiClient = new ApiClient();
             $apiClient->getSkuQuantity($orderProduct->sku_ordered);
 
-            $possibleSkus = [];
-            $possibleSkus += [$orderProduct->sku_ordered];
-            $possibleSkus += [$orderProduct->product->sku];
-            $possibleSkus += $orderProduct->product->aliases()->get(['alias'])->toArray();
+            $aliases = $orderProduct->product->aliases()
+                ->get('alias')
+                ->map(function (ProductAlias $alias) {
+                    return $alias->alias;
+                })->toArray();
+
+            $possibleSkus = array_merge([$orderProduct->sku_ordered, $orderProduct->product->sku], $aliases);
 
             /** @var WarehouseStock $warehouseStock */
             $warehouseStock = WarehouseStock::query()
                 ->whereIn('SKUNumber', $possibleSkus)
-                ->where('Available', '>', $orderProduct->quantity_ordered)
+                ->where('Available', '>=', $orderProduct->quantity_ordered)
                 ->first();
 
             if ($warehouseStock === null) {
@@ -83,6 +90,8 @@ class BoxTopService
             ];
         })->toArray();
 
+        $contactName = Str::substr($order->shippingAddress->full_name . ' ' . $order->shippingAddress->email, 0, 49);
+
         return [
             "DeliveryCompanyName"   => $order->shippingAddress->company,
             "DeliveryAddress1"      => $order->shippingAddress->address1,
@@ -92,10 +101,10 @@ class BoxTopService
             "DeliveryPostCode"      => $order->shippingAddress->postcode,
             "DeliveryCountry"       => $order->shippingAddress->country_code,
             "DeliveryPhone"         => $order->shippingAddress->phone,
-            "DeliveryContact"       => $order->shippingAddress->full_name . ' ' .$order->shippingAddress->email,
-            "OutboundRef"           => "WEB_". $order->order_number,
-            "ReleaseDate"           => Carbon::today()->addDays(2),
-            "DeliveryDate"          => Carbon::today()->addDays(2),
+            "DeliveryContact"       => $contactName,
+            "OutboundRef"           => $order->order_number,
+            "ReleaseDate"           => Carbon::today(),
+            "DeliveryDate"          => "",
             "DeliveryTime"          => "",
             "Haulier"               => "",
             "PickItems"             => $pickItems,
@@ -104,7 +113,7 @@ class BoxTopService
             "NOP"                   => 1,
             "Weight"                => 1,
             "Cube"                  => 1,
-            "CustRef"               => "WEB_". $order->order_number,
+            "CustRef"               => $order->order_number,
             "Remarks"               => ""
         ];
     }

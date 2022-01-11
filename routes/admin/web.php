@@ -24,7 +24,7 @@ Route::prefix('settings')->group(function () {
     Route::view('dpd-ireland', 'settings/dpd-ireland')->name('settings.dpd-ireland');
     Route::view('api2cart', 'settings/api2cart')->name('settings.api2cart');
     Route::view('api', 'settings/api')->name('settings.api');
-    Route::view('users', 'users')->name('settings.users');
+    Route::view('users', 'settings/users')->name('settings.users');
     Route::view('mail-templates', 'settings/mail-templates')->name('settings.mail_templates');
     Route::view('navigation-menu', 'settings/navigation-menu')->name('settings.navigation_menu');
     Route::view('automations', 'settings/automations')->name('settings.automations');

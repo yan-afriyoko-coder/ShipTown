@@ -27,6 +27,7 @@ use Spatie\Activitylog\Models\Activity;
  * @property-read float $quantity_available
  * @property-read Product $product
  *
+ * @method static Builder|Inventory increment($column, $quantity)
  * @method static Builder|Inventory newModelQuery()
  * @method static Builder|Inventory newQuery()
  * @method static Builder|Inventory query()
@@ -112,5 +113,13 @@ class Inventory extends BaseModel
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function warehouse(): BelongsTo
+    {
+        return $this->belongsTo(Warehouse::class);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Modules\Api2cart\src\Api;
 
 use App\Modules\Api2cart\src\Exceptions\RequestException;
 use Exception;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
 
@@ -17,15 +18,20 @@ class Orders extends Entity
      * @param array $params
      *
      * @return array|null
-     * @throws Exception|GuzzleException
-     *
      */
-    public static function get(string $store_key, array $params)
+    public static function get(string $store_key, array $params): ?array
     {
-        $response = Client::GET($store_key, 'order.list.json', $params);
+        try {
+            $response = Client::GET($store_key, 'order.list.json', $params);
+        } catch (ConnectException $connectException) {
+            Log::warning('Failed to connect to API2CART', [
+                $connectException->getMessage()
+            ]);
+            return null;
+        }
 
         if ($response->isSuccess()) {
-            logger('Fetched orders', [
+            Log::debug('Fetched orders', [
                 'source' => 'API2CART',
                 'count' => $response->getResult()['orders_count'],
             ]);
@@ -33,13 +39,13 @@ class Orders extends Entity
             return $response->getResult()['order'];
         }
 
-        Log::error('order.list.json call failed', $response->asArray());
-
-        throw new Exception('order.list.json call failed - ' . $response->getReturnMessage());
+        return null;
     }
 
     /**
-     * @throws GuzzleException|RequestException
+     * @param string $store_key
+     * @param array $params
+     * @return RequestResponse
      */
     public static function list(string $store_key, array $params): RequestResponse
     {
@@ -59,7 +65,9 @@ class Orders extends Entity
     }
 
     /**
-     *
+     * @param $store_key
+     * @param $params
+     * @return RequestResponse
      */
     public static function statuses($store_key, $params): RequestResponse
     {

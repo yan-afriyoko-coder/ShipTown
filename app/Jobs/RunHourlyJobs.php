@@ -3,6 +3,8 @@
 namespace App\Jobs;
 
 use App\Events\HourlyEvent;
+use App\Http\Controllers\Api\Run\HourlyJobsController;
+use App\Models\Heartbeat;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -30,6 +32,13 @@ class RunHourlyJobs implements ShouldQueue
         Log::debug('Hourly event - dispatching');
 
         HourlyEvent::dispatch();
+
+        Heartbeat::query()->updateOrCreate([
+            'code' => self::class,
+        ], [
+            'error_message' => 'Hourly jobs dispatched heartbeat missed',
+            'expires_at' => now()->addHours(2)
+        ]);
 
         Log::info('Hourly event - dispatched successfully');
     }

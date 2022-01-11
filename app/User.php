@@ -2,8 +2,10 @@
 
 namespace App;
 
+use App\Models\Warehouse;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -32,7 +34,8 @@ use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
  * @property int         $location_id
  * @property Carbon|null $email_verified_at
  * @property string      $password
- * @property int|null    $warehouse_id
+ * @property int|null       $warehouse_id
+ * @property Warehouse|null $warehouse
  * @property string|null $remember_token
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
@@ -126,31 +129,5 @@ class User extends Authenticatable
             ])
             ->allowedSorts([
             ]);
-    }
-
-    /**
-     * Generate 2FA Code
-     *
-     * @return void
-     */
-    public function generateTwoFactorCode()
-    {
-        $this->timestamps = false;
-        $this->two_factor_code = rand(100000, 999999);
-        $this->two_factor_expires_at = now()->addMinutes(10);
-        $this->save();
-    }
-
-    /**
-     * Reset 2FA Code
-     *
-     * @return void
-     */
-    public function resetTwoFactorCode()
-    {
-        $this->timestamps = false;
-        $this->two_factor_code = null;
-        $this->two_factor_expires_at = null;
-        $this->save();
     }
 }

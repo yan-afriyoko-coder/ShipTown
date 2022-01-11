@@ -12,6 +12,8 @@ class WarehouseSeeder extends Seeder
      */
     public function run()
     {
-        factory(Warehouse::class, 3)->create();
+        factory(Warehouse::class)->create(['code' => 'DUB', 'name' => 'Dublin']);
+        factory(Warehouse::class)->create(['code' => 'CRK', 'name' => 'Cork']);
+        factory(Warehouse::class)->create(['code' => 'GAL', 'name' => 'Galway']);
     }
 }

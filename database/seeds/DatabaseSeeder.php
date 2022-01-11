@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\RunHourlyJobs;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,12 +13,17 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+
             ConfigurationSeeder::class,
             NavigationMenuSeeder::class,
             WarehouseSeeder::class,
             AutomationsSeeder::class,
 
             UsersSeeder::class,
+
+            PrintNodeClientSeeder::class,
+            DpdUkTestConnectionSeeder::class,
+            DpdIrelandSeeder::class,
 
             ProductsSeeder::class,
             ProductAliasSeeder::class,
@@ -29,15 +35,14 @@ class DatabaseSeeder extends Seeder
             SplitOrdersScenarioSeeder::class,
 
             OrdersSeeder::class,
+            Orders_PackingWebDemoSeeder::class,
+            Orders_StorePickupDemoSeeder::class,
             UnpaidOrdersSeeder::class,
             ClosedOrdersSeeder::class,
             PicksSeeder::class,
             OrderShipmentsSeeder::class,
-
-            PrintNodeClientSeeder::class,
-            DpdUkTestConnectionSeeder::class,
         ]);
 
-        \App\Jobs\RunHourlyJobs::dispatchNow();
+        RunHourlyJobs::dispatchNow();
     }
 }

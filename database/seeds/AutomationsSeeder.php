@@ -1,13 +1,13 @@
 <?php
 
+use App\Events\Order\ActiveOrderCheckEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
+use App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition;
 use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
-use App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition;
-use App\Modules\Automations\src\Conditions\Order\CanBeFulfilledCondition;
 use Illuminate\Database\Seeder;
 
 class AutomationsSeeder extends Seeder
@@ -23,7 +23,7 @@ class AutomationsSeeder extends Seeder
         $automation = Automation::create([
             'name' => 'Store Pickup',
             'priority' => 1,
-            'event_class' => OrderCreatedEvent::class,
+            'event_class' => ActiveOrderCheckEvent::class,
         ]);
 
         Condition::create([

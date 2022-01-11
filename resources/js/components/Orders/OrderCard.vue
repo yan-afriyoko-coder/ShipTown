@@ -12,19 +12,21 @@
       <div class="swiper-slide">
           <div class="row ml-1 mr-1 card">
               <div class="col p-2 pl-2 rounded">
-                <div class="row">
+                  <div class="row">
+                          <h5 class="text-primary">
+                              <font-awesome-icon icon="copy" class="fa-xs" role="button" @click="copyToClipBoard(order['order_number'])"></font-awesome-icon>
+                              <a :href="'/orders/?search=' + order['order_number']">{{ order['order_number'] }}</a>
+                              <a @click="kickOrder" class="text-white">o</a>
+                          </h5>
+                  </div>
+                <div class="row align-text-top">
 
-                    <div class="col-5 col-md-4 col-lg-3">
-                        <h5 class="text-primary">
-                            <font-awesome-icon icon="copy" class="" role="button" @click="copyToClipBoard(order['order_number'])"></font-awesome-icon>
-                            <a :href="'/orders/?search=' + order['order_number']">#{{ order['order_number'] }}</a>
-                            <a @click="kickOrder" class="text-white">o</a>
-                        </h5>
+                    <div class="col-5 col-md-4 col-lg-3 align-text-top">
                         <div class="small"> <b> {{ order['status_code'] }} </b> </div>
                     </div>
 
                     <div class="col text-center" @click="toggleOrderDetails">
-                        <div class="row">
+                        <div class="row ">
                             <div class="col">
                                 <small> age </small>
                                 <h5> {{ order['age_in_days'] }}</h5>
@@ -76,6 +78,7 @@
                             </div>
                         </div>
                     </template>
+
                     <div class="row tabs-container mb-2">
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
@@ -94,7 +97,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link p-0 pl-2 pr-2" target="_blank" :href="'/order/packsheet/' + order['order_number']">
+                                <a class="nav-link p-0 pl-2 pr-2" target="_blank" :href="'/order/packsheet/' + order['order_number'] + '?hide_nav_bar=true'">
                                     Packsheet
                                 </a>
                             </li>
@@ -119,6 +122,10 @@
                                         <div class="col">
                                             <small> ordered </small>
                                             <h4>{{ toNumberOrDash(order_product['quantity_ordered']) }}</h4>
+                                        </div>
+                                        <div class="col d-none d-sm-block">
+                                            <small> price</small>
+                                            <h4>{{ toNumberOrDash(order_product['price']) }}</h4>
                                         </div>
                                         <div class="col bg-warning" v-if="Number(order_product['quantity_split']) > 0">
                                             <small> split </small>
@@ -161,7 +168,16 @@
                                   <td><b> {{ order['order_placed_at'] | moment('MMM DD H:mm') }} </b> </td>
                                 </tr>
                                 <tr>
-                                  <td> shipping method: </td><td><b> {{ order['shipping_method_code'] }} </b> </td>
+                                  <td> shipping_method: </td><td><b> {{ order['shipping_method_code'] }} </b> </td>
+                                </tr>
+                                <tr>
+                                  <td> total_products: </td><td><b> {{ order['total_products'] }} </b> </td>
+                                </tr>
+                                <tr>
+                                  <td> total_shipping: </td><td><b> {{ order['total_shipping'] }} </b> </td>
+                                </tr>
+                                <tr>
+                                  <td> total: </td><td><b> {{ order['total'] }} </b> </td>
                                 </tr>
                                 <tr>
                                   <td> paid: </td><td><b> {{ order['total_paid'] }} </b> </td>
@@ -292,17 +308,6 @@
         },
 
         methods: {
-            copyToClipBoard(textToCopy){
-                const tmpTextField = document.createElement("textarea")
-                tmpTextField.textContent = textToCopy
-                tmpTextField.setAttribute("style","position:absolute; right:200%;")
-                document.body.appendChild(tmpTextField)
-                tmpTextField.select()
-                tmpTextField.setSelectionRange(0, 99999) /*For mobile devices*/
-                document.execCommand("copy")
-                tmpTextField.remove()
-            },
-
             kickOrder: function () {
                 this.apiPostOrderCheckRequest({'order_id': this.order['id']});
             },
@@ -429,7 +434,7 @@
 
             getProductLink(orderProduct) {
                 const searchTerm = orderProduct['product'] ? orderProduct['product']['sku'] : orderProduct['sku_ordered'];
-                return '/products?search=' + searchTerm;
+                return '/products?search=' + searchTerm + '&hide_nav_bar=true';
             },
 
             getProductQuantity(orderProduct) {

@@ -35,7 +35,7 @@ Route::get('reports/shipments', 'Reports\ShipmentController@index')->name('repor
 
 Route::get('pdf/orders/{order_number}/{template}', 'PdfOrderController@show');
 Route::get('orders/{order_number}/kick', 'OrderKickController@index');
-Route::get('products/24h/kick', 'Products24hKickController@index');
+Route::get('products/last24h/kick', 'Products24hKickController@index');
 Route::get('products/{sku}/kick', 'ProductKickController@index');
 Route::get('csv/ready_order_shipments', 'Csv\ReadyOrderShipmentController@index')->name('ready_order_shipments_as_csv');
 Route::get('csv/order_shipments', 'Csv\PartialOrderShipmentController@index')->name('partial_order_shipments_as_csv');

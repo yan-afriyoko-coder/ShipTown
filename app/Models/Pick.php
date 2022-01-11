@@ -233,25 +233,25 @@ class Pick extends Model
     }
 
     /**
-     * @param QueryBuilder $query
-     * @param float        $min
-     * @param float        $max
+     * @param mixed $query
+     * @param float $min
+     * @param float $max
      *
      * @return QueryBuilder
      */
-    public function scopeQuantityPickedBetween(QueryBuilder $query, $min, $max): QueryBuilder
+    public function scopeQuantityPickedBetween($query, float $min, float $max): QueryBuilder
     {
         return $query->whereBetween('quantity_picked', [$min, $max]);
     }
 
     /**
-     * @param QueryBuilder $query
-     * @param float        $min
-     * @param float        $max
+     * @param mixed $query
+     * @param float $min
+     * @param float $max
      *
      * @return QueryBuilder
      */
-    public function scopeQuantitySkippedBetween(QueryBuilder $query, $min, $max): QueryBuilder
+    public function scopeQuantitySkippedBetween($query, float $min, float $max): QueryBuilder
     {
         return $query->whereBetween('quantity_skipped_picking', [$min, $max]);
     }

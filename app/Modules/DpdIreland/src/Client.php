@@ -6,14 +6,18 @@ use App\Modules\DpdIreland\src\Exceptions\AuthorizationException;
 use App\Modules\DpdIreland\src\Models\DpdIreland;
 use Carbon\Carbon;
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Cache;
-use Psr\Http\Message\ResponseInterface;
+use Log;
 
 /**
  * Class Client.
  */
 class Client
 {
+    /**
+     * DPD LIVE API URL.
+     */
     const API_URL_LIVE = 'https://papi.dpd.ie';
 
     /**
@@ -49,9 +53,11 @@ class Client
     /**
      * @param string $xml
      *
-     * @return ResponseInterface
+     * @return string
+     * @throws GuzzleException
+     * @throws AuthorizationException
      */
-    public static function postXml(string $xml): ResponseInterface
+    public static function postXml(string $xml): string
     {
         $options = [
             'headers' => [
@@ -62,11 +68,26 @@ class Client
             'body' => $xml,
         ];
 
-        return self::getGuzzleClient()->post(self::COMMON_API_PREADVICE, $options);
+        Log::debug('API REQUEST', [
+            'service' => 'DPD-IRL',
+            'request' => str_replace("\n", '', $xml),
+        ]);
+
+        $response = self::getGuzzleClient()->post(self::COMMON_API_PREADVICE, $options);
+        $response_content = $response->getBody()->getContents();
+
+        Log::debug('API REQUEST', [
+            'service' => 'DPD-IRL',
+            'response' => $response_content,
+            'request' => str_replace("\n", '', $xml),
+        ]);
+
+        return $response_content;
     }
 
     /**
      * @return mixed
+     * @throws AuthorizationException|GuzzleException
      */
     private static function getAuthorizationToken()
     {
@@ -79,6 +100,7 @@ class Client
      * Using cache we will not need to reauthorize every time.
      *
      * @return array
+     * @throws AuthorizationException|GuzzleException
      */
     public static function getCachedAuthorization(): array
     {
@@ -97,16 +119,9 @@ class Client
         return $authorization;
     }
 
-    public static function forceAuthorization(): array
-    {
-        self::clearCache();
-
-        return self::getCachedAuthorization();
-    }
-
     /**
      * @return array
-     * @throws AuthorizationException
+     * @throws AuthorizationException|GuzzleException
      */
     private static function getAuthorization(): array
     {
@@ -120,20 +135,25 @@ class Client
             'Type'     => 'CUST',
         ];
 
-        $headers = [
-            'Authorization' => 'Bearer '.$config->token,
-            'Content-Type'  => 'application/json',
-            'Accept'        => 'application/json',
+        $options = [
+            'headers' => [
+                'Authorization' => 'Bearer '.$config->token,
+                'Content-Type'  => 'application/json',
+                'Accept'        => 'application/json',
+            ],
+            'json' => $body,
         ];
 
-        $authorizationResponse = self::getGuzzleClient()->post(self::COMMON_API_AUTHORIZE, [
-            'headers' => $headers,
-            'json'    => $body,
-        ]);
+        $authorizationResponse = self::getGuzzleClient()->post(self::COMMON_API_AUTHORIZE, $options);
 
-        $authorization = json_decode($authorizationResponse->getBody()->getContents(), true);
+        $response_content = $authorizationResponse->getBody()->getContents();
+        $authorization = json_decode($response_content, true);
 
         if ($authorization['Status'] === 'FAIL') {
+            Log::debug('API REQUEST', [
+                'service' => 'DPD-IRL',
+                'response' => $response_content,
+            ]);
             throw new AuthorizationException($authorization['Code'].' : '.$authorization['Reason']);
         }
 
@@ -152,7 +172,7 @@ class Client
         return new GuzzleClient([
             'base_uri'   => self::getBaseUrl(),
             'timeout'    => 60,
-            'exceptions' => true,
+            'exceptions' => false,
         ]);
     }
 

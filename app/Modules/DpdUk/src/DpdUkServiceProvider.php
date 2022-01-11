@@ -32,7 +32,7 @@ class DpdUkServiceProvider extends BaseModuleServiceProvider
      */
     protected $listen = [
         OrderShipmentCreatedEvent::class => [
-            Listeners\OrderShipmentCreatedEvent\DispatchNowGenerateLabelJobListener::class,
+//            Listeners\OrderShipmentCreatedEvent\DispatchNowGenerateLabelJobListener::class,
         ]
 
     ];

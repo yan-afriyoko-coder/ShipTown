@@ -23,7 +23,3 @@ try {
 } catch (\Exception $exception) {
     Auth::routes(['register' => false]);
 }
-
-// Routes to allow invite other emails
-Route::get('invites/{token}', 'Api\Admin\UserInviteController@accept')->name('accept');
-Route::post('invites/{token}', 'Api\Admin\UserInviteController@process');

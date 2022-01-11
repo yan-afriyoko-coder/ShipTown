@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\BaseModel;
 use App\Traits\LogsActivityTrait;
+use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -41,6 +42,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property-read Order|null $order
  * @property-read Product|null $product
  *
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct increment($column, $quantity)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct addInventorySource($inventory_location_id)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct minimumShelfLocation($currentLocation)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct newModelQuery()
@@ -74,7 +76,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityOutstanding($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct createdBetween($min, $max)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereStatusCodeNotIn($statusCodeArray)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class OrderProduct extends BaseModel
 {
@@ -90,8 +92,6 @@ class OrderProduct extends BaseModel
         'quantity_ordered',
         'quantity_split',
         'quantity_shipped',
-        'quantity_to_ship',
-        'quantity_to_pick',
         'quantity_picked',
         'quantity_skipped_picking',
         'quantity_not_picked',
@@ -123,19 +123,6 @@ class OrderProduct extends BaseModel
         'quantity_not_picked'     => 'float',
         'inventory_source_quantity' => 'float',
     ];
-
-    /**
-     * @param array $options
-     *
-     * @return bool
-     */
-    public function save(array $options = []): bool
-    {
-        $this->quantity_to_ship = $this->quantity_ordered - $this->quantity_split - $this->quantity_shipped;
-        $this->quantity_to_pick = $this->quantity_ordered - $this->quantity_split - $this->quantity_picked - $this->quantity_skipped_picking;
-
-        return parent::save($options);
-    }
 
     /**
      * @param Builder|QueryBuilder $query

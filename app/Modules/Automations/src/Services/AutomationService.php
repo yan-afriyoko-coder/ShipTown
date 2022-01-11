@@ -2,49 +2,75 @@
 
 namespace App\Modules\Automations\src\Services;
 
-use App\Modules\Automations\src\Models\Automation;
-use App\Modules\Automations\src\Models\Condition;
+use App\Events\Order\ActiveOrderCheckEvent;
 use App\Modules\Automations\src\Models\Action;
+use App\Modules\Automations\src\Models\Automation;
+use App\Modules\Automations\src\Models\OrderLock;
+use Exception;
 use Log;
 
+/**
+ *
+ */
 class AutomationService
 {
-    public static function runAllAutomations($event)
+    /**
+     * @param ActiveOrderCheckEvent $event
+     */
+    public static function runAllAutomations(ActiveOrderCheckEvent $event)
     {
         Automation::where('event_class', get_class($event))
             ->where(['enabled' => true])
             ->orderBy('priority')
             ->get()
             ->each(function (Automation $automation) use ($event) {
-                AutomationService::runAutomation($automation, $event);
+                AutomationService::validateAndRunAutomation($automation, $event);
             });
     }
 
-    public static function runAutomation(Automation $automation, $event)
+    /**
+     * @param Automation $automation
+     * @param ActiveOrderCheckEvent $event
+     */
+    public static function validateAndRunAutomation(Automation $automation, ActiveOrderCheckEvent $event)
     {
-        // check all conditions
-        $allConditionsTrue = $automation->allConditionsTrue($event);
+        // this will prevent two automation processes running on same order
+        try {
+            OrderLock::where('created_at', '<', now()->subMinutes(10))
+                ->forceDelete();
+
+            /** @var OrderLock $lock */
+            $lock = OrderLock::create(['order_id' => $event->order->getKey()]);
+        } catch (Exception $exception) {
+            // early exit, cannot lock order, automation is already running for it
+            return;
+        }
+
+        $allConditionsPassed = $automation->allConditionsTrue($event);
+
+        if ($allConditionsPassed === true) {
+            $automation->actions()
+                ->orderBy('priority')
+                ->get()
+                ->each(function (Action $action) use ($event) {
+                    AutomationService::runAction($action, $event);
+                });
+        }
 
         Log::debug('Ran automation', [
             'class' => class_basename($automation),
             'name' => $automation->name,
-            'conditions_passed' => $allConditionsTrue
+            'all_conditions_passed' => $allConditionsPassed
         ]);
 
-        if ($allConditionsTrue === false) {
-            return;
-        }
-
-        // run all actions
-        $automation->actions()
-            ->orderBy('priority')
-            ->get()
-            ->each(function (Action $action) use ($event) {
-                AutomationService::runAction($action, $event);
-            });
+        $lock->forceDelete();
     }
 
-    private static function runAction(Action $action, $event): void
+    /**
+     * @param Action $action
+     * @param ActiveOrderCheckEvent $event
+     */
+    private static function runAction(Action $action, ActiveOrderCheckEvent $event): void
     {
         $runAction = new $action->action_class($event);
 

@@ -2,11 +2,16 @@
 
 namespace App\Modules\DpdIreland\src\Models;
 
+use App\BaseModel;
+use App\Models\OrderAddress;
 use App\Traits\Encryptable;
+use App\User;
 use Barryvdh\LaravelIdeHelper\Eloquent;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Log;
 
 /**
  * App\Models\Configuration.
@@ -52,7 +57,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|DpdIreland whereUpdatedAt($value)
  * @method static Builder|DpdIreland whereUser($value)
  */
-class DpdIreland extends Model
+class DpdIreland extends BaseModel
 {
     use Encryptable;
 
@@ -85,6 +90,32 @@ class DpdIreland extends Model
      */
     public function getCollectionAddress(): array
     {
+        try {
+            /** @var User $user */
+            $user = auth()->user();
+
+            if ($user && isset($user->warehouse->address)) {
+                $collectionAddress = $user->warehouse->address;
+                return [
+                    'Contact'          => $collectionAddress->full_name,
+                    'ContactTelephone' => $collectionAddress->phone,
+                    'ContactEmail'     => $collectionAddress->email,
+                    'BusinessName'     => $collectionAddress->company,
+                    'AddressLine1'     => $collectionAddress->address1,
+                    'AddressLine2'     => $collectionAddress->address2,
+                    'AddressLine3'     => '',
+                    'AddressLine4'     => $collectionAddress->city,
+                    'PostCode'         => $collectionAddress->postcode,
+                    'CountryCode'      => $collectionAddress->country_code,
+                ];
+            }
+        } catch (Exception $exception) {
+            Log::debug('Exception while loading warehouse collection address', [
+                'code' => $exception->getCode(),
+                'message' => $exception->getMessage(),
+            ]);
+        }
+
         return [
             'Contact'          => $this->attributes['contact'],
             'ContactTelephone' => $this->attributes['contact_telephone'],

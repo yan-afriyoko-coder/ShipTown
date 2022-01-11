@@ -5,8 +5,13 @@
             <div class="col p-2 pl-3">
                 <div class="row text-left">
                     <div class="col-md-6">
-                        <div class="text-primary h5">{{ product.name }} <a @click="kickProduct" class="text-white">o</a></div>
-                        <div>sku: <b> <a :href="'/products?search=' + product['sku']">{{ product['sku'] }}</a></b></div>
+                        <div class="text-primary h5">
+                            {{ product.name }} <a @click="kickProduct" class="text-white">o</a>
+                        </div>
+                        <div>
+                            sku:
+                            <font-awesome-icon icon="copy" class="fa-xs btn-link" role="button" @click="copyToClipBoard(product['sku'])"></font-awesome-icon>
+                            <b> <a :href="'/products?search=' + product['sku']">{{ product['sku'] }}</a></b></div>
                         <div>
                             <template v-for="tag in product.tags">
                                 <a class="badge text-uppercase" :key="tag.id" :href="'products?has_tags=' + Object.values(tag.name)[0]"> {{ Object.values(tag.name)[0] }} </a>
@@ -63,7 +68,7 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link p-0 pl-2 pr-2"  @click.prevent="currentTab = 'activityLog'" data-toggle="tab" href="#">
-                                        Activity Log
+                                        Activity
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -146,7 +151,7 @@
                                     </div>
                                     <div class="small pl-sm-0 pl-md-1">
                                         <b>
-                                            {{ activity['causer'] === null ? 'AutoStatus' : activity['causer']['name'] }}
+                                            {{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }}
                                         </b>
                                         {{ activity['description'] }} {{ activity['changes'] }}
                                     </div>
@@ -198,11 +203,12 @@
 
 <script>
     import api from "../../mixins/api";
+    import helpers from "../../mixins/helpers";
 
     export default {
         name: "ProductCard",
 
-        mixins: [api],
+        mixins: [api, helpers],
 
         props: {
             product: Object,
@@ -215,7 +221,7 @@
                     case 'orders':
                         if(!this.activeOrderProducts.length){
                             this.loadActiveOrders();
-                            this.loadInactiveOrders();
+                            this.loadCompletedOrders(10);
                         }
                         break;
                     case 'activityLog':
@@ -237,13 +243,13 @@
                 currentTab: '',
                 showOrders: false,
                 activeOrderProducts: [],
-                inactiveOrderProducts: []
+                completeOrderProducts: []
             };
         },
 
         computed: {
             orders() {
-                return this.activeOrderProducts.concat(this.inactiveOrderProducts)
+                return this.activeOrderProducts.concat(this.completeOrderProducts)
             }
         },
 
@@ -257,7 +263,7 @@
             numberFormat: (x) => {
                 x = parseInt(x).toString();
 
-                if (x == '0') return '-';
+                if (x ==='0') return '-';
 
                 var pattern = /(-?\d+)(\d{3})/;
                 while (pattern.test(x)) x = x.replace(pattern, "$1 $2");
@@ -304,19 +310,19 @@
                     });
             },
 
-            loadInactiveOrders: function () {
+            loadCompletedOrders: function (count = 5) {
                 this.statusMessageOrder = "Loading orders ..."
                 const params = {
                     'filter[product_id]': this.product['id'],
                     'filter[order.is_active]': false,
                     'sort': '-id',
                     'include': 'order',
-                    'per_page': 5
+                    'per_page': count
                 }
                 this.apiGetOrderProducts(params)
                     .then(({data}) => {
                         this.statusMessageOrder = '';
-                        this.inactiveOrderProducts = data.data;
+                        this.completeOrderProducts = data.data;
                     });
             },
 
@@ -343,15 +349,15 @@
             dashIfZero(value) {
                 return value === 0 ? '-' : value;
             },
-            showHideProducts() {
-                this.showProducts = ! this.showProducts;
-            },
+
             getProductLink(orderProduct) {
                 return '/orders?search=' + orderProduct['order']['order_number'];
             },
+
             getProductQuantity(orderProduct) {
                 return orderProduct['product'] ? Number(orderProduct['product']['quantity']) : -1;
             },
+
             ifHasEnoughStock(orderProduct) {
                 return this.getProductQuantity(orderProduct) < Number(orderProduct['quantity_ordered']);
             }

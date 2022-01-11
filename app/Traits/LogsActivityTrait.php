@@ -13,8 +13,10 @@ trait LogsActivityTrait
 
     public function log($message): self
     {
-        activity()->on($this)->log($message);
+        $activity = activity()->on($this);
+        $activity->log($message);
 
+        \Log::debug('Activity', ['message' => $message, 'id' => $this->getKey(), 'class' => get_class($this)]);
         return $this;
     }
 }

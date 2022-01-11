@@ -22,7 +22,8 @@ class CreateModulesAutomationsTable extends Migration
             $table->smallInteger('priority')->nullable(false)->default(0);
             $table->boolean('enabled')->nullable(false)->default(false);
             $table->string('name')->nullable(false);
-            $table->string('event_class');
+            $table->text('description')->nullable();
+            $table->string('event_class')->nullable();
             $table->timestamps();
         });
     }

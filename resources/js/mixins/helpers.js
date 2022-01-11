@@ -8,6 +8,17 @@ export default {
     mixins: [beep],
 
     methods: {
+        copyToClipBoard(textToCopy){
+            const tmpTextField = document.createElement("textarea")
+            tmpTextField.textContent = textToCopy
+            tmpTextField.setAttribute("style","position:absolute; right:200%;")
+            document.body.appendChild(tmpTextField)
+            tmpTextField.select()
+            tmpTextField.setSelectionRange(0, 99999) /*For mobile devices*/
+            document.execCommand("copy")
+            tmpTextField.remove()
+        },
+
         toNumberOrDash(value) {
             return this.dashIfZero(Number(value));
         },

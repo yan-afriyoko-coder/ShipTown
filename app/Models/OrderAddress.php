@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Crypt;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -85,31 +86,80 @@ class OrderAddress extends Model
         'region',
     ];
 
+    protected $casts = [
+        'phone_encrypted' => 'encrypted'
+    ];
+
     public function getFirstNameAttribute(): string
     {
-        if ($this->encrypted) {
-            return  Crypt::decryptString($this->attributes['first_name']);
+        if ($this->getRawOriginal('first_name') != '') {
+            return $this->getRawOriginal('first_name');
         }
 
-        return $this->attributes['first_name'];
+        try {
+            return Crypt::decryptString($this->attributes['first_name_encrypted']);
+        } catch (Exception $exception) {
+            return '';
+        }
+    }
+
+    public function setFirstNameAttribute($value): void
+    {
+        $this->attributes['first_name_encrypted'] = Crypt::encryptString($value);
     }
 
     public function getLastNameAttribute(): string
     {
-        if ($this->encrypted) {
-            return  Crypt::decryptString($this->attributes['last_name']);
+        if ($this->getRawOriginal('last_name') != '') {
+            return $this->getRawOriginal('last_name');
         }
 
-        return $this->attributes['last_name'];
+        try {
+            return Crypt::decryptString($this->attributes['last_name_encrypted']);
+        } catch (Exception $exception) {
+            return '';
+        }
+    }
+
+    public function setLastNameAttribute($value): void
+    {
+        $this->attributes['last_name_encrypted'] = Crypt::encryptString($value);
     }
 
     public function getPhoneAttribute(): string
     {
-        if ($this->encrypted) {
-            return  Crypt::decryptString($this->attributes['phone']);
+        if ($this->getRawOriginal('phone') != '') {
+            return $this->getRawOriginal('phone');
         }
 
-        return $this->attributes['phone'];
+        try {
+            return Crypt::decryptString($this->attributes['phone_encrypted']);
+        } catch (Exception $exception) {
+            return '';
+        }
+    }
+
+    public function setPhoneAttribute($value): void
+    {
+        $this->attributes['phone_encrypted'] = Crypt::encryptString($value);
+    }
+
+    public function getEmailAttribute(): string
+    {
+        if ($this->getRawOriginal('email') != '') {
+            return $this->getRawOriginal('email');
+        }
+
+        try {
+            return Crypt::decryptString($this->attributes['email_encrypted']);
+        } catch (Exception $exception) {
+            return '';
+        }
+    }
+
+    public function setEmailAttribute($value): void
+    {
+        $this->attributes['email_encrypted'] = Crypt::encryptString($value);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Api\Settings\Module\Automation\AutomationController;
 
-use App\Events\Order\OrderCreatedEvent;
+use App\Events\Order\ActiveOrderCheckEvent;
 use App\Modules\Automations\src\Models\Automation;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -25,12 +25,12 @@ class UpdateTest extends TestCase
         $automation = Automation::create([
             'name' => 'Store Pickup',
             'priority' => 1,
-            'event_class' => OrderCreatedEvent::class,
+            'event_class' => ActiveOrderCheckEvent::class,
         ]);
 
         $data = [
             'name' => 'Test Automation',
-            'event_class' => 'App\Events\Order\OrderCreatedEvent',
+            'event_class' => ActiveOrderCheckEvent::class,
             'enabled' => true,
             'description' => 'Some description',
             'priority' => 1,

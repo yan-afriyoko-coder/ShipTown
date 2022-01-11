@@ -1,11 +1,9 @@
 <template>
 <div>
     <div class="text-right">
-        from <b>{{ formated_starting_date }}</b>
-        to <b>{{ formated_ending_date }}</b>
         <div class="dropdown">
-            <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="dropdownDateRange" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Date Filter
+            <button class="btn btn-sm btn-outline-primary dropdown-toggle font-weight-bold" type="button" id="dropdownDateRange" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ formated_starting_date }} - {{ formated_ending_date }}
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownDateRange">
                 <a class="dropdown-item" href="?between_dates=today,now">Today</a>
@@ -13,19 +11,15 @@
                 <a class="dropdown-item" href="?between_dates=-7days,now">Last 7 days</a>
                 <a class="dropdown-item" href="?between_dates=this week monday,now">This week</a>
                 <a class="dropdown-item" href="?between_dates=last week monday,this week monday">Last Week</a>
-                <a class="dropdown-item" href="#" @click="showModal">Custom Date</a>
+                <a class="dropdown-item" @click.prevent="showModal">Custom Date</a>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="modal-date-selector-widget">
-        <div class="modal-dialog modal-dialog-centered">
-            <div ref="loadingContainer2" class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Custom Date Filter</h5>
-                </div>
-                <div class="modal-body">
-                    <form class="form" @submit.prevent="submit">
+        <dialog id="modal-date-selector-widget" class="m-auto border-light rounded">
+            <div class="row">
+                <div class="col">
+                    <form class="form" @submit.prevent="">
                         <div class="form-group">
                             <label class="form-label" for="starting_date">From</label>
                             <input class="form-control" id="starting_date" type="datetime-local" v-model="starting_date">
@@ -36,18 +30,23 @@
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" @click="closeModal" class="btn btn-default">Cancel</button>
-                    <button type="button" @click="validateFilter" class="btn btn-primary">Apply</button>
+            </div>
+            <div class="row">
+                <div class="col text-right">
+                    <div>
+                        <button type="button" @click="closeModal" class="btn btn-default">Cancel</button>
+                        <button type="button" @click="validateFilter" class="btn btn-primary">Apply</button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </dialog>
+
 </div>
 </template>
 
 <script>
 import moment from "moment"
+
 export default {
     props: ['dates'],
     data(){
@@ -73,10 +72,7 @@ export default {
     },
     methods: {
         applyFilter(range){
-
-            let href = '?between_dates='+range;
-            console.log(href);
-            location.href = href;
+            location.href = '?between_dates=' + range;
         },
         validateFilter(){
             if (this.starting_date > this.ending_date) {
@@ -87,11 +83,11 @@ export default {
         },
 
         showModal() {
-            $('#modal-date-selector-widget').modal('show');
+            document.getElementById('modal-date-selector-widget').showModal()
         },
 
         closeModal() {
-            $('#modal-date-selector-widget').modal('hide');
+            document.getElementById('modal-date-selector-widget').close();
         }
     }
 }
