@@ -1,26 +1,29 @@
 <template>
     <div>
-
-        <div class="row no-gutters mb-3 ml-1 mr-1">
-            <div class="col">
-                <input placeholder="Search"
-                       class="form-control"
-                       ref="search"
-                       v-model="searchText"
-                       @keyup.enter="findText" />
-            </div>
-        </div>
-
-        <div class="row" v-if="products.length === 0 && !isLoading" >
-            <div class="col">
-                <div class="alert alert-info" role="alert">
-                    No products found.
+        <template v-if="getUrlParameter('hide_nav_bar', false) === false">
+            <div class="row no-gutters ml-1 mr-1">
+                <div class="col">
+                    <input placeholder="Search"
+                           class="form-control"
+                           ref="search"
+                           v-model="searchText"
+                           @keyup.enter="findText" />
                 </div>
             </div>
-        </div>
+        </template>
+
+        <template  v-if="products.length === 0 && !isLoading" >
+            <div class="row">
+                <div class="col">
+                    <div class="alert alert-info" role="alert">
+                        No products found.
+                    </div>
+                </div>
+            </div>
+        </template>
 
         <template v-for="product in products">
-            <div class="row">
+            <div class="row mt-3">
                 <div class="col">
                     <product-card :product="product" :expanded="products.length === 1"/>
                 </div>
