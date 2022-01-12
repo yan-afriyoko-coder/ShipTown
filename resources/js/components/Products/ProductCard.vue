@@ -1,7 +1,7 @@
 <template>
 
     <div>
-        <div class="row card mb-3 ml-1 mr-1" >
+        <div class="row card ml-1 mr-1" >
             <div class="col p-2 pl-3">
                 <div class="row text-left">
                     <div class="col-md-6">
