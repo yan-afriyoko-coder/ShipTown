@@ -40,6 +40,8 @@ use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property string|null $two_factor_code
+ * @property Carbon|null $two_factor_expires_at
  * @property-read Collection|Client[] $clients
  * @property-read int|null $clients_count
  * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications
@@ -90,7 +92,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'warehouse_id', 'printer_id', 'address_label_template', 'ask_for_shipping_number',
+        'name', 'email', 'password', 'warehouse_id', 'printer_id', 'address_label_template', 'ask_for_shipping_number', 'two_factor_code', 'two_factor_expires_at',
     ];
 
     /**
@@ -110,6 +112,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at'       => 'datetime',
         'ask_for_shipping_number' => 'bool',
+        'two_factor_expires_at'   => 'datetime',
     ];
 
     /**
@@ -126,13 +129,5 @@ class User extends Authenticatable
             ])
             ->allowedSorts([
             ]);
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function warehouse(): BelongsTo
-    {
-        return $this->belongsTo(Warehouse::class);
     }
 }

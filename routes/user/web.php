@@ -13,6 +13,10 @@
 
 use Illuminate\Support\Facades\Route;
 
+// Route 2FA
+Route::get('verify/resend', 'Auth\TwoFactorController@resend')->name('verify.resend');
+Route::resource('verify', 'Auth\TwoFactorController')->only(['index', 'store']);
+
 Route::view('setting-profile', 'setting-profile')->name('setting-profile');
 
 Route::redirect('', 'dashboard');
