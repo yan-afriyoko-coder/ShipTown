@@ -49,8 +49,13 @@ class DpdAddress
      */
     public function getOnlyCorrectPostCode(): string
     {
+        $countryCode = $this->address->get('CountryCode', '');
         $postCode = $this->address->get('PostCode', '');
 
-        return Str::length($postCode) != 7 ? '' : $postCode;
+        if (in_array($countryCode, ['IE', 'IRL'])) {
+            return Str::length($postCode) != 7 ? '' : $postCode;
+        }
+
+        return $postCode;
     }
 }
