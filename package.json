@@ -34,7 +34,7 @@
     "dotenv": "^8.2.0",
     "fs": "0.0.1-security",
     "g": "^2.0.1",
-    "handsontable": "^7.4.2",
+    "handsontable": "^10.0.0",
     "laravel-vue-pagination": "^2.3.1",
     "moment": "^2.27.0",
     "npm": "^7.24.1",
