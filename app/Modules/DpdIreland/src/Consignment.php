@@ -42,7 +42,7 @@ class Consignment
         'DeliveryAddress.AddressLine3'     => 'required',
         'DeliveryAddress.AddressLine4'     => 'required',
         'DeliveryAddress.PostCode'         => ['sometimes'],
-        'DeliveryAddress.CountryCode'      => 'required|in:IE,IRL,UK,GB',
+        'DeliveryAddress.CountryCode'      => 'required|in:IE,IRL,UK,GB,CHE',
     ];
 
     /**
