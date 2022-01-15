@@ -1,6 +1,6 @@
 <?php
 
-namespace {{namespaceWithoutApp}};
+namespace Tests\Feature\Routes\Web;
 
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -9,14 +9,14 @@ use Tests\TestCase;
 /**
  *
  */
-class {{class}} extends TestCase
+class VerifyTest extends TestCase
 {
     use RefreshDatabase;
 
     /**
      * @var string
      */
-    protected string $uri = '';
+    protected string $uri = '/verify';
 
     /**
      * @var User
@@ -53,7 +53,7 @@ class {{class}} extends TestCase
 
         $response = $this->get($this->uri);
 
-        $response->assertForbidden();
+        $response->assertSuccessful();
     }
 
     /** @test */
@@ -65,6 +65,6 @@ class {{class}} extends TestCase
 
         $response = $this->get($this->uri);
 
-        $response->assertForbidden();
+        $response->assertSuccessful();
     }
 }
