@@ -27,7 +27,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/dashboard';
+    protected string $redirectTo = '/dashboard';
 
     /**
      * Create a new controller instance.
@@ -46,7 +46,9 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $user)
     {
-        $user->generateTwoFactorCode();
-        $user->notify(new TwoFactorCode());
+        if (config('two_factor_auth.enabled')) {
+            $user->generateTwoFactorCode();
+            $user->notify(new TwoFactorCode());
+        }
     }
 }

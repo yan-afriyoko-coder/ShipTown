@@ -53,7 +53,7 @@ class VerifyTest extends TestCase
 
         $response = $this->get($this->uri);
 
-        $response->assertRedirect('/dashboard');
+        $response->assertRedirect('/home');
     }
 
     /** @test */
@@ -65,6 +65,6 @@ class VerifyTest extends TestCase
 
         $response = $this->get($this->uri);
 
-        $response->assertRedirect('/dashboard');
+        $response->assertRedirect('/home');
     }
 }

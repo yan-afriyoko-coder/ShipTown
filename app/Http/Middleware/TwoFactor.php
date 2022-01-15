@@ -2,33 +2,39 @@
 
 namespace App\Http\Middleware;
 
+use App\User;
 use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TwoFactor
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param Request $request
+     * @param Closure $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
+        if (! config('two_factor_auth.enabled')) {
+            return $next($request);
+        }
+
+        if ($request->is('verify')) {
+            return $next($request);
+        }
+
+        /** @var User $user */
         $user = auth()->user();
 
-        if (auth()->check() && $user->two_factor_code) {
-            if ($user->two_factor_expires_at->lt(now())) {
-                $user->resetTwoFactorCode();
-                auth()->logout();
-
-                return redirect()->route('login')
-                    ->withMessage('The two factor code has expired. Please login again.');
+        if ($user->two_factor_code) {
+            if ($user->two_factor_expires_at->isPast()) {
+                Auth::logout();
             }
 
-            if (!$request->is('verify*')) {
-                return redirect()->route('verify.index');
-            }
+            return redirect()->route('verify.index');
         }
 
         return $next($request);

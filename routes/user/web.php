@@ -14,17 +14,17 @@
 use Illuminate\Support\Facades\Route;
 
 // Route 2FA
-Route::get('verify/resend', 'Auth\TwoFactorController@resend')->name('verify.resend');
 Route::resource('verify', 'Auth\TwoFactorController')->only(['index', 'store']);
 
-Route::view('setting-profile', 'setting-profile')->name('setting-profile');
-
 Route::redirect('', 'dashboard');
+Route::redirect('home', 'dashboard')->name('home');
+
 Route::view('dashboard', 'dashboard')->name('dashboard');
 Route::view('performance/dashboard', 'performance')->name('performance.dashboard');
 Route::view('products', 'products')->name('products');
 Route::view('picklist', 'picklist')->name('picklist');
 Route::view('orders', 'orders')->name('orders');
+Route::view('setting-profile', 'setting-profile')->name('setting-profile');
 
 Route::view('autopilot/packlist', 'autopilot/packlist')->name('autopilot.packlist');
 

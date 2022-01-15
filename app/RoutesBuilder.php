@@ -3,8 +3,8 @@
 namespace App;
 
 use Illuminate\Routing\PendingResourceRegistration;
-use Route;
-use Str;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 class RoutesBuilder
 {
