@@ -5,7 +5,7 @@ namespace App\Modules\Automations\src\Conditions\Order;
 use App\Events\Order\ActiveOrderCheckEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 /**
  *
