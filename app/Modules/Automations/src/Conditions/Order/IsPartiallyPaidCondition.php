@@ -6,8 +6,7 @@ use App\Events\Order\ActiveOrderCheckEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\Automations\src\Conditions\BaseCondition;
-use App\Services\OrderService;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 /**
  *
@@ -27,20 +26,19 @@ class IsPartiallyPaidCondition extends BaseCondition
     {
         $expectedBoolValue = filter_var($condition_value, FILTER_VALIDATE_BOOL);
 
-        $isAnythingPaid = $this->event->order->total_paid > 0;
-        $isNotFullyPaid = !$this->event->order->isPaid;
+        $order = $this->event->order;
 
-        $isPartiallyPaid = $isNotFullyPaid && $isAnythingPaid;
+        $isPartiallyPaid = ($order->total_paid > 0)  && ($order->total_paid < $order->total);
 
         $result = $isPartiallyPaid === $expectedBoolValue;
 
         Log::debug('Automation condition', [
-            'order_number' => $this->event->order->order_number,
+            'order_number' => $order->order_number,
             'result' => $result,
             'class' => class_basename(self::class),
-            'total_paid' => $this->event->order->total_paid,
+            'total_paid' => $order->total_paid,
             'expected' => $expectedBoolValue,
-            'actual' => $result
+            'actual' => $isPartiallyPaid
         ]);
 
         return $result;
