@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\External\DpdIreland;
+namespace Tests\External\DpdIreland\International;
 
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Modules\DpdIreland\Dpd;
-use App\Modules\DpdIreland\src\Consignment;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Tests\External\DpdIreland\SeedDpdTestConfiguration;
 use Tests\TestCase;
 
 class International_CHE_Test extends TestCase
@@ -19,36 +19,36 @@ class International_CHE_Test extends TestCase
         $this->markTestIncomplete();
     }
 
-    public function test_normal_overnight_consignment_single_parcel()
-    {
-        $address = factory(OrderAddress::class)->create([
-            'company'      => 'DPD Test',
-            'first_name'   => 'DPD',
-            'last_name'    => 'Depot',
-            'address1'     => 'Maisbühlstrasse 50',
-            'address2'     => '',
-            'phone'        => '0861230000',
-            'city'         => 'Unterägeri',
-            'state_name'   => 'ZG',
-            'postcode'     => '6314',
-            'country_code' => 'CHE',
-        ]);
-
-        $order = factory(Order::class)->create([
-            'shipping_address_id' => $address->getKey(),
-        ]);
-
-        try {
-            Dpd::shipOrder($order);
-            $success = true;
-        } catch (Exception $e) {
-            Log::error($e->getMessage());
-            $this->fail($e->getMessage());
-        }
-
-        // we just want no exceptions
-        $this->assertTrue($success);
-    }
+//    public function test_normal_overnight_consignment_single_parcel()
+//    {
+//        $address = factory(OrderAddress::class)->create([
+//            'company'      => 'DPD Test',
+//            'first_name'   => 'DPD',
+//            'last_name'    => 'Depot',
+//            'address1'     => 'Maisbühlstrasse 50',
+//            'address2'     => '',
+//            'phone'        => '0861230000',
+//            'city'         => 'Unterägeri',
+//            'state_name'   => 'ZG',
+//            'postcode'     => '6314',
+//            'country_code' => 'CHE',
+//        ]);
+//
+//        $order = factory(Order::class)->create([
+//            'shipping_address_id' => $address->getKey(),
+//        ]);
+//
+//        try {
+//            Dpd::shipOrder($order);
+//            $success = true;
+//        } catch (Exception $e) {
+//            Log::error($e->getMessage());
+//            $this->fail($e->getMessage());
+//        }
+//
+//        // we just want no exceptions
+//        $this->assertTrue($success);
+//    }
 //
 //    /**
 //     * @test
