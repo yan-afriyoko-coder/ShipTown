@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\External\DpdIreland;
+namespace Tests\External\DpdIreland\International;
 
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Modules\DpdIreland\Dpd;
-use App\Modules\DpdIreland\src\Consignment;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Tests\External\DpdIreland\SeedDpdTestConfiguration;
 use Tests\TestCase;
 
 class International_CHE_Test extends TestCase

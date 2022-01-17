@@ -36,7 +36,7 @@ class Dpd
      */
     public static function shipOrder(Order $order, User $user = null): PreAdvice
     {
-        $consignment = self::getConsignment($order);
+        $consignment = self::getConsignmentData($order);
 
         $preAdvice = self::getPreAdvice($consignment);
 
@@ -88,7 +88,7 @@ class Dpd
      *
      * @return Consignment
      */
-    private static function getConsignment(Order $order): Consignment
+    private static function getConsignmentData(Order $order): Consignment
     {
         $shipping_address = $order->shippingAddress()->first();
 
@@ -103,7 +103,7 @@ class Dpd
                 'AddressLine2'     => $shipping_address->address2,
                 'AddressLine3'     => $shipping_address->city,
                 'AddressLine4'     => $shipping_address->state_name ?: $shipping_address->city,
-                'PostCode'         => Str::length($shipping_address->postcode) === 7 ? $shipping_address->postcode : '',
+                'PostCode'         => $shipping_address->postcode,
                 'CountryCode'      => $shipping_address->country_code,
             ],
             'References'           => [
