@@ -7,7 +7,7 @@ use App\Modules\DpdIreland\src\Models\DpdIreland;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
-use Log;
+use Illuminate\Support\Facades\Log;
 use Spatie\ArrayToXml\ArrayToXml;
 
 /**
