@@ -49,13 +49,26 @@ class Consignment
      * @var array
      */
     private array $templateArray = [
-        'RecordID'             => 1,
-        'CustomerAccount'      => '',
-        'TotalParcels'         => 1,
-        'Relabel'              => 0,
-        'ServiceOption'        => self::SERVICE_OPTION_NORMAL,
-        'ServiceType'          => self::SERVICE_TYPE_OVERNIGHT,
-        'ConsignmentReference' => '',
+        'RecordID'                  => 1,
+        'CustomerAccount'           => '',
+        'TotalParcels'              => 1,
+        'Relabel'                   => 0,
+        'ServiceOption'             => self::SERVICE_OPTION_NORMAL,
+        'ServiceType'               => self::SERVICE_TYPE_OVERNIGHT,
+        'ConsignmentReference'      => '',
+        // customs data
+//        'ShipmentId'                => '1234567',
+//        'ReceiverType'              => 'Private',
+//        'ReceiverEORI'              => 'ABC123',
+//        'SenderEORI'                => 'ABC123',
+//        'SPRNRegNo'                 => 'Y4955191Q',
+//        'ShipmentType'              => 'Merchandise',
+//        'ShipmentInvoiceCurrency'   => 'EUR',
+//        'ShipmentIncoterms'         => 'DAP',
+//        'ShipmentParcelsWeight'     => '15',
+//        'InvoiceNumber'             => '1234',
+//        'FreightCost'               => '25',
+//        'FreightCurrency'           => 'EUR',
         'DeliveryAddress'      => [
             'Contact'          => '',
             'ContactTelephone' => '',
@@ -87,6 +100,25 @@ class Consignment
                 'ParcelNumber'   => 1,
             ],
         ],
+//        'CustomsLines' => [
+//            'CustomsLine' => [
+//                'CommodityCode'             => '6109100010',
+//                'CountryOfOrigin'           => '372',
+//                'Description'               => 'Red pencils',
+//                'Quantity'                  => '1',
+//                'Measurement'               => '1U38',
+//                'TotalLineValue'            => 123.45,
+//                'TaricAdd1'                 => 'tet',
+//                'TaricAdd2'                 => 'test',
+//                'ExtraLicensingRequired'    => 0,
+//                'Box44Lines'                => [
+//                    'Box44Line' => [
+//                        'Box44Code' => 'Y900',
+//                        'Box44Value' => 231,
+//                    ]
+//                ]
+//            ]
+//        ],
     ];
 
     /**
