@@ -6,8 +6,8 @@ use App\Modules\DpdIreland\src\Exceptions\ConsignmentValidationException;
 use App\Modules\DpdIreland\src\Models\DpdIreland;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Spatie\ArrayToXml\ArrayToXml;
 
 /**
@@ -32,30 +32,88 @@ class Consignment
      * @var array
      */
     public array $rules = [
-        'RecordID'                         => 'sometimes',
-        'DeliveryAddress.Contact'          => 'required',
-        'DeliveryAddress.ContactTelephone' => 'required',
-        'DeliveryAddress.ContactEmail'     => 'sometimes',
-        'DeliveryAddress.BusinessName'     => 'sometimes',
-        'DeliveryAddress.AddressLine1'     => 'sometimes',
-        'DeliveryAddress.AddressLine2'     => 'sometimes',
-        'DeliveryAddress.AddressLine3'     => 'required',
-        'DeliveryAddress.AddressLine4'     => 'required',
-        'DeliveryAddress.PostCode'         => ['sometimes'],
-        'DeliveryAddress.CountryCode'      => 'required|in:IE,IRL,UK,GB,CHE',
+        'RecordID'                          => 'sometimes',
+        'ShipmentId'                        => ['required_unless:DeliveryAddress.CountryCode,IE,IRL'],
+        'ReceiverType'                      => ['required_unless:DeliveryAddress.CountryCode,IE,IRL', 'in:Private,Business'],
+        'ReceiverEORI'                      => ['required_unless:DeliveryAddress.CountryCode,IE,IRL'],
+        'SenderEORI'                        => ['required_unless:DeliveryAddress.CountryCode,IE,IRL'],
+        'SPRNRegNo'                         => ['required_unless:DeliveryAddress.CountryCode,IE,IRL'],
+        'ShipmentType'                      => ['required_unless:DeliveryAddress.CountryCode,IE,IRL'],
+        'ShipmentInvoiceCurrency'           => ['required_unless:DeliveryAddress.CountryCode,IE,IRL', 'same:FreightCurrency'],
+        'ShipmentIncoterms'                 => ['required_unless:DeliveryAddress.CountryCode,IE,IRL'],
+        'ShipmentParcelsWeight'             => ['required_unless:DeliveryAddress.CountryCode,IE,IRL'],
+        'InvoiceNumber'                     => ['required_unless:DeliveryAddress.CountryCode,IE,IRL'],
+        'FreightCost'                       => ['required_unless:DeliveryAddress.CountryCode,IE,IRL'],
+        'FreightCurrency'                   => ['required_unless:DeliveryAddress.CountryCode,IE,IRL', 'same:ShipmentInvoiceCurrency'],
+
+        'DeliveryAddress.Contact'           => 'required',
+        'DeliveryAddress.ContactTelephone'  => 'required',
+        'DeliveryAddress.ContactEmail'      => 'sometimes',
+        'DeliveryAddress.BusinessName'      => 'sometimes',
+        'DeliveryAddress.AddressLine1'      => 'sometimes',
+        'DeliveryAddress.AddressLine2'      => 'sometimes',
+        'DeliveryAddress.AddressLine3'      => 'required',
+        'DeliveryAddress.AddressLine4'      => 'required',
+        'DeliveryAddress.PostCode'          => 'sometimes',
+        'DeliveryAddress.CountryCode'       => 'required|in:IE,IRL,UK,GB,CHE',
+
+//        'CollectionAddress.Contact'           => 'required',
+//        'CollectionAddress.ContactTelephone'  => 'required',
+//        'CollectionAddress.ContactEmail'      => 'sometimes',
+//        'CollectionAddress.BusinessName'      => 'sometimes',
+//        'CollectionAddress.AddressLine1'      => 'sometimes',
+//        'CollectionAddress.AddressLine2'      => 'sometimes',
+//        'CollectionAddress.AddressLine3'      => 'required',
+//        'CollectionAddress.AddressLine4'      => 'required',
+//        'CollectionAddress.PostCode'          => 'sometimes',
+//        'CollectionAddress.CountryCode'       => 'required|in:IE,IRL,UK,GB,CHE',
+//
+//        'ReturnAddress.Contact'           => 'required',
+//        'ReturnAddress.ContactTelephone'  => 'required',
+//        'ReturnAddress.ContactEmail'      => 'sometimes',
+//        'ReturnAddress.BusinessName'      => 'sometimes',
+//        'ReturnAddress.AddressLine1'      => 'sometimes',
+//        'ReturnAddress.AddressLine2'      => 'sometimes',
+//        'ReturnAddress.AddressLine3'      => 'required',
+//        'ReturnAddress.AddressLine4'      => 'required',
+//        'ReturnAddress.PostCode'          => 'sometimes',
+//        'ReturnAddress.CountryCode'       => 'required|in:IE,IRL,UK,GB,CHE',
+//
+//        'BillingAddress.Contact'           => 'required',
+//        'BillingAddress.ContactTelephone'  => 'required',
+//        'BillingAddress.ContactEmail'      => 'sometimes',
+//        'BillingAddress.BusinessName'      => 'sometimes',
+//        'BillingAddress.AddressLine1'      => 'sometimes',
+//        'BillingAddress.AddressLine2'      => 'sometimes',
+//        'BillingAddress.AddressLine3'      => 'required',
+//        'BillingAddress.AddressLine4'      => 'required',
+//        'BillingAddress.PostCode'          => 'sometimes',
+//        'BillingAddress.CountryCode'       => 'required|in:IE,IRL,UK,GB,CHE',
     ];
 
     /**
      * @var array
      */
     private array $templateArray = [
-        'RecordID'             => 1,
-        'CustomerAccount'      => '',
-        'TotalParcels'         => 1,
-        'Relabel'              => 0,
-        'ServiceOption'        => self::SERVICE_OPTION_NORMAL,
-        'ServiceType'          => self::SERVICE_TYPE_OVERNIGHT,
-        'ConsignmentReference' => '',
+        'RecordID'                  => 1,
+        'CustomerAccount'           => '',
+        'TotalParcels'              => 1,
+        'Relabel'                   => 0,
+        'ServiceOption'             => self::SERVICE_OPTION_NORMAL,
+        'ServiceType'               => self::SERVICE_TYPE_OVERNIGHT,
+        'ConsignmentReference'      => '',
+        'ShipmentId'                => '',
+        'ReceiverType'              => '',
+        'ReceiverEORI'              => '',
+        'SenderEORI'                => '',
+        'SPRNRegNo'                 => '',
+        'ShipmentType'              => '',
+        'ShipmentInvoiceCurrency'   => 'EUR',
+        'ShipmentIncoterms'         => '',
+        'ShipmentParcelsWeight'     => '',
+        'InvoiceNumber'             => '',
+        'FreightCost'               => 0,
+        'FreightCurrency'           => 'EUR',
         'DeliveryAddress'      => [
             'Contact'          => '',
             'ContactTelephone' => '',
@@ -80,6 +138,30 @@ class Consignment
             'PostCode'         => '',
             'CountryCode'      => '',
         ],
+        'ReturnAddress' => [
+            'Contact'          => '',
+            'ContactTelephone' => '',
+            'ContactEmail'     => '',
+            'BusinessName'     => '',
+            'AddressLine1'     => '',
+            'AddressLine2'     => '',
+            'AddressLine3'     => '',
+            'AddressLine4'     => '',
+            'PostCode'         => '',
+            'CountryCode'      => '',
+        ],
+        'BillingAddress'      => [
+            'Contact'          => '',
+            'ContactTelephone' => '',
+            'ContactEmail'     => '',
+            'BusinessName'     => '',
+            'AddressLine1'     => '',
+            'AddressLine2'     => '',
+            'AddressLine3'     => '',
+            'AddressLine4'     => '',
+            'PostCode'         => '',
+            'CountryCode'      => '',
+        ],
         'References' => [
             'Reference' => [
                 'ReferenceName'  => '',
@@ -87,12 +169,31 @@ class Consignment
                 'ParcelNumber'   => 1,
             ],
         ],
+//        'CustomsLines' => [
+//            'CustomsLine' => [
+//                'CommodityCode'             => '6109100010',
+//                'CountryOfOrigin'           => '372',
+//                'Description'               => 'Red pencils',
+//                'Quantity'                  => '1',
+//                'Measurement'               => '1U38',
+//                'TotalLineValue'            => 123.45,
+//                'TaricAdd1'                 => 'tet',
+//                'TaricAdd2'                 => 'test',
+//                'ExtraLicensingRequired'    => 0,
+//                'Box44Lines'                => [
+//                    'Box44Line' => [
+//                        'Box44Code' => 'Y900',
+//                        'Box44Value' => 231,
+//                    ]
+//                ]
+//            ]
+//        ],
     ];
 
     /**
      * @var Collection
      */
-    private $payload;
+    private Collection $payload;
 
     /**
      * @var Validator
@@ -150,9 +251,7 @@ class Consignment
     {
         $data = $this->toXml();
 
-        $data = str_replace(PHP_EOL, '', $data);
-
-        return $data;
+        return str_replace(PHP_EOL, '', $data);
     }
 
     /**
@@ -163,7 +262,9 @@ class Consignment
         $fixedValues = collect([
             'CustomerAccount'   => $this->config->user,
             'DeliveryAddress'   => (new DpdAddress($this->payload['DeliveryAddress']))->toArray(),
+            'BillingAddress'    => (new DpdAddress($this->payload['DeliveryAddress']))->toArray(),
             'CollectionAddress' => $this->getCollectionAddress(),
+            'ReturnAddress'     => $this->getCollectionAddress(),
         ]);
 
         $template = collect($this->templateArray);
