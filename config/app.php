@@ -219,7 +219,6 @@ return [
 //        App\Modules\AutoStatusPaid\src\AutoStatusPaidServiceProvider::class,
 
         App\Modules\AutoStatusPicking\src\AutoStatusPickingServiceProvider::class,
-        App\Modules\AutoStatusPackingWeb\src\AutoPackingWebServiceProvider::class,
         App\Modules\AutoStatusReady\src\AutoStatusReadyServiceProvider::class,
 
         // 3rd party integrations

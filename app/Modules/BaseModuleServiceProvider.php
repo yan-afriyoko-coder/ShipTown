@@ -2,11 +2,11 @@
 
 namespace App\Modules;
 
-use App;
 use App\Models\Module;
 use Exception;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
-use Log;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class BaseModuleServiceProvider.
@@ -91,10 +91,11 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
     public static function uninstallModule(): bool
     {
         try {
+            /** @var Module $module */
             $module = Module::where(['service_provider_class' => get_called_class()])->first();
 
             if ($module) {
-                $module->delete();
+                $module->forceDelete();
             }
 
             return true;
