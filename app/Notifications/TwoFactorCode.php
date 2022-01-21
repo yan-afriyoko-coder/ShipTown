@@ -30,6 +30,7 @@ class TwoFactorCode extends Notification
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
+            ->subject('Authentication Code')
             ->greeting('Authentication Code: '.$notifiable->two_factor_code)
             ->action('Click to Login', route('verify.index', ['two_factor_code'  => $notifiable->two_factor_code]));
     }
