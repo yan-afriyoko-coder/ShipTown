@@ -33,18 +33,18 @@ class Consignment
      */
     public array $rules = [
         'RecordID'                          => 'sometimes',
-        'ShipmentId'                        => ['required_unless:DeliveryAddress.CountryCode,IE,IRL'],
-        'ReceiverType'                      => ['required_unless:DeliveryAddress.CountryCode,IE,IRL', 'in:Private,Business'],
-        'ReceiverEORI'                      => ['required_unless:DeliveryAddress.CountryCode,IE,IRL'],
-        'SenderEORI'                        => ['required_unless:DeliveryAddress.CountryCode,IE,IRL'],
-        'SPRNRegNo'                         => ['required_unless:DeliveryAddress.CountryCode,IE,IRL'],
-        'ShipmentType'                      => ['required_unless:DeliveryAddress.CountryCode,IE,IRL'],
-        'ShipmentInvoiceCurrency'           => ['required_unless:DeliveryAddress.CountryCode,IE,IRL', 'same:FreightCurrency'],
-        'ShipmentIncoterms'                 => ['required_unless:DeliveryAddress.CountryCode,IE,IRL'],
-        'ShipmentParcelsWeight'             => ['required_unless:DeliveryAddress.CountryCode,IE,IRL'],
-        'InvoiceNumber'                     => ['required_unless:DeliveryAddress.CountryCode,IE,IRL'],
-        'FreightCost'                       => ['required_unless:DeliveryAddress.CountryCode,IE,IRL'],
-        'FreightCurrency'                   => ['required_unless:DeliveryAddress.CountryCode,IE,IRL', 'same:ShipmentInvoiceCurrency'],
+        'ShipmentId'                        => ['string', 'required_unless:DeliveryAddress.CountryCode,IE,IRL'],
+        'ReceiverType'                      => ['string', 'required_unless:DeliveryAddress.CountryCode,IE,IRL', 'in:Private,Business'],
+        'ReceiverEORI'                      => ['string', 'required_unless:DeliveryAddress.CountryCode,IE,IRL'],
+        'SenderEORI'                        => ['string', 'required_unless:DeliveryAddress.CountryCode,IE,IRL'],
+        'SPRNRegNo'                         => ['string', 'required_unless:DeliveryAddress.CountryCode,IE,IRL'],
+        'ShipmentType'                      => ['string', 'required_unless:DeliveryAddress.CountryCode,IE,IRL', 'in:Documents,Merchandise'],
+        'ShipmentInvoiceCurrency'           => ['string', 'required_unless:DeliveryAddress.CountryCode,IE,IRL', 'same:FreightCurrency'],
+        'ShipmentIncoterms'                 => ['string', 'required_unless:DeliveryAddress.CountryCode,IE,IRL', 'in:DAP,EDAP'],
+        'ShipmentParcelsWeight'             => ['numeric', 'required_unless:DeliveryAddress.CountryCode,IE,IRL'],
+        'InvoiceNumber'                     => ['string', 'required_unless:DeliveryAddress.CountryCode,IE,IRL'],
+        'FreightCost'                       => ['numeric', 'required_unless:DeliveryAddress.CountryCode,IE,IRL', 'required_with:FreightCurrency'],
+        'FreightCurrency'                   => ['string', 'required_unless:DeliveryAddress.CountryCode,IE,IRL', 'required_with:FreightCost', 'same:ShipmentInvoiceCurrency'],
 
         'DeliveryAddress.Contact'           => 'required',
         'DeliveryAddress.ContactTelephone'  => 'required',
@@ -89,6 +89,26 @@ class Consignment
 //        'BillingAddress.AddressLine4'      => 'required',
 //        'BillingAddress.PostCode'          => 'sometimes',
 //        'BillingAddress.CountryCode'       => 'required|in:IE,IRL,UK,GB,CHE',
+
+        'CustomsLines' => ['array', 'required_unless:DeliveryAddress.CountryCode,IE,IRL']
+//            'CustomsLine' => [
+//                'CommodityCode'             => '6109100010',
+//                'CountryOfOrigin'           => '372',
+//                'Description'               => 'Red pencils',
+//                'Quantity'                  => '1',
+//                'Measurement'               => '1U38',
+//                'TotalLineValue'            => 123.45,
+//                'TaricAdd1'                 => 'tet',
+//                'TaricAdd2'                 => 'test',
+//                'ExtraLicensingRequired'    => 0,
+//                'Box44Lines'                => [
+//                    'Box44Line' => [
+//                        'Box44Code' => 'Y900',
+//                        'Box44Value' => 231,
+//                    ]
+//                ]
+//            ]
+//        ],
     ];
 
     /**
@@ -110,7 +130,7 @@ class Consignment
         'ShipmentType'              => '',
         'ShipmentInvoiceCurrency'   => 'EUR',
         'ShipmentIncoterms'         => '',
-        'ShipmentParcelsWeight'     => '',
+        'ShipmentParcelsWeight'     => 0,
         'InvoiceNumber'             => '',
         'FreightCost'               => 0,
         'FreightCurrency'           => 'EUR',
@@ -169,25 +189,25 @@ class Consignment
                 'ParcelNumber'   => 1,
             ],
         ],
-//        'CustomsLines' => [
+        'CustomsLines' => [
 //            'CustomsLine' => [
-//                'CommodityCode'             => '6109100010',
-//                'CountryOfOrigin'           => '372',
-//                'Description'               => 'Red pencils',
-//                'Quantity'                  => '1',
-//                'Measurement'               => '1U38',
-//                'TotalLineValue'            => 123.45,
-//                'TaricAdd1'                 => 'tet',
-//                'TaricAdd2'                 => 'test',
+//                'CommodityCode'             => '',
+//                'CountryOfOrigin'           => '',
+//                'Description'               => '',
+//                'Quantity'                  => '',
+//                'Measurement'               => '',
+//                'TotalLineValue'            => 0,
+//                'TaricAdd1'                 => '',
+//                'TaricAdd2'                 => '',
 //                'ExtraLicensingRequired'    => 0,
 //                'Box44Lines'                => [
 //                    'Box44Line' => [
-//                        'Box44Code' => 'Y900',
-//                        'Box44Value' => 231,
+//                        'Box44Code' => '',
+//                        'Box44Value' => 0,
 //                    ]
 //                ]
 //            ]
-//        ],
+        ],
     ];
 
     /**

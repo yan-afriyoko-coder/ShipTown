@@ -4,6 +4,7 @@ namespace Tests\External\DpdIreland;
 
 use App\Models\Order;
 use App\Models\OrderAddress;
+use App\Models\OrderProduct;
 use App\Modules\DpdIreland\Dpd;
 use App\Modules\DpdIreland\src\Client;
 use Exception;
@@ -56,6 +57,8 @@ class DpdIntegrationJobTest extends TestCase
         $order = factory(Order::class)->create([
             'shipping_address_id' => $address->getKey(),
         ]);
+
+        factory(OrderProduct::class, 2)->create(['order_id' => $order->getKey()]);
 
         try {
             Dpd::shipOrder($order);

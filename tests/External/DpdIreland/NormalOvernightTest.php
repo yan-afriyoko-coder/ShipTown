@@ -49,7 +49,7 @@ class NormalOvernightTest extends TestCase
             ],
         ]);
 
-        $preAdvice = Dpd::getPreAdvice($consignment);
+        $preAdvice = Dpd::requestPreAdvice($consignment);
 
         $this->assertEquals($consignment->toArray()['RecordID'], $preAdvice->getAttribute('RecordID'));
     }
@@ -90,7 +90,7 @@ class NormalOvernightTest extends TestCase
             ],
         ]);
 
-        $preAdvice = Dpd::getPreAdvice($consignment);
+        $preAdvice = Dpd::requestPreAdvice($consignment);
 
         $this->assertEquals($consignment->toArray()['RecordID'], $preAdvice->getAttribute('RecordID'));
     }
@@ -131,7 +131,7 @@ class NormalOvernightTest extends TestCase
             ],
         ]);
 
-        $preAdvice = Dpd::getPreAdvice($consignment);
+        $preAdvice = Dpd::requestPreAdvice($consignment);
 
         $this->assertEquals($consignment->toArray()['RecordID'], $preAdvice->getAttribute('RecordID'));
     }
@@ -245,7 +245,7 @@ class NormalOvernightTest extends TestCase
             ],
         ]);
 
-        $preAdvice = Dpd::getPreAdvice($consignment);
+        $preAdvice = Dpd::requestPreAdvice($consignment);
 
         $this->assertEquals($consignment->toArray()['RecordID'], $preAdvice->getAttribute('RecordID'));
     }

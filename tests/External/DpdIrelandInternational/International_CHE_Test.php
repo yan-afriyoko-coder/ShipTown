@@ -4,6 +4,7 @@ namespace Tests\External\DpdIrelandInternational;
 
 use App\Models\Order;
 use App\Models\OrderAddress;
+use App\Models\OrderProduct;
 use App\Modules\DpdIreland\Dpd;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -14,14 +15,9 @@ class International_CHE_Test extends TestCase
 {
     use SeedDpdTestConfiguration;
 
-    public function test_if_this_is_completed()
-    {
-        $this->markTestIncomplete();
-    }
-
     public function test_normal_overnight_consignment_single_parcel()
     {
-        $this->markTestIncomplete();
+//        $this->markTestIncomplete();
 
         $address = factory(OrderAddress::class)->create([
             'company'      => 'DPD Test',
@@ -39,6 +35,8 @@ class International_CHE_Test extends TestCase
         $order = factory(Order::class)->create([
             'shipping_address_id' => $address->getKey(),
         ]);
+
+        factory(OrderProduct::class, 2)->create(['order_id' => $order->getKey()]);
 
         try {
             Dpd::shipOrder($order);
