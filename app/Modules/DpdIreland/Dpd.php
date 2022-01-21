@@ -142,12 +142,6 @@ class Dpd
                         'TaricAdd1' => '',
                         'TaricAdd2' => '',
                         'ExtraLicensingRequired' => 0,
-                        'Box44Lines' => [
-                            'Box44Line' => [
-                                'Box44Code' => 'Y900',
-                                'Box44Value' => 231,
-                            ]
-                        ]
                     ];
                 })->toArray()
             ];
