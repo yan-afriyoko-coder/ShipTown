@@ -55,7 +55,7 @@ class Consignment
         'DeliveryAddress.AddressLine3'      => 'required',
         'DeliveryAddress.AddressLine4'      => 'required',
         'DeliveryAddress.PostCode'          => 'sometimes',
-        'DeliveryAddress.CountryCode'       => 'required|in:IE,IRL,UK,GB,CHE,DEU,DE',
+        'DeliveryAddress.CountryCode'       => 'required|in:IE,IRL,UK,GB,CHE,DEU,DE,AUT,BEL,BGR,HRV,CYP,CZE,DNK,EST,FIN,FRA,DEU,GRC,HUN,IRL,ITA,LVA,LTU,LUX,MLT,NLD,POL,PRT,ROU,SVK,SVN,ESP,SWE',
 
 //        'CollectionAddress.Contact'           => 'required',
 //        'CollectionAddress.ContactTelephone'  => 'required',
@@ -90,7 +90,8 @@ class Consignment
 //        'BillingAddress.PostCode'          => 'sometimes',
 //        'BillingAddress.CountryCode'       => 'required|in:IE,IRL,UK,GB,CHE',
 
-        'CustomsLines' => ['array', 'required_unless:DeliveryAddress.CountryCode,IE,IRL,DEU']
+        'CustomsLines' => ['array', 'required_unless:DeliveryAddress.CountryCode,IE,IRL,DEU,DE,AUT,BEL,BGR,HRV,CYP,CZE,DNK,EST,FIN,FRA,DEU,GRC,HUN,IRL,ITA,LVA,LTU,LUX,MLT,NLD,POL,PRT,ROU,SVK,SVN,ESP,SWE'],
+
 //            'CustomsLine' => [
 //                'CommodityCode'             => '6109100010',
 //                'CountryOfOrigin'           => '372',
