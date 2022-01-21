@@ -93,7 +93,7 @@ class Dpd
      */
     private static function getConsignmentData(Order $order): Consignment
     {
-        return new Consignment([
+        $payload = [
             'RecordID' => $order->order_number,
             'ConsignmentReference' => $order->order_number,
             'ShipmentId' => $order->order_number,
@@ -126,7 +126,11 @@ class Dpd
                     'ParcelNumber' => 1,
                 ],
             ],
-            'CustomsLines' => [
+
+        ];
+
+        if (in_array($order->shippingAddress->country_code, ['CHE', 'RUS'])) {
+            $payload['CustomsLines'] = [
                 'CustomsLine' => $order->orderProducts->map(function (OrderProduct $orderProduct) {
                     return [
                         'CommodityCode' => $orderProduct->product->commodity_code,
@@ -146,8 +150,10 @@ class Dpd
                         ]
                     ];
                 })->toArray()
-            ]
-        ]);
+            ];
+        };
+
+        return new Consignment($payload);
     }
 
     /**

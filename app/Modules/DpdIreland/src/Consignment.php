@@ -90,7 +90,7 @@ class Consignment
 //        'BillingAddress.PostCode'          => 'sometimes',
 //        'BillingAddress.CountryCode'       => 'required|in:IE,IRL,UK,GB,CHE',
 
-        'CustomsLines' => ['array', 'required_unless:DeliveryAddress.CountryCode,IE,IRL']
+        'CustomsLines' => ['array', 'required_unless:DeliveryAddress.CountryCode,IE,IRL,DEU']
 //            'CustomsLine' => [
 //                'CommodityCode'             => '6109100010',
 //                'CountryOfOrigin'           => '372',
