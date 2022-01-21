@@ -55,7 +55,7 @@ class Consignment
         'DeliveryAddress.AddressLine3'      => 'required',
         'DeliveryAddress.AddressLine4'      => 'required',
         'DeliveryAddress.PostCode'          => 'sometimes',
-        'DeliveryAddress.CountryCode'       => 'required|in:IE,IRL,UK,GB,CHE',
+        'DeliveryAddress.CountryCode'       => 'required|in:IE,IRL,UK,GB,CHE,DEU,DE',
 
 //        'CollectionAddress.Contact'           => 'required',
 //        'CollectionAddress.ContactTelephone'  => 'required',
