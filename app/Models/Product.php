@@ -7,18 +7,16 @@ use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
 use App\Traits\HasTagsTrait;
 use App\Traits\LogsActivityTrait;
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
-use phpDocumentor\Reflection\Types\This;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -80,10 +78,11 @@ use Spatie\Tags\Tag;
  *
  * @property-read Collection|ProductPrice[] $prices
  * @property-read int|null $prices_count
+ * @property string commodity_code
  *
  * @method static Builder|Product hasTags($tags)
  * @method static Builder|Product whereQuantityAvailable($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Product extends BaseModel
 {
@@ -93,7 +92,7 @@ class Product extends BaseModel
     use Notifiable;
     use HasManyKeyByRelationship;
 
-    protected static $logAttributes = [
+    protected static array $logAttributes = [
         'quantity',
         'quantity_reserved',
         'quantity_available',

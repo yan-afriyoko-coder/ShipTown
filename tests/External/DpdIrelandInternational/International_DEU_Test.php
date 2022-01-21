@@ -11,25 +11,25 @@ use Illuminate\Support\Facades\Log;
 use Tests\External\DpdIreland\SeedDpdTestConfiguration;
 use Tests\TestCase;
 
-class International_CHE_Test extends TestCase
+class International_DEU_Test extends TestCase
 {
     use SeedDpdTestConfiguration;
 
     public function test_normal_overnight_consignment_single_parcel()
     {
-//        $this->markTestIncomplete();
-
         $address = factory(OrderAddress::class)->create([
             'company'      => 'DPD Test',
             'first_name'   => 'DPD',
             'last_name'    => 'Depot',
-            'address1'     => 'Maisbühlstrasse 50',
+            'address1'     => 'Sickingstraße 131',
             'address2'     => '',
             'phone'        => '0861230000',
-            'city'         => 'Unterägeri',
-            'state_name'   => 'ZG',
-            'postcode'     => '6314',
-            'country_code' => 'CHE',
+            'city'         => 'Marl',
+            'state_code'   => 'NRW',
+            'state_name'   => 'Nordrhein-Westfalen',
+            'postcode'     => '45772',
+            'country_code' => 'DEU',
+            'country_name' => 'Germany',
         ]);
 
         $order = factory(Order::class)->create([

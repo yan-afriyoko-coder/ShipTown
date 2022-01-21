@@ -4,6 +4,7 @@ namespace Tests\External\DpdIreland;
 
 use App\Models\Order;
 use App\Models\OrderAddress;
+use App\Models\OrderProduct;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -37,6 +38,8 @@ class PrintDpdLabelControllerTest extends TestCase
         $order = factory(Order::class)->create([
             'shipping_address_id' => $address->getKey(),
         ]);
+
+        factory(OrderProduct::class, 2)->create(['order_id' => $order->getKey()]);
 
         $user = factory(User::class)->create([
             'address_label_template' => 'dpd_label',

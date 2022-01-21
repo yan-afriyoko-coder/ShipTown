@@ -65,7 +65,7 @@ class DpdTest extends TestCase
             ],
         ]);
 
-        $preAdvice = Dpd::getPreAdvice($consignment);
+        $preAdvice = Dpd::requestPreAdvice($consignment);
 
         $this->assertEquals($consignment->toArray()['RecordID'], $preAdvice->getAttribute('RecordID'));
     }
@@ -116,7 +116,7 @@ class DpdTest extends TestCase
             ],
         ]);
 
-        $preAdvice = Dpd::getPreAdvice($consignment);
+        $preAdvice = Dpd::requestPreAdvice($consignment);
 
         $this->assertTrue($preAdvice->isSuccess());
     }
