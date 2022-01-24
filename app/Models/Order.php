@@ -6,7 +6,7 @@ use App\BaseModel;
 use App\Traits\HasTagsTrait;
 use App\Traits\LogsActivityTrait;
 use App\User;
-use Eloquent;
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -118,6 +118,7 @@ use Spatie\Tags\Tag;
  * @method static Builder|Order withAnyTags($tags, $type = null)
  * @method static Builder|Order withAnyTagsOfAnyType($tags)
  * @method static Builder|Order withoutAllTags($tags, $type = null)
+ * @method static where(array $array)
  * @mixin Eloquent
  */
 class Order extends BaseModel
