@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Events\HourlyEvent;
-use App\Http\Controllers\Api\Run\HourlyJobsController;
 use App\Models\Heartbeat;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
