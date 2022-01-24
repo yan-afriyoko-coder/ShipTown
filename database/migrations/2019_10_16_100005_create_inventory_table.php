@@ -33,6 +33,13 @@ class CreateInventoryTable extends Migration
                 ->on('products')
                 ->onDelete('cascade');
         });
+
+        Schema::table('inventory', function (Blueprint $table) {
+            $table->foreign('warehouse_id')
+                ->on('warehouses')
+                ->references('id')
+                ->onDelete('SET NULL');
+        });
     }
 
     /**

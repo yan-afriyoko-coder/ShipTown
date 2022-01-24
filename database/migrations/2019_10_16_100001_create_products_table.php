@@ -37,6 +37,10 @@ class CreateProductsTable extends Migration
                 ->after('quantity_reserved')
                 ->nullable(false);
         });
+
+        Schema::table('products', function (Blueprint $table) {
+            $table->string('commodity_code')->default('')->after('sale_price_end_date');
+        });
     }
 
     /**

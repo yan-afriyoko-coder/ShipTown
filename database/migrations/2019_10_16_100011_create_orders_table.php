@@ -51,6 +51,11 @@ class CreateOrdersTable extends Migration
                 ->on('users')
                 ->onDelete('SET NULL');
         });
+
+        Schema::table('orders', function (Blueprint $table) {
+            $table->decimal('total_discounts', 10)->default(0)
+                ->after('total_paid');
+        });
     }
 
     /**

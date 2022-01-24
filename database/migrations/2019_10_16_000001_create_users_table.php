@@ -35,6 +35,11 @@ class CreateUsersTable extends Migration
             $table->string('address_label_template')->nullable()->after('printer_id');
             $table->boolean('ask_for_shipping_number')->default(true)->after('address_label_template');
         });
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('two_factor_code')->after('password')->nullable();
+            $table->dateTime('two_factor_expires_at')->after('two_factor_code')->nullable();
+        });
     }
 
     /**

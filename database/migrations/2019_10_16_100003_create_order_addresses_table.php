@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\OrderAddress;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -40,6 +41,23 @@ class CreateOrderAddressesTable extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
+
+        Schema::table('order_addresses', function (Blueprint $table) {
+            $table->string('first_name_encrypted')->nullable()->after('first_name');
+            $table->string('last_name_encrypted')->nullable()->after('last_name');
+            $table->string('phone_encrypted')->nullable()->after('phone');
+            $table->string('email_encrypted')->nullable()->after('email');
+        });
+
+        Schema::table('order_addresses', function (Blueprint $table) {
+            $table->string('email')->default('')->change();
+        });
+
+        OrderAddress::query()->where(['email' => '0'])
+            ->toBase() // this will prevent touching timestamps
+            ->update([
+                'email' => '',
+            ]);
     }
 
     /**

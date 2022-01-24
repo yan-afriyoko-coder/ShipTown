@@ -67,6 +67,49 @@ class CreateOrderProductsTable extends Migration
                 $table->dropColumn('quantity_reserved');
             });
         }
+        Schema::table('order_products', function (Blueprint $table) {
+            $table->decimal('price', 10, 3)->default(0)->change();
+        });
+
+        Schema::table('order_products', function (Blueprint $table) {
+            $table->decimal('quantity_split', 10)->default(0)->change();
+            $table->dropColumn('quantity_to_ship');
+        });
+
+        Schema::table('order_products', function (Blueprint $table) {
+            $table->decimal('quantity_to_ship', 10)
+                ->nullable(false)
+                ->storedAs('quantity_ordered - quantity_split - quantity_shipped')
+                ->after('quantity_shipped');
+        });
+
+        Schema::table('order_products', function (Blueprint $table) {
+            $table->dropColumn('quantity_to_ship');
+        });
+
+        Schema::table('order_products', function (Blueprint $table) {
+            $table->decimal('quantity_to_ship', 10)
+                ->nullable(false)
+                ->storedAs('quantity_ordered - quantity_split - quantity_shipped')
+                ->after('quantity_shipped')
+                ->comment('quantity_ordered - quantity_split - quantity_shipped');
+        });
+
+        Schema::table('order_products', function (Blueprint $table) {
+            $table->dropColumn('quantity_to_pick');
+        });
+
+        Schema::table('order_products', function (Blueprint $table) {
+            $table->decimal('quantity_to_pick', 10)
+                ->nullable(false)
+                ->storedAs('quantity_ordered - quantity_split - quantity_picked - quantity_skipped_picking')
+                ->after('quantity_shipped')
+                ->comment('quantity_ordered - quantity_split - quantity_picked - quantity_skipped_picking');
+        });
+
+        Schema::table('order_products', function (Blueprint $table) {
+            $table->decimal('price', 10, 3)->nullable(false)->default(0)->change();
+        });
     }
 
     /**

@@ -21,6 +21,10 @@ class CreateHeartbeatsTable extends Migration
             $table->timestamp('expired_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamps();
         });
+
+        Schema::table('heartbeats', function (Blueprint $table) {
+            $table->renameColumn('expired_at', 'expires_at');
+        });
     }
 
     /**

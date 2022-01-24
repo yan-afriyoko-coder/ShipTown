@@ -39,6 +39,10 @@ class CreateApi2cartOrderImportsTable extends Migration
                 ->on('api2cart_connections')
                 ->onDelete('SET NULL');
         });
+
+        Schema::table('api2cart_order_imports', function (Blueprint $table) {
+            $table->index('order_number');
+        });
     }
 
     /**
