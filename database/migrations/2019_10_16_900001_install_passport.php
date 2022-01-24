@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Artisan;
 
 class InstallPassport extends Migration
 {
@@ -12,15 +13,5 @@ class InstallPassport extends Migration
     public function up()
     {
         Artisan::call('passport:install');
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        //
     }
 }

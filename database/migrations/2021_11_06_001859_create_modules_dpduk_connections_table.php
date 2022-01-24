@@ -23,14 +23,4 @@ class CreateModulesDpdukConnectionsTable extends Migration
             $table->timestamps();
         });
     }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('modules_dpduk_connections');
-    }
 }

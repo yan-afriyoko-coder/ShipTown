@@ -24,16 +24,8 @@ class CreateTagTables extends Migration
         Schema::create('taggables', function (Blueprint $table) {
             $table->integer('tag_id')->unsigned();
             $table->morphs('taggable');
-
             $table->unique(['tag_id', 'taggable_id', 'taggable_type']);
-
             $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
         });
-    }
-
-    public function down()
-    {
-        Schema::drop('taggables');
-        Schema::drop('tags');
     }
 }

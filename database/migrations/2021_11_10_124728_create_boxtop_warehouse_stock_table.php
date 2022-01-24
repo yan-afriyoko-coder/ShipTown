@@ -26,14 +26,4 @@ class CreateBoxtopWarehouseStockTable extends Migration
             $table->timestamps();
         });
     }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('modules_boxtop_warehouse_stock');
-    }
 }

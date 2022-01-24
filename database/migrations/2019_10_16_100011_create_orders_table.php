@@ -28,6 +28,7 @@ class CreateOrdersTable extends Migration
             $table->decimal('total_shipping')->default(0);
             $table->decimal('total', 10, 2)->default(0);
             $table->decimal('total_paid')->default(0);
+            $table->decimal('total_discounts', 10)->default(0);
             $table->string('shipping_method_code')->default('')->nullable(true);
             $table->string('shipping_method_name')->default('')->nullable(true);
             $table->timestamp('order_placed_at')->useCurrent()->nullable();
@@ -51,15 +52,5 @@ class CreateOrdersTable extends Migration
                 ->on('users')
                 ->onDelete('SET NULL');
         });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('orders');
     }
 }

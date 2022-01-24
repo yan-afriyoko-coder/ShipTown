@@ -24,14 +24,4 @@ class CreateModulesAutomationsOrderLockTable extends Migration
                 ->onDelete('CASCADE');
         });
     }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('modules_automations_order_lock');
-    }
 }

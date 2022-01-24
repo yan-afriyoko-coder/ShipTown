@@ -29,6 +29,8 @@ class CreateApi2cartOrderImportsTable extends Migration
             $table->json('raw_import');
             $table->timestamps();
 
+            $table->index('order_number');
+
             $table->foreign('order_id')
                 ->references('id')
                 ->on('orders')
@@ -39,15 +41,5 @@ class CreateApi2cartOrderImportsTable extends Migration
                 ->on('api2cart_connections')
                 ->onDelete('SET NULL');
         });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('api2cart_order_imports');
     }
 }

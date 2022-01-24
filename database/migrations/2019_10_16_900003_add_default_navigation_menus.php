@@ -2,8 +2,6 @@
 
 use App\Models\NavigationMenu;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 class AddDefaultNavigationMenus extends Migration
 {
@@ -35,15 +33,5 @@ class AddDefaultNavigationMenus extends Migration
             'url' => '/autopilot/packlist?status=single_line_orders&sort=order_placed_at',
             'group' => 'packlist'
         ]);
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        //
     }
 }

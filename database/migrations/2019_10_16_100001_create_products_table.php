@@ -25,27 +25,12 @@ class CreateProductsTable extends Migration
             $table->decimal('sale_price', 10, 2)->default(0);
             $table->date('sale_price_start_date')->default('1899-01-01');
             $table->date('sale_price_end_date')->default('1899-01-01');
+            $table->string('commodity_code')->default('');
             $table->decimal('quantity', 10, 2)->default(0);
             $table->decimal('quantity_reserved', 10, 2)->default(0);
+            $table->decimal('quantity_available', 10, 2)->default(0);
             $table->softDeletes();
             $table->timestamps();
         });
-
-        Schema::table('products', function (Blueprint $table) {
-            $table->decimal('quantity_available', 10, 2)
-                ->default(0)
-                ->after('quantity_reserved')
-                ->nullable(false);
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('products');
     }
 }

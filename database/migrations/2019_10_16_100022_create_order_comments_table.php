@@ -35,14 +35,4 @@ class CreateOrderCommentsTable extends Migration
                 ->onDelete('SET NULL');
         });
     }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('order_comments');
-    }
 }

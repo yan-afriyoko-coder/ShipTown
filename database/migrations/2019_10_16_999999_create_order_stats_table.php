@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
 class CreateOrderStatsTable extends Migration
 {
@@ -12,7 +13,7 @@ class CreateOrderStatsTable extends Migration
     public function up()
     {
         DB::statement('
-            CREATE OR REPLACE VIEW '.DB::getTablePrefix().'order_stats AS
+            CREATE OR REPLACE VIEW '. DB::getTablePrefix() .'order_stats AS
             SELECT
                 id as order_id,
                 DATEDIFF(date(now()), date(order_placed_at)) as age_in_days

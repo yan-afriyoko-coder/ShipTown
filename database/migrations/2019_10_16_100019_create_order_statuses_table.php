@@ -21,6 +21,7 @@ class CreateOrderStatusesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name')->unique();
             $table->string('code')->unique();
+            $table->boolean('reserves_stock')->default(true);
             $table->boolean('order_active')->default(1);
             $table->boolean('sync_ecommerce')->default(false);
             $table->softDeletes();
@@ -28,17 +29,6 @@ class CreateOrderStatusesTable extends Migration
         });
 
         Schema::table('order_statuses', function (Blueprint $table) {
-            $table->boolean('reserves_stock')->default(true)->after('code');
         });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('order_statuses');
     }
 }

@@ -23,7 +23,7 @@ class AppGenerateRoutesTests extends Command
      *
      * @var string
      */
-    protected $description = 'Generates tests for all API routes not yet covered';
+    protected $description = 'Generates tests for all not test covered routes';
 
     /**
      * Command will not override existing files
@@ -40,32 +40,6 @@ class AppGenerateRoutesTests extends Command
     }
 
     /**
-     * @param $testName
-     */
-    public function generateTest($testName): void
-    {
-        Artisan::call('generate:test '.$testName.' --stub=test_controller');
-    }
-
-    /**
-     * @param $route
-     *
-     * @return array|string|string[]
-     */
-    public function getTestName($route)
-    {
-        // $sample_action = 'App\\Http\\Controllers\\Api\\Settings\\UserMeController@index'
-        $controllerName = Str::before($route->action, '@');
-        $methodName = Str::after($route->action, '@');
-
-        $testDirectory = Str::after($controllerName, 'App\\');
-        $testName = $testDirectory.'\\'.Str::ucfirst($methodName).'Test';
-
-        // $sample_output = 'Http/Controllers/Api/Settings/UserMeController/IndexTest'
-        return str_replace('\\', '/', $testName);
-    }
-
-    /**
      *
      */
     private function generateApiRoutesTestsFiles(): void
@@ -75,9 +49,9 @@ class AppGenerateRoutesTests extends Command
         $routes = collect(json_decode(Artisan::output()));
 
         $routes->each(function ($route) {
-            $testName = $this->getTestName($route);
+            $testName = $this->getApiRouteTestName($route);
 
-            $this->generateTest($testName);
+            Artisan::call('generate:test '.$testName.' --stub=test_controller');
         });
     }
 
@@ -102,6 +76,24 @@ class AppGenerateRoutesTests extends Command
 
             Artisan::call('generate:test '.$testName.' --stub=test_web_route');
         });
+    }
+
+    /**
+     * @param $route
+     *
+     * @return string
+     */
+    public function getApiRouteTestName($route): string
+    {
+        // $sample_action = 'App\\Http\\Controllers\\Api\\Settings\\UserMeController@index'
+        $controllerName = Str::before($route->action, '@');
+        $methodName = Str::after($route->action, '@');
+
+        $testDirectory = Str::after($controllerName, 'App\\');
+        $testName = $testDirectory.'\\'.Str::ucfirst($methodName).'Test';
+
+        // $sample_output = 'Http/Controllers/Api/Settings/UserMeController/IndexTest'
+        return str_replace('\\', '/', $testName);
     }
 
     /**

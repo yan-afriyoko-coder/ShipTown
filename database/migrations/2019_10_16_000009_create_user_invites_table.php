@@ -23,15 +23,7 @@ class CreateUserInvitesTable extends Migration
             $table->string('token', 16)->unique();
             $table->timestamps();
         });
-    }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
         Schema::dropIfExists('user_invites');
     }
 }

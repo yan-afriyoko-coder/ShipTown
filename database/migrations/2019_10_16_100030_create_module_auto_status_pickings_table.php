@@ -25,14 +25,4 @@ class CreateModuleAutoStatusPickingsTable extends Migration
             $table->timestamps();
         });
     }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('module_auto_status_pickings');
-    }
 }

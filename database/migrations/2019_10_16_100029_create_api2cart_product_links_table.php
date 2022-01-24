@@ -33,14 +33,4 @@ class CreateApi2cartProductLinksTable extends Migration
             $table->timestamps();
         });
     }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('api2cart_product_links');
-    }
 }

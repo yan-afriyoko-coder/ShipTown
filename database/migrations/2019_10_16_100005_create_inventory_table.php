@@ -32,16 +32,11 @@ class CreateInventoryTable extends Migration
                 ->references('id')
                 ->on('products')
                 ->onDelete('cascade');
-        });
-    }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('inventory');
+            $table->foreign('warehouse_id')
+                ->on('warehouses')
+                ->references('id')
+                ->onDelete('SET NULL');
+        });
     }
 }
