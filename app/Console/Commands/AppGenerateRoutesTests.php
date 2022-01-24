@@ -40,19 +40,11 @@ class AppGenerateRoutesTests extends Command
     }
 
     /**
-     * @param $testName
-     */
-    public function generateTest($testName): void
-    {
-        Artisan::call('generate:test '.$testName.' --stub=test_controller');
-    }
-
-    /**
      * @param $route
      *
-     * @return array|string|string[]
+     * @return string
      */
-    public function getTestName($route)
+    public function getApiRouteTestName($route): string
     {
         // $sample_action = 'App\\Http\\Controllers\\Api\\Settings\\UserMeController@index'
         $controllerName = Str::before($route->action, '@');
@@ -75,9 +67,9 @@ class AppGenerateRoutesTests extends Command
         $routes = collect(json_decode(Artisan::output()));
 
         $routes->each(function ($route) {
-            $testName = $this->getTestName($route);
+            $testName = $this->getApiRouteTestName($route);
 
-            $this->generateTest($testName);
+            Artisan::call('generate:test '.$testName.' --stub=test_controller');
         });
     }
 
