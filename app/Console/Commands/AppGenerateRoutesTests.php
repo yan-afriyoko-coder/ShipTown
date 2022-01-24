@@ -40,24 +40,6 @@ class AppGenerateRoutesTests extends Command
     }
 
     /**
-     * @param $route
-     *
-     * @return string
-     */
-    public function getApiRouteTestName($route): string
-    {
-        // $sample_action = 'App\\Http\\Controllers\\Api\\Settings\\UserMeController@index'
-        $controllerName = Str::before($route->action, '@');
-        $methodName = Str::after($route->action, '@');
-
-        $testDirectory = Str::after($controllerName, 'App\\');
-        $testName = $testDirectory.'\\'.Str::ucfirst($methodName).'Test';
-
-        // $sample_output = 'Http/Controllers/Api/Settings/UserMeController/IndexTest'
-        return str_replace('\\', '/', $testName);
-    }
-
-    /**
      *
      */
     private function generateApiRoutesTestsFiles(): void
@@ -94,6 +76,24 @@ class AppGenerateRoutesTests extends Command
 
             Artisan::call('generate:test '.$testName.' --stub=test_web_route');
         });
+    }
+
+    /**
+     * @param $route
+     *
+     * @return string
+     */
+    public function getApiRouteTestName($route): string
+    {
+        // $sample_action = 'App\\Http\\Controllers\\Api\\Settings\\UserMeController@index'
+        $controllerName = Str::before($route->action, '@');
+        $methodName = Str::after($route->action, '@');
+
+        $testDirectory = Str::after($controllerName, 'App\\');
+        $testName = $testDirectory.'\\'.Str::ucfirst($methodName).'Test';
+
+        // $sample_output = 'Http/Controllers/Api/Settings/UserMeController/IndexTest'
+        return str_replace('\\', '/', $testName);
     }
 
     /**
