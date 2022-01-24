@@ -23,7 +23,7 @@ class AppGenerateRoutesTests extends Command
      *
      * @var string
      */
-    protected $description = 'Generates tests for all API routes not yet covered';
+    protected $description = 'Generates tests for all not test covered routes';
 
     /**
      * Command will not override existing files
