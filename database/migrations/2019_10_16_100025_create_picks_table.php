@@ -25,9 +25,6 @@ class CreatePicksTable extends Migration
             $table->string('name_ordered');
             $table->decimal('quantity_picked', 10, 2)->default(0);
             $table->decimal('quantity_skipped_picking', 10, 2)->default(0);
-            $table->decimal('quantity_required', 10, 2);
-            $table->unsignedBigInteger('picker_user_id')->nullable();
-            $table->timestamp('picked_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
 
@@ -36,21 +33,5 @@ class CreatePicksTable extends Migration
                 ->on('users')
                 ->onDelete('SET NULL');
         });
-
-        Schema::table('picks', function (Blueprint $table) {
-            $table->dropColumn('quantity_required');
-            $table->dropColumn('picker_user_id');
-            $table->dropColumn('picked_at');
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('picks');
     }
 }

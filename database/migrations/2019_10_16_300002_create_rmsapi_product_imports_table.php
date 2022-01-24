@@ -33,14 +33,4 @@ class CreateRmsapiProductImportsTable extends Migration
                 ->onDelete('SET NULL');
         });
     }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('rmsapi_product_imports');
-    }
 }

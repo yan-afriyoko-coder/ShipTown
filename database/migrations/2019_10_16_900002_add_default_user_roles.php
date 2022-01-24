@@ -28,14 +28,4 @@ class AddDefaultUserRoles extends Migration
 
         Role::firstOrCreate(['name' => 'user']);
     }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        //
-    }
 }

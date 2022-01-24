@@ -26,14 +26,4 @@ class CreateUserInvitesTable extends Migration
 
         Schema::dropIfExists('user_invites');
     }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('user_invites');
-    }
 }

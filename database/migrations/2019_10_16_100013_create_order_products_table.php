@@ -23,16 +23,19 @@ class CreateOrderProductsTable extends Migration
             $table->unsignedBigInteger('product_id')->nullable();
             $table->string('sku_ordered');
             $table->string('name_ordered');
-            $table->decimal('price', 10, 2)->default(0);
-            $table->decimal('quantity_ordered', 10, 2)->default(0);
-            $table->decimal('quantity_split')->default(0);
-            $table->decimal('quantity_outstanding', 10, 2)->default(0);
-            $table->decimal('quantity_shipped', 10, 2)->default(0);
-            $table->decimal('quantity_to_ship')->storedAs('quantity_ordered - quantity_split - quantity_shipped');
-            $table->decimal('quantity_to_pick', 10, 2)->default(0);
-            $table->decimal('quantity_picked', 10, 2)->default(0);
-            $table->decimal('quantity_skipped_picking', 10, 2)->default(0);
-            $table->decimal('quantity_not_picked', 10, 2)->default(0);
+            $table->decimal('price', 10, 3)->default(0);
+            $table->decimal('quantity_ordered', 10)->default(0);
+            $table->decimal('quantity_split', 10)->default(0);
+            $table->decimal('quantity_shipped', 10)->default(0);
+            $table->decimal('quantity_to_pick', 10)
+                ->storedAs('quantity_ordered - quantity_split - quantity_picked - quantity_skipped_picking')
+                ->comment('quantity_ordered - quantity_split - quantity_picked - quantity_skipped_picking');
+            $table->decimal('quantity_to_ship', 10)
+                ->storedAs('quantity_ordered - quantity_split - quantity_shipped')
+                ->comment('quantity_ordered - quantity_split - quantity_shipped');
+            $table->decimal('quantity_picked', 10)->default(0);
+            $table->decimal('quantity_skipped_picking', 10)->default(0);
+            $table->decimal('quantity_not_picked', 10)->default(0);
             $table->softDeletes();
             $table->timestamps();
 
@@ -46,79 +49,5 @@ class CreateOrderProductsTable extends Migration
                 ->references('id')
                 ->onDelete('cascade');
         });
-
-        if (Schema::hasColumn('order_products', 'quantity_outstanding')) {
-            Schema::table('order_products', function (Blueprint $table) {
-                $table->dropColumn('quantity_outstanding');
-            });
-        }
-
-        if (!Schema::hasColumn('order_products', 'quantity_reserved')) {
-            Schema::table('order_products', function (Blueprint $table) {
-                $table->decimal('quantity_reserved')
-                    ->default(0)
-                    ->nullable(false)
-                    ->after('quantity_ordered');
-            });
-        }
-
-        if (Schema::hasColumn('order_products', 'quantity_reserved')) {
-            Schema::table('order_products', function (Blueprint $table) {
-                $table->dropColumn('quantity_reserved');
-            });
-        }
-        Schema::table('order_products', function (Blueprint $table) {
-            $table->decimal('price', 10, 3)->default(0)->change();
-        });
-
-        Schema::table('order_products', function (Blueprint $table) {
-            $table->decimal('quantity_split', 10)->default(0)->change();
-            $table->dropColumn('quantity_to_ship');
-        });
-
-        Schema::table('order_products', function (Blueprint $table) {
-            $table->decimal('quantity_to_ship', 10)
-                ->nullable(false)
-                ->storedAs('quantity_ordered - quantity_split - quantity_shipped')
-                ->after('quantity_shipped');
-        });
-
-        Schema::table('order_products', function (Blueprint $table) {
-            $table->dropColumn('quantity_to_ship');
-        });
-
-        Schema::table('order_products', function (Blueprint $table) {
-            $table->decimal('quantity_to_ship', 10)
-                ->nullable(false)
-                ->storedAs('quantity_ordered - quantity_split - quantity_shipped')
-                ->after('quantity_shipped')
-                ->comment('quantity_ordered - quantity_split - quantity_shipped');
-        });
-
-        Schema::table('order_products', function (Blueprint $table) {
-            $table->dropColumn('quantity_to_pick');
-        });
-
-        Schema::table('order_products', function (Blueprint $table) {
-            $table->decimal('quantity_to_pick', 10)
-                ->nullable(false)
-                ->storedAs('quantity_ordered - quantity_split - quantity_picked - quantity_skipped_picking')
-                ->after('quantity_shipped')
-                ->comment('quantity_ordered - quantity_split - quantity_picked - quantity_skipped_picking');
-        });
-
-        Schema::table('order_products', function (Blueprint $table) {
-            $table->decimal('price', 10, 3)->nullable(false)->default(0)->change();
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('order_products');
     }
 }

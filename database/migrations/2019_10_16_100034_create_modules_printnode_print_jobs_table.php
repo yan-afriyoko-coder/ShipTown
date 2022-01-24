@@ -27,14 +27,4 @@ class CreateModulesPrintnodePrintJobsTable extends Migration
             $table->timestamps();
         });
     }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('modules_printnode_print_jobs');
-    }
 }

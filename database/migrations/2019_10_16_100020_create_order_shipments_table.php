@@ -26,7 +26,6 @@ class CreateOrderShipmentsTable extends Migration
             $table->string('service')->default('');
             $table->string('tracking_url')->default('');
             $table->longText('base64_pdf_labels');
-
             $table->timestamps();
 
             $table->foreign('order_id')
@@ -39,15 +38,5 @@ class CreateOrderShipmentsTable extends Migration
                 ->on('users')
                 ->onDelete('SET NULL');
         });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('order_shipments');
     }
 }

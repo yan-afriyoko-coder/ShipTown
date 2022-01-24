@@ -14,14 +14,4 @@ class InstallPassport extends Migration
     {
         Artisan::call('passport:install');
     }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        //
-    }
 }

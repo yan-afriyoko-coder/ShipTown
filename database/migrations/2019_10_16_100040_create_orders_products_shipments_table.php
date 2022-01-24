@@ -34,7 +34,5 @@ class CreateOrdersProductsShipmentsTable extends Migration
                 ->references('id')
                 ->onDelete('SET NULL');
         });
-
-
     }
 }

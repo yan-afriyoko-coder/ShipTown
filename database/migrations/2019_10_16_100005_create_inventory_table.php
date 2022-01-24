@@ -32,23 +32,11 @@ class CreateInventoryTable extends Migration
                 ->references('id')
                 ->on('products')
                 ->onDelete('cascade');
-        });
 
-        Schema::table('inventory', function (Blueprint $table) {
             $table->foreign('warehouse_id')
                 ->on('warehouses')
                 ->references('id')
                 ->onDelete('SET NULL');
         });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('inventory');
     }
 }

@@ -18,22 +18,8 @@ class CreateHeartbeatsTable extends Migration
             $table->id();
             $table->string('code')->unique();
             $table->string('error_message', 255)->nullable();
-            $table->timestamp('expired_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('expires_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamps();
         });
-
-        Schema::table('heartbeats', function (Blueprint $table) {
-            $table->renameColumn('expired_at', 'expires_at');
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('heartbeats');
     }
 }

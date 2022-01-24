@@ -59,14 +59,4 @@ class CreateOrderAddressesTable extends Migration
                 'email' => '',
             ]);
     }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('order_addresses');
-    }
 }
