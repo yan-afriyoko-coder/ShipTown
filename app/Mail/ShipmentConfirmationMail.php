@@ -28,7 +28,7 @@ class ShipmentConfirmationMail extends TemplateMailable
      *
      * @return $this
      */
-    public function build()
+    public function build(): self
     {
         $template = MailTemplate::where('mailable', get_class($this))->first();
 
