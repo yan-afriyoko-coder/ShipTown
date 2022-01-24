@@ -13,7 +13,7 @@ class UninstallUnusedModules extends Migration
      */
     public function up()
     {
-        \App\Modules\AutoStatusPaid\src\AutoStatusPaidServiceProvider::uninstallModule();
+//        \App\Modules\AutoStatusPaid\src\AutoStatusPaidServiceProvider::uninstallModule();
         \App\Modules\AutoStatusAwaitingPayment\src\AutoStatusAwaitingPaymentServiceProvider::uninstallModule();
     }
 
