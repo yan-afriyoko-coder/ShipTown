@@ -20,7 +20,7 @@
                     </div>
                     <div class="col-md-6" @click="toggle">
                         <div class="row small font-weight-bold text-right">
-                            <div class="col-2 text-left">Location</div>
+                            <div class="col-2 text-left">Warehouse</div>
                             <div class="col-2 d-none d-sm-block ">In Stock</div >
                             <div class="col-3 col-sm-2">Reserved</div>
                             <div class="col-3">Available</div>
@@ -28,9 +28,9 @@
                         </div>
                         <template v-for="warehouse_inventory in product.inventory">
                             <div class="row text-right" :key="warehouse_inventory.id">
-                                <div class="col-2 text-left">{{ warehouse_inventory.location_id }}</div>
+                                <div class="col-2 text-left">{{ warehouse_inventory.warehouse.code }}</div>
                                 <div class="col-2 d-none d-sm-block">{{ warehouse_inventory.quantity | numberFormat }}</div>
-                                <div class="col-3 col-sm-2">{{ warehouse_inventory.quantity_reserved | numberFormat }}</div>
+                                <div class="col-3  col-sm-2">{{ warehouse_inventory.quantity_reserved | numberFormat }}</div>
                                 <div class="col-3">{{ warehouse_inventory.quantity - warehouse_inventory.quantity_reserved | numberFormat }}</div>
                                 <div class="col-4 col-sm-3">{{ warehouse_inventory.shelve_location }}</div>
                             </div>
