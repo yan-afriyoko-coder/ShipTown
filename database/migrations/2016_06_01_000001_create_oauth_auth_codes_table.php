@@ -14,7 +14,7 @@ class CreateOauthAuthCodesTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('printer_id')->nullable();
             $table->string('address_label_template')->nullable();
             $table->boolean('ask_for_shipping_number')->default(true);
@@ -59,7 +59,7 @@ class CreateOauthAuthCodesTable extends Migration
         });
 
         Schema::create('oauth_clients', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('user_id')->nullable()->index();
             $table->string('name');
             $table->string('secret', 100)->nullable();
@@ -72,7 +72,7 @@ class CreateOauthAuthCodesTable extends Migration
         });
 
         Schema::create('oauth_personal_access_clients', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('client_id');
             $table->timestamps();
         });
@@ -108,7 +108,7 @@ class CreateOauthAuthCodesTable extends Migration
         });
 
         Schema::connection(config('activitylog.database_connection'))->create(config('activitylog.table_name'), function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('log_name')->nullable();
             $table->text('description');
             $table->unsignedBigInteger('subject_id')->nullable();
@@ -129,7 +129,7 @@ class CreateOauthAuthCodesTable extends Migration
         });
 
         Schema::create('failed_jobs', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->text('connection');
             $table->text('queue');
             $table->longText('payload');
@@ -138,7 +138,7 @@ class CreateOauthAuthCodesTable extends Migration
         });
 
         Schema::create('jobs', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('queue')->index();
             $table->longText('payload');
             $table->unsignedTinyInteger('attempts');
@@ -148,14 +148,14 @@ class CreateOauthAuthCodesTable extends Migration
         });
 
         Schema::create('widgets', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
             $table->json('config');
             $table->timestamps();
         });
 
         Schema::create('products', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('sku', 50)->unique();
             $table->string('name', 100)->default('');
             $table->decimal('price', 10)->default(0);
@@ -171,7 +171,7 @@ class CreateOauthAuthCodesTable extends Migration
         });
 
         Schema::create('products_aliases', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('product_id');
             $table->string('alias')->unique();
             $table->timestamps();
@@ -183,7 +183,7 @@ class CreateOauthAuthCodesTable extends Migration
         });
 
         Schema::create('order_addresses', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->boolean('encrypted')->default(false);
             $table->string('company')->default('');
             $table->string('gender')->default('');
@@ -211,7 +211,7 @@ class CreateOauthAuthCodesTable extends Migration
         });
 
         Schema::create('warehouses', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('code')->unique();
             $table->string('name');
             $table->foreignId('address_id')->nullable();
@@ -225,7 +225,7 @@ class CreateOauthAuthCodesTable extends Migration
         });
 
         Schema::create('inventory', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('warehouse_id')->nullable();
             $table->unsignedBigInteger('product_id')->index();
             $table->string('location_id')->default('');
@@ -247,7 +247,7 @@ class CreateOauthAuthCodesTable extends Migration
         });
 
         Schema::create('orders', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('shipping_address_id')->nullable();
             $table->string('order_number')->unique();
             $table->string('status_code')->default('');
@@ -283,7 +283,7 @@ class CreateOauthAuthCodesTable extends Migration
         });
 
         Schema::create('order_products', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('product_id')->nullable();
             $table->string('sku_ordered');
@@ -316,7 +316,7 @@ class CreateOauthAuthCodesTable extends Migration
         });
 
         Schema::create('order_statuses', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name')->unique();
             $table->string('code')->unique();
             $table->boolean('reserves_stock')->default(true);
@@ -327,7 +327,7 @@ class CreateOauthAuthCodesTable extends Migration
         });
 
         Schema::create('order_shipments', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('order_id');
             $table->string('shipping_number');
@@ -349,7 +349,7 @@ class CreateOauthAuthCodesTable extends Migration
         });
 
         Schema::create('order_comments', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('comment');
@@ -367,7 +367,7 @@ class CreateOauthAuthCodesTable extends Migration
         });
 
         Schema::create('picks', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('product_id')->nullable();
             $table->string('sku_ordered');
@@ -400,7 +400,7 @@ class CreateOauthAuthCodesTable extends Migration
         });
 
         Schema::create('product_prices', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('product_id')->index();
             $table->string('location_id')->default('');
             $table->decimal('price', 10)->default(99999);
@@ -417,7 +417,7 @@ class CreateOauthAuthCodesTable extends Migration
         });
 
         Schema::create('modules_printnode_clients', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('api_key');
             $table->timestamps();
         });
@@ -559,7 +559,7 @@ class CreateOauthAuthCodesTable extends Migration
         });
 
         Schema::create('rmsapi_connections', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('location_id');
             $table->string('url');
             $table->string('username');
@@ -569,7 +569,7 @@ class CreateOauthAuthCodesTable extends Migration
         });
 
         Schema::create('rmsapi_product_imports', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('connection_id');
             $table->uuid('batch_uuid')->nullable();
             $table->dateTime('when_processed')->nullable();
@@ -585,7 +585,7 @@ class CreateOauthAuthCodesTable extends Migration
         });
 
         Schema::create('api2cart_connections', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('location_id')->default('0');
             $table->string('type')->default('');
             $table->string('url')->default('');
@@ -600,7 +600,7 @@ class CreateOauthAuthCodesTable extends Migration
         });
 
         Schema::create('api2cart_order_imports', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('connection_id')->nullable();
             $table->unsignedBigInteger('order_id')->nullable();
             $table->string('shipping_method_name')->nullable(true);
