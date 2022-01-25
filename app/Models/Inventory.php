@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\BaseModel;
 use App\Traits\LogsActivityTrait;
-use Eloquent;
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -26,6 +26,8 @@ use Spatie\Activitylog\Models\Activity;
  * @property Carbon|null $updated_at
  * @property-read float $quantity_available
  * @property-read Product $product
+ *
+ * @property-read Warehouse $warehouse
  *
  * @method static Builder|Inventory increment($column, $quantity)
  * @method static Builder|Inventory newModelQuery()

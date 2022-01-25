@@ -36,11 +36,6 @@ class RefillWebPickingStatusListJobTest extends TestCase
 
         HourlyEvent::dispatch();
 
-        ray(
-            AutoStatusPickingConfiguration::firstOrCreate([], [])->max_batch_size,
-            AutoStatusPickingConfiguration::firstOrCreate([], [])->current_count_with_status
-        );
-
         $this->assertEquals(
             AutoStatusPickingConfiguration::firstOrCreate([], [])->max_batch_size,
             AutoStatusPickingConfiguration::firstOrCreate([], [])->current_count_with_status,

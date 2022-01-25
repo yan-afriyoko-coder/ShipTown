@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Illuminate\Support\Facades\Log;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 trait LogsActivityTrait
@@ -11,12 +12,13 @@ trait LogsActivityTrait
     protected static bool $logOnlyDirty = true;
     protected static bool $submitEmptyLogs = false;
 
-    public function log($message): self
+    public function log($message, array $properties = []): self
     {
         $activity = activity()->on($this);
-        $activity->log($message);
 
-        \Log::debug('Activity', ['message' => $message, 'id' => $this->getKey(), 'class' => get_class($this)]);
+        $activity->withProperties($properties)->log($message);
+
+        Log::debug('Activity', ['message' => $message, 'id' => $this->getKey(), 'class' => get_class($this)]);
         return $this;
     }
 }
