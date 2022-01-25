@@ -5,7 +5,7 @@ namespace App\Modules\Automations\src;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Models\Order;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 /**
  *

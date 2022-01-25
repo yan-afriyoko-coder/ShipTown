@@ -7,7 +7,7 @@ use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\OrderLock;
 use Exception;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 /**
  *
