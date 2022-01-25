@@ -20,7 +20,7 @@
                     </div>
                     <div class="col-md-6" @click="toggle">
                         <div class="row small font-weight-bold text-right">
-                            <div class="col-2 text-left">Warehouse</div>
+                            <div class="col-2 text-left">Location</div>
                             <div class="col-2 d-none d-sm-block ">In Stock</div >
                             <div class="col-3 col-sm-2">Reserved</div>
                             <div class="col-3">Available</div>
