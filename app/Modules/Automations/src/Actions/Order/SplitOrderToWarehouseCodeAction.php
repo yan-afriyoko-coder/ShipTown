@@ -5,12 +5,9 @@ namespace App\Modules\Automations\src\Actions\Order;
 use App\Events\Order\ActiveOrderCheckEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
-use App\Models\Inventory;
-use App\Models\Order;
-use App\Models\OrderProduct;
 use App\Models\Warehouse;
 use App\Modules\SplitOrder\src\SplitOrderService;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class SplitOrderToWarehouseCodeAction
 {

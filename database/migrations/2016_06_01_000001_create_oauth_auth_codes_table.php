@@ -529,6 +529,17 @@ class CreateOauthAuthCodesTable extends Migration
             $table->timestamps();
         });
 
+        Schema::create('modules_automations_order_lock', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('order_id');
+            $table->timestamps();
+
+            $table->foreign('order_id')
+                ->references('id')
+                ->on('orders')
+                ->onDelete('CASCADE');
+        });
+
         Schema::create('orders_products_shipments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->nullable();

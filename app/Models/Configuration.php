@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\BaseModel;
 
-class Configuration extends Model
+/**
+ */
+class Configuration extends BaseModel
 {
     protected $fillable = ['business_name'];
 }
