@@ -31,6 +31,12 @@ class InventoryObserver
     public function updated(Inventory $inventory)
     {
         if ($inventory->isAnyAttributeChanged(['quantity', 'quantity_reserved'])) {
+            $inventory->product->log('updated inventory', [
+                'warehouse' => $inventory->warehouse ? $inventory->warehouse->code : '',
+                'quantity' => $inventory->quantity,
+                'reserved' => $inventory->quantity_reserved,
+                'available' => $inventory->quantity_available,
+            ]);
             $inventory->product->recalculateQuantityTotals()->save();
         }
 
