@@ -33,8 +33,8 @@ class CreateOauthAuthCodesTable extends Migration
 
         Schema::create('oauth_auth_codes', function (Blueprint $table) {
             $table->string('id', 100)->primary();
-            $table->unsignedBigInteger('user_id')->index();
-            $table->unsignedBigInteger('client_id');
+            $table->foreignId('user_id')->index();
+            $table->foreignId('client_id');
             $table->text('scopes')->nullable();
             $table->boolean('revoked');
             $table->dateTime('expires_at')->nullable();
@@ -42,8 +42,8 @@ class CreateOauthAuthCodesTable extends Migration
 
         Schema::create('oauth_access_tokens', function (Blueprint $table) {
             $table->string('id', 100)->primary();
-            $table->unsignedBigInteger('user_id')->nullable()->index();
-            $table->unsignedBigInteger('client_id');
+            $table->foreignId('user_id')->nullable()->index();
+            $table->foreignId('client_id');
             $table->string('name')->nullable();
             $table->text('scopes')->nullable();
             $table->boolean('revoked');
@@ -60,7 +60,7 @@ class CreateOauthAuthCodesTable extends Migration
 
         Schema::create('oauth_clients', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable()->index();
+            $table->foreignId('user_id')->nullable()->index();
             $table->string('name');
             $table->string('secret', 100)->nullable();
             $table->string('provider')->nullable();
@@ -73,7 +73,7 @@ class CreateOauthAuthCodesTable extends Migration
 
         Schema::create('oauth_personal_access_clients', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('client_id');
+            $table->foreignId('client_id');
             $table->timestamps();
         });
 
@@ -111,9 +111,9 @@ class CreateOauthAuthCodesTable extends Migration
             $table->id();
             $table->string('log_name')->nullable();
             $table->text('description');
-            $table->unsignedBigInteger('subject_id')->nullable();
+            $table->foreignId('subject_id')->nullable();
             $table->string('subject_type')->nullable();
-            $table->unsignedBigInteger('causer_id')->nullable();
+            $table->foreignId('causer_id')->nullable();
             $table->string('causer_type')->nullable();
             $table->json('properties')->nullable();
             $table->timestamps();
@@ -172,7 +172,7 @@ class CreateOauthAuthCodesTable extends Migration
 
         Schema::create('products_aliases', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id');
+            $table->foreignId('product_id');
             $table->string('alias')->unique();
             $table->timestamps();
 
@@ -226,8 +226,8 @@ class CreateOauthAuthCodesTable extends Migration
 
         Schema::create('inventory', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('warehouse_id')->nullable();
-            $table->unsignedBigInteger('product_id')->index();
+            $table->foreignId('warehouse_id')->nullable();
+            $table->foreignId('product_id')->index();
             $table->string('location_id')->default('');
             $table->string('shelve_location')->default('');
             $table->decimal('quantity', 10)->default(0);
@@ -248,7 +248,7 @@ class CreateOauthAuthCodesTable extends Migration
 
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('shipping_address_id')->nullable();
+            $table->foreignId('shipping_address_id')->nullable();
             $table->string('order_number')->unique();
             $table->string('status_code')->default('');
             $table->boolean('is_active')->nullable(false)->default(0);
@@ -265,7 +265,7 @@ class CreateOauthAuthCodesTable extends Migration
             $table->integer('product_line_count')->default(0);
             $table->timestamp('picked_at')->nullable();
             $table->timestamp('packed_at')->nullable();
-            $table->unsignedBigInteger('packer_user_id')->nullable();
+            $table->foreignId('packer_user_id')->nullable();
             $table->decimal('total_quantity_ordered', 10)->default(0);
             $table->decimal('total_quantity_to_ship')->default(0);
             $table->softDeletes();
@@ -284,8 +284,8 @@ class CreateOauthAuthCodesTable extends Migration
 
         Schema::create('order_products', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('order_id');
-            $table->unsignedBigInteger('product_id')->nullable();
+            $table->foreignId('order_id');
+            $table->foreignId('product_id')->nullable();
             $table->string('sku_ordered');
             $table->string('name_ordered');
             $table->decimal('price', 10, 3)->default(0);
@@ -328,8 +328,8 @@ class CreateOauthAuthCodesTable extends Migration
 
         Schema::create('order_shipments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('order_id');
+            $table->foreignId('user_id')->nullable();
+            $table->foreignId('order_id');
             $table->string('shipping_number');
             $table->string('carrier')->default('');
             $table->string('service')->default('');
@@ -350,8 +350,8 @@ class CreateOauthAuthCodesTable extends Migration
 
         Schema::create('order_comments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('order_id');
-            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreignId('order_id');
+            $table->foreignId('user_id')->nullable();
             $table->string('comment');
             $table->timestamps();
 
@@ -368,8 +368,8 @@ class CreateOauthAuthCodesTable extends Migration
 
         Schema::create('picks', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('product_id')->nullable();
+            $table->foreignId('user_id')->nullable();
+            $table->foreignId('product_id')->nullable();
             $table->string('sku_ordered');
             $table->string('name_ordered');
             $table->decimal('quantity_picked', 10, 2)->default(0);
@@ -401,7 +401,7 @@ class CreateOauthAuthCodesTable extends Migration
 
         Schema::create('product_prices', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id')->index();
+            $table->foreignId('product_id')->index();
             $table->string('location_id')->default('');
             $table->decimal('price', 10)->default(99999);
             $table->decimal('sale_price', 10)->default(99999);
@@ -570,10 +570,10 @@ class CreateOauthAuthCodesTable extends Migration
 
         Schema::create('rmsapi_product_imports', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('connection_id');
+            $table->foreignId('connection_id');
             $table->uuid('batch_uuid')->nullable();
             $table->dateTime('when_processed')->nullable();
-            $table->unsignedBigInteger('product_id')->nullable();
+            $table->foreignId('product_id')->nullable();
             $table->string('sku')->nullable();
             $table->json('raw_import');
             $table->timestamps();
@@ -601,8 +601,8 @@ class CreateOauthAuthCodesTable extends Migration
 
         Schema::create('api2cart_order_imports', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('connection_id')->nullable();
-            $table->unsignedBigInteger('order_id')->nullable();
+            $table->foreignId('connection_id')->nullable();
+            $table->foreignId('order_id')->nullable();
             $table->string('shipping_method_name')->nullable(true);
             $table->string('shipping_method_code')->nullable(true);
             $table->dateTime('when_processed')->nullable();
