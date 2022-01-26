@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Events\OrderProduct\OrderProductCreatedEvent;
 use App\Events\OrderProduct\OrderProductUpdatedEvent;
 use App\Models\OrderProduct;
+use App\Models\Product;
 
 class OrderProductObserver
 {
@@ -17,6 +18,10 @@ class OrderProductObserver
      */
     public function created(OrderProduct $orderProduct)
     {
+        optional($orderProduct->product, function (Product $product) use ($orderProduct) {
+            $product->log('order updated', ['order_number' => $orderProduct->order->order_number]);
+        });
+
         OrderProductCreatedEvent::dispatch($orderProduct);
     }
 
@@ -29,6 +34,10 @@ class OrderProductObserver
      */
     public function updated(OrderProduct $orderProduct)
     {
+        optional($orderProduct->product, function (Product $product) use ($orderProduct) {
+            $product->log('order updated', ['order_number' => $orderProduct->order->order_number]);
+        });
+
         $this->setOrdersPickedAtIfAllPicked($orderProduct);
 
         OrderProductUpdatedEvent::dispatch($orderProduct);

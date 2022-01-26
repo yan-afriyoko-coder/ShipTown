@@ -30,7 +30,7 @@
                             <div class="row text-right" :key="warehouse_inventory.id">
                                 <div class="col-2 text-left">{{ warehouse_inventory.location_id }}</div>
                                 <div class="col-2 d-none d-sm-block">{{ warehouse_inventory.quantity | numberFormat }}</div>
-                                <div class="col-3 col-sm-2">{{ warehouse_inventory.quantity_reserved | numberFormat }}</div>
+                                <div class="col-3  col-sm-2">{{ warehouse_inventory.quantity_reserved | numberFormat }}</div>
                                 <div class="col-3">{{ warehouse_inventory.quantity - warehouse_inventory.quantity_reserved | numberFormat }}</div>
                                 <div class="col-4 col-sm-3">{{ warehouse_inventory.shelve_location }}</div>
                             </div>
@@ -185,8 +185,8 @@
                         </template>
 
                         <template v-if="currentTab === 'aliases'">
-                            <div class="container small">
-                                <span class="badge badge-light" v-for="alias in product.aliases" :key="alias.id">{{ alias.alias }}</span>
+                            <div class="container">
+                                <span v-for="alias in product.aliases" :key="alias.id">{{ alias.alias }}</span>
                             </div>
                         </template>
                     </div>
