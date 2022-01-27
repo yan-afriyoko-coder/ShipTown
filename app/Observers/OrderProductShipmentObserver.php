@@ -24,13 +24,16 @@ class OrderProductShipmentObserver
                 'warehouse_code' => $orderProductShipment->warehouse->code
             ]);
 
-        activity()->on($orderProductShipment->product)
-            ->causedBy($orderProductShipment->user)
-            ->withProperties([
-                'order_number' => $orderProductShipment->order->order_number,
-                'quantity' => $orderProductShipment->quantity_shipped,
-                'warehouse_code' => $orderProductShipment->warehouse->code
-            ]);
+
+        if ($orderProductShipment->product) {
+            activity()->on($orderProductShipment->product)
+                ->causedBy($orderProductShipment->user)
+                ->withProperties([
+                    'order_number' => $orderProductShipment->order->order_number,
+                    'quantity' => $orderProductShipment->quantity_shipped,
+                    'warehouse_code' => $orderProductShipment->warehouse->code
+                ]);
+        }
 
         OrderProductShipmentCreatedEvent::dispatch($orderProductShipment);
     }
