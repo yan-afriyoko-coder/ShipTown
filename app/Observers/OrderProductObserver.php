@@ -18,8 +18,11 @@ class OrderProductObserver
      */
     public function created(OrderProduct $orderProduct)
     {
-        optional($orderProduct->product, function (Product $product) use ($orderProduct) {
-            $product->log('order updated', ['order_number' => $orderProduct->order->order_number]);
+        optional($orderProduct->product, function () use ($orderProduct) {
+            $orderProduct->product->log('order placed', [
+                'order_number' => $orderProduct->order->order_number,
+                'quantity_ordered' => $orderProduct->quantity_ordered,
+            ]);
         });
 
         OrderProductCreatedEvent::dispatch($orderProduct);
@@ -34,10 +37,6 @@ class OrderProductObserver
      */
     public function updated(OrderProduct $orderProduct)
     {
-        optional($orderProduct->product, function (Product $product) use ($orderProduct) {
-            $product->log('order updated', ['order_number' => $orderProduct->order->order_number]);
-        });
-
         $this->setOrdersPickedAtIfAllPicked($orderProduct);
 
         OrderProductUpdatedEvent::dispatch($orderProduct);
