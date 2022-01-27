@@ -3,13 +3,12 @@
 namespace App\Models;
 
 use Barryvdh\LaravelIdeHelper\Eloquent;
-use Crypt;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
-use function Symfony\Component\Translation\t;
+use Illuminate\Support\Facades\Crypt;
 
 /**
  * App\Models\OrderAddress.

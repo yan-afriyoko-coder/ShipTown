@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\BaseModel;
 use App\Traits\LogsActivityTrait;
-use Eloquent;
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use phpDocumentor\Reflection\Types\Mixed_;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
