@@ -6,7 +6,7 @@ use App\Events\Order\OrderUpdatedEvent;
 use App\Models\Order;
 use App\Models\OrderProductShipment;
 use App\Models\OrderShipment;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class OrderObserver
 {

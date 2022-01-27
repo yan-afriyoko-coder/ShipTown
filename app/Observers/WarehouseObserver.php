@@ -2,14 +2,10 @@
 
 namespace App\Observers;
 
-use App\Events\Product\ProductCreatedEvent;
-use App\Events\Product\ProductUpdatedEvent;
 use App\Models\Inventory;
 use App\Models\Product;
-use App\Models\ProductAlias;
 use App\Models\ProductPrice;
 use App\Models\Warehouse;
-use Exception;
 
 class WarehouseObserver
 {

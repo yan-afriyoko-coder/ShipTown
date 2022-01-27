@@ -3,15 +3,10 @@
 namespace App\Models;
 
 use App\BaseModel;
-use App\Traits\LogsActivityTrait;
 use App\User;
-use Eloquent;
-use Illuminate\Database\Eloquent\Collection;
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
-use Spatie\Activitylog\Models\Activity;
 
 /**
  * App\Models\OrderProduct.

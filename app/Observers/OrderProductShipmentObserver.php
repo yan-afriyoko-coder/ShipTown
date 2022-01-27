@@ -19,6 +19,7 @@ class OrderProductShipmentObserver
         activity()->on($orderProductShipment->order)
             ->log('shipped {"sku": "' .
                 $orderProductShipment->sku_shipped. '", "quantity": '.$orderProductShipment->quantity_shipped.'}');
+
         OrderProductShipmentCreatedEvent::dispatch($orderProductShipment);
     }
 }
