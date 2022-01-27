@@ -4,7 +4,6 @@
 namespace App\Observers;
 
 use App\Jobs\UpdateOrdersIsActiveJob;
-use App\Models\Order;
 use App\Models\OrderStatus;
 
 class OrderStatusObserver
