@@ -352,6 +352,7 @@
                 shipOrderProduct(orderProduct, quantity) {
                     this.apiPostOrderProductShipment({
                             'sku_shipped': orderProduct.sku_ordered,
+                            'product_id': orderProduct.product_id,
                             'order_id': orderProduct.order_id,
                             'order_product_id': orderProduct.id,
                             'quantity_shipped': quantity,

@@ -35,7 +35,7 @@ class OrderProductShipment extends BaseModel
     protected $table = 'orders_products_shipments';
 
     protected $fillable = [
-        'products_id',
+        'product_id',
         'user_id',
         'warehouse_id',
         'order_id',
