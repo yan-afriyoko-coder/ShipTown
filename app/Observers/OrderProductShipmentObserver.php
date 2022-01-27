@@ -16,23 +16,29 @@ class OrderProductShipmentObserver
      */
     public function created(OrderProductShipment $orderProductShipment)
     {
-        activity()->on($orderProductShipment->order)
-            ->causedBy($orderProductShipment->user)
-            ->withProperties([
-                'sku' => $orderProductShipment->sku_shipped,
-                'quantity' => $orderProductShipment->quantity_shipped,
-                'warehouse_code' => $orderProductShipment->warehouse->code
-            ]);
+        //  log activity on order
+        if ($orderProductShipment->order) {
+            activity()->on($orderProductShipment->order)
+                ->causedBy($orderProductShipment->user)
+                ->withProperties([
+                    'sku' => $orderProductShipment->sku_shipped,
+                    'quantity' => $orderProductShipment->quantity_shipped,
+                    'warehouse_code' => $orderProductShipment->warehouse->code
+                ])
+                ->log('shipped');
+        }
 
-
+        // place log on product
         if ($orderProductShipment->product) {
             activity()->on($orderProductShipment->product)
                 ->causedBy($orderProductShipment->user)
                 ->withProperties([
+                    'sku' => $orderProductShipment->sku_shipped,
                     'order_number' => $orderProductShipment->order->order_number,
                     'quantity' => $orderProductShipment->quantity_shipped,
                     'warehouse_code' => $orderProductShipment->warehouse->code
-                ]);
+                ])
+                ->log('shipped');
         }
 
         OrderProductShipmentCreatedEvent::dispatch($orderProductShipment);
