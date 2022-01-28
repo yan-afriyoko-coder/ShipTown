@@ -8,11 +8,11 @@ return [
             'conditions' => [
                 [
                     'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition::class,
-                    'description' => 'Order Status Code equals',
+                    'description' => 'Status Code is',
                 ],
                 [
                     'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeNotInCondition::class,
-                    'description' => 'Order Status Code Not In',
+                    'description' => 'Status Code Not In',
                 ],
                 [
                     'class' => \App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition::class,
@@ -54,7 +54,7 @@ return [
             'actions' => [
                 [
                     'class' => \App\Modules\Automations\src\Actions\Order\SetStatusCodeAction::class,
-                    'description' => 'Set Order Status Code to',
+                    'description' => 'Set Status Code',
                 ],
                 [
                     'class' => \App\Modules\Automations\src\Actions\Order\AddOrderCommentAction::class,
@@ -63,6 +63,10 @@ return [
                 [
                     'class' => \App\Modules\Automations\src\Actions\Order\LogMessageAction::class,
                     'description' => 'Add log message',
+                ],
+                [
+                    'class' => \App\Modules\Automations\src\Actions\SetLabelTemplateAction::class,
+                    'description' => 'Set courier label template',
                 ],
                 [
                     'class' => \App\Modules\Automations\src\Actions\Order\SplitOrderToWarehouseCodeAction::class,

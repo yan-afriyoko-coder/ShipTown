@@ -27,6 +27,7 @@ use Spatie\Tags\Tag;
  * @property int              $id
  * @property string           $order_number
  * @property string           $status_code
+ * @property string           $label_template
  * @property string           $shipping_method_code
  * @property string           $shipping_method_name
  *
@@ -129,6 +130,7 @@ class Order extends BaseModel
     protected $fillable = [
         'order_number',
         'picked_at',
+        'label_template',
         'shipping_number',
         'is_active',
         'is_editing',

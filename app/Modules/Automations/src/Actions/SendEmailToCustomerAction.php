@@ -4,7 +4,7 @@ namespace App\Modules\Automations\src\Actions;
 
 use App\Mail\ShipmentConfirmationMail;
 use App\Modules\Automations\src\BaseOrderAction;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 
 class SendEmailToCustomerAction extends BaseOrderAction
 {
