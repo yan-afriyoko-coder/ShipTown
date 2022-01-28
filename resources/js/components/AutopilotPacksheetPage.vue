@@ -452,6 +452,10 @@
                 },
 
                 autoPrintLabelIfNeeded: async function() {
+                    if (this.order.label_template !== '') {
+                        return await this.order.label_template;
+                    }
+
                     let template = this.getAddressLabelTemplateName();
 
                     if (template) {
