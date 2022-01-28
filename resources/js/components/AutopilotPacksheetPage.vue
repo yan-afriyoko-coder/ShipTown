@@ -438,24 +438,22 @@
                 },
 
                 getAddressLabelTemplateName: function () {
-                    let templateName = this.getUrlParameter('address_label_template');
+                    if (this.getUrlParameter('address_label_template')) {
+                        return this.getUrlParameter('address_label_template');
+                    }
 
-                    if (templateName) {
-                        return templateName;
+                    if (this.order.label_template) {
+                        return this.order.label_template;
                     }
 
                     if (Vue.prototype.$currentUser.address_label_template) {
-                        return Vue.prototype.$currentUser.address_label_template;;
+                        return Vue.prototype.$currentUser.address_label_template;
                     }
 
                     return '';
                 },
 
                 autoPrintLabelIfNeeded: async function() {
-                    if (this.order.label_template !== '') {
-                        return await this.order.label_template;
-                    }
-
                     let template = this.getAddressLabelTemplateName();
 
                     if (template) {
