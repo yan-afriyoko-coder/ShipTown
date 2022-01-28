@@ -23,7 +23,7 @@ class OrderProductShipmentObserver
                 ->withProperties([
                     'sku' => $orderProductShipment->sku_shipped,
                     'quantity' => $orderProductShipment->quantity_shipped,
-                    'warehouse_code' => $orderProductShipment->warehouse->code
+                    'warehouse_code' => data_get($orderProductShipment, 'warehouse.code')
                 ])
                 ->log('shipped');
         }
