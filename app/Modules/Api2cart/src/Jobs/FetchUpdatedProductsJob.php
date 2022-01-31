@@ -24,8 +24,6 @@ class FetchUpdatedProductsJob implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @throws RequestException
-     *
      * @return void
      */
     public function handle()
@@ -41,8 +39,6 @@ class FetchUpdatedProductsJob implements ShouldQueue
 
     /**
      * @param Api2cartConnection $connection
-     *
-     * @throws RequestException
      *
      * @return Collection
      */

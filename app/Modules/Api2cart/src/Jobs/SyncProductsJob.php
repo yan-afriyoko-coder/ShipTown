@@ -5,7 +5,6 @@ namespace App\Modules\Api2cart\src\Jobs;
 use App\Models\Product;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
-use App\Modules\MagentoApi\src\Jobs\SyncProductStockJob;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

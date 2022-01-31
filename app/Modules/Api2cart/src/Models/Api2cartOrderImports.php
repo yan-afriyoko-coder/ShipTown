@@ -2,8 +2,9 @@
 
 namespace App\Modules\Api2cart\src\Models;
 
+use App\BaseModel;
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Carbon\Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -40,7 +41,7 @@ use Illuminate\Support\Collection;
  * @method static Builder|Api2cartOrderImports whereWhenProcessed($value)
  * @mixin Eloquent
  */
-class Api2cartOrderImports extends Model
+class Api2cartOrderImports extends BaseModel
 {
     /**
      * @var string

@@ -56,7 +56,7 @@ class SyncOrderStatus implements ShouldQueue
      *
      * @throws GuzzleException|RequestException
      */
-    public function handle()
+    public function handle(): bool
     {
         $this->queueData([
             'order_number' => $this->order->order_number,
@@ -76,9 +76,11 @@ class SyncOrderStatus implements ShouldQueue
             $orderImport->save();
         }
 
-        Orders::update($orderImport->api2cartConnection->bridge_api_key, [
+        $response = Orders::update($orderImport->api2cartConnection->bridge_api_key, [
             'order_id' => $orderImport->api2cart_order_id,
             'order_status' => $this->order->status_code
         ]);
+
+        return $response->isSuccess();
     }
 }
