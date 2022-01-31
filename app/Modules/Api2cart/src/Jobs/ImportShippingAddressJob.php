@@ -44,7 +44,7 @@ class ImportShippingAddressJob implements ShouldQueue
         }
 
         $order_import = Api2cartOrderImports::query()
-            ->where('order_number', '=', $order->order_number)
+            ->where(['order_number' => $order->order_number])
             ->latest()
             ->first();
 

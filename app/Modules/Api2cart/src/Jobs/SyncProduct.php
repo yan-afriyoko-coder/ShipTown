@@ -42,7 +42,6 @@ class SyncProduct implements ShouldQueue
      * Execute the job.
      *
      * @return void
-     * @throws GuzzleException
      * @throws RequestException
      */
     public function handle()
@@ -64,7 +63,6 @@ class SyncProduct implements ShouldQueue
     /**
      * @return bool
      * @throws RequestException
-     * @throws GuzzleException
      */
     private function verifyProductUpdate(): bool
     {
