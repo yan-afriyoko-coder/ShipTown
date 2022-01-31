@@ -3,6 +3,7 @@
 namespace App\Modules\Api2cart\src\Api;
 
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
 
 class Client
@@ -13,6 +14,7 @@ class Client
      * @param array $params
      *
      * @return RequestResponse
+     * @throws GuzzleException
      */
     public static function GET(string $store_key, string $uri, array $params): RequestResponse
     {
@@ -45,9 +47,10 @@ class Client
     /**
      * @param string $store_key
      * @param string $uri
-     * @param array  $data
+     * @param array $data
      *
      * @return RequestResponse
+     * @throws GuzzleException
      */
     public static function POST(string $store_key, string $uri, array $data): RequestResponse
     {
@@ -82,9 +85,10 @@ class Client
     /**
      * @param string $store_key
      * @param string $uri
-     * @param array  $params
+     * @param array $params
      *
      * @return RequestResponse
+     * @throws GuzzleException
      */
     public static function DELETE(string $store_key, string $uri, array $params): RequestResponse
     {
