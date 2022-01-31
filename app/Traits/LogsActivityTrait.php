@@ -14,11 +14,16 @@ trait LogsActivityTrait
 
     public function log($message, array $properties = []): self
     {
-        $activity = activity()->on($this);
+        activity()->on($this)
+            ->withProperties($properties)
+            ->log($message);
 
-        $activity->withProperties($properties)->log($message);
+        Log::debug('Activity', [
+            'message' => $message,
+            'id' => $this->getKey(),
+            'class' => get_class($this)
+        ]);
 
-        Log::debug('Activity', ['message' => $message, 'id' => $this->getKey(), 'class' => get_class($this)]);
         return $this;
     }
 }
