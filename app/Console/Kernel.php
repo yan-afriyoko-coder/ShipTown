@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Jobs\RunDailyJobs;
+use App\Jobs\RunHourlyJobs;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -24,7 +26,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        //
+        $schedule->job(new RunHourlyJobs())->hourly();
+        $schedule->job(new RunDailyJobs())->dailyAt('22:00');
     }
 
     /**
