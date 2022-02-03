@@ -233,7 +233,7 @@
                                     <b>
                                         {{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }}:
                                     </b>
-                                    {{ activity['description'] }} {{ activity['changes'] }}
+                                    {{ activity['description'] }} {{ activity['properties']['attributes'] ? activity['properties']['attributes'] : activity['properties'] }}
                                 </div>
                             </div>
                         </template>
