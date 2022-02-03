@@ -3,6 +3,7 @@
 namespace App\Modules\AutoTags\src\Listeners\InventoryUpdatedEvent;
 
 use App\Events\Inventory\InventoryUpdatedEvent;
+use App\Modules\AutoTags\src\Jobs\ToggleOversoldTagJob;
 
 class ToggleProductOversoldTagListener
 {
@@ -15,12 +16,7 @@ class ToggleProductOversoldTagListener
      */
     public function handle(InventoryUpdatedEvent $event)
     {
-        $product = $event->getInventory()->product;
-
-        if ($product->quantity_available < 0) {
-            $product->attachTag('oversold');
-        } else {
-            $product->detachTag('oversold');
-        }
+        ToggleOversoldTagJob::dispatch($event->getInventory()->product_id)
+            ->delay(1);
     }
 }
