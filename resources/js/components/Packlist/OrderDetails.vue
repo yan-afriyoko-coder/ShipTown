@@ -4,7 +4,7 @@
             <div class="col-3">
               <label>Order #: </label>
               <br>
-              <b>{{ order['order_number'] }}</b>
+              <b><a :href="'/orders/?search=' + order['order_number'] + '&hide_nav_bar=true'" target="_blank">{{ order['order_number'] }}</a></b>
             </div>
             <div class="col-3">
               <label>Date:</label>
