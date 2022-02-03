@@ -1,15 +1,16 @@
 <template>
     <div>
-
-        <div class="row no-gutters mb-3 ml-1 mr-1">
-            <div class="col">
-                <input placeholder="Search"
-                       class="form-control"
-                       ref="search"
-                       v-model="searchText"
-                       @keyup.enter="findText" />
+        <template v-if="getUrlParameter('hide_nav_bar', false) === false">
+            <div class="row no-gutters mb-3 ml-1 mr-1">
+                <div class="col">
+                    <input placeholder="Search"
+                           class="form-control"
+                           ref="search"
+                           v-model="searchText"
+                           @keyup.enter="findText" />
+                </div>
             </div>
-        </div>
+        </template>
 
         <div class="row" v-if="orders.length === 0 && !isLoading">
             <div class="col">
