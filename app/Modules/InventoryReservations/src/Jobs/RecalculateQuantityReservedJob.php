@@ -13,6 +13,9 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
+/**
+ *
+ */
 class RecalculateQuantityReservedJob implements ShouldQueue
 {
     use Dispatchable;
@@ -20,6 +23,9 @@ class RecalculateQuantityReservedJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
+    /**
+     * @var array
+     */
     private array $checkedProductIds = [];
 
     /**
@@ -29,19 +35,19 @@ class RecalculateQuantityReservedJob implements ShouldQueue
      */
     public function handle()
     {
-        $this->checkedProductIds = $this->fixReservedQuantity($this->checkedProductIds);
+        $this->fixReservedQuantity();
 
-        $this->fixNotReserved($this->checkedProductIds);
+        $this->fixNotReserved();
     }
 
     /**
-     * @param array $alreadyCheckedProductIds
+     * @return void
      */
-    private function fixNotReserved(array $alreadyCheckedProductIds): void
+    private function fixNotReserved(): void
     {
         Inventory::whereLocationId(999)
             ->whereNotIn('quantity_reserved', [0])
-            ->whereNotIn('product_id', $alreadyCheckedProductIds)
+            ->whereNotIn('product_id', $this->checkedProductIds)
             ->get()
             ->each(function (Inventory $inventory) {
                 Log::warning('Incorrect quantity_reserved detected', [
@@ -57,24 +63,22 @@ class RecalculateQuantityReservedJob implements ShouldQueue
     }
 
     /**
-     * @param array $checkedProductIds
-     *
-     * @return array
+     * @return void
      */
-    private function fixReservedQuantity(array $checkedProductIds): array
+    private function fixReservedQuantity(): void
     {
-        $query = OrderProduct::select([
-            'product_id',
-            DB::raw('sum(quantity_to_ship) as new_quantity_reserved'),
-        ])
+         OrderProduct::select([
+                'product_id',
+                DB::raw('sum(quantity_to_ship) as new_quantity_reserved'),
+            ])
             ->whereHas('order', function ($query) {
                 $query->select(['id'])->whereIn('status_code', OrderStatus::whereReservesStock(true)->select('code'));
             })
-            ->whereNotIn('product_id', $checkedProductIds)
+            ->whereNotIn('product_id', $this->checkedProductIds)
             ->groupBy('product_id')
             ->get()
-            ->each(function ($orderProduct) use (&$checkedProductIds) {
-                $checkedProductIds[] = $orderProduct->product_id;
+            ->each(function ($orderProduct) {
+                $this->checkedProductIds[] = $orderProduct->product_id;
 
                 $inventory = Inventory::firstOrCreate([
                     'product_id'  => $orderProduct->product_id,
@@ -92,7 +96,5 @@ class RecalculateQuantityReservedJob implements ShouldQueue
                     $inventory->save();
                 }
             });
-
-        return $checkedProductIds;
     }
 }
