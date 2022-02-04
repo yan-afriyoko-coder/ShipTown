@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Modules\InventoryReservations\src\Listeners\DailyEvent;
+namespace App\Modules\InventoryReservations\src\Listeners\HourlyEvent;
 
-use App\Events\DailyEvent;
+use App\Events\HourlyEvent;
 use App\Modules\InventoryReservations\src\Jobs\RecalculateQuantityReservedJob;
 
 class RunRecalculateQuantityReservedJobListener
@@ -10,11 +10,11 @@ class RunRecalculateQuantityReservedJobListener
     /**
      * Handle the event.
      *
-     * @param DailyEvent $event
+     * @param HourlyEvent $event
      *
      * @return void
      */
-    public function handle(DailyEvent $event)
+    public function handle(HourlyEvent $event)
     {
         RecalculateQuantityReservedJob::dispatch();
     }

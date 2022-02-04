@@ -2,7 +2,7 @@
 
 namespace App\Modules\InventoryReservations\src;
 
-use App\Events\DailyEvent;
+use App\Events\HourlyEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Events\OrderProduct\OrderProductCreatedEvent;
 use App\Events\OrderProduct\OrderProductUpdatedEvent;
@@ -35,8 +35,8 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        DailyEvent::class => [
-            Listeners\DailyEvent\RunRecalculateQuantityReservedJobListener::class,
+        HourlyEvent::class => [
+            Listeners\HourlyEvent\RunRecalculateQuantityReservedJobListener::class,
         ],
 
         OrderProductUpdatedEvent::class => [
