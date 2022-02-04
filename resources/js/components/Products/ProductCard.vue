@@ -149,7 +149,7 @@
                                     <div class="small flex-row align-middle">
                                         {{ activity['created_at'] | moment('MMM DD')  }} {{ activity['created_at'] | moment('H:mm')  }}:
                                     </div>
-                                    <div class="small pl-sm-0 pl-md-1">
+                                    <div class="pl-sm-0 pl-md-1">
                                         <b>
                                             {{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }}
                                         </b>
