@@ -3,8 +3,7 @@
 namespace App\Modules\InventoryReservations\src\Listeners\OrderProductUpdatedEvent;
 
 use App\Events\OrderProduct\OrderProductUpdatedEvent;
-use App\Models\Inventory;
-use App\Models\OrderProduct;
+use App\Modules\InventoryReservations\src\Jobs\UpdateQuantityReservedJob;
 
 class UpdateQuantityReservedListener
 {
@@ -13,36 +12,16 @@ class UpdateQuantityReservedListener
      *
      * @param OrderProductUpdatedEvent $event
      *
-     * @return void
-     */
-    public function handle(OrderProductUpdatedEvent $event)
-    {
-        if ($this->shouldModifyReservation($event->orderProduct)) {
-            $inventory = Inventory::firstOrNew([
-                'product_id'  => $event->orderProduct->product_id,
-                'location_id' => 999,
-            ]);
-            $inventory->quantity_reserved -= $event->orderProduct->getOriginal('quantity_to_ship') ?? 0;
-            $inventory->quantity_reserved += $event->orderProduct->getAttribute('quantity_to_ship') ?? 0;
-            $inventory->save();
-        }
-    }
-
-    /**
-     * @param OrderProduct $orderProduct
-     *
      * @return bool
      */
-    public function shouldModifyReservation(OrderProduct $orderProduct): bool
+    public function handle(OrderProductUpdatedEvent $event): bool
     {
-        if ($orderProduct->product_id === null) {
-            return false;
+        if ($event->orderProduct->product_id === null) {
+            return true;
         }
 
-        if ($orderProduct->order->orderStatus->reserves_stock === false) {
-            return false;
-        }
+        UpdateQuantityReservedJob::dispatch($event->orderProduct->product_id);
 
-        return $orderProduct->isAnyAttributeChanged(['quantity_to_ship']);
+        return true;
     }
 }

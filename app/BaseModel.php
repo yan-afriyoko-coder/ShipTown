@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static where(array $array)
  * @method static firstOrCreate(array $array, array $array)
  * @method static findOrFail($id)
+ * @method static updateOrCreate(array $array, array $array1)
  *
  * @mixin Eloquent
  */
