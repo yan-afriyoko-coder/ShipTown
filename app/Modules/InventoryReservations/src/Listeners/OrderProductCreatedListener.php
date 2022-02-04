@@ -3,20 +3,10 @@
 namespace App\Modules\InventoryReservations\src\Listeners;
 
 use App\Events\OrderProduct\OrderProductCreatedEvent;
-use App\Models\Inventory;
+use App\Modules\InventoryReservations\src\Jobs\UpdateQuantityReservedJob;
 
 class OrderProductCreatedListener
 {
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
     /**
      * Handle the event.
      *
@@ -32,16 +22,6 @@ class OrderProductCreatedListener
             return;
         }
 
-        if ($orderProduct->order->orderStatus->reserves_stock === false) {
-            return;
-        }
-
-        $inventory = Inventory::firstOrNew([
-            'product_id'  => $orderProduct->product_id,
-            'location_id' => 999,
-        ]);
-
-        $inventory->quantity_reserved += $orderProduct->quantity_to_ship;
-        $inventory->save();
+        UpdateQuantityReservedJob::dispatch($orderProduct->product_id);
     }
 }

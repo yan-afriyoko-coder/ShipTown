@@ -20,6 +20,8 @@ class RecalculateQuantityReservedJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
+    private array $checkedProductIds = [];
+
     /**
      * Execute the job.
      *
@@ -27,15 +29,9 @@ class RecalculateQuantityReservedJob implements ShouldQueue
      */
     public function handle()
     {
-        $checkedProductIds = [];
+        $this->checkedProductIds = $this->fixReservedQuantity($this->checkedProductIds);
 
-        $reservingStatusCodes = OrderStatus::whereReservesStock(true)
-            ->select(['code'])
-            ->get();
-
-        $checkedProductIds = $this->fixReservedQuantity($reservingStatusCodes, $checkedProductIds);
-
-        $this->fixNotReserved($checkedProductIds);
+        $this->fixNotReserved($this->checkedProductIds);
     }
 
     /**
@@ -44,7 +40,7 @@ class RecalculateQuantityReservedJob implements ShouldQueue
     private function fixNotReserved(array $alreadyCheckedProductIds): void
     {
         Inventory::whereLocationId(999)
-            ->where('quantity_reserved', '!=', 0)
+            ->whereNotIn('quantity_reserved', [0])
             ->whereNotIn('product_id', $alreadyCheckedProductIds)
             ->get()
             ->each(function (Inventory $inventory) {
@@ -61,19 +57,20 @@ class RecalculateQuantityReservedJob implements ShouldQueue
     }
 
     /**
-     * @param $reservingStatusCodes
      * @param array $checkedProductIds
      *
      * @return array
      */
-    private function fixReservedQuantity($reservingStatusCodes, array $checkedProductIds): array
+    private function fixReservedQuantity(array $checkedProductIds): array
     {
-        OrderProduct::whereStatusCodeIn($reservingStatusCodes)
-            ->select([
-                'product_id',
-                DB::raw('sum(quantity_to_ship) as new_quantity_reserved'),
-            ])
-            ->whereNotNull('product_id')
+        $query = OrderProduct::select([
+            'product_id',
+            DB::raw('sum(quantity_to_ship) as new_quantity_reserved'),
+        ])
+            ->whereHas('order', function ($query) {
+                $query->select(['id'])->whereIn('status_code', OrderStatus::whereReservesStock(true)->select('code'));
+            })
+            ->whereNotIn('product_id', $checkedProductIds)
             ->groupBy('product_id')
             ->get()
             ->each(function ($orderProduct) use (&$checkedProductIds) {
