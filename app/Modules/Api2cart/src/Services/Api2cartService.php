@@ -106,11 +106,10 @@ class Api2cartService
     /**
      * @param string $store_key
      * @param array $data
-     * @param bool $recursive
      * @return RequestResponse
      * @throws GuzzleException
      */
-    private static function updateSimpleProduct(string $store_key, array $data, bool $recursive = true): RequestResponse
+    private static function updateSimpleProduct(string $store_key, array $data): RequestResponse
     {
         $product = collect($data)
             ->only(self::PRODUCT_ALLOWED_KEYS)
@@ -129,11 +128,10 @@ class Api2cartService
      *
      * @param string $store_key
      * @param array $data
-     * @param bool $recursive
      * @return RequestResponse
      * @throws GuzzleException
      */
-    private static function updateVariant(string $store_key, array $data, bool $recursive = true): RequestResponse
+    private static function updateVariant(string $store_key, array $data): RequestResponse
     {
         $properties = collect($data)
             ->only(self::PRODUCT_ALLOWED_KEYS)
