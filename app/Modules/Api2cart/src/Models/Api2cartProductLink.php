@@ -120,7 +120,7 @@ class Api2cartProductLink extends BaseModel
     }
 
     /**
-     * @throws RequestException
+     * @throws GuzzleException
      */
     public function isInSync(): bool
     {

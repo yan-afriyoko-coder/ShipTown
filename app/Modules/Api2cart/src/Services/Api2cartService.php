@@ -478,21 +478,21 @@ class Api2cartService
      * @param Api2cartProductLink $product_link
      * @return bool
      */
-    public static function updateSku(Api2cartProductLink $product_link): bool
+    public static function updateSku(Api2cartProductLink $productLink): bool
     {
         try {
-            $requestResponse = self::productUpdateOrCreate($product_link);
+            $requestResponse = self::productUpdateOrCreate($productLink);
         } catch (ConnectException $exception) {
-            $product_link->product->log('eCommerce: Connection timeout, retry scheduled');
+            $productLink->product->log('eCommerce: Connection timeout, retry scheduled');
             return false;
         } catch (GuzzleException $exception) {
             report($exception);
-            $product_link->product->log('eCommerce: Sync failed, see logs for more details');
+            $productLink->product->log('eCommerce: Sync failed, see logs for more details');
             return false;
         }
 
         if ($requestResponse->isNotSuccess()) {
-            $product_link->product->log('eCommerce: Sync failed', [
+            $productLink->product->log('eCommerce: Sync failed', [
                 'return_code' => $requestResponse->getReturnCode(),
                 'message' => $requestResponse->getReturnMessage()
             ]);
@@ -504,11 +504,22 @@ class Api2cartService
     /**
      * @param Api2cartProductLink $productLink
      * @return bool
-     * @throws RequestException
      */
-    public static function verifyProductUpdate(Api2cartProductLink $productLink): bool
+    public static function verifyIfProductInSync(Api2cartProductLink $productLink): bool
     {
-        if ($productLink->isInSync()) {
+        try {
+            $isInSync = $productLink->isInSync();
+        } catch (ConnectException $exception) {
+            $productLink->product->attachTag('CHECK FAILED');
+            $productLink->product->log('eCommerce: Sync Check timeout, retry scheduled');
+            return false;
+        } catch (GuzzleException $exception) {
+            report($exception);
+            $productLink->product->log('eCommerce: Sync Check failed, see logs for more details');
+            return false;
+        }
+
+        if ($isInSync) {
             $productLink->product->detachTag('CHECK FAILED');
             return true;
         } else {
