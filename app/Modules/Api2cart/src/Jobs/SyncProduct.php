@@ -5,13 +5,11 @@ namespace App\Modules\Api2cart\src\Jobs;
 use App\Modules\Api2cart\src\Exceptions\RequestException;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use App\Modules\Api2cart\src\Services\Api2cartService;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Class SyncProductJob.
@@ -46,33 +44,13 @@ class SyncProduct implements ShouldQueue
      */
     public function handle()
     {
-        if (Api2cartService::updateSku($this->product_link) && $this->verifyProductUpdate()) {
-            $product = $this->product_link->product;
-            activity()->withoutLogs(function () use ($product) {
-                $product->detachTag('Not Synced');
-            });
+        $updateSuccess = Api2cartService::updateSku($this->product_link);
 
-            $product->detachTag('SYNC ERROR');
-            return;
+        if ($updateSuccess && Api2cartService::verifyProductUpdate($this->product_link)) {
+            $this->product_link->product->detachTag('SYNC ERROR');
+            $this->product_link->product->detachTagSilently('Not Synced');
+        } else {
+            $this->product_link->product->attachTag('SYNC ERROR');
         }
-
-        $this->product_link->product->attachTag('SYNC ERROR');
-        $this->product_link->product->log('eCommerce: Sync failed, see logs for more details');
-    }
-
-    /**
-     * @return bool
-     * @throws RequestException
-     */
-    private function verifyProductUpdate(): bool
-    {
-        if ($this->product_link->isInSync()) {
-            $this->product_link->product->detachTag('CHECK FAILED');
-            return true;
-        }
-
-        $this->product_link->product->attachTag('CHECK FAILED');
-        $this->product_link->product->log('eCommerce: Sync check failed, see logs');
-        return false;
     }
 }

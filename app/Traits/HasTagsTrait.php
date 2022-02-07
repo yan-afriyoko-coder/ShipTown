@@ -71,7 +71,7 @@ trait HasTagsTrait
      *
      * @return $this
      */
-    public function detachTag($tag, string $type = null)
+    public function detachTag($tag, string $type = null): self
     {
         try {
             if ($this->doesNotHaveTags([$tag])) {
@@ -84,6 +84,21 @@ trait HasTagsTrait
         } catch (Exception $exception) {
             $this->log("Could not detach '{$tag}'' tag");
         }
+
+        return $this;
+    }
+
+    /**
+     * @param string|Tag  $tag
+     * @param string|null $type
+     *
+     * @return $this
+     */
+    public function detachTagSilently($tag, string $type = null): self
+    {
+        activity()->withoutLogs(function () use ($tag, $type) {
+            $this->detachTag($tag, $type);
+        });
 
         return $this;
     }
