@@ -108,6 +108,7 @@ class Api2cartService
      * @param array $data
      * @param bool $recursive
      * @return RequestResponse
+     * @throws GuzzleException
      */
     private static function updateSimpleProduct(string $store_key, array $data, bool $recursive = true): RequestResponse
     {
@@ -120,23 +121,7 @@ class Api2cartService
             ])
             ->toArray();
 
-            return Client::GET($store_key, 'product.update.json', $product);
-//
-//        } catch (RequestException $exception) {
-//            Api2cartProductLink::where(['api2cart_product_id' => $data['id']])->forceDelete();
-//
-//            if ($exception->getCode() === RequestResponse::RETURN_CODE_MODEL_NOT_FOUND) {
-//                Products::assignStore($store_key, $data['id'], $data['store_id']);
-//
-//                if ($recursive) {
-//                    return self::updateSimpleProduct($store_key, $data, false);
-//                }
-//
-//                return null;
-//            }
-//
-//            throw $exception;
-//        }
+        return Client::GET($store_key, 'product.update.json', $product);
     }
 
     /**
@@ -146,6 +131,7 @@ class Api2cartService
      * @param array $data
      * @param bool $recursive
      * @return RequestResponse
+     * @throws GuzzleException
      */
     private static function updateVariant(string $store_key, array $data, bool $recursive = true): RequestResponse
     {
@@ -158,34 +144,13 @@ class Api2cartService
             ])
             ->toArray();
 
-//        try {
-            return Client::GET($store_key, 'product.variant.update.json', $properties);
-//        } catch (RequestException $exception) {
-//            if ($exception->getCode() === RequestResponse::RETURN_CODE_STORE_ID_NOT_SUPPORTED) {
-//                Products::assignStore($store_key, $properties['id'], $properties['store_id']);
-//
-//                if ($recursive) {
-//                    return self::updateVariant($store_key, $properties, false);
-//                }
-//
-//                return null;
-//            } elseif ($exception->getCode() === RequestResponse::RETURN_CODE_MODEL_NOT_FOUND) {
-//                Products::assignStore($store_key, $properties['id'], $properties['store_id']);
-//
-//                if ($recursive) {
-//                    return self::updateVariant($store_key, $properties, false);
-//                }
-//
-//                return null;
-//            }
-//
-//            throw $exception;
-//        }
+        return Client::GET($store_key, 'product.variant.update.json', $properties);
     }
 
     /**
      * @param Api2cartProductLink $product_link
      * @return RequestResponse
+     * @throws GuzzleException
      */
     public static function productUpdateOrCreate(Api2cartProductLink $product_link): RequestResponse
     {
@@ -253,6 +218,7 @@ class Api2cartService
      * @param array|null $fields
      *
      * @return array|null
+     * @throws GuzzleException
      */
     public static function getSimpleProductInfo(Api2cartConnection $conn, string $sku, array $fields = null): ?array
     {
@@ -358,6 +324,7 @@ class Api2cartService
      *
      * @return array|null
      *
+     * @throws GuzzleException
      */
     public static function getProductInfo(Api2cartConnection $connection, string $sku, array $fields = null): ?array
     {
