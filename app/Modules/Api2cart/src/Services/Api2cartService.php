@@ -5,18 +5,14 @@ namespace App\Modules\Api2cart\src\Services;
 use App\Modules\Api2cart\src\Api\Client;
 use App\Modules\Api2cart\src\Api\Products;
 use App\Modules\Api2cart\src\Api\RequestResponse;
-use App\Modules\Api2cart\src\Exceptions\RequestException;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use Carbon\Carbon;
 use Exception;
-use Facade\FlareClient\Report;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
-use function GuzzleHttp\Promise\exception_for;
 
 class Api2cartService
 {
@@ -475,7 +471,7 @@ class Api2cartService
     }
 
     /**
-     * @param Api2cartProductLink $product_link
+     * @param Api2cartProductLink $productLink
      * @return bool
      */
     public static function updateSku(Api2cartProductLink $productLink): bool
