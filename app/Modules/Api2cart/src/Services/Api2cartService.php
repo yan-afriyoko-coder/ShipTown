@@ -5,7 +5,6 @@ namespace App\Modules\Api2cart\src\Services;
 use App\Modules\Api2cart\src\Api\Client;
 use App\Modules\Api2cart\src\Api\Products;
 use App\Modules\Api2cart\src\Api\RequestResponse;
-use App\Modules\Api2cart\src\Exceptions\RequestException;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use Carbon\Carbon;
