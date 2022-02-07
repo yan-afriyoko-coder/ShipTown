@@ -5,13 +5,18 @@ namespace App\Modules\Api2cart\src\Services;
 use App\Modules\Api2cart\src\Api\Client;
 use App\Modules\Api2cart\src\Api\Products;
 use App\Modules\Api2cart\src\Api\RequestResponse;
+use App\Modules\Api2cart\src\Exceptions\RequestException;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use Carbon\Carbon;
 use Exception;
+use Facade\FlareClient\Report;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use function GuzzleHttp\Promise\exception_for;
 
 class Api2cartService
 {
@@ -149,7 +154,7 @@ class Api2cartService
      * @return RequestResponse
      * @throws GuzzleException
      */
-    public static function productUpdateOrCreate(Api2cartProductLink $product_link): RequestResponse
+    private static function productUpdateOrCreate(Api2cartProductLink $product_link): RequestResponse
     {
         $store_key = $product_link->api2cartConnection->bridge_api_key;
         $product_data = $product_link->getProductData();
@@ -473,8 +478,53 @@ class Api2cartService
      * @param Api2cartProductLink $product_link
      * @return bool
      */
-    public static function updateSku(Api2cartProductLink $product_link): bool
+    public static function updateSku(Api2cartProductLink $productLink): bool
     {
-        return self::productUpdateOrCreate($product_link)->isSuccess();
+        try {
+            $requestResponse = self::productUpdateOrCreate($productLink);
+        } catch (ConnectException $exception) {
+            $productLink->product->log('eCommerce: Connection timeout, retry scheduled');
+            return false;
+        } catch (GuzzleException $exception) {
+            report($exception);
+            $productLink->product->log('eCommerce: Sync failed, see logs for more details');
+            return false;
+        }
+
+        if ($requestResponse->isNotSuccess()) {
+            $productLink->product->log('eCommerce: Sync failed', [
+                'return_code' => $requestResponse->getReturnCode(),
+                'message' => $requestResponse->getReturnMessage()
+            ]);
+        }
+
+        return $requestResponse->isSuccess();
+    }
+
+    /**
+     * @param Api2cartProductLink $productLink
+     * @return bool
+     */
+    public static function verifyIfProductInSync(Api2cartProductLink $productLink): bool
+    {
+        try {
+            if ($productLink->isInSync()) {
+                $productLink->product->detachTag('CHECK FAILED');
+                return true;
+            } else {
+                $productLink->product->attachTag('CHECK FAILED');
+                $productLink->product->log('eCommerce: Sync check failed, see logs');
+                return false;
+            }
+        } catch (ConnectException $exception) {
+            $productLink->product->attachTag('CHECK FAILED');
+            $productLink->product->log('eCommerce: Sync Check timeout, retry scheduled');
+            return false;
+        } catch (GuzzleException $exception) {
+            report($exception);
+            $productLink->product->attachTag('CHECK FAILED');
+            $productLink->product->log('eCommerce: Sync Check failed, see logs for more details');
+            return false;
+        }
     }
 }
