@@ -158,7 +158,7 @@ class Api2cartService
         $product_data = $product_link->getProductData();
 
         // fetch api2cart product type and id
-        if ($product_link->api2cart_product_type === null) {
+        if ($product_link->api2cart_product_id === null) {
             $typeAndId = self::getProductTypeAndId($store_key, $product_link->product->sku);
 
             $product_link->update([
@@ -168,7 +168,7 @@ class Api2cartService
         }
 
         // if product not found by previous search, create new
-        if ($product_link->api2cart_product_type === null) {
+        if ($product_link->api2cart_product_id === null) {
             $response = self::createSimpleProduct($store_key, $product_data);
 
             $product_link->update([
