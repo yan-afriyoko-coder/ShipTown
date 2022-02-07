@@ -508,23 +508,22 @@ class Api2cartService
     public static function verifyIfProductInSync(Api2cartProductLink $productLink): bool
     {
         try {
-            $isInSync = $productLink->isInSync();
+            if ($productLink->isInSync()) {
+                $productLink->product->detachTag('CHECK FAILED');
+                return true;
+            } else {
+                $productLink->product->attachTag('CHECK FAILED');
+                $productLink->product->log('eCommerce: Sync check failed, see logs');
+                return false;
+            }
         } catch (ConnectException $exception) {
             $productLink->product->attachTag('CHECK FAILED');
             $productLink->product->log('eCommerce: Sync Check timeout, retry scheduled');
             return false;
         } catch (GuzzleException $exception) {
             report($exception);
-            $productLink->product->log('eCommerce: Sync Check failed, see logs for more details');
-            return false;
-        }
-
-        if ($isInSync) {
-            $productLink->product->detachTag('CHECK FAILED');
-            return true;
-        } else {
             $productLink->product->attachTag('CHECK FAILED');
-            $productLink->product->log('eCommerce: Sync check failed, see logs');
+            $productLink->product->log('eCommerce: Sync Check failed, see logs for more details');
             return false;
         }
     }
