@@ -472,9 +472,16 @@ class Api2cartService
     /**
      * @param Api2cartProductLink $product_link
      * @return bool
+     * @throws GuzzleException
      */
     public static function updateSku(Api2cartProductLink $product_link): bool
     {
-        return self::productUpdateOrCreate($product_link)->isSuccess();
+        $requestResponse = self::productUpdateOrCreate($product_link);
+
+        if ($requestResponse->isSuccess()) {
+            return true;
+        }
+
+        return $requestResponse->isSuccess();
     }
 }
