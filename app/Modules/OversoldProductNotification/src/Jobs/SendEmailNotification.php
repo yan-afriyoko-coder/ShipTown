@@ -46,7 +46,5 @@ class SendEmailNotification implements ShouldQueue
         ]);
 
         Mail::send($mail);
-
-        $mail->log('send oversold notification');
     }
 }
