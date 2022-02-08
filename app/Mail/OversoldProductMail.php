@@ -3,13 +3,14 @@
 namespace App\Mail;
 
 use App\Models\MailTemplate;
+use App\Traits\LogsActivityTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Spatie\MailTemplates\TemplateMailable;
 
 class OversoldProductMail extends TemplateMailable
 {
-    use Queueable, SerializesModels;
+    use Queueable, SerializesModels, LogsActivityTrait;
 
     public array $variables;
 
