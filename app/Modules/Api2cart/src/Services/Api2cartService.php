@@ -5,18 +5,13 @@ namespace App\Modules\Api2cart\src\Services;
 use App\Modules\Api2cart\src\Api\Client;
 use App\Modules\Api2cart\src\Api\Products;
 use App\Modules\Api2cart\src\Api\RequestResponse;
-use App\Modules\Api2cart\src\Exceptions\RequestException;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use Carbon\Carbon;
 use Exception;
-use Facade\FlareClient\Report;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
-use function GuzzleHttp\Promise\exception_for;
 
 class Api2cartService
 {
@@ -51,14 +46,6 @@ class Api2cartService
      */
     public static function getVariantID(string $store_key, string $sku): ?int
     {
-        $cache_key = $store_key.'_'.$sku.'_variant_id';
-
-        $id = Cache::get($cache_key);
-
-        if ($id) {
-            return $id;
-        }
-
         try {
             $response = Products::productChildItemFind($store_key, $sku);
         } catch (Exception $exception) {
@@ -69,11 +56,7 @@ class Api2cartService
             return null;
         }
 
-        $id = $response->getResult()['children'][0]['id'];
-
-        Cache::put($cache_key, $id, 60 * 24 * 7);
-
-        return $id;
+        return $response->getResult()['children'][0]['id'];
     }
 
     /**
@@ -343,14 +326,6 @@ class Api2cartService
      */
     public static function getSimpleProductID(string $store_key, string $sku): ?int
     {
-        $cache_key = $store_key.'_'.$sku.'_product_id';
-
-        $id = Cache::get($cache_key);
-
-        if ($id) {
-            return $id;
-        }
-
         $response = Products::find($store_key, [
             'find_where' => 'model',
             'find_value' => $sku,
@@ -361,11 +336,7 @@ class Api2cartService
             return null;
         }
 
-        $id = $response->getResult()['product'][0]['id'];
-
-        Cache::put($cache_key, $id, 60 * 24 * 7);
-
-        return $id;
+        return $response->getResult()['product'][0]['id'];
     }
 
     /**
@@ -377,53 +348,31 @@ class Api2cartService
      */
     public static function getProductTypeAndId(string $store_key, string $sku): array
     {
-        $cached_product = Cache::get(self::getSkuCacheKey($store_key, $sku));
-
-        if ($cached_product) {
-            return $cached_product;
-        }
-
+        // try to find simple product id
         $product_id = self::getSimpleProductID($store_key, $sku);
 
         if ($product_id) {
-            $product = [
+            return [
                 'type' => 'product',
                 'id'   => $product_id,
             ];
-
-            Cache::put(self::getSkuCacheKey($store_key, $sku), $product, 60 * 24 * 7);
-
-            return $product;
         }
 
+        // try to get variant if simple product does not exist
         $variant_id = self::getVariantID($store_key, $sku);
 
         if (!empty($variant_id)) {
-            $product = [
+            return [
                 'type' => 'variant',
                 'id'   => $variant_id,
             ];
-
-            Cache::put(self::getSkuCacheKey($store_key, $sku), $product, 60 * 24 * 7);
-
-            return $product;
         }
 
+        // returning null if nothing found
         return [
             'type' => null,
             'id'   => null,
         ];
-    }
-
-    /**
-     * @param string $store_key
-     * @param string $sku
-     *
-     * @return string
-     */
-    public static function getSkuCacheKey(string $store_key, string $sku): string
-    {
-        return $store_key.'_'.$sku;
     }
 
     /**
@@ -475,7 +424,7 @@ class Api2cartService
     }
 
     /**
-     * @param Api2cartProductLink $product_link
+     * @param Api2cartProductLink $productLink
      * @return bool
      */
     public static function updateSku(Api2cartProductLink $productLink): bool

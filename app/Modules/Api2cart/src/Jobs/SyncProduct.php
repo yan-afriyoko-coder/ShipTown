@@ -2,7 +2,6 @@
 
 namespace App\Modules\Api2cart\src\Jobs;
 
-use App\Modules\Api2cart\src\Exceptions\RequestException;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use App\Modules\Api2cart\src\Services\Api2cartService;
 use Illuminate\Bus\Queueable;
