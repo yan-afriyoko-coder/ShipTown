@@ -3,6 +3,7 @@
 namespace App\Modules\OversoldProductNotification\src\Jobs;
 
 use App\Mail\OversoldProductMail;
+use App\Models\Product;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -10,9 +11,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
-use Spatie\MailTemplates\TemplateMailable;
 
-class SendOversoldProductMailJob implements ShouldQueue
+class SendEmailNotification implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -20,9 +20,8 @@ class SendOversoldProductMailJob implements ShouldQueue
     use SerializesModels;
     use IsMonitored;
 
-    protected string $to;
 
-    protected array $data;
+    private int $product_id;
 
 
     /**
@@ -30,10 +29,9 @@ class SendOversoldProductMailJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($data, $to)
+    public function __construct(int $product_id)
     {
-        $this->to = $to;
-        $this->data = $data;
+        $this->product_id = $product_id;
     }
 
     /**
@@ -43,9 +41,10 @@ class SendOversoldProductMailJob implements ShouldQueue
      */
     public function handle()
     {
-        $mail = new OversoldProductMail($this->data);
+        $mail = new OversoldProductMail([
+            'product' => Product::find($this->product_id)->toArray()
+        ]);
 
-        Mail::to($this->to)->send($mail);
-        $this->queueData(['to' => $this->to, 'data' => $this->data]);
+        Mail::send($mail);
     }
 }

@@ -21,17 +21,17 @@ class BasicTest extends TestCase
      */
     public function testExample()
     {
-        Mail::fake();
+//        Mail::fake();
 
         OversoldProductNotificationServiceProvider::enableModule();
 
         MailTemplate::where(['mailable' => OversoldProductMail::class])
-            ->update(['to' => 'test@example.com']);
+            ->update(['to' => 'arthur@youritsolutions.ie, arthur2@youritsolutions']);
 
-        factory(Product::class)
-            ->create()
-            ->attachTag('oversold');
+        /** @var Product $product */
+        $product = factory(Product::class)->create();
+        $product->attachTag('oversold');
 
-        Mail::assertSent(OversoldProductMail::class);
+//        Mail::assertSent(OversoldProductMail::class, 1);
     }
 }

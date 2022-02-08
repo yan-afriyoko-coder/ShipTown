@@ -7,6 +7,8 @@ use Barryvdh\LaravelIdeHelper\Eloquent;
 
 /**
  * @mixin Eloquent
+ * @property string to
+ * @property string reply_to
  */
 class MailTemplate extends BaseModel
 {

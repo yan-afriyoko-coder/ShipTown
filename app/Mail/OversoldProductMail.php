@@ -12,6 +12,11 @@ class OversoldProductMail extends TemplateMailable
     use Queueable, SerializesModels;
 
     public array $variables;
+    /**
+     * @var MailTemplate
+     */
+    private $databaseMailTemplate;
+
 
     /**
      * Create a new message instance.
@@ -30,7 +35,17 @@ class OversoldProductMail extends TemplateMailable
      */
     public function build()
     {
-        $template = MailTemplate::where('mailable', get_class($this))->first();
+        /** @var MailTemplate $template */
+        $template = MailTemplate::query()->where(['mailable' => self::class])->first();
+
+        $recipientsEmails = collect(explode(',', $template->to))
+            ->map(function ($emailAddress) {
+                return trim($emailAddress);
+            });
+
+        if ($recipientsEmails) {
+            $this->to($recipientsEmails);
+        }
 
         if ($template->reply_to) {
             $this->replyTo($template->reply_to);

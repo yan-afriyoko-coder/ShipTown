@@ -33,7 +33,7 @@ class OversoldProductNotificationServiceProvider extends BaseModuleServiceProvid
      */
     protected $listen = [
         ProductTagAttachedEvent::class => [
-            Listeners\SendOversoldProductNotificationListener::class
+            Listeners\ProductAttachedEvent\OversoldTagListener::class
         ]
     ];
 }
