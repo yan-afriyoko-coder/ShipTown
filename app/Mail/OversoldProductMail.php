@@ -12,11 +12,6 @@ class OversoldProductMail extends TemplateMailable
     use Queueable, SerializesModels;
 
     public array $variables;
-    /**
-     * @var MailTemplate
-     */
-    private $databaseMailTemplate;
-
 
     /**
      * Create a new message instance.
