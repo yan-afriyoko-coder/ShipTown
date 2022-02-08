@@ -21,7 +21,7 @@ class BasicTest extends TestCase
      */
     public function testExample()
     {
-//        Mail::fake();
+        Mail::fake();
 
         OversoldProductNotificationServiceProvider::enableModule();
 
@@ -32,6 +32,6 @@ class BasicTest extends TestCase
         $product = factory(Product::class)->create();
         $product->attachTag('oversold');
 
-//        Mail::assertSent(OversoldProductMail::class, 1);
+        Mail::assertSent(OversoldProductMail::class, 1);
     }
 }
