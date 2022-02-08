@@ -6,7 +6,6 @@ use App\BaseModel;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 
 /**
- * @method static where(string $string, string $get_class)
  * @mixin Eloquent
  */
 class MailTemplate extends BaseModel

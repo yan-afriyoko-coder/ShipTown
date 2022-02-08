@@ -14,20 +14,23 @@ class SendOversoldProductNotificationListener
             return;
         }
 
+        $mailTemplate = MailTemplate::select('to')
+            ->where('mailable', 'App\Mail\OversoldProductMail')
+            ->first();
+
+        if (empty($mailTemplate->to)) {
+            return;
+        }
+
         $data = [
             'product' => $event->product()->toArray(),
             'tag' => $event->tag(),
         ];
 
-        $mailTemplate = MailTemplate::select('to')
-            ->where('mailable', 'App\Mail\OversoldProductMail')
-            ->first();
-        if ($mailTemplate->to) {
-            $listMail = explode(", ", $mailTemplate->to);
-            foreach ($listMail as $mail) {
-                if ($mail) {
-                    SendOversoldProductMailJob::dispatch($data, $mail);
-                }
+        $listMail = explode(", ", $mailTemplate->to);
+        foreach ($listMail as $mail) {
+            if ($mail) {
+                SendOversoldProductMailJob::dispatch($data, $mail);
             }
         }
     }
