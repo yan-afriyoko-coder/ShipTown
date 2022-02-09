@@ -222,7 +222,7 @@
                     <div class="container" v-if="currentTab === 'orderActivities'">
                         <template v-for="activity in order_activities">
                             <div class="d-flex flex-column flex-md-row align-middle">
-                                <div class="d-none d-md-block align-middle">
+                                <div class="d-none d-md-block align-middle" :title="activity['created_at'] | moment('YYYY-MM-DD H:mm:ss') ">
                                     {{ activity['created_at'] | moment('MMM DD')  }} <small>@</small> {{ activity['created_at'] | moment('H:mm')  }}:
                                 </div>
                                 <div class="small flex-row d-block d-md-none align-middle">

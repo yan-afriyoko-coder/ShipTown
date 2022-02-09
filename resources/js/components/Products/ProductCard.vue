@@ -144,19 +144,22 @@
                             <div>
                                 {{ statusMessageActivity }}
                             </div>
-                            <div v-for="activity in activityLog" class="container" :key="activity.id">
-                                <div class="d-flex flex-column flex-md-row align-middle">
-                                    <div class="small flex-row align-middle">
-                                        {{ activity['created_at'] | moment('MMM DD')  }} {{ activity['created_at'] | moment('H:mm')  }}:
-                                    </div>
-                                    <div class="pl-sm-0 pl-md-1">
-                                        <b>
-                                            {{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }}
-                                        </b>
-                                        {{ activity['description'] }} {{ activity['properties']['attributes'] ? activity['properties']['attributes'] : activity['properties'] }}
-                                    </div>
+                          <table>
+                            <tr v-for="activity in activityLog" class="container" :key="activity.id">
+                              <td class="align-text-top" :title="activity['created_at'] | moment('YYYY-MM-DD H:mm:ss') ">
+                                {{ activity['created_at'] | moment('MMM DD')  }} {{ activity['created_at'] | moment('H:mm')  }}:
+                                &nbsp;
+                              </td>
+                              <td>
+                                <div class="row">
+                                  <b>{{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }} </b>  &nbsp; {{ activity['description'] }}
                                 </div>
-                            </div>
+                                <div class="flex-row" v-for="(value, name) in activity['properties']['attributes'] ? activity['properties']['attributes'] : activity['properties']">
+                                   {{ name }} = {{ value }}
+                                </div>
+                              </td>
+                            </tr>
+                          </table>
                         </template>
 
                         <template v-if="currentTab === 'prices'">
