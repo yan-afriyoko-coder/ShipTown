@@ -215,7 +215,7 @@ class CoreV1 extends Migration
 
             $table->foreign('address_id')
                 ->references('id')
-                ->on('order_addresses')
+                ->on('orders_addresses')
                 ->onDelete('CASCADE');
         });
 
@@ -268,7 +268,7 @@ class CoreV1 extends Migration
             $table->timestamps();
 
             $table->foreign('shipping_address_id')
-                ->on('order_addresses')
+                ->on('orders_addresses')
                 ->references('id')
                 ->onDelete('SET NULL');
 
