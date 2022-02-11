@@ -188,11 +188,8 @@ class CreateOauthAuthCodesTable extends Migration
             $table->string('company')->default('');
             $table->string('gender')->default('');
             $table->string('first_name')->default('');
-            $table->string('first_name_encrypted')->nullable();
             $table->string('last_name')->default('');
-            $table->string('last_name_encrypted')->nullable();
             $table->string('email')->default('');
-            $table->string('email_encrypted')->nullable();
             $table->string('address1')->default('');
             $table->string('address2')->default('');
             $table->string('postcode')->default('');
@@ -202,10 +199,13 @@ class CreateOauthAuthCodesTable extends Migration
             $table->string('country_code')->default('');
             $table->string('country_name')->default('');
             $table->string('phone')->default('');
-            $table->string('phone_encrypted')->nullable();
             $table->string('fax')->default('');
             $table->string('website')->default('');
             $table->string('region')->default('');
+            $table->string('first_name_encrypted')->nullable();
+            $table->string('last_name_encrypted')->nullable();
+            $table->string('email_encrypted')->nullable();
+            $table->string('phone_encrypted')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
