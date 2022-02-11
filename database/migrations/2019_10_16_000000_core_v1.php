@@ -647,7 +647,7 @@ class CoreV1 extends Migration
 
             $table->foreign('connection_id')
                 ->references('id')
-                ->on('api2cart_connections')
+                ->on('modules_api2cart_connections')
                 ->onDelete('SET NULL');
         });
 
