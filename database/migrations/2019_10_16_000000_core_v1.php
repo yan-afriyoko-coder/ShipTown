@@ -569,7 +569,7 @@ class CoreV1 extends Migration
                 ->onDelete('SET NULL');
         });
 
-        Schema::create('rmsapi_connections', function (Blueprint $table) {
+        Schema::create('modules_rmsapi_connections', function (Blueprint $table) {
             $table->id();
             $table->string('location_id');
             $table->string('url');
@@ -579,7 +579,7 @@ class CoreV1 extends Migration
             $table->timestamps();
         });
 
-        Schema::create('rmsapi_product_imports', function (Blueprint $table) {
+        Schema::create('modules_api2cart_product_links', function (Blueprint $table) {
             $table->id();
             $table->foreignId('connection_id');
             $table->uuid('batch_uuid')->nullable();
@@ -595,7 +595,7 @@ class CoreV1 extends Migration
                 ->onDelete('SET NULL');
         });
 
-        Schema::create('api2cart_connections', function (Blueprint $table) {
+        Schema::create('modules_api2cart_connections', function (Blueprint $table) {
             $table->id();
             $table->string('location_id')->default('0');
             $table->string('type')->default('');
@@ -610,7 +610,7 @@ class CoreV1 extends Migration
             $table->timestamps();
         });
 
-        Schema::create('api2cart_order_imports', function (Blueprint $table) {
+        Schema::create('modules_api2cart_order_imports', function (Blueprint $table) {
             $table->id();
             $table->foreignId('connection_id')->nullable();
             $table->foreignId('order_id')->nullable();

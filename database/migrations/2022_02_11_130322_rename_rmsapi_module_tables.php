@@ -13,7 +13,6 @@ class RenameRmsapiModuleTables extends Migration
      */
     public function up()
     {
-        Schema::rename('rmsapi_connections', 'modules_rmsapi_connections');
         Schema::rename('rmsapi_product_imports', 'modules_rmsapi_products_imports');
     }
 }
