@@ -34,8 +34,8 @@ class AddForeignKeys extends Migration
                 ->onDelete('SET NULL');
         });
 
-        Schema::dropIfExists('telescope_entries');
         Schema::dropIfExists('telescope_entries_tags');
         Schema::dropIfExists('telescope_monitoring');
+        Schema::dropIfExists('telescope_entries');
     }
 }
