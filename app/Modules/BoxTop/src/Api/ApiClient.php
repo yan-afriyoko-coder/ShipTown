@@ -4,7 +4,7 @@ namespace App\Modules\BoxTop\src\Api;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use Log;
+use Illuminate\Support\Facades\Log;
 use Str;
 
 /**
