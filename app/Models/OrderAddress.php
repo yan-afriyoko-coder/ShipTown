@@ -65,6 +65,8 @@ use Illuminate\Support\Facades\Crypt;
  */
 class OrderAddress extends Model
 {
+    protected $table = 'orders_addresses';
+
     protected $fillable = [
         'company',
         'gender',

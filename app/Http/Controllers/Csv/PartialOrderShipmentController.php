@@ -17,13 +17,13 @@ class PartialOrderShipmentController extends Controller
         $query = OrderShipment::select([
             'orders.status_code',
             'orders.order_number',
-            'order_shipments.shipping_number',
+            'orders_shipments.shipping_number',
         ])
-            ->join('orders', 'orders.id', '=', 'order_shipments.order_id')
-            ->whereDate('order_shipments.created_at', '=', Carbon::today())
+            ->join('orders', 'orders.id', '=', 'orders_shipments.order_id')
+            ->whereDate('orders_shipments.created_at', '=', Carbon::today())
             ->where('orders.status_code', '<>', 'ready')
             ->orderBy('orders.status_code')
-            ->orderBy('order_shipments.created_at');
+            ->orderBy('orders_shipments.created_at');
 
         return $this->toCsvFileResponse($query->get(), 'partial_order_shipments.csv');
     }

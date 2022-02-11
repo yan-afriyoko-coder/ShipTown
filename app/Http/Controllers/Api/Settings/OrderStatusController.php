@@ -38,8 +38,8 @@ class OrderStatusController extends Controller
             $orderStatus->update($request->validated());
         } else {
             $this->validate($request, [
-                'name' => 'unique:order_statuses,name',
-                'code' => 'unique:order_statuses,code',
+                'name' => 'unique:orders_statuses,name',
+                'code' => 'unique:orders_statuses,code',
             ]);
 
             $orderStatus = new OrderStatus;

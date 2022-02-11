@@ -82,6 +82,8 @@ class OrderProduct extends BaseModel
     use SoftDeletes;
     use LogsActivityTrait;
 
+    protected $table = 'orders_products';
+
     /**
      * @var string[]
      */
@@ -273,7 +275,7 @@ class OrderProduct extends BaseModel
             ->toBase();
 
         return $query->leftJoinSub($source_inventory, 'inventory_source', function ($join) {
-            $join->on('order_products.product_id', '=', 'inventory_source_product_id');
+            $join->on('orders_products.product_id', '=', 'inventory_source_product_id');
         });
     }
 

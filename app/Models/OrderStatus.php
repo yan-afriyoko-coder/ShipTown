@@ -36,6 +36,8 @@ class OrderStatus extends BaseModel
 {
     use SoftDeletes;
 
+    protected $table = 'orders_statuses';
+
     protected $fillable = [
         'name',
         'code',
