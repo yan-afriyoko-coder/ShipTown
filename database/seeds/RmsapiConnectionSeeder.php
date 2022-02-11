@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\RmsapiConnection;
+use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use Illuminate\Database\Seeder;
 
 class RmsapiConnectionSeeder extends Seeder

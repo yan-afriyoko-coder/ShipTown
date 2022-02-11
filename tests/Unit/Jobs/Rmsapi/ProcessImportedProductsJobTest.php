@@ -5,9 +5,9 @@ namespace Tests\Unit\Jobs\Rmsapi;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductAlias;
-use App\Models\RmsapiProductImport;
+use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedBatch;
-use Event;
+use Illuminate\Support\Facades\Event;
 use Spatie\Tags\Tag;
 use Tests\TestCase;
 

@@ -2,7 +2,7 @@
 
 namespace Tests\External\Rmsapi;
 
-use App\Models\RmsapiConnection;
+use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Api\Client as RmsapiClient;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

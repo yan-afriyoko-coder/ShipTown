@@ -4,7 +4,7 @@ namespace Tests\Feature\Orders;
 
 use App\Models\Order;
 use App\Models\OrderStatus;
-use App\Models\RmsapiProductImport;
+use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

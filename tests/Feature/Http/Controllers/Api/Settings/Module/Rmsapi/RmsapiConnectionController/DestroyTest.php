@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Api\Settings\Module\Rmsapi\RmsapiConnectionController;
 
-use App\Models\RmsapiConnection;
+use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

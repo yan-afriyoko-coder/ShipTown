@@ -1,5 +1,6 @@
 <?php
 
+use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use Illuminate\Database\Seeder;
 
 class RmsapiProductImportSeeder extends Seeder
@@ -11,6 +12,6 @@ class RmsapiProductImportSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Models\RmsapiProductImport::class)->create();
+        factory(RmsapiProductImport::class)->create();
     }
 }

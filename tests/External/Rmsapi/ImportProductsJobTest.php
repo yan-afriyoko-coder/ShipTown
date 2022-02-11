@@ -2,8 +2,8 @@
 
 namespace Tests\External\Rmsapi;
 
-use App\Models\RmsapiConnection;
-use App\Models\RmsapiProductImport;
+use App\Modules\Rmsapi\src\Models\RmsapiConnection;
+use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Jobs\FetchUpdatedProductsJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedBatch;
 use Illuminate\Foundation\Testing\RefreshDatabase;
