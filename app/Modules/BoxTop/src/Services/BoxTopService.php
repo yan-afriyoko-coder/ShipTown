@@ -108,7 +108,7 @@ class BoxTopService
             "DeliveryTime"          => "",
             "Haulier"               => "",
             "PickItems"             => $pickItems,
-            "BranchID"              => 186,
+            "BranchID"              => env('TEST_BOXTOP_SITE_CODE', '000'),
             "CustomerID"            => "BELLABAB",
             "NOP"                   => 1,
             "Weight"                => 1,
