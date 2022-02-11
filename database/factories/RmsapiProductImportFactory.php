@@ -2,8 +2,8 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Models\RmsapiConnection;
-use App\Models\RmsapiProductImport;
+use App\Modules\Rmsapi\src\Models\RmsapiConnection;
+use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 

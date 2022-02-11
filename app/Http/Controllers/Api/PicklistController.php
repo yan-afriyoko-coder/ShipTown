@@ -27,9 +27,9 @@ class PicklistController extends Controller
                 DB::raw("GROUP_CONCAT(id ORDER BY id SEPARATOR ',' ) AS order_product_ids"),
             ])
             ->groupBy([
-                'order_products.name_ordered',
-                'order_products.sku_ordered',
-                'order_products.product_id',
+                'orders_products.name_ordered',
+                'orders_products.sku_ordered',
+                'orders_products.product_id',
                 'inventory_source_shelf_location',
             ]);
 

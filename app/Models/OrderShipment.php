@@ -45,6 +45,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class OrderShipment extends BaseModel
 {
+    protected $table = 'orders_shipments';
+
     /**
      * @var string[]
      */

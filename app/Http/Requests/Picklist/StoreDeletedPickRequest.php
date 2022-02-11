@@ -27,7 +27,7 @@ class StoreDeletedPickRequest extends FormRequest
             'quantity_picked'          => 'numeric|required_without:quantity_skipped_picking',
             'quantity_skipped_picking' => 'numeric|required_without:quantity_picked',
             'order_product_ids'        => 'required|array',
-            'order_product_ids.*'      => 'numeric|exists:order_products,id',
+            'order_product_ids.*'      => 'numeric|exists:orders_products,id',
         ];
     }
 }

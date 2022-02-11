@@ -35,6 +35,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class OrderComment extends Model
 {
+    protected $table = 'orders_comments';
+
     protected $fillable = [
         'order_id',
         'user_id',

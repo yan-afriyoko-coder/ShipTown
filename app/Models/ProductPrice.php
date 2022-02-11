@@ -39,6 +39,8 @@ use Illuminate\Support\Carbon;
  */
 class ProductPrice extends BaseModel
 {
+    protected $table = 'products_prices';
+
     protected $fillable = [
         'product_id',
         'location_id',

@@ -3,7 +3,7 @@
 namespace App\Modules\Rmsapi\src\Listeners\SyncRequestedEvent;
 
 use App\Events\SyncRequestedEvent;
-use App\Models\RmsapiConnection;
+use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Jobs\FetchUpdatedProductsJob;
 
 class DispatchSyncJobsListener

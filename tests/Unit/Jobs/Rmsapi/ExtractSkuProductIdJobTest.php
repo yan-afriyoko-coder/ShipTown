@@ -4,7 +4,7 @@ namespace Tests\Unit\Jobs\Rmsapi;
 
 use App\Models\Inventory;
 use App\Models\Product;
-use App\Models\RmsapiProductImport;
+use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Jobs\ExtractSkuAndProductIdJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedBatch;
 use Tests\TestCase;

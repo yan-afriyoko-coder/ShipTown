@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Modules\Rmsapi\src\Models;
 
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -35,6 +35,8 @@ use Illuminate\Support\Facades\Crypt;
  */
 class RmsapiConnection extends Model
 {
+    protected $table = 'modules_rmsapi_connections';
+
     protected $fillable = [
         'location_id',
         'url',

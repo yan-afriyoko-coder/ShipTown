@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Modules\Rmsapi\src\Models;
 
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -36,6 +36,8 @@ use Illuminate\Support\Carbon;
  */
 class RmsapiProductImport extends Model
 {
+    protected $table = 'modules_rmsapi_products_imports';
+
     protected $fillable = [
         'connection_id',
         'batch_uuid',

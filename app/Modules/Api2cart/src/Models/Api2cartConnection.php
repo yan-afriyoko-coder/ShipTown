@@ -58,7 +58,7 @@ class Api2cartConnection extends Model
         'type',
     ];
 
-    protected $table = 'api2cart_connections';
+    protected $table = 'modules_api2cart_connections';
 
     public function __construct(array $attributes = [])
     {

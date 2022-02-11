@@ -2,7 +2,7 @@
 
 namespace App\Modules\Rmsapi\src\Api;
 
-use App\Models\RmsapiConnection;
+use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Crypt;

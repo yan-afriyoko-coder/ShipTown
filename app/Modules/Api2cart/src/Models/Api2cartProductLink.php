@@ -59,6 +59,8 @@ use Illuminate\Support\Facades\Log;
  */
 class Api2cartProductLink extends BaseModel
 {
+    protected $table = 'modules_api2cart_product_links';
+
     /**
      * @var string[]
      */

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DropOrderStatsTable extends Migration
+class RenameRmsapiModuleTables extends Migration
 {
     /**
      * Run the migrations.
@@ -13,6 +13,7 @@ class DropOrderStatsTable extends Migration
      */
     public function up()
     {
-        \Illuminate\Support\Facades\DB::statement('DROP view order_stats');
+        Schema::rename('rmsapi_connections', 'modules_rmsapi_connections');
+        Schema::rename('rmsapi_product_imports', 'modules_rmsapi_products_imports');
     }
 }
