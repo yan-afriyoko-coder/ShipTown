@@ -13,6 +13,6 @@ class DropOrderStatsTable extends Migration
      */
     public function up()
     {
-        \Illuminate\Support\Facades\DB::raw('DROP view order_stats');
+        \Illuminate\Support\Facades\DB::statement('DROP view order_stats');
     }
 }
