@@ -184,12 +184,8 @@ class CoreV1 extends Migration
 
         Schema::create('order_addresses', function (Blueprint $table) {
             $table->id();
-            $table->boolean('encrypted')->default(false);
             $table->string('company')->default('');
             $table->string('gender')->default('');
-            $table->string('first_name')->default('');
-            $table->string('last_name')->default('');
-            $table->string('email')->default('');
             $table->string('address1')->default('');
             $table->string('address2')->default('');
             $table->string('postcode')->default('');
@@ -198,7 +194,6 @@ class CoreV1 extends Migration
             $table->string('state_name')->default('');
             $table->string('country_code')->default('');
             $table->string('country_name')->default('');
-            $table->string('phone')->default('');
             $table->string('fax')->default('');
             $table->string('website')->default('');
             $table->string('region')->default('');
@@ -251,6 +246,7 @@ class CoreV1 extends Migration
             $table->foreignId('shipping_address_id')->nullable();
             $table->string('order_number')->unique();
             $table->string('status_code')->default('');
+            $table->string('label_template')->default('');
             $table->boolean('is_active')->nullable(false)->default(0);
             $table->boolean('is_editing')->default(0);
             $table->decimal('total_products')->default(0);
