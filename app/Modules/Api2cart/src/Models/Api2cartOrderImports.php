@@ -46,7 +46,7 @@ class Api2cartOrderImports extends BaseModel
     /**
      * @var string
      */
-    protected $table = 'api2cart_order_imports';
+    protected $table = 'modules_api2cart_order_imports';
 
     /**
      * @var string[]
