@@ -170,9 +170,4 @@ class OrderAddress extends Model
         $this->first_name = explode(' ', $value)[0];
         $this->last_name = explode(' ', $value)[1];
     }
-
-    public function order(): HasOne
-    {
-        return $this->hasOne(Order::class);
-    }
 }
