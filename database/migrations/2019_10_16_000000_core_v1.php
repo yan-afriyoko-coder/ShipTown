@@ -182,7 +182,7 @@ class CoreV1 extends Migration
                 ->onDelete('CASCADE');
         });
 
-        Schema::create('order_addresses', function (Blueprint $table) {
+        Schema::create('orders_addresses', function (Blueprint $table) {
             $table->id();
             $table->string('company')->default('');
             $table->string('gender')->default('');
@@ -278,7 +278,7 @@ class CoreV1 extends Migration
                 ->onDelete('SET NULL');
         });
 
-        Schema::create('order_products', function (Blueprint $table) {
+        Schema::create('orders_products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id');
             $table->foreignId('product_id')->nullable();
@@ -311,7 +311,7 @@ class CoreV1 extends Migration
                 ->onDelete('cascade');
         });
 
-        Schema::create('order_statuses', function (Blueprint $table) {
+        Schema::create('orders_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
             $table->string('code')->unique();
@@ -322,7 +322,7 @@ class CoreV1 extends Migration
             $table->timestamps();
         });
 
-        Schema::create('order_shipments', function (Blueprint $table) {
+        Schema::create('orders_shipments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable();
             $table->foreignId('order_id');
@@ -344,7 +344,7 @@ class CoreV1 extends Migration
                 ->onDelete('SET NULL');
         });
 
-        Schema::create('order_comments', function (Blueprint $table) {
+        Schema::create('orders_comments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id');
             $table->foreignId('user_id')->nullable();
@@ -400,7 +400,7 @@ class CoreV1 extends Migration
             $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
         });
 
-        Schema::create('product_prices', function (Blueprint $table) {
+        Schema::create('products_prices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->index();
             $table->string('location_id')->default('');
