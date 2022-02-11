@@ -13,6 +13,6 @@ class DropOrderStatsTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('order_stats');
+        \Illuminate\Support\Facades\DB::raw('DROP view order_stats');
     }
 }
