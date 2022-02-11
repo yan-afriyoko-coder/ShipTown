@@ -182,14 +182,10 @@ class CoreV1 extends Migration
                 ->onDelete('CASCADE');
         });
 
-        Schema::create('order_addresses', function (Blueprint $table) {
+        Schema::create('orders_addresses', function (Blueprint $table) {
             $table->id();
-            $table->boolean('encrypted')->default(false);
             $table->string('company')->default('');
             $table->string('gender')->default('');
-            $table->string('first_name')->default('');
-            $table->string('last_name')->default('');
-            $table->string('email')->default('');
             $table->string('address1')->default('');
             $table->string('address2')->default('');
             $table->string('postcode')->default('');
@@ -198,7 +194,6 @@ class CoreV1 extends Migration
             $table->string('state_name')->default('');
             $table->string('country_code')->default('');
             $table->string('country_name')->default('');
-            $table->string('phone')->default('');
             $table->string('fax')->default('');
             $table->string('website')->default('');
             $table->string('region')->default('');
@@ -251,6 +246,7 @@ class CoreV1 extends Migration
             $table->foreignId('shipping_address_id')->nullable();
             $table->string('order_number')->unique();
             $table->string('status_code')->default('');
+            $table->string('label_template')->default('');
             $table->boolean('is_active')->nullable(false)->default(0);
             $table->boolean('is_editing')->default(0);
             $table->decimal('total_products')->default(0);
@@ -282,7 +278,7 @@ class CoreV1 extends Migration
                 ->onDelete('SET NULL');
         });
 
-        Schema::create('order_products', function (Blueprint $table) {
+        Schema::create('orders_products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id');
             $table->foreignId('product_id')->nullable();
@@ -315,7 +311,7 @@ class CoreV1 extends Migration
                 ->onDelete('cascade');
         });
 
-        Schema::create('order_statuses', function (Blueprint $table) {
+        Schema::create('orders_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
             $table->string('code')->unique();
@@ -326,7 +322,7 @@ class CoreV1 extends Migration
             $table->timestamps();
         });
 
-        Schema::create('order_shipments', function (Blueprint $table) {
+        Schema::create('orders_shipments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable();
             $table->foreignId('order_id');
@@ -348,7 +344,7 @@ class CoreV1 extends Migration
                 ->onDelete('SET NULL');
         });
 
-        Schema::create('order_comments', function (Blueprint $table) {
+        Schema::create('orders_comments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id');
             $table->foreignId('user_id')->nullable();
@@ -381,6 +377,11 @@ class CoreV1 extends Migration
                 ->references('id')
                 ->on('users')
                 ->onDelete('SET NULL');
+
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products')
+                ->onDelete('SET NULL');
         });
 
         Schema::create('tags', function (Blueprint $table) {
@@ -399,7 +400,7 @@ class CoreV1 extends Migration
             $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
         });
 
-        Schema::create('product_prices', function (Blueprint $table) {
+        Schema::create('products_prices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->index();
             $table->string('location_id')->default('');
@@ -518,6 +519,11 @@ class CoreV1 extends Migration
             $table->string('condition_class')->nullable();
             $table->string('condition_value')->nullable()->default('');
             $table->timestamps();
+
+            $table->foreign('automation_id')
+                ->references('id')
+                ->on('modules_automations')
+                ->onDelete('CASCADE');
         });
 
         Schema::create('modules_automations_actions', function (Blueprint $table) {
@@ -527,6 +533,11 @@ class CoreV1 extends Migration
             $table->string('action_class')->nullable();
             $table->string('action_value')->nullable(false)->default('');
             $table->timestamps();
+
+            $table->foreign('automation_id')
+                ->references('id')
+                ->on('modules_automations')
+                ->onDelete('CASCADE');
         });
 
         Schema::create('modules_automations_order_lock', function (Blueprint $table) {
@@ -558,7 +569,7 @@ class CoreV1 extends Migration
                 ->onDelete('SET NULL');
         });
 
-        Schema::create('rmsapi_connections', function (Blueprint $table) {
+        Schema::create('modules_rmsapi_connections', function (Blueprint $table) {
             $table->id();
             $table->string('location_id');
             $table->string('url');
@@ -568,7 +579,23 @@ class CoreV1 extends Migration
             $table->timestamps();
         });
 
-        Schema::create('rmsapi_product_imports', function (Blueprint $table) {
+        Schema::create('modules_rmsapi_product_imports', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('connection_id');
+            $table->uuid('batch_uuid')->nullable();
+            $table->dateTime('when_processed')->nullable();
+            $table->unsignedBigInteger('product_id')->nullable();
+            $table->string('sku')->nullable();
+            $table->json('raw_import');
+            $table->timestamps();
+
+            $table->foreign('product_id')
+                ->on('products')
+                ->references('id')
+                ->onDelete('SET NULL');
+        });
+
+        Schema::create('modules_api2cart_product_links', function (Blueprint $table) {
             $table->id();
             $table->foreignId('connection_id');
             $table->uuid('batch_uuid')->nullable();
@@ -584,7 +611,7 @@ class CoreV1 extends Migration
                 ->onDelete('SET NULL');
         });
 
-        Schema::create('api2cart_connections', function (Blueprint $table) {
+        Schema::create('modules_api2cart_connections', function (Blueprint $table) {
             $table->id();
             $table->string('location_id')->default('0');
             $table->string('type')->default('');
@@ -599,7 +626,7 @@ class CoreV1 extends Migration
             $table->timestamps();
         });
 
-        Schema::create('api2cart_order_imports', function (Blueprint $table) {
+        Schema::create('modules_api2cart_order_imports', function (Blueprint $table) {
             $table->id();
             $table->foreignId('connection_id')->nullable();
             $table->foreignId('order_id')->nullable();
