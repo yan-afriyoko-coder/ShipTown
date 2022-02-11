@@ -89,12 +89,16 @@ class OrderAddress extends Model
         'phone_encrypted' => 'encrypted'
     ];
 
+    protected $appends = [
+        'first_name',
+        'last_name',
+        'phone',
+        'email',
+    ];
+
+
     public function getFirstNameAttribute(): string
     {
-        if ($this->getRawOriginal('first_name') != '') {
-            return $this->getRawOriginal('first_name');
-        }
-
         try {
             return Crypt::decryptString($this->attributes['first_name_encrypted']);
         } catch (Exception $exception) {
@@ -109,10 +113,6 @@ class OrderAddress extends Model
 
     public function getLastNameAttribute(): string
     {
-        if ($this->getRawOriginal('last_name') != '') {
-            return $this->getRawOriginal('last_name');
-        }
-
         try {
             return Crypt::decryptString($this->attributes['last_name_encrypted']);
         } catch (Exception $exception) {
@@ -127,10 +127,6 @@ class OrderAddress extends Model
 
     public function getPhoneAttribute(): string
     {
-        if ($this->getRawOriginal('phone') != '') {
-            return $this->getRawOriginal('phone');
-        }
-
         try {
             return Crypt::decryptString($this->attributes['phone_encrypted']);
         } catch (Exception $exception) {
@@ -145,10 +141,6 @@ class OrderAddress extends Model
 
     public function getEmailAttribute(): string
     {
-        if ($this->getRawOriginal('email') != '') {
-            return $this->getRawOriginal('email');
-        }
-
         try {
             return Crypt::decryptString($this->attributes['email_encrypted']);
         } catch (Exception $exception) {
