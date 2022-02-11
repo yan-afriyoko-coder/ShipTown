@@ -3,6 +3,7 @@
 namespace App\Modules\AutoTags\src\Listeners\InventoryUpdatedEvent;
 
 use App\Events\Inventory\InventoryUpdatedEvent;
+use App\Modules\AutoTags\src\Jobs\ToggleOutOfStockTagJob;
 
 class ToggleProductOutOfStockTagListener
 {
@@ -15,12 +16,7 @@ class ToggleProductOutOfStockTagListener
      */
     public function handle(InventoryUpdatedEvent $event)
     {
-        $product = $event->getInventory()->product;
-
-        if ($product->isOutOfStock()) {
-            $product->attachTag('Out Of Stock');
-        } else {
-            $product->detachTag('Out Of Stock');
-        }
+        ToggleOutOfStockTagJob::dispatch($event->getInventory()->product_id)
+            ->delay(60);
     }
 }
