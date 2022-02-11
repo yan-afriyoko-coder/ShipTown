@@ -377,6 +377,11 @@ class CoreV1 extends Migration
                 ->references('id')
                 ->on('users')
                 ->onDelete('SET NULL');
+
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products')
+                ->onDelete('SET NULL');
         });
 
         Schema::create('tags', function (Blueprint $table) {
@@ -514,6 +519,11 @@ class CoreV1 extends Migration
             $table->string('condition_class')->nullable();
             $table->string('condition_value')->nullable()->default('');
             $table->timestamps();
+
+            $table->foreign('automation_id')
+                ->references('id')
+                ->on('modules_automations')
+                ->onDelete('CASCADE');
         });
 
         Schema::create('modules_automations_actions', function (Blueprint $table) {
@@ -523,6 +533,11 @@ class CoreV1 extends Migration
             $table->string('action_class')->nullable();
             $table->string('action_value')->nullable(false)->default('');
             $table->timestamps();
+
+            $table->foreign('automation_id')
+                ->references('id')
+                ->on('modules_automations')
+                ->onDelete('CASCADE');
         });
 
         Schema::create('modules_automations_order_lock', function (Blueprint $table) {
