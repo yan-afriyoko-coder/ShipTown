@@ -35,6 +35,8 @@ use Illuminate\Support\Facades\Crypt;
  */
 class RmsapiConnection extends Model
 {
+    protected $table = 'modules_rmsapi_connections';
+
     protected $fillable = [
         'location_id',
         'url',

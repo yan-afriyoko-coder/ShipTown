@@ -36,6 +36,8 @@ use Illuminate\Support\Carbon;
  */
 class RmsapiProductImport extends Model
 {
+    protected $table = 'modules_rmsapi_products_imports';
+
     protected $fillable = [
         'connection_id',
         'batch_uuid',
