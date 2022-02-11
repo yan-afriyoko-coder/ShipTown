@@ -579,6 +579,22 @@ class CoreV1 extends Migration
             $table->timestamps();
         });
 
+        Schema::create('modules_rmsapi_product_imports', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('connection_id');
+            $table->uuid('batch_uuid')->nullable();
+            $table->dateTime('when_processed')->nullable();
+            $table->unsignedBigInteger('product_id')->nullable();
+            $table->string('sku')->nullable();
+            $table->json('raw_import');
+            $table->timestamps();
+
+            $table->foreign('product_id')
+                ->on('products')
+                ->references('id')
+                ->onDelete('SET NULL');
+        });
+
         Schema::create('modules_api2cart_product_links', function (Blueprint $table) {
             $table->id();
             $table->foreignId('connection_id');
