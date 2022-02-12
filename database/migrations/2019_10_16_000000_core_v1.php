@@ -579,7 +579,7 @@ class CoreV1 extends Migration
             $table->timestamps();
         });
 
-        Schema::create('modules_rmsapi_product_imports', function (Blueprint $table) {
+        Schema::create('modules_rmsapi_products_imports', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('connection_id');
             $table->uuid('batch_uuid')->nullable();
