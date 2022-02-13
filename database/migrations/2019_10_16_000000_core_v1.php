@@ -215,7 +215,7 @@ class CoreV1 extends Migration
 
             $table->foreign('address_id')
                 ->references('id')
-                ->on('order_addresses')
+                ->on('orders_addresses')
                 ->onDelete('CASCADE');
         });
 
@@ -268,7 +268,7 @@ class CoreV1 extends Migration
             $table->timestamps();
 
             $table->foreign('shipping_address_id')
-                ->on('order_addresses')
+                ->on('orders_addresses')
                 ->references('id')
                 ->onDelete('SET NULL');
 
@@ -423,22 +423,6 @@ class CoreV1 extends Migration
             $table->timestamps();
         });
 
-        Schema::create('api2cart_product_links', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('product_id')->nullable();
-            $table->string('api2cart_connection_id')->nullable();
-            $table->string('api2cart_product_type')->nullable();
-            $table->string('api2cart_product_id')->nullable();
-            $table->dateTime('last_fetched_at')->nullable();
-            $table->json('last_fetched_data')->nullable();
-            $table->decimal('api2cart_quantity', 10, 2)->nullable();
-            $table->decimal('api2cart_price', 10, 2)->nullable();
-            $table->decimal('api2cart_sale_price', 10, 2)->nullable();
-            $table->date('api2cart_sale_price_start_date')->nullable();
-            $table->date('api2cart_sale_price_end_date')->nullable();
-            $table->timestamps();
-        });
-
         Schema::create('module_auto_status_pickings', function (Blueprint $table) {
             $table->id();
             $table->boolean('is_enabled')
@@ -579,28 +563,12 @@ class CoreV1 extends Migration
             $table->timestamps();
         });
 
-        Schema::create('modules_rmsapi_product_imports', function (Blueprint $table) {
+        Schema::create('modules_rmsapi_products_imports', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('connection_id');
             $table->uuid('batch_uuid')->nullable();
             $table->dateTime('when_processed')->nullable();
             $table->unsignedBigInteger('product_id')->nullable();
-            $table->string('sku')->nullable();
-            $table->json('raw_import');
-            $table->timestamps();
-
-            $table->foreign('product_id')
-                ->on('products')
-                ->references('id')
-                ->onDelete('SET NULL');
-        });
-
-        Schema::create('modules_api2cart_product_links', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('connection_id');
-            $table->uuid('batch_uuid')->nullable();
-            $table->dateTime('when_processed')->nullable();
-            $table->foreignId('product_id')->nullable();
             $table->string('sku')->nullable();
             $table->json('raw_import');
             $table->timestamps();
@@ -647,8 +615,24 @@ class CoreV1 extends Migration
 
             $table->foreign('connection_id')
                 ->references('id')
-                ->on('api2cart_connections')
+                ->on('modules_api2cart_connections')
                 ->onDelete('SET NULL');
+        });
+
+        Schema::create('modules_api2cart_product_links', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('product_id')->nullable();
+            $table->string('api2cart_connection_id')->nullable();
+            $table->string('api2cart_product_type')->nullable();
+            $table->string('api2cart_product_id')->nullable();
+            $table->dateTime('last_fetched_at')->nullable();
+            $table->json('last_fetched_data')->nullable();
+            $table->decimal('api2cart_quantity', 10, 2)->nullable();
+            $table->decimal('api2cart_price', 10, 2)->nullable();
+            $table->decimal('api2cart_sale_price', 10, 2)->nullable();
+            $table->date('api2cart_sale_price_start_date')->nullable();
+            $table->date('api2cart_sale_price_end_date')->nullable();
+            $table->timestamps();
         });
 
         Schema::create('configurations', function (Blueprint $table) {
