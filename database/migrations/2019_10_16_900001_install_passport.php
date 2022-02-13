@@ -5,6 +5,7 @@ use App\Models\MailTemplate;
 use App\Models\NavigationMenu;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -17,53 +18,26 @@ class InstallPassport extends Migration
      */
     public function up()
     {
-        Configuration::create([]);
-
-        Artisan::call('passport:install');
-
-        if (!Role::query()->exists()) {
-            $admin = Role::firstOrCreate(['name' => 'admin']);
-
-            $defaultAdminPermissions = ['manage users', 'list users', 'invite users', 'list roles'];
-
-            foreach ($defaultAdminPermissions as $permissionName) {
-                $permission = Permission::firstOrCreate(['name' => $permissionName]);
-                $admin->givePermissionTo($permission);
-            }
-
-            Role::firstOrCreate(['name' => 'user']);
-        }
-
-        NavigationMenu::query()->create([
-            'name' => 'Status: picking',
-            'url' => '/picklist?order.status_code=picking',
-            'group' => 'picklist'
-        ]);
-
-        NavigationMenu::query()->create([
-            'name' => 'Status: packing_web',
-            'url' => '/autopilot/packlist?status=packing_web&sort=order_placed_at',
-            'group' => 'packlist'
-        ]);
-
-        NavigationMenu::query()->create([
-            'name' => 'Status: single_line_orders',
-            'url' => '/autopilot/packlist?status=single_line_orders&sort=order_placed_at',
-            'group' => 'packlist'
-        ]);
-
-        $this->createShipmentNotificationMailTemplate();
-        $this->createOversoldMailTemplate();
+        DB::transaction(function () {
+            Artisan::call('passport:install');
+            $this->createDefaultConfigurationRecord();
+            $this->createDefaultUserRoles();
+            $this->createDefaultNavigatioLinks();
+            $this->createDefaultMailTemplateShipmentNotification();
+            $this->createDefaultMailTemplateOversoldProduct();
+        });
     }
 
-    private function createShipmentNotificationMailTemplate(): void
+    private function createDefaultMailTemplateShipmentNotification(): void
     {
         MailTemplate::create([
-            'mailable' => \App\Mail\ShipmentConfirmationMail::class,
+            'mailable' => App\Mail\ShipmentConfirmationMail::class,
             'subject' => 'Your Order #{{ variables.order.order_number }} has been Shipped!',
             'html_template' => '
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-    <html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
+    <html xmlns="http://www.w3.org/1999/xhtml"
+          xmlns="http://www.w3.org/1999/xhtml"
+          style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
     <head>
         <meta name="viewport" content="width=device-width" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -73,7 +47,11 @@ class InstallPassport extends Migration
             max-width: 100%;
         }
         body {
-            -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -webkit-text-size-adjust: none;
+            width: 100% !important;
+            height: 100%;
+            line-height: 1.6;
         }
         body {
             background-color: #f6f6f6;
@@ -216,14 +194,13 @@ class InstallPassport extends Migration
         ]);
     }
 
-    public function createOversoldMailTemplate(): void
+    public function createDefaultMailTemplateOversoldProduct(): void
     {
-        MailTemplate::updateOrCreate(
-            ['mailable' => 'App\Mail\OversoldProductMail'],
-            [
-                'subject' => 'Product Oversold - ({{ variables.product.name }})',
-                'html_template' => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
+        MailTemplate::create([
+            'mailable' => App\Mail\OversoldProductMail::class,
+            'subject' => 'Product Oversold - ({{ variables.product.name }})',
+            'html_template' => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" style="font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0;">
 <head>
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -233,7 +210,11 @@ class InstallPassport extends Migration
         max-width: 100%;
     }
     body {
-        -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -webkit-text-size-adjust: none;
+        width: 100% !important;
+        height: 100%;
+        line-height: 1.6;
     }
     body {
         background-color: #f6f6f6;
@@ -367,6 +348,47 @@ class InstallPassport extends Migration
 </table>
 
 </body>
-</html>']);
+</html>']
+        );
+    }
+
+    private function createDefaultNavigatioLinks(): void
+    {
+        NavigationMenu::query()->create([
+            'name' => 'Status: picking',
+            'url' => '/picklist?order.status_code=picking',
+            'group' => 'picklist'
+        ]);
+
+        NavigationMenu::query()->create([
+            'name' => 'Status: packing_web',
+            'url' => '/autopilot/packlist?status=packing_web&sort=order_placed_at',
+            'group' => 'packlist'
+        ]);
+
+        NavigationMenu::query()->create([
+            'name' => 'Status: single_line_orders',
+            'url' => '/autopilot/packlist?status=single_line_orders&sort=order_placed_at',
+            'group' => 'packlist'
+        ]);
+    }
+
+    private function createDefaultUserRoles(): void
+    {
+        Role::firstOrCreate(['name' => 'user']);
+
+        $admin = Role::firstOrCreate(['name' => 'admin']);
+
+        $defaultAdminPermissions = ['manage users', 'list users', 'invite users', 'list roles'];
+
+        foreach ($defaultAdminPermissions as $permissionName) {
+            $permission = Permission::firstOrCreate(['name' => $permissionName]);
+            $admin->givePermissionTo($permission);
+        }
+    }
+
+    private function createDefaultConfigurationRecord(): void
+    {
+        Configuration::create([]);
     }
 }

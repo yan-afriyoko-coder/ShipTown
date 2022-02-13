@@ -423,22 +423,6 @@ class CoreV1 extends Migration
             $table->timestamps();
         });
 
-        Schema::create('api2cart_product_links', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('product_id')->nullable();
-            $table->string('api2cart_connection_id')->nullable();
-            $table->string('api2cart_product_type')->nullable();
-            $table->string('api2cart_product_id')->nullable();
-            $table->dateTime('last_fetched_at')->nullable();
-            $table->json('last_fetched_data')->nullable();
-            $table->decimal('api2cart_quantity', 10, 2)->nullable();
-            $table->decimal('api2cart_price', 10, 2)->nullable();
-            $table->decimal('api2cart_sale_price', 10, 2)->nullable();
-            $table->date('api2cart_sale_price_start_date')->nullable();
-            $table->date('api2cart_sale_price_end_date')->nullable();
-            $table->timestamps();
-        });
-
         Schema::create('module_auto_status_pickings', function (Blueprint $table) {
             $table->id();
             $table->boolean('is_enabled')
@@ -595,22 +579,6 @@ class CoreV1 extends Migration
                 ->onDelete('SET NULL');
         });
 
-        Schema::create('modules_api2cart_product_links', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('connection_id');
-            $table->uuid('batch_uuid')->nullable();
-            $table->dateTime('when_processed')->nullable();
-            $table->foreignId('product_id')->nullable();
-            $table->string('sku')->nullable();
-            $table->json('raw_import');
-            $table->timestamps();
-
-            $table->foreign('product_id')
-                ->on('products')
-                ->references('id')
-                ->onDelete('SET NULL');
-        });
-
         Schema::create('modules_api2cart_connections', function (Blueprint $table) {
             $table->id();
             $table->string('location_id')->default('0');
@@ -649,6 +617,22 @@ class CoreV1 extends Migration
                 ->references('id')
                 ->on('modules_api2cart_connections')
                 ->onDelete('SET NULL');
+        });
+
+        Schema::create('modules_api2cart_product_links', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('product_id')->nullable();
+            $table->string('api2cart_connection_id')->nullable();
+            $table->string('api2cart_product_type')->nullable();
+            $table->string('api2cart_product_id')->nullable();
+            $table->dateTime('last_fetched_at')->nullable();
+            $table->json('last_fetched_data')->nullable();
+            $table->decimal('api2cart_quantity', 10, 2)->nullable();
+            $table->decimal('api2cart_price', 10, 2)->nullable();
+            $table->decimal('api2cart_sale_price', 10, 2)->nullable();
+            $table->date('api2cart_sale_price_start_date')->nullable();
+            $table->date('api2cart_sale_price_end_date')->nullable();
+            $table->timestamps();
         });
 
         Schema::create('configurations', function (Blueprint $table) {
