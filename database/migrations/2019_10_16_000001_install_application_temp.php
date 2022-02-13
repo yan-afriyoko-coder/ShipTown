@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-class InstallApplication extends Migration
+class InstallApplicationTemp extends Migration
 {
     /**
      * Run the migrations.
