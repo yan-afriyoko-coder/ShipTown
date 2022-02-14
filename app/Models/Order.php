@@ -354,10 +354,10 @@ class Order extends BaseModel
                 DB::raw('max(shelve_location) as max_shelf_location'),
             ])
             ->leftJoin('inventory', function ($join) use ($inventory_location_id) {
-                $join->on('order_products.product_id', '=', 'inventory.product_id');
+                $join->on('orders_products.product_id', '=', 'inventory.product_id');
                 $join->on('inventory.location_id', '=', DB::raw($inventory_location_id));
             })
-            ->groupBy('order_products.order_id')
+            ->groupBy('orders_products.order_id')
             ->toBase();
 
         return $query->leftJoinSub($source_inventory, 'inventory_source', function ($join) {
@@ -592,7 +592,6 @@ class Order extends BaseModel
             ->allowedIncludes([
                 'activities',
                 'activities.causer',
-                'stats',
                 'shipping_address',
                 'order_shipments',
                 'order_products',
