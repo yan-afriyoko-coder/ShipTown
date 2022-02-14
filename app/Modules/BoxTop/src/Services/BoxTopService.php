@@ -108,7 +108,7 @@ class BoxTopService
             "DeliveryTime"          => "",
             "Haulier"               => "",
             "PickItems"             => $pickItems,
-            "BranchID"              => env('TEST_BOXTOP_BRANCH_IS', ''),
+            "BranchID"              => env('TEST_BOXTOP_BRANCH_ID', ''),
             "CustomerID"            => env('TEST_BOXTOP_CUSTACCNUM', ''),
             "NOP"                   => 1,
             "Weight"                => 1,
