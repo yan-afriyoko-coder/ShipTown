@@ -48,7 +48,7 @@ class ClearOrderPackerAssignmentJobTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        Passport::actingAs($user);
+        $this->actingAs($user);
 
         factory(Order::class)->create([
             'packed_at'      => null,

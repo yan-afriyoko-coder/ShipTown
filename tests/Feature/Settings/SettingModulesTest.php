@@ -10,7 +10,7 @@ class SettingModulesTest extends TestCase
 {
     public function test_setting_modules_page_can_be_rendered()
     {
-        Passport::actingAs(
+        $this->actingAs(
             factory(User::class)->states('admin')->create()
         );
         $response = $this->get(route('settings.modules'));
@@ -27,7 +27,7 @@ class SettingModulesTest extends TestCase
 
     public function test_access_setting_modules_page_should_loggedin_as_admin()
     {
-        Passport::actingAs(
+        $this->actingAs(
             factory(User::class)->create()
         );
         $response = $this->get(route('settings.modules'));

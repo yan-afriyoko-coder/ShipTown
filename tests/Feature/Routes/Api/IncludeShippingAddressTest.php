@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Orders;
+namespace Tests\Feature\Routes\Api;
 
 use App\Models\Order;
 use App\Models\OrderAddress;

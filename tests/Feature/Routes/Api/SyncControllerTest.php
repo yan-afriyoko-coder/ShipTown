@@ -1,12 +1,13 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Routes\Api;
 
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Jobs\FetchUpdatedProductsJob;
 use App\User;
 use Illuminate\Support\Facades\Bus;
 use Laravel\Passport\Passport;
+use Mockery\Generator\StringManipulation\Pass\Pass;
 use Tests\TestCase;
 
 class SyncControllerTest extends TestCase
