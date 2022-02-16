@@ -19,7 +19,7 @@ class SnsControllerTest extends TestCase
 
     public function testTopicCreateSubscribeDelete()
     {
-        Passport::actingAs(
+        $this->actingAs(
             factory(User::class)->create()
         );
 

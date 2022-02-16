@@ -36,7 +36,7 @@
                         <td class="pr-2">{{  \Carbon\Carbon::parse($pick['created_at'])->format('M d, H:i') }}</td>
                         <td class="pr-4">
                             <a href="{{ route('reports.picks', ['filter[user_id]' => $pick['user_id']], true) }}">
-                                {{ $pick['user']['name'] }}
+                                {{ data_get($pick, 'user.name', '') }}
                             </a>
                         </td>
                         <td class="pr-4">

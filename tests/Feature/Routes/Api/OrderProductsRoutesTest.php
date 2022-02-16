@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Routes\Api;
 
 use App\User;
 use Laravel\Passport\Passport;
