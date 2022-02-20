@@ -1,13 +1,14 @@
 <template>
-
     <div>
         <div class="row card ml-1 mr-1" >
             <div class="col p-2 pl-3">
                 <div class="row">
                     <div class="col">
-                        <div class="text-primary h5">
-                            {{ product.name }} <a @click="kickProduct" class="text-white">o</a>
-                            <font-awesome-icon icon="cart-plus" class="fa-pull-right btn-link mt-1 mr-1" role="button"></font-awesome-icon>
+                        <div class="text-primary h5">{{ product.name }} <a @click="kickProduct" class="text-white">o</a>
+                            <div class="float-right" data-toggle="modal" data-target="#filterConfigurationModal">
+                                <button class="btn btn-success" v-if="quantityOrdered > 0">{{ quantityOrdered }}</button>
+                                <font-awesome-icon icon="cart-plus" class="btn-link mt-1 mr-1" role="button" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -153,7 +154,6 @@
                             <tr v-for="activity in activityLog" class="container" :key="activity.id">
                               <td class="align-text-top" :title="activity['created_at'] | moment('YYYY-MM-DD H:mm:ss') ">
                                 {{ activity['created_at'] | moment('MMM DD')  }} {{ activity['created_at'] | moment('H:mm')  }}:
-                                &nbsp;
                               </td>
                               <td>
                                 <div class="row">
@@ -206,6 +206,37 @@
 
         <div class="spacer-bottom row mb-4 mt-4" v-if="showOrders"></div>
 
+        <div class="modal fade widget-configuration-modal" id="filterConfigurationModal" ref="filterConfigurationModal" tabindex="-1" role="dialog" aria-labelledby="picklistConfigurationModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Settings: Packlist</h5>
+                        <div class="widget-tools-container">
+                            <font-awesome-icon icon="question-circle" :content="helpText" v-tippy></font-awesome-icon>
+                        </div>
+                    </div>
+                    <div class="modal-body" style="margin: 0 auto 0;">
+                        <button type="button" class="btn mb-1 btn-info" @click="orderProduct(0)">0</button><br>
+                        <button type="button" class="btn mb-1 btn-info" @click="orderProduct(12)">12</button><br>
+                        <button type="button" class="btn mb-1 btn-info" @click="orderProduct(24)">24</button><br>
+                        <button type="button" class="btn mb-1 btn-info" @click="orderProduct(36)">36</button><br>
+                        <button type="button" class="btn mb-1 btn-info" @click="orderProduct(36)">MORE</button><br>
+<!--                        <form method="POST" @submit.prevent="handleSubmit">-->
+<!--                            <div class="form-group">-->
+<!--                                <label class="form-label" for="selectStatus">Inventory Location ID</label>-->
+<!--                                <input v-model="filters['inventory_source_location_id']" type="number" class="form-control" />-->
+<!--                            </div>-->
+
+<!--                            <slot name="actions" v-bind:filters="filters"></slot>-->
+<!--                        </form>-->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" @click.prevent="handleSubmit" class="btn btn-primary">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -221,6 +252,7 @@
         props: {
             product: Object,
             expanded: false,
+            ordered: 0,
         },
 
         watch: {
@@ -258,6 +290,10 @@
         computed: {
             orders() {
                 return this.activeOrderProducts.concat(this.completeOrderProducts)
+            },
+
+            quantityOrdered() {
+                return this.ordered
             }
         },
 
@@ -280,6 +316,16 @@
         },
 
         methods: {
+            hide() {
+                $('#filterConfigurationModal').modal('hide');
+            },
+
+            orderProduct(quantity) {
+                console.log(this.$ref);
+                this.ordered = quantity;
+                this.hide();
+            },
+
             sharingAvailable() {
                 return navigator.share;
             },
