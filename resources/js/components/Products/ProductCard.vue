@@ -3,11 +3,16 @@
     <div>
         <div class="row card ml-1 mr-1" >
             <div class="col p-2 pl-3">
-                <div class="row text-left">
-                    <div class="col-md-6">
+                <div class="row">
+                    <div class="col">
                         <div class="text-primary h5">
                             {{ product.name }} <a @click="kickProduct" class="text-white">o</a>
+                            <font-awesome-icon icon="cart-plus" class="fa-pull-right btn-link mt-1 mr-1" role="button"></font-awesome-icon>
                         </div>
+                    </div>
+                </div>
+                <div class="row text-left">
+                    <div class="col-md-6">
                         <div>
                             sku:
                             <font-awesome-icon icon="copy" class="fa-xs btn-link" role="button" @click="copyToClipBoard(product['sku'])"></font-awesome-icon>
@@ -378,4 +383,12 @@ li {
 .table th, .table td {
     padding: 0.25rem;
 }
+
+.btn:active{
+    background-color: rgb(94, 79, 126);
+    border-color:rgb(94, 79, 126);
+    box-shadow: 0 1px 1px rgba(255, 255, 255, 0.075) inset, 0 0 8px rgba(114, 96, 153, 0.6);
+    outline: 0 none;
+}
+
 </style>

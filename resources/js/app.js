@@ -44,6 +44,7 @@ import {
     faWarehouse,
     faArchive,
     faCopy,
+    faCartPlus,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -81,6 +82,7 @@ library.add(faMagic);
 library.add(faWarehouse);
 library.add(faArchive);
 library.add(faCopy);
+library.add(faCartPlus);
 
 Vue.config.productionTip = false;
 
