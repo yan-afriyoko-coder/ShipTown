@@ -20,7 +20,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var bool
      */
-    public bool $autoEnable = true;
+    public bool $autoEnable = false;
 
     /**
      * The event listener mappings for the application.
