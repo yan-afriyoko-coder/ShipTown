@@ -21,7 +21,7 @@ class GenerateLabelDocumentJobTest extends TestCase
     /**
      * @var string
      */
-    private string $testSkippingExpiryDate = '01 March 2022';
+    private string $testSkippingExpiryDate = '01 May 2022';
 
     public function test_print_new_label()
     {
