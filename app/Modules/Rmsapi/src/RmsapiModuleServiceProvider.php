@@ -5,7 +5,7 @@ namespace App\Modules\Rmsapi\src;
 use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
-class EventServiceProviderBase extends BaseModuleServiceProvider
+class RmsapiModuleServiceProvider extends BaseModuleServiceProvider
 {
     /**
      * @var string
