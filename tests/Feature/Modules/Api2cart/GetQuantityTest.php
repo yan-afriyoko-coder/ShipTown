@@ -47,7 +47,7 @@ class GetQuantityTest extends TestCase
     {
         $this->api2cartConnection->update(['inventory_warehouse_ids' => []]);
 
-        $this->assertEquals(55, $this->productLink->getProductData()['quantity']);
+        $this->assertEquals($this->productLink->product->quantity_available, $this->productLink->getProductData()['quantity']);
     }
 
     /**
