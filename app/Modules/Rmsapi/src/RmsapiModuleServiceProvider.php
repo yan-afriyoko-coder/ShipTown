@@ -5,7 +5,7 @@ namespace App\Modules\Rmsapi\src;
 use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
-class EventServiceProviderBase extends BaseModuleServiceProvider
+class RmsapiModuleServiceProvider extends BaseModuleServiceProvider
 {
     /**
      * @var string
@@ -20,7 +20,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var bool
      */
-    public bool $autoEnable = true;
+    public bool $autoEnable = false;
 
     /**
      * The event listener mappings for the application.

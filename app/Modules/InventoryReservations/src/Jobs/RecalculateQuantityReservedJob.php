@@ -74,10 +74,11 @@ class RecalculateQuantityReservedJob implements ShouldQueue
             ->whereHas('order', function ($query) {
                 $query->select(['id'])->whereIn('status_code', OrderStatus::whereReservesStock(true)->select('code'));
             })
-            ->whereNotIn('product_id', $this->checkedProductIds)
-            ->groupBy('product_id')
-            ->get()
-            ->each(function ($orderProduct) {
+             ->whereNotNull('product_id')
+             ->whereNotIn('product_id', $this->checkedProductIds)
+             ->groupBy('product_id')
+             ->get()
+             ->each(function ($orderProduct) {
                 $this->checkedProductIds[] = $orderProduct->product_id;
 
                 $inventory = Inventory::firstOrCreate([
@@ -95,6 +96,6 @@ class RecalculateQuantityReservedJob implements ShouldQueue
                     $inventory->quantity_reserved = $orderProduct->getAttribute('new_quantity_reserved');
                     $inventory->save();
                 }
-            });
+             });
     }
 }

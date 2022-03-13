@@ -13,34 +13,34 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-
             ConfigurationSeeder::class,
             NavigationMenuSeeder::class,
-            WarehouseSeeder::class,
-            AutomationsSeeder::class,
+            WarehousesSeeder::class,
 
             UsersSeeder::class,
-
-            PrintNodeClientSeeder::class,
-            DpdUkTestConnectionSeeder::class,
-            DpdIrelandSeeder::class,
-
             ProductsSeeder::class,
-            ProductAliasSeeder::class,
-            ProductTagsSeeder::class,
-            ProductPriceSeeder::class,
+            PaidOrdersSeeder::class,
 
-            InventorySeeder::class,
-
-            SplitOrdersScenarioSeeder::class,
-
-            OrdersSeeder::class,
-            Orders_PackingWebDemoSeeder::class,
-            Orders_StorePickupDemoSeeder::class,
-            UnpaidOrdersSeeder::class,
-            ClosedOrdersSeeder::class,
-            PicksSeeder::class,
-            OrderShipmentsSeeder::class,
+//            AutomationsSeeder::class,
+//
+//            PrintNodeClientSeeder::class,
+//            DpdUkTestConnectionSeeder::class,
+//            DpdIrelandSeeder::class,
+//
+//            ProductAliasSeeder::class,
+//            ProductTagsSeeder::class,
+//            ProductPriceSeeder::class,
+//
+//            InventorySeeder::class,
+//
+//            SplitOrdersScenarioSeeder::class,
+//
+//            Orders_PackingWebDemoSeeder::class,
+//            Orders_StorePickupDemoSeeder::class,
+//            UnpaidOrdersSeeder::class,
+//            ClosedOrdersSeeder::class,
+//            PicksSeeder::class,
+//            OrderShipmentsSeeder::class,
         ]);
 
         RunHourlyJobs::dispatchNow();

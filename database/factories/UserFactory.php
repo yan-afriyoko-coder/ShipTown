@@ -22,7 +22,7 @@ $factory->define(User::class, function (Faker $faker) {
     $warehouse = Warehouse::query()->inRandomOrder()->first() ?? factory(Warehouse::class)->create();
 
     return [
-        'name'              => $faker->name,
+        'name'              => $faker->firstName .' '. $faker->lastName,
         'warehouse_id'      => $warehouse->getKey(),
         'email'             => $faker->unique()->safeEmail,
         'email_verified_at' => now(),

@@ -224,7 +224,7 @@ return [
         // order SHOULD not be important
         App\Modules\Webhooks\src\WebhooksServiceProviderBase::class,
         App\Modules\Api2cart\src\Api2cartServiceProvider::class,
-        App\Modules\Rmsapi\src\EventServiceProviderBase::class,
+        App\Modules\Rmsapi\src\RmsapiModuleServiceProvider::class,
         App\Modules\MagentoApi\src\EventServiceProviderBase::class,
         App\Modules\ScurriAnpost\src\ScurriServiceProvider::class,
         App\Modules\DpdUk\src\DpdUkServiceProvider::class,

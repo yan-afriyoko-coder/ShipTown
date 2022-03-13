@@ -6,9 +6,13 @@ namespace App\Modules\Api2cart\src\Listeners\OrderUpdatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\Api2cart\src\Jobs\SyncOrderStatus;
 
+/**
+ *
+ */
 class SyncStatusListener
 {
     /**
+     * @param OrderUpdatedEvent $event
      */
     public function handle(OrderUpdatedEvent $event)
     {
@@ -16,10 +20,8 @@ class SyncStatusListener
             return;
         }
 
-        if (! $event->order->orderStatus->sync_ecommerce) {
-            return;
+        if ($event->order->orderStatus->sync_ecommerce) {
+            SyncOrderStatus::dispatch($event->order);
         }
-
-        SyncOrderStatus::dispatch($event->order);
     }
 }

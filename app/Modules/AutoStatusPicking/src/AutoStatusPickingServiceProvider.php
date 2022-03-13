@@ -26,7 +26,7 @@ class AutoStatusPickingServiceProvider extends BaseModuleServiceProvider
     /**
      * @var bool
      */
-    public bool $autoEnable = true;
+    public bool $autoEnable = false;
 
     /**
      * @var string[][]
