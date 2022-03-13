@@ -2,7 +2,7 @@
 
 namespace App\Modules\Api2cart\src\Models;
 
-use Eloquent;
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -27,6 +27,7 @@ use Illuminate\Support\Collection;
  * @property int|null $pricing_location_id
  * @property-read Collection|Api2cartProductLink[] $productLinks
  * @property-read int|null $product_links_count
+ * @property string|null inventory_warehouse_ids
  *
  * @method static Builder|Api2cartConnection newModelQuery()
  * @method static Builder|Api2cartConnection newQuery()
@@ -49,8 +50,11 @@ use Illuminate\Support\Collection;
  */
 class Api2cartConnection extends Model
 {
+    protected $table = 'modules_api2cart_connections';
+
     protected $fillable = [
         'prefix',
+        'inventory_warehouse_ids',
         'bridge_api_key',
         'last_synced_modified_at',
         'url',
@@ -58,7 +62,13 @@ class Api2cartConnection extends Model
         'type',
     ];
 
-    protected $table = 'modules_api2cart_connections';
+    protected $casts = [
+        'inventory_warehouse_ids' => 'array'
+    ];
+
+    protected $attributes = [
+        'inventory_warehouse_ids' => []
+    ];
 
     public function __construct(array $attributes = [])
     {

@@ -307,24 +307,20 @@ class Api2cartProductLink extends BaseModel
      */
     private function getInventoryData(): array
     {
-        // we will refresh to get latest data
+        // we will refresh to get the latest data
         $product = $this->product->refresh();
 
-        if (is_null($this->api2cartConnection->inventory_location_id)) {
-            return [
-                'quantity' => floor($product->quantity_available) ?? 0,
-                'in_stock' => $product->quantity_available > 0 ? 'True' : 'False',
-            ];
+        $query = Inventory::whereProductId($product->getKey());
+
+        if ($this->api2cartConnection->inventory_warehouse_ids) {
+            $query->whereIn('warehouse_id', $this->api2cartConnection->inventory_warehouse_ids);
         }
 
-        $productInventory = Inventory::firstOrNew([
-            'product_id' => $product->getKey(),
-            'location_id' => $this->api2cartConnection->inventory_location_id,
-        ]);
+        $quantity_available = $query->sum('quantity_available');
 
         return [
-            'quantity' => $productInventory->quantity_available ?? 0,
-            'in_stock' => $productInventory->quantity_available > 0 ? 'True' : 'False',
+            'quantity' => $quantity_available ?? 0,
+            'in_stock' => $quantity_available > 0 ? 'True' : 'False',
         ];
     }
 
