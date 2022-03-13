@@ -18,6 +18,7 @@ class Orders extends Entity
      * @param array $params
      *
      * @return array|null
+     * @throws GuzzleException
      */
     public static function get(string $store_key, array $params): ?array
     {
@@ -46,6 +47,7 @@ class Orders extends Entity
      * @param string $store_key
      * @param array $params
      * @return RequestResponse
+     * @throws GuzzleException
      */
     public static function list(string $store_key, array $params): RequestResponse
     {
@@ -57,7 +59,6 @@ class Orders extends Entity
      * @param $params
      * @return RequestResponse
      * @throws GuzzleException
-     * @throws RequestException
      */
     public static function update($store_key, $params): RequestResponse
     {
@@ -68,6 +69,7 @@ class Orders extends Entity
      * @param $store_key
      * @param $params
      * @return RequestResponse
+     * @throws GuzzleException
      */
     public static function statuses($store_key, $params): RequestResponse
     {
