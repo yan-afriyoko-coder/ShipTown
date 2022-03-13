@@ -316,7 +316,7 @@ class Api2cartProductLink extends BaseModel
             $query->whereIn('warehouse_id', $this->api2cartConnection->inventory_warehouse_ids);
         }
 
-        $quantity_available = $query->sum('quantity_available');
+        $quantity_available = floor($query->sum('quantity_available'));
 
         return [
             'quantity' => $quantity_available ?? 0,
