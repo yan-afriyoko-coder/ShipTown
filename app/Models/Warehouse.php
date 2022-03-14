@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\BaseModel;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -30,9 +31,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Warehouse whereId($value)
  * @method static Builder|Warehouse whereName($value)
  * @method static Builder|Warehouse whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
-class Warehouse extends Model
+class Warehouse extends BaseModel
 {
     protected $fillable = [
         'code',
