@@ -12,7 +12,7 @@ return [
                 ],
                 [
                     'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeNotInCondition::class,
-                    'description' => 'Status Code Not In',
+                    'description' => 'Status Code NOT In',
                 ],
                 [
                     'class' => \App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition::class,
@@ -24,7 +24,7 @@ return [
                 ],
                 [
                     'class' => \App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition::class,
-                    'description' => 'Order Shipping Method Code equals',
+                    'description' => 'Shipping Method Code equals',
                 ],
                 [
                     'class' => \App\Modules\Automations\src\Conditions\Order\LineCountEqualsCondition::class,
