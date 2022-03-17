@@ -64,6 +64,25 @@
                                     </ValidationProvider>
                                 </div>
                             </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label" for="hidden">Hidden</label>
+                                <div class="col-sm-9">
+                                    <ValidationProvider vid="hidden" name="hidden" v-slot="{ errors }">
+                                        <div class="custom-control custom-switch mt-2" :class="{'is-invalid' : errors.length}">
+                                            <input type="checkbox"
+                                                id="edit-hidden"
+                                                class="custom-control-input"
+                                                v-model="syncEcommerce"
+                                                required>
+                                            <label class="custom-control-label" for="edit-hidden"></label>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            {{ errors[0] }}
+                                        </div>
+                                    </ValidationProvider>
+                                </div>
+                            </div>
                         </form>
                     </ValidationObserver>
                 </div>
@@ -100,6 +119,7 @@ export default {
             reservesStock: false,
             orderActive: false,
             syncEcommerce: false,
+            hidden: false,
         }
     },
 
@@ -112,6 +132,7 @@ export default {
             this.reservesStock = newVal.reserves_stock
             this.orderActive = newVal.order_active
             this.syncEcommerce = newVal.sync_ecommerce
+            this.hidden = newVal.hidden
         }
     },
 
@@ -122,6 +143,7 @@ export default {
                     reserves_stock: this.reservesStock,
                     order_active: this.orderActive,
                     sync_ecommerce: this.syncEcommerce,
+                    hidden: this.hidden,
                 })
                 .then(({ data }) => {
                     this.$snotify.success('Order status updated.');
@@ -140,21 +162,10 @@ export default {
         },
 
         confirmDelete() {
-            if(this.reservesStock) {
-              this.showError('Status cannot be archived when "Reserves Stock" enabled');
+            if(this.reservesStock || this.orderActive || this.syncEcommerce || this.syncEcommerce) {
+              this.showError('Please disable all options before archiving');
               return;
             }
-
-            if(this.orderActive) {
-              this.showError('Status cannot be archived when "Order Active" enabled');
-              return;
-            }
-
-            if(this.syncEcommerce) {
-              this.showError('Status cannot be archived when "Sync eCommerce" enabled');
-              return;
-            }
-
 
             if(this.isModified) {
               this.showError('Please save changes before archiving');
