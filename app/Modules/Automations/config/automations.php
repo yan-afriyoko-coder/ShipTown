@@ -27,7 +27,7 @@ return [
                     'description' => 'Shipping Method Code equals',
                 ],
                 [
-                    'class' => \App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeInCondition::class,
+                    'class' => \App\Modules\Automations\src\Conditions\ShippingMethodCodeInCondition::class,
                     'description' => 'Shipping Method Code in',
                 ],
                 [
