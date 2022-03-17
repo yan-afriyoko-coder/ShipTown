@@ -13,10 +13,10 @@
             </div>
 
             <div class="card-body">
-                <table v-if="orderStatuses.length > 0" class="table table-borderless table-responsive mb-0">
+                <table v-if="orderStatuses.length > 0" class="table table-hover table-borderless table-responsive mb-0">
                     <thead>
-                        <tr>
-                            <th>ID</th>
+                        <tr class="small">
+                            <th>id</th>
                             <th>Name</th>
                             <th>Code</th>
                             <th>Reserves Stock</th>
@@ -26,7 +26,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(orderStatus, i) in orderStatuses" :key="i">
+                        <tr v-for="(orderStatus, i) in orderStatuses" :key="i" @click.prevent="showEditForm(orderStatus)">
                             <td>{{ orderStatus.id }}</td>
                             <td>{{ orderStatus.name }}</td>
                             <td>{{ orderStatus.code }}</td>
@@ -38,11 +38,6 @@
                             </td>
                             <td align="center">
                                 <status-icon :status="orderStatus.sync_ecommerce" />
-                            </td>
-                            <td>
-                                <a @click.prevent="showEditForm(orderStatus)">
-                                    <font-awesome-icon icon="edit"></font-awesome-icon>
-                                </a>
                             </td>
                         </tr>
                     </tbody>
