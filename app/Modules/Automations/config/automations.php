@@ -27,6 +27,10 @@ return [
                     'description' => 'Shipping Method Code equals',
                 ],
                 [
+                    'class' => \App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeInCondition::class,
+                    'description' => 'Shipping Method Code in',
+                ],
+                [
                     'class' => \App\Modules\Automations\src\Conditions\Order\LineCountEqualsCondition::class,
                     'description' => 'Line count equals',
                 ],
