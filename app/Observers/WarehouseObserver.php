@@ -6,6 +6,7 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductPrice;
 use App\Models\Warehouse;
+use http\Exception\InvalidArgumentException;
 
 class WarehouseObserver
 {
@@ -19,6 +20,13 @@ class WarehouseObserver
     {
         $this->insertInventoryRecords($warehouse);
         $this->insertPricingRecords($warehouse);
+    }
+
+    public function updated(Warehouse $warehouse)
+    {
+        Inventory::query()
+            ->where(['location_id' => $warehouse->getOriginal('code')])
+            ->update(['warehouse_code' => $warehouse->code, 'location_id' => $warehouse->code]);
     }
 
     /**
