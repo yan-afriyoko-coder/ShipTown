@@ -16,11 +16,11 @@ return [
                 ],
                 [
                     'class' => \App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition::class,
-                    'description' => 'Can Fulfill from location (0 for all)',
+                    'description' => 'Can Fulfill from Warehouse Code (0 for all)',
                 ],
                 [
                     'class' => \App\Modules\Automations\src\Conditions\Order\CanNotFulfillFromLocationCondition::class,
-                    'description' => 'Can NOT Fulfill from location (0 for all)',
+                    'description' => 'Can NOT Fulfill Warehouse Code (0 for all)',
                 ],
                 [
                     'class' => \App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition::class,
