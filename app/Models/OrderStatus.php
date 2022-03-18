@@ -50,14 +50,16 @@ class OrderStatus extends BaseModel
     ];
 
     protected $casts = [
-        'order_active' => 'boolean',
-        'reserves_stock' => 'boolean',
-        'sync_ecommerce' => 'boolean',
+        'order_active'      => 'boolean',
+        'reserves_stock'    => 'boolean',
+        'hidden'            => 'boolean',
+        'sync_ecommerce'    => 'boolean',
     ];
 
     protected $attributes = [
-        'order_active' => true,
+        'order_active'   => true,
         'reserves_stock' => true,
+        'hidden'         => false,
         'sync_ecommerce' => false,
     ];
 

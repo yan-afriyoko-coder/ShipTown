@@ -74,7 +74,10 @@ export default {
     },
 
     mounted() {
-        this.apiGetOrderStatus()
+        this.apiGetOrderStatus({
+                'per_page': 999,
+                'sort': 'code'
+            })
             .then(({ data }) => {
                 this.orderStatuses = data.data;
                 console.log(this.orderStatuses);
@@ -102,7 +105,7 @@ export default {
             this.orderStatuses.push(orderStatus)
         },
         removeOrderStatus(id){
-            const indexOrderStatuses = this.orderStatuses.findIndex(status => status.id == id)
+            const indexOrderStatuses = this.orderStatuses.findIndex(orderStatus => orderStatus.id == id)
             Vue.delete(this.orderStatuses, indexOrderStatuses);
         },
     },
