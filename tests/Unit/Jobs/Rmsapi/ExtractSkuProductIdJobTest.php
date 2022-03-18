@@ -4,6 +4,7 @@ namespace Tests\Unit\Jobs\Rmsapi;
 
 use App\Models\Inventory;
 use App\Models\Product;
+use App\Models\Warehouse;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Jobs\ExtractSkuAndProductIdJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedBatch;
@@ -25,6 +26,8 @@ class ExtractSkuProductIdJobTest extends TestCase
         Inventory::query()->delete();
 
         RmsapiProductImport::query()->delete();
+
+        factory(Warehouse::class)->create();
 
         factory(RmsapiProductImport::class, 5)->create([
             'sku'            => null,
