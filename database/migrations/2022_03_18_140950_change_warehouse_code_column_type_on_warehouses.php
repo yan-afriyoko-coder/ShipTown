@@ -13,9 +13,13 @@ class ChangeWarehouseCodeColumnTypeOnWarehouses extends Migration
      */
     public function up()
     {
-        Schema::table('warehouses', function (Blueprint $table) {
-            $table->dropUnique('warehouses_code_unique');
-        });
+        try {
+            Schema::table('warehouses', function (Blueprint $table) {
+                $table->dropUnique('warehouses_code_unique');
+            });
+        } catch (Exception $exception) {
+            //
+        };
 
         Schema::table('warehouses', function (Blueprint $table) {
             $table->string('code', 5)->nullable(false)->unique()->change();
@@ -23,24 +27,25 @@ class ChangeWarehouseCodeColumnTypeOnWarehouses extends Migration
 
         Schema::table('inventory', function (Blueprint $table) {
             $table->string('warehouse_code', 5)->nullable(false)->change();
-//
-//            $table->foreign('warehouse_code')
-//                ->on('warehouses')
-//                ->references('code')
-//                ->onDelete('CASCADE');
+
+            $table->foreign('warehouse_code')
+                ->on('warehouses')
+                ->references('code')
+                ->onDelete('CASCADE');
         });
 
         Schema::table('products_prices', function (Blueprint $table) {
             $table->string('warehouse_code', 5)->nullable(false)->change();
-//
-//            $table->foreign('warehouse_code')
-//                ->on('warehouses')
-//                ->references('code')
-//                ->onDelete('CASCADE');
+
+            $table->foreign('warehouse_code')
+                ->on('warehouses')
+                ->references('code')
+                ->onDelete('CASCADE');
         });
 
         Schema::table('modules_api2cart_connections', function (Blueprint $table) {
-            $table->string('location_id', 5)->nullable(true)->change();
+            $table->string('inventory_location_id', 5)->nullable(true)->change();
+            $table->string('pricing_location_id', 5)->nullable(true)->change();
         });
     }
 

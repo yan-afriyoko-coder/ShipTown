@@ -5,6 +5,7 @@ namespace Tests\Feature\Jobs\Modules\Api2cart;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductPrice;
+use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Jobs\SyncProduct;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
@@ -21,16 +22,15 @@ class SyncProductJobTest extends TestCase
     {
         Api2cartConnection::query()->forceDelete();
 
+        /** @var Warehouse $warehouse */
+        $warehouse = factory(Warehouse::class)->create();
+
         $product = factory(Product::class)->create();
-
-        $inventory = factory(Inventory::class)->create(['product_id' => $product->getKey()]);
-
-        $pricing = factory(ProductPrice::class)->create(['product_id' => $product->getKey()]);
 
         $connection = factory(Api2cartConnection::class)->create(
             [
-                'pricing_location_id'   => $pricing->location_id,
-                'inventory_location_id' => $inventory->location_id,
+                'pricing_location_id'   => $warehouse->code,
+                'inventory_location_id' => $warehouse->code,
             ]
         );
 

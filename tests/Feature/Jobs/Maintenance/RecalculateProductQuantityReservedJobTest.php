@@ -6,6 +6,7 @@ use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
+use App\Models\Warehouse;
 use App\Modules\Maintenance\src\Jobs\Products\RecalculateProductQuantityReservedJob;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -21,13 +22,16 @@ class RecalculateProductQuantityReservedJobTest extends TestCase
      */
     public function testExample()
     {
+        /** @var Warehouse $warehouse */
+        $warehouse = factory(Warehouse::class)->create();
+
         $product = factory(Product::class)->create();
 
         Inventory::updateOrCreate([
             'product_id' => $product->getKey(),
-            'location_id' => rand(1,20)
+            'location_id' => $warehouse->code
         ], [
-            'quantity_reserved' => rand(10,100)
+            'quantity_reserved' => rand(10, 100)
         ]);
 
         $product->update([

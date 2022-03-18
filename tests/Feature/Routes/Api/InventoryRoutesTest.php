@@ -4,6 +4,7 @@ namespace Tests\Feature\Routes\Api;
 
 use App\Models\Inventory;
 use App\Models\Product;
+use App\Models\Warehouse;
 use App\User;
 use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
@@ -58,15 +59,17 @@ class InventoryRoutesTest extends TestCase
             factory(User::class)->create()
         );
 
-        $product = factory(Product::class)->create();
+        /** @var Warehouse $warehouse */
+        $warehouse = factory(Warehouse::class)->create();
 
-        $inventory = factory(Inventory::class)->make();
+        /** @var Product $product */
+        $product = factory(Product::class)->create();
 
         $update = [
             'sku'               => $product->sku,
-            'location_id'       => 0,
-            'quantity'          => $inventory->quantity,
-            'quantity_reserved' => $inventory->quantity_reserved,
+            'location_id'       => $warehouse->code,
+            'quantity'          => rand(100, 200),
+            'quantity_reserved' => rand(10, 50),
         ];
 
         $response = $this->postJson('/api/product/inventory', $update);

@@ -39,15 +39,13 @@ class SplitBundleSkuActionTest extends TestCase
 
         /** @var Product $bundle_product_1 */
         $bundle_product_1 = factory(Product::class)->create(['sku' => 'BUNDLE_PRODUCT_1']);
-        factory(ProductPrice::class)->create([
-            'product_id' => $bundle_product_1->getKey(),
+        $bundle_product_1->prices()->update([
             'price' => 75,
         ]);
 
         /** @var Product $bundle_product_1 */
         $bundle_product_1 = factory(Product::class)->create(['sku' => 'BUNDLE_PRODUCT_2']);
-        factory(ProductPrice::class)->create([
-            'product_id' => $bundle_product_1->getKey(),
+        $bundle_product_1->prices()->update([
             'price' => 75,
         ]);
 
@@ -87,7 +85,7 @@ class SplitBundleSkuActionTest extends TestCase
 
         $this->assertFalse($action->handle(''), 'Blank value should not be allowed');
         $this->assertFalse($action->handle('123'), 'Two SKUs should be present');
-        $this->assertFalse($action->handle('123,'),'Second SKU should not be blank');
+        $this->assertFalse($action->handle('123,'), 'Second SKU should not be blank');
         $this->assertFalse($action->handle('456,456'), 'Same SKUs should not be allowed');
     }
 }

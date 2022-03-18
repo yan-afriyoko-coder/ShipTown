@@ -3,6 +3,8 @@
 namespace Tests\Feature\Modules\AutoTags;
 
 use App\Models\Inventory;
+use App\Models\Product;
+use App\Models\Warehouse;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use function PHPUnit\Framework\assertTrue;
@@ -13,28 +15,33 @@ class AutoTagsTest extends TestCase
 
     public function test_if_attaches_tag()
     {
-        /** @var Inventory $inventory */
-        $inventory = factory(Inventory::class)->create([]);
+        $warehouse = factory(Warehouse::class)->create();
 
-        $inventory->update([
+        /** @var Product $product */
+        $product = factory(Product::class)->create();
+
+        $product->inventory->first()->update([
             'quantity' => 0,
             'quantity_reserved' => 1
         ]);
 
-        $product = $inventory->product->refresh();
+        $product = $product->refresh();
 
         $this->assertTrue($product->hasTags(['oversold']));
     }
+
     public function test_if_detaches_tag()
     {
-        /** @var Inventory $inventory */
-        $inventory = factory(Inventory::class)->create([]);
+        $warehouse = factory(Warehouse::class)->create();
 
-        $inventory->update([
+        /** @var Product $product */
+        $product = factory(Product::class)->create();
+
+        $product->inventory->first()->update([
             'quantity' => 0,
             'quantity_reserved' => 0
         ]);
 
-        $this->assertFalse($inventory->product->hasTags(['oversold']));
+        $this->assertFalse($product->hasTags(['oversold']));
     }
 }
