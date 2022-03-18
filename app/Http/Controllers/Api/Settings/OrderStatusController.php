@@ -7,30 +7,35 @@ use App\Http\Requests\OrderStatus\StoreRequest;
 use App\Http\Requests\OrderStatus\UpdateRequest;
 use App\Http\Resources\OrderStatusResource;
 use App\Models\OrderStatus;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 
 class OrderStatusController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return AnonymousResourceCollection
      */
     public function index() : AnonymousResourceCollection
     {
-        $orderStatuses = OrderStatus::all();
+        $query = OrderStatus::getSpatieQueryBuilder();
 
-        return OrderStatusResource::collection($orderStatuses);
+        return OrderStatusResource::collection($this->getPaginatedResult($query));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
+     * @param StoreRequest $request
      * @return OrderStatusResource
+     * @throws ValidationException
      */
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): OrderStatusResource
     {
         $orderStatus = OrderStatus::where('code', $request->code)->onlyTrashed()->first();
         if ($orderStatus) {
@@ -53,11 +58,11 @@ class OrderStatusController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request $request
-     * @param  OrderStatus $orderStatus
+     * @param UpdateRequest $request
+     * @param OrderStatus $orderStatus
      * @return OrderStatusResource
      */
-    public function update(UpdateRequest $request, OrderStatus $orderStatus)
+    public function update(UpdateRequest $request, OrderStatus $orderStatus): OrderStatusResource
     {
         $orderStatus->fill($request->validated());
         $orderStatus->save();
@@ -68,8 +73,9 @@ class OrderStatusController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  OrderStatus $orderStatus
-     * @return \Illuminate\Http\Response
+     * @param OrderStatus $orderStatus
+     * @return void
+     * @throws Exception
      */
     public function destroy(OrderStatus $orderStatus)
     {
@@ -78,7 +84,5 @@ class OrderStatusController extends Controller
         }
 
         $orderStatus->delete();
-
-        return true;
     }
 }

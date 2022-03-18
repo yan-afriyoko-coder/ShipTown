@@ -77,6 +77,7 @@ export default {
         this.apiGetOrderStatus()
             .then(({ data }) => {
                 this.orderStatuses = data.data;
+                console.log(this.orderStatuses);
             })
     },
 
