@@ -259,7 +259,11 @@
                 },
 
                 loadOrderStatuses(){
-                    this.apiGetOrderStatus({'filter[hidden]': 0})
+                    this.apiGetOrderStatus({
+                            'filter[hidden]': 0,
+                            'per_page': 999,
+                            'sort': 'code'
+                        })
                         .then(({ data }) => {
                             this.orderStatuses = data.data;
                         })
