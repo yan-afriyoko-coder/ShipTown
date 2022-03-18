@@ -191,6 +191,9 @@ class OrderServiceTest extends TestCase
         Product::query()->forceDelete();
         Inventory::query()->forceDelete();
 
+        /** @var Warehouse $warehouse */
+        $warehouse = factory(Warehouse::class)->create();
+
         factory(Product::class)->create();
 
         $order = factory(Order::class)
@@ -201,14 +204,15 @@ class OrderServiceTest extends TestCase
 
         Inventory::query()->updateOrCreate([
             'product_id'  => $orderProduct->product_id,
-            'location_id' => 100,
+            'location_id' => $warehouse->code,
         ], [
+            'warehouse_code'    => $warehouse->code,
             'quantity'          => 0,
             'quantity_reserved' => 0,
         ]);
 
         $this->assertTrue(OrderService::canNotFulfill($order), 'Should not be able to fulfill from any location');
-        $this->assertTrue(OrderService::canNotFulfill($order, 99), 'Should not be able to fulfill from location 99');
+        $this->assertTrue(OrderService::canNotFulfill($order, $warehouse->code), 'Should not be able to fulfill from location 99');
     }
 
     /**
