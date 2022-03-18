@@ -10,7 +10,7 @@ $factory->define(\App\Models\Warehouse::class, function (Faker $faker) {
 
     return [
         'name'  => $faker->city,
-        'code'  => rand(1, 1000),
+        'code'  => $faker->text(5),
         'address_id' => $address_id,
     ];
 });
