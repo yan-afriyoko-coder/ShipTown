@@ -5,6 +5,7 @@ namespace App\Modules\InventoryReservations\src\Jobs;
 use App\Models\Inventory;
 use App\Models\OrderProduct;
 use App\Models\OrderStatus;
+use App\Models\Warehouse;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -41,9 +42,12 @@ class UpdateQuantityReservedJob implements ShouldQueue
             })
             ->sum('quantity_to_ship');
 
+        Warehouse::firstOrCreate(['code' => '999'], ['name' => '999']);
+
         Inventory::updateOrCreate([
             'product_id'  => $this->product_id,
             'location_id' => 999,
+            'warehouse_code' => '999'
         ], [
             'quantity_reserved' => $newQuantityReserved,
         ]);

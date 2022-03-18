@@ -25,7 +25,7 @@ class UpdateRequest extends FormRequest
     {
         return [
             'name'  => 'required|string|max:250',
-            'code'  => 'required|string|unique:warehouses,code,' . $this->warehouse->id
+            'code'  => 'required|string|max:5|unique:warehouses,code,'.$this->id,
         ];
     }
 }

@@ -16,7 +16,8 @@ class AddQuantityAvailableColumnToInventoryTable extends Migration
         Schema::table('inventory', function (Blueprint $table) {
             $table->decimal('quantity_available', 10)
                 ->storedAs('quantity - quantity_reserved')
-                ->comment('quantity - quantity_reserved');
+                ->comment('quantity - quantity_reserved')
+                ->after('shelve_location');
         });
     }
 }

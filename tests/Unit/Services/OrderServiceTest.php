@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderProduct;
 use App\Models\Product;
+use App\Models\Warehouse;
 use App\Services\OrderService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
@@ -153,6 +154,8 @@ class OrderServiceTest extends TestCase
         Product::query()->forceDelete();
         Inventory::query()->forceDelete();
 
+        /** @var Warehouse $warehouse */
+        $warehouse = factory(Warehouse::class)->create();
         factory(Product::class)->create();
 
         $order = factory(Order::class)
@@ -163,8 +166,9 @@ class OrderServiceTest extends TestCase
 
         $inventory = Inventory::query()->updateOrCreate([
             'product_id'  => $orderProduct->product_id,
-            'location_id' => 100,
+            'location_id' => $warehouse->code,
         ], [
+            'warehouse_code'    => $warehouse->code,
             'quantity'          => $orderProduct->quantity_ordered,
             'quantity_reserved' => 0,
         ]);
@@ -172,7 +176,7 @@ class OrderServiceTest extends TestCase
         $this->assertTrue(OrderService::canFulfill($order), 'a');
         $this->assertFalse(OrderService::canNotFulfill($order), 'b');
 
-        $this->assertTrue(OrderService::canFulfill($order, 100), 'c');
+        $this->assertTrue(OrderService::canFulfill($order, $warehouse->code), 'c');
         $this->assertFalse(OrderService::canFulfill($order, 99), 'd');
     }
 
@@ -187,6 +191,9 @@ class OrderServiceTest extends TestCase
         Product::query()->forceDelete();
         Inventory::query()->forceDelete();
 
+        /** @var Warehouse $warehouse */
+        $warehouse = factory(Warehouse::class)->create();
+
         factory(Product::class)->create();
 
         $order = factory(Order::class)
@@ -197,14 +204,15 @@ class OrderServiceTest extends TestCase
 
         Inventory::query()->updateOrCreate([
             'product_id'  => $orderProduct->product_id,
-            'location_id' => 100,
+            'location_id' => $warehouse->code,
         ], [
+            'warehouse_code'    => $warehouse->code,
             'quantity'          => 0,
             'quantity_reserved' => 0,
         ]);
 
         $this->assertTrue(OrderService::canNotFulfill($order), 'Should not be able to fulfill from any location');
-        $this->assertTrue(OrderService::canNotFulfill($order, 99), 'Should not be able to fulfill from location 99');
+        $this->assertTrue(OrderService::canNotFulfill($order, $warehouse->code), 'Should not be able to fulfill from location 99');
     }
 
     /**
@@ -214,7 +222,8 @@ class OrderServiceTest extends TestCase
      */
     public function testFailedCanFulfill()
     {
-        $locationId = rand(1, 100);
+        /** @var Warehouse $warehouse */
+        $warehouse = factory(Warehouse::class)->create();
 
         $order = factory(Order::class)
             ->with('orderProducts', 1)
@@ -224,19 +233,20 @@ class OrderServiceTest extends TestCase
 
         Inventory::updateOrCreate([
             'product_id'  => $orderProduct->product_id,
-            'location_id' => $locationId,
+            'location_id' => $warehouse->code,
         ], [
             'quantity' => $orderProduct->quantity_ordered - 1,
         ]);
 
         $this->assertFalse(
-            OrderService::canFulfill($order, $locationId)
+            OrderService::canFulfill($order, $warehouse->code)
         );
     }
 
     public function testSuccessfulCanFulfill()
     {
-        $locationId = rand(1, 100);
+        /** @var Warehouse $warehouse */
+        $warehouse = factory(Warehouse::class)->create();
 
         $order = factory(Order::class)
             ->with('orderProducts', 1)
@@ -246,13 +256,13 @@ class OrderServiceTest extends TestCase
 
         Inventory::updateOrCreate([
             'product_id'  => $orderProduct->product_id,
-            'location_id' => $locationId,
+            'location_id' => $warehouse->code,
         ], [
             'quantity' => $orderProduct->quantity_ordered,
         ]);
 
         $this->assertTrue(
-            OrderService::canFulfill($order, $locationId)
+            OrderService::canFulfill($order, $warehouse->code)
         );
     }
 }

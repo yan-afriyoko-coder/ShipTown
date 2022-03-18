@@ -89,11 +89,12 @@ class ProductObserver
         $warehouse_ids = Warehouse::all(['id','code'])
             ->map(function (Warehouse $warehouse) use ($product) {
                 return [
-                    'warehouse_id' => $warehouse->getKey(),
-                    'product_id'   => $product->getKey(),
-                    'location_id'  => $warehouse->code,
-                    'created_at'  => now(),
-                    'updated_at'  => now(),
+                    'warehouse_id'    => $warehouse->getKey(),
+                    'product_id'      => $product->getKey(),
+                    'location_id'     => $warehouse->code,
+                    'warehouse_code'  => $warehouse->code,
+                    'created_at'      => now(),
+                    'updated_at'      => now(),
                 ];
             });
 
@@ -108,10 +109,11 @@ class ProductObserver
         $productPriceRecords = Warehouse::all(['id','code'])
             ->map(function (Warehouse $warehouse) use ($product) {
                 return [
-                    'product_id'  => $product->getKey(),
-                    'location_id' => $warehouse->code,
-                    'created_at'  => now(),
-                    'updated_at'  => now(),
+                    'product_id'     => $product->getKey(),
+                    'location_id'    => $warehouse->code,
+                    'warehouse_code' => $warehouse->code,
+                    'created_at'     => now(),
+                    'updated_at'     => now(),
                 ];
             });
 

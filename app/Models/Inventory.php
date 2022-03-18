@@ -62,6 +62,7 @@ class Inventory extends BaseModel
     protected $fillable = [
         'warehouse_id',
         'location_id',
+        'warehouse_code',
         'shelve_location',
         'product_id',
         'quantity',
