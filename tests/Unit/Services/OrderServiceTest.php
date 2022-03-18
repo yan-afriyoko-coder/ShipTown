@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderProduct;
 use App\Models\Product;
+use App\Models\Warehouse;
 use App\Services\OrderService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
@@ -153,6 +154,8 @@ class OrderServiceTest extends TestCase
         Product::query()->forceDelete();
         Inventory::query()->forceDelete();
 
+        /** @var Warehouse $warehouse */
+        $warehouse = factory(Warehouse::class)->create();
         factory(Product::class)->create();
 
         $order = factory(Order::class)
@@ -163,8 +166,9 @@ class OrderServiceTest extends TestCase
 
         $inventory = Inventory::query()->updateOrCreate([
             'product_id'  => $orderProduct->product_id,
-            'location_id' => 100,
+            'location_id' => $warehouse->code,
         ], [
+            'warehouse_code'    => $warehouse->code,
             'quantity'          => $orderProduct->quantity_ordered,
             'quantity_reserved' => 0,
         ]);
@@ -172,7 +176,7 @@ class OrderServiceTest extends TestCase
         $this->assertTrue(OrderService::canFulfill($order), 'a');
         $this->assertFalse(OrderService::canNotFulfill($order), 'b');
 
-        $this->assertTrue(OrderService::canFulfill($order, 100), 'c');
+        $this->assertTrue(OrderService::canFulfill($order, $warehouse->code), 'c');
         $this->assertFalse(OrderService::canFulfill($order, 99), 'd');
     }
 
