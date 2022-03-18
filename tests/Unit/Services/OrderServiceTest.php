@@ -222,7 +222,8 @@ class OrderServiceTest extends TestCase
      */
     public function testFailedCanFulfill()
     {
-        $locationId = rand(1, 100);
+        /** @var Warehouse $warehouse */
+        $warehouse = factory(Warehouse::class)->create();
 
         $order = factory(Order::class)
             ->with('orderProducts', 1)
@@ -232,19 +233,20 @@ class OrderServiceTest extends TestCase
 
         Inventory::updateOrCreate([
             'product_id'  => $orderProduct->product_id,
-            'location_id' => $locationId,
+            'location_id' => $warehouse->code,
         ], [
             'quantity' => $orderProduct->quantity_ordered - 1,
         ]);
 
         $this->assertFalse(
-            OrderService::canFulfill($order, $locationId)
+            OrderService::canFulfill($order, $warehouse->code)
         );
     }
 
     public function testSuccessfulCanFulfill()
     {
-        $locationId = rand(1, 100);
+        /** @var Warehouse $warehouse */
+        $warehouse = factory(Warehouse::class)->create();
 
         $order = factory(Order::class)
             ->with('orderProducts', 1)
@@ -254,13 +256,13 @@ class OrderServiceTest extends TestCase
 
         Inventory::updateOrCreate([
             'product_id'  => $orderProduct->product_id,
-            'location_id' => $locationId,
+            'location_id' => $warehouse->code,
         ], [
             'quantity' => $orderProduct->quantity_ordered,
         ]);
 
         $this->assertTrue(
-            OrderService::canFulfill($order, $locationId)
+            OrderService::canFulfill($order, $warehouse->code)
         );
     }
 }
