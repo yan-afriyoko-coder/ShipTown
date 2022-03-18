@@ -21,14 +21,18 @@ class UpdateTest extends TestCase
     /** @test */
     public function test_update_call_returns_ok()
     {
-        $wareshouse = factory(Warehouse::class)->create();
+        /** @var Warehouse $warehouse */
+        $warehouse = factory(Warehouse::class)->create();
+
+        /** @var Warehouse $newWarehouse */
+        $newWarehouse = factory(Warehouse::class)->make();
 
         $data = [
-            'name'  => 'new name',
-            'code'  => 'new code'
+            'name'  => $newWarehouse->name,
+            'code'  => $newWarehouse->code
         ];
 
-        $response = $this->put(route('api.settings.warehouses.update', $wareshouse), $data);
+        $response = $this->put(route('api.settings.warehouses.update', $warehouse), $data);
 
         $response->assertOk();
         $response->assertJsonStructure([
@@ -39,8 +43,8 @@ class UpdateTest extends TestCase
             ],
         ]);
 
-        $updatedWarehouse = Warehouse::find($wareshouse->id);
-        $this->assertEquals($updatedWarehouse->name, 'new name');
-        $this->assertEquals($updatedWarehouse->code, 'new code');
+        $updatedWarehouse = Warehouse::find($warehouse->id);
+        $this->assertEquals($updatedWarehouse->name, $newWarehouse->name);
+        $this->assertEquals($updatedWarehouse->code, $newWarehouse->code);
     }
 }
