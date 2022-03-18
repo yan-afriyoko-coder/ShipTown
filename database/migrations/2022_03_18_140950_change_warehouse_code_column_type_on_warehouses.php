@@ -14,15 +14,29 @@ class ChangeWarehouseCodeColumnTypeOnWarehouses extends Migration
     public function up()
     {
         Schema::table('warehouses', function (Blueprint $table) {
-            $table->string('code', 5)->nullable(false)->change();
+            $table->dropUnique('warehouses_code_unique');
+        });
+
+        Schema::table('warehouses', function (Blueprint $table) {
+            $table->string('code', 5)->nullable(false)->unique()->change();
         });
 
         Schema::table('inventory', function (Blueprint $table) {
             $table->string('warehouse_code', 5)->nullable(false)->change();
+
+            $table->foreign('warehouse_code')
+                ->on('warehouses')
+                ->references('code')
+                ->onDelete('CASCADE');
         });
 
         Schema::table('products_prices', function (Blueprint $table) {
             $table->string('warehouse_code', 5)->nullable(false)->change();
+
+            $table->foreign('warehouse_code')
+                ->on('warehouses')
+                ->references('code')
+                ->onDelete('CASCADE');
         });
     }
 
