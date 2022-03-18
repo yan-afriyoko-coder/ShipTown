@@ -27,6 +27,10 @@ class WarehouseObserver
         Inventory::query()
             ->where(['location_id' => $warehouse->getOriginal('code')])
             ->update(['warehouse_code' => $warehouse->code, 'location_id' => $warehouse->code]);
+
+        ProductPrice::query()
+            ->where(['location_id' => $warehouse->getOriginal('code')])
+            ->update(['warehouse_code' => $warehouse->code, 'location_id' => $warehouse->code]);
     }
 
     /**

@@ -91,8 +91,8 @@ class FetchUpdatedProductsJob implements ShouldQueue
         ]);
 
         info('Imported RMSAPI products', [
-            'location_id' => $this->rmsapiConnection->location_id,
-            'count'       => $response->asArray()['total'],
+            'warehouse_code' => $this->rmsapiConnection->location_id,
+            'count'          => $response->asArray()['total'],
         ]);
 
         return true;
