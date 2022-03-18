@@ -16,19 +16,20 @@
                 <table v-if="configurations.length > 0" class="table table-borderless table-responsive mb-0">
                     <thead>
                         <tr>
-                            <th>Location ID</th>
-                            <th>URL</th>
-                            <th>Username</th>
+                            <th></th>
+                            <th></th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(configuration, i) in configurations" :key="i">
-                            <td>{{ configuration.location_id }}</td>
-                            <td>{{ configuration.url }}</td>
-                            <td>{{ configuration.username }}</td>
                             <td>
-                                <a @click="confirmDelete(configuration.id, i)" class="action-link text-danger">Delete</a>
+                                {{ configuration.url }}<br>
+                                <div class="text-small"><span class="text-primary">username: </span> {{ configuration.username }}</div>
+                                <div class="text-small"><span class="text-primary">warehouse: </span> {{ configuration.location_id }}</div>
+                            </td>
+                            <td>
+                                <a @click="confirmDelete(configuration.id, i)" class="action-link text-danger">DELETE</a>
                             </td>
                         </tr>
                     </tbody>

@@ -74,7 +74,7 @@
                 <div class="form-group">
                     <label class="form-label" for="selectStatus">Status</label>
                     <select id="selectStatus" class="form-control" @change="changeStatus" v-model="order.status_code">
-                        <option v-for="orderStatus in orderStatuses" :value="orderStatus.code" :key="orderStatus.id">{{ orderStatus.name }}</option>
+                        <option v-for="orderStatus in orderStatuses" :value="orderStatus.code" :key="orderStatus.id">{{ orderStatus.code }}</option>
                     </select>
                 </div>
 
@@ -259,7 +259,7 @@
                 },
 
                 loadOrderStatuses(){
-                    this.apiGetOrderStatus()
+                    this.apiGetOrderStatus({'filter[hidden]': 0})
                         .then(({ data }) => {
                             this.orderStatuses = data.data;
                         })

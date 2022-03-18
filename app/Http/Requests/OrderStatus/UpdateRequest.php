@@ -26,6 +26,7 @@ class UpdateRequest extends FormRequest
         return [
             'order_active'      => ['required', 'boolean'],
             'reserves_stock'    => ['required', 'boolean'],
+            'hidden'            => ['sometimes', 'boolean'],
             'sync_ecommerce'    => ['required', 'boolean'],
         ];
     }

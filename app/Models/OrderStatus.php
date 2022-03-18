@@ -7,6 +7,8 @@ use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 /**
  * App\Models\OrderStatus.
@@ -42,6 +44,7 @@ class OrderStatus extends BaseModel
         'name',
         'code',
         'order_active',
+        'hidden',
         'reserves_stock',
         'sync_ecommerce',
     ];
@@ -123,5 +126,21 @@ class OrderStatus extends BaseModel
     public static function isComplete(string $status_code)
     {
         return array_search($status_code, self::getCompletedStatusCodeList()) != false;
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    public static function getSpatieQueryBuilder(): QueryBuilder
+    {
+        return QueryBuilder::for(OrderStatus::class)
+            ->allowedFilters([
+                AllowedFilter::exact('hidden')
+            ])
+            ->allowedIncludes([])
+            ->allowedSorts([
+                'updated_at',
+                'code',
+            ]);
     }
 }

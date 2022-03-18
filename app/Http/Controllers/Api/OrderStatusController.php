@@ -9,6 +9,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class OrderStatusController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -16,8 +17,8 @@ class OrderStatusController extends Controller
      */
     public function index() : AnonymousResourceCollection
     {
-        $orderStatuses = OrderStatus::orderBy('code')->get();
+        $query = OrderStatus::getSpatieQueryBuilder();
 
-        return OrderStatusResource::collection($orderStatuses);
+        return OrderStatusResource::collection($this->getPaginatedResult($query));
     }
 }
