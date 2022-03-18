@@ -30,8 +30,10 @@ class GetQuantityTest extends TestCase
             $inventory->update(['quantity' => $inventory->warehouse_id]);
         });
 
+
         $this->api2cartConnection = factory(Api2cartConnection::class)->create();
 
+        dd(1);
         $this->productLink = new Api2cartProductLink();
         $this->productLink->api2cart_connection_id = $this->api2cartConnection->getKey();
         $this->productLink->product_id = $product->getKey();
