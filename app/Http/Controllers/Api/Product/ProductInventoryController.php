@@ -61,8 +61,9 @@ class ProductInventoryController extends Controller
 
         $inventory = Inventory::updateOrCreate(
             [
-                'product_id'  => $update['product_id'],
-                'location_id' => $update['location_id'],
+                'product_id'     => $update['product_id'],
+                'location_id'    => $update['location_id'],
+                'warehouse_code' => $update['location_id'],
             ],
             $update
         );

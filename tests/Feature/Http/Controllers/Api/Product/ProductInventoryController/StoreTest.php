@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers\Api\Product\ProductInventoryController;
 
 use App\Models\Product;
+use App\Models\Warehouse;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -21,10 +22,14 @@ class StoreTest extends TestCase
     /** @test */
     public function test_store_call_returns_ok()
     {
+        /** @var Warehouse $warehouse */
+        $warehouse = factory(Warehouse::class)->create();
+
         $product = factory(Product::class)->create();
         $params = [
             'sku' => $product->sku,
-            'location_id' => 99,
+            'location_id' => $warehouse->code,
+            'warehouse_code' => $warehouse->code,
         ];
 
         $response = $this->post("api/product/inventory", $params);
@@ -37,11 +42,11 @@ class StoreTest extends TestCase
                     'quantity_reserved',
                     'product_id',
                     'location_id',
+                    'warehouse_code',
                     'updated_at',
                     'created_at',
                     'id',
                     'quantity_available',
-                    'product',
                 ]
             ]
         ]);
@@ -49,9 +54,12 @@ class StoreTest extends TestCase
 
     public function testIfInvalidSkuIsNotAllowed()
     {
+        /** @var Warehouse $warehouse */
+        $warehouse = factory(Warehouse::class)->create();
+
         $params = [
             'sku' => 0,
-            'location_id' => 99,
+            'location_id' => $warehouse->code,
         ];
 
         $response = $this->post("api/product/inventory", $params);
