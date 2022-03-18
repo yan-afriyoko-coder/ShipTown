@@ -73,7 +73,7 @@
                                             <input type="checkbox"
                                                 id="edit-hidden"
                                                 class="custom-control-input"
-                                                v-model="syncEcommerce"
+                                                v-model="hidden"
                                                 required>
                                             <label class="custom-control-label" for="edit-hidden"></label>
                                         </div>
