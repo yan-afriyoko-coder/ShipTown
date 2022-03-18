@@ -334,7 +334,7 @@ class Api2cartProductLink extends BaseModel
             'location_id' => $this->api2cartConnection->pricing_location_id,
         ];
 
-        $productPrice = ProductPrice::query()->firstOrCreate($attributes);
+        $productPrice = ProductPrice::query()->where($attributes)->first();
 
         if ($productPrice) {
             return [

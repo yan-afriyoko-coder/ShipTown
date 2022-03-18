@@ -7,6 +7,7 @@ use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
+use App\Models\Warehouse;
 use App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
@@ -25,6 +26,12 @@ class CanFulfillFromLocationConditionTest extends TestCase
      */
     public function test_can_not_fulfill_from_location_0_condition()
     {
+        /** @var Warehouse $warehouse */
+        $warehouse = factory(Warehouse::class)->create();
+
+        /** @var Product $product */
+        $product = factory(Product::class)->create();
+
         /** @var Automation $automation */
         $automation = factory(Automation::class)->create([
             'enabled' => true,
@@ -38,9 +45,6 @@ class CanFulfillFromLocationConditionTest extends TestCase
             'condition_value' => '0' // we are using location_id = 0 for ALL locations
         ]);
 
-        /** @var Product $product */
-        $product = factory(Product::class)->create();
-
         /** @var Order $order */
         $order = factory(Order::class)->create([]);
 
@@ -49,7 +53,7 @@ class CanFulfillFromLocationConditionTest extends TestCase
 
         Inventory::updateOrCreate([
             'product_id' => $product->getKey(),
-            'location_id' => '2'
+            'location_id' => $warehouse->code
         ], [
             'quantity' => $orderProduct->quantity_ordered - 1,
         ]);
@@ -66,6 +70,12 @@ class CanFulfillFromLocationConditionTest extends TestCase
      */
     public function test_can_fulfill_from_location_0_condition()
     {
+        /** @var Warehouse $warehouse */
+        $warehouse = factory(Warehouse::class)->create();
+
+        /** @var Product $product */
+        $product = factory(Product::class)->create();
+
         /** @var Automation $automation */
         $automation = factory(Automation::class)->create([
             'enabled' => true,
@@ -79,9 +89,6 @@ class CanFulfillFromLocationConditionTest extends TestCase
             'condition_value' => '0' // we are using location_id = 0 for ALL locations
         ]);
 
-        /** @var Product $product */
-        $product = factory(Product::class)->create();
-
         /** @var Order $order */
         $order = factory(Order::class)->create([]);
 
@@ -90,7 +97,7 @@ class CanFulfillFromLocationConditionTest extends TestCase
 
         Inventory::updateOrCreate([
             'product_id' => $product->getKey(),
-            'location_id' => '2'
+            'location_id' => $warehouse->code
         ], [
             'quantity' => 100,
         ]);
@@ -107,6 +114,12 @@ class CanFulfillFromLocationConditionTest extends TestCase
      */
     public function test_can_not_fulfill_condition()
     {
+        /** @var Warehouse $warehouse */
+        $warehouse = factory(Warehouse::class)->create();
+
+        /** @var Product $product */
+        $product = factory(Product::class)->create();
+
         /** @var Automation $automation */
         $automation = factory(Automation::class)->create([
             'enabled' => true,
@@ -117,14 +130,12 @@ class CanFulfillFromLocationConditionTest extends TestCase
         /** @var Condition $condition */
         $condition = $automation->conditions()->create([
             'condition_class' => CanFulfillFromLocationCondition::class,
-            'condition_value' => '1'
+            'condition_value' => $warehouse->code
         ]);
-
-        $product = factory(Product::class)->create();
 
         Inventory::updateOrCreate([
             'product_id' => $product->getKey(),
-            'location_id' => '1'
+            'location_id' => $warehouse->code
         ], [
             'quantity' => 0,
         ]);
@@ -145,6 +156,12 @@ class CanFulfillFromLocationConditionTest extends TestCase
      */
     public function test_can_fulfill_valid_condition()
     {
+        /** @var Warehouse $warehouse */
+        $warehouse = factory(Warehouse::class)->create();
+
+        /** @var Product $product */
+        $product = factory(Product::class)->create();
+
         /** @var Automation $automation */
         $automation = factory(Automation::class)->create([
             'enabled' => true,
@@ -155,12 +172,13 @@ class CanFulfillFromLocationConditionTest extends TestCase
         /** @var Condition $condition */
         $condition = $automation->conditions()->create([
             'condition_class' => CanFulfillFromLocationCondition::class,
-            'condition_value' => '1'
+            'condition_value' => $warehouse->code
         ]);
 
-        $product = factory(Product::class)->create();
-
-        Inventory::updateOrCreate(['product_id' => $product->getKey(), 'location_id' => '1'], [
+        Inventory::updateOrCreate([
+            'product_id' => $product->getKey(),
+            'location_id' => $warehouse->code
+        ], [
             'quantity' => 100,
         ]);
 
