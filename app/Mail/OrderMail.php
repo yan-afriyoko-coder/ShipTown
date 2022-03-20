@@ -11,7 +11,7 @@ class OrderMail extends TemplateMailable
 {
     use Queueable, SerializesModels;
 
-    private MailTemplate $template;
+    private $template;
 
     public array $variables;
 

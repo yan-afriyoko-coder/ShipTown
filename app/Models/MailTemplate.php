@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\BaseModel;
 use Barryvdh\LaravelIdeHelper\Eloquent;
+use Spatie\MailTemplates\Interfaces\MailTemplateInterface;
+use Spatie\MailTemplates\TemplateMailable;
 
 /**
  * @mixin Eloquent

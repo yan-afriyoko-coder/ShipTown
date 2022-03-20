@@ -3,7 +3,6 @@
 namespace App\Modules\Automations\src\Actions;
 
 use App\Mail\OrderMail;
-use App\Mail\ShipmentConfirmationMail;
 use App\Models\MailTemplate;
 use App\Modules\Automations\src\BaseOrderAction;
 use Illuminate\Support\Facades\Mail;
@@ -11,7 +10,7 @@ use Illuminate\Support\Facades\Mail;
 /**
  *
  */
-class SendEmailToCustomerAction extends BaseOrderAction
+class SendOrderEmailAction extends BaseOrderAction
 {
     /**
      * @param string $options
@@ -21,13 +20,23 @@ class SendEmailToCustomerAction extends BaseOrderAction
     {
         parent::handle($options);
 
-        $template = new ShipmentConfirmationMail([
+        if (empty($options)) {
+            return false;
+        }
+
+        $savedMailTemplate = MailTemplate::where(['code' => $options])->first();
+
+        if (is_null($savedMailTemplate)) {
+            return false;
+        }
+
+        $mailable = new OrderMail($savedMailTemplate, [
             'order' => $this->order->toArray(),
             'shipments' => $this->order->orderShipments->toArray(),
         ]);
 
         Mail::to($this->order->shippingAddress->email)
-            ->send($template);
+            ->send($mailable);
 
         return true;
     }
