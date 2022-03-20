@@ -82,8 +82,9 @@ class RecalculateQuantityReservedJob implements ShouldQueue
                 $this->checkedProductIds[] = $orderProduct->product_id;
 
                 $inventory = Inventory::firstOrCreate([
-                    'product_id'  => $orderProduct->product_id,
-                    'location_id' => 999,
+                    'product_id'     => $orderProduct->product_id,
+                    'location_id'    => 999,
+                    'warehouse_code' => '999',
                 ]);
 
                 if ($inventory->quantity_reserved != $orderProduct->getAttribute('new_quantity_reserved')) {
