@@ -28,7 +28,7 @@ class StoreConfigurationRmsApiRequest extends FormRequest
             'url'            => 'required|url',
             'username'       => 'required',
             'password'       => 'required',
-            'warehouse_code' => 'required',
+            'warehouse_code' => 'sometimes|max:5|exist2s:warehouse,code',
         ];
     }
 }
