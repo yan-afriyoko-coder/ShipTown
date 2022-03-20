@@ -24,8 +24,9 @@ class StoreInventoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'sku'         => 'required',
-            'location_id' => 'required',
+            'sku'            => 'required',
+            'location_id'    => 'required',
+            'warehouse_code' => 'sometimes',
         ];
     }
 }

@@ -55,7 +55,7 @@ class ProductInventoryController extends Controller
     {
         $product = Product::where('sku', '=', $request->sku)->firstOrFail();
 
-        $update = $request->all();
+        $update = $request->validated();
 
         $update['product_id'] = $product->id;
 
