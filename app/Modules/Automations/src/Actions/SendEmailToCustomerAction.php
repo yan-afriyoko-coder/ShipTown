@@ -2,13 +2,22 @@
 
 namespace App\Modules\Automations\src\Actions;
 
+use App\Mail\OrderMail;
 use App\Mail\ShipmentConfirmationMail;
+use App\Models\MailTemplate;
 use App\Modules\Automations\src\BaseOrderAction;
 use Illuminate\Support\Facades\Mail;
 
+/**
+ *
+ */
 class SendEmailToCustomerAction extends BaseOrderAction
 {
-    public function handle($options = '')
+    /**
+     * @param string $options
+     * @return bool
+     */
+    public function handle(string $options = ''): bool
     {
         parent::handle($options);
 
@@ -19,5 +28,7 @@ class SendEmailToCustomerAction extends BaseOrderAction
 
         Mail::to($this->order->shippingAddress->email)
             ->send($template);
+
+        return true;
     }
 }
