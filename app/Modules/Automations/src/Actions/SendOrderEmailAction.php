@@ -20,11 +20,8 @@ class SendOrderEmailAction extends BaseOrderAction
     {
         parent::handle($options);
 
-        if (empty($options)) {
-            return false;
-        }
-
         MailTemplate::query()
+            ->where('code', '<>', '')
             ->where(['code' => $options])
             ->each(function (MailTemplate $template) {
                 $mailable = new OrderMail($template, [
@@ -35,7 +32,10 @@ class SendOrderEmailAction extends BaseOrderAction
                 Mail::to($this->order->shippingAddress->email)
                     ->send($mailable);
 
-                $this->order->log('Email was send', ['template_code' => $template->code]);
+                activity()->on($this->order)
+                    ->causedByAnonymous()
+                    ->withProperties(['template_code' => $template->code])
+                    ->log('Email was send');
             });
 
         return true;
