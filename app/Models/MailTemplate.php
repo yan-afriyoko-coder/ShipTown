@@ -27,6 +27,6 @@ class MailTemplate extends BaseModel
 
     public function getNameAttribute()
     {
-        return preg_replace('/(?<!\ )[A-Z]/', ' $0', class_basename($this->mailable));
+        return $this->code;
     }
 }

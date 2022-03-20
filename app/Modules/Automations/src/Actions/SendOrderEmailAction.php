@@ -24,19 +24,19 @@ class SendOrderEmailAction extends BaseOrderAction
             return false;
         }
 
-        $savedMailTemplate = MailTemplate::where(['code' => $options])->first();
+        MailTemplate::query()
+            ->where(['code' => $options])
+            ->each(function (MailTemplate $template) {
+                $mailable = new OrderMail($template, [
+                    'order' => $this->order->toArray(),
+                    'shipments' => $this->order->orderShipments->toArray(),
+                ]);
 
-        if (is_null($savedMailTemplate)) {
-            return false;
-        }
+                Mail::to($this->order->shippingAddress->email)
+                    ->send($mailable);
 
-        $mailable = new OrderMail($savedMailTemplate, [
-            'order' => $this->order->toArray(),
-            'shipments' => $this->order->orderShipments->toArray(),
-        ]);
-
-        Mail::to($this->order->shippingAddress->email)
-            ->send($mailable);
+                $this->order->log('Email was send', ['template_code' => $template->code]);
+            });
 
         return true;
     }

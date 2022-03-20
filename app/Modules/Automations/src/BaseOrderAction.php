@@ -8,7 +8,7 @@ use App\Models\Order;
 use Illuminate\Support\Facades\Log;
 
 /**
- *
+ * @property-read Order $order
  */
 abstract class BaseOrderAction
 {
