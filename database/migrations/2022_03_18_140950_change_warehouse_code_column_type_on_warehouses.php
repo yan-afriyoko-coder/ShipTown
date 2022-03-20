@@ -27,20 +27,10 @@ class ChangeWarehouseCodeColumnTypeOnWarehouses extends Migration
 
         Schema::table('inventory', function (Blueprint $table) {
             $table->string('warehouse_code', 5)->nullable(false)->change();
-//
-//            $table->foreign('warehouse_code')
-//                ->on('warehouses')
-//                ->references('code')
-//                ->onDelete('CASCADE');
         });
 
         Schema::table('products_prices', function (Blueprint $table) {
             $table->string('warehouse_code', 5)->nullable(false)->change();
-
-//            $table->foreign('warehouse_code')
-//                ->on('warehouses')
-//                ->references('code')
-//                ->onDelete('CASCADE');
         });
 
         Schema::table('modules_api2cart_connections', function (Blueprint $table) {
