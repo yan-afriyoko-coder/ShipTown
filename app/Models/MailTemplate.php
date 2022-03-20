@@ -7,12 +7,21 @@ use Barryvdh\LaravelIdeHelper\Eloquent;
 
 /**
  * @mixin Eloquent
+ * @property string code
  * @property string to
  * @property string reply_to
  */
 class MailTemplate extends BaseModel
 {
-    protected $fillable = ['mailable', 'subject', 'html_template', 'text_template', 'reply_to', 'to'];
+    protected $fillable = [
+        'code',
+        'mailable',
+        'subject',
+        'html_template',
+        'text_template',
+        'reply_to',
+        'to'
+    ];
 
     public function getNameAttribute()
     {
