@@ -432,14 +432,14 @@ class Api2cartService
         try {
             $requestResponse = self::productUpdateOrCreate($productLink);
 
-            if ($requestResponse->isNotSuccess()) {
-                $productLink->product->log('eCommerce: Sync failed', [
-                    'return_code' => $requestResponse->getReturnCode(),
-                    'message' => $requestResponse->getReturnMessage()
-                ]);
+            if ($requestResponse->isSuccess()) {
+                return true;
             }
 
-            return $requestResponse->isSuccess();
+            $productLink->product->log('eCommerce: Sync failed', [
+                'return_code' => $requestResponse->getReturnCode(),
+                'message' => $requestResponse->getReturnMessage()
+            ]);
         } catch (ConnectException $exception) {
             $productLink->product->log('eCommerce: Connection timeout, retry scheduled');
             return false;
@@ -448,6 +448,8 @@ class Api2cartService
             $productLink->product->log('eCommerce: Sync failed, see logs for more details');
             return false;
         }
+
+        return false;
     }
 
     /**
