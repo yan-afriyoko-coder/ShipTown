@@ -329,40 +329,17 @@ class Api2cartProductLink extends BaseModel
      */
     private function getPricingData(): array
     {
-        $attributes = [
-            'product_id' => $this->product->getKey(),
-            'location_id' => $this->api2cartConnection->pricing_location_id,
+        $productPrice = ProductPrice::query()->where([
+                'product_id' => $this->product->getKey(),
+                'location_id' => $this->api2cartConnection->pricing_location_id,
+            ])
+            ->first();
+
+        return [
+            'price' => $productPrice->price,
+            'special_price' => $productPrice->sale_price,
+            'sprice_create' => Api2cartService::formatDateForApi2cart($productPrice->sale_price_start_date),
+            'sprice_expire' => Api2cartService::formatDateForApi2cart($productPrice->sale_price_end_date),
         ];
-
-        $productPrice = ProductPrice::query()->where($attributes)->first();
-
-        if ($productPrice) {
-            return [
-                'price' => $productPrice->price,
-                'special_price' => $productPrice->sale_price,
-                'sprice_create' => $this->formatDateForApi2cart($productPrice->sale_price_start_date),
-                'sprice_expire' => $this->formatDateForApi2cart($productPrice->sale_price_end_date),
-            ];
-        }
-
-        Log::warning('Pricing data not found', $attributes);
-
-        return [];
-    }
-
-    /**
-     * @param $date
-     *
-     * @return string
-     */
-    public function formatDateForApi2cart($date): string
-    {
-        $carbon_date = new Carbon($date ?? '2000-01-01 00:00:00');
-
-        if ($carbon_date->year < 2000) {
-            return '2000-01-01 00:00:00';
-        }
-
-        return $carbon_date->toDateTimeString();
     }
 }
