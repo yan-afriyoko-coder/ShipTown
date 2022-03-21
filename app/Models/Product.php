@@ -276,9 +276,12 @@ class Product extends BaseModel
     /**
      * @return HasMany|Inventory
      */
-    public function inventory(): HasMany
+    public function inventory(string $warehouse_code = null): HasMany
     {
         return $this->hasMany(Inventory::class)
+            ->when($warehouse_code, function ($query) use ($warehouse_code) {
+                $query->where(['warehouse_code' => $warehouse_code]);
+            })
             ->keyBy('location_id');
     }
 
