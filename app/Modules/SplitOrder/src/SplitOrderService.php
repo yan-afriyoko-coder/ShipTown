@@ -90,6 +90,16 @@ class SplitOrderService
 
             try {
                 $this->newOrder->save();
+
+                activity()->on($this->newOrder)
+                    ->byAnonymous()
+                    ->withProperties(['order_number' => $this->originalOrder->order_number])
+                    ->log('extracted from order');
+
+                activity()->on($this->originalOrder)
+                    ->byAnonymous()
+                    ->withProperties(['order_number' => $this->newOrder->order_number])
+                    ->log('split to order');
             } catch (Exception $exception) {
                 $this->newOrder = Order::whereOrderNumber($newOrderNumber)->first();
             }
