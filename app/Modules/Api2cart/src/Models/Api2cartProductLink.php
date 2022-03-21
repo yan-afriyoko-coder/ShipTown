@@ -271,10 +271,7 @@ class Api2cartProductLink extends BaseModel
         $data = $data->merge($this->getBasicData());
         $data = $data->merge($this->getMagentoStoreId());
         $data = $data->merge($this->getInventoryData());
-
-        if (isset($this->api2cartConnection->pricing_location_id)) {
-            $data = $data->merge($this->getPricingData());
-        }
+        $data = $data->merge($this->getPricingData());
 
         return $data->toArray();
     }
@@ -308,15 +305,13 @@ class Api2cartProductLink extends BaseModel
     private function getInventoryData(): array
     {
         // we will refresh to get the latest data
-        $product = $this->product->refresh();
+        $sum = $this->product->inventory()
+            ->when($this->api2cartConnection->inventory_warehouse_ids, function ($query) {
+                $query->whereIn('warehouse_id', $this->api2cartConnection->inventory_warehouse_ids);
+            })
+            ->sum('quantity_available');
 
-        $query = Inventory::whereProductId($product->getKey());
-
-        if ($this->api2cartConnection->inventory_warehouse_ids) {
-            $query->whereIn('warehouse_id', $this->api2cartConnection->inventory_warehouse_ids);
-        }
-
-        $quantity_available = floor($query->sum('quantity_available'));
+        $quantity_available = floor($sum);
 
         return [
             'quantity' => $quantity_available ?? 0,
@@ -329,6 +324,10 @@ class Api2cartProductLink extends BaseModel
      */
     private function getPricingData(): array
     {
+        if (is_null($this->api2cartConnection->pricing_location_id)) {
+            return [];
+        }
+
         $productPrice = ProductPrice::query()->where([
                 'product_id' => $this->product->getKey(),
                 'location_id' => $this->api2cartConnection->pricing_location_id,
