@@ -6,22 +6,25 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Warehouse\StoreRequest;
 use App\Http\Requests\Warehouse\UpdateRequest;
 use App\Http\Resources\WarehouseResource;
+use App\Models\Product;
 use App\Models\Warehouse;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Spatie\Tags\Tag;
 
 class WarehouseController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return WarehouseResource
+     * @return AnonymousResourceCollection
      */
     public function index(): AnonymousResourceCollection
     {
-        $warehouses = Warehouse::all();
+        $query = Warehouse::getSpatieQueryBuilder();
 
-        return WarehouseResource::collection($warehouses);
+        return WarehouseResource::collection($this->getPaginatedResult($query));
     }
 
     /**
@@ -46,9 +49,18 @@ class WarehouseController extends Controller
      * @param Warehouse $warehouse
      * @return WarehouseResource
      */
-    public function update(UpdateRequest $request, Warehouse $warehouse)
+    public function update(UpdateRequest $request, Warehouse $warehouse): WarehouseResource
     {
         $warehouse->update($request->validated());
+
+        $tags = data_get($request->validated(), 'tags', []);
+
+        $tags = collect($tags)->filter()->map(function ($tag) use ($warehouse) {
+            $warehouse->attachTag($tag);
+            return Tag::findFromString($tag);
+        });
+
+        $warehouse->tags()->sync($tags->pluck('id'));
 
         return new WarehouseResource($warehouse);
     }

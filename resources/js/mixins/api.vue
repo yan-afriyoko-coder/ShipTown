@@ -309,8 +309,8 @@ export default {
                 return axios.delete('/api/settings/modules/automations/' + id);
             },
 
-            apiGetWarehouses: function () {
-                return axios.get('/api/settings/warehouses');
+            apiGetWarehouses: function (params) {
+                return axios.get('/api/settings/warehouses', {params: params});
             },
 
             apiPostWarehouses: function (params) {

@@ -24,8 +24,9 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'  => 'required|string|max:250',
-            'code'  => 'required|string|max:5|unique:warehouses,code,'.$this->id,
+            'name'  => 'sometimes|string|max:250',
+            'code'  => ['sometimes','string','max:5','unique:warehouses,code,'.$this->warehouse->id],
+            'tags'  => 'sometimes|array',
         ];
     }
 }

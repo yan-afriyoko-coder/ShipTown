@@ -16,9 +16,7 @@
                                               'form-control': true,
                                               'is-invalid': errors.length > 0,
                                           }" id="edit-code" required>
-                                  <div class="invalid-feedback">
-                                    {{ errors[0] }}
-                                  </div>
+                                  <div class="invalid-feedback">{{ errors[0] }}</div>
                                 </ValidationProvider>
                               </div>
                             </div>
@@ -31,18 +29,32 @@
                                             'form-control': true,
                                             'is-invalid': errors.length > 0,
                                         }" id="edit-name" required>
-                                        <div class="invalid-feedback">
-                                            {{ errors[0] }}
-                                        </div>
+                                        <div class="invalid-feedback">{{ errors[0] }}</div>
+                                    </ValidationProvider>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label" for="tagsString">Tags</label>
+                                <div class="col-sm-9">
+                                    <ValidationProvider vid="tagsString" name="tagsString" v-slot="{ errors }">
+                                        <input v-model="tagsString" :class="{
+                                            'form-control': true,
+                                            'is-invalid': errors.length > 0,
+                                        }" id="edit-tags" required>
+                                        <div class="invalid-feedback">{{ errors[0] }}</div>
                                     </ValidationProvider>
                                 </div>
                             </div>
                         </form>
                     </ValidationObserver>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" @click="closeModal" class="btn btn-default">Cancel</button>
-                    <button type="button" @click="submit" class="btn btn-primary">Save</button>
+                <div class="modal-footer" style="justify-content:space-between">
+                    <button type="button" @click.prevent="confirmDelete(warehouse)" class="btn btn-outline-danger float-left">Delete</button>
+                    <div>
+                        <button type="button" @click="closeModal" class="btn btn-outline-primary">Cancel</button>
+                        <button type="button" @click="submit" class="btn btn-primary">Save</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -54,6 +66,7 @@ import { ValidationObserver, ValidationProvider } from "vee-validate";
 
 import Loading from "../../../mixins/loading-overlay";
 import api from "../../../mixins/api";
+import {split} from "lodash/string";
 
 export default {
     name: "EditModal",
@@ -68,6 +81,8 @@ export default {
         return {
             name: '',
             code: '',
+            tagsString: '',
+            tags: [],
         }
     },
 
@@ -77,8 +92,14 @@ export default {
 
     watch: {
         warehouse: function(newVal) {
-            this.name = newVal.name
-            this.code = newVal.code
+            this.name = newVal.name;
+            this.code = newVal.code;
+            this.tags = newVal.tags;
+            this.tagsString = newVal.tags
+                .map(function ($tag) {
+                    return $tag['name'];
+                })
+                .join(',');
         }
     },
 
@@ -89,9 +110,9 @@ export default {
             this.apiPutWarehouses(this.warehouse.id, {
                     name: this.name,
                     code: this.code,
+                    tags: this.tagsString.split(','),
                 })
                 .then(({ data }) => {
-                    this.$snotify.success('Navigation menu updated.');
                     this.closeModal();
                     this.$emit('onUpdated', data.data);
                 })
@@ -107,7 +128,26 @@ export default {
 
         closeModal() {
             $(this.$el).modal('hide');
-        }
+        },
+
+        confirmDelete(selectedWarehouse) {
+            this.$snotify.confirm('After delete data cannot restored', 'Are you sure?', {
+                position: 'centerCenter',
+                buttons: [
+                    {
+                        text: 'Yes',
+                        action: (toast) => {
+                            this.apiDeleteWarehouses(selectedWarehouse.id)
+                                .catch(() => {
+                                    this.$snotify.error('Error occurred while deleting.');
+                                });
+                            this.$snotify.remove(toast.id);
+                        }
+                    },
+                    {text: 'Cancel'},
+                ]
+            });
+        },
     },
 }
 </script>
