@@ -13,35 +13,24 @@
             </div>
 
             <div class="card-body">
-                <table v-if="warehouses.length > 0" class="table table-borderless table-responsive mb-0">
+                <table v-if="warehouses.length > 0" class="table table-hover table-borderless table-responsive mb-0">
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>Code</th>
                             <th>Name</th>
                             <th></th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(warehouse, i) in warehouses" :key="i">
+                        <tr v-for="(warehouse, i) in warehouses" :key="i" @click.prevent="showEditForm(warehouse)">
                             <td>{{ warehouse.id }}</td>
                             <td>{{ warehouse.code }}</td>
                             <td>{{ warehouse.name }}</td>
                             <td>
-
                                 <template v-for="tag in warehouse.tags">
                                     <a class="badge text-uppercase" :key="tag.id"> {{ tag.name }} </a>
                                 </template>
-
-                            </td>
-                            <td>
-                                <a @click.prevent="showEditForm(warehouse)">
-                                    <font-awesome-icon icon="edit"></font-awesome-icon>
-                                </a>
-                                <a @click.prevent="confirmDelete(warehouse)">
-                                    <font-awesome-icon icon="trash"></font-awesome-icon>
-                                </a>
                             </td>
                         </tr>
                     </tbody>
@@ -106,31 +95,6 @@ export default {
         warehouseUpdatedEvent(newValue) {
             this.fetchWarehouses();
         },
-
-        confirmDelete(selectedWarehouse) {
-            const indexWarehouse = this.warehouses.findIndex(warehouse => warehouse.id === selectedWarehouse.id)
-            this.$snotify.confirm('After delete data cannot restored', 'Are you sure?', {
-                position: 'centerCenter',
-                buttons: [
-                    {
-                        text: 'Yes',
-                        action: (toast) => {
-                            this.delete(selectedWarehouse.id, indexWarehouse)
-                            this.$snotify.remove(toast.id);
-                        }
-                    },
-                    {text: 'Cancel'},
-                ]
-            });
-        },
-
-        delete(id, index) {
-            this.apiDeleteWarehouses(id)
-                .then(() => {
-                    Vue.delete(this.warehouses, index);
-                    this.$snotify.success('Warehouse deleted.');
-                });
-        }
     },
 }
 </script>
