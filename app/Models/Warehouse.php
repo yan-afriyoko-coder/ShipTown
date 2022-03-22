@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\BaseModel;
+use App\Traits\HasTagsTrait;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -32,10 +33,13 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Warehouse whereName($value)
  * @method static Builder|Warehouse whereUpdatedAt($value)
  *
+ * @method static Builder hasTags($tags)
  * @mixin Eloquent
  */
 class Warehouse extends BaseModel
 {
+    use HasTagsTrait;
+
     protected $fillable = [
         'code',
         'name',
