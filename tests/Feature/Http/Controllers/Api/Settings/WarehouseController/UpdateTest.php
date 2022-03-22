@@ -30,7 +30,7 @@ class UpdateTest extends TestCase
         $data = [
             'name'  => $newWarehouse->name,
             'code'  => $newWarehouse->code,
-            'tags'  => 'tag1,tag2'
+            'tags'  => ['tag1','tag2']
         ];
 
         $response = $this->put(route('api.settings.warehouses.update', $warehouse), $data);
