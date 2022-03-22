@@ -431,6 +431,15 @@ class Api2cartService
     {
         try {
             $requestResponse = self::productUpdateOrCreate($productLink);
+
+            if ($requestResponse->isSuccess()) {
+                return true;
+            }
+
+            $productLink->product->log('eCommerce: Sync failed', [
+                'return_code' => $requestResponse->getReturnCode(),
+                'message' => $requestResponse->getReturnMessage()
+            ]);
         } catch (ConnectException $exception) {
             $productLink->product->log('eCommerce: Connection timeout, retry scheduled');
             return false;
@@ -440,14 +449,7 @@ class Api2cartService
             return false;
         }
 
-        if ($requestResponse->isNotSuccess()) {
-            $productLink->product->log('eCommerce: Sync failed', [
-                'return_code' => $requestResponse->getReturnCode(),
-                'message' => $requestResponse->getReturnMessage()
-            ]);
-        }
-
-        return $requestResponse->isSuccess();
+        return false;
     }
 
     /**
@@ -475,5 +477,22 @@ class Api2cartService
             $productLink->product->log('eCommerce: Sync Check failed, see logs for more details');
             return false;
         }
+    }
+
+
+    /**
+     * @param $date
+     *
+     * @return string
+     */
+    public static function formatDateForApi2cart($date): string
+    {
+        $carbon_date = new \Illuminate\Support\Carbon($date ?? '2000-01-01 00:00:00');
+
+        if ($carbon_date->year < 2000) {
+            return '2000-01-01 00:00:00';
+        }
+
+        return $carbon_date->toDateTimeString();
     }
 }

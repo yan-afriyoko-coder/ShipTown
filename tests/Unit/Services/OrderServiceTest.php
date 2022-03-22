@@ -156,19 +156,19 @@ class OrderServiceTest extends TestCase
 
         /** @var Warehouse $warehouse */
         $warehouse = factory(Warehouse::class)->create();
-        factory(Product::class)->create();
 
+        /** @var Product $product */
+        $product = factory(Product::class)->create();
+
+        /** @var Order $order */
         $order = factory(Order::class)
             ->with('orderProducts')
             ->create();
 
-        $orderProduct = $order->orderProducts()->first();
+        /** @var OrderProduct $orderProduct */
+        $orderProduct = $order->orderProducts->first();
 
-        $inventory = Inventory::query()->updateOrCreate([
-            'product_id'  => $orderProduct->product_id,
-            'location_id' => $warehouse->code,
-        ], [
-            'warehouse_code'    => $warehouse->code,
+        $orderProduct->product->inventory($warehouse->code)->update([
             'quantity'          => $orderProduct->quantity_ordered,
             'quantity_reserved' => 0,
         ]);
@@ -200,13 +200,10 @@ class OrderServiceTest extends TestCase
             ->with('orderProducts')
             ->create();
 
-        $orderProduct = $order->orderProducts()->first();
+        /** @var OrderProduct $orderProduct */
+        $orderProduct = $order->orderProducts->first();
 
-        Inventory::query()->updateOrCreate([
-            'product_id'  => $orderProduct->product_id,
-            'location_id' => $warehouse->code,
-        ], [
-            'warehouse_code'    => $warehouse->code,
+        $orderProduct->product->inventory($warehouse->code)->update([
             'quantity'          => 0,
             'quantity_reserved' => 0,
         ]);
@@ -229,12 +226,10 @@ class OrderServiceTest extends TestCase
             ->with('orderProducts', 1)
             ->create();
 
-        $orderProduct = $order->orderProducts()->first();
+        /** @var OrderProduct $orderProduct */
+        $orderProduct = $order->orderProducts->first();
 
-        Inventory::updateOrCreate([
-            'product_id'  => $orderProduct->product_id,
-            'location_id' => $warehouse->code,
-        ], [
+        $orderProduct->product->inventory($warehouse->code)->update([
             'quantity' => $orderProduct->quantity_ordered - 1,
         ]);
 
@@ -252,12 +247,10 @@ class OrderServiceTest extends TestCase
             ->with('orderProducts', 1)
             ->create();
 
-        $orderProduct = $order->orderProducts()->first();
+        /** @var OrderProduct $orderProduct */
+        $orderProduct = $order->orderProducts->first();
 
-        Inventory::updateOrCreate([
-            'product_id'  => $orderProduct->product_id,
-            'location_id' => $warehouse->code,
-        ], [
+        $orderProduct->product->inventory($warehouse->code)->update([
             'quantity' => $orderProduct->quantity_ordered,
         ]);
 

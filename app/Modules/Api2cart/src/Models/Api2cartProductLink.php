@@ -6,6 +6,7 @@ use App\BaseModel;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductPrice;
+use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Services\Api2cartService;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use GuzzleHttp\Exception\GuzzleException;
@@ -271,10 +272,7 @@ class Api2cartProductLink extends BaseModel
         $data = $data->merge($this->getBasicData());
         $data = $data->merge($this->getMagentoStoreId());
         $data = $data->merge($this->getInventoryData());
-
-        if (isset($this->api2cartConnection->pricing_location_id)) {
-            $data = $data->merge($this->getPricingData());
-        }
+        $data = $data->merge($this->getPricingData());
 
         return $data->toArray();
     }
@@ -308,15 +306,13 @@ class Api2cartProductLink extends BaseModel
     private function getInventoryData(): array
     {
         // we will refresh to get the latest data
-        $product = $this->product->refresh();
+        $sum = $this->product->inventory()
+            ->when($this->api2cartConnection->inventory_warehouse_ids, function ($query) {
+                $query->whereIn('warehouse_id', $this->api2cartConnection->inventory_warehouse_ids);
+            })
+            ->sum('quantity_available');
 
-        $query = Inventory::whereProductId($product->getKey());
-
-        if ($this->api2cartConnection->inventory_warehouse_ids) {
-            $query->whereIn('warehouse_id', $this->api2cartConnection->inventory_warehouse_ids);
-        }
-
-        $quantity_available = floor($query->sum('quantity_available'));
+        $quantity_available = floor($sum);
 
         return [
             'quantity' => $quantity_available ?? 0,
@@ -329,40 +325,19 @@ class Api2cartProductLink extends BaseModel
      */
     private function getPricingData(): array
     {
-        $attributes = [
-            'product_id' => $this->product->getKey(),
-            'location_id' => $this->api2cartConnection->pricing_location_id,
+        if ($this->api2cartConnection->pricing_location_id === null) {
+            return [];
+        }
+
+        $productPrice = $this->product
+            ->prices($this->api2cartConnection->pricing_location_id)
+            ->first();
+
+        return [
+            'price'         => $productPrice->price,
+            'special_price' => $productPrice->sale_price,
+            'sprice_create' => Api2cartService::formatDateForApi2cart($productPrice->sale_price_start_date),
+            'sprice_expire' => Api2cartService::formatDateForApi2cart($productPrice->sale_price_end_date),
         ];
-
-        $productPrice = ProductPrice::query()->where($attributes)->first();
-
-        if ($productPrice) {
-            return [
-                'price' => $productPrice->price,
-                'special_price' => $productPrice->sale_price,
-                'sprice_create' => $this->formatDateForApi2cart($productPrice->sale_price_start_date),
-                'sprice_expire' => $this->formatDateForApi2cart($productPrice->sale_price_end_date),
-            ];
-        }
-
-        Log::warning('Pricing data not found', $attributes);
-
-        return [];
-    }
-
-    /**
-     * @param $date
-     *
-     * @return string
-     */
-    public function formatDateForApi2cart($date): string
-    {
-        $carbon_date = new Carbon($date ?? '2000-01-01 00:00:00');
-
-        if ($carbon_date->year < 2000) {
-            return '2000-01-01 00:00:00';
-        }
-
-        return $carbon_date->toDateTimeString();
     }
 }

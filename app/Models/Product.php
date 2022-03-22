@@ -249,8 +249,9 @@ class Product extends BaseModel
                 'quantity as inventory_source_quantity',
                 'product_id as inventory_source_product_id',
                 'location_id as inventory_source_location_id',
+                'warehouse_code as inventory_source_warehouse_code',
             ])
-            ->where(['location_id'=>$inventory_location_id])
+            ->where(['warehouse_code' => $inventory_location_id])
             ->toBase();
 
         return $query->leftJoinSub($source_inventory, 'inventory_source', function ($join) {
@@ -276,19 +277,25 @@ class Product extends BaseModel
     /**
      * @return HasMany|Inventory
      */
-    public function inventory(): HasMany
+    public function inventory(string $warehouse_code = null): HasMany
     {
         return $this->hasMany(Inventory::class)
-            ->keyBy('location_id');
+            ->when($warehouse_code, function ($query) use ($warehouse_code) {
+                $query->where(['warehouse_code' => $warehouse_code]);
+            })
+            ->keyBy('warehouse_code');
     }
 
     /**
-     * @return mixed|hasMany
+     * @return HasMany|ProductPrice
      */
-    public function prices()
+    public function prices(string $warehouse_code = null): HasMany
     {
         return $this->hasMany(ProductPrice::class)
-            ->keyBy('location_id');
+            ->when($warehouse_code, function ($query) use ($warehouse_code) {
+                $query->where(['warehouse_code' => $warehouse_code]);
+            })
+            ->keyBy('warehouse_code');
     }
 
     public function aliases()

@@ -39,7 +39,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property-read Collection|Activity[] $activities
  * @property-read int|null $activities_count
  * @property-read Order|null $order
- * @property-read Product|null $product
+ * @property-read Product $product
  *
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct increment($column, $quantity)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct addInventorySource($inventory_location_id)

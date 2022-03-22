@@ -9,6 +9,7 @@ use App\Models\OrderAddress;
 use App\Models\OrderProduct;
 use App\Modules\Api2cart\src\Jobs\ImportShippingAddressJob;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use phpseclib\Math\BigInteger;
 
@@ -233,13 +234,13 @@ class OrderService
         }
 
         $query = Inventory::where('product_id', $product_id)
-            ->where('location_id', '!=', '999');
+            ->where('warehouse_code', '!=', '999');
 
         if ($sourceLocationId) {
-            $query->where('location_id', $sourceLocationId);
+            $query->where('warehouse_code', $sourceLocationId);
         }
 
-        $quantity_available = $query->sum(\DB::raw('(quantity - quantity_reserved)'));
+        $quantity_available = $query->sum(DB::raw('(quantity - quantity_reserved)'));
 
         if (!$quantity_available) {
             return false;
