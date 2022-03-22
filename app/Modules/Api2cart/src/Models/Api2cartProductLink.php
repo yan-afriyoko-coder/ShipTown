@@ -6,6 +6,7 @@ use App\BaseModel;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductPrice;
+use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Services\Api2cartService;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use GuzzleHttp\Exception\GuzzleException;
@@ -324,19 +325,16 @@ class Api2cartProductLink extends BaseModel
      */
     private function getPricingData(): array
     {
-        dd($this->api2cartConnection);
-        if (is_null($this->api2cartConnection->pricing_location_id)) {
+        if ($this->api2cartConnection->pricing_location_id === null) {
             return [];
         }
 
-        $productPrice = ProductPrice::query()->where([
-                'product_id' => $this->product->getKey(),
-                'location_id' => $this->api2cartConnection->pricing_location_id,
-            ])
+        $productPrice = $this->product
+            ->prices($this->api2cartConnection->pricing_location_id)
             ->first();
 
         return [
-            'price' => $productPrice->price,
+            'price'         => $productPrice->price,
             'special_price' => $productPrice->sale_price,
             'sprice_create' => Api2cartService::formatDateForApi2cart($productPrice->sale_price_start_date),
             'sprice_expire' => Api2cartService::formatDateForApi2cart($productPrice->sale_price_end_date),

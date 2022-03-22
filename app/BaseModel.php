@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method static firstOrCreate(array $array, array $array)
  * @method static findOrFail($id)
  * @method static updateOrCreate(array $array, array $array1)
- * @method static Builder|Warehouse select(string $string)
  *
  * @mixin Eloquent
  */
