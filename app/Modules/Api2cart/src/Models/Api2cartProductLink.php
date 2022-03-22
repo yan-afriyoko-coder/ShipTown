@@ -324,6 +324,7 @@ class Api2cartProductLink extends BaseModel
      */
     private function getPricingData(): array
     {
+        dd($this->api2cartConnection);
         if (is_null($this->api2cartConnection->pricing_location_id)) {
             return [];
         }
