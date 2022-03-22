@@ -221,12 +221,12 @@ class Product extends BaseModel
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param string                             $text
+     * @param mixed $query
+     * @param string $text
      *
-     * @return \Illuminate\Database\Query\Builder
+     * @return self
      */
-    public function scopeWhereHasText($query, $text)
+    public function scopeWhereHasText($query, string $text): Product
     {
         return $query->where('sku', 'like', '%'.$text.'%')
             ->orWhere('name', 'like', '%'.$text.'%')
