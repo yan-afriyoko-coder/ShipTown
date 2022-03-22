@@ -20,6 +20,7 @@
                             <th>Code</th>
                             <th>Name</th>
                             <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -27,6 +28,13 @@
                             <td>{{ warehouse.id }}</td>
                             <td>{{ warehouse.code }}</td>
                             <td>{{ warehouse.name }}</td>
+                            <td>
+
+                                <template v-for="tag in warehouse.tags">
+                                    <a class="badge text-uppercase" :key="tag.id"> {{ tag.name }} </a>
+                                </template>
+
+                            </td>
                             <td>
                                 <a @click.prevent="showEditForm(warehouse)">
                                     <font-awesome-icon icon="edit"></font-awesome-icon>
@@ -46,7 +54,7 @@
         </div>
         <!-- The modals -->
         <create-modal id="createForm" @onCreated="addWarehouse"></create-modal>
-        <edit-modal :warehouse="selectedWarehouse" id="editForm" @onUpdated="updateWarehouse"></edit-modal>
+        <edit-modal :warehouse="selectedWarehouse" id="editForm" @onUpdated="warehouseUpdatedEvent"></edit-modal>
     </div>
 </template>
 
@@ -64,10 +72,7 @@ export default {
     },
 
     mounted() {
-        this.apiGetWarehouses()
-            .then(({ data }) => {
-                this.warehouses = data.data;
-            })
+        this.fetchWarehouses();
     },
 
     data: () => ({
@@ -76,22 +81,34 @@ export default {
     }),
 
     methods: {
+        fetchWarehouses: function () {
+            this.apiGetWarehouses({
+                'include': 'tags'
+            })
+                .then(({data}) => {
+                    this.warehouses = data.data;
+                })
+        },
+
         showCreateForm(){
             $('#createForm').modal('show');
         },
+
         showEditForm(warehouse) {
             this.selectedWarehouse = warehouse;
             $('#editForm').modal('show');
         },
+
         addWarehouse(orderStatus){
             this.warehouses.push(orderStatus)
         },
-        updateWarehouse(newValue) {
-            const indexWarehouse = this.warehouses.findIndex(warehouse => warehouse.id == newValue.id)
-            this.$set(this.warehouses, indexWarehouse, newValue)
+
+        warehouseUpdatedEvent(newValue) {
+            this.fetchWarehouses();
         },
+
         confirmDelete(selectedWarehouse) {
-            const indexWarehouse = this.warehouses.findIndex(warehouse => warehouse.id == selectedWarehouse.id)
+            const indexWarehouse = this.warehouses.findIndex(warehouse => warehouse.id === selectedWarehouse.id)
             this.$snotify.confirm('After delete data cannot restored', 'Are you sure?', {
                 position: 'centerCenter',
                 buttons: [
@@ -106,6 +123,7 @@ export default {
                 ]
             });
         },
+
         delete(id, index) {
             this.apiDeleteWarehouses(id)
                 .then(() => {

@@ -4,11 +4,14 @@ namespace App\Models;
 
 use App\BaseModel;
 use App\Traits\HasTagsTrait;
+use App\Traits\LogsActivityTrait;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 /**
  * App\Models\Warehouse.
@@ -38,6 +41,7 @@ use Illuminate\Support\Carbon;
  */
 class Warehouse extends BaseModel
 {
+    use LogsActivityTrait;
     use HasTagsTrait;
 
     protected $fillable = [
@@ -45,6 +49,32 @@ class Warehouse extends BaseModel
         'name',
         'address_id',
     ];
+
+    /**
+     * @return QueryBuilder
+     */
+    public static function getSpatieQueryBuilder(): QueryBuilder
+    {
+        return QueryBuilder::for(Warehouse::class)
+            ->allowedFilters([
+                AllowedFilter::scope('search', 'whereHasText'),
+                AllowedFilter::exact('id'),
+                AllowedFilter::exact('code'),
+                AllowedFilter::exact('name'),
+
+                AllowedFilter::scope('has_tags', 'hasTags'),
+                AllowedFilter::scope('without_tags', 'withoutAllTags'),
+            ])
+            ->allowedSorts([
+                'id',
+                'code',
+                'name',
+            ])
+            ->allowedIncludes([
+                'address',
+                'tags',
+            ]);
+    }
 
     /**
      * @return BelongsTo
