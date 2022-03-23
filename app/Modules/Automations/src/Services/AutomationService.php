@@ -19,7 +19,8 @@ class AutomationService
      */
     public static function runAllAutomations(ActiveOrderCheckEvent $event)
     {
-        Automation::where('event_class', get_class($event))
+        Automation::query()
+            ->where('event_class', get_class($event))
             ->where(['enabled' => true])
             ->orderBy('priority')
             ->get()
@@ -36,7 +37,8 @@ class AutomationService
     {
         // this will prevent two automation processes running on same order
         try {
-            OrderLock::where('created_at', '<', now()->subMinutes(10))
+            OrderLock::query()
+                ->where('created_at', '<', now()->subMinutes(10))
                 ->forceDelete();
 
             /** @var OrderLock $lock */

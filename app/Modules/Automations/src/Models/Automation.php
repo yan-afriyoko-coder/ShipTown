@@ -3,7 +3,6 @@
 namespace App\Modules\Automations\src\Models;
 
 use App\BaseModel;
-use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**

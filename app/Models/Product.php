@@ -11,6 +11,7 @@ use Barryvdh\LaravelIdeHelper\Eloquent;
 use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\DatabaseNotification;
@@ -236,10 +237,10 @@ class Product extends BaseModel
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param int                                $inventory_location_id
+     * @param mixed $query
+     * @param mixed $inventory_location_id
      *
-     * @return \Illuminate\Database\Query\Builder
+     * @return mixed
      */
     public function scopeAddInventorySource($query, $inventory_location_id)
     {
@@ -298,27 +299,21 @@ class Product extends BaseModel
             ->keyBy('warehouse_code');
     }
 
-    public function aliases()
+    /**
+     * @return HasMany
+     */
+    public function aliases(): HasMany
     {
         return $this->hasMany(ProductAlias::class);
     }
 
+    /**
+     * @param string $sku
+     * @return Builder|Model|object|null
+     */
     public static function findBySKU(string $sku)
     {
         return static::query()->where('sku', '=', $sku)->first();
-    }
-
-    /**
-     * @param Builder $query
-     * @param string  $skuOrAlias
-     *
-     * @return Builder
-     */
-    public function scopeSkuOrAlias(Builder $query, string $skuOrAlias)
-    {
-        return $query->whereHas('aliases', function (Builder $query) use ($skuOrAlias) {
-            return $query->where('alias', 'like', '%'.$skuOrAlias.'%');
-        });
     }
 
     /**
