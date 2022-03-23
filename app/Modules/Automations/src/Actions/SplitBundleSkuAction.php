@@ -103,7 +103,7 @@ class SplitBundleSkuAction extends BaseOrderAction
 
             $originalOrderProduct->update(['quantity_split' => $quantity_to_ship]);
             $skusToAdd->each(function (string $sku) use ($originalOrderProduct, $quantity_to_ship, &$newOrderProducts_totalPrice) {
-                $product = Product::findBySKU($sku)->first();
+                $product = Product::findBySKU($sku);
                 $newOrderProduct = new OrderProduct([]);
                 $newOrderProduct->sku_ordered = $sku;
                 $newOrderProduct->order_id = $originalOrderProduct->order_id;
