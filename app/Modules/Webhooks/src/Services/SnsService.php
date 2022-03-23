@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Modules\Webhooks\src\Services;
 
 use AWS;
 use Aws\Exception\AwsException;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 /**
  * Class SnsController.
  */
-class SnsController extends Controller
+class SnsService
 {
     /**
      * @var SnsClient

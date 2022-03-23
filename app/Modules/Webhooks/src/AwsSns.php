@@ -2,7 +2,7 @@
 
 namespace App\Modules\Webhooks\src;
 
-use App\Http\Controllers\SnsController;
+use App\Modules\Webhooks\src\Services\SnsService;
 use Aws\Exception\AwsException;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -17,7 +17,7 @@ class AwsSns
      */
     public static function publish(string $topic, string $message): bool
     {
-        $snsTopic = new SnsController($topic);
+        $snsTopic = new SnsService($topic);
 
         try {
             return $snsTopic->publish($message);
