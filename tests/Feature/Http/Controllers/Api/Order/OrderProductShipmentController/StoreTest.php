@@ -16,7 +16,7 @@ class StoreTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = factory(User::class)->create()->assignRole('admin');
+        $admin = factory(User::class)->create()->assignRole('user');
         $this->actingAs($admin, 'api');
     }
 
