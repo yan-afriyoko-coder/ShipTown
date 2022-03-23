@@ -3,7 +3,7 @@
 namespace App\Modules\Automations\src\Conditions;
 
 use App\Events\Order\ActiveOrderCheckEvent;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 /**
  *
