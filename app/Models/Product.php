@@ -224,9 +224,9 @@ class Product extends BaseModel
      * @param mixed $query
      * @param string $text
      *
-     * @return self
+     * @return mixed
      */
-    public function scopeWhereHasText($query, string $text): Product
+    public function scopeWhereHasText($query, string $text)
     {
         return $query->where('sku', 'like', '%'.$text.'%')
             ->orWhere('name', 'like', '%'.$text.'%')
