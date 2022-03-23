@@ -313,7 +313,11 @@ class Product extends BaseModel
      */
     public static function findBySKU(string $sku)
     {
-        return static::query()->where('sku', '=', $sku)->first();
+        return static::query()->where('sku', '=', $sku)
+            ->orWhereHas('aliases', function (Builder $query) use ($sku) {
+                return $query->where('alias', '=', $sku);
+            })
+            ->first();
     }
 
     /**

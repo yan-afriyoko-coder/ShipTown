@@ -6,9 +6,9 @@ use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Modules\Automations\src\BaseOrderAction;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\MessageBag;
-use Log;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 /**
  *
@@ -103,7 +103,7 @@ class SplitBundleSkuAction extends BaseOrderAction
 
             $originalOrderProduct->update(['quantity_split' => $quantity_to_ship]);
             $skusToAdd->each(function (string $sku) use ($originalOrderProduct, $quantity_to_ship, &$newOrderProducts_totalPrice) {
-                $product = Product::skuOrAlias($sku)->first();
+                $product = Product::findBySKU($sku)->first();
                 $newOrderProduct = new OrderProduct([]);
                 $newOrderProduct->sku_ordered = $sku;
                 $newOrderProduct->order_id = $originalOrderProduct->order_id;
