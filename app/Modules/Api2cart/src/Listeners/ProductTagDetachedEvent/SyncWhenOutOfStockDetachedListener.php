@@ -5,7 +5,6 @@ namespace App\Modules\Api2cart\src\Listeners\ProductTagDetachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
 use App\Modules\Api2cart\src\Jobs\SyncProduct;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
-use App\Modules\MagentoApi\src\Jobs\SyncProductStockJob;
 
 class SyncWhenOutOfStockDetachedListener
 {
@@ -31,7 +30,6 @@ class SyncWhenOutOfStockDetachedListener
         Api2cartProductLink::where(['product_id' => $event->product()->getKey()])
             ->each(function (Api2cartProductLink $product_link) {
                 SyncProduct::dispatch($product_link);
-                SyncProductStockJob::dispatch($product_link->product);
             });
     }
 }

@@ -2,9 +2,8 @@
 
 namespace Tests\External;
 
-use App\Http\Controllers\SnsController;
+use App\Modules\Webhooks\src\Services\SnsService;
 use App\User;
-use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class SnsControllerTest extends TestCase
@@ -23,7 +22,7 @@ class SnsControllerTest extends TestCase
             factory(User::class)->create()
         );
 
-        $snsClient = new SnsController('testTopic');
+        $snsClient = new SnsService('testTopic');
 
         $this->assertTrue(
             $snsClient->createTopic(),

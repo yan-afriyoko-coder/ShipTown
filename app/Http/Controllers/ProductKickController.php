@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Modules\Api2cart\src\Jobs\SyncProduct;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
-use App\Modules\MagentoApi\src\Jobs\SyncProductStockJob;
 use Illuminate\Http\Request;
 
 /**
@@ -24,7 +23,6 @@ class ProductKickController extends Controller
         Api2cartProductLink::where(['product_id' => $product->getKey()])
             ->each(function (Api2cartProductLink $product_link) {
                 SyncProduct::dispatch($product_link);
-                SyncProductStockJob::dispatch($product_link->product);
             });
 
         $this->respondOK200('Product Kicked');
