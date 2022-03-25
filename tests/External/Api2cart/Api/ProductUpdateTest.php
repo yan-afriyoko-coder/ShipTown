@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\ProductPrice;
 use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Exceptions\RequestException;
+use App\Modules\Api2cart\src\Jobs\SyncProduct;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use App\Modules\Api2cart\src\Services\Api2cartService;
@@ -25,7 +26,7 @@ class ProductUpdateTest extends TestCase
     /**
      * @var Api2cartProductLink
      */
-    private $api2cart_product_link;
+    private Api2cartProductLink $api2cart_product_link;
 
     /**
      * @var Api2cartConnection
@@ -40,7 +41,7 @@ class ProductUpdateTest extends TestCase
     /**
      * @var Inventory
      */
-    private $inventory;
+    private Inventory $inventory;
 
     protected function setUp(): void
     {
@@ -57,11 +58,6 @@ class ProductUpdateTest extends TestCase
             'bridge_api_key' => config('api2cart.api2cart_test_store_key'),
         ]);
 
-
-        $this->inventory = factory(Inventory::class)->create(['location_id' => '99', 'product_id' => $product->getKey()]);
-
-        factory(ProductPrice::class)->create(['location_id' => '99', 'product_id' => $product->getKey()]);
-
         $this->api2cart_product_link = factory(Api2cartProductLink::class)->create([]);
         $this->api2cart_product_link->product()->associate($product);
         $this->api2cart_product_link->api2cartConnection()->associate($api2cart_connection);
@@ -71,8 +67,11 @@ class ProductUpdateTest extends TestCase
      */
     public function test_if_updates_stock_if_no_location_source_specified()
     {
-        Api2cartService::updateSku($this->api2cart_product_link);
+        $this->api2cart_product_link->product->attachTags(['Not Synced']);
 
-        $this->assertTrue($this->api2cart_product_link->isInSync());
+        $job = new SyncProduct($this->api2cart_product_link);
+        $job->handle();
+
+        $this->assertFalse($this->api2cart_product_link->product->hasTags(['Not Synced']));
     }
 }
