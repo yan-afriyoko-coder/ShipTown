@@ -99,8 +99,9 @@ class Api2cartProductLink extends BaseModel
         if ($this->last_fetched_data) {
             $product_data = $this->last_fetched_data;
 
+            ray($this->last_fetched_data);
             $this->api2cart_product_id = data_get($product_data, 'id');
-            $this->api2cart_quantity = $this->getQuantity((array)$product_data, $this->api2cartConnection);
+            $this->api2cart_quantity = data_get($product_data, 'quantity');
             $this->api2cart_price = data_get($product_data, 'price');
 
             $this->api2cart_sale_price = data_get($product_data, 'special_price');
@@ -152,7 +153,6 @@ class Api2cartProductLink extends BaseModel
             return false;
         }
 
-        $this->raw_import = $product_now;
         $this->last_fetched_data = $product_now;
         $this->save();
 
