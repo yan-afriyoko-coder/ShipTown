@@ -152,7 +152,6 @@ class Api2cartProductLink extends BaseModel
             return false;
         }
 
-        $this->raw_import = $product_now;
         $this->last_fetched_data = $product_now;
         $this->save();
 
