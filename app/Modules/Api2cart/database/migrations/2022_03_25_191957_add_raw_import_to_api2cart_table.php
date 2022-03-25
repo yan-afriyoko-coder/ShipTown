@@ -14,7 +14,7 @@ class AddRawImportToApi2cartTable extends Migration
     public function up()
     {
         Schema::table('modules_api2cart_product_links', function (Blueprint $table) {
-            $table->json('raw_import')->after('api2cart_sale_price_end_date');
+            $table->json('raw_import')->after('api2cart_sale_price_end_date')->nullable();
         });
     }
 }

@@ -46,9 +46,9 @@ trait HasTagsTrait
      * @param string|Tag  $tag
      * @param string|null $type
      *
-     * @return $this
+     * @return self
      */
-    public function attachTag($tag, string $type = null)
+    public function attachTag($tag, string $type = null): self
     {
         try {
             if ($this->hasTags([$tag])) {
