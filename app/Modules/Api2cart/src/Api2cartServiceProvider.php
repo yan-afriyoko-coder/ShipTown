@@ -12,6 +12,7 @@ use App\Events\ProductPrice\ProductPriceUpdatedEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\Api2cart\src\Listeners\HourlyEvent\DispatchSyncProductsJobListener;
 use App\Modules\BaseModuleServiceProvider;
+use Laravel\Passport\Passport;
 
 /**
  * Class Api2cartServiceProvider.
@@ -73,4 +74,13 @@ class Api2cartServiceProvider extends BaseModuleServiceProvider
             Listeners\OrderUpdatedEvent\SyncStatusListener::class,
         ]
     ];
+
+    public function boot()
+    {
+        parent::boot();
+
+        if ($this->app->runningInConsole()) {
+            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        }
+    }
 }
