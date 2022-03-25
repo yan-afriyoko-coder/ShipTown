@@ -4,6 +4,7 @@ namespace Tests\External\Api2cart\Jobs;
 
 use App\Models\Inventory;
 use App\Models\Product;
+use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Jobs\SyncProductsJob;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -21,6 +22,8 @@ class SyncProductsToApi2cartTest extends TestCase
      */
     public function testExample()
     {
+        factory(Warehouse::class)->create(['code' => '99', 'name' => '99']);
+
         $product = factory(Product::class)
             ->with('inventory')
             ->create();

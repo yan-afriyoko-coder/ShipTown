@@ -5,6 +5,7 @@ namespace Tests\External\Api2cart\Api;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductPrice;
+use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Exceptions\RequestException;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
@@ -45,6 +46,8 @@ class ProductUpdateTest extends TestCase
     {
         parent::setUp();
 
+        factory(Warehouse::class)->create(['code' => '99', 'name' => '99']);
+
         $product = factory(Product::class)->create();
 
         $api2cart_connection = factory(Api2cartConnection::class)->create([
@@ -69,7 +72,7 @@ class ProductUpdateTest extends TestCase
     public function test_if_updates_stock_if_no_location_source_specified()
     {
         Api2cartService::updateSku($this->api2cart_product_link);
-        
+
         $this->assertTrue($this->api2cart_product_link->isInSync());
     }
 }
