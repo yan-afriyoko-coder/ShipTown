@@ -6,7 +6,6 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductPrice;
 use App\Models\Warehouse;
-use http\Exception\InvalidArgumentException;
 
 class WarehouseObserver
 {
