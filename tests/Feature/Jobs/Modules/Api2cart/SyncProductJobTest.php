@@ -27,19 +27,16 @@ class SyncProductJobTest extends TestCase
 
         $product = factory(Product::class)->create();
 
-        $connection = factory(Api2cartConnection::class)->create(
-            [
-                'pricing_location_id'   => $warehouse->code,
-                'inventory_location_id' => $warehouse->code,
-            ]
-        );
+         factory(Api2cartConnection::class)->create([
+            'pricing_location_id'   => $warehouse->code,
+         ]);
 
         Api2cartProductLink::where(['product_id' => $product->getKey()])
             ->each(function (Api2cartProductLink $product_link) {
                 SyncProduct::dispatchNow($product_link);
             });
 
-        // no errors, so we happy :)
+        // no errors, so we are happy :)
         $this->assertTrue(true);
     }
 }

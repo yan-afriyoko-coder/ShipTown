@@ -52,9 +52,7 @@ class ProductUpdateTest extends TestCase
         $product = factory(Product::class)->create();
 
         $api2cart_connection = factory(Api2cartConnection::class)->create([
-            'location_id' => '99',
             'pricing_location_id' => '99',
-            'inventory_location_id' => '99',
             'bridge_api_key' => config('api2cart.api2cart_test_store_key'),
         ]);
 

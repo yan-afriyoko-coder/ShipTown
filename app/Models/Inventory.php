@@ -71,19 +71,28 @@ class Inventory extends BaseModel
 
     protected $table = 'inventory';
 
-    protected $appends = [
-        'quantity_available',
-    ];
-
     protected $attributes = [
         'quantity'          => 0,
         'quantity_reserved' => 0,
     ];
 
     protected $casts = [
-        'quantity'          => 'float',
-        'quantity_reserved' => 'float',
+        'quantity'           => 'float',
+        'quantity_reserved'  => 'float',
+        'quantity_available' => 'float',
     ];
+
+    /**
+     * @param $query
+     * @param $tags
+     * @return mixed
+     */
+    public function scopeWithWarehouseTags($query, $tags)
+    {
+        return $query->whereHas('warehouse', function (Builder $query) use ($tags) {
+            $query->withAllTags($tags);
+        });
+    }
 
     public function save(array $options = [])
     {
@@ -97,17 +106,6 @@ class Inventory extends BaseModel
         }
 
         return parent::save($options);
-    }
-
-    public function getQuantityAvailableAttribute()
-    {
-        $quantity_available = $this->quantity - $this->quantity_reserved;
-
-        if ($quantity_available < 0) {
-            return 0;
-        }
-
-        return $quantity_available;
     }
 
     /**

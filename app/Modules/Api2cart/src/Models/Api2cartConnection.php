@@ -54,20 +54,10 @@ class Api2cartConnection extends Model
 
     protected $fillable = [
         'prefix',
-        'inventory_warehouse_ids',
         'bridge_api_key',
         'last_synced_modified_at',
         'url',
-        'location_id',
         'type',
-    ];
-
-    protected $casts = [
-        'inventory_warehouse_ids' => 'array'
-    ];
-
-    protected $attributes = [
-        'inventory_warehouse_ids' => []
     ];
 
     public function __construct(array $attributes = [])
