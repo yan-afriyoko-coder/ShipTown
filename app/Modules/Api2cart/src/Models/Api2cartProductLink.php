@@ -3,10 +3,7 @@
 namespace App\Modules\Api2cart\src\Models;
 
 use App\BaseModel;
-use App\Models\Inventory;
 use App\Models\Product;
-use App\Models\ProductPrice;
-use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Services\Api2cartService;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use GuzzleHttp\Exception\GuzzleException;
@@ -99,23 +96,15 @@ class Api2cartProductLink extends BaseModel
         if ($this->last_fetched_data) {
             $product_data = $this->last_fetched_data;
 
-            ray($this->last_fetched_data);
+            $sprice_create = data_get($product_data, 'sprice_create', '2000-01-01 00:00:00');
+            $sprice_expire = data_get($product_data, 'sprice_expire', '2000-01-01 00:00:00');
+
             $this->api2cart_product_id = data_get($product_data, 'id');
             $this->api2cart_quantity = data_get($product_data, 'quantity');
             $this->api2cart_price = data_get($product_data, 'price');
-
             $this->api2cart_sale_price = data_get($product_data, 'special_price');
-
-            $created_at = data_get($product_data, 'sprice_create');
-            $sprice_create = empty($created_at) ? '2000-01-01 00:00:00' : $created_at;
-            $sprice_create = Carbon::createFromTimeString($sprice_create)->format('Y-m-d H:i:s');
             $this->api2cart_sale_price_start_date = Carbon::createFromTimeString($sprice_create)->format('Y-m-d H:i:s');
-
-            $expired_at = data_get($product_data, 'expired_at');
-            $sprice_expired_at = empty($expired_at) ? '2000-01-01 00:00:00' : $expired_at;
-            $sprice_expired_at = Carbon::createFromTimeString($sprice_expired_at)->format('Y-m-d H:i:s');
-            $this->api2cart_sale_price_end_date = Carbon::createFromTimeString($sprice_expired_at)
-                ->format('Y-m-d H:i:s');
+            $this->api2cart_sale_price_end_date = Carbon::createFromTimeString($sprice_expire)->format('Y-m-d H:i:s');
         }
 
         return parent::save($options);
