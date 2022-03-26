@@ -63,16 +63,16 @@ class Api2cartProductLink extends BaseModel
      */
     protected $fillable = [
         'product_id',
+        'last_fetched_at',
         'api2cart_connection_id',
         'api2cart_product_type',
         'api2cart_product_id',
-        'last_fetched_at',
-        'last_fetched_data',
         'api2cart_quantity',
         'api2cart_price',
         'api2cart_sale_price',
         'api2cart_sale_price_start_date',
         'api2cart_sale_price_end_date',
+        'last_fetched_data',
     ];
 
     protected $dates = [
@@ -298,16 +298,7 @@ class Api2cartProductLink extends BaseModel
      */
     private function getInventoryData(): array
     {
-        Inventory::withTags(['magento_stock']);
-
-        // we will refresh to get the latest data
-        $sum = $this->product->inventory()
-            ->when($this->api2cartConnection->inventory_warehouse_ids, function ($query) {
-                $query->whereIn('warehouse_id', $this->api2cartConnection->inventory_warehouse_ids);
-            })
-            ->sum('quantity_available');
-
-        $quantity_available = floor($sum);
+        $quantity_available = floor(Inventory::withWarehouseTags(['magento_stock'])->sum('quantity_available'));
 
         return [
             'quantity' => $quantity_available ?? 0,

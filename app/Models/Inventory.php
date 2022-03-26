@@ -82,10 +82,15 @@ class Inventory extends BaseModel
         'quantity_available' => 'float',
     ];
 
-    public static function withTags(array $array): Builder
+    /**
+     * @param $query
+     * @param $tags
+     * @return mixed
+     */
+    public function scopeWithWarehouseTags($query, $tags)
     {
-        return Inventory::query()->whereHas('warehouse', function (Builder $query) use ($array) {
-            $query->withAllTags($array);
+        return $query->whereHas('warehouse', function (Builder $query) use ($tags) {
+            $query->withAllTags($tags);
         });
     }
 

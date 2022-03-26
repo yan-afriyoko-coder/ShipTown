@@ -32,6 +32,16 @@ trait HasTagsTrait
         // override this function on model
     }
 
+    /**
+     * @param array|null $tags
+     *
+     * @return bool
+     */
+    public function hasTags(array $tags = null): bool
+    {
+        return static::withAllTags($tags)->whereId($this->getKey())->exists();
+    }
+
     public function scopeHasTags(Builder $query, $tags): Builder
     {
         $tags = collect(func_get_args());
@@ -121,16 +131,6 @@ trait HasTagsTrait
         });
 
         return $query;
-    }
-
-    /**
-     * @param array|null $tags
-     *
-     * @return bool
-     */
-    public function hasTags(array $tags = null): bool
-    {
-        return static::withAllTags($tags)->whereId($this->getKey())->exists();
     }
 
     /**

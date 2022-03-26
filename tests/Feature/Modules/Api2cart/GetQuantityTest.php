@@ -8,14 +8,12 @@ use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Arr;
 use Tests\TestCase;
 
 class GetQuantityTest extends TestCase
 {
     use RefreshDatabase;
 
-    private Api2cartConnection $api2cartConnection;
     private Api2cartProductLink $productLink;
 
     protected function setUp(): void
@@ -30,10 +28,10 @@ class GetQuantityTest extends TestCase
             $inventory->update(['quantity' => $inventory->warehouse_id]);
         });
 
-        $this->api2cartConnection = factory(Api2cartConnection::class)->create();
+        $api2cartConnection = factory(Api2cartConnection::class)->create();
 
         $this->productLink = new Api2cartProductLink();
-        $this->productLink->api2cart_connection_id = $this->api2cartConnection->getKey();
+        $this->productLink->api2cart_connection_id = $api2cartConnection->getKey();
         $this->productLink->product_id = $product->getKey();
         $this->productLink->save();
     }
@@ -45,9 +43,7 @@ class GetQuantityTest extends TestCase
      */
     public function testEmptyInventoryWarehouseIds()
     {
-        $this->api2cartConnection->update(['inventory_warehouse_ids' => []]);
-
-        $this->assertEquals($this->productLink->product->quantity_available, $this->productLink->getProductData()['quantity']);
+        $this->assertEquals(0, $this->productLink->getProductData()['quantity']);
     }
 
     /**
@@ -57,16 +53,16 @@ class GetQuantityTest extends TestCase
      */
     public function testSetInventoryWarehouseIds()
     {
-        $warehouseIds = Warehouse::select('id')
+        $warehouseIds = Warehouse::query()
+            ->select('id')
             ->limit(5)
             ->inRandomOrder()
             ->get()
             ->map(function (Warehouse $warehouse) {
+                $warehouse->attachTag('magento_stock');
                 return $warehouse->getKey();
             })
             ->toArray();
-
-        $this->api2cartConnection->update(['inventory_warehouse_ids' => $warehouseIds]);
 
         $idsSum = collect($warehouseIds)->sum(function ($warehouse) {
             return $warehouse;

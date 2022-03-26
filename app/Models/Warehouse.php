@@ -36,7 +36,6 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static Builder|Warehouse whereName($value)
  * @method static Builder|Warehouse whereUpdatedAt($value)
  *
- * @method static Builder hasTags($tags)
  * @mixin Eloquent
  */
 class Warehouse extends BaseModel
