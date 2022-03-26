@@ -8,7 +8,7 @@ use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
-use App\Events\ProductPrice\ProductPriceUpdatedEvent;
+use App\Events\Product\ProductPriceUpdatedEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\Api2cart\src\Listeners\HourlyEvent\DispatchSyncProductsJobListener;
 use App\Modules\BaseModuleServiceProvider;
