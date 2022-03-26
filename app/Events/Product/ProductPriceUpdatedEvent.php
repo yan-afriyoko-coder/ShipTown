@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events\ProductPrice;
+namespace App\Events\Product;
 
 use App\Models\ProductPrice;
 use Illuminate\Broadcasting\Channel;

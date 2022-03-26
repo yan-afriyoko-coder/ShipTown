@@ -2,7 +2,7 @@
 
 namespace App\Modules\Api2cart\src\Listeners\ProductPriceUpdatedEvent;
 
-use App\Events\ProductPrice\ProductPriceUpdatedEvent;
+use App\Events\Product\ProductPriceUpdatedEvent;
 
 class AddNotSyncedTagListener
 {

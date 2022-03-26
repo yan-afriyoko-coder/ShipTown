@@ -2,25 +2,11 @@
 
 namespace App\Observers;
 
-use App\Events\Inventory\InventoryCreatedEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Models\Inventory;
 
 class InventoryObserver
 {
-    /**
-     * Handle the inventory "created" event.
-     *
-     * @param Inventory $inventory
-     *
-     * @return void
-     */
-    public function created(Inventory $inventory)
-    {
-        $inventory->product->recalculateQuantityTotals()->save();
-        InventoryCreatedEvent::dispatch($inventory);
-    }
-
     /**
      * Handle the inventory "updated" event.
      *

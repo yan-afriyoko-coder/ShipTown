@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Events\ProductPrice\ProductPriceUpdatedEvent;
+use App\Events\Product\ProductPriceUpdatedEvent;
 use App\Models\ProductPrice;
 
 class ProductPriceObserver

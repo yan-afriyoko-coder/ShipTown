@@ -46,42 +46,6 @@ class ProductObserver
     }
 
     /**
-     * Handle the product "deleted" event.
-     *
-     * @param Product $product
-     *
-     * @return void
-     */
-    public function deleted(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Handle the product "restored" event.
-     *
-     * @param Product $product
-     *
-     * @return void
-     */
-    public function restored(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Handle the product "force deleted" event.
-     *
-     * @param Product $product
-     *
-     * @return void
-     */
-    public function forceDeleted(Product $product)
-    {
-        //
-    }
-
-    /**
      * @param Product $product
      */
     private function insertInventoryRecords(Product $product): void
