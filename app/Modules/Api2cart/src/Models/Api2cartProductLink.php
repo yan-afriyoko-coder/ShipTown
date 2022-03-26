@@ -3,10 +3,7 @@
 namespace App\Modules\Api2cart\src\Models;
 
 use App\BaseModel;
-use App\Models\Inventory;
 use App\Models\Product;
-use App\Models\ProductPrice;
-use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Services\Api2cartService;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use GuzzleHttp\Exception\GuzzleException;
