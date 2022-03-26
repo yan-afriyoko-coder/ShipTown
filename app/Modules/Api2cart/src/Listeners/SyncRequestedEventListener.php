@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Modules\Api2cart\src\Listeners\SyncRequestedEvent;
+namespace App\Modules\Api2cart\src\Listeners;
 
 use App\Events\SyncRequestedEvent;
 use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
 
-class DispatchImportOrdersJobsListener
+class SyncRequestedEventListener
 {
     /**
      * Handle the event.

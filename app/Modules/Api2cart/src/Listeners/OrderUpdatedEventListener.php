@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Modules\Api2cart\src\Listeners\OrderUpdatedEvent;
+namespace App\Modules\Api2cart\src\Listeners;
 
 use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\Api2cart\src\Jobs\SyncOrderStatus;
@@ -9,7 +9,7 @@ use App\Modules\Api2cart\src\Jobs\SyncOrderStatus;
 /**
  *
  */
-class SyncStatusListener
+class OrderUpdatedEventListener
 {
     /**
      * @param OrderUpdatedEvent $event

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Modules\Api2cart\src\Listeners\InventoryUpdatedEvent;
+namespace App\Modules\Api2cart\src\Listeners;
 
 use App\Events\Inventory\InventoryUpdatedEvent;
 
-class AddNotSyncedTagListener
+class InventoryUpdatedEventListener
 {
     /**
      * Handle the event.

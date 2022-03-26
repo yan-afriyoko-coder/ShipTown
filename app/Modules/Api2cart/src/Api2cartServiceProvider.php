@@ -10,9 +10,7 @@ use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
 use App\Events\Product\ProductPriceUpdatedEvent;
 use App\Events\SyncRequestedEvent;
-use App\Modules\Api2cart\src\Listeners\HourlyEvent\DispatchSyncProductsJobListener;
 use App\Modules\BaseModuleServiceProvider;
-use Laravel\Passport\Passport;
 
 /**
  * Class Api2cartServiceProvider.
@@ -27,7 +25,7 @@ class Api2cartServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_description = 'Module provides connectivity to eCommerce platforms. It uses api2cart.com';
+    public static string $module_description = 'Module provides connectivity to eCommerce platforms using api2cart.com';
 
     /**
      * @var bool
@@ -40,39 +38,21 @@ class Api2cartServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        SyncRequestedEvent::class => [
-            Listeners\SyncRequestedEvent\DispatchImportOrdersJobsListener::class,
-        ],
+        SyncRequestedEvent::class => [Listeners\SyncRequestedEventListener::class],
 
-        HourlyEvent::class => [
-            DispatchSyncProductsJobListener::class,
-        ],
+        HourlyEvent::class => [Listeners\HourlyEventListener::class],
 
-        DailyEvent::class => [
-            Listeners\DailyEvent\RunResyncLastDayJobListener::class,
-            Listeners\DailyEvent\RunResyncSyncErrorTaggedJobListener::class,
-            Listeners\DailyEvent\RunCheckFailedTaggedJobListener::class,
-        ],
+        DailyEvent::class => [Listeners\DailyEventListener::class],
 
-        ProductPriceUpdatedEvent::class => [
-            Listeners\ProductPriceUpdatedEvent\AddNotSyncedTagListener::class,
-        ],
+        ProductPriceUpdatedEvent::class => [Listeners\ProductPriceUpdatedEventListener::class],
 
-        ProductTagAttachedEvent::class => [
-            Listeners\ProductTagAttachedEvent\SyncWhenOutOfStockAttachedListener::class,
-        ],
+        ProductTagAttachedEvent::class => [Listeners\ProductTagAttachedEventListener::class],
 
-        ProductTagDetachedEvent::class => [
-            Listeners\ProductTagDetachedEvent\SyncWhenOutOfStockDetachedListener::class,
-        ],
+        ProductTagDetachedEvent::class => [Listeners\ProductTagDetachedEventListener::class],
 
-        InventoryUpdatedEvent::class => [
-            Listeners\InventoryUpdatedEvent\AddNotSyncedTagListener::class,
-        ],
+        InventoryUpdatedEvent::class => [Listeners\InventoryUpdatedEventListener::class],
 
-        OrderUpdatedEvent::class => [
-            Listeners\OrderUpdatedEvent\SyncStatusListener::class,
-        ]
+        OrderUpdatedEvent::class => [Listeners\OrderUpdatedEventListener::class]
     ];
 
     public function boot()

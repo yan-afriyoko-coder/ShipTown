@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Modules\Api2cart\src\Listeners\ProductPriceUpdatedEvent;
+namespace App\Modules\Api2cart\src\Listeners;
 
 use App\Events\Product\ProductPriceUpdatedEvent;
 
-class AddNotSyncedTagListener
+class ProductPriceUpdatedEventListener
 {
     /**
      * Handle the event.

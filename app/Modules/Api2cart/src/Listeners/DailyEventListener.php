@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Modules\Api2cart\src\Listeners\DailyEvent;
+namespace App\Modules\Api2cart\src\Listeners;
 
 use App\Events\DailyEvent;
+use App\Modules\Api2cart\src\Jobs\ResyncCheckFailedTaggedJob;
+use App\Modules\Api2cart\src\Jobs\ResyncLastDayJob;
 use App\Modules\Api2cart\src\Jobs\ResyncSyncErrorsTaggedJob;
 
-class RunResyncSyncErrorTaggedJobListener
+class DailyEventListener
 {
     /**
      * Handle the event.
@@ -16,6 +18,8 @@ class RunResyncSyncErrorTaggedJobListener
      */
     public function handle(DailyEvent $event)
     {
+        ResyncCheckFailedTaggedJob::dispatch();
+        ResyncLastDayJob::dispatch();
         ResyncSyncErrorsTaggedJob::dispatch();
     }
 }

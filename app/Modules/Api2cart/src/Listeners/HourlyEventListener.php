@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Modules\Api2cart\src\Listeners\HourlyEvent;
+namespace App\Modules\Api2cart\src\Listeners;
 
 use App\Events\HourlyEvent;
 use App\Modules\Api2cart\src\Jobs\SyncProductsJob;
 
-class DispatchSyncProductsJobListener
+class HourlyEventListener
 {
     /**
      * Handle the event.
