@@ -71,19 +71,23 @@ class Inventory extends BaseModel
 
     protected $table = 'inventory';
 
-    protected $appends = [
-        'quantity_available',
-    ];
-
     protected $attributes = [
         'quantity'          => 0,
         'quantity_reserved' => 0,
     ];
 
     protected $casts = [
-        'quantity'          => 'float',
-        'quantity_reserved' => 'float',
+        'quantity'           => 'float',
+        'quantity_reserved'  => 'float',
+        'quantity_available' => 'float',
     ];
+
+    public static function withTags(array $array): Builder
+    {
+        return Inventory::query()->whereHas('warehouse', function (Builder $query) use ($array) {
+            $query->withAllTags($array);
+        });
+    }
 
     public function save(array $options = [])
     {
@@ -97,17 +101,6 @@ class Inventory extends BaseModel
         }
 
         return parent::save($options);
-    }
-
-    public function getQuantityAvailableAttribute()
-    {
-        $quantity_available = $this->quantity - $this->quantity_reserved;
-
-        if ($quantity_available < 0) {
-            return 0;
-        }
-
-        return $quantity_available;
     }
 
     /**

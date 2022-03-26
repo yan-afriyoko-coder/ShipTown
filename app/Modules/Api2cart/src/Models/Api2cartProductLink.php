@@ -3,6 +3,7 @@
 namespace App\Modules\Api2cart\src\Models;
 
 use App\BaseModel;
+use App\Models\Inventory;
 use App\Models\Product;
 use App\Modules\Api2cart\src\Services\Api2cartService;
 use Barryvdh\LaravelIdeHelper\Eloquent;
@@ -297,6 +298,8 @@ class Api2cartProductLink extends BaseModel
      */
     private function getInventoryData(): array
     {
+        Inventory::withTags(['magento_stock']);
+
         // we will refresh to get the latest data
         $sum = $this->product->inventory()
             ->when($this->api2cartConnection->inventory_warehouse_ids, function ($query) {
