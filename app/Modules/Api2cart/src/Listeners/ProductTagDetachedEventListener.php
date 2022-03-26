@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Modules\Api2cart\src\Listeners\ProductTagDetachedEvent;
+namespace App\Modules\Api2cart\src\Listeners;
 
 use App\Events\Product\ProductTagDetachedEvent;
 use App\Modules\Api2cart\src\Jobs\SyncProduct;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 
-class SyncWhenOutOfStockDetachedListener
+class ProductTagDetachedEventListener
 {
     /**
      * Handle the event.
