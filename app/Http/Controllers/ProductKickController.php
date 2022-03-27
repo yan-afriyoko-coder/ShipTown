@@ -20,6 +20,8 @@ class ProductKickController extends Controller
     {
         $product = Product::query()->where(['sku' => $sku])->first();
 
+        $product->attachTag('Not Synced');
+
         Api2cartProductLink::where(['product_id' => $product->getKey()])
             ->each(function (Api2cartProductLink $product_link) {
                 SyncProduct::dispatch($product_link);
