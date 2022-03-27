@@ -17,6 +17,20 @@ class UpdateColumnsOnModulesApi2cartProductLinksTable extends Migration
             $table->foreignId('product_id')->change();
             $table->foreignId('api2cart_connection_id')->change();
         });
+
+        Schema::table('modules_api2cart_product_links', function (Blueprint $table) {
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products')
+                ->onDelete('CASCADE');
+
+            $table->foreign('api2cart_connection_id')
+                ->references('id')
+                ->on('modules_api2cart_connections')
+                ->onDelete('CASCADE');
+        });
+
+
     }
 
     /**
