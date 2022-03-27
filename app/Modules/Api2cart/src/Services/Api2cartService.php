@@ -7,6 +7,7 @@ use App\Modules\Api2cart\src\Api\Products;
 use App\Modules\Api2cart\src\Api\RequestResponse;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
+use App\Modules\Api2cart\src\Transformers\ProductTransformer;
 use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Exception\ConnectException;
@@ -140,7 +141,7 @@ class Api2cartService
     private static function productUpdateOrCreate(Api2cartProductLink $product_link): RequestResponse
     {
         $store_key = $product_link->api2cartConnection->bridge_api_key;
-        $product_data = $product_link->getProductData();
+        $product_data = ProductTransformer::toApi2cartPayload($product_link);
 
         // fetch api2cart product type and id
         if ($product_link->api2cart_product_id === null) {

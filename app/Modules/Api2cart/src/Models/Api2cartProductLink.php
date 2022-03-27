@@ -6,6 +6,7 @@ use App\BaseModel;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Modules\Api2cart\src\Services\Api2cartService;
+use App\Modules\Api2cart\src\Transformers\ProductTransformer;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Builder;
@@ -117,7 +118,7 @@ class Api2cartProductLink extends BaseModel
      */
     public function isInSync(): bool
     {
-        $product_data = $this->getProductData();
+        $product_data = ProductTransformer::toApi2cartPayload($this);
 
         $store_id = Arr::has($product_data, 'store_id') ? $product_data['store_id'] : null;
 
@@ -208,25 +209,6 @@ class Api2cartProductLink extends BaseModel
     }
 
     /**
-     * @param array $product
-     * @param Api2cartConnection|null $connection
-     *
-     * @return int
-     */
-    public static function getQuantity(array $product, Api2cartConnection $connection = null): int
-    {
-        if (is_null($connection) or is_null($connection->magento_warehouse_id)) {
-            return $product['quantity'];
-        }
-
-        if (!key_exists($connection->magento_warehouse_id, $product['inventory'])) {
-            return 0;
-        }
-
-        return $product['inventory'][$connection->magento_warehouse_id]['quantity'];
-    }
-
-    /**
      * @return BelongsTo
      */
     public function api2cartConnection(): BelongsTo
@@ -254,81 +236,5 @@ class Api2cartProductLink extends BaseModel
         $this->api2cart_product_id = $response['id'];
 
         return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getProductData(): array
-    {
-        $data = collect();
-
-        $data = $data->merge($this->getBasicData());
-        $data = $data->merge($this->getMagentoStoreId());
-        $data = $data->merge($this->getInventoryData());
-        $data = $data->merge($this->getPricingData());
-
-        return $data->toArray();
-    }
-
-    /**
-     * @return array
-     */
-    private function getBasicData(): array
-    {
-        return [
-            'product_id' => $this->product->getKey(),
-            'sku' => $this->product->sku,
-            'name' => $this->product->name,
-            'description' => $this->product->name,
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function getMagentoStoreId(): array
-    {
-        return [
-            'store_id' => $this->api2cartConnection->magento_store_id ?? 0,
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function getInventoryData(): array
-    {
-        $sum = $this->product->inventory()
-            ->withWarehouseTags(['magento_stock'])
-            ->sum('quantity_available');
-
-        $quantity_available = floor($sum);
-
-        return [
-            'quantity' => $quantity_available ?? 0,
-            'in_stock' => $quantity_available > 0 ? 'True' : 'False',
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function getPricingData(): array
-    {
-        if ($this->api2cartConnection->pricing_location_id === null) {
-            return [];
-        }
-
-        $productPrice = $this->product
-            ->prices($this->api2cartConnection->pricing_location_id)
-            ->first();
-
-        return [
-            'price'         => $productPrice->price,
-            'special_price' => $productPrice->sale_price,
-            'sprice_create' => Api2cartService::formatDateForApi2cart($productPrice->sale_price_start_date),
-            'sprice_expire' => Api2cartService::formatDateForApi2cart($productPrice->sale_price_end_date),
-        ];
     }
 }

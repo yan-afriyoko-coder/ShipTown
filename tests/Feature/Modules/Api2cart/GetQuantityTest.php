@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
+use App\Modules\Api2cart\src\Transformers\ProductTransformer;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -44,7 +45,7 @@ class GetQuantityTest extends TestCase
      */
     public function testEmptyInventoryWarehouseIds()
     {
-        $this->assertEquals(0, $this->productLink->getProductData()['quantity']);
+        $this->assertEquals(0, ProductTransformer::toApi2cartPayload($this->productLink)['quantity']);
     }
 
     /**
@@ -65,6 +66,6 @@ class GetQuantityTest extends TestCase
             })
             ->toArray();
 
-        $this->assertEquals(5, $this->productLink->getProductData()['quantity']);
+        $this->assertEquals(5, ProductTransformer::toApi2cartPayload($this->productLink)['quantity']);
     }
 }
