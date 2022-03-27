@@ -22,17 +22,18 @@ class GetQuantityTest extends TestCase
 
         factory(Warehouse::class, 10)->create();
 
-        $product = factory(Product::class)->create();
+        $product1 = factory(Product::class)->create();
+        $product2 = factory(Product::class)->create();
 
         Inventory::query()->each(function (Inventory $inventory) {
-            $inventory->update(['quantity' => $inventory->warehouse_id]);
+            $inventory->update(['quantity' => 1]);
         });
 
         $api2cartConnection = factory(Api2cartConnection::class)->create();
 
         $this->productLink = new Api2cartProductLink();
         $this->productLink->api2cart_connection_id = $api2cartConnection->getKey();
-        $this->productLink->product_id = $product->getKey();
+        $this->productLink->product_id = $product1->getKey();
         $this->productLink->save();
     }
 
@@ -53,7 +54,7 @@ class GetQuantityTest extends TestCase
      */
     public function testSetInventoryWarehouseIds()
     {
-        $warehouseIds = Warehouse::query()
+        Warehouse::query()
             ->select('id')
             ->limit(5)
             ->inRandomOrder()
@@ -64,10 +65,6 @@ class GetQuantityTest extends TestCase
             })
             ->toArray();
 
-        $idsSum = collect($warehouseIds)->sum(function ($warehouse) {
-            return $warehouse;
-        });
-
-        $this->assertEquals($idsSum, $this->productLink->getProductData()['quantity']);
+        $this->assertEquals(5, $this->productLink->getProductData()['quantity']);
     }
 }

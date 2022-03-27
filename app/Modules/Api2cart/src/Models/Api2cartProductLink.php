@@ -299,8 +299,8 @@ class Api2cartProductLink extends BaseModel
      */
     private function getInventoryData(): array
     {
-        $sum = Inventory::withWarehouseTags(['magento_stock'])
-            ->where(['product_id' => $this->product_id])
+        $sum = $this->product->inventory()
+            ->withWarehouseTags(['magento_stock'])
             ->sum('quantity_available');
 
         $quantity_available = floor($sum);
