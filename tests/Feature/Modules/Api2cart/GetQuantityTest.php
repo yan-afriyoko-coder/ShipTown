@@ -22,7 +22,8 @@ class GetQuantityTest extends TestCase
 
         factory(Warehouse::class, 10)->create();
 
-        $product = factory(Product::class)->create();
+        $product1 = factory(Product::class)->create();
+        $product2 = factory(Product::class)->create();
 
         Inventory::query()->each(function (Inventory $inventory) {
             $inventory->update(['quantity' => $inventory->warehouse_id]);
@@ -32,7 +33,7 @@ class GetQuantityTest extends TestCase
 
         $this->productLink = new Api2cartProductLink();
         $this->productLink->api2cart_connection_id = $api2cartConnection->getKey();
-        $this->productLink->product_id = $product->getKey();
+        $this->productLink->product_id = $product1->getKey();
         $this->productLink->save();
     }
 
