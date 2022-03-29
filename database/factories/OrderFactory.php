@@ -21,7 +21,7 @@ $factory->define(Order::class, function (Faker $faker) {
     do {
         try {
             $dateTime = $faker->dateTimeBetween('-7days', now());
-            \Carbon\Carbon::parse($dateTime);
+            \Carbon\Carbon::parse($dateTime, new \DateTimeZone('UTC'));
         } catch (InvalidFormatException $exception) {
             $dateTime = null;
         }

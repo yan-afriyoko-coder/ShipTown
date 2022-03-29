@@ -2,7 +2,6 @@
 
 namespace App\Modules\Api2cart\src\Transformers;
 
-use App\Models\Product;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use App\Modules\Api2cart\src\Services\Api2cartService;
 
@@ -63,10 +62,10 @@ class ProductTransformer
             ->withWarehouseTags(['magento_stock'])
             ->sum('quantity_available');
 
-        $quantity_available = floor($sum);
+        $quantity_available = floor($sum ?? 0);
 
         return [
-            'quantity' => $quantity_available ?? 0,
+            'quantity' => $quantity_available > 0 ? $quantity_available : 0,
             'in_stock' => $quantity_available > 0 ? 'True' : 'False',
         ];
     }
