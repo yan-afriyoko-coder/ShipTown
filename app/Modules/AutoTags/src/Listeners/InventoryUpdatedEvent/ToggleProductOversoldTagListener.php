@@ -16,7 +16,7 @@ class ToggleProductOversoldTagListener
      */
     public function handle(InventoryUpdatedEvent $event)
     {
-        ToggleOversoldTagJob::dispatch($event->getInventory()->product_id)
+        ToggleOversoldTagJob::dispatch($event->inventory->product_id)
             ->delay(60);
     }
 }

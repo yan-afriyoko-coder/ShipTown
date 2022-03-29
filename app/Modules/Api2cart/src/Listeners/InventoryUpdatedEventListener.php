@@ -3,6 +3,7 @@
 namespace App\Modules\Api2cart\src\Listeners;
 
 use App\Events\Inventory\InventoryUpdatedEvent;
+use App\Models\Inventory;
 
 class InventoryUpdatedEventListener
 {
@@ -15,12 +16,18 @@ class InventoryUpdatedEventListener
      */
     public function handle(InventoryUpdatedEvent $event)
     {
-        $product = $event->getInventory()->product;
+        $inventory = $event->inventory;
 
-        if ($product->hasTags(['Available Online'])) {
-            activity()->withoutLogs(function () use ($product) {
-                $product->attachTag('Not Synced');
-            });
+        if ($inventory->product->doesNotHaveTags(['Available Online'])) {
+            return;
         }
+
+        if ($inventory->warehouse->doesNotHaveTags(['magento_stock'])) {
+            return;
+        }
+
+        activity()->withoutLogs(function () use ($inventory) {
+            $inventory->product->attachTag('Not Synced');
+        });
     }
 }
