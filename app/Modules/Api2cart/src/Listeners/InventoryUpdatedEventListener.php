@@ -16,13 +16,18 @@ class InventoryUpdatedEventListener
      */
     public function handle(InventoryUpdatedEvent $event)
     {
-        $product = $event->inventory->product;
+        $inventory = $event->inventory;
 
-        if ($event->inventory->product->hasTags(['Available Online'])
-            && $event->inventory->warehouse->hasTags(['magento_stock'])) {
-                activity()->withoutLogs(function () use ($product) {
-                    $product->attachTag('Not Synced');
-                });
+        if ($inventory->product->doesNotHaveTags(['Available Online'])) {
+            return;
         }
+
+        if ($inventory->warehouse->doesNotHaveTags(['magento_stock'])) {
+            return;
+        }
+
+        activity()->withoutLogs(function () use ($inventory) {
+            $inventory->product->attachTag('Not Synced');
+        });
     }
 }
