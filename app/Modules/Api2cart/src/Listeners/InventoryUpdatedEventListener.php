@@ -15,7 +15,7 @@ class InventoryUpdatedEventListener
      */
     public function handle(InventoryUpdatedEvent $event)
     {
-        $product = $event->getInventory()->product;
+        $product = $event->inventory->product;
 
         if ($product->hasTags(['Available Online'])) {
             activity()->withoutLogs(function () use ($product) {

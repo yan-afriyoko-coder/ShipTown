@@ -16,7 +16,7 @@ class ToggleProductOutOfStockTagListener
      */
     public function handle(InventoryUpdatedEvent $event)
     {
-        ToggleOutOfStockTagJob::dispatch($event->getInventory()->product_id)
+        ToggleOutOfStockTagJob::dispatch($event->inventory->product_id)
             ->delay(60);
     }
 }

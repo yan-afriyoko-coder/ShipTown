@@ -9,6 +9,9 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ *
+ */
 class InventoryUpdatedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
@@ -16,7 +19,7 @@ class InventoryUpdatedEvent
     /**
      * @var Inventory
      */
-    private Inventory $inventory;
+    public Inventory $inventory;
 
     /**
      * Create a new event instance.
@@ -26,14 +29,6 @@ class InventoryUpdatedEvent
     public function __construct(Inventory $inventory)
     {
         $this->inventory = $inventory;
-    }
-
-    /**
-     * @return Inventory
-     */
-    public function getInventory(): Inventory
-    {
-        return $this->inventory;
     }
 
     /**
