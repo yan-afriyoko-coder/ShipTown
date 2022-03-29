@@ -57,10 +57,7 @@ class ImportProductJob implements ShouldQueue
             'name' => $importedProduct->raw_import['description'],
         ];
 
-        $product = Product::query()
-            ->updateOrCreate([
-                'sku' => $attributes['sku'],
-            ], $attributes);
+        $product = Product::query()->firstOrCreate(['sku' => $attributes['sku']], $attributes);
 
         $this->attachTags($importedProduct, $product);
 
@@ -75,8 +72,6 @@ class ImportProductJob implements ShouldQueue
             'product_id'     => $product->id,
             'sku'            => $attributes['sku'],
         ]);
-
-        $product->touch(); // we touching coz there was changes
     }
 
     /**
@@ -105,7 +100,7 @@ class ImportProductJob implements ShouldQueue
     {
         $connection = RmsapiConnection::query()->find($importedProduct->connection_id);
 
-        $inventory = Inventory::query()->updateOrCreate([
+        Inventory::query()->updateOrCreate([
             'product_id'  => $product->id,
             'location_id' => $connection->location_id,
         ], [
