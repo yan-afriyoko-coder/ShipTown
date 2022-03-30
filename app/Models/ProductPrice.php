@@ -30,6 +30,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|ProductPrice whereDeletedAt($value)
  * @method static Builder|ProductPrice whereId($value)
  * @method static Builder|ProductPrice whereLocationId($value)
+ * @method static Builder|ProductPrice whereWarehouseCode($value)
  * @method static Builder|ProductPrice wherePrice($value)
  * @method static Builder|ProductPrice whereProductId($value)
  * @method static Builder|ProductPrice whereSalePrice($value)
