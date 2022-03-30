@@ -46,14 +46,12 @@ class ProcessImportedProductsJobTest extends TestCase
 
     public function testIfImportsAliases()
     {
-//        Event::fake();
-
         // prepare
-        RmsapiProductImport::query()->delete();
+        RmsapiProductImport::query()->forceDelete();
         Product::query()->forceDelete();
         ProductAlias::query()->forceDelete();
 
-        $importData = factory(RmsapiProductImport::class)->create();
+        factory(RmsapiProductImport::class)->create();
 
         // act
         $job = new ProcessImportedBatch();
@@ -66,14 +64,12 @@ class ProcessImportedProductsJobTest extends TestCase
 
     public function testIfProcessesCorrectly()
     {
-        Event::fake();
-
         // prepare
         RmsapiProductImport::query()->forceDelete();
         Product::query()->forceDelete();
         Inventory::query()->forceDelete();
 
-        factory(Warehouse::class)->create();
+//        factory(Warehouse::class)->create();
         $importData = factory(RmsapiProductImport::class)->create();
 
         // act

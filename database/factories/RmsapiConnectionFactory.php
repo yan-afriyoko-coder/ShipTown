@@ -2,11 +2,12 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+use App\Models\Warehouse;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use Faker\Generator as Faker;
 
 $factory->define(RmsapiConnection::class, function (Faker $faker) {
-    $warehouse = \App\Models\Warehouse::query()->inRandomOrder()->first();
+    $warehouse = Warehouse::query()->inRandomOrder()->first() ?? factory(Warehouse::class)->create();
 
     return [
         'location_id'    => $warehouse->code,
