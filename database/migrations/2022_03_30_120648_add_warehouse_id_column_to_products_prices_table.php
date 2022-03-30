@@ -15,12 +15,16 @@ class AddWarehouseIdColumnToProductsPricesTable extends Migration
      */
     public function up()
     {
-        Schema::table('products_prices', function (Blueprint $table) {
-            $table->foreignId('warehouse_id')->nullable(true)->after('product_id');
-        });
+        if (Schema::hasColumn('products_prices', 'warehouse_id')) {
+            Schema::table('products_prices', function (Blueprint $table) {
+                $table->foreignId('warehouse_id')->nullable(true)->after('product_id');
+            });
+        }
 
         Warehouse::all()->each(function (Warehouse $warehouse) {
-            ProductPrice::whereWarehouseCode($warehouse->code)->update(['warehouse_id' => $warehouse->id]);
+            ProductPrice::query()->where('warehouse_code', '=', $warehouse->code)
+                ->where('warehouse_id', '<>', $warehouse->id)
+                ->update(['warehouse_id' => $warehouse->id]);
         });
 
         Schema::table('products_prices', function (Blueprint $table) {
