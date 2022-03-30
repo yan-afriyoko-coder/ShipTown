@@ -20,7 +20,7 @@ class ProductPriceUpdatedEvent
     /**
      * @var ProductPrice
      */
-    private ProductPrice $product_price;
+    public ProductPrice $product_price;
 
     /**
      * Create a new event instance.

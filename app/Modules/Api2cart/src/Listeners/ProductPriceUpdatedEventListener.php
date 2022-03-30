@@ -15,12 +15,18 @@ class ProductPriceUpdatedEventListener
      */
     public function handle(ProductPriceUpdatedEvent $event)
     {
-        $product = $event->getProductPrice()->product;
+        $product_price = $event->product_price;
 
-        if ($product->hasTags(['Available Online'])) {
-            activity()->withoutLogs(function () use ($product) {
-                $product->attachTag('Not Synced');
-            });
+        if ($product_price->product->doesNotHaveTags(['Available Online'])) {
+            return;
         }
+
+        if ($product_price->warehouse->doesNotHaveTags(['magento_stock'])) {
+            return;
+        }
+
+        activity()->withoutLogs(function () use ($product_price) {
+            $product_price->product->attachTag('Not Synced');
+        });
     }
 }
