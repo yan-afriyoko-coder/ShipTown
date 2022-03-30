@@ -57,7 +57,7 @@ class ImportProductJob implements ShouldQueue
             'name' => $importedProduct->raw_import['description'],
         ];
 
-        $product = Product::query()->firstOrCreate(['sku' => $attributes['sku']], $attributes);
+        $product = Product::firstOrCreate(['sku' => $attributes['sku']], $attributes);
 
         $this->attachTags($importedProduct, $product);
 
