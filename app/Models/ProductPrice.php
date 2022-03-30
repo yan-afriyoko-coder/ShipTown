@@ -21,6 +21,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Product     $product
+ * @property Warehouse   $warehouse
  *
  * @method static Builder|ProductPrice newModelQuery()
  * @method static Builder|ProductPrice newQuery()
@@ -66,6 +67,14 @@ class ProductPrice extends BaseModel
      * @return BelongsTo
      */
     public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function warehouse(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }

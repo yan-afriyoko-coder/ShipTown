@@ -20,7 +20,7 @@ class ProductPriceUpdatedEvent
     /**
      * @var ProductPrice
      */
-    private ProductPrice $product_price;
+    public ProductPrice $product_price;
 
     /**
      * Create a new event instance.
@@ -30,14 +30,6 @@ class ProductPriceUpdatedEvent
     public function __construct(ProductPrice $product_price)
     {
         $this->product_price = $product_price;
-    }
-
-    /**
-     * @return ProductPrice
-     */
-    public function getProductPrice(): ProductPrice
-    {
-        return $this->product_price;
     }
 
     /**
