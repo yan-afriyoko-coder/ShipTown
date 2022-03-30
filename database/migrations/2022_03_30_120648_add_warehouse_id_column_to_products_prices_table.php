@@ -15,7 +15,7 @@ class AddWarehouseIdColumnToProductsPricesTable extends Migration
      */
     public function up()
     {
-        if (Schema::hasColumn('products_prices', 'warehouse_id')) {
+        if (! Schema::hasColumn('products_prices', 'warehouse_id')) {
             Schema::table('products_prices', function (Blueprint $table) {
                 $table->foreignId('warehouse_id')->nullable(true)->after('product_id');
             });
