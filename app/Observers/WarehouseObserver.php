@@ -61,6 +61,7 @@ class WarehouseObserver
             ->map(function (Product $product) use ($warehouse) {
                 return [
                     'product_id'     => $product->getKey(),
+                    'warehouse_id'   => $warehouse->id,
                     'location_id'    => $warehouse->code,
                     'warehouse_code' => $warehouse->code,
                     'created_at'     => now(),

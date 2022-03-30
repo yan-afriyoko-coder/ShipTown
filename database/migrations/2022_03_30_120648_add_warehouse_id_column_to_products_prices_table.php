@@ -16,7 +16,7 @@ class AddWarehouseIdColumnToProductsPricesTable extends Migration
     public function up()
     {
         Schema::table('products_prices', function (Blueprint $table) {
-            $table->foreignId('warehouse_id')->nullable(true);
+            $table->foreignId('warehouse_id')->nullable(true)->after('product_id');
         });
 
         Warehouse::all()->each(function (Warehouse $warehouse) {
