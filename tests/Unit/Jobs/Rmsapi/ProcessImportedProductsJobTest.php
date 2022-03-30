@@ -5,18 +5,22 @@ namespace Tests\Unit\Jobs\Rmsapi;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductAlias;
+use App\Models\Warehouse;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedBatch;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Spatie\Tags\Tag;
 use Tests\TestCase;
 
 class ProcessImportedProductsJobTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function testIfAddsAvailableOnlineTag()
     {
         // prepare
-        RmsapiProductImport::query()->delete();
+        RmsapiProductImport::query()->forceDelete();
         Product::query()->forceDelete();
         ProductAlias::query()->forceDelete();
         Tag::query()->forceDelete();
@@ -65,10 +69,11 @@ class ProcessImportedProductsJobTest extends TestCase
         Event::fake();
 
         // prepare
-        RmsapiProductImport::query()->delete();
+        RmsapiProductImport::query()->forceDelete();
         Product::query()->forceDelete();
         Inventory::query()->forceDelete();
 
+        factory(Warehouse::class)->create();
         $importData = factory(RmsapiProductImport::class)->create();
 
         // act

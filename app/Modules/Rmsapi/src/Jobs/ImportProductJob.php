@@ -59,6 +59,8 @@ class ImportProductJob implements ShouldQueue
 
         $product = Product::query()->firstOrCreate(['sku' => $attributes['sku']], $attributes);
 
+        dd($product->toArray());
+
         $this->attachTags($importedProduct, $product);
 
         $this->importAliases($importedProduct, $product);
