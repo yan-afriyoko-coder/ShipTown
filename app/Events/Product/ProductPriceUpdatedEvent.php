@@ -33,14 +33,6 @@ class ProductPriceUpdatedEvent
     }
 
     /**
-     * @return ProductPrice
-     */
-    public function getProductPrice(): ProductPrice
-    {
-        return $this->product_price;
-    }
-
-    /**
      * Get the channels the event should broadcast on.
      *
      * @return Channel
