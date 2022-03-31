@@ -16,10 +16,25 @@ class EnsureAllProductPriceRecordsExistsJob implements ShouldQueue
     /**
      * @var string
      */
-    private string $query = /** @lang text */
+    private string $checkQuery = /** @lang text */
+    '
+        SELECT count(*) as count
+        FROM products
+        LEFT JOIN warehouses ON 1 = 1
+        WHERE NOT EXISTS (
+            SELECT product_id FROM products_prices
+            WHERE products_prices.id = warehouses.id AND products_prices.product_id = products.id
+        )
+    ';
+
+    /**
+     * @var string
+     */
+    private string $insertQuery = /** @lang text */
         'INSERT INTO products_prices
         (
             product_id,
+            warehouse_id,
             location_id,
             warehouse_code,
             price,
@@ -33,6 +48,7 @@ class EnsureAllProductPriceRecordsExistsJob implements ShouldQueue
             products.id,
             warehouses.id,
             warehouses.code,
+            warehouses.code,
             price,
             sale_price,
             sale_price_start_date,
@@ -42,9 +58,10 @@ class EnsureAllProductPriceRecordsExistsJob implements ShouldQueue
 
         FROM products
         LEFT JOIN warehouses ON 1 = 1
-        WHERE products.id NOT IN (
-                SELECT product_id FROM products_prices WHERE warehouse_code = warehouses.code
-            )
+        WHERE NOT EXISTS (
+            SELECT product_id FROM products_prices
+            WHERE products_prices.id = warehouses.id AND products_prices.product_id = products.id
+        )
         ';
 
     /**
@@ -54,6 +71,10 @@ class EnsureAllProductPriceRecordsExistsJob implements ShouldQueue
      */
     public function handle()
     {
-        DB::statement($this->query);
+        ray('prices start');
+        do {
+            DB::statement($this->insertQuery);
+        } while (data_get(DB::select($this->checkQuery), '0.count') > 0);
+        ray('prices end');
     }
 }

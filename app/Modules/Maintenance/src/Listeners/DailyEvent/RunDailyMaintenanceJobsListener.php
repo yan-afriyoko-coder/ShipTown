@@ -18,8 +18,8 @@ class RunDailyMaintenanceJobsListener
      */
     public function handle(DailyEvent $event)
     {
-        EnsureAllInventoryRecordsExistsJob::dispatch();
-        EnsureAllProductPriceRecordsExistsJob::dispatch();
-        FixQuantityAvailableJob::dispatch();
+        EnsureAllInventoryRecordsExistsJob::dispatchAfterResponse();
+        EnsureAllProductPriceRecordsExistsJob::dispatchAfterResponse();
+        FixQuantityAvailableJob::dispatchAfterResponse();
     }
 }
