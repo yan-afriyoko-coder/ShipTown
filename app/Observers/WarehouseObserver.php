@@ -18,8 +18,8 @@ class WarehouseObserver
      */
     public function created(Warehouse $warehouse)
     {
-//        EnsureAllInventoryRecordsExistsJob::dispatchAfterResponse();
-//        EnsureAllProductPriceRecordsExistsJob::dispatchAfterResponse();
+        EnsureAllInventoryRecordsExistsJob::dispatch();
+        EnsureAllProductPriceRecordsExistsJob::dispatch();
     }
 
     public function updated(Warehouse $warehouse)
