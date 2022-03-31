@@ -71,10 +71,8 @@ class EnsureAllProductPriceRecordsExistsJob implements ShouldQueue
      */
     public function handle()
     {
-        ray('prices start');
         do {
             DB::statement($this->insertQuery);
         } while (data_get(DB::select($this->checkQuery), '0.count') > 0);
-        ray('prices end');
     }
 }
