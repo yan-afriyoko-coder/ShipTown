@@ -23,7 +23,7 @@ class EnsureAllProductPriceRecordsExistsJob implements ShouldQueue
         LEFT JOIN warehouses ON 1 = 1
         WHERE NOT EXISTS (
             SELECT product_id FROM products_prices
-            WHERE products_prices.id = warehouses.id AND products_prices.product_id = products.id
+            WHERE products_prices.warehouse_id = warehouses.id AND products_prices.product_id = products.id
         )
     ';
 
@@ -60,7 +60,7 @@ class EnsureAllProductPriceRecordsExistsJob implements ShouldQueue
         LEFT JOIN warehouses ON 1 = 1
         WHERE NOT EXISTS (
             SELECT product_id FROM products_prices
-            WHERE products_prices.id = warehouses.id AND products_prices.product_id = products.id
+            WHERE products_prices.warehouse_id = warehouses.id AND products_prices.product_id = products.id
         )
         ';
 
