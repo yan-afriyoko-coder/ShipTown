@@ -16,7 +16,21 @@ class EnsureAllInventoryRecordsExistsJob implements ShouldQueue
     /**
      * @var string
      */
-    private string $query = /** @lang text */
+    private string $checkQuery = /** @lang text */
+        '
+        SELECT count(*) as count
+        FROM products
+        LEFT JOIN warehouses ON 1 = 1
+        WHERE NOT EXISTS (
+            SELECT product_id FROM inventory
+            WHERE inventory.warehouse_id = warehouses.id AND inventory.product_id = products.id
+        )
+        ';
+
+    /**
+     * @var string
+     */
+    private string $insertQuery = /** @lang text */
         'INSERT INTO inventory (
           product_id,
           warehouse_id,
@@ -35,8 +49,10 @@ class EnsureAllInventoryRecordsExistsJob implements ShouldQueue
 
         FROM products
         LEFT JOIN warehouses ON 1 = 1
-        WHERE products.id NOT IN (SELECT product_id FROM inventory WHERE warehouse_code = warehouses.code)
-        LIMIT 100000
+        WHERE NOT EXISTS (
+            SELECT product_id FROM inventory
+            WHERE inventory.warehouse_id = warehouses.id AND inventory.product_id = products.id
+        )
         ';
 
     /**
@@ -46,6 +62,8 @@ class EnsureAllInventoryRecordsExistsJob implements ShouldQueue
      */
     public function handle()
     {
-        DB::statement($this->query);
+        do {
+            DB::statement($this->insertQuery);
+        } while (data_get(DB::select($this->checkQuery), '0.count') > 0);
     }
 }
