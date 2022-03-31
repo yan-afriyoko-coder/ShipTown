@@ -23,7 +23,7 @@ class EnsureAllProductPriceRecordsExistsJob implements ShouldQueue
         LEFT JOIN warehouses ON 1 = 1
         WHERE NOT EXISTS (
             SELECT product_id FROM products_prices
-            WHERE products_prices.id = warehouses.id AND products_prices.product_id = products.id
+            WHERE products_prices.warehouse_id = warehouses.id AND products_prices.product_id = products.id
         )
     ';
 
@@ -60,7 +60,7 @@ class EnsureAllProductPriceRecordsExistsJob implements ShouldQueue
         LEFT JOIN warehouses ON 1 = 1
         WHERE NOT EXISTS (
             SELECT product_id FROM products_prices
-            WHERE products_prices.id = warehouses.id AND products_prices.product_id = products.id
+            WHERE products_prices.warehouse_id = warehouses.id AND products_prices.product_id = products.id
         )
         ';
 
@@ -71,10 +71,8 @@ class EnsureAllProductPriceRecordsExistsJob implements ShouldQueue
      */
     public function handle()
     {
-        ray('prices start');
         do {
             DB::statement($this->insertQuery);
         } while (data_get(DB::select($this->checkQuery), '0.count') > 0);
-        ray('prices end');
     }
 }
