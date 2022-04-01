@@ -18,7 +18,7 @@ class InventoryObserver
     {
         if ($inventory->isAnyAttributeChanged(['quantity', 'quantity_reserved'])) {
             $inventory->product->log('updated inventory', [
-                'warehouse' => $inventory->warehouse ? $inventory->warehouse->code : '',
+                'warehouse' => $inventory->warehouse->code,
                 'quantity' => $inventory->quantity,
                 'reserved' => $inventory->quantity_reserved,
                 'available' => $inventory->quantity_available,
