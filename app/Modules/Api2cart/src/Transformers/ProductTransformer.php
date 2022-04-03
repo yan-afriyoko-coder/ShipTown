@@ -76,7 +76,7 @@ class ProductTransformer
      */
     private static function getPricingData(Api2cartProductLink $api2cartProductLink): array
     {
-        if ($api2cartProductLink->api2cartConnection->pricing_location_id === null) {
+        if ($api2cartProductLink->api2cartConnection->pricing_source_warehouse_id === null) {
             return [];
         }
 
