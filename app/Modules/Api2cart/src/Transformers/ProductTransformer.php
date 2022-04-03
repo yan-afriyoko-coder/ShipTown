@@ -81,7 +81,8 @@ class ProductTransformer
         }
 
         $productPrice = $api2cartProductLink->product
-            ->prices($api2cartProductLink->api2cartConnection->pricing_location_id)
+            ->prices()
+            ->where(['warehouse_id' => $api2cartProductLink->api2cartConnection->pricing_source_warehouse_id])
             ->first();
 
         return [
