@@ -16,7 +16,7 @@ class AddPricingSourceWarehouseIdColumnToApi2cartConnectionsTable extends Migrat
     public function up()
     {
         Schema::table('modules_api2cart_connections', function (Blueprint $table) {
-            $table->foreignId('pricing_source_warehouse_id')->after('url');
+            $table->foreignId('pricing_source_warehouse_id')->nullable()->after('url');
         });
 
         Api2cartConnection::all()->each(function (Api2cartConnection $conn) {
