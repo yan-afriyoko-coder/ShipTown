@@ -28,6 +28,7 @@ use Illuminate\Support\Collection;
  * @property-read Collection|Api2cartProductLink[] $productLinks
  * @property-read int|null $product_links_count
  * @property string|null inventory_warehouse_ids
+ * @property int pricing_source_warehouse_id
  *
  * @method static Builder|Api2cartConnection newModelQuery()
  * @method static Builder|Api2cartConnection newQuery()
