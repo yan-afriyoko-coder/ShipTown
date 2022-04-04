@@ -4,6 +4,7 @@ namespace App\Modules\Api2cart\src\Listeners;
 
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
+use Illuminate\Support\Arr;
 
 class InventoryUpdatedEventListener
 {
@@ -25,7 +26,7 @@ class InventoryUpdatedEventListener
         /** @var Api2cartConnection $api2cartProductLink */
         $api2cartConnection = Api2cartConnection::query()->first();
 
-        if ($inventory->warehouse->doesNotHaveTags($api2cartConnection->inventory_source_warehouse_tag)) {
+        if ($inventory->warehouse->doesNotHaveTags(Arr::wrap($api2cartConnection->inventory_source_warehouse_tag))) {
             return;
         }
 
