@@ -3,6 +3,7 @@
 namespace App\Modules\Api2cart\src\Listeners;
 
 use App\Events\Product\ProductPriceUpdatedEvent;
+use App\Modules\Api2cart\src\Models\Api2cartConnection;
 
 class ProductPriceUpdatedEventListener
 {
@@ -21,12 +22,10 @@ class ProductPriceUpdatedEventListener
             return;
         }
 
-        if ($product_price->warehouse->doesNotHaveTags(['magento_stock'])) {
-            return;
+        if (Api2cartConnection::where(['pricing_source_warehouse_id' => $product_price->warehouse_id])->exists()) {
+            activity()->withoutLogs(function () use ($product_price) {
+                $product_price->product->attachTag('Not Synced');
+            });
         }
-
-        activity()->withoutLogs(function () use ($product_price) {
-            $product_price->product->attachTag('Not Synced');
-        });
     }
 }

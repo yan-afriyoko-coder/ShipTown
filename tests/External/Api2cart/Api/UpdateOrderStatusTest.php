@@ -22,6 +22,7 @@ class UpdateOrderStatusTest extends TestCase
             'type'           => 'opencart',
             'url'            => 'https://demo.api2cart.com/opencart',
             'bridge_api_key' => config('api2cart.api2cart_test_store_key'),
+            'inventory_source_warehouse_tag' => 'magento_stock'
         ]);
 
         $api2cartConnection->save();
@@ -46,6 +47,5 @@ class UpdateOrderStatusTest extends TestCase
         ])[0];
 
         $this->assertEquals($order['status']['id'], $status['id']);
-
     }
 }
