@@ -22,7 +22,9 @@ class SyncProductsToApi2cartTest extends TestCase
      */
     public function testExample()
     {
-        factory(Warehouse::class)->create(['code' => '99', 'name' => '99']);
+        /** @var Warehouse $warehouse */
+        $warehouse = factory(Warehouse::class)->create(['code' => '99', 'name' => '99']);
+        $warehouse->attachTag('magento_stock');
 
         $product = factory(Product::class)
             ->with('inventory')
@@ -31,6 +33,7 @@ class SyncProductsToApi2cartTest extends TestCase
         factory(Api2cartConnection::class)->create([
             'bridge_api_key'   => config('api2cart.api2cart_test_store_key'),
             'magento_store_id' => null,
+            'inventory_source_warehouse_tag' => 'magento_stock'
         ]);
 
         $product->attachTags(['Available Online', 'Not Synced']);
