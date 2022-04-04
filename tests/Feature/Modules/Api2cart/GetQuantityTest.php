@@ -30,7 +30,8 @@ class GetQuantityTest extends TestCase
             $inventory->update(['quantity' => 1]);
         });
 
-        $api2cartConnection = factory(Api2cartConnection::class)->create();
+        $api2cartConnection = factory(Api2cartConnection::class)
+            ->create(['inventory_source_warehouse_tag' => 'magento_stock']);
 
         $this->productLink = new Api2cartProductLink();
         $this->productLink->api2cart_connection_id = $api2cartConnection->getKey();

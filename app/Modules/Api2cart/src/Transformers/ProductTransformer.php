@@ -59,7 +59,7 @@ class ProductTransformer
     private static function getInventoryData(Api2cartProductLink $api2cartProductLink): array
     {
         $sum = $api2cartProductLink->product->inventory()
-            ->withWarehouseTags(['magento_stock'])
+            ->withWarehouseTags($api2cartProductLink->api2cartConnection->inventory_source_warehouse_tag)
             ->sum('quantity_available');
 
         $quantity_available = floor($sum ?? 0);
