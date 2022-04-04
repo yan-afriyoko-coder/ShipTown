@@ -57,7 +57,8 @@ class ProductUpdateTest extends TestCase
         $api2cart_connection = factory(Api2cartConnection::class)->create([
             'pricing_location_id' => '99',
             'bridge_api_key' => config('api2cart.api2cart_test_store_key'),
-            'inventory_source_warehouse_tag' => 'magento_stock'
+            'inventory_source_warehouse_tag' => 'magento_stock',
+            'pricing_source_warehouse_id' => $warehouse->getKey()
         ]);
 
         $this->api2cart_product_link = factory(Api2cartProductLink::class)->create([]);

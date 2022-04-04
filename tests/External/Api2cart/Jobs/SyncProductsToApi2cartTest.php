@@ -33,7 +33,8 @@ class SyncProductsToApi2cartTest extends TestCase
         factory(Api2cartConnection::class)->create([
             'bridge_api_key'   => config('api2cart.api2cart_test_store_key'),
             'magento_store_id' => null,
-            'inventory_source_warehouse_tag' => 'magento_stock'
+            'inventory_source_warehouse_tag' => 'magento_stock',
+            'pricing_source_warehouse_id' => $warehouse->getKey()
         ]);
 
         $product->attachTags(['Available Online', 'Not Synced']);
