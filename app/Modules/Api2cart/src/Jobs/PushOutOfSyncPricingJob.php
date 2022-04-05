@@ -16,7 +16,6 @@ class PushOutOfSyncPricingJob implements ShouldQueue
 
     private string $query = "
         SELECT
-        #  COUNT(*),
           products.sku,
           modules_api2cart_product_links.product_id,
 
