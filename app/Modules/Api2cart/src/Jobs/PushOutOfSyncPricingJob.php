@@ -76,6 +76,7 @@ class PushOutOfSyncPricingJob implements ShouldQueue
             activity()->withoutLogs(function () use ($product) {
                 $product->attachTag('Not Synced');
             });
+            $product->log('Out of sync eCommerce pricing detected, sync scheduled');
         });
     }
 }
