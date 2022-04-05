@@ -57,6 +57,8 @@ class Api2cartConnection extends Model
     protected $fillable = [
         'prefix',
         'bridge_api_key',
+        'inventory_source_warehouse_tag',
+        'pricing_source_warehouse_id',
         'last_synced_modified_at',
         'url',
         'type',
