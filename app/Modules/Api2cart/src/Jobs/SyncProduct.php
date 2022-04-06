@@ -44,6 +44,8 @@ class SyncProduct implements ShouldQueue
     {
         if ($this->product_link->api2cart_product_type === 'configurable') {
             $this->product_link->product->detachTag('Not Synced');
+            $this->product_link->product->detachTag('SYNC ERROR');
+            $this->product_link->product->detachTag('CHECK FAILED');
             return;
         }
 
