@@ -220,6 +220,7 @@ class Api2cartService
                 ',',
                 $fields ?? [
                     'id',
+                    'type',
                     'model',
                     'u_model',
                     'sku',
@@ -246,7 +247,7 @@ class Api2cartService
 
         $product = $response->getResult();
 
-        $product['type'] = 'product';
+//        $product['type'] = 'product';
 
         return self::transformProduct($product, $conn);
     }
@@ -274,6 +275,7 @@ class Api2cartService
                 $fields ?? [
                     'id',
                     'model',
+                    'type',
                     'u_model',
                     'sku',
                     'u_sku',
@@ -298,7 +300,7 @@ class Api2cartService
 
         $variant = $response->getResult()['variant'];
 
-        $variant['type'] = 'variant';
+//        $variant['type'] = 'variant';
 
         return self::transformProduct($variant, $connection);
     }
