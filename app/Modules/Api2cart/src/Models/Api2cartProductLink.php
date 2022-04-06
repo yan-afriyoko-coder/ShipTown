@@ -101,13 +101,14 @@ class Api2cartProductLink extends BaseModel
             $sprice_create = data_get($product_data, 'sprice_create', '2000-01-01 00:00:00');
             $sprice_expire = data_get($product_data, 'sprice_expire', '2000-01-01 00:00:00');
 
-            $this->last_fetched_at = now();
-            $this->api2cart_product_id = data_get($product_data, 'id');
-            $this->api2cart_quantity = data_get($product_data, 'quantity');
-            $this->api2cart_price = data_get($product_data, 'price');
-            $this->api2cart_sale_price = data_get($product_data, 'special_price');
+            $this->last_fetched_at                = now();
+            $this->api2cart_product_id            = data_get($product_data, 'id');
+            $this->api2cart_product_type          = data_get($product_data, 'type');
+            $this->api2cart_quantity              = data_get($product_data, 'quantity');
+            $this->api2cart_price                 = data_get($product_data, 'price');
+            $this->api2cart_sale_price            = data_get($product_data, 'special_price');
             $this->api2cart_sale_price_start_date = Carbon::createFromTimeString($sprice_create)->format('Y-m-d H:i:s');
-            $this->api2cart_sale_price_end_date = Carbon::createFromTimeString($sprice_expire)->format('Y-m-d H:i:s');
+            $this->api2cart_sale_price_end_date   = Carbon::createFromTimeString($sprice_expire)->format('Y-m-d H:i:s');
         }
 
         return parent::save($options);
