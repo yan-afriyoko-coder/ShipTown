@@ -275,6 +275,7 @@ class Api2cartService
                 $fields ?? [
                     'id',
                     'model',
+                    'type',
                     'u_model',
                     'sku',
                     'u_sku',
