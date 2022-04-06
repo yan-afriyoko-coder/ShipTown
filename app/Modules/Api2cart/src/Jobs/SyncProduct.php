@@ -42,6 +42,11 @@ class SyncProduct implements ShouldQueue
      */
     public function handle()
     {
+        if ($this->product_link->api2cart_product_type === 'configurable') {
+            $this->product_link->product->detachTag('Not Synced');
+            return;
+        }
+
         $updateSuccess = Api2cartService::updateSku($this->product_link);
         $updateVerified = Api2cartService::verifyIfProductInSync($this->product_link);
 
