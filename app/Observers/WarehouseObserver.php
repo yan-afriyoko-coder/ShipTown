@@ -25,11 +25,11 @@ class WarehouseObserver
     public function updated(Warehouse $warehouse)
     {
         Inventory::query()
-            ->where(['location_id' => $warehouse->getOriginal('code')])
+            ->where(['warehouse_id' => $warehouse->getKey()])
             ->update(['warehouse_code' => $warehouse->code, 'location_id' => $warehouse->code]);
 
         ProductPrice::query()
-            ->where(['location_id' => $warehouse->getOriginal('code')])
+            ->where(['warehouse_id' => $warehouse->getKey()])
             ->update(['warehouse_code' => $warehouse->code, 'location_id' => $warehouse->code]);
     }
 }
