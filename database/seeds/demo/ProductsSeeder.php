@@ -13,17 +13,17 @@ class ProductsSeeder extends Seeder
      */
     public function run()
     {
-//        $this->createSkuWithAliases([
-//            '01',
-//            '02',
-//            '03',
-//            '04',
-//            '05',
-//            '06',
-//            '06',
-//        ]);
+        $this->createSkuWithAliases([
+            '01',
+            '02',
+            '03',
+            '04',
+            '05',
+            '06',
+            '06',
+        ]);
 
-        factory(Product::class, 1)->create();
+        factory(Product::class, 50)->create();
     }
 
     private function createSkuWithAliases(array $skuList): void
