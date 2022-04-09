@@ -36,7 +36,7 @@ $factory->define(RmsapiProductImport::class, function (Faker $faker) {
            "date_created":"2003-06-03 17:17:23",
            "department_id":5,
            "reorder_point":'. $reorder_point .',
-           "restock_level":'. $restock_level .',,
+           "restock_level":'. $restock_level .',
            "sale_end_date":null,
            "food_stampable":0,
            "db_change_stamp":'.random_int(1000, 100000).',
