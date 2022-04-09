@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductsRequest;
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
  * Class ProductController.
@@ -21,13 +23,13 @@ class ProductController extends Controller
      *
      * @param Request $request
      *
-     * @return LengthAwarePaginator
+     * @return AnonymousResourceCollection
      */
     public function index(Request $request)
     {
         $query = Product::getSpatieQueryBuilder();
 
-        return $this->getPaginatedResult($query);
+        return ProductResource::collection($this->getPaginatedResult($query));
     }
 
     /**

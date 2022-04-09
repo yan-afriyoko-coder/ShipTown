@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Spatie\Activitylog\Models\Activity;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 /**
  * App\Models\Inventory.
@@ -53,9 +55,13 @@ class Inventory extends BaseModel
 {
     use LogsActivityTrait;
 
+    protected $table = 'inventory';
+
     protected static $logAttributes = [
         'quantity',
         'quantity_reserved',
+        'restock_level',
+        'reorder_point',
         'shelve_location',
     ];
 
@@ -67,20 +73,46 @@ class Inventory extends BaseModel
         'product_id',
         'quantity',
         'quantity_reserved',
+        'restock_level',
+        'reorder_point',
     ];
-
-    protected $table = 'inventory';
 
     protected $attributes = [
         'quantity'          => 0,
         'quantity_reserved' => 0,
+        'restock_level'     => 0,
+        'reorder_point'     => 0,
     ];
 
     protected $casts = [
         'quantity'           => 'float',
         'quantity_reserved'  => 'float',
         'quantity_available' => 'float',
+        'restock_level'      => 'float',
+        'reorder_point'      => 'float',
+        'quantity_required'  => 'float',
     ];
+
+    /**
+     * @return QueryBuilder
+     */
+    public static function getSpatieQueryBuilder(): QueryBuilder
+    {
+        return QueryBuilder::for(Inventory::class)
+            ->allowedFilters([
+                AllowedFilter::exact('id'),
+                AllowedFilter::exact('product_id'),
+                AllowedFilter::exact('warehouse_id'),
+            ])
+            ->allowedSorts([
+                'id',
+                'product_id',
+                'warehouse_id',
+            ])
+            ->allowedIncludes([
+                'product'
+            ]);
+    }
 
     /**
      * @param $query
@@ -92,20 +124,6 @@ class Inventory extends BaseModel
         return $query->whereHas('warehouse', function (Builder $query) use ($tags) {
             $query->withAllTags($tags);
         });
-    }
-
-    public function save(array $options = [])
-    {
-        if ($this->warehouse_id === null) {
-            if ($this->location_id) {
-                $warehouse = Warehouse::whereCode($this->location_id)->first();
-                if ($warehouse) {
-                    $this->warehouse_id = $warehouse->getKey();
-                }
-            }
-        }
-
-        return parent::save($options);
     }
 
     /**

@@ -105,7 +105,7 @@
                             this.products = [];
                         }
                         this.products = this.products.concat(data.data);
-                        this.lastPage = data.last_page;
+                        this.lastPage = data.meta.last_page;
                         this.lastPageLoaded = page;
                     })
                     .finally(() => {

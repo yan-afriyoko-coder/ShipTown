@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
 //            ProductTagsSeeder::class,
 //            ProductPriceSeeder::class,
 //
-//            InventorySeeder::class,
+            InventorySeeder::class,
 //
 //            SplitOrdersScenarioSeeder::class,
 //
