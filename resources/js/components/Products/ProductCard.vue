@@ -84,6 +84,11 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
+                                    <a class="nav-link p-0 pl-2 pr-2"  @click.prevent="currentTab = 'inventory'" data-toggle="tab" href="#">
+                                        Inventory
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link p-0 pl-2 pr-2"  @click.prevent="currentTab = 'aliases'" data-toggle="tab" href="#">
                                         Aliases
                                     </a>
@@ -193,6 +198,37 @@
                             </div>
                         </template>
 
+                        <template v-if="currentTab === 'inventory'">
+                            <div class="container">
+
+                                <table class="small table table-borderless table-responsive mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Location</th>
+                                            <th>Stock</th>
+                                            <th>Reserved</th>
+                                            <th>Available</th>
+                                            <th>Restock Level</th>
+                                            <th>Reorder Point</th>
+                                            <th>Required</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="inventory in product.inventory" :key="inventory.id">
+                                            <td>{{ inventory.warehouse_code }}</td>
+                                            <td>{{ inventory.quantity | numberFormat}}</td>
+                                            <td>{{ inventory.quantity_reserved | numberFormat}}</td>
+                                            <td>{{ inventory.quantity_available | numberFormat}}</td>
+                                            <td>{{ inventory.restock_level | numberFormat }}</td>
+                                            <td>{{ inventory.reorder_point | numberFormat}}</td>
+                                            <td>{{ inventory.quantity_required | numberFormat}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </template>
+
                         <template v-if="currentTab === 'aliases'">
                             <div class="container">
                                 <span v-for="alias in product.aliases" :key="alias.id">{{ alias.alias }}</span>
@@ -213,7 +249,7 @@
                     <div class="modal-header">
                         <h5 class="modal-title">Settings: Packlist</h5>
                         <div class="widget-tools-container">
-                            <font-awesome-icon icon="question-circle" :content="helpText" v-tippy></font-awesome-icon>
+<!--                            <font-awesome-icon icon="question-circle" :content="helpText" v-tippy></font-awesome-icon>-->
                         </div>
                     </div>
                     <div class="modal-body" style="margin: 0 auto 0;">
