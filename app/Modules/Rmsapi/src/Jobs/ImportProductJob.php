@@ -101,13 +101,15 @@ class ImportProductJob implements ShouldQueue
     {
         $connection = RmsapiConnection::query()->find($importedProduct->connection_id);
 
-        Inventory::query()->updateOrCreate([
+        Inventory::updateOrCreate([
             'product_id'        => $product->id,
             'warehouse_code'    => $connection->location_id,
         ], [
             'quantity'          => $importedProduct->raw_import['quantity_on_hand'],
             'quantity_reserved' => $importedProduct->raw_import['quantity_committed'],
             'shelve_location'   => Arr::get($importedProduct->raw_import, 'rmsmobile_shelve_location'),
+            'reorder_point'     => Arr::get($importedProduct->raw_import, 'reorder_point'),
+            'restock_level'     => Arr::get($importedProduct->raw_import, 'restock_level'),
         ]);
     }
 

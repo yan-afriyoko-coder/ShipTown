@@ -13,6 +13,8 @@ $factory->define(RmsapiProductImport::class, function (Faker $faker) {
     $quantity_on_hand = random_int(0, 1000);
     $quantity_committed = random_int(0, $quantity_on_hand);
     $quantity_available = $quantity_on_hand - $quantity_committed;
+    $reorder_point = random_int(0, 100);
+    $restock_level = random_int(0, $reorder_point);
 
     return [
         'connection_id' => $connection->id,
@@ -33,8 +35,8 @@ $factory->define(RmsapiProductImport::class, function (Faker $faker) {
            "supplier_id":2,
            "date_created":"2003-06-03 17:17:23",
            "department_id":5,
-           "reorder_point":0,
-           "restock_level":0,
+           "reorder_point":'. $reorder_point .',
+           "restock_level":'. $restock_level .',,
            "sale_end_date":null,
            "food_stampable":0,
            "db_change_stamp":'.random_int(1000, 100000).',
