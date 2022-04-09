@@ -205,8 +205,8 @@
                                     <thead>
                                         <tr>
                                             <th>Location</th>
-                                            <th>Stock</th>
-                                            <th>Reserved</th>
+<!--                                            <th>Stock</th>-->
+<!--                                            <th>Reserved</th>-->
                                             <th>Available</th>
                                             <th>Restock Level</th>
                                             <th>Reorder Point</th>
@@ -215,9 +215,9 @@
                                     </thead>
                                     <tbody>
                                         <tr v-for="inventory in product.inventory" :key="inventory.id">
-                                            <td>{{ inventory.warehouse_code }}</td>
-                                            <td>{{ inventory.quantity | numberFormat}}</td>
-                                            <td>{{ inventory.quantity_reserved | numberFormat}}</td>
+                                            <td><b>{{ inventory.warehouse_code }}</b></td>
+<!--                                            <td>{{ inventory.quantity | numberFormat}}</td>-->
+<!--                                            <td>{{ inventory.quantity_reserved | numberFormat}}</td>-->
                                             <td>{{ inventory.quantity_available | numberFormat}}</td>
                                             <td>{{ inventory.restock_level | numberFormat }}</td>
                                             <td>{{ inventory.reorder_point | numberFormat}}</td>
