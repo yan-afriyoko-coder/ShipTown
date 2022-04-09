@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Product;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreInventoryRequest;
+use App\Http\Resources\InventoryResource;
 use App\Models\Inventory;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -22,28 +23,9 @@ class ProductInventoryController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->get('per_page') == 'all') {
-            return Product::whereHas('inventory', function ($query) {
-                $query->where('quantity_reserved', '>', 0);
-            })
-                ->get()
-                ->load('inventory');
-        } else {
-            return Product::whereHas('inventory', function ($query) {
-                $query->where('quantity_reserved', '>', 0);
-            })
-                ->when($request->has('q'), function ($query) use ($request) {
-                    return $query
-                        ->where('sku', 'like', '%'.$request->get('q').'%')
-                        ->orWhere('name', 'like', '%'.$request->get('q').'%');
-                })
-                ->when($request->has('sort'), function ($query) use ($request) {
-                    return $query
-                            ->orderBy($request->get('sort'), $request->get('order', 'asc'));
-                })
-                ->with('inventory')
-                ->paginate(100);
-        }
+        $query = Inventory::getSpatieQueryBuilder();
+
+        return InventoryResource::collection($this->getPaginatedResult($query));
     }
 
     /**
