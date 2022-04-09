@@ -35,11 +35,11 @@
                         </div>
                         <template v-for="warehouse_inventory in product.inventory">
                             <div class="row text-right" :key="warehouse_inventory.id">
-                                <div class="col-2 text-left">{{ warehouse_inventory.location_id }}</div>
+                                <div class="col-2 text-left">{{ warehouse_inventory.warehouse_code }}</div>
                                 <div class="col-2 d-none d-sm-block">{{ warehouse_inventory.quantity | numberFormat }}</div>
                                 <div class="col-3  col-sm-2">{{ warehouse_inventory.quantity_reserved | numberFormat }}</div>
                                 <div class="col-3">{{ warehouse_inventory.quantity - warehouse_inventory.quantity_reserved | numberFormat }}</div>
-                                <div class="col-4 col-sm-3">{{ warehouse_inventory.shelve_location }}</div>
+                                <div class="col-4 col-sm-3">{{ warehouse_inventory.shelf_location }}</div>
                             </div>
                         </template>
                         <div class="row text-right font-weight-bold">
