@@ -87,11 +87,7 @@
                             <a class="dropdown-item" href="{{ route('performance.dashboard') .'?between_dates=-7days,now' }}">{{ __('Performance Dashboard') }}</a>
                             <a class="dropdown-item" href="{{ route('reports.picks') }}">{{ __('Picks') }}</a>
                             <a class="dropdown-item" href="{{ route('reports.shipments') }}">{{ __('Shipments') }}</a>
-                            <a class="dropdown-item" href="{{ route('ready_order_shipments_as_csv').'?include=order&filter[shipping_number]=LJ&filter[order.status_code]=ready&fields=shipping_number,order.order_number&filename=AnPost_ready_shipments.csv'}}" target="_blank">{{ __("Download AnPost Shipments") }}</a>
-                            <a class="dropdown-item" href="{{ route('ready_order_shipments_as_csv').'?include=order&filter[shipping_number]=6127&filter[order.status_code]=ready&fields=id,shipping_number,order.order_number&filename=dpd_ready_shipments.csv'}}" target="_blank">{{ __("Download DPD Shipments") }}</a>
-                            <a class="dropdown-item" href="{{ route('partial_order_shipments_as_csv') }}" target="_blank">{{ __("Download Today's Partial Shipments") }}</a>
-                            <a class="dropdown-item" href="{{ route('warehouse_picks.csv').'?filter[user_id]=8&filter[created_between]=today,now' }}" target="_blank">{{ __("Download Today's Warehouse Picks") }}</a>
-                            <a class="dropdown-item" href="{{ route('warehouse_shipped.csv').'?filter[packer_user_id]=8&filter[order.packed_between]=today,now' }}" target="_blank">{{ __("Download Today's Warehouse Shipped") }}</a>
+                            <a class="dropdown-item" href="{{ route('reports.inventory') }}">{{ __('Inventory') }}</a>
                             @foreach ($navigationMenuReports as $menu)
                                 <a class="dropdown-item" href="{{ $menu->url }}">
                                     {{ $menu->name }}
