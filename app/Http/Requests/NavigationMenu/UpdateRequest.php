@@ -25,7 +25,7 @@ class UpdateRequest extends FormRequest
     {
         return [
             'name'  => 'required|string|min:3|max:100',
-            'url'   => 'required|string|min:3|max:255',
+            'url'   => 'required|string|min:3|max:999',
             'group' => 'required|min:3|max:100|in:picklist,packlist,reports',
         ];
     }
