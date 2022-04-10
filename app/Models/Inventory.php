@@ -109,6 +109,7 @@ class Inventory extends BaseModel
                 AllowedFilter::scope('restock_level_between'),
 
                 AllowedFilter::scope('source_warehouse_code', 'addWarehouseSource'),
+                AllowedFilter::scope('inventory_source_quantity_available_between'),
             ])
             ->allowedSorts([
                 'id',
@@ -192,6 +193,18 @@ class Inventory extends BaseModel
         return $query->leftJoinSub($source_inventory, 'inventory_source', function ($join) {
             $join->on('inventory.product_id', '=', 'inventory_source_product_id');
         });
+    }
+
+    /**
+     * @param mixed $query
+     * @param mixed $min
+     * @param mixed $max
+     *
+     * @return mixed
+     */
+    public function scopeInventorySourceQuantityAvailableBetween($query, $min, $max)
+    {
+        return $query->whereBetween('inventory_source_quantity_available', [floatval($min), floatval($max)]);
     }
 
     /**
