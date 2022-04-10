@@ -37,6 +37,7 @@
                                             required>
                                             <option value="picklist">Picklist</option>
                                             <option value="packlist">Packlist</option>
+                                            <option value="reports">Reports</option>
                                         </select>
                                         <div class="invalid-feedback">
                                             {{ errors[0] }}
