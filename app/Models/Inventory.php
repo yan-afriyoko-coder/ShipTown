@@ -107,6 +107,8 @@ class Inventory extends BaseModel
                 AllowedFilter::scope('quantity_available_between'),
                 AllowedFilter::scope('quantity_required_between'),
                 AllowedFilter::scope('restock_level_between'),
+
+                AllowedFilter::scope('source_warehouse_code', 'addWarehouseSource'),
             ])
             ->allowedSorts([
                 'id',
@@ -166,6 +168,29 @@ class Inventory extends BaseModel
     {
         return $query->whereHas('warehouse', function (Builder $query) use ($tags) {
             $query->withAllTags($tags);
+        });
+    }
+
+
+    /**
+     * @param $query
+     * @param $warehouse_code
+     * @return mixed
+     */
+    public function scopeAddWarehouseSource($query, $warehouse_code)
+    {
+        $source_inventory = Inventory::query()
+            ->select([
+                'warehouse_id as inventory_source_warehouse_id',
+                'warehouse_code as inventory_source_warehouse_code',
+                'quantity_available as inventory_source_quantity_available',
+                'product_id as inventory_source_product_id',
+            ])
+            ->where(['warehouse_code' => $warehouse_code])
+            ->toBase();
+
+        return $query->leftJoinSub($source_inventory, 'inventory_source', function ($join) {
+            $join->on('inventory.product_id', '=', 'inventory_source_product_id');
         });
     }
 

@@ -29,6 +29,7 @@
                             <th>{{ __('Restock Level') }}</th>
                             <th>{{ __('Reorder Point') }}</th>
                             <th>{{ __('Quantity Required') }}</th>
+                            <th>{{ __('Inventory Source') }}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -41,6 +42,7 @@
                                 <td>{{ data_get($record, 'restock_level') }}</td>
                                 <td>{{ data_get($record, 'reorder_point') }}</td>
                                 <td>{{ data_get($record, 'quantity_required') }}</td>
+                                <td>{{ data_get($record, 'inventory_source_quantity_available') }}</td>
                             </tr>
                         @endforeach
                         </tbody>
