@@ -29,7 +29,8 @@ class ViewServiceProvider extends ServiceProvider
             $navigationMenu = NavigationMenu::all();
             $navigationMenuPicklist = $navigationMenu->where('group', 'picklist');
             $navigationMenuPacklist = $navigationMenu->where('group', 'packlist');
-            $view->with(compact('navigationMenuPicklist', 'navigationMenuPacklist'));
+            $navigationMenuReports  = $navigationMenu->where('group', 'reports');
+            $view->with(compact('navigationMenuPicklist', 'navigationMenuPacklist', 'navigationMenuReports'));
         });
     }
 }

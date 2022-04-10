@@ -7,13 +7,14 @@ use App\Http\Requests\NavigationMenu\StoreRequest;
 use App\Http\Requests\NavigationMenu\UpdateRequest;
 use App\Http\Resources\NavigationMenuResource;
 use App\Models\NavigationMenu;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class NavigationMenuController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return NavigationMenuResource
+     * @return AnonymousResourceCollection
      */
     public function index()
     {
