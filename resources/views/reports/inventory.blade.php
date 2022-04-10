@@ -35,7 +35,7 @@
                         @foreach ($data as $record)
                             <tr class="table-hover">
                                 <td>{{ data_get($record, 'warehouse.code') }}</td>
-                                <td>{{ data_get($record, 'product.sku') }}</td>
+                                <td><a href="/products?hide_nav_bar=true&search={{ data_get($record, 'product.sku') }}" target="_blank">{{ data_get($record, 'product.sku') }}</a></td>
                                 <td>{{ data_get($record, 'product.name') }}</td>
                                 <td>{{ data_get($record, 'quantity_available') }}</td>
                                 <td>{{ data_get($record, 'restock_level') }}</td>
