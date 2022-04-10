@@ -104,12 +104,17 @@ class Inventory extends BaseModel
                 AllowedFilter::exact('product_id'),
                 AllowedFilter::exact('warehouse_id'),
                 AllowedFilter::exact('warehouse_code'),
+                AllowedFilter::scope('quantity_available_between'),
                 AllowedFilter::scope('quantity_required_between'),
+                AllowedFilter::scope('restock_level_between'),
             ])
             ->allowedSorts([
                 'id',
                 'product_id',
                 'warehouse_id',
+                'quantity_available',
+                'restock_level',
+                'quantity_required'
             ])
             ->allowedIncludes([
                 'product'
@@ -123,9 +128,33 @@ class Inventory extends BaseModel
      *
      * @return mixed
      */
+    public function scopeQuantityAvailableBetween($query, $min, $max)
+    {
+        return $query->whereBetween('quantity_available', [floatval($min), floatval($max)]);
+    }
+
+    /**
+     * @param mixed $query
+     * @param mixed $min
+     * @param mixed $max
+     *
+     * @return mixed
+     */
     public function scopeQuantityRequiredBetween($query, $min, $max)
     {
         return $query->whereBetween('quantity_required', [floatval($min), floatval($max)]);
+    }
+
+    /**
+     * @param mixed $query
+     * @param mixed $min
+     * @param mixed $max
+     *
+     * @return mixed
+     */
+    public function scopeRestockLevelBetween($query, $min, $max)
+    {
+        return $query->whereBetween('restock_level', [floatval($min), floatval($max)]);
     }
 
     /**
