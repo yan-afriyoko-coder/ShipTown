@@ -9,6 +9,7 @@ class ShippingLabelController extends Controller
 {
     public function store(StoreShippingLabelRequest $request)
     {
+        dd($request->validated());
         $this->respondBadRequest('Haha all good!');
     }
 }
