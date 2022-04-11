@@ -1,21 +1,21 @@
 <?php
 
-namespace {{namespaceWithoutApp}};
+namespace Tests\Feature\Http\Controllers\Api\ShippingCourierController;
 
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class {{class}} extends TestCase
+class IndexTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
-    public function test_{{resourceLowercase}}_call_returns_ok()
+    public function test_index_call_returns_ok()
     {
         $user = factory(User::class)->create();
 
-        $response = $this->actingAs($user, 'api')->getJson(route('route-name.index'));
+        $response = $this->actingAs($user, 'api')->getJson(route('shipping-couriers.index'));
 
         $response->assertOk();
         $response->assertJsonStructure([
