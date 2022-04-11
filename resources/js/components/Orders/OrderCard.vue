@@ -22,7 +22,8 @@
                 <div class="row align-text-top">
 
                     <div class="col-5 col-md-4 col-lg-3 align-text-top">
-                        <div class="small"> <b> {{ order['status_code'] }} </b> </div>
+                        <div class="small font-weight-bold">{{ order['status_code'] }}</div>
+                        <div class="small">{{ order['label_template'] }} </div>
                     </div>
 
                     <div class="col text-center" @click="toggleOrderDetails">
