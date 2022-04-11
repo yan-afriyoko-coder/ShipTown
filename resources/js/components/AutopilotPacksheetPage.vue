@@ -77,6 +77,17 @@
                         <option v-for="orderStatus in orderStatuses" :value="orderStatus.code" :key="orderStatus.id">{{ orderStatus.code }}</option>
                     </select>
                 </div>
+                <div class="form-group">
+                    <label class="form-label" for="selectStatus">Courier</label>
+                    <select id="courierSelect" class="form-control" @change="updateLabelTemplate" v-model="order.label_template">
+                        <option selected>dpd_label</option>
+                        <option>an_post</option>
+                        <option>dpd_uk</option>
+                        <option>address_label</option>
+                    </select>
+                </div>
+                <button type="button" class="btn mb-1 btn-info" @click.prevent="printLabel()">Print Extra Label</button>
+                <br>
 
                 <button type="button" class="btn mb-1 btn-info" @click.prevent="openPreviousOrder">Open Previous Order</button>
                 <button type="button" class="btn mb-1 btn-info" @click.prevent="askForShippingNumber">Add Shipping Number</button>
@@ -139,22 +150,21 @@
                 };
             },
 
-            mounted() {
-                this.loadOrderStatuses();
-
-                if (Vue.prototype.$currentUser['warehouse_id']) {
-                    this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
-
-                    if (this.order_number) {
-                        this.loadOrder(this.order_number);
-                    }
-                    return;
-                }
-
-                this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
-            },
-
             watch: {
+                packlist() {
+                    if(this.order === null) {
+                        return;
+                    }
+
+                    if (this.somethingHasBeenPackedDuringThisSession === false) {
+                        return;
+                    }
+
+                    if(this.packlist && this.packlist.length === 0) {
+                        this.completeOrder();
+                    }
+                },
+
                 order_number() {
                     this.loadOrder(this.order_number);
                 },
@@ -176,20 +186,22 @@
                     this.packed = this.orderProducts.filter(orderProduct => Number(orderProduct['quantity_to_ship']) === 0);
                     this.packlist = this.orderProducts.filter(orderProduct => Number(orderProduct['quantity_to_ship']) > 0);
                 },
+            },
 
-                packlist() {
-                    if(this.order === null) {
-                        return;
-                    }
 
-                    if (this.somethingHasBeenPackedDuringThisSession === false) {
-                        return;
-                    }
+            mounted() {
+                this.loadOrderStatuses();
 
-                    if(this.packlist && this.packlist.length === 0) {
-                        this.completeOrder();
+                if (Vue.prototype.$currentUser['warehouse_id']) {
+                    this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
+
+                    if (this.order_number) {
+                        this.loadOrder(this.order_number);
                     }
-                },
+                    return;
+                }
+
+                this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
             },
 
             methods: {
@@ -493,7 +505,11 @@
                         });
                 },
 
-                printLabel: async function(template) {
+                printLabel: async function(template = null) {
+                    if (template === null) {
+                        template = this.order.label_template;
+                    }
+
                     if (template === 'dpd_uk') {
                         return this.createShipment(template);
                     }
@@ -551,6 +567,19 @@
                         buttons: []
                     });
                 },
+
+                updateLabelTemplate: function () {
+                    this.$refs.filtersModal.hide();
+                    this.setFocusOnBarcodeInput(500);
+
+                    this.apiUpdateOrder(this.order['id'], {'label_template': this.order.label_template})
+                        .then((response) => {
+                            this.order = response.data.data
+                        })
+                        .catch(() => {
+                            this.notifyError('Error when changing status');
+                        });
+                }
             },
 
             computed: {
