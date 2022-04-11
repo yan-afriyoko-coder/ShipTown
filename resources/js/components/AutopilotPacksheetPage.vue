@@ -83,7 +83,7 @@
                         <option v-for="shippingCourier in shippingCouriers" :value="shippingCourier.code" :key="shippingCourier.code">{{shippingCourier.code}}</option>
                     </select>
                 </div>
-                <button type="button" class="btn mb-1 btn-info" @click.prevent="printLabel()">Print Extra Label</button>
+                <button type="button" class="btn mb-1 btn-info" @click.prevent="printShippingLabel()">Print Extra Label</button>
                 <br>
 
                 <button type="button" class="btn mb-1 btn-info" @click.prevent="openPreviousOrder">Open Previous Order</button>
@@ -503,6 +503,31 @@
                         .catch((error) => {
                             this.canClose = false;
                             let errorMsg = 'Error: ' + error.response.data.message;
+
+                            this.notifyError(errorMsg, {
+                                closeOnClick: true,
+                                timeout: 0,
+                                buttons: [
+                                    {text: 'OK', action: null},
+                                ]
+                            });
+                        });
+                },
+
+                printShippingLabel: async function(shipping_service_code = null) {
+                    if (shipping_service_code === null) {
+                        shipping_service_code = this.getAddressLabelTemplateName();
+                    }
+
+                    let params = {
+                        'shipping_service_code': shipping_service_code,
+                        'order_id': this.order.id
+                    };
+
+                    return this.apiPostShippingLabel(params)
+                        .catch((error) => {
+                            this.canClose = false;
+                            let errorMsg = 'Error ' + error.response.status + ': ' + JSON.stringify(error.response.data);
 
                             this.notifyError(errorMsg, {
                                 closeOnClick: true,
