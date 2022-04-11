@@ -19,6 +19,7 @@ Route::put('print/order/{order_number}/an_post', 'Api\Modules\Scurri\ShipmentsCo
 Route::put('print/order/{order_number}/{view}', 'Api\PrintOrderController@store');
 
 Route::apiResource('shipments', 'Api\ShipmentControllerNew', ['as' => 'new'])->only(['store']);
+Route::apiResource('shipping-couriers', 'Api\ShippingCourierController')->only(['index']);
 
 Route::get('modules/consignments/{consignment_id}/labels', 'Api\Modules\Scurri\LabelsController@store')
     ->name('modules.scurri.consignments.labels');

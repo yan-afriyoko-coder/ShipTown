@@ -25,7 +25,7 @@ class UpdateRequest extends FormRequest
     {
         return [
             'shipping_number' => ['sometimes'],
-            'label_template'  => ['sometimes'],
+            'label_template'  => ['sometimes','exists:shipping_couriers,code'],
             'status_code'     => ['sometimes'],
             'packer_user_id'  => ['sometimes', 'integer', 'exists:users,id'],
             'is_packed'       => ['sometimes', 'boolean'],

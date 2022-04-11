@@ -80,10 +80,7 @@
                 <div class="form-group">
                     <label class="form-label" for="selectStatus">Courier</label>
                     <select id="courierSelect" class="form-control" @change="updateLabelTemplate" v-model="order.label_template">
-                        <option selected>dpd_label</option>
-                        <option>an_post</option>
-                        <option>dpd_uk</option>
-                        <option>address_label</option>
+                        <option v-for="shippingCourier in shippingCouriers" :value="shippingCourier.code" :key="shippingCourier.code">{{shippingCourier.code}}</option>
                     </select>
                 </div>
                 <button type="button" class="btn mb-1 btn-info" @click.prevent="printLabel()">Print Extra Label</button>
@@ -138,6 +135,7 @@
                     order: null,
                     orderProducts: [],
                     orderStatuses: [],
+                    shippingCouriers: [],
 
                     packlist: null,
                     packed: [],
@@ -191,6 +189,7 @@
 
             mounted() {
                 this.loadOrderStatuses();
+                this.loadShippingCouriers();
 
                 if (Vue.prototype.$currentUser['warehouse_id']) {
                     this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
@@ -278,6 +277,16 @@
                         })
                         .then(({ data }) => {
                             this.orderStatuses = data.data;
+                        })
+                },
+
+                loadShippingCouriers() {
+                    this.apiGetShippingCouriers({
+                        'per_page': 999,
+                        'sort': 'code'
+                    })
+                        .then(({ data }) => {
+                            this.shippingCouriers = data.data;
                         })
                 },
 
@@ -590,8 +599,8 @@
 
                     return (this.order['packer_user_id']  && this.order['packer_user_id'] !== Vue.prototype.$currentUser['id']);
                 }
-            }
-        }
+            },
+    }
     </script>
 
 
