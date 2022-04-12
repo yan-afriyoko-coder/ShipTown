@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\ShippingCourierController;
+namespace Tests\Feature\Http\Controllers\Api\ShippingServiceController;
 
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -15,7 +15,7 @@ class IndexTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $response = $this->actingAs($user, 'api')->getJson(route('shipping-couriers.index'));
+        $response = $this->actingAs($user, 'api')->getJson(route('shipping-services.index'));
 
         $response->assertOk();
         $response->assertJsonStructure([

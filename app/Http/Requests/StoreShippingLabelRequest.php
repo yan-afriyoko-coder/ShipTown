@@ -24,7 +24,7 @@ class StoreShippingLabelRequest extends FormRequest
     public function rules()
     {
         return [
-            'shipping_service_code' => ['required', 'exists:shipping_couriers,code'],
+            'shipping_service_code' => ['required', 'exists:shipping_services,code'],
             'order_id' => ['required', 'exists:orders,id'],
         ];
     }

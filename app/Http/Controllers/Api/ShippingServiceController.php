@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\ShippingCourierResource;
-use App\Models\ShippingCourier;
+use App\Models\ShippingService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class ShippingCourierController extends Controller
+class ShippingServiceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class ShippingCourierController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        $query = ShippingCourier::getSpatieQueryBuilder();
+        $query = ShippingService::getSpatieQueryBuilder();
 
         return ShippingCourierResource::collection($this->getPaginatedResult($query));
     }
