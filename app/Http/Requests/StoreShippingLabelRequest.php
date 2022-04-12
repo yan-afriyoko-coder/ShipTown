@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Order;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateRequest extends FormRequest
+class StoreShippingLabelRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,8 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'shipping_number' => ['sometimes'],
-            'label_template'  => ['sometimes','exists:shipping_services,code'],
-            'status_code'     => ['sometimes'],
-            'packer_user_id'  => ['sometimes', 'integer', 'exists:users,id'],
-            'is_packed'       => ['sometimes', 'boolean'],
+            'shipping_service_code' => ['required', 'exists:shipping_services,code'],
+            'order_id' => ['required', 'exists:orders,id'],
         ];
     }
 }

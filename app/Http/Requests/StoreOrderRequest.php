@@ -25,6 +25,7 @@ class StoreOrderRequest extends FormRequest
     {
         return [
             'order_number'        => 'required|string',
+            'label_template'      => 'sometimes|exists:shipping_services,code',
             'products'            => 'required|array',
             'products.*.sku'      => 'required|string',
             'products.*.name'     => 'required|string',

@@ -77,6 +77,14 @@
                         <option v-for="orderStatus in orderStatuses" :value="orderStatus.code" :key="orderStatus.id">{{ orderStatus.code }}</option>
                     </select>
                 </div>
+                <div class="form-group">
+                    <label class="form-label" for="selectStatus">Courier</label>
+                    <select id="courierSelect" class="form-control" @change="updateLabelTemplate" v-model="order.label_template">
+                        <option v-for="shippingCourier in shippingCouriers" :value="shippingCourier.code" :key="shippingCourier.code">{{shippingCourier.code}}</option>
+                    </select>
+                </div>
+                <button type="button" class="btn mb-1 btn-info" @click.prevent="printShippingLabel()">Print Extra Label</button>
+                <br>
 
                 <button type="button" class="btn mb-1 btn-info" @click.prevent="openPreviousOrder">Open Previous Order</button>
                 <button type="button" class="btn mb-1 btn-info" @click.prevent="askForShippingNumber">Add Shipping Number</button>
@@ -127,6 +135,7 @@
                     order: null,
                     orderProducts: [],
                     orderStatuses: [],
+                    shippingCouriers: [],
 
                     packlist: null,
                     packed: [],
@@ -139,22 +148,21 @@
                 };
             },
 
-            mounted() {
-                this.loadOrderStatuses();
-
-                if (Vue.prototype.$currentUser['warehouse_id']) {
-                    this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
-
-                    if (this.order_number) {
-                        this.loadOrder(this.order_number);
-                    }
-                    return;
-                }
-
-                this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
-            },
-
             watch: {
+                packlist() {
+                    if(this.order === null) {
+                        return;
+                    }
+
+                    if (this.somethingHasBeenPackedDuringThisSession === false) {
+                        return;
+                    }
+
+                    if(this.packlist && this.packlist.length === 0) {
+                        this.completeOrder();
+                    }
+                },
+
                 order_number() {
                     this.loadOrder(this.order_number);
                 },
@@ -176,20 +184,23 @@
                     this.packed = this.orderProducts.filter(orderProduct => Number(orderProduct['quantity_to_ship']) === 0);
                     this.packlist = this.orderProducts.filter(orderProduct => Number(orderProduct['quantity_to_ship']) > 0);
                 },
+            },
 
-                packlist() {
-                    if(this.order === null) {
-                        return;
-                    }
 
-                    if (this.somethingHasBeenPackedDuringThisSession === false) {
-                        return;
-                    }
+            mounted() {
+                this.loadOrderStatuses();
+                this.loadShippingCouriers();
 
-                    if(this.packlist && this.packlist.length === 0) {
-                        this.completeOrder();
+                if (Vue.prototype.$currentUser['warehouse_id']) {
+                    this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
+
+                    if (this.order_number) {
+                        this.loadOrder(this.order_number);
                     }
-                },
+                    return;
+                }
+
+                this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
             },
 
             methods: {
@@ -266,6 +277,16 @@
                         })
                         .then(({ data }) => {
                             this.orderStatuses = data.data;
+                        })
+                },
+
+                loadShippingCouriers() {
+                    this.apiGetShippingServices({
+                        'per_page': 999,
+                        'sort': 'code'
+                    })
+                        .then(({ data }) => {
+                            this.shippingCouriers = data.data;
                         })
                 },
 
@@ -493,7 +514,36 @@
                         });
                 },
 
-                printLabel: async function(template) {
+                printShippingLabel: async function(shipping_service_code = null) {
+                    if (shipping_service_code === null) {
+                        shipping_service_code = this.getAddressLabelTemplateName();
+                    }
+
+                    let params = {
+                        'shipping_service_code': shipping_service_code,
+                        'order_id': this.order.id
+                    };
+
+                    return this.apiPostShippingLabel(params)
+                        .catch((error) => {
+                            this.canClose = false;
+                            let errorMsg = 'Error ' + error.response.status + ': ' + JSON.stringify(error.response.data);
+
+                            this.notifyError(errorMsg, {
+                                closeOnClick: true,
+                                timeout: 0,
+                                buttons: [
+                                    {text: 'OK', action: null},
+                                ]
+                            });
+                        });
+                },
+
+                printLabel: async function(template = null) {
+                    if (template === null) {
+                        template = this.order.label_template;
+                    }
+
                     if (template === 'dpd_uk') {
                         return this.createShipment(template);
                     }
@@ -551,6 +601,19 @@
                         buttons: []
                     });
                 },
+
+                updateLabelTemplate: function () {
+                    this.$refs.filtersModal.hide();
+                    this.setFocusOnBarcodeInput(500);
+
+                    this.apiUpdateOrder(this.order['id'], {'label_template': this.order.label_template})
+                        .then((response) => {
+                            this.order = response.data.data
+                        })
+                        .catch(() => {
+                            this.notifyError('Error when changing status');
+                        });
+                }
             },
 
             computed: {
@@ -561,8 +624,8 @@
 
                     return (this.order['packer_user_id']  && this.order['packer_user_id'] !== Vue.prototype.$currentUser['id']);
                 }
-            }
-        }
+            },
+    }
     </script>
 
 

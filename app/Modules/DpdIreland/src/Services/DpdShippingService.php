@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Api\Modules\DpdIreland;
+namespace App\Modules\DpdIreland\src\Services;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\PrintDpdLabelStoreRequest;
+use App\Abstracts\ShippingServiceAbstract;
 use App\Http\Resources\PreAdviceResource;
 use App\Models\Order;
 use App\Modules\DpdIreland\Dpd;
@@ -15,20 +14,16 @@ use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-/**
- * Class PrintDpdLabelController.
- */
-class PrintDpdLabelController extends Controller
+class DpdShippingService extends ShippingServiceAbstract
 {
     /**
-     * @param PrintDpdLabelStoreRequest $request
-     * @param string $order_number
-     * @return AnonymousResourceCollection
      * @throws GuzzleException
+     * @throws Exception
      */
-    public function store(PrintDpdLabelStoreRequest $request, string $order_number): AnonymousResourceCollection
+    public function ship(int $order_id): AnonymousResourceCollection
     {
-        $order = Order::whereOrderNumber($order_number)->firstOrFail();
+        /** @var Order $order */
+        $order = Order::findOrFail($order_id);
 
         $preAdvice = $this->createPreAdviceOrFail($order);
 
@@ -39,28 +34,25 @@ class PrintDpdLabelController extends Controller
         );
     }
 
+
     /**
      * @param Order $order
      *
      * @return PreAdvice
-     * @throws GuzzleException
+     * @throws Exception|GuzzleException
      */
     private function createPreAdviceOrFail(Order $order): PreAdvice
     {
-        $preAdvice = null;
-
         try {
             $preAdvice = Dpd::shipOrder($order, request()->user());
 
             if ($preAdvice->isNotSuccess()) {
-                $this->respondBadRequest('DPD Responded: '.$preAdvice->consignment()['RecordErrorDetails']);
+                throw new Exception('DPD Responded: '.$preAdvice->consignment()['RecordErrorDetails']);
             }
 
             return $preAdvice;
-        } catch (AuthorizationException $exception) {
-            $this->respond403Forbidden($exception->getMessage());
-        } catch (Exception $exception) {
-            $this->respondBadRequest($exception->getMessage());
+        } catch (AuthorizationException | Exception $exception) {
+            throw new Exception($exception->getMessage());
         }
     }
 
@@ -68,6 +60,7 @@ class PrintDpdLabelController extends Controller
      * @param PreAdvice $preAdvice
      *
      * @return int
+     * @throws Exception
      */
     public function printOrFail(PreAdvice $preAdvice): int
     {
@@ -79,7 +72,7 @@ class PrintDpdLabelController extends Controller
 
             return PrintNode::print($printJob);
         } catch (Exception $exception) {
-            $this->respondBadRequest($exception->getMessage());
+            throw new Exception($exception->getMessage());
         }
     }
 }
