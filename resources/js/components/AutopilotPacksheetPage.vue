@@ -281,7 +281,7 @@
                 },
 
                 loadShippingCouriers() {
-                    this.apiGetShippingCouriers({
+                    this.apiGetShippingServices({
                         'per_page': 999,
                         'sort': 'code'
                     })
