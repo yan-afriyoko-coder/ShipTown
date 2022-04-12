@@ -22,7 +22,8 @@ class ShippingLabelController extends Controller
     public function store(StoreShippingLabelRequest $request): AnonymousResourceCollection
     {
         /** @var ShippingService $shippingService */
-        $shippingService = ShippingService::whereCode($request->validated()['shipping_service_code'])->firstOrFail();
+        $shippingService = ShippingService::whereCode($request->validated()['shipping_service_code'])
+            ->firstOrFail();
 
         try {
             /** @var ShippingServiceAbstract $shipper */
