@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Abstracts\ShippingServiceAbstract;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreShippingLabelRequest;
 use App\Http\Resources\ShippingLabelResource;
@@ -23,7 +24,10 @@ class ShippingLabelController extends Controller
         /** @var ShippingService $shippingService */
         $shippingService = ShippingService::whereCode($request->validated()['shipping_service_code'])->first();
 
-        app($shippingService->service_provider_class)->ship($request->validated()['order_id']);
+        /** @var ShippingServiceAbstract $shipper */
+        $shipper = app($shippingService->service_provider_class);
+
+        $shipper->ship($request->validated()['order_id']);
 
         $query = OrderShipment::getSpatieQueryBuilder();
 

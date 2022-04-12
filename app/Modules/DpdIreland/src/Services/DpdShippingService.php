@@ -2,6 +2,7 @@
 
 namespace App\Modules\DpdIreland\src\Services;
 
+use App\Abstracts\ShippingServiceAbstract;
 use App\Http\Resources\PreAdviceResource;
 use App\Models\Order;
 use App\Modules\DpdIreland\Dpd;
@@ -13,7 +14,7 @@ use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class DpdShippingService
+class DpdShippingService extends ShippingServiceAbstract
 {
     /**
      * @throws GuzzleException
