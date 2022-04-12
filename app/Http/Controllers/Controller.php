@@ -100,6 +100,12 @@ class Controller extends BaseController
         $this->setStatusCode(403)->throwJsonResponse($message);
     }
 
+
+    public function respond503ServiceUnavailable($message = 'Service Unavailable')
+    {
+        $this->setStatusCode(503)->throwJsonResponse($message);
+    }
+
     public function setStatusCode($code): Controller
     {
         $this->status_code = $code;

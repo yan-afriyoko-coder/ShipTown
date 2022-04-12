@@ -22,12 +22,16 @@ class ShippingLabelController extends Controller
     public function store(StoreShippingLabelRequest $request): AnonymousResourceCollection
     {
         /** @var ShippingService $shippingService */
-        $shippingService = ShippingService::whereCode($request->validated()['shipping_service_code'])->first();
+        $shippingService = ShippingService::whereCode($request->validated()['shipping_service_code'])->firstOrFail();
 
-        /** @var ShippingServiceAbstract $shipper */
-        $shipper = app($shippingService->service_provider_class);
+        try {
+            /** @var ShippingServiceAbstract $shipper */
+            $shipper = app($shippingService->service_provider_class);
 
-        $shipper->ship($request->validated()['order_id']);
+            $shipper->ship($request->validated()['order_id']);
+        } catch (\Exception $exception) {
+            $this->respond503ServiceUnavailable('AnPost: '.$exception->getMessage());
+        }
 
         $query = OrderShipment::getSpatieQueryBuilder();
 

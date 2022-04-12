@@ -32,7 +32,7 @@ class CreateShippingServicesTable extends Migration
 
         \App\Models\ShippingService::query()->create([
             'code' => 'an_post',
-            'service_provider_class' => '',
+            'service_provider_class' => App\Modules\ScurriAnpost\src\Services\AnPostShippingService::class,
         ]);
 
         \App\Models\ShippingService::query()->create([
