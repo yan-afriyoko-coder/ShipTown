@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
+/**
+ * @property int    id
+ * @property string code
+ * @property string service_provider_class
+ */
 class ShippingService extends Model
 {
     protected $fillable = [
