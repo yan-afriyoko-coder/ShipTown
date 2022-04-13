@@ -18,6 +18,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property string      $name
  * @property bool        $reserves_stock
  * @property bool         $order_active
+ * @property bool        order_on_hold
  * @property bool         $sync_ecommerce
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
