@@ -26,9 +26,10 @@ class StoreRequest extends FormRequest
         return [
             'name'              => ['required', 'string', 'max:100'],
             'code'              => ['required', 'string', 'max:100'],
-            'order_active'      => ['required', 'boolean'],
-            'reserves_stock'    => ['required', 'boolean'],
-            'sync_ecommerce'    => ['required', 'boolean'],
+            'order_active'      => ['sometimes', 'boolean'],
+            'order_on_hold'     => ['sometimes', 'boolean'],
+            'reserves_stock'    => ['sometimes', 'boolean'],
+            'sync_ecommerce'    => ['sometimes', 'boolean'],
         ];
     }
 }

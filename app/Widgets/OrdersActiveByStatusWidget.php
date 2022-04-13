@@ -8,7 +8,7 @@ use Arrilot\Widgets\AbstractWidget;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class ActiveOrdersWidget extends AbstractWidget
+class OrdersActiveByStatusWidget extends AbstractWidget
 {
     /**
      * The configuration array.
@@ -29,7 +29,7 @@ class ActiveOrdersWidget extends AbstractWidget
                 DB::raw('count(*) as order_count')
             ])
             ->where(['is_active' => true])
-            ->whereNotIn('status_code', OrderStatus::getToFollowStatusList())
+            ->where(['is_on_hold' => false])
             ->groupBy(['status_code'])
             ->orderBy('status_code')
             ->get();
@@ -40,7 +40,7 @@ class ActiveOrdersWidget extends AbstractWidget
             $total_count += $order_status['order_count'];
         }
 
-        return view('widgets.active_orders_widget', [
+        return view('widgets.orders_active_by_status_widget', [
             'config' => $this->config,
             'order_status_counts' => $order_status_counts,
             'total_count' => $total_count,

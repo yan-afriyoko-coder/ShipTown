@@ -32,6 +32,7 @@ use Spatie\Tags\Tag;
  * @property string           $shipping_method_name
  *
  * @property bool             $is_active
+ * @property bool             is_on_hold
  *
  * @property int|null         $packer_user_id
  * @property int|null         $shipping_address_id

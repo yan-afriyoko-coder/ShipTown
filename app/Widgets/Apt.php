@@ -31,7 +31,7 @@ class Apt extends AbstractDateSelectorWidget
 
         $apt_seconds  = (integer) Order::query()
             ->selectRaw("AVG(TIME_TO_SEC(TIMEDIFF(order_closed_at, order_placed_at))) as apt")
-            ->whereIn('status_code', OrderStatus::getCompletedStatusCodeList())
+            ->where(['is_active' => false])
             ->whereRaw('order_closed_at > order_placed_at')
             ->whereBetween('order_closed_at', [
                 $this->getStartingDateTime(),

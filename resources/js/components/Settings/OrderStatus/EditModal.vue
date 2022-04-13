@@ -47,6 +47,25 @@
                             </div>
 
                             <div class="form-group row">
+                                <label class="col-sm-3 col-form-label" for="order_on_hold">Order On Hold</label>
+                                <div class="col-sm-9">
+                                    <ValidationProvider vid="order_on_hold" name="order_on_hold" v-slot="{ errors }">
+                                        <div class="custom-control custom-switch mt-2" :class="{'is-invalid' : errors.length}">
+                                            <input type="checkbox"
+                                                id="edit-order_on_hold"
+                                                class="custom-control-input"
+                                                v-model="orderOnHold"
+                                                required>
+                                            <label class="custom-control-label" for="edit-order_on_hold"></label>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            {{ errors[0] }}
+                                        </div>
+                                    </ValidationProvider>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
                                 <label class="col-sm-3 col-form-label" for="sync_ecommerce">Sync Ecommerce</label>
                                 <div class="col-sm-9">
                                     <ValidationProvider vid="sync_ecommerce" name="sync_ecommerce" v-slot="{ errors }">
@@ -118,6 +137,7 @@ export default {
         return {
             reservesStock: false,
             orderActive: false,
+            orderOnHold: false,
             syncEcommerce: false,
             hidden: false,
         }
@@ -131,6 +151,7 @@ export default {
         orderStatus: function(newVal) {
             this.reservesStock = newVal.reserves_stock
             this.orderActive = newVal.order_active
+            this.orderOnHold = newVal.order_on_hold
             this.syncEcommerce = newVal.sync_ecommerce
             this.hidden = newVal.hidden
         }
@@ -142,6 +163,7 @@ export default {
             this.apiPutOrderStatus(this.orderStatus.id, {
                     reserves_stock: this.reservesStock,
                     order_active: this.orderActive,
+                    order_on_hold: this.orderOnHold,
                     sync_ecommerce: this.syncEcommerce,
                     hidden: this.hidden,
                 })

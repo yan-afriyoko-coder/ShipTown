@@ -20,6 +20,7 @@
                             <th>Code</th>
                             <th class="d-none d-sm-block">Name</th>
                             <th>Order Active</th>
+                            <th>Order On Hold</th>
                             <th>Reserves Stock</th>
                             <th>Hidden</th>
                             <th>Sync Ecommerce</th>
@@ -31,18 +32,11 @@
                             <td class="d-none d-sm-block text-center">{{ orderStatus.id }}</td>
                             <td>{{ orderStatus.code }}</td>
                             <td class="d-none d-sm-block">{{ orderStatus.name }}</td>
-                            <td class="text-center">
-                                <status-icon :status="orderStatus.reserves_stock" />
-                            </td>
-                            <td class="text-center">
-                                <status-icon :status="orderStatus.order_active" />
-                            </td>
-                            <td class="text-center">
-                                <status-icon :status="orderStatus.hidden" />
-                            </td>
-                            <td class="text-center">
-                                <status-icon :status="orderStatus.sync_ecommerce" />
-                            </td>
+                            <td class="text-center"><status-icon :status="orderStatus.order_active" /></td>
+                            <td class="text-center"><status-icon :status="orderStatus.order_on_hold" /></td>
+                            <td class="text-center"><status-icon :status="orderStatus.reserves_stock" /></td>
+                            <td class="text-center"><status-icon :status="orderStatus.hidden" /></td>
+                            <td class="text-center"><status-icon :status="orderStatus.sync_ecommerce" /></td>
                         </tr>
                     </tbody>
                 </table>
@@ -74,14 +68,7 @@ export default {
     },
 
     mounted() {
-        this.apiGetOrderStatus({
-                'per_page': 999,
-                'sort': 'code'
-            })
-            .then(({ data }) => {
-                this.orderStatuses = data.data;
-                console.log(this.orderStatuses);
-            })
+        this.loadOrderStatusList();
     },
 
     data: () => ({
@@ -90,22 +77,38 @@ export default {
     }),
 
     methods: {
+        loadOrderStatusList() {
+            this.apiGetOrderStatus({
+                'per_page': 999,
+                'sort': 'code'
+            })
+                .then(({ data }) => {
+                    this.orderStatuses = data.data;
+                })
+        },
+
         showCreateForm(){
             $('#createForm').modal('show');
         },
+
         showEditForm(orderStatus) {
             this.selectedOrderStatus = orderStatus;
             $('#editForm').modal('show');
         },
+
         updateOrderStatus(newValue) {
-            const indexOrderStatus = this.orderStatuses.findIndex(orderStatus => orderStatus.id == newValue.id)
-            this.$set(this.orderStatuses, indexOrderStatus, newValue)
+            const indexOrderStatus = this.orderStatuses.findIndex(orderStatus => orderStatus.id === newValue.id)
+            this.$set(this.orderStatuses, indexOrderStatus, newValue);
+            this.loadOrderStatusList();
         },
+
         addOrderStatus(orderStatus){
             this.orderStatuses.push(orderStatus)
+            this.loadOrderStatusList();
         },
+
         removeOrderStatus(id){
-            const indexOrderStatuses = this.orderStatuses.findIndex(orderStatus => orderStatus.id == id)
+            const indexOrderStatuses = this.orderStatuses.findIndex(orderStatus => orderStatus.id === id)
             Vue.delete(this.orderStatuses, indexOrderStatuses);
         },
     },

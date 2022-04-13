@@ -24,10 +24,11 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'order_active'      => ['required', 'boolean'],
-            'reserves_stock'    => ['required', 'boolean'],
+            'order_active'      => ['sometimes', 'boolean'],
+            'order_on_hold'     => ['sometimes', 'boolean'],
+            'reserves_stock'    => ['sometimes', 'boolean'],
             'hidden'            => ['sometimes', 'boolean'],
-            'sync_ecommerce'    => ['required', 'boolean'],
+            'sync_ecommerce'    => ['sometimes', 'boolean'],
         ];
     }
 }

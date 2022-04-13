@@ -18,6 +18,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property string      $name
  * @property bool        $reserves_stock
  * @property bool         $order_active
+ * @property bool        order_on_hold
  * @property bool         $sync_ecommerce
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -44,6 +45,7 @@ class OrderStatus extends BaseModel
         'name',
         'code',
         'order_active',
+        'order_on_hold',
         'hidden',
         'reserves_stock',
         'sync_ecommerce',
@@ -51,6 +53,7 @@ class OrderStatus extends BaseModel
 
     protected $casts = [
         'order_active'      => 'boolean',
+        'order_on_hold'     => 'boolean',
         'reserves_stock'    => 'boolean',
         'hidden'            => 'boolean',
         'sync_ecommerce'    => 'boolean',
@@ -58,77 +61,11 @@ class OrderStatus extends BaseModel
 
     protected $attributes = [
         'order_active'   => true,
+        'order_on_hold'  => false,
         'reserves_stock' => true,
         'hidden'         => false,
         'sync_ecommerce' => false,
     ];
-
-    public static $toFollowStatusList = [
-        'processing',
-        'unshipped',
-        'partially_shipped',
-        'holded',
-        'on_hold',
-        'missing_item',
-        'auto_missing_item',
-        'ready',
-    ];
-
-    public static $completedStatusCodeList = [
-        'cancelled',
-        'canceled',
-        'closed',
-        'complete',
-        'completed_imported_to_rms',
-    ];
-
-    public static function getToFollowStatusList()
-    {
-        return self::$toFollowStatusList;
-    }
-
-    public static function getCompletedStatusCodeList()
-    {
-        return self::$completedStatusCodeList;
-    }
-
-    public static function getClosedStatuses()
-    {
-        return array_merge(
-            static::getCompletedStatusCodeList()
-        );
-    }
-
-    public static function getStatusesReservingStock()
-    {
-        return array_merge(
-            static::getCompletedStatusCodeList()
-        );
-    }
-
-    /**
-     * @param string $status_code
-     *
-     * @return bool
-     */
-    public static function isActive(string $status_code): bool
-    {
-        if (self::isComplete($status_code) || self::isToFollow($status_code)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public static function isToFollow(string $status_code)
-    {
-        return array_search($status_code, self::getToFollowStatusList()) != false;
-    }
-
-    public static function isComplete(string $status_code)
-    {
-        return array_search($status_code, self::getCompletedStatusCodeList()) != false;
-    }
 
     /**
      * @return QueryBuilder
