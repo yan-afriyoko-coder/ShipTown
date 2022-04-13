@@ -3,6 +3,7 @@
 namespace App\Modules\OrderStatus\src;
 
 use App\Events\Order\OrderUpdatedEvent;
+use App\Events\OrderStatus\OrderStatusUpdatedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
@@ -32,5 +33,9 @@ class OrderStatusServiceProvider extends BaseModuleServiceProvider
         OrderUpdatedEvent::class => [
             Listeners\OrderUpdatedEventListener::class,
         ],
+
+        OrderStatusUpdatedEvent::class => [
+            Listeners\OrderStatusUpdatedEventListener::class,
+        ]
     ];
 }
