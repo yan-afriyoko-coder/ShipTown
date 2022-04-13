@@ -515,6 +515,9 @@
                 },
 
                 printShippingLabel: async function(shipping_service_code = null) {
+                    this.$refs.filtersModal.hide();
+                    this.setFocusOnBarcodeInput(500);
+
                     if (shipping_service_code === null) {
                         shipping_service_code = this.getAddressLabelTemplateName();
                     }
