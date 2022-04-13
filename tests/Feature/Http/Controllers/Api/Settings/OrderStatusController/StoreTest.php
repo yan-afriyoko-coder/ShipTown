@@ -55,7 +55,7 @@ class StoreTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_name_and_code_cannot_duplicate()
+    public function test_code_cannot_duplicate()
     {
         Passport::actingAs(
             factory(User::class)->states('admin')->create()
@@ -65,7 +65,6 @@ class StoreTest extends TestCase
         $response = $this->simulationTest();
 
         $response->assertSessionHasErrors([
-            'name',
             'code',
         ]);
     }
