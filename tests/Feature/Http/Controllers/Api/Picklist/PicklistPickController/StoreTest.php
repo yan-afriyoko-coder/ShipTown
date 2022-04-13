@@ -5,10 +5,13 @@ namespace Tests\Feature\Http\Controllers\Api\Picklist\PicklistPickController;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class StoreTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function store_returns_an_ok_response()
     {
