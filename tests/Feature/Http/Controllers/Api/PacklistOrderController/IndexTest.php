@@ -20,10 +20,6 @@ class IndexTest extends TestCase
 
         $response = $this->actingAs($user, 'api')->getJson(route('packlist.order.index'));
 
-        if ($response->isNotFound()) {
-            dd($response->json());
-        }
-
         $response->assertOk();
 
         $response->assertJsonStructure([
