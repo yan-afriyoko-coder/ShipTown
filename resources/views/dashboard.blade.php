@@ -16,13 +16,13 @@
 
                 <div class="row">
                     <div class="col-md-8 offset-md-2">
-                        <div class="">@asyncWidget('ActiveOrdersWidget')</div>
+                        <div class="">@asyncWidget('OrdersActiveByStatusWidget')</div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-8 offset-md-2">
-                        <div class="">@asyncWidget('ToFollowStatusOrderCountWidget')</div>
+                        <div class="">@asyncWidget('OrdersOnHoldByStatusWidget')</div>
                     </div>
                 </div>
 
