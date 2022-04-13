@@ -29,6 +29,7 @@ class ActiveOrdersWidget extends AbstractWidget
                 DB::raw('count(*) as order_count')
             ])
             ->where(['is_active' => true])
+            ->where(['is_on_hold' => false])
             ->whereNotIn('status_code', OrderStatus::getToFollowStatusList())
             ->groupBy(['status_code'])
             ->orderBy('status_code')
