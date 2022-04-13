@@ -8,23 +8,30 @@ use Illuminate\Database\Eloquent\Factory;
 
 $factory->define(OrderStatus::class, function (Faker $faker) {
     $status = $faker->randomElement([
-        [
-            'code' => 'open',
-            'name' => 'open',
-        ],
-        [
-            'code' => 'closed',
-            'name' => 'closed',
-        ],
-        [
-            'code' => 'pending',
-            'name' => 'pending',
-        ],
+        'open',
+        'closed',
+        'pending',
+        'ready',
+        'on_hold',
+        'authorized',
+        'paid',
+        'fulfilled',
+        'overdue',
+        'expired',
+        'refunded',
+        'unpaid',
+        'voided',
+        'in_transit',
+        'canceled',
+        'failed',
+        'completed',
     ]);
 
     return [
-        'code'           => $status['code'],
-        'name'           => $status['name'],
+        'code'           => $status,
+        'name'           => $status,
         'reserves_stock' => $faker->boolean,
+        'order_active'   => $faker->boolean,
+        'order_on_hold'  => $faker->boolean,
     ];
 });

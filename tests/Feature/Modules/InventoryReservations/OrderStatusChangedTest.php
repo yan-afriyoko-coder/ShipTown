@@ -23,6 +23,7 @@ class OrderStatusChangedTest extends TestCase
         OrderProduct::query()->forceDelete();
         Inventory::query()->forceDelete();
         Product::query()->forceDelete();
+        OrderStatus::query()->forceDelete();
     }
 
     /** @test */
