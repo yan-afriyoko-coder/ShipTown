@@ -22,7 +22,9 @@ class AddPricingSourceWarehouseIdColumnToApi2cartConnectionsTable extends Migrat
         }
 
         Api2cartConnection::all()->each(function (Api2cartConnection $conn) {
-            $conn->pricing_source_warehouse_id = Warehouse::whereCode($conn->pricing_location_id)->first()->id;
+            $warehouse = Warehouse::whereCode($conn->pricing_location_id)->first();
+
+            $conn->pricing_source_warehouse_id = $warehouse ? $warehouse->id : null;
         });
     }
 }
