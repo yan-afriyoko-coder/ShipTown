@@ -45,6 +45,7 @@ class OrderStatus extends BaseModel
         'name',
         'code',
         'order_active',
+        'order_on_hold',
         'hidden',
         'reserves_stock',
         'sync_ecommerce',
@@ -52,6 +53,7 @@ class OrderStatus extends BaseModel
 
     protected $casts = [
         'order_active'      => 'boolean',
+        'order_on_hold'     => 'boolean',
         'reserves_stock'    => 'boolean',
         'hidden'            => 'boolean',
         'sync_ecommerce'    => 'boolean',
@@ -59,6 +61,7 @@ class OrderStatus extends BaseModel
 
     protected $attributes = [
         'order_active'   => true,
+        'order_on_hold'  => false,
         'reserves_stock' => true,
         'hidden'         => false,
         'sync_ecommerce' => false,

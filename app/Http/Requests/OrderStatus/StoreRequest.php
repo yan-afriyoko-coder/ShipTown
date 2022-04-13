@@ -27,6 +27,7 @@ class StoreRequest extends FormRequest
             'name'              => ['required', 'string', 'max:100'],
             'code'              => ['required', 'string', 'max:100'],
             'order_active'      => ['required', 'boolean'],
+            'order_on_hold'     => ['required', 'boolean'],
             'reserves_stock'    => ['required', 'boolean'],
             'sync_ecommerce'    => ['required', 'boolean'],
         ];
