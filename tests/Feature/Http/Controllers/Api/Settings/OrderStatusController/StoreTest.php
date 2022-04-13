@@ -55,29 +55,6 @@ class StoreTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_all_field_is_required()
-    {
-        Passport::actingAs(
-            factory(User::class)->states('admin')->create()
-        );
-
-        $response = $this->post(route('api.settings.order-statuses.store'), [
-            'name'              => '',
-            'code'              => '',
-            'order_active'      => '',
-            'reserves_stock'    => '',
-            'sync_ecommerce'    => '',
-        ]);
-
-        $response->assertSessionHasErrors([
-            'name',
-            'code',
-            'order_active',
-            'reserves_stock',
-            'sync_ecommerce',
-        ]);
-    }
-
     public function test_name_and_code_cannot_duplicate()
     {
         Passport::actingAs(
@@ -116,8 +93,6 @@ class StoreTest extends TestCase
             'reserves_stock'    => 0,
             'sync_ecommerce'    => 0,
         ]);
-
-        ray($response);
 
         $response->assertStatus(200);
     }
