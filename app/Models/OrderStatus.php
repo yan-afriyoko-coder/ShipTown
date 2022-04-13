@@ -67,17 +67,6 @@ class OrderStatus extends BaseModel
         'sync_ecommerce' => false,
     ];
 
-    public static $toFollowStatusList = [
-        'processing',
-        'unshipped',
-        'partially_shipped',
-        'holded',
-        'on_hold',
-        'missing_item',
-        'auto_missing_item',
-        'ready',
-    ];
-
     public static $completedStatusCodeList = [
         'cancelled',
         'canceled',
@@ -85,11 +74,6 @@ class OrderStatus extends BaseModel
         'complete',
         'completed_imported_to_rms',
     ];
-
-    public static function getToFollowStatusList()
-    {
-        return self::$toFollowStatusList;
-    }
 
     public static function getCompletedStatusCodeList()
     {
@@ -101,32 +85,6 @@ class OrderStatus extends BaseModel
         return array_merge(
             static::getCompletedStatusCodeList()
         );
-    }
-
-    public static function getStatusesReservingStock()
-    {
-        return array_merge(
-            static::getCompletedStatusCodeList()
-        );
-    }
-
-    /**
-     * @param string $status_code
-     *
-     * @return bool
-     */
-    public static function isActive(string $status_code): bool
-    {
-        if (self::isComplete($status_code) || self::isToFollow($status_code)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public static function isToFollow(string $status_code)
-    {
-        return array_search($status_code, self::getToFollowStatusList()) != false;
     }
 
     public static function isComplete(string $status_code)
