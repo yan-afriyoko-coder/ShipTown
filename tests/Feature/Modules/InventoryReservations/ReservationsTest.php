@@ -4,6 +4,7 @@ namespace Tests\Feature\Modules\InventoryReservations;
 
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\OrderStatus;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -17,8 +18,17 @@ class ReservationsTest extends TestCase
         /** @var Order $product */
         $product = factory(Product::class)->create();
 
+        /** @var OrderStatus $orderStatus */
+        $orderStatus = factory(OrderStatus::class)->create(['order_active' => true, 'reserves_stock' => true]);
+
+        /** @var Order $order */
+        $order = factory(Order::class)->create(['status_code' => $orderStatus->code]);
+
         /** @var OrderProduct $orderProduct */
-        $orderProduct = factory(OrderProduct::class)->create(['product_id' => $product->getKey()]);
+        $orderProduct = factory(OrderProduct::class)->create([
+            'order_id' => $order->getKey(),
+            'product_id' => $product->getKey()
+        ]);
 
         $this->assertEquals(
             $orderProduct->quantity_to_ship,
