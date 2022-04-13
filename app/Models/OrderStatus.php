@@ -67,31 +67,6 @@ class OrderStatus extends BaseModel
         'sync_ecommerce' => false,
     ];
 
-    public static $completedStatusCodeList = [
-        'cancelled',
-        'canceled',
-        'closed',
-        'complete',
-        'completed_imported_to_rms',
-    ];
-
-    public static function getCompletedStatusCodeList()
-    {
-        return self::$completedStatusCodeList;
-    }
-
-    public static function getClosedStatuses()
-    {
-        return array_merge(
-            static::getCompletedStatusCodeList()
-        );
-    }
-
-    public static function isComplete(string $status_code)
-    {
-        return array_search($status_code, self::getCompletedStatusCodeList()) != false;
-    }
-
     /**
      * @return QueryBuilder
      */

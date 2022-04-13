@@ -32,7 +32,7 @@ class TimeToZeroWidget extends AbstractWidget
         $data['orders_placed_count'] = Order::where('order_placed_at', '>', $startDate)
             ->count();
 
-        $data['orders_closed_count'] = Order::whereIn('status_code', OrderStatus::getCompletedStatusCodeList())
+        $data['orders_closed_count'] = Order::where(['is_active' => false])
             ->where('order_closed_at', '>', $startDate)
             ->count();
 
