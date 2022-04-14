@@ -85,10 +85,6 @@ return [
                     'description' => 'Create Warehouse Shipment in BoxTop Software',
                 ],
                 [
-                    'class' => \App\Modules\Automations\src\Actions\SendEmailToCustomerAction::class,
-                    'description' => 'Send shipment email to customer',
-                ],
-                [
                     'class' => \App\Modules\Automations\src\Actions\SendOrderEmailAction::class,
                     'description' => 'Send email template to customer',
                 ],
