@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
@@ -37,7 +38,7 @@ use Spatie\Tags\Tag;
  * @property int|null         $packer_user_id
  * @property int|null         $shipping_address_id
  *
- * @property int              $product_line_count
+ * @property int              product_line_count
  * @property float            $total_products
  * @property float            $total_shipping
  * @property float            $total
@@ -61,6 +62,7 @@ use Spatie\Tags\Tag;
  * @property-read boolean     $isPaid
  * @property-read boolean     $isNotPaid
  *
+ * @property-read OrderTotal orderTotals
  * @property-read OrderStatus $order_status
  * @property-read User|null   $packer
  * @property-read Collection|OrderComment[] $orderComments
@@ -224,18 +226,6 @@ class Order extends BaseModel
 
         $this->is_editing = false;
         return true;
-    }
-
-    /**
-     * @return $this
-     */
-    public function recalculateTotals(): Order
-    {
-        $this->total_quantity_ordered = $this->orderProducts()->sum('quantity_ordered');
-        $this->total_quantity_to_ship = $this->orderProducts()->sum('total_quantity_to_ship');
-        $this->product_line_count = $this->orderProducts()->count('id');
-
-        return $this;
     }
 
     /**
@@ -547,6 +537,14 @@ class Order extends BaseModel
     }
 
     /**
+     * @return HasOne
+     */
+    public function orderTotals(): HasOne
+    {
+        return $this->hasOne(OrderTotal::class, 'order_id');
+    }
+
+    /**
      * @return HasMany | OrderShipment
      */
     public function orderShipments()
@@ -591,6 +589,7 @@ class Order extends BaseModel
                 AllowedFilter::scope('without_tags', 'withoutAllTags'),
             ])
             ->allowedIncludes([
+                'order_totals',
                 'activities',
                 'activities.causer',
                 'shipping_address',
@@ -604,7 +603,7 @@ class Order extends BaseModel
             ])
             ->allowedSorts([
                 'updated_at',
-                'product_line_count',
+                'order_totals.product_line_count',
                 'total_quantity_ordered',
                 'order_placed_at',
                 'packed_at',

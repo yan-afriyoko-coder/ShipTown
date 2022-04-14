@@ -233,7 +233,7 @@
 
                     const params = {
                         'filter[order_number]': orderNumber,
-                        'include': 'order_comments,' +
+                        'include': 'order_totals,order_comments,' +
                             'order_comments.user',
                     };
 
