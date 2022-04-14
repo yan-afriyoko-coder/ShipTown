@@ -75,7 +75,7 @@ class SplitBundleSkuActionTest extends TestCase
         $this->assertTrue($actionSucceeded, 'Action failed');
 
         $this->assertEquals(4, $this->order->orderProducts()->count(), 'Incorrect order products count');
-        $this->assertEquals(200, $this->order->total_products);
+        $this->assertEquals(200, $this->order->orderTotals()->first()->total_ordered);
     }
 
     public function test_incorrect_inputs()
