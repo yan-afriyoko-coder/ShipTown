@@ -27,10 +27,7 @@ class OrderObserver
 
     public function saving(Order $order)
     {
-        if ($order->orderTotals) {
-            $order->total_products = $order->orderTotals->total_ordered;
-        }
-
+        $order->total_products = $order->orderTotals ? $order->orderTotals->total_ordered : 0;
         $order->total = $order->total_products + $order->total_shipping;
 
         $order->is_active = $order->order_status->order_active ?? 1;
