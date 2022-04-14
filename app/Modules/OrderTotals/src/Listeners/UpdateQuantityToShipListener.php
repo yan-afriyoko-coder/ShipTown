@@ -15,11 +15,6 @@ class UpdateQuantityToShipListener
      */
     public function handle($event)
     {
-        $order = $event->orderProduct->order;
-
-        $order->total_quantity_ordered = $order->orderProducts()->sum('quantity_ordered');
-        $order->total_quantity_to_ship = $order->orderProducts()->sum('quantity_to_ship');
-        $order->product_line_count = $order->orderProducts()->count('id');
-        $order->save();
+        //
     }
 }

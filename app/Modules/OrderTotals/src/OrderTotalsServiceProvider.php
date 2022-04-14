@@ -28,20 +28,12 @@ class OrderTotalsServiceProvider extends BaseModuleServiceProvider
     /**
      * @var bool
      */
-    public bool $autoEnable = true;
+    public bool $autoEnable = false;
 
     /**
      * The event listener mappings for the application.
      *
      * @var array
      */
-    protected $listen = [
-        OrderProductCreatedEvent::class => [
-            Listeners\UpdateQuantityToShipListener::class
-        ],
-
-        OrderProductUpdatedEvent::class => [
-            Listeners\UpdateQuantityToShipListener::class
-        ]
-    ];
+    protected $listen = [];
 }

@@ -27,10 +27,8 @@ class OrderObserver
 
     public function saving(Order $order)
     {
-        $order->total_quantity_ordered = $order->orderProducts()->sum('quantity_ordered');
         $order->total_products = $order->orderProducts()->sum(DB::raw('(quantity_ordered - quantity_split) * price'));
         $order->total = $order->total_products + $order->total_shipping;
-        $order->product_line_count = $order->orderProducts()->count('id');
 
         $order->is_active = $order->order_status->order_active ?? 1;
         if ($order->isAttributeChanged('is_active')) {

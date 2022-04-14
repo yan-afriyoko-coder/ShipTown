@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\OrderTotal;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -27,8 +28,6 @@ class OrderResource extends JsonResource
             'shipping_address_id'   => $this->shipping_address_id,
             'shipping_method_code'  => $this->shipping_method_code,
             'shipping_method_name'  => $this->shipping_method_name,
-            'product_line_count'    => (integer) $this->product_line_count,
-            'total_quantity_ordered'=> (double) $this->total_quantity_ordered,
             'status_code'           => $this->status_code,
 
             'packer_user_id'        => $this->packer_user_id,
@@ -56,6 +55,7 @@ class OrderResource extends JsonResource
             'order_products'   => new JsonResource($this->whenLoaded('orderProducts')),
             'packer'           => new UserResource($this->whenLoaded('packer')),
             'order_comments'   => new JsonResource($this->whenLoaded('orderComments')),
+            'order_totals'     => new OrderTotalsResource($this->whenLoaded('orderTotals')),
         ];
     }
 }
