@@ -20,23 +20,24 @@ class SendOrderEmailAction extends BaseOrderAction
     {
         parent::handle($options);
 
-        MailTemplate::query()
+        /** @var MailTemplate $template */
+        $template = MailTemplate::query()
             ->where('code', '<>', '')
             ->where(['code' => $options])
-            ->each(function (MailTemplate $template) {
-                $mailable = new OrderMail($template, [
-                    'order' => $this->order->toArray(),
-                    'shipments' => $this->order->orderShipments->toArray(),
-                ]);
+            ->first();
 
-                Mail::to($this->order->shippingAddress->email)
-                    ->send($mailable);
+        $mailable = new OrderMail($template, [
+            'order' => $this->order->toArray(),
+            'shipments' => $this->order->orderShipments->toArray(),
+        ]);
 
-                activity()->on($this->order)
-                    ->causedByAnonymous()
-                    ->withProperties(['template_code' => $template->code])
-                    ->log('Email was send');
-            });
+        Mail::to($this->order->shippingAddress->email)
+            ->send($mailable);
+
+        activity()->on($this->order)
+            ->causedByAnonymous()
+            ->withProperties(['template_code' => $template->code])
+            ->log('Email was send');
 
         return true;
     }
