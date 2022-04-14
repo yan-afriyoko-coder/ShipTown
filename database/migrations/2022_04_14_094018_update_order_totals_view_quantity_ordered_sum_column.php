@@ -15,27 +15,17 @@ class UpdateOrderTotalsViewQuantityOrderedSumColumn extends Migration
     public function up()
     {
         DB::statement("
-            CREATE OR REPLACE VIEW orders_totals_view
-            AS
+            CREATE OR REPLACE VIEW orders_totals_view AS
             SELECT
-                order_id,
-                COUNT(id) as product_line_count,
+                orders.id as order_id,
+                COUNT(orders_products.id) as product_line_count,
                 IFNULL(SUM(quantity_ordered - quantity_split), 0) as quantity_ordered_sum,
                 IFNULL(SUM(quantity_to_ship), 0) as quantity_to_ship_sum,
                 IFNULL(SUM(price * (quantity_ordered - quantity_split)), 0) as total_ordered
 
-            FROM orders_products
-            GROUP BY order_id
+            FROM orders
+            LEFT JOIN orders_products ON orders.id = orders_products.order_id
+            GROUP BY orders.id
         ");
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        //
     }
 }
