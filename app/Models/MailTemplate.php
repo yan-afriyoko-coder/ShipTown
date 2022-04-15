@@ -12,6 +12,7 @@ use Spatie\MailTemplates\TemplateMailable;
  * @property string code
  * @property string to
  * @property string reply_to
+ * @property string html_template
  */
 class MailTemplate extends BaseModel
 {

@@ -13,7 +13,11 @@
                 <table v-if="mailTemplates.length > 0" class="table table-borderless table-responsive mb-0">
                     <tbody>
                         <tr v-for="(mailTemplate, i) in mailTemplates" :key="i">
-                            <td>{{ mailTemplate.name }}</td>
+                            <td>
+                                <a :href='"mail-templates/" + mailTemplate.id + "/preview"' target="_blank">
+                                    {{ mailTemplate.name }}
+                                </a>
+                            </td>
                             <td>
                                 <a @click.prevent="showEditForm(mailTemplate)">
                                     <font-awesome-icon icon="edit"></font-awesome-icon>

@@ -26,6 +26,8 @@ Route::prefix('settings')->group(function () {
     Route::view('api', 'settings/api')->name('settings.api');
     Route::view('users', 'settings/users')->name('settings.users');
     Route::view('mail-templates', 'settings/mail-templates')->name('settings.mail_templates');
+    Route::get('mail-templates/{mailTemplate}/preview', 'MailTemplatePreviewController@index')
+        ->name('settings.mail_template_preview');
     Route::view('navigation-menu', 'settings/navigation-menu')->name('settings.navigation_menu');
     Route::view('automations', 'settings/automations')->name('settings.automations');
     Route::view('warehouses', 'settings/warehouses')->name('settings.warehouses');
