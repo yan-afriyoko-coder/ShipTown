@@ -8,7 +8,7 @@
     <tbody>
     @foreach ($data as $record)
         <tr>
-            <td>{{ $record['user']['name'] }}</td>
+            <td>{{ data_get($record, 'user.name', 'AutoPilot') }}</td>
             <td class="text-right">{{ $record['quantity_shipped'] }}</td>
         </tr>
     @endforeach
