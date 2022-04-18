@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
 //            ProductPriceSeeder::class,
 //
             InventorySeeder::class,
+
 //
 //            SplitOrdersScenarioSeeder::class,
 //
