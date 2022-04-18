@@ -14,7 +14,7 @@ class ShipmentController extends Controller
     /**
      * @param Request $request
      *
-     * @return array|Application|Factory|View|mixed
+     * @return Application|Factory|View
      */
     public function index(Request $request)
     {
