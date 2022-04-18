@@ -11,14 +11,14 @@ use Tests\TestCase;
 /**
  *
  */
-class InventoryTest extends TestCase
+class RestockingTest extends TestCase
 {
     use RefreshDatabase;
 
     /**
      * @var string
      */
-    protected string $uri = '/reports/inventory';
+    protected string $uri = '/reports/restocking';
 
     /**
      * @var User
@@ -64,12 +64,12 @@ class InventoryTest extends TestCase
     /** @test */
     public function test_admin_call()
     {
+        $this->actingAs($this->user, 'web');
+
         $this->user->assignRole('admin');
 
         factory(Warehouse::class)->create();
         factory(Product::class)->create();
-
-        $this->actingAs($this->user, 'web');
 
         $response = $this->get($this->uri);
 
