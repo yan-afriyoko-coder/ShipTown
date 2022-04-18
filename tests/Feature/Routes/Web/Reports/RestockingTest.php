@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Routes\Web\Reports;
 
+use App\Models\Product;
+use App\Models\Warehouse;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -51,20 +53,26 @@ class RestockingTest extends TestCase
     {
         $this->actingAs($this->user, 'web');
 
+        factory(Warehouse::class)->create();
+        factory(Product::class)->create();
+
         $response = $this->get($this->uri);
 
-        $response->assertForbidden();
+        $response->assertSuccessful();
     }
 
     /** @test */
     public function test_admin_call()
     {
+        $this->actingAs($this->user, 'web');
+
         $this->user->assignRole('admin');
 
-        $this->actingAs($this->user, 'web');
+        factory(Warehouse::class)->create();
+        factory(Product::class)->create();
 
         $response = $this->get($this->uri);
 
-        $response->assertForbidden();
+        $response->assertSuccessful();
     }
 }
