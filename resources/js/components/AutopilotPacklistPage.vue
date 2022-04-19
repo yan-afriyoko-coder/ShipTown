@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="!order_number" class="row text-center mt-3" >
+        <div v-if="! order_number" class="row text-center mt-3" >
             <button type="button"  class="btn-info" @click.prevent="loadNextOrder">
                 Start AutoPilot Packing
             </button>
@@ -15,9 +15,10 @@
     import api from "../mixins/api";
     import beep from "../mixins/beep";
     import Vue from "vue";
+    import helpers from "../mixins/helpers";
 
     export default {
-        mixins: [api, beep, url],
+        mixins: [api, beep, url, helpers],
 
         data: function() {
             return {
@@ -25,21 +26,22 @@
             };
         },
 
-        watch: {
-            user: {
-                handler() {
-                    if(Vue.prototype.$currentUser['location_id']) {
-                        this.setUrlParameter('inventory_source_location_id', Vue.prototype.$currentUser['location_id']);
-                    }
-                }
-            },
+        mounted() {
+            if(Vue.prototype.$currentUser['warehouse_id']) {
+                this.setUrlParameter('inventory_source_warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
+            }
         },
 
         methods: {
             loadNextOrder() {
+                if(! Vue.prototype.$currentUser['warehouse_id']) {
+                    this.notifyError('User does not have warehouse assigned! Please assign in Settings->User');
+                    return;
+                }
+
                 let params = {
                     'filter[status]': this.getUrlParameter('status','picking'),
-                    'filter[inventory_source_location_id]': this.getUrlParameter('inventory_source_location_id'),
+                    'filter[inventory_source_warehouse_id]': this.getUrlParameter('inventory_source_warehouse_id'),
                     'sort': this.getUrlParameter('sort', 'order_placed_at'),
                 };
 
@@ -48,11 +50,12 @@
                         this.order_number = data.data['order_number'];
                     })
                     .catch((error) => {
-                        let msg = 'Error occurred loading order';
+                        let msg = error.response.data.errors;
+
                         if (error.response.status === 404) {
                             msg = "No orders available with specified filters"
                         }
-                        this.$snotify.error(msg);
+                        this.notifyError(msg);
                         this.errorBeep();
                     })
             },

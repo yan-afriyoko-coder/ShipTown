@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Packlist\StoreRequest;
+use App\Http\Requests\PacklistOrderIndexRequest;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\PacklistResource;
 use App\Models\Order;
@@ -17,11 +18,11 @@ use Illuminate\Http\Request;
 class PacklistOrderController extends Controller
 {
     /**
-     * @param Request $request
+     * @param PacklistOrderIndexRequest $request
      *
      * @return OrderResource
      */
-    public function index(Request $request): OrderResource
+    public function index(PacklistOrderIndexRequest $request): OrderResource
     {
         /** @var Order $order */
         $order = Order::getSpatieQueryBuilder()
