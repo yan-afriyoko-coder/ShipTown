@@ -10,11 +10,6 @@
                     </div>
                     <div class="modal-body" style="margin: 0 auto 0;">
                         <form method="POST" @submit.prevent="handleSubmit">
-                            <div class="form-group">
-                                <label class="form-label" for="selectStatus">Inventory Location ID</label>
-                                <input v-model="filters['inventory_source_location_id']" type="number" class="form-control" />
-                            </div>
-
                             <slot name="actions" v-bind:filters="filters"></slot>
                         </form>
                     </div>
@@ -38,7 +33,6 @@
             return {
                 filters: {
                     order_number: this.getUrlParameter('order_number',  null),
-                    inventory_source_location_id: this.getUrlParameter('inventory_source_location_id',  100),
                 }
             }
         },
