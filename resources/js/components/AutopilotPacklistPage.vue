@@ -6,7 +6,7 @@
             </button>
         </div>
 
-        <autopilot-packsheet-page v-if="order_number" :order_number="order_number" @orderCompleted="loadNextOrder"></autopilot-packsheet-page>
+        <order-packsheet-page v-if="order_number" :order_number="order_number" @orderCompleted="loadNextOrder"></order-packsheet-page>
     </div>
 </template>
 
