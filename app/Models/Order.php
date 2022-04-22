@@ -332,10 +332,10 @@ class Order extends BaseModel
 
     /**
      * @param mixed $query
-     * @param string $warehouse_code
+     * @param string $warehouse_id
      * @return mixed
      */
-    public function scopeAddInventorySource($query, string $warehouse_code)
+    public function scopeAddInventorySource($query, string $warehouse_id)
     {
         $source_inventory = OrderProduct::query()
             ->select([
@@ -343,9 +343,9 @@ class Order extends BaseModel
                 DB::raw('min(shelve_location) as min_shelf_location'),
                 DB::raw('max(shelve_location) as max_shelf_location'),
             ])
-            ->leftJoin('inventory', function ($join) use ($warehouse_code) {
+            ->leftJoin('inventory', function ($join) use ($warehouse_id) {
                 $join->on('orders_products.product_id', '=', 'inventory.product_id');
-                $join->where('inventory.warehouse_code', '=', $warehouse_code);
+                $join->where('inventory.warehouse_id', '=', $warehouse_id);
             })
             ->groupBy('orders_products.order_id')
             ->toBase();
@@ -584,6 +584,7 @@ class Order extends BaseModel
 
                 AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->ignore([null, '']),
                 AllowedFilter::scope('inventory_source_warehouse_id', 'addInventorySource')->ignore([null, '']),
+                AllowedFilter::scope('inventory_source_warehouse_code', 'addInventorySourceByWarehouseCode')->ignore([null, '']),
 
                 AllowedFilter::scope('has_tags', 'withAllTags'),
                 AllowedFilter::scope('without_tags', 'withoutAllTags'),
