@@ -332,10 +332,10 @@ class Order extends BaseModel
 
     /**
      * @param mixed $query
-     * @param string $warehouse_id
+     * @param int $warehouse_id
      * @return mixed
      */
-    public function scopeAddInventorySource($query, string $warehouse_id)
+    public function scopeAddInventorySource($query, int $warehouse_id)
     {
         $source_inventory = OrderProduct::query()
             ->select([
