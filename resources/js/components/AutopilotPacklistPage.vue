@@ -1,9 +1,11 @@
 <template>
     <div>
         <div v-if="! order_number" class="row text-center mt-3" >
-            <button type="button"  class="btn-info" @click.prevent="loadNextOrder">
-                Start AutoPilot Packing
-            </button>
+            <div class="col">
+                <button type="button"  class="btn btn-primary" @click.prevent="loadNextOrder">
+                    Start AutoPilot Packing
+                </button>
+            </div>
         </div>
 
         <order-packsheet-page v-if="order_number" :order_number="order_number" @orderCompleted="loadNextOrder"></order-packsheet-page>
@@ -16,9 +18,10 @@
     import beep from "../mixins/beep";
     import Vue from "vue";
     import helpers from "../mixins/helpers";
+    import loadingOverlay from "../mixins/loading-overlay";
 
     export default {
-        mixins: [api, beep, url, helpers],
+        mixins: [loadingOverlay, api, beep, url, helpers],
 
         data: function() {
             return {
@@ -45,11 +48,15 @@
                     'sort': this.getUrlParameter('sort', 'order_placed_at'),
                 };
 
+                this.showLoading();
                 this.apiGetPacklistOrder(params)
                     .then(({data}) => {
                         this.order_number = data.data['order_number'];
+                        this.hideLoading();
                     })
                     .catch((error) => {
+                        this.hideLoading();
+
                         let msg = error.response.data.errors;
 
                         if (error.response.status === 404) {
