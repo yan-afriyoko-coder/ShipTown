@@ -582,9 +582,7 @@ class Order extends BaseModel
 
                 AllowedFilter::scope('has_packer'),
 
-                AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->ignore([null, '']),
                 AllowedFilter::scope('inventory_source_warehouse_id', 'addInventorySource')->ignore([null, '']),
-                AllowedFilter::scope('inventory_source_warehouse_code', 'addInventorySourceByWarehouseCode')->ignore([null, '']),
 
                 AllowedFilter::scope('has_tags', 'withAllTags'),
                 AllowedFilter::scope('without_tags', 'withoutAllTags'),
