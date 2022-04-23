@@ -62,7 +62,7 @@ class Report extends Model
 
     public function queryBuilder(): QueryBuilder
     {
-        foreach ($this->fields as $field => $alias) {
+        foreach ($this->fields as $alias => $field) {
             $this->fieldSelects[] = "$field as $alias";
             $this->fieldAliases[] = $alias;
         }
@@ -78,8 +78,8 @@ class Report extends Model
         collect($this->casts)->filter(function ($type) {
             return $type === 'float';
         })
-        ->each(function ($record, $key) use (&$allowedFilters) {
-            $allowedFilters[] = AllowedFilter::callback($key . '_between', function ($query, $value) use ($record, $key) {
+        ->each(function ($record, $alias) use (&$allowedFilters) {
+            $allowedFilters[] = AllowedFilter::callback($alias . '_between', function ($query, $value) use ($record, $alias) {
                 // we add this to make sure query returns no records
                 // if array of two values is not specified
                 if ((! is_array($value)) or (count($value) != 2)) {
@@ -87,7 +87,7 @@ class Report extends Model
                     return;
                 }
 
-                $query->whereBetween($key, [floatval($value[0]), floatval($value[1])]);
+                $query->whereBetween($this->fields[$alias], [floatval($value[0]), floatval($value[1])]);
             });
         });
 
