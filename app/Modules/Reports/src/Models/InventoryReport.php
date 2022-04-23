@@ -24,8 +24,7 @@ class InventoryReport extends Report
             ->leftJoin('products as product', 'inventory.product_id', '=', 'product.id')
             ->when(request('inventory_source_warehouse_code'), function ($query) {
                 $query->leftJoin('inventory as inventory_source', 'inventory.product_id', '=', 'product.id');
-            })
-            ->toBase();
+            });
 
         $this->casts = [
             'restock_level'      => 'float',

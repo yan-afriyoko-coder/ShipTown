@@ -3,6 +3,7 @@
 namespace App\Modules\Reports\src\Models;
 
 use App\Models\Inventory;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 class RestockingReport extends Report
 {
@@ -29,8 +30,7 @@ class RestockingReport extends Report
                 $leftJoin->where([
                     'inventory.warehouse_code' => data_get(request('filter'), 'inventory_source_warehouse_code')
                 ]);
-            })
-            ->toBase();
+            });
 
         $this->casts = [
             'restock_level'      => 'float',
