@@ -70,8 +70,8 @@ class Report extends Model
         $allowedFilters = [];
 
         collect($this->fields)
-            ->each(function ($record, $key) use (&$allowedFilters) {
-                $allowedFilters[] = AllowedFilter::exact($record, $key);
+            ->each(function ($full_field_name, $alias) use (&$allowedFilters) {
+                $allowedFilters[] = AllowedFilter::exact($alias, $full_field_name);
             });
 
         // add between filters
