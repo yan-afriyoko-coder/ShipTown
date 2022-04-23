@@ -10,6 +10,8 @@ class RestockingReport extends Report
     {
         parent::__construct($attributes);
 
+        $this->report_name = 'Restocking Report';
+
         $this->fields = [
            'warehouse_code'                     => 'inventory.warehouse_code',
            'product_sku'                        => 'product.sku',
