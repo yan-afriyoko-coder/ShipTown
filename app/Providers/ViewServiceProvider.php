@@ -27,9 +27,9 @@ class ViewServiceProvider extends ServiceProvider
     {
         View::composer('layouts.nav', function ($view) {
             $navigationMenu = NavigationMenu::all();
-            $navigationMenuPicklist = $navigationMenu->where('group', 'picklist');
-            $navigationMenuPacklist = $navigationMenu->where('group', 'packlist');
-            $navigationMenuReports  = $navigationMenu->where('group', 'reports');
+            $navigationMenuPicklist = $navigationMenu->where('group', 'picklist')->sortBy('name');
+            $navigationMenuPacklist = $navigationMenu->where('group', 'packlist')->sortBy('name');
+            $navigationMenuReports  = $navigationMenu->where('group', 'reports')->sortBy('name');
             $view->with(compact('navigationMenuPicklist', 'navigationMenuPacklist', 'navigationMenuReports'));
         });
     }

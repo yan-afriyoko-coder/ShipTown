@@ -88,6 +88,7 @@
                             <a class="dropdown-item" href="{{ route('reports.picks') }}">{{ __('Picks') }}</a>
                             <a class="dropdown-item" href="{{ route('reports.shipments') }}">{{ __('Shipments') }}</a>
                             <a class="dropdown-item" href="{{ route('reports.inventory') }}">{{ __('Inventory') }}</a>
+                            <a class="dropdown-item" href="{{ route('reports.restocking') }}">{{ __('Restocking') }}</a>
                             @foreach ($navigationMenuReports as $menu)
                                 <a class="dropdown-item" href="{{ $menu->url }}">
                                     {{ $menu->name }}
