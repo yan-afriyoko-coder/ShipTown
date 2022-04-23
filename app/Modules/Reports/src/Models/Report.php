@@ -11,6 +11,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 class Report extends Model
 {
     protected $table = 'report';
+    protected string $report_name = 'Report';
 
     public array $toSelect = [];
 
@@ -53,6 +54,7 @@ class Report extends Model
         );
 
         $data = [
+            'report_name' => $this->report_name ?? $this->table,
             'fields' => $resource->count() > 0 ? array_keys((array)json_decode($resource[0]->toJson())) : [],
             'data' => $resource
         ];
