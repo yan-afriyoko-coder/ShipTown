@@ -3,7 +3,6 @@
 namespace App\Modules\Reports\src\Models;
 
 use App\Helpers\CsvBuilder;
-use App\Models\Inventory;
 use App\Modules\Reports\src\Http\Resources\ReportResource;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -48,8 +47,8 @@ class Report extends Model
     {
         $resource = ReportResource::collection(
             $this->queryBuilder()
-                ->paginate(request('per_page', 10))
-                ->appends(request()->query())
+                ->limit(request('per_page', 10))
+                ->get()
         );
 
         $data = [
