@@ -3,18 +3,20 @@
 namespace App\Modules\Reports\src\Models;
 
 use App\Helpers\CsvBuilder;
+use App\Models\Inventory;
 use App\Modules\Reports\src\Http\Resources\ReportResource;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class Report extends Model
 {
+    protected $table = 'report';
+
     public array $toSelect = [];
 
     protected array $fields;
-    protected Builder $baseQuery;
+    protected $baseQuery;
 
     private array $fieldAliases = [];
     private array $fieldSelects = [];
@@ -51,7 +53,7 @@ class Report extends Model
         );
 
         $data = [
-            'fields' => array_keys((array)json_decode($resource[0]->toJson())),
+            'fields' => $resource->count() > 0 ? array_keys((array)json_decode($resource[0]->toJson())) : [],
             'data' => $resource
         ];
 
@@ -60,14 +62,24 @@ class Report extends Model
 
     public function queryBuilder(): QueryBuilder
     {
-        $allowedFilters = $this->fieldAliases;
+        foreach ($this->fields as $field => $alias) {
+            $this->fieldSelects[] = "$field as $alias";
+            $this->fieldAliases[] = $alias;
+        }
+
+        $allowedFilters = [];
+
+        collect($this->fields)
+            ->each(function ($record, $key) use (&$allowedFilters) {
+                $allowedFilters[] = AllowedFilter::exact($record, $key);
+            });
 
         // add between filters
         collect($this->casts)->filter(function ($type) {
             return $type === 'float';
         })
         ->each(function ($record, $key) use (&$allowedFilters) {
-            $allowedFilters[] = AllowedFilter::callback($key . '_between', function ($query, $value) use ($key) {
+            $allowedFilters[] = AllowedFilter::callback($key . '_between', function ($query, $value) use ($record, $key) {
                 // we add this to make sure query returns no records
                 // if array of two values is not specified
                 if ((! is_array($value)) or (count($value) != 2)) {
@@ -79,16 +91,8 @@ class Report extends Model
             });
         });
 
-        foreach ($this->fields as $field => $alias) {
-            $this->fieldSelects[] = "$field as $alias";
-            $this->fieldAliases[] = $alias;
-        }
-
-        $this->baseQuery->select($this->fieldSelects);
-
-        $queryBuilder = QueryBuilder::for($this)
-            ->select($this->fieldAliases)
-            ->fromSub($this->baseQuery, 'report')
+        $queryBuilder = QueryBuilder::for($this->baseQuery)
+            ->select($this->fieldSelects)
             ->allowedFilters($allowedFilters)
             ->allowedSorts($this->fieldAliases);
 
