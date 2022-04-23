@@ -96,7 +96,12 @@ class Report extends Model
             ->allowedSorts($this->fieldAliases);
 
         if (request()->has('select')) {
-            $queryBuilder->select(explode(',', request('select')));
+            $aliases = collect(explode(',', request('select')))
+                ->map(function ($alias) {
+                    return $this->fields[$alias] . ' as ' . $alias;
+                });
+
+            $queryBuilder->select($aliases->toArray());
         }
 
         return $queryBuilder;
