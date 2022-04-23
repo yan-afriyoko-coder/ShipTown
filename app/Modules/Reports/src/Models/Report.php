@@ -38,6 +38,7 @@ class Report extends Model
 
         return response((string) $csv, 200, [
             'Content-Type'              => 'text/csv',
+            'Cache-Control'             => 'no-store, no-cache',
             'Content-Transfer-Encoding' => 'binary',
             'Content-Disposition'       => 'attachment; filename="'.request('filename', 'report.csv').'"',
         ]);
@@ -61,49 +62,67 @@ class Report extends Model
 
     public function queryBuilder(): QueryBuilder
     {
+        $this->fieldSelects = [];
+        $this->fieldAliases = [];
+
         foreach ($this->fields as $alias => $field) {
             $this->fieldSelects[] = "$field as $alias";
             $this->fieldAliases[] = $alias;
         }
 
-        $allowedFilters = [];
+        return QueryBuilder::for($this->baseQuery)
+            ->select($this->getSelectFields())
+            ->allowedFilters($this->getAllowedFilters())
+            ->allowedSorts($this->fieldAliases);
+    }
 
+    /**
+     * @return array
+     */
+    private function getAllowedFilters(): array
+    {
+        $filters = [];
+
+        // add exact filters
         collect($this->fields)
-            ->each(function ($full_field_name, $alias) use (&$allowedFilters) {
-                $allowedFilters[] = AllowedFilter::exact($alias, $full_field_name);
+            ->each(function ($full_field_name, $alias) use (&$filters) {
+                $filters[] = AllowedFilter::exact($alias, $full_field_name);
             });
 
         // add between filters
-        collect($this->casts)->filter(function ($type) {
-            return $type === 'float';
-        })
-        ->each(function ($record, $alias) use (&$allowedFilters) {
-            $allowedFilters[] = AllowedFilter::callback($alias . '_between', function ($query, $value) use ($record, $alias) {
-                // we add this to make sure query returns no records
-                // if array of two values is not specified
-                if ((! is_array($value)) or (count($value) != 2)) {
-                    $query->whereRaw('1=2');
-                    return;
-                }
+        collect($this->casts)
+            ->filter(function ($type) {
+                return $type === 'float';
+            })
+            ->each(function ($record, $alias) use (&$filters) {
+                $filters[] = AllowedFilter::callback($alias . '_between', function ($query, $value) use ($alias) {
+                    // we add this to make sure query returns no records
+                    // if array of two values is not specified
+                    if ((! is_array($value)) or (count($value) != 2)) {
+                        $query->whereRaw('1=2');
+                        return;
+                    }
 
-                $query->whereBetween($this->fields[$alias], [floatval($value[0]), floatval($value[1])]);
+                    $query->whereBetween($this->fields[$alias], [floatval($value[0]), floatval($value[1])]);
+                });
             });
-        });
 
-        $queryBuilder = QueryBuilder::for($this->baseQuery)
-            ->select($this->fieldSelects)
-            ->allowedFilters($allowedFilters)
-            ->allowedSorts($this->fieldAliases);
+        return $filters;
+    }
 
+    /**
+     * @return array
+     */
+    private function getSelectFields(): array
+    {
         if (request()->has('select')) {
-            $aliases = collect(explode(',', request('select')))
+            return collect(explode(',', request('select')))
                 ->map(function ($alias) {
                     return $this->fields[$alias] . ' as ' . $alias;
-                });
-
-            $queryBuilder->select($aliases->toArray());
+                })
+                ->toArray();
         }
 
-        return $queryBuilder;
+        return $this->fieldSelects;
     }
 }
