@@ -101,16 +101,18 @@ class ImportProductJob implements ShouldQueue
     {
         $connection = RmsapiConnection::query()->find($importedProduct->connection_id);
 
-        Inventory::updateOrCreate([
-            'product_id'        => $product->id,
-            'warehouse_code'    => $connection->location_id,
-        ], [
-            'quantity'          => $importedProduct->raw_import['quantity_on_hand'],
-            'quantity_reserved' => $importedProduct->raw_import['quantity_committed'],
-            'shelve_location'   => Arr::get($importedProduct->raw_import, 'rmsmobile_shelve_location'),
-            'reorder_point'     => Arr::get($importedProduct->raw_import, 'reorder_point'),
-            'restock_level'     => Arr::get($importedProduct->raw_import, 'restock_level'),
-        ]);
+        Inventory::query()
+            ->where([
+                'product_id'        => $product->id,
+                'warehouse_code'    => $connection->location_id,
+            ])
+            ->update([
+                'quantity'          => $importedProduct->raw_import['quantity_on_hand'],
+                'quantity_reserved' => $importedProduct->raw_import['quantity_committed'],
+                'shelve_location'   => Arr::get($importedProduct->raw_import, 'rmsmobile_shelve_location'),
+                'reorder_point'     => Arr::get($importedProduct->raw_import, 'reorder_point'),
+                'restock_level'     => Arr::get($importedProduct->raw_import, 'restock_level'),
+            ]);
     }
 
     /**
@@ -121,15 +123,16 @@ class ImportProductJob implements ShouldQueue
     {
         $connection = RmsapiConnection::query()->find($importedProduct->connection_id);
 
-        ProductPrice::query()->updateOrCreate([
-            'product_id'            => $product->id,
-            'warehouse_code'        => $connection->location_id,
-        ], [
-            'price'                 => $importedProduct->raw_import['price'],
-            'sale_price'            => $importedProduct->raw_import['sale_price'],
-            'sale_price_start_date' => $importedProduct->raw_import['sale_start_date'] ?? '1899-01-01 00:00:00',
-            'sale_price_end_date'   => $importedProduct->raw_import['sale_end_date'] ?? '1899-01-01 00:00:00',
-        ]);
+        ProductPrice::query()
+            ->where([
+                'product_id'            => $product->id,
+                'warehouse_code'        => $connection->location_id,
+            ])->update([
+                'price'                 => $importedProduct->raw_import['price'],
+                'sale_price'            => $importedProduct->raw_import['sale_price'],
+                'sale_price_start_date' => $importedProduct->raw_import['sale_start_date'] ?? '1899-01-01 00:00:00',
+                'sale_price_end_date'   => $importedProduct->raw_import['sale_end_date'] ?? '1899-01-01 00:00:00',
+            ]);
     }
 
     /**
