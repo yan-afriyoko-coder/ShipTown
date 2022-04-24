@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers\Api\PacklistOrderController;
 
 use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Models\OrderStatus;
 use App\Models\Warehouse;
 use App\User;
@@ -25,7 +26,8 @@ class IndexTest extends TestCase
 
         $warehouse = factory(Warehouse::class)->create();
 
-        factory(Order::class)->create(['status_code' => 'packing']);
+        $order = factory(Order::class)->create(['status_code' => 'packing']);
+        factory(OrderProduct::class)->create(['order_id' => $order->getKey()]);
 
         /** @var User $user */
         $user = factory(User::class)->create([
