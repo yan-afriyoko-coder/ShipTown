@@ -15,8 +15,11 @@ class Report extends Model
 
     public array $toSelect = [];
 
-    protected array $fields;
-    protected $baseQuery;
+    public array $fields = [];
+    /**
+     * @var mixed
+     */
+    public $baseQuery;
 
     private array $fieldAliases = [];
     private array $fieldSelects = [];
