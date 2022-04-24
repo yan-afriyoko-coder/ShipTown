@@ -2,13 +2,13 @@
     <ValidationObserver ref="form">
         <form class="form" @submit.prevent="submit" ref="loadingContainer">
             <div class="form-group row">
-                <label class="col-sm-3 col-form-label" for="locationID">Location ID</label>
+                <label class="col-sm-3 col-form-label" for="locationID">Warehouse Code</label>
                 <div class="col-sm-9">
                     <ValidationProvider vid="location_id" name="Location ID" v-slot="{ errors }">
                         <input v-model="location_id" :class="{
                             'form-control': true,
                             'is-invalid': errors.length > 0,
-                        }" id="locationID" placeholder="Location ID" required>
+                        }" id="locationID" placeholder="Warehouse Code" required>
                         <div class="invalid-feedback">
                             {{ errors[0] }}
                         </div>
