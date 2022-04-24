@@ -7,6 +7,8 @@ use App\Models\ProductPrice;
 use App\Models\Warehouse;
 use App\Modules\Maintenance\src\Jobs\Products\EnsureAllInventoryRecordsExistsJob;
 use App\Modules\Maintenance\src\Jobs\Products\EnsureAllProductPriceRecordsExistsJob;
+use App\Modules\Maintenance\src\Jobs\UpdateInventoryWarehouseCodeJob;
+use App\Modules\Maintenance\src\Jobs\UpdateProductPriceWarehouseCodeJob;
 
 class WarehouseObserver
 {
@@ -24,12 +26,7 @@ class WarehouseObserver
 
     public function updated(Warehouse $warehouse)
     {
-        Inventory::query()
-            ->where(['warehouse_id' => $warehouse->getKey()])
-            ->update(['warehouse_code' => $warehouse->code, 'location_id' => $warehouse->code]);
-
-        ProductPrice::query()
-            ->where(['warehouse_id' => $warehouse->getKey()])
-            ->update(['warehouse_code' => $warehouse->code, 'location_id' => $warehouse->code]);
+        UpdateInventoryWarehouseCodeJob::dispatch($warehouse);
+        UpdateProductPriceWarehouseCodeJob::dispatch($warehouse);
     }
 }
