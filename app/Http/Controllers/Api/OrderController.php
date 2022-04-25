@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class OrdersController.
@@ -68,6 +69,11 @@ class OrderController extends Controller
     public function update(UpdateRequest $request, Order $order)
     {
         $updates = $request->validated();
+
+        if (Arr::has($updates, 'is_packed')) {
+            $updates['packer_user_id'] = Auth::id();
+            ray(Auth::id());
+        }
 
         if ($request->has('packer_user_id')) {
             Order::query()
