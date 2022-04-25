@@ -364,7 +364,10 @@
                 markAsPacked: async function () {
                     this.order['is_packed'] = true;
 
-                    this.apiUpdateOrder(this.order['id'],{'is_packed': true})
+                    this.apiUpdateOrder(this.order['id'],{
+                            'is_packed': true,
+                            'packer_user_id': Vue.prototype.$currentUser['id']
+                        })
                         .catch((error) => {
                             this.notifyError('Error: '+error.response.message);
                         });
