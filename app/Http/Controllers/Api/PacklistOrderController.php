@@ -50,6 +50,10 @@ class PacklistOrderController extends Controller
         /** @var Order $order */
         $order = $report->queryBuilder()->firstOrFail();
 
+        Order::where(['packer_user_id' => $request->user()->getKey()])
+            ->whereNull('packed_at')
+            ->update(['packer_user_id' => null]);
+
         $wasReserved = Order::where(['id' => $order->id])
             ->where(['updated_at' => $order->updated_at])
             ->whereNull('packer_user_id')
@@ -59,14 +63,9 @@ class PacklistOrderController extends Controller
             $this->respondBadRequest('Order could not be reserved, try again');
         }
 
-        Order::whereKeyNot($order->id)
-            ->where(['packer_user_id' => $request->user()->getKey()])
-            ->whereNull('packed_at')
-            ->update(['packer_user_id' => null]);
-
         $order->log('received order for packing');
 
-        return new OrderResource($order);
+        return new OrderResource(Order::findOrFail($order->id));
     }
 
     /**
