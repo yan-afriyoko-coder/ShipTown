@@ -1,7 +1,12 @@
 <?php
 
+use App\Events\Order\ActiveOrderCheckEvent;
 use App\Models\NavigationMenu;
 use App\Models\Order;
+use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
+use App\Modules\Automations\src\Conditions\Order\IsFullyPackedCondition;
+use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
+use App\Modules\Automations\src\Models\Automation;
 use Illuminate\Database\Seeder;
 
 class PaidOrdersSeeder extends Seeder
@@ -12,6 +17,13 @@ class PaidOrdersSeeder extends Seeder
      * @return void
      */
     public function run()
+    {
+        $this->createOrders();
+        $this->createNavigationMenu();
+        $this->createPaidToCompleteAutomation();
+    }
+
+    private function createOrders(): void
     {
         factory(Order::class, 10)
             ->with('orderProducts', 1)
@@ -29,12 +41,15 @@ class PaidOrdersSeeder extends Seeder
             ->with('orderProducts', 4)
             ->create(['status_code' => 'paid']);
 
-        Order::all()->each(function (Order $order) {
-            $order->total_paid = $order->total;
-            $order->save();
-        });
+        Order::query()->get()
+            ->each(function (Order $order) {
+                $order->total_paid = $order->total;
+                $order->save();
+            });
+    }
 
-
+    private function createNavigationMenu(): void
+    {
         $menu = [
             [
                 'name' => 'Status: paid',
@@ -49,5 +64,32 @@ class PaidOrdersSeeder extends Seeder
         ];
 
         NavigationMenu::insert($menu);
+    }
+
+    private function createPaidToCompleteAutomation(): void
+    {
+        /** @var Automation $automation */
+        $automation = Automation::create([
+            'name' => 'paid to complete',
+            'event_class' => ActiveOrderCheckEvent::class,
+            'enabled' => false,
+        ]);
+
+        $automation->conditions()->create([
+            'condition_class' => StatusCodeEqualsCondition::class,
+            'condition_value' => 'paid'
+        ]);
+
+        $automation->conditions()->create([
+            'condition_class' => IsFullyPackedCondition::class,
+            'condition_value' => 'True'
+        ]);
+
+        $automation->actions()->create([
+            'action_class' => SetStatusCodeAction::class,
+            'action_value' => 'complete'
+        ]);
+
+        $automation->update(['enabled' => true]);
     }
 }

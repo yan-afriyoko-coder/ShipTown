@@ -125,6 +125,14 @@ class Inventory extends BaseModel
     }
 
     /**
+     * @return float
+     */
+    public function getQuantityAvailableAttribute(): float
+    {
+        return $this->quantity - $this->quantity_reserved;
+    }
+
+    /**
      * @param mixed $query
      * @param mixed $min
      * @param mixed $max

@@ -209,7 +209,7 @@
                         return;
                     }
 
-                    if(this.order['is_packed'] && this.canClose) {
+                    if((this.packlist.length === 0) && this.canClose) {
                         this.$emit('orderCompleted')
                     }
                 },
@@ -351,7 +351,7 @@
                     };
                     this.apiPostOrderShipment(data)
                         .then(() => {
-                            if(this.order['is_packed']) {
+                            if(this.packlist.length === 0) {
                                 this.$emit('orderCompleted')
                             }
                             this.notifySuccess('Shipping number saved');
@@ -363,6 +363,7 @@
 
                 markAsPacked: async function () {
                     this.order['is_packed'] = true;
+                    this.order['packer_user_id'] = Vue.prototype.$currentUser['id'];
 
                     this.apiUpdateOrder(this.order['id'],{
                             'is_packed': true,

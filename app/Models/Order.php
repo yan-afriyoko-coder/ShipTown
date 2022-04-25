@@ -122,7 +122,6 @@ use Spatie\Tags\Tag;
  * @method static Builder|Order withAnyTags($tags, $type = null)
  * @method static Builder|Order withAnyTagsOfAnyType($tags)
  * @method static Builder|Order withoutAllTags($tags, $type = null)
- * @method static where(array $array)
  * @mixin Eloquent
  */
 class Order extends BaseModel
@@ -133,6 +132,7 @@ class Order extends BaseModel
     protected $fillable = [
         'order_number',
         'picked_at',
+        'packed_at',
         'label_template',
         'shipping_number',
         'is_active',
