@@ -13,7 +13,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -26,7 +25,7 @@ class OrderController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function index(Request $request)
+    public function index(Request $request): AnonymousResourceCollection
     {
         $query = Order::getSpatieQueryBuilder();
 
@@ -38,10 +37,10 @@ class OrderController extends Controller
      *
      * @return JsonResponse
      */
-    public function store(StoreOrderRequest $request)
+    public function store(StoreOrderRequest $request): JsonResponse
     {
         $order = Order::query()->updateOrCreate(
-            ['order_number' => $request->order_number],
+            ['order_number' => $request->validated()['order_number']],
             $request->validated()
         );
 
@@ -66,34 +65,25 @@ class OrderController extends Controller
      *
      * @return JsonResource
      */
-    public function update(UpdateRequest $request, Order $order)
+    public function update(UpdateRequest $request, Order $order): JsonResource
     {
-        $updates = $request->validated();
-
-        if (Arr::has($updates, 'is_packed')) {
-            $updates['packer_user_id'] = Auth::id();
-            ray(Auth::id());
-        }
-
-        if ($request->has('packer_user_id')) {
-            Order::query()
-                ->whereNull('packed_at')
-                ->where(['packer_user_id' => $request->get('packer_user_id')])
-                ->whereKeyNot($order->getKey())
-                ->update(['packer_user_id' => null]);
-        }
+        $attributes = $request->validated();
 
         if ($request->has('is_packed')) {
             if ($order->is_packed) {
                 $this->respondNotAllowed405('Order already packed!');
             }
 
-            $updates = Arr::add($updates, 'packer_user_id', $request->user()->getKey());
+            if ($order->packed_at === null) {
+                $order->packed_at = now();
+            }
+
+            $attributes['packer_user_id'] = Auth::id();
         }
 
-        $order->fill($updates)->save();
+        $order->update($attributes);
 
-        return OrderResource::make($order);
+        return OrderResource::make($order->refresh());
     }
 
     /**
@@ -102,7 +92,7 @@ class OrderController extends Controller
      *
      * @return JsonResource
      */
-    public function show(Request $request, Order $order)
+    public function show(Request $request, Order $order): JsonResource
     {
         return new JsonResource($order);
     }

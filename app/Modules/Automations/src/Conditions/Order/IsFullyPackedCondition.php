@@ -30,12 +30,16 @@ class IsFullyPackedCondition
     {
         $expectedBoolValue = filter_var($condition_value, FILTER_VALIDATE_BOOL);
 
-        $result = $this->event->order->is_packed === $expectedBoolValue;
+        $hasAnythingToShip = $this->event->order->orderProducts()->where('quantity_to_ship', '>', 0)->exists();
+
+        $isPacked = ! $hasAnythingToShip;
+
+        $result = $isPacked === $expectedBoolValue;
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
             'class' => class_basename(self::class),
-            'is_packed' => $this->event->order->is_packed,
+            'is_packed' => $isPacked,
             'expected' => $expectedBoolValue,
             'actual' => $result,
         ]);

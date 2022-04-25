@@ -2,10 +2,10 @@
 
 namespace App\Observers;
 
+use App\Events\Order\OrderUpdatedEvent;
 use App\Events\OrderProduct\OrderProductCreatedEvent;
 use App\Events\OrderProduct\OrderProductUpdatedEvent;
 use App\Models\OrderProduct;
-use App\Models\Product;
 
 class OrderProductObserver
 {
@@ -40,6 +40,9 @@ class OrderProductObserver
         $this->setOrdersPickedAtIfAllPicked($orderProduct);
 
         OrderProductUpdatedEvent::dispatch($orderProduct);
+
+        // we do it here because touch() does not dispatch models UpdatedEvent
+        OrderUpdatedEvent::dispatch($orderProduct->order);
     }
 
     /**
