@@ -22,7 +22,7 @@ class CreateShippingServicesTable extends Migration
 
         \App\Models\ShippingService::query()->create([
             'code' => 'dpd_label',
-            'service_provider_class' => App\Modules\DpdIreland\src\Services\DpdShippingService::class,
+            'service_provider_class' => App\Modules\DpdIreland\src\Services\NextDayShippingService::class,
         ]);
 
         \App\Models\ShippingService::query()->create([
