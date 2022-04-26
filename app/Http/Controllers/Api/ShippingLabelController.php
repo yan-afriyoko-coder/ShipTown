@@ -31,7 +31,7 @@ class ShippingLabelController extends Controller
 
             $shipper->ship($request->validated()['order_id']);
         } catch (\Exception $exception) {
-            $this->respond503ServiceUnavailable('AnPost: '.$exception->getMessage());
+            $this->respond503ServiceUnavailable($exception->getMessage());
         }
 
         $query = OrderShipment::getSpatieQueryBuilder();
