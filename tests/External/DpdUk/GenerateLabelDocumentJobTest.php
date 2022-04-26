@@ -8,7 +8,7 @@ use App\Models\OrderShipment;
 use App\Modules\DpdUk\src\DpdUkServiceProvider;
 use App\Modules\DpdUk\src\Jobs\GenerateLabelDocumentJob;
 use App\Modules\DpdUk\src\Models\Connection;
-use App\Modules\DpdUk\src\Services\DpdUkService;
+use App\Modules\DpdUk\src\Services\NextDayShippingService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
@@ -52,7 +52,7 @@ class GenerateLabelDocumentJobTest extends TestCase
         $shipment = factory(OrderShipment::class)->create();
         $shipment->order->shippingAddress()->associate($testAddress)->save();
 
-        $this->assertNotNull(DpdUkService::printNewLabel($shipment, $connection));
+        $this->assertNotNull(NextDayShippingService::printNewLabel($shipment, $connection));
     }
 
     public function test_if_job_dispatches()
