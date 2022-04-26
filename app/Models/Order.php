@@ -157,6 +157,7 @@ class Order extends BaseModel
      */
     protected static array $logAttributes = [
         'status_code',
+        'label_template',
         'packer_user_id',
     ];
 
