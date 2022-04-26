@@ -3,6 +3,7 @@
 namespace App\Modules\AddressLabel\src;
 
 use App\Models\ShippingService;
+use App\Modules\AddressLabel\src\Services\AddressLabelShippingService;
 use App\Modules\BaseModuleServiceProvider;
 
 class AddressLabelServiceProvider extends BaseModuleServiceProvider
@@ -33,7 +34,7 @@ class AddressLabelServiceProvider extends BaseModuleServiceProvider
     {
         $shippingService = new ShippingService();
         $shippingService->code = 'address_label';
-        $shippingService->service_provider_class = AddressLabelServiceProvider::class;
+        $shippingService->service_provider_class = AddressLabelShippingService::class;
         $shippingService->save();
 
         return true;
