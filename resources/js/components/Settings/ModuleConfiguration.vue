@@ -18,7 +18,7 @@
                             </td>
                             <td class="text-right align-middle">
                                 <div class="custom-control custom-switch">
-                                    <input type="checkbox" @change="updateModuleStatus(module.id)" class="custom-control-input" :id="module.id" v-model="module.enabled">
+                                    <input type="checkbox" @change="updateModule(module)" class="custom-control-input" :id="module.id" v-model="module.enabled">
                                     <label class="custom-control-label" :for="module.id"></label>
                                 </div>
                             </td>
@@ -32,15 +32,13 @@
 
 <script>
 import api from "../../mixins/api";
+import helpers from "../../mixins/helpers";
 
 export default {
-    mixins: [api],
+    mixins: [api, helpers],
 
     created() {
-        this.apiGetModules()
-            .then(({ data }) => {
-                this.modules = data.data;
-            });
+        this.loadModules();
     },
 
     data: () => ({
@@ -49,8 +47,29 @@ export default {
     }),
 
     methods: {
-        updateModuleStatus(module_id) {
-            this.apiToggleModules(module_id);
+        loadModules() {
+            this.apiGetModules()
+                .then(({ data }) => {
+                    this.modules = data.data;
+                });
+        },
+
+        updateModule(module) {
+            this.apiPostModule(module.id, {
+                    'enabled': module.enabled
+                })
+                .catch((error) => {
+                    let errorMsg = 'Error ' + error.response.status + ': ' + JSON.stringify(error.response.data);
+
+                    this.notifyError(errorMsg, {
+                        closeOnClick: true,
+                        timeout: 0,
+                        buttons: [
+                            {text: 'OK', action: null},
+                        ]
+                    });
+                    this.loadModules();
+                });
         }
     }
 }

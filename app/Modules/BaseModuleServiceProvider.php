@@ -49,6 +49,21 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
         }
     }
 
+
+    public static function enabling(): bool
+    {
+        // this method is fired when module is being enabled
+        // return false if you want to prevent enabling
+        return true;
+    }
+
+    public static function disabling(): bool
+    {
+        // this method is fired when module is being disabled
+        // return false if you want to prevent enabling
+        return true;
+    }
+
     /**
      * @return bool
      */

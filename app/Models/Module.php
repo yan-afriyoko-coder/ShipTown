@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\BaseModel;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
@@ -26,7 +26,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Module whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class Module extends Model
+class Module extends BaseModel
 {
     protected $fillable = [
         'service_provider_class',

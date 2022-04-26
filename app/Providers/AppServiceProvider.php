@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Models\Configuration;
 use App\Models\Inventory;
+use App\Models\Module;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\OrderProductShipment;
@@ -15,6 +15,7 @@ use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use App\Modules\Api2cart\src\Observers\Api2cartOrderImportsObserver;
 use App\Observers\InventoryObserver;
+use App\Observers\ModuleObserver;
 use App\Observers\OrderObserver;
 use App\Observers\OrderProductObserver;
 use App\Observers\OrderProductShipmentObserver;
@@ -23,7 +24,6 @@ use App\Observers\OrderStatusObserver;
 use App\Observers\ProductObserver;
 use App\Observers\ProductPriceObserver;
 use App\Observers\WarehouseObserver;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -52,6 +52,7 @@ class AppServiceProvider extends ServiceProvider
         OrderStatus::observe(OrderStatusObserver::class);
         OrderProductShipment::observe(OrderProductShipmentObserver::class);
         Warehouse::observe(WarehouseObserver::class);
+        Module::observe(ModuleObserver::class);
 
         // Modules
         Api2cartOrderImports::observe(Api2cartOrderImportsObserver::class);
