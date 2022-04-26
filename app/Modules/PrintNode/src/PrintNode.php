@@ -51,6 +51,7 @@ class PrintNode
     /**
      * @param PrintJob $printJob
      * @return int
+     * @throws Exception
      */
     public static function print(PrintJob $printJob): int
     {
@@ -58,8 +59,7 @@ class PrintNode
 
         if (!$printNodeClient) {
             Log::warning('Print job failed, no PrintNode clients configured');
-
-            return -1;
+            throw new Exception('PrintNode service not configured');
         }
 
         $response = $printNodeClient->postRequest('printjobs', $printJob->toPrintNodePayload());

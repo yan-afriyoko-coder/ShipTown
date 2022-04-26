@@ -235,8 +235,8 @@ export default {
                 return axios.get('/api/settings/modules');
             },
 
-            apiToggleModules: function (id) {
-                return axios.put('/api/settings/modules/' + id);
+            apiPostModule: function (id, params) {
+                return axios.put('/api/settings/modules/' + id, params);
             },
 
             apiGetOrderStatus: function (params) {

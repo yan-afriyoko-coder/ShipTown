@@ -20,7 +20,7 @@ Route::apiResource('admin/users', 'Api\Admin\UserController')->only(['index', 's
 Route::apiResource('modules/autostatus/picking/configuration', 'Api\Modules\AutoStatus\ConfigurationController', ['as' => 'modules.autostatus.picking'])->only('index', 'store');
 
 Route::group(['prefix' => 'settings', 'namespace' => 'Api\Settings', 'as' => 'api.settings.'], function () {
-    Route::apiResource('modules', 'ModuleConfigurationController')->only(['index', 'update']);
+    Route::apiResource('modules', 'ModuleController')->only(['index', 'update']);
     Route::apiResource('order-statuses', 'OrderStatusController')->only(['index', 'store', 'update', 'destroy']);
     Route::apiResource('mail-templates', 'MailTemplateController')->only(['index', 'update']);
     Route::apiResource('navigation-menu', 'NavigationMenuController')->only(['index', 'store', 'update', 'destroy']);
