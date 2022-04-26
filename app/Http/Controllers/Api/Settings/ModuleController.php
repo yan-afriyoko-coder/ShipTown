@@ -20,7 +20,7 @@ class ModuleController extends Controller
      */
     public function index(ModuleIndexRequest $request): AnonymousResourceCollection
     {
-        $modules = Module::all();
+        $modules = Module::query()->get();
 
         return ModuleResource::collection($modules);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\ModuleConfigurationController;
+namespace Tests\Feature\Http\Controllers\Api\Settings\ModuleController;
 
 use App\Models\Module;
 use App\Modules\BaseModuleServiceProvider;
