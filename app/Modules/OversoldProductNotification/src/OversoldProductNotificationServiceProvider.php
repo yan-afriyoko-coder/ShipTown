@@ -19,7 +19,7 @@ class OversoldProductNotificationServiceProvider extends BaseModuleServiceProvid
     /**
      * @var string
      */
-    public static string $module_description = 'Sends email notification when "oversold" tag attached to product';
+    public static string $module_description = 'Sends email  when "oversold" tag attached to product';
 
     /**
      * @var bool

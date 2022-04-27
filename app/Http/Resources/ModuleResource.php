@@ -21,6 +21,7 @@ class ModuleResource extends JsonResource
             'enabled'                   => $this->enabled,
             'name'                      => $this->name,
             'description'               => $this->description,
+            'settings_link'             => $this->settings_link,
         ];
     }
 }

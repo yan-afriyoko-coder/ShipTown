@@ -24,6 +24,11 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
     public static string $module_description = '';
 
     /**
+     * @var string
+     */
+    public static string $settings_link = '';
+
+    /**
      * Should we automatically enable it
      * When module first registered.
      *

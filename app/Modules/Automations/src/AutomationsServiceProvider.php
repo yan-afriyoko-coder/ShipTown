@@ -10,12 +10,12 @@ class AutomationsServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'Automations - Management';
+    public static string $module_name = 'Automations - Active Orders';
 
     /**
      * @var string
      */
-    public static string $module_description = 'Provides user managed automations';
+    public static string $module_description = 'Sporadically, when required, runs automations on active orders';
 
     /**
      * @var bool

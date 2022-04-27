@@ -19,7 +19,7 @@ class OrderStatusServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_description = 'Automatically manages order Active & On Hold when status code changed';
+    public static string $module_description = 'Manages orders Active & On Hold when status code changed';
 
     /**
      * @var bool

@@ -24,6 +24,11 @@ class DpdIrelandServiceProvider extends BaseModuleServiceProvider
     public static string $module_description = 'Provides seamless integration with DPD Ireland';
 
     /**
+     * @var string
+     */
+    public static string $settings_link = '/admin/settings/dpd-ireland';
+
+    /**
      * @var bool
      */
     public bool $autoEnable = false;
@@ -41,7 +46,7 @@ class DpdIrelandServiceProvider extends BaseModuleServiceProvider
             ->updateOrCreate([
                 'code' => 'dpd_irl_next_day',
             ], [
-                'service_provider_class' => Services\NextDayShippingService::class,
+                'service_provider_class' =>     Services\NextDayShippingService::class,
             ]);
 
         return true;

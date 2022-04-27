@@ -11,12 +11,12 @@ class AutoPilotServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'Automation - Packer Clear';
+    public static string $module_name = 'Automation - Packer Collision';
 
     /**
      * @var string
      */
-    public static string $module_description = 'Clears Packer assignment after 12h of inactivity on order';
+    public static string $module_description = 'Locks orders from being assigned to two packers at the same time';
 
     /**
      * @var bool

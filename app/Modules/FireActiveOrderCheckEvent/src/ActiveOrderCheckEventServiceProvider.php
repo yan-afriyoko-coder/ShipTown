@@ -16,13 +16,12 @@ class ActiveOrderCheckEventServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = '.CORE - Active Order Checks';
+    public static string $module_name = '.CORE - Active Order Check';
 
     /**
      * @var string
      */
-    public static string $module_description = 'Automatically fires ActiveOrderCheck event 5 minutes ' .
-        'after the order is created';
+    public static string $module_description = 'Run automations 5 minutes after the order is created';
 
     /**
      * @var bool

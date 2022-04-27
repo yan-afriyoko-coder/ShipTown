@@ -18,6 +18,11 @@ class RmsapiModuleServiceProvider extends BaseModuleServiceProvider
     public static string $module_description = 'Provides connectivity to Microsoft RMS 2.0';
 
     /**
+     * @var string
+     */
+    public static string $settings_link = '/admin/settings/rmsapi';
+
+    /**
      * @var bool
      */
     public bool $autoEnable = false;

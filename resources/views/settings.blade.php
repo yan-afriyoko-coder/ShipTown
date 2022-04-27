@@ -103,36 +103,6 @@
                     </div>
                 </a>
 
-                <a href="{{ route('settings.rmsapi') }}" class="setting-list">
-                    <div class="setting-icon">
-                        <font-awesome-icon icon="code" class="fa-sm"></font-awesome-icon>
-                    </div>
-                    <div class="setting-body">
-                        <div class="setting-title">Microsoft Dynamic RMS 2.0 API</div>
-                        <div class="setting-desc">View and update RMS API integration settings</div>
-                    </div>
-                </a>
-
-                <a href="{{ route('settings.dpd-ireland') }}" class="setting-list">
-                    <div class="setting-icon">
-                        <font-awesome-icon icon="truck" class="fa-sm"></font-awesome-icon>
-                    </div>
-                    <div class="setting-body">
-                        <div class="setting-title">DPD Ireland API</div>
-                        <div class="setting-desc">View and update DPD Ireland integration settings</div>
-                    </div>
-                </a>
-
-                <a href="{{ route('settings.api2cart') }}" class="setting-list">
-                    <div class="setting-icon">
-                        <font-awesome-icon icon="shopping-cart" class="fa-sm"></font-awesome-icon>
-                    </div>
-                    <div class="setting-body">
-                        <div class="setting-title">Api2cart</div>
-                        <div class="setting-desc">View and update Api2cart integration settings</div>
-                    </div>
-                </a>
-
                 <a href="{{ route('settings.api') }}" class="setting-list">
                     <div class="setting-icon">
                         <font-awesome-icon icon="key" class="fa-sm"></font-awesome-icon>
