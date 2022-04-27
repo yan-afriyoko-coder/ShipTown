@@ -77,6 +77,8 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
         $module = Module::updateOrCreate(['service_provider_class' => get_called_class()], ['enabled' => false]);
 
         $module->update(['enabled' => true]);
+
+        App::register(get_called_class())->boot();
     }
 
     /**
