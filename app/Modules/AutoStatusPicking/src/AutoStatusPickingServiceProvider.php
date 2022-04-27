@@ -15,7 +15,7 @@ class AutoStatusPickingServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'Auto "picking" status';
+    public static string $module_name = 'Automation - Auto "picking" refilling';
 
     /**
      * @var string

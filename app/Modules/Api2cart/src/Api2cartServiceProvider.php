@@ -20,7 +20,7 @@ class Api2cartServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'eCommerce Integration (Api2cart)';
+    public static string $module_name = 'eCommerce - Api2cart Integration';
 
     /**
      * @var string

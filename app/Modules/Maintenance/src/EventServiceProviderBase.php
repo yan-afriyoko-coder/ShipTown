@@ -13,12 +13,12 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'Maintenance';
+    public static string $module_name = '.CORE - Maintenance';
 
     /**
      * @var string
      */
-    public static string $module_description = 'Basic maintenance tasks';
+    public static string $module_description = 'Daily Maintenance Jobs';
 
     /**
      * @var bool
@@ -33,4 +33,9 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
             Listeners\DailyEvent\RunDailyMaintenanceJobsListener::class,
         ],
     ];
+
+    public static function disabling(): bool
+    {
+        return false;
+    }
 }

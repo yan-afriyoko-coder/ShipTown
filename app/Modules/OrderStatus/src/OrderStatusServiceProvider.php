@@ -14,7 +14,7 @@ class OrderStatusServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'Order Status';
+    public static string $module_name = '.CORE - Order Status';
 
     /**
      * @var string
@@ -38,4 +38,9 @@ class OrderStatusServiceProvider extends BaseModuleServiceProvider
             Listeners\OrderStatusUpdatedEventListener::class,
         ]
     ];
+
+    public static function disabling(): bool
+    {
+        return false;
+    }
 }

@@ -15,7 +15,7 @@ class ScurriServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_description = 'Provides connectivity to AnPost.ie';
+    public static string $module_description = 'Provides seamless integration with AnPost Ireland';
 
     /**
      * @var bool

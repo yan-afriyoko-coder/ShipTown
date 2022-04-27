@@ -15,12 +15,12 @@ class StockControlServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'Stock Control';
+    public static string $module_name = '.CORE - Stock Control';
 
     /**
      * @var string
      */
-    public static string $module_description = 'Increase \ Decrease stock when product shipped';
+    public static string $module_description = 'Increase \ Decrease inventory when product shipped';
 
     /**
      * @var bool
@@ -37,4 +37,9 @@ class StockControlServiceProvider extends BaseModuleServiceProvider
             Listeners\OrderProductShipmentCreatedEvent\IncreaseDecreaseInventoryQuantityListener::class
         ]
     ];
+
+    public static function disabling(): bool
+    {
+        return false;
+    }
 }

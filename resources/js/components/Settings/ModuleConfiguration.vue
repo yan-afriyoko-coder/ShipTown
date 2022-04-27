@@ -68,8 +68,14 @@ export default {
                             {text: 'OK', action: null},
                         ]
                     });
+
+                    this.loadModules();
+                }).finally(() => {
                     this.loadModules();
                 });
+
+
+
         }
     }
 }

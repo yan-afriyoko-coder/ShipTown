@@ -14,7 +14,7 @@
     </div>
     @endif
     <div class="row justify-content-center">
-        <div class="col-lg-8">
+        <div class="col-lg-8 col-md-12">
             <navigation-menu-table></navigation-menu-table>
         </div>
     </div>

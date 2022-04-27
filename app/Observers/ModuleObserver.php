@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Module;
+use Illuminate\Support\Facades\App;
 
 class ModuleObserver
 {
@@ -10,7 +11,10 @@ class ModuleObserver
     {
         if ($module->isAttributeChanged('enabled')) {
             if ($module->enabled) {
-                return $module->service_provider_class::enabling();
+                if ($module->service_provider_class::enabling()) {
+//                    App::register(get_called_class())->boot();
+                    return true;
+                }
             } else {
                 return $module->service_provider_class::disabling();
             }

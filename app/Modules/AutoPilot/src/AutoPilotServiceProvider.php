@@ -11,7 +11,7 @@ class AutoPilotServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'AutoPilot';
+    public static string $module_name = 'Automation - Packer Clear';
 
     /**
      * @var string

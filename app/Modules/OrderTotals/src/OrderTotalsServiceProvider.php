@@ -18,7 +18,7 @@ class OrderTotalsServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'Order Totals';
+    public static string $module_name = '.CORE - Order Totals';
 
     /**
      * @var string
@@ -28,7 +28,7 @@ class OrderTotalsServiceProvider extends BaseModuleServiceProvider
     /**
      * @var bool
      */
-    public bool $autoEnable = false;
+    public bool $autoEnable = true;
 
     /**
      * The event listener mappings for the application.
@@ -36,4 +36,9 @@ class OrderTotalsServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [];
+
+    public static function disabling(): bool
+    {
+        return false;
+    }
 }

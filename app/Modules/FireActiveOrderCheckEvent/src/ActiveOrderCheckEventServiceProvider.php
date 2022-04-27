@@ -16,7 +16,7 @@ class ActiveOrderCheckEventServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'Active Order Checks';
+    public static string $module_name = '.CORE - Active Order Checks';
 
     /**
      * @var string
@@ -45,4 +45,9 @@ class ActiveOrderCheckEventServiceProvider extends BaseModuleServiceProvider
             Listeners\HourlyEventListener::class,
         ]
     ];
+
+    public static function disabling(): bool
+    {
+        return false;
+    }
 }

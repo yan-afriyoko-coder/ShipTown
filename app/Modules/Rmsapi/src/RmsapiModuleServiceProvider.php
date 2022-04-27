@@ -10,7 +10,7 @@ class RmsapiModuleServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'RMSAPI Integration';
+    public static string $module_name = 'eCommerce - RMSAPI Integration';
 
     /**
      * @var string

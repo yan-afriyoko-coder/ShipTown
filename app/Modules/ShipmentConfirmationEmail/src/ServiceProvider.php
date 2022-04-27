@@ -14,7 +14,7 @@ class ServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'Shipment Confirmation Email';
+    public static string $module_name = 'Automation - Shipment Confirmation Email';
 
     /**
      * @var string

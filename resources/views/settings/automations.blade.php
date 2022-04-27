@@ -14,7 +14,7 @@
     </div>
     @endif
     <div class="row justify-content-center">
-        <div class="col-lg-8">
+        <div class="col-lg-8 col-md-12">
             <automation-table></automation-table>
         </div>
     </div>

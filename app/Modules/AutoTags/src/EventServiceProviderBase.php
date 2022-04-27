@@ -16,7 +16,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'AutoTags';
+    public static string $module_name = 'Automation - AutoTags';
 
     /**
      * @var string

@@ -39,6 +39,6 @@ class ModuleController extends Controller
     {
         $module->update($request->validated());
 
-        return ModuleResource::make($module);
+        return ModuleResource::make($module->refresh());
     }
 }

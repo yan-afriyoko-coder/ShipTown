@@ -14,7 +14,7 @@ class OversoldProductNotificationServiceProvider extends BaseModuleServiceProvid
     /**
      * @var string
      */
-    public static string $module_name = 'Oversold Product Notification';
+    public static string $module_name = 'Automation - Oversold Product Notification';
 
     /**
      * @var string

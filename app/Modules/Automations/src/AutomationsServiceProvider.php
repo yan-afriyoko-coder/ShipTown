@@ -10,7 +10,7 @@ class AutomationsServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'Automations';
+    public static string $module_name = 'Automations - Management';
 
     /**
      * @var string
