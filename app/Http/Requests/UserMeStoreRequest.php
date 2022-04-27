@@ -26,7 +26,7 @@ class UserMeStoreRequest extends FormRequest
         return [
             'name'                    => ['sometimes', 'string'],
             'printer_id'              => ['sometimes', 'numeric'],
-            'address_label_template'  => ['sometimes', 'in:"",address_label,dpd_label,dpd_uk'],
+            'address_label_template'  => ['sometimes', 'nullable','string', 'exists:"shipping_services",code'],
             'ask_for_shipping_number' => ['sometimes', 'boolean'],
         ];
     }

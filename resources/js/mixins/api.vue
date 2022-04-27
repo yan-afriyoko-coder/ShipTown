@@ -243,7 +243,7 @@ export default {
                 return axios.get('/api/order-statuses', {params: params});
             },
 
-            apiGetShippingServices: function (params) {
+            apiGetShippingServices: function (params = {}) {
                 return axios.get('/api/shipping-services', {params: params});
             },
 
