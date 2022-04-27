@@ -22,7 +22,9 @@ class ModuleController extends Controller
     {
         $modules = Module::query()->get();
 
-        return ModuleResource::collection($modules);
+        $collection = $modules->sortBy('name');
+
+        return ModuleResource::collection($collection);
     }
 
     /**

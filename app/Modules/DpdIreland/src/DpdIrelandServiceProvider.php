@@ -16,7 +16,7 @@ class DpdIrelandServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'DPD Ireland Integration';
+    public static string $module_name = 'Courier - DPD Ireland Integration';
 
     /**
      * @var string
@@ -37,25 +37,21 @@ class DpdIrelandServiceProvider extends BaseModuleServiceProvider
 
     public static function enabling(): bool
     {
-        ShippingService::query()->updateOrCreate([
-            'code' => 'dpd_label',
-        ], [
-            'service_provider_class' => Services\NextDayShippingService::class,
-        ]);
-
-        ShippingService::query()->updateOrCreate([
-            'code' => 'dpd_irl_next_day',
-        ], [
-            'service_provider_class' => Services\NextDayShippingService::class,
-        ]);
+        ShippingService::query()
+            ->updateOrCreate([
+                'code' => 'dpd_irl_next_day',
+            ], [
+                'service_provider_class' => Services\NextDayShippingService::class,
+            ]);
 
         return true;
     }
 
     public static function disabling(): bool
     {
-        ShippingService::query()->where(['code' => 'dpd_irl_next_day'])->delete();
-        ShippingService::query()->where(['code' => 'dpd_label'])->delete();
+        ShippingService::query()
+            ->where(['code' => 'dpd_irl_next_day'])
+            ->delete();
 
         return true;
     }

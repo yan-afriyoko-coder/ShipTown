@@ -11,7 +11,7 @@ class AddressLabelServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'Address Label';
+    public static string $module_name = 'Courier - Address Label';
 
     /**
      * @var string
@@ -32,18 +32,22 @@ class AddressLabelServiceProvider extends BaseModuleServiceProvider
 
     public static function enabling(): bool
     {
-        ShippingService::query()->updateOrCreate([
-            'code' => 'address_label',
-        ], [
-            'service_provider_class' => Services\AddressLabelShippingService::class,
-        ]);
+        ShippingService::query()
+            ->updateOrCreate([
+                'code' => 'address_label',
+            ], [
+                'service_provider_class' => Services\AddressLabelShippingService::class,
+            ]);
 
         return true;
     }
 
     public static function disabling(): bool
     {
-        ShippingService::query()->where(['code' => 'address_label'])->delete();
+        ShippingService::query()
+            ->where(['code' => 'address_label'])
+            ->delete();
+
         return true;
     }
 }
