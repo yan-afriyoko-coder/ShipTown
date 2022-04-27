@@ -65,39 +65,15 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
     }
 
     /**
-     * @return bool
-     */
-    public function isEnabled(): bool
-    {
-        try {
-            $module = Module::firstOrCreate([
-                'service_provider_class' => get_called_class(),
-            ], [
-                'enabled' => $this->autoEnable,
-            ]);
-
-            return $module->enabled;
-        } catch (Exception $exception) {
-            return false;
-        }
-    }
-
-    /**
      *
      */
     public static function enableModule()
     {
-        $module = Module::firstOrCreate(['service_provider_class' => get_called_class()], ['enabled' => false]);
+        $module = Module::updateOrCreate(['service_provider_class' => get_called_class()], ['enabled' => false]);
 
-        if ($module->enabled) {
-            return;
-        }
+        $module->update(['enabled' => true]);
 
-        $module->enabled = true;
-        $module->save();
-
-        App::register(get_called_class())
-            ->boot();
+        App::register(get_called_class())->boot();
     }
 
     /**
@@ -121,15 +97,20 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
     }
 
     /**
-     *
+     * @return bool
      */
-    public static function disableModule()
+    public function isEnabled(): bool
     {
-        $module = Module::firstOrCreate(['service_provider_class' => get_called_class()], ['enabled' => false]);
+        try {
+            $module = Module::firstOrCreate([
+                'service_provider_class' => get_called_class(),
+            ], [
+                'enabled' => $this->autoEnable,
+            ]);
 
-        if ($module->enabled) {
-            $module->enabled = false;
-            $module->save();
+            return $module->enabled;
+        } catch (Exception $exception) {
+            return false;
         }
     }
 }
