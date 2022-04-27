@@ -32,10 +32,11 @@ class AddressLabelServiceProvider extends BaseModuleServiceProvider
 
     public static function enabling(): bool
     {
-        $shippingService = new ShippingService();
-        $shippingService->code = 'address_label';
-        $shippingService->service_provider_class = AddressLabelShippingService::class;
-        $shippingService->save();
+        ShippingService::query()->updateOrCreate([
+            'code' => 'address_label',
+        ], [
+            'service_provider_class' => Services\AddressLabelShippingService::class,
+        ]);
 
         return true;
     }
