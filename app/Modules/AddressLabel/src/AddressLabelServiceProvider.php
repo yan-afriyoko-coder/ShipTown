@@ -3,7 +3,6 @@
 namespace App\Modules\AddressLabel\src;
 
 use App\Models\ShippingService;
-use App\Modules\AddressLabel\src\Services\AddressLabelShippingService;
 use App\Modules\BaseModuleServiceProvider;
 
 class AddressLabelServiceProvider extends BaseModuleServiceProvider
