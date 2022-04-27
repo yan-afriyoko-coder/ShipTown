@@ -35,7 +35,6 @@ class DpdIrelandServiceProvider extends BaseModuleServiceProvider
      */
     protected $listen = [];
 
-
     public static function enabling(): bool
     {
         ShippingService::query()->updateOrCreate([

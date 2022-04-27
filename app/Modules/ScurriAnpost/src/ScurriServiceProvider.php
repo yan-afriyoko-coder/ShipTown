@@ -2,6 +2,7 @@
 
 namespace App\Modules\ScurriAnpost\src;
 
+use App\Models\ShippingService;
 use App\Modules\BaseModuleServiceProvider;
 
 class ScurriServiceProvider extends BaseModuleServiceProvider
@@ -27,6 +28,26 @@ class ScurriServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [];
+
+    public static function enabling(): bool
+    {
+        ShippingService::query()->where(['code' => 'an_post'])->delete();
+
+        ShippingService::query()->updateOrCreate([
+            'code' => 'anpost_3day',
+        ], [
+            'service_provider_class' => Services\AnPostShippingService::class,
+        ]);
+
+        return true;
+    }
+
+    public static function disabling(): bool
+    {
+        ShippingService::query()->where(['code' => 'anpost_3day'])->delete();
+
+        return true;
+    }
 
     public function boot()
     {
