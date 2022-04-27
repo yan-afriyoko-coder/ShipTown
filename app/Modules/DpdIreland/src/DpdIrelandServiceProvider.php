@@ -38,14 +38,16 @@ class DpdIrelandServiceProvider extends BaseModuleServiceProvider
 
     public static function enabling(): bool
     {
-        ShippingService::query()->create([
-            'code' => 'dpd_irl_next_day',
-            'service_provider_class' => NextDayShippingService::class,
+        ShippingService::query()->updateOrCreate([
+            'code' => 'dpd_label',
+        ], [
+            'service_provider_class' => Services\NextDayShippingService::class,
         ]);
 
-        ShippingService::query()->create([
-            'code' => 'dpd_label',
-            'service_provider_class' => NextDayShippingService::class,
+        ShippingService::query()->updateOrCreate([
+            'code' => 'dpd_irl_next_day',
+        ], [
+            'service_provider_class' => Services\NextDayShippingService::class,
         ]);
 
         return true;

@@ -35,15 +35,17 @@ class DpdUkServiceProvider extends BaseModuleServiceProvider
 
     public static function enabling(): bool
     {
-        ShippingService::query()->create([
-            'code' => 'dpd_uk_next_day',
-            'service_provider_class' => Services\NextDayShippingService::class,
-        ]);
+        ShippingService::query()->updateOrCreate([
+                'code' => 'dpd_uk_next_day',
+            ], [
+                'service_provider_class' => Services\NextDayShippingService::class,
+            ]);
 
-        ShippingService::query()->create([
-            'code' => 'dpd_uk',
-            'service_provider_class' => Services\NextDayShippingService::class,
-        ]);
+        ShippingService::query()->updateOrCreate([
+                'code' => 'dpd_uk'
+            ], [
+                'service_provider_class' => Services\NextDayShippingService::class,
+            ]);
 
         return true;
     }
