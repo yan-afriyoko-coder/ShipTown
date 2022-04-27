@@ -16,9 +16,9 @@
                             <td class="text-right">
                                 <select class="form-control w-100" @change="updateUsersAddressLabelTemplate" v-model="selected_address_label_template">
                                     <option value=""></option>
-                                    <option value="address_label">address_label</option>
-                                    <option value="dpd_label">dpd_label</option>
-                                    <option value="dpd_uk">dpd_uk_label</option>
+                                    <template v-for="shipping_service in shipping_services">
+                                        <option :value="shipping_service.code" :key="shipping_service.id" >{{ shipping_service['code'] }}</option>
+                                    </template>
                                 </select>
                             </td>
                         </tr>
@@ -47,11 +47,13 @@ export default {
     mixins: [api, helpers],
 
     mounted() {
+        this.loadShippingServices();
         this.selected_address_label_template = Vue.prototype.$currentUser.address_label_template;
         this.selected_ask_for_shipping_number = Vue.prototype.$currentUser.ask_for_shipping_number;
     },
 
     data: () => ({
+        shipping_services: [],
         selected_address_label_template: "",
         selected_ask_for_shipping_number: false,
     }),
@@ -64,6 +66,8 @@ export default {
                 .catch(e => {
                     this.showException(e);
                 });
+
+            this.loadShippingServices();
         },
 
         saveAskForShippingNumberValue() {
@@ -73,7 +77,17 @@ export default {
                 .catch(e => {
                     this.showError('Request failed: ' + e.message);
                 });
+        },
+
+        loadShippingServices()  {
+            this.apiGetShippingServices()
+                .then(({ data }) => {
+                    this.shipping_services = data.data;
+                })
+                .catch(() => {
+                    this.notifyError('Error occurred while loading packlist');
+                });
         }
-    }
+    },
 }
 </script>
