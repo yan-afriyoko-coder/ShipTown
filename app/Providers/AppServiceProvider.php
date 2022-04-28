@@ -24,6 +24,7 @@ use App\Observers\OrderStatusObserver;
 use App\Observers\ProductObserver;
 use App\Observers\ProductPriceObserver;
 use App\Observers\WarehouseObserver;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -42,6 +43,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $models = Module::query()->where(['enabled' => true])->get();
+        $models->each(function (Module $module) {
+            $this->app->singleton($module->service_provider_class, $module->service_provider_class);
+            App::register($module->service_provider_class);
+        });
+
         // Core Models
         Product::observe(ProductObserver::class);
         ProductPrice::observe(ProductPriceObserver::class);

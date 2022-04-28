@@ -16,6 +16,7 @@ class SyncRequestedEventListener
      */
     public function handle(SyncRequestedEvent $event)
     {
+        ray(self::class . '.handle');
         DispatchImportOrdersJobs::dispatch();
     }
 }

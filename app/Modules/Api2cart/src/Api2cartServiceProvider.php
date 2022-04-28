@@ -36,7 +36,7 @@ class Api2cartServiceProvider extends BaseModuleServiceProvider
     /**
      * @var bool
      */
-    public bool $autoEnable = false;
+    public static bool $autoEnable = false;
 
     /**
      * The event listener mappings for the application.
@@ -66,6 +66,7 @@ class Api2cartServiceProvider extends BaseModuleServiceProvider
      */
     public function boot()
     {
+        ray('booting!!!!!');
         parent::boot();
 
         if ($this->app->runningInConsole()) {

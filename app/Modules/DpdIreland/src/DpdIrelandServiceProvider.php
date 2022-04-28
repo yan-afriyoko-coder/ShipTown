@@ -28,7 +28,7 @@ class DpdIrelandServiceProvider extends BaseModuleServiceProvider
     /**
      * @var bool
      */
-    public bool $autoEnable = false;
+    public static bool $autoEnable = false;
 
     /**
      * The event listener mappings for the application.
