@@ -36,10 +36,8 @@ class ProcessImportedBatch implements ShouldQueue
     public function handle()
     {
         $imports = RmsapiProductImport::query()
-            ->when(isset($this->batch_uuid), function ($query) {
-                return $query->where('batch_uuid', '=', $this->batch_uuid);
-            })
             ->whereNull('when_processed')
+            ->limit(100)
             ->orderBy('id', 'asc')
             ->get();
 

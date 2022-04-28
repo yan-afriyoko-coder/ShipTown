@@ -76,7 +76,7 @@ class FetchUpdatedProductsJob implements ShouldQueue
         if ($response->getResult()) {
             $this->saveImportedProducts($response->getResult());
 
-            ProcessImportedBatch::dispatch($this->batch_uuid);
+            ProcessImportedBatch::dispatch();
 
             if (isset($response->asArray()['next_page_url'])) {
                 FetchUpdatedProductsJob::dispatch($this->rmsapiConnection->getKey());
