@@ -90,7 +90,7 @@ class FetchUpdatedProductsJob implements ShouldQueue
             'expires_at' => now()->addHour()
         ]);
 
-        info('Imported RMSAPI products', [
+        info('Downloaded RMSAPI products', [
             'warehouse_code' => $this->rmsapiConnection->location_id,
             'count'          => $response->asArray()['total'],
         ]);
