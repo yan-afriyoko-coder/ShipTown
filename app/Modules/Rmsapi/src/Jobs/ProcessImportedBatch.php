@@ -37,7 +37,7 @@ class ProcessImportedBatch implements ShouldQueue
     {
         $imports = RmsapiProductImport::query()
             ->whereNull('when_processed')
-            ->limit(100)
+            ->limit(500)
             ->orderBy('id', 'asc')
             ->get();
 
