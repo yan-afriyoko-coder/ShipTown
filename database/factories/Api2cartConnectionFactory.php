@@ -1,4 +1,4 @@
-<?php
+a<?php
 
 /** @var Factory $factory */
 
@@ -8,7 +8,7 @@ use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;
 
 $factory->define(Api2cartConnection::class, function (Faker $faker) {
-    $warehouse = Warehouse::query()->inRandomOrder()->first();
+    $warehouse = Warehouse::query()->inRandomOrder()->first() ?? factory(Warehouse::class)->create();
 
     return [
         'type'                           => $faker->randomElement(['Magento', 'Prestashop', 'Shopify']),
