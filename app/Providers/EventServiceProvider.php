@@ -46,8 +46,5 @@ class EventServiceProvider extends ServiceProvider
         parent::boot();
 
         //
-        Event::listen('App\*', function ($event) {
-            ray($event);
-        });
     }
 }
