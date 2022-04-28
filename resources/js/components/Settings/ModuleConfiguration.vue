@@ -3,20 +3,20 @@
         <div class="list-group">
             <template v-for="module in modules" >
                 <div class="setting-list">
-                    <div class="setting-body">
+
+                    <div class="setting-body flex-fill">
                         <div class="setting-title">{{ module.name }}</div>
                         <div class="setting-desc">{{ module.description }}</div>
                     </div>
+
                     <template v-if="module.settings_link">
-                            <div class="setting-icon flex-fill text-right bg-white">
-                                <a :href="module.settings_link" class="btn-link">
+                        <a :href="module.settings_link" class="btn-link">
+                            <div class="setting-icon text-right bg-white">
                                     <font-awesome-icon icon="cog" class="fa-sm bg-white"></font-awesome-icon>
-                                </a>
                             </div>
+                        </a>
                     </template>
-                    <template v-if="!module.settings_link">
-                        <div class="flex-fill bg-white text-right"></div>
-                    </template>
+
                     <div class="custom-control custom-switch m-auto text-right align-content-center">
                         <input type="checkbox" @change="updateModule(module)" class="custom-control-input" :id="module.id" v-model="module.enabled">
                         <label class="custom-control-label" :for="module.id"></label>

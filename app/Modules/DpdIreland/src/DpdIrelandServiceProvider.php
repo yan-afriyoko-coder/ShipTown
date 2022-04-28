@@ -2,11 +2,8 @@
 
 namespace App\Modules\DpdIreland\src;
 
-use App\Events\OrderShipment\OrderShipmentCreatedEvent;
 use App\Models\ShippingService;
-use App\Modules\AddressLabel\src\Services\AddressLabelShippingService;
 use App\Modules\BaseModuleServiceProvider;
-use App\Modules\DpdIreland\src\Services\NextDayShippingService;
 
 /**
  * Class EventServiceProviderBase.

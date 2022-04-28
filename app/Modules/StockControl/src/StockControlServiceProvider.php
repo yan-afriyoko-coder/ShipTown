@@ -3,7 +3,6 @@
 namespace App\Modules\StockControl\src;
 
 use App\Events\OrderProductShipmentCreatedEvent;
-use App\Events\OrderShipment\OrderShipmentCreatedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
