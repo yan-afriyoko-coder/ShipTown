@@ -76,7 +76,6 @@ class SplitBundleSkuAction extends BaseOrderAction
 
         if ($validator->fails()) {
             $this->validation_errors = $validator->errors();
-            ray($skus, $this->validation_errors, $skus);
             return false;
         }
 

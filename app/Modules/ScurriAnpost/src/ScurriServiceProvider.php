@@ -10,17 +10,17 @@ class ScurriServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'An Post Ireland';
+    public static string $module_name = 'Courier - An Post Ireland';
 
     /**
      * @var string
      */
-    public static string $module_description = 'Provides connectivity to AnPost.ie';
+    public static string $module_description = 'Provides seamless integration with AnPost Ireland';
 
     /**
      * @var bool
      */
-    public bool $autoEnable = false;
+    public static bool $autoEnable = false;
 
     /**
      * The event listener mappings for the application.
@@ -31,20 +31,21 @@ class ScurriServiceProvider extends BaseModuleServiceProvider
 
     public static function enabling(): bool
     {
-        ShippingService::query()->where(['code' => 'an_post'])->delete();
-
-        ShippingService::query()->updateOrCreate([
-            'code' => 'anpost_3day',
-        ], [
-            'service_provider_class' => Services\AnPostShippingService::class,
-        ]);
+        ShippingService::query()
+            ->updateOrCreate([
+                'code' => 'anpost_3day',
+            ], [
+                'service_provider_class' => Services\AnPostShippingService::class,
+            ]);
 
         return true;
     }
 
     public static function disabling(): bool
     {
-        ShippingService::query()->where(['code' => 'anpost_3day'])->delete();
+        ShippingService::query()
+            ->where(['code' => 'anpost_3day'])
+            ->delete();
 
         return true;
     }

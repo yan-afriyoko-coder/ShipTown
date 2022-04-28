@@ -3,7 +3,6 @@
 namespace App\Modules\StockControl\src;
 
 use App\Events\OrderProductShipmentCreatedEvent;
-use App\Events\OrderShipment\OrderShipmentCreatedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
@@ -15,17 +14,17 @@ class StockControlServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'Stock Control';
+    public static string $module_name = '.CORE - Stock Control';
 
     /**
      * @var string
      */
-    public static string $module_description = 'Increase \ Decrease stock when product shipped';
+    public static string $module_description = 'Increase \ Decrease inventory when product shipped';
 
     /**
      * @var bool
      */
-    public bool $autoEnable = true;
+    public static bool $autoEnable = true;
 
     /**
      * The event listener mappings for the application.
@@ -37,4 +36,9 @@ class StockControlServiceProvider extends BaseModuleServiceProvider
             Listeners\OrderProductShipmentCreatedEvent\IncreaseDecreaseInventoryQuantityListener::class
         ]
     ];
+
+    public static function disabling(): bool
+    {
+        return false;
+    }
 }

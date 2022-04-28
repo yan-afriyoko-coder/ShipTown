@@ -3,7 +3,6 @@
 namespace App\Modules\AddressLabel\src;
 
 use App\Models\ShippingService;
-use App\Modules\AddressLabel\src\Services\AddressLabelShippingService;
 use App\Modules\BaseModuleServiceProvider;
 
 class AddressLabelServiceProvider extends BaseModuleServiceProvider
@@ -11,7 +10,7 @@ class AddressLabelServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'Address Label';
+    public static string $module_name = 'Courier - Address Label';
 
     /**
      * @var string
@@ -21,7 +20,7 @@ class AddressLabelServiceProvider extends BaseModuleServiceProvider
     /**
      * @var bool
      */
-    public bool $autoEnable = true;
+    public static bool $autoEnable = true;
 
     /**
      * The event listener mappings for the application.
@@ -32,18 +31,22 @@ class AddressLabelServiceProvider extends BaseModuleServiceProvider
 
     public static function enabling(): bool
     {
-        ShippingService::query()->updateOrCreate([
-            'code' => 'address_label',
-        ], [
-            'service_provider_class' => Services\AddressLabelShippingService::class,
-        ]);
+        ShippingService::query()
+            ->updateOrCreate([
+                'code' => 'address_label',
+            ], [
+                'service_provider_class' => Services\AddressLabelShippingService::class,
+            ]);
 
         return true;
     }
 
     public static function disabling(): bool
     {
-        ShippingService::query()->where(['code' => 'address_label'])->delete();
+        ShippingService::query()
+            ->where(['code' => 'address_label'])
+            ->delete();
+
         return true;
     }
 }

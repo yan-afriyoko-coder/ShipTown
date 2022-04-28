@@ -24,11 +24,10 @@ class IncreaseDecreaseInventoryQuantityListener
             return true;
         }
 
+        /** @var Inventory $inventory */
         $inventory = Inventory::firstOrCreate([
                 'product_id' => $orderProductShipment->product_id,
                 'warehouse_id' => $orderProductShipment->warehouse_id,
-            ], [
-                'location_id' => $orderProductShipment->warehouse->code
             ]);
 
         $inventory->quantity = $inventory->quantity - $orderProductShipment->quantity_shipped;

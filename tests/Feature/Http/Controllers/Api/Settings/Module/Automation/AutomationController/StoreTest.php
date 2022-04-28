@@ -47,8 +47,6 @@ class StoreTest extends TestCase
         ];
         $response = $this->post(route('api.settings.module.automations.store'), $data);
 
-        ray($response->json());
-
         $response->assertStatus(201);
         $response->assertJsonStructure([
             'data' => [

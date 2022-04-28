@@ -17,7 +17,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'Inventory Reservations';
+    public static string $module_name = '.CORE - Inventory Reservations';
 
     /**
      * @var string
@@ -27,7 +27,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var bool
      */
-    public bool $autoEnable = true;
+    public static bool $autoEnable = true;
 
     /**
      * The event listener mappings for the application.
@@ -51,4 +51,9 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
             Listeners\OrderProductCreatedListener::class,
         ],
     ];
+
+    public static function disabling(): bool
+    {
+        return false;
+    }
 }

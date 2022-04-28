@@ -15,18 +15,17 @@ class AutoStatusPickingServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'Auto "picking" status';
+    public static string $module_name = 'Automation - Auto "picking" refilling';
 
     /**
      * @var string
      */
-    public static string $module_description = 'Automatically moves batch of orders "paid" to "picking" status. '.
-    'It prioritize old orders';
+    public static string $module_description = '"paid" to "picking" batch refill prioritizing old orders';
 
     /**
      * @var bool
      */
-    public bool $autoEnable = false;
+    public static bool $autoEnable = false;
 
     /**
      * @var string[][]

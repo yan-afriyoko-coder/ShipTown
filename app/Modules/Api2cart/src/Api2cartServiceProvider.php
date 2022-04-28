@@ -6,11 +6,12 @@ use App\Events\DailyEvent;
 use App\Events\HourlyEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
+use App\Events\Product\ProductPriceUpdatedEvent;
 use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
-use App\Events\Product\ProductPriceUpdatedEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
+use Exception;
 
 /**
  * Class Api2cartServiceProvider.
@@ -20,17 +21,22 @@ class Api2cartServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'eCommerce Integration (Api2cart)';
+    public static string $module_name = 'eCommerce - Api2cart Integration';
 
     /**
      * @var string
      */
-    public static string $module_description = 'Module provides connectivity to eCommerce platforms using api2cart.com';
+    public static string $module_description = 'Api2cart.com platform integration';
+
+    /**
+     * @var string
+     */
+    public static string $settings_link = '/admin/settings/api2cart';
 
     /**
      * @var bool
      */
-    public bool $autoEnable = false;
+    public static bool $autoEnable = false;
 
     /**
      * The event listener mappings for the application.
@@ -55,6 +61,9 @@ class Api2cartServiceProvider extends BaseModuleServiceProvider
         OrderUpdatedEvent::class => [Listeners\OrderUpdatedEventListener::class]
     ];
 
+    /**
+     * @throws Exception
+     */
     public function boot()
     {
         parent::boot();

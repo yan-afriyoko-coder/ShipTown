@@ -13,7 +13,7 @@ class DpdUkServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'DPD UK Integration';
+    public static string $module_name = 'Courier - DPD UK Integration';
 
     /**
      * @var string
@@ -23,7 +23,7 @@ class DpdUkServiceProvider extends BaseModuleServiceProvider
     /**
      * @var bool
      */
-    public bool $autoEnable = false;
+    public static bool $autoEnable = false;
 
     /**
      * The event listener mappings for the application.
@@ -35,9 +35,8 @@ class DpdUkServiceProvider extends BaseModuleServiceProvider
 
     public static function enabling(): bool
     {
-        ShippingService::query()->where(['code' => 'dpd_uk'])->delete();
-
-        ShippingService::query()->updateOrCreate([
+        ShippingService::query()
+            ->updateOrCreate([
                 'code' => 'dpd_uk_next_day',
             ], [
                 'service_provider_class' => Services\NextDayShippingService::class,
@@ -48,7 +47,9 @@ class DpdUkServiceProvider extends BaseModuleServiceProvider
 
     public static function disabling(): bool
     {
-        ShippingService::query()->where(['code' => 'dpd_uk_next_day'])->delete();
+        ShippingService::query()
+            ->where(['code' => 'dpd_uk_next_day'])
+            ->delete();
 
         return true;
     }

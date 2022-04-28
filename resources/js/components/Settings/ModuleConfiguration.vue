@@ -1,31 +1,28 @@
 <template>
     <div>
-        <div class="card card-default">
-            <div class="card-header">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span>
-                        Module Configuration
-                    </span>
+        <div class="list-group">
+            <template v-for="module in modules" >
+                <div class="setting-list">
+
+                    <div class="setting-body flex-fill">
+                        <div class="setting-title">{{ module.name }}</div>
+                        <div class="setting-desc">{{ module.description }}</div>
+                    </div>
+
+                    <template v-if="module.settings_link">
+                        <a :href="module.settings_link" class="btn-link">
+                            <div class="setting-icon text-right bg-white">
+                                    <font-awesome-icon icon="cog" class="fa-sm bg-white"></font-awesome-icon>
+                            </div>
+                        </a>
+                    </template>
+
+                    <div class="custom-control custom-switch m-auto text-right align-content-center">
+                        <input type="checkbox" @change="updateModule(module)" class="custom-control-input" :id="module.id" v-model="module.enabled">
+                        <label class="custom-control-label" :for="module.id"></label>
+                    </div>
                 </div>
-            </div>
-            <div class="card-body">
-                <table class="table table-borderless">
-                    <tbody>
-                        <tr v-for="module in modules" :key="module.id">
-                            <td>
-                                <div><strong>{{ module.name }}</strong></div>
-                                <div class="text-secondary">{{ module.description }}</div>
-                            </td>
-                            <td class="text-right align-middle">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" @change="updateModule(module)" class="custom-control-input" :id="module.id" v-model="module.enabled">
-                                    <label class="custom-control-label" :for="module.id"></label>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            </template>
         </div>
     </div>
 </template>
@@ -68,8 +65,14 @@ export default {
                             {text: 'OK', action: null},
                         ]
                     });
+
+                    this.loadModules();
+                }).finally(() => {
                     this.loadModules();
                 });
+
+
+
         }
     }
 }

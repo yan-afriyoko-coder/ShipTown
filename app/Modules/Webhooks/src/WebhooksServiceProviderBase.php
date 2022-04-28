@@ -20,7 +20,7 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'Webhooks';
+    public static string $module_name = '.CORE - Webhooks';
 
     /**
      * @var string
@@ -30,7 +30,7 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var bool
      */
-    public bool $autoEnable = true;
+    public static bool $autoEnable = true;
 
     /**
      * The event listener mappings for the application.
@@ -74,5 +74,10 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
         ], 'config');
 
         $this->mergeConfigFrom(__DIR__.'/../config/webhooks.php', 'webhooks');
+    }
+
+    public static function disabling(): bool
+    {
+        return false;
     }
 }

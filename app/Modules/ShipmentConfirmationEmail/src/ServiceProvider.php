@@ -14,7 +14,7 @@ class ServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'Shipment Confirmation Email';
+    public static string $module_name = 'Automation - Shipment Confirmation Email';
 
     /**
      * @var string
@@ -24,7 +24,7 @@ class ServiceProvider extends BaseModuleServiceProvider
     /**
      * @var bool
      */
-    public bool $autoEnable = false;
+    public static bool $autoEnable = false;
 
     /**
      * The event listener mappings for the application.

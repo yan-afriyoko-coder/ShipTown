@@ -14,17 +14,17 @@ class OrderStatusServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'Order Status';
+    public static string $module_name = '.CORE - Order Status';
 
     /**
      * @var string
      */
-    public static string $module_description = 'Automatically manages order Active & On Hold when status code changed';
+    public static string $module_description = 'Manages orders Active & On Hold when status code changed';
 
     /**
      * @var bool
      */
-    public bool $autoEnable = true;
+    public static bool $autoEnable = true;
 
     /**
      * @var array
@@ -38,4 +38,9 @@ class OrderStatusServiceProvider extends BaseModuleServiceProvider
             Listeners\OrderStatusUpdatedEventListener::class,
         ]
     ];
+
+    public static function disabling(): bool
+    {
+        return false;
+    }
 }

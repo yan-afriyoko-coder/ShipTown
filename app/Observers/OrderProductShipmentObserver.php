@@ -16,6 +16,16 @@ class OrderProductShipmentObserver
      */
     public function created(OrderProductShipment $orderProductShipment)
     {
+        OrderProductShipmentCreatedEvent::dispatch($orderProductShipment);
+
+        $this->logActivitiesAbout($orderProductShipment);
+    }
+
+    /**
+     * @param OrderProductShipment $orderProductShipment
+     */
+    private function logActivitiesAbout(OrderProductShipment $orderProductShipment): void
+    {
         //  log activity on order
         if ($orderProductShipment->order) {
             activity()->on($orderProductShipment->order)
@@ -28,7 +38,7 @@ class OrderProductShipmentObserver
                 ->log('shipped');
         }
 
-        // place log on product
+        // log activity on product
         if ($orderProductShipment->product) {
             activity()->on($orderProductShipment->product)
                 ->causedBy($orderProductShipment->user)
@@ -40,7 +50,5 @@ class OrderProductShipmentObserver
                 ])
                 ->log('shipped');
         }
-
-        OrderProductShipmentCreatedEvent::dispatch($orderProductShipment);
     }
 }

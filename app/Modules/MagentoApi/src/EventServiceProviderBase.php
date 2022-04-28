@@ -16,7 +16,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'Magento 2.0 API';
+    public static string $module_name = 'eCommerce - Magento 2.0 API';
 
     /**
      * @var string
@@ -26,7 +26,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var bool
      */
-    public bool $autoEnable = false;
+    public static bool $autoEnable = false;
 
     /**
      * The event listener mappings for the application.

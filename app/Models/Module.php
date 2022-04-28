@@ -39,6 +39,7 @@ class Module extends BaseModel
 
     protected $appends = [
         'enabled' => false,
+        'settings_link' => '',
     ];
 
     public function getNameAttribute()
@@ -49,5 +50,10 @@ class Module extends BaseModel
     public function getDescriptionAttribute()
     {
         return $this->service_provider_class::$module_description;
+    }
+
+    public function getSettingsLinkAttribute()
+    {
+        return $this->service_provider_class::$settings_link;
     }
 }

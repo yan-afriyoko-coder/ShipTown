@@ -24,12 +24,17 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
     public static string $module_description = '';
 
     /**
+     * @var string
+     */
+    public static string $settings_link = '';
+
+    /**
      * Should we automatically enable it
      * When module first registered.
      *
      * @var bool
      */
-    public bool $autoEnable = false;
+    public static bool $autoEnable = false;
 
     /**
      * Register any events for your application.
@@ -44,9 +49,7 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
             throw new Exception('Module "'.get_called_class().'" missing name or description');
         }
 
-        if ($this->isEnabled()) {
-            parent::boot();
-        }
+        parent::boot();
     }
 
 
@@ -73,7 +76,7 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
             $module = Module::firstOrCreate([
                 'service_provider_class' => get_called_class(),
             ], [
-                'enabled' => $this->autoEnable,
+                'enabled' => self::$autoEnable,
             ]);
 
             return $module->enabled;
@@ -96,8 +99,9 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
         $module->enabled = true;
         $module->save();
 
-        App::register(get_called_class())
-            ->boot();
+        app()->singleton(get_called_class(), get_called_class());
+
+        App::register(get_called_class());
     }
 
     /**

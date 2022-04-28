@@ -33,13 +33,13 @@ class IncreaseQuantityTest extends TestCase
         StockControlServiceProvider::enableModule();
 
         $orderProductShipment = new OrderProductShipment();
-        $orderProductShipment->order_id = $order->getKey();
         $orderProductShipment->quantity_shipped = $orderProduct->quantity_to_ship * (-1);
+        $orderProductShipment->orderProduct()->associate($orderProduct);
+        $orderProductShipment->order()->associate($order);
         $orderProductShipment->product()->associate($product);
         $orderProductShipment->warehouse()->associate($warehouse);
-        $orderProductShipment->orderProduct()->associate($orderProduct);
         $orderProductShipment->save();
-
+//
         $inventory = Inventory::whereWarehouseId($warehouse->getKey())->whereProductId($product->getKey())->first();
 
         $this->assertNotNull($inventory);
