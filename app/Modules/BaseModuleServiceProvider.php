@@ -101,8 +101,9 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
         $module->enabled = true;
         $module->save();
 
-        App::register(get_called_class())
-            ->boot();
+        app()->singleton(get_called_class(), function () {
+            return app(get_called_class());
+        });
     }
 
     /**

@@ -16,6 +16,7 @@ class OrderProductShipmentObserver
      */
     public function created(OrderProductShipment $orderProductShipment)
     {
+        ray('orderProductShipmentObserver.created()');
         OrderProductShipmentCreatedEvent::dispatch($orderProductShipment);
 
         $this->logActivitiesAbout($orderProductShipment);
