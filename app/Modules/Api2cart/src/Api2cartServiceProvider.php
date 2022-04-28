@@ -66,7 +66,6 @@ class Api2cartServiceProvider extends BaseModuleServiceProvider
      */
     public function boot()
     {
-        ray('booting!!!!!');
         parent::boot();
 
         if ($this->app->runningInConsole()) {

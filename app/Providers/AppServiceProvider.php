@@ -24,7 +24,9 @@ use App\Observers\OrderStatusObserver;
 use App\Observers\ProductObserver;
 use App\Observers\ProductPriceObserver;
 use App\Observers\WarehouseObserver;
+use Exception;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -43,11 +45,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $models = Module::query()->where(['enabled' => true])->get();
-        $models->each(function (Module $module) {
-            $this->app->singleton($module->service_provider_class, $module->service_provider_class);
-            App::register($module->service_provider_class);
-        });
+        $this->registerEnabledModules();
 
         // Core Models
         Product::observe(ProductObserver::class);
@@ -63,5 +61,22 @@ class AppServiceProvider extends ServiceProvider
 
         // Modules
         Api2cartOrderImports::observe(Api2cartOrderImportsObserver::class);
+    }
+
+    private function registerEnabledModules(): void
+    {
+        try {
+            $enabled_modules = Module::query()
+                ->where(['enabled' => true])
+                ->get();
+        } catch (Exception $exception) {
+            report($exception);
+            return;
+        }
+
+        $enabled_modules->each(function (Module $module) {
+            $this->app->singleton($module->service_provider_class, $module->service_provider_class);
+            App::register($module->service_provider_class);
+        });
     }
 }
