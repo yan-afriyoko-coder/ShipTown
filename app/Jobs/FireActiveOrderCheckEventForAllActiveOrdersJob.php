@@ -9,6 +9,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class FireActiveOrderCheckEventForAllActiveOrdersJob implements ShouldQueue
@@ -26,6 +28,13 @@ class FireActiveOrderCheckEventForAllActiveOrdersJob implements ShouldQueue
      */
     public function handle()
     {
+        if (Cache::get('recently_ran_all_automations') === true) {
+            Log::warning('FireActiveOrderCheckEventForAllActiveOrdersJob dispatched in last 60 seconds, skipping');
+            return;
+        }
+
+        Cache::add('recently_ran_all_automations', true, 60);
+
         $orders = Order::where([
                 'is_active' => true,
                 'is_editing' => false
