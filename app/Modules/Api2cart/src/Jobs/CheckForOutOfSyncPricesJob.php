@@ -42,7 +42,7 @@ class CheckForOutOfSyncPricesJob implements ShouldQueue
 
 
         $query->get()->each(function (Api2cartProductLink $productLink) {
-            $productLink->product->attachTag('NOT SYNCED');
+            $productLink->product->attachTag('Not Synced');
             $productLink->product->log('eCommerce Api2cart: Out Of Sync Pricing, attached NOT SYNCED tag');
         });
     }
