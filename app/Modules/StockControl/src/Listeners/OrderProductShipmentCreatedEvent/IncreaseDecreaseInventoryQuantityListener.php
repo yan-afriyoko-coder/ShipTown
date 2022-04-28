@@ -14,7 +14,6 @@ class IncreaseDecreaseInventoryQuantityListener
      */
     public function handle(OrderProductShipmentCreatedEvent $event): bool
     {
-        ray($event->orderProductShipment->toArray());
         $orderProductShipment = $event->orderProductShipment;
 
         if ($orderProductShipment->product_id === null) {
