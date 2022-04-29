@@ -106,6 +106,7 @@ class ImportProductJob implements ShouldQueue
                 'product_id'        => $product->id,
                 'warehouse_code'    => $connection->location_id,
             ])
+            ->first()
             ->update([
                 'quantity'          => $importedProduct->raw_import['quantity_on_hand'],
                 'quantity_reserved' => $importedProduct->raw_import['quantity_committed'],
@@ -127,7 +128,9 @@ class ImportProductJob implements ShouldQueue
             ->where([
                 'product_id'            => $product->id,
                 'warehouse_code'        => $connection->location_id,
-            ])->update([
+            ])
+            ->first()
+            ->update([
                 'price'                 => $importedProduct->raw_import['price'],
                 'sale_price'            => $importedProduct->raw_import['sale_price'],
                 'sale_price_start_date' => $importedProduct->raw_import['sale_start_date'] ?? '1899-01-01 00:00:00',
