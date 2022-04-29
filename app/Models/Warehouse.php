@@ -37,6 +37,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static Builder|Warehouse whereUpdatedAt($value)
  *
  * @mixin Eloquent
+ * @mixin HasTagsTrait
  */
 class Warehouse extends BaseModel
 {
