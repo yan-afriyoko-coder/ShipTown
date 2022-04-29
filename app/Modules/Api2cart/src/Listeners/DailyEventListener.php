@@ -24,6 +24,5 @@ class DailyEventListener
         ResyncLastDayJob::dispatch();
         ResyncSyncErrorsTaggedJob::dispatch();
         PushOutOfSyncPricingJob::dispatch();
-        CheckForOutOfSyncPricesJob::dispatch();
     }
 }

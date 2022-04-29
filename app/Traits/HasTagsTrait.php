@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Spatie\Tags\HasTags;
 use Spatie\Tags\Tag;
 
+/**
+ * @method static withAllTags(string[] $array)
+ */
 trait HasTagsTrait
 {
     use HasTags {
