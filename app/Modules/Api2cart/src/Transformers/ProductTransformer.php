@@ -2,6 +2,7 @@
 
 namespace App\Modules\Api2cart\src\Transformers;
 
+use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use App\Modules\Api2cart\src\Services\Api2cartService;
 
@@ -58,8 +59,10 @@ class ProductTransformer
      */
     private static function getInventoryData(Api2cartProductLink $api2cartProductLink): array
     {
+        $inventory_source_warehouse_tag = $api2cartProductLink->api2cartConnection->inventory_source_warehouse_tag;
+
         $sum = $api2cartProductLink->product->inventory()
-            ->withWarehouseTags($api2cartProductLink->api2cartConnection->inventory_source_warehouse_tag)
+            ->withWarehouseTags($inventory_source_warehouse_tag)
             ->sum('quantity_available');
 
         $quantity_available = floor($sum ?? 0);
