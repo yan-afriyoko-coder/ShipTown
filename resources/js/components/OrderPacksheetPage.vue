@@ -83,7 +83,7 @@
                         <option v-for="shippingCourier in shippingCouriers" :value="shippingCourier.code" :key="shippingCourier.code">{{shippingCourier.code}}</option>
                     </select>
                 </div>
-                <button type="button" class="btn mb-1 btn-info" @click.prevent="printShippingLabel()">Print Extra Label</button>
+                <button type="button" class="btn mb-1 btn-info" @click.prevent="printExtraLabelClick()">Print Extra Label</button>
                 <br>
 
                 <button type="button" class="btn mb-1 btn-info" @click.prevent="openPreviousOrder">Open Previous Order</button>
@@ -485,7 +485,7 @@
                     let template = this.getAddressLabelTemplateName();
 
                     if (template) {
-                        return await this.printLabel(template);
+                        return await this.printShippingLabel(template);
                     }
                 },
 
@@ -514,10 +514,15 @@
                         });
                 },
 
-                printShippingLabel: async function(shipping_service_code = null) {
+                printExtraLabelClick: function ()
+                {
                     this.$refs.filtersModal.hide();
                     this.setFocusOnBarcodeInput(500);
 
+                    this.printShippingLabel();
+                },
+
+                printShippingLabel: async function(shipping_service_code = null) {
                     if (shipping_service_code === null) {
                         shipping_service_code = this.getAddressLabelTemplateName();
                     }
