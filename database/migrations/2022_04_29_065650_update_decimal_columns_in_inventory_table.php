@@ -26,11 +26,6 @@ class UpdateDecimalColumnsInInventoryTable extends Migration
                     'THEN restock_level - (quantity - quantity_reserved) ' .
                     'ELSE 0 END')
                 ->change();
-
-            $table->decimal('quantity_available', 20)
-                ->storedAs('quantity - quantity_reserved')
-                ->comment('quantity - quantity_reserved')
-                ->change();
         });
 
         Schema::table('products', function (Blueprint $table) {

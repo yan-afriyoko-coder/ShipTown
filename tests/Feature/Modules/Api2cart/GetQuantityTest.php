@@ -67,6 +67,7 @@ class GetQuantityTest extends TestCase
             })
             ->toArray();
 
-        $this->assertEquals(5, ProductTransformer::toApi2cartPayload($this->productLink)['quantity']);
+        $toApi2cartPayload = ProductTransformer::toApi2cartPayload($this->productLink);
+        $this->assertEquals(5, $toApi2cartPayload['quantity']);
     }
 }

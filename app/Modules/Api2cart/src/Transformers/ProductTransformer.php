@@ -58,8 +58,11 @@ class ProductTransformer
      */
     private static function getInventoryData(Api2cartProductLink $api2cartProductLink): array
     {
-        $sum = $api2cartProductLink->product->inventory()
+        $query = $api2cartProductLink->product->inventory()
             ->withWarehouseTags($api2cartProductLink->api2cartConnection->inventory_source_warehouse_tag)
+        ;
+
+        $sum = $query
             ->sum('quantity_available');
 
         $quantity_available = floor($sum ?? 0);
