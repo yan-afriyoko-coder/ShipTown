@@ -13,7 +13,7 @@ use Tests\TestCase;
 
 class GetQuantityTest extends TestCase
 {
-    use RefreshDatabase;
+//    use RefreshDatabase;
 
     private Api2cartProductLink $productLink;
 
@@ -67,7 +67,9 @@ class GetQuantityTest extends TestCase
             })
             ->toArray();
 
+
         $toApi2cartPayload = ProductTransformer::toApi2cartPayload($this->productLink);
+
         $this->assertEquals(5, $toApi2cartPayload['quantity']);
     }
 }
