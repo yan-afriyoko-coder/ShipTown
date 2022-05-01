@@ -45,7 +45,7 @@ class NextDayShippingService extends ShippingServiceAbstract
 
         self::printNewLabel($order);
 
-        return JsonResource::collection([]);
+        return JsonResource::collection([$this->shipment]);
     }
 
     /**
