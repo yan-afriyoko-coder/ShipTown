@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class NextDayShippingService extends ShippingServiceAbstract
 {
@@ -171,6 +172,7 @@ class NextDayShippingService extends ShippingServiceAbstract
         $this->shipment->shipping_number = $dpdShipment->getConsignmentNumber();
         $this->shipment->tracking_url = $this->generateTrackingUrl($this->shipment);
         $this->shipment->base64_pdf_labels = base64_encode($dpdShippingLabel->response->content);
+        $this->shipment->user()->associate(Auth::user());
         $this->shipment->save();
     }
 
