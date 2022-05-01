@@ -10,7 +10,7 @@ class AuthenticationResponse
     /**
      * @var ApiResponse
      */
-    private ApiResponse $response;
+    public ApiResponse $response;
 
     /**
      * @param ApiResponse $response

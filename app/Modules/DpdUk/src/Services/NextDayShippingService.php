@@ -2,24 +2,56 @@
 
 namespace App\Modules\DpdUk\src\Services;
 
+use App\Abstracts\ShippingServiceAbstract;
+use App\Models\Order;
 use App\Models\OrderShipment;
 use App\Modules\DpdUk\src\Api\ApiClient;
 use App\Modules\DpdUk\src\Models\Connection;
-use App\Modules\DpdUk\src\Api\GetShippingLabelResponse;
 use App\Modules\PrintNode\src\PrintNode;
 use App\User;
 use Carbon\Carbon;
 use Exception;
-use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class NextDayShippingService
+class NextDayShippingService extends ShippingServiceAbstract
 {
     /**
-     * @param OrderShipment $orderShipment
-     * @param Connection $connection
+     * @var Connection
+     */
+    private Connection $connection;
+
+    private ApiClient $apiClient;
+
+    private OrderShipment $shipment;
+
+    public function __construct()
+    {
+        $this->connection = Connection::firstOrFail();
+
+        $this->apiClient = new ApiClient($this->connection);
+
+        $this->shipment = new OrderShipment();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function ship(int $order_id): AnonymousResourceCollection
+    {
+        /** @var Order $order */
+        $order = Order::findOrFail($order_id);
+
+        self::printNewLabel($order);
+
+        return JsonResource::collection([]);
+    }
+
+    /**
+     * @param Order $order
      * @return array
      */
-    private static function convertToDpdUkFormat(OrderShipment $orderShipment, Connection $connection): array
+    private function convertToDpdUkFormat(Order $order): array
     {
         try {
             /** @var User $user */
@@ -28,13 +60,13 @@ class NextDayShippingService
             if ($user && isset($user->warehouse->address)) {
                 $collectionAddress = $user->warehouse->address;
             } else {
-                $collectionAddress = $connection->collectionAddress;
+                $collectionAddress = $this->connection->collectionAddress;
             }
         } catch (Exception $exception) {
-            $collectionAddress = $connection->collectionAddress;
+            $collectionAddress = $this->connection->collectionAddress;
         }
 
-        $shippingAddress = $orderShipment->order->shippingAddress;
+        $shippingAddress = $order->shippingAddress;
 
         return [
             "jobId" => null,
@@ -84,7 +116,7 @@ class NextDayShippingService
                     "networkCode" => "1^12",
                     "numberOfParcels" => 1,
                     "totalWeight" => 10,
-                    "shippingRef1" => "#" . $orderShipment->order->order_number,
+                    "shippingRef1" => "#" . $order->order_number,
                     "shippingRef2" => "",
                     "shippingRef3" => "",
                     "customsValue" => null,
@@ -97,24 +129,23 @@ class NextDayShippingService
         ];
     }
 
-    public static function replaceArray(array $replaceArray, string $subject)
+    public function replaceArray(array $replaceArray, string $subject)
     {
         return str_replace(array_keys($replaceArray), array_values($replaceArray), $subject);
     }
 
     /**
-     * @param OrderShipment $orderShipment
-     * @param Connection $connection
+     * @param Order $order
      * @return string|null
-     * @throws GuzzleException
+     * @throws Exception
      */
-    public static function printNewLabel(OrderShipment $orderShipment, Connection $connection): ?string
+    public function printNewLabel(Order $order): ?string
     {
-        $labelResponse = self::makeNewLabel($connection, $orderShipment);
+        $this->makeNewLabel($order);
 
         if (isset(auth()->user()->printer_id)) {
             return PrintNode::printRaw(
-                base64_encode($labelResponse->response->content),
+                $this->shipment->base64_pdf_labels,
                 auth()->user()->printer_id
             );
         }
@@ -123,43 +154,31 @@ class NextDayShippingService
     }
 
     /**
-     * @param Connection $connection
-     * @param OrderShipment $orderShipment
-     * @return GetShippingLabelResponse
-     * @throws GuzzleException
+     * @param Order $order
+     * @return void
      * @throws Exception
      */
-    private static function makeNewLabel(Connection $connection, OrderShipment $orderShipment): GetShippingLabelResponse
+    private function makeNewLabel(Order $order): void
     {
-        $dpd = new ApiClient($connection);
+        $payload = $this->convertToDpdUkFormat($order);
 
-        $payload = self::convertToDpdUkFormat($orderShipment, $connection);
+        $dpdShipment = $this->apiClient->createShipment($payload);
+        $dpdShippingLabel = $this->apiClient->getShipmentLabel($dpdShipment->getShipmentId());
 
-        $shipmentResponse = $dpd->createShipment($payload);
-
-        $orderShipment->shipping_number = $shipmentResponse->getConsignmentNumber();
-        $orderShipment->tracking_url = self::generateTrackingUrl($orderShipment);
-
-        if ($orderShipment->shipping_number) {
-            $orderShipment->save();
-            return $dpd->getShipmentLabel($shipmentResponse->getShipmentId());
-        } elseif ($shipmentResponse->errors()) {
-            $shipmentResponse->errors()->each(function ($error) {
-                throw new Exception(
-                    $error['obj'] . ': ' . $error['errorMessage'],
-                    $error['errorCode']
-                );
-            });
-        }
-
-        return $dpd->getShipmentLabel($shipmentResponse->getShipmentId());
+        $this->shipment->order_id = $order->getKey();
+        $this->shipment->carrier = 'DPD UK';
+        $this->shipment->service = 'overnight';
+        $this->shipment->shipping_number = $dpdShipment->getConsignmentNumber();
+        $this->shipment->tracking_url = $this->generateTrackingUrl($this->shipment);
+        $this->shipment->base64_pdf_labels = base64_encode($dpdShippingLabel->response->content);
+        $this->shipment->save();
     }
 
     /**
      * @param OrderShipment $orderShipment
      * @return string
      */
-    private static function generateTrackingUrl(OrderShipment $orderShipment): string
+    private function generateTrackingUrl(OrderShipment $orderShipment): string
     {
         $baseUlr = 'https://track.dpd.co.uk/search';
         $referenceParam = 'reference=' . $orderShipment->shipping_number;

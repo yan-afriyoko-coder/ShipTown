@@ -8,8 +8,8 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Log;
 
 /**
  *
@@ -45,6 +45,7 @@ class ApiClient
 
     /**
      * @return string
+     * @throws Exception
      */
     private function getGeoSession(): string
     {
@@ -54,7 +55,16 @@ class ApiClient
             return $geoSession;
         }
 
-        $geoSession = $this->postAuthenticationsRequest()->getGeoSession();
+        $authenticationResponse = $this->postAuthenticationsRequest();
+
+        if ($authenticationResponse->response->http_response->getStatusCode() !== 200) {
+            throw new Exception('DPD UK Authentication failed: ' .
+                $authenticationResponse->response->http_response->getStatusCode() .
+                ' ' .
+                $authenticationResponse->response->content);
+        }
+
+        $geoSession = $authenticationResponse->getGeoSession();
 
         // save to cache
         Cache::put(self::GEO_SESSION_CACHE_KEY_NAME, $geoSession, 86400);
@@ -67,6 +77,7 @@ class ApiClient
      * @param string $uri
      * @param array $options
      * @return ApiResponse|null
+     * @throws Exception
      */
     public function request(string $method, string $uri = '', array $options = []): ?ApiResponse
     {
@@ -106,16 +117,28 @@ class ApiClient
     {
         $payload['consignment'][0]['networkCode'] = $this->getNetworkCode($payload);
 
-        return new CreateShipmentResponse(
+        $shipmentResponse = new CreateShipmentResponse(
             $this->request('POST', 'shipping/shipment', [
                 'json' => $payload
             ])
         );
+
+        if ($shipmentResponse->errors()) {
+            $shipmentResponse->errors()->each(function ($error) {
+                throw new Exception(
+                    $error['obj'] . ': ' . $error['errorMessage'],
+                    $error['errorCode']
+                );
+            });
+        }
+
+        return $shipmentResponse;
     }
 
     /**
      * @param int $shipmentId
      * @return GetShippingLabelResponse
+     * @throws Exception
      */
     public function getShipmentLabel(int $shipmentId): GetShippingLabelResponse
     {
@@ -130,9 +153,22 @@ class ApiClient
 
     /**
      * @return AuthenticationResponse
+     * @throws Exception
      */
     private function postAuthenticationsRequest(): AuthenticationResponse
     {
+        if ($this->connection->username === '') {
+            throw new Exception('DPD UK: Username not set');
+        }
+
+        if ($this->connection->password === '') {
+            throw new Exception('DPD UK: Username not set');
+        }
+
+        if ($this->connection->account_number === '') {
+            throw new Exception('DPD UK: Username not set');
+        }
+
         return new AuthenticationResponse(
             $this->request('POST', "user/?action=login", [
                 'auth' => [
@@ -152,6 +188,7 @@ class ApiClient
     /**
      * @param array $payload
      * @return string
+     * @throws Exception
      */
     private function getNetworkCode(array $payload): string
     {
