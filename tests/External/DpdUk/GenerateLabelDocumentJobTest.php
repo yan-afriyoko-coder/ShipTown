@@ -3,6 +3,7 @@
 namespace Tests\External\DpdUk;
 
 use App\Events\OrderShipment\OrderShipmentCreatedEvent;
+use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderShipment;
 use App\Modules\DpdUk\src\DpdUkServiceProvider;
@@ -23,6 +24,9 @@ class GenerateLabelDocumentJobTest extends TestCase
      */
     private string $testSkippingExpiryDate = '01 May 2022';
 
+    /**
+     * @throws \Exception
+     */
     public function test_print_new_label()
     {
         if (Carbon::make($this->testSkippingExpiryDate)->isFuture()) {
@@ -48,25 +52,9 @@ class GenerateLabelDocumentJobTest extends TestCase
         $connection->collection_address_id = $testAddress->getKey();
         $connection->save();
 
-        /** @var OrderShipment $shipment */
-        $shipment = factory(OrderShipment::class)->create();
-        $shipment->order->shippingAddress()->associate($testAddress)->save();
+        $order = factory(Order::class)->create();
+        $shipment = (new NextDayShippingService())->ship($order->getKey());
 
-        $this->assertNotNull(NextDayShippingService::printNewLabel($shipment, $connection));
-    }
-
-    public function test_if_job_dispatches()
-    {
-        if ($this->testSkippingExpiryDate) {
-            $this->markTestSkipped();
-        }
-
-        DpdUkServiceProvider::enableModule();
-
-        Bus::fake();
-
-        OrderShipmentCreatedEvent::dispatch(factory(OrderShipment::class)->create());
-
-        Bus::assertDispatched(GenerateLabelDocumentJob::class);
+        $this->assertGreaterThan(0, $shipment->count());
     }
 }

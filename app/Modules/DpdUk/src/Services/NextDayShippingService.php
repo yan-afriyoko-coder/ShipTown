@@ -15,6 +15,9 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ *
+ */
 class NextDayShippingService extends ShippingServiceAbstract
 {
     /**
@@ -22,10 +25,19 @@ class NextDayShippingService extends ShippingServiceAbstract
      */
     private Connection $connection;
 
+    /**
+     * @var ApiClient
+     */
     private ApiClient $apiClient;
 
+    /**
+     * @var OrderShipment
+     */
     private OrderShipment $shipment;
 
+    /**
+     *
+     */
     public function __construct()
     {
         $this->connection = Connection::firstOrFail();
@@ -43,7 +55,9 @@ class NextDayShippingService extends ShippingServiceAbstract
         /** @var Order $order */
         $order = Order::findOrFail($order_id);
 
-        self::printNewLabel($order);
+        $shipment = $this->createShipment($order);
+
+        $this->printShipment($shipment);
 
         return JsonResource::collection([$this->shipment]);
     }
@@ -130,50 +144,14 @@ class NextDayShippingService extends ShippingServiceAbstract
         ];
     }
 
+    /**
+     * @param array $replaceArray
+     * @param string $subject
+     * @return array|string|string[]
+     */
     public function replaceArray(array $replaceArray, string $subject)
     {
         return str_replace(array_keys($replaceArray), array_values($replaceArray), $subject);
-    }
-
-    /**
-     * @param Order $order
-     * @return string|null
-     * @throws Exception
-     */
-    public function printNewLabel(Order $order): ?string
-    {
-        $this->makeNewLabel($order);
-
-        if (isset(auth()->user()->printer_id)) {
-            return PrintNode::printRaw(
-                $this->shipment->base64_pdf_labels,
-                auth()->user()->printer_id
-            );
-        }
-
-        return null;
-    }
-
-    /**
-     * @param Order $order
-     * @return void
-     * @throws Exception
-     */
-    private function makeNewLabel(Order $order): void
-    {
-        $payload = $this->convertToDpdUkFormat($order);
-
-        $dpdShipment = $this->apiClient->createShipment($payload);
-        $dpdShippingLabel = $this->apiClient->getShipmentLabel($dpdShipment->getShipmentId());
-
-        $this->shipment->order_id = $order->getKey();
-        $this->shipment->carrier = 'DPD UK';
-        $this->shipment->service = 'overnight';
-        $this->shipment->shipping_number = $dpdShipment->getConsignmentNumber();
-        $this->shipment->tracking_url = $this->generateTrackingUrl($this->shipment);
-        $this->shipment->base64_pdf_labels = base64_encode($dpdShippingLabel->response->content);
-        $this->shipment->user()->associate(Auth::user());
-        $this->shipment->save();
     }
 
     /**
@@ -187,5 +165,38 @@ class NextDayShippingService extends ShippingServiceAbstract
         $postcodeParam = 'postcode=' . $orderShipment->order->shippingAddress->postcode;
 
         return $baseUlr .'?'. $referenceParam .'&'. $postcodeParam;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createShipment(Order $order): OrderShipment
+    {
+        $payload = $this->convertToDpdUkFormat($order);
+
+        $dpdShipment = $this->apiClient->createShipment($payload);
+        $dpdShippingLabel = $this->apiClient->getShipmentLabel($dpdShipment->getShipmentId());
+
+        $shipment = new OrderShipment();
+        $shipment->order_id = $order->getKey();
+        $shipment->carrier = 'DPD UK';
+        $shipment->service = 'overnight';
+        $shipment->shipping_number = $dpdShipment->getConsignmentNumber();
+        $shipment->tracking_url = $this->generateTrackingUrl($this->shipment);
+        $shipment->base64_pdf_labels = base64_encode($dpdShippingLabel->response->content);
+        $shipment->user()->associate(Auth::user());
+        $shipment->save();
+
+        return $shipment;
+    }
+
+    /**
+     * @param OrderShipment $shipment
+     */
+    private function printShipment(OrderShipment $shipment): void
+    {
+        if (isset(auth()->user()->printer_id)) {
+            PrintNode::printRaw($shipment->base64_pdf_labels, auth()->user()->printer_id);
+        }
     }
 }
