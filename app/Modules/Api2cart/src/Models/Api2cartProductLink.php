@@ -88,80 +88,50 @@ class Api2cartProductLink extends BaseModel
         'last_fetched_data' => 'array',
     ];
 
-    /**
-     * @param array $options
-     *
-     * @return bool
-     */
-    public function save(array $options = []): bool
+    public function setLastFetchedDataAttribute($value)
     {
-        if ($this->last_fetched_data) {
-            $product_data = $this->last_fetched_data;
+        $this->attributes['last_fetched_data'] = $value;
 
-            $sprice_create = data_get($product_data, 'sprice_create', '2000-01-01 00:00:00');
-            $sprice_expire = data_get($product_data, 'sprice_expire', '2000-01-01 00:00:00');
+        $this->last_fetched_at                = now();
 
-            $this->last_fetched_at                = now();
-            $this->api2cart_product_id            = data_get($product_data, 'id');
-            $this->api2cart_product_type          = data_get($product_data, 'type');
-            $this->api2cart_quantity              = data_get($product_data, 'quantity');
-            $this->api2cart_price                 = data_get($product_data, 'price');
-            $this->api2cart_sale_price            = data_get($product_data, 'special_price');
-            $this->api2cart_sale_price_start_date = Carbon::createFromTimeString($sprice_create)->format('Y-m-d H:i:s');
-            $this->api2cart_sale_price_end_date   = Carbon::createFromTimeString($sprice_expire)->format('Y-m-d H:i:s');
-        }
+        $sprice_create = data_get($value, 'sprice_create', '2000-01-01 00:00:00');
+        $sprice_expire = data_get($value, 'sprice_expire', '2000-01-01 00:00:00');
 
-        return parent::save($options);
+        $this->api2cart_product_id            = data_get($value, 'id');
+        $this->api2cart_product_type          = data_get($value, 'type');
+        $this->api2cart_quantity              = data_get($value, 'quantity');
+        $this->api2cart_price                 = data_get($value, 'price');
+        $this->api2cart_sale_price            = data_get($value, 'special_price');
+        $this->api2cart_sale_price_start_date = Carbon::createFromTimeString($sprice_create)->format('Y-m-d H:i:s');
+        $this->api2cart_sale_price_end_date   = Carbon::createFromTimeString($sprice_expire)->format('Y-m-d H:i:s');
     }
-
     /**
-     * @throws GuzzleException
      */
     public function isInSync(): bool
     {
-        $product_data = ProductTransformer::toApi2cartPayload($this);
+        $api2cartDataExpected = ProductTransformer::toApi2cartPayload($this);
 
-        $store_id = Arr::has($product_data, 'store_id') ? $product_data['store_id'] : null;
+        $api2cartDataActual = [
+            'type'          => $this->api2cart_product_type,
+            'id'            => $this->api2cart_product_id,
+            'quantity'      => $this->api2cart_quantity,
+            'price'         => $this->api2cart_price,
+            'special_price' => $this->api2cart_sale_price,
+            'sprice_create' => $this->api2cart_sale_price_start_date,
+            'sprice_expire' => $this->api2cart_sale_price_end_date,
+        ];
 
-        if ($this->api2cart_product_type === null) {
-            $this->updateTypeAndId()->save();
-        }
-
-        switch ($this->api2cart_product_type) {
-            case 'simple':
-            case 'product':
-                $product_now = Api2cartService::getSimpleProductInfo($this->api2cartConnection, $this->product->sku);
-                break;
-            case 'variant':
-                $product_now = Api2cartService::getVariantInfo($this->api2cartConnection, $this->product->sku);
-                break;
-            default:
-                Log::warning('Update Check FAILED - Could not find product', ['sku' => $product_data['sku']]);
-                return false;
-        }
-
-        // if product data is null, product does not exist on eCommerce
-        // we will delete link
-        if (is_null($product_now)) {
-            $this->forceDelete();
-            return false;
-        }
-
-        $this->last_fetched_data = $product_now;
-        $this->save();
-
-        $differences = $this->getDifferences($product_data, $product_now);
+        $differences = $this->getDifferences($api2cartDataExpected, $api2cartDataActual);
 
         if (empty($differences)) {
             return true;
         }
 
         Log::warning('Update Check FAILED', [
-            'type' => $product_now['type'],
-            'sku' => $product_now['sku'],
-            'store_id' => $store_id,
+            'type' => $this->api2cart_product_type,
+            'sku' => $this->product->sku,
             'differences' => $differences,
-            'now' => $product_now
+            'now' => $api2cartDataActual
         ]);
 
         return false;
@@ -238,5 +208,35 @@ class Api2cartProductLink extends BaseModel
         $this->api2cart_product_id = $response['id'];
 
         return $this;
+    }
+
+    /**
+     * @throws GuzzleException
+     */
+    public function fetchFromApi2cart(): void
+    {
+        if ($this->api2cart_product_type === null) {
+            $this->updateTypeAndId()->save();
+        }
+
+        switch ($this->api2cart_product_type) {
+            case 'simple':
+            case 'product':
+                $product_now = Api2cartService::getSimpleProductInfo($this->api2cartConnection, $this->product->sku);
+                break;
+            case 'variant':
+                $product_now = Api2cartService::getVariantInfo($this->api2cartConnection, $this->product->sku);
+                break;
+            case 'configurable':
+                $product_now = null;
+                break;
+            default:
+                $product_now = null;
+                Log::warning('Update Check FAILED - Could not find product', ['sku' => $this->product->sku]);
+                break;
+        }
+
+        $this->last_fetched_data = $product_now;
+        $this->save();
     }
 }
