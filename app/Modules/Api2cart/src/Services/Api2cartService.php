@@ -462,6 +462,8 @@ class Api2cartService
     public static function verifyIfProductInSync(Api2cartProductLink $productLink): bool
     {
         try {
+            $productLink->fetchFromApi2cart();
+
             if ($productLink->isInSync()) {
                 $productLink->product->detachTag('CHECK FAILED');
                 return true;
