@@ -90,7 +90,7 @@ class Api2cartProductLink extends BaseModel
 
     public function setLastFetchedDataAttribute($value)
     {
-        $this->attributes['last_fetched_data'] = $value;
+        $this->attributes['last_fetched_data'] = json_encode($value);
 
         $this->last_fetched_at                = now();
 
