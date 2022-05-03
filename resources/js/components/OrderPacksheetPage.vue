@@ -552,10 +552,6 @@
                         template = this.order.label_template;
                     }
 
-                    if (template === 'dpd_uk') {
-                        return this.createShipment(template);
-                    }
-
                     let orderNumber = this.order['order_number'];
 
                     this.setFocusOnBarcodeInput();
