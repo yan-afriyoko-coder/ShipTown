@@ -222,10 +222,16 @@ class Api2cartProductLink extends BaseModel
         switch ($this->api2cart_product_type) {
             case 'simple':
             case 'product':
-                $product_now = Api2cartService::getSimpleProductInfo($this->api2cartConnection, $this->product->sku);
+                $product_now = Api2cartService::getSimpleProductInfoByID(
+                    $this->api2cartConnection,
+                    $this->api2cart_product_id
+                );
                 break;
             case 'variant':
-                $product_now = Api2cartService::getVariantInfo($this->api2cartConnection, $this->product->sku);
+                $product_now = Api2cartService::getVariantInfoByID(
+                    $this->api2cartConnection,
+                    $this->api2cart_product_id
+                );
                 break;
             case 'configurable':
                 $product_now = null;

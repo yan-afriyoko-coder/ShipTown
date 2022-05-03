@@ -199,23 +199,16 @@ class Api2cartService
     }
 
     /**
-     * @param Api2cartConnection $conn
-     * @param string $sku
-     * @param array|null $fields
-     *
-     * @return array|null
      * @throws GuzzleException
      */
-    public static function getSimpleProductInfo(Api2cartConnection $conn, string $sku, array $fields = null): ?array
+    public static function getSimpleProductInfoByID(Api2cartConnection $conn, int $id, array $fields = null): ?array
     {
-        $product_id = self::getSimpleProductID($conn->bridge_api_key, $sku);
-
-        if (empty($product_id)) {
+        if (empty($id)) {
             return null;
         }
 
         $params = [
-            'id'     => $product_id,
+            'id'     => $id,
             'params' => implode(
                 ',',
                 $fields ?? [
@@ -247,29 +240,35 @@ class Api2cartService
 
         $product = $response->getResult();
 
-//        $product['type'] = 'product';
-
         return self::transformProduct($product, $conn);
     }
 
     /**
-     * @param Api2cartConnection $connection
+     * @param Api2cartConnection $conn
      * @param string $sku
      * @param array|null $fields
      *
      * @return array|null
-     *
+     * @throws GuzzleException
      */
-    public static function getVariantInfo(Api2cartConnection $connection, string $sku, array $fields = null): ?array
+    public static function getSimpleProductInfo(Api2cartConnection $conn, string $sku, array $fields = null): ?array
     {
-        $variant_id = self::getVariantID($connection->bridge_api_key, $sku);
+        $product_id = self::getSimpleProductID($conn->bridge_api_key, $sku);
 
-        if (empty($variant_id)) {
+        return self::getSimpleProductInfoByID($conn, $product_id, $fields);
+    }
+
+    /**
+     * @throws GuzzleException
+     */
+    public static function getVariantInfoByID(Api2cartConnection $connection, int $id, array $fields = null): ?array
+    {
+        if (empty($id)) {
             return null;
         }
 
         $params = [
-            'id'     => $variant_id,
+            'id'     => $id,
             'params' => implode(
                 ',',
                 $fields ?? [
@@ -300,9 +299,23 @@ class Api2cartService
 
         $variant = $response->getResult()['variant'];
 
-//        $variant['type'] = 'variant';
-
         return self::transformProduct($variant, $connection);
+    }
+
+    /**
+     * @param Api2cartConnection $connection
+     * @param string $sku
+     * @param array|null $fields
+     *
+     * @return array|null
+     *
+     * @throws GuzzleException
+     */
+    public static function getVariantInfo(Api2cartConnection $connection, string $sku, array $fields = null): ?array
+    {
+        $variant_id = self::getVariantID($connection->bridge_api_key, $sku);
+
+        return self::getVariantInfoByID($connection, $variant_id, $fields);
     }
 
     /**
