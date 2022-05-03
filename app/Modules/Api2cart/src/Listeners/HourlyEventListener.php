@@ -3,6 +3,7 @@
 namespace App\Modules\Api2cart\src\Listeners;
 
 use App\Events\HourlyEvent;
+use App\Modules\Api2cart\src\Jobs\CheckIfProductsInSync;
 use App\Modules\Api2cart\src\Jobs\SyncProductsJob;
 
 class HourlyEventListener
@@ -17,5 +18,6 @@ class HourlyEventListener
     public function handle(HourlyEvent $event)
     {
         SyncProductsJob::dispatch();
+        CheckIfProductsInSync::dispatch();
     }
 }
