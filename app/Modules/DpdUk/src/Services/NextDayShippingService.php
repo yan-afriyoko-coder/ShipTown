@@ -178,13 +178,13 @@ class NextDayShippingService extends ShippingServiceAbstract
         $dpdShippingLabel = $this->apiClient->getShipmentLabel($dpdShipment->getShipmentId());
 
         $shipment = new OrderShipment();
-        $shipment->order_id = $order->getKey();
+        $shipment->order()->associate($order);
+        $shipment->user()->associate(Auth::user());
         $shipment->carrier = 'DPD UK';
         $shipment->service = 'overnight';
         $shipment->shipping_number = $dpdShipment->getConsignmentNumber();
         $shipment->tracking_url = $this->generateTrackingUrl($this->shipment);
         $shipment->base64_pdf_labels = base64_encode($dpdShippingLabel->response->content);
-        $shipment->user()->associate(Auth::user());
         $shipment->save();
 
         return $shipment;
