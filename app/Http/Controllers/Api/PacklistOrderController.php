@@ -3,15 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Packlist\StoreRequest;
 use App\Http\Requests\PacklistOrderIndexRequest;
 use App\Http\Resources\OrderResource;
-use App\Http\Resources\PacklistResource;
 use App\Models\Order;
 use App\Models\OrderProduct;
-use App\Models\Packlist;
 use App\Modules\Reports\src\Models\Report;
-use App\Services\OrderService;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -69,29 +65,5 @@ class PacklistOrderController extends Controller
         $order->log('received order for packing');
 
         return new OrderResource(Order::findOrFail($order->id));
-    }
-
-    /**
-     * @param StoreRequest $request
-     * @param Packlist     $packlist
-     *
-     * @return PacklistResource
-     */
-    public function store(StoreRequest $request, Packlist $packlist): PacklistResource
-    {
-        $attributes = array_merge(
-            $request->validated(),
-            ['packer_user_id' => $request->user()->id]
-        );
-
-        $packlist->update($attributes);
-
-        if ($packlist->order->isPacked) {
-            // Print address label
-            $pdf = OrderService::getOrderPdf($packlist->order->order_number, 'address_label');
-            $request->user()->newPdfPrintJob('test', $pdf);
-        }
-
-        return new PacklistResource($packlist);
     }
 }

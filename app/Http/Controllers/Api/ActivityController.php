@@ -45,9 +45,9 @@ class ActivityController extends Controller
 
     /**
      * @param ActivityStoreRequest $request
-     * @return ActivityResource
+     * @return AnonymousResourceCollection
      */
-    public function store(ActivityStoreRequest $request): ActivityResource
+    public function store(ActivityStoreRequest $request): AnonymousResourceCollection
     {
         $modelClass = 'App\\Models\\' . Str::ucfirst($request->validated()['subject_type']);
 
@@ -58,6 +58,6 @@ class ActivityController extends Controller
             ->on($model)
             ->log($request->validated()['message']);
 
-        return ActivityResource::make($activity);
+        return ActivityResource::collection([$activity]);
     }
 }
