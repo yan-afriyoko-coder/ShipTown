@@ -31,6 +31,7 @@ class ShippingLabelController extends Controller
 
             $shipper->ship($request->validated()['order_id']);
         } catch (\Exception $exception) {
+            report($exception);
             $this->respond503ServiceUnavailable($exception->getMessage());
         }
 
