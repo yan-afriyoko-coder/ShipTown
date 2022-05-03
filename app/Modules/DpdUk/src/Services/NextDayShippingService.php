@@ -31,11 +31,6 @@ class NextDayShippingService extends ShippingServiceAbstract
     private ApiClient $apiClient;
 
     /**
-     * @var OrderShipment
-     */
-    private OrderShipment $shipment;
-
-    /**
      *
      */
     public function __construct()
@@ -43,8 +38,6 @@ class NextDayShippingService extends ShippingServiceAbstract
         $this->connection = Connection::firstOrFail();
 
         $this->apiClient = new ApiClient($this->connection);
-
-        $this->shipment = new OrderShipment();
     }
 
     /**
@@ -59,7 +52,7 @@ class NextDayShippingService extends ShippingServiceAbstract
 
         $this->printShipment($shipment);
 
-        return JsonResource::collection([$this->shipment]);
+        return JsonResource::collection([$shipment]);
     }
 
     /**
@@ -162,7 +155,7 @@ class NextDayShippingService extends ShippingServiceAbstract
     {
         $baseUlr = 'https://track.dpd.co.uk/search';
         $referenceParam = 'reference=' . $orderShipment->shipping_number;
-        $postcodeParam = 'postcode=' . $orderShipment->order->shippingAddress->postcode;
+        $postcodeParam = 'postcode=' . $orderShipment->order()->first()->shippingAddress->postcode;
 
         return $baseUlr .'?'. $referenceParam .'&'. $postcodeParam;
     }
@@ -183,7 +176,7 @@ class NextDayShippingService extends ShippingServiceAbstract
         $shipment->carrier = 'DPD UK';
         $shipment->service = 'overnight';
         $shipment->shipping_number = $dpdShipment->getConsignmentNumber();
-        $shipment->tracking_url = $this->generateTrackingUrl($this->shipment);
+        $shipment->tracking_url = $this->generateTrackingUrl($shipment);
         $shipment->base64_pdf_labels = base64_encode($dpdShippingLabel->response->content);
         $shipment->save();
 

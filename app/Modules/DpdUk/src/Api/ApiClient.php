@@ -158,15 +158,15 @@ class ApiClient
     private function postAuthenticationsRequest(): AuthenticationResponse
     {
         if ($this->connection->username === '') {
-            throw new Exception('DPD UK: Username not set');
+            throw new Exception('DPD UK: "username" not set');
         }
 
         if ($this->connection->password === '') {
-            throw new Exception('DPD UK: Username not set');
+            throw new Exception('DPD UK: "password" not set');
         }
 
         if ($this->connection->account_number === '') {
-            throw new Exception('DPD UK: Username not set');
+            throw new Exception('DPD UK: "account_number" not set');
         }
 
         return new AuthenticationResponse(
