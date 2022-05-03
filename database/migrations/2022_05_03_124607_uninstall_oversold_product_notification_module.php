@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class InstallModules extends Migration
+class UninstallOversoldProductNotificationModule extends Migration
 {
     /**
      * Run the migrations.
