@@ -109,6 +109,10 @@ class Api2cartProductLink extends BaseModel
      */
     public function isInSync(): bool
     {
+        if ($this->api2cart_product_type === 'configurable') {
+            return true;
+        }
+
         $api2cartDataExpected = ProductTransformer::toApi2cartPayload($this);
 
         $api2cartDataActual = [
