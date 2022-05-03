@@ -22,7 +22,7 @@ class GenerateLabelDocumentJobTest extends TestCase
     /**
      * @var string
      */
-    private string $testSkippingExpiryDate = '01 May 2022';
+    private string $testSkippingExpiryDate = '01 June 2022';
 
     /**
      * @throws \Exception
