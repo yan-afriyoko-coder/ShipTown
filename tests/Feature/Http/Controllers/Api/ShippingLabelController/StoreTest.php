@@ -41,8 +41,6 @@ class StoreTest extends TestCase
 
         $response->assertOk();
         $response->assertJsonStructure([
-            'meta',
-            'links',
             'data' => [
                 '*' => [
                     'id'
