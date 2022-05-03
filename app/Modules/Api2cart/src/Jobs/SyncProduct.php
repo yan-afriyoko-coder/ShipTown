@@ -43,6 +43,8 @@ class SyncProduct implements ShouldQueue
     public function handle()
     {
         if ($this->product_link->api2cart_product_type === 'configurable') {
+            $this->product_link->product->log('api2cart: configurable products cannot be synced');
+            $this->product_link->product->detachTag('Available Online');
             $this->product_link->product->detachTag('Not Synced');
             $this->product_link->product->detachTag('SYNC ERROR');
             $this->product_link->product->detachTag('CHECK FAILED');
