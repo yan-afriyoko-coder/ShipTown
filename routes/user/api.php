@@ -34,6 +34,7 @@ Route::apiResource('run/hourly/jobs', 'Api\Run\HourlyJobsController', ['as' => '
 Route::apiResource('run/daily/jobs', 'Api\Run\DailyJobsController', ['as' => 'run.daily'])->only('index');
 
 Route::apiResource('logs', 'Api\LogController')->only(['index']);
+Route::apiResource('activities', 'Api\ActivityController')->only(['index', 'store']);
 
 Route::apiResource('products', 'Api\ProductController')->only(['index', 'store']);
 Route::apiResource('product/aliases', 'Api\Product\ProductAliasController', ['as' => 'product'])->only(['index']);

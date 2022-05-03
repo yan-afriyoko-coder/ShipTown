@@ -27,6 +27,10 @@ export default {
                 return axios.get('/api/logs', {params: params});
             },
 
+            apiActivitiesPost: function (data) {
+                return axios.post('/api/activities', data);
+            },
+
             apiGetProducts: function(params) {
                 return axios.get('/api/products', {params: params});
             },

@@ -159,15 +159,16 @@
                     }
                 },
 
-                order_number() {
-                    this.loadOrder(this.order_number);
-                },
-
                 order() {
                     if(!this.order) {
                         return;
                     }
 
+                    this.apiActivitiesPost({
+                        'subject_type': 'order',
+                        'subject_id': this.order.id,
+                        'message': 'Packsheet opened'
+                    })
                     this.loadOrderProducts();
                 },
 
@@ -184,6 +185,7 @@
 
 
             mounted() {
+                this.loadOrder(this.order_number);
                 this.loadOrderStatuses();
                 this.loadShippingCouriers();
 
@@ -550,10 +552,6 @@
                 printLabel: async function(template = null) {
                     if (template === null) {
                         template = this.order.label_template;
-                    }
-
-                    if (template === 'dpd_uk') {
-                        return this.createShipment(template);
                     }
 
                     let orderNumber = this.order['order_number'];
