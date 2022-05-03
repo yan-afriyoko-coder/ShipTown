@@ -159,15 +159,16 @@
                     }
                 },
 
-                order_number() {
-                    this.loadOrder(this.order_number);
-                },
-
                 order() {
                     if(!this.order) {
                         return;
                     }
 
+                    this.apiActivitiesPost({
+                        'subject_type': 'order',
+                        'subject_id': this.order.id,
+                        'message': 'Packsheet opened'
+                    })
                     this.loadOrderProducts();
                 },
 
@@ -184,6 +185,7 @@
 
 
             mounted() {
+                this.loadOrder(this.order_number);
                 this.loadOrderStatuses();
                 this.loadShippingCouriers();
 
