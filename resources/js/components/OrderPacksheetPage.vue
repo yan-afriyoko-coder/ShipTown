@@ -167,9 +167,12 @@
                     this.apiActivitiesPost({
                         'subject_type': 'order',
                         'subject_id': this.order.id,
-                        'message': 'Packsheet opened'
+                        'description': 'Packsheet opened'
                     })
+
                     this.loadOrderProducts();
+
+                    this.checkIfPacker();
                 },
 
                 orderProducts() {
@@ -185,23 +188,53 @@
 
 
             mounted() {
+                if (! Vue.prototype.$currentUser['warehouse_id']) {
+                    this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
+                    return
+                }
+                this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
+
                 this.loadOrder(this.order_number);
                 this.loadOrderStatuses();
                 this.loadShippingCouriers();
-
-                if (Vue.prototype.$currentUser['warehouse_id']) {
-                    this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
-
-                    if (this.order_number) {
-                        this.loadOrder(this.order_number);
-                    }
-                    return;
-                }
-
-                this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
             },
 
             methods: {
+                checkIfPacker: async function() {
+                    if (this.order === null) {
+                        return;
+                    }
+
+                    this.apiGetActivityLog({
+                            'filter[subject_type]': 'App\\Models\\Order',
+                            'filter[subject_id]': this.order.id,
+                            'filter[description]': 'Packsheet opened',
+                            'sort': '-id',
+                            'per_page': 1
+                        })
+                        .then(({data}) => {
+                            const activity = data.data.pop();
+
+                            if (activity['causer_id'] !== Vue.prototype.$currentUser['id']) {
+                                this.order = null;
+                                this.notifyError('Someone else opened packsheet for this order', {
+                                    timeout: 0,
+                                    buttons: [
+                                        {
+                                            text: 'OPEN PACKSHEET #' + this.order_number,
+                                            action: (toast) => {
+                                                window.location.href = '/orders?search=' + this.order_number;
+                                            }
+                                        },
+                                    ],
+                                })
+                            }
+                        });
+
+
+                    setTimeout(() => {this.checkIfPacker();}, 10000);
+                },
+
                 completeOrder: async function () {
                     await this.markAsPacked();
                     await this.autoPrintLabelIfNeeded();
