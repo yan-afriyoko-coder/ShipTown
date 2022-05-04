@@ -145,6 +145,10 @@
             },
 
             watch: {
+                order_number() {
+                    this.loadOrder(this.order_number);
+                },
+
                 packlist() {
                     if(this.order === null) {
                         return;
