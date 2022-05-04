@@ -20,6 +20,7 @@ class AddressLabelShippingService extends ShippingServiceAbstract
 
         $shippingLabel = new ShippingLabel();
         $shippingLabel->order()->associate($order);
+        $shippingLabel->user_id = auth()->id();
         $shippingLabel->carrier = '';
         $shippingLabel->service = 'address_label';
         $shippingLabel->shipping_number = $order->order_number;
