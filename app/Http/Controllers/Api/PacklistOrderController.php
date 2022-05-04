@@ -51,12 +51,17 @@ class PacklistOrderController extends Controller
         Order::query()
             ->where(['packer_user_id' => Auth::id()])
             ->whereNull('packed_at')
-            ->update(['packer_user_id' => null]);
+            ->get()
+            ->each(function (Order $order) {
+                $order->update(['packer_user_id' => null]);
+            });
 
-        $wasReserved = Order::where(['id' => $order->id])
+        $order = Order::where(['id' => $order->id])
             ->where(['updated_at' => $order->updated_at])
             ->whereNull('packer_user_id')
-            ->update(['packer_user_id' => Auth::id()]);
+            ->first();
+
+        $wasReserved = $order->update(['packer_user_id' => Auth::id()]);
 
         if (!$wasReserved) {
             $this->respondBadRequest('Order could not be reserved, try again');
