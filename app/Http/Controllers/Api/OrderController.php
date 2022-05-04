@@ -78,7 +78,7 @@ class OrderController extends Controller
                 $attributes['packed_at'] = now();
             }
 
-            $attributes['packer_user_id'] = Auth::id();
+            $attributes['packer_user_id'] = $request->user()->getKey();
         }
 
         $order->update($attributes);
