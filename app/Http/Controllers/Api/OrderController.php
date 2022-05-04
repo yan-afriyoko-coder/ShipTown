@@ -75,7 +75,7 @@ class OrderController extends Controller
             }
 
             if ($order->packed_at === null) {
-                $order->packed_at = now();
+                $attributes['packed_at'] = now();
             }
 
             $attributes['packer_user_id'] = Auth::id();

@@ -404,7 +404,7 @@
                     this.order['is_packed'] = true;
                     this.order['packer_user_id'] = Vue.prototype.$currentUser['id'];
 
-                    this.apiUpdateOrder(this.order['id'],{
+                    return await this.apiUpdateOrder(this.order['id'],{
                             'is_packed': true,
                             'packer_user_id': Vue.prototype.$currentUser['id']
                         })
