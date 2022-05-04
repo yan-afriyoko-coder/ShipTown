@@ -7,7 +7,7 @@ use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;
 
 $factory->define(OrderStatus::class, function (Faker $faker) {
-    $status = $faker->randomElement([
+    $availableStatuses = [
         'open',
         'closed',
         'pending',
@@ -25,7 +25,13 @@ $factory->define(OrderStatus::class, function (Faker $faker) {
         'canceled',
         'failed',
         'completed',
-    ]);
+    ];
+
+    $status = $faker->randomElement($availableStatuses);
+
+    while (OrderStatus::query()->where(['code' => $status])->exists()) {
+        $status = $faker->randomElement($availableStatuses);
+    }
 
     return [
         'code'           => $status,
