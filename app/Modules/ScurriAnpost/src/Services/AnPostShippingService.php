@@ -18,7 +18,8 @@ class AnPostShippingService extends ShippingServiceAbstract
      */
     public function ship(int $order_id): AnonymousResourceCollection
     {
-        $order = Order::whereId($order_id)->firstOrFail();
+        /** @var Order $order */
+        $order = Order::findOrFail($order_id);
 
         $orderShipment = Scurri::createOrderShipment($order);
         $orderShipment->save();

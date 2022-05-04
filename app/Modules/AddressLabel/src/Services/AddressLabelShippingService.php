@@ -10,12 +10,43 @@ use App\Services\OrderService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ *
+ */
 class AddressLabelShippingService extends ShippingServiceAbstract
 {
+    /**
+     * @param int $order_id
+     * @return AnonymousResourceCollection
+     */
     public function ship(int $order_id): AnonymousResourceCollection
     {
         /** @var Order $order */
         $order = Order::findOrFail($order_id);
+
+        $shippingLabel = $this->createShippingLabel($order);
+
+        $this->print($shippingLabel);
+
+        return JsonResource::collection([$shippingLabel]);
+    }
+
+    /**
+     * @param ShippingLabel $shippingLabel
+     */
+    private function print(ShippingLabel $shippingLabel): void
+    {
+        if (isset(auth()->user()->printer_id)) {
+            PrintNode::printRaw($shippingLabel->base64_pdf_labels, auth()->user()->printer_id);
+        }
+    }
+
+    /**
+     * @param Order $order
+     * @return ShippingLabel
+     */
+    private function createShippingLabel(Order $order): ShippingLabel
+    {
         $pdfString = OrderService::getOrderPdf($order->order_number, 'address_label');
 
         $shippingLabel = new ShippingLabel();
@@ -26,19 +57,6 @@ class AddressLabelShippingService extends ShippingServiceAbstract
         $shippingLabel->shipping_number = $order->order_number;
         $shippingLabel->base64_pdf_labels = base64_encode($pdfString);
         $shippingLabel->save();
-
-        $this->printShippingLabel($shippingLabel);
-
-        return JsonResource::collection([$shippingLabel]);
-    }
-
-    /**
-     * @param ShippingLabel $shippingLabel
-     */
-    private function printShippingLabel(ShippingLabel $shippingLabel): void
-    {
-        if (isset(auth()->user()->printer_id)) {
-            PrintNode::printRaw($shippingLabel->base64_pdf_labels, auth()->user()->printer_id);
-        }
+        return $shippingLabel;
     }
 }
