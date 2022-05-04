@@ -21,7 +21,7 @@ class StoreTest extends TestCase
             ->postJson(route('activities.store', [
                 'subject_type' => 'order',
                 'subject_id' => $order->getKey(),
-                'message' => 'test message',
+                'description' => 'test message',
             ]));
 
         $response->assertOk();

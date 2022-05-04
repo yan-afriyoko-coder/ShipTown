@@ -31,6 +31,7 @@ class ActivityController extends Controller
             ->allowedFilters([
                 AllowedFilter::exact('subject_type'),
                 AllowedFilter::exact('subject_id'),
+                AllowedFilter::exact('description'),
             ])
             ->allowedIncludes([
                 'causer',
@@ -51,12 +52,11 @@ class ActivityController extends Controller
     {
         $modelClass = 'App\\Models\\' . Str::ucfirst($request->validated()['subject_type']);
 
-        $model = app($modelClass)
-            ->findOrFail($request->validated()['subject_id']);
+        $model = app($modelClass)->findOrFail($request->validated()['subject_id']);
 
         $activity = activity()
             ->on($model)
-            ->log($request->validated()['message']);
+            ->log($request->validated()['description']);
 
         return ActivityResource::collection([$activity]);
     }

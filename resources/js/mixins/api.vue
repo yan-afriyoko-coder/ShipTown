@@ -24,7 +24,7 @@ export default {
             },
 
             apiGetActivityLog: function (params) {
-                return axios.get('/api/logs', {params: params});
+                return axios.get('/api/activities', {params: params});
             },
 
             apiActivitiesPost: function (data) {
