@@ -13,7 +13,7 @@ use Tests\TestCase;
 
 class GetQuantityTest extends TestCase
 {
-//    use RefreshDatabase;
+    use RefreshDatabase;
 
     private Api2cartProductLink $productLink;
 

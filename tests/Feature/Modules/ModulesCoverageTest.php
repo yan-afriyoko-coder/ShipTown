@@ -21,7 +21,7 @@ class ModulesCoverageTest extends TestCase
         $modulesList = File::directories('app/modules');
 
         $expectedTestsList = collect($modulesList)->map(function ($moduleDirectory) {
-            $testPath = Str::replaceArray('app/modules/', ['/tests/Feature/ModulesNew/'], $moduleDirectory);
+            $testPath = Str::replaceArray('app/modules/', ['/tests/Feature/Modules/'], $moduleDirectory);
 
             return app()->basePath(). $testPath . '/BasicModuleTest.php';
         });
