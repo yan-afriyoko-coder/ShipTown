@@ -129,7 +129,13 @@ class Inventory extends BaseModel
      */
     public function getQuantityAvailableAttribute(): float
     {
-        return $this->quantity - $this->quantity_reserved;
+        // quantity_available is mssql computed stored value, it's not updated until is saved
+        // this is to make sure always up-to-date value is returned
+        if ($this->quantity && $this->quantity_reserved) {
+            return $this->quantity - $this->quantity_reserved;
+        }
+
+        return $this->attributes['quantity_available'];
     }
 
     /**
