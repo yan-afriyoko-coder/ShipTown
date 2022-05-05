@@ -174,5 +174,6 @@ return [
         'test'                              => base_path().'/resources/stubs/test.stub',
         'test_controller'                   => base_path().'/resources/stubs/test.controller.stub',
         'test_web_route'                    => base_path().'/resources/stubs/test.web_route.stub',
+        'test_module'                       => base_path().'/resources/stubs/test.module.stub',
     ],
 ];
