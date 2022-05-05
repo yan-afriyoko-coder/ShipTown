@@ -18,10 +18,10 @@ class ModulesCoverageTest extends TestCase
      */
     public function test_if_all_modules_have_test_file()
     {
-        $modulesList = File::directories('app/modules');
+        $modulesList = File::directories('app/Modules');
 
         $expectedTestsList = collect($modulesList)->map(function ($moduleDirectory) {
-            $testPath = Str::replaceArray('app/modules/', ['/tests/Feature/Modules/'], $moduleDirectory);
+            $testPath = Str::replaceArray('app/Modules/', ['/tests/Feature/Modules/'], $moduleDirectory);
 
             return app()->basePath(). $testPath . '/BasicModuleTest.php';
         });
