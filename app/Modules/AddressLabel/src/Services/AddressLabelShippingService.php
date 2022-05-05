@@ -9,6 +9,7 @@ use App\Modules\PrintNode\src\PrintNode;
 use App\Services\OrderService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Collection;
 
 /**
  *
@@ -17,9 +18,9 @@ class AddressLabelShippingService extends ShippingServiceAbstract
 {
     /**
      * @param int $order_id
-     * @return AnonymousResourceCollection
+     * @return Collection
      */
-    public function ship(int $order_id): AnonymousResourceCollection
+    public function ship(int $order_id): Collection
     {
         /** @var Order $order */
         $order = Order::findOrFail($order_id);
@@ -28,7 +29,7 @@ class AddressLabelShippingService extends ShippingServiceAbstract
 
         $this->print($shippingLabel);
 
-        return JsonResource::collection([$shippingLabel]);
+        return collect([$shippingLabel]);
     }
 
     /**

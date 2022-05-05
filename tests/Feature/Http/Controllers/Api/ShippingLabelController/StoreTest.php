@@ -8,13 +8,14 @@ use App\Models\ShippingService;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Collection;
 use Tests\TestCase;
 
 class TestShipmentService extends ShippingServiceAbstract
 {
-    public function ship(int $order_id): AnonymousResourceCollection
+    public function ship(int $order_id): Collection
     {
-        return AnonymousResourceCollection::collection(collect([]));
+        return collect([]);
     }
 }
 
