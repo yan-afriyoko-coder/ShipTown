@@ -7,7 +7,6 @@ use App\Models\Order;
 use App\Models\ShippingService;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Collection;
 use Tests\TestCase;
 
@@ -29,7 +28,7 @@ class StoreTest extends TestCase
         $user = factory(User::class)->create();
         $order = factory(Order::class)->create();
 
-        $shippingService = factory(ShippingService::class)->create([
+        factory(ShippingService::class)->create([
             'code' => 'test_service',
             'service_provider_class' => TestShipmentService::class
         ]);
