@@ -4,7 +4,7 @@ namespace Tests\External\DpdUk;
 
 use App\Models\Order;
 use App\Modules\DpdUk\src\Models\Connection;
-use App\Modules\DpdUk\src\Services\NextDayShippingService;
+use App\Modules\DpdUk\src\Services\DpdUkService;
 use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
