@@ -26,6 +26,8 @@ Route::view('picklist', 'picklist')->name('picklist');
 Route::view('orders', 'orders')->name('orders');
 Route::view('setting-profile', 'setting-profile')->name('setting-profile');
 
+Route::get('shipping-labels/{shipping_label}', 'ShippingLabelController@show')->name('shipping-labels');
+
 Route::view('autopilot/packlist', 'autopilot/packlist')->name('autopilot.packlist');
 
 Route::resource('order/packsheet', 'Order\PacksheetController')->only(['show']);

@@ -213,7 +213,10 @@
                                       <a :href="shipment['tracking_url']" target="_blank">
                                         {{ shipment['shipping_number'] }}
                                       </a>
-                                      by {{ shipment['user'] ? shipment['user']['name'] : ''}}
+                                        by {{ shipment['user'] ? shipment['user']['name'] : ''}}
+                                        <a :href="shippingContentUrl(shipment)" target="_blank" style="color: white">
+                                           o
+                                        </a>
                                     </td>
                                   </tr>
                                 </template>
@@ -312,6 +315,11 @@
         },
 
         methods: {
+            shippingContentUrl: function(shipment) {
+                console.log(shipment);
+                return '/shipping-labels/' + shipment['id'];
+            },
+
             kickOrder: function () {
                 this.apiPostOrderCheckRequest({'order_id': this.order['id']});
             },
