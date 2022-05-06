@@ -4,9 +4,9 @@
 namespace App\Modules\ScurriAnpost\src\Api;
 
 use Exception;
-use Http;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Http;
 
 /**
  * Class Client
