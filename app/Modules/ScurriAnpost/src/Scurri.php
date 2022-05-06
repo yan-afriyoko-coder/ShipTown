@@ -5,6 +5,7 @@ namespace App\Modules\ScurriAnpost\src;
 
 use App\Models\Order;
 use App\Models\OrderShipment;
+use App\Models\ShippingLabel;
 use App\Modules\ScurriAnpost\src\Api\Client;
 use Exception;
 
@@ -12,10 +13,10 @@ class Scurri
 {
     /**
      * @param Order $order
-     * @return OrderShipment
+     * @return ShippingLabel
      * @throws Exception
      */
-    public static function createOrderShipment(Order $order): OrderShipment
+    public static function createShippingLabel(Order $order): ShippingLabel
     {
         $consignment_id = Client::createSingleConsignment([
             "order_number" => $order->order_number,
@@ -57,7 +58,7 @@ class Scurri
         // we need to refresh it in order to obtain shipping number
         $consignment = Client::getSingleConsignment($consignment_id)->json();
 
-        $orderShipment = new OrderShipment([
+        $orderShipment = new ShippingLabel([
             'order_id' => $order->getKey(),
             'carrier' => $consignment['carrier'],
             'service' => $consignment['service'],

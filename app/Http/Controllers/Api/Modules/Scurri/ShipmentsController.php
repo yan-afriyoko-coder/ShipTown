@@ -21,7 +21,7 @@ class ShipmentsController extends Controller
     {
         $order = Order::whereOrderNumber($order_number)->firstOrFail();
 
-        $orderShipment = Scurri::createOrderShipment($order);
+        $orderShipment = Scurri::createShippingLabel($order);
         $orderShipment->user()->associate($request->user());
         $orderShipment->save();
 

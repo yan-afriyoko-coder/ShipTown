@@ -102,7 +102,7 @@ class Client
         $response = self::createMultipleConsignments($consignmentList);
 
         if ($response->errors->isNotEmpty()) {
-            dd($response->errors, $data);
+            throw new Exception($response->errors);
         }
 
         return $response->success[0];
