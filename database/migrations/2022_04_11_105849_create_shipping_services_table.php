@@ -19,15 +19,5 @@ class CreateShippingServicesTable extends Migration
             $table->string('service_provider_class');
             $table->timestamps();
         });
-
-        \App\Models\ShippingService::query()->create([
-            'code' => 'an_post',
-            'service_provider_class' => App\Modules\ScurriAnpost\src\Services\AnPostShippingService::class,
-        ]);
-
-        \App\Models\ShippingService::query()->create([
-            'code' => 'address_label',
-            'service_provider_class' => '',
-        ]);
     }
 }
