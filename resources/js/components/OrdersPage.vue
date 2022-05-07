@@ -90,6 +90,8 @@
                 this.page = page;
                 this.last_page = 1;
 
+                console.log(this.getUrlParameter('filter'));
+
                 const params = {
                     'filter[status]': this.getUrlParameter('status'),
                     'filter[search]': this.getUrlParameter('search'),
@@ -97,6 +99,7 @@
                     'filter[without_tags]': this.getUrlParameter('without_tags'),
                     'filter[age_in_days]': this.getUrlParameter('age_in_days'),
                     'filter[is_active]': this.getUrlParameter('is_active'),
+                    'filter[is_on_hold]': this.getUrlParameter('is_on_hold'),
                     'filter[packed_between]': this.getUrlParameter('packed_between'),
                     'filter[packer_user_id]': this.getUrlParameter('packer_user_id'),
                     'filter[shipping_method_code]': this.getUrlParameter('shipping_method'),

@@ -573,6 +573,7 @@ class Order extends BaseModel
                 AllowedFilter::exact('order_number')->ignore([null, '']),
                 AllowedFilter::partial('shipping_method_code')->ignore([null, '']),
                 AllowedFilter::exact('is_active'),
+                AllowedFilter::exact('is_on_hold'),
                 AllowedFilter::exact('packer_user_id'),
 
                 AllowedFilter::scope('age_in_days', 'whereAgeInDays')->ignore([null, '']),
