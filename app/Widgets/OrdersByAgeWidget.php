@@ -28,6 +28,7 @@ class OrdersByAgeWidget extends AbstractWidget
             DB::raw('count(*) as order_count'),
         ])
             ->where(['is_active' => true])
+            ->where(['is_on_hold' => false])
             ->groupBy(DB::raw('date(order_placed_at)'))
             ->orderBy('date', 'ASC')
             ->get();
