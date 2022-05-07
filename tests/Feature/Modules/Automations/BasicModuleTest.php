@@ -6,7 +6,6 @@ use App\Events\Order\ActiveOrderCheckEvent;
 use App\Models\Order;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
 use App\Modules\Automations\src\AutomationsServiceProvider;
-use App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition;
 use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
@@ -14,9 +13,10 @@ use App\Modules\Automations\src\Models\Condition;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class BasicAutomationTest extends TestCase
+class BasicModuleTest extends TestCase
 {
     use RefreshDatabase;
+
 
     /**
      * A basic feature test example.

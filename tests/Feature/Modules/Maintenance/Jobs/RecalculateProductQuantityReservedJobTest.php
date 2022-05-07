@@ -1,10 +1,8 @@
 <?php
 
-namespace Tests\Feature\Jobs\Maintenance;
+namespace Tests\Feature\Modules\Maintenance\Jobs;
 
 use App\Models\Inventory;
-use App\Models\Order;
-use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\Maintenance\src\Jobs\Products\RecalculateProductQuantityReservedJob;

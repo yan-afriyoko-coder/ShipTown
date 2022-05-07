@@ -5,11 +5,12 @@ namespace Tests\Feature\Modules\AutoPilot;
 use App\Events\HourlyEvent;
 use App\Modules\AutoPilot\src\AutoPilotServiceProvider;
 use App\Modules\AutoPilot\src\Jobs\ClearPackerIdJob;
+use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
-class AutoPilotServiceProviderTest extends TestCase
+class BasicModuleTest extends TestCase
 {
     use RefreshDatabase;
 

@@ -1,10 +1,8 @@
 <?php
 
-namespace Tests\Feature\Jobs\Modules\Api2cart;
+namespace Tests\Feature\Modules\Api2cart\Jobs;
 
-use App\Models\Inventory;
 use App\Models\Product;
-use App\Models\ProductPrice;
 use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Jobs\SyncProduct;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;

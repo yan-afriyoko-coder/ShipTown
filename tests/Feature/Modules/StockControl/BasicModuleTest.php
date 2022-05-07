@@ -12,7 +12,7 @@ use App\Modules\StockControl\src\StockControlServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class IncreaseQuantityTest extends TestCase
+class BasicModuleTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -39,7 +39,7 @@ class IncreaseQuantityTest extends TestCase
         $orderProductShipment->product()->associate($product);
         $orderProductShipment->warehouse()->associate($warehouse);
         $orderProductShipment->save();
-//
+
         $inventory = Inventory::whereWarehouseId($warehouse->getKey())->whereProductId($product->getKey())->first();
 
         $this->assertNotNull($inventory);

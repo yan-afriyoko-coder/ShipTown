@@ -9,7 +9,7 @@ use App\Models\OrderShipment;
 use App\Modules\DpdUk\src\DpdUkServiceProvider;
 use App\Modules\DpdUk\src\Jobs\GenerateLabelDocumentJob;
 use App\Modules\DpdUk\src\Models\Connection;
-use App\Modules\DpdUk\src\Services\NextDayShippingService;
+use App\Modules\DpdUk\src\Services\DpdUkService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
@@ -53,7 +53,7 @@ class GenerateLabelDocumentJobTest extends TestCase
         $connection->save();
 
         $order = factory(Order::class)->create();
-        $shipment = (new NextDayShippingService())->ship($order->getKey());
+        $shipment = (new DpdUkService())->ship($order->getKey());
 
         $this->assertGreaterThan(0, $shipment->count());
     }

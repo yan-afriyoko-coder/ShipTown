@@ -2,14 +2,13 @@
 
 namespace Tests\Feature\Modules\AutoTags;
 
-use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Warehouse;
+use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use function PHPUnit\Framework\assertTrue;
 
-class AutoTagsTest extends TestCase
+class BasicModuleTest extends TestCase
 {
     use RefreshDatabase;
 

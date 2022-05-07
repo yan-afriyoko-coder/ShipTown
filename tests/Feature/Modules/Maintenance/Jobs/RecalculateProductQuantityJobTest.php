@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Jobs\Maintenance;
+namespace Tests\Feature\Modules\Maintenance\Jobs;
 
 use App\Jobs\RunHourlyJobs;
 use App\Models\Inventory;

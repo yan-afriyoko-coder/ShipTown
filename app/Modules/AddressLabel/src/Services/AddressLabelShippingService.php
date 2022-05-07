@@ -4,29 +4,60 @@ namespace App\Modules\AddressLabel\src\Services;
 
 use App\Abstracts\ShippingServiceAbstract;
 use App\Models\Order;
-use App\Modules\PrintNode\src\Models\PrintJob;
+use App\Models\ShippingLabel;
 use App\Modules\PrintNode\src\PrintNode;
-use App\Modules\PrintNode\src\Resources\PrintJobResource;
 use App\Services\OrderService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Collection;
 
+/**
+ *
+ */
 class AddressLabelShippingService extends ShippingServiceAbstract
 {
-    public function ship(int $order_id): AnonymousResourceCollection
+    /**
+     * @param int $order_id
+     * @return Collection
+     */
+    public function ship(int $order_id): Collection
     {
         /** @var Order $order */
         $order = Order::findOrFail($order_id);
+
+        $shippingLabel = $this->createShippingLabel($order);
+
+        $this->print($shippingLabel);
+
+        return collect([$shippingLabel]);
+    }
+
+    /**
+     * @param ShippingLabel $shippingLabel
+     */
+    private function print(ShippingLabel $shippingLabel): void
+    {
+        if (isset(auth()->user()->printer_id)) {
+            PrintNode::printRaw($shippingLabel->base64_pdf_labels, auth()->user()->printer_id);
+        }
+    }
+
+    /**
+     * @param Order $order
+     * @return ShippingLabel
+     */
+    private function createShippingLabel(Order $order): ShippingLabel
+    {
         $pdfString = OrderService::getOrderPdf($order->order_number, 'address_label');
 
-        $printJob = new PrintJob();
-        $printJob->printer_id = Auth::user()->printer_id;
-        $printJob->title = 'address_label_'.$order->order_number.'_by_'.Auth::id();
-        $printJob->pdf = base64_encode($pdfString);
-
-        PrintNode::print($printJob);
-
-        return PrintJobResource::collection([$printJob]);
+        $shippingLabel = new ShippingLabel();
+        $shippingLabel->order()->associate($order);
+        $shippingLabel->user_id = auth()->id();
+        $shippingLabel->carrier = '';
+        $shippingLabel->service = 'address_label';
+        $shippingLabel->shipping_number = $order->order_number;
+        $shippingLabel->base64_pdf_labels = base64_encode($pdfString);
+        $shippingLabel->save();
+        return $shippingLabel;
     }
 }

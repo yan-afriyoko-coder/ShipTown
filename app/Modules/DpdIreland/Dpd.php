@@ -40,12 +40,9 @@ class Dpd
 
         $preAdvice = self::requestPreAdvice($consignment);
 
-        $shipment = self::saveOrderShipment($order, $preAdvice, $user);
-
         logger('DPD PreAdvice generated', [
             'consignment' => $consignment->toArray(),
             'preAdvice' => $preAdvice->toArray(),
-            'shipment' => $shipment->toArray(),
         ]);
 
         return $preAdvice;
@@ -148,25 +145,5 @@ class Dpd
         };
 
         return new Consignment($payload);
-    }
-
-    /**
-     * @param Order $order
-     * @param PreAdvice $preAdvice
-     * @param User|null $user
-     *
-     * @return OrderShipment
-     * @throws Exception
-     */
-    public static function saveOrderShipment(Order $order, PreAdvice $preAdvice, ?User $user): OrderShipment
-    {
-        return retry(15, function () use ($order, $preAdvice, $user) {
-            return $order->orderShipments()->create([
-                'user_id' => $user ? $user->getKey() : null,
-                'carrier' => 'DPD Ireland',
-                'shipping_number' => $preAdvice->trackingNumber(),
-                'tracking_url' => 'https://dpd.ie/tracking?consignmentNumber=' . $preAdvice->trackingNumber(),
-            ]);
-        }, 150);
     }
 }

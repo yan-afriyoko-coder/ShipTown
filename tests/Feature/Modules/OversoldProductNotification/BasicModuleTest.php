@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
-class BasicTest extends TestCase
+class BasicModuleTest extends TestCase
 {
     use RefreshDatabase;
 

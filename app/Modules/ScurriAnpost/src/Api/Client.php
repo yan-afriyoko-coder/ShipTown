@@ -4,9 +4,9 @@
 namespace App\Modules\ScurriAnpost\src\Api;
 
 use Exception;
-use Http;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Http;
 
 /**
  * Class Client
@@ -102,7 +102,7 @@ class Client
         $response = self::createMultipleConsignments($consignmentList);
 
         if ($response->errors->isNotEmpty()) {
-            dd($response->errors, $data);
+            throw new Exception($response->errors);
         }
 
         return $response->success[0];

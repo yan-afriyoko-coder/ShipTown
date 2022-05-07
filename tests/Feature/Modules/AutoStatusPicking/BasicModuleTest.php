@@ -5,11 +5,12 @@ namespace Tests\Feature\Modules\AutoStatusPicking;
 use App\Events\HourlyEvent;
 use App\Modules\AutoStatusPicking\src\AutoStatusPickingServiceProvider;
 use App\Modules\AutoStatusPicking\src\Jobs\RefillPickingIfEmptyJob;
+use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
-class AutoStatusPaidServiceProviderTest extends TestCase
+class BasicModuleTest extends TestCase
 {
     use RefreshDatabase;
 
