@@ -38,7 +38,7 @@ class AddressLabelShippingService extends ShippingServiceAbstract
     private function print(ShippingLabel $shippingLabel): void
     {
         if (isset(auth()->user()->printer_id)) {
-            PrintNode::printRaw($shippingLabel->base64_pdf_labels, auth()->user()->printer_id);
+            PrintNode::printBase64Pdf($shippingLabel->base64_pdf_labels, auth()->user()->printer_id);
         }
     }
 
