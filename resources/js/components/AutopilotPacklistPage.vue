@@ -8,7 +8,9 @@
             </div>
         </div>
 
-        <order-packsheet-page v-if="order_number" :order_number="order_number" @orderCompleted="loadNextOrder"></order-packsheet-page>
+        <template v-for="order in orders">
+            <order-packsheet-page :key="'order_id_' + order.id" :order_id="order.id" :order_number="order.order_number" @orderCompleted="loadNextOrder"></order-packsheet-page>
+        </template>
     </div>
 </template>
 
@@ -25,7 +27,9 @@
 
         data: function() {
             return {
+                orders: [],
                 order_number: null,
+                order_id: null,
             };
         },
 
@@ -42,16 +46,23 @@
                     return;
                 }
 
+                this.showLoading();
+
+                this.orders = [];
+
                 let params = {
                     'filter[status]': this.getUrlParameter('status','picking'),
                     'filter[inventory_source_warehouse_id]': this.getUrlParameter('inventory_source_warehouse_id'),
                     'sort': this.getUrlParameter('sort', 'order_placed_at'),
                 };
 
-                this.showLoading();
                 this.apiGetPacklistOrder(params)
                     .then(({data}) => {
+                        // we use array here so we can use v-for component
+                        // and auto destroy when loading next order
+                        this.orders = [data.data];
                         this.order_number = data.data['order_number'];
+                        this.order_id = data.data['id'];
                         this.hideLoading();
                     })
                     .catch((error) => {
