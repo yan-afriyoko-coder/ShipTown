@@ -183,7 +183,6 @@
             methods: {
                 reloadOrder: function() {
                     this.loadOrderById();
-                    this.loadOrderProducts();
                 },
 
                 checkIfPacker: async function() {
@@ -277,14 +276,22 @@
                     this.order = null;
                     this.somethingHasBeenPackedDuringThisSession = false;
 
-                    const params = {
-                        'filter[id]': this.order_id,
+                    let params = {
                         'include': 'order_totals,order_comments,order_comments.user',
                     };
+
+                    if  (this.order_id) {
+                        params['filter[order_id]'] = this.order_id;
+                    }
+
+                    if  (this.order_number) {
+                        params['filter[order_number]'] = this.order_number;
+                    }
 
                     return this.apiGetOrders(params)
                         .then(({data}) => {
                             this.order = data.meta.total > 0 ? data.data[0] : null;
+                            this.loadOrderProducts();
                         })
                         .catch(() => {
                             this.notifyError('Error occurred while loading order');
@@ -296,10 +303,9 @@
 
                 loadOrderProducts: function() {
                     const params = {
-                        'filter[order_id]': this.order_id,
+                        'filter[order_id]': this.order.id,
                         'filter[warehouse_id]': this.getUrlParameter('warehouse_id'),
-                        'sort': 'inventory_source_shelf_location,' +
-                            'sku_ordered',
+                        'sort': 'inventory_source_shelf_location,sku_ordered',
                         'include': 'product,product.aliases',
                         'per_page': 999,
                     };

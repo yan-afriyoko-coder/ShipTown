@@ -571,6 +571,7 @@ class Order extends BaseModel
 
                 AllowedFilter::exact('status', 'status_code'),
                 AllowedFilter::exact('id', 'id'),
+                AllowedFilter::exact('order_id', 'id'),
                 AllowedFilter::exact('order_number')->ignore([null, '']),
                 AllowedFilter::partial('shipping_method_code')->ignore([null, '']),
                 AllowedFilter::exact('is_active'),
