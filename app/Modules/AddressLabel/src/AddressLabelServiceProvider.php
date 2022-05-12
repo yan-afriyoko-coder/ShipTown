@@ -10,7 +10,7 @@ class AddressLabelServiceProvider extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_name = 'Courier - Address Label';
+    public static string $module_name = '.CORE - Courier - Address Label';
 
     /**
      * @var string
@@ -43,10 +43,6 @@ class AddressLabelServiceProvider extends BaseModuleServiceProvider
 
     public static function disabling(): bool
     {
-        ShippingService::query()
-            ->where(['code' => 'address_label'])
-            ->delete();
-
-        return true;
+        return false;
     }
 }
