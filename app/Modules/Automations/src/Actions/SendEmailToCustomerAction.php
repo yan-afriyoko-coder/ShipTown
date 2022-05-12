@@ -26,7 +26,7 @@ class SendEmailToCustomerAction extends BaseOrderAction
         $order = Order::query()
             ->whereKey($this->order->getKey())
             ->with('orderShipments', 'orderProducts', 'shippingAddress')
-            ->get();
+            ->first();
 
         $template = new ShipmentConfirmationMail([
             'order' => $order->toArray(),

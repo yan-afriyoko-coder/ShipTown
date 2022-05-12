@@ -69,7 +69,7 @@ use Spatie\Tags\Tag;
  * @property-read int|null $order_comments_count
  * @property-read Collection|OrderProduct[] $orderProducts
  * @property-read int|null $order_products_count
- * @property-read Collection|ShippingLabel[] $orderShipments
+ * @property-read HasMany $orderShipments
  * @property-read int|null $order_shipments_count
  * @property-read Collection|Activity[] $activities
  * @property-read int|null $activities_count
@@ -545,9 +545,9 @@ class Order extends BaseModel
     }
 
     /**
-     * @return HasMany | ShippingLabel
+     * @return HasMany
      */
-    public function orderShipments()
+    public function orderShipments(): HasMany
     {
         return $this->hasMany(ShippingLabel::class)->latest();
     }

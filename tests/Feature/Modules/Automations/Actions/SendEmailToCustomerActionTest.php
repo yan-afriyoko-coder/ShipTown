@@ -6,11 +6,8 @@ use App\Events\Order\ActiveOrderCheckEvent;
 use App\Mail\OrderMail;
 use App\Models\MailTemplate;
 use App\Models\Order;
-use App\Models\OrderProduct;
-use App\Models\Product;
-use App\Models\ProductPrice;
+use App\Models\ShippingLabel;
 use App\Modules\Automations\src\Actions\SendEmailToCustomerAction;
-use App\Modules\Automations\src\Actions\SplitBundleSkuAction;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -23,6 +20,8 @@ class SendEmailToCustomerActionTest extends TestCase
     public function test_successful_notification()
     {
         $order = factory(Order::class)->create();
+        $orderShipment = factory(ShippingLabel::class)->create();
+
         $event = new ActiveOrderCheckEvent($order);
         $action = new SendEmailToCustomerAction($event);
 
