@@ -124,6 +124,7 @@
 
             props: {
                 order_number: null,
+                order_id: null,
             },
 
             data: function() {
@@ -141,52 +142,20 @@
                     isPrintingLabel: false,
                     somethingHasBeenPackedDuringThisSession: false,
                     autopilotEnabled: false,
+                    autoLabelAlreadyPrinted: false,
                 };
             },
-
             watch: {
-                order_number() {
-                    this.loadOrder(this.order_number);
-                },
-
                 packlist() {
-                    if(this.order === null) {
+                    if(    this.order === null
+                        || this.order.is_packed
+                        || this.somethingHasBeenPackedDuringThisSession === false
+                        || this.packlist === null
+                        || this.packlist.length > 0) {
                         return;
                     }
 
-                    if (this.somethingHasBeenPackedDuringThisSession === false) {
-                        return;
-                    }
-
-                    if(this.packlist && this.packlist.length === 0) {
-                        this.completeOrder();
-                    }
-                },
-
-                order() {
-                    if(!this.order) {
-                        return;
-                    }
-
-                    this.apiActivitiesPost({
-                        'subject_type': 'order',
-                        'subject_id': this.order.id,
-                        'description': 'Packsheet opened'
-                    })
-
-                    this.loadOrderProducts();
-
-                    this.checkIfPacker();
-                },
-
-                orderProducts() {
-                    if(this.orderProducts.length === 0) {
-                        this.packed = [];
-                        this.packlist = [];
-                    }
-
-                    this.packed = this.orderProducts.filter(orderProduct => Number(orderProduct['quantity_to_ship']) === 0);
-                    this.packlist = this.orderProducts.filter(orderProduct => Number(orderProduct['quantity_to_ship']) > 0);
+                    this.completeOrder();
                 },
             },
 
@@ -198,12 +167,18 @@
                 }
                 this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
 
-                this.loadOrder(this.order_number);
+                this.reloadOrder();
+
                 this.loadOrderStatuses();
                 this.loadShippingCouriers();
             },
 
             methods: {
+                reloadOrder: function() {
+                    this.loadOrderById();
+                    this.loadOrderProducts();
+                },
+
                 checkIfPacker: async function() {
                     if (this.order === null) {
                         return;
@@ -249,6 +224,7 @@
                     }
 
                     if((this.packlist.length === 0) && this.canClose) {
+                        console.log('emitting orderCompleted event')
                         this.$emit('orderCompleted')
                     }
                 },
@@ -262,14 +238,41 @@
 
                     this.canClose = true;
                     this.order = null;
-                    this.packlist = [];
-                    this.packed = [];
                     this.somethingHasBeenPackedDuringThisSession = false;
 
                     const params = {
                         'filter[order_number]': orderNumber,
-                        'include': 'order_totals,order_comments,' +
+                        'include': 'order_totals,order_comments,order_products,' +
                             'order_comments.user',
+                    };
+
+                    return this.apiGetOrders(params)
+                        .then(({data}) => {
+                            this.order = data.meta.total > 0 ? data.data[0] : null;
+                            this.loadOrderProducts();
+                        })
+                        .catch(() => {
+                            this.notifyError('Error occurred while loading order');
+                        })
+                        .finally(() => {
+                            this.hideLoading();
+                        })
+                },
+
+                loadOrderById: function () {
+                    this.showLoading();
+
+                    if(this.order && this.order['id'] !== this.order_id) {
+                        this.previousOrderNumber = this.order['order_number'];
+                    }
+
+                    this.canClose = true;
+                    this.order = null;
+                    this.somethingHasBeenPackedDuringThisSession = false;
+
+                    const params = {
+                        'filter[id]': this.order_id,
+                        'include': 'order_totals,order_comments,order_comments.user',
                     };
 
                     return this.apiGetOrders(params)
@@ -286,18 +289,21 @@
 
                 loadOrderProducts: function() {
                     const params = {
-                        'filter[order_id]': this.order.id,
+                        'filter[order_id]': this.order_id,
                         'filter[warehouse_id]': this.getUrlParameter('warehouse_id'),
                         'sort': 'inventory_source_shelf_location,' +
                             'sku_ordered',
-                        'include': 'product,' +
-                            'product.aliases',
+                        'include': 'product,product.aliases',
                         'per_page': 999,
                     };
 
                     this.apiGetOrderProducts(params)
                         .then(({ data }) => {
                             this.orderProducts = data.data;
+
+                            this.packed = this.orderProducts.filter(orderProduct => Number(orderProduct['quantity_to_ship']) === 0);
+                            this.packlist = this.orderProducts.filter(orderProduct => Number(orderProduct['quantity_to_ship']) > 0);
+
                         })
                         .catch(() => {
                             this.notifyError('Error occurred while loading packlist');
@@ -521,6 +527,12 @@
                 },
 
                 autoPrintLabelIfNeeded: async function() {
+                    if (this.autoLabelAlreadyPrinted) {
+                        return;
+                    }
+
+                    this.autoLabelAlreadyPrinted = true;
+
                     let template = this.getAddressLabelTemplateName();
 
                     if (template) {
