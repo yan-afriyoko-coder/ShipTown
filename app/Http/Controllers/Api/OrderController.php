@@ -69,6 +69,12 @@ class OrderController extends Controller
     {
         $attributes = $request->validated();
 
+
+        if ($request->has('label_template') && $request->get('label_template') === null) {
+            // we don't want turn off ConvertEmptyStringToNulls middleware
+            $attributes['label_template'] = '';
+        };
+
         if ($request->has('is_packed')) {
             if ($order->is_packed) {
                 $this->respondNotAllowed405('Order already packed!');

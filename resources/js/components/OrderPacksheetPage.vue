@@ -28,13 +28,11 @@
                     </div>
                 </div>
             </template>
-            <div class="row mb-3">
-                <div class="col-11">
+            <div class="row mb-3 pl-1 pr-1">
+                <div class="flex-fill">
                     <barcode-input-field @barcodeScanned="packBarcode" placeholder="Enter sku or alias to ship 1 piece" ref="barcode"/>
                 </div>
-                <div class="col-1">
-                    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#filterConfigurationModal" href="#"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
-                </div>
+                <button type="button" class="btn btn-primary ml-2 mr-0 border-right-0 text-white" data-toggle="modal" data-target="#filterConfigurationModal" href="#"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
             </div>
 
             <div v-if="packlist && packlist.length === 0 && packed.length === 0" class="row" >
@@ -80,15 +78,24 @@
                 <div class="form-group">
                     <label class="form-label" for="selectStatus">Courier</label>
                     <select id="courierSelect" class="form-control" @change="updateLabelTemplate" v-model="order.label_template">
+                        <option :value="''"></option>
                         <option v-for="shippingCourier in shippingCouriers" :value="shippingCourier.code" :key="shippingCourier.code">{{shippingCourier.code}}</option>
                     </select>
                 </div>
-                <button type="button" class="btn mb-1 btn-info" @click.prevent="printExtraLabelClick()">Print Extra Label</button>
-                <br>
 
-                <button type="button" class="btn mb-1 btn-info" @click.prevent="openPreviousOrder">Open Previous Order</button>
-                <button type="button" class="btn mb-1 btn-info" @click.prevent="askForShippingNumber">Add Shipping Number</button>
+                    <button :disabled="order.label_template === ''" type="button" @click.prevent="printExtraLabelClick()" class="col btn mb-1 btn-primary">Print Courier Label</button>
+                    <button type="button" @click.prevent="printShippingLabel('address_label')" class="col btn mb-1 btn-primary">Print Address Label</button>
+                    <br>
+                    <br>
+                    <button type="button" class="col btn mb-1 btn-primary" @click.prevent="askForShippingNumber">Add Shipping Number</button>
             </template>
+
+            <template v-slot:footer>
+                <div class="flex-fill">
+                    <button type="button" class="btn btn-primary  float-left" @click.prevent="openPreviousOrder">Open Previous Order</button>
+                </div>
+            </template>
+
         </filters-modal>
 
     </div>
@@ -200,9 +207,9 @@
                                     timeout: 0,
                                     buttons: [
                                         {
-                                            text: 'OPEN PACKSHEET #' + this.order_number,
+                                            text: 'OPEN PACKSHEET #' + this.order.order_number,
                                             action: (toast) => {
-                                                window.location.href = '/orders?search=' + this.order_number;
+                                                window.location.href = '/orders?search=' + this.order.order_number;
                                             }
                                         },
                                     ],
@@ -565,8 +572,7 @@
                         });
                 },
 
-                printExtraLabelClick: function ()
-                {
+                printExtraLabelClick: function () {
                     this.$refs.filtersModal.hide();
                     this.setFocusOnBarcodeInput(500);
 
@@ -661,7 +667,9 @@
                     this.$refs.filtersModal.hide();
                     this.setFocusOnBarcodeInput(500);
 
-                    this.apiUpdateOrder(this.order['id'], {'label_template': this.order.label_template})
+                    this.apiUpdateOrder(this.order['id'], {
+                            'label_template': this.order.label_template
+                        })
                         .then((response) => {
                             this.order = response.data.data
                         })

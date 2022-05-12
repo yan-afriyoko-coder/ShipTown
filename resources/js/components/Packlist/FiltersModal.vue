@@ -14,6 +14,7 @@
                         </form>
                     </div>
                     <div class="modal-footer">
+                        <slot name="footer"></slot>
                         <button type="button" @click.prevent="handleSubmit" class="btn btn-primary">OK</button>
                     </div>
                 </div>

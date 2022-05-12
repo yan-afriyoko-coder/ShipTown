@@ -9,7 +9,7 @@
         </div>
 
         <template v-for="order in orders">
-            <order-packsheet-page :key="'order_id_' + order.id" :order_id="order.id" :order_number="order.order_number" @orderCompleted="loadNextOrder"></order-packsheet-page>
+            <order-packsheet-page :key="'order_id_' + order.id" :order_id="order.id" @orderCompleted="loadNextOrder"></order-packsheet-page>
         </template>
     </div>
 </template>
