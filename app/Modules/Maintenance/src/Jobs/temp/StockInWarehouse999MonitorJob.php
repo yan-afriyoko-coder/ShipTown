@@ -38,7 +38,7 @@ class StockInWarehouse999MonitorJob implements ShouldQueue
             ->get()->each(function (Inventory $inventory) {
                 $inventory->update(['quantity' => 0]);
 
-                report(new Exception('test'));
+                report(new Exception('Incorrect quantity, web reservations cannot have stock'));
             });
     }
 }
