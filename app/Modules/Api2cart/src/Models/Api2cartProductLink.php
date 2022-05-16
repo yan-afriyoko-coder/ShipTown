@@ -121,8 +121,8 @@ class Api2cartProductLink extends BaseModel
             'quantity'      => $this->api2cart_quantity,
             'price'         => $this->api2cart_price,
             'special_price' => $this->api2cart_sale_price,
-            'sprice_create' => $this->api2cart_sale_price_start_date,
-            'sprice_expire' => $this->api2cart_sale_price_end_date,
+            'sprice_create' => Api2cartService::formatDateForApi2cart($this->api2cart_sale_price_start_date),
+            'sprice_expire' => Api2cartService::formatDateForApi2cart($this->api2cart_sale_price_end_date),
         ];
 
         $differences = $this->getDifferences($api2cartDataExpected, $api2cartDataActual);
