@@ -23,7 +23,7 @@ class IndexTest extends TestCase
 
         $response->assertOk();
 
-        $this->assertGreaterThan(0, $response->json('meta.total'), 'No records returned');
+        $this->assertEquals(1, $response->json('meta.total'), 'No records returned');
 
         $response->assertJsonStructure([
             'meta',
