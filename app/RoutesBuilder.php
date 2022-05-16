@@ -51,13 +51,15 @@ class RoutesBuilder
         $controllerName = $controllerName.'Controller';
         // $controllerName = DpdukConnectionsController
 
-
+        $controllerPath = $nameParts->toArray();
         // nameParts['api','modules','dpd-uk']
-        $controllerPath = implode('\\', $nameParts->toArray());
+        $controllerPath = implode('\\', $controllerPath);
         // $controllerPath = api\modules\dpd-uk
         $controllerPath = Str::title($controllerPath);
         // $controllerPath = Api\Modules\Dpd-Uk
         $controllerPath = Str::camel($controllerPath);
+        // $controllerPath = Api\Modules\DpdUk
+        $controllerPath = Str::ucfirst($controllerPath);
         // $controllerPath = Api\Modules\DpdUk
 
         // $controllerClass = Api\Modules\CustomModuleController
