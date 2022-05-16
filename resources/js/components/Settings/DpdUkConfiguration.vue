@@ -21,7 +21,6 @@
                     <thead>
                         <tr>
                             <th>API Username</th>
-<!--                            <th>API Live</th>-->
                             <th>Collection Address</th>
                             <th></th><!--Delete-->
                         </tr>
@@ -30,7 +29,6 @@
                     <template v-for="configuration in configurations">
                         <tr key="{{ configuration.id }}">
                             <td>{{ configuration.username }}</td>
-<!--                            <td>{{ configuration.api_live ? 'true' : 'false'}}</td>-->
                             <td>
                                 <div>{{ configuration.collection_address.first_name }} {{ configuration.collection_address.last_name }}</div>
                                 <div>{{ configuration.collection_address.compnay }}</div>
