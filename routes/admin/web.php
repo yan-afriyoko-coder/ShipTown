@@ -31,7 +31,7 @@ Route::prefix('settings')->group(function () {
     Route::view('navigation-menu', 'settings/navigation-menu')->name('settings.navigation_menu');
     Route::view('automations', 'settings/automations')->name('settings.automations');
     Route::view('warehouses', 'settings/warehouses')->name('settings.warehouses');
-    Route::view('dpd-uk', 'settings/dpd-uk')->name('settings.dpd-uk');
+    Route::view('modules/dpd-uk', 'settings/dpd-uk')->name('settings.modules.dpd-uk');
 });
 
 Route::prefix('tools')->group(function () {

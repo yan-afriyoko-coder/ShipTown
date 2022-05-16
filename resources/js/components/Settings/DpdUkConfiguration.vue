@@ -22,7 +22,7 @@
                         <tr>
                             <th>API Username</th>
                             <th>Collection Address</th>
-                            <th></th><!--Delete-->
+<!--                            <th></th>&lt;!&ndash;Delete&ndash;&gt;-->
                         </tr>
                     </thead>
                     <tbody>
@@ -41,9 +41,9 @@
                                 <div>{{ configuration.collection_telephone }}</div>
                                 <div>{{ configuration.collection_email }}</div>
                             </td>
-                            <td>
-                                <a @click="handleDelete(configuration.id)" class="action-link text-danger">Delete</a>
-                            </td>
+<!--                            <td>-->
+<!--                                <a @click="handleDelete(configuration.id)" class="action-link text-danger">Delete</a>-->
+<!--                            </td>-->
                         </tr>
                     </template>
                     </tbody>
@@ -100,7 +100,6 @@
                 this.apiGetDpdUkConnections()
                     .then(({ data }) => {
                         this.configurations = data.data;
-                        console.log(data.data);
                     })
                     .catch((error) => {
                         this.notifyError('Api call failed - Error ' + error.response.status +': '+ error.response.statusText);
