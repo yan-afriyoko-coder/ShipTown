@@ -18,6 +18,9 @@ class {{class}} extends TestCase
         $response = $this->actingAs($user, 'api')->getJson(route('route-name.index'));
 
         $response->assertOk();
+
+        $this->assertEquals(1, $response->json('meta.total'), 'No records returned');
+
         $response->assertJsonStructure([
             'meta',
             'links',

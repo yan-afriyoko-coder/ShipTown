@@ -2,13 +2,14 @@
 
 namespace App\Modules\DpdUk\src\Models;
 
+use App\BaseModel;
 use App\Models\OrderAddress;
 use App\Traits\Encryptable;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Spatie\QueryBuilder\QueryBuilder;
 
 /**
  * App\Models\Configuration.
@@ -18,6 +19,7 @@ use Illuminate\Support\Carbon;
  * @property string         $password
  * @property string         $account_number
  * @property int            $collection_address_id
+ * @property OrderAddress   $collection_address
  * @property string         $geo_session
  * @property Carbon|null    $created_at
  * @property Carbon|null    $updated_at
@@ -32,7 +34,7 @@ use Illuminate\Support\Carbon;
  * @mixin Eloquent
  *
  */
-class Connection extends Model
+class Connection extends BaseModel
 {
     use Encryptable;
 
@@ -46,12 +48,28 @@ class Connection extends Model
         'geo_session',
     ];
 
+    protected $hidden = ['password'];
+    protected $guarded = [
+        'password'
+    ];
+
     protected array $encryptable = [
         'username',
         'password',
         'account_number',
         'geo_session'
     ];
+
+    /**
+     * @return QueryBuilder
+     */
+    public static function getSpatieQueryBuilder(): QueryBuilder
+    {
+        return QueryBuilder::for(self::class)
+            ->allowedFilters([])
+            ->allowedIncludes([])
+            ->allowedSorts([]);
+    }
 
     /**
      * @return BelongsTo

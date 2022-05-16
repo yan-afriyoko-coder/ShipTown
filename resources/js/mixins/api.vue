@@ -143,6 +143,10 @@ export default {
                 return axios.get(`/api/settings/modules/dpd-ireland/connections`);
             },
 
+            apiGetDpdUkConnections() {
+                return axios.get(`/api/modules/dpd-uk/dpd-uk-connections`);
+            },
+
             apiPostDpdConfiguration: function (data) {
                 return axios.post(`/api/settings/modules/dpd-ireland/connections`, data);
             },

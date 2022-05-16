@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
 //            AutomationsSeeder::class,
 //
 //            PrintNodeClientSeeder::class,
-//            DpdUkTestConnectionSeeder::class,
+            DpdUkTestConnectionSeeder::class,
 //            DpdIrelandSeeder::class,
 //
 //            ProductAliasSeeder::class,
