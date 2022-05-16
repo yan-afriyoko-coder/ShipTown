@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Routes\Web\Admin\Settings;
+namespace Tests\Feature\Routes\Web\Admin\Settings\Modules;
 
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
