@@ -45,6 +45,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static Builder|Inventory whereShelveLocation($value)
  * @method static Builder|Inventory whereUpdatedAt($value)
  * @method static Builder|Inventory whereWarehouseId($value)
+ * @method static Builder|Inventory whereWarehouseCode($value)
  * @method static Inventory firstOrNew(array $array)
  *
  * @property-read Collection|Activity[] $activities

@@ -3,6 +3,7 @@
 namespace App\Modules\Maintenance\src;
 
 use App\Events\DailyEvent;
+use App\Events\HourlyEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
@@ -29,6 +30,9 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
+        HourlyEvent::class => [
+            Listeners\HourlyEventListener::class,
+        ],
         DailyEvent::class => [
             Listeners\DailyEvent\RunDailyMaintenanceJobsListener::class,
         ],
