@@ -21,6 +21,11 @@ class DpdUkServiceProvider extends BaseModuleServiceProvider
     public static string $module_description = 'Provides seamless integration with DPD UK';
 
     /**
+     * @var string
+     */
+    public static string $settings_link = '/admin/settings/dpd-uk';
+
+    /**
      * @var bool
      */
     public static bool $autoEnable = false;

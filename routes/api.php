@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::put('print/order/{order_number}/{view}', 'Api\PrintOrderController@store');
 
+RoutesBuilder::apiResource('modules/dpd-uk/dpd-uk-connections')->only(['index']);
+RoutesBuilder::apiResource('modules/printnode/printjobs')->only(['store']);
+
 Route::apiResource('shipments', 'Api\ShipmentControllerNew', ['as' => 'new'])->only(['store']);
 Route::apiResource('shipping-services', 'Api\ShippingServiceController')->only(['index']);
 Route::apiResource('shipping-labels', 'Api\ShippingLabelController')->only(['store']);
@@ -57,7 +60,6 @@ Route::apiResource('settings/widgets', 'Api\Settings\WidgetController')->only(['
 Route::apiResource('navigation-menu', 'Api\Settings\NavigationMenuController')->only(['index']);
 Route::apiResource('heartbeats', 'Api\HeartbeatsController')->only(['index']);
 
-RoutesBuilder::apiResource('modules/printnode/printjobs')->only(['store']);
 
 Route::resource(
     'modules/printnode/printers',

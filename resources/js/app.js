@@ -138,6 +138,7 @@ Vue.component('date-selector-widget', require('./components/Widgets/DateSelector
 
 Vue.component('autopilot-packlist-page', require('./components/AutopilotPacklistPage.vue').default);
 Vue.component('dpd-configuration', require('./components/Settings/DpdConfiguration').default);
+Vue.component('dpd-uk-configuration', require('./components/Settings/DpdUkConfiguration').default);
 
 Vue.component('products-table', require('./components/ProductsPage.vue').default);
 Vue.component('orders-table', require('./components/OrdersPage.vue').default);
