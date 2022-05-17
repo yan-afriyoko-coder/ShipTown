@@ -23,6 +23,9 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property string      $shelve_location
  * @property float       $quantity
  * @property float       $quantity_reserved
+ * @property float       $quantity_incoming
+ * @property float       $restock_level
+ * @property float       $reorder_point
  * @property string|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -81,6 +84,7 @@ class Inventory extends BaseModel
     protected $attributes = [
         'quantity'          => 0,
         'quantity_reserved' => 0,
+        'quantity_incoming' => 0,
         'restock_level'     => 0,
         'reorder_point'     => 0,
     ];
@@ -89,6 +93,7 @@ class Inventory extends BaseModel
         'quantity'           => 'float',
         'quantity_reserved'  => 'float',
         'quantity_available' => 'float',
+        'quantity_incoming'  => 'float',
         'restock_level'      => 'float',
         'reorder_point'      => 'float',
         'quantity_required'  => 'float',
@@ -105,6 +110,7 @@ class Inventory extends BaseModel
                 AllowedFilter::exact('product_id'),
                 AllowedFilter::exact('warehouse_id'),
                 AllowedFilter::exact('warehouse_code'),
+                AllowedFilter::exact('quantity_incoming'),
                 AllowedFilter::scope('quantity_available_between'),
                 AllowedFilter::scope('quantity_required_between'),
                 AllowedFilter::scope('restock_level_between'),
@@ -118,7 +124,8 @@ class Inventory extends BaseModel
                 'warehouse_id',
                 'quantity_available',
                 'restock_level',
-                'quantity_required'
+                'quantity_required',
+                'quantity_incoming',
             ])
             ->allowedIncludes([
                 'product'
@@ -137,6 +144,25 @@ class Inventory extends BaseModel
         }
 
         return $this->attributes['quantity_available'];
+    }
+
+    /**
+     * @return float
+     */
+    public function getQuantityRequiredAttribute(): float
+    {
+        // quantity_required is mssql computed stored value, it's not updated until is saved
+        // this is to make sure always up-to-date value is returned
+        if ($this->quantity === null || $this->quantity_reserved === null || $this->quantity_incoming === null) {
+            $quantity_required = $this->restock_level - ($this->quantity_available + $this->quantity_incoming);
+            if ($quantity_required > 0) {
+                return $quantity_required;
+            }
+
+            return 0;
+        }
+
+        return $this->attributes['quantity_required'];
     }
 
     /**

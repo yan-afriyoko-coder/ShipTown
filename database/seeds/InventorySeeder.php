@@ -27,10 +27,11 @@ class InventorySeeder extends Seeder
                         'product_id'  => $product->id,
                         'warehouse_id' => $warehouse->getKey(),
                     ])->update([
-                        'quantity'        => rand(0, 100),
-                        'restock_level'   => $restock_level,
-                        'reorder_point'   => rand(0, $restock_level),
-                        'shelve_location' => $random_location
+                        'quantity'          => rand(0, 100),
+                        'quantity_incoming' => rand(0, 100),
+                        'restock_level'     => $restock_level,
+                        'reorder_point'     => rand(0, $restock_level),
+                        'shelve_location'   => $random_location
                     ]);
                 });
         });
