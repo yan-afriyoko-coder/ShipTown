@@ -10,6 +10,8 @@ use Illuminate\Support\Str;
 $factory->define(RmsapiProductImport::class, function (Faker $faker) {
     $connection = factory(RmsapiConnection::class)->create();
 
+    $random_department = $faker->randomElement(['household', 'bedding', 'fashion', 'baby']);
+    $random_category = $faker->randomElement(['category1', 'category2', 'category3', 'category4']);
     $quantity_on_hand = random_int(0, 1000);
     $quantity_committed = random_int(0, $quantity_on_hand);
     $quantity_available = $quantity_on_hand - $quantity_committed;
@@ -35,6 +37,8 @@ $factory->define(RmsapiProductImport::class, function (Faker $faker) {
            "supplier_id":2,
            "date_created":"2003-06-03 17:17:23",
            "department_id":5,
+           "department_name":"'. $random_department .'",
+           "category_name":"'. $random_category .'",
            "reorder_point":'. $reorder_point .',
            "restock_level":'. $restock_level .',
            "sale_end_date":null,
