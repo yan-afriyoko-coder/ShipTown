@@ -42,7 +42,7 @@ $factory->define(RmsapiProductImport::class, function (Faker $faker) {
            "db_change_stamp":'.random_int(1000, 100000).',
            "sale_start_date":null,
            "quantity_on_hand":'.$quantity_on_hand.',
-           "quantity_on_order":0,
+           "quantity_on_order":'.random_int(10, 20).',
            "sub_description_1":"",
            "sub_description_2":"",
            "sub_description_3":"",
