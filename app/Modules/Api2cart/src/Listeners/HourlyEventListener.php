@@ -4,6 +4,7 @@ namespace App\Modules\Api2cart\src\Listeners;
 
 use App\Events\HourlyEvent;
 use App\Modules\Api2cart\src\Jobs\CheckIfProductsInSync;
+use App\Modules\Api2cart\src\Jobs\RemoveProductLinksIfNotAvailableOnlineJob;
 use App\Modules\Api2cart\src\Jobs\SyncProductsJob;
 
 class HourlyEventListener
@@ -19,5 +20,6 @@ class HourlyEventListener
     {
         SyncProductsJob::dispatch();
         CheckIfProductsInSync::dispatch();
+        RemoveProductLinksIfNotAvailableOnlineJob::dispatch();
     }
 }
