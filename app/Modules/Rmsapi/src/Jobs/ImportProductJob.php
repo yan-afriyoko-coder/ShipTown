@@ -110,6 +110,7 @@ class ImportProductJob implements ShouldQueue
             ->update([
                 'quantity'          => $importedProduct->raw_import['quantity_on_hand'],
                 'quantity_reserved' => $importedProduct->raw_import['quantity_committed'],
+                'quantity_incoming' => $importedProduct->raw_import['quantity_on_order'],
                 'shelve_location'   => Arr::get($importedProduct->raw_import, 'rmsmobile_shelve_location'),
                 'reorder_point'     => Arr::get($importedProduct->raw_import, 'reorder_point'),
                 'restock_level'     => Arr::get($importedProduct->raw_import, 'restock_level'),
