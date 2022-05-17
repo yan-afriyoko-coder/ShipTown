@@ -151,7 +151,12 @@ class ImportProductJob implements ShouldQueue
             $product->detachTag('Available Online');
         }
 
-        $product->attachTag($importedProduct->raw_import['department_name']);
-        $product->attachTag($importedProduct->raw_import['category_name']);
+        if ($importedProduct->raw_import['department_name']) {
+            $product->attachTag($importedProduct->raw_import['department_name']);
+        }
+
+        if ($importedProduct->raw_import['category_name']) {
+            $product->attachTag($importedProduct->raw_import['category_name']);
+        }
     }
 }
