@@ -37,6 +37,7 @@ class ModulesService
         \App\Modules\DpdUk\src\DpdUkServiceProvider::class,
         \App\Modules\AddressLabel\src\AddressLabelServiceProvider::class,
         \App\Modules\DpdIreland\src\DpdIrelandServiceProvider::class,
+        \App\Modules\PrintNode\src\PrintNodeServiceProvider::class,
     ];
 
     /**
