@@ -9,9 +9,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-class RemoveProductLinksIfNotAvailableOnlineJob implements ShouldQueue
+class DetachNotSyncedTagIfNotAvailableOnlineJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -25,10 +26,14 @@ class RemoveProductLinksIfNotAvailableOnlineJob implements ShouldQueue
      */
     public function handle()
     {
-        Api2cartProductLink::query()
-            ->whereDoesntHave('product', function ($query) {
-                $query->hasTags('Available Online');
-            })
-            ->forceDelete();
+        $query = Product::query()
+            ->withAllTags('Not Synced')
+            ->withoutAllTags(['Available Online']);
+
+        $query->chunk(50, function (Collection $chunk) {
+            $chunk->each(function (Product $product) {
+                $product->detachTag('Not Synced');
+            });
+        });
     }
 }
