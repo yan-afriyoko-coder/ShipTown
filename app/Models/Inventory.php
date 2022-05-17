@@ -77,6 +77,7 @@ class Inventory extends BaseModel
         'product_id',
         'quantity',
         'quantity_reserved',
+        'quantity_incoming',
         'restock_level',
         'reorder_point',
     ];
