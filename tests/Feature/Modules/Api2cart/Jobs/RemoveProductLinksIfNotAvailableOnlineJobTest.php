@@ -3,10 +3,7 @@
 namespace Tests\Feature\Modules\Api2cart\Jobs;
 
 use App\Models\Product;
-use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Jobs\RemoveProductLinksIfNotAvailableOnlineJob;
-use App\Modules\Api2cart\src\Jobs\SyncProduct;
-use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use Tests\TestCase;
 

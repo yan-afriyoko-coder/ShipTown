@@ -3,14 +3,12 @@
 namespace App\Modules\Api2cart\src\Jobs;
 
 use App\Models\Product;
-use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 
 class DetachNotSyncedTagIfNotAvailableOnlineJob implements ShouldQueue
 {
