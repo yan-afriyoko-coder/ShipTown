@@ -10,13 +10,13 @@ use Illuminate\Support\Str;
 $factory->define(RmsapiProductImport::class, function (Faker $faker) {
     $connection = factory(RmsapiConnection::class)->create();
 
-    $random_department = $faker->randomElement(['household', 'bedding', 'fashion', 'baby']);
-    $random_category = $faker->randomElement(['category1', 'category2', 'category3', 'category4']);
-    $quantity_on_hand = random_int(0, 1000);
+    $random_department  = $faker->randomElement(['household', 'bedding', 'fashion', 'baby']);
+    $random_category    = $faker->randomElement(['category1', 'category2', 'category3', 'category4']);
+    $quantity_on_hand   = random_int(0, 1000);
     $quantity_committed = random_int(0, $quantity_on_hand);
     $quantity_available = $quantity_on_hand - $quantity_committed;
-    $reorder_point = random_int(0, 100);
-    $restock_level = random_int(0, $reorder_point);
+    $reorder_point      = random_int(0, 100);
+    $restock_level      = random_int(0, $reorder_point);
 
     return [
         'connection_id' => $connection->id,
