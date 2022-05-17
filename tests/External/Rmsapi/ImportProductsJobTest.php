@@ -5,7 +5,7 @@ namespace Tests\External\Rmsapi;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Jobs\FetchUpdatedProductsJob;
-use App\Modules\Rmsapi\src\Jobs\ProcessImportedBatch;
+use App\Modules\Rmsapi\src\Jobs\ProcessProductImports;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
@@ -38,6 +38,6 @@ class ImportProductsJobTest extends TestCase
         $job->handle();
 
         $this->assertTrue(RmsapiProductImport::query()->exists(), 'No imports have been made');
-        Bus::assertDispatched(ProcessImportedBatch::class);
+        Bus::assertDispatched(ProcessProductImports::class);
     }
 }

@@ -7,7 +7,7 @@ use App\Models\Product;
 use App\Models\ProductAlias;
 use App\Models\Warehouse;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
-use App\Modules\Rmsapi\src\Jobs\ProcessImportedBatch;
+use App\Modules\Rmsapi\src\Jobs\ProcessProductImports;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Spatie\Tags\Tag;
@@ -32,7 +32,7 @@ class ProcessImportedProductsJobTest extends TestCase
         $importData->update(['raw_import' => $raw_import]);
 
         // act
-        $job = new ProcessImportedBatch();
+        $job = new ProcessProductImports();
 
         $job->handle();
 
@@ -54,7 +54,7 @@ class ProcessImportedProductsJobTest extends TestCase
         factory(RmsapiProductImport::class)->create();
 
         // act
-        $job = new ProcessImportedBatch();
+        $job = new ProcessProductImports();
 
         $job->handle();
 
@@ -73,7 +73,7 @@ class ProcessImportedProductsJobTest extends TestCase
         $importData = factory(RmsapiProductImport::class)->create();
 
         // act
-        $job = new ProcessImportedBatch();
+        $job = new ProcessProductImports();
 
         $job->handle();
 
