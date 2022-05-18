@@ -13,7 +13,7 @@ class AddReservedAtColumnToRmsapiProductsImportsTable extends Migration
      */
     public function up()
     {
-        Schema::table('rmsapi_products_imports', function (Blueprint $table) {
+        Schema::table('modules_rmsapi_products_imports', function (Blueprint $table) {
             $table->timestamp('reserved_at')->nullable()->after('batch_uuid');
         });
     }
