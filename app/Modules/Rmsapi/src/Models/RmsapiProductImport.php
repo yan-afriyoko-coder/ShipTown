@@ -13,7 +13,8 @@ use Illuminate\Support\Carbon;
  * @property int         $id
  * @property int         $connection_id
  * @property string|null $batch_uuid
- * @property string|null $when_processed
+ * @property Carbon|null $reserved_at
+ * @property Carbon|null $when_processed
  * @property int|null    $product_id
  * @property string|null $sku
  * @property array       $raw_import
@@ -41,6 +42,7 @@ class RmsapiProductImport extends Model
     protected $fillable = [
         'connection_id',
         'batch_uuid',
+        'reserved_at',
         'when_processed',
         'product_id',
         'sku',
@@ -52,7 +54,7 @@ class RmsapiProductImport extends Model
     ];
 
     // we use attributes to set default values
-    // we wont use database default values
+    // we won't use database default values
     // as this is then not populated
     // correctly to events
     protected $attributes = [
