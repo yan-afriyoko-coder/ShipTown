@@ -25,7 +25,7 @@ class ImportProductJob implements ShouldQueue
     /**
      * @var RmsapiProductImport
      */
-    private $importedProduct;
+    private RmsapiProductImport $importedProduct;
 
     /**
      * Create a new job instance.
@@ -44,7 +44,11 @@ class ImportProductJob implements ShouldQueue
      */
     public function handle()
     {
-        $this->import($this->importedProduct);
+        $importedProduct = $this->importedProduct->refresh();
+
+        if ($importedProduct->when_processed === null) {
+            $this->import($importedProduct);
+        }
     }
 
     /**
@@ -108,12 +112,12 @@ class ImportProductJob implements ShouldQueue
             ])
             ->first()
             ->update([
-                'quantity'          => $importedProduct->raw_import['quantity_on_hand'],
-                'quantity_reserved' => $importedProduct->raw_import['quantity_committed'],
-                'quantity_incoming' => $importedProduct->raw_import['quantity_on_order'],
-                'shelve_location'   => Arr::get($importedProduct->raw_import, 'rmsmobile_shelve_location'),
-                'reorder_point'     => Arr::get($importedProduct->raw_import, 'reorder_point'),
-                'restock_level'     => Arr::get($importedProduct->raw_import, 'restock_level'),
+                'quantity'          => Arr::get($importedProduct->raw_import, 'quantity_on_hand', 0),
+                'quantity_reserved' => Arr::get($importedProduct->raw_import, 'quantity_committed', 0),
+                'quantity_incoming' => Arr::get($importedProduct->raw_import, 'quantity_on_order', 0),
+                'shelve_location'   => Arr::get($importedProduct->raw_import, 'rmsmobile_shelve_location', ''),
+                'reorder_point'     => Arr::get($importedProduct->raw_import, 'reorder_point', 0),
+                'restock_level'     => Arr::get($importedProduct->raw_import, 'restock_level', 0),
             ]);
     }
 
