@@ -393,6 +393,11 @@
                             this.notifySuccess('Status changed')
                         })
                         .catch(() => {
+                            this.apiActivitiesPost({
+                                'subject_type': 'order',
+                                'subject_id': this.order.id,
+                                'description': 'Error when changing status'
+                            });
                             this.notifyError('Error when changing status');
                         });
                 },
@@ -415,6 +420,11 @@
                             this.notifySuccess('Shipping number saved');
                         })
                         .catch(() => {
+                            this.apiActivitiesPost({
+                                'subject_type': 'order',
+                                'subject_id': this.order.id,
+                                'description': 'Error saving shipping number, try again'
+                            });
                             this.notifyError('Error saving shipping number, try again');
                         })
                 },
@@ -428,6 +438,11 @@
                             'packer_user_id': Vue.prototype.$currentUser['id']
                         })
                         .catch((error) => {
+                            this.apiActivitiesPost({
+                                'subject_type': 'order',
+                                'subject_id': this.order.id,
+                                'description': 'Error occurred when marking order as packed'
+                            });
                             this.notifyError('Error: '+error.response.message);
                         });
                 },
@@ -444,7 +459,12 @@
                             this.displayPackedNotification(data.data);
                         })
                         .catch((error) => {
-                            console.log(error);
+                            this.apiActivitiesPost({
+                                'subject_type': 'order',
+                                'subject_id': this.order.id,
+                                'description': 'Error occurred when shipping products, try again'
+                            });
+                            this.notifyError('Error occurred when shipping products, try again');
                         });
                 },
 
@@ -456,7 +476,12 @@
                             this.notifySuccess();
                         })
                         .catch(() => {
-                            this.notifyError('Error occurred when saving quantity shipped, try again');
+                            this.apiActivitiesPost({
+                                'subject_type': 'order',
+                                'subject_id': this.order.id,
+                                'description': 'Error occurred when setting quantity_shipped, try again'
+                            });
+                            this.notifyError('Error occurred when setting quantity_shipped, try again');
                         })
                         .finally(() => {
                             this.loadOrderProducts();
@@ -606,6 +631,12 @@
                                 buttons: [
                                     {text: 'OK', action: null},
                                 ]
+                            });
+
+                            this.apiActivitiesPost({
+                                'subject_type': 'order',
+                                'subject_id': this.order.id,
+                                'description': 'Error when posting shipping label request'
                             });
                         });
                 },
