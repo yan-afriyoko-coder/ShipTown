@@ -28,14 +28,24 @@ class ProcessProductImports implements ShouldQueue
             ->where('reserved_at', '<', now()->subMinutes(60))
             ->update(['reserved_at' => null]);
 
-        RmsapiProductImport::query()
+        $query = RmsapiProductImport::query()
             ->whereNull('when_processed')
             ->whereNull('reserved_at')
-            ->limit(500)
-            ->orderBy('id', 'asc')
-            ->get()->each(function (RmsapiProductImport $productImport) {
-                $productImport->update(['reserved_at' => now()]);
-                ImportProductJob::dispatch($productImport);
+            ->limit(10)
+            ->orderBy('id', 'asc');
+
+        $productImports = $query->get();
+
+        while ($productImports->isNotEmpty()) {
+            RmsapiProductImport::query()
+                ->whereIn('id', $productImports->pluck('id'))
+                ->update(['reserved_at' => now()]);
+
+            $productImports->each(function (RmsapiProductImport $productImport) {
+                ImportProductJob::dispatchNow($productImport);
             });
+
+            $productImports = $query->get();
+        }
     }
 }
