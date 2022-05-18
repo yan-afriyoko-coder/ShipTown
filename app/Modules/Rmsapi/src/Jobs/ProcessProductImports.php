@@ -31,7 +31,7 @@ class ProcessProductImports implements ShouldQueue
         $query = RmsapiProductImport::query()
             ->whereNull('when_processed')
             ->whereNull('reserved_at')
-            ->limit(10)
+            ->limit(20)
             ->orderBy('id', 'asc');
 
         $productImports = $query->get();
