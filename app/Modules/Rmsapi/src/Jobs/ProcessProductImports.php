@@ -25,7 +25,7 @@ class ProcessProductImports implements ShouldQueue
     {
         RmsapiProductImport::query()
             ->whereNull('when_processed')
-            ->where('reserved_at', '<', now()->subMinutes(10))
+            ->where('reserved_at', '<', now()->subMinutes(60))
             ->update(['reserved_at' => null]);
 
         RmsapiProductImport::query()
