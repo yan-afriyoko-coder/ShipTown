@@ -37,18 +37,17 @@ class ProductInventoryController extends Controller
     {
         $product = Product::where('sku', '=', $request->sku)->firstOrFail();
 
-        $update = $request->validated();
+        $attributes = $request->validated();
 
-        $update['product_id'] = $product->id;
+        $attributes['product_id'] = $product->id;
 
-        $inventory = Inventory::updateOrCreate(
-            [
-                'product_id'     => $update['product_id'],
-                'location_id'    => $update['location_id'],
-                'warehouse_code' => $update['location_id'],
-            ],
-            $update
-        );
+        $inventory = Inventory::query()->where([
+                'product_id'     => $attributes['product_id'],
+                'warehouse_code' => $attributes['location_id'],
+            ])
+            ->first();
+
+        $inventory->update($attributes);
 
         return JsonResource::collection(collect([$inventory]));
     }
