@@ -145,6 +145,8 @@
                     packed: [],
 
                     previousOrderNumber: null,
+                    previousOrderId: null,
+
                     canClose: true,
                     isPrintingLabel: false,
                     somethingHasBeenPackedDuringThisSession: false,
@@ -235,41 +237,11 @@
                     }
                 },
 
-                loadOrder: function (orderNumber) {
-                    this.showLoading();
-
-                    if(this.order && this.order['order_number'] !== orderNumber) {
-                        this.previousOrderNumber = this.order['order_number'];
-                    }
-
-                    this.canClose = true;
-                    this.order = null;
-                    this.somethingHasBeenPackedDuringThisSession = false;
-
-                    const params = {
-                        'filter[order_number]': orderNumber,
-                        'include': 'order_totals,order_comments,order_products,' +
-                            'order_comments.user',
-                    };
-
-                    return this.apiGetOrders(params)
-                        .then(({data}) => {
-                            this.order = data.meta.total > 0 ? data.data[0] : null;
-                            this.loadOrderProducts();
-                        })
-                        .catch(() => {
-                            this.notifyError('Error occurred while loading order');
-                        })
-                        .finally(() => {
-                            this.hideLoading();
-                        })
-                },
-
-                loadOrderById: function () {
+                loadOrderById: function (order_id = null) {
                     this.showLoading();
 
                     if(this.order && this.order['id'] !== this.order_id) {
-                        this.previousOrderNumber = this.order['order_number'];
+                        this.previousOrderId = this.order['id'];
                     }
 
                     this.canClose = true;
@@ -277,15 +249,12 @@
                     this.somethingHasBeenPackedDuringThisSession = false;
 
                     let params = {
+                        'filter[order_id]': this.order_id,
                         'include': 'order_totals,order_comments,order_comments.user',
                     };
 
-                    if  (this.order_id) {
+                    if (order_id) {
                         params['filter[order_id]'] = this.order_id;
-                    }
-
-                    if  (this.order_number) {
-                        params['filter[order_number]'] = this.order_number;
                     }
 
                     return this.apiGetOrders(params)
@@ -680,13 +649,12 @@
                 openPreviousOrder: function (){
                     this.$refs.filtersModal.hide();
 
-                    if (! this.previousOrderNumber) {
+                    if (! this.previousOrderId) {
                         this.notifyError('Not Available');
                         return;
                     }
 
-                    this.loadOrder(this.previousOrderNumber);
-                    this.notifySuccess(this.previousOrderNumber);
+                    this.loadOrderById(this.previousOrderId);
                 },
 
                 displayPackedNotification: function (order_product_shipment) {
