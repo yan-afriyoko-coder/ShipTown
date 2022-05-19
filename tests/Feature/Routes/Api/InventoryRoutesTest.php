@@ -6,12 +6,15 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class InventoryRoutesTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function testGetRouteUnauthorized()
     {
         $response = $this->get('/api/product/inventory');
@@ -53,8 +56,6 @@ class InventoryRoutesTest extends TestCase
 
     public function testQuantityUpdate()
     {
-        Event::fake();
-
         Passport::actingAs(
             factory(User::class)->create()
         );
