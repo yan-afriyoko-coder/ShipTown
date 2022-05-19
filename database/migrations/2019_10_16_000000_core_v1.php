@@ -223,7 +223,7 @@ class CoreV1 extends Migration
         Schema::create('inventory', function (Blueprint $table) {
             $table->id();
             $table->foreignId('warehouse_id')->nullable();
-            $table->foreignId('product_id')->index();
+            $table->foreignId('product_id');
             $table->string('location_id')->default('');
             $table->string('shelve_location')->default('');
             $table->decimal('quantity', 10)->default(0);
@@ -240,6 +240,8 @@ class CoreV1 extends Migration
                 ->on('warehouses')
                 ->references('id')
                 ->onDelete('SET NULL');
+
+            $table->index('product_id');
         });
 
         Schema::create('orders', function (Blueprint $table) {

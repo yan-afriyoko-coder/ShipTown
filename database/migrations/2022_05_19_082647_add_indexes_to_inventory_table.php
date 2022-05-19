@@ -14,7 +14,6 @@ class AddIndexesToInventoryTable extends Migration
     public function up()
     {
         Schema::table('inventory', function (Blueprint $table) {
-            $table->index('product_id');
             $table->index('shelve_location');
             $table->index('quantity_available');
             $table->index('quantity');
