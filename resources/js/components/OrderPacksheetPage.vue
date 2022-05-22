@@ -28,39 +28,39 @@
                     </div>
                 </div>
             </template>
+
             <div class="row mb-3 pl-1 pr-1">
                 <div class="flex-fill">
                     <barcode-input-field @barcodeScanned="packBarcode" placeholder="Enter sku or alias to ship 1 piece" ref="barcode"/>
                 </div>
-                <button type="button" class="btn btn-primary ml-2 mr-0 border-right-0 text-white" data-toggle="modal" data-target="#filterConfigurationModal" href="#"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+
+                <button type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
             </div>
 
-            <div v-if="packlist && packlist.length === 0 && packed.length === 0" class="row" >
-                <div class="col">
-                    <div class="alert alert-info" role="alert">
-                        Loading product list ...
+            <template v-if="orderProducts.length === 0" >
+                <div class="row mb-3" >
+                    <div class="col">
+                        <div class="alert alert-info" role="alert">
+                            No products found
+                        </div>
                     </div>
                 </div>
-            </div>
+            </template>
 
-            <template v-else class="row">
-
-                <template v-for="record in packlist">
-                    <div class="row mb-3">
-                        <div class="col">
-                            <packlist-entry :picklistItem="record" :key="record.id" @swipeRight="shipAll" @swipeLeft="shipPartialSwiped"/>
-                        </div>
+            <template v-for="record in packlist">
+                <div class="row mb-3">
+                    <div class="col">
+                        <packlist-entry :picklistItem="record" :key="record.id" @swipeRight="shipAll" @swipeLeft="shipPartialSwiped"/>
                     </div>
-                </template>
+                </div>
+            </template>
 
-                <template v-for="record in packed">
-                    <div class="row mb-3">
-                        <div class="col">
-                            <packed-entry :picklistItem="record" :key="record.id" @swipeLeft="shipPartialSwiped" />
-                        </div>
+            <template v-for="record in packed">
+                <div class="row mb-3">
+                    <div class="col">
+                        <packed-entry :picklistItem="record" :key="record.id" @swipeLeft="shipPartialSwiped" />
                     </div>
-                </template>
-
+                </div>
             </template>
 
         </div>
@@ -83,16 +83,16 @@
                     </select>
                 </div>
 
-                    <button :disabled="order.label_template === ''" type="button" @click.prevent="printExtraLabelClick()" class="col btn mb-1 btn-primary">Print Courier Label</button>
-                    <button type="button" @click.prevent="printShippingLabel('address_label')" class="col btn mb-1 btn-primary">Print Address Label</button>
-                    <br>
-                    <br>
-                    <button type="button" class="col btn mb-1 btn-primary" @click.prevent="askForShippingNumber">Add Shipping Number</button>
+                <button :disabled="order.label_template === ''" type="button" @click.prevent="printExtraLabelClick()" class="col btn mb-1 btn-primary">Print Courier Label</button>
+                <button type="button" @click.prevent="printShippingLabel('address_label')" class="col btn mb-1 btn-primary">Print Address Label</button>
+                <br>
+                <br>
+                <button type="button" class="col btn mb-1 btn-primary" @click.prevent="askForShippingNumber">Add Shipping Number</button>
             </template>
 
             <template v-slot:footer>
                 <div class="flex-fill">
-                    <button type="button" class="btn btn-primary  float-left" @click.prevent="openPreviousOrder">Open Previous Order</button>
+                    <button :disabled="previous_order_id === null"  type="button" class="btn btn-primary  float-left" @click.prevent="openPreviousOrder">Open Previous Order</button>
                 </div>
             </template>
 
@@ -130,8 +130,8 @@
             },
 
             props: {
-                order_number: null,
                 order_id: null,
+                previous_order_id: null,
             },
 
             data: function() {
@@ -144,13 +144,8 @@
                     packlist: null,
                     packed: [],
 
-                    previousOrderNumber: null,
-                    previousOrderId: null,
-
                     canClose: true,
-                    isPrintingLabel: false,
                     somethingHasBeenPackedDuringThisSession: false,
-                    autopilotEnabled: false,
                     autoLabelAlreadyPrinted: false,
                 };
             },
@@ -240,10 +235,6 @@
                 loadOrderById: function (order_id = null) {
                     this.showLoading();
 
-                    if(this.order && this.order['id'] !== this.order_id) {
-                        this.previousOrderId = this.order['id'];
-                    }
-
                     this.canClose = true;
                     this.order = null;
                     this.somethingHasBeenPackedDuringThisSession = false;
@@ -254,7 +245,7 @@
                     };
 
                     if (order_id) {
-                        params['filter[order_id]'] = this.order_id;
+                        params['filter[order_id]'] = order_id;
                     }
 
                     return this.apiGetOrders(params)
@@ -308,9 +299,9 @@
                         'per_page': 999,
                         'sort': 'code'
                     })
-                        .then(({ data }) => {
-                            this.shippingCouriers = data.data;
-                        })
+                    .then(({ data }) => {
+                        this.shippingCouriers = data.data;
+                    })
                 },
 
                 shipPartialSwiped(orderProduct) {
@@ -649,12 +640,12 @@
                 openPreviousOrder: function (){
                     this.$refs.filtersModal.hide();
 
-                    if (! this.previousOrderId) {
+                    if (! this.previous_order_id) {
                         this.notifyError('Not Available');
                         return;
                     }
 
-                    this.loadOrderById(this.previousOrderId);
+                    this.loadOrderById(this.previous_order_id);
                 },
 
                 displayPackedNotification: function (order_product_shipment) {
