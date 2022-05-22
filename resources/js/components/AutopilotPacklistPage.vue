@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="! order_number" class="row text-center mt-3" >
+        <div v-if="! order_id" class="row text-center mt-3" >
             <div class="col">
                 <button type="button"  class="btn btn-primary" @click.prevent="loadNextOrder">
                     Start AutoPilot Packing
@@ -9,7 +9,12 @@
         </div>
 
         <template v-for="order in orders">
-            <order-packsheet-page :key="'order_id_' + order.id" :order_id="order.id" @orderCompleted="loadNextOrder"></order-packsheet-page>
+            <order-packsheet-page
+                :key="'order_id_' + order.id"
+                :order_id="order.id"
+                :previous_order_id="previous_order_id"
+                @orderCompleted="loadNextOrder">
+            </order-packsheet-page>
         </template>
     </div>
 </template>
@@ -28,8 +33,8 @@
         data: function() {
             return {
                 orders: [],
-                order_number: null,
                 order_id: null,
+                previous_order_id: null,
             };
         },
 
@@ -58,10 +63,11 @@
 
                 this.apiGetPacklistOrder(params)
                     .then(({data}) => {
+                        this.previous_order_id = this.order_id;
+
                         // we use array here so we can use v-for component
                         // and auto destroy when loading next order
                         this.orders = [data.data];
-                        this.order_number = data.data['order_number'];
                         this.order_id = data.data['id'];
                         this.hideLoading();
                     })

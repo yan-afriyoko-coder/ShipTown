@@ -28,39 +28,39 @@
                     </div>
                 </div>
             </template>
+
             <div class="row mb-3 pl-1 pr-1">
                 <div class="flex-fill">
                     <barcode-input-field @barcodeScanned="packBarcode" placeholder="Enter sku or alias to ship 1 piece" ref="barcode"/>
                 </div>
-                <button type="button" class="btn btn-primary ml-2 mr-0 border-right-0 text-white" data-toggle="modal" data-target="#filterConfigurationModal" href="#"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+
+                <button type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
             </div>
 
-            <div v-if="packlist && packlist.length === 0 && packed.length === 0" class="row" >
-                <div class="col">
-                    <div class="alert alert-info" role="alert">
-                        Loading product list ...
+            <template v-if="orderProducts.length === 0" >
+                <div class="row mb-3" >
+                    <div class="col">
+                        <div class="alert alert-info" role="alert">
+                            No products found
+                        </div>
                     </div>
                 </div>
-            </div>
+            </template>
 
-            <template v-else class="row">
-
-                <template v-for="record in packlist">
-                    <div class="row mb-3">
-                        <div class="col">
-                            <packlist-entry :picklistItem="record" :key="record.id" @swipeRight="shipAll" @swipeLeft="shipPartialSwiped"/>
-                        </div>
+            <template v-for="record in packlist">
+                <div class="row mb-3">
+                    <div class="col">
+                        <packlist-entry :picklistItem="record" :key="record.id" @swipeRight="shipAll" @swipeLeft="shipPartialSwiped"/>
                     </div>
-                </template>
+                </div>
+            </template>
 
-                <template v-for="record in packed">
-                    <div class="row mb-3">
-                        <div class="col">
-                            <packed-entry :picklistItem="record" :key="record.id" @swipeLeft="shipPartialSwiped" />
-                        </div>
+            <template v-for="record in packed">
+                <div class="row mb-3">
+                    <div class="col">
+                        <packed-entry :picklistItem="record" :key="record.id" @swipeLeft="shipPartialSwiped" />
                     </div>
-                </template>
-
+                </div>
             </template>
 
         </div>
@@ -83,16 +83,16 @@
                     </select>
                 </div>
 
-                    <button :disabled="order.label_template === ''" type="button" @click.prevent="printExtraLabelClick()" class="col btn mb-1 btn-primary">Print Courier Label</button>
-                    <button type="button" @click.prevent="printShippingLabel('address_label')" class="col btn mb-1 btn-primary">Print Address Label</button>
-                    <br>
-                    <br>
-                    <button type="button" class="col btn mb-1 btn-primary" @click.prevent="askForShippingNumber">Add Shipping Number</button>
+                <button :disabled="order.label_template === ''" type="button" @click.prevent="printExtraLabelClick()" class="col btn mb-1 btn-primary">Print Courier Label</button>
+                <button type="button" @click.prevent="printShippingLabel('address_label')" class="col btn mb-1 btn-primary">Print Address Label</button>
+                <br>
+                <br>
+                <button type="button" class="col btn mb-1 btn-primary" @click.prevent="askForShippingNumber">Add Shipping Number</button>
             </template>
 
             <template v-slot:footer>
                 <div class="flex-fill">
-                    <button type="button" class="btn btn-primary  float-left" @click.prevent="openPreviousOrder">Open Previous Order</button>
+                    <button :disabled="previous_order_id === null"  type="button" class="btn btn-primary  float-left" @click.prevent="openPreviousOrder">Open Previous Order</button>
                 </div>
             </template>
 
@@ -130,8 +130,8 @@
             },
 
             props: {
-                order_number: null,
                 order_id: null,
+                previous_order_id: null,
             },
 
             data: function() {
@@ -144,11 +144,8 @@
                     packlist: null,
                     packed: [],
 
-                    previousOrderNumber: null,
                     canClose: true,
-                    isPrintingLabel: false,
                     somethingHasBeenPackedDuringThisSession: false,
-                    autopilotEnabled: false,
                     autoLabelAlreadyPrinted: false,
                 };
             },
@@ -235,57 +232,20 @@
                     }
                 },
 
-                loadOrder: function (orderNumber) {
+                loadOrderById: function (order_id = null) {
                     this.showLoading();
-
-                    if(this.order && this.order['order_number'] !== orderNumber) {
-                        this.previousOrderNumber = this.order['order_number'];
-                    }
-
-                    this.canClose = true;
-                    this.order = null;
-                    this.somethingHasBeenPackedDuringThisSession = false;
-
-                    const params = {
-                        'filter[order_number]': orderNumber,
-                        'include': 'order_totals,order_comments,order_products,' +
-                            'order_comments.user',
-                    };
-
-                    return this.apiGetOrders(params)
-                        .then(({data}) => {
-                            this.order = data.meta.total > 0 ? data.data[0] : null;
-                            this.loadOrderProducts();
-                        })
-                        .catch(() => {
-                            this.notifyError('Error occurred while loading order');
-                        })
-                        .finally(() => {
-                            this.hideLoading();
-                        })
-                },
-
-                loadOrderById: function () {
-                    this.showLoading();
-
-                    if(this.order && this.order['id'] !== this.order_id) {
-                        this.previousOrderNumber = this.order['order_number'];
-                    }
 
                     this.canClose = true;
                     this.order = null;
                     this.somethingHasBeenPackedDuringThisSession = false;
 
                     let params = {
+                        'filter[order_id]': this.order_id,
                         'include': 'order_totals,order_comments,order_comments.user',
                     };
 
-                    if  (this.order_id) {
-                        params['filter[order_id]'] = this.order_id;
-                    }
-
-                    if  (this.order_number) {
-                        params['filter[order_number]'] = this.order_number;
+                    if (order_id) {
+                        params['filter[order_id]'] = order_id;
                     }
 
                     return this.apiGetOrders(params)
@@ -339,9 +299,9 @@
                         'per_page': 999,
                         'sort': 'code'
                     })
-                        .then(({ data }) => {
-                            this.shippingCouriers = data.data;
-                        })
+                    .then(({ data }) => {
+                        this.shippingCouriers = data.data;
+                    })
                 },
 
                 shipPartialSwiped(orderProduct) {
@@ -578,31 +538,6 @@
                     }
                 },
 
-                createShipment: async function(carrier) {
-                    let shipment = {
-                        'order_id': this.order.id,
-                        'shipping_number': 'pending',
-                        'carrier': carrier,
-                        'service': 'overnight',
-                    };
-
-                    this.$refs.filtersModal.hide();
-
-                    return this.apiPostShipment(shipment)
-                        .catch((error) => {
-                            this.canClose = false;
-                            let errorMsg = 'Error: ' + error.response.data.message;
-
-                            this.notifyError(errorMsg, {
-                                closeOnClick: true,
-                                timeout: 0,
-                                buttons: [
-                                    {text: 'OK', action: null},
-                                ]
-                            });
-                        });
-                },
-
                 printExtraLabelClick: function () {
                     this.$refs.filtersModal.hide();
                     this.setFocusOnBarcodeInput(500);
@@ -641,52 +576,16 @@
                         });
                 },
 
-                printLabel: async function(template = null) {
-                    if (template === null) {
-                        template = this.order.label_template;
-                    }
-
-                    let orderNumber = this.order['order_number'];
-
-                    this.setFocusOnBarcodeInput();
-
-                    return this.apiPrintLabel(orderNumber, template)
-                        .catch((error) => {
-                            this.canClose = false;
-                            let errorMsg = 'Error occurred when printing label';
-
-                            if (error.response.status === 400) {
-                                errorMsg = 'Error occurred: ' + error.response.data.message;
-                            }
-
-                            if (error.response.status === 403) {
-                                errorMsg = 'Error occurred: ' + error.response.data.message;
-                            }
-
-                            if (error.response.status === 404) {
-                                errorMsg = 'Order not found: #' + orderNumber;
-                            }
-
-                            this.notifyError(errorMsg, {
-                                closeOnClick: true,
-                                timeout: 0,
-                                buttons: [
-                                    {text: 'OK', action: null},
-                                ]
-                            });
-                        });
-                },
-
                 openPreviousOrder: function (){
                     this.$refs.filtersModal.hide();
+                    this.setFocusOnBarcodeInput(500);
 
-                    if (! this.previousOrderNumber) {
+                    if (! this.previous_order_id) {
                         this.notifyError('Not Available');
                         return;
                     }
 
-                    this.loadOrder(this.previousOrderNumber);
-                    this.notifySuccess(this.previousOrderNumber);
+                    this.loadOrderById(this.previous_order_id);
                 },
 
                 displayPackedNotification: function (order_product_shipment) {
