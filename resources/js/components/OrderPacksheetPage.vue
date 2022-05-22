@@ -538,31 +538,6 @@
                     }
                 },
 
-                createShipment: async function(carrier) {
-                    let shipment = {
-                        'order_id': this.order.id,
-                        'shipping_number': 'pending',
-                        'carrier': carrier,
-                        'service': 'overnight',
-                    };
-
-                    this.$refs.filtersModal.hide();
-
-                    return this.apiPostShipment(shipment)
-                        .catch((error) => {
-                            this.canClose = false;
-                            let errorMsg = 'Error: ' + error.response.data.message;
-
-                            this.notifyError(errorMsg, {
-                                closeOnClick: true,
-                                timeout: 0,
-                                buttons: [
-                                    {text: 'OK', action: null},
-                                ]
-                            });
-                        });
-                },
-
                 printExtraLabelClick: function () {
                     this.$refs.filtersModal.hide();
                     this.setFocusOnBarcodeInput(500);
@@ -639,6 +614,7 @@
 
                 openPreviousOrder: function (){
                     this.$refs.filtersModal.hide();
+                    this.setFocusOnBarcodeInput(500);
 
                     if (! this.previous_order_id) {
                         this.notifyError('Not Available');
