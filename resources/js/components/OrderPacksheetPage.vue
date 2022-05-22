@@ -576,42 +576,6 @@
                         });
                 },
 
-                printLabel: async function(template = null) {
-                    if (template === null) {
-                        template = this.order.label_template;
-                    }
-
-                    let orderNumber = this.order['order_number'];
-
-                    this.setFocusOnBarcodeInput();
-
-                    return this.apiPrintLabel(orderNumber, template)
-                        .catch((error) => {
-                            this.canClose = false;
-                            let errorMsg = 'Error occurred when printing label';
-
-                            if (error.response.status === 400) {
-                                errorMsg = 'Error occurred: ' + error.response.data.message;
-                            }
-
-                            if (error.response.status === 403) {
-                                errorMsg = 'Error occurred: ' + error.response.data.message;
-                            }
-
-                            if (error.response.status === 404) {
-                                errorMsg = 'Order not found: #' + orderNumber;
-                            }
-
-                            this.notifyError(errorMsg, {
-                                closeOnClick: true,
-                                timeout: 0,
-                                buttons: [
-                                    {text: 'OK', action: null},
-                                ]
-                            });
-                        });
-                },
-
                 openPreviousOrder: function (){
                     this.$refs.filtersModal.hide();
                     this.setFocusOnBarcodeInput(500);
