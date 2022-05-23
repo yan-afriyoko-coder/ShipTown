@@ -13,9 +13,13 @@ class ChangeWarehouseIdToNotNullableOnInventoryTable extends Migration
      */
     public function up()
     {
-        Schema::table('inventory', function (Blueprint $table) {
-            $table->dropForeign(['warehouse_id']);
-        });
+        try {
+            Schema::table('inventory', function (Blueprint $table) {
+                $table->dropForeign(['warehouse_id']);
+            });
+        } catch (Exception $exception) {
+            //
+        }
 
         Schema::table('inventory', function (Blueprint $table) {
             $table->foreignId('warehouse_id')->nullable(false)->change();
