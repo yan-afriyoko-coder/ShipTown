@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 
 class PacksheetController extends Controller
 {
-    public function show(Request $request, $order_number)
+    public function show(Request $request, $order_id)
     {
-        return view('order-packsheet', ['order_number' => $order_number]);
+        return view('order-packsheet', ['order_id' => $order_id]);
     }
 }

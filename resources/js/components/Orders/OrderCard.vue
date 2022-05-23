@@ -98,7 +98,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link p-0 pl-2 pr-2" target="_blank" :href="'/order/packsheet/' + order['order_number'] + '?hide_nav_bar=true'">
+                                <a class="nav-link p-0 pl-2 pr-2" target="_blank" :href="'/order/packsheet/' + order['id'] + '?hide_nav_bar=true'">
                                     Packsheet
                                 </a>
                             </li>

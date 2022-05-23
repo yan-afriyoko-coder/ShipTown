@@ -15,7 +15,7 @@
         @endif
         <div class="row justify-content-center">
             <div class="col-lg-12">
-                <order-packsheet-page :order_number="'{{ $order_number }}'"></order-packsheet-page>
+                <order-packsheet-page :order_id="'{{ $order_id }}'"></order-packsheet-page>
             </div>
         </div>
     </div>
