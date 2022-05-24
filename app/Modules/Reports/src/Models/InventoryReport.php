@@ -3,6 +3,7 @@
 namespace App\Modules\Reports\src\Models;
 
 use App\Models\Inventory;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class InventoryReport extends Report
 {
@@ -11,6 +12,9 @@ class InventoryReport extends Report
         parent::__construct($attributes);
 
         $this->report_name = 'Inventory Report';
+
+        $this->baseQuery = Inventory::query()
+            ->leftJoin('products as product', 'inventory.product_id', '=', 'product.id');
 
         $this->fields = [
             'warehouse_code'        => 'inventory.warehouse_code',
@@ -25,9 +29,6 @@ class InventoryReport extends Report
             'quantity_required'     => 'inventory.quantity_required',
         ];
 
-        $this->baseQuery = Inventory::query()
-            ->leftJoin('products as product', 'inventory.product_id', '=', 'product.id');
-
         $this->casts = [
             'quantity'              => 'float',
             'quantity_reserved'     => 'float',
@@ -36,5 +37,13 @@ class InventoryReport extends Report
             'restock_level'         => 'float',
             'reorder_point'         => 'float',
         ];
+
+        $this->addFilter(
+            AllowedFilter::callback('has_tags', function ($query, $value) {
+                $query->whereHas('product', function ($query) use ($value) {
+                    $query->withAllTags($value);
+                });
+            })
+        );
     }
 }
