@@ -6,6 +6,7 @@ use App\Helpers\CsvBuilder;
 use App\Modules\Reports\src\Http\Resources\ReportResource;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\Exceptions\InvalidFilterQuery;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class Report extends Model
@@ -51,8 +52,14 @@ class Report extends Model
 
     private function view()
     {
-        $queryBuilder = $this->queryBuilder()
-            ->limit(request('per_page', 10));
+        try {
+            $queryBuilder = $this->queryBuilder()
+                ->limit(request('per_page', 10));
+        } catch (InvalidFilterQuery $exception) {
+            printf($exception->getMessage());
+            die(400);
+        }
+
 
         $resource = ReportResource::collection($queryBuilder->get());
 
