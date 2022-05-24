@@ -16,7 +16,7 @@
 
                 <div class="row">
                     <div class="col-md-8 offset-md-2">
-                        <div class="">@asyncWidget('OrdersActiveByStatusWidget')</div>
+                        <div class="">@widget('OrdersActiveByStatusWidget')</div>
                     </div>
                 </div>
 
