@@ -21,6 +21,7 @@ class Report extends Model
      */
     public $baseQuery;
 
+    private array $allowedFilters = [];
     private array $fieldAliases = [];
     private array $fieldSelects = [];
 
@@ -50,11 +51,10 @@ class Report extends Model
 
     private function view()
     {
-        $resource = ReportResource::collection(
-            $this->queryBuilder()
-                ->limit(request('per_page', 10))
-                ->get()
-        );
+        $queryBuilder = $this->queryBuilder()
+            ->limit(request('per_page', 10));
+
+        $resource = ReportResource::collection($queryBuilder->get());
 
         $data = [
             'report_name' => $this->report_name ?? $this->table,
@@ -82,11 +82,22 @@ class Report extends Model
     }
 
     /**
+     * @param AllowedFilter $filter
+     * @return $this
+     */
+    public function addFilter(AllowedFilter $filter): Report
+    {
+        $this->allowedFilters[] = $filter;
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     private function getAllowedFilters(): array
     {
-        $filters = [];
+        $filters = $this->allowedFilters;
 
         // add exact filters
         collect($this->fields)
