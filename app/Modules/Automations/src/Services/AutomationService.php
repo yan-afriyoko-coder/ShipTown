@@ -3,6 +3,7 @@
 namespace App\Modules\Automations\src\Services;
 
 use App\Events\Order\ActiveOrderCheckEvent;
+use App\Modules\Automations\src\Jobs\RunAutomationsOnActiveOrdersJob;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\OrderLock;
@@ -16,18 +17,11 @@ use Illuminate\Support\Facades\Log;
 class AutomationService
 {
     /**
-     * @param ActiveOrderCheckEvent $event
+     * @param ActiveOrderCheckEvent|null $event
      */
-    public static function runAllAutomations(ActiveOrderCheckEvent $event)
+    public static function runAllAutomations(ActiveOrderCheckEvent $event = null)
     {
-        Automation::query()
-            ->where('event_class', get_class($event))
-            ->where(['enabled' => true])
-            ->orderBy('priority')
-            ->get()
-            ->each(function (Automation $automation) use ($event) {
-                AutomationService::validateAndRunAutomation($automation, $event);
-            });
+        RunAutomationsOnActiveOrdersJob::dispatch();
     }
 
     /**
@@ -93,5 +87,15 @@ class AutomationService
     public static function availableEvents(): Collection
     {
         return collect()->push(['class' => ActiveOrderCheckEvent::class]);
+    }
+
+    public static function runAutomationsOn(\App\Models\Order $order)
+    {
+        RunAutomationsOnActiveOrdersJob::dispatch($order->getKey());
+    }
+
+    public static function runAutomationsOnActiveOrders()
+    {
+        RunAutomationsOnActiveOrdersJob::dispatch();
     }
 }

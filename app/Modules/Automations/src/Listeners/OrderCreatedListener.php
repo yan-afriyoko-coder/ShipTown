@@ -2,15 +2,15 @@
 
 namespace App\Modules\Automations\src\Listeners;
 
-use App\Events\Order\ActiveOrderCheckEvent;
+use App\Events\Order\OrderCreatedEvent;
 use App\Modules\Automations\src\Services\AutomationService;
 
-class ActiveOrderCheckEventListener
+class OrderCreatedListener
 {
     /**
-     * @param ActiveOrderCheckEvent $event
+     * @param OrderCreatedEvent $event
      */
-    public function handle(ActiveOrderCheckEvent $event)
+    public function handle(OrderCreatedEvent $event)
     {
         AutomationService::runAutomationsOn($event->order);
     }

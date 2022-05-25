@@ -15,6 +15,7 @@ use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
+use App\Modules\Automations\src\Services\AutomationService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -83,6 +84,8 @@ class SplitOrderToWarehouseCodeAction_SplitSingleProductTest extends TestCase
             $automation->enabled = true;
             $automation->save();
         });
+
+        AutomationService::runAllAutomations();
 
         FireActiveOrderCheckEventForAllActiveOrdersJob::dispatch();
 

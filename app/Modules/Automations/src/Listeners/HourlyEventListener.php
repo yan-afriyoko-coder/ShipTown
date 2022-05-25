@@ -2,12 +2,16 @@
 
 namespace App\Modules\Automations\src\Listeners;
 
-use App\Modules\Automations\src\Jobs\RunAutomationsOnActiveOrdersJob;
+use App\Events\HourlyEvent;
+use App\Modules\Automations\src\Services\AutomationService;
 
 class HourlyEventListener
 {
-    public function handle()
+    /**
+     * @param HourlyEvent $hourlyEvent
+     */
+    public function handle(HourlyEvent $hourlyEvent)
     {
-        RunAutomationsOnActiveOrdersJob::dispatch();
+        AutomationService::runAutomationsOnActiveOrders();
     }
 }

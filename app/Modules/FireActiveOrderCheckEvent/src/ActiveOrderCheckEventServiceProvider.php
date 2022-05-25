@@ -32,17 +32,6 @@ class ActiveOrderCheckEventServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        OrderCreatedEvent::class => [
-            Listeners\OrderCreatedListener::class,
-        ],
-
-        OrderUpdatedEvent::class => [
-            Listeners\OrderUpdatedListener::class,
-        ],
-
-        HourlyEvent::class => [
-            Listeners\HourlyEventListener::class,
-        ]
     ];
 
     public static function disabling(): bool
