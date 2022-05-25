@@ -12,6 +12,6 @@ class OrderUpdatedListener
      */
     public function handle(OrderUpdatedEvent $event)
     {
-        AutomationService::runAutomationsOn($event->order);
+        AutomationService::dispatchAutomationsOn($event->order);
     }
 }

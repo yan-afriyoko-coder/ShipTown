@@ -12,6 +12,11 @@ class OrderCreatedListener
      */
     public function handle(OrderCreatedEvent $event)
     {
-        AutomationService::runAutomationsOn($event->order);
+        AutomationService::dispatchAutomationsOn($event->order)
+            // we let things settle down
+            // set 5min cool down period
+            ->delay(
+                now()->addMinutes(5)
+            );
     }
 }

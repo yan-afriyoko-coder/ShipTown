@@ -12,6 +12,6 @@ class ActiveOrderCheckEventListener
      */
     public function handle(ActiveOrderCheckEvent $event)
     {
-        AutomationService::runAutomationsOn($event->order);
+        AutomationService::dispatchAutomationsOn($event->order);
     }
 }

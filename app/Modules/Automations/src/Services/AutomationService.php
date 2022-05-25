@@ -8,6 +8,7 @@ use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\OrderLock;
 use Exception;
+use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -89,13 +90,13 @@ class AutomationService
         return collect()->push(['class' => ActiveOrderCheckEvent::class]);
     }
 
-    public static function runAutomationsOn(\App\Models\Order $order)
+    public static function dispatchAutomationsOn(\App\Models\Order $order): PendingDispatch
     {
-        RunAutomationsOnActiveOrdersJob::dispatch($order->getKey());
+        return RunAutomationsOnActiveOrdersJob::dispatch($order->getKey());
     }
 
-    public static function runAutomationsOnActiveOrders()
+    public static function dispatchAutomationsOnActiveOrders(): PendingDispatch
     {
-        RunAutomationsOnActiveOrdersJob::dispatch();
+        return RunAutomationsOnActiveOrdersJob::dispatch();
     }
 }

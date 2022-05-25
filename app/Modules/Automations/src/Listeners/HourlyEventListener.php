@@ -12,6 +12,6 @@ class HourlyEventListener
      */
     public function handle(HourlyEvent $hourlyEvent)
     {
-        AutomationService::runAutomationsOnActiveOrders();
+        AutomationService::dispatchAutomationsOnActiveOrders();
     }
 }
