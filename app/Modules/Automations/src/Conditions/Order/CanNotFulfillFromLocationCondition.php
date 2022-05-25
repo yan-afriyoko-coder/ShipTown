@@ -15,11 +15,6 @@ use Illuminate\Support\Facades\Log;
 class CanNotFulfillFromLocationCondition extends BaseCondition
 {
     /**
-     * @var ActiveOrderCheckEvent|OrderCreatedEvent|OrderUpdatedEvent
-     */
-    protected $event;
-
-    /**
      * @param $location_id
      * @return bool
      */

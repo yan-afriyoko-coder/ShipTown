@@ -7,6 +7,7 @@ use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\OrderLock;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -77,5 +78,20 @@ class AutomationService
         $runAction = new $action->action_class($event);
 
         $runAction->handle($action->action_value);
+    }
+
+    public static function availableConditions(): Collection
+    {
+        return collect(config('automations.conditions'));
+    }
+
+    public static function availableActions(): Collection
+    {
+        return collect(config('automations.actions'));
+    }
+
+    public static function availableEvents(): Collection
+    {
+        return collect()->push(['class' => ActiveOrderCheckEvent::class]);
     }
 }

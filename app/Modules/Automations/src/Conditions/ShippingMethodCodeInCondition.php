@@ -2,26 +2,13 @@
 
 namespace App\Modules\Automations\src\Conditions;
 
-use App\Events\Order\ActiveOrderCheckEvent;
-use App\Events\Order\OrderCreatedEvent;
-use App\Events\Order\OrderUpdatedEvent;
 use Illuminate\Support\Facades\Log;
 
 /**
  *
  */
-class ShippingMethodCodeInCondition
+class ShippingMethodCodeInCondition extends BaseCondition
 {
-    /**
-     * @var ActiveOrderCheckEvent|OrderCreatedEvent|OrderUpdatedEvent
-     */
-    private $event;
-
-    public function __construct($event)
-    {
-        $this->event = $event;
-    }
-
     /**
      * @param $condition_value
      * @return bool

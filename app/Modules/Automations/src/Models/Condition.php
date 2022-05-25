@@ -3,11 +3,14 @@
 namespace App\Modules\Automations\src\Models;
 
 use App\BaseModel;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property integer automation_id
  * @property string condition_class
  * @property string condition_value
+ * @property Automation automation
+ *
  */
 class Condition extends BaseModel
 {
@@ -24,5 +27,14 @@ class Condition extends BaseModel
         $validator = new $this->condition_class($event);
 
         return $validator->isValid($this->condition_value);
+    }
+
+
+    /**
+     * @return BelongsTo
+     */
+    public function automation(): BelongsTo
+    {
+        return $this->belongsTo(Automation::class);
     }
 }

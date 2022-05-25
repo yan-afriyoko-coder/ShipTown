@@ -2,24 +2,13 @@
 
 namespace App\Modules\Automations\src\Conditions;
 
-use App\Events\Order\ActiveOrderCheckEvent;
 use Illuminate\Support\Facades\Log;
 
 /**
  *
  */
-class IsFullyPickedCondition
+class IsFullyPickedCondition extends BaseCondition
 {
-    /**
-     * @var ActiveOrderCheckEvent
-     */
-    private ActiveOrderCheckEvent $event;
-
-    public function __construct($event)
-    {
-        $this->event = $event;
-    }
-
     /**
      * @param string $condition_value
      * @return bool

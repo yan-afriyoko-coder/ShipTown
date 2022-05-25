@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Automations;
 
+use App\Events\Order\ActiveOrderCheckEvent;
+use App\Modules\Automations\src\Services\AutomationService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -24,38 +26,18 @@ class StoreRequest extends FormRequest
      */
     public function rules()
     {
-        $config = collect(config('automations.when'));
-        $availableEvent = $config->pluck('class');
-        $availableValidation = $config->where('class', $this->event_class)
-                            ->pluck('conditions')
-                            ->collapse()->pluck('class')
-                            ->unique();
-        $availableActions = $config->where('class', $this->event_class)
-                            ->pluck('actions')
-                            ->collapse()->pluck('class')
-                            ->unique();
+        $available_conditions_classes = AutomationService::availableConditions()->pluck('class');
+        $available_action_classes = AutomationService::availableActions()->pluck('class');
+
         return [
             'name' => 'required|min:3|max:200',
             'description' => 'nullable|string',
-            'event_class' => [
-                'nullable',
-                Rule::in($availableEvent),
-            ],
+            'event_class' => ['nullable', Rule::in(ActiveOrderCheckEvent::class)],
             'enabled' => 'required|boolean',
             'priority' => 'required|numeric',
-
-            // Conditions
-            'conditions.*.condition_class' => [
-                'nullable',
-                Rule::in($availableValidation),
-            ],
+            'conditions.*.condition_class' => ['nullable', Rule::in($available_conditions_classes)],
             'conditions.*.condition_value' => 'nullable|string',
-
-            // Actions
-            'actions.*.action_class' => [
-                'nullable',
-                Rule::in($availableActions),
-            ],
+            'actions.*.action_class' => ['nullable', Rule::in($available_action_classes)],
             'actions.*.action_value' => 'nullable|string'
         ];
     }

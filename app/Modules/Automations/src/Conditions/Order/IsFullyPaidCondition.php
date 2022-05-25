@@ -2,26 +2,14 @@
 
 namespace App\Modules\Automations\src\Conditions\Order;
 
-use App\Events\Order\ActiveOrderCheckEvent;
-use App\Events\Order\OrderCreatedEvent;
-use App\Events\Order\OrderUpdatedEvent;
+use App\Modules\Automations\src\Conditions\BaseCondition;
 use Illuminate\Support\Facades\Log;
 
 /**
  *
  */
-class IsFullyPaidCondition
+class IsFullyPaidCondition extends BaseCondition
 {
-    /**
-     * @var ActiveOrderCheckEvent|OrderCreatedEvent|OrderUpdatedEvent
-     */
-    private $event;
-
-    public function __construct($event)
-    {
-        $this->event = $event;
-    }
-
     /**
      * @param string $condition_value
      * @return bool

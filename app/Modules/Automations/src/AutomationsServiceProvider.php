@@ -2,6 +2,7 @@
 
 namespace App\Modules\Automations\src;
 
+use App\Events\HourlyEvent;
 use App\Events\Order\ActiveOrderCheckEvent;
 use App\Modules\BaseModuleServiceProvider;
 
@@ -29,6 +30,10 @@ class AutomationsServiceProvider extends BaseModuleServiceProvider
         ActiveOrderCheckEvent::class => [
             Listeners\ActiveOrderCheckEventListener::class
         ],
+
+        HourlyEvent::class => [
+            Listeners\HourlyEventListener::class,
+        ]
     ];
 
     public function boot()

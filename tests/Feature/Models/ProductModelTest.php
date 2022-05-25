@@ -1,18 +1,32 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature\Models;
 
+use App\Events\Product\ProductTagAttachedEvent;
 use App\Models\Product;
 use App\Services\ProductService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class ProductModelTest extends TestCase
 {
+    use RefreshDatabase;
+
+    public function test_if_dispatched_tag_attached_event()
+    {
+        Event::fake(ProductTagAttachedEvent::class);
+
+        /** @var Product $product */
+        $product = factory(Product::class)->create();
+
+        $product->attachTag('test-fads');
+
+        Event::assertDispatched(ProductTagAttachedEvent::class);
+    }
+
     public function testIfQuantityAvailableBelow0NotAllowed()
     {
-        Event::fake();
-
         $product_before = Product::firstOrCreate(['sku' => '0123456']);
 
         // reserve 1 more than actually in stock
