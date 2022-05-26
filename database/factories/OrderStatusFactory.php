@@ -17,16 +17,20 @@ $factory->define(OrderStatus::class, function (Faker $faker) {
         'paid',
         'fulfilled',
         'overdue',
-        'expired',
         'refunded',
         'unpaid',
         'voided',
         'in_transit',
         'canceled',
-        'failed',
         'completed',
         'awaiting',
         'cannot_fulfill',
+        'packing_dublin',
+        'packing_galway',
+        'packing_warehouse',
+        'ready_for_collection',
+        'collection_dublin',
+        'collection_galway',
     ];
 
     $status = $faker->randomElement($availableStatuses);
