@@ -11,7 +11,7 @@ use Tests\TestCase;
  */
 class RegisterTest extends TestCase
 {
-    use RefreshDatabase;
+//    use RefreshDatabase;
 
     /**
      * @var string
@@ -29,6 +29,7 @@ class RegisterTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->user = factory(User::class)->create();
     }
 
     /** @test */
@@ -42,30 +43,40 @@ class RegisterTest extends TestCase
     {
         $response = $this->get($this->uri);
 
-        $response->assertOk();
+        if (! User::query()->exists()) {
+            $response->assertOk();
+        }
+
+        if (User::query()->exists()) {
+            $response->assertNotFound();
+        }
     }
 
     /** @test */
     public function test_user_call()
     {
-        $this->user = factory(User::class)->create();
         $this->actingAs($this->user, 'web');
 
         $response = $this->get($this->uri);
 
-        $response->assertRedirect('/dashboard');
+        $response->assertNotFound();
     }
 
     /** @test */
     public function test_admin_call()
     {
-        $this->user = factory(User::class)->create();
         $this->user->assignRole('admin');
 
         $this->actingAs($this->user, 'web');
 
         $response = $this->get($this->uri);
 
-        $response->assertRedirect('/dashboard');
+//        if (User::query()->exists()) {
+            $response->assertNotFound();
+//        }
+
+//        if (!User::query()->exists()) {
+//            $response->assertRedirect('/dashboard');
+//        }
     }
 }
