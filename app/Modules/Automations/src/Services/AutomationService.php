@@ -27,19 +27,6 @@ class AutomationService
      */
     public static function validateAndRunAutomation(Automation $automation, ActiveOrderCheckEvent $event)
     {
-        // this will prevent two automation processes running on same order
-        try {
-            OrderLock::query()
-                ->where('created_at', '<', now()->subMinutes(10))
-                ->forceDelete();
-
-            /** @var OrderLock $lock */
-            $lock = OrderLock::create(['order_id' => $event->order->getKey()]);
-        } catch (Exception $exception) {
-            // early exit, cannot lock order, automation is already running for it
-            return;
-        }
-
         $allConditionsPassed = $automation->allConditionsTrue($event);
 
         if ($allConditionsPassed === true) {
@@ -96,10 +83,15 @@ class AutomationService
     }
 
     /**
-     * @return PendingDispatch
+     * @return PendingDispatch|Fluent
      */
-    public static function dispatchAutomationsOnActiveOrders(): PendingDispatch
+    public static function dispatchAutomationsOnActiveOrders()
     {
-        return RunAutomationsOnActiveOrdersJob::dispatch();
+        return RunAutomationsOnActiveOrdersJob::dispatchUnless(
+            \romanzipp\QueueMonitor\Models\Monitor::query()
+                ->where('name', '=', RunAutomationsOnActiveOrdersJob::class)
+                ->whereNull('finished_at')
+                ->exists()
+        );
     }
 }
