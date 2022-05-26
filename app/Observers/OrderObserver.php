@@ -31,6 +31,12 @@ class OrderObserver
         $order->total = $order->total_products + $order->total_shipping;
 
         $order->is_active = $order->order_status->order_active ?? 1;
+
+//        if ($order->isAttributeChanged('status_code'))
+//        {
+//
+//        }
+
         if ($order->isAttributeChanged('is_active')) {
             $order->order_closed_at = $order->is_active ? null : now();
 

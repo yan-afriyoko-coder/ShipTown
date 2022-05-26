@@ -228,25 +228,34 @@ class Order extends BaseModel
         $this->is_editing = false;
         return true;
     }
+//
+//    /**
+//     * @return OrderStatus
+//     */
+//    public function getOrderStatusAttribute(): OrderStatus
+//    {
+//        return $this->orderStatus()->first;
+//    }
+
+//    /**
+//     * @return OrderStatus
+//     */
+//    public function orderStatus(): OrderStatus
+//    {
+//
+//        return OrderStatus::firstOrCreate([
+//            'code' => $this->status_code
+//        ], [
+//            'name' => $this->status_code,
+//        ]);
+//    }
 
     /**
-     * @return OrderStatus
+     * @return BelongsTo
      */
-    public function getOrderStatusAttribute(): OrderStatus
+    public function orderStatus(): BelongsTo
     {
-        return $this->orderStatus();
-    }
-
-    /**
-     * @return OrderStatus
-     */
-    public function orderStatus(): OrderStatus
-    {
-        return OrderStatus::firstOrCreate([
-            'code' => $this->status_code
-        ], [
-            'name' => $this->status_code,
-        ]);
+        return $this->belongsTo(OrderStatus::class);
     }
 
     /**
