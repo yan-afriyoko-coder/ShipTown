@@ -18,9 +18,6 @@ class ProcessApi2cartImportedOrderJobTest extends TestCase
      */
     public function testExample()
     {
-        // prepare
-        Event::fake();
-
         Order::query()->forceDelete();
         OrderProduct::query()->forceDelete();
         Api2cartOrderImports::query()->forceDelete();
