@@ -21,7 +21,6 @@ class OrderStatusResource extends JsonResource
             'code'              => $this->code,
             'order_active'      => $this->order_active,
             'order_on_hold'     => $this->order_on_hold,
-            'reserves_stock'    => $this->reserves_stock,
             'hidden'            => $this->hidden,
             'sync_ecommerce'    => $this->sync_ecommerce,
         ];

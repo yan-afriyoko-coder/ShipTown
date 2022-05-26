@@ -26,7 +26,6 @@ class UpdateRequest extends FormRequest
         return [
             'order_active'      => ['sometimes', 'boolean'],
             'order_on_hold'     => ['sometimes', 'boolean'],
-            'reserves_stock'    => ['sometimes', 'boolean'],
             'hidden'            => ['sometimes', 'boolean'],
             'sync_ecommerce'    => ['sometimes', 'boolean'],
         ];

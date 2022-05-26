@@ -38,7 +38,6 @@ $factory->define(OrderStatus::class, function (Faker $faker) {
     return [
         'code'           => $status,
         'name'           => $status,
-        'reserves_stock' => $faker->boolean,
         'order_active'   => $faker->boolean,
         'order_on_hold'  => $faker->boolean,
     ];

@@ -21,7 +21,6 @@
                             <th class="d-none d-sm-block">Name</th>
                             <th>Order Active</th>
                             <th>Order On Hold</th>
-                            <th>Reserves Stock</th>
                             <th>Hidden</th>
                             <th>Sync Ecommerce</th>
                             <th></th>
@@ -34,7 +33,6 @@
                             <td class="d-none d-sm-block">{{ orderStatus.name }}</td>
                             <td class="text-center"><status-icon :status="orderStatus.order_active" /></td>
                             <td class="text-center"><status-icon :status="orderStatus.order_on_hold" /></td>
-                            <td class="text-center"><status-icon :status="orderStatus.reserves_stock" /></td>
                             <td class="text-center"><status-icon :status="orderStatus.hidden" /></td>
                             <td class="text-center"><status-icon :status="orderStatus.sync_ecommerce" /></td>
                         </tr>

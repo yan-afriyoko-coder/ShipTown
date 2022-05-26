@@ -28,9 +28,9 @@ class RecalculateQuantityReservedJobTest extends TestCase
     public function test_if_recalculates_correctly()
     {
         factory(OrderStatus::class)->create([
-            'code'           => 'new',
-            'name'           => 'new',
-            'reserves_stock' => true,
+            'code'          => 'new',
+            'name'          => 'new',
+            'order_active'  => true,
         ]);
 
         $product = factory(Product::class)->create();
