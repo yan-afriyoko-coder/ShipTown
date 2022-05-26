@@ -3,6 +3,7 @@
 namespace App\Modules\Automations\src\Conditions\Order;
 
 use App\Modules\Automations\src\Conditions\BaseCondition;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -10,6 +11,17 @@ use Illuminate\Support\Facades\Log;
  */
 class StatusCodeEqualsCondition extends BaseCondition
 {
+
+    /**
+     * @param Builder $query
+     * @param $expected_status_code
+     * @return Builder
+     */
+    public static function ordersQueryScope(Builder $query, $expected_status_code): Builder
+    {
+        return $query->where('status_code', '=', $expected_status_code);
+    }
+
     /**
      * @param $condition_value
      * @return bool

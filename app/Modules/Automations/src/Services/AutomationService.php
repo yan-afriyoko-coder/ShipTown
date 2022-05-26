@@ -43,8 +43,6 @@ class AutomationService
             'name' => $automation->name,
             'all_conditions_passed' => $allConditionsPassed
         ]);
-
-        $lock->forceDelete();
     }
 
     /**

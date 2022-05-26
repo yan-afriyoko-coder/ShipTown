@@ -11,7 +11,7 @@ class ExceptionTestingConditionOnlyForTestingPurposes extends BaseCondition
     /**
      * @throws Exception
      */
-    public static function ordersQueryScope(Builder $query, $value): Builder
+    public static function ordersQueryScope(Builder $query, $expected_status_code): Builder
     {
         throw new Exception('This exception should be handled by automation');
     }

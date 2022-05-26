@@ -18,9 +18,9 @@ class OrderNumberEqualsCondition extends BaseCondition
      */
     protected $event;
 
-    public static function ordersQueryScope(Builder $query, $value): Builder
+    public static function ordersQueryScope(Builder $query, $expected_status_code): Builder
     {
-        $query->where(['order_number' => $value]);
+        $query->where(['order_number' => $expected_status_code]);
 
         return $query;
     }
