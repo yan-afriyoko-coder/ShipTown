@@ -3,6 +3,7 @@
 namespace App\Modules\Automations\src\Conditions\Order;
 
 use App\Modules\Automations\src\Conditions\BaseCondition;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -10,6 +11,22 @@ use Illuminate\Support\Facades\Log;
  */
 class IsFullyPackedCondition extends BaseCondition
 {
+
+    public static function ordersQueryScope(Builder $query, $expected_value): Builder
+    {
+        $expectedBoolValue = filter_var($expected_value, FILTER_VALIDATE_BOOL);
+
+        if ($expectedBoolValue) {
+            return $query->whereDoesntHave('orderProducts', function ($query) {
+                $query->where('quantity_to_ship', '>', 0);
+            });
+        }
+
+        return $query->whereHas('orderProducts', function ($query) {
+            $query->where('quantity_to_ship', '>', 0);
+        });
+    }
+
     /**
      * @param string $condition_value
      * @return bool

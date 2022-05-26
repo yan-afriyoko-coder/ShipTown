@@ -25,6 +25,8 @@ $factory->define(OrderStatus::class, function (Faker $faker) {
         'canceled',
         'failed',
         'completed',
+        'awaiting',
+        'cannot_fulfill',
     ];
 
     $status = $faker->randomElement($availableStatuses);

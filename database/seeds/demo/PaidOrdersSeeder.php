@@ -18,6 +18,10 @@ class PaidOrdersSeeder extends Seeder
      */
     public function run()
     {
+        factory(Order::class, 1)
+            ->with('orderProducts', 1)
+            ->create(['status_code' => 'paid']);
+
         $this->createOrders();
         $this->createNavigationMenu();
         $this->createPaidToCompleteAutomation();

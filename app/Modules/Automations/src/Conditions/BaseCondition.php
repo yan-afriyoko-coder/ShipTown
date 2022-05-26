@@ -25,7 +25,7 @@ abstract class BaseCondition
         $this->event = $event;
     }
 
-    public static function ordersQueryScope(Builder $query, $expected_status_code): Builder
+    public static function ordersQueryScope(Builder $query, $expected_value): Builder
     {
         return $query;
     }
