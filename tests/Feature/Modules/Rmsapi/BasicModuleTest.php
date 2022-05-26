@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Modules\Rmsapi;
 
-use App\User;
+use App\Modules\Rmsapi\src\RmsapiModuleServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -13,6 +13,8 @@ class BasicModuleTest extends TestCase
     /** @test */
     public function test_module_basic_functionality()
     {
-        $this->markAsRisky();
+        RmsapiModuleServiceProvider::enableModule();
+
+        $this->assertTrue(true, 'Most basic test... to be continued');
     }
 }
