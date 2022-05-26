@@ -19,15 +19,12 @@ class ModulesCoverageTest extends TestCase
         collect(File::directories('app/Modules'))
             ->map(function ($moduleDirectory) {
                 $testFileName = app()->basePath();
-                $testFileName .= Str::replaceArray('app/Modules/', ['/tests/Feature/Modules/'], $moduleDirectory);
+                $testFileName .= Str::replaceArray('app/', ['/tests/Feature/'], $moduleDirectory);
                 $testFileName .= '/BasicModuleTest.php';
                 return $testFileName;
             })
             ->each(function ($fileName) {
-                $this->assertFileExists(
-                    $fileName,
-                    $fileName . ' is missing. Run "php artisan app:generate-modules-tests"'
-                );
+                $this->assertFileExists($fileName, 'Run "php artisan app:generate-modules-tests"');
             });
     }
 }
