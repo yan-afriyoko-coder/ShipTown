@@ -33,7 +33,7 @@ class OrderObserver
 
         $order->is_active = $order->order_status->order_active ?? 1;
 
-        if ($order->isAttributeChanged('status_code')) {
+        if (($order->exists === false) || ($order->isAttributeChanged('status_code'))) {
             OrderStatus::firstOrCreate([
                 'code' => $order->status_code
             ], [
