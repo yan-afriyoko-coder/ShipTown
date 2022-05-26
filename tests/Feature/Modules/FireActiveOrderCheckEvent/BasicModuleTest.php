@@ -13,6 +13,6 @@ class BasicModuleTest extends TestCase
     /** @test */
     public function test_module_basic_functionality()
     {
-        $this->markAsRisky();
+        $this->markTestSkipped('FireActiveOrderCheckEvent module should be deleted');
     }
 }
