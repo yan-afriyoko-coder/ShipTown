@@ -32,6 +32,7 @@ class AutomationsServiceProvider extends BaseModuleServiceProvider
         ActiveOrderCheckEvent::class => [
             Listeners\ActiveOrderCheckListener::class,
         ],
+
         OrderCreatedEvent::class => [
             Listeners\OrderCreatedListener::class,
         ],

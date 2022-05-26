@@ -235,7 +235,7 @@ export default {
 
     watch: {
         "automation.event_class": function(newValue) {
-            if(newValue == ""){
+            if(newValue === ""){
                 this.automation.conditions.forEach(condition => {
                     condition.condition_class = ""
                 });

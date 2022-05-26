@@ -68,7 +68,7 @@ export default {
 
         this.apiGetAutomationConfig()
             .then(({ data }) => {
-                this.events = data.when;
+                this.events = [data];
             })
     },
 
