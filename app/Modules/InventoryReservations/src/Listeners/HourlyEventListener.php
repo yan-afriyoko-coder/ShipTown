@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Modules\InventoryReservations\src\Listeners\HourlyEvent;
+namespace App\Modules\InventoryReservations\src\Listeners;
 
 use App\Events\HourlyEvent;
 use App\Modules\InventoryReservations\src\Jobs\RecalculateQuantityReservedJob;
 
-class RunRecalculateQuantityReservedJobListener
+class HourlyEventListener
 {
     /**
      * Handle the event.

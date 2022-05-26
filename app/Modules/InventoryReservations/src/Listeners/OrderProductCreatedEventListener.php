@@ -3,9 +3,9 @@
 namespace App\Modules\InventoryReservations\src\Listeners;
 
 use App\Events\OrderProduct\OrderProductCreatedEvent;
-use App\Modules\InventoryReservations\src\Jobs\UpdateQuantityReservedJob;
+use App\Modules\InventoryReservations\src\Jobs\UpdateInventoryQuantityReservedJob;
 
-class OrderProductCreatedListener
+class OrderProductCreatedEventListener
 {
     /**
      * Handle the event.
@@ -16,12 +16,10 @@ class OrderProductCreatedListener
      */
     public function handle(OrderProductCreatedEvent $event)
     {
-        $orderProduct = $event->orderProduct;
-
-        if ($orderProduct->product_id === null) {
+        if ($event->orderProduct->product_id === null) {
             return;
         }
 
-        UpdateQuantityReservedJob::dispatch($orderProduct->product_id);
+        UpdateInventoryQuantityReservedJob::dispatchNow($event->orderProduct->product_id);
     }
 }

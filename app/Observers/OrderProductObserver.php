@@ -56,7 +56,7 @@ class OrderProductObserver
             ->exists();
 
         if ($orderHasMoreToPick === false) {
-            $orderProduct->order()->update(['picked_at' => now()]);
+            $orderProduct->order()->whereNull('picked_at')->update(['picked_at' => now()]);
         }
     }
 }

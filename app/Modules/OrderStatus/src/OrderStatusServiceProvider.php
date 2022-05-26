@@ -4,7 +4,9 @@ namespace App\Modules\OrderStatus\src;
 
 use App\Events\Order\OrderUpdatedEvent;
 use App\Events\OrderStatus\OrderStatusUpdatedEvent;
+use App\Models\Order;
 use App\Modules\BaseModuleServiceProvider;
+use App\Modules\OrderStatus\src\Observers\OrderObserver;
 
 /**
  * Class EventServiceProviderBase.
@@ -42,5 +44,12 @@ class OrderStatusServiceProvider extends BaseModuleServiceProvider
     public static function disabling(): bool
     {
         return false;
+    }
+
+    public function boot()
+    {
+        parent::boot();
+
+        Order::observe(OrderObserver::class);
     }
 }
