@@ -3,7 +3,6 @@
 namespace Tests\Feature\Modules\Automations\Actions;
 
 use App\Events\Order\ActiveOrderCheckEvent;
-use App\Jobs\FireActiveOrderCheckEventForAllActiveOrdersJob;
 use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
