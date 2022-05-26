@@ -16,6 +16,9 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 
+/**
+ * @property int|null order_id
+ */
 class RunAutomationsOnActiveOrdersJob implements ShouldQueue
 {
     use Dispatchable;
@@ -50,10 +53,10 @@ class RunAutomationsOnActiveOrdersJob implements ShouldQueue
     public function ordersSelectQuery(Automation $automation)
     {
         $query = Order::query()
+            ->where(['is_active' => true])
             ->when($this->order_id, function ($query) {
                 $query->where(['id' => $this->order_id]);
-            })
-            ->where(['is_active' => true]);
+            });
 
         try {
             $automation->conditions()

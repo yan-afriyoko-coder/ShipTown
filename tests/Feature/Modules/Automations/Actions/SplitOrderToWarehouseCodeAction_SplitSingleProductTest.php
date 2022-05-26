@@ -85,9 +85,7 @@ class SplitOrderToWarehouseCodeAction_SplitSingleProductTest extends TestCase
             $automation->save();
         });
 
-        AutomationService::runAllAutomations();
-
-        FireActiveOrderCheckEventForAllActiveOrdersJob::dispatch();
+        AutomationService::dispatchAutomationsOnActiveOrders();
 
         // we will have original order left + X new ones
         $this->assertEquals(4, Order::count());

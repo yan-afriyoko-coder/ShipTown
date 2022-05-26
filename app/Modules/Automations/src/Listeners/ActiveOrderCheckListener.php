@@ -5,7 +5,7 @@ namespace App\Modules\Automations\src\Listeners;
 use App\Events\Order\ActiveOrderCheckEvent;
 use App\Modules\Automations\src\Services\AutomationService;
 
-class ActiveOrderCheckEventListener
+class ActiveOrderCheckListener
 {
     /**
      * @param ActiveOrderCheckEvent $event

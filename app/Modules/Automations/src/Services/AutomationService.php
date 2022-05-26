@@ -3,28 +3,24 @@
 namespace App\Modules\Automations\src\Services;
 
 use App\Events\Order\ActiveOrderCheckEvent;
+use App\Models\Order;
 use App\Modules\Automations\src\Jobs\RunAutomationsOnActiveOrdersJob;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\OrderLock;
 use Exception;
+use Illuminate\Contracts\Queue\Monitor;
 use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Fluent;
+use romanzipp\QueueMonitor\Services\QueueMonitor;
 
 /**
  *
  */
 class AutomationService
 {
-    /**
-     * @param ActiveOrderCheckEvent|null $event
-     */
-    public static function runAllAutomations(ActiveOrderCheckEvent $event = null)
-    {
-        RunAutomationsOnActiveOrdersJob::dispatch();
-    }
-
     /**
      * @param Automation $automation
      * @param ActiveOrderCheckEvent $event
@@ -90,11 +86,18 @@ class AutomationService
         return collect()->push(['class' => ActiveOrderCheckEvent::class]);
     }
 
-    public static function dispatchAutomationsOn(\App\Models\Order $order): PendingDispatch
+    /**
+     * @param Order $order
+     * @return PendingDispatch
+     */
+    public static function dispatchAutomationsOn(Order $order): PendingDispatch
     {
         return RunAutomationsOnActiveOrdersJob::dispatch($order->getKey());
     }
 
+    /**
+     * @return PendingDispatch
+     */
     public static function dispatchAutomationsOnActiveOrders(): PendingDispatch
     {
         return RunAutomationsOnActiveOrdersJob::dispatch();

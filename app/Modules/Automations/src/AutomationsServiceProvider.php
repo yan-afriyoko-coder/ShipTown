@@ -29,16 +29,15 @@ class AutomationsServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
+        ActiveOrderCheckEvent::class => [
+            Listeners\ActiveOrderCheckListener::class,
+        ],
         OrderCreatedEvent::class => [
             Listeners\OrderCreatedListener::class,
         ],
 
         OrderUpdatedEvent::class => [
             Listeners\OrderUpdatedListener::class,
-        ],
-
-        ActiveOrderCheckEvent::class => [
-            Listeners\ActiveOrderCheckEventListener::class
         ],
 
         HourlyEvent::class => [

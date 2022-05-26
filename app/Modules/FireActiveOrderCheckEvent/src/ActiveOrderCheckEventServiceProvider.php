@@ -2,10 +2,6 @@
 
 namespace App\Modules\FireActiveOrderCheckEvent\src;
 
-use App\Events\HourlyEvent;
-use App\Events\Order\ActiveOrderCheckEvent;
-use App\Events\Order\OrderCreatedEvent;
-use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
