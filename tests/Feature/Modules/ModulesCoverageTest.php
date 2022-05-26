@@ -9,8 +9,6 @@ use Tests\TestCase;
 
 class ModulesCoverageTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * A basic test to make sure all routes have minimum one test file.
      *
