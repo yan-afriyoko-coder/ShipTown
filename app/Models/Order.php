@@ -255,7 +255,7 @@ class Order extends BaseModel
      */
     public function orderStatus(): BelongsTo
     {
-        return $this->belongsTo(OrderStatus::class);
+        return $this->belongsTo(OrderStatus::class, 'status_code', 'code');
     }
 
     /**

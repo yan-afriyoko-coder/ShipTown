@@ -19,9 +19,9 @@ class OrderUpdatedListener
     public function handle(OrderUpdatedEvent $event)
     {
         $previous_status = OrderStatus::firstOrCreate([
-            'code' => $event->order->getOriginal('order_status')['code'],
+            'code' => $event->order->getOriginal('status_code'),
         ], [
-            'name' => $event->order->getOriginal('order_status')['code'],
+            'name' => $event->order->getOriginal('status_code'),
         ]);
 
         if ($previous_status->reserves_stock === $event->order->orderStatus->reserves_stock) {
