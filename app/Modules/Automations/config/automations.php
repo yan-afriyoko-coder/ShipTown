@@ -90,9 +90,9 @@ return [
             'class' => \App\Modules\Automations\src\Actions\SendOrderEmailAction::class,
             'description' => 'Send email template to customer',
         ],
-        [
-            'class' => \App\Modules\Automations\src\Actions\SplitBundleSkuAction::class,
-            'description' => 'Split bundle SKU (format: BundleSKU,SKU1,SKU2...)',
-        ],
+//        [
+//            'class' => \App\Modules\Automations\src\Actions\SplitBundleSkuAction::class,
+//            'description' => 'Split bundle SKU (format: BundleSKU,SKU1,SKU2...)',
+//        ],
     ]
 ];
