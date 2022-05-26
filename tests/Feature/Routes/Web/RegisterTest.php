@@ -3,7 +3,6 @@
 namespace Tests\Feature\Routes\Web;
 
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
@@ -11,8 +10,6 @@ use Tests\TestCase;
  */
 class RegisterTest extends TestCase
 {
-//    use RefreshDatabase;
-
     /**
      * @var string
      */
@@ -43,11 +40,9 @@ class RegisterTest extends TestCase
     {
         $response = $this->get($this->uri);
 
-        if (! User::query()->exists()) {
+        if (User::query()->doesntExist()) {
             $response->assertOk();
-        }
-
-        if (User::query()->exists()) {
+        } else {
             $response->assertNotFound();
         }
     }
@@ -55,11 +50,9 @@ class RegisterTest extends TestCase
     /** @test */
     public function test_user_call()
     {
-        $this->actingAs($this->user, 'web');
-
-        $response = $this->get($this->uri);
-
-        $response->assertNotFound();
+        $this->actingAs($this->user, 'web')
+            ->get($this->uri)
+            ->assertNotFound();
     }
 
     /** @test */
@@ -67,16 +60,8 @@ class RegisterTest extends TestCase
     {
         $this->user->assignRole('admin');
 
-        $this->actingAs($this->user, 'web');
-
-        $response = $this->get($this->uri);
-
-//        if (User::query()->exists()) {
-            $response->assertNotFound();
-//        }
-
-//        if (!User::query()->exists()) {
-//            $response->assertRedirect('/dashboard');
-//        }
+        $this->actingAs($this->user, 'web')
+            ->get($this->uri)
+            ->assertNotFound();
     }
 }
