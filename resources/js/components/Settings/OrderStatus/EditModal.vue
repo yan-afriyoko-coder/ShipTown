@@ -7,26 +7,6 @@
                 </div>
                 <div class="modal-body">
                     <ValidationObserver ref="form">
-                        <form class="form" @submit.prevent="submit" ref="loadingContainer">
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label" for="reserves_stock">Reserves Stock</label>
-                                <div class="col-sm-9">
-                                    <ValidationProvider vid="reserves_stock" name="reserves_stock" v-slot="{ errors }">
-                                        <div class="custom-control custom-switch mt-2" :class="{'is-invalid' : errors.length}">
-                                            <input type="checkbox"
-                                                id="edit-reserves_stock"
-                                                class="custom-control-input"
-                                                v-model="reservesStock"
-                                                required>
-                                            <label class="custom-control-label" for="edit-reserves_stock"></label>
-                                        </div>
-                                        <div class="invalid-feedback">
-                                            {{ errors[0] }}
-                                        </div>
-                                    </ValidationProvider>
-                                </div>
-                            </div>
-
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label" for="order_active">Order Active</label>
                                 <div class="col-sm-9">
@@ -149,7 +129,6 @@ export default {
 
     watch: {
         orderStatus: function(newVal) {
-            this.reservesStock = newVal.reserves_stock
             this.orderActive = newVal.order_active
             this.orderOnHold = newVal.order_on_hold
             this.syncEcommerce = newVal.sync_ecommerce
@@ -161,7 +140,6 @@ export default {
         submit() {
             this.showLoading();
             this.apiPutOrderStatus(this.orderStatus.id, {
-                    reserves_stock: this.reservesStock,
                     order_active: this.orderActive,
                     order_on_hold: this.orderOnHold,
                     sync_ecommerce: this.syncEcommerce,

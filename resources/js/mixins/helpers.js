@@ -50,6 +50,12 @@ export default {
             );
         },
 
+        setFocusElementById(delay = 1, elementId) {
+            setTimeout(() => {
+                this.setFocus(document.getElementById(elementId), true,true)
+            }, delay);
+        },
+
         isMoreThanPercentageScrolled: function (percentage) {
             return document.documentElement.scrollTop + window.innerHeight > document.documentElement.offsetHeight * (percentage / 100);
         },

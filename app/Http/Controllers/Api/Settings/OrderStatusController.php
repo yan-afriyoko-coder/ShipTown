@@ -8,9 +8,7 @@ use App\Http\Requests\OrderStatus\UpdateRequest;
 use App\Http\Resources\OrderStatusResource;
 use App\Models\OrderStatus;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
 class OrderStatusController extends Controller
@@ -75,7 +73,7 @@ class OrderStatusController extends Controller
      */
     public function destroy(OrderStatus $orderStatus)
     {
-        if ($orderStatus->order_active || $orderStatus->reserves_stock || $orderStatus->sync_ecommerce) {
+        if ($orderStatus->order_active || $orderStatus->sync_ecommerce) {
             abort(401, "This order statuses cannot archived");
         }
 

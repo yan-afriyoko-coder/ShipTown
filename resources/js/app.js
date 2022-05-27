@@ -140,6 +140,7 @@ Vue.component('autopilot-packlist-page', require('./components/AutopilotPacklist
 Vue.component('dpd-configuration', require('./components/Settings/DpdConfiguration').default);
 Vue.component('dpd-uk-configuration', require('./components/Settings/DpdUkConfiguration').default);
 
+Vue.component('barcode-input-field', require('./components/SharedComponents/BarcodeInputField.vue').default);
 Vue.component('products-table', require('./components/ProductsPage.vue').default);
 Vue.component('orders-table', require('./components/OrdersPage.vue').default);
 Vue.component('api2cart-configuration', require('./components/Settings/Api2cartConnections.vue').default);

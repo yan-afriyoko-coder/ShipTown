@@ -3,7 +3,6 @@
 namespace Tests\Feature\Modules\Automations\Actions;
 
 use App\Events\Order\ActiveOrderCheckEvent;
-use App\Jobs\FireActiveOrderCheckEventForAllActiveOrdersJob;
 use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
@@ -15,6 +14,7 @@ use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
+use App\Modules\Automations\src\Services\AutomationService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -84,7 +84,7 @@ class SplitOrderToWarehouseCodeAction_SplitSingleProductTest extends TestCase
             $automation->save();
         });
 
-        FireActiveOrderCheckEventForAllActiveOrdersJob::dispatch();
+        AutomationService::dispatchAutomationsOnActiveOrders();
 
         // we will have original order left + X new ones
         $this->assertEquals(4, Order::count());

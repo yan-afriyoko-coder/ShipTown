@@ -9,8 +9,6 @@ use Tests\TestCase;
 
 class ModulesCoverageTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * A basic test to make sure all routes have minimum one test file.
      *
@@ -18,19 +16,15 @@ class ModulesCoverageTest extends TestCase
      */
     public function test_if_all_modules_have_test_file()
     {
-        $modulesList = File::directories('app/Modules');
-
-        $expectedTestsList = collect($modulesList)->map(function ($moduleDirectory) {
-            $testPath = Str::replaceArray('app/Modules/', ['/tests/Feature/Modules/'], $moduleDirectory);
-
-            return app()->basePath(). $testPath . '/BasicModuleTest.php';
-        });
-
-        $expectedTestsList->each(function ($testName) {
-            $this->assertFileExists(
-                $testName,
-                $testName . ' test is missing. Run "php artisan app:generate-modules-tests"'
-            );
-        });
+        collect(File::directories('app/Modules'))
+            ->map(function ($moduleDirectory) {
+                $testFileName = app()->basePath();
+                $testFileName .= Str::replaceArray('app/', ['/tests/Feature/'], $moduleDirectory);
+                $testFileName .= '/BasicModuleTest.php';
+                return $testFileName;
+            })
+            ->each(function ($fileName) {
+                $this->assertFileExists($fileName, 'Run "php artisan app:generate-modules-tests"');
+            });
     }
 }

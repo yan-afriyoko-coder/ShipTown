@@ -7,7 +7,7 @@ use App\Events\OrderProduct\OrderProductUpdatedEvent;
 use App\Events\Product\ProductTagAttachedEvent;
 use App\Models\OrderProduct;
 use App\Modules\BaseModuleServiceProvider;
-use App\Modules\InventoryReservations\src\Listeners\OrderProductCreatedListener;
+use App\Modules\InventoryReservations\src\Listeners\OrderProductCreatedEventListener;
 
 /**
  * Class ServiceProvider

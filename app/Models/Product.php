@@ -261,21 +261,6 @@ class Product extends BaseModel
     }
 
     /**
-     * @return $this
-     */
-    public function recalculateQuantityTotals(): Product
-    {
-        $this->quantity = Inventory::where(['product_id' => $this->id])
-            ->where('quantity', '!=', 0)
-            ->sum('quantity');
-        $this->quantity_reserved = Inventory::where(['product_id' => $this->id])
-            ->where('quantity_reserved', '!=', 0)
-            ->sum('quantity_reserved');
-
-        return $this;
-    }
-
-    /**
      * @return HasMany|Inventory
      */
     public function inventory(string $warehouse_code = null): HasMany

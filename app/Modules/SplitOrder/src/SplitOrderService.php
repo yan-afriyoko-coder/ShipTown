@@ -93,7 +93,10 @@ class SplitOrderService
 
                 activity()->on($this->newOrder)
                     ->byAnonymous()
-                    ->withProperties(['order_number' => $this->originalOrder->order_number])
+                    ->withProperties([
+                        'order_number' => $this->originalOrder->order_number,
+                        'status_code' => $this->newOrder->status_code
+                    ])
                     ->log('extracted from order');
 
                 activity()->on($this->originalOrder)

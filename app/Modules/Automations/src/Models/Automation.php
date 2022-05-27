@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  *
+ * @property integer id
  * @property integer priority
  * @property boolean enabled
  * @property string name

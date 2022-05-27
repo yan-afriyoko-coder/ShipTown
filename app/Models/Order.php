@@ -173,7 +173,7 @@ class Order extends BaseModel
     // as this is then not populated
     // correctly to events
     protected $attributes = [
-        'status_code'   => 'processing',
+        'status_code'   => 'new',
         'is_active'     => 1,
         'is_editing'    => 0,
     ];
@@ -228,25 +228,34 @@ class Order extends BaseModel
         $this->is_editing = false;
         return true;
     }
+//
+//    /**
+//     * @return OrderStatus
+//     */
+//    public function getOrderStatusAttribute(): OrderStatus
+//    {
+//        return $this->orderStatus()->first;
+//    }
+
+//    /**
+//     * @return OrderStatus
+//     */
+//    public function orderStatus(): OrderStatus
+//    {
+//
+//        return OrderStatus::firstOrCreate([
+//            'code' => $this->status_code
+//        ], [
+//            'name' => $this->status_code,
+//        ]);
+//    }
 
     /**
-     * @return OrderStatus
+     * @return BelongsTo
      */
-    public function getOrderStatusAttribute(): OrderStatus
+    public function orderStatus(): BelongsTo
     {
-        return $this->orderStatus();
-    }
-
-    /**
-     * @return OrderStatus
-     */
-    public function orderStatus(): OrderStatus
-    {
-        return OrderStatus::firstOrCreate([
-            'code' => $this->status_code
-        ], [
-            'name' => $this->status_code,
-        ]);
+        return $this->belongsTo(OrderStatus::class, 'status_code', 'code');
     }
 
     /**

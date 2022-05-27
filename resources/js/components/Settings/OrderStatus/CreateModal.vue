@@ -39,25 +39,6 @@
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-sm-3 col-form-label" for="reserves_stock">Reserves Stock</label>
-                                <div class="col-sm-9">
-                                    <ValidationProvider vid="reserves_stock" name="reserves_stock" v-slot="{ errors }">
-                                        <div class="custom-control custom-switch mt-2" :class="{'is-invalid' : errors.length}">
-                                            <input type="checkbox"
-                                                id="create-reserves_stock"
-                                                class="custom-control-input"
-                                                v-model="reservesStock"
-                                                required>
-                                            <label class="custom-control-label" for="create-reserves_stock"></label>
-                                        </div>
-                                        <div class="invalid-feedback">
-                                            {{ errors[0] }}
-                                        </div>
-                                    </ValidationProvider>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
                                 <label class="col-sm-3 col-form-label" for="order_active">Order Active</label>
                                 <div class="col-sm-9">
                                     <ValidationProvider vid="order_active" name="order_active" v-slot="{ errors }">
@@ -125,7 +106,6 @@ export default {
         return {
             name: '',
             code: '',
-            reservesStock: false,
             orderActive: false,
             syncEcommerce: false,
         }
@@ -138,7 +118,6 @@ export default {
             this.apiPostOrderStatus({
                     name: this.name,
                     code: this.code,
-                    reserves_stock: this.reservesStock,
                     order_active: this.orderActive,
                     sync_ecommerce: this.syncEcommerce,
                 })

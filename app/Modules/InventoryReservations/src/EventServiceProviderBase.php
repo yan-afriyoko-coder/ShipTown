@@ -3,11 +3,12 @@
 namespace App\Modules\InventoryReservations\src;
 
 use App\Events\HourlyEvent;
+use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Events\OrderProduct\OrderProductCreatedEvent;
 use App\Events\OrderProduct\OrderProductUpdatedEvent;
+use App\Models\Warehouse;
 use App\Modules\BaseModuleServiceProvider;
-use App\Modules\InventoryReservations\src\Listeners\OrderProductUpdatedEvent\UpdateQuantityReservedListener;
 
 /**
  * Class EventServiceProviderBase.
@@ -36,21 +37,32 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
      */
     protected $listen = [
         HourlyEvent::class => [
-            Listeners\HourlyEvent\RunRecalculateQuantityReservedJobListener::class,
+            Listeners\HourlyEventListener::class,
         ],
 
         OrderProductUpdatedEvent::class => [
-            UpdateQuantityReservedListener::class,
+            Listeners\OrderProductUpdatedEventListener::class,
         ],
 
         OrderUpdatedEvent::class => [
-            Listeners\OrderUpdatedListener::class,
+            Listeners\OrderUpdatedEventListener::class,
         ],
 
         OrderProductCreatedEvent::class => [
-            Listeners\OrderProductCreatedListener::class,
+            Listeners\OrderProductCreatedEventListener::class,
+        ],
+
+        InventoryUpdatedEvent::class => [
+            Listeners\InventoryUpdatedEventListener::class,
         ],
     ];
+
+    public static function enableModule()
+    {
+        parent::enableModule();
+
+        Warehouse::firstOrCreate(['code' => '999'], ['name' => '999']);
+    }
 
     public static function disabling(): bool
     {

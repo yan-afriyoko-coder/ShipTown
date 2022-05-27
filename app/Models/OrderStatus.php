@@ -16,9 +16,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property int         $id
  * @property string      $code
  * @property string      $name
- * @property bool        $reserves_stock
  * @property bool        $order_active
- * @property bool        order_on_hold
+ * @property bool        $order_on_hold
  * @property bool        $sync_ecommerce
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -32,7 +31,6 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static Builder|OrderStatus whereName($value)
  * @method static Builder|OrderStatus whereOrderActive($value)
  * @method static Builder|OrderStatus whereUpdatedAt($value)
- * @method static Builder|OrderStatus whereReservesStock(bool $reserves_stock)
  * @mixin Eloquent
  */
 class OrderStatus extends BaseModel
@@ -47,14 +45,12 @@ class OrderStatus extends BaseModel
         'order_active',
         'order_on_hold',
         'hidden',
-        'reserves_stock',
         'sync_ecommerce',
     ];
 
     protected $casts = [
         'order_active'      => 'boolean',
         'order_on_hold'     => 'boolean',
-        'reserves_stock'    => 'boolean',
         'hidden'            => 'boolean',
         'sync_ecommerce'    => 'boolean',
     ];
@@ -62,7 +58,6 @@ class OrderStatus extends BaseModel
     protected $attributes = [
         'order_active'   => true,
         'order_on_hold'  => false,
-        'reserves_stock' => true,
         'hidden'         => false,
         'sync_ecommerce' => false,
     ];

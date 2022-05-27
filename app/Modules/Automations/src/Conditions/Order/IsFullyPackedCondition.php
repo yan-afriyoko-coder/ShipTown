@@ -2,24 +2,29 @@
 
 namespace App\Modules\Automations\src\Conditions\Order;
 
-use App\Events\Order\ActiveOrderCheckEvent;
-use App\Events\Order\OrderCreatedEvent;
-use App\Events\Order\OrderUpdatedEvent;
+use App\Modules\Automations\src\Conditions\BaseCondition;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
 
 /**
  *
  */
-class IsFullyPackedCondition
+class IsFullyPackedCondition extends BaseCondition
 {
-    /**
-     * @var ActiveOrderCheckEvent|OrderCreatedEvent|OrderUpdatedEvent
-     */
-    private $event;
 
-    public function __construct($event)
+    public static function ordersQueryScope(Builder $query, $expected_value): Builder
     {
-        $this->event = $event;
+        $expectedBoolValue = filter_var($expected_value, FILTER_VALIDATE_BOOL);
+
+        if ($expectedBoolValue) {
+            return $query->whereDoesntHave('orderProducts', function ($query) {
+                $query->where('quantity_to_ship', '>', 0);
+            });
+        }
+
+        return $query->whereHas('orderProducts', function ($query) {
+            $query->where('quantity_to_ship', '>', 0);
+        });
     }
 
     /**
@@ -32,7 +37,7 @@ class IsFullyPackedCondition
 
         $hasAnythingToShip = $this->event->order->orderProducts()->where('quantity_to_ship', '>', 0)->exists();
 
-        $isPacked = ! $hasAnythingToShip;
+        $isPacked = !$hasAnythingToShip;
 
         $result = $isPacked === $expectedBoolValue;
 

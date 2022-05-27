@@ -5,6 +5,7 @@ namespace Tests\Feature\Modules\InventoryReservations\Jobs;
 use App\Models\Inventory;
 use App\Models\OrderStatus;
 use App\Models\Product;
+use App\Modules\InventoryReservations\src\EventServiceProviderBase;
 use App\Modules\InventoryReservations\src\Jobs\RecalculateQuantityReservedJob;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -22,15 +23,17 @@ class RecalculateQuantityReservedJobTest extends TestCase
         parent::setUp();
         $admin = factory(User::class)->create()->assignRole('admin');
         $this->actingAs($admin, 'api');
+
+        EventServiceProviderBase::enableModule();
     }
 
     /** @test */
     public function test_if_recalculates_correctly()
     {
         factory(OrderStatus::class)->create([
-            'code'           => 'new',
-            'name'           => 'new',
-            'reserves_stock' => true,
+            'code'          => 'new',
+            'name'          => 'new',
+            'order_active'  => true,
         ]);
 
         $product = factory(Product::class)->create();

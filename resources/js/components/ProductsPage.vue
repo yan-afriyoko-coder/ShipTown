@@ -1,19 +1,17 @@
 <template>
     <div>
         <template v-if="getUrlParameter('hide_nav_bar', false) === false">
-            <div class="row no-gutters ml-1 mr-1">
-                <div class="col">
-                    <input placeholder="Search"
-                           class="form-control"
-                           ref="search"
-                           v-model="searchText"
-                           @keyup.enter="findText" />
+            <div class="row mb-3 pl-1 pr-1">
+                <div class="flex-fill">
+                    <barcode-input-field :url_param_name="'search'" @barcodeScanned="findText" placeholder="Search products using name, sku, alias or command" ref="barcode"/>
                 </div>
+
+                <button disabled type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
             </div>
         </template>
 
         <template  v-if="products.length === 0 && !isLoading" >
-            <div class="row">
+            <div class="row mt-3">
                 <div class="col">
                     <div class="alert alert-info" role="alert">
                         No products found.
@@ -59,23 +57,20 @@
             return {
                 lastPageLoaded: 1,
                 lastPage: 1,
-                searchText: '',
 
                 products: [],
             };
         },
 
         mounted() {
-            this.searchText = this.getUrlParameter('search');
-
             window.onscroll = () => this.loadMore();
 
             this.loadProductList(1);
         },
 
         methods: {
-            findText() {
-                this.setUrlParameter('search', this.searchText);
+            findText(search) {
+                this.setUrlParameter('search', search);
                 this.reloadProducts();
                 this.setFocus(this.$refs.search, true, true)
             },
@@ -111,7 +106,6 @@
                     .finally(() => {
                         this.hideLoading();
                     });
-                this.setFocus(this.$refs.search, true, true);
                 return this;
             },
 

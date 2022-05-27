@@ -4,13 +4,12 @@ namespace Tests\Feature\Http\Controllers\Api;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class RoutesCoverageTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * A basic test to make sure all routes have minimum one test file.
      *
@@ -20,20 +19,22 @@ class RoutesCoverageTest extends TestCase
     {
         Artisan::call('route:list --json --path=api/ --env=production');
 
-        $routes = collect(json_decode(Artisan::output()));
+        $artisanOutput = json_decode(Artisan::output());
 
-        $this->assertNotEmpty($routes, 'Artisan route:list command did not return any routes');
+        collect($artisanOutput)
+            ->map(function ($route) {
+                $fullFileName = app()->basePath();
+                $fullFileName .= '/tests/Feature/';
+                $fullFileName .= $this->getTestFileName($route);
+                $fullFileName .= '.php';
 
-        $routes->each(function ($route) {
-            $testName = $this->getTestName($route);
+                return $fullFileName;
+            })
+            ->each(function ($fileName) {
+                $this->assertFileExists($fileName, 'Run "php artisan app:generate-routes-tests"');
+            });
 
-            $fileName = app()->basePath().'/tests/Feature/'.$testName.'.php';
-
-            $this->assertFileExists(
-                $fileName,
-                'Route test missing. Please run "php artisan app:generate-routes-tests"'
-            );
-        });
+        $this->assertNotEmpty($artisanOutput, 'Artisan route:list command did not return any routes');
     }
 
     /**
@@ -41,7 +42,7 @@ class RoutesCoverageTest extends TestCase
      *
      * @return string
      */
-    public function getTestName($route): string
+    public function getTestFileName($route): string
     {
         // $sample_action = 'App\\Http\\Controllers\\Api\\Settings\\UserMeController@index'
         $controllerName = Str::before($route->action, '@');

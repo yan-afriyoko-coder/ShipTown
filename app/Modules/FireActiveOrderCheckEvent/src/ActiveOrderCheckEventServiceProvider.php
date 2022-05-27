@@ -2,10 +2,6 @@
 
 namespace App\Modules\FireActiveOrderCheckEvent\src;
 
-use App\Events\HourlyEvent;
-use App\Events\Order\ActiveOrderCheckEvent;
-use App\Events\Order\OrderCreatedEvent;
-use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
@@ -32,17 +28,6 @@ class ActiveOrderCheckEventServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        OrderCreatedEvent::class => [
-            Listeners\OrderCreatedListener::class,
-        ],
-
-        OrderUpdatedEvent::class => [
-            Listeners\OrderUpdatedListener::class,
-        ],
-
-        HourlyEvent::class => [
-            Listeners\HourlyEventListener::class,
-        ]
     ];
 
     public static function disabling(): bool

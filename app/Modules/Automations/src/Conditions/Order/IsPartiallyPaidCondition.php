@@ -2,9 +2,6 @@
 
 namespace App\Modules\Automations\src\Conditions\Order;
 
-use App\Events\Order\ActiveOrderCheckEvent;
-use App\Events\Order\OrderCreatedEvent;
-use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\Automations\src\Conditions\BaseCondition;
 use Illuminate\Support\Facades\Log;
 
@@ -13,11 +10,6 @@ use Illuminate\Support\Facades\Log;
  */
 class IsPartiallyPaidCondition extends BaseCondition
 {
-    /**
-     * @var ActiveOrderCheckEvent|OrderCreatedEvent|OrderUpdatedEvent
-     */
-    protected $event;
-
     /**
      * @param string $condition_value
      * @return bool

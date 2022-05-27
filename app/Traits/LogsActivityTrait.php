@@ -18,12 +18,6 @@ trait LogsActivityTrait
             ->withProperties($properties)
             ->log($message);
 
-        Log::debug('Activity', [
-            'message' => $message,
-            'id' => $this->getKey(),
-            'class' => get_class($this)
-        ]);
-
         return $this;
     }
 }

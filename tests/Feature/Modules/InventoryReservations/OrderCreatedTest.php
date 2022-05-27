@@ -6,6 +6,7 @@ use App\Models\Inventory;
 use App\Models\OrderProduct;
 use App\Models\OrderStatus;
 use App\Models\Product;
+use App\Modules\InventoryReservations\src\EventServiceProviderBase;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -23,9 +24,7 @@ class OrderCreatedTest extends TestCase
         $admin = factory(User::class)->create()->assignRole('admin');
         $this->actingAs($admin, 'api');
 
-        OrderProduct::query()->forceDelete();
-        Inventory::query()->forceDelete();
-        Product::query()->forceDelete();
+        EventServiceProviderBase::enableModule();
     }
 
     /** @test */
@@ -34,7 +33,7 @@ class OrderCreatedTest extends TestCase
         factory(OrderStatus::class)->create([
             'code'           => 'new',
             'name'           => 'new',
-            'reserves_stock' => true,
+            'order_active'   => true,
         ]);
 
         $product = factory(Product::class)->create();

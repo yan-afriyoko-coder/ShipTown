@@ -2,24 +2,24 @@
 
 namespace App\Modules\Automations\src\Conditions\Order;
 
-use App\Events\Order\ActiveOrderCheckEvent;
-use App\Events\Order\OrderCreatedEvent;
-use App\Events\Order\OrderUpdatedEvent;
+use App\Modules\Automations\src\Conditions\BaseCondition;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
 
 /**
  *
  */
-class StatusCodeEqualsCondition
+class StatusCodeEqualsCondition extends BaseCondition
 {
-    /**
-     * @var ActiveOrderCheckEvent|OrderCreatedEvent|OrderUpdatedEvent
-     */
-    private $event;
 
-    public function __construct($event)
+    /**
+     * @param Builder $query
+     * @param $expected_status_code
+     * @return Builder
+     */
+    public static function ordersQueryScope(Builder $query, $expected_status_code): Builder
     {
-        $this->event = $event;
+        return $query->where('status_code', '=', $expected_status_code);
     }
 
     /**

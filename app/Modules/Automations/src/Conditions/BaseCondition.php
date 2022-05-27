@@ -2,13 +2,18 @@
 
 namespace App\Modules\Automations\src\Conditions;
 
+use App\Events\Order\ActiveOrderCheckEvent;
+use App\Events\Order\OrderCreatedEvent;
+use App\Events\Order\OrderUpdatedEvent;
+use Illuminate\Database\Eloquent\Builder;
+
 /**
  *
  */
 abstract class BaseCondition
 {
     /**
-     * @var mixed
+     * @var ActiveOrderCheckEvent|OrderCreatedEvent|OrderUpdatedEvent
      */
     protected $event;
 
@@ -18,5 +23,20 @@ abstract class BaseCondition
     public function __construct($event)
     {
         $this->event = $event;
+    }
+
+    public static function ordersQueryScope(Builder $query, $expected_value): Builder
+    {
+        return $query;
+    }
+
+
+    /**
+     * @param string $expected_value
+     * @return bool
+     */
+    public function isValid(string $expected_value): bool
+    {
+        return false;
     }
 }

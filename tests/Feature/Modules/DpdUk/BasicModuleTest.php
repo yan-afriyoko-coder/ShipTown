@@ -15,11 +15,6 @@ use Tests\TestCase;
 class BasicModuleTest extends TestCase
 {
     use RefreshDatabase;
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-    }
 
     /** @test
      * @throws Exception

@@ -2,17 +2,15 @@
 
 namespace Tests\Feature\Modules\InventoryReservations;
 
-use App\Models\Inventory;
-use App\Models\OrderProduct;
 use App\Models\OrderStatus;
 use App\Models\Product;
+use App\Modules\InventoryReservations\src\EventServiceProviderBase;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class OrderStatusChangedTest extends TestCase
 {
-    use RefreshDatabase;
+//    use RefreshDatabase;
 
     protected function setUp(): void
     {
@@ -20,10 +18,7 @@ class OrderStatusChangedTest extends TestCase
         $admin = factory(User::class)->create()->assignRole('admin');
         $this->actingAs($admin, 'api');
 
-        OrderProduct::query()->forceDelete();
-        Inventory::query()->forceDelete();
-        Product::query()->forceDelete();
-        OrderStatus::query()->forceDelete();
+        EventServiceProviderBase::enableModule();
     }
 
     /** @test */
@@ -32,13 +27,13 @@ class OrderStatusChangedTest extends TestCase
         factory(OrderStatus::class)->create([
             'code'           => 'open',
             'name'           => 'open',
-            'reserves_stock' => true,
+            'order_active'   => true,
         ]);
 
         factory(OrderStatus::class)->create([
             'code'           => 'cancelled',
             'name'           => 'cancelled',
-            'reserves_stock' => false,
+            'order_active'   => false,
         ]);
 
         $product = factory(Product::class)->create();
@@ -58,13 +53,19 @@ class OrderStatusChangedTest extends TestCase
             ],
         ];
 
-        $response = $this->postJson('api/orders', $data)->assertOk();
+
+        $response = $this->postJson('api/orders', $data);
+        ray('response', $response->json());
+        $response->assertOk();
+
         $this->assertDatabaseHas('inventory', ['quantity_reserved' => $randomQuantity]);
         $this->assertDatabaseHas('products', ['quantity_reserved' => $randomQuantity]);
 
         $order_id = $response->json('id');
-        $this->putJson('api/orders/'.$order_id, ['status_code' => 'cancelled'])
-            ->assertOk();
+
+        $response = $this->putJson('api/orders/'.$order_id, ['status_code' => 'cancelled']);
+        ray('response', $response->json());
+        $response->assertOk();
 
         $this->assertDatabaseHas('inventory', ['quantity_reserved' => 0]);
         $this->assertDatabaseHas('products', ['quantity_reserved' => 0]);
