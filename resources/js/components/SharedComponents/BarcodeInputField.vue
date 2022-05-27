@@ -6,9 +6,8 @@
                @keyup.enter="barcodeScanned(barcode)"/>
 
 
-      <b-modal id="set-shelf-location-command-modal" @submit="updateShelfLocation" scrollable centered>
-        <template #modal-title>Shelf: {{ command[1] }}</template>
-        <input ref="barcode" id="set-shelf-location-command-modal-input" class="form-control" :placeholder="'Scan product to update shelf location'"
+      <b-modal id="set-shelf-location-command-modal" @submit="updateShelfLocation" scrollable centered no-fade hide-header>
+        <input ref="barcode" id="set-shelf-location-command-modal-input" class="form-control" :placeholder="'Scan product to update shelf location: ' + command[1]"
                @focus="simulateSelectAll"
                @keyup.enter="updateShelfLocation"/>
       </b-modal>
@@ -44,6 +43,10 @@
         },
 
         methods: {
+          hideModal(event) {
+            this.$bvModal.hide('set-shelf-location-command-modal');
+          },
+
           runCommandShelfScanned: function (command) {
             this.command = command;
             this.warningBeep();
