@@ -73,9 +73,9 @@
 
           updateShelfLocation(event)
           {
+            this.setFocusOnBarcodeInput();
             this.$bvModal.hide('set-shelf-location-command-modal');
             this.notifyError('Set Shelf Location command not yet implemented: ' + event.target.value);
-            this.setFocusOnBarcodeInput();
           },
 
           barcodeScanned(barcode) {
