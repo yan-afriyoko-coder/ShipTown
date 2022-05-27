@@ -1,21 +1,9 @@
 <template>
     <div>
         <template v-if="getUrlParameter('hide_nav_bar', false) === false">
-<!--            <div class="row no-gutters ml-1 mr-1">-->
-<!--                <div class="col">-->
-<!--                    <input placeholder="Search"-->
-<!--                           class="form-control"-->
-<!--                           ref="search"-->
-<!--                           v-model="searchText"-->
-<!--                           @keyup.enter="findText" />-->
-<!--                </div>-->
-<!--            </div>-->
-
-
-
             <div class="row mb-3 pl-1 pr-1">
                 <div class="flex-fill">
-                    <barcode-input-field :url_param_name="'search'" @commandEntered="" @barcodeScanned="findText" placeholder="Search products using name, sku, alias or command" ref="barcode"/>
+                    <barcode-input-field :url_param_name="'search'" @barcodeScanned="findText" placeholder="Search products using name, sku, alias or command" ref="barcode"/>
                 </div>
 
                 <button disabled type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
