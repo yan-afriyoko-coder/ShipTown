@@ -6,12 +6,11 @@
                @keyup.enter="barcodeScanned(barcode)"/>
 
 
-      <b-modal id="set-shelf-location-command-modal" scrollable centered no-fade>
+      <b-modal id="set-shelf-location-command-modal" @submit="updateShelfLocation" scrollable centered>
         <template #modal-title>Shelf: {{ command[1] }}</template>
         <input ref="barcode" id="set-shelf-location-command-modal-input" class="form-control" :placeholder="'Scan product to update shelf location'"
-               v-model="barcode"
                @focus="simulateSelectAll"
-               @keyup.enter="barcodeScanned(barcode)"/>
+               @keyup.enter="updateShelfLocation"/>
       </b-modal>
     </div>
 </template>
@@ -59,7 +58,7 @@
               return false;
             }
 
-            switch (command[0])
+            switch (command[0].toLowerCase())
             {
                 case 'shelf':
                   this.runCommandShelfScanned(command);
@@ -67,6 +66,12 @@
             }
 
             return false;
+          },
+
+          updateShelfLocation(event)
+          {
+            this.$bvModal.hide('set-shelf-location-command-modal');
+            this.notifyError('Set Shelf Location command not yet implemented: ' + event.target.value);
           },
 
           barcodeScanned(barcode) {
