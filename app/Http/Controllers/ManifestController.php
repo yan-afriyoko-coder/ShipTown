@@ -35,8 +35,8 @@ class ManifestController extends Controller
             ],
             'start_url'        => '/index.php',
             'display'          => 'standalone',
-            'background_color' => '#3E4EB8',
-            'theme_color'      => '#2F3BA2',
+            'background_color' => '#007bff',
+            'theme_color'      => '#007bff',
         ]);
     }
 }
