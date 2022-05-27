@@ -1,17 +1,17 @@
 @auth
 {{--    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm mb-0">--}}
-    <nav class="navbar navbar-expand-md navbar-light bg-secondary mb-2 p-0 bg-white">
+    <nav class="navbar navbar-expand-md navbar-light mb-2 p-0">
         <div class="container text-white">
             <a class="navbar-brand d-none d-md-block" href="{{ url('/') }}">
                 PM
                 @yield('title')
             </a>
 
-            <div class="d-block d-md-none mb-0 navbar-dark w-100 bg-secondary">
+            <div class="d-block d-md-none mb-0 navbar-dark w-100 bg-primary">
                 <div class="btn-group" role="group" aria-label="Basic example">
-                    <a type="button" class="btn btn-secondary bg-secondary" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
-                    <a type="button" class="btn btn-secondary bg-secondary " href="{{ route('products') }}">{{ __('Products') }}</a>
-                    <a type="button" class="btn btn-secondary bg-secondary" href="{{ route('orders') }}">{{ __('Orders') }}</a>
+                    <a type="button" class="btn btn-primary" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
+                    <a type="button" class="btn btn-primary " href="{{ route('products') }}">{{ __('Products') }}</a>
+                    <a type="button" class="btn btn-primary" href="{{ route('orders') }}">{{ __('Orders') }}</a>
                 </div>
                 <button class="navbar-toggler navbar-light float-right border-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon text-white"></span>
