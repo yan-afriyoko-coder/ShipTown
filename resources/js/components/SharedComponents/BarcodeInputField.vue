@@ -4,20 +4,30 @@
                v-model="barcode"
                @focus="simulateSelectAll"
                @keyup.enter="barcodeScanned(barcode)"/>
+
+
+      <b-modal id="set-shelf-location-command-modal" scrollable centered no-fade>
+        <template #modal-title>Shelf: {{ command[1] }}</template>
+        <input ref="barcode" id="set-shelf-location-command-modal-input" class="form-control" :placeholder="'Scan product to update shelf location'"
+               v-model="barcode"
+               @focus="simulateSelectAll"
+               @keyup.enter="barcodeScanned(barcode)"/>
+      </b-modal>
     </div>
 </template>
 
 <script>
     import helpers from "../../mixins/helpers";
     import url from "../../mixins/url";
+    import FiltersModal from "../Packlist/FiltersModal";
 
     export default {
         name: "BarcodeInputField",
 
-        mixins: [helpers, url],
+        mixins: [helpers, url, FiltersModal],
 
         props: {
-            url_param_name: '',
+            url_param_name: null,
             placeholder: '',
         },
 
@@ -25,6 +35,7 @@
             return {
                 currentLocation: '',
                 barcode: '',
+                command: ['',''],
             }
         },
 
@@ -34,7 +45,36 @@
         },
 
         methods: {
-            barcodeScanned(barcode) {
+          runCommandShelfScanned: function (command) {
+            this.command = command;
+            this.warningBeep();
+            this.$bvModal.show('set-shelf-location-command-modal')
+            this.setFocusElementById(500, 'set-shelf-location-command-modal-input')
+          },
+
+          tryToRunCommand: function (barcode) {
+            let command = barcode.split(':');
+
+            if(command.length < 2) {
+              return false;
+            }
+
+            switch (command[0])
+            {
+                case 'shelf':
+                  this.runCommandShelfScanned(command);
+                  return true;
+            }
+
+            return false;
+          },
+
+          barcodeScanned(barcode) {
+                if (this.tryToRunCommand(barcode)) {
+                  this.barcode = '';
+                  return;
+                }
+
                 this.$emit('barcodeScanned', barcode);
                 if(this.url_param_name) {
                   this.setUrlParameter(this.url_param_name, barcode);
