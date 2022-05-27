@@ -69,23 +69,20 @@
             return {
                 lastPageLoaded: 1,
                 lastPage: 1,
-                searchText: '',
 
                 products: [],
             };
         },
 
         mounted() {
-            this.searchText = this.getUrlParameter('search');
-
             window.onscroll = () => this.loadMore();
 
             this.loadProductList(1);
         },
 
         methods: {
-            findText() {
-                this.setUrlParameter('search', this.searchText);
+            findText(search) {
+                this.setUrlParameter('search', search);
                 this.reloadProducts();
                 this.setFocus(this.$refs.search, true, true)
             },
@@ -121,7 +118,6 @@
                     .finally(() => {
                         this.hideLoading();
                     });
-                this.setFocus(this.$refs.search, true, true);
                 return this;
             },
 
