@@ -13,7 +13,7 @@
         </template>
 
         <template  v-if="products.length === 0 && !isLoading" >
-            <div class="row">
+            <div class="row mt-3">
                 <div class="col">
                     <div class="alert alert-info" role="alert">
                         No products found.

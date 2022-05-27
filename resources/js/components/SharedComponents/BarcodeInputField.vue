@@ -9,13 +9,15 @@
 
 <script>
     import helpers from "../../mixins/helpers";
+    import url from "../../mixins/url";
 
     export default {
         name: "BarcodeInputField",
 
-        mixins: [helpers],
+        mixins: [helpers, url],
 
         props: {
+            url_param_name: '',
             placeholder: '',
         },
 
@@ -27,12 +29,16 @@
         },
 
         mounted() {
+            this.barcode = this.getUrlParameter(this.url_param_name);
             this.setFocusOnBarcodeInput(500);
         },
 
         methods: {
             barcodeScanned(barcode) {
                 this.$emit('barcodeScanned', barcode);
+                if(this.url_param_name) {
+                  this.setUrlParameter(this.url_param_name, barcode);
+                }
                 this.setFocusOnBarcodeInput();
                 this.simulateSelectAll();
             },

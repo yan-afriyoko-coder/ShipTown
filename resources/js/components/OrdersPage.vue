@@ -1,14 +1,24 @@
 <template>
     <div>
         <template v-if="getUrlParameter('hide_nav_bar', false) === false">
-            <div class="row no-gutters mb-3 ml-1 mr-1">
-                <div class="col">
-                    <input placeholder="Search"
-                           class="form-control"
-                           ref="search"
-                           v-model="searchText"
-                           @keyup.enter="findText" />
+<!--            <div class="row no-gutters mb-3 ml-1 mr-1">-->
+<!--                <div class="col">-->
+<!--                    <input placeholder="Search"-->
+<!--                           class="form-control"-->
+<!--                           ref="search"-->
+<!--                           v-model="searchText"-->
+<!--                           @keyup.enter="findText" />-->
+<!--                </div>-->
+<!--            </div>-->
+
+
+
+            <div class="row mb-3 pl-1 pr-1">
+                <div class="flex-fill">
+                    <barcode-input-field :url_param_name="'search'" @commandEntered="" @barcodeScanned="findText" placeholder="Search orders using number, sku, alias or command" ref="barcode"/>
                 </div>
+
+                <button disabled type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
             </div>
         </template>
 
@@ -64,7 +74,6 @@
         },
 
         mounted() {
-            this.searchText = this.getUrlParameter('search');
             this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
 
             window.onscroll = () => this.loadMore();
@@ -73,15 +82,14 @@
         },
 
         methods: {
-            findText() {
-                this.setUrlParameter('search', this.searchText);
+            findText(param) {
+                this.setUrlParameter('search', param);
                 this.reloadOrders();
             },
 
             reloadOrders(e) {
                 this.orders = [];
                 this.loadOrderList();
-                this.setFocus(this.$refs.search, true, true);
             },
 
             loadOrderList: function(page = 1) {
@@ -89,8 +97,6 @@
 
                 this.page = page;
                 this.last_page = 1;
-
-                console.log(this.getUrlParameter('filter'));
 
                 const params = {
                     'filter[status]': this.getUrlParameter('status'),
