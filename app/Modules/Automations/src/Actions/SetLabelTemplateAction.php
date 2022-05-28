@@ -4,7 +4,7 @@ namespace App\Modules\Automations\src\Actions;
 
 use App\Modules\Automations\src\Abstracts\BaseOrderActionAbstract;
 
-class SetLabelTemplateActionAbstract extends BaseOrderActionAbstract
+class SetLabelTemplateAction extends BaseOrderActionAbstract
 {
     public function handle($options = '')
     {

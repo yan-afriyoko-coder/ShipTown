@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Validator;
 /**
  *
  */
-class SplitBundleSkuActionAbstract extends BaseOrderActionAbstract
+class SplitBundleSkuAction extends BaseOrderActionAbstract
 {
     /**
      * @var MessageBag

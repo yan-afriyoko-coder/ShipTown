@@ -3,8 +3,8 @@
 use App\Events\Order\ActiveOrderCheckEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
-use App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsOrderConditionAbstract;
-use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsOrderConditionAbstract;
+use App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsOrderCondition;
+use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsOrderCondition;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
@@ -28,13 +28,13 @@ class AutomationsSeeder extends Seeder
 
         Condition::create([
             'automation_id' => $automation->getKey(),
-            'condition_class' => StatusCodeEqualsOrderConditionAbstract::class,
+            'condition_class' => StatusCodeEqualsOrderCondition::class,
             'condition_value' => 'paid'
         ]);
 
         Condition::create([
             'automation_id' => $automation->getKey(),
-            'condition_class' => ShippingMethodCodeEqualsOrderConditionAbstract::class,
+            'condition_class' => ShippingMethodCodeEqualsOrderCondition::class,
             'condition_value' => 'store_pickup'
         ]);
 

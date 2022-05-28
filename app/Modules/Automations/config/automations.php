@@ -5,55 +5,55 @@ return [
     'description' => 'On Active Order Event',
     'conditions' => [
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsOrderConditionAbstract::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsOrderCondition::class,
             'description' => 'Status Code is',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeNotInOrderConditionAbstract::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeNotInOrderCondition::class,
             'description' => 'Status Code NOT In',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationOrderConditionAbstract::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationOrderCondition::class,
             'description' => 'Can Fulfill from Warehouse Code (0 for all)',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\CanNotFulfillFromLocationOrderConditionAbstract::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\CanNotFulfillFromLocationOrderCondition::class,
             'description' => 'Can NOT Fulfill Warehouse Code (0 for all)',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsOrderConditionAbstract::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsOrderCondition::class,
             'description' => 'Shipping Method Code equals',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\ShippingMethodCodeInOrderConditionAbstract::class,
+            'class' => \App\Modules\Automations\src\Conditions\ShippingMethodCodeInOrderCondition::class,
             'description' => 'Shipping Method Code in',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\LineCountEqualsOrderConditionAbstract::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\LineCountEqualsOrderCondition::class,
             'description' => 'Line count equals',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\TotalQuantityToShipEqualsOrderConditionAbstract::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\TotalQuantityToShipEqualsOrderCondition::class,
             'description' => 'Total Quantity To Ship',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\IsPartiallyPaidOrderConditionAbstract::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\IsPartiallyPaidOrderCondition::class,
             'description' => 'Is Partially Paid',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\IsFullyPaidOrderConditionAbstract::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\IsFullyPaidOrderCondition::class,
             'description' => 'Is Fully Paid',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\IsFullyPickedOrderConditionAbstract::class,
+            'class' => \App\Modules\Automations\src\Conditions\IsFullyPickedOrderCondition::class,
             'description' => 'Is Fully Picked',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\IsFullyPackedOrderConditionAbstract::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\IsFullyPackedOrderCondition::class,
             'description' => 'Is Fully Packed',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\OrderNumberEqualsOrderConditionAbstract::class,
+            'class' => \App\Modules\Automations\src\Conditions\OrderNumberEqualsOrderCondition::class,
             'description' => 'Order Number equals',
         ],
     ],
@@ -71,7 +71,7 @@ return [
             'description' => 'Add log message',
         ],
         [
-            'class' => \App\Modules\Automations\src\Actions\SetLabelTemplateActionAbstract::class,
+            'class' => \App\Modules\Automations\src\Actions\SetLabelTemplateAction::class,
             'description' => 'Set courier label template',
         ],
         [
@@ -83,11 +83,11 @@ return [
             'description' => 'Mark remaining products as shipped',
         ],
         [
-            'class' => \App\Modules\Automations\src\Actions\PushToBoxTopOrderActionAbstract::class,
+            'class' => \App\Modules\Automations\src\Actions\PushToBoxTopOrderAction::class,
             'description' => 'Create Warehouse Shipment in BoxTop Software',
         ],
         [
-            'class' => \App\Modules\Automations\src\Actions\SendOrderEmailActionAbstract::class,
+            'class' => \App\Modules\Automations\src\Actions\SendOrderEmailAction::class,
             'description' => 'Send email template to customer',
         ],
 //        [

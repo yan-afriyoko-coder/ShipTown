@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Automations\src\Conditions;
+namespace App\Modules\Automations\src\Conditions\Order;
 
 use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
 use Illuminate\Support\Facades\Log;
@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 /**
  *
  */
-class IsFullyPickedOrderConditionAbstract extends BaseOrderConditionAbstract
+class LineCountEqualsOrderCondition extends BaseOrderConditionAbstract
 {
     /**
      * @param string $condition_value
@@ -16,16 +16,17 @@ class IsFullyPickedOrderConditionAbstract extends BaseOrderConditionAbstract
      */
     public function isValid(string $condition_value): bool
     {
-        $expectedBoolValue = filter_var($condition_value, FILTER_VALIDATE_BOOL);
+        $numericValue = intval($condition_value);
 
-        $result = $this->event->order->is_picked === $expectedBoolValue;
+        $result = is_numeric($condition_value)
+            && $this->event->order->orderTotals->product_line_count === $numericValue;
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
+            'result' => $result,
             'class' => class_basename(self::class),
-            'is_picked' => $this->event->order->is_packed,
-            'expected' => $expectedBoolValue,
-            'actual' => $result,
+            'expected' => $numericValue,
+            'actual' => $this->event->order->orderTotals->product_line_count,
         ]);
 
         return $result;
