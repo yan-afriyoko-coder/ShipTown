@@ -6,7 +6,7 @@ use App\Mail\OrderMail;
 use App\Mail\ShipmentConfirmationMail;
 use App\Models\MailTemplate;
 use App\Models\Order;
-use App\Modules\Automations\src\BaseOrderAction;
+use App\Modules\Automations\src\Abstracts\BaseOrderAction;
 use Illuminate\Support\Facades\Mail;
 
 /**

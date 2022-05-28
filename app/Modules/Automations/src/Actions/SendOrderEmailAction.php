@@ -4,7 +4,7 @@ namespace App\Modules\Automations\src\Actions;
 
 use App\Mail\OrderMail;
 use App\Models\MailTemplate;
-use App\Modules\Automations\src\BaseOrderAction;
+use App\Modules\Automations\src\Abstracts\BaseOrderAction;
 use Illuminate\Support\Facades\Mail;
 
 /**
