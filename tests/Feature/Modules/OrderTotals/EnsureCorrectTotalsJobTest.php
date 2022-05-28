@@ -8,7 +8,7 @@ use App\Modules\OrderTotals\src\Jobs\EnsureCorrectTotalsJob;
 use App\Modules\OrderTotals\src\OrderTotalsServiceProvider;
 use Tests\TestCase;
 
-class RecalculateOrdersProductsTotalsJobTest extends TestCase
+class EnsureCorrectTotalsJobTest extends TestCase
 {
     public function test_if_updates_totals()
     {
@@ -28,13 +28,5 @@ class RecalculateOrdersProductsTotalsJobTest extends TestCase
         $this->assertDatabaseHas('orders_products_totals', ['quantity_skipped_picking' => $orderProduct->quantity_skipped_picking]);
         $this->assertDatabaseHas('orders_products_totals', ['quantity_not_picked' => $orderProduct->quantity_not_picked]);
         $this->assertDatabaseHas('orders_products_totals', ['quantity_shipped' => $orderProduct->quantity_shipped]);
-    }
-
-    /** @test */
-    public function test_module_basic_functionality()
-    {
-        OrderTotalsServiceProvider::enableModule();
-
-        $this->assertTrue(true, 'Most basic test... to be continued');
     }
 }

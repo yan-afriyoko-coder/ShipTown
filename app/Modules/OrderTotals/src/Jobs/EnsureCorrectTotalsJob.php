@@ -4,7 +4,6 @@ namespace App\Modules\OrderTotals\src\Jobs;
 
 use App\Helpers\TemporaryTable;
 use App\Models\OrderProductTotal;
-use BeyondCode\QueryDetector\Outputs\Alert;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Query\Builder;
