@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Automations\src\Conditions\Order;
+namespace App\Modules\Automations\src\Conditions;
 
 use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
 use Illuminate\Support\Facades\Log;
@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 /**
  *
  */
-class StatusCodeNotInOrderConditionAbstract extends BaseOrderConditionAbstract
+class ShippingMethodCodeInOrderCondition extends BaseOrderConditionAbstract
 {
     /**
      * @param $condition_value
@@ -16,16 +16,16 @@ class StatusCodeNotInOrderConditionAbstract extends BaseOrderConditionAbstract
      */
     public function isValid($condition_value): bool
     {
-        $expectedStatuses = explode(',', $condition_value);
+        $expected = explode(',', $condition_value);
 
-        $result = in_array($this->event->order->status_code, $expectedStatuses) === false;
+        $result = in_array($this->event->order->status_code, $expected) === false;
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
             'result' => $result,
             'class' => class_basename(self::class),
-            'expected_statuses' => $condition_value,
-            'actual_status' => $this->event->order->status_code,
+            'expected_shipping_method_code' => $condition_value,
+            'actual_shipping_method_code' => $this->event->order->shipping_method_code,
         ]);
 
         return $result;

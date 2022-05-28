@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Mail;
 /**
  *
  */
-class SendEmailToCustomerActionAbstract extends BaseOrderActionAbstract
+class SendEmailToCustomerAction extends BaseOrderActionAbstract
 {
     /**
      * @param string $options

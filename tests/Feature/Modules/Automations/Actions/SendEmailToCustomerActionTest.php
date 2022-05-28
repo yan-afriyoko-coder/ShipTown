@@ -7,7 +7,7 @@ use App\Mail\OrderMail;
 use App\Models\MailTemplate;
 use App\Models\Order;
 use App\Models\ShippingLabel;
-use App\Modules\Automations\src\Actions\SendEmailToCustomerActionAbstract;
+use App\Modules\Automations\src\Actions\SendEmailToCustomerAction;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -23,7 +23,7 @@ class SendEmailToCustomerActionTest extends TestCase
         $orderShipment = factory(ShippingLabel::class)->create();
 
         $event = new ActiveOrderCheckEvent($order);
-        $action = new SendEmailToCustomerActionAbstract($event);
+        $action = new SendEmailToCustomerAction($event);
 
         // act
         $actionSucceeded = $action->handle('');
@@ -46,7 +46,7 @@ class SendEmailToCustomerActionTest extends TestCase
 
         $order = factory(Order::class)->create();
         $event = new ActiveOrderCheckEvent($order);
-        $action = new SendEmailToCustomerActionAbstract($event);
+        $action = new SendEmailToCustomerAction($event);
 
         // act
         $actionSucceeded = $action->handle($template->code);

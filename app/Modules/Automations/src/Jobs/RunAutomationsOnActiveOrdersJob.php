@@ -4,11 +4,10 @@ namespace App\Modules\Automations\src\Jobs;
 
 use App\Events\Order\ActiveOrderCheckEvent;
 use App\Models\Order;
-use App\Modules\Automations\src\Conditions\BaseCondition;
+use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
 use App\Modules\Automations\src\Services\AutomationService;
-use AWS\CRT\Log;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -61,7 +60,7 @@ class RunAutomationsOnActiveOrdersJob implements ShouldQueue
         try {
             $automation->conditions()
                 ->each(function (Condition $condition) use ($query) {
-                    /** @var BaseCondition $c */
+                    /** @var BaseOrderConditionAbstract $c */
                     $c = $condition->condition_class;
                     $c::ordersQueryScope($query, $condition->condition_value);
                 });

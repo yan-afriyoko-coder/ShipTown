@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 /**
  *
  */
-class IsFullyPaidOrderConditionAbstract extends BaseOrderConditionAbstract
+class IsPartiallyPaidOrderCondition extends BaseOrderConditionAbstract
 {
     /**
      * @param string $condition_value
@@ -18,14 +18,19 @@ class IsFullyPaidOrderConditionAbstract extends BaseOrderConditionAbstract
     {
         $expectedBoolValue = filter_var($condition_value, FILTER_VALIDATE_BOOL);
 
-        $result = $this->event->order->isPaid === $expectedBoolValue;
+        $order = $this->event->order;
+
+        $isPartiallyPaid = ($order->total_paid > 0)  && ($order->total_paid < $order->total);
+
+        $result = $isPartiallyPaid === $expectedBoolValue;
 
         Log::debug('Automation condition', [
-            'order_number' => $this->event->order->order_number,
+            'order_number' => $order->order_number,
             'result' => $result,
             'class' => class_basename(self::class),
-            'expected_isPaid' => $expectedBoolValue,
-            'actual_isPaid' => $this->event->order->isPaid,
+            'total_paid' => $order->total_paid,
+            'expected' => $expectedBoolValue,
+            'actual' => $isPartiallyPaid
         ]);
 
         return $result;

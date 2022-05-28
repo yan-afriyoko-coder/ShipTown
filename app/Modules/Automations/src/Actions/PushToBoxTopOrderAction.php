@@ -9,7 +9,7 @@ use App\Modules\BoxTop\src\Models\OrderLock;
 use App\Modules\BoxTop\src\Services\BoxTopService;
 use Exception;
 
-class PushToBoxTopOrderActionAbstract extends BaseOrderActionAbstract
+class PushToBoxTopOrderAction extends BaseOrderActionAbstract
 {
     public function handle($options = '')
     {

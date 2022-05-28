@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 /**
  *
  */
-class LineCountEqualsOrderConditionAbstract extends BaseOrderConditionAbstract
+class TotalQuantityToShipEqualsOrderCondition extends BaseOrderConditionAbstract
 {
     /**
      * @param string $condition_value
@@ -16,17 +16,22 @@ class LineCountEqualsOrderConditionAbstract extends BaseOrderConditionAbstract
      */
     public function isValid(string $condition_value): bool
     {
-        $numericValue = intval($condition_value);
+        if (! is_numeric($condition_value)) {
+            $result = false;
+        } else {
+            $conditionFloatValue = floatval($condition_value);
 
-        $result = is_numeric($condition_value)
-            && $this->event->order->orderTotals->product_line_count === $numericValue;
+            $totalQuantityToShip = floatval($this->event->order->orderProducts()->sum('quantity_to_ship'));
+
+            $result = $totalQuantityToShip === $conditionFloatValue;
+        }
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
             'result' => $result,
             'class' => class_basename(self::class),
-            'expected' => $numericValue,
-            'actual' => $this->event->order->orderTotals->product_line_count,
+            'expected' => $conditionFloatValue ?? '',
+            'actual' => $totalQuantityToShip ?? '',
         ]);
 
         return $result;

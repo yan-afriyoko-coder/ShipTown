@@ -35,7 +35,15 @@ class OrderTotalsServiceProvider extends BaseModuleServiceProvider
      *
      * @var array
      */
-    protected $listen = [];
+    protected $listen = [
+        OrderProductCreatedEvent::class => [
+            Listeners\OrderProductCreatedEventListener::class
+        ],
+
+        OrderProductUpdatedEvent::class => [
+            Listeners\OrderProductUpdatedEventListener::class
+        ]
+    ];
 
     public static function disabling(): bool
     {

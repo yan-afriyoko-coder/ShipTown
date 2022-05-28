@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 /**
  *
  */
-class CanFulfillFromLocationOrderConditionAbstract extends BaseOrderConditionAbstract
+class CanFulfillFromLocationOrderCondition extends BaseOrderConditionAbstract
 {
     /**
      * @param $location_id

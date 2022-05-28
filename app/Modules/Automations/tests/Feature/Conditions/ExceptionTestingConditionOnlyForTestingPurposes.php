@@ -2,11 +2,11 @@
 
 namespace App\Modules\Automations\tests\Feature\Conditions;
 
-use App\Modules\Automations\src\Conditions\BaseCondition;
+use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 
-class ExceptionTestingConditionOnlyForTestingPurposes extends BaseCondition
+class ExceptionTestingConditionOnlyForTestingPurposes extends BaseOrderConditionAbstract
 {
     /**
      * @throws Exception

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 /**
  *
  */
-class OrderNumberEqualsOrderConditionAbstract extends BaseOrderConditionAbstract
+class OrderNumberEqualsOrderCondition extends BaseOrderConditionAbstract
 {
     /**
      * @var ActiveOrderCheckEvent|OrderCreatedEvent|OrderUpdatedEvent

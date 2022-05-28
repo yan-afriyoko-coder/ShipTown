@@ -8,7 +8,7 @@ use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Models\ProductPrice;
-use App\Modules\Automations\src\Actions\SplitBundleSkuActionAbstract;
+use App\Modules\Automations\src\Actions\SplitBundleSkuAction;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -82,7 +82,7 @@ class SplitBundleSkuActionTest extends TestCase
     public function test_incorrect_inputs()
     {
         $event = new ActiveOrderCheckEvent($this->order);
-        $action = new SplitBundleSkuActionAbstract($event);
+        $action = new SplitBundleSkuAction($event);
 
         $this->assertFalse($action->handle(''), 'Blank value should not be allowed');
         $this->assertFalse($action->handle('123'), 'Two SKUs should be present');
