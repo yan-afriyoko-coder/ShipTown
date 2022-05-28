@@ -5,6 +5,7 @@ namespace Tests;
 use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\OrderProductTotal;
 use App\Models\OrderStatus;
 use App\Models\Product;
 use App\Models\ProductAlias;
@@ -33,5 +34,6 @@ abstract class TestCase extends BaseTestCase
         OrderStatus::query()->forceDelete();
         Warehouse::query()->forceDelete();
         Tag::query()->forceDelete();
+        OrderProductTotal::query()->forceDelete();
     }
 }
