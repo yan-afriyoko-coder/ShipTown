@@ -5,7 +5,7 @@ return [
     'description' => 'On Active Order Event',
     'conditions' => [
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsOrderCondition::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition::class,
             'description' => 'Status Code is',
         ],
         [

@@ -5,7 +5,7 @@ use App\Models\NavigationMenu;
 use App\Models\Order;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
 use App\Modules\Automations\src\Conditions\Order\IsFullyPackedOrderCondition;
-use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsOrderCondition;
+use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
 use App\Modules\Automations\src\Models\Automation;
 use Illuminate\Database\Seeder;
 
@@ -80,7 +80,7 @@ class PaidOrdersSeeder extends Seeder
         ]);
 
         $automation->conditions()->create([
-            'condition_class' => StatusCodeEqualsOrderCondition::class,
+            'condition_class' => StatusCodeEqualsCondition::class,
             'condition_value' => 'paid'
         ]);
 

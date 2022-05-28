@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 /**
  *
  */
-class StatusCodeEqualsOrderCondition extends BaseOrderConditionAbstract
+class StatusCodeEqualsCondition extends BaseOrderConditionAbstract
 {
 
     /**
