@@ -43,22 +43,23 @@ class EnsureCorrectTotalsJob implements ShouldQueue
             $records = $this->missingOrWrongTotalsQuery()
                 ->limit(100)
                 ->get();
-                $records->each(function ($record) {
-                    OrderProductTotal::query()
-                        ->updateOrCreate([
-                            'order_id' => $record->order_id
-                        ], [
-                            'count' => $record->count_expected,
-                            'quantity_ordered' => $record->quantity_ordered_expected,
-                            'quantity_split' => $record->quantity_split_expected,
-                            'quantity_picked' => $record->quantity_picked_expected,
-                            'quantity_skipped_picking' => $record->quantity_skipped_picking_expected,
-                            'quantity_not_picked' => $record->quantity_not_picked_expected,
-                            'quantity_shipped' => $record->quantity_shipped_expected,
-                            'quantity_to_pick' => $record->quantity_to_pick_expected,
-                            'quantity_to_ship' => $record->quantity_to_ship_expected,
-                        ]);
-                });
+
+            $records->each(function ($record) {
+                OrderProductTotal::query()
+                    ->updateOrCreate([
+                        'order_id' => $record->order_id
+                    ], [
+                        'count' => $record->count_expected,
+                        'quantity_ordered' => $record->quantity_ordered_expected,
+                        'quantity_split' => $record->quantity_split_expected,
+                        'quantity_picked' => $record->quantity_picked_expected,
+                        'quantity_skipped_picking' => $record->quantity_skipped_picking_expected,
+                        'quantity_not_picked' => $record->quantity_not_picked_expected,
+                        'quantity_shipped' => $record->quantity_shipped_expected,
+                        'quantity_to_pick' => $record->quantity_to_pick_expected,
+                        'quantity_to_ship' => $record->quantity_to_ship_expected,
+                    ]);
+            });
         } while ($records->isNotEmpty());
     }
 
