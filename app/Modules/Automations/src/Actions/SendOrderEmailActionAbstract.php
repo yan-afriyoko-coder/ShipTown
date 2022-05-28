@@ -4,13 +4,13 @@ namespace App\Modules\Automations\src\Actions;
 
 use App\Mail\OrderMail;
 use App\Models\MailTemplate;
-use App\Modules\Automations\src\Abstracts\BaseOrderAction;
+use App\Modules\Automations\src\Abstracts\BaseOrderActionAbstract;
 use Illuminate\Support\Facades\Mail;
 
 /**
  *
  */
-class SendOrderEmailAction extends BaseOrderAction
+class SendOrderEmailActionAbstract extends BaseOrderActionAbstract
 {
     /**
      * @param string $options

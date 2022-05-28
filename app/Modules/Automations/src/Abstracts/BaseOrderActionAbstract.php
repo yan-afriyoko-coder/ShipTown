@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 /**
  * @property-read Order $order
  */
-abstract class BaseOrderAction
+abstract class BaseOrderActionAbstract
 {
     /**
     * @var OrderCreatedEvent|OrderUpdatedEvent
