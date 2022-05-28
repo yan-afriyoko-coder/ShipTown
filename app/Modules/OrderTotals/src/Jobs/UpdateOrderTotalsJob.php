@@ -2,7 +2,6 @@
 
 namespace App\Modules\OrderTotals\src\Jobs;
 
-use App\Helpers\TemporaryTable;
 use App\Models\OrderProductTotal;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

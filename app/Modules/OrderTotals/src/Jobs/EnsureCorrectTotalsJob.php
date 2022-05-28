@@ -4,7 +4,6 @@ namespace App\Modules\OrderTotals\src\Jobs;
 
 use App\Helpers\TemporaryTable;
 use App\Models\OrderProductTotal;
-use BeyondCode\QueryDetector\Outputs\Alert;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Query\Builder;
@@ -12,10 +11,15 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class EnsureCorrectTotalsJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable,
+        InteractsWithQueue,
+        Queueable,
+        SerializesModels,
+        IsMonitored;
 
     private Builder $recalculationsTempTable;
 
@@ -44,22 +48,23 @@ class EnsureCorrectTotalsJob implements ShouldQueue
             $records = $this->missingOrWrongTotalsQuery()
                 ->limit(100)
                 ->get();
-                $records->each(function ($record) {
-                    OrderProductTotal::query()
-                        ->updateOrCreate([
-                            'order_id' => $record->order_id
-                        ], [
-                            'count' => $record->count_expected,
-                            'quantity_ordered' => $record->quantity_ordered_expected,
-                            'quantity_split' => $record->quantity_split_expected,
-                            'quantity_picked' => $record->quantity_picked_expected,
-                            'quantity_skipped_picking' => $record->quantity_skipped_picking_expected,
-                            'quantity_not_picked' => $record->quantity_not_picked_expected,
-                            'quantity_shipped' => $record->quantity_shipped_expected,
-                            'quantity_to_pick' => $record->quantity_to_pick_expected,
-                            'quantity_to_ship' => $record->quantity_to_ship_expected,
-                        ]);
-                });
+
+            $records->each(function ($record) {
+                OrderProductTotal::query()
+                    ->updateOrCreate([
+                        'order_id' => $record->order_id
+                    ], [
+                        'count' => $record->count_expected,
+                        'quantity_ordered' => $record->quantity_ordered_expected,
+                        'quantity_split' => $record->quantity_split_expected,
+                        'quantity_picked' => $record->quantity_picked_expected,
+                        'quantity_skipped_picking' => $record->quantity_skipped_picking_expected,
+                        'quantity_not_picked' => $record->quantity_not_picked_expected,
+                        'quantity_shipped' => $record->quantity_shipped_expected,
+                        'quantity_to_pick' => $record->quantity_to_pick_expected,
+                        'quantity_to_ship' => $record->quantity_to_ship_expected,
+                    ]);
+            });
         } while ($records->isNotEmpty());
     }
 
