@@ -2,6 +2,7 @@
 
 namespace App\Modules\Automations\src\Conditions;
 
+use App\Modules\Automations\src\Abstracts\BaseCondition;
 use Illuminate\Support\Facades\Log;
 
 /**

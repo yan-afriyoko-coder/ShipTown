@@ -2,10 +2,7 @@
 
 namespace App\Modules\Automations\src\Conditions\Order;
 
-use App\Events\Order\ActiveOrderCheckEvent;
-use App\Events\Order\OrderCreatedEvent;
-use App\Events\Order\OrderUpdatedEvent;
-use App\Modules\Automations\src\Conditions\BaseCondition;
+use App\Modules\Automations\src\Abstracts\BaseCondition;
 use App\Services\OrderService;
 use Illuminate\Support\Facades\Log;
 

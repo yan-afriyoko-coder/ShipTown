@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Automations\src\Conditions;
+namespace App\Modules\Automations\src\Abstracts;
 
 use App\Events\Order\ActiveOrderCheckEvent;
 use App\Events\Order\OrderCreatedEvent;
