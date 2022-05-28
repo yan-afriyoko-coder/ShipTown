@@ -27,6 +27,7 @@ class OrderProductTotal extends Model
     ];
 
     protected $casts = [
+        'count'                   => 'integer',
         'quantity_ordered'        => 'float',
         'quantity_split'          => 'float',
         'quantity_picked'         => 'float',
@@ -38,6 +39,7 @@ class OrderProductTotal extends Model
     ];
 
     protected $attributes = [
+        'count'                   => 0,
         'quantity_ordered'        => 0,
         'quantity_split'          => 0,
         'quantity_picked'         => 0,

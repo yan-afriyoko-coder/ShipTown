@@ -6,7 +6,7 @@ use App\Models\NavigationMenu;
 use App\Models\Order;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
 use App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsOrderCondition;
-use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsOrderCondition;
+use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
