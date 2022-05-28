@@ -11,7 +11,7 @@ use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
-use App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsOrderCondition;
+use App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition;
 use App\Modules\Automations\src\Services\AutomationService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -46,7 +46,7 @@ class OrderShippingMethodCodeEqualsConditionTest extends TestCase
         /** @var Condition $condition */
         Condition::create([
             'automation_id' => $automation->getKey(),
-            'condition_class' => ShippingMethodCodeEqualsOrderCondition::class,
+            'condition_class' => ShippingMethodCodeEqualsCondition::class,
             'condition_value' => 'store_pickup'
         ]);
 

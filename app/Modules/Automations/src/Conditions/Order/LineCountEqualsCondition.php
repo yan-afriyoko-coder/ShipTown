@@ -8,22 +8,25 @@ use Illuminate\Support\Facades\Log;
 /**
  *
  */
-class ShippingMethodCodeEqualsOrderCondition extends BaseOrderConditionAbstract
+class LineCountEqualsCondition extends BaseOrderConditionAbstract
 {
     /**
-     * @param $condition_value
+     * @param string $condition_value
      * @return bool
      */
-    public function isValid($condition_value): bool
+    public function isValid(string $condition_value): bool
     {
-        $result = $this->event->order->shipping_method_code === $condition_value;
+        $numericValue = intval($condition_value);
+
+        $result = is_numeric($condition_value)
+            && $this->event->order->orderTotals->product_line_count === $numericValue;
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
             'result' => $result,
             'class' => class_basename(self::class),
-            'expected_shipping_method_code' => $condition_value,
-            'actual_shipping_method_code' => $this->event->order->shipping_method_code,
+            'expected' => $numericValue,
+            'actual' => $this->event->order->orderTotals->product_line_count,
         ]);
 
         return $result;

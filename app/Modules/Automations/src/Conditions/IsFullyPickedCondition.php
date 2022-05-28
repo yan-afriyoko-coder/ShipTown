@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Automations\src\Conditions\Order;
+namespace App\Modules\Automations\src\Conditions;
 
 use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
 use Illuminate\Support\Facades\Log;
@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 /**
  *
  */
-class IsPartiallyPaidOrderCondition extends BaseOrderConditionAbstract
+class IsFullyPickedCondition extends BaseOrderConditionAbstract
 {
     /**
      * @param string $condition_value
@@ -18,19 +18,14 @@ class IsPartiallyPaidOrderCondition extends BaseOrderConditionAbstract
     {
         $expectedBoolValue = filter_var($condition_value, FILTER_VALIDATE_BOOL);
 
-        $order = $this->event->order;
-
-        $isPartiallyPaid = ($order->total_paid > 0)  && ($order->total_paid < $order->total);
-
-        $result = $isPartiallyPaid === $expectedBoolValue;
+        $result = $this->event->order->is_picked === $expectedBoolValue;
 
         Log::debug('Automation condition', [
-            'order_number' => $order->order_number,
-            'result' => $result,
+            'order_number' => $this->event->order->order_number,
             'class' => class_basename(self::class),
-            'total_paid' => $order->total_paid,
+            'is_picked' => $this->event->order->is_packed,
             'expected' => $expectedBoolValue,
-            'actual' => $isPartiallyPaid
+            'actual' => $result,
         ]);
 
         return $result;

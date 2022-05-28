@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 /**
  *
  */
-class ShippingMethodCodeInOrderCondition extends BaseOrderConditionAbstract
+class ShippingMethodCodeInCondition extends BaseOrderConditionAbstract
 {
     /**
      * @param $condition_value

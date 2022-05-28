@@ -6,7 +6,7 @@ use App\Events\HourlyEvent;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
-use App\Modules\Automations\src\Conditions\OrderNumberEqualsOrderCondition;
+use App\Modules\Automations\src\Conditions\OrderNumberEqualsCondition;
 use App\Modules\Automations\src\Jobs\RunAutomationsOnActiveOrdersJob;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
@@ -28,7 +28,7 @@ class OrderNumberEqualsConditionTest extends TestCase
 
         factory(Condition::class)->create([
             'automation_id'     => $automation->getKey(),
-            'condition_class'   => OrderNumberEqualsOrderCondition::class,
+            'condition_class'   => OrderNumberEqualsCondition::class,
             'condition_value'   => '123456'
         ]);
 
