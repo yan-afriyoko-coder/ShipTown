@@ -29,7 +29,7 @@ class PrintNodeServiceProvider extends BaseModuleServiceProvider
     /**
      * @var bool
      */
-    public static bool $autoEnable = true;
+    public static bool $autoEnable = false;
 
     /**
      * @var array
