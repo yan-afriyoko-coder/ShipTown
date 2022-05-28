@@ -16,6 +16,6 @@ class HourlyEventListener
      */
     public function handle(HourlyEvent $event)
     {
-//        RecalculateQuantityReservedJob::dispatch();
+        RecalculateQuantityReservedJob::dispatch();
     }
 }
