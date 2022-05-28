@@ -9,51 +9,51 @@ return [
             'description' => 'Status Code is',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeNotInOrderCondition::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeNotInCondition::class,
             'description' => 'Status Code NOT In',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationOrderCondition::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition::class,
             'description' => 'Can Fulfill from Warehouse Code (0 for all)',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\CanNotFulfillFromLocationOrderCondition::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\CanNotFulfillFromLocationCondition::class,
             'description' => 'Can NOT Fulfill Warehouse Code (0 for all)',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsOrderCondition::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition::class,
             'description' => 'Shipping Method Code equals',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\ShippingMethodCodeInOrderCondition::class,
+            'class' => \App\Modules\Automations\src\Conditions\ShippingMethodCodeInCondition::class,
             'description' => 'Shipping Method Code in',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\LineCountEqualsOrderCondition::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\LineCountEqualsCondition::class,
             'description' => 'Line count equals',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\TotalQuantityToShipEqualsOrderCondition::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\TotalQuantityToShipEqualsCondition::class,
             'description' => 'Total Quantity To Ship',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\IsPartiallyPaidOrderCondition::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\IsPartiallyPaidCondition::class,
             'description' => 'Is Partially Paid',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\IsFullyPaidOrderCondition::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\IsFullyPaidCondition::class,
             'description' => 'Is Fully Paid',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\IsFullyPickedOrderCondition::class,
+            'class' => \App\Modules\Automations\src\Conditions\IsFullyPickedCondition::class,
             'description' => 'Is Fully Picked',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\IsFullyPackedOrderCondition::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\IsFullyPackedCondition::class,
             'description' => 'Is Fully Packed',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\OrderNumberEqualsOrderCondition::class,
+            'class' => \App\Modules\Automations\src\Conditions\OrderNumberEqualsCondition::class,
             'description' => 'Order Number equals',
         ],
     ],
@@ -90,9 +90,9 @@ return [
             'class' => \App\Modules\Automations\src\Actions\SendOrderEmailAction::class,
             'description' => 'Send email template to customer',
         ],
-//        [
-//            'class' => \App\Modules\Automations\src\Actions\SplitBundleSkuAction::class,
-//            'description' => 'Split bundle SKU (format: BundleSKU,SKU1,SKU2...)',
-//        ],
+        [
+            'class' => \App\Modules\Automations\src\Actions\SplitBundleSkuAction::class,
+            'description' => 'Split bundle SKU (format: BundleSKU,SKU1,SKU2...)',
+        ],
     ]
 ];

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 /**
  *
  */
-class TotalQuantityToShipEqualsOrderCondition extends BaseOrderConditionAbstract
+class IsFullyPaidCondition extends BaseOrderConditionAbstract
 {
     /**
      * @param string $condition_value
@@ -16,22 +16,16 @@ class TotalQuantityToShipEqualsOrderCondition extends BaseOrderConditionAbstract
      */
     public function isValid(string $condition_value): bool
     {
-        if (! is_numeric($condition_value)) {
-            $result = false;
-        } else {
-            $conditionFloatValue = floatval($condition_value);
+        $expectedBoolValue = filter_var($condition_value, FILTER_VALIDATE_BOOL);
 
-            $totalQuantityToShip = floatval($this->event->order->orderProducts()->sum('quantity_to_ship'));
-
-            $result = $totalQuantityToShip === $conditionFloatValue;
-        }
+        $result = $this->event->order->isPaid === $expectedBoolValue;
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
             'result' => $result,
             'class' => class_basename(self::class),
-            'expected' => $conditionFloatValue ?? '',
-            'actual' => $totalQuantityToShip ?? '',
+            'expected_isPaid' => $expectedBoolValue,
+            'actual_isPaid' => $this->event->order->isPaid,
         ]);
 
         return $result;

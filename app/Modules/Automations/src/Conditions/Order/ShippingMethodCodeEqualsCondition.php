@@ -8,24 +8,22 @@ use Illuminate\Support\Facades\Log;
 /**
  *
  */
-class IsFullyPaidOrderCondition extends BaseOrderConditionAbstract
+class ShippingMethodCodeEqualsCondition extends BaseOrderConditionAbstract
 {
     /**
-     * @param string $condition_value
+     * @param $condition_value
      * @return bool
      */
-    public function isValid(string $condition_value): bool
+    public function isValid($condition_value): bool
     {
-        $expectedBoolValue = filter_var($condition_value, FILTER_VALIDATE_BOOL);
-
-        $result = $this->event->order->isPaid === $expectedBoolValue;
+        $result = $this->event->order->shipping_method_code === $condition_value;
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
             'result' => $result,
             'class' => class_basename(self::class),
-            'expected_isPaid' => $expectedBoolValue,
-            'actual_isPaid' => $this->event->order->isPaid,
+            'expected_shipping_method_code' => $condition_value,
+            'actual_shipping_method_code' => $this->event->order->shipping_method_code,
         ]);
 
         return $result;

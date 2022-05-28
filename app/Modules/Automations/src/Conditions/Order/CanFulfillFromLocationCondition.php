@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 /**
  *
  */
-class CanNotFulfillFromLocationOrderCondition extends BaseOrderConditionAbstract
+class CanFulfillFromLocationCondition extends BaseOrderConditionAbstract
 {
     /**
      * @param $location_id
@@ -21,7 +21,7 @@ class CanNotFulfillFromLocationOrderCondition extends BaseOrderConditionAbstract
             $location_id = null;
         }
 
-        $result = OrderService::canNotFulfill($this->event->order, $location_id);
+        $result = OrderService::canFulfill($this->event->order, $location_id);
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,

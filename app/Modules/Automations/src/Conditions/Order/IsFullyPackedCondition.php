@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 /**
  *
  */
-class IsFullyPackedOrderCondition extends BaseOrderConditionAbstract
+class IsFullyPackedCondition extends BaseOrderConditionAbstract
 {
 
     public static function ordersQueryScope(Builder $query, $expected_value): Builder

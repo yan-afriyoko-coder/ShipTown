@@ -3,31 +3,29 @@
 namespace App\Modules\Automations\src\Conditions\Order;
 
 use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
-use App\Services\OrderService;
 use Illuminate\Support\Facades\Log;
 
 /**
  *
  */
-class CanFulfillFromLocationOrderCondition extends BaseOrderConditionAbstract
+class StatusCodeNotInCondition extends BaseOrderConditionAbstract
 {
     /**
-     * @param $location_id
+     * @param $condition_value
      * @return bool
      */
-    public function isValid($location_id): bool
+    public function isValid($condition_value): bool
     {
-        if ($location_id === '0') {
-            $location_id = null;
-        }
+        $expectedStatuses = explode(',', $condition_value);
 
-        $result = OrderService::canFulfill($this->event->order, $location_id);
+        $result = in_array($this->event->order->status_code, $expectedStatuses) === false;
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
             'result' => $result,
             'class' => class_basename(self::class),
-            'location_id' => $location_id,
+            'expected_statuses' => $condition_value,
+            'actual_status' => $this->event->order->status_code,
         ]);
 
         return $result;
