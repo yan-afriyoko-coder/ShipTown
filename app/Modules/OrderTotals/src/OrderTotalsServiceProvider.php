@@ -8,6 +8,7 @@ use App\Events\Product\ProductTagAttachedEvent;
 use App\Models\OrderProduct;
 use App\Modules\BaseModuleServiceProvider;
 use App\Modules\InventoryReservations\src\Listeners\OrderProductCreatedEventListener;
+use App\Modules\Rmsapi\src\Listeners\HourlyEventListener;
 
 /**
  * Class ServiceProvider
@@ -36,6 +37,10 @@ class OrderTotalsServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
+        HourlyEventListener::class => [
+            Listeners\HourlyEventListener::class
+        ],
+
         OrderProductCreatedEvent::class => [
             Listeners\OrderProductCreatedEventListener::class
         ],

@@ -25,4 +25,29 @@ class OrderProductTotal extends Model
         'quantity_not_picked',
         'quantity_shipped',
     ];
+
+    protected $casts = [
+        'quantity_ordered'        => 'float',
+        'quantity_split'          => 'float',
+        'quantity_picked'         => 'float',
+        'quantity_skipped_picking'=> 'float',
+        'quantity_not_picked'     => 'float',
+        'quantity_shipped'        => 'float',
+        'quantity_to_pick'        => 'float',
+        'quantity_to_ship'        => 'float',
+    ];
+
+    protected $attributes = [
+        'quantity_ordered'        => 0,
+        'quantity_split'          => 0,
+        'quantity_picked'         => 0,
+        'quantity_skipped_picking'=> 0,
+        'quantity_not_picked'     => 0,
+        'quantity_shipped'        => 0,
+    ];
+
+    protected $appends  = [
+       'quantity_to_pick',
+       'quantity_to_ship',
+    ];
 }
