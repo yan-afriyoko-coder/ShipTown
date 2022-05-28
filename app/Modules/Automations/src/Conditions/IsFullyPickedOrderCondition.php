@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Modules\Automations\src\Conditions\Order;
+namespace App\Modules\Automations\src\Conditions;
 
-use App\Modules\Automations\src\Abstracts\BaseCondition;
+use App\Modules\Automations\src\Abstracts\BaseOrderCondition;
 use Illuminate\Support\Facades\Log;
 
 /**
  *
  */
-class IsFullyPaidCondition extends BaseCondition
+class IsFullyPickedOrderCondition extends BaseOrderCondition
 {
     /**
      * @param string $condition_value
@@ -18,14 +18,14 @@ class IsFullyPaidCondition extends BaseCondition
     {
         $expectedBoolValue = filter_var($condition_value, FILTER_VALIDATE_BOOL);
 
-        $result = $this->event->order->isPaid === $expectedBoolValue;
+        $result = $this->event->order->is_picked === $expectedBoolValue;
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
-            'result' => $result,
             'class' => class_basename(self::class),
-            'expected_isPaid' => $expectedBoolValue,
-            'actual_isPaid' => $this->event->order->isPaid,
+            'is_picked' => $this->event->order->is_packed,
+            'expected' => $expectedBoolValue,
+            'actual' => $result,
         ]);
 
         return $result;

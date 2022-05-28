@@ -2,13 +2,13 @@
 
 namespace App\Modules\Automations\src\Conditions\Order;
 
-use App\Modules\Automations\src\Abstracts\BaseCondition;
+use App\Modules\Automations\src\Abstracts\BaseOrderCondition;
 use Illuminate\Support\Facades\Log;
 
 /**
  *
  */
-class LineCountEqualsCondition extends BaseCondition
+class IsFullyPaidOrderCondition extends BaseOrderCondition
 {
     /**
      * @param string $condition_value
@@ -16,17 +16,16 @@ class LineCountEqualsCondition extends BaseCondition
      */
     public function isValid(string $condition_value): bool
     {
-        $numericValue = intval($condition_value);
+        $expectedBoolValue = filter_var($condition_value, FILTER_VALIDATE_BOOL);
 
-        $result = is_numeric($condition_value)
-            && $this->event->order->orderTotals->product_line_count === $numericValue;
+        $result = $this->event->order->isPaid === $expectedBoolValue;
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
             'result' => $result,
             'class' => class_basename(self::class),
-            'expected' => $numericValue,
-            'actual' => $this->event->order->orderTotals->product_line_count,
+            'expected_isPaid' => $expectedBoolValue,
+            'actual_isPaid' => $this->event->order->isPaid,
         ]);
 
         return $result;

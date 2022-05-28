@@ -36,11 +36,11 @@ class UpdateTest extends TestCase
             'priority' => 1,
             'conditions' => [
                 [
-                    'condition_class' => 'App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition',
+                    'condition_class' => 'App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationOrderCondition',
                     'condition_value' => 'paid'
                 ],
                 [
-                    'condition_class' => 'App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition',
+                    'condition_class' => 'App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsOrderCondition',
                     'condition_value' => 'paid'
                 ]
             ],

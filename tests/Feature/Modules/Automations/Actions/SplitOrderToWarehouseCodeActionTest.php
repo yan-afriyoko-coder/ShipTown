@@ -10,7 +10,7 @@ use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\Automations\src\Actions\Order\SplitOrderToWarehouseCodeAction;
 use App\Modules\Automations\src\AutomationsServiceProvider;
-use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
+use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsOrderCondition;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
@@ -72,7 +72,7 @@ class SplitOrderToWarehouseCodeActionTest extends TestCase
 
             $condition = new Condition();
             $condition->automation_id = $automation->getKey();
-            $condition->condition_class = StatusCodeEqualsCondition::class;
+            $condition->condition_class = StatusCodeEqualsOrderCondition::class;
             $condition->condition_value = 'split_order';
             $condition->save();
 

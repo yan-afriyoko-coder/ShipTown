@@ -2,14 +2,14 @@
 
 namespace App\Modules\Automations\src\Conditions\Order;
 
-use App\Modules\Automations\src\Abstracts\BaseCondition;
+use App\Modules\Automations\src\Abstracts\BaseOrderCondition;
 use App\Services\OrderService;
 use Illuminate\Support\Facades\Log;
 
 /**
  *
  */
-class CanNotFulfillFromLocationCondition extends BaseCondition
+class CanFulfillFromLocationOrderCondition extends BaseOrderCondition
 {
     /**
      * @param $location_id
@@ -21,7 +21,7 @@ class CanNotFulfillFromLocationCondition extends BaseCondition
             $location_id = null;
         }
 
-        $result = OrderService::canNotFulfill($this->event->order, $location_id);
+        $result = OrderService::canFulfill($this->event->order, $location_id);
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,

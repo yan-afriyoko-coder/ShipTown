@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 /**
  *
  */
-abstract class BaseCondition
+abstract class BaseOrderCondition
 {
     /**
      * @var ActiveOrderCheckEvent|OrderCreatedEvent|OrderUpdatedEvent

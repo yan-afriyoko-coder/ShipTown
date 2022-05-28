@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Modules\Automations\src\Conditions\Order;
+namespace App\Modules\Automations\src\Conditions;
 
-use App\Modules\Automations\src\Abstracts\BaseCondition;
+use App\Modules\Automations\src\Abstracts\BaseOrderCondition;
 use Illuminate\Support\Facades\Log;
 
 /**
  *
  */
-class ShippingMethodCodeEqualsCondition extends BaseCondition
+class ShippingMethodCodeInOrderCondition extends BaseOrderCondition
 {
     /**
      * @param $condition_value
@@ -16,7 +16,9 @@ class ShippingMethodCodeEqualsCondition extends BaseCondition
      */
     public function isValid($condition_value): bool
     {
-        $result = $this->event->order->shipping_method_code === $condition_value;
+        $expected = explode(',', $condition_value);
+
+        $result = in_array($this->event->order->status_code, $expected) === false;
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
