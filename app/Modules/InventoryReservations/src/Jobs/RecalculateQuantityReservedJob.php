@@ -43,6 +43,7 @@ class RecalculateQuantityReservedJob implements ShouldQueue
                 ]);
 
                 $inventory->product->log('Updating quantity reserved');
+
                 $inventory->update(['quantity_reserved' => $inventory['quantity_to_ship_sum']]);
             });
     }
@@ -69,6 +70,7 @@ class RecalculateQuantityReservedJob implements ShouldQueue
     private function incorrectInventoryRecordsQuery()
     {
         return Inventory::query()
+            ->with('product')
             ->select([
                 'inventory.*',
                 DB::raw('IFNULL(temp_table_totals.quantity_to_ship_sum, 0) as quantity_to_ship_sum'),
