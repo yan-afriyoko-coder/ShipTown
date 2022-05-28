@@ -37,7 +37,7 @@ class RecalculateQuantityReservedJob implements ShouldQueue
             ->get()
             ->each(function (Inventory $inventory) {
                 Log::warning('Incorrect quantity_reserved detected', [
-                    'product_id'                 => $inventory['product_id'],
+                    'sku'                        => $inventory->product->sku,
                     'quantity_reserved_expected' => $inventory['quantity_to_ship_sum'],
                     'quantity_reserved_current'  => $inventory['quantity_reserved'],
                 ]);
