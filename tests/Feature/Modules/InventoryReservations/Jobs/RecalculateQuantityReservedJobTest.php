@@ -5,10 +5,10 @@ namespace Tests\Feature\Modules\InventoryReservations\Jobs;
 use App\Models\Inventory;
 use App\Models\OrderStatus;
 use App\Models\Product;
+use App\Models\Warehouse;
 use App\Modules\InventoryReservations\src\EventServiceProviderBase;
 use App\Modules\InventoryReservations\src\Jobs\RecalculateQuantityReservedJob;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
@@ -16,8 +16,6 @@ use Tests\TestCase;
  */
 class RecalculateQuantityReservedJobTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -25,6 +23,10 @@ class RecalculateQuantityReservedJobTest extends TestCase
         $this->actingAs($admin, 'api');
 
         EventServiceProviderBase::enableModule();
+
+        if (Warehouse::whereCode('999')->doesntExist()) {
+            factory(Warehouse::class)->create(['code' => '999']);
+        }
     }
 
     /** @test */
@@ -62,5 +64,18 @@ class RecalculateQuantityReservedJobTest extends TestCase
 
         $this->assertDatabaseHas('inventory', ['quantity_reserved' => $random_quantity]);
         $this->assertDatabaseHas('products', ['quantity_reserved' => $random_quantity]);
+    }
+
+    /** @test */
+    public function test_if_recalculates_correctly_if_0_reserved()
+    {
+        factory(Product::class)->create();
+
+        Inventory::query()->where(['warehouse_code' => '999'])->update(['quantity_reserved' => 4]);
+
+        RecalculateQuantityReservedJob::dispatchNow();
+
+        $this->assertDatabaseHas('inventory', ['warehouse_code' => '999', 'quantity_reserved' => 0]);
+        $this->assertDatabaseHas('products', ['quantity_reserved' => 0]);
     }
 }

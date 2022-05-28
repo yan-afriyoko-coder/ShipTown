@@ -2,10 +2,12 @@
 
 namespace App\Modules\InventoryReservations\src\Jobs;
 
+use App\Helpers\TemporaryTable;
 use App\Models\Inventory;
 use App\Models\OrderProduct;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -23,103 +25,56 @@ class RecalculateQuantityReservedJob implements ShouldQueue
     use SerializesModels;
 
     /**
-     * @var array
-     */
-    private array $checkedProductIds = [];
-
-    /**
      * Execute the job.
      *
      * @return void
      */
     public function handle()
     {
-        $this->fixReservedQuantity();
+        $this->prepareTempTable('temp_table_totals');
 
-        $this->fixNotReserved();
-    }
-
-    /**
-     * @return void
-     */
-    private function fixNotReserved(): void
-    {
-        $query = Inventory::query()
-            ->select([
-                'inventory.*',
-            ])
-            ->join('orders_products', function ($join) {
-                $join->on('orders_products.product_id', '=', 'inventory.product_id');
-            })
-            ->leftJoin('orders', function ($join) {
-                $join->on('orders_products.order_id', '=', 'orders.id');
-                $join->on('orders.is_active', '=', DB::raw(true));
-            })
-            ->where(['inventory.warehouse_code' => 999])
-            ->where('inventory.quantity_reserved', '!=', 0)
-            ->whereNull('orders.id')
-            ->whereNotIn('inventory.product_id', $this->checkedProductIds);
-
-
-        $query->get()
+        $this->incorrectInventoryRecordsQuery()
+            ->get()
             ->each(function (Inventory $inventory) {
                 Log::warning('Incorrect quantity_reserved detected', [
-                    'sku'                        => $inventory->product->sku,
-                    'quantity_reserved_expected' => 0,
-                    'quantity_reserved_current'  => $inventory->quantity_reserved,
+                    'product_id'                 => $inventory['product_id'],
+                    'quantity_reserved_expected' => $inventory['quantity_to_ship_sum'],
+                    'quantity_reserved_current'  => $inventory['quantity_reserved'],
                 ]);
 
-                $inventory->product->log('Resetting quantity reserved');
-
-                $inventory->update(['quantity_reserved' => 0]);
-                $inventory->save();
+                $inventory->product->log('Updating quantity reserved');
+                $inventory->update(['quantity_reserved' => $inventory['quantity_to_ship_sum']]);
             });
     }
 
-    /**
-     * @return void
-     */
-    private function fixReservedQuantity(): void
+    private function prepareTempTable($table_name): void
     {
-        $query = OrderProduct::query()
+        $baseQuery = OrderProduct::query()
             ->select([
                 'orders_products.product_id',
-                DB::raw('999 as warehouse_code'),
-                DB::raw('sum(quantity_to_ship) as quantity_reserved_expected'),
-                DB::raw('max(inventory.quantity_reserved) as quantity_reserved_actual')
+                DB::raw('sum(orders_products.quantity_to_ship) as quantity_to_ship_sum')
             ])
-            ->leftJoin('inventory', function ($join) {
-                $join->on('inventory.product_id', '=', 'orders_products.product_id');
-                $join->on('inventory.warehouse_code', '=', DB::raw('999'));
-            })
-            ->whereHas('order', function ($query) {
-                $query->select(['id'])->where(['is_active' => true]);
-            })
+            ->join('orders', 'orders.id', '=', 'orders_products.order_id')
             ->whereNotNull('orders_products.product_id')
-            ->whereNotIn('orders_products.product_id', $this->checkedProductIds)
-            ->having('quantity_reserved_expected', '!=', DB::raw('max(inventory.quantity_reserved)'))
+            ->where('orders.is_active', '=', true)
+            ->where('orders_products.quantity_to_ship', '>', '0')
             ->groupBy('orders_products.product_id');
 
-        $query->get()
-             ->each(function ($orderProduct) {
-                 $this->checkedProductIds[] = $orderProduct->product_id;
+        TemporaryTable::create($table_name, $baseQuery);
+    }
 
-                 $inventory = Inventory::query()
-                     ->where([
-                         'product_id' => $orderProduct->product_id,
-                         'warehouse_code' => '999',
-                     ])
-                     ->first();
-
-                 $inventory->update([
-                        'quantity_reserved'    => $orderProduct->getAttribute('quantity_reserved_expected'),
-                    ]);
-
-                Log::warning('Incorrect quantity_reserved detected', [
-                    'product_id'                 => $orderProduct->getAttribute('product_id'),
-                    'quantity_reserved_expected' => $orderProduct->getAttribute('quantity_reserved_expected'),
-                    'quantity_reserved_current'  => $orderProduct->getAttribute('quantity_reserved_expected'),
-                ]);
-             });
+    /**
+     * @return Inventory|Builder
+     */
+    private function incorrectInventoryRecordsQuery()
+    {
+        return Inventory::query()
+            ->select([
+                'inventory.*',
+                DB::raw('IFNULL(temp_table_totals.quantity_to_ship_sum, 0) as quantity_to_ship_sum'),
+            ])
+            ->leftJoin('temp_table_totals', 'inventory.product_id', '=', 'temp_table_totals.product_id')
+            ->where('inventory.warehouse_code', '=', '999')
+            ->whereRaw('inventory.quantity_reserved != IFNULL(temp_table_totals.quantity_to_ship_sum, 0)');
     }
 }
