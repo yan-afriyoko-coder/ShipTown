@@ -2,7 +2,7 @@
 
 namespace App\Modules\Automations\src\Actions;
 
-use App\Modules\Automations\src\BaseOrderAction;
+use App\Modules\Automations\src\Abstracts\BaseOrderAction;
 
 class SetLabelTemplateAction extends BaseOrderAction
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Automations\src;
+namespace App\Modules\Automations\src\Abstracts;
 
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;

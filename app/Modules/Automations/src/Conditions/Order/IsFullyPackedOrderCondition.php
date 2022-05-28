@@ -2,14 +2,14 @@
 
 namespace App\Modules\Automations\src\Conditions\Order;
 
-use App\Modules\Automations\src\Conditions\BaseCondition;
+use App\Modules\Automations\src\Abstracts\BaseOrderCondition;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
 
 /**
  *
  */
-class IsFullyPackedCondition extends BaseCondition
+class IsFullyPackedOrderCondition extends BaseOrderCondition
 {
 
     public static function ordersQueryScope(Builder $query, $expected_value): Builder

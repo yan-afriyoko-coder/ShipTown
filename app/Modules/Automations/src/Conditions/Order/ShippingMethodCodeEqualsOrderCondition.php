@@ -2,13 +2,13 @@
 
 namespace App\Modules\Automations\src\Conditions\Order;
 
-use App\Modules\Automations\src\Conditions\BaseCondition;
+use App\Modules\Automations\src\Abstracts\BaseOrderCondition;
 use Illuminate\Support\Facades\Log;
 
 /**
  *
  */
-class ShippingMethodCodeEqualsCondition extends BaseCondition
+class ShippingMethodCodeEqualsOrderCondition extends BaseOrderCondition
 {
     /**
      * @param $condition_value

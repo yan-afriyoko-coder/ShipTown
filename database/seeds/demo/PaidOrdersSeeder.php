@@ -4,8 +4,8 @@ use App\Events\Order\ActiveOrderCheckEvent;
 use App\Models\NavigationMenu;
 use App\Models\Order;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
-use App\Modules\Automations\src\Conditions\Order\IsFullyPackedCondition;
-use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
+use App\Modules\Automations\src\Conditions\Order\IsFullyPackedOrderCondition;
+use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsOrderCondition;
 use App\Modules\Automations\src\Models\Automation;
 use Illuminate\Database\Seeder;
 
@@ -80,12 +80,12 @@ class PaidOrdersSeeder extends Seeder
         ]);
 
         $automation->conditions()->create([
-            'condition_class' => StatusCodeEqualsCondition::class,
+            'condition_class' => StatusCodeEqualsOrderCondition::class,
             'condition_value' => 'paid'
         ]);
 
         $automation->conditions()->create([
-            'condition_class' => IsFullyPackedCondition::class,
+            'condition_class' => IsFullyPackedOrderCondition::class,
             'condition_value' => 'True'
         ]);
 

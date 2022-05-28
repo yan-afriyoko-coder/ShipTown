@@ -2,13 +2,13 @@
 
 namespace App\Modules\Automations\src\Conditions\Order;
 
-use App\Modules\Automations\src\Conditions\BaseCondition;
+use App\Modules\Automations\src\Abstracts\BaseOrderCondition;
 use Illuminate\Support\Facades\Log;
 
 /**
  *
  */
-class IsPartiallyPaidCondition extends BaseCondition
+class IsPartiallyPaidOrderCondition extends BaseOrderCondition
 {
     /**
      * @param string $condition_value

@@ -4,7 +4,7 @@ namespace App\Modules\Automations\src\Actions;
 
 use App\Models\OrderProduct;
 use App\Models\Product;
-use App\Modules\Automations\src\BaseOrderAction;
+use App\Modules\Automations\src\Abstracts\BaseOrderAction;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\MessageBag;

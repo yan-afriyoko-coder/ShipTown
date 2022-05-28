@@ -2,17 +2,14 @@
 
 namespace App\Modules\Automations\src\Conditions\Order;
 
-use App\Events\Order\ActiveOrderCheckEvent;
-use App\Events\Order\OrderCreatedEvent;
-use App\Events\Order\OrderUpdatedEvent;
-use App\Modules\Automations\src\Conditions\BaseCondition;
+use App\Modules\Automations\src\Abstracts\BaseOrderCondition;
 use App\Services\OrderService;
 use Illuminate\Support\Facades\Log;
 
 /**
  *
  */
-class CanFulfillFromLocationCondition extends BaseCondition
+class CanFulfillFromLocationOrderCondition extends BaseOrderCondition
 {
     /**
      * @param $location_id

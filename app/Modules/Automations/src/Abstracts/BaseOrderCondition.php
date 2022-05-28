@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Automations\src\Conditions;
+namespace App\Modules\Automations\src\Abstracts;
 
 use App\Events\Order\ActiveOrderCheckEvent;
 use App\Events\Order\OrderCreatedEvent;
@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 /**
  *
  */
-abstract class BaseCondition
+abstract class BaseOrderCondition
 {
     /**
      * @var ActiveOrderCheckEvent|OrderCreatedEvent|OrderUpdatedEvent
