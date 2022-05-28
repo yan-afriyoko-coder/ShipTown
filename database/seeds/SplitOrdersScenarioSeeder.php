@@ -8,7 +8,7 @@ use App\Models\OrderStatus;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\Automations\src\Actions\Order\SplitOrderToWarehouseCodeAction;
-use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsOrderCondition;
+use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsOrderConditionAbstract;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
@@ -51,7 +51,7 @@ class SplitOrdersScenarioSeeder extends Seeder
 
             $condition = new Condition();
             $condition->automation_id = $automation->getKey();
-            $condition->condition_class = StatusCodeEqualsOrderCondition::class;
+            $condition->condition_class = StatusCodeEqualsOrderConditionAbstract::class;
             $condition->condition_value = 'packing';
             $condition->save();
 

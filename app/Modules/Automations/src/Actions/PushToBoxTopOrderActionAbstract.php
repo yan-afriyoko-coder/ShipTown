@@ -4,12 +4,12 @@ namespace App\Modules\Automations\src\Actions;
 
 use App\Models\Order;
 use App\Models\OrderShipment;
-use App\Modules\Automations\src\Abstracts\BaseOrderAction;
+use App\Modules\Automations\src\Abstracts\BaseOrderActionAbstract;
 use App\Modules\BoxTop\src\Models\OrderLock;
 use App\Modules\BoxTop\src\Services\BoxTopService;
 use Exception;
 
-class PushToBoxTopOrderAction extends BaseOrderAction
+class PushToBoxTopOrderActionAbstract extends BaseOrderActionAbstract
 {
     public function handle($options = '')
     {

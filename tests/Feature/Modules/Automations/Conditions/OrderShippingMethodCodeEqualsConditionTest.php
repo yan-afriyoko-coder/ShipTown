@@ -7,11 +7,11 @@ use App\Events\Order\OrderCreatedEvent;
 use App\Models\Order;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
 use App\Modules\Automations\src\AutomationsServiceProvider;
-use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsOrderCondition;
+use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsOrderConditionAbstract;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
-use App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsOrderCondition;
+use App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsOrderConditionAbstract;
 use App\Modules\Automations\src\Services\AutomationService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -39,14 +39,14 @@ class OrderShippingMethodCodeEqualsConditionTest extends TestCase
         /** @var Condition $condition */
         Condition::create([
             'automation_id' => $automation->getKey(),
-            'condition_class' => StatusCodeEqualsOrderCondition::class,
+            'condition_class' => StatusCodeEqualsOrderConditionAbstract::class,
             'condition_value' => 'paid'
         ]);
 
         /** @var Condition $condition */
         Condition::create([
             'automation_id' => $automation->getKey(),
-            'condition_class' => ShippingMethodCodeEqualsOrderCondition::class,
+            'condition_class' => ShippingMethodCodeEqualsOrderConditionAbstract::class,
             'condition_value' => 'store_pickup'
         ]);
 

@@ -2,13 +2,13 @@
 
 namespace App\Modules\Automations\src\Conditions;
 
-use App\Modules\Automations\src\Abstracts\BaseOrderCondition;
+use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
 use Illuminate\Support\Facades\Log;
 
 /**
  *
  */
-class IsFullyPickedOrderCondition extends BaseOrderCondition
+class IsFullyPickedOrderConditionAbstract extends BaseOrderConditionAbstract
 {
     /**
      * @param string $condition_value

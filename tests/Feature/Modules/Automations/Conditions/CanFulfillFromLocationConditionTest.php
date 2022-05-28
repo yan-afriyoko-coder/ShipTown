@@ -8,7 +8,7 @@ use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Models\Warehouse;
-use App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationOrderCondition;
+use App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationOrderConditionAbstract;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -41,7 +41,7 @@ class CanFulfillFromLocationConditionTest extends TestCase
 
         /** @var Condition $condition */
         $condition = $automation->conditions()->create([
-            'condition_class' => CanFulfillFromLocationOrderCondition::class,
+            'condition_class' => CanFulfillFromLocationOrderConditionAbstract::class,
             'condition_value' => '0' // we are using location_id = 0 for ALL locations
         ]);
 
@@ -85,7 +85,7 @@ class CanFulfillFromLocationConditionTest extends TestCase
 
         /** @var Condition $condition */
         $condition = $automation->conditions()->create([
-            'condition_class' => CanFulfillFromLocationOrderCondition::class,
+            'condition_class' => CanFulfillFromLocationOrderConditionAbstract::class,
             'condition_value' => '0' // we are using location_id = 0 for ALL locations
         ]);
 
@@ -129,7 +129,7 @@ class CanFulfillFromLocationConditionTest extends TestCase
 
         /** @var Condition $condition */
         $condition = $automation->conditions()->create([
-            'condition_class' => CanFulfillFromLocationOrderCondition::class,
+            'condition_class' => CanFulfillFromLocationOrderConditionAbstract::class,
             'condition_value' => $warehouse->code
         ]);
 
@@ -171,7 +171,7 @@ class CanFulfillFromLocationConditionTest extends TestCase
 
         /** @var Condition $condition */
         $condition = $automation->conditions()->create([
-            'condition_class' => CanFulfillFromLocationOrderCondition::class,
+            'condition_class' => CanFulfillFromLocationOrderConditionAbstract::class,
             'condition_value' => $warehouse->code
         ]);
 

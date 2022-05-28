@@ -5,14 +5,14 @@ namespace App\Modules\Automations\src\Conditions;
 use App\Events\Order\ActiveOrderCheckEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
-use App\Modules\Automations\src\Abstracts\BaseOrderCondition;
+use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
 
 /**
  *
  */
-class OrderNumberEqualsOrderCondition extends BaseOrderCondition
+class OrderNumberEqualsOrderConditionAbstract extends BaseOrderConditionAbstract
 {
     /**
      * @var ActiveOrderCheckEvent|OrderCreatedEvent|OrderUpdatedEvent

@@ -9,9 +9,9 @@ use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Models\ProductPrice;
-use App\Modules\Automations\src\Actions\SendEmailToCustomerAction;
-use App\Modules\Automations\src\Actions\SendOrderEmailAction;
-use App\Modules\Automations\src\Actions\SplitBundleSkuAction;
+use App\Modules\Automations\src\Actions\SendEmailToCustomerActionAbstract;
+use App\Modules\Automations\src\Actions\SendOrderEmailActionAbstract;
+use App\Modules\Automations\src\Actions\SplitBundleSkuActionAbstract;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
@@ -36,7 +36,7 @@ class SendOrderEmailActionTest extends TestCase
 
         $order = factory(Order::class)->create();
         $event = new ActiveOrderCheckEvent($order);
-        $action = new SendOrderEmailAction($event);
+        $action = new SendOrderEmailActionAbstract($event);
 
         // act
         $actionSucceeded = $action->handle($template->code);

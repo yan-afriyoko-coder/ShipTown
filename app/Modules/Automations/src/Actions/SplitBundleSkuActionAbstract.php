@@ -4,7 +4,7 @@ namespace App\Modules\Automations\src\Actions;
 
 use App\Models\OrderProduct;
 use App\Models\Product;
-use App\Modules\Automations\src\Abstracts\BaseOrderAction;
+use App\Modules\Automations\src\Abstracts\BaseOrderActionAbstract;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\MessageBag;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Validator;
 /**
  *
  */
-class SplitBundleSkuAction extends BaseOrderAction
+class SplitBundleSkuActionAbstract extends BaseOrderActionAbstract
 {
     /**
      * @var MessageBag
