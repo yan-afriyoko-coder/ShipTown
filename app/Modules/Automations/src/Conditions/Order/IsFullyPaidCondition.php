@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 /**
  *
  */
-class IsFullyPaidOrderCondition extends BaseOrderConditionAbstract
+class IsFullyPaidCondition extends BaseOrderConditionAbstract
 {
     /**
      * @param string $condition_value

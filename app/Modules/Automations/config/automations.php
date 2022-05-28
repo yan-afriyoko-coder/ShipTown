@@ -41,7 +41,7 @@ return [
             'description' => 'Is Partially Paid',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\IsFullyPaidOrderCondition::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\IsFullyPaidCondition::class,
             'description' => 'Is Fully Paid',
         ],
         [
