@@ -11,15 +11,15 @@ use Illuminate\Support\Facades\Log;
 class TotalQuantityToShipEqualsCondition extends BaseOrderConditionAbstract
 {
     /**
-     * @param string $condition_value
+     * @param string $expected_value
      * @return bool
      */
-    public function isValid(string $condition_value): bool
+    public function isValid(string $expected_value): bool
     {
-        if (! is_numeric($condition_value)) {
+        if (! is_numeric($expected_value)) {
             $result = false;
         } else {
-            $conditionFloatValue = floatval($condition_value);
+            $conditionFloatValue = floatval($expected_value);
 
             $totalQuantityToShip = floatval($this->event->order->orderProducts()->sum('quantity_to_ship'));
 

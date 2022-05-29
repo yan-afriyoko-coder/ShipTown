@@ -4,6 +4,7 @@ namespace App\Modules\Automations\src\Conditions\Order;
 
 use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -11,19 +12,10 @@ use Illuminate\Support\Facades\Log;
  */
 class IsFullyPackedCondition extends BaseOrderConditionAbstract
 {
-
     public static function ordersQueryScope(Builder $query, $expected_value): Builder
     {
-        $expectedBoolValue = filter_var($expected_value, FILTER_VALIDATE_BOOL);
-
-        if ($expectedBoolValue) {
-            return $query->whereDoesntHave('orderProducts', function ($query) {
-                $query->where('quantity_to_ship', '>', 0);
-            });
-        }
-
-        return $query->whereHas('orderProducts', function ($query) {
-            $query->where('quantity_to_ship', '>', 0);
+        return $query->whereHas('orderProductsTotals', function ($query) use ($expected_value) {
+            $query->where(DB::raw('(quantity_to_ship = 0)'), '=', filter_var($expected_value, FILTER_VALIDATE_BOOL));
         });
     }
 

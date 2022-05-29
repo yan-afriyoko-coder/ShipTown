@@ -11,30 +11,29 @@ use Illuminate\Support\Facades\Log;
  */
 class StatusCodeEqualsCondition extends BaseOrderConditionAbstract
 {
-
     /**
      * @param Builder $query
-     * @param $expected_status_code
+     * @param $expected_value
      * @return Builder
      */
-    public static function ordersQueryScope(Builder $query, $expected_status_code): Builder
+    public static function ordersQueryScope(Builder $query, $expected_value): Builder
     {
-        return $query->where('status_code', '=', $expected_status_code);
+        return $query->where('status_code', '=', $expected_value);
     }
 
     /**
-     * @param $condition_value
+     * @param $expected_value
      * @return bool
      */
-    public function isValid($condition_value): bool
+    public function isValid($expected_value): bool
     {
-        $result = $this->event->order->status_code === $condition_value;
+        $result = $this->event->order->status_code === $expected_value;
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
             'result' => $result,
             'class' => class_basename(self::class),
-            'expected_status' => $condition_value,
+            'expected_status' => $expected_value,
             'actual_status' => $this->event->order->status_code,
         ]);
 

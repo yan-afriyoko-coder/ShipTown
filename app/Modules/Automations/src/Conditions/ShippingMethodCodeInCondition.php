@@ -11,20 +11,20 @@ use Illuminate\Support\Facades\Log;
 class ShippingMethodCodeInCondition extends BaseOrderConditionAbstract
 {
     /**
-     * @param $condition_value
+     * @param $expected_value
      * @return bool
      */
-    public function isValid($condition_value): bool
+    public function isValid($expected_value): bool
     {
-        $expected = explode(',', $condition_value);
+        $expected = explode(',', $expected_value);
 
-        $result = in_array($this->event->order->status_code, $expected) === false;
+        $result = in_array($this->event->order->shipping_method_code, $expected) === false;
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
             'result' => $result,
             'class' => class_basename(self::class),
-            'expected_shipping_method_code' => $condition_value,
+            'expected_shipping_method_code' => $expected_value,
             'actual_shipping_method_code' => $this->event->order->shipping_method_code,
         ]);
 

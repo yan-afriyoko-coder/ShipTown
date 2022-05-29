@@ -52,6 +52,7 @@ class AllConditionsTest extends TestCase
 
             RunAutomationsOnActiveOrdersJob::dispatch();
         } catch (Exception $exception) {
+            ray($exception);
             $this->fail('Exceptions occurred when running all conditions');
         }
 
