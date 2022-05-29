@@ -56,6 +56,10 @@ return [
             'class' => \App\Modules\Automations\src\Conditions\OrderNumberEqualsCondition::class,
             'description' => 'Order Number equals',
         ],
+        [
+            'class' => \App\Modules\Automations\src\Conditions\Order\HasTagsCondition::class,
+            'description' => 'Has tags',
+        ],
     ],
     'actions' => [
         [
