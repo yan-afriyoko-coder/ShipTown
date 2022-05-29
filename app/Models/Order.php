@@ -259,6 +259,14 @@ class Order extends BaseModel
     }
 
     /**
+     * @return HasOne
+     */
+    public function orderProductsTotals(): HasOne
+    {
+        return $this->hasOne(OrderProductTotal::class, 'order_id', 'id');
+    }
+
+    /**
      * @return OrderStatus
      */
     public function getPreviousOrderStatus(): OrderStatus
