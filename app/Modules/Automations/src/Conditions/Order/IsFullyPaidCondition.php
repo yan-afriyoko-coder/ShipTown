@@ -3,6 +3,8 @@
 namespace App\Modules\Automations\src\Conditions\Order;
 
 use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -10,6 +12,13 @@ use Illuminate\Support\Facades\Log;
  */
 class IsFullyPaidCondition extends BaseOrderConditionAbstract
 {
+    public static function ordersQueryScope(Builder $query, $expected_value): Builder
+    {
+        $expectedBoolValue = filter_var($expected_value, FILTER_VALIDATE_BOOL);
+
+        return $query->where(DB::raw('(total_paid >= total)'), '=', $expectedBoolValue);
+    }
+
     /**
      * @param string $condition_value
      * @return bool
