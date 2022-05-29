@@ -54,15 +54,15 @@ class EnsureCorrectTotalsJob implements ShouldQueue
                     ->updateOrCreate([
                         'order_id' => $record->order_id
                     ], [
-                        'count' => $record->count_expected,
-                        'quantity_ordered' => $record->quantity_ordered_expected,
-                        'quantity_split' => $record->quantity_split_expected,
-                        'quantity_picked' => $record->quantity_picked_expected,
-                        'quantity_skipped_picking' => $record->quantity_skipped_picking_expected,
-                        'quantity_not_picked' => $record->quantity_not_picked_expected,
-                        'quantity_shipped' => $record->quantity_shipped_expected,
-                        'quantity_to_pick' => $record->quantity_to_pick_expected,
-                        'quantity_to_ship' => $record->quantity_to_ship_expected,
+                        'count' => $record->count_expected ?? 0,
+                        'quantity_ordered' => $record->quantity_ordered_expected ?? 0,
+                        'quantity_split' => $record->quantity_split_expected ?? 0,
+                        'quantity_picked' => $record->quantity_picked_expected ?? 0,
+                        'quantity_skipped_picking' => $record->quantity_skipped_picking_expected ?? 0,
+                        'quantity_not_picked' => $record->quantity_not_picked_expected ?? 0,
+                        'quantity_shipped' => $record->quantity_shipped_expected ?? 0,
+                        'quantity_to_pick' => $record->quantity_to_pick_expected ?? 0,
+                        'quantity_to_ship' => $record->quantity_to_ship_expected ?? 0,
                     ]);
             });
         } while ($records->isNotEmpty());
