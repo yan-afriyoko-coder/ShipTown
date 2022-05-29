@@ -39,8 +39,9 @@ class AutomationService
         }
 
         Log::debug('Ran automation', [
-            'class' => class_basename($automation),
-            'name' => $automation->name,
+            'order_number' => $event->order->order_number,
+            'event_class' => class_basename($automation),
+            'automation_name' => $automation->name,
             'all_conditions_passed' => $allConditionsPassed
         ]);
     }
@@ -54,6 +55,12 @@ class AutomationService
         $runAction = new $action->action_class($event);
 
         $runAction->handle($action->action_value);
+
+        Log::debug('Executed Order Action', [
+            'order_number' => $event->order->order_number,
+            'action_class' => class_basename($action->action_class),
+            'action_value' => $action->action_value,
+        ]);
     }
 
     public static function availableConditions(): Collection

@@ -98,5 +98,9 @@ return [
             'class' => \App\Modules\Automations\src\Actions\SplitBundleSkuAction::class,
             'description' => 'Split bundle SKU (format: BundleSKU,SKU1,SKU2...)',
         ],
+        [
+            'class' => \App\Modules\Automations\src\Actions\Order\AttachTagsAction::class,
+            'description' => 'Attach tags',
+        ],
     ]
 ];
