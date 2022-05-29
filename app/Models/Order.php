@@ -620,6 +620,7 @@ class Order extends BaseModel
                 'packer',
                 'order_comments',
                 'order_comments.user',
+                'tags',
             ])
             ->allowedSorts([
                 'updated_at',

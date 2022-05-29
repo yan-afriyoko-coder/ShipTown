@@ -21,7 +21,7 @@
                             <b> <a :href="'/products?search=' + product['sku']">{{ product['sku'] }}</a></b></div>
                         <div>
                             <template v-for="tag in product.tags">
-                                <a class="badge text-uppercase" :key="tag.id" :href="'products?has_tags=' + Object.values(tag.name)[0]"> {{ Object.values(tag.name)[0] }} </a>
+                                <a class="badge text-uppercase" :key="tag.id" :href="'products?has_tags=' + tag.name"> {{ tag.name }} </a>
                             </template>
                         </div>
                     </div>
