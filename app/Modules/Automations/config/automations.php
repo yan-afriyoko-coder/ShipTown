@@ -102,5 +102,9 @@ return [
             'class' => \App\Modules\Automations\src\Actions\Order\AttachTagsAction::class,
             'description' => 'Attach tags',
         ],
+        [
+            'class' => \App\Modules\Automations\src\Actions\Order\DetachTagsAction::class,
+            'description' => 'Detach tags',
+        ],
     ]
 ];
