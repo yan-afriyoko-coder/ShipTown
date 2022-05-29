@@ -2,14 +2,23 @@
 
 namespace Tests\Feature\Modules\OrderTotals;
 
+use App\Events\HourlyEvent;
 use App\Models\OrderProduct;
 use App\Models\OrderProductTotal;
 use App\Modules\OrderTotals\src\Jobs\EnsureCorrectTotalsJob;
-use App\Modules\OrderTotals\src\OrderTotalsServiceProvider;
+use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
 class EnsureCorrectTotalsJobTest extends TestCase
 {
+    public function test_if_dispatches_job()
+    {
+        Bus::fake(EnsureCorrectTotalsJob::class);
+
+        HourlyEvent::dispatch();
+
+        Bus::assertDispatched(EnsureCorrectTotalsJob::class);
+    }
     public function test_if_updates_totals()
     {
         /** @var OrderProduct $orderProduct */

@@ -2,10 +2,10 @@
 
 namespace App\Modules\OrderTotals\src;
 
+use App\Events\HourlyEvent;
 use App\Events\OrderProduct\OrderProductCreatedEvent;
 use App\Events\OrderProduct\OrderProductUpdatedEvent;
 use App\Modules\BaseModuleServiceProvider;
-use App\Modules\Rmsapi\src\Listeners\HourlyEventListener;
 
 /**
  * Class ServiceProvider
@@ -34,7 +34,7 @@ class OrderTotalsServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        HourlyEventListener::class => [
+        HourlyEvent::class => [
             Listeners\HourlyEventListener::class
         ],
 
