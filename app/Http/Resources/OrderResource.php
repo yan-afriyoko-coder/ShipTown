@@ -56,6 +56,7 @@ class OrderResource extends JsonResource
             'packer'           => new UserResource($this->whenLoaded('packer')),
             'order_comments'   => new JsonResource($this->whenLoaded('orderComments')),
             'order_totals'     => new OrderTotalsResource($this->whenLoaded('orderTotals')),
+            'tags'             => TagResource::collection($this->whenLoaded('tags')),
         ];
     }
 }

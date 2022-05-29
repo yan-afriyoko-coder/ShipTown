@@ -37,6 +37,6 @@ abstract class BaseOrderConditionAbstract
      */
     public function isValid(string $expected_value): bool
     {
-        return false;
+        return true;
     }
 }

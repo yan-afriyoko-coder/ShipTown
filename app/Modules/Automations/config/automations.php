@@ -56,6 +56,10 @@ return [
             'class' => \App\Modules\Automations\src\Conditions\OrderNumberEqualsCondition::class,
             'description' => 'Order Number equals',
         ],
+        [
+            'class' => \App\Modules\Automations\src\Conditions\Order\HasTagsCondition::class,
+            'description' => 'Has tags',
+        ],
     ],
     'actions' => [
         [
@@ -93,6 +97,14 @@ return [
         [
             'class' => \App\Modules\Automations\src\Actions\SplitBundleSkuAction::class,
             'description' => 'Split bundle SKU (format: BundleSKU,SKU1,SKU2...)',
+        ],
+        [
+            'class' => \App\Modules\Automations\src\Actions\Order\AttachTagsAction::class,
+            'description' => 'Attach tags',
+        ],
+        [
+            'class' => \App\Modules\Automations\src\Actions\Order\DetachTagsAction::class,
+            'description' => 'Detach tags',
         ],
     ]
 ];

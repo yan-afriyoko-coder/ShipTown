@@ -21,9 +21,12 @@
                   </div>
                 <div class="row align-text-top">
 
-                    <div class="col-5 col-md-4 col-lg-3 align-text-top">
+                    <div class="col-5 col-md-4 col-lg-5 align-text-top">
                         <div class="small font-weight-bold">{{ order['status_code'] }}</div>
                         <div class="small">{{ order['label_template'] }} </div>
+                        <template v-for="tag in order.tags">
+                            <a class="badge text-uppercase" :key="tag.id" :href="'orders?has_tags=' + tag.name"> {{ tag.name }} </a>
+                        </template>
                     </div>
 
                     <div class="col text-center" @click="toggleOrderDetails">
@@ -114,7 +117,7 @@
                         <template v-for="order_product in order_products">
 
                             <div class="row text-left mb-2">
-                                <div class="col-md-4">
+                                <div class="col-md-4 col-lg-6">
                                     <small>{{ order_product['name_ordered'] }} &nbsp;</small>
                                     <div class="small"><a target="_blank" :href="getProductLink(order_product)">{{ order_product['sku_ordered'] }}</a>&nbsp;</div>
                                 </div>
