@@ -18,7 +18,7 @@ class ShippingMethodCodeInCondition extends BaseOrderConditionAbstract
     {
         $expected = explode(',', $condition_value);
 
-        $result = in_array($this->event->order->status_code, $expected) === false;
+        $result = in_array($this->event->order->shipping_method_code, $expected) === false;
 
         Log::debug('Automation condition', [
             'order_number' => $this->event->order->order_number,
