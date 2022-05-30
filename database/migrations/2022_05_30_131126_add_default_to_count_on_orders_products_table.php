@@ -23,9 +23,9 @@ class AddDefaultToCountOnOrdersProductsTable extends Migration
         Schema::table('orders_products_totals', function (Blueprint $table) {
             $table->integer('count')->default(0)->change();
 
-            $table->decimal('quantity_to_pick', 20)->default(0);
-            $table->decimal('quantity_to_ship', 20)->default(0);
-            $table->timestamp('max_updated_at')->default('2000-01-01 00:00:00');
+            $table->decimal('quantity_to_pick', 20)->after('quantity_shipped')->default(0);
+            $table->decimal('quantity_to_ship', 20)->after('quantity_to_pick')->default(0);
+            $table->timestamp('max_updated_at')->after('quantity_to_ship')->default('2000-01-01 00:00:00');
         });
     }
 }
