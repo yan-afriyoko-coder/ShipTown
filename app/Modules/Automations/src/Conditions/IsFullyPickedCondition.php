@@ -15,7 +15,7 @@ class IsFullyPickedCondition extends BaseOrderConditionAbstract
     public static function ordersQueryScope(Builder $query, $expected_value): Builder
     {
         return $query->whereHas('orderProductsTotals', function ($query) use ($expected_value) {
-            $query->where(DB::raw('(quantity_to_pick = 0)'), '=', filter_var($expected_value, FILTER_VALIDATE_BOOL));
+            $query->where(DB::raw('(orders_products_totals.quantity_to_pick = 0)'), '=', filter_var($expected_value, FILTER_VALIDATE_BOOL));
         });
     }
 

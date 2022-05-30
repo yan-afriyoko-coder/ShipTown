@@ -2,14 +2,24 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property-read int order_id
- * @property-read int product_line_count
- * @property-read float quantity_ordered_sum
- * @property-read float quantity_to_ship_sum
- * @property-read float total_ordered
+ * @property int order_id
+ * @property int count
+ * @property float quantity_ordered
+ * @property float quantity_split
+ * @property float quantity_picked
+ * @property float quantity_skipped_picking
+ * @property float quantity_not_picked
+ * @property float quantity_shipped
+ * @property float quantity_to_pick
+ * @property float quantity_to_ship
+ * @property Carbon max_updated_at
+ * @property Carbon created_at
+ * @property Carbon updated_at
+ *
  */
 class OrderProductTotal extends Model
 {
@@ -26,6 +36,7 @@ class OrderProductTotal extends Model
         'quantity_shipped',
         'quantity_to_pick',
         'quantity_to_ship',
+        'max_updated_at',
     ];
 
     protected $casts = [
@@ -38,6 +49,7 @@ class OrderProductTotal extends Model
         'quantity_shipped'        => 'float',
         'quantity_to_pick'        => 'float',
         'quantity_to_ship'        => 'float',
+        'max_updated_at'          => 'timestamp',
     ];
 
     protected $attributes = [
@@ -50,5 +62,6 @@ class OrderProductTotal extends Model
         'quantity_shipped'        => 0,
         'quantity_to_pick'        => 0,
         'quantity_to_ship'        => 0,
+        'max_updated_at'          => '2000-01-01 00:00:00',
     ];
 }

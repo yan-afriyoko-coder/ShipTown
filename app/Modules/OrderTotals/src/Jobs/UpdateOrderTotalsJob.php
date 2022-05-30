@@ -64,8 +64,8 @@ class UpdateOrderTotalsJob implements ShouldQueue
                         'quantity_skipped_picking' => $record->quantity_skipped_picking_expected,
                         'quantity_not_picked' => $record->quantity_not_picked_expected,
                         'quantity_shipped' => $record->quantity_shipped_expected,
-//                        'quantity_to_pick' => $record->quantity_to_pick_expected,
-//                        'quantity_to_ship' => $record->quantity_to_ship_expected,
+                        'quantity_to_pick' => $record->quantity_to_pick_expected,
+                        'quantity_to_ship' => $record->quantity_to_ship_expected,
                         'updated_at' => $record->updated_at_expected,
                     ]);
             });
