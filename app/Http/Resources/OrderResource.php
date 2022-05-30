@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\OrderProduct;
 use App\Models\OrderTotal;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -48,15 +49,16 @@ class OrderResource extends JsonResource
             'is_packed'             => $this->is_packed,
             'age_in_days'           => $this->age_in_days,
 
-            'activities'       => ActivityResource::collection($this->whenLoaded('activities')),
-            'stats'            => new JsonResource($this->whenLoaded('stats')),
-            'shipping_address' => new JsonResource($this->whenLoaded('shippingAddress')),
-            'order_shipments'  => new JsonResource($this->whenLoaded('orderShipments')),
-            'order_products'   => new JsonResource($this->whenLoaded('orderProducts')),
-            'packer'           => new UserResource($this->whenLoaded('packer')),
-            'order_comments'   => new JsonResource($this->whenLoaded('orderComments')),
-            'order_totals'     => new OrderTotalsResource($this->whenLoaded('orderTotals')),
-            'tags'             => TagResource::collection($this->whenLoaded('tags')),
+            'activities'            => ActivityResource::collection($this->whenLoaded('activities')),
+            'stats'                 => new JsonResource($this->whenLoaded('stats')),
+            'shipping_address'      => new JsonResource($this->whenLoaded('shippingAddress')),
+            'order_shipments'       => new JsonResource($this->whenLoaded('orderShipments')),
+            'order_products'        => new JsonResource($this->whenLoaded('orderProducts')),
+            'packer'                => new UserResource($this->whenLoaded('packer')),
+            'order_comments'        => new JsonResource($this->whenLoaded('orderComments')),
+            'order_totals'          => new OrderTotalsResource($this->whenLoaded('orderTotals')),
+            'order_products_totals' => new OrderProductsTotalsResource($this->whenLoaded('orderProductsTotals')),
+            'tags'                  => TagResource::collection($this->whenLoaded('tags')),
         ];
     }
 }

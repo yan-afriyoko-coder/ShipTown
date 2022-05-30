@@ -10,6 +10,8 @@ class BasicModuleTest extends TestCase
 {
     public function test_if_updates_totals()
     {
+        OrderTotalsServiceProvider::enableModule();
+
         /** @var OrderProduct $orderProduct */
         $orderProduct = factory(OrderProduct::class)->create();
 

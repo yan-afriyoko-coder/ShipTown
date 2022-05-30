@@ -3,8 +3,10 @@
 namespace Tests\Feature\Modules\OrderTotals;
 
 use App\Events\HourlyEvent;
+use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\OrderProductTotal;
+use App\Modules\OrderTotals\src\Jobs\EnsureAllRecordsExistsJob;
 use App\Modules\OrderTotals\src\Jobs\EnsureCorrectTotalsJob;
 use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
@@ -17,15 +19,23 @@ class EnsureCorrectTotalsJobTest extends TestCase
 
         HourlyEvent::dispatch();
 
-//        Bus::assertDispatched(EnsureCorrectTotalsJob::class);
+        Bus::assertDispatched(EnsureCorrectTotalsJob::class);
     }
     public function test_if_updates_totals()
     {
+        // Create Order with order product
         /** @var OrderProduct $orderProduct */
         $orderProduct = factory(OrderProduct::class)->create();
         $orderProduct = $orderProduct->refresh();
 
+        // create order without any orderProduct
+        factory(Order::class)->create();
+
         OrderProductTotal::query()->forceDelete();
+
+        EnsureAllRecordsExistsJob::dispatchNow();
+
+        $this->assertDatabaseCount('orders_products_totals', 2);
 
         EnsureCorrectTotalsJob::dispatchNow();
 
