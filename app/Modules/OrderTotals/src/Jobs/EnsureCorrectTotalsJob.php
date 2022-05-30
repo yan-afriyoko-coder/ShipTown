@@ -52,11 +52,9 @@ class EnsureCorrectTotalsJob implements ShouldQueue
                 ->get();
 
             $records->each(function ($record) {
-
                 OrderProductTotal::query()
-                    ->updateOrCreate([
-                        'order_id' => $record->order_id
-                    ], [
+                    ->where(['order_id' => $record->order_id])
+                    ->update([
                         'count' => $record->count_expected ?? 0,
                         'quantity_ordered' => $record->quantity_ordered_expected ?? 0,
                         'quantity_split' => $record->quantity_split_expected ?? 0,
