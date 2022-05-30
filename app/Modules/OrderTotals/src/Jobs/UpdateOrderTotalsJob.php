@@ -49,7 +49,7 @@ class UpdateOrderTotalsJob implements ShouldQueue
                 sum(quantity_to_pick) as quantity_to_pick_expected,
                 sum(quantity_to_ship) as quantity_to_ship_expected,
 
-                max(updated_at) as updated_at_expected
+                max(updated_at) as max_updated_at_expected
             ')
             ->get()
             ->each(function ($record) {
@@ -66,7 +66,7 @@ class UpdateOrderTotalsJob implements ShouldQueue
                         'quantity_shipped' => $record->quantity_shipped_expected,
                         'quantity_to_pick' => $record->quantity_to_pick_expected,
                         'quantity_to_ship' => $record->quantity_to_ship_expected,
-                        'updated_at' => $record->updated_at_expected,
+                        'max_updated_at' => $record->max_updated_at_expected,
                     ]);
             });
     }
