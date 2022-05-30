@@ -48,7 +48,7 @@ class EnsureCorrectTotalsJob implements ShouldQueue
     {
 //        do {
             $records = $this->missingOrWrongTotalsQuery()
-                ->limit(100)
+                ->limit(10000)
                 ->get();
 
             $records->each(function ($record) {
