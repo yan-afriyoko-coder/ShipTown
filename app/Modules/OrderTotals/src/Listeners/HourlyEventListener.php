@@ -9,6 +9,6 @@ class HourlyEventListener
 {
     public function handle(HourlyEvent $event)
     {
-        EnsureCorrectTotalsJob::dispatch();
+//        EnsureCorrectTotalsJob::dispatch();
     }
 }
