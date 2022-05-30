@@ -11,6 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class EnsureCorrectTotalsJob implements ShouldQueue
@@ -37,6 +38,7 @@ class EnsureCorrectTotalsJob implements ShouldQueue
      */
     public function handle()
     {
+        Log::debug('starting');
         $this->prepareTempTable();
 
         $this->fixMissingOrWrongTotals();
@@ -44,12 +46,13 @@ class EnsureCorrectTotalsJob implements ShouldQueue
 
     public function fixMissingOrWrongTotals()
     {
-        do {
+//        do {
             $records = $this->missingOrWrongTotalsQuery()
                 ->limit(100)
                 ->get();
 
             $records->each(function ($record) {
+
                 OrderProductTotal::query()
                     ->updateOrCreate([
                         'order_id' => $record->order_id
@@ -63,9 +66,12 @@ class EnsureCorrectTotalsJob implements ShouldQueue
                         'quantity_shipped' => $record->quantity_shipped_expected ?? 0,
                         'quantity_to_pick' => $record->quantity_to_pick_expected ?? 0,
                         'quantity_to_ship' => $record->quantity_to_ship_expected ?? 0,
+                        'max_updated_at' => $record->max_updated_at_expected ?? 0,
                     ]);
+
+                    Log::warning('EnsureCorrectTotalsJob - order updated', ['order_id' => $record->order_id]);
             });
-        } while ($records->isNotEmpty());
+//        } while ($records->isNotEmpty());
     }
 
     private function prepareTempTable()
@@ -83,7 +89,7 @@ class EnsureCorrectTotalsJob implements ShouldQueue
                         sum(quantity_to_pick) as quantity_to_pick_expected,
                         sum(quantity_to_ship) as quantity_to_ship_expected,
 
-                        max(updated_at) as updated_at
+                        max(updated_at) as max_updated_at_expected
                     ')
             ->groupBy('order_id');
 
@@ -95,19 +101,9 @@ class EnsureCorrectTotalsJob implements ShouldQueue
      */
     private function missingOrWrongTotalsQuery(): Builder
     {
-        return DB::table('orders')
+        return DB::table('orders_products_totals')
             ->selectRaw('
-                orders.id as order_id,
-
-                recalculations.count_expected,
-                recalculations.quantity_ordered_expected,
-                recalculations.quantity_split_expected,
-                recalculations.quantity_picked_expected,
-                recalculations.quantity_skipped_picking_expected,
-                recalculations.quantity_not_picked_expected,
-                recalculations.quantity_shipped_expected,
-                recalculations.quantity_to_pick_expected,
-                recalculations.quantity_to_ship_expected,
+                orders_products_totals.order_id,
 
                 orders_products_totals.count,
                 orders_products_totals.quantity_ordered,
@@ -118,25 +114,28 @@ class EnsureCorrectTotalsJob implements ShouldQueue
                 orders_products_totals.quantity_shipped,
                 orders_products_totals.quantity_to_pick,
                 orders_products_totals.quantity_to_ship,
+                orders_products_totals.max_updated_at,
 
-                orders_products_totals.updated_at as max_updated_at
+                recalculations.count_expected,
+                recalculations.quantity_ordered_expected,
+                recalculations.quantity_split_expected,
+                recalculations.quantity_picked_expected,
+                recalculations.quantity_skipped_picking_expected,
+                recalculations.quantity_not_picked_expected,
+                recalculations.quantity_shipped_expected,
+                recalculations.quantity_to_pick_expected,
+                recalculations.quantity_to_ship_expected,
+                recalculations.max_updated_at_expected
             ')
-            ->leftJoin(
-                'orders_products_totals',
-                'orders_products_totals.order_id',
-                '=',
-                'orders.id'
-            )
             ->leftJoin(
                 $this->recalculations_temp_table_name .' as recalculations',
                 'recalculations.order_id',
                 '=',
-                'orders.id'
+                'orders_products_totals.order_id'
             )
             ->whereRaw('
               (
-                ISNULL(orders_products_totals.count)
-                OR (orders_products_totals.count                    != recalculations.count_expected                   )
+                   (orders_products_totals.count                    != recalculations.count_expected                   )
                 OR (orders_products_totals.quantity_ordered         != recalculations.quantity_ordered_expected        )
                 OR (orders_products_totals.quantity_split           != recalculations.quantity_split_expected          )
                 OR (orders_products_totals.quantity_picked          != recalculations.quantity_picked_expected         )
@@ -145,6 +144,7 @@ class EnsureCorrectTotalsJob implements ShouldQueue
                 OR (orders_products_totals.quantity_shipped         != recalculations.quantity_shipped_expected        )
                 OR (orders_products_totals.quantity_to_pick         != recalculations.quantity_to_pick_expected        )
                 OR (orders_products_totals.quantity_to_ship         != recalculations.quantity_to_ship_expected        )
+                OR (orders_products_totals.max_updated_at           != recalculations.max_updated_at_expected          )
               )
             ');
     }

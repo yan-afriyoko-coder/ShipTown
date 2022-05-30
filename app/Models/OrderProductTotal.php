@@ -24,6 +24,8 @@ class OrderProductTotal extends Model
         'quantity_skipped_picking',
         'quantity_not_picked',
         'quantity_shipped',
+        'quantity_to_pick',
+        'quantity_to_ship',
     ];
 
     protected $casts = [
@@ -46,10 +48,7 @@ class OrderProductTotal extends Model
         'quantity_skipped_picking'=> 0,
         'quantity_not_picked'     => 0,
         'quantity_shipped'        => 0,
+        'quantity_to_pick'        => 0,
+        'quantity_to_ship'        => 0,
     ];
-
-//    protected $appends  = [
-//       'quantity_to_pick',
-//       'quantity_to_ship',
-//    ];
 }
