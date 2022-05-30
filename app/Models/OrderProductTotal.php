@@ -48,8 +48,8 @@ class OrderProductTotal extends Model
         'quantity_shipped'        => 0,
     ];
 
-    protected $appends  = [
-       'quantity_to_pick',
-       'quantity_to_ship',
-    ];
+//    protected $appends  = [
+//       'quantity_to_pick',
+//       'quantity_to_ship',
+//    ];
 }

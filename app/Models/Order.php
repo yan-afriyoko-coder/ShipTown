@@ -250,21 +250,6 @@ class Order extends BaseModel
 //        ]);
 //    }
 
-    /**
-     * @return BelongsTo
-     */
-    public function orderStatus(): BelongsTo
-    {
-        return $this->belongsTo(OrderStatus::class, 'status_code', 'code');
-    }
-
-    /**
-     * @return HasOne
-     */
-    public function orderProductsTotals(): HasOne
-    {
-        return $this->hasOne(OrderProductTotal::class, 'order_id', 'id');
-    }
 
     /**
      * @return OrderStatus
@@ -521,6 +506,15 @@ class Order extends BaseModel
         $this->picked_at = $value ? now() : null;
     }
 
+
+    /**
+     * @return BelongsTo
+     */
+    public function orderStatus(): BelongsTo
+    {
+        return $this->belongsTo(OrderStatus::class, 'status_code', 'code');
+    }
+
     /**
      * @return HasMany|OrderProduct
      */
@@ -559,6 +553,14 @@ class Order extends BaseModel
     public function orderTotals(): HasOne
     {
         return $this->hasOne(OrderTotal::class, 'order_id');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function orderProductsTotals(): HasOne
+    {
+        return $this->hasOne(OrderProductTotal::class, 'order_id', 'id');
     }
 
     /**
@@ -615,6 +617,7 @@ class Order extends BaseModel
                 'shipping_address',
                 'order_shipments',
                 'order_products',
+                'order_products_totals',
                 'order_products.product',
                 'order_products.product.aliases',
                 'packer',
