@@ -21,6 +21,8 @@ class ManifestController extends Controller
         return response()->json([
             'name'       => 'Product Management ' . $config->business_name,
             'short_name' => 'PM ' . $config->business_name,
+            "description" => "Helps businesses increase profits by simplifying and automating order fulfilment process",
+            "categories" => ["ecommerce", "business", "productivity", "utilities"],
             'icons'      => [
                 [
                     'src'   => '/img/icons/android-chrome-192x192.png',
@@ -35,8 +37,8 @@ class ManifestController extends Controller
             ],
             'start_url'        => '/index.php',
             'display'          => 'standalone',
-            'background_color' => '#007bff',
-            'theme_color'      => '#007bff',
+            'background_color' => '#0275d8',
+            'theme_color'      => '#0275d8',
         ]);
     }
 }
