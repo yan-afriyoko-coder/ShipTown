@@ -97,17 +97,7 @@ class EnsureCorrectTotalsJob implements ShouldQueue
     {
         return DB::table('orders')
             ->selectRaw('
-                recalculations.order_id,
-
-                orders_products_totals.count,
-                orders_products_totals.quantity_ordered,
-                orders_products_totals.quantity_split,
-                orders_products_totals.quantity_picked,
-                orders_products_totals.quantity_skipped_picking,
-                orders_products_totals.quantity_not_picked,
-                orders_products_totals.quantity_shipped,
-                orders_products_totals.quantity_to_pick,
-                orders_products_totals.quantity_to_ship,
+                orders.id as order_id,
 
                 recalculations.count_expected,
                 recalculations.quantity_ordered_expected,
@@ -119,7 +109,17 @@ class EnsureCorrectTotalsJob implements ShouldQueue
                 recalculations.quantity_to_pick_expected,
                 recalculations.quantity_to_ship_expected,
 
-                now() as created_at
+                orders_products_totals.count,
+                orders_products_totals.quantity_ordered,
+                orders_products_totals.quantity_split,
+                orders_products_totals.quantity_picked,
+                orders_products_totals.quantity_skipped_picking,
+                orders_products_totals.quantity_not_picked,
+                orders_products_totals.quantity_shipped,
+                orders_products_totals.quantity_to_pick,
+                orders_products_totals.quantity_to_ship,
+
+                orders_products_totals.updated_at as max_updated_at
             ')
             ->leftJoin(
                 'orders_products_totals',
