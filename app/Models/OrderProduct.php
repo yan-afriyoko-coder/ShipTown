@@ -114,6 +114,7 @@ class OrderProduct extends BaseModel
 
     protected $casts = [
         'price'                   => 'float',
+        'total_price'             => 'float',
         'quantity_ordered'        => 'float',
         'quantity_split'          => 'float',
         'quantity_shipped'        => 'float',
@@ -188,6 +189,11 @@ class OrderProduct extends BaseModel
     public function getQuantityToShipAttribute(): float
     {
         return $this->quantity_ordered - $this->quantity_split - $this->quantity_shipped;
+    }
+
+    public function getTotalPriceAttribute(): float
+    {
+        return ($this->quantity_ordered - $this->quantity_split) * $this->price;
     }
 
     /**
