@@ -21,7 +21,7 @@
                   </div>
                 <div class="row align-text-top">
 
-                    <div class="col-5 col-md-4 col-lg-5 align-text-top">
+                    <div class="col-5 col-md-4 col-lg-6 align-text-top">
                         <div class="small font-weight-bold">{{ order['status_code'] }}</div>
                         <div class="small">{{ order['label_template'] }} </div>
                         <template v-for="tag in order.tags">
@@ -39,6 +39,12 @@
                                 <small> lines </small>
                                 <h5> {{ order['order_products_totals']['count'] }} </h5>
                             </div>
+                            <div class="col d-none d-md-block text-right align-text-top">
+                                <div class="text-center w-100">
+                                    <small>price</small>
+                                </div>
+                                <span class="pr-0 mr-2 h5">{{ Math.floor(order['order_products_totals']['total_price']) }}<span class="" style="font-size: 8pt"><template v-if="order['order_products_totals']['total_price'] % 1 === 0"> .00</template><template v-if="order['order_products_totals']['total_price'] % 1 > 0"> .{{ Math.floor(order['order_products_totals']['total_price'] % 1 * 100) }} </template></span></span>
+                            </div>
                             <div class="col d-none d-sm-block">
                                 <small> ordered </small>
                                 <h5>{{ toNumberOrDash(order['order_products_totals']['quantity_ordered']) }}</h5>
@@ -47,17 +53,9 @@
                                 <small> split </small>
                                 <h5>{{ toNumberOrDash(order['order_products_totals']['quantity_split']) }}</h5>
                             </div>
-                            <div class="col d-none d-md-block">
-                                <small> price</small>
-                                <h5>{{ toNumberOrDash(order['order_products_totals']['total_price']) }}</h5>
-                            </div>
                             <div class="col">
                                 <small> picked </small>
                                 <h5>{{ toNumberOrDash(order['order_products_totals']['quantity_picked']) }}</h5>
-                            </div>
-                            <div class="col d-none d-md-block">
-                                <small> to pick </small>
-                                <h5>{{ toNumberOrDash(order['order_products_totals']['quantity_to_pick']) }}</h5>
                             </div>
                             <div class="col bg-warning" v-if="Number(order['order_products_totals']['quantity_skipped_picking']) > 0">
                                 <small> skipped </small>
@@ -155,9 +153,11 @@
                                             <small> split </small>
                                             <h4>{{ toNumberOrDash(order_product['quantity_split']) }}</h4>
                                         </div>
-                                        <div class="col d-none d-sm-block">
-                                            <small> price</small>
-                                            <h4>{{ toNumberOrDash(order_product['price']) }}</h4>
+                                        <div class="col d-none d-md-block text-right">
+                                            <div class="text-center w-100">
+                                                <small>price</small>
+                                            </div>
+                                            <span class="pr-0 mr-2 h4">{{ Math.floor(order_product['price']) }}.<span class="ml-0 pl-0" style="font-size: 8pt"><template v-if="order_product['price'] % 1 === 0"> .00</template><template v-if="order_product['price'] % 1 > 0"> .{{ Math.floor(order_product['price'] % 1 * 100) }} </template></span></span>
                                         </div>
                                         <div class="col">
                                             <small> picked </small>
@@ -342,6 +342,14 @@
         },
 
         methods: {
+            formatPrice: function (price) {
+                if (price === 0) {
+                    return '-';
+                }
+
+                return price.toFixed();
+            },
+
             shippingContentUrl: function(shipment) {
                 return '/shipping-labels/' + shipment['id'];
             },
