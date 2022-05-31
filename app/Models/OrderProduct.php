@@ -27,6 +27,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property float       $price
  * @property float       $quantity_ordered
  * @property float       $quantity_split
+ * @property float       $total_price
  * @property float       $quantity_shipped
  * @property float       $quantity_to_ship
  * @property float       $quantity_to_pick
@@ -69,8 +70,6 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static Builder|OrderProduct withTrashed()
  * @method static Builder|OrderProduct withoutTrashed()
  *
- * @property string $quantity_outstanding
- *
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereHasStockReserved($statusCodeArray)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct whereQuantityOutstanding($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct createdBetween($min, $max)
@@ -90,8 +89,10 @@ class OrderProduct extends BaseModel
     protected $touches = ['order'];
 
     protected static array $logAttributes = [
+        'price',
         'quantity_ordered',
         'quantity_split',
+        'total_price',
         'quantity_shipped',
         'quantity_picked',
         'quantity_skipped_picking',
@@ -106,6 +107,7 @@ class OrderProduct extends BaseModel
         'price',
         'quantity_ordered',
         'quantity_split',
+        'total_price',
         'quantity_picked',
         'quantity_skipped_picking',
         'quantity_not_picked',
@@ -113,16 +115,16 @@ class OrderProduct extends BaseModel
     ];
 
     protected $casts = [
-        'price'                   => 'float',
-        'total_price'             => 'float',
-        'quantity_ordered'        => 'float',
-        'quantity_split'          => 'float',
-        'quantity_shipped'        => 'float',
-        'quantity_to_ship'        => 'float',
-        'quantity_to_pick'        => 'float',
-        'quantity_picked'         => 'float',
-        'quantity_skipped_picking'=> 'float',
-        'quantity_not_picked'     => 'float',
+        'price'                     => 'float',
+        'quantity_ordered'          => 'float',
+        'quantity_split'            => 'float',
+        'total_price'               => 'float',
+        'quantity_shipped'          => 'float',
+        'quantity_to_ship'          => 'float',
+        'quantity_to_pick'          => 'float',
+        'quantity_picked'           => 'float',
+        'quantity_skipped_picking'  => 'float',
+        'quantity_not_picked'       => 'float',
         'inventory_source_quantity' => 'float',
     ];
 

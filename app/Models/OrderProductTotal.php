@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int count
  * @property float quantity_ordered
  * @property float quantity_split
+ * @property float total_price
  * @property float quantity_picked
  * @property float quantity_skipped_picking
  * @property float quantity_not_picked
@@ -30,6 +31,7 @@ class OrderProductTotal extends Model
         'count',
         'quantity_ordered',
         'quantity_split',
+        'total_price',
         'quantity_picked',
         'quantity_skipped_picking',
         'quantity_not_picked',
@@ -40,28 +42,30 @@ class OrderProductTotal extends Model
     ];
 
     protected $casts = [
-        'count'                   => 'integer',
-        'quantity_ordered'        => 'float',
-        'quantity_split'          => 'float',
-        'quantity_picked'         => 'float',
-        'quantity_skipped_picking'=> 'float',
-        'quantity_not_picked'     => 'float',
-        'quantity_shipped'        => 'float',
-        'quantity_to_pick'        => 'float',
-        'quantity_to_ship'        => 'float',
-        'max_updated_at'          => 'timestamp',
+        'count'                     => 'integer',
+        'quantity_ordered'          => 'float',
+        'quantity_split'            => 'float',
+        'total_price'               => 'float',
+        'quantity_picked'           => 'float',
+        'quantity_skipped_picking'  => 'float',
+        'quantity_not_picked'       => 'float',
+        'quantity_shipped'          => 'float',
+        'quantity_to_pick'          => 'float',
+        'quantity_to_ship'          => 'float',
+        'max_updated_at'            => 'timestamp',
     ];
 
     protected $attributes = [
-        'count'                   => 0,
-        'quantity_ordered'        => 0,
-        'quantity_split'          => 0,
-        'quantity_picked'         => 0,
-        'quantity_skipped_picking'=> 0,
-        'quantity_not_picked'     => 0,
-        'quantity_shipped'        => 0,
-        'quantity_to_pick'        => 0,
-        'quantity_to_ship'        => 0,
-        'max_updated_at'          => '2000-01-01 00:00:00',
+        'count'                     => 0,
+        'quantity_ordered'          => 0,
+        'quantity_split'            => 0,
+        'total_price'               => 0,
+        'quantity_picked'           => 0,
+        'quantity_skipped_picking'  => 0,
+        'quantity_not_picked'       => 0,
+        'quantity_shipped'          => 0,
+        'quantity_to_pick'          => 0,
+        'quantity_to_ship'          => 0,
+        'max_updated_at'            => '2000-01-01 00:00:00',
     ];
 }
