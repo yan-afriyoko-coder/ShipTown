@@ -36,16 +36,40 @@
                                 <h5> {{ order['age_in_days'] }}</h5>
                             </div>
                             <div class="col">
-                                <small> products </small>
+                                <small> lines </small>
                                 <h5> {{ order['order_products_totals']['count'] }} </h5>
                             </div>
                             <div class="col d-none d-sm-block">
                                 <small> ordered </small>
-                                <h5> {{ order['order_products_totals']['quantity_ordered'] }} </h5>
+                                <h5>{{ toNumberOrDash(order['order_products_totals']['quantity_ordered']) }}</h5>
+                            </div>
+                            <div class="col d-none d-md-block">
+                                <small> price</small>
+                                <h5>{{ toNumberOrDash(order['order_products_totals']['total_price']) }}</h5>
+                            </div>
+                            <div class="col bg-warning" v-if="Number(order['order_products_totals']['quantity_split']) > 0">
+                                <small> split </small>
+                                <h5>{{ toNumberOrDash(order['order_products_totals']['quantity_split']) }}</h5>
+                            </div>
+                            <div class="col">
+                                <small> picked </small>
+                                <h5>{{ toNumberOrDash(order['order_products_totals']['quantity_picked']) }}</h5>
+                            </div>
+                            <div class="col d-none d-md-block">
+                                <small> to pick </small>
+                                <h5>{{ toNumberOrDash(order['order_products_totals']['quantity_to_pick']) }}</h5>
+                            </div>
+                            <div class="col bg-warning" v-if="Number(order['order_products_totals']['quantity_skipped_picking']) > 0">
+                                <small> skipped </small>
+                                <h5>{{ toNumberOrDash(order['order_products_totals']['quantity_skipped_picking']) }}</h5>
+                            </div>
+                            <div class="col d-none d-md-block">
+                                <small> shipped </small>
+                                <h5>{{ toNumberOrDash(order['order_products_totals']['quantity_shipped'])  }}</h5>
                             </div>
                             <div class="col">
                                 <small> to ship </small>
-                                <h5>{{ dashIfZero(order['order_products_totals']['quantity_to_ship']) }}</h5>
+                                <h5>{{ toNumberOrDash(order['order_products_totals']['quantity_to_ship'])  }}</h5>
                             </div>
                         </div>
                     </div>

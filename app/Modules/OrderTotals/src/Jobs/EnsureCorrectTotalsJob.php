@@ -65,6 +65,7 @@ class EnsureCorrectTotalsJob implements ShouldQueue
                         count(id) as count_expected,
                         sum(quantity_ordered) as quantity_ordered_expected,
                         sum(quantity_split) as quantity_split_expected,
+                        sum(total_price) as total_price_expected,
                         sum(quantity_picked) as quantity_picked_expected,
                         sum(quantity_skipped_picking) as quantity_skipped_picking_expected,
                         sum(quantity_not_picked) as quantity_not_picked_expected,
@@ -97,6 +98,7 @@ class EnsureCorrectTotalsJob implements ShouldQueue
                 orders_products_totals.quantity_ordered         = recalculations.quantity_ordered_expected,
                 orders_products_totals.quantity_split           = recalculations.quantity_split_expected,
                 orders_products_totals.quantity_picked          = recalculations.quantity_picked_expected,
+                orders_products_totals.total_price              = recalculations.total_price_expected,
                 orders_products_totals.quantity_skipped_picking = recalculations.quantity_skipped_picking_expected,
                 orders_products_totals.quantity_not_picked      = recalculations.quantity_not_picked_expected,
                 orders_products_totals.quantity_shipped         = recalculations.quantity_shipped_expected,
@@ -108,6 +110,7 @@ class EnsureCorrectTotalsJob implements ShouldQueue
                 orders_products_totals.count                       != recalculations.count_expected
                 OR orders_products_totals.quantity_ordered         != recalculations.quantity_ordered_expected
                 OR orders_products_totals.quantity_split           != recalculations.quantity_split_expected
+                OR orders_products_totals.total_price              != recalculations.total_price_expected
                 OR orders_products_totals.quantity_picked          != recalculations.quantity_picked_expected
                 OR orders_products_totals.quantity_skipped_picking != recalculations.quantity_skipped_picking_expected
                 OR orders_products_totals.quantity_not_picked      != recalculations.quantity_not_picked_expected
