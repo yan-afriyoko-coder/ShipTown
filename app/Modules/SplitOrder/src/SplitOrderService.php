@@ -122,6 +122,7 @@ class SplitOrderService
             'order_id',
             'quantity_ordered',
             'quantity_split',
+            'total_price',
             'quantity_to_ship',
             'quantity_to_pick',
             'quantity_picked',
