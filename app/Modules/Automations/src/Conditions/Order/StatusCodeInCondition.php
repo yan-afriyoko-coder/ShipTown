@@ -16,7 +16,7 @@ class StatusCodeInCondition extends BaseOrderConditionAbstract
      * @param $expected_value
      * @return Builder
      */
-    public static function ordersQueryScope(Builder $query, $expected_value): Builder
+    public static function addQueryScope(Builder $query, $expected_value): Builder
     {
         $expectedStatuses = explode(',', $expected_value);
 

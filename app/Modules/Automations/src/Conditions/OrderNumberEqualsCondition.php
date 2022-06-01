@@ -19,7 +19,7 @@ class OrderNumberEqualsCondition extends BaseOrderConditionAbstract
      */
     protected $event;
 
-    public static function ordersQueryScope(Builder $query, $expected_value): Builder
+    public static function addQueryScope(Builder $query, $expected_value): Builder
     {
         $query->where(['order_number' => $expected_value]);
 

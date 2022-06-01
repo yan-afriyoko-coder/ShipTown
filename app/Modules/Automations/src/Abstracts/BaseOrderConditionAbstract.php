@@ -25,7 +25,7 @@ abstract class BaseOrderConditionAbstract
         $this->event = $event;
     }
 
-    public static function ordersQueryScope(Builder $query, $expected_value): Builder
+    public static function addQueryScope(Builder $query, $expected_value): Builder
     {
         return $query;
     }

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
  */
 class LineCountEqualsCondition extends BaseOrderConditionAbstract
 {
-    public static function ordersQueryScope(Builder $query, $expected_value): Builder
+    public static function addQueryScope(Builder $query, $expected_value): Builder
     {
         return $query->whereHas('orderProductsTotals', function ($query) use ($expected_value) {
             $query->where('count', '=', $expected_value);

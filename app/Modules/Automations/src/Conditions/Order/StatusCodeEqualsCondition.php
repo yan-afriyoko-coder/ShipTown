@@ -16,7 +16,7 @@ class StatusCodeEqualsCondition extends BaseOrderConditionAbstract
      * @param $expected_value
      * @return Builder
      */
-    public static function ordersQueryScope(Builder $query, $expected_value): Builder
+    public static function addQueryScope(Builder $query, $expected_value): Builder
     {
         return $query->where('status_code', '=', $expected_value);
     }

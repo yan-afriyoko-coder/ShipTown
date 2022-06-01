@@ -29,7 +29,7 @@ class AutomationService
             ->each(function (Condition $condition) use ($query) {
                 /** @var BaseOrderConditionAbstract $c */
                 $c = $condition->condition_class;
-                $c::ordersQueryScope($query, $condition->condition_value);
+                $c::addQueryScope($query, $condition->condition_value);
             });
 
         $query->get()

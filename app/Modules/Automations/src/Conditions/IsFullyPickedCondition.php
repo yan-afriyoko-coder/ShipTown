@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
  */
 class IsFullyPickedCondition extends BaseOrderConditionAbstract
 {
-    public static function ordersQueryScope(Builder $query, $expected_value): Builder
+    public static function addQueryScope(Builder $query, $expected_value): Builder
     {
         if ($expected_value === '') {
             $expected_value = 'true';

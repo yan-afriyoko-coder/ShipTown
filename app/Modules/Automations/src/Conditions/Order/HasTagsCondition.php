@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class HasTagsCondition extends BaseOrderConditionAbstract
 {
-    public static function ordersQueryScope(Builder $query, $expected_value): Builder
+    public static function addQueryScope(Builder $query, $expected_value): Builder
     {
         if (trim($expected_value) === '') {
             // empty value automatically invalidates query

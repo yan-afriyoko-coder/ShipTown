@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
  */
 class IsFullyPaidCondition extends BaseOrderConditionAbstract
 {
-    public static function ordersQueryScope(Builder $query, $expected_value): Builder
+    public static function addQueryScope(Builder $query, $expected_value): Builder
     {
         $expectedBoolValue = filter_var($expected_value, FILTER_VALIDATE_BOOL);
 
