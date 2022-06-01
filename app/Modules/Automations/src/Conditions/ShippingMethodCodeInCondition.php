@@ -3,7 +3,7 @@
 namespace App\Modules\Automations\src\Conditions;
 
 use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  *
@@ -11,23 +11,19 @@ use Illuminate\Support\Facades\Log;
 class ShippingMethodCodeInCondition extends BaseOrderConditionAbstract
 {
     /**
+     * @param Builder $query
      * @param $expected_value
-     * @return bool
+     * @return Builder
      */
-    public function isValid($expected_value): bool
+    public static function addQueryScope(Builder $query, $expected_value): Builder
     {
-        $expected = explode(',', $expected_value);
+        if (trim($expected_value) === '') {
+            // empty value automatically invalidates query
+            return $query->whereRaw('( "has_tags_condition"="" )');
+        }
 
-        $result = in_array($this->event->order->shipping_method_code, $expected) === false;
+        $shippingMethods = explode(',', $expected_value);
 
-        Log::debug('Automation condition', [
-            'order_number' => $this->event->order->order_number,
-            'result' => $result,
-            'class' => class_basename(self::class),
-            'expected_shipping_method_code' => $expected_value,
-            'actual_shipping_method_code' => $this->event->order->shipping_method_code,
-        ]);
-
-        return $result;
+        return $query->whereIn('shipping_method_code', $shippingMethods);
     }
 }
