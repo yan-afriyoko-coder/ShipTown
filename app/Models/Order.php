@@ -576,7 +576,7 @@ class Order extends BaseModel
      */
     public function orderComments()
     {
-        return $this->hasMany(OrderComment::class)->latest();
+        return $this->hasMany(OrderComment::class)->orderByDesc('id');
     }
 
     /**

@@ -24,6 +24,7 @@ Route::view('performance/dashboard', 'performance')->name('performance.dashboard
 Route::view('products', 'products')->name('products');
 Route::view('picklist', 'picklist')->name('picklist');
 Route::view('orders', 'orders')->name('orders');
+Route::view('stocktaking', 'stocktaking')->name('stocktaking');
 Route::view('setting-profile', 'setting-profile')->name('setting-profile');
 
 Route::get('shipping-labels/{shipping_label}', 'ShippingLabelController@show')->name('shipping-labels');
