@@ -3,6 +3,7 @@
 namespace App\Modules\Automations\src\Conditions\Order;
 
 use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -10,30 +11,15 @@ use Illuminate\Support\Facades\Log;
  */
 class TotalQuantityToShipEqualsCondition extends BaseOrderConditionAbstract
 {
-    /**
-     * @param string $expected_value
-     * @return bool
-     */
-    public function isValid(string $expected_value): bool
+    public static function addQueryScope(Builder $query, $expected_value): Builder
     {
         if (! is_numeric($expected_value)) {
-            $result = false;
-        } else {
-            $conditionFloatValue = floatval($expected_value);
-
-            $totalQuantityToShip = floatval($this->event->order->orderProducts()->sum('quantity_to_ship'));
-
-            $result = $totalQuantityToShip === $conditionFloatValue;
+            // empty value automatically invalidates query
+            return $query->whereRaw('(1=2)');
         }
 
-        Log::debug('Automation condition', [
-            'order_number' => $this->event->order->order_number,
-            'result' => $result,
-            'class' => class_basename(self::class),
-            'expected' => $conditionFloatValue ?? '',
-            'actual' => $totalQuantityToShip ?? '',
-        ]);
-
-        return $result;
+        return $query->whereHas('orderProductsTotals', function ($query) use ($expected_value) {
+            $query->where('quantity_to_ship', '=', $expected_value);
+        });
     }
 }
