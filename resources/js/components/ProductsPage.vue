@@ -3,7 +3,11 @@
         <template v-if="getUrlParameter('hide_nav_bar', false) === false">
             <div class="row mb-3 pl-1 pr-1">
                 <div class="flex-fill">
-                    <barcode-input-field :url_param_name="'search'" @barcodeScanned="findText" placeholder="Search products using name, sku, alias or command" ref="barcode"/>
+                    <barcode-input-field placeholder="Search products using name, sku, alias or command"
+                                         ref="barcode"
+                                         :url_param_name="'search'"
+                                         @barcodeScanned="findText"
+                    />
                 </div>
 
                 <button disabled type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
@@ -72,7 +76,6 @@
             findText(search) {
                 this.setUrlParameter('search', search);
                 this.reloadProducts();
-                this.setFocus(this.$refs.search, true, true)
             },
 
             reloadProducts() {
@@ -84,7 +87,7 @@
                 this.showLoading();
 
                 const params = {
-                    'filter[sku]': this.getUrlParameter('sku'),
+                    'filter[sku_like]': this.getUrlParameter('sku'),
                     'filter[search]': this.getUrlParameter('search'),
                     'filter[has_tags]': this.getUrlParameter('has_tags'),
                     'filter[without_tags]': this.getUrlParameter('without_tags'),

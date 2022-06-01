@@ -155,6 +155,7 @@ class Product extends BaseModel
         return QueryBuilder::for(Product::class)
             ->allowedFilters([
                 AllowedFilter::scope('search', 'whereHasText'),
+                AllowedFilter::exact('sku'),
                 AllowedFilter::exact('id'),
                 AllowedFilter::exact('sku'),
                 AllowedFilter::exact('name'),

@@ -18,11 +18,12 @@
     import helpers from "../../mixins/helpers";
     import url from "../../mixins/url";
     import FiltersModal from "../Packlist/FiltersModal";
+    import api from "../../mixins/api";
 
     export default {
         name: "BarcodeInputField",
 
-        mixins: [helpers, url, FiltersModal],
+        mixins: [helpers, url, FiltersModal, api],
 
         props: {
             url_param_name: null,
@@ -38,56 +39,60 @@
         },
 
         mounted() {
-            this.barcode = this.getUrlParameter(this.url_param_name);
-            this.setFocusOnBarcodeInput(500);
+            if(this.url_param_name) {
+                this.barcode = this.getUrlParameter(this.url_param_name);
+            }
+            this.setFocusOnBarcodeInput();
         },
 
         methods: {
-          hideModal(event) {
-            this.$bvModal.hide('set-shelf-location-command-modal');
-          },
+            hideModal(event) {
+              this.$bvModal.hide('set-shelf-location-command-modal');
+            },
 
-          runCommandShelfScanned: function (command) {
-            this.command = command;
-            this.warningBeep();
-            this.$bvModal.show('set-shelf-location-command-modal')
-            this.setFocusElementById(500, 'set-shelf-location-command-modal-input')
-          },
+            runCommandShelfScanned: function (command) {
+              this.command = command;
+              this.$bvModal.show('set-shelf-location-command-modal')
+              this.warningBeep();
+              this.setFocusElementById(1, 'set-shelf-location-command-modal-input')
+            },
 
-          tryToRunCommand: function (barcode) {
-            let command = barcode.split(':');
+            tryToRunCommand: function (barcode) {
+              let command = barcode.split(':');
 
-            if(command.length < 2) {
+              if(command.length < 2) {
+                return false;
+              }
+
+              switch (command[0].toLowerCase())
+              {
+                  case 'shelf':
+                    this.runCommandShelfScanned(command);
+                    return true;
+              }
+
               return false;
-            }
+            },
 
-            switch (command[0].toLowerCase())
+            updateShelfLocation(event)
             {
-                case 'shelf':
-                  this.runCommandShelfScanned(command);
-                  return true;
-            }
+              this.$bvModal.hide('set-shelf-location-command-modal');
+              this.notifyError('Set Shelf Location command not yet implemented: ' + event.target.value);
+              this.setFocusOnBarcodeInput();
+            },
 
-            return false;
-          },
-
-          updateShelfLocation(event)
-          {
-            this.setFocusOnBarcodeInput();
-            this.$bvModal.hide('set-shelf-location-command-modal');
-            this.notifyError('Set Shelf Location command not yet implemented: ' + event.target.value);
-          },
-
-          barcodeScanned(barcode) {
-                if (this.tryToRunCommand(barcode)) {
-                  this.barcode = '';
-                  return;
+            barcodeScanned(barcode) {
+                if(this.url_param_name) {
+                    this.setUrlParameter(this.url_param_name, barcode);
                 }
+
+                if (this.tryToRunCommand(barcode)) {
+                    this.barcode = '';
+                    return;
+                  }
 
                 this.$emit('barcodeScanned', barcode);
-                if(this.url_param_name) {
-                  this.setUrlParameter(this.url_param_name, barcode);
-                }
+
                 this.setFocusOnBarcodeInput();
                 this.simulateSelectAll();
             },
