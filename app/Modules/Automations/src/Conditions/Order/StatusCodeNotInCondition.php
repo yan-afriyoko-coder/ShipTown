@@ -3,7 +3,7 @@
 namespace App\Modules\Automations\src\Conditions\Order;
 
 use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  *
@@ -11,23 +11,19 @@ use Illuminate\Support\Facades\Log;
 class StatusCodeNotInCondition extends BaseOrderConditionAbstract
 {
     /**
-     * @param $condition_value
-     * @return bool
+     * @param Builder $query
+     * @param $expected_value
+     * @return Builder
      */
-    public function isValid($condition_value): bool
+    public static function addQueryScope(Builder $query, $expected_value): Builder
     {
-        $expectedStatuses = explode(',', $condition_value);
+        if (trim($expected_value) === '') {
+            // empty value automatically invalidates query
+            return $query->whereRaw('( "has_tags_condition"="" )');
+        }
 
-        $result = in_array($this->event->order->status_code, $expectedStatuses) === false;
+        $expectedStatuses = explode(',', $expected_value);
 
-        Log::debug('Automation condition', [
-            'order_number' => $this->event->order->order_number,
-            'result' => $result,
-            'class' => class_basename(self::class),
-            'expected_statuses' => $condition_value,
-            'actual_status' => $this->event->order->status_code,
-        ]);
-
-        return $result;
+        return $query->whereNotIn('status_code', $expectedStatuses);
     }
 }
