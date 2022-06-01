@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Automations\src\Conditions;
+namespace App\Modules\Automations\src\Conditions\Order;
 
 use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
 use Illuminate\Database\Eloquent\Builder;

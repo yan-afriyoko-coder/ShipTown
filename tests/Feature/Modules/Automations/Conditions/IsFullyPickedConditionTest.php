@@ -33,7 +33,7 @@ class IsFullyPickedConditionTest extends TestCase
     {
         $query = Order::query();
 
-        IsFullyPickedCondition::ordersQueryScope($query, 'true');
+        IsFullyPickedCondition::addQueryScope($query, 'true');
 
         $this->assertEquals(1, $query->count());
     }
@@ -42,7 +42,7 @@ class IsFullyPickedConditionTest extends TestCase
     {
         $query = Order::query();
 
-        IsFullyPickedCondition::ordersQueryScope($query, 'false');
+        IsFullyPickedCondition::addQueryScope($query, 'false');
 
         $this->assertEquals(2, $query->count());
     }

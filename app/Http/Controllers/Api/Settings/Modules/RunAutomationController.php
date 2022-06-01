@@ -25,13 +25,7 @@ class RunAutomationController extends Controller
         /** @var Automation $automation */
         $automation = Automation::findOrFail($request->get('automation_id'));
 
-        Order::where(['is_active' => true])
-            ->get()
-            ->each(function (Order $order) use ($automation) {
-                $event = new ActiveOrderCheckEvent($order);
-
-                AutomationService::validateAndRunAutomation($automation, $event);
-            });
+        AutomationService::run($automation, Order::query());
 
         return JsonResource::make([
             'automation_id' => $automation->getKey(),

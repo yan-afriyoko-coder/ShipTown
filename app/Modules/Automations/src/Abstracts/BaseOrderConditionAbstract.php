@@ -25,11 +25,22 @@ abstract class BaseOrderConditionAbstract
         $this->event = $event;
     }
 
-    public static function ordersQueryScope(Builder $query, $expected_value): Builder
+    public static function addQueryScope(Builder $query, $expected_value): Builder
     {
         return $query;
     }
 
+    protected static function invalidateQueryIf($query, bool $shouldInvalidate): void
+    {
+        if ($shouldInvalidate) {
+            $query->whereRaw('(1=2)');
+        }
+    }
+
+    protected static function invalidateQueryUnless($query, bool $shouldInvalidate): void
+    {
+        static::invalidateQueryIf($query, ! $shouldInvalidate);
+    }
 
     /**
      * @param string $expected_value

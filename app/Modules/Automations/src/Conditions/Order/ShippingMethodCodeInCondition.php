@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 /**
  *
  */
-class ShippingMethodCodeEqualsCondition extends BaseOrderConditionAbstract
+class ShippingMethodCodeInCondition extends BaseOrderConditionAbstract
 {
     /**
      * @param Builder $query
@@ -17,6 +17,10 @@ class ShippingMethodCodeEqualsCondition extends BaseOrderConditionAbstract
      */
     public static function addQueryScope(Builder $query, $expected_value): Builder
     {
-        return $query->where('shipping_method_code', '=', $expected_value);
+        static::invalidateQueryIf($query, trim($expected_value) === '');
+
+        $shippingMethods = explode(',', $expected_value);
+
+        return $query->whereIn('shipping_method_code', $shippingMethods);
     }
 }

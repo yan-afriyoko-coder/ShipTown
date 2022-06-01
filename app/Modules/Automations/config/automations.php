@@ -29,7 +29,7 @@ return [
             'description' => 'Shipping Method Code equals',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\ShippingMethodCodeInCondition::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeInCondition::class,
             'description' => 'Shipping Method Code in',
         ],
         [
@@ -49,7 +49,7 @@ return [
             'description' => 'Is Fully Paid',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\IsFullyPickedCondition::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\IsFullyPickedCondition::class,
             'description' => 'Is Fully Picked',
         ],
         [
@@ -57,12 +57,16 @@ return [
             'description' => 'Is Fully Packed',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\OrderNumberEqualsCondition::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\OrderNumberEqualsCondition::class,
             'description' => 'Order Number equals',
         ],
         [
             'class' => \App\Modules\Automations\src\Conditions\Order\HasTagsCondition::class,
             'description' => 'Has tags',
+        ],
+        [
+            'class' => \App\Modules\Automations\src\Conditions\Order\DoesntHaveTagsCondition::class,
+            'description' => 'Does not have tags',
         ],
     ],
     'actions' => [
