@@ -64,6 +64,10 @@ return [
             'class' => \App\Modules\Automations\src\Conditions\Order\HasTagsCondition::class,
             'description' => 'Has tags',
         ],
+        [
+            'class' => \App\Modules\Automations\src\Conditions\Order\DoesntHaveTagsCondition::class,
+            'description' => 'Does not have tags',
+        ],
     ],
     'actions' => [
         [

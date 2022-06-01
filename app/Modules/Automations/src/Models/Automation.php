@@ -3,6 +3,7 @@
 namespace App\Modules\Automations\src\Models;
 
 use App\BaseModel;
+use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -49,8 +50,7 @@ class Automation extends BaseModel
      */
     public function allConditionsTrue($event): bool
     {
-        return $this->conditions()
-            ->get()
+        return $this->conditions
             ->every(function (Condition $condition) use ($event) {
                 return $condition->isTrue($event);
             });
@@ -61,7 +61,7 @@ class Automation extends BaseModel
      */
     public function conditions(): HasMany
     {
-        return $this->hasMany(Condition::class);
+        return $this->hasMany(Condition::class)->orderBy('id');
     }
 
     /**
@@ -69,6 +69,25 @@ class Automation extends BaseModel
      */
     public function actions(): HasMany
     {
-        return $this->hasMany(Action::class);
+        return $this->hasMany(Action::class)->orderBy('priority');
+    }
+
+
+    public function addConditions($query)
+    {
+        try {
+            $this->conditions
+                ->each(function (Condition $condition) use ($query) {
+                    /** @var BaseOrderConditionAbstract $c */
+                    $c = $condition->condition_class;
+                    $c::ordersQueryScope($query, $condition->condition_value);
+                });
+        } catch (\Exception $exception) {
+            report($exception);
+            // we will invalidate query here
+            return $query->whereRaw('1=2');
+        }
+
+        return $query;
     }
 }

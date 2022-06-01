@@ -4,9 +4,7 @@ namespace App\Modules\Automations\src\Jobs;
 
 use App\Events\Order\ActiveOrderCheckEvent;
 use App\Models\Order;
-use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
 use App\Modules\Automations\src\Models\Automation;
-use App\Modules\Automations\src\Models\Condition;
 use App\Modules\Automations\src\Services\AutomationService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -57,18 +55,6 @@ class RunAutomationsOnActiveOrdersJob implements ShouldQueue
                 $query->where(['id' => $this->order_id]);
             });
 
-        try {
-            $automation->conditions()
-                ->each(function (Condition $condition) use ($query) {
-                    /** @var BaseOrderConditionAbstract $c */
-                    $c = $condition->condition_class;
-                    $c::ordersQueryScope($query, $condition->condition_value);
-                });
-        } catch (\Exception $exception) {
-            report($exception);
-            return collect();
-        }
-
-        return $query;
+        return $automation->addConditions($query);
     }
 }

@@ -25,8 +25,11 @@ class RunAutomationController extends Controller
         /** @var Automation $automation */
         $automation = Automation::findOrFail($request->get('automation_id'));
 
-        Order::where(['is_active' => true])
-            ->get()
+        $orders = Order::query();
+
+        $automation->addConditions($orders);
+
+        $orders->get()
             ->each(function (Order $order) use ($automation) {
                 $event = new ActiveOrderCheckEvent($order);
 

@@ -7,14 +7,10 @@ use App\Models\Order;
 use App\Modules\Automations\src\Jobs\RunAutomationsOnActiveOrdersJob;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
-use App\Modules\Automations\src\Models\OrderLock;
-use Exception;
-use Illuminate\Contracts\Queue\Monitor;
 use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Fluent;
-use romanzipp\QueueMonitor\Services\QueueMonitor;
 
 /**
  *
@@ -30,9 +26,7 @@ class AutomationService
         $allConditionsPassed = $automation->allConditionsTrue($event);
 
         if ($allConditionsPassed === true) {
-            $automation->actions()
-                ->orderBy('priority')
-                ->get()
+            $automation->actions
                 ->each(function (Action $action) use ($event) {
                     AutomationService::runAction($action, $event);
                 });
