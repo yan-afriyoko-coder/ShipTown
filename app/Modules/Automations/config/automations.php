@@ -9,6 +9,10 @@ return [
             'description' => 'Status Code is',
         ],
         [
+            'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeInCondition::class,
+            'description' => 'Status Code In',
+        ],
+        [
             'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeNotInCondition::class,
             'description' => 'Status Code NOT In',
         ],
