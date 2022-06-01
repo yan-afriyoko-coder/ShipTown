@@ -33,7 +33,6 @@ abstract class BaseOrderConditionAbstract
     protected static function invalidateQueryIf($query, bool $shouldInvalidate): void
     {
         if ($shouldInvalidate) {
-            // empty value automatically invalidates query
             $query->whereRaw('(1=2)');
         }
     }
