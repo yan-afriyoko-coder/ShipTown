@@ -4,9 +4,11 @@ namespace App\Modules\Automations\src\Services;
 
 use App\Events\Order\ActiveOrderCheckEvent;
 use App\Models\Order;
+use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
 use App\Modules\Automations\src\Jobs\RunAutomationsOnActiveOrdersJob;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
+use App\Modules\Automations\src\Models\Condition;
 use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -17,6 +19,26 @@ use Illuminate\Support\Fluent;
  */
 class AutomationService
 {
+    /**
+     * @param Automation $automation
+     * @param $query
+     */
+    public static function run(Automation $automation, $query)
+    {
+        $automation->conditions
+            ->each(function (Condition $condition) use ($query) {
+                /** @var BaseOrderConditionAbstract $c */
+                $c = $condition->condition_class;
+                $c::ordersQueryScope($query, $condition->condition_value);
+            });
+
+        $query->get()
+            ->each(function (Order $order) use ($automation) {
+                $event = new ActiveOrderCheckEvent($order);
+                AutomationService::validateAndRunAutomation($automation, $event);
+            });
+    }
+
     /**
      * @param Automation $automation
      * @param ActiveOrderCheckEvent $event
