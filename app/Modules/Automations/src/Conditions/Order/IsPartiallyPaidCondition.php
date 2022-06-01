@@ -3,36 +3,15 @@
 namespace App\Modules\Automations\src\Conditions\Order;
 
 use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  *
  */
 class IsPartiallyPaidCondition extends BaseOrderConditionAbstract
 {
-    /**
-     * @param string $condition_value
-     * @return bool
-     */
-    public function isValid(string $condition_value): bool
+    public static function addQueryScope(Builder $query, $expected_value): Builder
     {
-        $expectedBoolValue = filter_var($condition_value, FILTER_VALIDATE_BOOL);
-
-        $order = $this->event->order;
-
-        $isPartiallyPaid = ($order->total_paid > 0)  && ($order->total_paid < $order->total);
-
-        $result = $isPartiallyPaid === $expectedBoolValue;
-
-        Log::debug('Automation condition', [
-            'order_number' => $order->order_number,
-            'result' => $result,
-            'class' => class_basename(self::class),
-            'total_paid' => $order->total_paid,
-            'expected' => $expectedBoolValue,
-            'actual' => $isPartiallyPaid
-        ]);
-
-        return $result;
+        return $query->whereRaw('((total_paid > 0) AND (total_paid < total))');
     }
 }
