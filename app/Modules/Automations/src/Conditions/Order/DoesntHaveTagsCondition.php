@@ -12,10 +12,7 @@ class DoesntHaveTagsCondition extends BaseOrderConditionAbstract
 {
     public static function addQueryScope(Builder $query, $expected_value): Builder
     {
-        if (trim($expected_value) === '') {
-            // empty value automatically invalidates query
-            return $query->whereRaw('( "has_tags_condition"="" )');
-        }
+        static::invalidateQueryIf($query, trim($expected_value) === '');
 
         $tagsArray = explode(',', $expected_value);
 

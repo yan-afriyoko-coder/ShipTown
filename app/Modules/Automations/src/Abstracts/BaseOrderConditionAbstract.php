@@ -30,6 +30,18 @@ abstract class BaseOrderConditionAbstract
         return $query;
     }
 
+    protected static function invalidateQueryIf($query, bool $shouldInvalidate): void
+    {
+        if ($shouldInvalidate) {
+            // empty value automatically invalidates query
+            $query->whereRaw('(1=2)');
+        }
+    }
+
+    protected static function invalidateQueryUnless($query, bool $shouldInvalidate): void
+    {
+        static::invalidateQueryIf($query, ! $shouldInvalidate);
+    }
 
     /**
      * @param string $expected_value

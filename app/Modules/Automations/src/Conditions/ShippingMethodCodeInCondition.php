@@ -17,10 +17,7 @@ class ShippingMethodCodeInCondition extends BaseOrderConditionAbstract
      */
     public static function addQueryScope(Builder $query, $expected_value): Builder
     {
-        if (trim($expected_value) === '') {
-            // empty value automatically invalidates query
-            return $query->whereRaw('(1=2)');
-        }
+        static::invalidateQueryIf($query, trim($expected_value) === '');
 
         $shippingMethods = explode(',', $expected_value);
 
