@@ -3,7 +3,7 @@
 namespace App\Modules\Automations\src\Conditions\Order;
 
 use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  *
@@ -11,21 +11,12 @@ use Illuminate\Support\Facades\Log;
 class ShippingMethodCodeEqualsCondition extends BaseOrderConditionAbstract
 {
     /**
-     * @param $condition_value
-     * @return bool
+     * @param Builder $query
+     * @param $expected_value
+     * @return Builder
      */
-    public function isValid($condition_value): bool
+    public static function addQueryScope(Builder $query, $expected_value): Builder
     {
-        $result = $this->event->order->shipping_method_code === $condition_value;
-
-        Log::debug('Automation condition', [
-            'order_number' => $this->event->order->order_number,
-            'result' => $result,
-            'class' => class_basename(self::class),
-            'expected_shipping_method_code' => $condition_value,
-            'actual_shipping_method_code' => $this->event->order->shipping_method_code,
-        ]);
-
-        return $result;
+        return $query->where('shipping_method_code', '=', $expected_value);
     }
 }
