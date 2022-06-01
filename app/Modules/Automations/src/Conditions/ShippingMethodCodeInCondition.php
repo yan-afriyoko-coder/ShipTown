@@ -19,7 +19,7 @@ class ShippingMethodCodeInCondition extends BaseOrderConditionAbstract
     {
         if (trim($expected_value) === '') {
             // empty value automatically invalidates query
-            return $query->whereRaw('( "has_tags_condition"="" )');
+            return $query->whereRaw('(1=2)');
         }
 
         $shippingMethods = explode(',', $expected_value);
