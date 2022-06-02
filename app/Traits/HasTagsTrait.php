@@ -14,8 +14,8 @@ use Spatie\Tags\Tag;
 trait HasTagsTrait
 {
     use HasTags {
-        attachTag as traitHasTagsAttachTag;
-        detachTag as traitHasTagsDetachTag;
+        attachTags as originalAttachTags;
+        detachTags as originalDetachTags;
         scopeWithAllTags as traitHasTagsScopeWithAllTags;
     }
 
@@ -56,47 +56,37 @@ trait HasTagsTrait
     }
 
     /**
-     * @param string|Tag  $tag
+     * @param array $tags
      * @param string|null $type
-     *
-     * @return self
+     * @return $this
      */
-    public function attachTag($tag, string $type = null): self
+    public function attachTags($tags, string $type = null): self
     {
-        try {
-            if ($this->hasTags([$tag])) {
-                return $this;
-            }
-
-            $this->traitHasTagsAttachTag($tag, $type);
-            $this->onTagAttached($tag);
-            $this->log('"'.$tag.'" tag attached');
-        } catch (Exception $exception) {
-            $this->log("Could not attach '{$tag}'' tag");
-        }
+        collect($tags)
+            ->filter()
+            ->each(function ($tag) use ($type) {
+                $this->originalAttachTags([$tag], $type);
+                $this->onTagAttached($tag);
+                $this->log('attached "'.$tag.'" tag');
+            });
 
         return $this;
     }
 
     /**
-     * @param string|Tag  $tag
+     * @param array $tags
      * @param string|null $type
-     *
      * @return $this
      */
-    public function detachTag($tag, string $type = null): self
+    public function detachTags($tags, string $type = null): self
     {
-        try {
-            if ($this->doesNotHaveTags([$tag])) {
-                return $this;
-            }
-
-            $this->traitHasTagsDetachTag($tag, $type);
-            $this->onTagDetached($tag);
-            $this->log('"'.$tag.'" tag detached');
-        } catch (Exception $exception) {
-            $this->log("Could not detach '{$tag}'' tag");
-        }
+        collect($tags)
+            ->filter()
+            ->each(function ($tag) use ($type) {
+                $this->originalDetachTags($tag, $type);
+                $this->onTagDetached($tag);
+                $this->log('detached "'.$tag.'" tag');
+            });
 
         return $this;
     }
