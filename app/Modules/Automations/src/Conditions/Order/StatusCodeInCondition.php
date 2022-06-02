@@ -17,9 +17,11 @@ class StatusCodeInCondition extends BaseOrderConditionAbstract
      */
     public static function addQueryScope(Builder $query, $expected_value): Builder
     {
-        static::invalidateQueryIf($query, trim($expected_value) === '');
-
-        $expectedStatuses = explode(',', $expected_value);
+        $expectedStatuses = collect(explode(',', $expected_value))
+            ->filter()
+            ->transform(function ($record) {
+                return trim($record);
+            });
 
         return $query->whereIn('status_code', $expectedStatuses);
     }
