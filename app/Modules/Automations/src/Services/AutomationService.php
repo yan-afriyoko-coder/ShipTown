@@ -32,7 +32,8 @@ class AutomationService
                 $c::addQueryScope($query, $condition->condition_value);
             });
 
-        $query->get()
+        $query->inRandomOrder()
+            ->get()
             ->each(function (Order $order) use ($automation) {
                 $event = new ActiveOrderCheckEvent($order);
                 AutomationService::validateAndRunAutomation($automation, $event);
