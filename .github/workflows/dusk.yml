@@ -4,6 +4,7 @@ on: [push]
 env:
   APP_URL: "http://127.0.0.1:8000"
   APP_ENV: local
+  DB_DATABASE: products_management
   DB_USERNAME: root
   DB_PASSWORD: root
 
