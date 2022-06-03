@@ -1,7 +1,11 @@
 name: CI
 on: [push]
-jobs:
 
+env:
+  DB_USERNAME: root
+  DB_PASSWORD: root
+
+jobs:
   dusk-php:
     runs-on: ubuntu-20.04
     steps:
