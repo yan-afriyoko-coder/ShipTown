@@ -11,8 +11,6 @@ class OrderMail extends TemplateMailable
 {
     use Queueable, SerializesModels;
 
-    private $template;
-
     public array $variables;
 
     /**
@@ -22,7 +20,7 @@ class OrderMail extends TemplateMailable
      */
     public function __construct(MailTemplate $template, array $variables = [])
     {
-        $this->template = $template;
+        $this->mailTemplate = $template;
         $this->variables = $variables;
     }
 
@@ -33,8 +31,8 @@ class OrderMail extends TemplateMailable
      */
     public function build(): self
     {
-        if ($this->template->reply_to) {
-            $this->replyTo($this->template->reply_to);
+        if ($this->mailTemplate->reply_to) {
+            $this->replyTo($this->mailTemplate->reply_to);
         }
 
         return $this;

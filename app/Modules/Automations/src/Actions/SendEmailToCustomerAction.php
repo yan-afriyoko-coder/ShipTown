@@ -7,6 +7,7 @@ use App\Mail\ShipmentConfirmationMail;
 use App\Models\MailTemplate;
 use App\Models\Order;
 use App\Modules\Automations\src\Abstracts\BaseOrderActionAbstract;
+use Illuminate\Contracts\Mail\Mailable;
 use Illuminate\Support\Facades\Mail;
 
 /**
@@ -28,13 +29,19 @@ class SendEmailToCustomerAction extends BaseOrderActionAbstract
             ->with('orderShipments', 'orderProducts', 'shippingAddress')
             ->first();
 
-        $template = new ShipmentConfirmationMail([
+        /** @var MailTemplate $template */
+        $template = MailTemplate::query()
+            ->where('code', $options)
+            ->where('mailable', OrderMail::class)
+            ->first();
+
+        $email = new OrderMail($template, [
             'order' => $order->toArray(),
             'shipments' => $order->orderShipments->toArray(),
         ]);
 
         Mail::to($this->order->shippingAddress->email)
-            ->send($template);
+            ->send($email);
 
         return true;
     }

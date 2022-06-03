@@ -14,7 +14,7 @@ use Spatie\MailTemplates\TemplateMailable;
  * @property string reply_to
  * @property string html_template
  */
-class MailTemplate extends BaseModel
+class MailTemplate extends \Spatie\MailTemplates\Models\MailTemplate
 {
     protected $fillable = [
         'code',
