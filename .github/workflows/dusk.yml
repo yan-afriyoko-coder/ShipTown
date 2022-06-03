@@ -28,6 +28,8 @@ jobs:
         run: php artisan dusk:chrome-driver `/opt/google/chrome/chrome --version | cut -d " " -f3 | cut -d "." -f1`
       - name: Start Chrome Driver
         run: ./vendor/laravel/dusk/bin/chromedriver-linux &
+      - name: Migrate database
+        run: php artisan migrate:fresh --force
       - name: Run Laravel Server
         run: php artisan serve --no-reload &
       - name: Run Dusk Tests
