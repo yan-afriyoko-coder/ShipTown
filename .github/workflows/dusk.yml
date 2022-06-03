@@ -2,6 +2,7 @@ name: CI
 on: [push]
 
 env:
+  APP_ENV: local
   DB_USERNAME: root
   DB_PASSWORD: root
 
