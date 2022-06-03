@@ -3,18 +3,19 @@
 namespace Tests\Feature\Modules\Automations\Actions;
 
 use App\Events\Order\ActiveOrderCheckEvent;
+use App\Mail\JustTesting;
 use App\Mail\OrderMail;
+use App\Mail\ShipmentConfirmationMail;
 use App\Models\MailTemplate;
 use App\Models\Order;
 use App\Models\ShippingLabel;
 use App\Modules\Automations\src\Actions\SendEmailToCustomerAction;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class SendEmailToCustomerActionTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      */
     public function test_successful_notification()
@@ -23,10 +24,18 @@ class SendEmailToCustomerActionTest extends TestCase
         $orderShipment = factory(ShippingLabel::class)->create();
 
         $event = new ActiveOrderCheckEvent($order);
+
         $action = new SendEmailToCustomerAction($event);
 
+        Mail::fake();
+
         // act
-        $actionSucceeded = $action->handle('');
+        $actionSucceeded = $action->handle('ready_for_collection_notification');
+
+        Mail::assertSent(OrderMail::class, function ($mail) {
+            $this->assertEquals('ready_for_collection_notification', $mail->getMailTemplate()->code);
+            return true;
+        });
 
         // validate
         $this->assertTrue($actionSucceeded, 'Action failed');
