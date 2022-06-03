@@ -2,6 +2,7 @@ name: CI
 on: [push]
 
 env:
+  APP_URL: "http://127.0.0.1:8000"
   APP_ENV: local
   DB_USERNAME: root
   DB_PASSWORD: root
@@ -31,12 +32,10 @@ jobs:
         run: ./vendor/laravel/dusk/bin/chromedriver-linux &
       - name: Migrate database
         run: php artisan migrate:fresh --force
-      - name: Run Laravel Server
-        run: php artisan serve &
+      - name: Run Phpunit Tests
+        run: phpunit
       - name: Run Dusk Tests
-        env:
-          APP_URL: "http://127.0.0.1:8000"
-        run: php artisan dusk
+        run: php artisan serve & php artisan dusk
       - name: Upload Screenshots
         if: failure()
         uses: actions/upload-artifact@v2
