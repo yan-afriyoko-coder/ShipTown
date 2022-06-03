@@ -33,7 +33,7 @@ jobs:
       - name: Migrate database
         run: php artisan migrate:fresh --force
       - name: Run Phpunit Tests
-        run: phpunit
+        run: vendor/bin/phpunit
       - name: Run Dusk Tests
         run: php artisan serve & php artisan dusk
       - name: Upload Screenshots

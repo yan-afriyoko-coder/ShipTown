@@ -8,7 +8,7 @@ use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
 
-class FailedApiCallTest extends DuskTestCase
+class ProductsPageTest extends DuskTestCase
 {
     /**
      * A basic browser test example.
