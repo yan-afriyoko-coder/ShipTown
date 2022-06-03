@@ -37,7 +37,7 @@ abstract class DuskTestCase extends BaseTestCase
         ]);
 
         return RemoteWebDriver::create(
-            env('APP_URL'),
+            'http://localhost:9515',
             DesiredCapabilities::chrome()->setCapability(
                 ChromeOptions::CAPABILITY,
                 $options
