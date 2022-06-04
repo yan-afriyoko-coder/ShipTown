@@ -5,11 +5,9 @@ namespace App\Modules\Automations\src\Services;
 use App\Events\Order\ActiveOrderCheckEvent;
 use App\Models\Order;
 use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
-use App\Modules\Automations\src\Jobs\RunAutomationsOnActiveOrdersJob;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
-use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
