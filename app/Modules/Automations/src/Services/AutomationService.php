@@ -32,28 +32,27 @@ class AutomationService
         $query->inRandomOrder()
             ->get()
             ->each(function (Order $order) use ($automation) {
-                $event = new ActiveOrderCheckEvent($order);
-                AutomationService::validateAndRunAutomation($automation, $event);
+                AutomationService::validateAndRunAutomation($automation, $order);
             });
     }
 
     /**
      * @param Automation $automation
-     * @param ActiveOrderCheckEvent $event
+     * @param Order $order
      */
-    public static function validateAndRunAutomation(Automation $automation, ActiveOrderCheckEvent $event)
+    public static function validateAndRunAutomation(Automation $automation, Order $order)
     {
-        $allConditionsPassed = $automation->allConditionsTrue($event);
+        $allConditionsPassed = $automation->allConditionsTrue(new ActiveOrderCheckEvent($order));
 
         if ($allConditionsPassed === true) {
             $automation->actions
-                ->each(function (Action $action) use ($event) {
-                    AutomationService::runAction($action, $event->order);
+                ->each(function (Action $action) use ($order) {
+                    AutomationService::runAction($action, $order);
                 });
         }
 
         Log::debug('Ran automation', [
-            'order_number' => $event->order->order_number,
+            'order_number' => $order->order_number,
             'event_class' => class_basename($automation),
             'automation_name' => $automation->name,
             'all_conditions_passed' => $allConditionsPassed
