@@ -11,6 +11,7 @@ use App\Models\Warehouse;
 use App\Modules\Automations\src\Actions\Order\SplitOrderToWarehouseCodeAction;
 use App\Modules\Automations\src\AutomationsServiceProvider;
 use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
+use App\Modules\Automations\src\Jobs\RunAutomationsOnActiveOrdersJob;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
@@ -86,7 +87,7 @@ class SplitOrderToWarehouseCodeActionTest extends TestCase
             $automation->save();
         });
 
-        AutomationService::dispatchAutomationsOnActiveOrders();
+        RunAutomationsOnActiveOrdersJob::dispatch();
 
         // we will have original order left + X new ones
         $this->assertEquals(1 + $random_number, Order::count());

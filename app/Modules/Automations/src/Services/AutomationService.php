@@ -12,7 +12,6 @@ use App\Modules\Automations\src\Models\Condition;
 use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Fluent;
 
 /**
  *
@@ -102,18 +101,5 @@ class AutomationService
     public static function dispatchAutomationsOn(Order $order): PendingDispatch
     {
         return RunAutomationsOnActiveOrdersJob::dispatch($order->getKey());
-    }
-
-    /**
-     * @return PendingDispatch|Fluent
-     */
-    public static function dispatchAutomationsOnActiveOrders()
-    {
-        return RunAutomationsOnActiveOrdersJob::dispatchUnless(
-            \romanzipp\QueueMonitor\Models\Monitor::query()
-                ->where('name', '=', RunAutomationsOnActiveOrdersJob::class)
-                ->whereNull('finished_at')
-                ->exists()
-        );
     }
 }
