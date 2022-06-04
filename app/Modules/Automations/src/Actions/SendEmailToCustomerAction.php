@@ -3,11 +3,9 @@
 namespace App\Modules\Automations\src\Actions;
 
 use App\Mail\OrderMail;
-use App\Mail\ShipmentConfirmationMail;
 use App\Models\MailTemplate;
 use App\Models\Order;
 use App\Modules\Automations\src\Abstracts\BaseOrderActionAbstract;
-use Illuminate\Contracts\Mail\Mailable;
 use Illuminate\Support\Facades\Mail;
 
 /**

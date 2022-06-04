@@ -50,7 +50,7 @@ class AutomationService
         if ($allConditionsPassed === true) {
             $automation->actions
                 ->each(function (Action $action) use ($event) {
-                    AutomationService::runAction($action, $event);
+                    AutomationService::runAction($action, $event->order);
                 });
         }
 
@@ -64,16 +64,16 @@ class AutomationService
 
     /**
      * @param Action $action
-     * @param ActiveOrderCheckEvent $event
+     * @param Order $order
      */
-    private static function runAction(Action $action, ActiveOrderCheckEvent $event): void
+    private static function runAction(Action $action, Order $order): void
     {
-        $runAction = new $action->action_class($event);
+        $runAction = new $action->action_class($order);
 
         $runAction->handle($action->action_value);
 
         Log::debug('Executed Order Action', [
-            'order_number' => $event->order->order_number,
+            'order_number' => $order->order_number,
             'action_class' => class_basename($action->action_class),
             'action_value' => $action->action_value,
         ]);

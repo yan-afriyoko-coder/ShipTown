@@ -2,38 +2,26 @@
 
 namespace App\Modules\Automations\src\Actions\Order;
 
-use App\Events\Order\ActiveOrderCheckEvent;
-use App\Events\Order\OrderCreatedEvent;
-use App\Events\Order\OrderUpdatedEvent;
 use App\Models\OrderComment;
-use Log;
+use App\Modules\Automations\src\Abstracts\BaseOrderActionAbstract;
+use Illuminate\Support\Facades\Log;
 
-class AddOrderCommentAction
+class AddOrderCommentAction extends BaseOrderActionAbstract
 {
     /**
-     * @var ActiveOrderCheckEvent|OrderCreatedEvent|OrderUpdatedEvent
+     * @param string $options
      */
-    private $event;
-
-    public function __construct($event)
-    {
-        $this->event = $event;
-    }
-
-    /**
-     * @param $value
-     */
-    public function handle($value)
+    public function handle(string $options = '')
     {
         Log::debug('Automation Action', [
-            'order_number' => $this->event->order->order_number,
+            'order_number' => $this->order->order_number,
             'class' => class_basename(self::class),
-            'comment' => $value,
+            'comment' => $options,
         ]);
 
         $comment = new OrderComment();
-        $comment->comment = $value;
-        $comment->order_id = $this->event->order->getKey();
+        $comment->comment = $options;
+        $comment->order_id = $this->order->getKey();
         $comment->save();
     }
 }

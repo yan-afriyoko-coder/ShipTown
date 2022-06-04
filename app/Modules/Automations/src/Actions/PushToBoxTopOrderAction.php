@@ -2,7 +2,6 @@
 
 namespace App\Modules\Automations\src\Actions;
 
-use App\Models\Order;
 use App\Models\OrderShipment;
 use App\Modules\Automations\src\Abstracts\BaseOrderActionAbstract;
 use App\Modules\BoxTop\src\Models\OrderLock;

@@ -2,34 +2,22 @@
 
 namespace App\Modules\Automations\src\Actions\Order;
 
-use App\Events\Order\ActiveOrderCheckEvent;
-use App\Events\Order\OrderCreatedEvent;
-use App\Events\Order\OrderUpdatedEvent;
-use Log;
+use App\Modules\Automations\src\Abstracts\BaseOrderActionAbstract;
+use Illuminate\Support\Facades\Log;
 
-class LogMessageAction
+class LogMessageAction extends BaseOrderActionAbstract
 {
     /**
-     * @var ActiveOrderCheckEvent|OrderCreatedEvent|OrderUpdatedEvent
+     * @param string $options
      */
-    private $event;
-
-    public function __construct($event)
-    {
-        $this->event = $event;
-    }
-
-    /**
-     * @param $value
-     */
-    public function handle($value)
+    public function handle(string $options = '')
     {
         Log::debug('Automation Action', [
-            'order_number' => $this->event->order->order_number,
+            'order_number' => $this->order->order_number,
             'class' => class_basename(self::class),
-            'message' => $value,
+            'message' => $options,
         ]);
 
-        $this->event->order->log($value);
+        $this->order->log($options);
     }
 }

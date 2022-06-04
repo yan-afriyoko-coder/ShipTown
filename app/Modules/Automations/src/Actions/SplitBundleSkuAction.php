@@ -7,8 +7,8 @@ use App\Models\Product;
 use App\Modules\Automations\src\Abstracts\BaseOrderActionAbstract;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\MessageBag;
 
 /**
  *
@@ -33,7 +33,7 @@ class SplitBundleSkuAction extends BaseOrderActionAbstract
      * @param string $options
      * @return bool
      */
-    public function handle(string $options = '')
+    public function handle(string $options = ''): bool
     {
         parent::handle($options);
 
