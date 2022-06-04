@@ -93,13 +93,4 @@ class AutomationService
     {
         return collect()->push(['class' => ActiveOrderCheckEvent::class]);
     }
-
-    /**
-     * @param Order $order
-     * @return PendingDispatch
-     */
-    public static function dispatchAutomationsOn(Order $order): PendingDispatch
-    {
-        return RunAutomationsOnActiveOrdersJob::dispatch($order->getKey());
-    }
 }
