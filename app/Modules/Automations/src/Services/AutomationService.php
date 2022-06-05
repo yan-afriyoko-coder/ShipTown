@@ -42,7 +42,7 @@ class AutomationService
      */
     public static function validateAndRunAutomation(Automation $automation, Order $order)
     {
-        $allConditionsPassed = $automation->allConditionsTrue(new ActiveOrderCheckEvent($order));
+        $allConditionsPassed = $automation->allConditionsTrue($order);
 
         if ($allConditionsPassed === true) {
             $automation->actions

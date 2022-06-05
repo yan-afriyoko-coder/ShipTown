@@ -58,9 +58,7 @@ class CanFulfillFromLocationConditionTest extends TestCase
             'quantity' => $orderProduct->quantity_ordered - 1,
         ]);
 
-        $event = new ActiveOrderCheckEvent($order);
-
-        $this->assertFalse($condition->isTrue($event));
+        $this->assertFalse($condition->isTrue($order));
     }
 
     /**
@@ -102,9 +100,7 @@ class CanFulfillFromLocationConditionTest extends TestCase
             'quantity' => 100,
         ]);
 
-        $event = new ActiveOrderCheckEvent($order);
-
-        $this->assertTrue($condition->isTrue($event));
+        $this->assertTrue($condition->isTrue($order));
     }
 
     /**
@@ -144,9 +140,7 @@ class CanFulfillFromLocationConditionTest extends TestCase
         $order = factory(Order::class)->create([]);
         factory(OrderProduct::class)->create(['order_id' => $order->getKey()]);
 
-        $event = new ActiveOrderCheckEvent($order);
-
-        $this->assertFalse($condition->isTrue($event));
+        $this->assertFalse($condition->isTrue($order));
     }
 
     /**
@@ -186,8 +180,6 @@ class CanFulfillFromLocationConditionTest extends TestCase
         $order = factory(Order::class)->create([]);
         factory(OrderProduct::class)->create(['order_id' => $order->getKey()]);
 
-        $event = new ActiveOrderCheckEvent($order);
-
-        $this->assertTrue($condition->isTrue($event));
+        $this->assertTrue($condition->isTrue($order));
     }
 }
