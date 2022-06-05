@@ -2,9 +2,7 @@
 
 namespace App\Modules\Automations\src\Abstracts;
 
-use App\Events\Order\ActiveOrderCheckEvent;
-use App\Events\Order\OrderCreatedEvent;
-use App\Events\Order\OrderUpdatedEvent;
+use App\Models\Order;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -13,16 +11,16 @@ use Illuminate\Database\Eloquent\Builder;
 abstract class BaseOrderConditionAbstract
 {
     /**
-     * @var ActiveOrderCheckEvent|OrderCreatedEvent|OrderUpdatedEvent
+     * @var Order
      */
-    protected $event;
+    protected Order $order;
 
     /**
-     * @param $event
+     * @param Order $order
      */
-    public function __construct($event)
+    public function __construct(Order $order)
     {
-        $this->event = $event;
+        $this->order = $order;
     }
 
     public static function addQueryScope(Builder $query, $expected_value): Builder
@@ -33,7 +31,7 @@ abstract class BaseOrderConditionAbstract
     protected static function invalidateQueryIf($query, bool $shouldInvalidate): void
     {
         if ($shouldInvalidate) {
-            $query->whereRaw('(1=2)');
+            $query->whereRaw('0 = 1');
         }
     }
 

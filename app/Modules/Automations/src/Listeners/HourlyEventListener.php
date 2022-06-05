@@ -3,6 +3,7 @@
 namespace App\Modules\Automations\src\Listeners;
 
 use App\Events\HourlyEvent;
+use App\Modules\Automations\src\Jobs\RunAutomationsOnActiveOrdersJob;
 use App\Modules\Automations\src\Services\AutomationService;
 
 class HourlyEventListener
@@ -12,6 +13,6 @@ class HourlyEventListener
      */
     public function handle(HourlyEvent $hourlyEvent)
     {
-        AutomationService::dispatchAutomationsOnActiveOrders();
+        RunAutomationsOnActiveOrdersJob::dispatch();
     }
 }

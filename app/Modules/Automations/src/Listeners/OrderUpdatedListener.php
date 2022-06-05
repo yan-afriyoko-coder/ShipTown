@@ -3,7 +3,7 @@
 namespace App\Modules\Automations\src\Listeners;
 
 use App\Events\Order\OrderUpdatedEvent;
-use App\Modules\Automations\src\Services\AutomationService;
+use App\Modules\Automations\src\Jobs\RunAutomationsOnActiveOrdersJob;
 
 class OrderUpdatedListener
 {
@@ -12,6 +12,6 @@ class OrderUpdatedListener
      */
     public function handle(OrderUpdatedEvent $event)
     {
-        AutomationService::dispatchAutomationsOn($event->order);
+        RunAutomationsOnActiveOrdersJob::dispatch($event->order->getKey());
     }
 }

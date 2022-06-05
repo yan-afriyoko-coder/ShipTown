@@ -3,6 +3,7 @@
 namespace App\Modules\Automations\src\Models;
 
 use App\BaseModel;
+use App\Models\Order;
 use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -45,14 +46,14 @@ class Automation extends BaseModel
 
 
     /**
-     * @param $event
+     * @param Order $order
      * @return bool
      */
-    public function allConditionsTrue($event): bool
+    public function allConditionsTrue(Order $order): bool
     {
         return $this->conditions
-            ->every(function (Condition $condition) use ($event) {
-                return $condition->isTrue($event);
+            ->every(function (Condition $condition) use ($order) {
+                return $condition->isTrue($order);
             });
     }
 

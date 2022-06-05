@@ -81,8 +81,7 @@ class SplitBundleSkuActionTest extends TestCase
 
     public function test_incorrect_inputs()
     {
-        $event = new ActiveOrderCheckEvent($this->order);
-        $action = new SplitBundleSkuAction($event);
+        $action = new SplitBundleSkuAction($this->order);
 
         $this->assertFalse($action->handle(''), 'Blank value should not be allowed');
         $this->assertFalse($action->handle('123'), 'Two SKUs should be present');

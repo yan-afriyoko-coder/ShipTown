@@ -35,8 +35,7 @@ class SendOrderEmailActionTest extends TestCase
         ]);
 
         $order = factory(Order::class)->create();
-        $event = new ActiveOrderCheckEvent($order);
-        $action = new SendOrderEmailAction($event);
+        $action = new SendOrderEmailAction($order);
 
         // act
         $actionSucceeded = $action->handle($template->code);

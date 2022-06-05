@@ -3,14 +3,11 @@
 namespace Tests\Feature\Modules\Automations\Actions;
 
 use App\Events\Order\ActiveOrderCheckEvent;
-use App\Mail\JustTesting;
 use App\Mail\OrderMail;
-use App\Mail\ShipmentConfirmationMail;
 use App\Models\MailTemplate;
 use App\Models\Order;
 use App\Models\ShippingLabel;
 use App\Modules\Automations\src\Actions\SendEmailToCustomerAction;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
@@ -23,9 +20,7 @@ class SendEmailToCustomerActionTest extends TestCase
         $order = factory(Order::class)->create();
         $orderShipment = factory(ShippingLabel::class)->create();
 
-        $event = new ActiveOrderCheckEvent($order);
-
-        $action = new SendEmailToCustomerAction($event);
+        $action = new SendEmailToCustomerAction($order);
 
         Mail::fake();
 
@@ -54,8 +49,8 @@ class SendEmailToCustomerActionTest extends TestCase
         ]);
 
         $order = factory(Order::class)->create();
-        $event = new ActiveOrderCheckEvent($order);
-        $action = new SendEmailToCustomerAction($event);
+
+        $action = new SendEmailToCustomerAction($order);
 
         // act
         $actionSucceeded = $action->handle($template->code);

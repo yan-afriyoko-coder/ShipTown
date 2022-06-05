@@ -2,7 +2,6 @@
 
 namespace App\Modules\Automations\src\Jobs;
 
-use App\Events\Order\ActiveOrderCheckEvent;
 use App\Models\Order;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Services\AutomationService;
@@ -42,7 +41,7 @@ class RunAutomationsOnActiveOrdersJob implements ShouldQueue
                 $orders = self::ordersSelectQuery($automation);
 
                 $orders->each(function (Order $order) use ($automation) {
-                    AutomationService::validateAndRunAutomation($automation, new ActiveOrderCheckEvent($order));
+                    AutomationService::validateAndRunAutomation($automation, $order);
                 });
             });
     }

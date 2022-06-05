@@ -2,8 +2,6 @@
 
 namespace App\Modules\Automations\src\Abstracts;
 
-use App\Events\Order\OrderCreatedEvent;
-use App\Events\Order\OrderUpdatedEvent;
 use App\Models\Order;
 use Illuminate\Support\Facades\Log;
 
@@ -13,19 +11,13 @@ use Illuminate\Support\Facades\Log;
 abstract class BaseOrderActionAbstract
 {
     /**
-    * @var OrderCreatedEvent|OrderUpdatedEvent
-    */
-    private $event;
-
-    /**
      * @var Order
      */
     public Order $order;
 
-    public function __construct($event)
+    public function __construct($order)
     {
-        $this->event = $event;
-        $this->order = $event->order;
+        $this->order = $order;
     }
 
     /**
@@ -34,7 +26,7 @@ abstract class BaseOrderActionAbstract
     public function handle(string $options = '')
     {
         Log::debug('automation.action.executing', [
-            'order_number' => $this->event->order->order_number,
+            'order_number' => $this->order->order_number,
             'class' => class_basename(self::class),
             '$options' => $options,
         ]);
