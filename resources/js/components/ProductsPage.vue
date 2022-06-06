@@ -87,7 +87,7 @@
                 this.showLoading();
 
                 const params = {
-                    'filter[sku_like]': this.getUrlParameter('sku'),
+                    'filter[sku]': this.getUrlParameter('sku'),
                     'filter[search]': this.getUrlParameter('search'),
                     'filter[has_tags]': this.getUrlParameter('has_tags'),
                     'filter[without_tags]': this.getUrlParameter('without_tags'),
