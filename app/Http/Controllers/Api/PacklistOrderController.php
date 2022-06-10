@@ -22,6 +22,15 @@ class PacklistOrderController extends Controller
      */
     public function index(PacklistOrderIndexRequest $request): OrderResource
     {
+        // we clear packer ID from other orders first
+        Order::query()
+            ->where(['packer_user_id' => Auth::id()])
+            ->whereNull('packed_at')
+            ->get()
+            ->each(function (Order $order) {
+                $order->update(['packer_user_id' => null]);
+            });
+
         $report = new Report();
         $report->fields = [
             'id'                                => 'order.id',
@@ -48,25 +57,18 @@ class PacklistOrderController extends Controller
         /** @var Order $order */
         $order = $report->queryBuilder()->firstOrFail();
 
-        Order::query()
-            ->where(['packer_user_id' => Auth::id()])
-            ->whereNull('packed_at')
-            ->get()
-            ->each(function (Order $order) {
-                $order->update(['packer_user_id' => null]);
-            });
-
-        $order = Order::where(['id' => $order->id])
+        $rowsUpdated = Order::query()
+            ->where(['id' => $order->id])
             ->where(['updated_at' => $order->updated_at])
             ->whereNull('packer_user_id')
-            ->first();
+            ->update(['packer_user_id' => Auth::id()]);
 
-        $wasReserved = $order->update(['packer_user_id' => Auth::id()]);
-
-        if (!$wasReserved) {
+        if ($rowsUpdated === 0) {
             $this->respondBadRequest('Order could not be reserved, try again');
         }
 
+        // we update it once again trough Eloquent for events etc
+        $order->update(['packer_user_id' => Auth::id()]);
         $order->log('received order for packing');
 
         return new OrderResource(Order::findOrFail($order->id));
