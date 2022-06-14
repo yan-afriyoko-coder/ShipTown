@@ -1,13 +1,18 @@
 <template>
     <div>
-        <input ref="barcode" id="barcodeInput" class="form-control" :placeholder="placeholder"
+        <input class="form-control"
+               :placeholder="placeholder"
+               ref="barcode"
+               id="barcodeInput"
+               dusk="barcode-input-field"
                v-model="barcode"
                @focus="simulateSelectAll"
-               @keyup.enter="barcodeScanned(barcode)"/>
+               @keyup.enter="barcodeScanned(barcode)"
+        />
 
 
       <b-modal id="set-shelf-location-command-modal" @submit="updateShelfLocation" scrollable centered no-fade hide-header>
-        <input ref="barcode" id="set-shelf-location-command-modal-input" class="form-control" :placeholder="'Scan product to update shelf location: ' + command[1]"
+        <input id="set-shelf-location-command-modal-input" class="form-control" :placeholder="'Scan product to update shelf location: ' + command[1]"
                @focus="simulateSelectAll"
                @keyup.enter="updateShelfLocation"/>
       </b-modal>

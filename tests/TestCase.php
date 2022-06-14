@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App\Models\Inventory;
+use App\Models\InventoryMovement;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\OrderProductTotal;
@@ -35,5 +36,6 @@ abstract class TestCase extends BaseTestCase
         Warehouse::query()->forceDelete();
         Tag::query()->forceDelete();
         OrderProductTotal::query()->forceDelete();
+        InventoryMovement::query()->forceDelete();
     }
 }

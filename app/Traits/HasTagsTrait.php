@@ -3,7 +3,6 @@
 namespace App\Traits;
 
 use ArrayAccess;
-use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\Tags\HasTags;
 use Spatie\Tags\Tag;
@@ -67,7 +66,11 @@ trait HasTagsTrait
             ->each(function ($tag) use ($type) {
                 $this->originalAttachTags([$tag], $type);
                 $this->onTagAttached($tag);
-                $this->log('attached "'.$tag.'" tag');
+
+                // if LogsActivityTrait is used, we log it
+                if (in_array(LogsActivityTrait::class, class_uses_recursive($this))) {
+                    $this->log('attached "'.$tag.'" tag');
+                }
             });
 
         return $this;

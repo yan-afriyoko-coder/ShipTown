@@ -32,6 +32,13 @@ Route::prefix('settings')->group(function () {
     Route::view('automations', 'settings/automations')->name('settings.automations');
     Route::view('warehouses', 'settings/warehouses')->name('settings.warehouses');
     Route::view('modules/dpd-uk', 'settings/dpd-uk')->name('settings.modules.dpd-uk');
+
+    Route::namespace('Admin\Settings')->group(function () {
+        Route::namespace('Modules')->group(function () {
+            Route::get('modules/webhooks/subscriptions', 'Webhooks\SubscriptionController@index')
+                ->name('webhooks::subscriptions');
+        });
+    });
 });
 
 Route::prefix('tools')->group(function () {

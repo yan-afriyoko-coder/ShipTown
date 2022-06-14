@@ -20,7 +20,7 @@ return [
         'key'    => env('AWS_ACCESS_KEY_ID', ''),
         'secret' => env('AWS_SECRET_ACCESS_KEY', ''),
     ],
-    'region'    => env('AWS_REGION', 'us-east-1'),
+    'region'    => env('AWS_REGION', ''),
     'version'   => 'latest',
     'user_code' => env('AWS_USER_CODE'),
     'ua_append' => [

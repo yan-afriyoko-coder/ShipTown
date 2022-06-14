@@ -127,6 +127,10 @@
                                 {{ __('YouTube') }}
                             </a>
 
+                            <a class="dropdown-item" href="{{ route('stocktaking') }}">
+                                {{ __('Stocktaking') }}
+                            </a>
+
                             <!-- Logout -->
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                onclick="event.preventDefault();
