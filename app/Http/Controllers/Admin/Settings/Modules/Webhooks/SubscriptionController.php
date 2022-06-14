@@ -11,7 +11,7 @@ class SubscriptionController extends Controller
     public function index(WebhookSubscriptionIndexRequest $request)
     {
         if (WebhooksServiceProviderBase::isEnabled()) {
-            return view('webhooks::subscriptions');
+            return view('webhooks::WebhooksSubscriptionsPage');
         }
 
         return back()->with(['alert-warning-message' => 'Module disabled, please enable first']);

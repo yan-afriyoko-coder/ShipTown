@@ -22,7 +22,7 @@
                     </thead>
                     <tbody>
                     <template v-for="subscription in subscriptions">
-                        <tr key="1">
+                        <tr>
                             <td>{{ subscription['SubscriptionArn'] }}</td>
                             <td>{{ subscription['Endpoint'] }}</td>
                         </tr>

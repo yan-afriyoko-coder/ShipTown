@@ -12,7 +12,7 @@
                 </div>
             @endif
 
-            <webhooks-subscriptions></webhooks-subscriptions>
+            <webhooks-subscription-page></webhooks-subscription-page>
     </div>
 </div>
 @endsection
