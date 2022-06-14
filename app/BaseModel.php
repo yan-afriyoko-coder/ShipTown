@@ -11,8 +11,9 @@ use Illuminate\Database\Eloquent\Model;
  * Class BaseModel.
  *
  * @method static create(array $array)
-// * @method static where(array $array)
- * @method static firstOrCreate(array $array, array $array)
+ *
+ * @method static first()
+ * @method static firstOrUpdate(array $array, array $array1)
  * @method static findOrFail($id)
  * @method static updateOrCreate(array $array, array $array1)
  *

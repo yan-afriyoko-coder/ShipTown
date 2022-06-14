@@ -57,11 +57,15 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
         ],
     ];
 
-    public static function enableModule()
+    public static function enableModule(): bool
     {
-        parent::enableModule();
+        if (! parent::enableModule()) {
+            return false;
+        }
 
         Warehouse::firstOrCreate(['code' => '999'], ['name' => '999']);
+
+        return true;
     }
 
     public static function disabling(): bool

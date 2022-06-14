@@ -2,6 +2,7 @@
 
 namespace App\Modules\Webhooks\src\Services;
 
+use App\Modules\Webhooks\src\Models\WebhooksConfiguration;
 use AWS;
 use Aws\Exception\AwsException;
 use Aws\Result;
@@ -34,18 +35,31 @@ class SnsService
      */
     public Result $lastResponse;
 
+    public static function client()
+    {
+        return (new SnsService(''))->awsSnsClient;
+    }
     /**
      * SnsController constructor.
      *
-     * @param $topicName
+     * @param string $topicName
      */
-    public function __construct($topicName)
+    public function __construct(string $topicName = '')
     {
-        if (empty(config('aws.user_code')) === false) {
-            $this->awsSnsClient = AWS::createClient('sns');
-        }
+        $this->awsSnsClient = AWS::createClient('sns');
 
         $this->topicName = $topicName;
+    }
+
+    /**
+     * @return WebhooksConfiguration
+     */
+    public static function getConfiguration(): WebhooksConfiguration
+    {
+        /** @var WebhooksConfiguration $model */
+        $model = WebhooksConfiguration::query()->firstOrCreate([], []);
+
+        return $model;
     }
 
     /**
@@ -57,14 +71,17 @@ class SnsService
     }
 
     /**
+     * @param string|null $topic_name
      * @return bool
      */
-    public function createTopic(): bool
+    public function createTopic(string $topic_name = null): bool
     {
+        if ($topic_name === null) {
+            $topic_name = $this->getFullTopicName();
+        }
+
         try {
-            $this->awsSnsClient->createTopic([
-                'Name' => $this->getFullTopicName(),
-            ]);
+            $this->awsSnsClient->createTopic(['Name' => $topic_name,]);
         } catch (AwsException $e) {
             $this->lastException = $e;
             Log::critical('Could not create SNS topic', ['code' => $e->getStatusCode(), 'message' => $e->getMessage()]);
@@ -77,43 +94,37 @@ class SnsService
 
     /**
      * @param string $subscription_url
-     *
      * @return bool
      */
-    public function subscribeToTopic(string $subscription_url): bool
+    public static function subscribeToTopic(string $subscription_url): bool
     {
-        try {
-            $this->awsSnsClient->subscribe([
-                'Protocol'              => 'https',
-                'Endpoint'              => trim($subscription_url),
-                'ReturnSubscriptionArn' => true,
-                'TopicArn'              => $this->getTopicArn(),
-            ]);
-        } catch (AwsException $e) {
-            Log::critical(
-                'Could not subscribe to SNS topic',
-                ['code' => $e->getStatusCode(), 'message' => $e->getMessage()]
-            );
-
-            return false;
-        }
+        self::client()->subscribe([
+            'Protocol'              => 'https',
+            'Endpoint'              => trim($subscription_url),
+            'ReturnSubscriptionArn' => true,
+            'TopicArn'              => self::getConfiguration()->topic_arn,
+        ]);
 
         return true;
     }
 
     /**
      * @param string $message
-     *
+     * @param null $topic_name
      * @return bool
      */
-    public function publish(string $message): bool
+    public function publish(string $message, $topic_name = null): bool
     {
         if (is_null($this->awsSnsClient)) {
             return false;
         }
 
+        if ($topic_name === null) {
+            $topic_name = self::getFullTopicName($this->topicName);
+        }
+
         $notification = [
-            'TargetArn' => $this->getTopicArn(),
+            'TargetArn' => self::getTopicArn($topic_name),
             'Message'   => $message,
         ];
 
@@ -126,7 +137,7 @@ class SnsService
             Log::error('Could not publish SNS message', [
                 'code'           => $e->getStatusCode(),
                 'return_message' => $e->getMessage(),
-                'topic'          => $this->getTopicArn(),
+                'topic'          => self::getTopicArn($topic_name),
                 'message'        => $notification,
             ]);
 
@@ -135,7 +146,7 @@ class SnsService
             Log::error('Could not publish SNS message', [
                 'code'           => $e->getCode(),
                 'return_message' => $e->getMessage(),
-                'topic'          => $this->getTopicArn(),
+                'topic'          => self::getTopicArn($topic_name),
                 'message'        => $notification,
             ]);
 
@@ -144,13 +155,35 @@ class SnsService
     }
 
     /**
+     * @param string $message
+     * @param string $event_type
+     * @return Result
+     */
+    public static function publishNew(string $message, string $event_type): Result
+    {
+        $notification = [
+            'TargetArn' => self::getConfiguration()->topic_arn,
+            'Message'   => $message,
+            'MessageAttributes' => [
+                'EventType' => array(
+                    'DataType' => 'String',
+                    'StringValue' => $event_type,
+                ),
+            ],
+        ];
+
+        return self::client()->publish($notification);
+    }
+
+    /**
+     * @param null $topic_name
      * @return bool
      */
-    public function deleteTopic(): bool
+    public function deleteTopic($topic_name = null): bool
     {
         try {
             $this->awsSnsClient->deleteTopic([
-                'TopicArn' => $this->getTopicArn(),
+                'TopicArn' => self::getTopicArn($topic_name),
             ]);
         } catch (AwsException $e) {
             Log::critical('Could not delete SNS topic', ['code' => $e->getStatusCode(), 'message' => $e->getMessage()]);
@@ -162,17 +195,19 @@ class SnsService
     }
 
     /**
+     * @param string $topic_name
      * @return string
      */
-    public function getFullTopicName(): string
+    public static function getFullTopicName(string $topic_name): string
     {
-        return config('sns.topic.prefix', '') . $this->topicName;
+        return config('sns.topic.prefix', '') . $topic_name;
     }
 
     /**
+     * @param string|null $topic_name
      * @return string
      */
-    private function getTopicArn(): string
+    public static function getTopicArn(string $topic_name = null): string
     {
         return implode(':', [
             'arn',
@@ -180,7 +215,7 @@ class SnsService
             'sns',
             config('aws.region'),
             config('aws.user_code'),
-            $this->getFullTopicName(),
+            $topic_name,
         ]);
     }
 }

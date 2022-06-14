@@ -30,7 +30,7 @@ class SnsControllerTest extends TestCase
         );
 
         $this->assertTrue(
-            $snsClient->subscribeToTopic('https://demo.products.management'),
+            SnsService::subscribeToTopic('https://demo.products.management'),
             'Could not subscribe to topic'
         );
 

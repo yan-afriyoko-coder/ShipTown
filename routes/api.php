@@ -18,13 +18,13 @@ Route::put('print/order/{order_number}/{view}', 'Api\PrintOrderController@store'
 
 RoutesBuilder::apiResource('modules/dpd-uk/dpd-uk-connections')->only(['index']);
 RoutesBuilder::apiResource('modules/printnode/printjobs')->only(['store']);
+RoutesBuilder::apiResource('modules/webhooks/subscriptions')->only(['index', 'store']);
 
 Route::apiResource('shipments', 'Api\ShipmentControllerNew', ['as' => 'new'])->only(['store']);
 Route::apiResource('shipping-services', 'Api\ShippingServiceController')->only(['index']);
 Route::apiResource('shipping-labels', 'Api\ShippingLabelController')->only(['store']);
 
-Route::post('settings/modules/automations/run', 'Api\Settings\Modules\RunAutomationController@store')
-    ->name('settings.modules.automations.run');
+Route::post('settings/modules/automations/run', 'Api\Settings\Modules\RunAutomationController@store')->name('settings.modules.automations.run');
 
 Route::apiResource('run/sync', 'Api\Run\SyncController')->only('index');
 Route::apiResource('run/sync/api2cart', 'Api\Run\SyncApi2CartController')->only('index');
@@ -38,6 +38,8 @@ Route::apiResource('products', 'Api\ProductController')->only(['index', 'store']
 Route::apiResource('product/aliases', 'Api\Product\ProductAliasController', ['as' => 'product'])->only(['index']);
 Route::apiResource('product/inventory', 'Api\Product\ProductInventoryController')->only(['index', 'store']);
 Route::apiResource('product/tags', 'Api\Product\ProductTagController')->only(['index']);
+
+Route::apiResource('inventory-movement', 'Api\InventoryMovementController')->only(['store']);
 
 Route::apiResource('order-check-request', 'Api\OrderCheckRequestController')->only(['store']);
 

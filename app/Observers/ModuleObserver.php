@@ -8,12 +8,18 @@ class ModuleObserver
 {
     public function saving(Module $module)
     {
-        if ($module->isAttributeChanged('enabled')) {
-            if ($module->enabled & $module->service_provider_class::enabling()) {
-                return true;
-            }
+        if ($module->isAttributeNotChanged('enabled')) {
+            return true;
+        }
 
+        if ($module->enabled === true) {
+            return $module->service_provider_class::enabling();
+        }
+
+        if ($module->enabled === true) {
             return $module->service_provider_class::disabling();
         }
+
+        return true;
     }
 }

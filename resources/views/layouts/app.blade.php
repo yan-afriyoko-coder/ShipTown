@@ -32,9 +32,20 @@
     <div id="app">
         <heartbeats></heartbeats>
 
-
         @if((request()->input('hide_nav_bar', false) === false))
             @include('layouts.nav')
+        @endif
+
+        @if (session('alert-success-message'))
+            <div class="alert alert-success" role="alert">{{ session('alert-success-message') }}</div>
+        @endif
+
+        @if (session('alert-warning-message'))
+            <div class="alert alert-warning" role="alert">{{ session('alert-warning-message') }}</div>
+        @endif
+
+        @if (session('alert-danger-message'))
+            <div class="alert alert-danger" role="alert">{{ session('alert-danger-message') }}</div>
         @endif
 
         <main class="py-0 pl-1 pr-2">

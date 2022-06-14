@@ -70,7 +70,7 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
     /**
      * @return bool
      */
-    public function isEnabled(): bool
+    public static function isEnabled(): bool
     {
         try {
             $module = Module::firstOrCreate([
@@ -86,22 +86,26 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
     }
 
     /**
-     *
+     * @return bool
      */
-    public static function enableModule()
+    public static function enableModule(): bool
     {
         $module = Module::firstOrCreate(['service_provider_class' => get_called_class()], ['enabled' => false]);
 
         if ($module->enabled) {
-            return;
+            return true;
         }
 
         $module->enabled = true;
-        $module->save();
+        if (! $module->save()) {
+            return false;
+        };
 
         app()->singleton(get_called_class(), get_called_class());
 
         App::register(get_called_class());
+
+        return true;
     }
 
     /**

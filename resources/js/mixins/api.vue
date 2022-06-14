@@ -19,6 +19,29 @@ export default {
         },
 
         methods: {
+            currentUser: function () {
+                return Vue.prototype.$currentUser;
+            },
+
+            apiGet(url, params) {
+                return axios.get(url, params)
+            },
+
+            apiPost(url, data) {
+                return axios.post(url, data)
+            },
+
+            displayApiCallError: function (error) {
+                console.log('api failed call response', error.response);
+
+                if (error.response.status === 422) {
+                    this.notifyError(JSON.stringify(error.response.data), {timeout: 0});
+                    return;
+                }
+
+                this.notifyError('API call failed: ' + error.response.status + ' ' + error.response.statusText, {timeout: 0});
+            },
+
             apiGetUserMe: function () {
                 return axios.get('/api/settings/user/me');
             },
@@ -33,6 +56,14 @@ export default {
 
             apiGetProducts: function(params) {
                 return axios.get('/api/products', {params: params});
+            },
+
+            apiGetInventory(params) {
+                return axios.get('/api/product/inventory', {params: params});
+            },
+
+            apiPostInventoryMovement(data) {
+                return axios.post('/api/inventory-movement', data);
             },
 
             apiKickProduct: function(sku) {

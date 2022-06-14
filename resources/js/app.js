@@ -169,6 +169,7 @@ Vue.component('automation-table', require('./components/Settings/AutomationTable
 Vue.component('warehouse-table', require('./components/Settings/WarehouseTable.vue').default);
 Vue.component('heartbeats', require('./components/Heartbeats.vue').default);
 Vue.component('api', require('./mixins/api').default);
+Vue.component('webhooks-subscriptions', require('../../app/Modules/Webhooks/resources/js/WebhooksSubscriptions').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
