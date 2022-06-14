@@ -26,6 +26,7 @@
                 <div>Stock: {{ inventory.quantity }}</div>
                 <input class="form-control" :placeholder="'New quantity'"
                        id="quantity-request-input"
+                       dusk="quantity-request-input"
                        v-model="quantity"
                        type="number"
                        inputmode="numeric"
@@ -108,6 +109,12 @@
             },
 
             submitStocktake: function () {
+                if (this.quantity < 0) {
+                    this.notifyError('Minus quantity not allowed');
+                    this.setFocusElementById(100, 'quantity-request-input', true, false)
+                    return;
+                }
+
                 this.$bvModal.hide('quantity-request-modal');
 
                 const delta_quantity = this.quantity - this.inventory.quantity;

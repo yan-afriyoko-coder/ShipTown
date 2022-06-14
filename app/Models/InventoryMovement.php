@@ -2,11 +2,18 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ *
+ */
 class InventoryMovement extends Model
 {
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'inventory_id',
         'product_id',
@@ -18,21 +25,33 @@ class InventoryMovement extends Model
         'user_id',
     ];
 
-    public function inventory()
+    /**
+     * @return BelongsTo
+     */
+    public function inventory(): BelongsTo
     {
-        $this->belongsTo(Inventory::class);
+        return $this->belongsTo(Inventory::class);
     }
 
-    public function product()
+    /**
+     * @return BelongsTo
+     */
+    public function product(): BelongsTo
     {
-        $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class);
     }
 
-    public function warehouse()
+    /**
+     * @return BelongsTo
+     */
+    public function warehouse(): BelongsTo
     {
-        $this->belongsTo(Warehouse::class);
+        return $this->belongsTo(Warehouse::class);
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

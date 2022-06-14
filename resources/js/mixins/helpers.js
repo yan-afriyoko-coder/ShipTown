@@ -71,7 +71,11 @@ export default {
 
             showError: function (message, options) {
                 const defaultOptions = {
-                    timeout: 5000
+                    closeOnClick: true,
+                    timeout: 0,
+                    buttons: [
+                        {text: 'OK', action: null},
+                    ]
                 };
 
                 this.$snotify.error(message, options ?? defaultOptions);
