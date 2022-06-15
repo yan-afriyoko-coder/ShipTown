@@ -27,7 +27,7 @@ class ProductsPageTest extends DuskTestCase
 
             $browser->loginAs($user)
                 ->visit('/products')
-                ->waitUntilMissingText('No products found.')
+                ->waitForText($product->name)
                 ->assertSee($product->name);
         });
     }
