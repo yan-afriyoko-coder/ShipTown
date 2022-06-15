@@ -154,7 +154,6 @@ class Product extends BaseModel
     {
         return QueryBuilder::for(Product::class)
             ->allowedFilters([
-                AllowedFilter::scope('search', 'whereHasText'),
                 AllowedFilter::exact('sku'),
                 AllowedFilter::exact('id'),
                 AllowedFilter::exact('sku'),
@@ -162,8 +161,10 @@ class Product extends BaseModel
                 AllowedFilter::exact('price'),
                 AllowedFilter::scope('inventory_source_location_id', 'addInventorySource')->ignore(['', null]),
 
+                AllowedFilter::scope('search', 'whereHasText'),
                 AllowedFilter::scope('has_tags', 'hasTags'),
                 AllowedFilter::scope('without_tags', 'withoutAllTags'),
+                AllowedFilter::scope('sku_or_alias', 'skuOrAlias'),
             ])
             ->allowedSorts([
                 'id',
@@ -179,6 +180,19 @@ class Product extends BaseModel
                 'prices',
                 'inventory.warehouse',
             ]);
+    }
+
+    public function scopeSkuOrAlias($query, string $value)
+    {
+        $query->where(function ($query) use ($value) {
+            return $query
+                    ->where(['sku' => $value])
+                    ->orWhereHas('aliases', function ($query) use ($value) {
+                        $query->where(['alias' => $value]);
+                    });
+        });
+
+        return $query;
     }
 
     public function setQuantityReservedAttribute($value)
