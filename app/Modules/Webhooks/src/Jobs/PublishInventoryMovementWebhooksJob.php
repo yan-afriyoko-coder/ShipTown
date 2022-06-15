@@ -31,6 +31,7 @@ class PublishInventoryMovementWebhooksJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws Exception
      */
     public function handle()
     {
@@ -57,8 +58,7 @@ class PublishInventoryMovementWebhooksJob implements ShouldQueue
                     ->whereIn('id', $pendingWebhookIds)
                     ->update(['reserved_at' => null]);
 
-                $this->fail();
-                return;
+                throw $exception;
             }
 
             $chunk = $query->get();
@@ -77,6 +77,8 @@ class PublishInventoryMovementWebhooksJob implements ShouldQueue
                 ->get()
         );
 
-        SnsService::publishNew($inventoryMovementsCollection->toJson(), 'InventoryMovement');
+        $payload = collect(['InventoryMovements' => $inventoryMovementsCollection]);
+
+        SnsService::publishNew($payload->toJson());
     }
 }

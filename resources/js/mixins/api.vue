@@ -32,14 +32,14 @@ export default {
             },
 
             displayApiCallError: function (error) {
-                console.log('api failed call response', error.response);
+                console.log('API failed call response', error.response);
 
                 if (error.response.status === 422) {
                     this.notifyError(JSON.stringify(error.response.data), {timeout: 0});
                     return;
                 }
 
-                this.notifyError('API call failed: ' + error.response.status + ' ' + error.response.statusText, {timeout: 0});
+                this.notifyError('API call failed: ' + error.response.status + ' ' + error.response.statusText);
             },
 
             apiGetUserMe: function () {

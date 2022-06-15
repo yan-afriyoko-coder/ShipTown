@@ -113,11 +113,11 @@ class Inventory extends BaseModel
                 AllowedFilter::exact('warehouse_id'),
                 AllowedFilter::exact('warehouse_code'),
                 AllowedFilter::exact('quantity_incoming'),
-                AllowedFilter::exact('product.sku'),
                 AllowedFilter::scope('quantity_available_between'),
                 AllowedFilter::scope('quantity_required_between'),
                 AllowedFilter::scope('restock_level_between'),
 
+                AllowedFilter::scope('product.sku_or_alias'),
                 AllowedFilter::scope('source_warehouse_code', 'addWarehouseSource'),
                 AllowedFilter::scope('inventory_source_quantity_available_between'),
             ])

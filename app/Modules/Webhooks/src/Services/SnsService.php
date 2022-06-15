@@ -156,20 +156,13 @@ class SnsService
 
     /**
      * @param string $message
-     * @param string $event_type
      * @return Result
      */
-    public static function publishNew(string $message, string $event_type): Result
+    public static function publishNew(string $message): Result
     {
         $notification = [
             'TargetArn' => self::getConfiguration()->topic_arn,
             'Message'   => $message,
-            'MessageAttributes' => [
-                'EventType' => array(
-                    'DataType' => 'String',
-                    'StringValue' => $event_type,
-                ),
-            ],
         ];
 
         return self::client()->publish($notification);

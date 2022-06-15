@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Modules\Webhooks\SubscriptionController;
+namespace Tests\External\Webhooks\Controllers\SubscriptionController;
 
 use App\Modules\Webhooks\src\Services\SnsService;
 use App\Modules\Webhooks\src\WebhooksServiceProviderBase;

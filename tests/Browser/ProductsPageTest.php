@@ -27,8 +27,7 @@ class ProductsPageTest extends DuskTestCase
 
             $browser->loginAs($user)
                 ->visit('/products')
-                ->screenshot('test')
-                ->assertDontSee('No products found.')
+                ->waitForText($product->name)
                 ->assertSee($product->name);
         });
     }
@@ -49,7 +48,7 @@ class ProductsPageTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)
                 ->visit('/products')
-                ->screenshot('test')
+                ->waitForText('No products found.')
                 ->assertSee('No products found.');
         });
     }
