@@ -5,6 +5,7 @@ namespace Tests\Feature\Modules\Automations\Conditions;
 use App\Events\Order\ActiveOrderCheckEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
 use App\Modules\Automations\src\AutomationsServiceProvider;
 use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
@@ -58,6 +59,7 @@ class OrderShippingMethodCodeEqualsConditionTest extends TestCase
 
         /** @var Order $order */
         $order = factory(Order::class)->create(['status_code' => 'paid', 'shipping_method_code' => 'store_pickup']);
+        factory(OrderProduct::class)->create(['order_id' => $order->getKey()]);
 
         ActiveOrderCheckEvent::dispatch($order);
 

@@ -4,6 +4,7 @@ namespace Tests\Feature\Modules\Automations;
 
 use App\Events\Order\ActiveOrderCheckEvent;
 use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
 use App\Modules\Automations\src\AutomationsServiceProvider;
 use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
@@ -50,6 +51,7 @@ class BasicModuleTest extends TestCase
 
         /** @var Order $order */
         $order = factory(Order::class)->create(['status_code' => 'paid']);
+        factory(OrderProduct::class)->create(['order_id' => $order->getKey()]);
 
         ActiveOrderCheckEvent::dispatch($order);
 

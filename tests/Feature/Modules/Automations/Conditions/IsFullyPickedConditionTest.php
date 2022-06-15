@@ -4,6 +4,7 @@ namespace Tests\Feature\Modules\Automations\Conditions;
 
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\OrderProductTotal;
 use App\Modules\Automations\src\Conditions\IsFullyPickedCondition;
 use Tests\TestCase;
 
@@ -43,6 +44,11 @@ class IsFullyPickedConditionTest extends TestCase
         $query = Order::query();
 
         IsFullyPickedCondition::addQueryScope($query, 'false');
+
+        ray(OrderProduct::all()->toArray());
+        ray(OrderProductTotal::all()->toArray());
+
+        ray($query->toSql());
 
         $this->assertEquals(2, $query->count());
     }

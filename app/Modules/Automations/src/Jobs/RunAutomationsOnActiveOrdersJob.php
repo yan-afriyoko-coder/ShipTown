@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 /**
@@ -49,9 +50,12 @@ class RunAutomationsOnActiveOrdersJob implements ShouldQueue
     public function ordersSelectQuery(Automation $automation)
     {
         $query = Order::query()
-            ->where(['is_active' => true])
             ->when($this->order_id, function ($query) {
                 $query->where(['id' => $this->order_id]);
+            })
+            ->where(['is_active' => true])
+            ->whereHas('orderProductsTotals', function ($query) {
+                $query->whereRaw('(orders_products_totals.quantity_ordered > 0)');
             });
 
         return $automation->addConditions($query);
