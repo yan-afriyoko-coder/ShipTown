@@ -20,7 +20,8 @@ class IsFullyPickedCondition extends BaseOrderConditionAbstract
         $expected_value = filter_var($expected_value, FILTER_VALIDATE_BOOL);
 
         return $query->whereHas('orderProductsTotals', function ($query) use ($expected_value) {
-            $query->where(DB::raw('(orders_products_totals.quantity_to_pick = 0)'), '=', $expected_value);
+            $query->whereRaw('(orders_products_totals.quantity_ordered > 0)')
+                ->where(DB::raw('(orders_products_totals.quantity_to_pick = 0)'), '=', $expected_value);
         });
     }
 }

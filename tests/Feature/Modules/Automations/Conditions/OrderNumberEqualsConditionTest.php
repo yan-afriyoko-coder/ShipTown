@@ -4,6 +4,7 @@ namespace Tests\Feature\Modules\Automations\Conditions;
 
 use App\Events\HourlyEvent;
 use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Models\OrderStatus;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
 use App\Modules\Automations\src\Conditions\OrderNumberEqualsCondition;
@@ -49,8 +50,12 @@ class OrderNumberEqualsConditionTest extends TestCase
     public function testExample()
     {
         factory(OrderStatus::class)->create(['code' => 'active', 'order_active' => true]);
-        factory(Order::class)->create(['order_number' => '000000', 'status_code' => 'active']);
-        factory(Order::class)->create(['order_number' => '123456', 'status_code' => 'active']);
+
+        $order1 = factory(Order::class)->create(['order_number' => '000000', 'status_code' => 'active']);
+        factory(OrderProduct::class)->create(['order_id' => $order1->getKey()]);
+
+        $order2 = factory(Order::class)->create(['order_number' => '123456', 'status_code' => 'active']);
+        factory(OrderProduct::class)->create(['order_id' => $order2->getKey()]);
 
         RunAutomationsOnActiveOrdersJob::dispatch();
 

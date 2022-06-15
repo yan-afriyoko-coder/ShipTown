@@ -20,7 +20,8 @@ class IsFullyPackedCondition extends BaseOrderConditionAbstract
         $expectedBoolValue = filter_var($expected_value, FILTER_VALIDATE_BOOL);
 
         return $query->whereHas('orderProductsTotals', function ($query) use ($expectedBoolValue) {
-            $query->where(DB::raw('(quantity_to_ship = 0)'), '=', $expectedBoolValue);
+            $query->whereRaw('(orders_products_totals.quantity_ordered > 0)')
+                ->where(DB::raw('(orders_products_totals.quantity_to_ship = 0)'), '=', $expectedBoolValue);
         });
     }
 }
