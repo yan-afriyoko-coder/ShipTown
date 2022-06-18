@@ -104,7 +104,7 @@ class AutomationHelper
             return false;
         }
 
-        if ($order->orderProductsTotals()->where('quantity_ordered', '=', 0)->exists()) {
+        if (! $order->orderProductsTotals()->where('quantity_ordered', '>', 0)->exists()) {
             return false;
         }
 
