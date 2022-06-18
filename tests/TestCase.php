@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\Models\CacheLock;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use App\Models\Order;
@@ -11,6 +12,9 @@ use App\Models\OrderStatus;
 use App\Models\Product;
 use App\Models\ProductAlias;
 use App\Models\Warehouse;
+use App\Modules\Automations\src\Models\Action;
+use App\Modules\Automations\src\Models\Automation;
+use App\Modules\Automations\src\Models\Condition;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Spatie\Tags\Tag;
@@ -37,5 +41,10 @@ abstract class TestCase extends BaseTestCase
         Tag::query()->forceDelete();
         OrderProductTotal::query()->forceDelete();
         InventoryMovement::query()->forceDelete();
+
+        Automation::query()->forceDelete();
+        Condition::query()->forceDelete();
+        Action::query()->forceDelete();
+        CacheLock::query()->forceDelete();
     }
 }

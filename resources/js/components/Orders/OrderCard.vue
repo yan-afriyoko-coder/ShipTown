@@ -29,7 +29,7 @@
                         </template>
                     </div>
 
-                    <div class="col text-center" @click="toggleOrderDetails">
+                    <div v-if="order['order_products_totals']" class="col text-center" @click="toggleOrderDetails">
                         <div class="row ">
                             <div class="col">
                                 <small> age </small>

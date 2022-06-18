@@ -2,22 +2,19 @@
 
 namespace Tests\Feature\Modules\Automations;
 
-use App\Events\Order\ActiveOrderCheckEvent;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
 use App\Modules\Automations\src\AutomationsServiceProvider;
 use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
+use App\Modules\Automations\src\Jobs\RunEnabledAutomationsOnSpecificOrderJob;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class BasicModuleTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * A basic feature test example.
      *
@@ -31,7 +28,6 @@ class BasicModuleTest extends TestCase
         $automation = Automation::create([
             'enabled' => false,
             'name' => 'Paid to Picking',
-            'event_class' => ActiveOrderCheckEvent::class,
         ]);
 
         Condition::create([
@@ -53,7 +49,7 @@ class BasicModuleTest extends TestCase
         $order = factory(Order::class)->create(['status_code' => 'paid']);
         factory(OrderProduct::class)->create(['order_id' => $order->getKey()]);
 
-        ActiveOrderCheckEvent::dispatch($order);
+        RunEnabledAutomationsOnSpecificOrderJob::dispatch($order->id);
 
         $order = $order->refresh();
 

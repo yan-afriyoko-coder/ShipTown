@@ -2,18 +2,16 @@
 
 namespace Tests\Feature\Modules\Automations\Conditions;
 
-use App\Events\Order\ActiveOrderCheckEvent;
-use App\Events\Order\OrderCreatedEvent;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
 use App\Modules\Automations\src\AutomationsServiceProvider;
+use App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition;
 use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
+use App\Modules\Automations\src\Jobs\RunEnabledAutomationsOnSpecificOrderJob;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
-use App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition;
-use App\Modules\Automations\src\Services\AutomationService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -34,7 +32,6 @@ class OrderShippingMethodCodeEqualsConditionTest extends TestCase
         $automation = Automation::create([
             'enabled' => true,
             'name' => 'paid to store_pickup',
-            'event_class' => ActiveOrderCheckEvent::class,
         ]);
 
         /** @var Condition $condition */
@@ -61,7 +58,7 @@ class OrderShippingMethodCodeEqualsConditionTest extends TestCase
         $order = factory(Order::class)->create(['status_code' => 'paid', 'shipping_method_code' => 'store_pickup']);
         factory(OrderProduct::class)->create(['order_id' => $order->getKey()]);
 
-        ActiveOrderCheckEvent::dispatch($order);
+        RunEnabledAutomationsOnSpecificOrderJob::dispatch($order->getKey());
 
         $order = $order->refresh();
 

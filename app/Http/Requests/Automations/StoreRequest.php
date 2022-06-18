@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Automations;
 
-use App\Events\Order\ActiveOrderCheckEvent;
 use App\Modules\Automations\src\Services\AutomationService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -32,7 +31,6 @@ class StoreRequest extends FormRequest
         return [
             'name' => 'required|min:3|max:200',
             'description' => 'nullable|string',
-            'event_class' => ['nullable', Rule::in(ActiveOrderCheckEvent::class)],
             'enabled' => 'required|boolean',
             'priority' => 'required|numeric',
             'conditions.*.condition_class' => ['nullable', Rule::in($available_conditions_classes)],

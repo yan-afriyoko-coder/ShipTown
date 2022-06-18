@@ -2,12 +2,11 @@
 
 namespace Tests\Feature\Modules\Automations\Actions;
 
-use App\Events\Order\ActiveOrderCheckEvent;
 use App\Mail\OrderMail;
 use App\Models\MailTemplate;
 use App\Models\Order;
 use App\Models\ShippingLabel;
-use App\Modules\Automations\src\Actions\SendEmailToCustomerAction;
+use App\Modules\Automations\src\Actions\Order\SendEmailToCustomerAction;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 

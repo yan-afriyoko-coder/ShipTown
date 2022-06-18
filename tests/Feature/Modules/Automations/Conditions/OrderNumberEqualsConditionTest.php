@@ -2,13 +2,12 @@
 
 namespace Tests\Feature\Modules\Automations\Conditions;
 
-use App\Events\HourlyEvent;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\OrderStatus;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
-use App\Modules\Automations\src\Conditions\OrderNumberEqualsCondition;
-use App\Modules\Automations\src\Jobs\RunAutomationsOnActiveOrdersJob;
+use App\Modules\Automations\src\Conditions\Order\OrderNumberEqualsCondition;
+use App\Modules\Automations\src\Jobs\RunEnabledAutomationsJob;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
@@ -25,7 +24,7 @@ class OrderNumberEqualsConditionTest extends TestCase
         ray()->clearAll();
 
 
-        $automation = factory(Automation::class)->create(['event_class' => 'App\Events\Order\ActiveOrderCheckEvent']);
+        $automation = factory(Automation::class)->create();
 
         factory(Condition::class)->create([
             'automation_id'     => $automation->getKey(),
@@ -57,7 +56,7 @@ class OrderNumberEqualsConditionTest extends TestCase
         $order2 = factory(Order::class)->create(['order_number' => '123456', 'status_code' => 'active']);
         factory(OrderProduct::class)->create(['order_id' => $order2->getKey()]);
 
-        RunAutomationsOnActiveOrdersJob::dispatch();
+        RunEnabledAutomationsJob::dispatch();
 
         $this->assertDatabaseHas('orders', ['status_code' => 'new_status_code']);
     }

@@ -4,6 +4,7 @@ namespace App\Modules\Automations\src\Models;
 
 use App\BaseModel;
 use App\Models\Order;
+use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -30,6 +31,13 @@ class Condition extends BaseModel
         return $validator->isValid($this->condition_value);
     }
 
+    public function condition()
+    {
+        /** @var BaseOrderConditionAbstract $condition */
+        $condition = $this->condition_class;
+
+        return $condition;
+    }
 
     /**
      * @return BelongsTo

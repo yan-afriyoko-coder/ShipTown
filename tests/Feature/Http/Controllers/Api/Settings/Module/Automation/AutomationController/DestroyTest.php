@@ -25,7 +25,6 @@ class DestroyTest extends TestCase
         $automation = Automation::create([
             'name' => 'Store Pickup',
             'priority' => 1,
-            'event_class' => OrderCreatedEvent::class,
         ]);
 
         $response = $this->delete(route('api.settings.module.automations.destroy', $automation));

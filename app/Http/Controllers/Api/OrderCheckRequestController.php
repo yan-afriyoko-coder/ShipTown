@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\Order\ActiveOrderCheckEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderCheckRequest\StoreRequest;
-use App\Models\Order;
+use App\Modules\Automations\src\Jobs\RunEnabledAutomationsOnSpecificOrderJob;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderCheckRequestController extends Controller
 {
-    public function store(StoreRequest $request)
+    /**
+     * @param StoreRequest $request
+     * @return JsonResource
+     */
+    public function store(StoreRequest $request): JsonResource
     {
-        ActiveOrderCheckEvent::dispatch(
-            Order::findOrFail($request->get('order_id'))
-        );
+        RunEnabledAutomationsOnSpecificOrderJob::dispatch($request->validated()['order_id']);
 
         return JsonResource::make($request->validated());
     }

@@ -1,6 +1,5 @@
 <?php
 
-use App\Events\Order\ActiveOrderCheckEvent;
 use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
@@ -46,7 +45,6 @@ class SplitOrdersScenarioSeeder extends Seeder
             $automation = new Automation();
             $automation->enabled = false;
             $automation->name = 'packing to packing_' . $warehouse->code;
-            $automation->event_class = ActiveOrderCheckEvent::class;
             $automation->save();
 
             $condition = new Condition();

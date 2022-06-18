@@ -21,6 +21,12 @@ use Illuminate\Support\Str;
 $factory->define(User::class, function (Faker $faker) {
     $warehouse = Warehouse::query()->inRandomOrder()->first() ?? factory(Warehouse::class)->create();
 
+    $email = $faker->unique()->safeEmail;
+
+    while (User::query()->where(['email' => $email])->exists()) {
+        $email = $faker->unique()->safeEmail;
+    }
+
     return [
         'name'              => $faker->firstName .' '. $faker->lastName,
         'warehouse_id'      => $warehouse->getKey(),

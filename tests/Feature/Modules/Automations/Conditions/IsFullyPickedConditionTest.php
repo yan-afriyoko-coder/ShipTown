@@ -5,7 +5,7 @@ namespace Tests\Feature\Modules\Automations\Conditions;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\OrderProductTotal;
-use App\Modules\Automations\src\Conditions\IsFullyPickedCondition;
+use App\Modules\Automations\src\Conditions\Order\IsFullyPickedCondition;
 use Tests\TestCase;
 
 class IsFullyPickedConditionTest extends TestCase
