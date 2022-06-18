@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\Api\Settings\Modules;
 
-use App\Events\Order\ActiveOrderCheckEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RunAutomationRequest;
-use App\Models\Order;
-use App\Modules\Automations\src\Models\Automation;
-use App\Modules\Automations\src\Services\AutomationService;
+use App\Models\CacheLock;
+use App\Modules\Automations\src\Jobs\RunAutomationJob;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -22,13 +20,11 @@ class RunAutomationController extends Controller
      */
     public function store(RunAutomationRequest $request): JsonResource
     {
-        /** @var Automation $automation */
-        $automation = Automation::findOrFail($request->get('automation_id'));
-
-        AutomationService::run($automation, Order::query());
+        RunAutomationJob::dispatch($request->validated()['automation_id']);
 
         return JsonResource::make([
-            'automation_id' => $automation->getKey(),
+            'job_requested' => true,
+            'automation_id' => $request->validated()['automation_id'],
             'time' => Carbon::now(),
         ]);
     }

@@ -25,7 +25,8 @@ class StocktakingPageTest extends DuskTestCase
                 /** @var Product $product */
                 $product = Product::query()->inRandomOrder()->first() ?? factory(Product::class)->create();
 
-                $browser->assertFocused('@barcode-input-field');
+                $browser->assertFocused('@barcode-input-field')
+                    ->screenshot('StocktakingPage');
 
                 $browser->driver->getKeyboard()->sendKeys($product->sku);
                 $browser->driver->getKeyboard()->sendKeys(WebDriverKeys::ENTER);

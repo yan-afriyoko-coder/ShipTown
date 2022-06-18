@@ -10,10 +10,11 @@ use Illuminate\Support\Arr;
 
 $factory->define(OrderProduct::class, function (Faker $faker) {
     $product = Product::query()->inRandomOrder()->first() ?? factory(Product::class)->create();
-    $order = Order::query()->inRandomOrder()->first() ?? factory(Order::class)->create();
 
     return [
-        'order_id'         => $order->getKey(),
+        'order_id'         => function () {
+            return factory(Order::class)->create()->getKey();
+        },
         'product_id'       => $product->getKey(),
         'sku_ordered'      => $product->sku,
         'name_ordered'     => $product->name,

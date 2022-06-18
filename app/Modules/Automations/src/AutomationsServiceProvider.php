@@ -3,7 +3,6 @@
 namespace App\Modules\Automations\src;
 
 use App\Events\HourlyEvent;
-use App\Events\Order\ActiveOrderCheckEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\BaseModuleServiceProvider;
@@ -29,10 +28,6 @@ class AutomationsServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        ActiveOrderCheckEvent::class => [
-            Listeners\ActiveOrderCheckListener::class,
-        ],
-
         OrderCreatedEvent::class => [
             Listeners\OrderCreatedListener::class,
         ],

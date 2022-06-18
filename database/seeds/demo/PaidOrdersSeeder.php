@@ -1,6 +1,5 @@
 <?php
 
-use App\Events\Order\ActiveOrderCheckEvent;
 use App\Models\NavigationMenu;
 use App\Models\Order;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
@@ -75,7 +74,6 @@ class PaidOrdersSeeder extends Seeder
         /** @var Automation $automation */
         $automation = Automation::create([
             'name' => 'paid to complete',
-            'event_class' => ActiveOrderCheckEvent::class,
             'enabled' => false,
         ]);
 

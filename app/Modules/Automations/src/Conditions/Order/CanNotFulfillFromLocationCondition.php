@@ -12,22 +12,22 @@ use Illuminate\Support\Facades\Log;
 class CanNotFulfillFromLocationCondition extends BaseOrderConditionAbstract
 {
     /**
-     * @param $location_id
+     * @param $expected_value
      * @return bool
      */
-    public function isValid($location_id): bool
+    public function isValid($expected_value): bool
     {
-        if ($location_id === '0') {
-            $location_id = null;
+        if ($expected_value === '0') {
+            $expected_value = null;
         }
 
-        $result = OrderService::canNotFulfill($this->order, $location_id);
+        $result = OrderService::canNotFulfill($this->order, $expected_value);
 
         Log::debug('Automation condition', [
             'order_number' => $this->order->order_number,
             'result' => $result,
             'class' => class_basename(self::class),
-            'location_id' => $location_id,
+            'location_id' => $expected_value,
         ]);
 
         return $result;

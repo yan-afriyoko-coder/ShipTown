@@ -3,8 +3,7 @@
 namespace App\Modules\Automations\src\Listeners;
 
 use App\Events\Order\OrderCreatedEvent;
-use App\Modules\Automations\src\Jobs\RunAutomationsOnActiveOrdersJob;
-use App\Modules\Automations\src\Services\AutomationService;
+use App\Modules\Automations\src\Jobs\RunEnabledAutomationsOnSpecificOrderJob;
 
 class OrderCreatedListener
 {
@@ -13,11 +12,6 @@ class OrderCreatedListener
      */
     public function handle(OrderCreatedEvent $event)
     {
-        RunAutomationsOnActiveOrdersJob::dispatch($event->order->getKey())
-            // we let things settle down
-            // set 5min cool down period
-            ->delay(
-                now()->addMinutes(5)
-            );
+        RunEnabledAutomationsOnSpecificOrderJob::dispatchNow($event->order->getKey());
     }
 }

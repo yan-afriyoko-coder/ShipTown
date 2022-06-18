@@ -5,7 +5,7 @@ namespace Tests\Feature\Modules\Automations\Conditions;
 use App\Events\HourlyEvent;
 use App\Models\Order;
 use App\Models\OrderStatus;
-use App\Modules\Automations\src\Jobs\RunAutomationsOnActiveOrdersJob;
+use App\Modules\Automations\src\Jobs\RunEnabledAutomationsJob;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
 use App\Modules\Automations\src\Services\AutomationService;
@@ -23,8 +23,7 @@ class AllConditionsTest extends TestCase
         OrderStatus::query()->forceDelete();
         Automation::query()->forceDelete();
 
-        $automation = factory(Automation::class)
-            ->create(['event_class' => 'App\Events\Order\ActiveOrderCheckEvent']);
+        $automation = factory(Automation::class)->create();
 
         AutomationService::availableConditions()
             ->pluck('class')
@@ -50,7 +49,7 @@ class AllConditionsTest extends TestCase
         try {
             factory(Order::class)->create();
 
-            RunAutomationsOnActiveOrdersJob::dispatch();
+            RunEnabledAutomationsJob::dispatch();
         } catch (Exception $exception) {
             ray($exception);
             $this->fail('Exceptions occurred when running all conditions');

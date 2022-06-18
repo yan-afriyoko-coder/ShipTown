@@ -1,14 +1,13 @@
 <?php
 
-namespace Tests\Feature\Modules\Automations\Conditions;
+namespace Tests\Feature\Modules\Automations\Actions;
 
-use App\Events\HourlyEvent;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Modules\Automations\src\Jobs\RunEnabledAutomationsJob;
+use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
-use App\Modules\Automations\src\Models\Condition;
-use App\Modules\Automations\tests\Feature\Conditions\ExceptionTestCondition;
+use App\Modules\Automations\tests\Feature\Actions\ExceptionTestAction;
 use Mockery\Exception;
 use Tests\TestCase;
 
@@ -22,10 +21,10 @@ class ExceptionHandlingTest extends TestCase
 
         $automation = factory(Automation::class)->create();
 
-        factory(Condition::class)->create([
+        factory(Action::class)->create([
             'automation_id'     => $automation->getKey(),
-            'condition_class'   => ExceptionTestCondition::class,
-            'condition_value'   => ''
+            'action_class'   => ExceptionTestAction::class,
+            'action_value'   => ''
         ]);
 
         $automation->update(['enabled' => true]);

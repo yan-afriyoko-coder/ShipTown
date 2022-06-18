@@ -1,8 +1,7 @@
 <?php
 
 return [
-    'class' => \App\Events\Order\ActiveOrderCheckEvent::class,
-    'description' => 'On Active Order Event',
+    'description' => 'Placed in Last 28 Days or Active Orders',
     'conditions' => [
         [
             'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition::class,
@@ -83,7 +82,7 @@ return [
             'description' => 'Add log message',
         ],
         [
-            'class' => \App\Modules\Automations\src\Actions\SetLabelTemplateAction::class,
+            'class' => \App\Modules\Automations\src\Actions\Order\SetLabelTemplateAction::class,
             'description' => 'Set courier label template',
         ],
         [
@@ -95,15 +94,15 @@ return [
             'description' => 'Mark remaining products as shipped',
         ],
         [
-            'class' => \App\Modules\Automations\src\Actions\PushToBoxTopOrderAction::class,
+            'class' => \App\Modules\Automations\src\Actions\Order\PushToBoxTopOrderAction::class,
             'description' => 'Create Warehouse Shipment in BoxTop Software',
         ],
         [
-            'class' => \App\Modules\Automations\src\Actions\SendOrderEmailAction::class,
+            'class' => \App\Modules\Automations\src\Actions\Order\SendOrderEmailAction::class,
             'description' => 'Send email template to customer',
         ],
         [
-            'class' => \App\Modules\Automations\src\Actions\SplitBundleSkuAction::class,
+            'class' => \App\Modules\Automations\src\Actions\Order\SplitBundleSkuAction::class,
             'description' => 'Split bundle SKU (format: BundleSKU,SKU1,SKU2...)',
         ],
         [

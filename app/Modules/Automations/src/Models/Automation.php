@@ -4,7 +4,7 @@ namespace App\Modules\Automations\src\Models;
 
 use App\BaseModel;
 use App\Models\Order;
-use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property integer priority
  * @property boolean enabled
  * @property string name
- * @property string event_class
  * @property mixed conditions
  * @property mixed actions
  *
@@ -32,7 +31,6 @@ class Automation extends BaseModel
         'priority',
         'enabled',
         'name',
-        'event_class',
         'description'
     ];
 
@@ -43,6 +41,14 @@ class Automation extends BaseModel
     protected $casts = [
         'enabled' => 'boolean'
     ];
+
+    /**
+     * @return Builder
+     */
+    public static function enabled(): Builder
+    {
+        return self::query()->where(['enabled' => true]);
+    }
 
 
     /**
@@ -71,24 +77,5 @@ class Automation extends BaseModel
     public function actions(): HasMany
     {
         return $this->hasMany(Action::class)->orderBy('priority');
-    }
-
-
-    public function addConditions($query)
-    {
-        try {
-            $this->conditions
-                ->each(function (Condition $condition) use ($query) {
-                    /** @var BaseOrderConditionAbstract $c */
-                    $c = $condition->condition_class;
-                    $c::addQueryScope($query, $condition->condition_value);
-                });
-        } catch (\Exception $exception) {
-            report($exception);
-            // we will invalidate query here
-            return $query->whereRaw('1=2');
-        }
-
-        return $query;
     }
 }

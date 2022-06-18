@@ -6,7 +6,7 @@ use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 
-class ExceptionTestingConditionOnlyForTestingPurposes extends BaseOrderConditionAbstract
+class ExceptionTestCondition extends BaseOrderConditionAbstract
 {
     /**
      * @throws Exception

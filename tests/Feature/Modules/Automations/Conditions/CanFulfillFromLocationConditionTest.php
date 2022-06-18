@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Modules\Automations\Conditions;
 
-use App\Events\Order\ActiveOrderCheckEvent;
 use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
@@ -36,7 +35,6 @@ class CanFulfillFromLocationConditionTest extends TestCase
         $automation = factory(Automation::class)->create([
             'enabled' => true,
             'name' => 'paid to can_fulfill',
-            'event_class' => ActiveOrderCheckEvent::class,
         ]);
 
         /** @var Condition $condition */
@@ -78,7 +76,6 @@ class CanFulfillFromLocationConditionTest extends TestCase
         $automation = factory(Automation::class)->create([
             'enabled' => true,
             'name' => 'paid to can_fulfill',
-            'event_class' => ActiveOrderCheckEvent::class,
         ]);
 
         /** @var Condition $condition */
@@ -120,7 +117,6 @@ class CanFulfillFromLocationConditionTest extends TestCase
         $automation = factory(Automation::class)->create([
             'enabled' => true,
             'name' => 'paid to can_fulfill',
-            'event_class' => ActiveOrderCheckEvent::class,
         ]);
 
         /** @var Condition $condition */
@@ -160,7 +156,6 @@ class CanFulfillFromLocationConditionTest extends TestCase
         $automation = factory(Automation::class)->create([
             'enabled' => true,
             'name' => 'paid to can_fulfill',
-            'event_class' => ActiveOrderCheckEvent::class,
         ]);
 
         /** @var Condition $condition */

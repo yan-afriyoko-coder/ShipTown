@@ -24,7 +24,6 @@ class GetConfigTest extends TestCase
 
         $response->assertOk();
         $response->assertJsonStructure([
-            'class',
             'description',
             'conditions' => [
                 '*' => [

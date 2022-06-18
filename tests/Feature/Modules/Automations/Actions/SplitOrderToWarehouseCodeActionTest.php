@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Modules\Automations\Actions;
 
-use App\Events\Order\ActiveOrderCheckEvent;
 use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
@@ -11,17 +10,15 @@ use App\Models\Warehouse;
 use App\Modules\Automations\src\Actions\Order\SplitOrderToWarehouseCodeAction;
 use App\Modules\Automations\src\AutomationsServiceProvider;
 use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
-use App\Modules\Automations\src\Jobs\RunAutomationsOnActiveOrdersJob;
+use App\Modules\Automations\src\Jobs\RunEnabledAutomationsJob;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
-use App\Modules\Automations\src\Services\AutomationService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class SplitOrderToWarehouseCodeActionTest extends TestCase
 {
-    use RefreshDatabase;
+//    use RefreshDatabase;
 
     /**
      * A basic feature test example.
@@ -68,7 +65,6 @@ class SplitOrderToWarehouseCodeActionTest extends TestCase
             $automation = new Automation();
             $automation->enabled = false;
             $automation->name = 'split_order to '.$status_code_name;
-            $automation->event_class = ActiveOrderCheckEvent::class;
             $automation->save();
 
             $condition = new Condition();
@@ -87,7 +83,7 @@ class SplitOrderToWarehouseCodeActionTest extends TestCase
             $automation->save();
         });
 
-        RunAutomationsOnActiveOrdersJob::dispatch();
+        RunEnabledAutomationsJob::dispatch();
 
         // we will have original order left + X new ones
         $this->assertEquals(1 + $random_number, Order::count());

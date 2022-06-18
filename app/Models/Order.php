@@ -85,7 +85,6 @@ use Spatie\Tags\Tag;
  * @method static Builder|Order isPicked($expected)
  * @method static Builder|Order newModelQuery()
  * @method static Builder|Order newQuery()
- * @method static Builder|Order query()
  * @method static Builder|Order whereCreatedAt($value)
  * @method static Builder|Order whereDeletedAt($value)
  * @method static Builder|Order whereHasText($text)
@@ -122,6 +121,7 @@ use Spatie\Tags\Tag;
  * @method static Builder|Order withAnyTags($tags, $type = null)
  * @method static Builder|Order withAnyTagsOfAnyType($tags)
  * @method static Builder|Order withoutAllTags($tags, $type = null)
+ *
  * @mixin Eloquent
  */
 class Order extends BaseModel
@@ -190,6 +190,25 @@ class Order extends BaseModel
         'order_placed_at',
         'order_closed_at',
     ];
+
+    /**
+     * @return Builder
+     */
+    public static function active(): Builder
+    {
+        return self::query()->where(['is_active' => true]);
+    }
+
+    /**
+     * @return Builder
+     */
+    public static function placedInLast28DaysOrActive(): Builder
+    {
+        return self::query()->where(function (Builder $query) {
+            return $query->where(['is_active' => true])
+                ->orWhereBetween('created_at', [now()->subDays(28), now()]);
+        });
+    }
 
     /**
      * @return bool

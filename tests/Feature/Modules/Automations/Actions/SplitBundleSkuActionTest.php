@@ -2,13 +2,10 @@
 
 namespace Tests\Feature\Modules\Automations\Actions;
 
-use App\Events\Order\ActiveOrderCheckEvent;
-use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
-use App\Models\ProductPrice;
-use App\Modules\Automations\src\Actions\SplitBundleSkuAction;
+use App\Modules\Automations\src\Actions\Order\SplitBundleSkuAction;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
