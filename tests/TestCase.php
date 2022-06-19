@@ -46,5 +46,6 @@ abstract class TestCase extends BaseTestCase
         Condition::query()->forceDelete();
         Action::query()->forceDelete();
         CacheLock::query()->forceDelete();
+        InventoryMovement::query()->forceDelete();
     }
 }

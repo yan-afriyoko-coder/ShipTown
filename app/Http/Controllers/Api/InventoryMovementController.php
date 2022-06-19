@@ -9,9 +9,22 @@ use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class InventoryMovementController extends Controller
 {
+    public function index()
+    {
+        $inventoryMovement = QueryBuilder::for(InventoryMovement::class)
+            ->allowedIncludes([
+                'product',
+                'warehouse',
+                'user',
+            ]);
+
+        return InventoryMovementResource::collection($this->getPaginatedResult($inventoryMovement));
+    }
+
     public function store(InventoryMovementStoreRequest $request): AnonymousResourceCollection
     {
         /** @var Inventory $inventory */
