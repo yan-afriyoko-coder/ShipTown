@@ -22,15 +22,14 @@ class AutomationHelper
      * We utilize power or database to run Automation Actions
      * only very specifically selected orders
      *
-     * @param $automationsToRunQuery
-     * @param $ordersToRunQuery
+     * @param Builder $automationsToRunQuery
+     * @param Builder $ordersToRunQuery
      * @return bool
      */
-    public static function runAutomationsOnOrdersQuery($automationsToRunQuery, $ordersToRunQuery): bool
+    public static function runAutomationsOnOrdersQuery(Builder $automationsToRunQuery, Builder $ordersToRunQuery): bool
     {
-        $automations = $automationsToRunQuery->get();
-
-        return $automations
+        return $automationsToRunQuery
+            ->get()
             ->every(function (Automation $automation) use ($ordersToRunQuery) {
                 return self::runAutomation($automation, $ordersToRunQuery);
             });
@@ -43,19 +42,9 @@ class AutomationHelper
      */
     public static function runAutomation(Automation $automation, Builder $ordersToRunQuery): bool
     {
-        // we will try to add conditions to query
-        try {
-            $orders = self::addAutomationConditions($automation, $ordersToRunQuery);
+        $orders = clone $ordersToRunQuery;
 
-            //
-        } catch (Exception $exception) {
-            report($exception);
-            Log::error('Exception occurred when adding Automation Query conditions', [
-                'automation' => $automation->name,
-                'exception' => $exception->getMessage()
-            ]);
-            return false;
-        }
+        self::addAutomationConditions($automation, $orders);
 
         $orders->get()
             ->each(function (Order $order) use ($automation) {
@@ -70,7 +59,6 @@ class AutomationHelper
                         'order_number' => $order->order_number,
                         'exception' => $exception->getMessage(),
                     ]);
-                    return false;
                 }
             });
 
@@ -79,17 +67,26 @@ class AutomationHelper
 
     /**
      * @param Automation $automation
-     * @param $query
-     * @return mixed
+     * @param Builder $query
+     * @return bool
      */
-    public static function addAutomationConditions(Automation $automation, $query)
+    public static function addAutomationConditions(Automation $automation, Builder $query): bool
     {
-        $automation->conditions
-            ->each(function (Condition $condition) use ($query) {
-                $condition->condition()::addQueryScope($query, $condition->condition_value);
-            });
+        try {
+            $automation->conditions
+                ->each(function (Condition $condition) use ($query) {
+                    $condition->condition()::addQueryScope($query, $condition->condition_value);
+                });
+        } catch (Exception $exception) {
+            report($exception);
+            Log::error('Exception occurred when adding Automation Query conditions', [
+                'automation' => $automation->name,
+                'exception' => $exception->getMessage()
+            ]);
+            return false;
+        }
 
-        return $query;
+        return true;
     }
 
     /**
@@ -104,7 +101,7 @@ class AutomationHelper
             return false;
         }
 
-        if ($order->orderProductsTotals()->where('quantity_ordered', '=', 0)->exists()) {
+        if (! $order->orderProductsTotals()->where('quantity_ordered', '>', 0)->exists()) {
             return false;
         }
 
