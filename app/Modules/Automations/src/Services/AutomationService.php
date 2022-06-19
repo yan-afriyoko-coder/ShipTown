@@ -3,6 +3,7 @@
 namespace App\Modules\Automations\src\Services;
 
 use App\Modules\Automations\src\Helpers\AutomationHelper;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 /**
@@ -22,15 +23,19 @@ class AutomationService
      * we will start automations from newest to oldest,
      * that will effectively process new orders first and lastly process problematic order
      *
-     * @param $automationsToRunQuery
-     * @param $ordersToRunQuery
+     * @param Builder $automationsToRunQuery
+     * @param Builder $ordersToRunQuery
      * @return bool
      */
-    public static function runAutomationsOnOrdersQuery($automationsToRunQuery, $ordersToRunQuery): bool
+    public static function runAutomationsOnOrdersQuery(Builder $automationsToRunQuery, Builder $ordersToRunQuery): bool
     {
+        // we will clone the queries so originals are not affected
+        $automations = clone $automationsToRunQuery;
+        $orders = clone $ordersToRunQuery;
+
         return AutomationHelper::runAutomationsOnOrdersQuery(
-            $automationsToRunQuery->orderBy('priority', 'asc'),
-            $ordersToRunQuery->orderBy('id', 'desc')
+            $automations->orderBy('priority', 'asc'),
+            $orders->orderBy('id', 'desc')
         );
     }
 

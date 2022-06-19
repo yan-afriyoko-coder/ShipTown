@@ -39,7 +39,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property Carbon|null $updated_at
  * @property-read Collection|Activity[] $activities
  * @property-read int|null $activities_count
- * @property-read Order|null $order
+ * @property-read Order $order
  * @property-read Product $product
  *
  * @method static \Illuminate\Database\Eloquent\Builder|OrderProduct increment($column, $quantity)
