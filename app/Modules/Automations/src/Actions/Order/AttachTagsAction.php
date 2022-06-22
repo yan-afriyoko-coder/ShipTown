@@ -8,16 +8,18 @@ class AttachTagsAction extends BaseOrderActionAbstract
 {
     /**
      * @param string $options
-     * @return void
+     * @return bool
      */
-    public function handle(string $options = '')
+    public function handle(string $options = ''): bool
     {
         if (trim($options) === '') {
-            return;
+            return true;
         }
 
         $tags = explode(',', $options);
 
         $this->order->attachTags($tags);
+
+        return true;
     }
 }

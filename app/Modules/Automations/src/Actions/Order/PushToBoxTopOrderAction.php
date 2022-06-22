@@ -8,9 +8,16 @@ use App\Modules\BoxTop\src\Models\OrderLock;
 use App\Modules\BoxTop\src\Services\BoxTopService;
 use Exception;
 
+/**
+ *
+ */
 class PushToBoxTopOrderAction extends BaseOrderActionAbstract
 {
-    public function handle($options = '')
+    /**
+     * @param string $options
+     * @return bool
+     */
+    public function handle(string $options = ''): bool
     {
         parent::handle($options);
 
@@ -24,14 +31,14 @@ class PushToBoxTopOrderAction extends BaseOrderActionAbstract
                 $lock = OrderLock::create(['order_id' => $this->order->getKey()]);
             } catch (\Exception $exception) {
                 // cannot lock it so another action is already running
-                return;
+                return false;
             }
 
             $shipment = OrderShipment::whereOrderId($this->order->getKey())->first();
 
             if ($shipment) {
                 // order already shipped
-                return;
+                return true;
             }
 
             /** @var OrderShipment $shipment */
@@ -51,7 +58,7 @@ class PushToBoxTopOrderAction extends BaseOrderActionAbstract
 
                 $this->order->status_code = $newStatusCode;
                 $this->order->save();
-                return;
+                return true;
             }
 
             $shipment->delete();
@@ -65,6 +72,9 @@ class PushToBoxTopOrderAction extends BaseOrderActionAbstract
                 $shipment->forceDelete();
             }
             $this->order->log('BoxTop pick FAILED - '. $exception->getMessage());
+            return false;
         }
+
+        return true;
     }
 }

@@ -22,13 +22,16 @@ abstract class BaseOrderActionAbstract
 
     /**
      * @param string $options
+     * @return bool
      */
-    public function handle(string $options = '')
+    public function handle(string $options = ''): bool
     {
         Log::debug('automation.action.executing', [
             'order_number' => $this->order->order_number,
             'class' => class_basename(self::class),
             '$options' => $options,
         ]);
+
+        return true;
     }
 }
