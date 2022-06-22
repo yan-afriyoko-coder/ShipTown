@@ -15,6 +15,22 @@ class InventoryMovementResource extends JsonResource
      */
     public function toArray($request): array
     {
-        return parent::toArray($request);
+        return [
+            "id" => $this->id,
+            "inventory_id" => $this->inventory_id,
+            "product_id" => $this->product_id,
+            "warehouse_id" => $this->warehouse_id,
+            "quantity_delta" => $this->quantity_delta,
+            "quantity_before" => $this->quantity_before,
+            "quantity_after" => $this->quantity_after,
+            "description" => $this->description,
+            "user_id" => $this->user_id,
+            "created_at" => $this->created_at,
+            "updated_at" => $this->updated_at,
+
+            "product" => ProductResource::make($this->whenLoaded('product')),
+            "warehouse" => WarehouseResource::make($this->whenLoaded('warehouse')),
+            "user" => UserResource::make($this->whenLoaded('user')),
+        ];
     }
 }

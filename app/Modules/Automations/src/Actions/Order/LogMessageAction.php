@@ -9,8 +9,9 @@ class LogMessageAction extends BaseOrderActionAbstract
 {
     /**
      * @param string $options
+     * @return bool
      */
-    public function handle(string $options = '')
+    public function handle(string $options = ''): bool
     {
         Log::debug('Automation Action', [
             'order_number' => $this->order->order_number,
@@ -19,5 +20,7 @@ class LogMessageAction extends BaseOrderActionAbstract
         ]);
 
         $this->order->log($options);
+
+        return true;
     }
 }

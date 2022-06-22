@@ -10,8 +10,9 @@ class AddOrderCommentAction extends BaseOrderActionAbstract
 {
     /**
      * @param string $options
+     * @return bool
      */
-    public function handle(string $options = '')
+    public function handle(string $options = ''): bool
     {
         Log::debug('Automation Action', [
             'order_number' => $this->order->order_number,
@@ -23,5 +24,7 @@ class AddOrderCommentAction extends BaseOrderActionAbstract
         $comment->comment = $options;
         $comment->order_id = $this->order->getKey();
         $comment->save();
+
+        return true;
     }
 }

@@ -4,9 +4,7 @@ namespace App\Modules\Webhooks\src\Jobs;
 
 use App\Http\Resources\InventoryMovementResource;
 use App\Models\InventoryMovement;
-use App\Modules\Webhooks\src\AwsSns;
 use App\Modules\Webhooks\src\Models\PendingWebhook;
-use App\Modules\Webhooks\src\Models\WebhooksConfiguration;
 use App\Modules\Webhooks\src\Services\SnsService;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -74,6 +72,7 @@ class PublishInventoryMovementWebhooksJob implements ShouldQueue
             InventoryMovement::query()
                 ->whereIn('id', $chunk->pluck('model_id'))
                 ->orderBy('id')
+                ->with(['product', 'warehouse', 'user'])
                 ->get()
         );
 

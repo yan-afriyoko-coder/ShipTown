@@ -8,15 +8,18 @@ class SetStatusCodeAction extends BaseOrderActionAbstract
 {
     /**
      * @param string $options
+     * @return bool
      */
-    public function handle(string $options = '')
+    public function handle(string $options = ''): bool
     {
         $order = $this->order->refresh();
 
         if ($order->status_code === $options) {
-            return;
+            return true;
         }
 
         $order->update(['status_code' => $options]);
+
+        return true;
     }
 }
