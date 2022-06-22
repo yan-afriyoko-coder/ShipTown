@@ -16,15 +16,21 @@
                 <table v-if="subscriptions.length" class="table table-borderless table-responsive mb-0">
                     <thead>
                         <tr>
-                            <th>ARN</th>
-                            <th>Endpoint</th>
+<!--                            <th>ARN</th>-->
+<!--                            <th>Endpoint</th>-->
                         </tr>
                     </thead>
                     <tbody>
-                    <template v-for="subscription in subscriptions">
+                    <template v-for="subscription in sortedArray">
                         <tr>
-                            <td>{{ subscription['SubscriptionArn'] }}</td>
-                            <td>{{ subscription['Endpoint'] }}</td>
+                            <td>
+                                <div class="font-weight-bold">
+                                    {{ subscription['Endpoint'] }}
+                                </div>
+                                <div class="small text-secondary">
+                                    {{ subscription['SubscriptionArn'] }}
+                                </div>
+                            </td>
                         </tr>
                     </template>
                     </tbody>
@@ -99,6 +105,18 @@
 
                 return 'https://' + this.url;
             },
+
+            sortedArray: function() {
+                function compare(a, b) {
+                    if (a['SubscriptionArn'] > b['SubscriptionArn'])
+                        return -1;
+                    if (a['SubscriptionArn'] < b['SubscriptionArn'])
+                        return 1;
+                    return 0;
+                }
+
+                return this.subscriptions.sort(compare);
+            }
         },
 
         methods: {
