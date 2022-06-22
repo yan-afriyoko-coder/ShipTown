@@ -62,6 +62,41 @@ class SnsService
         return $model;
     }
 
+
+    /**
+     * @param string $endpoint
+     * @return array|Result
+     */
+    public static function subscribeOrFail(string $endpoint)
+    {
+        $subscribeRequestData = [
+            'Protocol' => 'https',
+            'Endpoint' => $endpoint,
+            'ReturnSubscriptionArn' => true,
+            'TopicArn' => self::getConfiguration()->topic_arn,
+        ];
+
+        try {
+            $subscribeResponse = self::client()->subscribe($subscribeRequestData);
+        } catch (AwsException $awsException) {
+            $subscribeResponse = [
+                'service' => 'AWS SNS',
+                'data_sent' => $subscribeRequestData,
+                'data_received' => [
+                    'status_code' => $awsException->getStatusCode(),
+                    'message' => $awsException->getMessage(),
+                ],
+            ];
+            Log::error('Could not subscribe to AWS SNS topic', $subscribeResponse);
+
+            response()->json(
+                ['message' => $subscribeResponse],
+                $awsException->getStatusCode()
+            )->throwResponse();
+        }
+
+        return $subscribeResponse;
+    }
     /**
      * @return mixed
      */
