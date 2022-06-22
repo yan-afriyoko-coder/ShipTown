@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Warehouse;
 use App\User;
 use Illuminate\Database\Seeder;
 
@@ -18,7 +19,8 @@ class UsersSeeder extends Seeder
             ->doesntExist()) {
             $user = factory(User::class, 1)->create([
                 'name' => 'Artur Hanusek',
-                'email' => 'admin@products.management'
+                'email' => 'admin@products.management',
+                'warehouse_id' => Warehouse::whereCode('DUB')->first()->getKey(),
             ]);
             $user->first()->assignRole('admin');
         }
