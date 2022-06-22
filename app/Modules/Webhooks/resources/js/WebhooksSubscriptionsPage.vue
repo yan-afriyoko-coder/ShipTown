@@ -38,11 +38,35 @@
 
         <!-- The modal -->
         <b-modal ref="updateFormModal" id="new-subscription-modal" title="Subscribe" @ok="handleModalOk">
-            <input class="form-control" :placeholder="'URL'"
-                   id="quantity-request-input"
-                   type="url"
-                   v-model="new_subscriptions_url"
-                   inputmode="numeric"
+
+            <div class="row">Required</div>
+            <div class="row">
+                <div class="col-2 align-content-center">
+                    https://
+                </div>
+                <div class="col">
+                    <input class="form-control" :placeholder="'URL'"
+                           id="input-url"
+                           type="url"
+                           v-model="url"
+                           inputmode="numeric"
+                           required
+                    />
+                </div>
+            </div>
+            <br>
+
+            <span>Optional</span>
+            <input class="form-control" :placeholder="'Username'"
+                   id="input-username"
+                   type="text"
+                   v-model="username"
+            />
+
+            <input class="form-control" :placeholder="'Password'"
+                   id="input-password"
+                   type="password"
+                   v-model="password"
             />
         </b-modal>
     </div>
@@ -57,12 +81,24 @@
         mixins: [api, helpers],
 
         data: () => ({
+            username: '',
+            password: '',
+            url: '',
             subscriptions: {},
-            new_subscriptions_url: null,
         }),
 
         mounted() {
             this.getConfiguration();
+        },
+
+        computed: {
+            finalEndpointUrl() {
+                if ((this.username !== '') && (this.password !== '')) {
+                    return 'https://' + this.username.replace('@', '%40') + ':' + this.password + '@' + this.url;
+                }
+
+                return 'https://' + this.url;
+            },
         },
 
         methods: {
@@ -82,9 +118,9 @@
             handleModalOk(bvModalEvt) {
                 bvModalEvt.preventDefault();
 
-                this.apiPost('/api/modules/webhooks/subscriptions', {'endpoint': this.new_subscriptions_url})
+                this.apiPost('/api/modules/webhooks/subscriptions', {'endpoint': this.finalEndpointUrl})
                     .then(() => {
-                        this.notifySuccess(this.new_subscriptions_url);
+                        this.notifySuccess('Subscription requested, awaiting confirmation from url');
                         this.getConfiguration()
                         this.$bvModal.hide('new-subscription-modal');
                     })

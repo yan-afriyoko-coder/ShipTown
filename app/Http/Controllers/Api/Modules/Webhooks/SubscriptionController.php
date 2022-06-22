@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\WebhookSubscriptionStoreRequest;
 use App\Http\Resources\SubscriptionResource;
 use App\Modules\Webhooks\src\Services\SnsService;
+use Aws\Exception\AwsException;
+use Aws\Result;
+use Illuminate\Support\Facades\Log;
 
 class SubscriptionController extends Controller
 {
@@ -25,13 +28,7 @@ class SubscriptionController extends Controller
 
     public function store(WebhookSubscriptionStoreRequest $request): SubscriptionResource
     {
-        $subscribeResponse = SnsService::client()
-            ->subscribe([
-                'Protocol' => 'https',
-                'Endpoint' => $request->validated()['endpoint'],
-                'ReturnSubscriptionArn' => true,
-                'TopicArn' => SnsService::getConfiguration()->topic_arn,
-            ]);
+        $subscribeResponse = SnsService::subscribeOrFail($request->validated()['endpoint']);
 
         return SubscriptionResource::make([
             "service" => 'AWS SNS',
