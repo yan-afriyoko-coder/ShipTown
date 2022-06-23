@@ -24,7 +24,7 @@ class StoreTest extends TestCase
             'description' => 'test',
         ];
 
-        $response = $this->actingAs($user, 'api')->postJson(route('inventory-movement.store'), $data);
+        $response = $this->actingAs($user, 'api')->postJson(route('inventory-movements.store'), $data);
 
         ray($response->json());
 

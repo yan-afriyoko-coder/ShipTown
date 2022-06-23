@@ -9,6 +9,7 @@ use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class InventoryMovementController extends Controller
@@ -16,10 +17,16 @@ class InventoryMovementController extends Controller
     public function index()
     {
         $inventoryMovement = QueryBuilder::for(InventoryMovement::class)
+            ->allowedFilters([
+                AllowedFilter::exact('description')
+            ])
             ->allowedIncludes([
                 'product',
                 'warehouse',
                 'user',
+            ])
+            ->allowedSorts([
+                'id'
             ]);
 
         return InventoryMovementResource::collection($this->getPaginatedResult($inventoryMovement));

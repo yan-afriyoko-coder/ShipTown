@@ -39,7 +39,7 @@ Route::apiResource('product/aliases', 'Api\Product\ProductAliasController', ['as
 Route::apiResource('product/inventory', 'Api\Product\ProductInventoryController')->only(['index', 'store']);
 Route::apiResource('product/tags', 'Api\Product\ProductTagController')->only(['index']);
 
-Route::apiResource('inventory-movement', 'Api\InventoryMovementController')->only(['store', 'index']);
+Route::apiResource('inventory-movements', 'Api\InventoryMovementController')->only(['store', 'index']);
 
 Route::apiResource('order-check-request', 'Api\OrderCheckRequestController')->only(['store']);
 
