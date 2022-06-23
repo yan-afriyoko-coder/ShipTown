@@ -149,7 +149,8 @@ class Inventory extends BaseModel
                 ->select('product_id as product_id')
                 ->where(['alias' => $value]);
 
-            return $query->whereIn('product_id', $products)->orWhereIn('product_id', $aliases);
+            return $query->whereIn('product_id', $products)
+                ->orWhereIn('product_id', $aliases);
         });
 
         return $query;
