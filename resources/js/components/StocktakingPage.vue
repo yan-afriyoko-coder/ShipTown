@@ -105,6 +105,23 @@
         },
 
         methods: {
+            loadRecentStocktakes() {
+                const params = {
+                    'filter[description]': 'stocktake',
+                    'filter[warehouse_id]': this.currentUser()['warehouse_id'],
+                    'include': 'product',
+                    'sort': '-id'
+                }
+
+                this.apiGetInventoryMovements(params)
+                    .then((response) => {
+                        this.recentStocktakes = response.data;
+                    })
+                    .catch((error) => {
+                        this.displayApiCallError(error);
+                    });
+            },
+
             barcodeScanned: async function (barcode) {
                 if (barcode === null) {
                     return;
@@ -182,22 +199,6 @@
                         this.loadRecentStocktakes();
                     });
             },
-
-            loadRecentStocktakes() {
-                const params = {
-                    'filter[description]': 'stocktake',
-                    'include': 'product',
-                    'sort': '-id'
-                }
-
-                this.apiGetInventoryMovements(params)
-                    .then((response) => {
-                        this.recentStocktakes = response.data;
-                    })
-                    .catch((error) => {
-                        this.displayApiCallError(error);
-                    });
-            }
         },
 
     }
