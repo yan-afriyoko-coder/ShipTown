@@ -109,6 +109,14 @@
             },
 
             submitStocktake: function () {
+                if (this.quantity === null) {
+                    return;
+                }
+
+                if (this.quantity === "") {
+                    return;
+                }
+
                 if (this.quantity < 0) {
                     this.notifyError('Minus quantity not allowed');
                     this.setFocusElementById(100, 'quantity-request-input', true, false)
