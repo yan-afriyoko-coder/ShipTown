@@ -8,6 +8,7 @@ use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -117,7 +118,7 @@ class Inventory extends BaseModel
                 AllowedFilter::scope('quantity_required_between'),
                 AllowedFilter::scope('restock_level_between'),
 
-                AllowedFilter::scope('product.sku_or_alias'),
+                AllowedFilter::scope('sku_or_alias'),
                 AllowedFilter::scope('source_warehouse_code', 'addWarehouseSource'),
                 AllowedFilter::scope('inventory_source_quantity_available_between'),
             ])
@@ -133,6 +134,21 @@ class Inventory extends BaseModel
             ->allowedIncludes([
                 'product'
             ]);
+    }
+
+    public function scopeSkuOrAlias($query, string $value)
+    {
+        $query->where(function ($query) use ($value) {
+            return $query
+                ->whereHas('product', function ($query) use ($value) {
+                    $query->where(['sku' => $value]);
+                })
+                ->orWhereHas('productAliases', function ($query) use ($value) {
+                    $query->where(['alias' => $value]);
+                });
+        });
+
+        return $query;
     }
 
     /**
@@ -265,5 +281,14 @@ class Inventory extends BaseModel
     public function warehouse(): BelongsTo
     {
         return $this->belongsTo(Warehouse::class);
+    }
+
+
+    /**
+     * @return HasMany
+     */
+    public function productAliases(): HasMany
+    {
+        return $this->hasMany(ProductAlias::class, 'product_id', 'product_id');
     }
 }
