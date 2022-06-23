@@ -21,9 +21,7 @@
                 <table class="fullWidth w-100">
                     <thead>
                         <tr>
-                            <th>SKU</th>
-                            <th>Name</th>
-                            <th class="text-right">Quantity</th>
+                            <th colspan="3">Recent stocktakes</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -31,6 +29,29 @@
                             <td>{{ itemMovement['product']['sku'] }}</td>
                             <td>{{ itemMovement['product']['name'] }}</td>
                             <td class="text-right">{{ itemMovement['quantity_after'] }}</td>
+                            <td class="text-right">{{ itemMovement['inventory']['shelf_location'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row" >
+            <div class="col">
+                <table class="fullWidth w-100">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Stocktake suggestions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="suggestion in stocktakeSuggestions.data">
+                            <td>{{ suggestion['product']['sku'] }}</td>
+                            <td>{{ suggestion['product']['name'] }}</td>
+                            <td class="text-right">{{ suggestion['quantity'] }}</td>
+                            <td class="text-right">{{ suggestion['shelf_location'] }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -78,11 +99,12 @@
                 inventory: null,
                 quantity: null,
                 recentStocktakes: [],
+                stocktakeSuggestions: [],
             };
         },
 
         mounted() {
-            this.loadRecentStocktakes();
+            this.reloadData();
 
             if (! this.currentUser()['warehouse_id']) {
                 this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
@@ -105,17 +127,42 @@
         },
 
         methods: {
+            reloadData() {
+                this.loadRecentStocktakes();
+                this.loadStocktakeSuggestions();
+            },
+
             loadRecentStocktakes() {
                 const params = {
                     'filter[description]': 'stocktake',
                     'filter[warehouse_id]': this.currentUser()['warehouse_id'],
-                    'include': 'product',
-                    'sort': '-id'
+                    'include': 'product,inventory',
+                    'sort': '-id',
+                    'per_page': 3,
                 }
 
                 this.apiGetInventoryMovements(params)
                     .then((response) => {
                         this.recentStocktakes = response.data;
+                    })
+                    .catch((error) => {
+                        this.displayApiCallError(error);
+                    });
+            },
+
+
+            loadStocktakeSuggestions() {
+                const params = {
+                    'filter[quantity_between]': '-10000000,-1',
+                    'filter[warehouse_id]': this.currentUser()['warehouse_id'],
+                    'include': 'product',
+                    'sort': 'shelve_location,quantity',
+                    'per_page': 5,
+                }
+
+                this.apiGetInventory(params)
+                    .then((response) => {
+                        this.stocktakeSuggestions = response.data;
                     })
                     .catch((error) => {
                         this.displayApiCallError(error);
@@ -153,7 +200,7 @@
                     })
                     .catch((error) => {
                         this.displayApiCallError(error);
-                        this.loadRecentStocktakes();
+                        this.reloadData();
                     });
             },
 
@@ -178,7 +225,7 @@
 
                 if (delta_quantity === 0) {
                     this.notifySuccess('Stock correct');
-                    this.loadRecentStocktakes();
+                    this.reloadData();
                     return;
                 }
 
@@ -192,15 +239,15 @@
                 this.apiPostInventoryMovement(data)
                     .then(() => {
                         this.notifySuccess('Inventory updated');
-                        this.loadRecentStocktakes();
                     })
                     .catch((error) => {
                         this.displayApiCallError(error);
-                        this.loadRecentStocktakes();
+                    })
+                    .finally(() => {
+                        this.reloadData();
                     });
             },
         },
-
     }
 </script>
 

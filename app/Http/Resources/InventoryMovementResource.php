@@ -28,6 +28,7 @@ class InventoryMovementResource extends JsonResource
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,
 
+            "inventory" => InventoryResource::make($this->whenLoaded('inventory')),
             "product" => ProductResource::make($this->whenLoaded('product')),
             "warehouse" => WarehouseResource::make($this->whenLoaded('warehouse')),
             "user" => UserResource::make($this->whenLoaded('user')),

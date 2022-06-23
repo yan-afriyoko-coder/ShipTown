@@ -115,6 +115,7 @@ class Inventory extends BaseModel
                 AllowedFilter::exact('warehouse_id'),
                 AllowedFilter::exact('warehouse_code'),
                 AllowedFilter::exact('quantity_incoming'),
+                AllowedFilter::scope('quantity_between'),
                 AllowedFilter::scope('quantity_available_between'),
                 AllowedFilter::scope('quantity_required_between'),
                 AllowedFilter::scope('restock_level_between'),
@@ -127,10 +128,13 @@ class Inventory extends BaseModel
                 'id',
                 'product_id',
                 'warehouse_id',
+                'quantity',
+                'quantity_reserved',
                 'quantity_available',
-                'restock_level',
                 'quantity_required',
                 'quantity_incoming',
+                'restock_level',
+                'shelve_location'
             ])
             ->allowedIncludes([
                 'product'
@@ -177,6 +181,18 @@ class Inventory extends BaseModel
         }
 
         return $this->attributes['quantity_required'];
+    }
+
+    /**
+     * @param mixed $query
+     * @param mixed $min
+     * @param mixed $max
+     *
+     * @return mixed
+     */
+    public function scopeQuantityBetween($query, $min, $max)
+    {
+        return $query->whereBetween('quantity', [floatval($min), floatval($max)]);
     }
 
     /**

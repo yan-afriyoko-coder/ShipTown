@@ -22,12 +22,13 @@ class InventoryMovementController extends Controller
                 AllowedFilter::exact('warehouse_id'),
             ])
             ->allowedIncludes([
+                'inventory',
                 'product',
                 'warehouse',
                 'user',
             ])
             ->allowedSorts([
-                'id'
+                'id',
             ]);
 
         return InventoryMovementResource::collection($this->getPaginatedResult($inventoryMovement));
