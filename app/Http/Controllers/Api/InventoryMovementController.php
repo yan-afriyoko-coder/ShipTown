@@ -18,7 +18,8 @@ class InventoryMovementController extends Controller
     {
         $inventoryMovement = QueryBuilder::for(InventoryMovement::class)
             ->allowedFilters([
-                AllowedFilter::exact('description')
+                AllowedFilter::exact('description'),
+                AllowedFilter::exact('warehouse_id'),
             ])
             ->allowedIncludes([
                 'product',
