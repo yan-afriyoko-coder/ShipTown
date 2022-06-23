@@ -87,7 +87,7 @@
                 this.quantity = null;
 
                 const params = {
-                    'filter[product.sku_or_alias]': barcode,
+                    'filter[sku_or_alias]': barcode,
                     'filter[warehouse_id]': Vue.prototype.$currentUser['warehouse_id'],
                     'include': 'product'
                 }
