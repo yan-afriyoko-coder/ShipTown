@@ -83,6 +83,14 @@
 
         methods: {
             barcodeScanned: async function (barcode) {
+                if (this.barcode === null) {
+                    return;
+                }
+
+                if (this.barcode === "") {
+                    return;
+                }
+
                 this.inventory = null;
                 this.quantity = null;
 
