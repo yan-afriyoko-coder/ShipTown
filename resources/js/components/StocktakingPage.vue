@@ -142,7 +142,7 @@
 
                 const data = {
                     'product_id': this.inventory['product_id'],
-                    'warehouse_id': this.currentUser['warehouse_id'],
+                    'warehouse_id': this.currentUser()['warehouse_id'],
                     'description': 'stocktake',
                     'quantity': delta_quantity,
                 };
