@@ -139,21 +139,11 @@ class Inventory extends BaseModel
 
     public function scopeSkuOrAlias($query, string $value)
     {
-        $query->where(function ($query) use ($value) {
+        $aliases = ProductAlias::query()
+            ->select('product_id')
+            ->where(['alias' => $value]);
 
-            $products = Product::query()
-                ->select('id as product_id')
-                ->where(['sku' => $value]);
-
-            $aliases = ProductAlias::query()
-                ->select('product_id as product_id')
-                ->where(['alias' => $value]);
-
-            return $query->whereIn('product_id', $products)
-                ->orWhereIn('product_id', $aliases);
-        });
-
-        return $query;
+        return $query->orWhereIn('product_id', $aliases);
     }
 
     /**
