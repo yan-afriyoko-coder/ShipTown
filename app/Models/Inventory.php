@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -139,13 +140,16 @@ class Inventory extends BaseModel
     public function scopeSkuOrAlias($query, string $value)
     {
         $query->where(function ($query) use ($value) {
-            return $query
-                ->whereHas('product', function ($query) use ($value) {
-                    $query->where(['sku' => $value]);
-                })
-                ->orWhereHas('productAliases', function ($query) use ($value) {
-                    $query->where(['alias' => $value]);
-                });
+
+            $products = Product::query()
+                ->select('id as product_id')
+                ->where(['sku' => $value]);
+
+            $aliases = ProductAlias::query()
+                ->select('product_id as product_id')
+                ->where(['alias' => $value]);
+
+            return $query->whereIn('product_id', $products)->orWhereIn('product_id', $aliases);
         });
 
         return $query;
