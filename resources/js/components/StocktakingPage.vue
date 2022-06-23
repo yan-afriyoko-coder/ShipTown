@@ -61,7 +61,7 @@
         },
 
         mounted() {
-            if (! Vue.prototype.$currentUser['warehouse_id']) {
+            if (! this.currentUser()['warehouse_id']) {
                 this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
                 return
             }
@@ -83,11 +83,11 @@
 
         methods: {
             barcodeScanned: async function (barcode) {
-                if (this.barcode === null) {
+                if (barcode === null) {
                     return;
                 }
 
-                if (this.barcode === "") {
+                if (barcode === "") {
                     return;
                 }
 
@@ -96,7 +96,7 @@
 
                 const params = {
                     'filter[sku_or_alias]': barcode,
-                    'filter[warehouse_id]': Vue.prototype.$currentUser['warehouse_id'],
+                    'filter[warehouse_id]': this.currentUser()['warehouse_id'],
                     'include': 'product'
                 }
 
@@ -142,7 +142,7 @@
 
                 const data = {
                     'product_id': this.inventory['product_id'],
-                    'warehouse_id': Vue.prototype.$currentUser['warehouse_id'],
+                    'warehouse_id': this.currentUser['warehouse_id'],
                     'description': 'stocktake',
                     'quantity': delta_quantity,
                 };

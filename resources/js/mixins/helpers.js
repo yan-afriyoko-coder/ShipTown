@@ -72,7 +72,7 @@ export default {
             showError: function (message, options) {
                 const defaultOptions = {
                     closeOnClick: true,
-                    timeout: 0,
+                    timeout: 15 * 1000,
                     buttons: [
                         {text: 'OK', action: null},
                     ]
