@@ -62,8 +62,12 @@ export default {
                 return axios.get('/api/product/inventory', {params: params});
             },
 
+            apiGetInventoryMovements(params) {
+                return this.apiGet('/api/inventory-movements', {params: params});
+            },
+
             apiPostInventoryMovement(data) {
-                return axios.post('/api/inventory-movement', data);
+                return axios.post('/api/inventory-movements', data);
             },
 
             apiKickProduct: function(sku) {

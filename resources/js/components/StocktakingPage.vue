@@ -10,9 +10,30 @@
             <button id="config-button" disabled type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
-        <div class="row">
+        <div class="row" v-if="isLoading">
             <div class="col">
                 <div ref="loadingContainerOverride" style="height: 100px"></div>
+            </div>
+        </div>
+
+        <div class="row" >
+            <div class="col">
+                <table class="fullWidth w-100">
+                    <thead>
+                        <tr>
+                            <th>SKU</th>
+                            <th>Name</th>
+                            <th class="text-right">Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="itemMovement in recentStocktakes.data">
+                            <td>{{ itemMovement['product']['sku'] }}</td>
+                            <td>{{ itemMovement['product']['name'] }}</td>
+                            <td class="text-right">{{ itemMovement['quantity_after'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -44,7 +65,6 @@
     import api from "../mixins/api";
     import helpers from "../mixins/helpers";
     import url from "../mixins/url";
-    import Vue from "vue";
 
     export default {
         mixins: [loadingOverlay, url, api, helpers],
@@ -57,10 +77,13 @@
             return {
                 inventory: null,
                 quantity: null,
+                recentStocktakes: [],
             };
         },
 
         mounted() {
+            this.loadRecentStocktakes();
+
             if (! this.currentUser()['warehouse_id']) {
                 this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
                 return
@@ -113,6 +136,7 @@
                     })
                     .catch((error) => {
                         this.displayApiCallError(error);
+                        this.loadRecentStocktakes();
                     });
             },
 
@@ -137,6 +161,7 @@
 
                 if (delta_quantity === 0) {
                     this.notifySuccess('Stock correct');
+                    this.loadRecentStocktakes();
                     return;
                 }
 
@@ -150,12 +175,31 @@
                 this.apiPostInventoryMovement(data)
                     .then(() => {
                         this.notifySuccess('Inventory updated');
+                        this.loadRecentStocktakes();
+                    })
+                    .catch((error) => {
+                        this.displayApiCallError(error);
+                        this.loadRecentStocktakes();
+                    });
+            },
+
+            loadRecentStocktakes() {
+                const params = {
+                    'filter[description]': 'stocktake',
+                    'include': 'product',
+                    'sort': '-id'
+                }
+
+                this.apiGetInventoryMovements(params)
+                    .then((response) => {
+                        this.recentStocktakes = response.data;
                     })
                     .catch((error) => {
                         this.displayApiCallError(error);
                     });
-            },
+            }
         },
+
     }
 </script>
 
