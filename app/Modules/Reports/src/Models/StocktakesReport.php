@@ -17,13 +17,16 @@ class StocktakesReport extends Report
         $this->report_name = 'Stocktakes Report';
 
         $this->baseQuery = InventoryMovement::query()
-            ->leftJoin('inventory', 'inventory_movements.product_id', '=', 'inventory.product_id')
+            ->leftJoin('inventory', function ($join) {
+                $join->on('inventory_movements.product_id', '=', 'inventory.product_id');
+                $join->on('inventory_movements.warehouse_id', '=', 'inventory.warehouse_id');
+            })
             ->leftJoin('products as product', 'inventory_movements.product_id', '=', 'product.id')
             ->leftJoin('users as user', 'inventory_movements.user_id', '=', 'user.id')
             ->orderBy('inventory_movements.id', 'desc');
 
         $this->fields = [
-            'date'              => 'inventory.created_at',
+            'date'              => 'inventory_movements.created_at',
             'warehouse_code'    => 'inventory.warehouse_code',
             'user'              => 'user.name',
             'product_sku'       => 'product.sku',
