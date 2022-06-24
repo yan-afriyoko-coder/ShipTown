@@ -1,5 +1,4 @@
-function playAudio(base64Audio, times = 1) {
-    let timesPlayed = 0;
+function playAudio(base64Audio) {
     let audio = new Audio("data:audio/wav;base64," + base64Audio);
     audio.play();
 }
