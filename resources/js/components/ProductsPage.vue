@@ -6,6 +6,7 @@
                     <barcode-input-field placeholder="Search products using name, sku, alias or command"
                                          ref="barcode"
                                          :url_param_name="'search'"
+                                         @refreshRequest="reloadProducts"
                                          @barcodeScanned="findText"
                     />
                 </div>

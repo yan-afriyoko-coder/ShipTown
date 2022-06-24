@@ -101,8 +101,8 @@
                 this.$bvModal.hide('set-shelf-location-command-modal');
 
                 this.apiGetInventory({
-                          'filter[sku_or_alias]': event.target.value,
-                          'filter[warehouse_id]': this.currentUser()['warehouse_id'],
+                        'filter[sku_or_alias]': event.target.value,
+                        'filter[warehouse_id]': this.currentUser()['warehouse_id'],
                     })
                     .then((response) => {
                         if (response.data['meta']['total'] !== 1) {
@@ -117,9 +117,11 @@
                             })
                             .then(() => {
                                 this.notifySuccess('Shelf updated');
+                                this.$emit('refreshRequest');
                             })
                             .catch((error) => {
                                 this.displayApiCallError(error)
+                                this.$emit('refreshRequest');
                             });
                     })
                     .catch((error) => {
