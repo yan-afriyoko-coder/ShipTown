@@ -19,16 +19,18 @@ class StocktakesReport extends Report
         $this->baseQuery = InventoryMovement::query()
             ->leftJoin('inventory', 'inventory_movements.product_id', '=', 'inventory.product_id')
             ->leftJoin('products as product', 'inventory_movements.product_id', '=', 'product.id')
+            ->leftJoin('users as user', 'inventory_movements.user_id', '=', 'user.id')
             ->orderBy('inventory_movements.id', 'desc');
 
         $this->fields = [
-            'date'                     => 'inventory.created_at',
-            'warehouse_code'                     => 'inventory.warehouse_code',
-            'product_sku'                        => 'product.sku',
-            'product_name'                       => 'product.name',
-            'quantity_delta'                     => 'inventory_movements.quantity_delta',
-            'quantity_before'                    => 'inventory_movements.quantity_before',
-            'quantity_after'                     => 'inventory_movements.quantity_after',
+            'date'              => 'inventory.created_at',
+            'warehouse_code'    => 'inventory.warehouse_code',
+            'user'              => 'user.name',
+            'product_sku'       => 'product.sku',
+            'product_name'      => 'product.name',
+            'quantity_delta'    => 'inventory_movements.quantity_delta',
+            'quantity_before'   => 'inventory_movements.quantity_before',
+            'quantity_after'    => 'inventory_movements.quantity_after',
         ];
 
         $this->casts = [
