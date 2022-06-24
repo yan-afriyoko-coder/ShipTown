@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Api\Product\ProductInventoryController;
 
+use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\User;
@@ -26,13 +27,17 @@ class StoreTest extends TestCase
         $warehouse = factory(Warehouse::class)->create();
 
         $product = factory(Product::class)->create();
+
+        $inventory = Inventory::first();
+
         $params = [
-            'sku' => $product->sku,
-            'location_id' => $warehouse->code,
-            'warehouse_code' => $warehouse->code,
+            'id' => $inventory->getKey(),
+            'shelve_location' => 'test',
         ];
 
         $response = $this->post("api/product/inventory", $params);
+
+        ray($response->json());
 
         $response->assertStatus(200);
         $response->assertJsonStructure([
@@ -41,7 +46,6 @@ class StoreTest extends TestCase
                     'quantity',
                     'quantity_reserved',
                     'product_id',
-                    'location_id',
                     'warehouse_code',
                     'updated_at',
                     'created_at',
@@ -50,19 +54,5 @@ class StoreTest extends TestCase
                 ]
             ]
         ]);
-    }
-
-    public function testIfInvalidSkuIsNotAllowed()
-    {
-        /** @var Warehouse $warehouse */
-        $warehouse = factory(Warehouse::class)->create();
-
-        $params = [
-            'sku' => 0,
-            'location_id' => $warehouse->code,
-        ];
-
-        $response = $this->post("api/product/inventory", $params);
-        $response->assertStatus(404);
     }
 }
