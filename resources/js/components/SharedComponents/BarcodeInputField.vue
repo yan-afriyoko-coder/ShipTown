@@ -131,6 +131,7 @@
             },
 
             barcodeScanned(barcode) {
+                this.errorBeep();
                 if (this.tryToRunCommand(barcode)) {
                     this.barcode = '';
                     return;
