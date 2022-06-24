@@ -4,14 +4,14 @@ function beep() {
 }
 
 function warningBeep() {
-    setTimeout(this.beep, 1);
-    setTimeout(this.beep, 150);
+    setTimeout(this.beep, 100);
+    setTimeout(this.beep, 250);
 }
 
 function errorBeep() {
-    setTimeout(this.beep, 1);
-    setTimeout(this.beep, 150);
-    setTimeout(this.beep, 300);
+    setTimeout(this.beep, 100);
+    setTimeout(this.beep, 250);
+    setTimeout(this.beep, 400);
 }
 
 export default {
