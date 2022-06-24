@@ -106,6 +106,9 @@
                                 'id': inventory['id'],
                                 'shelve_location': this.command['value'],
                             })
+                            .then(() => {
+                                this.notifySuccess('Shelf updated');
+                            })
                             .catch((error) => {
                                 this.displayApiCallError(error)
                             });
