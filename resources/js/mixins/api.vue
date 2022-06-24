@@ -35,7 +35,7 @@ export default {
                 console.log('API failed call response', error.response);
 
                 if (error.response.status === 422) {
-                    this.notifyError(JSON.stringify(error.response.data), {timeout: 0});
+                    this.notifyError(JSON.stringify(error.response.data));
                     return;
                 }
 
@@ -60,6 +60,10 @@ export default {
 
             apiGetInventory(params) {
                 return axios.get('/api/product/inventory', {params: params});
+            },
+
+            apiPostInventory(data) {
+                return this.apiPost('/api/product/inventory', data);
             },
 
             apiGetInventoryMovements(params) {

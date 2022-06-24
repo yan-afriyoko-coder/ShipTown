@@ -43,58 +43,102 @@
             }
         },
 
+
         mounted() {
-            if(this.url_param_name) {
-                this.barcode = this.getUrlParameter(this.url_param_name);
-            }
+            this.resetInputValue();
             this.setFocusOnBarcodeInput();
+
+            this.$root.$on('bv::modal::hidden', (bvEvent, modalId) => {
+                this.setFocusElementById(300, 'barcodeInput', true, true)
+            })
+
+            this.$root.$on('bv::modal::show', (bvEvent, modalId) => {
+                // we need to disable it otherwise b-modal might return focus on it too quickly
+                // and on screen keyboard will stay visible
+                document.getElementById('barcodeInput').readOnly = true;
+            })
         },
 
         methods: {
-            hideModal(event) {
-              this.$bvModal.hide('set-shelf-location-command-modal');
+            resetInputValue: function () {
+                if (this.url_param_name) {
+                    this.barcode = this.getUrlParameter(this.url_param_name);
+                }
             },
 
-            runCommandShelfScanned: function (command) {
-              this.command = command;
-              this.$bvModal.show('set-shelf-location-command-modal')
-              this.warningBeep();
-              this.setFocusElementById(1, 'set-shelf-location-command-modal-input')
+            hideModal(event) {
+                this.$bvModal.hide('set-shelf-location-command-modal');
+            },
+
+            runCommandShelfScanned: function () {
+                this.$bvModal.show('set-shelf-location-command-modal')
+                this.warningBeep();
+                this.setFocusElementById(300, 'set-shelf-location-command-modal-input')
             },
 
             tryToRunCommand: function (barcode) {
-              let command = barcode.split(':');
+                let command = barcode.split(':');
 
-              if(command.length < 2) {
+                if(command.length < 2) {
+                    return false;
+                }
+
+                this.command['name'] = command[0];
+                this.command['value'] = command[1];
+
+                switch (command[0].toLowerCase())
+                {
+                    case 'shelf':
+                        this.runCommandShelfScanned(command);
+                        return true;
+                }
+
                 return false;
-              }
-
-              switch (command[0].toLowerCase())
-              {
-                  case 'shelf':
-                    this.runCommandShelfScanned(command);
-                    return true;
-              }
-
-              return false;
             },
 
             updateShelfLocation(event)
             {
-              this.$bvModal.hide('set-shelf-location-command-modal');
-              this.notifyError('Set Shelf Location command not yet implemented: ' + event.target.value);
-              this.setFocusOnBarcodeInput();
+                this.$bvModal.hide('set-shelf-location-command-modal');
+
+                this.apiGetInventory({
+                          'filter[sku_or_alias]': event.target.value,
+                          'filter[warehouse_id]': this.currentUser()['warehouse_id'],
+                    })
+                    .then((response) => {
+                        if (response.data['meta']['total'] !== 1) {
+                            this.notifyError('SKU "'+ event.target.value +'" not found ');
+                            return;
+                        }
+
+                        const inventory = response.data.data[0];
+                        this.apiPostInventory({
+                                'id': inventory['id'],
+                                'shelve_location': this.command['value'],
+                            })
+                            .then(() => {
+                                this.notifySuccess('Shelf updated');
+                            })
+                            .catch((error) => {
+                                this.displayApiCallError(error)
+                            });
+                    })
+                    .catch((error) => {
+                        this.displayApiCallError(error)
+                    });
+
+                this.resetInputValue();
+                this.setFocusOnBarcodeInput();
             },
 
             barcodeScanned(barcode) {
-                if(this.url_param_name) {
-                    this.setUrlParameter(this.url_param_name, barcode);
-                }
-
                 if (this.tryToRunCommand(barcode)) {
                     this.barcode = '';
                     return;
                   }
+
+                if(this.url_param_name) {
+                    this.setUrlParameter(this.url_param_name, barcode);
+                }
 
                 this.$emit('barcodeScanned', barcode);
 

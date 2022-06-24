@@ -71,7 +71,7 @@ class PublishInventoryWebhooksJob implements ShouldQueue
     private function publishInventoryMessage($chunk): void
     {
         $inventoryCollection = InventoryResource::collection(
-            InventoryMovement::query()
+            Inventory::query()
                 ->whereIn('id', $chunk->pluck('model_id'))
                 ->orderBy('id')
                 ->with(['product', 'warehouse'])

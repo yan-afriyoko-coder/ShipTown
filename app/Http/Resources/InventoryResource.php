@@ -16,6 +16,7 @@ class InventoryResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id'                 => $this->id,
             'product_id'         => $this->product_id,
             'warehouse_id'       => $this->warehouse_id,
             'warehouse_code'     => $this->warehouse_code,

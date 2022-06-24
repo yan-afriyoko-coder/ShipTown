@@ -1,6 +1,7 @@
 <?php
 
 use App\Modules\Webhooks\src\Models\WebhooksConfiguration;
+use App\Modules\Webhooks\src\WebhooksServiceProviderBase;
 use Illuminate\Database\Seeder;
 
 class WebhooksTestSeeder extends Seeder
@@ -12,10 +13,14 @@ class WebhooksTestSeeder extends Seeder
      */
     public function run()
     {
-        if (env('TEST_SNS_TOPIC_ARN')) {
-            WebhooksConfiguration::query()->updateOrCreate([], [
-                'topic_arn' => env('TEST_SNS_TOPIC_ARN')
-            ]);
+        if (env('TEST_SNS_TOPIC_ARN') === null) {
+            return;
         }
+
+        WebhooksConfiguration::query()->updateOrCreate([], [
+            'topic_arn' => env('TEST_SNS_TOPIC_ARN')
+        ]);
+
+        WebhooksServiceProviderBase::enableModule();
     }
 }

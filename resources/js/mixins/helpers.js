@@ -28,26 +28,30 @@ export default {
                 return (value && value !== 0) ? value : '-';
             },
 
-            setFocus: function (input, autoSelectAll = false, hideOnScreenKeyboard = false) {
+            setFocus: function (input, autoSelectAll = false, hideOnScreenKeyboard = false, delay = 1) {
                 setTimeout(() => {
                     if (hideOnScreenKeyboard) {
                         // this simple hack of setting focus when field is read only will
                         // prevent showing on screen keyboard on mobile devices
                         input.readOnly = true;
                     }
-                        input.focus();
+
+                    input.focus();
+
                     if (hideOnScreenKeyboard) {
                         input.readOnly = false;
                     }
+
                     if (autoSelectAll) {
                         document.execCommand('selectall');
                     }
-                    },1);
+
+                    }, delay);
             },
 
             setFocusElementById(delay = 1, elementId, autoSelectAll = false, hideOnScreenKeyboard = false) {
                 setTimeout(() => {
-                    this.setFocus(document.getElementById(elementId), autoSelectAll, hideOnScreenKeyboard)
+                    this.setFocus(document.getElementById(elementId), autoSelectAll, hideOnScreenKeyboard);
                 }, delay);
             },
 
@@ -73,6 +77,7 @@ export default {
                 const defaultOptions = {
                     closeOnClick: true,
                     timeout: 15 * 1000,
+                    showProgressBar: true,
                     buttons: [
                         {text: 'OK', action: null},
                     ]

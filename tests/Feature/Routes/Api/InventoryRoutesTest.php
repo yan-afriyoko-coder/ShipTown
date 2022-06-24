@@ -66,9 +66,10 @@ class InventoryRoutesTest extends TestCase
         /** @var Product $product */
         $product = factory(Product::class)->create();
 
+        $inventory = Inventory::first();
+
         $update = [
-            'sku'               => $product->sku,
-            'location_id'       => $warehouse->code,
+            'id'                => $inventory->getKey(),
             'quantity'          => rand(100, 200),
             'quantity_reserved' => rand(10, 50),
         ];
