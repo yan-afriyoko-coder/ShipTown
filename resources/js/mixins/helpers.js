@@ -29,12 +29,6 @@ export default {
             },
 
             setFocus: function (input, autoSelectAll = false, hideOnScreenKeyboard = false, delay = 1) {
-                if (hideOnScreenKeyboard) {
-                    // this simple hack of setting focus when field is read only will
-                    // prevent showing on screen keyboard on mobile devices
-                    input.readOnly = true;
-                }
-
                 setTimeout(() => {
                     if (hideOnScreenKeyboard) {
                         // this simple hack of setting focus when field is read only will
@@ -56,7 +50,9 @@ export default {
             },
 
             setFocusElementById(delay = 1, elementId, autoSelectAll = false, hideOnScreenKeyboard = false) {
-                this.setFocus(document.getElementById(elementId), autoSelectAll, hideOnScreenKeyboard, delay);
+                setTimeout(() => {
+                    this.setFocus(document.getElementById(elementId), autoSelectAll, hideOnScreenKeyboard);
+                }, delay);
             },
 
             isMoreThanPercentageScrolled: function (percentage) {

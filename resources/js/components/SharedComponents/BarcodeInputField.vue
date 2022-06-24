@@ -47,6 +47,16 @@
         mounted() {
             this.resetInputValue();
             this.setFocusOnBarcodeInput();
+
+            this.$root.$on('bv::modal::hidden', (bvEvent, modalId) => {
+                this.setFocusElementById(300, 'barcodeInput', true, true)
+            })
+
+            this.$root.$on('bv::modal::show', (bvEvent, modalId) => {
+                // we need to disable it otherwise b-modal might return focus on it too quickly
+                // and on screen keyboard will stay visible
+                document.getElementById('barcodeInput').readOnly = true;
+            })
         },
 
         methods: {
@@ -61,11 +71,9 @@
             },
 
             runCommandShelfScanned: function () {
-                document.getElementById('set-shelf-location-command-modal-input').readOnly = true;
-
                 this.$bvModal.show('set-shelf-location-command-modal')
                 this.warningBeep();
-                this.setFocusElementById(1, 'set-shelf-location-command-modal-input')
+                this.setFocusElementById(300, 'set-shelf-location-command-modal-input')
             },
 
             tryToRunCommand: function (barcode) {
