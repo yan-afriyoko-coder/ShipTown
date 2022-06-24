@@ -38,6 +38,7 @@ class PublishInventoryMovementWebhooksJob implements ShouldQueue
                 'model_class' => InventoryMovement::class,
                 'reserved_at' => null
             ])
+            ->orderBy('id')
             ->limit(10);
 
         $chunk = $query->get();
