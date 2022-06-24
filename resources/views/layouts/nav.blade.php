@@ -107,7 +107,7 @@
                     <li class="nav-item dropdown">
                         <!-- User dropdown menu -->
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            {{ Auth::user()->name }} (id: {{ Auth::user()->id }})<span class="caret"></span>
+                            {{ Auth::user()->name }} ({{ Auth::user()->warehouse->code }})<span class="caret"></span>
                         </a>
 
                         <!-- Menu Items END -->
