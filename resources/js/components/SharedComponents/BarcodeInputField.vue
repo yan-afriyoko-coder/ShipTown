@@ -93,7 +93,7 @@
             showShelfLocationModal: function () {
                 this.$bvModal.show('set-shelf-location-command-modal')
                 this.warningBeep();
-                this.setFocusElementById(300, 'set-shelf-location-command-modal-input')
+                this.setFocusElementById(1, 'set-shelf-location-command-modal-input')
             },
 
             tryToRunCommand: function (textEntered) {
