@@ -35,20 +35,13 @@ class ProductInventoryController extends Controller
      */
     public function store(StoreInventoryRequest $request): AnonymousResourceCollection
     {
-        $product = Product::where('sku', '=', $request->sku)->firstOrFail();
-
-        $attributes = $request->validated();
-
-        $attributes['product_id'] = $product->id;
-
-        $inventory = Inventory::query()->where([
-                'product_id'     => $attributes['product_id'],
-                'warehouse_code' => $attributes['location_id'],
-            ])
+        /** @var Inventory $inventory */
+        $inventory = Inventory::query()
+            ->where(['id' => $request->validated()['id']])
             ->first();
 
-        $inventory->update($attributes);
+        $inventory->update($request->except('id'));
 
-        return JsonResource::collection(collect([$inventory]));
+        return InventoryResource::collection(collect([$inventory]));
     }
 }
