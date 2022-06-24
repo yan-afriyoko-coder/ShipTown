@@ -2,7 +2,8 @@
 
 namespace App\Modules\Webhooks\src\Jobs;
 
-use App\Http\Resources\InventoryMovementResource;
+use App\Http\Resources\InventoryResource;
+use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use App\Modules\Webhooks\src\Models\PendingWebhook;
 use App\Modules\Webhooks\src\Services\SnsService;
@@ -17,7 +18,7 @@ use romanzipp\QueueMonitor\Traits\IsMonitored;
 /**
  * Class PublishOrdersWebhooksJob.
  */
-class PublishInventoryMovementWebhooksJob implements ShouldQueue
+class PublishInventoryWebhooksJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -35,7 +36,7 @@ class PublishInventoryMovementWebhooksJob implements ShouldQueue
     {
         $query = PendingWebhook::query()
             ->where([
-                'model_class' => InventoryMovement::class,
+                'model_class' => Inventory::class,
                 'reserved_at' => null
             ])
             ->orderBy('id')
@@ -49,7 +50,7 @@ class PublishInventoryMovementWebhooksJob implements ShouldQueue
             try {
                 PendingWebhook::query()->whereIn('id', $pendingWebhookIds)->update(['reserved_at' => now()]);
 
-                $this->publishInventoryMovementMessage($chunk);
+                $this->publishInventoryMessage($chunk);
 
                 PendingWebhook::query()->whereIn('id', $pendingWebhookIds)->delete();
             } catch (Exception $exception) {
@@ -67,17 +68,17 @@ class PublishInventoryMovementWebhooksJob implements ShouldQueue
     /**
      * @param $chunk
      */
-    private function publishInventoryMovementMessage($chunk): void
+    private function publishInventoryMessage($chunk): void
     {
-        $inventoryMovementsCollection = InventoryMovementResource::collection(
+        $inventoryCollection = InventoryResource::collection(
             InventoryMovement::query()
                 ->whereIn('id', $chunk->pluck('model_id'))
                 ->orderBy('id')
-                ->with(['product', 'warehouse', 'user'])
+                ->with(['product', 'warehouse'])
                 ->get()
         );
 
-        $payload = collect(['InventoryMovements' => $inventoryMovementsCollection]);
+        $payload = collect(['Inventory' => $inventoryCollection]);
 
         SnsService::publishNew($payload->toJson());
     }
