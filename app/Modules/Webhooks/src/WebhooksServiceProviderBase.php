@@ -3,6 +3,7 @@
 namespace App\Modules\Webhooks\src;
 
 use App\Events\DailyEvent;
+use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\InventoryMovementCreatedEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
@@ -76,6 +77,10 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
 
         InventoryMovementCreatedEvent::class => [
             InventoryMovementCreatedEventListener::class,
+        ],
+
+        InventoryUpdatedEvent::class => [
+            Listeners\InventoryUpdatedEventListener::class,
         ]
     ];
 
