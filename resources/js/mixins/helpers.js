@@ -77,6 +77,7 @@ export default {
                 const defaultOptions = {
                     closeOnClick: true,
                     timeout: 15 * 1000,
+                    showProgressBar: true,
                     buttons: [
                         {text: 'OK', action: null},
                     ]
