@@ -61,7 +61,8 @@
             },
 
             runCommandShelfScanned: function () {
-                // this.command = command;
+                document.getElementById('set-shelf-location-command-modal-input').readOnly = true;
+
                 this.$bvModal.show('set-shelf-location-command-modal')
                 this.warningBeep();
                 this.setFocusElementById(1, 'set-shelf-location-command-modal-input')
