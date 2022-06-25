@@ -22,6 +22,8 @@ class ProductsSeeder extends Seeder
             '06',
             '06',
             '45',
+            '8413848043283',
+            '3276000690573'
         ]);
 
         factory(Product::class, 50)->create();

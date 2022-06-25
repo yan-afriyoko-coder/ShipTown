@@ -12,9 +12,21 @@
 
 
       <b-modal id="set-shelf-location-command-modal" @submit="updateShelfLocation" scrollable centered no-fade hide-header>
-        <input id="set-shelf-location-command-modal-input" class="form-control" :placeholder="'Scan product to update shelf location: ' + command[1]"
+          <div class="h5 text-center">{{ command['name'] }} : {{ command['value'] }}</div>
+          <div v-if="shelfLocationModalContinuesScan" class="alert-success text-center mb-2 small">CONTINUES SCAN ENABLED</div>
+
+          <input id="set-shelf-location-command-modal-input" class="form-control" :placeholder="'Scan product to update shelf location: ' + command[1]"
                @focus="simulateSelectAll"
                @keyup.enter="updateShelfLocation"/>
+
+          <div class="mt-2 small">
+              <div>
+                  <span class="text-primary font-weight-bold">Continues Scan</span><span>- scan shelf again to enable</span>
+              </div>
+              <div>
+                  <span class="text-danger font-weight-bold">Close</span><span>- scan twice to close</span>
+              </div>
+          </div>
       </b-modal>
     </div>
 </template>
@@ -40,6 +52,10 @@
                 currentLocation: '',
                 barcode: '',
                 command: ['',''],
+
+                shelfLocationModalCommandScanCount: 0,
+                shelfLocationModalShowing: false,
+                shelfLocationModalContinuesScan: false,
             }
         },
 
@@ -49,10 +65,18 @@
             this.setFocusOnBarcodeInput();
 
             this.$root.$on('bv::modal::hidden', (bvEvent, modalId) => {
+                this.shelfLocationModalShowing = false;
+                this.shelfLocationModalContinuesScan = false;
+                this.shelfLocationModalCommandScanCount = 0;
+                this.resetInputValue();
                 this.setFocusElementById(300, 'barcodeInput', true, true)
+                this.$emit('refreshRequest');
             })
 
             this.$root.$on('bv::modal::show', (bvEvent, modalId) => {
+                this.shelfLocationModalShowing = true;
+                this.shelfLocationModalContinuesScan = false;
+                this.shelfLocationModalCommandScanCount = 0;
                 // we need to disable it otherwise b-modal might return focus on it too quickly
                 // and on screen keyboard will stay visible
                 document.getElementById('barcodeInput').readOnly = true;
@@ -66,18 +90,16 @@
                 }
             },
 
-            hideModal(event) {
-                this.$bvModal.hide('set-shelf-location-command-modal');
-            },
-
-            runCommandShelfScanned: function () {
+            showShelfLocationModal: function () {
                 this.$bvModal.show('set-shelf-location-command-modal')
                 this.warningBeep();
-                this.setFocusElementById(300, 'set-shelf-location-command-modal-input')
+                this.setFocusElementById(1, 'set-shelf-location-command-modal-input')
             },
 
-            tryToRunCommand: function (barcode) {
-                let command = barcode.split(':');
+            tryToRunCommand: function (textEntered) {
+                this.lastCommand = textEntered;
+
+                let command = this.lastCommand.split(':');
 
                 if(command.length < 2) {
                     return false;
@@ -89,7 +111,7 @@
                 switch (command[0].toLowerCase())
                 {
                     case 'shelf':
-                        this.runCommandShelfScanned(command);
+                        this.showShelfLocationModal(command);
                         return true;
                 }
 
@@ -98,11 +120,32 @@
 
             updateShelfLocation(event)
             {
-                this.$bvModal.hide('set-shelf-location-command-modal');
+                const textEntered = event.target.value;
+
+                if (textEntered === "") {
+                    return;
+                }
+
+                if (textEntered === this.command['name'] + ':' + this.command['value']) {
+                    this.shelfLocationModalCommandScanCount = this.shelfLocationModalCommandScanCount + 1;
+
+                    switch (this.shelfLocationModalCommandScanCount)
+                    {
+                        case 1:
+                            this.shelfLocationModalContinuesScan = true;
+                            break;
+                        case 2:
+                            this.$bvModal.hide('set-shelf-location-command-modal');
+                            break;
+                    }
+
+                    event.target.value = '';
+                    return ;
+                }
 
                 this.apiGetInventory({
-                          'filter[sku_or_alias]': event.target.value,
-                          'filter[warehouse_id]': this.currentUser()['warehouse_id'],
+                        'filter[sku_or_alias]': textEntered,
+                        'filter[warehouse_id]': this.currentUser()['warehouse_id'],
                     })
                     .then((response) => {
                         if (response.data['meta']['total'] !== 1) {
@@ -126,8 +169,12 @@
                         this.displayApiCallError(error)
                     });
 
-                this.resetInputValue();
-                this.setFocusOnBarcodeInput();
+                if(this.shelfLocationModalContinuesScan) {
+                    this.setFocusElementById(1, 'set-shelf-location-command-modal-input', true, true)
+                    return;
+                }
+
+                this.$bvModal.hide('set-shelf-location-command-modal');
             },
 
             barcodeScanned(barcode) {
