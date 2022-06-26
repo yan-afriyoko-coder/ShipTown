@@ -108,14 +108,21 @@
                 this.command['name'] = command[0];
                 this.command['value'] = command[1];
 
-                switch (command[0].toLowerCase())
+                switch (this.command['name'].toLowerCase())
                 {
                     case 'shelf':
-                        this.showShelfLocationModal(command);
+                        this.showShelfLocationModal(this.lastCommand);
+                        return true;
+                    case 'goto':
+                        this.runGotoCommand();
                         return true;
                 }
 
                 return false;
+            },
+
+            runGotoCommand() {
+                window.location.href = this.command['value'];
             },
 
             updateShelfLocation(event)
