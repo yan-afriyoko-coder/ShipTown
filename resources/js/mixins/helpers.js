@@ -93,7 +93,13 @@ export default {
 
             notifySuccess: function (message = null, beep = true) {
                 if (message) {
-                    this.$snotify.success(message);
+                    this.$snotify.confirm(message, {
+                        timeout: 1000,
+                        showProgressBar: false,
+                        pauseOnHover: true,
+                        icon: false,
+                        buttons: []
+                    });
                 }
 
                 if (beep) {
