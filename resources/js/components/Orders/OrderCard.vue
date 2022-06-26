@@ -41,7 +41,7 @@
                             </div>
                             <div class="col d-none d-md-block text-right align-text-top">
                                 <div class="text-center w-100">
-                                    <small>price</small>
+                                    <small>total</small>
                                 </div>
                                 <span class="pr-0 mr-2 h5">{{ Math.floor(order['order_products_totals']['total_price']) }}<span class="" style="font-size: 8pt"><template v-if="order['order_products_totals']['total_price'] % 1 === 0"> .00</template><template v-if="order['order_products_totals']['total_price'] % 1 > 0"> .{{ Math.floor(order['order_products_totals']['total_price'] % 1 * 100) }} </template></span></span>
                             </div>
@@ -155,7 +155,7 @@
                                         </div>
                                         <div class="col d-none d-md-block text-right">
                                             <div class="text-center w-100">
-                                                <small>price</small>
+                                                <small>unit price</small>
                                             </div>
                                             <span class="pr-0 mr-2 h4">{{ Math.floor(order_product['price']) }}.<span class="ml-0 pl-0" style="font-size: 8pt"><template v-if="order_product['price'] % 1 === 0"> .00</template><template v-if="order_product['price'] % 1 > 0"> .{{ Math.floor(order_product['price'] % 1 * 100) }} </template></span></span>
                                         </div>
