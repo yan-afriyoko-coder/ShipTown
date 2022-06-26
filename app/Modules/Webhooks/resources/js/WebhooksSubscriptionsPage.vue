@@ -4,7 +4,7 @@
             <div class="card-header">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span>
-                        Webhooks Subscriptions
+                        Webhooks Subscriptions (AWS SNS)
                     </span>
                     <a tabindex="-1" class="action-link" @click="showAddSubscriptionModal">
                         Add
