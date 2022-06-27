@@ -149,39 +149,39 @@ class Inventory extends BaseModel
 
         return $query->whereIn('product_id', $aliases);
     }
-
-    /**
-     * @return float
-     */
-    public function getQuantityAvailableAttribute(): float
-    {
-        // quantity_available is mssql computed stored value, it's not updated until is saved
-        // this is to make sure always up-to-date value is returned
-        if ($this->quantity && $this->quantity_reserved) {
-            return $this->quantity - $this->quantity_reserved;
-        }
-
-        return $this->attributes['quantity_available'];
-    }
-
-    /**
-     * @return float
-     */
-    public function getQuantityRequiredAttribute(): float
-    {
-        // quantity_required is mssql computed stored value, it's not updated until is saved
-        // this is to make sure always up-to-date value is returned
-        if ($this->quantity === null || $this->quantity_reserved === null || $this->quantity_incoming === null) {
-            $quantity_required = $this->restock_level - ($this->quantity_available + $this->quantity_incoming);
-            if ($quantity_required > 0) {
-                return $quantity_required;
-            }
-
-            return 0;
-        }
-
-        return $this->attributes['quantity_required'];
-    }
+//
+//    /**
+//     * @return float
+//     */
+//    public function getQuantityAvailableAttribute(): float
+//    {
+//        // quantity_available is mssql computed stored value, it's not updated until is saved
+//        // this is to make sure always up-to-date value is returned
+//        if ($this->quantity && $this->quantity_reserved) {
+//            return $this->quantity - $this->quantity_reserved;
+//        }
+//
+//        return $this->attributes['quantity_available'];
+//    }
+//
+//    /**
+//     * @return float
+//     */
+//    public function getQuantityRequiredAttribute(): float
+//    {
+//        // quantity_required is mssql computed stored value, it's not updated until is saved
+//        // this is to make sure always up-to-date value is returned
+//        if ($this->quantity === null || $this->quantity_reserved === null || $this->quantity_incoming === null) {
+//            $quantity_required = $this->restock_level - ($this->quantity_available + $this->quantity_incoming);
+//            if ($quantity_required > 0) {
+//                return $quantity_required;
+//            }
+//
+//            return 0;
+//        }
+//
+//        return $this->attributes['quantity_required'];
+//    }
 
     /**
      * @param mixed $query
