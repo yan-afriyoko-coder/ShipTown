@@ -210,8 +210,7 @@ class Report extends Model
                 $filterName = $alias . '_between';
 
                 $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($alias) {
-                    // we add this to make sure query returns no records
-                    // if array of two values is not specified
+                    // we add this to make sure query returns no records if array of two values is not specified
                     if ((!is_array($value)) or (count($value) != 2)) {
                         $query->whereRaw('1=2');
                         return;
@@ -239,8 +238,7 @@ class Report extends Model
                 $filterName = $alias . '_greater_than';
 
                 $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($alias) {
-                    // we add this to make sure query returns no records
-                    // if array of two values is not specified
+                    // we add this to make sure query returns no records if array of two values is not specified
                     if ((!is_array($value)) or (count($value) != 2)) {
                         $query->whereRaw('1=2');
                         return;
@@ -268,8 +266,7 @@ class Report extends Model
                 $filterName = $alias . '_lower_than';
 
                 $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($alias) {
-                    // we add this to make sure query returns no records
-                    // if array of two values is not specified
+                    // we add this to make sure query returns no records if array of two values is not specified
                     if ((!is_array($value)) or (count($value) != 2)) {
                         $query->whereRaw('1=2');
                         return;
