@@ -6,6 +6,8 @@ use App\Helpers\CsvBuilder;
 use App\Modules\Reports\src\Http\Resources\ReportResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Expression;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\Exceptions\InvalidFilterQuery;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -25,8 +27,11 @@ class Report extends Model
 
     private array $allowedFilters = [];
     private array $fieldAliases = [];
-    private array $fieldSelects = [];
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function response($request)
     {
         if ($request->has('filename')) {
@@ -36,6 +41,10 @@ class Report extends Model
         return $this->view();
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function csvDownload()
     {
         $csv = CsvBuilder::fromQueryBuilder(
@@ -51,6 +60,10 @@ class Report extends Model
         ]);
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     private function view()
     {
         try {
@@ -73,13 +86,15 @@ class Report extends Model
         return view('reports.inventory', $data);
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function queryBuilder(): QueryBuilder
     {
-        $this->fieldSelects = [];
         $this->fieldAliases = [];
 
         foreach ($this->fields as $alias => $field) {
-            $this->fieldSelects[] = "$field as $alias";
             $this->fieldAliases[] = $alias;
         }
 
@@ -105,37 +120,21 @@ class Report extends Model
      */
     private function getAllowedFilters(): array
     {
-        $filters = $this->allowedFilters;
+        $filters = collect($this->allowedFilters);
 
-        // add exact filters
-        collect($this->fields)
-            ->each(function ($full_field_name, $alias) use (&$filters) {
-                $filters[] = AllowedFilter::exact($alias, $full_field_name);
-            });
+        $filters = $filters->merge($this->addExactFilters());
+        $filters = $filters->merge($this->addContainsFilters());
+        $filters = $filters->merge($this->addBetweenFilters());
+        $filters = $filters->merge($this->addGreaterThan());
+        $filters = $filters->merge($this->addLowerThan());
 
-        // add between filters
-        collect($this->casts)
-            ->filter(function ($type) {
-                return $type === 'float';
-            })
-            ->each(function ($record, $alias) use (&$filters) {
-                $filters[] = AllowedFilter::callback($alias . '_between', function ($query, $value) use ($alias) {
-                    // we add this to make sure query returns no records
-                    // if array of two values is not specified
-                    if ((! is_array($value)) or (count($value) != 2)) {
-                        $query->whereRaw('1=2');
-                        return;
-                    }
-
-                    $query->whereBetween($this->fields[$alias], [floatval($value[0]), floatval($value[1])]);
-                });
-            });
-
-        return $filters;
+        return $filters->toArray();
     }
 
     /**
      * @return array
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     private function getSelectFields(): array
     {
@@ -154,5 +153,132 @@ class Report extends Model
                 return $this->fields[$alias] . ' as ' . $alias;
             })
             ->toArray();
+    }
+
+    /**
+     * @return array
+     */
+    private function addExactFilters(): array
+    {
+
+        $allowedFilters = [];
+
+        // add exact filters
+        collect($this->fields)
+            ->each(function ($full_field_name, $alias) use (&$allowedFilters) {
+                $allowedFilters[] = AllowedFilter::exact($alias, $full_field_name);
+            });
+
+        return $allowedFilters;
+    }
+
+
+    /**
+     * @return array
+     */
+    private function addContainsFilters(): array
+    {
+        $allowedFilters = [];
+
+        collect($this->fields)
+            ->filter(function ($value, $key) {
+                $type = data_get($this->casts, $key);
+
+                return in_array($type, ['string', null]);
+            })
+            ->each(function ($record, $alias) use (&$allowedFilters) {
+                $filterName = $alias . '_contains';
+
+                $allowedFilters[] = AllowedFilter::partial($filterName, $record);
+            });
+
+        return $allowedFilters;
+    }
+
+    /**
+     * @return array
+     */
+    private function addBetweenFilters(): array
+    {
+        $allowedFilters = [];
+
+        collect($this->casts)
+            ->filter(function ($type) {
+                return $type === 'float';
+            })
+            ->each(function ($record, $alias) use (&$allowedFilters) {
+                $filterName = $alias . '_between';
+
+                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($alias) {
+                    // we add this to make sure query returns no records
+                    // if array of two values is not specified
+                    if ((!is_array($value)) or (count($value) != 2)) {
+                        $query->whereRaw('1=2');
+                        return;
+                    }
+
+                    $query->whereBetween($this->fields[$alias], [floatval($value[0]), floatval($value[1])]);
+                });
+            });
+
+        return $allowedFilters;
+    }
+
+    /**
+     * @return array
+     */
+    private function addGreaterThan(): array
+    {
+        $allowedFilters = [];
+
+        collect($this->casts)
+            ->filter(function ($type) {
+                return $type === 'float';
+            })
+            ->each(function ($record, $alias) use (&$allowedFilters) {
+                $filterName = $alias . '_greater_than';
+
+                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($alias) {
+                    // we add this to make sure query returns no records
+                    // if array of two values is not specified
+                    if ((!is_array($value)) or (count($value) != 2)) {
+                        $query->whereRaw('1=2');
+                        return;
+                    }
+
+                    $query->where($this->fields[$alias], '>', floatval($value));
+                });
+            });
+
+        return $allowedFilters;
+    }
+
+    /**
+     * @return array
+     */
+    private function addLowerThan(): array
+    {
+        $allowedFilters = [];
+
+        collect($this->casts)
+            ->filter(function ($type) {
+                return $type === 'float';
+            })
+            ->each(function ($record, $alias) use (&$allowedFilters) {
+                $filterName = $alias . '_lower_than';
+
+                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($alias) {
+                    // we add this to make sure query returns no records
+                    // if array of two values is not specified
+                    if ((!is_array($value)) or (count($value) != 2)) {
+                        $query->whereRaw('1=2');
+                        return;
+                    }
+
+                    $query->where($this->fields[$alias], '<', floatval($value));
+                });
+            });
+
+        return $allowedFilters;
     }
 }
