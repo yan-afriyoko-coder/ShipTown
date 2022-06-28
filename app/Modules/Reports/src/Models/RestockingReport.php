@@ -3,9 +3,8 @@
 namespace App\Modules\Reports\src\Models;
 
 use App\Models\Inventory;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\Filters\FiltersCallback;
 
 class RestockingReport extends Report
 {
@@ -32,6 +31,7 @@ class RestockingReport extends Report
             'quantity_required'                  => 'inventory.quantity_required',
             'warehouse_quantity'                 => 'inventory_source.quantity_available',
             'inventory_source_warehouse_code'    => 'inventory_source.warehouse_code',
+            'quantity_to_ship'                   => DB::raw('CASE WHEN (inventory_source.quantity_available > inventory.quantity_required) THEN inventory_source.quantity_available ELSE inventory.quantity_required END as quantity_to_ship'),
         ];
 
         $this->casts = [

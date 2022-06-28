@@ -5,6 +5,7 @@ namespace App\Modules\Reports\src\Models;
 use App\Helpers\CsvBuilder;
 use App\Modules\Reports\src\Http\Resources\ReportResource;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Expression;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\Exceptions\InvalidFilterQuery;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -138,14 +139,20 @@ class Report extends Model
      */
     private function getSelectFields(): array
     {
-        if (request()->has('select')) {
-            return collect(explode(',', request('select')))
-                ->map(function ($alias) {
-                    return $this->fields[$alias] . ' as ' . $alias;
-                })
-                ->toArray();
+        $fieldsToSelect = collect(explode(',', request()->get('select', '')))->filter();
+
+        if ($fieldsToSelect->isEmpty()) {
+            $fieldsToSelect = collect(array_keys($this->fields));
         }
 
-        return $this->fieldSelects;
+        return $fieldsToSelect
+            ->map(function ($alias) {
+                if ($this->fields[$alias] instanceof Expression) {
+                    return $this->fields[$alias];
+                }
+
+                return $this->fields[$alias] . ' as ' . $alias;
+            })
+            ->toArray();
     }
 }
