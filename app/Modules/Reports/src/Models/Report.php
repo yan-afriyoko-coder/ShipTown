@@ -2,10 +2,12 @@
 
 namespace App\Modules\Reports\src\Models;
 
+use App\Exceptions\InvalidSelectException;
 use App\Helpers\CsvBuilder;
 use App\Modules\Reports\src\Http\Resources\ReportResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Expression;
+use Illuminate\Support\Facades\DB;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -31,19 +33,56 @@ class Report extends Model
     /**
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws InvalidSelectException
      */
-    public function response($request)
+    public function queryBuilder(): QueryBuilder
     {
-        if ($request->has('filename')) {
-            return $this->csvDownload();
+        $this->fieldAliases = [];
+
+        foreach ($this->fields as $alias => $field) {
+            $this->fieldAliases[] = $alias;
         }
 
-        return $this->view();
+        $queryBuilder = QueryBuilder::for($this->baseQuery);
+
+        $queryBuilder = $this->addSelectFields($queryBuilder);
+
+        return $queryBuilder
+            ->allowedFilters($this->getAllowedFilters())
+            ->allowedSorts($this->fieldAliases);
     }
 
     /**
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     */
+    private function view()
+    {
+        try {
+            $queryBuilder = $this->queryBuilder()
+                ->limit(request('per_page', 10));
+        } catch (InvalidFilterQuery | InvalidSelectException $ex) {
+            printf($ex->getMessage());
+
+            die(400);
+        }
+
+
+        $resource = ReportResource::collection($queryBuilder->get());
+
+        $data = [
+            'report_name' => $this->report_name ?? $this->table,
+            'fields' => $resource->count() > 0 ? array_keys((array)json_decode($resource[0]->toJson())) : [],
+            'data' => $resource
+        ];
+
+        return view('reports.inventory', $data);
+    }
+
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws InvalidSelectException
      */
     public function csvDownload()
     {
@@ -63,45 +102,15 @@ class Report extends Model
     /**
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws InvalidSelectException
      */
-    private function view()
+    public function response($request)
     {
-        try {
-            $queryBuilder = $this->queryBuilder()
-                ->limit(request('per_page', 10));
-        } catch (InvalidFilterQuery $exception) {
-            printf($exception->getMessage());
-            die(400);
+        if ($request->has('filename')) {
+            return $this->csvDownload();
         }
 
-
-        $resource = ReportResource::collection($queryBuilder->get());
-
-        $data = [
-            'report_name' => $this->report_name ?? $this->table,
-            'fields' => $resource->count() > 0 ? array_keys((array)json_decode($resource[0]->toJson())) : [],
-            'data' => $resource
-        ];
-
-        return view('reports.inventory', $data);
-    }
-
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    public function queryBuilder(): QueryBuilder
-    {
-        $this->fieldAliases = [];
-
-        foreach ($this->fields as $alias => $field) {
-            $this->fieldAliases[] = $alias;
-        }
-
-        return QueryBuilder::for($this->baseQuery)
-            ->select($this->getSelectFields())
-            ->allowedFilters($this->getAllowedFilters())
-            ->allowedSorts($this->fieldAliases);
+        return $this->view();
     }
 
     /**
@@ -132,27 +141,39 @@ class Report extends Model
     }
 
     /**
-     * @return array
+     * @param QueryBuilder $queryBuilder
+     * @return QueryBuilder
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws InvalidSelectException
      */
-    private function getSelectFields(): array
+    private function addSelectFields(QueryBuilder $queryBuilder): QueryBuilder
     {
-        $fieldsToSelect = collect(explode(',', request()->get('select', '')))->filter();
+        $requestedSelect = collect(explode(',', request()->get('select', '')))->filter();
 
-        if ($fieldsToSelect->isEmpty()) {
-            $fieldsToSelect = collect(array_keys($this->fields));
+        if ($requestedSelect->isEmpty()) {
+            $requestedSelect = collect(array_keys($this->fields));
         }
 
-        return $fieldsToSelect
-            ->map(function ($alias) {
-                if ($this->fields[$alias] instanceof Expression) {
-                    return $this->fields[$alias];
+        $requestedSelect
+            ->each(function ($selectFieldName) use ($queryBuilder) {
+                $fieldValue = data_get($this->fields, $selectFieldName);
+
+                if ($fieldValue === null) {
+                    throw new InvalidSelectException('Requested select field(s) `'.$selectFieldName.'` are not allowed.
+                    Allowed select(s) are '.
+                        collect(array_keys($this->fields))->implode(', '));
                 }
 
-                return $this->fields[$alias] . ' as ' . $alias;
-            })
-            ->toArray();
+                if ($fieldValue instanceof Expression) {
+                    $queryBuilder->addSelect(DB::raw('('.$fieldValue.') as '.$selectFieldName));
+                    return;
+                }
+
+                $queryBuilder->addSelect($fieldValue . ' as ' . $selectFieldName);
+            });
+
+        return $queryBuilder;
     }
 
     /**
@@ -206,17 +227,24 @@ class Report extends Model
             ->filter(function ($type) {
                 return $type === 'float';
             })
-            ->each(function ($record, $alias) use (&$allowedFilters) {
-                $filterName = $alias . '_between';
+            ->each(function ($fieldType, $fieldAlias) use (&$allowedFilters) {
+                $filterName = $fieldAlias . '_between';
+                $fieldQuery = $this->fields[$fieldAlias];
 
-                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($alias) {
+                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($fieldType, $fieldAlias, $fieldQuery) {
                     // we add this to make sure query returns no records if array of two values is not specified
                     if ((!is_array($value)) or (count($value) != 2)) {
                         $query->whereRaw('1=2');
                         return;
                     }
 
-                    $query->whereBetween($this->fields[$alias], [floatval($value[0]), floatval($value[1])]);
+                    if ($fieldQuery instanceof Expression) {
+                        $query->whereBetween(DB::raw('(' . $fieldQuery . ')'), [floatval($value[0]), floatval($value[1])]);
+
+                        return ;
+                    }
+
+                    $query->whereBetween($fieldQuery, [floatval($value[0]), floatval($value[1])]);
                 });
             });
 
