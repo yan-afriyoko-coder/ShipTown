@@ -228,6 +228,7 @@ class Report extends Model
             })
             ->each(function ($fieldType, $fieldAlias) use (&$allowedFilters) {
                 $filterName = $fieldAlias . '_between';
+                ray($fieldType, $fieldAlias);
                 $fieldQuery = $this->fields[$fieldAlias];
 
                 $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($fieldType, $fieldAlias, $fieldQuery) {

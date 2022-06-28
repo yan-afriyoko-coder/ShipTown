@@ -37,12 +37,9 @@ class StocktakesReport extends Report
         ];
 
         $this->casts = [
-            'restock_level'      => 'float',
-            'reorder_point'      => 'float',
-            'quantity_required'  => 'float',
-            'quantity_available' => 'float',
-            'quantity_incoming'  => 'float',
-            'warehouse_quantity' => 'float',
+            'quantity_delta'    => 'float',
+            'quantity_before'   => 'float',
+            'quantity_after'    => 'float',
         ];
 
         $this->addFilter(
