@@ -22,22 +22,18 @@ class CsvBuilder
      */
     public static function fromQueryBuilder(QueryBuilder $query, array $fields): Writer
     {
-        if (empty($fields) or ($fields[0] === '')) {
-            return Writer::createFromString('"fields" param not specified, comma delimited, dot notation');
-        }
-
         try {
             $csv = Writer::createFromFileObject(new SplTempFileObject());
 
-            $rows = self::collectOnly($fields, $query->get()->toArray());
+            $records = $query->get()->toArray();
 
-            if ($rows->isEmpty()) {
+            if (count($records) === 0) {
                 return $csv;
             }
 
-            $csv->insertOne(array_keys($rows[0]));
+            $csv->insertOne(array_keys($records[0]));
 
-            $csv->insertAll($rows);
+            $csv->insertAll($records);
 
             return $csv;
         } catch (CannotInsertRecord $exception) {
