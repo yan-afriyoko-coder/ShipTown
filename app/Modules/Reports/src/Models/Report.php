@@ -161,8 +161,7 @@ class Report extends Model
 
                 if ($fieldValue === null) {
                     throw new InvalidSelectException('Requested select field(s) `'.$selectFieldName.'` are not allowed.
-                    Allowed select(s) are '.
-                        collect(array_keys($this->fields))->implode(', '));
+                    Allowed select(s) are ' . collect(array_keys($this->fields))->implode(','));
                 }
 
                 if ($fieldValue instanceof Expression) {
