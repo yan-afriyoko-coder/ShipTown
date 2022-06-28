@@ -41,6 +41,7 @@ class RestockingReport extends Report
             'quantity_available' => 'float',
             'quantity_incoming'  => 'float',
             'warehouse_quantity' => 'float',
+            'quantity_to_ship'   => 'float',
         ];
 
         $this->addFilter(
