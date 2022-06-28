@@ -14,6 +14,10 @@ class RestockingReport extends Report
 
         $this->report_name = 'Restocking Report';
 
+        if (request('title')) {
+            $this->report_name = request('title').' ('.$this->report_name.')';
+        }
+
         $this->baseQuery = Inventory::query()
             ->leftJoin('inventory as inventory_source', function ($join) {
                 $join->on('inventory_source.product_id', '=', 'inventory.product_id');
