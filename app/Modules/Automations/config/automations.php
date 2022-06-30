@@ -68,6 +68,10 @@ return [
             'description' => 'Has tags',
         ],
         [
+            'class' => \App\Modules\Automations\src\Conditions\Order\HasAnyShipmentCondition::class,
+            'description' => 'Has any shipments',
+        ],
+        [
             'class' => \App\Modules\Automations\src\Conditions\Order\DoesntHaveTagsCondition::class,
             'description' => 'Does not have tags',
         ],
