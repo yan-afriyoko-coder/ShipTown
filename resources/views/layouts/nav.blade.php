@@ -113,24 +113,16 @@
                         <!-- Menu Items END -->
                         <div class="dropdown-menu dropdown-menu-right text-center text-md-left" aria-labelledby="navbarDropdown">
                             {{-- Profile --}}
-                            <a class="dropdown-item" href="{{ route('setting-profile') }}">
-                                {{ __('Profile') }}
-                            </a>
+                            <a class="dropdown-item" href="{{ route('setting-profile') }}">{{ __('Profile') }}</a>
 
-                            <!-- Settings -->
                             @hasrole('admin')
-                                <a class="dropdown-item" href="{{ route('settings') }}">
-                                    {{ __('Settings') }}
-                                </a>
+                                <a class="dropdown-item" href="{{ route('settings') }}">{{ __('Settings') }}</a>
                             @endhasrole
 
-                            <a class="dropdown-item" href="https://www.youtube.com/channel/UCl04S5dRXop1ZdZsOqY3OnA" target="_blank">
-                                {{ __('YouTube') }}
-                            </a>
 
-                            <a class="dropdown-item" href="{{ route('stocktaking') }}">
-                                {{ __('Stocktaking') }}
-                            </a>
+                            <a class="dropdown-item" href="https://www.youtube.com/channel/UCl04S5dRXop1ZdZsOqY3OnA" target="_blank">{{ __('YouTube') }}</a>
+                            <a class="dropdown-item" href="{{ route('stocktaking') }}">{{ __('Stocktaking') }}</a>
+                            <a class="dropdown-item" href="https://docs.google.com/spreadsheets/d/1IagdPL-ZKOz0-_Rf83ukhDKj02S-DpgLTz7LrvzWWR4/copy" target="_blank">{{ __('Shelf Labels') }}</a>
 
                             <!-- Logout -->
                             <a class="dropdown-item" href="{{ route('logout') }}"
