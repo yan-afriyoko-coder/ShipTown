@@ -51,9 +51,7 @@
                         <!-- Menu Items END -->
                         <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
                            @foreach ($navigationMenuPicklist as $menu)
-                                <a class="dropdown-item" href="{{ $menu->url }}">
-                                    {{ $menu->name }}
-                                </a>
+                                <a class="dropdown-item" href="{{ $menu->url }}">{{ $menu->name }}</a>
                             @endforeach
                         </div>
                     </li>
@@ -68,9 +66,7 @@
                         <!-- Packlist Menu -->
                         <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
                             @foreach ($navigationMenuPacklist as $menu)
-                                <a class="dropdown-item" href="{{ $menu->url }}">
-                                    {{ $menu->name }}
-                                </a>
+                                <a class="dropdown-item" href="{{ $menu->url }}">{{ $menu->name }}</a>
                             @endforeach
                         </div>
                     </li>
@@ -90,11 +86,14 @@
                             <a class="dropdown-item" href="{{ route('reports.inventory') }}">{{ __('Inventory') }}</a>
                             <a class="dropdown-item" href="{{ route('reports.restocking') }}">{{ __('Restocking') }}</a>
                             <a class="dropdown-item" href="{{ route('reports.stocktakes') }}">{{ __('Stocktakes') }}</a>
-                            @foreach ($navigationMenuReports as $menu)
-                                <a class="dropdown-item" href="{{ $menu->url }}">
-                                    {{ $menu->name }}
-                                </a>
-                            @endforeach
+                            @if(count($navigationMenuReports) > 0)
+                                <hr v-if='{{ count($navigationMenuReports) > 0 }}'>
+                                @foreach ($navigationMenuReports as $menu)
+                                    <a class="dropdown-item" href="{{ $menu->url }}">
+                                        {{ $menu->name }}
+                                    </a>
+                                @endforeach
+                            @endif
 
                         </div>
                     </li>
