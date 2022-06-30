@@ -16,17 +16,17 @@
                 <table v-if="navigations.length > 0" class="table table-borderless table-responsive mb-0">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
                             <th>Group</th>
+                            <th>Name</th>
+<!--                            <th>ID</th>-->
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(navigationMenu, i) in navigations" :key="i">
-                            <td>{{ navigationMenu.id }}</td>
-                            <td>{{ navigationMenu.name }}</td>
                             <td>{{ navigationMenu.group }}</td>
+                            <td>{{ navigationMenu.name }}</td>
+<!--                            <td>{{ navigationMenu.id }}</td>-->
                             <td>
                                 <a @click.prevent="showEditForm(navigationMenu)">
                                     <font-awesome-icon icon="edit"></font-awesome-icon>
@@ -64,7 +64,9 @@ export default {
     },
 
     mounted() {
-        this.apiGetNavigationMenu()
+        this.apiGetNavigationMenu({
+            'sort': 'group,name'
+        })
             .then(({ data }) => {
                 this.navigations = data.data;
             })
@@ -87,11 +89,11 @@ export default {
             this.navigations.push(orderStatus)
         },
         updateNavigationMenu(newValue) {
-            const indexNavigationMenu = this.navigations.findIndex(navigationMenu => navigationMenu.id == newValue.id)
+            const indexNavigationMenu = this.navigations.findIndex(navigationMenu => navigationMenu.id === newValue.id)
             this.$set(this.navigations, indexNavigationMenu, newValue)
         },
         confirmDelete(navigationMenu) {
-            const indexNavigationMenu = this.navigations.findIndex(menu => navigationMenu.id == menu.id)
+            const indexNavigationMenu = this.navigations.findIndex(menu => navigationMenu.id === menu.id)
             this.$snotify.confirm('After delete data cannot restored', 'Are you sure?', {
                 position: 'centerCenter',
                 buttons: [

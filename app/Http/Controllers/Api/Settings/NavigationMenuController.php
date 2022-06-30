@@ -7,6 +7,7 @@ use App\Http\Requests\NavigationMenu\StoreRequest;
 use App\Http\Requests\NavigationMenu\UpdateRequest;
 use App\Http\Resources\NavigationMenuResource;
 use App\Models\NavigationMenu;
+use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class NavigationMenuController extends Controller
@@ -16,11 +17,11 @@ class NavigationMenuController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
-        $navigationMenu = NavigationMenu::all();
+        $navigationMenu = NavigationMenu::getSpatieQueryBuilder();
 
-        return NavigationMenuResource::collection($navigationMenu);
+        return NavigationMenuResource::collection($this->getPaginatedResult($navigationMenu));
     }
 
     /**
@@ -29,9 +30,9 @@ class NavigationMenuController extends Controller
      * @param  StoreRequest  $request
      * @return NavigationMenuResource
      */
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): NavigationMenuResource
     {
-        $navigationMenu = NavigationMenu::create($request->validated());
+        $navigationMenu = NavigationMenu::query()->create($request->validated());
 
         return new NavigationMenuResource($navigationMenu);
     }
@@ -40,10 +41,10 @@ class NavigationMenuController extends Controller
      * Update the specified resource in storage.
      *
      * @param  UpdateRequest $request
-     * @param  \App\Models\NavigationMenu  $navigationMenu
+     * @param  NavigationMenu $navigationMenu
      * @return NavigationMenuResource
      */
-    public function update(UpdateRequest $request, NavigationMenu $navigationMenu)
+    public function update(UpdateRequest $request, NavigationMenu $navigationMenu): NavigationMenuResource
     {
         $navigationMenu->update($request->validated());
 
@@ -53,13 +54,14 @@ class NavigationMenuController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\NavigationMenu  $navigationMenu
+     * @param NavigationMenu $navigationMenu
      * @return NavigationMenuResource
+     * @throws Exception
      */
-    public function destroy(NavigationMenu $navigationMenu)
+    public function destroy(NavigationMenu $navigationMenu): NavigationMenuResource
     {
         $navigationMenu->delete();
 
-        return true;
+        return NavigationMenuResource::make($navigationMenu);
     }
 }

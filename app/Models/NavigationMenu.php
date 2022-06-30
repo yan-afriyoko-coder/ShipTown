@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class NavigationMenu extends Model
 {
@@ -13,4 +14,14 @@ class NavigationMenu extends Model
         'group',
         'url',
     ];
+
+    public static function getSpatieQueryBuilder(): QueryBuilder
+    {
+        return QueryBuilder::for(NavigationMenu::class)
+            ->allowedSorts([
+                'id',
+                'group',
+                'name'
+            ]);
+    }
 }
