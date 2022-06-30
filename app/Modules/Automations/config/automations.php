@@ -4,6 +4,10 @@ return [
     'description' => 'Placed in Last 28 Days or Active Orders',
     'conditions' => [
         [
+            'class' => \App\Modules\Automations\src\Conditions\Order\IsActiveCondition::class,
+            'description' => 'Is Active',
+        ],
+        [
             'class' => \App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition::class,
             'description' => 'Status Code is',
         ],
