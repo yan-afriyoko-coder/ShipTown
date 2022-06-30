@@ -65,8 +65,9 @@ export default {
 
     mounted() {
         this.apiGetNavigationMenu({
-            'sort': 'group,name'
-        })
+                'sort': 'group,name',
+                'per_page': 999
+            })
             .then(({ data }) => {
                 this.navigations = data.data;
             })
