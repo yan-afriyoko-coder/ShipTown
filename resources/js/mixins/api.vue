@@ -318,8 +318,8 @@ export default {
                 return axios.put('/api/settings/mail-templates/' + id, params);
             },
 
-            apiGetNavigationMenu: function () {
-                return axios.get('/api/settings/navigation-menu');
+            apiGetNavigationMenu: function (params = {}) {
+                return axios.get('/api/settings/navigation-menu', {params: params});
             },
 
             apiPostNavigationMenu: function (params) {
