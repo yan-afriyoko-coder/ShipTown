@@ -120,11 +120,16 @@ class AutomationHelper
      */
     private static function runActions(Automation $automation, Order $order): bool
     {
-        if (! CacheLock::acquire(__METHOD__, $order->id)) {
+        if (! CacheLock::acquire(__METHOD__, $order->id, 60)) {
             return false;
         }
 
         try {
+            activity()->on($order)
+                ->withProperties([$automation->name])
+                ->causedByAnonymous()
+                ->log('Running automation');
+
             $result = $automation->actions
                 ->every(function (Action $action) use ($order) {
                     $runAction = new $action->action_class($order);
@@ -139,11 +144,6 @@ class AutomationHelper
 
                     return $actionRan;
                 });
-
-            activity()->on($order)
-                ->withProperties([$automation->name])
-                ->causedByAnonymous()
-                ->log('ran automation');
         } finally {
             CacheLock::release(__METHOD__, $order->id);
         }

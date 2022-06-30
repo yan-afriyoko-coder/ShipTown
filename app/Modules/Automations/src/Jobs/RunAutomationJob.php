@@ -32,7 +32,7 @@ class RunAutomationJob implements ShouldQueue
 
     public function handle()
     {
-        if (! CacheLock::acquire(self::class, $this->automation_id)) {
+        if (! CacheLock::acquire(self::class, $this->automation_id, 30)) {
             return;
         }
 
