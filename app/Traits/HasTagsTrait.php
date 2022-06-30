@@ -64,6 +64,9 @@ trait HasTagsTrait
         collect($tags)
             ->filter()
             ->each(function ($tag) use ($type) {
+                if ($this->hasTags([$tag])) {
+                    return;
+                }
                 $this->originalAttachTags([$tag], $type);
                 $this->onTagAttached($tag);
 
