@@ -41,10 +41,10 @@ abstract class BaseOrderConditionAbstract
     }
 
     /**
-     * @param string $expected_value
+     * @param string|null $expected_value
      * @return bool
      */
-    public function isValid(string $expected_value): bool
+    public function isValid(?string $expected_value = ''): bool
     {
         return true;
     }
