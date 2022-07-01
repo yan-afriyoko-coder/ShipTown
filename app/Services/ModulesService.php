@@ -9,6 +9,7 @@ class ModulesService
     private static array $modules = [
         // misc modules
         \App\Modules\Maintenance\src\EventServiceProviderBase::class,
+        \App\Modules\SystemHeartbeats\src\SystemHeartbeatsServiceProvider::class,
         \App\Modules\StockControl\src\StockControlServiceProvider::class,
         \App\Modules\OrderTotals\src\OrderTotalsServiceProvider::class,
         \App\Modules\OrderStatus\src\OrderStatusServiceProvider::class,

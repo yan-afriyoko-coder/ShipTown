@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Jobs\DispatchEvery10minEventJob;
 use App\Jobs\RunDailyJobs;
 use App\Jobs\RunHourlyJobs;
 use Illuminate\Console\Scheduling\Schedule;
@@ -26,6 +27,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->job(new DispatchEvery10minEventJob())->everyTenMinutes();
         $schedule->job(new RunHourlyJobs())->hourly();
         $schedule->job(new RunDailyJobs())->dailyAt('22:00');
     }
