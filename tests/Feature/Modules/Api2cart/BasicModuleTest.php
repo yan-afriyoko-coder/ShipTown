@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Modules\Api2cart;
 
+use App\Events\Every10minEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\Api2cart\src\Api2cartServiceProvider;
 use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
@@ -25,7 +26,7 @@ class BasicModuleTest extends TestCase
 
         Bus::fake();
 
-        SyncRequestedEvent::dispatch();
+        Every10minEvent::dispatch();
 
         Bus::assertDispatched(DispatchImportOrdersJobs::class);
     }

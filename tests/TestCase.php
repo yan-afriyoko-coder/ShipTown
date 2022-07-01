@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App\Models\CacheLock;
+use App\Models\Heartbeat;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use App\Models\Order;
@@ -47,5 +48,6 @@ abstract class TestCase extends BaseTestCase
         Action::query()->forceDelete();
         CacheLock::query()->forceDelete();
         InventoryMovement::query()->forceDelete();
+        Heartbeat::query()->forceDelete();
     }
 }
