@@ -4,7 +4,6 @@ namespace App\Modules\Automations\src\Conditions\Order;
 
 use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\DB;
 
 /**
  *
@@ -13,13 +12,13 @@ class HasAnyShipmentCondition extends BaseOrderConditionAbstract
 {
     public static function addQueryScope(Builder $query, $expected_value): Builder
     {
-        if ($expected_value === '') {
-            $expected_value = 'true';
-        }
+        $value = trim($expected_value);
 
-        if (filter_var($expected_value, FILTER_VALIDATE_BOOL) === true) {
+        $expectsTrue = $value === '' || filter_var($value, FILTER_VALIDATE_BOOL);
+
+        if ($expectsTrue) {
             return $query->whereHas('orderShipments');
-        };
+        }
 
         return $query->whereDoesntHave('orderShipments');
     }
