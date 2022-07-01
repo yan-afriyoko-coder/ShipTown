@@ -12,10 +12,10 @@ use Illuminate\Support\Facades\Log;
 class CanNotFulfillFromLocationCondition extends BaseOrderConditionAbstract
 {
     /**
-     * @param $expected_value
+     * @param string|null $expected_value
      * @return bool
      */
-    public function isValid($expected_value): bool
+    public function isValid(?string $expected_value = ''): bool
     {
         if ($expected_value === '0') {
             $expected_value = null;

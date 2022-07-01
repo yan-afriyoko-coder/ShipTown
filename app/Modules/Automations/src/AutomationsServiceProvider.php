@@ -5,6 +5,7 @@ namespace App\Modules\Automations\src;
 use App\Events\HourlyEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
+use App\Events\OrderShipment\OrderShipmentCreatedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 class AutomationsServiceProvider extends BaseModuleServiceProvider
@@ -34,6 +35,10 @@ class AutomationsServiceProvider extends BaseModuleServiceProvider
 
         OrderUpdatedEvent::class => [
             Listeners\OrderUpdatedListener::class,
+        ],
+
+        OrderShipmentCreatedEvent::class => [
+            Listeners\OrderShipmentCreatedEventListener::class,
         ],
 
         HourlyEvent::class => [
