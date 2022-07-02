@@ -6,6 +6,7 @@ use App\Models\CacheLock;
 use App\Models\Heartbeat;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
+use App\Models\Module;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\OrderProductTotal;
@@ -49,5 +50,7 @@ abstract class TestCase extends BaseTestCase
         CacheLock::query()->forceDelete();
         InventoryMovement::query()->forceDelete();
         Heartbeat::query()->forceDelete();
+
+        Module::query()->forceDelete();
     }
 }
