@@ -6,6 +6,7 @@ use App\Events\HourlyEvent;
 use App\Models\AutoStatusPickingConfiguration;
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\OrderStatus;
 use App\Models\Product;
 use App\Modules\AutoStatusPicking\src\AutoStatusPickingServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -27,6 +28,8 @@ class RefillWebPickingStatusListJobTest extends TestCase
         Product::query()->forceDelete();
         OrderProduct::query()->forceDelete();
         Order::query()->forceDelete();
+
+        factory(OrderStatus::class)->create(['code' => 'paid']);
 
         factory(Product::class, 30)->create();
 
