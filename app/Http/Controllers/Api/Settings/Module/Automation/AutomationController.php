@@ -25,6 +25,8 @@ class AutomationController extends Controller
     {
         $configs = config('automations');
 
+        ray($configs);
+
         return $configs;
     }
 
