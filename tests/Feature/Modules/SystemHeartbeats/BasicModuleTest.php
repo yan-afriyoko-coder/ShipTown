@@ -9,15 +9,23 @@ use App\Models\Heartbeat;
 use App\Modules\SystemHeartbeats\src\Listeners\DailyEventListener;
 use App\Modules\SystemHeartbeats\src\Listeners\Every10minEventListener;
 use App\Modules\SystemHeartbeats\src\Listeners\HourlyEventListener;
+use App\Modules\SystemHeartbeats\src\SystemHeartbeatsServiceProvider;
 use Tests\TestCase;
 
 class BasicModuleTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        SystemHeartbeatsServiceProvider::enableModule();
+
+        Heartbeat::query()->forceDelete();
+    }
+
     /** @test */
     public function test_every10minEvent_heartbeat()
     {
-        Heartbeat::query()->forceDelete();
-
         Every10minEvent::dispatch();
 
         $this->assertDatabaseHas('heartbeats', [
@@ -28,8 +36,6 @@ class BasicModuleTest extends TestCase
         /** @test */
     public function test_hourlyEvent_heartbeat()
     {
-        Heartbeat::query()->forceDelete();
-
         HourlyEvent::dispatch();
 
         $this->assertDatabaseHas('heartbeats', [
@@ -40,8 +46,6 @@ class BasicModuleTest extends TestCase
     /** @test */
     public function test_dailyEvent_heartbeat()
     {
-        Heartbeat::query()->forceDelete();
-
         DailyEvent::dispatch();
 
         $this->assertDatabaseHas('heartbeats', [

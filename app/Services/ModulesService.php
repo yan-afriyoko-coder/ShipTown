@@ -56,6 +56,10 @@ class ModulesService
             ], [
                 'enabled' => $module_class::$autoEnable,
             ]);
+
+            if ($module_class::$autoEnable) {
+                $module_class::enableModule();
+            }
         });
     }
 }

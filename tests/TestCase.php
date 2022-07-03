@@ -6,6 +6,7 @@ use App\Models\CacheLock;
 use App\Models\Heartbeat;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
+use App\Models\Module;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\OrderProductTotal;
@@ -16,6 +17,7 @@ use App\Models\Warehouse;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
+use App\Services\ModulesService;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Spatie\Tags\Tag;
@@ -49,5 +51,9 @@ abstract class TestCase extends BaseTestCase
         CacheLock::query()->forceDelete();
         InventoryMovement::query()->forceDelete();
         Heartbeat::query()->forceDelete();
+
+        Module::query()->forceDelete();
+
+        ModulesService::updateModulesTable();
     }
 }

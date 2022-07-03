@@ -45,11 +45,4 @@ class OrderStatusServiceProvider extends BaseModuleServiceProvider
     {
         return false;
     }
-
-    public function boot()
-    {
-        parent::boot();
-
-        Order::observe(OrderObserver::class);
-    }
 }

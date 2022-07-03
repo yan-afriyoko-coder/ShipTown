@@ -2,25 +2,27 @@
 
 namespace Tests\Feature\Http\Controllers\Api\Settings\Module\Automation\AutomationController;
 
+use App\Modules\Automations\src\AutomationsServiceProvider;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class GetConfigTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
         $admin = factory(User::class)->create()->assignRole('admin');
         $this->actingAs($admin, 'api');
+
+        AutomationsServiceProvider::enableModule();
     }
 
     /** @test */
     public function test_get_config_call_returns_ok()
     {
         $response = $this->get(route('api.settings.module.automations.config'));
+
+        ray($response->json());
 
         $response->assertOk();
         $response->assertJsonStructure([

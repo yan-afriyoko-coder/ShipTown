@@ -23,7 +23,8 @@ class StockInWarehouse999MonitorJobTest extends TestCase
     {
         EventServiceProviderBase::enableModule();
 
-        factory(Warehouse::class)->create(['code' => '999']);
+        Warehouse::firstOrCreate(['code' => '999']);
+
         /** @var Product $product */
         $product = factory(Product::class)->create();
 
