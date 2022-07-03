@@ -87,7 +87,7 @@
                             <a class="dropdown-item" href="{{ route('reports.restocking') }}">{{ __('Restocking') }}</a>
                             <a class="dropdown-item" href="{{ route('reports.stocktakes') }}">{{ __('Stocktakes') }}</a>
                             @if(count($navigationMenuReports) > 0)
-                                <hr v-if='{{ count($navigationMenuReports) > 0 }}'>
+                                <hr v-if='{{ count($navigationMenuReports) > 0 }}' class="mb-1 mt-1">
                                 @foreach ($navigationMenuReports as $menu)
                                     <a class="dropdown-item" href="{{ $menu->url }}">
                                         {{ $menu->name }}
@@ -106,7 +106,7 @@
                     <li class="nav-item dropdown">
                         <!-- User dropdown menu -->
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            {{ Auth::user()->name }} ({{ Auth::user()->warehouse->code }})<span class="caret"></span>
+                            {{ Auth::user()->name }} ({{ Auth::user()->warehouse ? Auth::user()->warehouse->code : 'All Locations' }})<span class="caret"></span>
                         </a>
 
                         <!-- Menu Items END -->
