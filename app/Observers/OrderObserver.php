@@ -6,9 +6,24 @@ use App\Events\Order\OrderUpdatedEvent;
 use App\Models\Order;
 use App\Models\OrderProductShipment;
 use App\Models\OrderShipment;
+use App\Models\OrderStatus;
 
 class OrderObserver
 {
+    /**
+     * @param Order $order
+     */
+    public function creating(Order $order)
+    {
+        if ($order->status_code != '') {
+            OrderStatus::query()->firstOrCreate([
+                'code' => $order->status_code
+            ], [
+                'name' => $order->status_code
+            ]);
+        }
+    }
+
     /**
      * Handle the order "created" event.
      *
@@ -41,6 +56,18 @@ class OrderObserver
                     ->update(['order_shipment_id' => $last_shipment->getKey()]);
             }
         }
+    }
+
+    /**
+     * @param Order $order
+     */
+    public function updating(Order $order)
+    {
+        if ($order->isAttributeNotChanged('status_code')) {
+            return;
+        }
+
+        OrderStatus::firstOrCreate(['code' => $order->status_code], ['name' => $order->status_code]);
     }
 
     /**

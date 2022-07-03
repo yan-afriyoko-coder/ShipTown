@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Run;
 
+use App\Events\Every10minEvent;
 use App\Events\SyncRequestedEvent;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Request;
@@ -19,6 +20,8 @@ class SyncController extends Controller
         logger('Dispatching sync jobs');
 
         SyncRequestedEvent::dispatch();
+
+        Every10minEvent::dispatch();
 
         info('Sync jobs dispatched');
 
