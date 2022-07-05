@@ -14,6 +14,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::view('settings', 'settings')->name('settings');
+Route::view('activity-log', 'activity-log')->name('activity-log');
 
 Route::prefix('settings')->group(function () {
     Route::view('general', 'settings/general')->name('settings.general');

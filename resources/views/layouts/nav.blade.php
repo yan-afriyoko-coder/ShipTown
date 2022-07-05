@@ -86,6 +86,7 @@
                             <a class="dropdown-item" href="{{ route('reports.inventory') }}">{{ __('Inventory') }}</a>
                             <a class="dropdown-item" href="{{ route('reports.restocking') }}">{{ __('Restocking') }}</a>
                             <a class="dropdown-item" href="{{ route('reports.stocktakes') }}">{{ __('Stocktakes') }}</a>
+                            <a class="dropdown-item" href="{{ route('activity-log') }}">{{ __('Activity Log') }}</a>
                             @if(count($navigationMenuReports) > 0)
                                 <hr v-if='{{ count($navigationMenuReports) > 0 }}' class="mb-1 mt-1">
                                 @foreach ($navigationMenuReports as $menu)
