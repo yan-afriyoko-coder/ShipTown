@@ -34,6 +34,11 @@ export default {
             displayApiCallError: function (error) {
                 console.log('API failed call response', error.response);
 
+                if (error.response.status === 400) {
+                    this.notifyError(JSON.stringify(error.response.data));
+                    return;
+                }
+
                 if (error.response.status === 422) {
                     this.notifyError(JSON.stringify(error.response.data));
                     return;
