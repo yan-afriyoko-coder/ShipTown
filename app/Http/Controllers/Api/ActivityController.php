@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\InvalidSelectException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ActivityIndexRequest;
 use App\Http\Requests\Api\ActivityStoreRequest;
 use App\Http\Resources\ActivityResource;
 use App\Http\Resources\LogResource;
+use App\Modules\Reports\src\Models\ActivityReport;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Str;
-use Spatie\Activitylog\Models\Activity;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\QueryBuilder;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  *
@@ -24,24 +25,15 @@ class ActivityController extends Controller
      * @param ActivityIndexRequest $request
      *
      * @return AnonymousResourceCollection
+     * @throws ContainerExceptionInterface
+     * @throws InvalidSelectException
+     * @throws NotFoundExceptionInterface
      */
     public function index(ActivityIndexRequest $request): AnonymousResourceCollection
     {
-        $query = QueryBuilder::for(Activity::class)
-            ->allowedFilters([
-                AllowedFilter::exact('subject_type'),
-                AllowedFilter::exact('subject_id'),
-                AllowedFilter::exact('description'),
-            ])
-            ->allowedIncludes([
-                'causer',
-            ])
-            ->allowedSorts([
-                'id',
-                'created_at',
-            ]);
+        $report = new ActivityReport();
 
-        return LogResource::collection($this->getPaginatedResult($query));
+        return LogResource::collection($this->getPaginatedResult($report->queryBuilder()));
     }
 
     /**

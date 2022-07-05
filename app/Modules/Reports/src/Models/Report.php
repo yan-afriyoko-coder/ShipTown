@@ -5,6 +5,7 @@ namespace App\Modules\Reports\src\Models;
 use App\Exceptions\InvalidSelectException;
 use App\Helpers\CsvBuilder;
 use App\Modules\Reports\src\Http\Resources\ReportResource;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Facades\DB;
@@ -28,6 +29,7 @@ class Report extends Model
     public $baseQuery;
 
     private array $allowedFilters = [];
+    private array $allowedIncludes = [];
     private array $fieldAliases = [];
 
     /**
@@ -49,7 +51,8 @@ class Report extends Model
 
         return $queryBuilder
             ->allowedFilters($this->getAllowedFilters())
-            ->allowedSorts($this->fieldAliases);
+            ->allowedSorts($this->fieldAliases)
+            ->allowedIncludes($this->allowedIncludes);
     }
 
     /**
@@ -62,9 +65,7 @@ class Report extends Model
             $queryBuilder = $this->queryBuilder()
                 ->limit(request('per_page', 10));
         } catch (InvalidFilterQuery | InvalidSelectException $ex) {
-            printf($ex->getMessage());
-
-            die(400);
+            return response($ex->getMessage(), $ex->getStatusCode());
         }
 
 
@@ -125,6 +126,17 @@ class Report extends Model
     }
 
     /**
+     * @param $include
+     * @return $this
+     */
+    public function addAllowedInclude($include): Report
+    {
+        $this->allowedIncludes[] = $include;
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     private function getAllowedFilters(): array
@@ -134,6 +146,7 @@ class Report extends Model
         $filters = $filters->merge($this->addExactFilters());
         $filters = $filters->merge($this->addContainsFilters());
         $filters = $filters->merge($this->addBetweenFilters());
+        $filters = $filters->merge($this->addBetweenDatesFilters());
         $filters = $filters->merge($this->addGreaterThan());
         $filters = $filters->merge($this->addLowerThan());
 
@@ -228,7 +241,6 @@ class Report extends Model
             })
             ->each(function ($fieldType, $fieldAlias) use (&$allowedFilters) {
                 $filterName = $fieldAlias . '_between';
-                ray($fieldType, $fieldAlias);
                 $fieldQuery = $this->fields[$fieldAlias];
 
                 $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($fieldType, $fieldAlias, $fieldQuery) {
@@ -245,6 +257,44 @@ class Report extends Model
                     }
 
                     $query->whereBetween($fieldQuery, [floatval($value[0]), floatval($value[1])]);
+                });
+            });
+
+        return $allowedFilters;
+    }
+
+    /**
+     * @return array
+     */
+    private function addBetweenDatesFilters(): array
+    {
+        $allowedFilters = [];
+
+        collect($this->casts)
+            ->filter(function ($type) {
+                return $type === 'datetime';
+            })
+            ->each(function ($fieldType, $fieldAlias) use (&$allowedFilters) {
+                $filterName = $fieldAlias . '_between';
+                $fieldQuery = $this->fields[$fieldAlias];
+
+                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($fieldType, $fieldAlias, $fieldQuery) {
+                    // we add this to make sure query returns no records if array of two values is not specified
+                    if ((!is_array($value)) or (count($value) != 2)) {
+                        $query->whereRaw('1=2');
+                        return;
+                    }
+
+                    if ($fieldQuery instanceof Expression) {
+                        $query->whereBetween(
+                            DB::raw('(' . $fieldQuery . ')'),
+                            [Carbon::parse($value[0]), Carbon::parse($value[1])]
+                        );
+
+                        return ;
+                    }
+
+                    $query->whereBetween($fieldQuery, [Carbon::parse($value[0]), Carbon::parse($value[1])]);
                 });
             });
 

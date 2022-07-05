@@ -5,7 +5,6 @@
                 <div class="flex-fill">
                     <barcode-input-field placeholder="Search activity"
                                          ref="barcode"
-                                         :url_param_name="'search'"
                                          @refreshRequest="reloadProducts"
                                          @barcodeScanned="findText"
                     />
@@ -79,23 +78,21 @@
         methods: {
             loadActivityLog: function () {
                 this.statusMessageActivity = "Loading activities ...";
-                const params = {
-                    // 'filter[subject_type]': 'App\\Models\\Product',
-                    // 'filter[subject_id]': this.product['id'],
-                    'sort': '-id',
-                    'include': 'causer',
-                    'per_page': 1000
-                }
+                let params = this.$router.currentRoute.query;
+
+                params['include'] = 'causer';
 
                 this.apiGetActivityLog(params)
                     .then(({data}) => {
                         this.activityLog = data.data
+                    }).catch(error => {
+                        this.displayApiCallError(error);
                     });
             },
 
             findText(search) {
-                this.setUrlParameter('search', search);
-                this.reloadProducts();
+                this.setUrlParameter('filter[search]', search);
+                this.loadActivityLog();
             },
 
             reloadProducts() {
