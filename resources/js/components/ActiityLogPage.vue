@@ -3,7 +3,7 @@
         <template v-if="getUrlParameter('hide_nav_bar', false) === false">
             <div class="row mb-3 pl-1 pr-1">
                 <div class="flex-fill">
-                    <barcode-input-field placeholder="Search products using name, sku, alias or command"
+                    <barcode-input-field placeholder="Search activity"
                                          ref="barcode"
                                          :url_param_name="'search'"
                                          @refreshRequest="reloadProducts"
@@ -19,7 +19,7 @@
             <div class="row mt-3">
                 <div class="col">
                     <div class="alert alert-info" role="alert">
-                        No activities found.
+                        No activities found
                     </div>
                 </div>
             </div>
