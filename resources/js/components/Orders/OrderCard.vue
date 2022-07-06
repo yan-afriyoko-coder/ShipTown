@@ -157,7 +157,7 @@
                                             <div class="text-center w-100">
                                                 <small>unit price</small>
                                             </div>
-                                            <span class="pr-0 mr-2 h4">{{ Math.floor(order_product['price']) }}.<span class="ml-0 pl-0" style="font-size: 8pt"><template v-if="order_product['price'] % 1 === 0"> .00</template><template v-if="order_product['price'] % 1 > 0"> .{{ Math.floor(order_product['price'] % 1 * 100) }} </template></span></span>
+                                            <span class="pr-0 mr-2 h4">{{ Math.floor(order_product['price']) }}<span class="ml-0 pl-0" style="font-size: 8pt"><template v-if="order_product['price'] % 1 === 0"> .00</template><template v-if="order_product['price'] % 1 > 0"> .{{ Math.floor(order_product['price'] % 1 * 100) }} </template></span></span>
                                         </div>
                                         <div class="col">
                                             <small> picked </small>
