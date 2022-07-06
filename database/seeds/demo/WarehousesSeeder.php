@@ -15,6 +15,6 @@ class WarehousesSeeder extends Seeder
         factory(Warehouse::class)->create(['code' => 'DUB', 'name' => 'Dublin']);
         factory(Warehouse::class)->create(['code' => 'CRK', 'name' => 'Cork']);
         factory(Warehouse::class)->create(['code' => 'GAL', 'name' => 'Galway']);
-        factory(Warehouse::class)->create(['code' => '999', 'name' => 'Web']);
+        Warehouse::query()->firstOrCreate(['code' => '999'], ['name' => 'Web']);
     }
 }
