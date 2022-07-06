@@ -12,6 +12,7 @@ use App\Models\OrderShipment;
 use App\Models\OrderStatus;
 use App\Models\Product;
 use App\Models\ProductPrice;
+use App\Models\ShippingLabel;
 use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use App\Modules\Api2cart\src\Observers\Api2cartOrderImportsObserver;
@@ -25,10 +26,10 @@ use App\Observers\OrderShipmentObserver;
 use App\Observers\OrderStatusObserver;
 use App\Observers\ProductObserver;
 use App\Observers\ProductPriceObserver;
+use App\Observers\ShippingLabelObserver;
 use App\Observers\WarehouseObserver;
 use Exception;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -61,6 +62,8 @@ class AppServiceProvider extends ServiceProvider
         Warehouse::observe(WarehouseObserver::class);
         Module::observe(ModuleObserver::class);
         InventoryMovement::observe(InventoryMovementObserver::class);
+
+        ShippingLabel::observe(ShippingLabelObserver::class);
 
         // Modules
         Api2cartOrderImports::observe(Api2cartOrderImportsObserver::class);
