@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
@@ -49,7 +50,25 @@ class ShippingLabel extends Model
 
     public static function getSpatieQueryBuilder(): QueryBuilder
     {
-        return QueryBuilder::for(ShippingLabel::class);
+        return QueryBuilder::for(ShippingLabel::class)
+            ->allowedFilters([
+                    AllowedFilter::partial('shipping_number'),
+                    AllowedFilter::exact('order.status_code'),
+                    AllowedFilter::exact('user_id'),
+                    AllowedFilter::exact('order_id'),
+
+                    AllowedFilter::scope('age_in_days_between', 'whereAgeInDaysBetween'),
+                    'created_at',
+                    'updated_at',
+                ])
+                ->allowedIncludes([
+                    'order',
+                    'user',
+                ])
+                ->defaultSort('-id')
+                ->allowedSorts([
+                    'id',
+                ]);
     }
 
     /**
