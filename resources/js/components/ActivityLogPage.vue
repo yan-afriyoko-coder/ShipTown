@@ -24,15 +24,17 @@
             </div>
         </template>
 
-        <template v-for="activity in activityLog">
-            <tr>
-                <td>{{ activity['created_at'] }}</td>
-                <td>{{ activity['causer_id'] ? activity['causer']['name'] : 'AutoPilot' }}</td>
-                <td>{{ activity['description'] }}</td>
-                <td>{{ activity['subject_type'] }}</td>
-                <td>{{ activity['subject_id'] }}</td>
-            </tr>
-        </template>
+        <table v-if="activityLog.length > 0">
+            <template v-for="activity in activityLog">
+                <tr>
+                    <td class="pr-2">{{ activity['created_at'] }}</td>
+                    <td class="pr-2">{{ activity['causer_id'] ? activity['causer']['name'] : 'AutoPilot' }}</td>
+                    <td class="pr-2">{{ activity['description'] }}</td>
+                    <td class="pr-2">{{ activity['subject_type'] }}</td>
+                    <td class="pr-2">{{ activity['subject_id'] }}</td>
+                </tr>
+            </template>
+        </table>
 
         <div class="row">
             <div class="col">
