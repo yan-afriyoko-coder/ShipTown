@@ -6,6 +6,7 @@ use App\Events\HourlyEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Events\OrderShipment\OrderShipmentCreatedEvent;
+use App\Events\ShippingLabelCreatedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 class AutomationsServiceProvider extends BaseModuleServiceProvider
@@ -29,6 +30,10 @@ class AutomationsServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
+        HourlyEvent::class => [
+            Listeners\HourlyEventListener::class,
+        ],
+
         OrderCreatedEvent::class => [
             Listeners\OrderCreatedListener::class,
         ],
@@ -37,13 +42,13 @@ class AutomationsServiceProvider extends BaseModuleServiceProvider
             Listeners\OrderUpdatedListener::class,
         ],
 
+        ShippingLabelCreatedEvent::class => [
+            Listeners\ShippingLabelCreatedListener::class
+        ],
+
         OrderShipmentCreatedEvent::class => [
             Listeners\OrderShipmentCreatedEventListener::class,
         ],
-
-        HourlyEvent::class => [
-            Listeners\HourlyEventListener::class,
-        ]
     ];
 
     public function boot()
