@@ -34,6 +34,7 @@ Route::view('autopilot/packlist', 'autopilot/packlist')->name('autopilot.packlis
 Route::resource('order/packsheet', 'Order\PacksheetController')->only(['show']);
 
 Route::view('reports/picks', 'reports/picks_report')->name('reports.picks');
+Route::get('reports/inventory-dashboard', 'Reports\InventoryDashboardController@index')->name('reports.inventory-dashboard');
 Route::get('reports/shipments', 'Reports\ShipmentController@index')->name('reports.shipments');
 Route::get('reports/inventory', 'Reports\InventoryController@index')->name('reports.inventory');
 Route::get('reports/restocking', 'Reports\RestockingReportController@index')->name('reports.restocking');
