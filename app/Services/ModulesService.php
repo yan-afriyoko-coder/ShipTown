@@ -17,6 +17,7 @@ class ModulesService
 
         \App\Modules\InventoryReservations\src\EventServiceProviderBase::class,
         \App\Modules\Automations\src\AutomationsServiceProvider::class,
+        \App\Modules\Reports\src\ReportsServiceProvider::class,
 
         // Automations modules
         // order MIGHT be important!
