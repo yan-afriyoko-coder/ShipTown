@@ -7,6 +7,7 @@ use App\Helpers\CsvBuilder;
 use App\Modules\Reports\src\Http\Resources\ReportResource;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Facades\DB;
 use Psr\Container\ContainerExceptionInterface;

@@ -3,11 +3,14 @@
 namespace App\Modules\Reports\src\Models;
 
 use App\Models\Inventory;
+use App\Traits\LogsActivityTrait;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 
 class InventoryDashboardReport extends Report
 {
+    use LogsActivityTrait;
+
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -53,5 +56,12 @@ class InventoryDashboardReport extends Report
                 });
             })
         );
+    }
+
+    public function saveSnapshotToActivity()
+    {
+        $this->log('snapshot', $this->queryBuilder()->get()->toArray());
+
+        return $this;
     }
 }
