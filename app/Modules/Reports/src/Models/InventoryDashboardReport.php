@@ -30,6 +30,7 @@ class InventoryDashboardReport extends Report
 
         $this->fields = [
             'warehouse_code'             => 'inventory.warehouse_code',
+            'products_on_minus'          => DB::raw('count(CASE WHEN inventory.quantity_available < 0 THEN 1 END)'),
             'wh_products_available'      => DB::raw('count(*)'),
             'wh_products_out_of_stock'   => DB::raw('count(CASE WHEN inventory.quantity_available = 0 THEN 1 END)'),
             'wh_products_required'       => DB::raw('count(CASE WHEN inventory.quantity_required > 0 THEN 1 END)'),
@@ -38,6 +39,7 @@ class InventoryDashboardReport extends Report
 
 
         $this->casts = [
+            'products_on_minus'           => 'float',
             'wh_products_available'       => 'float',
             'wh_products_out_of_stock'    => 'float',
             'wh_products_required'        => 'float',
