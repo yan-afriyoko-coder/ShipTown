@@ -20,6 +20,7 @@ use App\Modules\Automations\src\Models\Condition;
 use App\Services\ModulesService;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use JMac\Testing\Traits\AdditionalAssertions;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\Tags\Tag;
 
 abstract class TestCase extends BaseTestCase
@@ -33,6 +34,8 @@ abstract class TestCase extends BaseTestCase
 
         ray()->clearAll();
         ray()->className($this)->blue();
+
+        Activity::query()->forceDelete();
 
         Product::query()->forceDelete();
         Inventory::query()->forceDelete();
