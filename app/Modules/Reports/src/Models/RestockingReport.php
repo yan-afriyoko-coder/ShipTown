@@ -12,6 +12,8 @@ class RestockingReport extends Report
     {
         parent::__construct($attributes);
 
+        $this->view = 'reports.restocking';
+
         $this->report_name = 'Restocking Report';
 
         if (request('title')) {
