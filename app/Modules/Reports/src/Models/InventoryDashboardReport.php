@@ -15,6 +15,8 @@ class InventoryDashboardReport extends Report
     {
         parent::__construct($attributes);
 
+        $this->view = 'reports.inventory-dashboard';
+
         $this->report_name = 'Inventory Dashboard';
 
         if (request('title')) {

@@ -20,6 +20,7 @@ class Report extends Model
 {
     protected $table = 'report';
     protected string $report_name = 'Report';
+    protected string $view = 'reports.inventory';
 
     public array $toSelect = [];
 
@@ -78,7 +79,7 @@ class Report extends Model
             'data' => $resource
         ];
 
-        return view('reports.inventory', $data);
+        return view($this->view, $data);
     }
 
     /**
