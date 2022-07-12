@@ -56,25 +56,6 @@
             </div>
         </div>
 
-        <b-modal scrollable centered no-fade hide-header
-                 id="quantity-request-modal"
-                 @ok="submitStocktake"
-        >
-            <template v-if="inventory">
-                <div>SKU: {{ inventory.product.sku }}</div>
-                <div>Name: {{ inventory.product.name }}</div>
-                <div>Stock: {{ inventory.quantity }}</div>
-                <input class="form-control" :placeholder="'New quantity'"
-                       id="quantity-request-input"
-                       dusk="quantity-request-input"
-                       v-model="quantity"
-                       type="number"
-                       inputmode="numeric"
-                       @keyup.enter="submitStocktake"
-                />
-            </template>
-        </b-modal>
-
     </div>
 </template>
 
