@@ -4,6 +4,7 @@ namespace App\Modules\Reports\src\Models;
 
 use App\Models\Inventory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Spatie\QueryBuilder\AllowedFilter;
 
 class RestockingReport extends Report
@@ -12,7 +13,23 @@ class RestockingReport extends Report
     {
         parent::__construct($attributes);
 
+        $this->view = 'reports.restocking-report';
+
         $this->report_name = 'Restocking Report';
+
+        $this->defaultSelect = implode(',', [
+            'warehouse_code',
+            'product_sku',
+            'product_name',
+            'quantity_required',
+            'quantity_available',
+            'quantity_incoming',
+            'reorder_point',
+            'restock_level',
+            'warehouse_quantity'
+        ]);
+
+        $this->defaultSort = '-quantity_required';
 
         if (request('title')) {
             $this->report_name = request('title').' ('.$this->report_name.')';

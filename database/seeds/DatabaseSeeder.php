@@ -20,23 +20,19 @@ class DatabaseSeeder extends Seeder
             UsersSeeder::class,
             ProductsSeeder::class,
             PaidOrdersSeeder::class,
-
-//            AutomationsSeeder::class,
-//
-//            PrintNodeClientSeeder::class,
             DpdUkTestConnectionSeeder::class,
             WebhooksTestSeeder::class,
+            InventorySeeder::class,
+            RestockingReportSeeder::class,
+
+
+//            AutomationsSeeder::class,
+//            PrintNodeClientSeeder::class,
 //            DpdIrelandSeeder::class,
-//
 //            ProductAliasSeeder::class,
 //            ProductTagsSeeder::class,
 //            ProductPriceSeeder::class,
-//
-            InventorySeeder::class,
-
-//
 //            SplitOrdersScenarioSeeder::class,
-//
 //            Orders_PackingWebDemoSeeder::class,
 //            Orders_StorePickupDemoSeeder::class,
 //            UnpaidOrdersSeeder::class,

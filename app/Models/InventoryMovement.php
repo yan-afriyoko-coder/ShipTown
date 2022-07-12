@@ -8,6 +8,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  *
+ * @property int inventory_id
+ * @property int product_id
+ * @property int warehouse_id
+ * @property float quantity_delta
+ * @property float quantity_before
+ * @property float quantity_after
+ * @property string description
+ * @property int user_id
  */
 class InventoryMovement extends Model
 {

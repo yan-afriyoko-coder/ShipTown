@@ -22,6 +22,9 @@ class Report extends Model
     protected string $report_name = 'Report';
     protected string $view = 'reports.inventory';
 
+    protected string $defaultSelect = '';
+    protected ?string $defaultSort = null;
+
     public array $toSelect = [];
 
     public array $fields = [];
@@ -50,6 +53,10 @@ class Report extends Model
         $queryBuilder = QueryBuilder::for($this->baseQuery);
 
         $queryBuilder = $this->addSelectFields($queryBuilder);
+
+        if ($this->defaultSort) {
+            $queryBuilder = $queryBuilder->defaultSort($this->defaultSort);
+        }
 
         return $queryBuilder
             ->allowedFilters($this->getAllowedFilters())
@@ -164,7 +171,7 @@ class Report extends Model
      */
     private function addSelectFields(QueryBuilder $queryBuilder): QueryBuilder
     {
-        $requestedSelect = collect(explode(',', request()->get('select', '')))->filter();
+        $requestedSelect = collect(explode(',', request()->get('select', $this->defaultSelect)))->filter();
 
         if ($requestedSelect->isEmpty()) {
             $requestedSelect = collect(array_keys($this->fields));

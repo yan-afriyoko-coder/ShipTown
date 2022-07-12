@@ -1,60 +1,8 @@
 <template>
     <div>
-        <div class="row mb-3 pl-1 pr-1">
-            <div class="flex-fill">
-                <stocktaking-input-field></stocktaking-input-field>
-            </div>
-
-            <button id="config-button" disabled type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
-        </div>
-
-        <div class="row" v-if="isLoading">
-            <div class="col">
-                <div ref="loadingContainerOverride" style="height: 100px"></div>
-            </div>
-        </div>
-
-        <div class="row" >
-            <div class="col">
-                <table class="fullWidth w-100">
-                    <thead>
-                        <tr>
-                            <th colspan="3">Recent stocktakes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="itemMovement in recentStocktakes.data">
-                            <td>{{ itemMovement['product']['sku'] }}</td>
-                            <td>{{ itemMovement['product']['name'] }}</td>
-                            <td class="text-right">{{ itemMovement['quantity_after'] }}</td>
-                            <td class="text-right">{{ itemMovement['inventory']['shelf_location'] }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <br>
-
-        <div class="row" >
-            <div class="col">
-                <table class="fullWidth w-100">
-                    <thead>
-                        <tr>
-                            <th colspan="3">Stocktake suggestions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="suggestion in stocktakeSuggestions.data">
-                            <td>{{ suggestion['product']['sku'] }}</td>
-                            <td>{{ suggestion['product']['name'] }}</td>
-                            <td class="text-right">{{ suggestion['quantity'] }}</td>
-                            <td class="text-right">{{ suggestion['shelf_location'] }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <barcode-input-field placeholder="Scan sku or alias to stocktake product"
+                             @barcodeScanned="barcodeScanned"
+        />
 
         <b-modal scrollable centered no-fade hide-header
                  id="quantity-request-modal"
@@ -79,11 +27,11 @@
 </template>
 
 <script>
-    import loadingOverlay from '../mixins/loading-overlay';
-    import BarcodeInputField from "./SharedComponents/BarcodeInputField";
-    import api from "../mixins/api";
-    import helpers from "../mixins/helpers";
-    import url from "../mixins/url";
+    import loadingOverlay from '../../mixins/loading-overlay';
+    import BarcodeInputField from "./../SharedComponents/BarcodeInputField";
+    import api from "../../mixins/api";
+    import helpers from "../../mixins/helpers";
+    import url from "../../mixins/url";
 
     export default {
         mixins: [loadingOverlay, url, api, helpers],
@@ -125,47 +73,7 @@
         },
 
         methods: {
-            reloadData() {
-                this.loadRecentStocktakes();
-                this.loadStocktakeSuggestions();
-            },
-
-            loadRecentStocktakes() {
-                const params = {
-                    'filter[description]': 'stocktake',
-                    'filter[warehouse_id]': this.currentUser()['warehouse_id'],
-                    'include': 'product,inventory',
-                    'sort': '-id',
-                    'per_page': 3,
-                }
-
-                this.apiGetInventoryMovements(params)
-                    .then((response) => {
-                        this.recentStocktakes = response.data;
-                    })
-                    .catch((error) => {
-                        this.displayApiCallError(error);
-                    });
-            },
-
-
-            loadStocktakeSuggestions() {
-                const params = {
-                    'filter[quantity_between]': '-10000000,-1',
-                    'filter[warehouse_id]': this.currentUser()['warehouse_id'],
-                    'include': 'product',
-                    'sort': 'shelve_location,quantity',
-                    'per_page': 5,
-                }
-
-                this.apiGetInventory(params)
-                    .then((response) => {
-                        this.stocktakeSuggestions = response.data;
-                    })
-                    .catch((error) => {
-                        this.displayApiCallError(error);
-                    });
-            },
+            reloadData() {},
 
             barcodeScanned: async function (barcode) {
                 if (barcode === null) {
