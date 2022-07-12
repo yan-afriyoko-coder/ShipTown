@@ -17,6 +17,20 @@ class RestockingReport extends Report
 
         $this->report_name = 'Restocking Report';
 
+        $this->defaultSelect = implode(',', [
+            'warehouse_code',
+            'product_sku',
+            'product_name',
+            'quantity_required',
+            'quantity_available',
+            'quantity_incoming',
+            'reorder_point',
+            'restock_level',
+            'warehouse_quantity'
+        ]);
+
+        $this->defaultSort = '-quantity_required';
+
         if (request('title')) {
             $this->report_name = request('title').' ('.$this->report_name.')';
         }

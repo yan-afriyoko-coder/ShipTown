@@ -4,6 +4,8 @@
 
 @section('content')
     <div class="container dashboard-widgets">
+
+    @if(Auth::user()->warehouse)
         <div class="row mb-3 pl-1 pr-1">
             <div class="flex-fill">
                 <stocktaking-input-field placeholder="Search products using name, sku, alias or command"></stocktaking-input-field>
@@ -11,9 +13,9 @@
 
             <button id="config-button" disabled type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
+    @endif
 
     <div class="row">
-
         <div class="col">
             <div class="widget-tools-container">
                 <a class="btn btn-primary btn-sm mt-2 fa-arrow-alt-circle-down"  href="{{ request()->fullUrlWithQuery(['filename' =>  __($report_name).'.csv']) }}">{{ __('Download') }}</a>
