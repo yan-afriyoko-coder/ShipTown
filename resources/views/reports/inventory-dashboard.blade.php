@@ -35,6 +35,7 @@
 
                                         @if(data_get($record, 'products_on_minus') > 0)
                                             <a href='{{ url()->route('reports.restocking', [
+                                                'title' => 'Negative Stock',
                                                 'select' => 'warehouse_code,product_sku,product_name,quantity_required,quantity_available,quantity_incoming,reorder_point,restock_level,warehouse_quantity',
                                                 'sort' => 'quantity_available',
                                                 'per_page' => '999',
