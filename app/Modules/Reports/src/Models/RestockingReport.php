@@ -4,6 +4,7 @@ namespace App\Modules\Reports\src\Models;
 
 use App\Models\Inventory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Spatie\QueryBuilder\AllowedFilter;
 
 class RestockingReport extends Report
@@ -12,7 +13,7 @@ class RestockingReport extends Report
     {
         parent::__construct($attributes);
 
-        $this->view = 'reports.restocking';
+        $this->view = 'reports.restocking-report';
 
         $this->report_name = 'Restocking Report';
 

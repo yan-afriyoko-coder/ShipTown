@@ -5,6 +5,7 @@ namespace App\Modules\Reports\src;
 
 use App\Events\HourlyEvent;
 use App\Modules\BaseModuleServiceProvider;
+use Exception;
 
 /**
  *
@@ -44,5 +45,34 @@ class ReportsServiceProvider extends BaseModuleServiceProvider
     public static function disabling(): bool
     {
         return false;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function boot()
+    {
+        parent::boot();
+
+        $module_filename = 'reports';
+
+//        $this->publishes(
+//            [__DIR__. '/../config/' . $module_filename . '.php' => config_path($module_filename.'.php')],
+//            'config'
+//        );
+//
+//        $this->mergeConfigFrom(
+//            __DIR__.'/../config/' . $module_filename . '.php',
+//            $module_filename
+//        );
+
+        $this->loadViewsFrom(
+            __DIR__.'/../resources/views',
+            $module_filename
+        );
+
+//        if ($this->app->runningInConsole()) {
+//            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+//        }
     }
 }

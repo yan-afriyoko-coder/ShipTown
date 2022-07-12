@@ -1,15 +1,27 @@
 <template>
     <div>
-        <input class="form-control"
-               :placeholder="placeholder"
-               ref="barcode"
-               id="barcodeInput"
-               dusk="barcode-input-field"
-               v-model="barcode"
-               @focus="simulateSelectAll"
-               @keyup.enter="barcodeScanned(barcode)"
-        />
 
+
+            <div class="input-group mb-0">
+                <div class="input-group-prepend">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            search:
+                    </button>
+                    <div class="dropdown-menu small">
+                        <a class="dropdown-item small" href="#">shelf:</a>
+                        <a class="dropdown-item small" href="#">stocktake:</a>
+                    </div>
+                </div>
+                <input class="form-control"
+                       :placeholder="placeholder"
+                       ref="barcode"
+                       id="barcodeInput"
+                       dusk="barcode-input-field"
+                       v-model="barcode"
+                       @focus="simulateSelectAll"
+                       @keyup.enter="barcodeScanned(barcode)"
+                />
+            </div>
 
       <b-modal id="set-shelf-location-command-modal" @submit="updateShelfLocation" scrollable centered no-fade hide-header>
           <div class="h5 text-center">{{ command['name'] }} : {{ command['value'] }}</div>
