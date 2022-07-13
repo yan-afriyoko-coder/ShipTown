@@ -54,19 +54,62 @@
 {{--                                        </a>--}}
                                     </td>
                                     <td>
-{{--                                        <a href="">--}}
-                                            {{ data_get($record, 'wh_products_out_of_stock') }}
-{{--                                        </a>--}}
+                                        @if(data_get($record, 'wh_products_out_of_stock') === 0)
+                                            -
+                                        @endif
+
+                                        @if(data_get($record, 'wh_products_out_of_stock') > 0)
+                                            <a href='{{ url()->route('reports.restocking', [
+                                                'title' => 'Negative Stock',
+                                                'select' => 'warehouse_code,product_sku,product_name,quantity_required,quantity_available,quantity_incoming,reorder_point,restock_level,warehouse_quantity',
+                                                'sort' => 'quantity_available',
+                                                'per_page' => '999',
+                                                'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
+                                                'filter[quantity_available]' => '',
+                                                'filter[inventory_source_warehouse_code]' => '99',
+                                                'filter[warehouse_quantity_between]' => '1,99999',
+                                            ]) }}'>
+                                                {{ data_get($record, 'wh_products_out_of_stock') }}
+                                            </a>
+                                        @endif
                                     </td>
                                     <td>
-{{--                                        <a href="">--}}
-                                            {{ data_get($record, 'wh_products_required') }}
-{{--                                        </a>--}}
+                                        @if(data_get($record, 'wh_products_required') === 0)
+                                            -
+                                        @endif
+
+                                        @if(data_get($record, 'wh_products_required') > 0)
+                                            <a href='{{ url()->route('reports.restocking', [
+                                                'select' => 'warehouse_code,product_sku,product_name,quantity_required,quantity_available,quantity_incoming,reorder_point,restock_level,warehouse_quantity',
+                                                'sort' => 'quantity_required',
+                                                'per_page' => '999',
+                                                'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
+                                                'filter[quantity_required_between]' => '1,9999',
+                                                'filter[inventory_source_warehouse_code]' => '99',
+                                                'filter[warehouse_quantity_between]' => '1,99999',
+                                            ]) }}'>
+                                                {{ data_get($record, 'wh_products_required') }}
+                                            </a>
+                                        @endif
                                     </td>
                                     <td>
-{{--                                        <a href="">--}}
-                                            {{ data_get($record, 'wh_products_stock_level_ok') }}
-{{--                                        </a>--}}
+                                        @if(data_get($record, 'wh_products_stock_level_ok') === 0)
+                                            -
+                                        @endif
+
+                                        @if(data_get($record, 'wh_products_stock_level_ok') > 0)
+                                            <a href='{{ url()->route('reports.restocking', [
+                                                'select' => 'warehouse_code,product_sku,product_name,quantity_required,quantity_available,quantity_incoming,reorder_point,restock_level,warehouse_quantity',
+                                                'sort' => 'quantity_required',
+                                                'per_page' => '999',
+                                                'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
+                                                'filter[quantity_available_between]' => '1,9999',
+                                                'filter[inventory_source_warehouse_code]' => '99',
+                                                'filter[warehouse_quantity_between]' => '1,99999',
+                                            ]) }}'>
+                                                {{ data_get($record, 'wh_products_stock_level_ok') }}
+                                            </a>
+                                        @endif
                                     </td>
                             </tr>
                         @endforeach
