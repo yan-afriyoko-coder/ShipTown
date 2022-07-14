@@ -36,7 +36,7 @@
                 <input class="form-control mt-2" :placeholder="'Reason'" disabled
                        id="reason-request-input"
                        dusk="reason-request-input"
-                       v-model="reason"
+                       v-model="description"
                        type="text"
                        @keyup.enter="submitStocktake"
                 />
@@ -58,6 +58,17 @@
 
         components: {
             BarcodeInputField
+        },
+
+        data: function() {
+            return {
+                inventory: null,
+                adjustByQuantity: null,
+                newQuantity: null,
+                description: 'stocktake',
+                recentStocktakes: [],
+                stocktakeSuggestions: [],
+            };
         },
 
         watch: {
@@ -104,17 +115,6 @@
                     this.adjustByQuantity = newValue === 0 ? '' : newValue;
                 }
             }
-        },
-
-        data: function() {
-            return {
-                inventory: null,
-                adjustByQuantity: null,
-                newQuantity: null,
-                reason: 'stocktake',
-                recentStocktakes: [],
-                stocktakeSuggestions: [],
-            };
         },
 
         mounted() {
