@@ -146,6 +146,7 @@ Vue.component('dpd-uk-configuration', require('./components/Settings/DpdUkConfig
 
 Vue.component('barcode-input-field', require('./components/SharedComponents/BarcodeInputField.vue').default);
 Vue.component('stocktaking-input-field', require('./components/SharedComponents/StocktakingInputField.vue').default);
+Vue.component('restocking-page', require('./components/RestockingPage.vue').default);
 Vue.component('products-table', require('./components/ProductsPage.vue').default);
 Vue.component('activity-log-page', require('./components/ActivityLogPage.vue').default);
 Vue.component('orders-table', require('./components/OrdersPage.vue').default);
