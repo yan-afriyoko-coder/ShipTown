@@ -4,20 +4,40 @@
                              @barcodeScanned="barcodeScanned"
         />
 
-        <b-modal scrollable centered no-fade hide-header
-                 id="quantity-request-modal"
-                 @ok="submitStocktake"
-        >
+        <b-modal @ok="submitStocktake" id="quantity-request-modal" scrollable centered no-fade hide-header>
             <template v-if="inventory">
                 <div>SKU: {{ inventory.product.sku }}</div>
                 <div>Name: {{ inventory.product.name }}</div>
                 <div>Stock: {{ inventory.quantity }}</div>
-                <input class="form-control" :placeholder="'New quantity'"
-                       id="quantity-request-input"
-                       dusk="quantity-request-input"
-                       v-model="quantity"
-                       type="number"
-                       inputmode="numeric"
+                <div class="row mt-2">
+                    <div class="col-6">
+                        <label class="small" for="adjust-by-request-input">adjust by</label>
+                        <input class="form-control " :placeholder="'Adjust by'" :class="{ 'border-danger': this.adjustByQuantity < 0, 'border-success': this.adjustByQuantity > 0}"
+                               id="adjust-by-request-input"
+                               dusk="adjust-by-request-input"
+                               v-model="adjustByQuantity"
+                               type="number"
+                               inputmode="numeric"
+                               @keyup.enter="submitStocktake"
+                        />
+                    </div>
+                    <div class="col-6">
+                        <label class="small" for="adjust-by-request-input">new quantity</label>
+                        <input class="form-control" :placeholder="'New quantity'" :class="{ 'border-danger': this.adjustByQuantity < 0, 'border-success': this.adjustByQuantity > 0}"
+                               id="quantity-request-input"
+                               dusk="quantity-request-input"
+                               v-model="newQuantity"
+                               type="number"
+                               inputmode="numeric"
+                               @keyup.enter="submitStocktake"
+                        />
+                    </div>
+                </div>
+                <input class="form-control mt-2" :placeholder="'Reason'" disabled
+                       id="reason-request-input"
+                       dusk="reason-request-input"
+                       v-model="reason"
+                       type="text"
                        @keyup.enter="submitStocktake"
                 />
             </template>
@@ -40,10 +60,58 @@
             BarcodeInputField
         },
 
+        watch: {
+            adjustByQuantity() {
+                let adjustByValue = 0;
+                let newValue = null;
+
+                if (this.adjustByQuantity === null) {
+                    if (this.newQuantity === '') {
+                        return;
+                    }
+                    if (this.newQuantity === null) {
+                        return;
+                    }
+                } else if (this.adjustByQuantity === '') {
+                    if (this.newQuantity === '') {
+                        return;
+                    }
+                } else {
+                    adjustByValue = this.adjustByQuantity;
+                }
+
+                newValue = Number(this.inventory.quantity) + Number(adjustByValue);
+
+                if (this.newQuantity !== newValue) {
+                    this.newQuantity = newValue;
+                }
+            },
+
+            newQuantity() {
+                let newValue = 0;
+
+                if (this.newQuantity === null) {
+                    this.adjustByQuantity = null;
+                    return;
+                } else if (this.newQuantity === '') {
+                    this.adjustByQuantity = null;
+                    return;
+                } else {
+                    newValue = this.newQuantity - this.inventory.quantity;
+                }
+
+                if (this.adjustByQuantity !== newValue) {
+                    this.adjustByQuantity = newValue === 0 ? '' : newValue;
+                }
+            }
+        },
+
         data: function() {
             return {
                 inventory: null,
-                quantity: null,
+                adjustByQuantity: null,
+                newQuantity: null,
+                reason: 'stocktake',
                 recentStocktakes: [],
                 stocktakeSuggestions: [],
             };
@@ -85,7 +153,7 @@
                 }
 
                 this.inventory = null;
-                this.quantity = null;
+                this.newQuantity = null;
 
                 const params = {
                     'filter[sku_or_alias]': barcode,
@@ -111,15 +179,15 @@
             },
 
             submitStocktake: function () {
-                if (this.quantity === null) {
+                if (this.newQuantity === null) {
                     return;
                 }
 
-                if (this.quantity === "") {
+                if (this.newQuantity === "") {
                     return;
                 }
 
-                if (this.quantity < 0) {
+                if (this.newQuantity < 0) {
                     this.notifyError('Minus quantity not allowed');
                     this.setFocusElementById(100, 'quantity-request-input', true, false)
                     return;
@@ -127,7 +195,7 @@
 
                 this.$bvModal.hide('quantity-request-modal');
 
-                const delta_quantity = this.quantity - this.inventory.quantity;
+                const delta_quantity = this.newQuantity - this.inventory.quantity;
 
                 if (delta_quantity === 0) {
                     this.notifySuccess('Stock correct');
@@ -138,7 +206,7 @@
                 const data = {
                     'product_id': this.inventory['product_id'],
                     'warehouse_id': this.currentUser()['warehouse_id'],
-                    'description': 'stocktake',
+                    'description': this.description,
                     'quantity': delta_quantity,
                 };
 
