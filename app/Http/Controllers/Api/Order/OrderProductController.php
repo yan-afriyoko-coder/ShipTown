@@ -39,6 +39,6 @@ class OrderProductController extends Controller
     {
         $product->update($request->validated());
 
-        return new OrderProductResource($product);
+        return OrderProductResource::make($product);
     }
 }

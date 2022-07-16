@@ -23,8 +23,6 @@ class UpdateRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'quantity_shipped' => ['sometimes', 'numeric', 'min:0'],
-        ];
+        return [];
     }
 }
