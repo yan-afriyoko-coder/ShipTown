@@ -86,6 +86,6 @@ class OrderProductShipment extends BaseModel
      */
     public function orderProduct(): BelongsTo
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(OrderProduct::class);
     }
 }

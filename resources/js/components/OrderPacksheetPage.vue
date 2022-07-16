@@ -328,7 +328,6 @@
 
                                     this.$snotify.remove(toast.id);
                                     this.shipOrderProduct(orderProduct, Number(toast.value));
-                                    this.setQuantityShipped(orderProduct, Number(orderProduct['quantity_shipped']) + Number(toast.value));
                                     this.setFocusOnBarcodeInput();
                                 }
                             },
@@ -408,6 +407,8 @@
                 },
 
                 shipOrderProduct(orderProduct, quantity) {
+                    orderProduct.quantity_shipped += quantity;
+
                     this.apiPostOrderProductShipment({
                             'sku_shipped': orderProduct.sku_ordered,
                             'product_id': orderProduct.product_id,
@@ -416,6 +417,7 @@
                             'quantity_shipped': quantity,
                         })
                         .then((data) => {
+                            this.somethingHasBeenPackedDuringThisSession = true;
                             this.displayPackedNotification(data.data);
                         })
                         .catch((error) => {
@@ -424,24 +426,7 @@
                                 'subject_id': this.order.id,
                                 'description': 'Error occurred when shipping products, try again'
                             });
-                            this.notifyError('Error occurred when shipping products, try again');
-                        });
-                },
-
-                setQuantityShipped(orderProduct, quantity) {
-                    this.somethingHasBeenPackedDuringThisSession = true;
-
-                    this.apiUpdateOrderProduct(orderProduct.id, {'quantity_shipped': quantity})
-                        .then(() => {
-                            this.notifySuccess();
-                        })
-                        .catch(() => {
-                            this.apiActivitiesPost({
-                                'subject_type': 'order',
-                                'subject_id': this.order.id,
-                                'description': 'Error occurred when setting quantity_shipped, try again'
-                            });
-                            this.notifyError('Error occurred when setting quantity_shipped, try again');
+                            this.displayApiCallError(error);
                         })
                         .finally(() => {
                             this.loadOrderProducts();
@@ -450,7 +435,6 @@
 
                 shipAll(orderProduct) {
                     this.shipOrderProduct(orderProduct, orderProduct['quantity_to_ship']);
-                    this.setQuantityShipped(orderProduct, orderProduct['quantity_ordered']);
                     this.setFocusOnBarcodeInput();
                 },
 
@@ -505,7 +489,7 @@
                     }
 
                     this.shipOrderProduct(pickItem, 1);
-                    this.setQuantityShipped(pickItem,pickItem['quantity_shipped'] + 1);
+                    this.setFocusOnBarcodeInput();
                 },
 
                 getAddressLabelTemplateName: function () {

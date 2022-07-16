@@ -28,6 +28,12 @@ class OrderProductShipmentController extends Controller
         $orderProductShipment->warehouse_id = $orderProductShipment->user->warehouse_id;
         $orderProductShipment->save();
 
+        $orderProduct = $orderProductShipment->orderProduct;
+
+        $orderProduct->update([
+            'quantity_shipped' => $orderProduct->quantity_shipped + $request->get('quantity_shipped', 0)
+        ]);
+
         return new OrderProductShipmentResource($orderProductShipment);
     }
 }
