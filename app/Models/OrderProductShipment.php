@@ -6,6 +6,7 @@ use App\BaseModel;
 use App\User;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
 /**
@@ -27,6 +28,7 @@ use Illuminate\Support\Carbon;
  * @property User|null   $user
  * @property Order|null  $order
  * @property OrderProduct|null  $orderProduct
+ * @property Inventory inventory
  *
  * @mixin Eloquent
  */
@@ -48,6 +50,17 @@ class OrderProductShipment extends BaseModel
     protected $casts = [
         'quantity_shipped' => 'float',
     ];
+
+    /**
+     * @return HasOne
+     */
+    public function inventory(): HasOne
+    {
+        return $this->hasOne(Inventory::class, 'product_id', 'product_id')
+            ->where([
+                'warehouse_id' => $this->warehouse_id
+            ]);
+    }
 
     /**
      * @return BelongsTo

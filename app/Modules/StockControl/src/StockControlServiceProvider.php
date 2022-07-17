@@ -33,7 +33,7 @@ class StockControlServiceProvider extends BaseModuleServiceProvider
      */
     protected $listen = [
         OrderProductShipmentCreatedEvent::class => [
-            Listeners\OrderProductShipmentCreatedEvent\IncreaseDecreaseInventoryQuantityListener::class
+            Listeners\OrderProductShipmentCreatedListener::class
         ]
     ];
 
