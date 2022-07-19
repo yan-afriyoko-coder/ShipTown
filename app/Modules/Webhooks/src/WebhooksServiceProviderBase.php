@@ -7,6 +7,8 @@ use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\InventoryMovementCreatedEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
+use App\Events\OrderProductShipmentCreatedEvent;
+use App\Events\OrderShipment\OrderShipmentCreatedEvent;
 use App\Events\Product\ProductCreatedEvent;
 use App\Events\Product\ProductUpdatedEvent;
 use App\Events\SyncRequestedEvent;
@@ -57,6 +59,10 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
 
         DailyEvent::class => [
             Listeners\DailyEvent\AttachAwaitingPublishTagListener::class,
+        ],
+
+        OrderProductShipmentCreatedEvent::class => [
+            Listeners\OrderProductShipmentCreatedListener::class,
         ],
 
         ProductCreatedEvent::class => [
