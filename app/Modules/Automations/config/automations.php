@@ -99,7 +99,7 @@ return [
         ],
         [
             'class' => \App\Modules\Automations\src\Actions\Order\ShipRemainingProductsAction::class,
-            'description' => 'Mark remaining products as shipped',
+            'description' => 'Ship all from warehouse code',
         ],
         [
             'class' => \App\Modules\Automations\src\Actions\Order\PushToBoxTopOrderAction::class,
