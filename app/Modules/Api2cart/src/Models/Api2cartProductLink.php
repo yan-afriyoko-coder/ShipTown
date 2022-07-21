@@ -152,16 +152,18 @@ class Api2cartProductLink extends BaseModel
         // initialize variables
         $differences = [];
 
-        $keys_to_verify = [
-            'price',
-        ];
+        $keys_to_verify = [];
 
-        if ((Arr::has($actual, 'manage_stock')) && ($actual['manage_stock'] != 'False')) {
+        if ($expected['quantity'] > 0) {
+            $keys_to_verify = array_merge($keys_to_verify, ['price']);
+        }
+
+        if (data_get($actual, 'manage_stock', 'False') != 'False') {
             $keys_to_verify = array_merge($keys_to_verify, ['quantity']);
         }
 
-        if ((Arr::has($expected, 'sprice_expire')) &&
-            (\Carbon\Carbon::createFromTimeString($expected['sprice_expire'])->isFuture())) {
+        if ((Arr::has($expected, 'sprice_expire'))
+            && (\Carbon\Carbon::createFromTimeString($expected['sprice_expire'])->isFuture())) {
             $keys_to_verify = array_merge($keys_to_verify, [
                 'special_price',
                 'sprice_create',
