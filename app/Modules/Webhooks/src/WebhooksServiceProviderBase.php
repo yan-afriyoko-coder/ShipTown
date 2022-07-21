@@ -3,20 +3,16 @@
 namespace App\Modules\Webhooks\src;
 
 use App\Events\DailyEvent;
+use App\Events\HourlyEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\InventoryMovementCreatedEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Events\OrderProductShipmentCreatedEvent;
-use App\Events\OrderShipment\OrderShipmentCreatedEvent;
 use App\Events\Product\ProductCreatedEvent;
 use App\Events\Product\ProductUpdatedEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
-use App\Modules\Webhooks\src\Jobs\PublishOrdersWebhooksJob;
-use App\Modules\Webhooks\src\Listeners\InventoryMovementCreatedEventListener;
-use App\Modules\Webhooks\src\Listeners\SyncRequestedEvent\PublishProductsWebhooksListener;
-use App\Modules\Webhooks\src\Services\SnsService;
 use Exception;
 use Ramsey\Uuid\Guid\Guid;
 
@@ -53,12 +49,14 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
     protected $listen = [
         SyncRequestedEvent::class => [
             Listeners\SyncRequestedEventListener::class,
-            PublishOrdersWebhooksJob::class,
-            PublishProductsWebhooksListener::class,
+        ],
+
+        HourlyEvent::class => [
+            Listeners\HourlyEventListener::class
         ],
 
         DailyEvent::class => [
-            Listeners\DailyEvent\AttachAwaitingPublishTagListener::class,
+            Listeners\DailyEventListener::class,
         ],
 
         OrderProductShipmentCreatedEvent::class => [
@@ -82,7 +80,7 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
         ],
 
         InventoryMovementCreatedEvent::class => [
-            InventoryMovementCreatedEventListener::class,
+            Listeners\InventoryMovementCreatedEventListener::class,
         ],
 
         InventoryUpdatedEvent::class => [
@@ -102,10 +100,10 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
 
     public static function enabling(): bool
     {
-        $configuration = SnsService::getConfiguration();
+        $configuration = Services\SnsService::getConfiguration();
 
         if ($configuration->topic_arn === null) {
-            $response = SnsService::client()->createTopic(['Name' => Guid::uuid4()]);
+            $response = Services\SnsService::client()->createTopic(['Name' => Guid::uuid4()]);
 
             $topicArn = $response->toArray()['TopicArn'];
 
@@ -113,7 +111,7 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
         }
 
         try {
-            $response = SnsService::client()->listSubscriptionsByTopic(['TopicArn' => $configuration->topic_arn]);
+            Services\SnsService::client()->listSubscriptionsByTopic(['TopicArn' => $configuration->topic_arn]);
         } catch (Exception $exception) {
             ray($exception);
             report($exception);
