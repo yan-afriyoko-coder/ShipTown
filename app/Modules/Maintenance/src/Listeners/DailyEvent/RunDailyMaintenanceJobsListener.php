@@ -6,6 +6,7 @@ use App\Events\DailyEvent;
 use App\Modules\Maintenance\src\Jobs\Products\EnsureAllInventoryRecordsExistsJob;
 use App\Modules\Maintenance\src\Jobs\Products\EnsureAllProductPriceRecordsExistsJob;
 use App\Modules\Maintenance\src\Jobs\Products\FixQuantityAvailableJob;
+use App\Modules\Maintenance\src\Jobs\Products\RecalculateProductQuantityJob;
 
 class RunDailyMaintenanceJobsListener
 {
@@ -21,5 +22,6 @@ class RunDailyMaintenanceJobsListener
         EnsureAllInventoryRecordsExistsJob::dispatchAfterResponse();
         EnsureAllProductPriceRecordsExistsJob::dispatchAfterResponse();
         FixQuantityAvailableJob::dispatchAfterResponse();
+        RecalculateProductQuantityJob::dispatch();
     }
 }
