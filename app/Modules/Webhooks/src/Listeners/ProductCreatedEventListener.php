@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Webhooks\src\Listeners\ProductCreatedEvent;
+namespace App\Modules\Webhooks\src\Listeners;
 
 use App\Events\Product\ProductCreatedEvent;
 

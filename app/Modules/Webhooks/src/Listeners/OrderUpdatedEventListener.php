@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Webhooks\src\Listeners\OrderUpdatedEvent;
+namespace App\Modules\Webhooks\src\Listeners;
 
 use App\Events\Order\OrderUpdatedEvent;
 

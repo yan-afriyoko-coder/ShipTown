@@ -64,19 +64,19 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
         ],
 
         ProductCreatedEvent::class => [
-            Listeners\ProductCreatedEvent\ProductCreatedEventListener::class,
+            Listeners\ProductCreatedEventListener::class,
         ],
 
         ProductUpdatedEvent::class => [
-            Listeners\ProductUpdatedEvent\ProductUpdatedEventListener::class,
+            Listeners\ProductUpdatedEventListener::class,
         ],
 
         OrderCreatedEvent::class => [
-            Listeners\OrderCreatedEvent\OrderCreatedEventListener::class,
+            Listeners\OrderCreatedEventListener::class,
         ],
 
         OrderUpdatedEvent::class => [
-            Listeners\OrderUpdatedEvent\OrderUpdatedEventListener::class,
+            Listeners\OrderUpdatedEventListener::class,
         ],
 
         InventoryMovementCreatedEvent::class => [
@@ -92,10 +92,10 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
     {
         parent::boot();
 
-        $this->publishes([__DIR__.'/../config/webhooks.php' => config_path('webhooks.php')], 'config');
-        $this->mergeConfigFrom(__DIR__.'/../config/webhooks.php', 'webhooks');
+        $this->publishes([__DIR__ . '/../config/webhooks.php' => config_path('webhooks.php')], 'config');
+        $this->mergeConfigFrom(__DIR__ . '/../config/webhooks.php', 'webhooks');
 
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'webhooks');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'webhooks');
     }
 
     public static function enabling(): bool
