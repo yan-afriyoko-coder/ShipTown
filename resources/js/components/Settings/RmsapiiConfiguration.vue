@@ -19,10 +19,15 @@
                             <th></th>
                             <th></th>
                             <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(configuration, i) in configurations" :key="i">
+                            <td>
+                                <div v-if="configuration.status === 200" class="badge badge-success text-uppercase"> Status OK </div>
+                                <div v-if="configuration.status !== 200" class="badge badge-danger text-uppercase"> Status {{configuration.status}} </div>
+                            </td>
                             <td>
                                 {{ configuration.url }}<br>
                                 <div class="text-small"><span class="text-primary">username: </span> {{ configuration.username }}</div>
@@ -94,7 +99,13 @@
             getConfiguration() {
                 this.apiGetRmsapiConnections({})
                     .then(({ data }) => {
-                        this.configurations = data.data;
+                        data.data.forEach((item, index) => {
+                            this.apiGet(item['url'] + '/status')
+                                .then((response) => {
+                                    item['status'] = response.status;
+                                    this.configurations.push(item);
+                                })
+                        })
                     });
             },
 

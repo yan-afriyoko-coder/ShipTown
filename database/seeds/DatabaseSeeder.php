@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             RestockingReportSeeder::class,
 
 
+            RmsapiConnectionSeeder::class,
 //            AutomationsSeeder::class,
 //            PrintNodeClientSeeder::class,
 //            DpdIrelandSeeder::class,
