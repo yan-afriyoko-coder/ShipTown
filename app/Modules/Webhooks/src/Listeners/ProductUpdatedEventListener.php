@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Modules\Webhooks\src\Listeners\SyncRequestedEvent;
+namespace App\Modules\Webhooks\src\Listeners;
 
 use App\Events\Product\ProductUpdatedEvent;
-use App\Modules\Webhooks\src\Jobs\PublishOrdersWebhooksJob;
 
-class PublishOrdersWebhooksListener
+class ProductUpdatedEventListener
 {
     /**
      * Handle the event.
@@ -16,6 +15,8 @@ class PublishOrdersWebhooksListener
      */
     public function handle(ProductUpdatedEvent $event)
     {
-        PublishOrdersWebhooksJob::dispatch();
+        activity()->withoutLogs(function () use ($event) {
+            $event->getProduct()->attachTag(config('webhooks.tags.awaiting.name'));
+        });
     }
 }
