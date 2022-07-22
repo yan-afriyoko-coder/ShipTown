@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Modules\Webhooks\src\Listeners\ProductUpdatedEvent;
+namespace App\Modules\Webhooks\src\Listeners\ProductCreatedEvent;
 
-use App\Events\Product\ProductUpdatedEvent;
+use App\Events\Product\ProductCreatedEvent;
 
-class AttachAwaitingPublishTagListener
+class ProductCreatedEventListener
 {
     /**
      * Handle the event.
      *
-     * @param ProductUpdatedEvent $event
+     * @param ProductCreatedEvent $event
      *
      * @return void
      */
-    public function handle(ProductUpdatedEvent $event)
+    public function handle(ProductCreatedEvent $event)
     {
         activity()->withoutLogs(function () use ($event) {
             $event->getProduct()->attachTag(config('webhooks.tags.awaiting.name'));

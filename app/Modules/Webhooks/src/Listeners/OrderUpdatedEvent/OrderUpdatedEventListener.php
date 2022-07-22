@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Modules\Webhooks\src\Listeners\OrderCreatedEvent;
+namespace App\Modules\Webhooks\src\Listeners\OrderUpdatedEvent;
 
-use App\Events\Order\OrderCreatedEvent;
+use App\Events\Order\OrderUpdatedEvent;
 
 /**
  * Class AttachAwaitingPublishTagListener.
  */
-class AttachAwaitingPublishTagListener
+class OrderUpdatedEventListener
 {
     /**
      * Handle the event.
      *
-     * @param OrderCreatedEvent $event
+     * @param OrderUpdatedEvent $event
      *
      * @return void
      */
-    public function handle(OrderCreatedEvent $event)
+    public function handle(OrderUpdatedEvent $event)
     {
         activity()->withoutLogs(function () use ($event) {
             $event->getOrder()->attachTag(config('webhooks.tags.awaiting.name'));

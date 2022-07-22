@@ -64,19 +64,19 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
         ],
 
         ProductCreatedEvent::class => [
-            Listeners\ProductCreatedEvent\AttachAwaitingPublishTagListener::class,
+            Listeners\ProductCreatedEvent\ProductCreatedEventListener::class,
         ],
 
         ProductUpdatedEvent::class => [
-            Listeners\ProductUpdatedEvent\AttachAwaitingPublishTagListener::class,
+            Listeners\ProductUpdatedEvent\ProductUpdatedEventListener::class,
         ],
 
         OrderCreatedEvent::class => [
-            Listeners\OrderCreatedEvent\AttachAwaitingPublishTagListener::class,
+            Listeners\OrderCreatedEvent\OrderCreatedEventListener::class,
         ],
 
         OrderUpdatedEvent::class => [
-            Listeners\OrderUpdatedEvent\AttachAwaitingPublishTagListener::class,
+            Listeners\OrderUpdatedEvent\OrderUpdatedEventListener::class,
         ],
 
         InventoryMovementCreatedEvent::class => [
