@@ -17,6 +17,7 @@ use App\Models\Warehouse;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
+use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Services\ModulesService;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use JMac\Testing\Traits\AdditionalAssertions;
@@ -56,6 +57,8 @@ abstract class TestCase extends BaseTestCase
         Heartbeat::query()->forceDelete();
 
         Module::query()->forceDelete();
+
+        RmsapiConnection::query()->forceDelete();
 
         ModulesService::updateModulesTable();
     }

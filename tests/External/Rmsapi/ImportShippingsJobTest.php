@@ -2,17 +2,17 @@
 
 namespace Tests\External\Rmsapi;
 
-use App\Modules\Rmsapi\src\Api\Client as RmsapiClient;
+use App\Modules\Rmsapi\src\Api\Client;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use GuzzleHttp\Exception\GuzzleException;
 use Tests\TestCase;
 
-class RmsapiConnectionTest extends TestCase
+class ImportShippingsJobTest extends TestCase
 {
     /**
      * @throws GuzzleException
      */
-    public function test_if_fetches_products()
+    public function test_endpoint()
     {
         $connection = factory(RmsapiConnection::class)->create([
             'location_id'  => env('TEST_RMSAPI_WAREHOUSE_CODE'),
@@ -21,7 +21,9 @@ class RmsapiConnectionTest extends TestCase
             'password'     => env('TEST_RMSAPI_PASSWORD'),
         ]);
 
-        $response = RmsapiClient::GET($connection, 'api/products');
+        $response = Client::GET($connection, 'api/shippings');
+
+//        $this->import(response)
 
         $this->assertTrue($response->isSuccess());
     }

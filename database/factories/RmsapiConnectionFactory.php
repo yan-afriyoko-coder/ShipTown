@@ -11,8 +11,8 @@ $factory->define(RmsapiConnection::class, function (Faker $faker) {
 
     return [
         'location_id'    => $warehouse->code,
-        'url'            => 'https://demo.rmsapi.products.management',
-        'username'       => 'demo@products.management',
-        'password'       => 'secret123',
+        'url'            => $faker->url,
+        'username'       => $faker->companyEmail,
+        'password'       => $faker->password,
     ];
 });

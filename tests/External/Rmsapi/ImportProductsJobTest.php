@@ -2,19 +2,16 @@
 
 namespace Tests\External\Rmsapi;
 
-use App\Modules\Rmsapi\src\Models\RmsapiConnection;
-use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Jobs\FetchUpdatedProductsJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessProductImports;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Modules\Rmsapi\src\Models\RmsapiConnection;
+use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class ImportProductsJobTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * A basic feature test example.
      *
@@ -31,7 +28,12 @@ class ImportProductsJobTest extends TestCase
         RmsapiConnection::query()->delete();
         RmsapiProductImport::query()->delete();
 
-        $connection = factory(RmsapiConnection::class)->create();
+        $connection = factory(RmsapiConnection::class)->create([
+            'location_id'  => env('TEST_RMSAPI_WAREHOUSE_CODE'),
+            'url'          => env('TEST_RMSAPI_URL'),
+            'username'     => env('TEST_RMSAPI_USERNAME'),
+            'password'     => env('TEST_RMSAPI_PASSWORD'),
+        ]);
 
         $job = new FetchUpdatedProductsJob($connection->id);
 
