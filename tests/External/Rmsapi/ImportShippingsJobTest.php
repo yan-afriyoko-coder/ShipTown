@@ -23,7 +23,7 @@ class ImportShippingsJobTest extends TestCase
 
         $response = Client::GET($connection, 'api/shippings');
 
-//        $this->import(response)
+        // todo $this->import(response)
 
         $this->assertTrue($response->isSuccess());
     }
