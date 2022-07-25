@@ -43,7 +43,7 @@
                                 <div class="text-center w-100">
                                     <small>total</small>
                                 </div>
-                                <span class="pr-0 mr-2 h5">{{ Math.floor(order['order_products_totals']['total_price']) }}<span class="" style="font-size: 8pt"><template v-if="order['order_products_totals']['total_price'] % 1 === 0"> .00</template><template v-if="order['order_products_totals']['total_price'] % 1 > 0"> .{{ Math.floor(order['order_products_totals']['total_price'] % 1 * 100) }} </template></span></span>
+                                <span class="pr-0 mr-2 h5">{{ Math.floor(order['order_products_totals']['total_price'] + order['total_shipping']) }}<span class="" style="font-size: 8pt"><template v-if="(order['order_products_totals']['total_price'] + order['total_shipping']) % 1 === 0"> .00</template><template v-if="(order['order_products_totals']['total_price'] + order['total_shipping']) % 1 > 0"> .{{ Math.floor((order['order_products_totals']['total_price'] + order['total_shipping'])% 1 * 100) }} </template></span></span>
                             </div>
                             <div class="col d-none d-sm-block">
                                 <small> ordered </small>
@@ -202,13 +202,13 @@
                                   <td> label_template: </td><td><b> {{ order['label_template'] }} </b> </td>
                                 </tr>
                                 <tr>
-                                  <td> total_products: </td><td><b> {{ order['total_products'] }} </b> </td>
+                                  <td> total_products: </td><td><b> {{ order['order_products_totals']['total_price'] }} </b> </td>
                                 </tr>
                                 <tr>
-                                  <td> total_shipping: </td><td><b> {{ order['total_shipping'] }} </b> </td>
+                                  <td> total_shipping: </td><td><b> {{ toNumberOrDash(order['total_shipping']) }} </b> </td>
                                 </tr>
                                 <tr>
-                                  <td> total: </td><td><b> {{ order['total'] }} </b> </td>
+                                  <td> total: </td><td><b> {{ order['order_products_totals']['total_price'] + order['total_shipping'] }} </b> </td>
                                 </tr>
                                 <tr>
                                   <td> paid: </td><td><b> {{ order['total_paid'] }} </b> </td>

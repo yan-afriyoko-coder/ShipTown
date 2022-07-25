@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
+use App\BaseModel;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Crypt;
 
@@ -63,7 +62,7 @@ use Illuminate\Support\Facades\Crypt;
  * @method static Builder|OrderAddress whereWebsite($value)
  * @mixin Eloquent
  */
-class OrderAddress extends Model
+class OrderAddress extends BaseModel
 {
     protected $table = 'orders_addresses';
 

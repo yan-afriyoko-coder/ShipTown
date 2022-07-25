@@ -99,6 +99,7 @@ class OrderProduct extends BaseModel
     ];
 
     protected $fillable = [
+        'custom_unique_reference_id',
         'order_id',
         'product_id',
         'sku_ordered',

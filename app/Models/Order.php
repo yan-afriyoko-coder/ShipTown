@@ -62,6 +62,7 @@ use Spatie\Tags\Tag;
  * @property-read boolean     $isPaid
  * @property-read boolean     $isNotPaid
  *
+ * @property-read OrderProductTotal orderProductsTotals
  * @property-read OrderTotal orderTotals
  * @property-read OrderStatus $order_status
  * @property-read User|null   $packer
@@ -85,6 +86,7 @@ use Spatie\Tags\Tag;
  * @method static Builder|Order isPicked($expected)
  * @method static Builder|Order newModelQuery()
  * @method static Builder|Order newQuery()
+ * @method static Builder|Order where($value)
  * @method static Builder|Order whereCreatedAt($value)
  * @method static Builder|Order whereDeletedAt($value)
  * @method static Builder|Order whereHasText($text)

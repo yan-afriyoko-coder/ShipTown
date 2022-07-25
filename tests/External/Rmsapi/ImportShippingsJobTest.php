@@ -2,13 +2,29 @@
 
 namespace Tests\External\Rmsapi;
 
-use App\Modules\Rmsapi\src\Api\Client;
+use App\Models\Order;
+use App\Models\OrderProduct;
+use App\Models\OrderStatus;
+use App\Models\Product;
+use App\Models\Warehouse;
+use App\Modules\Rmsapi\src\Jobs\FetchShippingsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use GuzzleHttp\Exception\GuzzleException;
 use Tests\TestCase;
 
 class ImportShippingsJobTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        factory(OrderStatus::class)->create([
+            'code' => 'cancelled',
+            'name' => 'cancelled',
+            'order_active' => false,
+        ]);
+    }
+
     /**
      * @throws GuzzleException
      */
@@ -21,10 +37,17 @@ class ImportShippingsJobTest extends TestCase
             'password'     => env('TEST_RMSAPI_PASSWORD'),
         ]);
 
-        $response = Client::GET($connection, 'api/shippings');
+        Product::create(['sku' => '45']);
+        Warehouse::create([
+            'code' => env('TEST_RMSAPI_WAREHOUSE_CODE'),
+            'name' => env('TEST_RMSAPI_WAREHOUSE_CODE')
+        ]);
 
-        // todo $this->import(response)
+        FetchShippingsJob::dispatch($connection->getKey());
 
-        $this->assertTrue($response->isSuccess());
+        ray(Order::all()->toArray());
+        ray(OrderProduct::all()->toArray());
+
+        $this->assertNotEquals(0, Order::query()->count());
     }
 }

@@ -12,10 +12,10 @@ class WarehousesSeeder extends Seeder
      */
     public function run()
     {
-        factory(Warehouse::class)->create(['code' => '99', 'name'  => 'Warehouse']);
-        factory(Warehouse::class)->create(['code' => 'DUB', 'name' => 'Dublin']);
-        factory(Warehouse::class)->create(['code' => 'CRK', 'name' => 'Cork']);
-        factory(Warehouse::class)->create(['code' => 'GAL', 'name' => 'Galway']);
-        Warehouse::query()->firstOrCreate(['code' => '999'], ['name' => 'Web']);
+        Warehouse::firstOrCreate(['code' => '99'], ['name'  => 'Warehouse']);
+        Warehouse::firstOrCreate(['code' => 'DUB'], ['name' => 'Dublin']);
+        Warehouse::firstOrCreate(['code' => 'CRK'], ['name' => 'Cork']);
+        Warehouse::firstOrCreate(['code' => 'GAL'], ['name' => 'Galway']);
+        Warehouse::firstOrCreate(['code' => '999'], ['name' => 'Web']);
     }
 }

@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Crypt;
  * @property string      $username
  * @property string      $password
  * @property int         $products_last_timestamp
+ * @property int         $shippings_last_timestamp
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -43,6 +44,7 @@ class RmsapiConnection extends Model
         'username',
         'password',
         'products_last_timestamp',
+        'shippings_last_timestamp',
     ];
 
     public function setPasswordAttribute($password)

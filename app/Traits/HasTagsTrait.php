@@ -94,6 +94,9 @@ trait HasTagsTrait
         collect($tags)
             ->filter()
             ->each(function ($tag) use ($type) {
+                if ($this->doesNotHaveTags([$tag])) {
+                    return;
+                }
                 $this->originalDetachTags($tag, $type);
                 $this->onTagDetached($tag);
                 $this->log('detached "'.$tag.'" tag');
