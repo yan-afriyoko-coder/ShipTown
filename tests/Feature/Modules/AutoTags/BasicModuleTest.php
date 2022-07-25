@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Modules\AutoTags;
 
+use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\AutoTags\src\EventServiceProviderBase;
@@ -28,6 +29,8 @@ class BasicModuleTest extends TestCase
             'quantity' => 0,
             'quantity_reserved' => 1
         ]);
+
+        ray(Inventory::all()->toArray());
 
         $product = $product->refresh();
 
