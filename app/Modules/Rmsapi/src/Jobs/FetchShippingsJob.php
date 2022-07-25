@@ -74,9 +74,11 @@ class FetchShippingsJob implements ShouldQueue
 
         collect($response->getResult())
             ->each(function ($shippingRecord) {
-                $this->importShippingRecord($shippingRecord);
+                $orderProduct = $this->importShippingRecord($shippingRecord);
 
-                $this->restockProduct($this->orderProduct, $shippingRecord);
+                if ($orderProduct) {
+                    $this->restockProduct($orderProduct, $shippingRecord);
+                }
             });
 
         return true;
@@ -139,23 +141,24 @@ class FetchShippingsJob implements ShouldQueue
 
     /**
      * @param $shippingRecord
+     * @return OrderProduct|null:
      */
-    private function importShippingRecord($shippingRecord): void
+    private function importShippingRecord($shippingRecord): ?OrderProduct
     {
         Log::debug('Importing record', ["rmsapi_shipping_record" => $shippingRecord]);
 
         $uuid = $this->rmsapiConnection->location_id . '-shipping.id-' . $shippingRecord['ID'];
 
         if (OrderProduct::query()->where(['custom_unique_reference_id' => $uuid])->exists()) {
-            return;
+            Log::debug('Record already exists', ["rmsapi_shipping_record" => $shippingRecord]);
+            return null;
         }
 
         $order = $this->firstOrCreateOrder($shippingRecord);
 
         $product = Product::findBySKU($shippingRecord['ItemLookupCode']);
 
-        /** @var OrderProduct $orderProduct */
-        $this->orderProduct = OrderProduct::create([
+        $orderProduct = OrderProduct::create([
             'custom_unique_reference_id' => $uuid,
             'order_id' => $order->getKey(),
             'product_id' => $product ? $product->getKey() : null,
@@ -179,13 +182,14 @@ class FetchShippingsJob implements ShouldQueue
         ]);
 
         $this->rmsapiConnection->update(['shippings_last_timestamp' => $shippingRecord['DBTimeStamp']]);
+
+        return $orderProduct;
     }
 
     /**
      * @param OrderProduct $orderProduct
-     * @param $shippingRecord
      */
-    private function restockProduct(OrderProduct $orderProduct, $shippingRecord): void
+    private function restockProduct(OrderProduct $orderProduct): void
     {
         if ($orderProduct->product_id === null) {
             return;
@@ -197,16 +201,16 @@ class FetchShippingsJob implements ShouldQueue
                 'warehouse_code' => $this->rmsapiConnection->location_id,
             ])
             ->get()
-            ->each(function (Inventory $inventoryRecord) use ($shippingRecord) {
+            ->each(function (Inventory $inventoryRecord) {
                 InventoryService::adjustQuantity(
                     $inventoryRecord,
-                    $shippingRecord['TransactionEntryQuantity'],
+                    $inventoryRecord['quantity_ordered'],
                     'rmsapi_shipping_import'
                 );
 
                 $inventoryRecord->product->log('Imported RMS shipping, restocking', [
                     'warehouse_code' => $inventoryRecord->warehouse_code,
-                    'quantity' => $shippingRecord['TransactionEntryQuantity'],
+                    'quantity' => $inventoryRecord['quantity_ordered'],
                 ]);
             });
     }
