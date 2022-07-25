@@ -20,4 +20,13 @@ trait LogsActivityTrait
 
         return $this;
     }
+
+    public function logActivity($message, array $properties = []): self
+    {
+        activity()->on($this)
+            ->withProperties($properties)
+            ->log($message);
+
+        return $this;
+    }
 }
