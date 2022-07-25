@@ -30,8 +30,6 @@ class BasicModuleTest extends TestCase
             'quantity_reserved' => 1
         ]);
 
-        ray(Inventory::all()->toArray());
-
         $product = $product->refresh();
 
         $this->assertTrue($product->hasTags(['oversold']));
