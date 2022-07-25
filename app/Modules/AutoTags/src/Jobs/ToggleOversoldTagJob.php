@@ -36,8 +36,6 @@ class ToggleOversoldTagJob implements ShouldQueue
         /** @var Product $product */
         $product = Product::find($this->product_id, ['id', 'quantity_available']);
 
-        ray($product->toArray());
-
         if ($product->quantity_available < 0) {
             $product->attachTag('oversold');
         } else {
