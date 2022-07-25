@@ -56,6 +56,7 @@ class FetchShippingsJob implements ShouldQueue
         $params = [
             'per_page'            => 100,
             'order_by'            => 'DBTimeStamp:asc',
+            'ShippingCarrierName' => 'PM',
             'min:DBTimeStamp' => $this->rmsapiConnection->shippings_last_timestamp,
         ];
 
@@ -69,8 +70,6 @@ class FetchShippingsJob implements ShouldQueue
 
             return false;
         }
-
-
 
         collect($response->getResult())->each(function ($shippingRecord) {
             Log::debug('Importing record', ["rmsapi_shipping_record" => $shippingRecord]);
@@ -91,9 +90,9 @@ class FetchShippingsJob implements ShouldQueue
                 'order_id' => $order->getKey(),
                 'product_id' => $product ? $product->getKey() : null,
                 'sku_ordered' => $shippingRecord['ItemLookupCode'],
-                'name_ordered' => $shippingRecord['Description'],
-                'quantity_ordered' => $shippingRecord['Quantity'],
-                'price' => $shippingRecord['Price'],
+                'name_ordered' => $shippingRecord['ItemDescription'],
+                'quantity_ordered' => $shippingRecord['TransactionEntryQuantity'],
+                'price' => $shippingRecord['TransactionEntryPrice'],
             ]);
 
 //             enable when ready !!!
@@ -106,21 +105,21 @@ class FetchShippingsJob implements ShouldQueue
                 $inventory->each(function (Inventory $inventoryRecord) use ($shippingRecord) {
                     InventoryService::adjustQuantity(
                         $inventoryRecord,
-                        $shippingRecord['Quantity'],
+                        $shippingRecord['TransactionEntryQuantity'],
                         'rmsapi_shipping_import'
                     );
 
                     $inventoryRecord->product->log('Imported RMS shipping, restocking', [
                         'warehouse_code' => $inventoryRecord->warehouse_code,
-                        'quantity' => $shippingRecord['Quantity'],
+                        'quantity' => $shippingRecord['ShippingCarrierName'],
                     ]);
                 });
             }
 
             $order->update([
-                'total_shipping' => $shippingRecord['Charge'],
-                'total' => $order->orderProductsTotals->total_price + $shippingRecord['Charge'],
-                'total_paid' => $order->orderProductsTotals->total_price + $shippingRecord['Charge'],
+                'total_shipping' => $shippingRecord['ShippingCharge'],
+                'total' => $order->orderProductsTotals->total_price + $shippingRecord['ShippingCharge'],
+                'total_paid' => $order->orderProductsTotals->total_price + $shippingRecord['ShippingCharge'],
             ]);
 
             $this->rmsapiConnection->update(['shippings_last_timestamp' => $shippingRecord['DBTimeStamp']]);
