@@ -26,7 +26,7 @@ class SyncControllerTest extends TestCase
 
         factory(RmsapiConnection::class)->create();
 
-        SyncRequestJob::dispatchNow();
+        (new SyncRequestJob())->handle();
 
         Bus::assertDispatched(FetchUpdatedProductsJob::class);
     }
