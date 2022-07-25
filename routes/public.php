@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('manifest.json', 'ManifestController@index');
 
+Route::view('help', 'help');
+
 // you can register only first user then he should invite others
 try {
     Auth::routes(['register' => !User::query()->exists()]);

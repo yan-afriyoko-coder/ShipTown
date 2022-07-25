@@ -14,13 +14,12 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             ConfigurationSeeder::class,
-            NavigationMenuSeeder::class,
             WarehousesSeeder::class,
 
             UsersSeeder::class,
             ProductsSeeder::class,
             PaidOrdersSeeder::class,
-            DpdUkTestConnectionSeeder::class,
+            DpdUkTestOrdersSeeder::class,
             WebhooksTestSeeder::class,
             InventorySeeder::class,
             RestockingReportSeeder::class,

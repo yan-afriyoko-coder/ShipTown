@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\BaseModel;
 use App\User;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string description
  * @property int user_id
  */
-class InventoryMovement extends Model
+class InventoryMovement extends BaseModel
 {
     /**
      * @var string[]

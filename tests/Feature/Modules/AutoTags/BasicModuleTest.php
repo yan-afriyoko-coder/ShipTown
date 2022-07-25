@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Modules\AutoTags;
 
+use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\AutoTags\src\EventServiceProviderBase;

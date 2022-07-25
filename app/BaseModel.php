@@ -10,12 +10,14 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class BaseModel.
  *
- * @method static create(array $array)
+ * @method static self create(array $array)
  *
  * @method static first()
+ * @method static firstOrCreate(string[] $array, string[] $array1)
  * @method static firstOrUpdate(array $array, array $array1)
  * @method static findOrFail($id)
  * @method static updateOrCreate(array $array, array $array1)
+ * @method static where($values)
  * @method static whereBetween(string $string, array $array)
  * @method static whereId(int $id)
  *

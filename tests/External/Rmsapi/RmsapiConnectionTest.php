@@ -2,18 +2,24 @@
 
 namespace Tests\External\Rmsapi;
 
-use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Api\Client as RmsapiClient;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Modules\Rmsapi\src\Models\RmsapiConnection;
+use GuzzleHttp\Exception\GuzzleException;
 use Tests\TestCase;
 
 class RmsapiConnectionTest extends TestCase
 {
-    use RefreshDatabase;
-
-    public function testIfFetchesProducts()
+    /**
+     * @throws GuzzleException
+     */
+    public function test_if_fetches_products()
     {
-        $connection = factory(RmsapiConnection::class)->create();
+        $connection = factory(RmsapiConnection::class)->create([
+            'location_id'  => env('TEST_RMSAPI_WAREHOUSE_CODE'),
+            'url'          => env('TEST_RMSAPI_URL'),
+            'username'     => env('TEST_RMSAPI_USERNAME'),
+            'password'     => env('TEST_RMSAPI_PASSWORD'),
+        ]);
 
         $response = RmsapiClient::GET($connection, 'api/products');
 

@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\BaseModel;
 use App\User;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -33,7 +33,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static Builder|OrderComment whereUserId($value)
  * @mixin Eloquent
  */
-class OrderComment extends Model
+class OrderComment extends BaseModel
 {
     protected $table = 'orders_comments';
 

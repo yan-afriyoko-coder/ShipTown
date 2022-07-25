@@ -13,7 +13,7 @@ class WebhooksTestSeeder extends Seeder
      */
     public function run()
     {
-        if (env('TEST_SNS_TOPIC_ARN') === null) {
+        if (empty(env('TEST_SNS_TOPIC_ARN'))) {
             return;
         }
 
