@@ -186,7 +186,7 @@ class FetchShippingsJob implements ShouldQueue
 
                 $inventoryRecord->product->log('Imported RMS shipping, restocking', [
                     'warehouse_code' => $inventoryRecord->warehouse_code,
-                    'quantity' => $shippingRecord['ShippingCarrierName'],
+                    'quantity' => $shippingRecord['TransactionEntryQuantity'],
                 ]);
             });
         }
