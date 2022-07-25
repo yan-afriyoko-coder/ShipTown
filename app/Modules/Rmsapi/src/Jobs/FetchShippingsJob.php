@@ -71,59 +71,10 @@ class FetchShippingsJob implements ShouldQueue
             return false;
         }
 
-        collect($response->getResult())->each(function ($shippingRecord) {
-            Log::debug('Importing record', ["rmsapi_shipping_record" => $shippingRecord]);
-
-            $uuid = $this->rmsapiConnection->location_id . '-shipping.id-' . $shippingRecord['ID'];
-
-            if (OrderProduct::query()->where(['custom_unique_reference_id' => $uuid])->exists()) {
-                return;
-            }
-
-            $order = $this->firstOrCreateOrder($shippingRecord);
-
-            $product = Product::findBySKU($shippingRecord['ItemLookupCode']);
-
-            /** @var OrderProduct $orderProduct */
-            $orderProduct = OrderProduct::create([
-                'custom_unique_reference_id' => $uuid,
-                'order_id' => $order->getKey(),
-                'product_id' => $product ? $product->getKey() : null,
-                'sku_ordered' => $shippingRecord['ItemLookupCode'],
-                'name_ordered' => $shippingRecord['ItemDescription'],
-                'quantity_ordered' => $shippingRecord['TransactionEntryQuantity'],
-                'price' => $shippingRecord['TransactionEntryPrice'],
-            ]);
-
-//             enable when ready !!!
-            if ($orderProduct->product_id) {
-                $inventory = Inventory::query()->where([
-                    'product_id' => $orderProduct->product_id,
-                    'warehouse_code' => $this->rmsapiConnection->location_id,
-                ])->get();
-
-                $inventory->each(function (Inventory $inventoryRecord) use ($shippingRecord) {
-                    InventoryService::adjustQuantity(
-                        $inventoryRecord,
-                        $shippingRecord['TransactionEntryQuantity'],
-                        'rmsapi_shipping_import'
-                    );
-
-                    $inventoryRecord->product->log('Imported RMS shipping, restocking', [
-                        'warehouse_code' => $inventoryRecord->warehouse_code,
-                        'quantity' => $shippingRecord['ShippingCarrierName'],
-                    ]);
-                });
-            }
-
-            $order->update([
-                'total_shipping' => $shippingRecord['ShippingCharge'],
-                'total' => $order->orderProductsTotals->total_price + $shippingRecord['ShippingCharge'],
-                'total_paid' => $order->orderProductsTotals->total_price + $shippingRecord['ShippingCharge'],
-            ]);
-
-            $this->rmsapiConnection->update(['shippings_last_timestamp' => $shippingRecord['DBTimeStamp']]);
-        });
+        collect($response->getResult())
+            ->each(function ($shippingRecord) {
+                $this->importShippingRecord($shippingRecord);
+            });
 
         return true;
     }
@@ -136,12 +87,22 @@ class FetchShippingsJob implements ShouldQueue
     {
         $order = Order::firstOrCreate([
             'order_number' => $this->rmsapiConnection->location_id. '-TRN-' . $record['TransactionNumber'],
-            'status_code' => 'imported_rms_shippings'
+            'status_code' => 'imported_rms_shippings',
+            'shipping_method_code' => $record['ShippingServiceName'],
+            'shipping_method_name' => $record['ShippingCarrierName'],
         ], []);
 
         if (! $order->wasRecentlyCreated) {
             return $order;
         }
+
+        if (isset($record['TransactionEntryComment'])) {
+            OrderComment::create([
+                'order_id' => $order->getKey(),
+                'comment' => $record['TransactionEntryComment'],
+            ]);
+        }
+
         /** @var OrderAddress $shippingAddress */
         $shippingAddress = OrderAddress::create([
             'company' => $record['Company'],
@@ -162,15 +123,65 @@ class FetchShippingsJob implements ShouldQueue
             'region' => '',
         ]);
 
-        $order->shipping_address_id = $shippingAddress->getKey();
-
-        if (! empty($record['TransactionEntryComment'])) {
-            OrderComment::create([
-                'order_id' => $order->getKey(),
-                'comment' => $record['TransactionEntryComment'],
-            ]);
-        }
+        $order->update(['shipping_address_id' => $shippingAddress->getKey()]);
 
         return $order;
+    }
+
+    /**
+     * @param $shippingRecord
+     */
+    private function importShippingRecord($shippingRecord): void
+    {
+        Log::debug('Importing record', ["rmsapi_shipping_record" => $shippingRecord]);
+
+        $uuid = $this->rmsapiConnection->location_id . '-shipping.id-' . $shippingRecord['ID'];
+
+        if (OrderProduct::query()->where(['custom_unique_reference_id' => $uuid])->exists()) {
+            return;
+        }
+
+        $order = $this->firstOrCreateOrder($shippingRecord);
+
+        $product = Product::findBySKU($shippingRecord['ItemLookupCode']);
+
+        /** @var OrderProduct $orderProduct */
+        $orderProduct = OrderProduct::create([
+            'custom_unique_reference_id' => $uuid,
+            'order_id' => $order->getKey(),
+            'product_id' => $product ? $product->getKey() : null,
+            'sku_ordered' => $shippingRecord['ItemLookupCode'],
+            'name_ordered' => $shippingRecord['ItemDescription'],
+            'quantity_ordered' => $shippingRecord['TransactionEntryQuantity'],
+            'price' => $shippingRecord['TransactionEntryPrice'],
+        ]);
+
+        $order->update([
+            'total_shipping' => $shippingRecord['ShippingCharge'],
+            'total' => $order->orderProductsTotals->total_price + $shippingRecord['ShippingCharge'],
+            'total_paid' => $order->orderProductsTotals->total_price + $shippingRecord['ShippingCharge'],
+        ]);
+
+        $this->rmsapiConnection->update(['shippings_last_timestamp' => $shippingRecord['DBTimeStamp']]);
+
+        if ($orderProduct->product_id) {
+            $inventory = Inventory::query()->where([
+                'product_id' => $orderProduct->product_id,
+                'warehouse_code' => $this->rmsapiConnection->location_id,
+            ])->get();
+
+            $inventory->each(function (Inventory $inventoryRecord) use ($shippingRecord) {
+                InventoryService::adjustQuantity(
+                    $inventoryRecord,
+                    $shippingRecord['TransactionEntryQuantity'],
+                    'rmsapi_shipping_import'
+                );
+
+                $inventoryRecord->product->log('Imported RMS shipping, restocking', [
+                    'warehouse_code' => $inventoryRecord->warehouse_code,
+                    'quantity' => $shippingRecord['ShippingCarrierName'],
+                ]);
+            });
+        }
     }
 }
