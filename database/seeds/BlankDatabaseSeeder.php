@@ -3,7 +3,7 @@
 use App\Jobs\RunHourlyJobs;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class BlankDatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
@@ -14,18 +14,14 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             ConfigurationSeeder::class,
-            WarehousesSeeder::class,
 
             UsersSeeder::class,
-            ProductsSeeder::class,
-            PaidOrdersSeeder::class,
-            DpdUkTestOrdersSeeder::class,
+            WarehousesSeeder::class,
+
             WebhooksTestSeeder::class,
-            InventorySeeder::class,
-            RestockingReportSeeder::class,
-
-
             RmsapiConnectionSeeder::class,
+
+
 //            AutomationsSeeder::class,
 //            PrintNodeClientSeeder::class,
 //            DpdIrelandSeeder::class,

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Run;
 use App\Events\Every10minEvent;
 use App\Events\SyncRequestedEvent;
 use App\Http\Controllers\Controller;
+use App\Jobs\SyncRequestJob;
 use Illuminate\Support\Facades\Request;
 
 /**
@@ -17,14 +18,10 @@ class SyncController extends Controller
      */
     public function index(Request $request)
     {
-        logger('Dispatching sync jobs');
+        SyncRequestJob::dispatchAfterResponse();
 
-        SyncRequestedEvent::dispatch();
+        info('SyncRequestJob dispatched');
 
-        Every10minEvent::dispatch();
-
-        info('Sync jobs dispatched');
-
-        $this->respondOK200('Sync jobs dispatched');
+        $this->respondOK200('Sync requested successfully');
     }
 }

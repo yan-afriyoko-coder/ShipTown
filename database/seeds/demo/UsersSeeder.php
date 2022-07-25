@@ -20,7 +20,7 @@ class UsersSeeder extends Seeder
             $user = factory(User::class, 1)->create([
                 'name' => 'Artur Hanusek',
                 'email' => 'admin@products.management',
-                'warehouse_id' => Warehouse::whereCode('DUB')->first()->getKey(),
+                'warehouse_id' => Warehouse::firstOrCreate(['code' => 'DUB'], ['name' => 'Dublin'])->getKey(),
             ]);
             $user->first()->assignRole('admin');
         }
