@@ -96,10 +96,10 @@ class FetchShippingsJob implements ShouldQueue
             return $order;
         }
 
-        if (isset($record['TransactionEntryComment'])) {
+        if (! empty($record['TransactionComment'])) {
             OrderComment::create([
                 'order_id' => $order->getKey(),
-                'comment' => $record['TransactionEntryComment'],
+                'comment' => trim($record['TransactionComment']),
             ]);
         }
 
@@ -155,6 +155,13 @@ class FetchShippingsJob implements ShouldQueue
             'quantity_ordered' => $shippingRecord['TransactionEntryQuantity'],
             'price' => $shippingRecord['TransactionEntryPrice'],
         ]);
+
+        if (! empty($record['TransactionEntryComment'])) {
+            OrderComment::create([
+                'order_id' => $order->getKey(),
+                'comment' => trim($record['TransactionEntryComment']),
+            ]);
+        }
 
         $order->update([
             'total_shipping' => $shippingRecord['ShippingCharge'],
