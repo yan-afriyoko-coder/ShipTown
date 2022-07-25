@@ -6,10 +6,8 @@ use App\Jobs\SyncRequestJob;
 use App\Modules\Rmsapi\src\Jobs\FetchUpdatedProductsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\RmsapiModuleServiceProvider;
-use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
-use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class SyncControllerTest extends TestCase
