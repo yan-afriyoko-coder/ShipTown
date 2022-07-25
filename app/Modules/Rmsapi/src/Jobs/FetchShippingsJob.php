@@ -74,10 +74,10 @@ class FetchShippingsJob implements ShouldQueue
 
         collect($response->getResult())
             ->each(function ($shippingRecord) {
-                $orderProduct = $this->importShippingRecord($shippingRecord);
+                $orderProduct = $this->createOrderProductFrom($shippingRecord);
 
                 if ($orderProduct) {
-                    $this->restockProduct($orderProduct, $shippingRecord);
+                    $this->restockOriginForStockToBalance($orderProduct);
                 }
             });
 
@@ -143,7 +143,7 @@ class FetchShippingsJob implements ShouldQueue
      * @param $shippingRecord
      * @return OrderProduct|null:
      */
-    private function importShippingRecord($shippingRecord): ?OrderProduct
+    private function createOrderProductFrom($shippingRecord): ?OrderProduct
     {
         Log::debug('Importing record', ["rmsapi_shipping_record" => $shippingRecord]);
 
@@ -187,9 +187,14 @@ class FetchShippingsJob implements ShouldQueue
     }
 
     /**
+     * When creating shipping in RMS, it automatically creates transaction and deducts stock
+     * We not 100% sure where the stock is gonna be shipped from so
+     * We will restock sold products and reserve from all stock until shipped
+     * then transaction will be created in warehouse where product ships from
+     *
      * @param OrderProduct $orderProduct
      */
-    private function restockProduct(OrderProduct $orderProduct): void
+    private function restockOriginForStockToBalance(OrderProduct $orderProduct): void
     {
         if ($orderProduct->product_id === null) {
             return;
@@ -201,16 +206,16 @@ class FetchShippingsJob implements ShouldQueue
                 'warehouse_code' => $this->rmsapiConnection->location_id,
             ])
             ->get()
-            ->each(function (Inventory $inventoryRecord) {
+            ->each(function (Inventory $inventoryRecord) use ($orderProduct) {
                 InventoryService::adjustQuantity(
                     $inventoryRecord,
-                    $inventoryRecord['quantity_ordered'],
+                    $orderProduct->quantity_ordered,
                     'rmsapi_shipping_import'
                 );
 
                 $inventoryRecord->product->log('Imported RMS shipping, restocking', [
                     'warehouse_code' => $inventoryRecord->warehouse_code,
-                    'quantity' => $inventoryRecord['quantity_ordered'],
+                    'quantity' => $orderProduct->quantity_ordered,
                 ]);
             });
     }
