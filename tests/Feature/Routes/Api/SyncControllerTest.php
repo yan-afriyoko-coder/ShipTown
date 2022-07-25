@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Routes\Api;
 
+use App\Jobs\SyncRequestJob;
 use App\Modules\Rmsapi\src\Jobs\FetchUpdatedProductsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\RmsapiModuleServiceProvider;
@@ -27,11 +28,7 @@ class SyncControllerTest extends TestCase
 
         factory(RmsapiConnection::class)->create();
 
-        Passport::actingAs(
-            factory(User::class)->create()
-        );
-
-        $response = $this->get('/api/run/sync');
+        SyncRequestJob::dispatchNow();
 
         Bus::assertDispatched(FetchUpdatedProductsJob::class);
     }
