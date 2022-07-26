@@ -94,6 +94,7 @@ class FetchShippingsJob implements ShouldQueue
         $order = Order::firstOrCreate([
             'order_number' => $this->rmsapiConnection->location_id. '-TRN-' . $record['TransactionNumber'],
             'status_code' => 'imported_rms_shippings',
+            'order_placed_at' => $record['ShippingDateCreated'],
             'shipping_method_code' => $record['ShippingServiceName'],
             'shipping_method_name' => $record['ShippingCarrierName'],
         ], []);
