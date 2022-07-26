@@ -78,6 +78,7 @@ class RecalculateQuantityJob implements ShouldQueue
                 DB::raw('IFNULL('.$this->table_name.'.quantity_expected, 0) as quantity_expected'),
             ])
             ->leftJoin($this->table_name, 'products.id', '=', $this->table_name.'.product_id')
+            ->limit(100)
             ->whereRaw('products.quantity != IFNULL('. $this->table_name . '.quantity_expected, 0)');
     }
 }
