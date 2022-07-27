@@ -358,6 +358,9 @@ class CoreV1 extends Migration
             $table->decimal('price', 10, 3)->default(0);
             $table->decimal('quantity_ordered', 10)->default(0);
             $table->decimal('quantity_split', 10)->default(0);
+            $table->decimal('total_price', 20)
+                ->storedAs('(quantity_ordered - quantity_split) * price')
+                ->comment('(quantity_ordered - quantity_split) * price');
             $table->decimal('quantity_shipped', 10)->default(0);
             $table->decimal('quantity_to_pick', 10)
                 ->storedAs('quantity_ordered - quantity_split - quantity_picked - quantity_skipped_picking')
@@ -388,6 +391,7 @@ class CoreV1 extends Migration
             $table->integer('count')->default(0);
             $table->decimal('quantity_ordered', 20)->default(0);
             $table->decimal('quantity_split', 20)->default(0);
+            $table->decimal('total_price', 20)->default(0);
             $table->decimal('quantity_picked', 20)->default(0);
             $table->decimal('quantity_skipped_picking', 20)->default(0);
             $table->decimal('quantity_not_picked', 20)->default(0);
@@ -810,6 +814,39 @@ class CoreV1 extends Migration
             $table->id();
             $table->foreignId('order_id')->unique();
             $table->timestamps();
+        });
+
+        Schema::create('inventory_movements', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('inventory_id');
+            $table->foreignId('product_id');
+            $table->foreignId('warehouse_id');
+            $table->decimal('quantity_delta', 20);
+            $table->decimal('quantity_before', 20);
+            $table->decimal('quantity_after', 20);
+            $table->string('description', 50);
+            $table->foreignId('user_id')->nullable();
+            $table->timestamps();
+
+            $table->foreign('inventory_id')
+                ->references('id')
+                ->on('inventory')
+                ->cascadeOnDelete();
+
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products')
+                ->cascadeOnDelete();
+
+            $table->foreign('warehouse_id')
+                ->references('id')
+                ->on('warehouses')
+                ->cascadeOnDelete();
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->cascadeOnDelete();
         });
 
         $this->installSpatiePermissions();
