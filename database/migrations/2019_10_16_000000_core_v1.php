@@ -113,8 +113,11 @@ class CoreV1 extends Migration
             $table->longText('data')->nullable();
         });
 
+
+
         Schema::create('mail_templates', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('code')->nullable(false)->default('');
             $table->string('mailable');
             $table->string('to', 255)->nullable();
             $table->string('reply_to', 100)->nullable();
@@ -250,6 +253,8 @@ class CoreV1 extends Migration
             $table->decimal('quantity_reserved', 10)->default(0);
             $table->softDeletes();
             $table->timestamps();
+
+            $table->index('warehouse_code');
 
             $table->foreign('product_id')
                 ->references('id')
@@ -437,6 +442,8 @@ class CoreV1 extends Migration
             $table->softDeletes();
             $table->timestamps();
 
+            $table->index('warehouse_code');
+
             $table->foreign('product_id')
                 ->on('products')
                 ->references('id')
@@ -610,15 +617,12 @@ class CoreV1 extends Migration
 
         Schema::create('modules_api2cart_connections', function (Blueprint $table) {
             $table->id();
-            $table->string('location_id')->default('0');
-            $table->json('inventory_warehouse_ids')->nullable();
             $table->string('type')->default('');
             $table->string('url')->default('');
             $table->char('prefix', 10)->default('');
             $table->string('bridge_api_key')->nullable();
             $table->unsignedBigInteger('magento_store_id')->nullable();
             $table->string('magento_warehouse_id')->nullable();
-            $table->string('inventory_location_id', 5)->nullable(true);
             $table->string('pricing_location_id', 5)->nullable(true);
             $table->dateTime('last_synced_modified_at')->default('2020-01-01 00:00:00');
             $table->timestamps();
