@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CoreV1 extends Migration
@@ -30,6 +31,21 @@ class CoreV1 extends Migration
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();
+        });
+
+        Schema::create('sessions', function (Blueprint $table) {
+            $table->string('id')->unique();
+            $table->foreignId('user_id')->nullable();
+            $table->string('ip_address', 45)->nullable();
+            $table->text('user_agent')->nullable();
+            $table->text('payload');
+            $table->integer('last_activity');
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
         });
 
         Schema::create('oauth_auth_codes', function (Blueprint $table) {
@@ -585,6 +601,7 @@ class CoreV1 extends Migration
         Schema::create('modules_api2cart_connections', function (Blueprint $table) {
             $table->id();
             $table->string('location_id')->default('0');
+            $table->json('inventory_warehouse_ids')->nullable();
             $table->string('type')->default('');
             $table->string('url')->default('');
             $table->char('prefix', 10)->default('');
