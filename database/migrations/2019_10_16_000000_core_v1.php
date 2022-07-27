@@ -241,7 +241,11 @@ class CoreV1 extends Migration
             $table->foreignId('warehouse_id')->nullable();
             $table->foreignId('product_id');
             $table->string('location_id')->default('');
+            $table->string('warehouse_code')->default('');
             $table->string('shelve_location')->default('');
+            $table->decimal('quantity_available', 10)
+                ->storedAs('quantity - quantity_reserved')
+                ->comment('quantity - quantity_reserved');
             $table->decimal('quantity', 10)->default(0);
             $table->decimal('quantity_reserved', 10)->default(0);
             $table->softDeletes();
@@ -336,6 +340,7 @@ class CoreV1 extends Migration
             $table->string('code')->unique();
             $table->boolean('reserves_stock')->default(true);
             $table->boolean('order_active')->default(1);
+            $table->boolean('hidden')->default(false);
             $table->boolean('sync_ecommerce')->default(false);
             $table->softDeletes();
             $table->timestamps();
