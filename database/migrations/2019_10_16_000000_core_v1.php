@@ -251,6 +251,15 @@ class CoreV1 extends Migration
                 ->comment('quantity - quantity_reserved');
             $table->decimal('quantity', 10)->default(0);
             $table->decimal('quantity_reserved', 10)->default(0);
+            $table->decimal('reorder_point', 10)->default(0);
+            $table->decimal('restock_level', 10)->default(0);
+            $table->decimal('quantity_required', 10)
+                ->storedAs('CASE WHEN (quantity - quantity_reserved) < reorder_point ' .
+                    'THEN restock_level - (quantity - quantity_reserved) ' .
+                    'ELSE 0 END')
+                ->comment('CASE WHEN (quantity - quantity_reserved) < reorder_point ' .
+                    'THEN restock_level - (quantity - quantity_reserved) ' .
+                    'ELSE 0 END');
             $table->softDeletes();
             $table->timestamps();
 
@@ -276,6 +285,7 @@ class CoreV1 extends Migration
             $table->string('status_code')->default('');
             $table->string('label_template')->default('');
             $table->boolean('is_active')->nullable(false)->default(0);
+            $table->boolean('is_on_hold')->default(false);
             $table->boolean('is_editing')->default(0);
             $table->decimal('total_products')->default(0);
             $table->decimal('total_shipping')->default(0);
@@ -290,8 +300,6 @@ class CoreV1 extends Migration
             $table->timestamp('picked_at')->nullable();
             $table->timestamp('packed_at')->nullable();
             $table->foreignId('packer_user_id')->nullable();
-            $table->decimal('total_quantity_ordered', 10)->default(0);
-            $table->decimal('total_quantity_to_ship')->default(0);
             $table->softDeletes();
             $table->timestamps();
 
@@ -344,7 +352,8 @@ class CoreV1 extends Migration
             $table->string('name')->unique();
             $table->string('code')->unique();
             $table->boolean('reserves_stock')->default(true);
-            $table->boolean('order_active')->default(1);
+            $table->boolean('order_active')->default(true);
+            $table->boolean('order_on_hold')->default(false);
             $table->boolean('hidden')->default(false);
             $table->boolean('sync_ecommerce')->default(false);
             $table->softDeletes();
@@ -411,6 +420,13 @@ class CoreV1 extends Migration
                 ->references('id')
                 ->on('products')
                 ->onDelete('SET NULL');
+        });
+
+        Schema::create('shipping_services', function (Blueprint $table) {
+            $table->id();
+            $table->string('code', 25)->unique()->nullable(false);
+            $table->string('service_provider_class');
+            $table->timestamps();
         });
 
         Schema::create('tags', function (Blueprint $table) {
@@ -493,6 +509,8 @@ class CoreV1 extends Migration
             $table->string('service_provider_class')->nullable(false);
             $table->boolean('enabled')->nullable(false)->default(false);
             $table->timestamps();
+
+            $table->unique('service_provider_class');
         });
 
         Schema::create('modules_autostatus_picking_configurations', function (Blueprint $table) {
@@ -521,7 +539,7 @@ class CoreV1 extends Migration
         Schema::create('navigation_menu', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
-            $table->string('url', 255);
+            $table->string('url', 999)->default('');
             $table->string('group', 100);
             $table->timestamps();
         });

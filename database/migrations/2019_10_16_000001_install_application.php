@@ -27,6 +27,8 @@ class InstallApplication extends Migration
             $this->createReadyForCollectionNotificationTemplate();
             $this->createDefaultMailTemplateShipmentNotification();
             $this->createDefaultMailTemplateOversoldProduct();
+
+            \App\Services\ModulesService::updateModulesTable();
         });
     }
 
