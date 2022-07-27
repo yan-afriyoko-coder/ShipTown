@@ -188,6 +188,10 @@ class CoreV1 extends Migration
             $table->decimal('quantity_available', 10)->default(0);
             $table->softDeletes();
             $table->timestamps();
+
+            $table->index('quantity');
+            $table->index('quantity_reserved');
+            $table->index('quantity_available');
         });
 
         Schema::create('products_aliases', function (Blueprint $table) {
@@ -241,7 +245,7 @@ class CoreV1 extends Migration
 
         Schema::create('inventory', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('warehouse_id')->nullable();
+            $table->foreignId('warehouse_id');
             $table->foreignId('product_id');
             $table->string('location_id')->default('');
             $table->string('warehouse_code', 5)->nullable(false);
@@ -251,19 +255,29 @@ class CoreV1 extends Migration
                 ->comment('quantity - quantity_reserved');
             $table->decimal('quantity', 20)->default(0);
             $table->decimal('quantity_reserved', 20)->default(0);
+            $table->decimal('quantity_incoming', 20)->default(0);
+            $table->decimal('quantity_required', 20)
+                ->storedAs('CASE WHEN (quantity - quantity_reserved + quantity_incoming) BETWEEN 0 AND reorder_point ' .
+                    'THEN restock_level - (quantity - quantity_reserved + quantity_incoming)' .
+                    'ELSE 0 END')
+                ->comment('CASE WHEN (quantity - quantity_reserved + quantity_incoming) BETWEEN 0 AND reorder_point ' .
+                    'THEN restock_level - (quantity - quantity_reserved + quantity_incoming)' .
+                    'ELSE 0 END');
             $table->decimal('reorder_point', 20)->default(0);
             $table->decimal('restock_level', 20)->default(0);
-            $table->decimal('quantity_required', 20)
-                ->storedAs('CASE WHEN (quantity - quantity_reserved) < reorder_point ' .
-                    'THEN restock_level - (quantity - quantity_reserved) ' .
-                    'ELSE 0 END')
-                ->comment('CASE WHEN (quantity - quantity_reserved) < reorder_point ' .
-                    'THEN restock_level - (quantity - quantity_reserved) ' .
-                    'ELSE 0 END');
             $table->softDeletes();
             $table->timestamps();
 
+            $table->index('product_id');
             $table->index('warehouse_code');
+            $table->index('shelve_location');
+            $table->index('quantity_available');
+            $table->index('quantity');
+            $table->index('quantity_reserved');
+            $table->index('quantity_incoming');
+            $table->index('quantity_required');
+            $table->index('restock_level');
+            $table->index('reorder_point');
 
             $table->foreign('product_id')
                 ->references('id')
@@ -273,9 +287,19 @@ class CoreV1 extends Migration
             $table->foreign('warehouse_id')
                 ->on('warehouses')
                 ->references('id')
-                ->onDelete('SET NULL');
+                ->onDelete('cascade');
+        });
 
-            $table->index('product_id');
+        Schema::create('orders_statuses', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique();
+            $table->string('code')->unique();
+            $table->boolean('order_active')->default(true);
+            $table->boolean('order_on_hold')->default(false);
+            $table->boolean('hidden')->default(false);
+            $table->boolean('sync_ecommerce')->default(false);
+            $table->softDeletes();
+            $table->timestamps();
         });
 
         Schema::create('orders', function (Blueprint $table) {
@@ -302,6 +326,17 @@ class CoreV1 extends Migration
             $table->foreignId('packer_user_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
+
+            $table->index('status_code');
+            $table->index('is_active');
+            $table->index('is_on_hold');
+            $table->index('label_template');
+            $table->index('order_placed_at');
+
+            $table->foreign('status_code')
+                ->on('orders_statuses')
+                ->references('code')
+                ->onDelete('RESTRICT');
 
             $table->foreign('shipping_address_id')
                 ->on('orders_addresses')
@@ -347,17 +382,36 @@ class CoreV1 extends Migration
                 ->onDelete('cascade');
         });
 
-        Schema::create('orders_statuses', function (Blueprint $table) {
+        Schema::create('orders_products_totals', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->string('code')->unique();
-            $table->boolean('reserves_stock')->default(true);
-            $table->boolean('order_active')->default(true);
-            $table->boolean('order_on_hold')->default(false);
-            $table->boolean('hidden')->default(false);
-            $table->boolean('sync_ecommerce')->default(false);
-            $table->softDeletes();
+            $table->foreignId('order_id');
+            $table->integer('count')->default(0);
+            $table->decimal('quantity_ordered', 20)->default(0);
+            $table->decimal('quantity_split', 20)->default(0);
+            $table->decimal('quantity_picked', 20)->default(0);
+            $table->decimal('quantity_skipped_picking', 20)->default(0);
+            $table->decimal('quantity_not_picked', 20)->default(0);
+            $table->decimal('quantity_shipped', 20)->default(0);
+            $table->decimal('quantity_to_pick', 20)->default(0);
+            $table->decimal('quantity_to_ship', 20)->default(0);
+            $table->timestamp('max_updated_at')->default('2000-01-01 00:00:00');
             $table->timestamps();
+
+            $table->index('count');
+            $table->index('quantity_ordered');
+            $table->index('quantity_split');
+            $table->index('quantity_picked');
+            $table->index('quantity_skipped_picking');
+            $table->index('quantity_not_picked');
+            $table->index('quantity_shipped');
+            $table->index('quantity_to_pick');
+            $table->index('quantity_to_ship');
+            $table->index('updated_at');
+
+            $table->foreign('order_id')
+                ->references('id')
+                ->on('orders')
+                ->onDelete('CASCADE');
         });
 
         Schema::create('orders_shipments', function (Blueprint $table) {
@@ -561,6 +615,11 @@ class CoreV1 extends Migration
             $table->string('condition_value')->nullable()->default('');
             $table->timestamps();
 
+            $table->unique(
+                ['automation_id', 'condition_class', 'condition_value'],
+                'modules_automations_conditions_automation_id_class_value_unique'
+            );
+
             $table->foreign('automation_id')
                 ->references('id')
                 ->on('modules_automations')
@@ -624,11 +683,14 @@ class CoreV1 extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('connection_id');
             $table->uuid('batch_uuid')->nullable();
+            $table->timestamp('reserved_at')->nullable();
             $table->dateTime('when_processed')->nullable();
             $table->unsignedBigInteger('product_id')->nullable();
             $table->string('sku')->nullable();
             $table->json('raw_import');
             $table->timestamps();
+
+            $table->index('when_processed');
 
             $table->foreign('product_id')
                 ->on('products')
@@ -721,9 +783,14 @@ class CoreV1 extends Migration
             $table->string('username');
             $table->string('password');
             $table->string('account_number');
-            $table->foreignId('collection_address_id');
+            $table->foreignId('collection_address_id')->nullable();
             $table->string('geo_session')->nullable();
             $table->timestamps();
+
+            $table->foreign('collection_address_id')
+                ->references('id')
+                ->on('orders_addresses')
+                ->onDelete('SET NULL');
         });
 
         Schema::create('modules_boxtop_warehouse_stock', function (Blueprint $table) {
