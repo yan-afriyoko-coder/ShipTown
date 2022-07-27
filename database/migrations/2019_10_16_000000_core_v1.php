@@ -249,10 +249,10 @@ class CoreV1 extends Migration
             $table->decimal('quantity_available', 10)
                 ->storedAs('quantity - quantity_reserved')
                 ->comment('quantity - quantity_reserved');
-            $table->decimal('quantity', 10)->default(0);
-            $table->decimal('quantity_reserved', 10)->default(0);
-            $table->decimal('reorder_point', 10)->default(0);
-            $table->decimal('restock_level', 10)->default(0);
+            $table->decimal('quantity', 20)->default(0);
+            $table->decimal('quantity_reserved', 20)->default(0);
+            $table->decimal('reorder_point', 20)->default(0);
+            $table->decimal('restock_level', 20)->default(0);
             $table->decimal('quantity_required', 10)
                 ->storedAs('CASE WHEN (quantity - quantity_reserved) < reorder_point ' .
                     'THEN restock_level - (quantity - quantity_reserved) ' .

@@ -13,12 +13,7 @@ class UpdateDecimalColumnsInInventoryTable extends Migration
      */
     public function up()
     {
-        Schema::table('inventory', function (Blueprint $table) {
-            $table->decimal('quantity', 20)->default(0)->change();
-            $table->decimal('quantity_reserved', 20)->default(0)->change();
-            $table->decimal('reorder_point', 20)->default(0)->change();
-            $table->decimal('restock_level', 20)->default(0)->change();
-        });
+
 
         if (Schema::hasColumn('inventory', 'quantity_available')) {
             Schema::table('inventory', function (Blueprint $table) {
