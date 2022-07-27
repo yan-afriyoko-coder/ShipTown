@@ -429,10 +429,10 @@ class CoreV1 extends Migration
             $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
         });
 
-
         Schema::create('products_prices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->index();
+            $table->foreignId('warehouse_id');
             $table->string('location_id')->default('');
             $table->string('warehouse_code', 5)->nullable(false);
             $table->decimal('price', 10)->default(99999);
@@ -443,10 +443,16 @@ class CoreV1 extends Migration
             $table->timestamps();
 
             $table->index('warehouse_code');
+            $table->unique(['product_id', 'warehouse_id']);
 
             $table->foreign('product_id')
                 ->on('products')
                 ->references('id')
+                ->onDelete('CASCADE');
+
+            $table->foreign('warehouse_id')
+                ->references('id')
+                ->on('warehouses')
                 ->onDelete('CASCADE');
         });
 
@@ -612,13 +618,12 @@ class CoreV1 extends Migration
                 ->onDelete('SET NULL');
         });
 
-        Schema::table('modules_api2cart_connections', function (Blueprint $table) {
-        });
-
         Schema::create('modules_api2cart_connections', function (Blueprint $table) {
             $table->id();
             $table->string('type')->default('');
             $table->string('url')->default('');
+            $table->string('inventory_source_warehouse_tag')->nullable();
+            $table->foreignId('pricing_source_warehouse_id')->nullable();
             $table->char('prefix', 10)->default('');
             $table->string('bridge_api_key')->nullable();
             $table->unsignedBigInteger('magento_store_id')->nullable();
@@ -655,8 +660,8 @@ class CoreV1 extends Migration
 
         Schema::create('modules_api2cart_product_links', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->nullable();
-            $table->string('api2cart_connection_id')->nullable();
+            $table->foreignId('product_id');
+            $table->foreignId('api2cart_connection_id');
             $table->string('api2cart_product_type')->nullable();
             $table->string('api2cart_product_id')->nullable();
             $table->dateTime('last_fetched_at')->nullable();
@@ -667,6 +672,16 @@ class CoreV1 extends Migration
             $table->date('api2cart_sale_price_start_date')->nullable();
             $table->date('api2cart_sale_price_end_date')->nullable();
             $table->timestamps();
+
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products')
+                ->onDelete('CASCADE');
+
+            $table->foreign('api2cart_connection_id')
+                ->references('id')
+                ->on('modules_api2cart_connections')
+                ->onDelete('CASCADE');
         });
 
         Schema::create('configurations', function (Blueprint $table) {
