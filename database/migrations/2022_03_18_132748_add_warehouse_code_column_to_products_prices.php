@@ -13,9 +13,7 @@ class AddWarehouseCodeColumnToProductsPrices extends Migration
      */
     public function up()
     {
-        Schema::table('products_prices', function (Blueprint $table) {
-            $table->string('warehouse_code')->after('location_id')->default('');
-        });
+
 
         \Illuminate\Support\Facades\DB::statement('UPDATE products_prices SET warehouse_code = location_id');
     }
