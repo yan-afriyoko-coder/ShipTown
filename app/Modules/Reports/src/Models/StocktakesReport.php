@@ -23,6 +23,7 @@ class StocktakesReport extends Report
             })
             ->leftJoin('products as product', 'inventory_movements.product_id', '=', 'product.id')
             ->leftJoin('users as user', 'inventory_movements.user_id', '=', 'user.id')
+            ->where(['inventory_movements.description' => 'stocktake'])
             ->orderBy('inventory_movements.id', 'desc');
 
         $this->fields = [
