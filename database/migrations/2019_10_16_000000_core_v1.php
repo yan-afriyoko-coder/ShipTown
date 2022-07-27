@@ -351,6 +351,7 @@ class CoreV1 extends Migration
 
         Schema::create('orders_products', function (Blueprint $table) {
             $table->id();
+            $table->string('custom_unique_reference_id')->unique()->nullable();
             $table->foreignId('order_id');
             $table->foreignId('product_id')->nullable();
             $table->string('sku_ordered');
@@ -608,7 +609,6 @@ class CoreV1 extends Migration
             $table->boolean('enabled')->nullable(false)->default(false);
             $table->string('name')->nullable(false);
             $table->text('description')->nullable();
-            $table->string('event_class')->nullable();
             $table->timestamps();
         });
 
@@ -644,17 +644,6 @@ class CoreV1 extends Migration
                 ->onDelete('CASCADE');
         });
 
-        Schema::create('modules_automations_order_lock', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('order_id');
-            $table->timestamps();
-
-            $table->foreign('order_id')
-                ->references('id')
-                ->on('orders')
-                ->onDelete('CASCADE');
-        });
-
         Schema::create('orders_products_shipments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->nullable();
@@ -680,6 +669,7 @@ class CoreV1 extends Migration
             $table->string('username');
             $table->string('password');
             $table->unsignedBigInteger('products_last_timestamp')->default(0);
+            $table->unsignedBigInteger('shippings_last_timestamp')->default(0);
             $table->timestamps();
         });
 
@@ -847,6 +837,31 @@ class CoreV1 extends Migration
                 ->references('id')
                 ->on('users')
                 ->cascadeOnDelete();
+        });
+
+        Schema::create('modules_webhooks_pending_webhooks', function (Blueprint $table) {
+            $table->id();
+            $table->string('model_class');
+            $table->foreignId('model_id');
+            $table->timestamp('reserved_at')->nullable();
+            $table->timestamp('available_at')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('modules_webhooks_configuration', function (Blueprint $table) {
+            $table->id();
+            $table->string('topic_arn')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('cache_locks', function (Blueprint $table) {
+            $table->id();
+            $table->string('key');
+            $table->integer('key_id');
+            $table->dateTime('expires_at');
+
+            $table->index('key');
+            $table->unique(['key', 'key_id']);
         });
 
         $this->installSpatiePermissions();
