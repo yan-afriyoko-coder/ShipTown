@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CoreV1 extends Migration
@@ -30,6 +31,21 @@ class CoreV1 extends Migration
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();
+        });
+
+        Schema::create('sessions', function (Blueprint $table) {
+            $table->string('id')->unique();
+            $table->foreignId('user_id')->nullable();
+            $table->string('ip_address', 45)->nullable();
+            $table->text('user_agent')->nullable();
+            $table->text('payload');
+            $table->integer('last_activity');
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
         });
 
         Schema::create('oauth_auth_codes', function (Blueprint $table) {
@@ -97,8 +113,11 @@ class CoreV1 extends Migration
             $table->longText('data')->nullable();
         });
 
+
+
         Schema::create('mail_templates', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('code')->nullable(false)->default('');
             $table->string('mailable');
             $table->string('to', 255)->nullable();
             $table->string('reply_to', 100)->nullable();
@@ -169,6 +188,10 @@ class CoreV1 extends Migration
             $table->decimal('quantity_available', 10)->default(0);
             $table->softDeletes();
             $table->timestamps();
+
+            $table->index('quantity');
+            $table->index('quantity_reserved');
+            $table->index('quantity_available');
         });
 
         Schema::create('products_aliases', function (Blueprint $table) {
@@ -208,7 +231,7 @@ class CoreV1 extends Migration
 
         Schema::create('warehouses', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();
+            $table->string('code', 5)->nullable(false)->unique();
             $table->string('name');
             $table->foreignId('address_id')->nullable();
             $table->softDeletes();
@@ -222,14 +245,39 @@ class CoreV1 extends Migration
 
         Schema::create('inventory', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('warehouse_id')->nullable();
+            $table->foreignId('warehouse_id');
             $table->foreignId('product_id');
             $table->string('location_id')->default('');
+            $table->string('warehouse_code', 5)->nullable(false);
             $table->string('shelve_location')->default('');
-            $table->decimal('quantity', 10)->default(0);
-            $table->decimal('quantity_reserved', 10)->default(0);
+            $table->decimal('quantity_available', 20)
+                ->storedAs('quantity - quantity_reserved')
+                ->comment('quantity - quantity_reserved');
+            $table->decimal('quantity', 20)->default(0);
+            $table->decimal('quantity_reserved', 20)->default(0);
+            $table->decimal('quantity_incoming', 20)->default(0);
+            $table->decimal('quantity_required', 20)
+                ->storedAs('CASE WHEN (quantity - quantity_reserved + quantity_incoming) BETWEEN 0 AND reorder_point ' .
+                    'THEN restock_level - (quantity - quantity_reserved + quantity_incoming)' .
+                    'ELSE 0 END')
+                ->comment('CASE WHEN (quantity - quantity_reserved + quantity_incoming) BETWEEN 0 AND reorder_point ' .
+                    'THEN restock_level - (quantity - quantity_reserved + quantity_incoming)' .
+                    'ELSE 0 END');
+            $table->decimal('reorder_point', 20)->default(0);
+            $table->decimal('restock_level', 20)->default(0);
             $table->softDeletes();
             $table->timestamps();
+
+            $table->index('product_id');
+            $table->index('warehouse_code');
+            $table->index('shelve_location');
+            $table->index('quantity_available');
+            $table->index('quantity');
+            $table->index('quantity_reserved');
+            $table->index('quantity_incoming');
+            $table->index('quantity_required');
+            $table->index('restock_level');
+            $table->index('reorder_point');
 
             $table->foreign('product_id')
                 ->references('id')
@@ -239,9 +287,19 @@ class CoreV1 extends Migration
             $table->foreign('warehouse_id')
                 ->on('warehouses')
                 ->references('id')
-                ->onDelete('SET NULL');
+                ->onDelete('cascade');
+        });
 
-            $table->index('product_id');
+        Schema::create('orders_statuses', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique();
+            $table->string('code')->unique();
+            $table->boolean('order_active')->default(true);
+            $table->boolean('order_on_hold')->default(false);
+            $table->boolean('hidden')->default(false);
+            $table->boolean('sync_ecommerce')->default(false);
+            $table->softDeletes();
+            $table->timestamps();
         });
 
         Schema::create('orders', function (Blueprint $table) {
@@ -251,6 +309,7 @@ class CoreV1 extends Migration
             $table->string('status_code')->default('');
             $table->string('label_template')->default('');
             $table->boolean('is_active')->nullable(false)->default(0);
+            $table->boolean('is_on_hold')->default(false);
             $table->boolean('is_editing')->default(0);
             $table->decimal('total_products')->default(0);
             $table->decimal('total_shipping')->default(0);
@@ -265,10 +324,19 @@ class CoreV1 extends Migration
             $table->timestamp('picked_at')->nullable();
             $table->timestamp('packed_at')->nullable();
             $table->foreignId('packer_user_id')->nullable();
-            $table->decimal('total_quantity_ordered', 10)->default(0);
-            $table->decimal('total_quantity_to_ship')->default(0);
             $table->softDeletes();
             $table->timestamps();
+
+            $table->index('status_code');
+            $table->index('is_active');
+            $table->index('is_on_hold');
+            $table->index('label_template');
+            $table->index('order_placed_at');
+
+            $table->foreign('status_code')
+                ->on('orders_statuses')
+                ->references('code')
+                ->onDelete('RESTRICT');
 
             $table->foreign('shipping_address_id')
                 ->on('orders_addresses')
@@ -283,6 +351,7 @@ class CoreV1 extends Migration
 
         Schema::create('orders_products', function (Blueprint $table) {
             $table->id();
+            $table->string('custom_unique_reference_id')->unique()->nullable();
             $table->foreignId('order_id');
             $table->foreignId('product_id')->nullable();
             $table->string('sku_ordered');
@@ -290,6 +359,9 @@ class CoreV1 extends Migration
             $table->decimal('price', 10, 3)->default(0);
             $table->decimal('quantity_ordered', 10)->default(0);
             $table->decimal('quantity_split', 10)->default(0);
+            $table->decimal('total_price', 20)
+                ->storedAs('(quantity_ordered - quantity_split) * price')
+                ->comment('(quantity_ordered - quantity_split) * price');
             $table->decimal('quantity_shipped', 10)->default(0);
             $table->decimal('quantity_to_pick', 10)
                 ->storedAs('quantity_ordered - quantity_split - quantity_picked - quantity_skipped_picking')
@@ -314,15 +386,37 @@ class CoreV1 extends Migration
                 ->onDelete('cascade');
         });
 
-        Schema::create('orders_statuses', function (Blueprint $table) {
+        Schema::create('orders_products_totals', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->string('code')->unique();
-            $table->boolean('reserves_stock')->default(true);
-            $table->boolean('order_active')->default(1);
-            $table->boolean('sync_ecommerce')->default(false);
-            $table->softDeletes();
+            $table->foreignId('order_id');
+            $table->integer('count')->default(0);
+            $table->decimal('quantity_ordered', 20)->default(0);
+            $table->decimal('quantity_split', 20)->default(0);
+            $table->decimal('total_price', 20)->default(0);
+            $table->decimal('quantity_picked', 20)->default(0);
+            $table->decimal('quantity_skipped_picking', 20)->default(0);
+            $table->decimal('quantity_not_picked', 20)->default(0);
+            $table->decimal('quantity_shipped', 20)->default(0);
+            $table->decimal('quantity_to_pick', 20)->default(0);
+            $table->decimal('quantity_to_ship', 20)->default(0);
+            $table->timestamp('max_updated_at')->default('2000-01-01 00:00:00');
             $table->timestamps();
+
+            $table->index('count');
+            $table->index('quantity_ordered');
+            $table->index('quantity_split');
+            $table->index('quantity_picked');
+            $table->index('quantity_skipped_picking');
+            $table->index('quantity_not_picked');
+            $table->index('quantity_shipped');
+            $table->index('quantity_to_pick');
+            $table->index('quantity_to_ship');
+            $table->index('updated_at');
+
+            $table->foreign('order_id')
+                ->references('id')
+                ->on('orders')
+                ->onDelete('CASCADE');
         });
 
         Schema::create('orders_shipments', function (Blueprint $table) {
@@ -387,6 +481,13 @@ class CoreV1 extends Migration
                 ->onDelete('SET NULL');
         });
 
+        Schema::create('shipping_services', function (Blueprint $table) {
+            $table->id();
+            $table->string('code', 25)->unique()->nullable(false);
+            $table->string('service_provider_class');
+            $table->timestamps();
+        });
+
         Schema::create('tags', function (Blueprint $table) {
             $table->increments('id');
             $table->json('name');
@@ -406,7 +507,9 @@ class CoreV1 extends Migration
         Schema::create('products_prices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->index();
+            $table->foreignId('warehouse_id');
             $table->string('location_id')->default('');
+            $table->string('warehouse_code', 5)->nullable(false);
             $table->decimal('price', 10)->default(99999);
             $table->decimal('sale_price', 10)->default(99999);
             $table->date('sale_price_start_date')->default('1899-01-01');
@@ -414,9 +517,17 @@ class CoreV1 extends Migration
             $table->softDeletes();
             $table->timestamps();
 
+            $table->index('warehouse_code');
+            $table->unique(['product_id', 'warehouse_id']);
+
             $table->foreign('product_id')
                 ->on('products')
                 ->references('id')
+                ->onDelete('CASCADE');
+
+            $table->foreign('warehouse_id')
+                ->references('id')
+                ->on('warehouses')
                 ->onDelete('CASCADE');
         });
 
@@ -457,6 +568,8 @@ class CoreV1 extends Migration
             $table->string('service_provider_class')->nullable(false);
             $table->boolean('enabled')->nullable(false)->default(false);
             $table->timestamps();
+
+            $table->unique('service_provider_class');
         });
 
         Schema::create('modules_autostatus_picking_configurations', function (Blueprint $table) {
@@ -485,7 +598,7 @@ class CoreV1 extends Migration
         Schema::create('navigation_menu', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
-            $table->string('url', 255);
+            $table->string('url', 999)->default('');
             $table->string('group', 100);
             $table->timestamps();
         });
@@ -496,7 +609,6 @@ class CoreV1 extends Migration
             $table->boolean('enabled')->nullable(false)->default(false);
             $table->string('name')->nullable(false);
             $table->text('description')->nullable();
-            $table->string('event_class')->nullable();
             $table->timestamps();
         });
 
@@ -506,6 +618,11 @@ class CoreV1 extends Migration
             $table->string('condition_class')->nullable();
             $table->string('condition_value')->nullable()->default('');
             $table->timestamps();
+
+            $table->unique(
+                ['automation_id', 'condition_class', 'condition_value'],
+                'modules_automations_conditions_automation_id_class_value_unique'
+            );
 
             $table->foreign('automation_id')
                 ->references('id')
@@ -524,17 +641,6 @@ class CoreV1 extends Migration
             $table->foreign('automation_id')
                 ->references('id')
                 ->on('modules_automations')
-                ->onDelete('CASCADE');
-        });
-
-        Schema::create('modules_automations_order_lock', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('order_id');
-            $table->timestamps();
-
-            $table->foreign('order_id')
-                ->references('id')
-                ->on('orders')
                 ->onDelete('CASCADE');
         });
 
@@ -563,6 +669,7 @@ class CoreV1 extends Migration
             $table->string('username');
             $table->string('password');
             $table->unsignedBigInteger('products_last_timestamp')->default(0);
+            $table->unsignedBigInteger('shippings_last_timestamp')->default(0);
             $table->timestamps();
         });
 
@@ -570,11 +677,14 @@ class CoreV1 extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('connection_id');
             $table->uuid('batch_uuid')->nullable();
+            $table->timestamp('reserved_at')->nullable();
             $table->dateTime('when_processed')->nullable();
             $table->unsignedBigInteger('product_id')->nullable();
             $table->string('sku')->nullable();
             $table->json('raw_import');
             $table->timestamps();
+
+            $table->index('when_processed');
 
             $table->foreign('product_id')
                 ->on('products')
@@ -584,15 +694,15 @@ class CoreV1 extends Migration
 
         Schema::create('modules_api2cart_connections', function (Blueprint $table) {
             $table->id();
-            $table->string('location_id')->default('0');
             $table->string('type')->default('');
             $table->string('url')->default('');
+            $table->string('inventory_source_warehouse_tag')->nullable();
+            $table->foreignId('pricing_source_warehouse_id')->nullable();
             $table->char('prefix', 10)->default('');
             $table->string('bridge_api_key')->nullable();
             $table->unsignedBigInteger('magento_store_id')->nullable();
             $table->string('magento_warehouse_id')->nullable();
-            $table->unsignedBigInteger('inventory_location_id')->nullable();
-            $table->unsignedBigInteger('pricing_location_id')->nullable();
+            $table->string('pricing_location_id', 5)->nullable(true);
             $table->dateTime('last_synced_modified_at')->default('2020-01-01 00:00:00');
             $table->timestamps();
         });
@@ -624,8 +734,8 @@ class CoreV1 extends Migration
 
         Schema::create('modules_api2cart_product_links', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->nullable();
-            $table->string('api2cart_connection_id')->nullable();
+            $table->foreignId('product_id');
+            $table->foreignId('api2cart_connection_id');
             $table->string('api2cart_product_type')->nullable();
             $table->string('api2cart_product_id')->nullable();
             $table->dateTime('last_fetched_at')->nullable();
@@ -636,6 +746,16 @@ class CoreV1 extends Migration
             $table->date('api2cart_sale_price_start_date')->nullable();
             $table->date('api2cart_sale_price_end_date')->nullable();
             $table->timestamps();
+
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products')
+                ->onDelete('CASCADE');
+
+            $table->foreign('api2cart_connection_id')
+                ->references('id')
+                ->on('modules_api2cart_connections')
+                ->onDelete('CASCADE');
         });
 
         Schema::create('configurations', function (Blueprint $table) {
@@ -657,9 +777,14 @@ class CoreV1 extends Migration
             $table->string('username');
             $table->string('password');
             $table->string('account_number');
-            $table->foreignId('collection_address_id');
+            $table->foreignId('collection_address_id')->nullable();
             $table->string('geo_session')->nullable();
             $table->timestamps();
+
+            $table->foreign('collection_address_id')
+                ->references('id')
+                ->on('orders_addresses')
+                ->onDelete('SET NULL');
         });
 
         Schema::create('modules_boxtop_warehouse_stock', function (Blueprint $table) {
@@ -679,6 +804,64 @@ class CoreV1 extends Migration
             $table->id();
             $table->foreignId('order_id')->unique();
             $table->timestamps();
+        });
+
+        Schema::create('inventory_movements', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('inventory_id');
+            $table->foreignId('product_id');
+            $table->foreignId('warehouse_id');
+            $table->decimal('quantity_delta', 20);
+            $table->decimal('quantity_before', 20);
+            $table->decimal('quantity_after', 20);
+            $table->string('description', 50);
+            $table->foreignId('user_id')->nullable();
+            $table->timestamps();
+
+            $table->foreign('inventory_id')
+                ->references('id')
+                ->on('inventory')
+                ->cascadeOnDelete();
+
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products')
+                ->cascadeOnDelete();
+
+            $table->foreign('warehouse_id')
+                ->references('id')
+                ->on('warehouses')
+                ->cascadeOnDelete();
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->cascadeOnDelete();
+        });
+
+        Schema::create('modules_webhooks_pending_webhooks', function (Blueprint $table) {
+            $table->id();
+            $table->string('model_class');
+            $table->foreignId('model_id');
+            $table->timestamp('reserved_at')->nullable();
+            $table->timestamp('available_at')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('modules_webhooks_configuration', function (Blueprint $table) {
+            $table->id();
+            $table->string('topic_arn')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('cache_locks', function (Blueprint $table) {
+            $table->id();
+            $table->string('key');
+            $table->integer('key_id');
+            $table->dateTime('expires_at');
+
+            $table->index('key');
+            $table->unique(['key', 'key_id']);
         });
 
         $this->installSpatiePermissions();
