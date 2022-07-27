@@ -224,7 +224,7 @@ class CoreV1 extends Migration
 
         Schema::create('warehouses', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();
+            $table->string('code', 5)->nullable(false)->unique();
             $table->string('name');
             $table->foreignId('address_id')->nullable();
             $table->softDeletes();
@@ -241,7 +241,7 @@ class CoreV1 extends Migration
             $table->foreignId('warehouse_id')->nullable();
             $table->foreignId('product_id');
             $table->string('location_id')->default('');
-            $table->string('warehouse_code')->default('');
+            $table->string('warehouse_code', 5)->nullable(false);
             $table->string('shelve_location')->default('');
             $table->decimal('quantity_available', 10)
                 ->storedAs('quantity - quantity_reserved')
@@ -424,11 +424,12 @@ class CoreV1 extends Migration
             $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
         });
 
+
         Schema::create('products_prices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->index();
             $table->string('location_id')->default('');
-            $table->string('warehouse_code')->default('');
+            $table->string('warehouse_code', 5)->nullable(false);
             $table->decimal('price', 10)->default(99999);
             $table->decimal('sale_price', 10)->default(99999);
             $table->date('sale_price_start_date')->default('1899-01-01');
@@ -604,6 +605,9 @@ class CoreV1 extends Migration
                 ->onDelete('SET NULL');
         });
 
+        Schema::table('modules_api2cart_connections', function (Blueprint $table) {
+        });
+
         Schema::create('modules_api2cart_connections', function (Blueprint $table) {
             $table->id();
             $table->string('location_id')->default('0');
@@ -614,8 +618,8 @@ class CoreV1 extends Migration
             $table->string('bridge_api_key')->nullable();
             $table->unsignedBigInteger('magento_store_id')->nullable();
             $table->string('magento_warehouse_id')->nullable();
-            $table->unsignedBigInteger('inventory_location_id')->nullable();
-            $table->unsignedBigInteger('pricing_location_id')->nullable();
+            $table->string('inventory_location_id', 5)->nullable(true);
+            $table->string('pricing_location_id', 5)->nullable(true);
             $table->dateTime('last_synced_modified_at')->default('2020-01-01 00:00:00');
             $table->timestamps();
         });
