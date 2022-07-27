@@ -246,20 +246,22 @@ class CoreV1 extends Migration
             $table->string('location_id')->default('');
             $table->string('warehouse_code', 5)->nullable(false);
             $table->string('shelve_location')->default('');
-            $table->decimal('quantity_available', 10)
+            $table->decimal('quantity_available', 20)
                 ->storedAs('quantity - quantity_reserved')
-                ->comment('quantity - quantity_reserved');
+                ->comment('quantity - quantity_reserved')
+                ->default(0);
             $table->decimal('quantity', 20)->default(0);
             $table->decimal('quantity_reserved', 20)->default(0);
             $table->decimal('reorder_point', 20)->default(0);
             $table->decimal('restock_level', 20)->default(0);
-            $table->decimal('quantity_required', 10)
+            $table->decimal('quantity_required', 20)
                 ->storedAs('CASE WHEN (quantity - quantity_reserved) < reorder_point ' .
                     'THEN restock_level - (quantity - quantity_reserved) ' .
                     'ELSE 0 END')
                 ->comment('CASE WHEN (quantity - quantity_reserved) < reorder_point ' .
                     'THEN restock_level - (quantity - quantity_reserved) ' .
-                    'ELSE 0 END');
+                    'ELSE 0 END')
+                ->default(0);
             $table->softDeletes();
             $table->timestamps();
 
