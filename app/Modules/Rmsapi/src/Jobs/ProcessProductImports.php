@@ -42,7 +42,7 @@ class ProcessProductImports implements ShouldQueue
                 ->update(['reserved_at' => now()]);
 
             $productImports->each(function (RmsapiProductImport $productImport) {
-                ImportProductJob::dispatchNow($productImport);
+                ProcessProductImportJob::dispatchNow($productImport);
             });
 
             $productImports = $query->get();

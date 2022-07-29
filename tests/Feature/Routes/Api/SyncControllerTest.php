@@ -3,7 +3,7 @@
 namespace Tests\Feature\Routes\Api;
 
 use App\Jobs\SyncRequestJob;
-use App\Modules\Rmsapi\src\Jobs\FetchUpdatedProductsJob;
+use App\Modules\Rmsapi\src\Jobs\ImportProductsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\RmsapiModuleServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -28,6 +28,6 @@ class SyncControllerTest extends TestCase
 
         (new SyncRequestJob())->handle();
 
-        Bus::assertDispatched(FetchUpdatedProductsJob::class);
+        Bus::assertDispatched(ImportProductsJob::class);
     }
 }

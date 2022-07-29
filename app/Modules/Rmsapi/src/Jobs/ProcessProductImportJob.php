@@ -15,7 +15,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
 
-class ImportProductJob implements ShouldQueue
+class ProcessProductImportJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;

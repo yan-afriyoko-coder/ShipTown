@@ -21,7 +21,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
-class FetchShippingsJob implements ShouldQueue
+class ImportShippingsJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
