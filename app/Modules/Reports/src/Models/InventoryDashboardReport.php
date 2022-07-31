@@ -45,6 +45,8 @@ class InventoryDashboardReport extends Report
             ->whereNotIn('inventory.warehouse_code', ['99','999','100'])
             ->groupBy('inventory.warehouse_code');
 
+        $this->setPerPage(100);
+
         $this->casts = [
             'products_on_minus'           => 'float',
             'wh_products_available'       => 'float',
