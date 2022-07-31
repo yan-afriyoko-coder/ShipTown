@@ -72,7 +72,7 @@ class Report extends Model
     {
         try {
             $queryBuilder = $this->queryBuilder()
-                ->limit(request('per_page', 10));
+                ->limit(request('per_page', $this->perPage));
         } catch (InvalidFilterQuery | InvalidSelectException $ex) {
             return response($ex->getMessage(), $ex->getStatusCode());
         }
