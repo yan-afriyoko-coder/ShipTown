@@ -45,6 +45,10 @@ class CreateSiteJob implements ShouldQueue
         $token = env('LARAVEL_FORGE_TOKEN');
         $serverId = env('LARAVEL_FORGE_SERVER_ID');
 
+        if (empty($token) || empty($serverId)) {
+            return;
+        }
+
         $this->installSiteOnForge($token, $serverId, $this->domain);
     }
 
