@@ -23,6 +23,18 @@ class InventoryDashboardReport extends Report
             $this->report_name = request('title').' ('.$this->report_name.')';
         }
 
+        $this->fields = [
+            'warehouse_code'             => 'inventory.warehouse_code',
+            'products_on_minus'          => DB::raw('count(CASE WHEN inventory.quantity_available < 0 THEN 1 END)'),
+            'wh_products_available'      => DB::raw('count(*)'),
+            'wh_products_out_of_stock'   => DB::raw('count(CASE WHEN inventory.quantity_available = 0 THEN 1 END)'),
+            'wh_products_required'       => DB::raw('count(CASE WHEN inventory.quantity_required > 0 THEN 1 END)'),
+            'wh_products_stock_level_ok' => DB::raw('count(CASE ' .
+                'WHEN (inventory.quantity_required = 0 AND inventory.restock_level > 0) ' .
+                'THEN 1 ' .
+                'END)'),
+        ];
+
         $this->baseQuery = Inventory::query()
             ->leftJoin('inventory as inventory_source', function ($join) {
                 $join->on('inventory_source.product_id', '=', 'inventory.product_id');
@@ -32,16 +44,6 @@ class InventoryDashboardReport extends Report
             ->where('inventory_source.quantity_available', '>', 0)
             ->whereNotIn('inventory.warehouse_code', ['99','999','100'])
             ->groupBy('inventory.warehouse_code');
-
-        $this->fields = [
-            'warehouse_code'             => 'inventory.warehouse_code',
-            'products_on_minus'          => DB::raw('count(CASE WHEN inventory.quantity_available < 0 THEN 1 END)'),
-            'wh_products_available'      => DB::raw('count(*)'),
-            'wh_products_out_of_stock'   => DB::raw('count(CASE WHEN inventory.quantity_available = 0 THEN 1 END)'),
-            'wh_products_required'       => DB::raw('count(CASE WHEN inventory.quantity_required > 0 THEN 1 END)'),
-            'wh_products_stock_level_ok' => DB::raw('count(CASE WHEN (inventory.quantity_required = 0 AND inventory.restock_level > 0) THEN 1 END)'),
-        ];
-
 
         $this->casts = [
             'products_on_minus'           => 'float',

@@ -12,6 +12,7 @@ use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 /**
  * Class SyncCheckFailedProductsJob.
+ * @property $domain
  */
 class CreateSiteJob implements ShouldQueue
 {
@@ -22,18 +23,29 @@ class CreateSiteJob implements ShouldQueue
     use IsMonitored;
 
     /**
+     * @var string
+     */
+    public string $domain;
+
+    /**
+     * @param string $domain
+     */
+    public function __constructs(string $domain)
+    {
+        $this->domain = $domain;
+    }
+
+    /**
      * Execute the job.
      *
      * @return void
      */
     public function handle()
     {
-        $siteDomain = "";
-
         $token = env('LARAVEL_FORGE_TOKEN');
         $serverId = env('LARAVEL_FORGE_SERVER_ID');
 
-        $this->installSiteOnForge($token, $serverId, $siteDomain);
+        $this->installSiteOnForge($token, $serverId, $this->domain);
     }
 
 
