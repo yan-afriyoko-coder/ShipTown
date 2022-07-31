@@ -15,5 +15,7 @@ class BasicModuleTest extends TestCase
     public function test_module_basic_functionality()
     {
         CreateSiteJob::dispatch('demo.products.management.com');
+
+        $this->assertTrue(true);
     }
 }
