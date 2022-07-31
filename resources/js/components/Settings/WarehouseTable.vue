@@ -16,7 +16,7 @@
                 <table v-if="warehouses.length > 0" class="table table-hover table-borderless table-responsive mb-0">
                     <thead>
                         <tr>
-                            <th>ID</th>
+<!--                            <th>ID</th>-->
                             <th>Code</th>
                             <th>Name</th>
                             <th></th>
@@ -24,7 +24,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="(warehouse, i) in warehouses" :key="i" @click.prevent="showEditForm(warehouse)">
-                            <td>{{ warehouse.id }}</td>
+<!--                            <td>{{ warehouse.id }}</td>-->
                             <td>{{ warehouse.code }}</td>
                             <td>{{ warehouse.name }}</td>
                             <td>
@@ -72,6 +72,8 @@ export default {
     methods: {
         fetchWarehouses: function () {
             this.apiGetWarehouses({
+                'per_page': 100,
+                'sort': 'code',
                 'include': 'tags'
             })
                 .then(({data}) => {
