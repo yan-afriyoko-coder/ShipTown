@@ -7,7 +7,7 @@ use App\Models\OrderProduct;
 use App\Models\OrderStatus;
 use App\Models\Product;
 use App\Models\Warehouse;
-use App\Modules\Rmsapi\src\Jobs\FetchShippingsJob;
+use App\Modules\Rmsapi\src\Jobs\ImportShippingsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use GuzzleHttp\Exception\GuzzleException;
 use Tests\TestCase;
@@ -43,7 +43,7 @@ class ImportShippingsJobTest extends TestCase
             'name' => env('TEST_RMSAPI_WAREHOUSE_CODE')
         ]);
 
-        FetchShippingsJob::dispatch($connection->getKey());
+        ImportShippingsJob::dispatch($connection->getKey());
 
         ray(Order::all()->toArray());
         ray(OrderProduct::all()->toArray());

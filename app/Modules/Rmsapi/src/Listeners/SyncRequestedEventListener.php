@@ -3,8 +3,8 @@
 namespace App\Modules\Rmsapi\src\Listeners;
 
 use App\Events\SyncRequestedEvent;
-use App\Modules\Rmsapi\src\Jobs\FetchShippingsJob;
-use App\Modules\Rmsapi\src\Jobs\FetchUpdatedProductsJob;
+use App\Modules\Rmsapi\src\Jobs\ImportShippingsJob;
+use App\Modules\Rmsapi\src\Jobs\ImportProductsJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessProductImports;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 
@@ -21,8 +21,8 @@ class SyncRequestedEventListener
     {
         // dispatch Fetch jobs for all connections
         foreach (RmsapiConnection::all() as $rmsapiConnection) {
-            FetchUpdatedProductsJob::dispatch($rmsapiConnection->id);
-            FetchShippingsJob::dispatch($rmsapiConnection->id);
+            ImportProductsJob::dispatch($rmsapiConnection->id);
+            ImportShippingsJob::dispatch($rmsapiConnection->id);
             logger('Rmsapi sync job dispatched', ['connection_id' => $rmsapiConnection->id]);
         }
 

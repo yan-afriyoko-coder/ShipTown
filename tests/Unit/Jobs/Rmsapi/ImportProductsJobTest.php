@@ -4,7 +4,7 @@ namespace Tests\Unit\Jobs\Rmsapi;
 
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
-use App\Modules\Rmsapi\src\Jobs\FetchUpdatedProductsJob;
+use App\Modules\Rmsapi\src\Jobs\ImportProductsJob;
 use Tests\TestCase;
 
 class ImportProductsJobTest extends TestCase
@@ -33,7 +33,7 @@ class ImportProductsJobTest extends TestCase
             ->sortBy('db_change_stamp');
 
         // do the job
-        $job = new FetchUpdatedProductsJob($rmsapiConnection->id);
+        $job = new ImportProductsJob($rmsapiConnection->id);
         $job->saveImportedProducts($productsCollection->toArray());
 
         // test if right data was saved

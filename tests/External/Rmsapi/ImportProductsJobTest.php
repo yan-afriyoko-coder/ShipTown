@@ -2,7 +2,7 @@
 
 namespace Tests\External\Rmsapi;
 
-use App\Modules\Rmsapi\src\Jobs\FetchUpdatedProductsJob;
+use App\Modules\Rmsapi\src\Jobs\ImportProductsJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessProductImports;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
@@ -35,7 +35,7 @@ class ImportProductsJobTest extends TestCase
             'password'     => env('TEST_RMSAPI_PASSWORD'),
         ]);
 
-        $job = new FetchUpdatedProductsJob($connection->id);
+        $job = new ImportProductsJob($connection->id);
 
         $job->handle();
 

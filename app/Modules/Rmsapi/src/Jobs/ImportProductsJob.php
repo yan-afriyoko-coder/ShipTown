@@ -16,7 +16,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
-class FetchUpdatedProductsJob implements ShouldQueue
+class ImportProductsJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -79,7 +79,7 @@ class FetchUpdatedProductsJob implements ShouldQueue
             ProcessProductImports::dispatch();
 
             if (isset($response->asArray()['next_page_url'])) {
-                FetchUpdatedProductsJob::dispatch($this->rmsapiConnection->getKey());
+                ImportProductsJob::dispatch($this->rmsapiConnection->getKey());
             }
         }
 
