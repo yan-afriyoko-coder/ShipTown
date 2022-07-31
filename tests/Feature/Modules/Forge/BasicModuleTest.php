@@ -14,6 +14,7 @@ class BasicModuleTest extends TestCase
     /** @test */
     public function test_module_basic_functionality()
     {
+        // We just need to make sure that no exceptions are thrown when we run the module.
         CreateSiteJob::dispatch('demo.products.management.com');
 
         $this->assertTrue(true);
