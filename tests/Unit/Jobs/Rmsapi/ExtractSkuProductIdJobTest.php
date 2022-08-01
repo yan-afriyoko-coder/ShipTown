@@ -34,16 +34,10 @@ class ExtractSkuProductIdJobTest extends TestCase
             'when_processed' => null,
         ]);
 
-        ProcessImportedProductRecordsJob::dispatchNow();
-
-        RmsapiProductImport::query()->update([
-            'sku'        => null,
-            'product_id' => null,
-        ]);
-
         // do
         ProcessImportedProductRecordsJob::dispatchNow();
 
+        ray(RmsapiProductImport::query()->get()->toArray());
         // assert
         $this->assertFalse(
             RmsapiProductImport::query()
