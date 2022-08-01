@@ -5,9 +5,8 @@ namespace Tests\Unit\Jobs\Rmsapi;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Warehouse;
+use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
-use App\Modules\Rmsapi\src\Jobs\ExtractSkuAndProductIdJob;
-use App\Modules\Rmsapi\src\Jobs\ProcessProductImports;
 use Tests\TestCase;
 
 class ExtractSkuProductIdJobTest extends TestCase
@@ -35,7 +34,7 @@ class ExtractSkuProductIdJobTest extends TestCase
             'when_processed' => null,
         ]);
 
-        ProcessProductImports::dispatchNow();
+        ProcessImportedProductRecordsJob::dispatchNow();
 
         RmsapiProductImport::query()->update([
             'sku'        => null,
@@ -43,7 +42,7 @@ class ExtractSkuProductIdJobTest extends TestCase
         ]);
 
         // do
-        ExtractSkuAndProductIdJob::dispatchNow();
+        ProcessImportedProductRecordsJob::dispatchNow();
 
         // assert
         $this->assertFalse(

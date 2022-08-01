@@ -2,7 +2,7 @@
 
 namespace App\Modules\Rmsapi\src\Listeners;
 
-use App\Modules\Rmsapi\src\Jobs\ProcessProductImports;
+use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 
 class HourlyEventListener
 {
@@ -11,6 +11,6 @@ class HourlyEventListener
      */
     public function handle()
     {
-        ProcessProductImports::dispatch();
+        ProcessImportedProductRecordsJob::dispatch();
     }
 }

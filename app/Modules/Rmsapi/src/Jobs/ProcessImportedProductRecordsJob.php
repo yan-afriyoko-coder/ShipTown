@@ -15,27 +15,12 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
 
-class ProcessProductImportJob implements ShouldQueue
+class ProcessImportedProductRecordsJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-
-    /**
-     * @var RmsapiProductImport
-     */
-    private RmsapiProductImport $importedProduct;
-
-    /**
-     * Create a new job instance.
-     *
-     * @param RmsapiProductImport $importedProduct
-     */
-    public function __construct(RmsapiProductImport $importedProduct)
-    {
-        $this->importedProduct = $importedProduct;
-    }
 
     /**
      * Execute the job.
@@ -44,12 +29,29 @@ class ProcessProductImportJob implements ShouldQueue
      */
     public function handle()
     {
-        $importedProduct = $this->importedProduct->refresh();
+        $reservationTime = now();
 
-        if ($importedProduct->when_processed === null) {
-            $this->import($importedProduct);
-        }
+        RmsapiProductImport::query()
+            ->whereNull('when_processed')
+            ->where('reserved_at', '<', now()->subMinutes(60))
+            ->update(['reserved_at' => null]);
+
+         RmsapiProductImport::query()
+            ->whereNull('when_processed')
+            ->whereNull('reserved_at')
+            ->limit(50)
+            ->update(['reserved_at' => $reservationTime]);
+
+        RmsapiProductImport::query()
+            ->whereNull('when_processed')
+            ->where(['reserved_at' => $reservationTime])
+            ->orderBy('id')
+            ->get()
+            ->each(function (RmsapiProductImport $productImport) {
+                $this->import($productImport);
+            });
     }
+
 
     /**
      * @param RmsapiProductImport $importedProduct

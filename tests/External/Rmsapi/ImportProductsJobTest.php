@@ -3,7 +3,7 @@
 namespace Tests\External\Rmsapi;
 
 use App\Modules\Rmsapi\src\Jobs\ImportProductsJob;
-use App\Modules\Rmsapi\src\Jobs\ProcessProductImports;
+use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use Illuminate\Support\Facades\Bus;
@@ -40,6 +40,6 @@ class ImportProductsJobTest extends TestCase
         $job->handle();
 
         $this->assertTrue(RmsapiProductImport::query()->exists(), 'No imports have been made');
-        Bus::assertDispatched(ProcessProductImports::class);
+        Bus::assertDispatched(ProcessImportedProductRecordsJob::class);
     }
 }
