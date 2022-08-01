@@ -8,6 +8,7 @@ use App\Models\ProductAlias;
 use App\Models\ProductPrice;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -26,6 +27,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws Exception
      */
     public function handle()
     {
@@ -55,7 +57,9 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
             }
 
             $records->each(function (RmsapiProductImport $productImport) {
-                $this->import($productImport);
+                retry(2, function () use ($productImport) {
+                    $this->import($productImport);
+                });
             });
         } while ($records->isNotEmpty());
     }
