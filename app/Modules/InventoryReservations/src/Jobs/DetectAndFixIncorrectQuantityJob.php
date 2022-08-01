@@ -46,7 +46,7 @@ class DetectAndFixIncorrectQuantityJob implements ShouldQueue
                     having max(products.quantity) != sum(inventory.quantity)
                 )
                 ")
-            ->limit(50);
+            ->limit(200);
 
         $result = $query->get();
 
