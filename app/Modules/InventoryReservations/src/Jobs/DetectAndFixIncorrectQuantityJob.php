@@ -28,62 +28,24 @@ class DetectAndFixIncorrectQuantityJob implements ShouldQueue
      */
     public function handle()
     {
-        $this->dispatchFixForOutOfStockStock();
-        $this->dispatchFixForInStock();
-    }
-
-    private function dispatchFixForOutOfStockStock(): void
-    {
-        $rawQuery = /** @lang mysql */ "
-            select
-               products.id as product_id
-
-            from products
-
-            left join inventory on inventory.product_id = products.id
-              and inventory.quantity <> 0
-
-            where
-             products.quantity = 0
-             AND inventory.id IS NOT NULL
-
-            group by products.id
-
-            having max(products.quantity) <> sum(inventory.quantity)
-        ";
-
-        $this->dispatRecalculateJobsForProductIdIn($rawQuery);
-    }
-
-    private function dispatchFixForInStock(): void
-    {
-        $rawQuery = /** @lang mysql */ "
-                select
-                    products.id
-
-                from products
-
-                left join inventory on inventory.product_id = products.id
-
-                where
-                 products.quantity > 0
-                 AND inventory.quantity <> 0
-
-                group by products.id
-
-                having sum(inventory.quantity) != max(products.quantity)
-        ";
-
-        $this->dispatRecalculateJobsForProductIdIn($rawQuery);
-    }
-
-    /**
-     * @param string $rawQuery
-     */
-    private function dispatRecalculateJobsForProductIdIn(string $rawQuery): void
-    {
         $query = Product::query()
-            ->whereRaw("products.id IN ({$rawQuery})")
+            ->whereRaw(/** @lang mysql */  "
+                products.id IN (
+                    select
+                        products.id
+
+                    from inventory
+
+                    left join products on inventory.product_id = products.id
+
+                    where
+                     inventory.quantity <> 0
+                     OR products.quantity <> 0
+
+                    group by products.id
+
+                    having max(products.quantity) != sum(inventory.quantity)
+                ")
             ->limit(50);
 
         $result = $query->get();
