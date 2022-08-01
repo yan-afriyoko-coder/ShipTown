@@ -19,8 +19,6 @@ class DetectAndFixIncorrectQuantityJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    private string $table_name;
-
     /**
      * Execute the job.
      *
