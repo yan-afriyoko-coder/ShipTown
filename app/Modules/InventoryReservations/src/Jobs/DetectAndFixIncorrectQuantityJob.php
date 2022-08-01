@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 /**
  *
@@ -28,7 +29,7 @@ class DetectAndFixIncorrectQuantityJob implements ShouldQueue
     {
         $query = Product::query()
             ->whereRaw(/** @lang mysql */  "
-                products.id IN (
+                id IN (
                     select
                         products.id
 
@@ -43,12 +44,15 @@ class DetectAndFixIncorrectQuantityJob implements ShouldQueue
                     group by products.id
 
                     having max(products.quantity) != sum(inventory.quantity)
+                )
                 ")
             ->limit(50);
 
         $result = $query->get();
 
         while ($result->count() > 0) {
+            Log::warning('Found products with incorrect quantity: ', ['count' => $result->count()]);
+
             $result->each(function (Product $product) {
                 UpdateProductQuantityJob::dispatch($product->getKey());
                 UpdateProductQuantityReservedJob::dispatch($product->getKey());
