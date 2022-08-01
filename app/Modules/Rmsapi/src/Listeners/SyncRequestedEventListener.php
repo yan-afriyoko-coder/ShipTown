@@ -5,7 +5,7 @@ namespace App\Modules\Rmsapi\src\Listeners;
 use App\Events\SyncRequestedEvent;
 use App\Modules\Rmsapi\src\Jobs\ImportShippingsJob;
 use App\Modules\Rmsapi\src\Jobs\ImportProductsJob;
-use App\Modules\Rmsapi\src\Jobs\ProcessProductImports;
+use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 
 class SyncRequestedEventListener
@@ -26,6 +26,6 @@ class SyncRequestedEventListener
             logger('Rmsapi sync job dispatched', ['connection_id' => $rmsapiConnection->id]);
         }
 
-        ProcessProductImports::dispatch();
+        ProcessImportedProductRecordsJob::dispatch();
     }
 }

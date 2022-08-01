@@ -76,7 +76,7 @@ class ImportProductsJob implements ShouldQueue
         if ($response->getResult()) {
             $this->saveImportedProducts($response->getResult());
 
-            ProcessProductImports::dispatch();
+            ProcessImportedProductRecordsJob::dispatch();
 
             if (isset($response->asArray()['next_page_url'])) {
                 ImportProductsJob::dispatch($this->rmsapiConnection->getKey());
@@ -117,7 +117,7 @@ class ImportProductsJob implements ShouldQueue
 
         // we will use insert instead of create as this is way faster
         // method of inputting bulk of records to database
-        // be careful as this probably wont invoke event (not 100% sure)
+        // this won't invoke any events (not 100% sure)
         RmsapiProductImport::query()->insert($insertData->toArray());
 
         RmsapiConnection::find($this->rmsapiConnection->getKey())->update([
