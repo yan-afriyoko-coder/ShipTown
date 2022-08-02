@@ -37,7 +37,8 @@ class PublishInventoryWebhooksJob implements ShouldQueue
         $query = PendingWebhook::query()
             ->where([
                 'model_class' => Inventory::class,
-                'reserved_at' => null
+                'reserved_at' => null,
+                'published_at' => null,
             ])
             ->orderBy('id')
             ->limit(10);
@@ -52,11 +53,11 @@ class PublishInventoryWebhooksJob implements ShouldQueue
 
                 $this->publishInventoryMessage($chunk);
 
-                PendingWebhook::query()->whereIn('id', $pendingWebhookIds)->delete();
+                PendingWebhook::query()->whereIn('id', $pendingWebhookIds)->update(['published_at' => now()]);
             } catch (Exception $exception) {
                 PendingWebhook::query()
                     ->whereIn('id', $pendingWebhookIds)
-                    ->update(['reserved_at' => null]);
+                    ->update(['reserved_at' => null, 'published_at' => null]);
 
                 throw $exception;
             }
