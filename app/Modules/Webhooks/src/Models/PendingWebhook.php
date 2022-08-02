@@ -13,5 +13,6 @@ class PendingWebhook extends Model
         'model_id',
         'reserved_at',
         'available_at',
+        'published_at',
     ];
 }
