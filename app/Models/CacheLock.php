@@ -42,7 +42,7 @@ class CacheLock extends Model
         }
 
         if (rand(1, 5) === 5) {
-            self::query()->where('expires_at', '<=', now())->delete();
+            self::query()->where('expires_at', '<=', now()->subSeconds(5))->delete();
         }
 
         return $acquired;
