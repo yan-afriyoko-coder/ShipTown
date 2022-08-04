@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Carbon;
 
 class CacheLock extends Model
 {
@@ -17,6 +16,7 @@ class CacheLock extends Model
      * @param int $key_id
      * @param int $ttl_seconds
      * @return bool
+     * @throws \Exception
      */
     public static function acquire(string $key, int $key_id = 0, int $ttl_seconds = 600): bool
     {
@@ -42,18 +42,27 @@ class CacheLock extends Model
         }
 
         if (rand(1, 5) === 5) {
-            self::query()->where('expires_at', '<=', now()->subSeconds(5))->delete();
+            retry(5, function () {
+                self::query()
+                    ->where('expires_at', '<=', now()->subSeconds(5))
+                    ->delete();
+            });
         }
 
         return $acquired;
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function release(string $key, int $key_id = 0)
     {
-        self::query()
-            ->where(['key' => $key, 'key_id' => $key_id])
-            // at the same time we can clear expired locks
-            ->orWhere('expires_at', '<=', now())
-            ->delete();
+        retry(5, function () use ($key, $key_id) {
+            self::query()
+                ->where(['key' => $key, 'key_id' => $key_id])
+                // at the same time we can clear expired locks
+                ->orWhere('expires_at', '<=', now()->subMinute())
+                ->delete();
+        });
     }
 }

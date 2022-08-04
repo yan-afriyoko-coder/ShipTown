@@ -31,11 +31,12 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
      */
     public function handle()
     {
-
-        RmsapiProductImport::query()
-            ->whereNull('when_processed')
-            ->where('reserved_at', '<', now()->subMinutes(60))
-            ->update(['reserved_at' => null]);
+        retry(5, function () {
+            RmsapiProductImport::query()
+                ->whereNull('when_processed')
+                ->where('reserved_at', '<', now()->subMinutes(5))
+                ->update(['reserved_at' => null]);
+        });
 
         do {
              $reservationTime = now();
