@@ -119,6 +119,7 @@ class SplitOrderService
     private function extractOrderProduct(OrderProduct $orderProduct, int$quantity, Inventory $inventory): void
     {
         $newOrderProduct = $orderProduct->replicate([
+            'custom_unique_reference_id',
             'order_id',
             'quantity_ordered',
             'quantity_split',
