@@ -80,32 +80,39 @@ class SplitOrderService
      */
     private function getNewOrderOrCreate(): Order
     {
-        if ($this->newOrder === null) {
-            $newOrderNumber = $this->originalOrder->order_number . '-PARTIAL-' . $this->warehouse->code;
+        if ($this->newOrder) {
+            return $this->newOrder;
+        }
 
-            $this->newOrder = $this->originalOrder->replicate();
-            $this->newOrder->status_code = $this->newOrderStatus;
-            $this->newOrder->is_editing = true;
-            $this->newOrder->order_number = $newOrderNumber;
+        $newOrderNumber = $this->originalOrder->order_number . '-PARTIAL-' . $this->warehouse->code;
 
-            try {
-                $this->newOrder->save();
+        $this->newOrder = Order::query()
+            ->where(['order_number' => $newOrderNumber])
+            ->firstOr(function () use ($newOrderNumber) {
+                return $this->originalOrder->replicate();
+            });
 
-                activity()->on($this->newOrder)
-                    ->byAnonymous()
-                    ->withProperties([
-                        'order_number' => $this->originalOrder->order_number,
-                        'status_code' => $this->newOrder->status_code
-                    ])
-                    ->log('extracted from order');
+        $this->newOrder->status_code = $this->newOrderStatus;
+        $this->newOrder->is_editing = true;
+        $this->newOrder->order_number = $newOrderNumber;
 
-                activity()->on($this->originalOrder)
-                    ->byAnonymous()
-                    ->withProperties(['order_number' => $this->newOrder->order_number])
-                    ->log('split to order');
-            } catch (Exception $exception) {
-                $this->newOrder = Order::whereOrderNumber($newOrderNumber)->first();
-            }
+        try {
+            $this->newOrder->save();
+
+            activity()->on($this->newOrder)
+                ->byAnonymous()
+                ->withProperties([
+                    'order_number' => $this->originalOrder->order_number,
+                    'status_code' => $this->newOrder->status_code
+                ])
+                ->log('extracted from order');
+
+            activity()->on($this->originalOrder)
+                ->byAnonymous()
+                ->withProperties(['order_number' => $this->newOrder->order_number])
+                ->log('split to order');
+        } catch (Exception $exception) {
+            $this->newOrder = Order::whereOrderNumber($newOrderNumber)->first();
         }
 
         return $this->newOrder;
