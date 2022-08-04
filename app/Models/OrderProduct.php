@@ -20,6 +20,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * App\Models\OrderProduct.
  *
  * @property int         $id
+ * @property int|null    $custom_unique_reference_id
  * @property int|null    $order_id
  * @property int|null    $product_id
  * @property string      $sku_ordered
