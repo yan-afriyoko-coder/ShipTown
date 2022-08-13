@@ -14,6 +14,8 @@ class OrderProductShipmentCreatedListener
         PendingWebhook::query()->firstOrCreate([
             'model_class' => OrderProductShipment::class,
             'model_id' => $event->orderProductShipment->getKey(),
+            'reserved_at' => null,
+            'published_at' => null,
         ]);
 
         PublishOrderProductShipmentWebhooksJob::dispatchAfterResponse();

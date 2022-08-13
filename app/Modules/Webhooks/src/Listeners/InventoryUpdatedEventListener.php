@@ -14,6 +14,8 @@ class InventoryUpdatedEventListener
         PendingWebhook::query()->firstOrCreate([
             'model_class' => Inventory::class,
             'model_id' => $event->inventory->getKey(),
+            'reserved_at' => null,
+            'published_at' => null,
         ]);
 
         PublishInventoryWebhooksJob::dispatchAfterResponse();
