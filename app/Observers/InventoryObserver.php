@@ -16,8 +16,6 @@ class InventoryObserver
      */
     public function updated(Inventory $inventory)
     {
-        if ($inventory->isAnyAttributeChanged(['quantity', 'quantity_reserved', 'shelve_location'])) {
-            InventoryUpdatedEvent::dispatch($inventory);
-        }
+        InventoryUpdatedEvent::dispatch($inventory);
     }
 }
