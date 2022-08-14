@@ -14,5 +14,14 @@ class PendingWebhook extends Model
         'reserved_at',
         'available_at',
         'published_at',
+        'message',
+    ];
+
+    protected $attributes = [
+        'message' => '{}',
+    ];
+
+    protected $casts = [
+        'message' => 'array',
     ];
 }
