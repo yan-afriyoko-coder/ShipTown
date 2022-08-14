@@ -3,10 +3,15 @@
 namespace App\Modules\Webhooks\src\Jobs;
 
 use App\Http\Resources\ProductResource;
+use App\Models\Order;
 use App\Models\Product;
 use App\Modules\Webhooks\src\AwsSns;
+use App\Modules\Webhooks\src\Models\PendingWebhook;
+use App\Modules\Webhooks\src\Services\SnsService;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -28,28 +33,57 @@ class PublishProductsWebhooksJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws Exception
      */
     public function handle()
     {
-        activity()->withoutLogs(function () {
-            $awaiting_publish_tag = config('webhooks.tags.awaiting.name');
+        $query = PendingWebhook::query()
+            ->where([
+                'model_class' => Product::class,
+                'reserved_at' => null,
+                'published_at' => null,
+            ])
+            ->orderBy('id')
+            ->limit(10);
 
-            $products = Product::withAllTags($awaiting_publish_tag)
-                ->get();
+        $chunk = $query->get();
 
-            $this->queueData(['products_count' => $products->count()]);
+        while ($chunk->isNotEmpty()) {
+            $pendingWebhookIds = $chunk->pluck('id');
 
-            $products->each(function (Product $product) {
-                $product->attachTag(config('webhooks.tags.publishing.name'));
-                $product->detachTag(config('webhooks.tags.awaiting.name'));
+            try {
+                PendingWebhook::query()->whereIn('id', $pendingWebhookIds)->update(['reserved_at' => now()]);
 
-                $productResource = new ProductResource($product);
-                if (!AwsSns::publish('products_events', $productResource->toJson())) {
-                    $product->attachTag(config('webhooks.tags.awaiting.name'));
-                }
+                $this->publishProductsMessage($chunk);
 
-                $product->detachTag(config('webhooks.tags.publishing.name'));
-            });
-        });
+                PendingWebhook::query()->whereIn('id', $pendingWebhookIds)->update(['published_at' => now()]);
+            } catch (Exception $exception) {
+                PendingWebhook::query()
+                    ->whereIn('id', $pendingWebhookIds)
+                    ->update(['reserved_at' => null, 'published_at' => null]);
+
+                throw $exception;
+            }
+
+            $chunk = $query->get();
+        }
+    }
+
+    private function publishProductsMessage(Collection $chunk)
+    {
+        $productsCollection = ProductResource::collection(
+            Product::query()
+                ->whereIn('id', $chunk->pluck('model_id'))
+                ->orderBy('id')
+                ->with([
+                    'aliases',
+                    'tags',
+                ])
+                ->get()
+        );
+
+        $payload = collect(['Products' => $productsCollection]);
+
+        SnsService::publishNew($payload->toJson());
     }
 }

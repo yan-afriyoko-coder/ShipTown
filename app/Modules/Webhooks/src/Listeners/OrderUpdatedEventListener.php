@@ -3,9 +3,7 @@
 namespace App\Modules\Webhooks\src\Listeners;
 
 use App\Events\Order\OrderUpdatedEvent;
-use App\Models\InventoryMovement;
 use App\Models\Order;
-use App\Modules\Webhooks\src\Jobs\PublishOrdersWebhooksJob;
 use App\Modules\Webhooks\src\Models\PendingWebhook;
 
 /**
