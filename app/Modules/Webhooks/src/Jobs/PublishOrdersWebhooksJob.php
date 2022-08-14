@@ -75,11 +75,9 @@ class PublishOrdersWebhooksJob implements ShouldQueue
                 ->whereIn('id', $chunk->pluck('model_id'))
                 ->orderBy('id')
                 ->with([
-                    'activities',
                     'shippingAddress',
                     'orderShipments',
                     'orderProducts',
-                    'packer',
                     'orderComments',
                     'orderProductTotals',
                     'tags',
