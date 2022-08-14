@@ -79,9 +79,8 @@ class PublishOrdersWebhooksJob implements ShouldQueue
                     'orderShipments',
                     'orderProducts',
                     'orderComments',
-                    'orderProductTotals',
+                    'orderProductsTotals',
                     'tags',
-
                 ])
                 ->get()
         );
