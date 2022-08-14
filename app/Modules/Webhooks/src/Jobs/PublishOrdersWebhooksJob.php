@@ -76,7 +76,6 @@ class PublishOrdersWebhooksJob implements ShouldQueue
                 ->orderBy('id')
                 ->with([
                     'activities',
-                    'stats',
                     'shipping_address',
                     'order_shipments',
                     'order_products',
