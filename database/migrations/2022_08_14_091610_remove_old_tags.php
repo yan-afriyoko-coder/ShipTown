@@ -16,6 +16,9 @@ class RemoveOldTags extends Migration
     public function up()
     {
         $tag = Tag::findFromString('awaiting_webhook_publish');
-        DB::table('taggables')->where('tag_id', $tag->getKey())->delete();
+
+        if ($tag) {
+            DB::table('taggables')->where('tag_id', $tag->getKey())->delete();
+        }
     }
 }
