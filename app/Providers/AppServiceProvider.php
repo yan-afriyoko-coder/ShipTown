@@ -14,8 +14,6 @@ use App\Models\Product;
 use App\Models\ProductPrice;
 use App\Models\ShippingLabel;
 use App\Models\Warehouse;
-use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
-use App\Modules\Api2cart\src\Observers\Api2cartOrderImportsObserver;
 use App\Observers\InventoryMovementObserver;
 use App\Observers\InventoryObserver;
 use App\Observers\ModuleObserver;
@@ -64,9 +62,6 @@ class AppServiceProvider extends ServiceProvider
         InventoryMovement::observe(InventoryMovementObserver::class);
 
         ShippingLabel::observe(ShippingLabelObserver::class);
-
-        // Modules
-        Api2cartOrderImports::observe(Api2cartOrderImportsObserver::class);
     }
 
     private function registerEnabledModules(): void

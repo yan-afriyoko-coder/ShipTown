@@ -4,6 +4,7 @@ namespace App\Modules\Api2cart\src\Listeners;
 
 use App\Events\Every10minEvent;
 use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
+use App\Modules\Api2cart\src\Jobs\ProcessImportedOrdersJob;
 
 class Every10minEventListener
 {
@@ -17,5 +18,6 @@ class Every10minEventListener
     public function handle(Every10minEvent $event)
     {
         DispatchImportOrdersJobs::dispatch();
+        ProcessImportedOrdersJob::dispatch();
     }
 }

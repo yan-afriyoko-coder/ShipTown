@@ -2,7 +2,7 @@
 
 namespace Tests\External\Api2cart;
 
-use App\Modules\Api2cart\src\Jobs\FetchUpdatedOrdersJob;
+use App\Modules\Api2cart\src\Jobs\ImportOrdersJobs;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
@@ -31,7 +31,7 @@ class FetchUpdatedOrdersJobTest extends TestCase
 
         $api2cartConnection->save();
 
-        $job = new FetchUpdatedOrdersJob($api2cartConnection);
+        $job = new ImportOrdersJobs($api2cartConnection);
 
         $job->handle();
     }

@@ -24,7 +24,7 @@ class DispatchImportOrdersJobs implements ShouldQueue
     public function handle()
     {
         foreach (Api2cartConnection::all() as $api2cartConnection) {
-            FetchUpdatedOrdersJob::dispatch($api2cartConnection);
+            ImportOrdersJobs::dispatch($api2cartConnection);
         }
     }
 }

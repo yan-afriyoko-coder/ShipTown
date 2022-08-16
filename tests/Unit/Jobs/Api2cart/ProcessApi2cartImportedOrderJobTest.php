@@ -4,7 +4,7 @@ namespace Tests\Unit\Jobs\Api2cart;
 
 use App\Models\Order;
 use App\Models\OrderProduct;
-use App\Modules\Api2cart\src\Jobs\ProcessApi2cartImportedOrderJob;
+use App\Modules\Api2cart\src\Jobs\ProcessImportedOrdersJob;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
@@ -25,7 +25,7 @@ class ProcessApi2cartImportedOrderJobTest extends TestCase
         $importedOrder = factory(Api2cartOrderImports::class)->create();
 
         // act
-        ProcessApi2cartImportedOrderJob::dispatch($importedOrder);
+        ProcessImportedOrdersJob::dispatch($importedOrder);
 
         // test
         $order = Order::query()->first();
