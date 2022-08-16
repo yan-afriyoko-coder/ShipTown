@@ -42,8 +42,16 @@ class ApiClient
 
         $finalUri = str_replace('{siteCode}', env('TEST_BOXTOP_SITE_CODE', '000'), $uri);
 
+        Log::debug('Boxtop API request', [
+            'method' => $method,
+            'uri' => $finalUri,
+            'options' => $options,
+        ]);
+
         try {
-            $response = new ApiResponse($this->guzzleClient->request($method, $finalUri, $options));
+            $rawResponse = $this->guzzleClient->request($method, $finalUri, $options);
+
+            $response = new ApiResponse($rawResponse);
         } catch (GuzzleException $guzzleException) {
             Log::error($guzzleException->getMessage(), [
                 $guzzleException->getCode()
