@@ -15,7 +15,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 
-class FetchUpdatedOrdersJob implements ShouldQueue
+class ImportOrdersJobs implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
