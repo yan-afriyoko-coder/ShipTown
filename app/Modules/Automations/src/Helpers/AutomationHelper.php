@@ -144,10 +144,17 @@ class AutomationHelper
 
                     return $actionRan;
                 });
+        } catch (Exception $exception) {
+            report($exception);
+            Log::error('Exception occurred when running actions', [
+                'automation' => $automation->name,
+                'order_number' => $order->order_number,
+                'exception' => $exception->getMessage(),
+            ]);
+            $result = false;
         } finally {
             CacheLock::release(__METHOD__, $order->id);
         }
-
 
         // log
         Log::debug('Ran automation actions', [
