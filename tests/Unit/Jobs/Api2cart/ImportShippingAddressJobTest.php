@@ -5,6 +5,7 @@ namespace Tests\Unit\Jobs\Api2cart;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Modules\Api2cart\src\Jobs\ImportShippingAddressJob;
+use App\Modules\Api2cart\src\Jobs\ProcessImportedOrdersJob;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -26,6 +27,8 @@ class ImportShippingAddressJobTest extends TestCase
 
         $import = factory(Api2cartOrderImports::class)->create();
         $import = $import->refresh();
+
+        ProcessImportedOrdersJob::dispatch();
 
         $order = Order::where(['order_number' => $import->order_number])->first();
         $order->update(['shipping_address_id' => null]);
