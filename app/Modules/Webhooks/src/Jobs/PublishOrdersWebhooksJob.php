@@ -4,7 +4,6 @@ namespace App\Modules\Webhooks\src\Jobs;
 
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
-use App\Modules\Webhooks\src\AwsSns;
 use App\Modules\Webhooks\src\Models\PendingWebhook;
 use App\Modules\Webhooks\src\Services\SnsService;
 use Exception;
@@ -14,8 +13,8 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
-use Spatie\Activitylog\Models\Activity;
 
 /**
  * Class PublishOrdersWebhooksJob.
@@ -68,6 +67,9 @@ class PublishOrdersWebhooksJob implements ShouldQueue
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private function publishOrderMessage(Collection $chunk)
     {
         $ordersCollection = OrderResource::collection(
@@ -87,6 +89,14 @@ class PublishOrdersWebhooksJob implements ShouldQueue
 
         $payload = collect(['Orders' => $ordersCollection]);
 
-        SnsService::publishNew($payload->toJson());
+        try {
+            SnsService::publishNew($payload->toJson());
+        } catch (Exception $exception) {
+            Log::error('Exception occurred when publishing message', [
+                'exception' => $exception->getMessage(),
+                'sns_message' => $payload->toJson()
+            ]);
+            throw $exception;
+        }
     }
 }
