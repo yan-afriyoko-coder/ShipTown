@@ -11,9 +11,8 @@ use App\Modules\BoxTop\src\Exceptions\ProductOutOfStockException;
 use App\Modules\BoxTop\src\Models\WarehouseStock;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\ClientException;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Log;
-use function Aws\map;
 
 /**
  *
@@ -33,7 +32,10 @@ class BoxTopService
         try {
             return self::apiClient()->createWarehousePick($data);
         } catch (ClientException $exception) {
-            ray($exception->getResponse()->getBody()->getContents());
+            Log::error('BoxTop API error', [
+                'message' => $exception->getMessage(),
+                'code' => $exception->getCode(),
+            ]);
             throw $exception;
         }
     }
