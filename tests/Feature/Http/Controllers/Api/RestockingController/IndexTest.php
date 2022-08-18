@@ -18,11 +18,11 @@ class IndexTest extends TestCase
 
         $response = $this->actingAs($user, 'api')->getJson(route('restocking.index'));
 
+        ray($response->json());
+
         $response->assertOk();
 
-        $this->assertEquals(4, $response->json('meta.total'), 'No records returned');
-
-        ray($response->json());
+        $this->assertCount(4, $response->json('data'), 'No records returned');
 
         $response->assertJsonStructure([
             'meta',
