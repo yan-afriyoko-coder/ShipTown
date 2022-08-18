@@ -11,8 +11,8 @@ class RestockingController extends Controller
 {
     public function index(Request $request)
     {
-        $query = new RestockingReport();
+        $report = new RestockingReport();
 
-        return JsonResource::collection($this->getPaginatedResult($query->queryBuilder()));
+        return JsonResource::collection($report->queryBuilder()->simplePaginate(25)->appends(request()->query()));
     }
 }
