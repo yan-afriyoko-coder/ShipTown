@@ -3,7 +3,9 @@
 
         <div class="row mb-3 pl-1 pr-1" v-if="currentUser['warehouse'] !== null">
             <div class="flex-fill">
-                <barcode-input-field placeholder='Search products using name, sku, alias or command'></barcode-input-field>
+                <barcode-input-field placeholder='Search products using name, sku, alias or command'
+                                     :url_param_name="'filter[search]'"
+                                     @barcodeScanned="findText"></barcode-input-field>
             </div>
 
             <button id="config-button" disabled type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
@@ -123,16 +125,9 @@
             loadData(page = 1) {
                 this.showLoading();
 
-                const params = {
-                    // 'filter[sku]': this.getUrlParameter('sku'),
-                    // 'filter[search]': this.getUrlParameter('search'),
-                    // 'filter[has_tags]': this.getUrlParameter('has_tags'),
-                    // 'filter[without_tags]': this.getUrlParameter('without_tags'),
-                    // 'sort': this.getUrlParameter('sort', '-quantity'),
-                    // 'include': 'inventory,tags,prices,aliases,inventory.warehouse',
-                    // 'per_page': this.getUrlParameter('per_page', 25),
-                    'page': page
-                }
+                const params = this.$router.currentRoute.query;
+                params['page'] = page;
+
 
                 this.apiGetRestocking(params)
                     .then((response) => {
@@ -146,6 +141,11 @@
                     .finally(() => {
                         this.hideLoading();
                     });
+            },
+
+            findText() {
+                this.data = [];
+                this.loadData();
             },
 
             hasMorePagesToLoad: function () {

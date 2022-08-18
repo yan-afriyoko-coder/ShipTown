@@ -56,6 +56,7 @@ class RestockingReport extends Report
         ];
 
         $this->casts = [
+            'product_name'       => 'string',
             'restock_level'      => 'float',
             'reorder_point'      => 'float',
             'quantity_required'  => 'float',
@@ -69,6 +70,15 @@ class RestockingReport extends Report
             AllowedFilter::callback('has_tags', function ($query, $value) {
                 $query->whereHas('product', function ($query) use ($value) {
                     $query->withAllTags($value);
+                });
+            })
+        );
+
+        $this->addFilter(
+            AllowedFilter::callback('search', function ($query, $value) {
+                $query->where(function ($query) use ($value) {
+                    $query->where('product.sku', 'like', '%'.$value.'%')
+                        ->orWhere('product.name', 'like', '%'.$value.'%');
                 });
             })
         );
