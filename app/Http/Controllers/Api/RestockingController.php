@@ -11,8 +11,12 @@ class RestockingController extends Controller
 {
     public function index(Request $request)
     {
-        $report = new RestockingReport();
+        $query = new RestockingReport();
 
-        return JsonResource::collection($report->queryBuilder()->simplePaginate(25)->appends(request()->query()));
+        $resource = $query->queryBuilder()
+            ->simplePaginate(request()->get('per_page', 10))
+            ->appends(request()->query());
+
+        return JsonResource::collection($resource);
     }
 }

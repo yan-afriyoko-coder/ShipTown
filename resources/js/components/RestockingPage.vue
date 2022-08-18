@@ -91,7 +91,7 @@
         data: function() {
             return {
                 data: [],
-                pagesAvailable: 1,
+                reachedEnd: false,
                 pagesLoaded: 1,
             };
         },
@@ -99,7 +99,6 @@
         mounted() {
             if (this.initial_data !== null) {
                 this.data = this.initial_data.data;
-                this.pagesAvailable = this.initial_data.last_page;
                 this.pagesLoaded = this.initial_data.current_page;
             }
             window.onscroll = () => this.loadMore();
@@ -111,11 +110,11 @@
                     return;
                 }
 
-                if (! this.hasMorePagesToLoad() && !this.isLoading) {
+                if (! this.isMoreThanPercentageScrolled(70)) {
                     return;
                 }
 
-                if (! this.isMoreThanPercentageScrolled(70)) {
+                if (this.reachedEnd) {
                     return;
                 }
 
@@ -128,14 +127,14 @@
                 const params = this.$router.currentRoute.query;
                 params['page'] = page;
 
-
                 this.apiGetRestocking(params)
                     .then((response) => {
                         if (page === 1) {
                             this.data = [];
                         }
+                        this.reachedEnd = response.data.data.length === 0;
+
                         this.data = this.data.concat(response.data.data);
-                        this.pagesAvailable = response.data.meta.last_page;
                         this.pagesLoaded = page;
                     })
                     .finally(() => {
@@ -146,10 +145,6 @@
             findText() {
                 this.data = [];
                 this.loadData();
-            },
-
-            hasMorePagesToLoad: function () {
-                return this.pagesAvailable > this.pagesLoaded;
             },
         },
     }
