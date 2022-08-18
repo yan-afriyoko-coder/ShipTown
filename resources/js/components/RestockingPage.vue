@@ -10,7 +10,7 @@
         </div>
 
 
-        <template v-for="record in initial_data">
+        <template v-for="record in data">
             <div class="row mb-3">
                 <div class="col ml-0 pl-0">
                     <div class="card ml-0 pl-0">
@@ -57,6 +57,12 @@
                 </div>
             </div>
         </template>
+
+        <div class="row">
+            <div class="col">
+                <div ref="loadingContainerOverride" style="height: 100px"></div>
+            </div>
+        </div>
     </div>
 
 </template>
@@ -74,7 +80,7 @@
         mixins: [loadingOverlay, url, api, helpers],
 
         props: {
-            initial_data: [],
+            initial_data: null,
         },
 
         components: {
@@ -82,15 +88,69 @@
 
         data: function() {
             return {
+                data: [],
+                pagesAvailable: 1,
+                pagesLoaded: 1,
             };
         },
 
         mounted() {
-
+            if (this.initial_data !== null) {
+                this.data = this.initial_data.data;
+                this.pagesAvailable = this.initial_data.last_page;
+                this.pagesLoaded = this.initial_data.current_page;
+            }
+            window.onscroll = () => this.loadMore();
         },
 
         methods: {
+            loadMore() {
+                if (this.isLoading) {
+                    return;
+                }
 
+                if (! this.hasMorePagesToLoad() && !this.isLoading) {
+                    return;
+                }
+
+                if (! this.isMoreThanPercentageScrolled(70)) {
+                    return;
+                }
+
+                this.loadData(++this.pagesLoaded);
+            },
+
+            loadData(page = 1) {
+                this.showLoading();
+
+                const params = {
+                    // 'filter[sku]': this.getUrlParameter('sku'),
+                    // 'filter[search]': this.getUrlParameter('search'),
+                    // 'filter[has_tags]': this.getUrlParameter('has_tags'),
+                    // 'filter[without_tags]': this.getUrlParameter('without_tags'),
+                    // 'sort': this.getUrlParameter('sort', '-quantity'),
+                    // 'include': 'inventory,tags,prices,aliases,inventory.warehouse',
+                    // 'per_page': this.getUrlParameter('per_page', 25),
+                    'page': page
+                }
+
+                this.apiGetRestocking(params)
+                    .then((response) => {
+                        if (page === 1) {
+                            this.data = [];
+                        }
+                        this.data = this.data.concat(response.data.data);
+                        this.pagesAvailable = response.data.meta.last_page;
+                        this.pagesLoaded = page;
+                    })
+                    .finally(() => {
+                        this.hideLoading();
+                    });
+            },
+
+            hasMorePagesToLoad: function () {
+                return this.pagesAvailable > this.pagesLoaded;
+            },
         },
     }
 </script>

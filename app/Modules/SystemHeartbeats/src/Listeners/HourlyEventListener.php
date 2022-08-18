@@ -16,7 +16,7 @@ class HourlyEventListener
             'code' => self::class,
         ], [
             'error_message' => 'Hourly event heartbeat missed',
-            'expires_at' => now()->addMinutes(30)
+            'expires_at' => now()->addHours(2)
         ]);
     }
 }
