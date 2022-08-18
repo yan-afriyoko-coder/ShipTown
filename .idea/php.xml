@@ -205,6 +205,7 @@
       <path value="$PROJECT_DIR$/vendor/composer" />
       <path value="$PROJECT_DIR$/vendor/beyondcode/laravel-query-detector" />
       <path value="$PROJECT_DIR$/vendor/laravel/forge-sdk" />
+      <path value="$PROJECT_DIR$/vendor/blackfire/php-sdk" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4" />
