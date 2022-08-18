@@ -15,8 +15,8 @@ class DailyEventListener
         Heartbeat::query()->updateOrCreate([
             'code' => self::class,
         ], [
-            'error_message' => 'Every 10 minutes heartbeat missed',
-            'expires_at' => now()->addMinutes(30)
+            'error_message' => 'Daily event heartbeat missed',
+            'expires_at' => now()->addDays(2)
         ]);
     }
 }

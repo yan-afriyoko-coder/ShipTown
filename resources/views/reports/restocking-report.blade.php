@@ -4,6 +4,6 @@
 
 @section('content')
 
-    <restocking-page :initial_data="{{$data->resource}}"></restocking-page>
+    <restocking-page :initial_data="{{$initial_data}}"></restocking-page>
 
 @endsection

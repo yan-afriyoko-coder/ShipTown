@@ -67,6 +67,10 @@ export default {
                 return axios.get('/api/product/inventory', {params: params});
             },
 
+            apiGetRestocking(params) {
+                return axios.get('/api/restocking', {params: params});
+            },
+
             apiPostInventory(data) {
                 return this.apiPost('/api/product/inventory', data);
             },

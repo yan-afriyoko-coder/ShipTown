@@ -3,14 +3,16 @@
 
         <div class="row mb-3 pl-1 pr-1" v-if="currentUser['warehouse'] !== null">
             <div class="flex-fill">
-                <barcode-input-field placeholder='Search products using name, sku, alias or command'></barcode-input-field>
+                <barcode-input-field placeholder='Search products using name, sku, alias or command'
+                                     :url_param_name="'filter[search]'"
+                                     @barcodeScanned="findText"></barcode-input-field>
             </div>
 
             <button id="config-button" disabled type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
 
-        <template v-for="record in initial_data">
+        <template v-for="record in data">
             <div class="row mb-3">
                 <div class="col ml-0 pl-0">
                     <div class="card ml-0 pl-0">
@@ -57,6 +59,12 @@
                 </div>
             </div>
         </template>
+
+        <div class="row">
+            <div class="col">
+                <div ref="loadingContainerOverride" style="height: 100px"></div>
+            </div>
+        </div>
     </div>
 
 </template>
@@ -74,7 +82,7 @@
         mixins: [loadingOverlay, url, api, helpers],
 
         props: {
-            initial_data: [],
+            initial_data: null,
         },
 
         components: {
@@ -82,15 +90,67 @@
 
         data: function() {
             return {
+                data: [],
+                pagesAvailable: 1,
+                pagesLoaded: 1,
             };
         },
 
         mounted() {
-
+            if (this.initial_data !== null) {
+                this.data = this.initial_data.data;
+                this.pagesAvailable = this.initial_data.last_page;
+                this.pagesLoaded = this.initial_data.current_page;
+            }
+            window.onscroll = () => this.loadMore();
         },
 
         methods: {
+            loadMore() {
+                if (this.isLoading) {
+                    return;
+                }
 
+                if (! this.hasMorePagesToLoad() && !this.isLoading) {
+                    return;
+                }
+
+                if (! this.isMoreThanPercentageScrolled(70)) {
+                    return;
+                }
+
+                this.loadData(++this.pagesLoaded);
+            },
+
+            loadData(page = 1) {
+                this.showLoading();
+
+                const params = this.$router.currentRoute.query;
+                params['page'] = page;
+
+
+                this.apiGetRestocking(params)
+                    .then((response) => {
+                        if (page === 1) {
+                            this.data = [];
+                        }
+                        this.data = this.data.concat(response.data.data);
+                        this.pagesAvailable = response.data.meta.last_page;
+                        this.pagesLoaded = page;
+                    })
+                    .finally(() => {
+                        this.hideLoading();
+                    });
+            },
+
+            findText() {
+                this.data = [];
+                this.loadData();
+            },
+
+            hasMorePagesToLoad: function () {
+                return this.pagesAvailable > this.pagesLoaded;
+            },
         },
     }
 </script>

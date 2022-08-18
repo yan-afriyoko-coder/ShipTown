@@ -23,6 +23,7 @@ RoutesBuilder::apiResource('modules/webhooks/subscriptions')->only(['index', 'st
 Route::apiResource('shipments', 'Api\ShipmentControllerNew', ['as' => 'new'])->only(['store']);
 Route::apiResource('shipping-services', 'Api\ShippingServiceController')->only(['index']);
 Route::apiResource('shipping-labels', 'Api\ShippingLabelController')->only(['store']);
+Route::apiResource('restocking', 'Api\RestockingController')->only(['index']);
 
 Route::post('settings/modules/automations/run', 'Api\Settings\Modules\RunAutomationController@store')->name('settings.modules.automations.run');
 

@@ -9,6 +9,7 @@ use App\Traits\CsvFileResponse;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Psr\Container\ContainerExceptionInterface;
@@ -35,13 +36,15 @@ class RestockingReportController extends Controller
                 $var->put('filter[warehouse_code]', Auth::user()->warehouse->code);
             }
 
-            $var->put('per_page', 999);
-
             return redirect(route('reports.restocking', $var->toArray()));
         }
 
         $report = new RestockingReport();
 
-        return $report->response($request);
+        $initialData = JsonResource::collection($this->getPaginatedResult($report->queryBuilder()));
+
+        return view('reports.restocking-report', [
+            'initial_data' => $initialData->resource->toJson(),
+        ]);
     }
 }

@@ -77,7 +77,6 @@ class Report extends Model
             return response($ex->getMessage(), $ex->getStatusCode());
         }
 
-
         $resource = ReportResource::collection($queryBuilder->get());
 
         $data = [
