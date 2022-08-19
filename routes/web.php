@@ -11,7 +11,23 @@
 |
 */
 
+use App\Modules\Rmsapi\src\Jobs\ImportProductsJob;
+use App\Modules\Rmsapi\src\Jobs\ImportShippingsJob;
+use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
+use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use Illuminate\Support\Facades\Route;
+
+Route::get('orders', function () {
+
+    // dispatch Fetch jobs for all connections
+    foreach (RmsapiConnection::all() as $rmsapiConnection) {
+        ImportProductsJob::dispatch($rmsapiConnection->id);
+        ImportShippingsJob::dispatch($rmsapiConnection->id);
+        logger('Rmsapi sync job dispatched', ['connection_id' => $rmsapiConnection->id]);
+    }
+
+    return \App\Models\Order::where(['order_number' => 'DUB-TRN-130'])->first()->shippingAddress->phone;
+});
 
 // Route 2FA
 Route::resource('verify', 'Auth\TwoFactorController')->only(['index', 'store']);
@@ -23,7 +39,7 @@ Route::view('dashboard', 'dashboard')->name('dashboard');
 Route::view('performance/dashboard', 'performance')->name('performance.dashboard');
 Route::view('products', 'products')->name('products');
 Route::view('picklist', 'picklist')->name('picklist');
-Route::view('orders', 'orders')->name('orders');
+Route::view('orders2', 'orders')->name('orders');
 Route::view('stocktaking', 'stocktaking')->name('stocktaking');
 Route::view('setting-profile', 'setting-profile')->name('setting-profile');
 

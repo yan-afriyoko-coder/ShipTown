@@ -72,6 +72,7 @@ class ImportShippingsJob implements ShouldQueue
             return false;
         }
 
+//        dd($params, $this->rmsapiConnection->shippings_last_timestamp, $response->getResult());
         collect($response->getResult())
             ->each(function ($shippingRecord) {
                 $orderProduct = $this->createOrderProductFrom($shippingRecord);
@@ -100,19 +101,10 @@ class ImportShippingsJob implements ShouldQueue
             'shipping_method_name' => $record['ShippingCarrierName'],
         ]);
 
-        if (! $order->wasRecentlyCreated) {
-            return $order;
-        }
-
-        if (! empty($record['TransactionComment'])) {
-            OrderComment::create([
-                'order_id' => $order->getKey(),
-                'comment' => trim($record['TransactionComment']),
-            ]);
-        }
-
         /** @var OrderAddress $shippingAddress */
-        $shippingAddress = OrderAddress::create([
+        $shippingAddress = OrderAddress::updateOrCreate([
+            'id' => $order->shipping_address_id
+        ], [
             'company' => $record['Company'],
             'first_name' => $record['Name'],
             'last_name' => $record['Name'],
@@ -133,6 +125,17 @@ class ImportShippingsJob implements ShouldQueue
 
         $order->update(['shipping_address_id' => $shippingAddress->getKey()]);
 
+        if (! $order->wasRecentlyCreated) {
+            return $order;
+        }
+
+        if (! empty($record['TransactionComment'])) {
+            OrderComment::create([
+                'order_id' => $order->getKey(),
+                'comment' => trim($record['TransactionComment']),
+            ]);
+        }
+
         $order->logActivity('Order imported from RMS API', [
             'warehouse_code' => $this->rmsapiConnection->location_id,
             'transaction_number' => $record['TransactionNumber'],
@@ -151,12 +154,12 @@ class ImportShippingsJob implements ShouldQueue
 
         $uuid = $this->rmsapiConnection->location_id . '-shipping.id-' . $shippingRecord['ID'];
 
+        $order = $this->firstOrCreateOrder($shippingRecord);
+
         if (OrderProduct::query()->where(['custom_unique_reference_id' => $uuid])->exists()) {
             Log::debug('Record already exists', ["rmsapi_shipping_record" => $shippingRecord]);
             return null;
         }
-
-        $order = $this->firstOrCreateOrder($shippingRecord);
 
         $product = Product::findBySKU($shippingRecord['ItemLookupCode']);
 
