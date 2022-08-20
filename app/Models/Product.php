@@ -147,6 +147,12 @@ class Product extends BaseModel
         return parent::save($options);
     }
 
+    public function getQuantityAttribute()
+    {
+//        report(new \Exception('Quantity should be accessed via InventoryTotals->quantity'));
+
+        return $this->attributes['quantity'];
+    }
     /**
      * @return QueryBuilder
      */
