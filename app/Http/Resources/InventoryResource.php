@@ -24,6 +24,7 @@ class InventoryResource extends JsonResource
             'quantity'           => $this->quantity,
             'quantity_reserved'  => $this->quantity_reserved,
             'quantity_available' => $this->quantity_available,
+            'quantity_incoming'  => $this->quantity_incoming,
             'restock_level'      => $this->restock_level,
             'reorder_point'      => $this->reorder_point,
             'quantity_required'  => $this->quantity_required,
