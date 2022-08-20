@@ -41,6 +41,8 @@ use Spatie\Tags\Tag;
  * @property Carbon|null      $created_at
  * @property Carbon|null      $updated_at
  * @property-read Collection|Activity[] $activities
+ * @property-read Collection|InventoryTotal[] $inventoryTotals
+ * @property-read int|null $inventoryTotals_count
  * @property-read int|null $activities_count
  * @property-read Collection|ProductAlias[] $aliases
  * @property-read int|null $aliases_count
@@ -224,6 +226,14 @@ class Product extends BaseModel
         $this->save();
 
         return $this;
+    }
+
+    /**
+     * @return HasMany|InventoryTotal
+     */
+    public function inventoryTotals(): HasMany
+    {
+        return $this->hasMany(InventoryTotal::class);
     }
 
     /**

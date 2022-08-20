@@ -16,6 +16,7 @@ class ModulesService
         \App\Modules\FireActiveOrderCheckEvent\src\ActiveOrderCheckEventServiceProvider::class,
 
         \App\Modules\InventoryReservations\src\EventServiceProviderBase::class,
+        \App\Modules\InventoryTotals\src\InventoryTotalsServiceProvider::class,
         \App\Modules\Automations\src\AutomationsServiceProvider::class,
         \App\Modules\Reports\src\ReportsServiceProvider::class,
 
