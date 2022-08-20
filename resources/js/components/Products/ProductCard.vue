@@ -208,6 +208,7 @@
 <!--                                            <th>Stock</th>-->
 <!--                                            <th>Reserved</th>-->
                                             <th>Available</th>
+                                            <th>Incoming</th>
                                             <th>Restock Level</th>
                                             <th>Reorder Point</th>
                                             <th>Required</th>
@@ -219,6 +220,7 @@
 <!--                                            <td>{{ inventory.quantity | numberFormat}}</td>-->
 <!--                                            <td>{{ inventory.quantity_reserved | numberFormat}}</td>-->
                                             <td>{{ inventory.quantity_available | numberFormat}}</td>
+                                            <td>{{ inventory.quantity_incoming | numberFormat}}</td>
                                             <td>{{ inventory.restock_level | numberFormat }}</td>
                                             <td>{{ inventory.reorder_point | numberFormat}}</td>
                                             <td>{{ inventory.quantity_required | numberFormat}}</td>
