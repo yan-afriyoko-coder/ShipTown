@@ -20,6 +20,14 @@ class SendOrderEmailAction extends BaseOrderActionAbstract
     {
         parent::handle($options);
 
+        if (empty(trim($this->order->shippingAddress->email))) {
+            activity()->on($this->order)
+                ->causedByAnonymous()
+                ->log('No email specified, skipping notification');
+
+            return true;
+        }
+
         /** @var MailTemplate $template */
         $template = MailTemplate::query()
             ->where('code', '<>', '')
