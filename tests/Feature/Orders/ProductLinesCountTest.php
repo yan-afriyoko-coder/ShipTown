@@ -21,6 +21,6 @@ class ProductLinesCountTest extends TestCase
 
         $order = $order->refresh();
 
-        $this->assertEquals($order->orderTotals->product_line_count, $orderProductCount);
+        $this->assertEquals($order->orderProductsTotals->count, $orderProductCount);
     }
 }
