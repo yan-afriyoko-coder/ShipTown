@@ -38,31 +38,30 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
                 ->update(['reserved_at' => null]);
         });
 
-        do {
-             $reservationTime = now();
+         $reservationTime = now();
 
-             RmsapiProductImport::query()
-                ->whereNull('when_processed')
-                ->whereNull('reserved_at')
-                ->limit(50)
-                ->update(['reserved_at' => $reservationTime]);
+         RmsapiProductImport::query()
+             ->whereNull('when_processed')
+             ->whereNull('reserved_at')
+             ->orderBy('id')
+             ->limit(20)
+             ->update(['reserved_at' => $reservationTime]);
 
-            $records = RmsapiProductImport::query()
-                ->whereNull('when_processed')
-                ->where(['reserved_at' => $reservationTime])
-                ->orderBy('id')
-                ->get();
+        $records = RmsapiProductImport::query()
+            ->whereNull('when_processed')
+            ->where(['reserved_at' => $reservationTime])
+            ->orderBy('id')
+            ->get();
 
-            if ($records->isEmpty()) {
-                return;
-            }
-
-            $records->each(function (RmsapiProductImport $productImport) {
-                retry(2, function () use ($productImport) {
-                    $this->import($productImport);
-                });
+        $records->each(function (RmsapiProductImport $productImport) {
+            retry(2, function () use ($productImport) {
+                $this->import($productImport);
             });
-        } while ($records->isNotEmpty());
+        });
+
+        if (RmsapiProductImport::query()->whereNull('when_processed')->exists()) {
+            ProcessImportedProductRecordsJob::dispatch();
+        }
     }
 
 
