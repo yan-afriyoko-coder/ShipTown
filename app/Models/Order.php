@@ -63,7 +63,6 @@ use Spatie\Tags\Tag;
  * @property-read boolean     $isNotPaid
  *
  * @property-read OrderProductTotal orderProductsTotals
- * @property-read OrderTotal orderTotals
  * @property-read OrderStatus $order_status
  * @property-read User|null   $packer
  * @property-read Collection|OrderComment[] $orderComments
@@ -571,14 +570,6 @@ class Order extends BaseModel
     /**
      * @return HasOne
      */
-    public function orderTotals(): HasOne
-    {
-        return $this->hasOne(OrderTotal::class, 'order_id');
-    }
-
-    /**
-     * @return HasOne
-     */
     public function orderProductsTotals(): HasOne
     {
         return $this->hasOne(OrderProductTotal::class, 'order_id', 'id');
@@ -632,7 +623,6 @@ class Order extends BaseModel
                 AllowedFilter::scope('without_tags', 'withoutAllTags'),
             ])
             ->allowedIncludes([
-                'order_totals',
                 'activities',
                 'activities.causer',
                 'shipping_address',
@@ -648,8 +638,6 @@ class Order extends BaseModel
             ])
             ->allowedSorts([
                 'updated_at',
-                'order_totals.product_line_count',
-                'total_quantity_ordered',
                 'order_placed_at',
                 'packed_at',
                 'order_closed_at',
