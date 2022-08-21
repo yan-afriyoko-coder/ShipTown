@@ -17,11 +17,11 @@ class ProductUpdatedEventListener
      */
     public function handle(ProductUpdatedEvent $event)
     {
-        PendingWebhook::query()->firstOrCreate([
-            'model_class' => Product::class,
-            'model_id' => $event->product->getKey(),
-            'reserved_at' => null,
-            'published_at' => null,
-        ]);
+//        PendingWebhook::query()->firstOrCreate([
+//            'model_class' => Product::class,
+//            'model_id' => $event->product->getKey(),
+//            'reserved_at' => null,
+//            'published_at' => null,
+//        ]);
     }
 }
