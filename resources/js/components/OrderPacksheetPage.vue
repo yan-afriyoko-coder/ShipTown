@@ -241,7 +241,7 @@
 
                     let params = {
                         'filter[order_id]': this.order_id,
-                        'include': 'order_totals,order_comments,order_comments.user',
+                        'include': 'order_products_totals,order_comments,order_comments.user',
                     };
 
                     if (order_id) {

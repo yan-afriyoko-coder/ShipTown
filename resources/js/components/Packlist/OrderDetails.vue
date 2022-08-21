@@ -23,15 +23,15 @@
                             </div>
                             <div class="col">
                                 <small> products </small>
-                                <h5> {{ order['order_totals']['product_line_count'] }} </h5>
+                                <h5> {{ order['order_products_totals']['count'] }} </h5>
                             </div>
                             <div class="col">
                                 <small> quantity </small>
-                                <h5> {{ order['order_totals']['quantity_ordered_sum'] }} </h5>
+                                <h5> {{ order['order_products_totals']['quantity_ordered'] }} </h5>
                             </div>
                             <div class="col d-none d-sm-block">
                                 <small> total </small>
-                                <h5>{{ order['order_totals']['total_ordered'] }}</h5>
+                                <h5>{{ order['order_products_totals']['total_price'] }}</h5>
                             </div>
                         </div>
                     </div>
