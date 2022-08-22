@@ -137,6 +137,7 @@ class Order extends BaseModel
         'label_template',
         'shipping_number',
         'is_active',
+        'is_on_hold',
         'is_editing',
         'shipping_method_code',
         'shipping_method_name',
@@ -164,9 +165,13 @@ class Order extends BaseModel
 
     protected $casts = [
         'is_active'         => 'boolean',
+        'is_on_hold'        => 'boolean',
         'is_editing'        => 'boolean',
+        'total'             => 'float',
+        'total_products'    => 'float',
         'total_shipping'    => 'float',
         'total_paid'        => 'float',
+        'total_discounts'   => 'float',
     ];
 
     // we use attributes to set default values
