@@ -165,8 +165,11 @@ class Order extends BaseModel
     protected $casts = [
         'is_active'         => 'boolean',
         'is_editing'        => 'boolean',
+        'total'             => 'float',
+        'total_products'    => 'float',
         'total_shipping'    => 'float',
         'total_paid'        => 'float',
+        'total_discounts'   => 'float',
     ];
 
     // we use attributes to set default values
