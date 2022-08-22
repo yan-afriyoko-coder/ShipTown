@@ -25,6 +25,8 @@ class BasicModuleTest extends TestCase
 
     public function test_if_order_on_hold_updates()
     {
+        OrderStatusServiceProvider::enableModule();
+
         /** @var OrderStatus $orderStatus */
         $orderStatus = factory(OrderStatus::class)->create(['order_on_hold' => true]);
 
