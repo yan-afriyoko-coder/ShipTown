@@ -11,7 +11,6 @@ use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\Rmsapi\src\Jobs\ImportShippingsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
-use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class ImportShippingsTest extends TestCase
@@ -28,7 +27,7 @@ class ImportShippingsTest extends TestCase
         $connection = factory(RmsapiConnection::class)->create(['location_id' => $warehouse->code]);
 
         $job = new ImportShippingsJob($connection->getKey());
-        $job->importShippingRecords([
+        $records = [
             [
                 'DBTimeStamp' => 1,
                 'ID' => 1,
@@ -57,29 +56,32 @@ class ImportShippingsTest extends TestCase
                 'CarrierName' => 'PM',
                 'ServiceName' => 'PM',
             ],
-        ]);
+        ];
 
-        ray([
-            'orders' => Order::all()->toArray(),
-            'inventory' => Inventory::all()->toArray(),
-            'inventory_totals' => InventoryTotal::all()->toArray(),
-            'inventory_movements' => InventoryMovement::all()->toArray()
-        ]);
+        $job->importShippingRecords($records);
 
         $orderProduct = OrderProduct::first();
+
+        $uuid = 'rmsapi_shipping_import-order_product_id-' . $orderProduct->id;
 
         $this->assertDatabaseHas('inventory_movements', [
             'product_id' => $product->id,
             'warehouse_id' => $warehouse->id,
             'quantity_delta' => 1,
             'description' => 'rmsapi_shipping_import',
-            'custom_unique_reference_id' => 'rmsapi_shipping_import-order_product_id-'.$orderProduct->id,
+            'custom_unique_reference_id' => $uuid,
         ]);
 
-        $this->assertDatabaseHas('inventory', [
-            'product_id' => $product->id,
-            'warehouse_id' => $warehouse->id,
-            'quantity' => 1,
+        // intend to import the same record again and expect no new inventory movement to be created
+        $job->importShippingRecords($records);
+
+        $this->assertDatabaseCount('inventory_movements', 1);
+
+        ray([
+            'orders' => Order::all()->toArray(),
+            'inventory' => Inventory::all()->toArray(),
+            'inventory_totals' => InventoryTotal::all()->toArray(),
+            'inventory_movements' => InventoryMovement::all()->toArray()
         ]);
     }
 }

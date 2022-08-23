@@ -3,6 +3,7 @@
 namespace App\Modules\Rmsapi\src\Jobs;
 
 use App\Models\Inventory;
+use App\Models\InventoryMovement;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderComment;
@@ -41,7 +42,6 @@ class ImportShippingsJob implements ShouldQueue
      *
      * @param int $rmsapiConnectionId
      *
-     * @throws Exception
      */
     public function __construct(int $rmsapiConnectionId)
     {
@@ -84,7 +84,6 @@ class ImportShippingsJob implements ShouldQueue
 
     /**
      * @param array $records
-     * @throws Exception
      */
     public function importShippingRecords(array $records): void
     {
@@ -169,9 +168,10 @@ class ImportShippingsJob implements ShouldQueue
 
         $order = $this->firstOrCreateOrder($shippingRecord);
 
-        if (OrderProduct::query()->where(['custom_unique_reference_id' => $uuid])->exists()) {
-            Log::debug('Record already exists', ["rmsapi_shipping_record" => $shippingRecord]);
-            return null;
+        $orderProduct = OrderProduct::query()->where(['custom_unique_reference_id' => $uuid])->first();
+
+        if ($orderProduct) {
+            return $orderProduct;
         }
 
         $product = Product::findBySKU($shippingRecord['ItemLookupCode']);
@@ -225,11 +225,17 @@ class ImportShippingsJob implements ShouldQueue
         ])
         ->first();
 
+        $unique_reference_id = 'rmsapi_shipping_import-order_product_id-' . $orderProduct->getKey();
+
+        if (InventoryMovement::where(['custom_unique_reference_id' => $unique_reference_id])->exists()) {
+            return;
+        }
+
         InventoryService::adjustQuantity(
             $inventoryRecord,
             $orderProduct->quantity_ordered,
             'rmsapi_shipping_import',
-            'rmsapi_shipping_import-order_product_id-' . $orderProduct->getKey()
+            $unique_reference_id
         );
 
         $inventoryRecord->product->log('Imported RMS shipping, restocking', [
