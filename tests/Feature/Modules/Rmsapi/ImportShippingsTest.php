@@ -2,11 +2,16 @@
 
 namespace Tests\Feature\Modules\Rmsapi;
 
+use App\Models\Inventory;
+use App\Models\InventoryMovement;
+use App\Models\InventoryTotal;
+use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\Rmsapi\src\Jobs\ImportShippingsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class ImportShippingsTest extends TestCase
@@ -54,6 +59,13 @@ class ImportShippingsTest extends TestCase
             ],
         ]);
 
+        ray([
+            'orders' => Order::all()->toArray(),
+            'inventory' => Inventory::all()->toArray(),
+            'inventory_totals' => InventoryTotal::all()->toArray(),
+            'inventory_movements' => InventoryMovement::all()->toArray()
+        ]);
+
         $orderProduct = OrderProduct::first();
 
         $this->assertDatabaseHas('inventory_movements', [
@@ -62,6 +74,12 @@ class ImportShippingsTest extends TestCase
             'quantity_delta' => 1,
             'description' => 'rmsapi_shipping_import',
             'custom_unique_reference_id' => 'rmsapi_shipping_import-order_product_id-'.$orderProduct->id,
+        ]);
+
+        $this->assertDatabaseHas('inventory', [
+            'product_id' => $product->id,
+            'warehouse_id' => $warehouse->id,
+            'quantity' => 1,
         ]);
     }
 }
