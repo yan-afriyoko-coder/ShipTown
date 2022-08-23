@@ -18,6 +18,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
@@ -78,6 +79,22 @@ class ImportShippingsJob implements ShouldQueue
         $this->importShippingRecords($records);
 
         return true;
+    }
+
+    /**
+     * @param array $records
+     * @throws Exception
+     */
+    public function importShippingRecords(array $records): void
+    {
+        collect($records)
+            ->each(function ($shippingRecord) {
+                DB::transaction(function () use ($shippingRecord) {
+                    $orderProduct = $this->createOrderProductFrom($shippingRecord);
+
+                    $this->restockOriginForStockToBalance($orderProduct);
+                });
+            });
     }
 
     /**
@@ -196,45 +213,22 @@ class ImportShippingsJob implements ShouldQueue
      */
     private function restockOriginForStockToBalance(OrderProduct $orderProduct): void
     {
+        $inventoryRecord = Inventory::query()->where([
+            'product_id' => $orderProduct->product_id,
+            'warehouse_code' => $this->rmsapiConnection->location_id,
+        ])
+        ->first();
 
-        if ($orderProduct->product_id === null) {
-            return;
-        }
+        InventoryService::adjustQuantity(
+            $inventoryRecord,
+            $orderProduct->quantity_ordered,
+            'rmsapi_shipping_import',
+            'rmsapi_shipping_import-order_product_id-' . $orderProduct->getKey()
+        );
 
-        Inventory::query()
-            ->where([
-                'product_id'     => $orderProduct->product_id,
-                'warehouse_code' => $this->rmsapiConnection->location_id,
-            ])
-            ->get()
-            ->each(function (Inventory $inventoryRecord) use ($orderProduct) {
-                InventoryService::adjustQuantity(
-                    $inventoryRecord,
-                    $orderProduct->quantity_ordered,
-                    'rmsapi_shipping_import',
-                    'rmsapi_shipping_import-order_product_id-' . $orderProduct->getKey()
-                );
-
-                $inventoryRecord->product->log('Imported RMS shipping, restocking', [
-                    'warehouse_code' => $inventoryRecord->warehouse_code,
-                    'quantity' => $orderProduct->quantity_ordered,
-                ]);
-            });
-    }
-
-    /**
-     * @param array $records
-     * @throws Exception
-     */
-    public function importShippingRecords(array $records): void
-    {
-        collect($records)
-            ->each(function ($shippingRecord) {
-                $orderProduct = $this->createOrderProductFrom($shippingRecord);
-
-                if ($orderProduct) {
-                    $this->restockOriginForStockToBalance($orderProduct);
-                }
-            });
+        $inventoryRecord->product->log('Imported RMS shipping, restocking', [
+            'warehouse_code' => $inventoryRecord->warehouse_code,
+            'quantity' => $orderProduct->quantity_ordered,
+        ]);
     }
 }
