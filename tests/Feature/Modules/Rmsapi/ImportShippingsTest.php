@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Modules\Rmsapi;
 
+use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\Rmsapi\src\Jobs\ImportShippingsJob;
@@ -53,11 +54,14 @@ class ImportShippingsTest extends TestCase
             ],
         ]);
 
+        $orderProduct = OrderProduct::first();
+
         $this->assertDatabaseHas('inventory_movements', [
             'product_id' => $product->id,
             'warehouse_id' => $warehouse->id,
             'quantity_delta' => 1,
             'description' => 'rmsapi_shipping_import',
+            'custom_unique_reference_id' => 'rmsapi_shipping_import-order_product_id-'.$orderProduct->id,
         ]);
     }
 }

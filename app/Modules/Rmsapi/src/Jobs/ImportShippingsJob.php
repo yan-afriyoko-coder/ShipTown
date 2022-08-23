@@ -211,7 +211,8 @@ class ImportShippingsJob implements ShouldQueue
                 InventoryService::adjustQuantity(
                     $inventoryRecord,
                     $orderProduct->quantity_ordered,
-                    'rmsapi_shipping_import'
+                    'rmsapi_shipping_import',
+                    'rmsapi_shipping_import-order_product_id-' . $orderProduct->getKey()
                 );
 
                 $inventoryRecord->product->log('Imported RMS shipping, restocking', [
