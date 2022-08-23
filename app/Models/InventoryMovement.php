@@ -23,6 +23,7 @@ class InventoryMovement extends BaseModel
      * @var string[]
      */
     protected $fillable = [
+        'custom_unique_reference_id',
         'inventory_id',
         'product_id',
         'warehouse_id',
