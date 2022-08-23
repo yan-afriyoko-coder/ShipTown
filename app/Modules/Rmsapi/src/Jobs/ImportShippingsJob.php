@@ -51,6 +51,7 @@ class ImportShippingsJob implements ShouldQueue
      * Execute the job.
      *
      * @return bool
+     * @throws Exception
      */
     public function handle(): bool
     {
@@ -64,7 +65,7 @@ class ImportShippingsJob implements ShouldQueue
         try {
             $response = RmsapiClient::GET($this->rmsapiConnection, 'api/shippings', $params);
         } catch (GuzzleException $e) {
-            Log::warning('Failed RMSAPI product fetch', [
+            Log::warning('Failed RMSAPI shippings fetch', [
                 'code' => $e->getCode(),
                 'message' => $e->getMessage(),
             ]);
@@ -72,15 +73,9 @@ class ImportShippingsJob implements ShouldQueue
             return false;
         }
 
-//        dd($params, $this->rmsapiConnection->shippings_last_timestamp, $response->getResult());
-        collect($response->getResult())
-            ->each(function ($shippingRecord) {
-                $orderProduct = $this->createOrderProductFrom($shippingRecord);
+        $records = $response->getResult();
 
-                if ($orderProduct) {
-                    $this->restockOriginForStockToBalance($orderProduct);
-                }
-            });
+        $this->importShippingRecords($records);
 
         return true;
     }
@@ -201,6 +196,7 @@ class ImportShippingsJob implements ShouldQueue
      */
     private function restockOriginForStockToBalance(OrderProduct $orderProduct): void
     {
+
         if ($orderProduct->product_id === null) {
             return;
         }
@@ -222,6 +218,22 @@ class ImportShippingsJob implements ShouldQueue
                     'warehouse_code' => $inventoryRecord->warehouse_code,
                     'quantity' => $orderProduct->quantity_ordered,
                 ]);
+            });
+    }
+
+    /**
+     * @param array $records
+     * @throws Exception
+     */
+    public function importShippingRecords(array $records): void
+    {
+        collect($records)
+            ->each(function ($shippingRecord) {
+                $orderProduct = $this->createOrderProductFrom($shippingRecord);
+
+                if ($orderProduct) {
+                    $this->restockOriginForStockToBalance($orderProduct);
+                }
             });
     }
 }
