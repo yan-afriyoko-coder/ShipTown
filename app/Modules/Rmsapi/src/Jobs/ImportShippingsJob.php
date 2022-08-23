@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderComment;
 use App\Models\OrderProduct;
+use App\Models\OrderProductTotal;
 use App\Models\Product;
 use App\Modules\Rmsapi\src\Api\Client as RmsapiClient;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
@@ -175,6 +176,7 @@ class ImportShippingsJob implements ShouldQueue
 
         $product = Product::findBySKU($shippingRecord['ItemLookupCode']);
 
+        /** @var OrderProduct $orderProduct */
         $orderProduct = OrderProduct::create([
             'custom_unique_reference_id' => $uuid,
             'order_id' => $order->getKey(),
@@ -192,10 +194,14 @@ class ImportShippingsJob implements ShouldQueue
             ]);
         }
 
+        $orderProductTotal = $order->orderProductsTotals ?? OrderProductTotal::query()->create([
+            'order_id' => $order->getKey(),
+        ]);
+
         $order->update([
             'total_shipping' => $shippingRecord['ShippingCharge'],
-            'total' => $order->orderProductsTotals->total_price + $shippingRecord['ShippingCharge'],
-            'total_paid' => $order->orderProductsTotals->total_price + $shippingRecord['ShippingCharge'],
+            'total' => $orderProductTotal->total_price + $shippingRecord['ShippingCharge'],
+            'total_paid' => $orderProductTotal->total_price + $shippingRecord['ShippingCharge'],
         ]);
 
         $this->rmsapiConnection->update(['shippings_last_timestamp' => $shippingRecord['DBTimeStamp']]);
