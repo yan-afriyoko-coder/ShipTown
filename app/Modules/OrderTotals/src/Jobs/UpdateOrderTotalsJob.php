@@ -36,6 +36,7 @@ class UpdateOrderTotalsJob implements ShouldQueue
     {
         DB::table('orders_products')
             ->where(['order_id' => $this->order_id])
+            ->whereNull('deleted_at')
             ->groupBy('order_id')
             ->selectRaw('
                 order_id,
