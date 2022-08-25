@@ -19,8 +19,8 @@ use Spatie\QueryBuilder\QueryBuilder;
 class Report extends Model
 {
     protected $table = 'report';
-    protected string $report_name = 'Report';
-    protected string $view = 'reports.inventory';
+    public string $report_name = 'Report';
+    public string $view = 'reports.inventory';
 
     protected string $defaultSelect = '';
     protected ?string $defaultSort = null;
@@ -28,6 +28,8 @@ class Report extends Model
     public array $toSelect = [];
 
     public array $fields = [];
+
+    public array $initial_data = [];
     /**
      * @var mixed
      */
@@ -96,7 +98,7 @@ class Report extends Model
         $data = [
             'report_name' => $this->report_name ?? $this->table,
             'fields' => $resource->count() > 0 ? array_keys((array)json_decode($resource[0]->toJson())) : [],
-            'data' => $resource
+            'data' => $resource,
         ];
 
         return view($this->view, $data);

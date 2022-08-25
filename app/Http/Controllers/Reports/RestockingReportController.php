@@ -40,13 +40,8 @@ class RestockingReportController extends Controller
         }
 
         $report = new RestockingReport();
+        $report->view = 'reports.restocking-report';
 
-        $resource = $report->queryBuilder()
-            ->simplePaginate(request()->get('per_page', 10))
-            ->appends(request()->query());
-
-        return view('reports.restocking-report', [
-            'initial_data' => $resource->toJson(),
-        ]);
+        return $report->response($request);
     }
 }
