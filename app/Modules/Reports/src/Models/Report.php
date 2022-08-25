@@ -42,6 +42,20 @@ class Report extends Model
      * @throws NotFoundExceptionInterface
      * @throws InvalidSelectException
      */
+    public function response($request)
+    {
+        if ($request->has('filename')) {
+            return $this->csvDownload();
+        }
+
+        return $this->view();
+    }
+
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws InvalidSelectException
+     */
     public function queryBuilder(): QueryBuilder
     {
         $this->fieldAliases = [];
@@ -106,20 +120,6 @@ class Report extends Model
             'Content-Transfer-Encoding' => 'binary',
             'Content-Disposition'       => 'attachment; filename="'.request('filename', 'report.csv').'"',
         ]);
-    }
-
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     * @throws InvalidSelectException
-     */
-    public function response($request)
-    {
-        if ($request->has('filename')) {
-            return $this->csvDownload();
-        }
-
-        return $this->view();
     }
 
     /**
