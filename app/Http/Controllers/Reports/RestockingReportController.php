@@ -29,14 +29,8 @@ class RestockingReportController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->query->count() === 0) {
-            $var = collect();
-
-            if (Auth::user()->warehouse) {
-                $var->put('filter[warehouse_code]', Auth::user()->warehouse->code);
-            }
-
-            return redirect(route('reports.restocking', $var->toArray()));
+        if (($request->query->count() === 0) && (Auth::user()->warehouse)) {
+            return redirect(route('reports.restocking', ['filter[warehouse_code]' => Auth::user()->warehouse->code]));
         }
 
         $report = new RestockingReport();
