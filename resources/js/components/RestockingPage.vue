@@ -92,15 +92,13 @@
             return {
                 data: [],
                 reachedEnd: false,
-                pagesLoaded: 1,
+                pagesLoaded: 0,
             };
         },
 
         mounted() {
-            if (this.initial_data !== null) {
-                this.data = this.initial_data.data;
-                this.pagesLoaded = this.initial_data.current_page;
-            }
+            this.loadData();
+
             window.onscroll = () => this.loadMore();
         },
 
