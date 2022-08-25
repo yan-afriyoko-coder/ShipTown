@@ -2,7 +2,10 @@
 
 namespace App\Modules\Webhooks\src\Jobs;
 
+use App\Http\Resources\InventoryResource;
+use App\Http\Resources\OrderResource;
 use App\Models\Inventory;
+use App\Models\Order;
 use App\Modules\Webhooks\src\Models\PendingWebhook;
 use App\Modules\Webhooks\src\Services\SnsService;
 use Exception;
@@ -69,9 +72,15 @@ class PublishInventoryWebhooksJob implements ShouldQueue
      */
     private function publishInventoryMessage($chunk): void
     {
-        $payload = collect(['Inventory' => $chunk->pluck('message')->map(function ($message) {
-            return json_decode($message, true);
-        })]);
+        $ordersCollection = InventoryResource::collection(
+            Inventory::query()
+                ->whereIn('id', $chunk->pluck('model_id'))
+                ->orderBy('id')
+                ->with(['product', 'warehouse'])
+                ->get()
+        );
+
+        $payload = collect(['Inventory' => $ordersCollection]);
 
         SnsService::publishNew($payload->toJson());
     }
