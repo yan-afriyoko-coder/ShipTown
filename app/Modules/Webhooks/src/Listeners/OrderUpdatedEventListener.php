@@ -21,20 +21,11 @@ class OrderUpdatedEventListener
      */
     public function handle(OrderUpdatedEvent $event)
     {
-        PendingWebhook::query()->updateOrCreate([
+        PendingWebhook::query()->firstOrCreate([
             'model_class' => Order::class,
             'model_id' => $event->order->getKey(),
             'reserved_at' => null,
             'published_at' => null,
-        ], [
-            'message' => OrderResource::make($event->order->load([
-                'shippingAddress',
-                'orderShipments',
-                'orderProducts',
-                'orderComments',
-                'orderProductsTotals',
-                'tags',
-            ]))->toJson(),
         ]);
     }
 }
