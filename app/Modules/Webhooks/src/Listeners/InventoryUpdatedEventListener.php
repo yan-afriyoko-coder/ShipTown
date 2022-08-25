@@ -12,13 +12,11 @@ class InventoryUpdatedEventListener
 {
     public function handle(InventoryUpdatedEvent $event)
     {
-        PendingWebhook::query()->updateOrCreate([
+        PendingWebhook::query()->firstOrCreate([
             'model_class' => Inventory::class,
             'model_id' => $event->inventory->getKey(),
             'reserved_at' => null,
             'published_at' => null,
-        ], [
-            'message' => InventoryResource::make($event->inventory->load(['product', 'warehouse']))->toJson(),
         ]);
 
         PublishInventoryWebhooksJob::dispatchAfterResponse();
