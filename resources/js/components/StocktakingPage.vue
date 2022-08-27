@@ -14,27 +14,6 @@
             </div>
         </div>
 
-        <div class="row" >
-            <div class="col">
-                <table class="fullWidth w-100">
-                    <thead>
-                        <tr>
-                            <th colspan="3">Recent stocktakes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="itemMovement in recentStocktakes.data">
-                            <td>{{ itemMovement['product']['sku'] }}</td>
-                            <td>{{ itemMovement['product']['name'] }}</td>
-                            <td class="text-right">{{ itemMovement['quantity_after'] }}</td>
-                            <td class="text-right">{{ itemMovement['inventory']['shelf_location'] }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <br>
 
         <div class="row" >
             <div class="col">
@@ -51,6 +30,32 @@
                             <td class="text-right">{{ suggestion['quantity'] }}</td>
                             <td class="text-right">{{ suggestion['shelf_location'] }}</td>
                         </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row" >
+            <div class="col">
+                <table class="fullWidth w-100">
+                    <thead>
+                    <tr>
+                        <th colspan="2">Recent stocktakes</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="itemMovement in recentStocktakes.data" class="pb-3">
+                        <td>
+                            {{ itemMovement['product']['name'] }}<br>
+                            <small>
+                                {{ itemMovement['product']['sku'] }}
+                            </small>
+                        </td>
+                        <td class="text-right">{{ itemMovement['quantity_after'] }}</td>
+<!--                        <td class="text-right">{{ itemMovement['inventory']['shelf_location'] }}</td>-->
+                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -87,11 +92,14 @@
 
             if (! this.currentUser()['warehouse_id']) {
                 this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
-                return
+                return;
             }
 
             this.$root.$on('bv::modal::hidden', (bvEvent, modalId) => {
                 this.setFocusElementById(300, 'barcodeInput', true, true)
+                setTimeout(() => {
+                    this.reloadData();
+                }, 300);
             })
 
             this.$root.$on('bv::modal::show', (bvEvent, modalId) => {
@@ -117,7 +125,7 @@
                     'filter[warehouse_id]': this.currentUser()['warehouse_id'],
                     'include': 'product,inventory',
                     'sort': '-id',
-                    'per_page': 3,
+                    'per_page': 25,
                 }
 
                 this.apiGetInventoryMovements(params)
@@ -136,7 +144,7 @@
                     'filter[warehouse_id]': this.currentUser()['warehouse_id'],
                     'include': 'product',
                     'sort': 'shelve_location,quantity',
-                    'per_page': 5,
+                    'per_page': 2,
                 }
 
                 this.apiGetInventory(params)
@@ -145,85 +153,6 @@
                     })
                     .catch((error) => {
                         this.displayApiCallError(error);
-                    });
-            },
-
-            barcodeScanned: async function (barcode) {
-                if (barcode === null) {
-                    return;
-                }
-
-                if (barcode === "") {
-                    return;
-                }
-
-                this.inventory = null;
-                this.quantity = null;
-
-                const params = {
-                    'filter[sku_or_alias]': barcode,
-                    'filter[warehouse_id]': this.currentUser()['warehouse_id'],
-                    'include': 'product'
-                }
-
-                this.apiGetInventory(params)
-                    .then(e => {
-                        if (e.data.meta.total === 0) {
-                            this.notifyError('Product not found - "' + barcode + '"');
-                            return;
-                        }
-
-                        this.inventory = e.data.data[0];
-
-                        this.$bvModal.show('quantity-request-modal');
-                    })
-                    .catch((error) => {
-                        this.displayApiCallError(error);
-                        this.reloadData();
-                    });
-            },
-
-            submitStocktake: function () {
-                if (this.quantity === null) {
-                    return;
-                }
-
-                if (this.quantity === "") {
-                    return;
-                }
-
-                if (this.quantity < 0) {
-                    this.notifyError('Minus quantity not allowed');
-                    this.setFocusElementById(100, 'quantity-request-input', true, false)
-                    return;
-                }
-
-                this.$bvModal.hide('quantity-request-modal');
-
-                const delta_quantity = this.quantity - this.inventory.quantity;
-
-                if (delta_quantity === 0) {
-                    this.notifySuccess('Stock correct');
-                    this.reloadData();
-                    return;
-                }
-
-                const data = {
-                    'product_id': this.inventory['product_id'],
-                    'warehouse_id': this.currentUser()['warehouse_id'],
-                    'description': 'stocktake',
-                    'quantity': delta_quantity,
-                };
-
-                this.apiPostInventoryMovement(data)
-                    .then(() => {
-                        this.notifySuccess('Inventory updated');
-                    })
-                    .catch((error) => {
-                        this.displayApiCallError(error);
-                    })
-                    .finally(() => {
-                        this.reloadData();
                     });
             },
         },

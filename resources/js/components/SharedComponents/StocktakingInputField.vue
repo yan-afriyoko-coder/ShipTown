@@ -118,8 +118,6 @@
         },
 
         mounted() {
-            this.reloadData();
-
             if (! this.currentUser()['warehouse_id']) {
                 this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
                 return
@@ -141,8 +139,6 @@
         },
 
         methods: {
-            reloadData() {},
-
             barcodeScanned: async function (barcode) {
                 if (barcode === null) {
                     return;
@@ -174,7 +170,6 @@
                     })
                     .catch((error) => {
                         this.displayApiCallError(error);
-                        this.reloadData();
                     });
             },
 
@@ -199,7 +194,6 @@
 
                 if (delta_quantity === 0) {
                     this.notifySuccess('Stock correct');
-                    this.reloadData();
                     return;
                 }
 
@@ -218,7 +212,7 @@
                         this.displayApiCallError(error);
                     })
                     .finally(() => {
-                        this.reloadData();
+                        this.$root.$emit('InventoryMovementSubmitted');
                     });
             },
         },
