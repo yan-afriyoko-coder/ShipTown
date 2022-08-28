@@ -18,13 +18,6 @@
         <div class="row" >
             <div class="col">
                 <table class="fullWidth w-100">
-                    <thead>
-                        <tr>
-                            <th colspan="3">
-<!--                                Stocktake suggestions-->
-                            </th>
-                        </tr>
-                    </thead>
                     <tbody>
                         <tr v-for="record in data" class="align-text-top">
                             <td>
@@ -90,6 +83,16 @@
                 console.log(response);
 
                 this.data = [response].concat(this.data);
+
+                this.apiPostDataCollection(response)
+                    .then(() => {
+
+                    })
+                    .catch(e => {
+                        this.notifyError(e);
+
+                        this.data.splice(this.data.indexOf(response), 1)
+                    });
             },
 
             loadStocktakeSuggestions() {

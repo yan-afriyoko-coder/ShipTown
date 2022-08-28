@@ -42,6 +42,7 @@ Route::apiResource('product/tags', 'Api\Product\ProductTagController')->only(['i
 
 Route::apiResource('inventory-movements', 'Api\InventoryMovementController')->only(['store', 'index']);
 Route::apiResource('stocktakes', 'Api\StocktakesController')->only(['store']);
+Route::apiResource('data-collector', 'Api\DataCollectorController')->only(['store']);
 
 Route::apiResource('order-check-request', 'Api\OrderCheckRequestController')->only(['store']);
 
