@@ -135,6 +135,7 @@ Vue.component('passport-personal-access-tokens', require('./components/Settings/
  * Pages
  */
 Vue.component('stocktaking-page', require('./components/StocktakingPage.vue').default);
+Vue.component('data-collector-page', require('./components/DataCollectorPage.vue').default);
 
 /**
  * Widget
@@ -146,6 +147,7 @@ Vue.component('dpd-uk-configuration', require('./components/Settings/DpdUkConfig
 
 Vue.component('barcode-input-field', require('./components/SharedComponents/BarcodeInputField.vue').default);
 Vue.component('stocktaking-input-field', require('./components/SharedComponents/StocktakingInputField.vue').default);
+Vue.component('product-count-request-input-field', require('./components/SharedComponents/ProductCountRequestInputField.vue').default);
 Vue.component('restocking-page', require('./components/RestockingPage.vue').default);
 Vue.component('products-table', require('./components/ProductsPage.vue').default);
 Vue.component('activity-log-page', require('./components/ActivityLogPage.vue').default);
