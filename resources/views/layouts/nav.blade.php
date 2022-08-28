@@ -123,7 +123,7 @@
 
                             <a class="dropdown-item" href="https://www.youtube.com/channel/UCl04S5dRXop1ZdZsOqY3OnA" target="_blank">{{ __('YouTube') }}</a>
                             <a class="dropdown-item" href="{{ route('stocktaking') }}">{{ __('Stocktaking') }}</a>
-§                            <a class="dropdown-item" href="{{ route('data-collector') }}">{{ __('Data Collector') }}</a>
+                            <a class="dropdown-item" href="{{ route('data-collector') }}">{{ __('Data Collector') }}</a>
                             <a class="dropdown-item" href="https://docs.google.com/spreadsheets/d/1IagdPL-ZKOz0-_Rf83ukhDKj02S-DpgLTz7LrvzWWR4/copy" target="_blank">{{ __('Shelf Labels') }}</a>
 
                             <!-- Logout -->
