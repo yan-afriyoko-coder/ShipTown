@@ -118,8 +118,6 @@
         },
 
         mounted() {
-            this.reloadData();
-
             if (! this.currentUser()['warehouse_id']) {
                 this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
                 return
@@ -141,8 +139,6 @@
         },
 
         methods: {
-            reloadData() {},
-
             barcodeScanned: async function (barcode) {
                 if (barcode === null) {
                     return;
@@ -174,7 +170,6 @@
                     })
                     .catch((error) => {
                         this.displayApiCallError(error);
-                        this.reloadData();
                     });
             },
 
@@ -195,30 +190,21 @@
 
                 this.$bvModal.hide('quantity-request-modal');
 
-                const delta_quantity = this.newQuantity - this.inventory.quantity;
-
-                if (delta_quantity === 0) {
-                    this.notifySuccess('Stock correct');
-                    this.reloadData();
-                    return;
-                }
-
-                const data = {
+                const stocktakeData = {
                     'product_id': this.inventory['product_id'],
                     'warehouse_id': this.currentUser()['warehouse_id'],
-                    'description': this.description,
-                    'quantity': delta_quantity,
+                    'new_quantity': this.newQuantity,
                 };
 
-                this.apiPostInventoryMovement(data)
+                this.apiPostStocktakes(stocktakeData)
                     .then(() => {
-                        this.notifySuccess('Inventory updated');
+                        this.notifySuccess('Stocktake updated');
                     })
                     .catch((error) => {
                         this.displayApiCallError(error);
                     })
                     .finally(() => {
-                        this.reloadData();
+                            this.$emit('stocktakeSubmitted');
                     });
             },
         },

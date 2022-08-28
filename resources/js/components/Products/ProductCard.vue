@@ -212,6 +212,7 @@
                                             <th>Restock Level</th>
                                             <th>Reorder Point</th>
                                             <th>Required</th>
+                                            <th>Last Counted</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -224,6 +225,7 @@
                                             <td>{{ inventory.restock_level | numberFormat }}</td>
                                             <td>{{ inventory.reorder_point | numberFormat}}</td>
                                             <td>{{ inventory.quantity_required | numberFormat}}</td>
+                                            <td>{{ inventory['last_counted_at'] | moment('MMM DD')  }}</td>
                                         </tr>
                                     </tbody>
                                 </table>

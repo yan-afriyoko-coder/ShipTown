@@ -83,6 +83,10 @@ export default {
                 return axios.post('/api/inventory-movements', data);
             },
 
+            apiPostStocktakes(data) {
+                return axios.post('/api/stocktakes', data);
+            },
+
             apiKickProduct: function(sku) {
               return axios.get('/products/' + sku  + '/kick/', {params: null});
             },

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Modules\Webhooks;
+namespace Tests\External\Webhooks;
 
 use App\Models\Inventory;
 use App\Models\Product;

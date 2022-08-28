@@ -1,0 +1,52 @@
+<?php
+
+namespace Tests\Feature\Http\Controllers\Api\StocktakesController;
+
+use App\Models\Product;
+use App\Models\Warehouse;
+use App\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class StoreTest extends TestCase
+{
+    /** @test */
+    public function test_store_call_returns_ok()
+    {
+        $user = factory(User::class)->create();
+
+        $product = factory(Product::class)->create();
+        $warehouse = factory(Warehouse::class)->create();
+
+        $response = $this->actingAs($user, 'api')
+            ->postJson(route('stocktakes.store'), [
+                'warehouse_id' => $warehouse->getKey(),
+                'product_id' => $product->getKey(),
+                'new_quantity' => 0
+            ]);
+
+        ray($response->json());
+
+        $response->assertOk();
+
+        $this->assertCount(1, $response->json('data'), 'No records returned');
+
+        $response->assertJsonStructure([
+            'data' => [
+                '*' => [
+                    "id",
+                    "inventory_id",
+                    "product_id",
+                    "warehouse_id" ,
+                    "quantity_delta",
+                    "quantity_before",
+                    "quantity_after",
+                    "description",
+                    "user_id",
+                    "created_at",
+                    "updated_at",
+                ],
+            ],
+        ]);
+    }
+}
