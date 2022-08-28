@@ -89,7 +89,7 @@
             onProductCountRequestResponse(response) {
                 console.log(response);
 
-                this.data = this.data.concat([response]);
+                this.data = [response].concat(this.data);
             },
 
             loadStocktakeSuggestions() {
