@@ -4,10 +4,12 @@ namespace App\Models;
 
 use App\BaseModel;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  *
+ * @property int id
  * @property int inventory_id
  * @property int product_id
  * @property int warehouse_id
@@ -16,6 +18,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float quantity_after
  * @property string description
  * @property int user_id
+ * @property Carbon created_at
+ * @property Carbon updated_at
  */
 class InventoryMovement extends BaseModel
 {
