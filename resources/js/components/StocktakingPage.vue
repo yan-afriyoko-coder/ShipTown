@@ -2,7 +2,7 @@
     <div>
         <div class="row mb-3 pl-1 pr-1">
             <div class="flex-fill">
-                <stocktaking-input-field></stocktaking-input-field>
+                <stocktaking-input-field @stocktakeSubmitted="reloadData"></stocktaking-input-field>
             </div>
 
             <button id="config-button" disabled type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
@@ -97,9 +97,6 @@
 
             this.$root.$on('bv::modal::hidden', (bvEvent, modalId) => {
                 this.setFocusElementById(300, 'barcodeInput', true, true)
-                setTimeout(() => {
-                    this.reloadData();
-                }, 300);
             })
 
             this.$root.$on('bv::modal::show', (bvEvent, modalId) => {

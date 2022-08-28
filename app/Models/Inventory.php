@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -27,9 +26,11 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property float       $quantity
  * @property float       $quantity_reserved
  * @property float       $quantity_incoming
+ * @property float       $quantity_required
  * @property float       $restock_level
  * @property float       $reorder_point
- * @property string|null $deleted_at
+ * @property Carbon|null $last_counted_at
+ * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read float $quantity_available
@@ -83,6 +84,7 @@ class Inventory extends BaseModel
         'quantity_incoming',
         'restock_level',
         'reorder_point',
+        'last_counted_at',
     ];
 
     protected $attributes = [
@@ -101,6 +103,7 @@ class Inventory extends BaseModel
         'restock_level'      => 'float',
         'reorder_point'      => 'float',
         'quantity_required'  => 'float',
+        'last_counted_at'    => 'datetime',
     ];
 
     /**
@@ -149,39 +152,6 @@ class Inventory extends BaseModel
 
         return $query->whereIn('product_id', $aliases);
     }
-//
-//    /**
-//     * @return float
-//     */
-//    public function getQuantityAvailableAttribute(): float
-//    {
-//        // quantity_available is mssql computed stored value, it's not updated until is saved
-//        // this is to make sure always up-to-date value is returned
-//        if ($this->quantity && $this->quantity_reserved) {
-//            return $this->quantity - $this->quantity_reserved;
-//        }
-//
-//        return $this->attributes['quantity_available'];
-//    }
-//
-//    /**
-//     * @return float
-//     */
-//    public function getQuantityRequiredAttribute(): float
-//    {
-//        // quantity_required is mssql computed stored value, it's not updated until is saved
-//        // this is to make sure always up-to-date value is returned
-//        if ($this->quantity === null || $this->quantity_reserved === null || $this->quantity_incoming === null) {
-//            $quantity_required = $this->restock_level - ($this->quantity_available + $this->quantity_incoming);
-//            if ($quantity_required > 0) {
-//                return $quantity_required;
-//            }
-//
-//            return 0;
-//        }
-//
-//        return $this->attributes['quantity_required'];
-//    }
 
     /**
      * @param mixed $query

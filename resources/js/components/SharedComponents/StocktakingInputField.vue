@@ -190,29 +190,21 @@
 
                 this.$bvModal.hide('quantity-request-modal');
 
-                const delta_quantity = this.newQuantity - this.inventory.quantity;
-
-                if (delta_quantity === 0) {
-                    this.notifySuccess('Stock correct');
-                    return;
-                }
-
-                const data = {
+                const stocktakeData = {
                     'product_id': this.inventory['product_id'],
                     'warehouse_id': this.currentUser()['warehouse_id'],
-                    'description': this.description,
-                    'quantity': delta_quantity,
+                    'new_quantity': this.newQuantity,
                 };
 
-                this.apiPostInventoryMovement(data)
+                this.apiPostStocktakes(stocktakeData)
                     .then(() => {
-                        this.notifySuccess('Inventory updated');
+                        this.notifySuccess('Stocktake updated');
                     })
                     .catch((error) => {
                         this.displayApiCallError(error);
                     })
                     .finally(() => {
-                        this.$root.$emit('InventoryMovementSubmitted');
+                            this.$emit('stocktakeSubmitted');
                     });
             },
         },
