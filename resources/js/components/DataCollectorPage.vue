@@ -18,19 +18,12 @@
         <div class="row" >
             <div class="col">
                 <table class="fullWidth w-100">
-                    <thead>
-                        <tr>
-                            <th colspan="3">
-<!--                                Stocktake suggestions-->
-                            </th>
-                        </tr>
-                    </thead>
                     <tbody>
                         <tr v-for="record in data" class="align-text-top">
                             <td>
-                                {{ record['product_name'] }}
+                                {{ record['product_name'] ? record['product_name'] : record['product']['name'] }}
                                 <br>
-                                <span class="small">sku: {{ record['product_sku'] }}</span>
+                                <span class="small">sku: {{ record['product_sku'] ? record['product_sku'] : record['product']['sku'] }}</span>
                             </td>
                             <td class="text-right h5 align-middle   ">{{ record['quantity'] }}</td>
                         </tr>
@@ -65,6 +58,8 @@
         },
 
         mounted() {
+            this.loadData();
+
             if (! this.currentUser()['warehouse_id']) {
                 this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
                 return;
@@ -89,21 +84,29 @@
             onProductCountRequestResponse(response) {
                 console.log(response);
 
-                this.data = this.data.concat([response]);
+                this.data = [response].concat(this.data);
+
+                this.apiPostDataCollection(response)
+                    .then(() => {
+                        this.loadData();
+                    })
+                    .catch(e => {
+                        this.displayApiCallError(e);
+
+                        this.data.splice(this.data.indexOf(response), 1)
+                    });
             },
 
-            loadStocktakeSuggestions() {
+            loadData() {
                 const params = {
-                    'filter[quantity_between]': '-10000000,-1',
-                    'filter[warehouse_id]': this.currentUser()['warehouse_id'],
                     'include': 'product',
-                    'sort': 'shelve_location,quantity',
-                    'per_page': 2,
+                    'sort': '-id',
+                    'per_page': 99999,
                 }
 
-                this.apiGetInventory(params)
+                this.apiGetDataCollectionRecord(params)
                     .then((response) => {
-                        this.stocktakeSuggestions = response.data;
+                        this.data = response.data.data;
                     })
                     .catch((error) => {
                         this.displayApiCallError(error);
