@@ -113,6 +113,11 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link p-0 pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'shippingAddress'" >
+                                    Address
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link p-0 pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderDetails'" >
                                     Details
                                 </a>
@@ -185,6 +190,32 @@
                             </div>
                             <hr>
                         </template>
+                    </div>
+
+                    <div class="container" v-if="currentTab === 'shippingAddress'">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table class="table-borderless table-hover border-0">
+                                      <tr><td class="font-weight-bold">first_name:</td><td> {{ order['shipping_address']['first_name'] }}</td></tr>
+                                      <tr><td class="font-weight-bold">last_name:</td><td> {{ order['shipping_address']['last_name'] }}</td></tr>
+                                      <tr><td class="font-weight-bold">company:</td><td> {{ order['shipping_address']['company'] }}</td></tr>
+                                      <tr><td class="font-weight-bold">address1:</td><td> {{ order['shipping_address']['address1'] }}</td></tr>
+                                      <tr><td class="font-weight-bold">address2:</td><td> {{ order['shipping_address']['address2'] }}</td></tr>
+                                      <tr><td class="font-weight-bold">postcode:</td> <td>{{ order['shipping_address']['postcode'] }}</td></tr>
+                                      <tr><td class="font-weight-bold">city:</td><td> {{ order['shipping_address']['city'] }}</td></tr>
+                                      <tr><td class="font-weight-bold">phone:</td><td> {{ order['shipping_address']['phone'] }}</td></tr>
+                                      <tr><td class="font-weight-bold">email:</td><td> {{ order['shipping_address']['email'] }}</td></tr>
+                                      <tr><td class="font-weight-bold">country_code:</td><td> {{ order['shipping_address']['country_code'] }}</td></tr>
+                                      <tr><td class="font-weight-bold">country_name:</td><td> {{ order['shipping_address']['country_name'] }}</td></tr>
+                                      <tr><td class="font-weight-bold">fax:</td><td> {{ order['shipping_address']['fax'] }}</td></tr>
+                                      <tr><td class="font-weight-bold">region:</td> <td>{{ order['shipping_address']['region'] }}</td></tr>
+                                      <tr><td class="font-weight-bold">state_code:</td> <td>{{ order['shipping_address']['state_code'] }}</td></tr>
+                                      <tr><td class="font-weight-bold">state_name:</td> <td>{{ order['shipping_address']['state_name'] }}</td></tr>
+                                      <tr><td class="font-weight-bold">website:</td> <td>{{ order['shipping_address']['website'] }}</td></tr>
+                                </table>
+                                <div>.</div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="container" v-if="currentTab === 'orderDetails'">
