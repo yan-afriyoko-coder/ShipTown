@@ -213,7 +213,6 @@
                                       <tr><td class="font-weight-bold">state_name:</td> <td>{{ order['shipping_address']['state_name'] }}</td></tr>
                                       <tr><td class="font-weight-bold">website:</td> <td>{{ order['shipping_address']['website'] }}</td></tr>
                                 </table>
-                                <div>.</div>
                             </div>
                         </div>
                     </div>
