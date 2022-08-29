@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App\Models\CacheLock;
+use App\Models\DataCollectionRecord;
 use App\Models\Heartbeat;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
@@ -19,6 +20,7 @@ use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Services\ModulesService;
+use DebugBar\DataCollector\DataCollector;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Spatie\Activitylog\Models\Activity;
@@ -59,6 +61,7 @@ abstract class TestCase extends BaseTestCase
         Module::query()->forceDelete();
 
         RmsapiConnection::query()->forceDelete();
+        DataCollectionRecord::query()->forceDelete();
 
         ModulesService::updateModulesTable();
     }

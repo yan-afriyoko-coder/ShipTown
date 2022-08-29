@@ -15,8 +15,8 @@ class DataCollectorController extends Controller
         $attributes = $request->validated();
         $attributes['user_id'] = Auth::id();
 
-        return DataCollectResource::make(
+        return DataCollectResource::collection([
             DataCollectionRecord::create($attributes)
-        );
+        ]);
     }
 }
