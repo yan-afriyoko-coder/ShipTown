@@ -91,6 +91,10 @@ export default {
                 return axios.post('/api/data-collector', data);
             },
 
+            apiGetDataCollectionRecord(params) {
+                return axios.get('/api/data-collector', {params: params});
+            },
+
             apiKickProduct: function(sku) {
               return axios.get('/products/' + sku  + '/kick/', {params: null});
             },
