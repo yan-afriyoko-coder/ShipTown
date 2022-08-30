@@ -17,7 +17,7 @@ class IndexTest extends TestCase
 
         factory(DataCollectionRecord::class)->create([
             'product_id' => factory(Product::class)->create()->getKey(),
-            'quantity' => rand(1, 10),
+            'quantity_collected' => rand(1, 10),
         ]);
 
         $response = $this->actingAs($user, 'api')->getJson(route('data-collector.index'));
