@@ -21,6 +21,8 @@ class DataCollectionRecordResource extends JsonResource
     {
         return [
             'id'                 => $this->getKey(),
+            'product_id'         => $this->product_id,
+            'user_id'            => $this->user_id,
             'quantity_collected' => $this->quantity_collected,
             'quantity_expected'  => $this->quantity_expected,
             'quantity_required'  => $this->quantity_required,
