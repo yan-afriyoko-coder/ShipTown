@@ -24,8 +24,17 @@ class DataCollectorController extends Controller
         $attributes = $request->validated();
         $attributes['user_id'] = Auth::id();
 
-        return DataCollectionRecordResource::collection([
-            DataCollectionRecord::create($attributes)
+        /** @var DataCollectionRecord $dataCollectionRecord */
+        $dataCollectionRecord = DataCollectionRecord::firstOrCreate([
+            'user_id' => $attributes['user_id'],
+            'product_id' => $attributes['product_id'],
         ]);
+
+        $dataCollectionRecord->update([
+            'quantity_collected' => $dataCollectionRecord->quantity_collected + $attributes['quantity_collected'],
+        ]);
+
+
+        return DataCollectionRecordResource::collection([$dataCollectionRecord]);
     }
 }

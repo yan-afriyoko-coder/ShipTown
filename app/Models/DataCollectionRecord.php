@@ -7,7 +7,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
- *
+ *  @property int $id
+ *  @property int $product_id
+ *  @property double $quantity_collected
+ *  @property double $quantity_expected
+ *  @property double $quantity_required
+ *  @property int $user_id
  */
 class DataCollectionRecord extends Model
 {
@@ -16,11 +21,23 @@ class DataCollectionRecord extends Model
      */
     protected $fillable = [
         'product_id',
-        'quantity',
+        'quantity_expected',
+        'quantity_collected',
         'user_id'
     ];
 
-    public static function getSpatieQueryBuilder()
+    protected $casts = [
+        'quantity_collected' => 'double',
+        'quantity_expected' => 'double',
+        'quantity_required' => 'double',
+        'user_id' => 'int',
+        'product_id' => 'int'
+    ];
+
+    /**
+     * @return QueryBuilder
+     */
+    public static function getSpatieQueryBuilder(): QueryBuilder
     {
         return QueryBuilder::for(DataCollectionRecord::class)
             ->allowedFilters([])
