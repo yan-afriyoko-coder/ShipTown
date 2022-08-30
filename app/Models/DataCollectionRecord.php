@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -13,6 +15,11 @@ use Spatie\QueryBuilder\QueryBuilder;
  *  @property double $quantity_expected
  *  @property double $quantity_required
  *  @property int $user_id
+ *  @property Carbon $created_at
+ *  @property Carbon $updated_at
+ *
+ *  @property-read Product $product
+ *  @property-read User $user
  */
 class DataCollectionRecord extends Model
 {
@@ -55,5 +62,13 @@ class DataCollectionRecord extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }
