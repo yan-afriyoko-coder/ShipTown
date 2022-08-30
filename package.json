@@ -49,6 +49,7 @@
     "vue-router": "^3.5.4",
     "vue-snotify": "^3.2.1",
     "vue-tippy": "^4.13.0",
+    "vue-uuid": "^3.0.0",
     "vuejs-countdown-timer": "^2.1.3"
   }
 }

@@ -145,6 +145,8 @@ Vue.component('autopilot-packlist-page', require('./components/AutopilotPacklist
 Vue.component('dpd-configuration', require('./components/Settings/DpdConfiguration').default);
 Vue.component('dpd-uk-configuration', require('./components/Settings/DpdUkConfiguration').default);
 
+Vue.component('number-card-col', require('./components/SharedComponents/NumberCardCol.vue').default);
+Vue.component('swiping-card-col', require('./components/SharedComponents/SwipingCard.vue').default);
 Vue.component('barcode-input-field', require('./components/SharedComponents/BarcodeInputField.vue').default);
 Vue.component('stocktaking-input-field', require('./components/SharedComponents/StocktakingInputField.vue').default);
 Vue.component('product-count-request-input-field', require('./components/SharedComponents/ProductCountRequestInputField.vue').default);

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <barcode-input-field placeholder="Scan sku or alias to stocktake product"
+        <barcode-input-field :placeholder="placeholder"
                              @barcodeScanned="barcodeScanned"
         />
 
@@ -10,7 +10,6 @@
                 <div class="small">sku: {{ inventory.product.sku }}</div>
                 <div class="row mt-2">
                     <div class="col-12">
-<!--                        <label class="small" for="quantity-request-input">Quantity</label>-->
                         <input class="form-control" :placeholder="'quantity'" :class="{ 'border-danger': this.quantity < 0, 'border-success': this.quantity > 0}"
                                id="quantity-request-input"
                                dusk="quantity-request-input"
@@ -39,6 +38,10 @@
 
         components: {
             BarcodeInputField
+        },
+
+        props: {
+            placeholder: '',
         },
 
         data: function() {

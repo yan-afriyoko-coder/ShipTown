@@ -15,7 +15,7 @@ class StoreTest extends TestCase
 
         $response = $this->actingAs($user, 'api')->postJson(route('data-collector.store'), [
             'product_id'=> factory(Product::class)->create()->getKey(),
-            'quantity' => rand(0, 100),
+            'quantity_collected' => rand(0, 100),
         ]);
 
         ray($response->json());
@@ -29,7 +29,7 @@ class StoreTest extends TestCase
                 '*' => [
                     'id',
                     'product_id',
-                    'quantity'
+                    'quantity_collected'
                 ],
             ],
         ]);
