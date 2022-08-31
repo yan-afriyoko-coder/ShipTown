@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Helpers\HasQuantityRequiredSort;
-use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,17 +10,15 @@ use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
- *  @property int $id
- *  @property int $product_id
- *  @property double $quantity_collected
- *  @property double $quantity_expected
- *  @property double $quantity_required
- *  @property int $user_id
+ *  @property int    $id
+ *  @property int    $product_id
+ *  @property double $quantity_requested
+ *  @property double $quantity_scanned
+ *  @property double $quantity_to_scan
  *  @property Carbon $created_at
  *  @property Carbon $updated_at
  *
  *  @property-read Product $product
- *  @property-read User $user
  */
 class DataCollectionRecord extends Model
 {
@@ -30,17 +27,15 @@ class DataCollectionRecord extends Model
      */
     protected $fillable = [
         'product_id',
-        'quantity_expected',
-        'quantity_collected',
-        'user_id'
+        'quantity_requested',
+        'quantity_scanned',
     ];
 
     protected $casts = [
-        'quantity_collected' => 'double',
-        'quantity_expected' => 'double',
-        'quantity_required' => 'double',
-        'user_id' => 'int',
-        'product_id' => 'int'
+        'product_id'         => 'int',
+        'quantity_requested' => 'double',
+        'quantity_scanned'   => 'double',
+        'quantity_to_scan'   => 'double',
     ];
 
     /**
@@ -54,11 +49,11 @@ class DataCollectionRecord extends Model
             ->allowedFilters([])
             ->allowedSorts([
                 'id',
-                'quantity_collected',
-                'quantity_expected',
-                'quantity_required',
+                'quantity_requested',
+                'quantity_scanned',
+                'quantity_to_scan',
                 'updated_at',
-                'product.user_inventory.shelf_location',
+                'created_at',
             ])
             ->allowedIncludes([
                 'product',
@@ -74,13 +69,5 @@ class DataCollectionRecord extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
     }
 }

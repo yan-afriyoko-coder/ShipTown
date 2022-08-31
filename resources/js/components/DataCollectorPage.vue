@@ -8,33 +8,33 @@
             <button type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
+
+
         <template v-for="record in data">
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
                 <template v-slot:content>
                     <div class="row">
                         <div class="col-sm-12 col-lg-6 ">
-                            <div class="text-primary h5">{{ record['product']['name'] }}</div>
+                            <div class="text-primary h5">{{ record['product_name'] }}</div>
                             <div>
-                                product: <b><a target="_blank" :href="'/products?sku=' + record['product']['sku']">{{ record['product']['sku'] }}</a></b>
+                                product: <b><a target="_blank" :href="'/products?sku=' + record['product_sku']">{{ record['product_sku'] }}</a></b>
                             </div>
                         </div>
 
                         <div class="row-cols col-sm-12 col-lg-6 text-right">
-                            <number-card label="requested" :number="record['quantity_expected']" v-if="record['quantity_expected']"></number-card>
-                            <number-card label="scanned" :number="record['quantity_collected']" v-bind:class="{ 'bg-warning': record['quantity_expected'] && record['quantity_collected'] > record['quantity_expected'] }"></number-card>
-                            <number-card label="to scan" :number="record['quantity_required']" v-if="record['quantity_expected']"></number-card>
-                            <text-card label="shelf" :text="record['product']['user_inventory']['shelf_location']"></text-card>
+                            <number-card label="requested" :number="record['quantity_requested']" v-if="record['quantity_requested']"></number-card>
+                            <number-card label="scanned" :number="record['quantity_scanned']" v-bind:class="{ 'bg-warning': record['quantity_requested'] && record['quantity_scanned'] > record['quantity_requested'] }"></number-card>
+                            <number-card label="to scan" :number="record['quantity_to_scan']" v-if="record['quantity_requested']"></number-card>
+                            <text-card label="shelf" :text="record['shelf_location']"></text-card>
                         </div>
                     </div>
                 </template>
             </swiping-card>
         </template>
 
-        <div class="row">
-            <div class="col">
-                <div ref="loadingContainerOverride" style="height: 100px"></div>
-            </div>
-        </div>
+        <div class="row"><div class="col">
+                <div ref="loadingContainerOverride" style="height: 50px"></div>
+        </div></div>
 
         <filters-modal ref="filtersModal">
             <template v-slot:actions="slotScopes">
@@ -88,7 +88,7 @@
 
             methods: {
                 loadMoreWhenNeeded() {
-                    if (this.loading) {
+                    if (this.isLoading) {
                         return;
                     }
 
@@ -96,7 +96,7 @@
                         return;
                     }
 
-                    if (! this.nextUrl) {
+                    if (this.nextUrl === null) {
                         return;
                     }
 
@@ -107,7 +107,6 @@
                     this.showLoading();
 
                     const params = this.$router.currentRoute.query;
-                    params['include'] = 'product,product.user_inventory';
                     params['page'] = page;
 
                     this.apiGetDataCollectionRecord(params)
@@ -131,7 +130,7 @@
                 onProductCountRequestResponse(response) {
                     const payload = {
                         'product_id': response['product_id'],
-                        'quantity_collected': response['quantity'],
+                        'quantity_scanned': response['quantity'],
                     }
 
                     this.apiPostDataCollection(payload)
