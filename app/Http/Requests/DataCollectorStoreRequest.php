@@ -25,7 +25,7 @@ class DataCollectorStoreRequest extends FormRequest
     {
         return [
             'product_id' => ['required', 'exists:products,id'],
-            'quantity_collected' => ['required', 'numeric'],
+            'quantity_scanned' => ['required', 'numeric'],
         ];
     }
 }

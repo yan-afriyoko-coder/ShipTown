@@ -7,17 +7,20 @@ use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
 use App\Traits\HasTagsTrait;
 use App\Traits\LogsActivityTrait;
+use App\User;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -183,6 +186,7 @@ class Product extends BaseModel
             ])
             ->allowedIncludes([
                 'inventory',
+                'user_inventory',
                 'aliases',
                 'tags',
                 'prices',
@@ -301,6 +305,18 @@ class Product extends BaseModel
                 $query->where(['warehouse_code' => $warehouse_code]);
             })
             ->keyBy('warehouse_code');
+    }
+
+    /**
+     * @return HasOne|Inventory
+     */
+    public function userInventory(): HasOne
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        return $this->hasOne(Inventory::class)
+            ->where(['warehouse_id' => $user->warehouse_id]);
     }
 
     /**

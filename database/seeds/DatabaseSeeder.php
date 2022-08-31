@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
 
 
             RmsapiConnectionSeeder::class,
+            DataCollectionRecordsSeeder::class
 //            AutomationsSeeder::class,
 //            PrintNodeClientSeeder::class,
 //            DpdIrelandSeeder::class,

@@ -20,17 +20,15 @@ class DataCollectionRecordResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id'                 => $this->getKey(),
+            'id'                 => $this->id,
             'product_id'         => $this->product_id,
-            'user_id'            => $this->user_id,
-            'quantity_collected' => $this->quantity_collected,
-            'quantity_expected'  => $this->quantity_expected,
-            'quantity_required'  => $this->quantity_required,
+            'quantity_requested' => $this->quantity_requested,
+            'quantity_scanned'   => $this->quantity_scanned,
+            'quantity_to_scan'   => $this->quantity_to_scan,
             'created_at'         => $this->created_at,
             'updated_at'         => $this->updated_at,
 
             'product' => ProductResource::make($this->product),
-            'user'    => UserResource::make($this->user),
         ];
     }
 }
