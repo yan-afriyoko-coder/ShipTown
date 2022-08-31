@@ -20,9 +20,10 @@
                         </div>
 
                         <div class="row-cols col-sm-12 col-lg-6 text-right">
-                            <number-card-col label="requested" :number="record['quantity_expected']" v-if="record['quantity_expected']"></number-card-col>
-                            <number-card-col label="scanned" :number="record['quantity_collected']" v-bind:class="{ 'bg-warning': record['quantity_expected'] && record['quantity_collected'] > record['quantity_expected'] }"></number-card-col>
-                            <number-card-col label="to scan" :number="record['quantity_required']" v-if="record['quantity_expected']"></number-card-col>
+                            <number-card label="requested" :number="record['quantity_expected']" v-if="record['quantity_expected']"></number-card>
+                            <number-card label="scanned" :number="record['quantity_collected']" v-bind:class="{ 'bg-warning': record['quantity_expected'] && record['quantity_collected'] > record['quantity_expected'] }"></number-card>
+                            <number-card label="to scan" :number="record['quantity_required']" v-if="record['quantity_expected']"></number-card>
+                            <text-card label="shelf" :text="record['product']['user_inventory']['shelf_location']"></text-card>
                         </div>
                     </div>
                 </template>
@@ -48,61 +49,41 @@
     import beep from '../mixins/beep';
     import loadingOverlay from '../mixins/loading-overlay';
 
-    import PacklistEntry from './Packlist/PacklistEntry';
-    import PackedEntry from './Packlist/PackedEntry';
-
-    import OrderDetails from "./Packlist/OrderDetails";
-    import BarcodeInputField from "./SharedComponents/BarcodeInputField";
     import FiltersModal from "./Packlist/FiltersModal";
     import url from "../mixins/url";
-    import SetShippingNumberModal from "./Packlist/ShippingNumberModal";
     import api from "../mixins/api";
     import helpers from "../mixins/helpers";
     import Vue from "vue";
-    import NumberCardCol from "./SharedComponents/NumberCardCol";
+    import NumberCard from "./SharedComponents/NumberCard";
     import SwipingCard from "./SharedComponents/SwipingCard";
 
     export default {
-            mixins: [loadingOverlay, beep, url, api, helpers, BarcodeInputField],
+            mixins: [loadingOverlay, beep, url, api, helpers],
 
             components: {
-                PacklistEntry,
                 FiltersModal,
-                BarcodeInputField,
-                NumberCardCol,
+                NumberCard,
                 SwipingCard,
-                OrderDetails,
-                PackedEntry,
-                SetShippingNumberModal,
             },
 
             data: function() {
                 return {
                     data: [],
-                    fixToBottom: false,
                     nextUrl: null,
                     page: 1,
                 };
             },
 
-
             mounted() {
                 if (! Vue.prototype.$currentUser['warehouse_id']) {
                     this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
-                    return
+                    return;
                 }
+                this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
 
                 window.onscroll = () => this.loadMoreWhenNeeded();
 
-                this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
-
                 this.loadData();
-            },
-
-            computed: {
-                productUrl() {
-                    return '/products?sku=' + this.productSku;
-                },
             },
 
             methods: {
@@ -125,12 +106,9 @@
                 loadData(page = 1) {
                     this.showLoading();
 
-                    const params = {
-                        'include': 'product',
-                        'sort': '-id',
-                        'per_page': 10,
-                        'page': page,
-                    }
+                    const params = this.$router.currentRoute.query;
+                    params['include'] = 'product,product.user_inventory';
+                    params['page'] = page;
 
                     this.apiGetDataCollectionRecord(params)
                         .then((response) => {
@@ -139,10 +117,8 @@
                             } else {
                                 this.data = this.data.concat(response.data.data);
                             }
-                            this.page = response.data.meta.current_page;
-                            this.fixToBottom = false;
-                            this.allLoaded = response.data.links.next === null;
-                            this.nextUrl = response.data.links.next;
+                            this.page = response.data['meta']['current_page'];
+                            this.nextUrl = response.data['links']['next'];
                         })
                         .catch((error) => {
                             this.displayApiCallError(error);
@@ -159,13 +135,11 @@
                     }
 
                     this.apiPostDataCollection(payload)
-                        .then((response) => {
+                        .then(() => {
                             this.notifySuccess('Data collected');
                         })
                         .catch(e => {
                             this.displayApiCallError(e);
-
-                            this.data.splice(this.data.indexOf(response), 1)
                         })
                         .finally(() => {
                             this.loadData();

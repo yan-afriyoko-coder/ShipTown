@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Helpers\HasQuantityRequiredSort;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
@@ -46,14 +48,24 @@ class DataCollectionRecord extends Model
      */
     public static function getSpatieQueryBuilder(): QueryBuilder
     {
+        $allowedSort = AllowedSort::custom('has_quantity_required', new HasQuantityRequiredSort());
+
         return QueryBuilder::for(DataCollectionRecord::class)
             ->allowedFilters([])
             ->allowedSorts([
                 'id',
+                'quantity_collected',
+                'quantity_expected',
+                'quantity_required',
+                'updated_at',
+                'product.user_inventory.shelf_location',
             ])
             ->allowedIncludes([
                 'product',
-            ]);
+                'product.inventory',
+                'product.user_inventory',
+            ])
+            ->defaultSort($allowedSort, '-updated_at');
     }
 
     /**

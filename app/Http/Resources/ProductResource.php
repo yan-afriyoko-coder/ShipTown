@@ -2,18 +2,23 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Product;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin Product
+ */
 class ProductResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      *
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
             'id'                              => $this->id,
@@ -34,6 +39,7 @@ class ProductResource extends JsonResource
             'inventory_source_shelf_location' => $this->inventory_source_shelf_location,
             'inventory_source_quantity'       => $this->inventory_source_quantity,
             'inventory'                       => InventoryResource::collection($this->whenLoaded('inventory')),
+            'user_inventory'                  => InventoryResource::make($this->whenLoaded('userInventory')),
             'aliases'                         => ProductAliasResource::collection($this->whenLoaded('aliases')),
             'prices'                          => ProductPriceResource::collection($this->whenLoaded('prices')),
             'tags'                            => TagResource::collection($this->whenLoaded('tags')),
