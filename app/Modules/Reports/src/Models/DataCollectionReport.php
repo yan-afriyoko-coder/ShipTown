@@ -22,6 +22,7 @@ class DataCollectionReport extends Report
             });
 
         $this->fields = [
+            'id'                    => 'data_collection_records.id',
             'product_sku'           => 'product.sku',
             'product_name'          => 'product.name',
             'quantity_requested'    => 'data_collection_records.quantity_requested',
