@@ -212,7 +212,7 @@ class Order extends BaseModel
     {
         return self::query()->where(function (Builder $query) {
             return $query->where(['is_active' => true])
-                ->orWhereBetween('created_at', [now()->subDays(28), now()]);
+                ->orWhereBetween('created_at', [now()->subDays(28), now()->subMinute()]);
         });
     }
 

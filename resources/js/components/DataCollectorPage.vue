@@ -21,7 +21,7 @@
 
                         <div class="row-cols col-sm-12 col-lg-6 text-right">
                             <number-card-col label="requested" :number="record['quantity_expected']" v-if="record['quantity_expected']"></number-card-col>
-                            <number-card-col label="scanned" :number="record['quantity_collected']" v-bind:class="{ 'bg-warning': record['quantity_collected'] > record['quantity_expected'] }"></number-card-col>
+                            <number-card-col label="scanned" :number="record['quantity_collected']" v-bind:class="{ 'bg-warning': record['quantity_expected'] && record['quantity_collected'] > record['quantity_expected'] }"></number-card-col>
                             <number-card-col label="to scan" :number="record['quantity_required']" v-if="record['quantity_expected']"></number-card-col>
                         </div>
                     </div>

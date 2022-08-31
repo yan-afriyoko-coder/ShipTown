@@ -40,7 +40,7 @@ class RunEnabledAutomationsOnSpecificOrderJob implements ShouldQueue
         try {
             AutomationService::runAutomationsOnOrdersQuery(
                 Automation::enabled(),
-                Order::whereId($this->order_id)
+                Order::placedInLast28DaysOrActive()->where(['id' => $this->order_id])
             );
         } finally {
             CacheLock::release(self::class, $this->order_id);
