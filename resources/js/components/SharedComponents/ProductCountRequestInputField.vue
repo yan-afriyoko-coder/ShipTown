@@ -54,11 +54,6 @@
         },
 
         mounted() {
-            if (! this.currentUser()['warehouse_id']) {
-                this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
-                return
-            }
-
             this.$root.$on('bv::modal::hidden', (bvEvent, modalId) => {
                 this.setFocusElementById(300, 'barcodeInput', true, true)
             })

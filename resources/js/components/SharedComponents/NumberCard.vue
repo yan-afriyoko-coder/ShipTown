@@ -1,13 +1,10 @@
 <template>
-    <div class="text-center border-0 d-inline-block p-2">
-            <small>{{ this.labelFormatted }}</small>
-            <h3>{{ this.numberFormatted }}</h3>
-    </div>
+    <text-card :label="label" :text="numberFormatted"></text-card>
 </template>
 
 <script>
     export default {
-        name: "NumberCardCol",
+        name: "NumberCard",
 
         props: {
             label: null,
@@ -27,12 +24,6 @@
             dashIfZero(value) {
                 return value === 0 ? '-' : value;
             },
-        },
-
-        data: function() {
-            return {
-
-            }
         },
     }
 </script>

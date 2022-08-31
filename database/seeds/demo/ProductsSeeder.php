@@ -20,13 +20,16 @@ class ProductsSeeder extends Seeder
             '04',
             '05',
             '06',
-            '06',
-            '45',
             '8413848043283',
             '3276000690573'
         ]);
 
         factory(Product::class, 50)->create();
+
+        factory(ProductAlias::class)->create([
+            'product_id' => factory(Product::class)->create()->getKey(),
+            'alias'      => '45',
+        ]);
     }
 
     private function createSkuWithAliases(array $skuList): void

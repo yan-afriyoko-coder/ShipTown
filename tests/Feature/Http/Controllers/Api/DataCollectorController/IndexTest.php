@@ -17,7 +17,7 @@ class IndexTest extends TestCase
 
         factory(DataCollectionRecord::class)->create([
             'product_id' => factory(Product::class)->create()->getKey(),
-            'quantity_collected' => rand(1, 10),
+            'quantity_scanned' => rand(1, 10),
         ]);
 
         $response = $this->actingAs($user, 'api')->getJson(route('data-collector.index'));
@@ -26,7 +26,7 @@ class IndexTest extends TestCase
 
         $response->assertOk();
 
-        $this->assertEquals(1, $response->json('meta.total'), 'No records returned');
+        $this->assertCount(1, $response->json('data'), 'No records returned');
 
         $response->assertJsonStructure([
             'meta',
