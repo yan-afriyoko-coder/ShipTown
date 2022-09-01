@@ -3,10 +3,7 @@
 namespace Tests\Feature\Http\Controllers\Api\DataCollectorController;
 
 use App\Models\DataCollection;
-use App\Models\DataCollectionRecord;
-use App\Models\Product;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class IndexTest extends TestCase
@@ -16,13 +13,7 @@ class IndexTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $dataCollection = factory(DataCollection::class)->create(['name' => 'test']);
-
-        factory(DataCollectionRecord::class)->create([
-            'data_collection_id' => $dataCollection->getKey(),
-            'product_id' => factory(Product::class)->create()->getKey(),
-            'quantity_scanned' => rand(1, 10),
-        ]);
+        factory(DataCollection::class)->create(['name' => 'test']);
 
         $response = $this->actingAs($user, 'api')->getJson(route('data-collector.index'));
 

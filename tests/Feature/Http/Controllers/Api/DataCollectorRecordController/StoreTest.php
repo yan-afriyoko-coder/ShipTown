@@ -1,7 +1,8 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\DataCollectorController;
+namespace Tests\Feature\Http\Controllers\Api\DataCollectorRecordController;
 
+use App\Models\DataCollection;
 use App\Models\Product;
 use App\User;
 use Tests\TestCase;
@@ -13,7 +14,10 @@ class StoreTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $response = $this->actingAs($user, 'api')->postJson(route('data-collector.store'), [
+        $dataCollection = factory(DataCollection::class)->create(['name' => 'test']);
+
+        $response = $this->actingAs($user, 'api')->postJson(route('data-collector-records.store'), [
+            'data_collection_id' => $dataCollection->getKey(),
             'product_id'=> factory(Product::class)->create()->getKey(),
             'quantity_scanned' => rand(0, 100),
         ]);
