@@ -28,19 +28,16 @@ class DataCollectionReport extends Report
             'quantity_requested'    => 'data_collection_records.quantity_requested',
             'quantity_scanned'      => 'data_collection_records.quantity_scanned',
             'quantity_to_scan'      => 'data_collection_records.quantity_to_scan',
-            'quantity_reserved'     => 'inventory.quantity_reserved',
-            'quantity_available'    => 'inventory.quantity_available',
-            'quantity_incoming'     => 'inventory.quantity_incoming',
             'shelf_location'        => 'inventory.shelve_location',
         ];
 
         $this->casts = [
+            'product_sku'           => 'string',
+            'product_name'          => 'string',
+            'shelf_location'        => 'string',
             'quantity_requested'    => 'float',
             'quantity_scanned'      => 'float',
             'quantity_to_scan'      => 'float',
-            'quantity_reserved'     => 'float',
-            'quantity_available'    => 'float',
-            'quantity_incoming'     => 'float',
         ];
 
         $this->addFilter(

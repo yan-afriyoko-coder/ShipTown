@@ -26,7 +26,7 @@ Route::view('picklist', 'picklist')->name('picklist');
 Route::view('orders', 'orders')->name('orders');
 Route::view('stocktaking', 'stocktaking')->name('stocktaking');
 Route::view('setting-profile', 'setting-profile')->name('setting-profile');
-Route::view('data-collector', 'vue-page')->name('data-collector');
+Route::get('data-collector', 'DataCollectorController@index')->name('data-collector');
 
 Route::get('shipping-labels/{shipping_label}', 'ShippingLabelController@show')->name('shipping-labels');
 
