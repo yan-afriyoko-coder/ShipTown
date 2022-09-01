@@ -35,6 +35,7 @@ import {
     faBoxOpen,
     faEdit,
     faMinus,
+    faPlus,
     faCheckCircle,
     faTimesCircle,
     faEnvelopeOpenText,
@@ -73,6 +74,7 @@ library.add(faPuzzlePiece);
 library.add(faBoxOpen);
 library.add(faEdit);
 library.add(faMinus);
+library.add(faPlus);
 library.add(faCheckCircle);
 library.add(faTimesCircle);
 library.add(faEnvelopeOpenText);
@@ -135,6 +137,7 @@ Vue.component('passport-personal-access-tokens', require('./components/Settings/
  * Pages
  */
 Vue.component('stocktaking-page', require('./components/StocktakingPage.vue').default);
+Vue.component('data-collector-list-page', require('./components/DataCollectorListPage.vue').default);
 Vue.component('data-collector-page', require('./components/DataCollectorPage.vue').default);
 
 /**

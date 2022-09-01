@@ -87,12 +87,16 @@ export default {
                 return axios.post('/api/stocktakes', data);
             },
 
-            apiPostDataCollection(data) {
-                return axios.post('/api/data-collector', data);
+            apiPostDataCollectorRecords(data) {
+                return axios.post('/api/data-collector-records', data);
             },
 
-            apiGetDataCollectionRecord(params) {
+            apiGetDataCollectorList(params) {
                 return axios.get('/api/data-collector', {params: params});
+            },
+
+            apiGetDataCollectorRecords(params) {
+                return axios.get('/api/data-collector-records', {params: params});
             },
 
             apiKickProduct: function(sku) {

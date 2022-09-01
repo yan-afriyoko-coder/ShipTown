@@ -13,20 +13,32 @@ class DataCollectionRecordsSeeder extends Seeder
      */
     public function run()
     {
+        /** @var DataCollectionRecord $dataCollection */
+        $dataCollection = \App\Models\DataCollection::query()->create([
+            'name' => 'Sample Data Collection',
+        ]);
+
         Product::query()
             ->inRandomOrder()
             ->limit(20)
             ->get()
-            ->each(function (Product $product) {
+            ->each(function (Product $product) use ($dataCollection) {
                 DataCollectionRecord::query()->firstOrCreate([
-                   'product_id' => $product->id,
+                    'data_collection_id' => $dataCollection->id,
+                    'product_id' => $product->id
                 ], [
-                    'quantity_requested' => 12,
+                    'quantity_requested' => 12
                 ]);
             });
 
         $product = Product::skuOrAlias('45')->first();
 
-        DataCollectionRecord::query()->firstOrCreate(['product_id' => $product->id], ['quantity_requested' => 12]);
+
+        DataCollectionRecord::query()->firstOrCreate([
+            'data_collection_id' => $dataCollection->id,
+            'product_id' => $product->id
+        ], [
+            'quantity_requested' => 12
+        ]);
     }
 }

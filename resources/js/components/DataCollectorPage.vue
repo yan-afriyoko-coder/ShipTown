@@ -62,6 +62,10 @@
                 SwipingCard,
             },
 
+            props: {
+                data_collection_id: null,
+            },
+
             data: function() {
                 return {
                     data: [],
@@ -103,9 +107,10 @@
                     this.showLoading();
 
                     const params = this.$router.currentRoute.query;
+                    params['filter[data_collection_id]'] = this.data_collection_id;
                     params['page'] = page;
 
-                    this.apiGetDataCollectionRecord(params)
+                    this.apiGetDataCollectorRecords(params)
                         .then((response) => {
                             if (page === 1) {
                                 this.data = response.data.data;
@@ -125,11 +130,12 @@
 
                 onProductCountRequestResponse(response) {
                     const payload = {
+                        'data_collection_id': this.data_collection_id,
                         'product_id': response['product_id'],
                         'quantity_scanned': response['quantity'],
                     }
 
-                    this.apiPostDataCollection(payload)
+                    this.apiPostDataCollectorRecords(payload)
                         .then(() => {
                             this.notifySuccess('Data collected');
                         })

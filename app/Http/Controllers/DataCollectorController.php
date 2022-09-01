@@ -7,20 +7,22 @@ use App\Modules\Reports\src\Models\DataCollectionReport;
 use App\Modules\Reports\src\Models\RestockingReport;
 use Illuminate\Http\Request;
 use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class DataCollectorController extends Controller
 {
     /**
      * @throws ContainerExceptionInterface
      * @throws InvalidSelectException
-     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public function index(Request $request)
+    public function index(Request $request, $id)
     {
-//        dd($request->all());
-        $report = new DataCollectionReport();
-        $report->view = 'vue-page';
+        if ($request->has('filename')) {
+            $report = new DataCollectionReport();
+            return $report->csvDownload();
+        }
 
-        return $report->response($request);
+        return view('data-collector-page', ['data_collection_id' => $id]);
     }
 }
