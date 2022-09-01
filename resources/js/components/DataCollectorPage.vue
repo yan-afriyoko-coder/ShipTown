@@ -5,10 +5,12 @@
                 <product-count-request-input-field @quantityRequestResponse="onProductCountRequestResponse" placeholder="Scan sku or alias"></product-count-request-input-field>
             </div>
 
-            <button type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+            <button v-b-modal="'configuration-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
-
+        <b-modal id="configuration-modal" centered no-fade hide-footer title="Data Collection">
+            <button type="button" @click.prevent="downloadFile" class="col btn mb-1 btn-primary">Download</button>
+        </b-modal>
 
         <template v-for="record in data">
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
@@ -35,12 +37,6 @@
         <div class="row"><div class="col">
                 <div ref="loadingContainerOverride" style="height: 50px"></div>
         </div></div>
-
-        <filters-modal ref="filtersModal">
-            <template v-slot:actions="slotScopes">
-                <button :disabled="true" type="button" @click.prevent="" class="col btn mb-1 btn-primary">Print Courier Label</button>
-            </template>
-        </filters-modal>
 
     </div>
 </template>
@@ -143,6 +139,14 @@
                         .finally(() => {
                             this.loadData();
                         });
+                },
+
+                downloadFile() {
+                    let routeData = this.$router.resolve({
+                        path: this.$router.currentRoute.fullPath,
+                        query: {filename: "test.csv"}
+                    });
+                    window.open(routeData.href, '_blank');
                 },
             },
     }
