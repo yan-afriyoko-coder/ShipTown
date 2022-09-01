@@ -86,7 +86,7 @@
 
                 this.data = [response].concat(this.data);
 
-                this.apiPostDataCollection(response)
+                this.apiPostDataCollectorRecords(response)
                     .then(() => {
                         this.loadData();
                     })

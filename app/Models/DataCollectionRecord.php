@@ -26,6 +26,7 @@ class DataCollectionRecord extends Model
      * @var string[]
      */
     protected $fillable = [
+        'data_collection_id',
         'product_id',
         'quantity_requested',
         'quantity_scanned',

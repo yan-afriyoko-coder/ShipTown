@@ -23,6 +23,7 @@ class DataCollectionReport extends Report
 
         $this->fields = [
             'id'                    => 'data_collection_records.id',
+            'data_collection_id'    => 'data_collection_records.data_collection_id',
             'product_sku'           => 'product.sku',
             'product_name'          => 'product.name',
             'quantity_requested'    => 'data_collection_records.quantity_requested',
@@ -32,6 +33,8 @@ class DataCollectionReport extends Report
         ];
 
         $this->casts = [
+            'id'                    => 'integer',
+            'data_collection_id'    => 'integer',
             'product_sku'           => 'string',
             'product_name'          => 'string',
             'shelf_location'        => 'string',

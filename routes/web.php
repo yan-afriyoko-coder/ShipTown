@@ -26,7 +26,8 @@ Route::view('picklist', 'picklist')->name('picklist');
 Route::view('orders', 'orders')->name('orders');
 Route::view('stocktaking', 'stocktaking')->name('stocktaking');
 Route::view('setting-profile', 'setting-profile')->name('setting-profile');
-Route::get('data-collector', 'DataCollectorController@index')->name('data-collector');
+Route::view('data-collector', 'data-collector-list')->name('data-collector');
+Route::get('data-collector/{data_collection_id}', 'DataCollectorController@index')->name('data-collector-show');
 
 Route::get('shipping-labels/{shipping_label}', 'ShippingLabelController@show')->name('shipping-labels');
 

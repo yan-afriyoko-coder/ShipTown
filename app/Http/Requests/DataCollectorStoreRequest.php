@@ -24,6 +24,7 @@ class DataCollectorStoreRequest extends FormRequest
     public function rules()
     {
         return [
+            'data_collection_id' => ['required', 'exists:data_collections,id'],
             'product_id' => ['required', 'exists:products,id'],
             'quantity_scanned' => ['required', 'numeric'],
         ];

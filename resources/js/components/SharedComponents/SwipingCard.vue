@@ -10,7 +10,7 @@
 
             <div class="swiper-slide">
                 <div class="row h-100">
-                    <div class="col ml-1 mr-1 p-2 pl-3 rounded">
+                    <div class="col ml-1 mr-1 p-2 pl-3 rounded content">
                         <slot name="content"></slot>
                     </div>
                 </div>
@@ -109,4 +109,11 @@ export default {
 .swiper-slide {
     height: auto;
 }
+
+.content:hover, .content:focus {
+    color: #495057;
+    text-decoration: none;
+    background-color: #f8f9fa;
+}
+
 </style>

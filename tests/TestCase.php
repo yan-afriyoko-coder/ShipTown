@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App\Models\CacheLock;
+use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
 use App\Models\Heartbeat;
 use App\Models\Inventory;
@@ -61,6 +62,7 @@ abstract class TestCase extends BaseTestCase
         Module::query()->forceDelete();
 
         RmsapiConnection::query()->forceDelete();
+        DataCollection::query()->forceDelete();
         DataCollectionRecord::query()->forceDelete();
 
         ModulesService::updateModulesTable();
