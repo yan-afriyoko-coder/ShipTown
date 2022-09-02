@@ -8,9 +8,12 @@
                                      @barcodeScanned="findText"></barcode-input-field>
             </div>
 
-            <button id="config-button" disabled type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+            <button v-b-modal="'configuration-modal'"  id="config-button" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
+        <b-modal id="configuration-modal" centered no-fade hide-footer title="Data Collection">
+            <button type="button" @click.prevent="downloadFileAndHideModal" class="col btn mb-1 btn-primary">Download</button>
+        </b-modal>
 
         <template v-for="record in data">
             <div class="row mb-3">
@@ -103,6 +106,16 @@
         },
 
         methods: {
+            downloadFileAndHideModal() {
+                let routeData = this.$router.resolve({
+                    path: this.$router.currentRoute.fullPath,
+                    query: {filename: "restocking-"+ this.getUrlParameter('filter[warehouse_code]')+".csv"}
+                });
+                window.open(routeData.href, '_blank');
+
+                this.$bvModal.hide('configuration-modal');
+            },
+
             loadMore() {
                 if (this.isLoading) {
                     return;

@@ -23,4 +23,23 @@ class TemporaryTable
 
         return DB::statement($finalQuery, $subQuery->getBindings());
     }
+
+    /**
+     * @param string $table_name
+     * @param string $columnsStatement
+     * @return bool
+     */
+    public static function createEmpty(
+        string $table_name,
+        string $columnsStatement = 'id bigint(20) unsigned NOT NULL AUTO_INCREMENT'
+    ): bool {
+        $finalQuery = sprintf(
+            /** @lang text */
+            'CREATE TEMPORARY TABLE %s (%s)',
+            $table_name,
+            $columnsStatement
+        );
+
+        return DB::statement($finalQuery);
+    }
 }
