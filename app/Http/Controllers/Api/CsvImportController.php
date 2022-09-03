@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class CsvImportController extends Controller
@@ -18,6 +18,7 @@ class CsvImportController extends Controller
      */
     private array $rules = [
         'data_collection_id' => ['required', 'exists:data_collections,id'],
+//        'data' => ['required', 'array'],
         'data.*.product_sku' => ['required_if:product_id,null', 'string'],
         'data.*.product_id' => ['required_if:product_sku,null', 'integer'],
         'data.*.quantity_requested' => ['sometimes', 'numeric'],
@@ -50,7 +51,6 @@ class CsvImportController extends Controller
             WHERE ' . $tempTableName . '.product_id IS NULL
         ');
 
-
         $skuNotFoundErrors = DB::table($tempTableName)
             ->whereNull('product_id')
             ->select('product_sku')
@@ -59,7 +59,6 @@ class CsvImportController extends Controller
                 return 'SKU not found: ' . $item->product_sku;
             })
             ->filter();
-
 
         if ($skuNotFoundErrors->isNotEmpty()) {
             throw ValidationException::withMessages($skuNotFoundErrors->toArray());
@@ -83,5 +82,7 @@ class CsvImportController extends Controller
 
             FROM ' . $tempTableName . '
         ');
+
+        return JsonResource::make(['success' => true]);
     }
 }
