@@ -14,19 +14,10 @@ class AddForeignKeyToDataCollectionRecordsTable extends Migration
     public function up()
     {
         Schema::table('data_collection_records', function (Blueprint $table) {
-            $table->foreign('product_id')->references('id')->on('products');
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('data_collection_records', function (Blueprint $table) {
-            //
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products')
+                ->onDelete('cascade');
         });
     }
 }
