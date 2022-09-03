@@ -1,3 +1,10 @@
+/* @license
+Papa Parse
+v5.3.2
+https://github.com/mholt/PapaParse
+License: MIT
+*/
+
 /*!
   * Bootstrap v4.6.1 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
@@ -38,6 +45,19 @@
  * https://jquery.org/license
  *
  * Date: 2021-03-02T17:08Z
+ */
+
+/*!
+ * mime-db
+ * Copyright(c) 2014 Jonathan Ong
+ * MIT Licensed
+ */
+
+/*!
+ * mime-types
+ * Copyright(c) 2014 Jonathan Ong
+ * Copyright(c) 2015 Douglas Christopher Wilson
+ * MIT Licensed
  */
 
 /*! 

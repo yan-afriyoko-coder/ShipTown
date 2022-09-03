@@ -26,17 +26,13 @@ class StoreTest extends TestCase
 
         $response->assertSuccessful();
 
-        $this->assertCount(1, $response->json('data'), 'No records returned');
-
         $response->assertJsonStructure([
             'data' => [
-                '*' => [
-                    'id',
-                    'product_id',
-                    'quantity_requested',
-                    'quantity_scanned',
-                    'quantity_to_scan',
-                ],
+                'id',
+                'product_id',
+                'quantity_requested',
+                'quantity_to_scan',
+                'quantity_scanned',
             ],
         ]);
     }

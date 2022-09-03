@@ -5,11 +5,50 @@
                 <product-count-request-input-field @quantityRequestResponse="onProductCountRequestResponse" placeholder="Scan sku or alias"></product-count-request-input-field>
             </div>
 
-            <button v-b-modal="'configuration-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+            <button v-b-modal="'configuration-modal'"type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
+
+
         <b-modal id="configuration-modal" centered no-fade hide-footer title="Data Collection">
-            <button type="button" @click.prevent="downloadFile" class="col btn mb-1 btn-primary">Download</button>
+            <a :href="getDownloadLink"  @click.prevent="downloadFileAndHideModal" v-b-toggle class="col btn mb-1 btn-primary">Download</a>
+            <hr>
+            <vue-csv-import
+                v-model="csv"
+                headers
+                autoMatchFields
+                loadBtnText="Load"
+                :map-fields="['product_sku', 'quantity_requested']">
+
+                <template slot="hasHeaders" slot-scope="{headers, toggle}">
+                    <label>
+                        <input type="checkbox" id="hasHeaders" :value="headers" @change="toggle">
+                        Headers?
+                    </label>
+                </template>
+
+                <template slot="error">
+                    File type is invalid
+                </template>
+
+                <template slot="thead">
+                    <tr>
+                        <th>My Fields</th>
+                        <th>Column</th>
+                    </tr>
+                </template>
+
+                <!--            <template slot="next" slot-scope="{load}">-->
+                <!--                <button @click.prevent="load"></button>-->
+                <!--            </template>-->
+
+                <template slot="submit" slot-scope="{submit}">
+                    <button @click.prevent="submit">send!</button>
+                </template>
+            </vue-csv-import>
+
+            <button v-if="csv" type="button" @click.prevent="postCsvRecordsToApiAndCloseModal" class="col btn mb-1 btn-primary">Import Records</button>
+
         </b-modal>
 
         <template v-for="record in data">
@@ -52,6 +91,7 @@
     import Vue from "vue";
     import NumberCard from "./SharedComponents/NumberCard";
     import SwipingCard from "./SharedComponents/SwipingCard";
+    import { VueCsvImport } from 'vue-csv-import';
 
     export default {
             mixins: [loadingOverlay, beep, url, api, helpers],
@@ -60,6 +100,7 @@
                 FiltersModal,
                 NumberCard,
                 SwipingCard,
+                VueCsvImport
             },
 
             props: {
@@ -71,6 +112,8 @@
                     data: [],
                     nextUrl: null,
                     page: 1,
+                    per_page: 10,
+                    csv: null,
                 };
             },
 
@@ -79,6 +122,7 @@
                     this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
                     return;
                 }
+
                 this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
 
                 window.onscroll = () => this.loadMoreWhenNeeded();
@@ -100,6 +144,13 @@
                         return;
                     }
 
+                    // we double per_page every second page load to avoid hitting the API too hard
+                    // and we will limit it to 100-ish per_page
+                    if ((this.page % 2 === 0) && (this.per_page < 100)) {
+                        this.page = this.page/ 2;
+                        this.per_page = this.per_page * 2;
+                    }
+
                     this.loadData(++this.page);
                 },
 
@@ -108,6 +159,7 @@
 
                     const params = this.$router.currentRoute.query;
                     params['filter[data_collection_id]'] = this.data_collection_id;
+                    params['per_page'] = this.per_page;
                     params['page'] = page;
 
                     this.apiGetDataCollectorRecords(params)
@@ -147,14 +199,54 @@
                         });
                 },
 
-                downloadFile() {
+                postCsvRecordsToApiAndCloseModal() {
+                    const data = this.csv.map(record => ({
+                        'product_sku': record.product_sku,
+                        'quantity_requested': record.quantity_requested,
+                    }));
+
+                    //we removing header row from csv
+                    data.shift();
+
+                    const payload = {
+                        'data_collection_id': this.data_collection_id,
+                        'data': data,
+                    }
+
+                    this.apiPostCsvImport(payload)
+                        .then(() => {
+                            this.notifySuccess('Records imported');
+                            this.$bvModal.hide('configuration-modal');
+                        })
+                        .catch(e => {
+                            this.displayApiCallError(e);
+                        })
+                        .finally(() => {
+                            this.loadData();
+                        });
+                },
+
+                downloadFileAndHideModal($event) {
                     let routeData = this.$router.resolve({
                         path: this.$router.currentRoute.fullPath,
                         query: {filename: "test.csv"}
                     });
-                    window.open(routeData.href, '_blank');
+
+                    window.location = routeData.href;
+
+                    this.$bvModal.hide('configuration-modal');
                 },
             },
+        computed: {
+            getDownloadLink() {
+                let routeData = this.$router.resolve({
+                    path: this.$router.currentRoute.fullPath,
+                    query: {filename: "test.csv"}
+                });
+
+                return routeData.href;
+            },
+        },
     }
     </script>
 

@@ -5,10 +5,15 @@
                 <product-count-request-input-field @quantityRequestResponse="onProductCountRequestResponse" placeholder="Scan sku or alias"></product-count-request-input-field>
             </div>
 
-            <button disabled v-b-modal="'configuration-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="plus" class="fa-lg"></font-awesome-icon><font-awesome-icon icon="fa-solid fa-plus" /></button>
+            <button v-b-modal="'new-collection-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="plus" class="fa-lg"></font-awesome-icon></button>
+            <button disabled v-b-modal="'configuration-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
-        <b-modal id="configuration-modal" centered no-fade hide-footer title="Data Collection">
+        <b-modal id="new-collection-modal" centered no-fade hide-footer title="New Dats Collection">
+            <barcode-input-field @barcodeScanned="createCollctionAndRedirect" placeholder="New Collection name"></barcode-input-field>
+        </b-modal>
+
+        <b-modal id="configuration-modal" autofocus centered no-fade hide-footer title="Data Collection">
             <button type="button" @click.prevent="downloadFile" class="col btn mb-1 btn-primary">Download</button>
         </b-modal>
 
@@ -76,6 +81,24 @@
             },
 
             methods: {
+                createCollctionAndRedirect(name) {
+                    const payload = {
+                        'name': name,
+                    }
+
+                    this.apiPostDataCollection(payload)
+                        .then(() => {
+                            this.notifySuccess('Data collected');
+                            this.$bvModal.hide('new-collection-modal');
+                        })
+                        .catch(e => {
+                            this.displayApiCallError(e);
+                        })
+                        .finally(() => {
+                            this.loadData();
+                        });
+                },
+
                 loadMoreWhenNeeded() {
                     if (this.isLoading) {
                         return;
@@ -96,6 +119,7 @@
                     this.showLoading();
 
                     const params = this.$router.currentRoute.query;
+                    params['sort'] = this.getUrlParameter('sort', '-created_at');
                     params['page'] = page;
 
                     this.apiGetDataCollectorList(params)

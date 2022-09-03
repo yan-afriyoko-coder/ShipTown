@@ -87,6 +87,14 @@ export default {
                 return axios.post('/api/stocktakes', data);
             },
 
+            apiPostCsvImport(data) {
+                return axios.post('/api/csv-import', data);
+            },
+
+            apiPostDataCollection(data) {
+                return axios.post('/api/data-collector', data);
+            },
+
             apiPostDataCollectorRecords(data) {
                 return axios.post('/api/data-collector-records', data);
             },

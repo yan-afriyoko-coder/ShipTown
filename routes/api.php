@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::apiResource('csv-import', 'Api\CsvImportController')->only(['store']);
 
 Route::put('print/order/{order_number}/{view}', 'Api\PrintOrderController@store');
 
@@ -42,7 +43,7 @@ Route::apiResource('product/tags', 'Api\Product\ProductTagController')->only(['i
 
 Route::apiResource('inventory-movements', 'Api\InventoryMovementController')->only(['store', 'index']);
 Route::apiResource('stocktakes', 'Api\StocktakesController')->only(['store']);
-Route::apiResource('data-collector', 'Api\DataCollectorController')->only(['index']);
+Route::apiResource('data-collector', 'Api\DataCollectorController')->only(['index', 'store']);
 Route::apiResource('data-collector-records', 'Api\DataCollectorRecordController')->only(['store', 'index']);
 
 Route::apiResource('order-check-request', 'Api\OrderCheckRequestController')->only(['store']);

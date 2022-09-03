@@ -4,6 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ *
+ */
 class DataCollectorStoreRequest extends FormRequest
 {
     /**
@@ -11,7 +14,7 @@ class DataCollectorStoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,12 +24,14 @@ class DataCollectorStoreRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'data_collection_id' => ['required', 'exists:data_collections,id'],
-            'product_id' => ['required', 'exists:products,id'],
-            'quantity_scanned' => ['required', 'numeric'],
+            'product_sku' => ['required_if:product_id,null', 'exists:products_aliases,alias'],
+            'product_id' => ['required_if:product_sku,null', 'exists:products,id'],
+            'quantity_requested' => ['sometimes', 'numeric'],
+            'quantity_scanned' => ['sometimes', 'numeric'],
         ];
     }
 }
