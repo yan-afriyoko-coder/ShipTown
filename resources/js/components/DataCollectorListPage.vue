@@ -6,11 +6,10 @@
             </div>
 
             <button v-b-modal="'new-collection-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="plus" class="fa-lg"></font-awesome-icon></button>
-            <button disabled v-b-modal="'configuration-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
-        <b-modal id="new-collection-modal" centered no-fade hide-footer title="New Dats Collection">
-            <barcode-input-field @barcodeScanned="createCollctionAndRedirect" placeholder="New Collection name"></barcode-input-field>
+        <b-modal id="new-collection-modal" centered no-fade hide-header title="New Dats Collection" @shown="setFocusElementById(10, 'collection_name_input')">
+            <input id="collection_name_input" type="text" class="form-control" @keyup.enter="createCollectionAndRedirect" placeholder="New Collection name">
         </b-modal>
 
         <b-modal id="configuration-modal" autofocus centered no-fade hide-footer title="Data Collection">
@@ -73,6 +72,7 @@
                     this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
                     return;
                 }
+
                 this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
 
                 window.onscroll = () => this.loadMoreWhenNeeded();
@@ -81,9 +81,9 @@
             },
 
             methods: {
-                createCollctionAndRedirect(name) {
+                createCollectionAndRedirect(event) {
                     const payload = {
-                        'name': name,
+                        'name': event.target.value,
                     }
 
                     this.apiPostDataCollection(payload)

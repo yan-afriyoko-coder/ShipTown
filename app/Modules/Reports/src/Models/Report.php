@@ -275,6 +275,7 @@ class Report extends Model
 
     /**
      * @return array
+     * @throws \Exception
      */
     private function addBetweenDatesFilters(): array
     {
@@ -288,11 +289,10 @@ class Report extends Model
                 $filterName = $fieldAlias . '_between';
                 $fieldQuery = $this->fields[$fieldAlias];
 
-                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($fieldType, $fieldAlias, $fieldQuery) {
+                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($fieldType, $fieldAlias, $filterName, $fieldQuery) {
                     // we add this to make sure query returns no records if array of two values is not specified
                     if ((!is_array($value)) or (count($value) != 2)) {
-                        $query->whereRaw('1=2');
-                        return;
+                        throw new \Exception($filterName.': Invalid filter value, expected array of two values');
                     }
 
                     if ($fieldQuery instanceof Expression) {
@@ -313,8 +313,32 @@ class Report extends Model
 
     /**
      * @return array
+     * @throws \Exception
      */
     private function addGreaterThan(): array
+    {
+        $allowedFilters = [];
+
+        collect($this->casts)
+            ->filter(function ($type) {
+                return in_array($type, ['string', 'datetime']);
+            })
+            ->each(function ($record, $alias) use (&$allowedFilters) {
+                $filterName = $alias . '_greater_than';
+
+                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($alias, $filterName) {
+                    $query->where($this->fields[$alias], '>', $value);
+                });
+            });
+
+        return $allowedFilters;
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    private function addGreaterThanFloat(): array
     {
         $allowedFilters = [];
 
@@ -325,13 +349,7 @@ class Report extends Model
             ->each(function ($record, $alias) use (&$allowedFilters) {
                 $filterName = $alias . '_greater_than';
 
-                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($alias) {
-                    // we add this to make sure query returns no records if array of two values is not specified
-                    if ((!is_array($value)) or (count($value) != 2)) {
-                        $query->whereRaw('1=2');
-                        return;
-                    }
-
+                $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($alias, $filterName) {
                     $query->where($this->fields[$alias], '>', floatval($value));
                 });
             });

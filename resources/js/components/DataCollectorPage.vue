@@ -1,14 +1,53 @@
 <template>
     <div>
+        <swiping-card>
+            <template v-slot:content>
+                    <div class="row setting-list">
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="text-primary h5">{{ dataCollection ? dataCollection['data']['0']['name'] : '' }}</div>
+                            <div class="small text-secondary">{{ dataCollection ? dataCollection['data']['0']['created_at'] : ''  }}</div>
+                        </div>
+                    </div>
+            </template>
+        </swiping-card>
+
         <div class="row mb-3 pl-1 pr-1 bg-white">
             <div class="flex-fill">
                 <product-count-request-input-field @quantityRequestResponse="onProductCountRequestResponse" placeholder="Scan sku or alias"></product-count-request-input-field>
             </div>
 
-            <button v-b-modal="'configuration-modal'"type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+            <barcode-input-field :url_param_name="'filter[shelf_location_greater_than]'" @barcodeScanned="setMinShelfLocation" placeholder="shelf" style="width: 75px" class="text-center ml-2 font-weight-bold"></barcode-input-field>
+
+            <button v-b-modal="'configuration-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
+        <template v-for="record in data">
+            <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
+                <template v-slot:content>
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-6 ">
+                            <div class="text-primary h5">{{ record['product_name'] }}</div>
+                            <div>
+                                product: <b><a target="_blank" :href="'/products?sku=' + record['product_sku']">{{ record['product_sku'] }}</a></b>
+                            </div>
+                        </div>
 
+                        <div class="row-cols col-sm-12 col-lg-6 text-right">
+                            <number-card label="requested" :number="record['quantity_requested']" v-if="record['quantity_requested']"></number-card>
+                            <number-card label="scanned" :number="record['quantity_scanned']" v-bind:class="{ 'bg-warning': record['quantity_requested'] && record['quantity_scanned'] > record['quantity_requested'] }"></number-card>
+                            <number-card label="to scan" :number="record['quantity_to_scan']" v-if="record['quantity_requested']"></number-card>
+                            <text-card label="shelf" :text="record['shelf_location']"></text-card>
+                        </div>
+                    </div>
+                </template>
+            </swiping-card>
+        </template>
+
+        <div class="row">
+            <div class="col">
+                <div ref="loadingContainerOverride" style="height: 50px"></div>
+            </div>
+        </div>
 
         <b-modal id="configuration-modal" centered no-fade hide-footer title="Data Collection">
             <a :href="getDownloadLink"  @click.prevent="downloadFileAndHideModal" v-b-toggle class="col btn mb-1 btn-primary">Download</a>
@@ -38,10 +77,6 @@
                     </tr>
                 </template>
 
-                <!--            <template slot="next" slot-scope="{load}">-->
-                <!--                <button @click.prevent="load"></button>-->
-                <!--            </template>-->
-
                 <template slot="submit" slot-scope="{submit}">
                     <button @click.prevent="submit">send!</button>
                 </template>
@@ -50,32 +85,6 @@
             <button v-if="csv" type="button" @click.prevent="postCsvRecordsToApiAndCloseModal" class="col btn mb-1 btn-primary">Import Records</button>
 
         </b-modal>
-
-        <template v-for="record in data">
-            <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
-                <template v-slot:content>
-                    <div class="row">
-                        <div class="col-sm-12 col-lg-6 ">
-                            <div class="text-primary h5">{{ record['product_name'] }}</div>
-                            <div>
-                                product: <b><a target="_blank" :href="'/products?sku=' + record['product_sku']">{{ record['product_sku'] }}</a></b>
-                            </div>
-                        </div>
-
-                        <div class="row-cols col-sm-12 col-lg-6 text-right">
-                            <number-card label="requested" :number="record['quantity_requested']" v-if="record['quantity_requested']"></number-card>
-                            <number-card label="scanned" :number="record['quantity_scanned']" v-bind:class="{ 'bg-warning': record['quantity_requested'] && record['quantity_scanned'] > record['quantity_requested'] }"></number-card>
-                            <number-card label="to scan" :number="record['quantity_to_scan']" v-if="record['quantity_requested']"></number-card>
-                            <text-card label="shelf" :text="record['shelf_location']"></text-card>
-                        </div>
-                    </div>
-                </template>
-            </swiping-card>
-        </template>
-
-        <div class="row"><div class="col">
-                <div ref="loadingContainerOverride" style="height: 50px"></div>
-        </div></div>
 
     </div>
 </template>
@@ -109,6 +118,7 @@
 
             data: function() {
                 return {
+                    dataCollection: null,
                     data: [],
                     nextUrl: null,
                     page: 1,
@@ -128,6 +138,11 @@
                 window.onscroll = () => this.loadMoreWhenNeeded();
 
                 this.loadData();
+
+                this.apiGetDataCollectorList({'filter[id]': this.data_collection_id})
+                    .then(response => {
+                        this.dataCollection = response.data;
+                    });
             },
 
             methods: {
@@ -152,6 +167,11 @@
                     }
 
                     this.loadData(++this.page);
+                },
+
+                setMinShelfLocation (shelfLocation) {
+                    this.setUrlParameter( "filter[shelf_location_greater_than]", shelfLocation);
+                    this.loadData();
                 },
 
                 loadData(page = 1) {
