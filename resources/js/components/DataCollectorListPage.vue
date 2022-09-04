@@ -6,7 +6,6 @@
             </div>
 
             <button v-b-modal="'new-collection-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="plus" class="fa-lg"></font-awesome-icon></button>
-            <button disabled v-b-modal="'configuration-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
         <b-modal id="new-collection-modal" centered no-fade hide-footer title="New Dats Collection">

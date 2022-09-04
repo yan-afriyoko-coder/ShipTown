@@ -5,9 +5,10 @@
                 <product-count-request-input-field @quantityRequestResponse="onProductCountRequestResponse" placeholder="Scan sku or alias"></product-count-request-input-field>
             </div>
 
-            <button v-b-modal="'configuration-modal'"type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
-        </div>
+            <barcode-input-field @barcodeScanned="setMinShelfLocation" placeholder="shelf" style="width: 75px" class="text-center ml-2 font-weight-bold"></barcode-input-field>
 
+            <button v-b-modal="'configuration-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+        </div>
 
 
         <b-modal id="configuration-modal" centered no-fade hide-footer title="Data Collection">
@@ -73,9 +74,11 @@
             </swiping-card>
         </template>
 
-        <div class="row"><div class="col">
+        <div class="row">
+            <div class="col">
                 <div ref="loadingContainerOverride" style="height: 50px"></div>
-        </div></div>
+            </div>
+        </div>
 
     </div>
 </template>
@@ -152,6 +155,11 @@
                     }
 
                     this.loadData(++this.page);
+                },
+
+                setMinShelfLocation (shelfLocation) {
+                    this.setUrlParameter( "filter[shelf_location_greater_than]", shelfLocation);
+                    this.loadData();
                 },
 
                 loadData(page = 1) {
