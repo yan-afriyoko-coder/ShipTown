@@ -10,7 +10,7 @@
                @keyup.enter="barcodeScanned(barcode)"
         />
 
-      <b-modal id="set-shelf-location-command-modal" @submit="updateShelfLocation" scrollable centered no-fade hide-header>
+      <b-modal :id="getModalID" @submit="updateShelfLocation" @show="updateShelfLocationShow" @hidden="updateShelfLocationHidden" scrollable centered no-fade hide-header>
           <div class="h5 text-center">{{ command['name'] }} : {{ command['value'] }}</div>
           <div v-if="shelfLocationModalContinuesScan" class="alert-success text-center mb-2 small">CONTINUES SCAN ENABLED</div>
 
@@ -46,6 +46,13 @@
             placeholder: '',
         },
 
+
+        computed: {
+            getModalID() {
+                return `set-shelf-location-command-modal-${Math.floor(Math.random() * 10000000)}`;
+            }
+        },
+
         data: function() {
             return {
                 currentLocation: '',
@@ -62,27 +69,27 @@
         mounted() {
             this.resetInputValue();
             this.setFocusOnBarcodeInput();
+        },
 
-            this.$root.$on('bv::modal::hidden', (bvEvent, modalId) => {
-                this.shelfLocationModalShowing = false;
-                this.shelfLocationModalContinuesScan = false;
-                this.shelfLocationModalCommandScanCount = 0;
-                this.resetInputValue();
-                this.setFocusElementById(300, 'barcodeInput', true, true)
-                this.$emit('refreshRequest');
-            })
-
-            this.$root.$on('bv::modal::show', (bvEvent, modalId) => {
+        methods: {
+            updateShelfLocationShow: function (bvEvent, modalId) {
                 this.shelfLocationModalShowing = true;
                 this.shelfLocationModalContinuesScan = false;
                 this.shelfLocationModalCommandScanCount = 0;
                 // we need to disable it otherwise b-modal might return focus on it too quickly
                 // and on screen keyboard will stay visible
                 document.getElementById('barcodeInput').readOnly = true;
-            })
-        },
+            },
 
-        methods: {
+            updateShelfLocationHidden: function (bvEvent, modalId) {
+                this.shelfLocationModalShowing = false;
+                this.shelfLocationModalContinuesScan = false;
+                this.shelfLocationModalCommandScanCount = 0;
+                this.resetInputValue();
+                this.setFocusElementById(300, 'barcodeInput', true, true)
+                this.$emit('refreshRequest');
+            },
+
             resetInputValue: function () {
                 if (this.url_param_name) {
                     this.barcode = this.getUrlParameter(this.url_param_name);
@@ -90,7 +97,7 @@
             },
 
             showShelfLocationModal: function () {
-                this.$bvModal.show('set-shelf-location-command-modal')
+                this.$bvModal.show(this.getModalID);
                 this.warningBeep();
                 this.setFocusElementById(1, 'set-shelf-location-command-modal-input')
             },
