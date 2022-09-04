@@ -38,6 +38,12 @@ export default {
         disableSwipeRight: false,
     },
 
+    computed: {
+        getElementId() {
+            return `swiping-card-${Math.floor(Math.random() * 10000000)}`;
+        }
+    },
+
     mounted() {
         let swipedRightIndex = 0;
         let swipedLeftIndex = 2;
@@ -75,12 +81,6 @@ export default {
 
             this.slideTo(initialSlide,0,false);
         });
-    },
-
-    computed: {
-        getElementId() {
-            return `swiping-card-${Math.floor(Math.random() * 10000000)}`;
-        }
     },
 }
 </script>
