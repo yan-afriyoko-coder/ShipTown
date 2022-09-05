@@ -24,11 +24,11 @@ class StoreConfigurationRmsApiRequest extends FormRequest
     public function rules()
     {
         return [
-            'location_id'    => 'required',
-            'url'            => 'required|url',
-            'username'       => 'required',
-            'password'       => 'required',
-            'warehouse_code' => 'sometimes|max:5|exist2s:warehouse,code',
+            'location_id'    => ['required_if:id,null'],
+            'url'            => 'required_if:id,null|url',
+            'username'       => 'required_if:id,null',
+            'password'       => 'required_if:id,null',
+            'warehouse_code' => 'sometimes|max:5|exists:warehouse,code',
         ];
     }
 }

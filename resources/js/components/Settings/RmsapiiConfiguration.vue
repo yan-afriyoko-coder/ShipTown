@@ -35,6 +35,7 @@
                             </td>
                             <td>
                                 <a @click="confirmDelete(configuration.id, i)" class="action-link text-danger">DELETE</a>
+                                <a @click="changePassword(configuration.id, i)" class="action-link text-danger">CHANGE PASSWORD</a>
                             </td>
                         </tr>
                     </tbody>
@@ -120,6 +121,36 @@
                 this.$nextTick(() => {
                     this.$refs.formModal.hide();
                 });
+            },
+
+            changePassword(id, index){
+                this.$snotify.prompt('Enter new password', 'Change Password', {
+                    buttons: [
+                        {text: 'Cancel', action: (toast) => { this.$snotify.remove(toast.id) }},
+                        {text: 'Ok', action: (toast) => {
+                                this.apiPostRmsapiConnections({id: id, password: toast.value})
+                                    .then(({ data }) => {
+                                        this.$snotify.success('Password changed successfully');
+                                        this.$snotify.remove(toast.id);
+                                    })
+                                    .catch(({ response }) => {
+                                        this.$snotify.error(response.data.message);
+                                        this.$snotify.remove(toast.id);
+                                    })
+                                    .finally(() => {
+                                        this.$snotify.remove(toast.id);
+                                    });
+                            }
+                        }
+                    ]
+                });
+                this.apiPostRmsapiConnections({
+                    id: id,
+                    password: 'password'
+                })
+                    .then(({ data }) => {
+                        this.configurations[index]['password'] = 'password';
+                    });
             },
 
             confirmDelete(id, index){

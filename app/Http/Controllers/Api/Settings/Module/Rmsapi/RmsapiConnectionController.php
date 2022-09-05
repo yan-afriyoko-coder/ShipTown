@@ -10,6 +10,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Crypt;
 
 /**
  * Class RmsapiConnectionController.
@@ -31,11 +32,10 @@ class RmsapiConnectionController extends Controller
      */
     public function store(StoreConfigurationRmsApiRequest $request)
     {
-        $config = new RmsapiConnection();
-        $config->fill($request->only($config->getFillable()));
-        $config->save();
+        $rmsapiConnection = RmsapiConnection::query()
+            ->updateOrCreate(['id' => $request->get('id')], $request->validated());
 
-        return new RmsapiConnectionResource($config);
+        return new RmsapiConnectionResource($rmsapiConnection);
     }
 
     /**
