@@ -196,6 +196,9 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <table class="table-borderless table-hover border-0">
+                                      <tr><td class="font-weight-bold">email:</td><td><a :href="'mailto:' + order['shipping_address']['email'] + '?subject=Order #' + order['order_number']">{{ order['shipping_address']['email'] }} </a></td></tr>
+                                      <tr class="pb-2"><td class="font-weight-bold">phone:</td><td> {{ order['shipping_address']['phone'] }}</td></tr>
+                                      <tr><td class="font-weight-bold"></td><td> &nbsp;</td></tr>
                                       <tr><td class="font-weight-bold">first_name:</td><td> {{ order['shipping_address']['first_name'] }}</td></tr>
                                       <tr><td class="font-weight-bold">last_name:</td><td> {{ order['shipping_address']['last_name'] }}</td></tr>
                                       <tr><td class="font-weight-bold">company:</td><td> {{ order['shipping_address']['company'] }}</td></tr>
@@ -203,8 +206,6 @@
                                       <tr><td class="font-weight-bold">address2:</td><td> {{ order['shipping_address']['address2'] }}</td></tr>
                                       <tr><td class="font-weight-bold">postcode:</td> <td>{{ order['shipping_address']['postcode'] }}</td></tr>
                                       <tr><td class="font-weight-bold">city:</td><td> {{ order['shipping_address']['city'] }}</td></tr>
-                                      <tr><td class="font-weight-bold">phone:</td><td> {{ order['shipping_address']['phone'] }}</td></tr>
-                                      <tr><td class="font-weight-bold">email:</td><td> {{ order['shipping_address']['email'] }}</td></tr>
                                       <tr><td class="font-weight-bold">country_code:</td><td> {{ order['shipping_address']['country_code'] }}</td></tr>
                                       <tr><td class="font-weight-bold">country_name:</td><td> {{ order['shipping_address']['country_name'] }}</td></tr>
                                       <tr><td class="font-weight-bold">fax:</td><td> {{ order['shipping_address']['fax'] }}</td></tr>
