@@ -197,7 +197,7 @@
                             <div class="col-md-6">
                                 <table class="table-borderless table-hover border-0">
                                       <tr><td class="font-weight-bold">email:</td><td><a :href="'mailto:' + order['shipping_address']['email'] + '?subject=Order #' + order['order_number']">{{ order['shipping_address']['email'] }} </a></td></tr>
-                                      <tr class="pb-2"><td class="font-weight-bold">phone:</td><td> {{ order['shipping_address']['phone'] }}</td></tr>
+                                      <tr class="pb-2"><td class="font-weight-bold">phone:</td><td><a :href="'tel:' + order['shipping_address']['phone']">{{ order['shipping_address']['phone'] }}</a> </td></tr>
                                       <tr><td class="font-weight-bold"></td><td> &nbsp;</td></tr>
                                       <tr><td class="font-weight-bold">first_name:</td><td> {{ order['shipping_address']['first_name'] }}</td></tr>
                                       <tr><td class="font-weight-bold">last_name:</td><td> {{ order['shipping_address']['last_name'] }}</td></tr>
