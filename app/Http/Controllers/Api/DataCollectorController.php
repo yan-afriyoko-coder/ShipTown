@@ -21,10 +21,10 @@ class DataCollectorController extends Controller
             ->simplePaginate(request()->get('per_page', 10))
             ->appends(request()->query());
 
-        return DataCollectionResource::collection($resource);
+        return JsonResource::collection($resource);
     }
 
-    public function store(ApiDataCollectorStoreRequest $request)
+    public function store(ApiDataCollectorStoreRequest $request): DataCollectionResource
     {
         $dataCollection = DataCollection::create($request->validated());
 

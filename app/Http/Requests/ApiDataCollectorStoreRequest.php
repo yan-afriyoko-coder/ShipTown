@@ -24,6 +24,7 @@ class ApiDataCollectorStoreRequest extends FormRequest
     public function rules()
     {
         return [
+            'warehouse_id' => ['required', 'exists:warehouses,id'],
             'name' => ['required', 'string'],
         ];
     }
