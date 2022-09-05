@@ -4,6 +4,7 @@ namespace Tests\Feature\Http\Controllers\Api\CsvImportController;
 
 use App\Models\DataCollection;
 use App\Models\Product;
+use App\Models\Warehouse;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -17,7 +18,13 @@ class StoreTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $dataCollection = factory(DataCollection::class)->create(['name' => 'test']);
+        /** @var Warehouse $warehouse */
+        $warehouse = factory(Warehouse::class)->create();
+
+        $dataCollection = factory(DataCollection::class)->create([
+            'warehouse_id' => $warehouse->id,
+            'name' => 'test'
+        ]);
 
         /** @var Product $product */
         $product = factory(Product::class)->create();
