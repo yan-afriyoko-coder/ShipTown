@@ -3,6 +3,7 @@
 namespace Tests\Feature\Routes\Web\Data_collector;
 
 use App\Models\DataCollection;
+use App\Models\Warehouse;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -52,7 +53,10 @@ class Data_collection_idTest extends TestCase
     {
         $this->actingAs($this->user, 'web');
 
-        $dataCollection = factory(DataCollection::class)->create(['name' => 'test']);
+        $dataCollection = factory(DataCollection::class)->create([
+            'warehouse_id' => factory(Warehouse::class)->create()->getKey(),
+            'name' => 'test'
+        ]);
 
         $response = $this->get($this->uri . '/' . $dataCollection->id);
 
@@ -66,7 +70,10 @@ class Data_collection_idTest extends TestCase
 
         $this->actingAs($this->user, 'web');
 
-        $dataCollection = factory(DataCollection::class)->create(['name' => 'test']);
+        $dataCollection = factory(DataCollection::class)->create([
+            'warehouse_id' => factory(Warehouse::class)->create()->getKey(),
+            'name' => 'test'
+        ]);
 
         $response = $this->get($this->uri . '/' . $dataCollection->id);
 
