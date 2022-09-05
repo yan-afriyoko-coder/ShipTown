@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers\Api\DataCollectorController;
 
 use App\Models\DataCollection;
+use App\Models\Warehouse;
 use App\User;
 use Tests\TestCase;
 
@@ -13,7 +14,13 @@ class IndexTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        factory(DataCollection::class)->create(['name' => 'test']);
+        /** @var Warehouse $warehouse */
+        $warehouse = factory(Warehouse::class)->create();
+
+        factory(DataCollection::class)->create([
+            'warehouse_id' => $warehouse->id,
+            'name' => 'test'
+        ]);
 
         $response = $this->actingAs($user, 'api')->getJson(route('data-collector.index'));
 

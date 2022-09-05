@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Api\DataCollectorController;
 
+use App\Models\Warehouse;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -13,9 +14,11 @@ class StoreTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $response = $this->actingAs($user, 'api')->postJson(route('data-collector.store'), [
-            'name' => 'test',
-        ]);
+        $response = $this->actingAs($user, 'api')
+            ->postJson(route('data-collector.store'), [
+                'warehouse_id' => factory(Warehouse::class)->create()->getKey(),
+                'name' => 'test',
+            ]);
 
         ray($response->json());
 
