@@ -2,7 +2,7 @@
     <div>
         <div class="row mb-3 pl-1 pr-1 bg-white">
             <div class="flex-fill">
-                <product-count-request-input-field @quantityRequestResponse="onProductCountRequestResponse" placeholder="Scan sku or alias"></product-count-request-input-field>
+                <barcode-input-field placeholder="Search"></barcode-input-field>
             </div>
 
             <button v-b-modal="'new-collection-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="plus" class="fa-lg"></font-awesome-icon></button>
@@ -19,14 +19,15 @@
         <template v-for="record in data">
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
                 <template v-slot:content>
-                    <a class="card-block stretched-link text-decoration-none" :href=" '/data-collector/' + record['id']">
-                        <div class="row setting-list">
-                            <div class="col-sm-12 col-lg-6">
-                                <div class="text-primary h5">{{ record['name'] }}</div>
-                                <div class="small text-secondary">{{ record['created_at'] |  moment('YYYY MMM DD H:mm') }}</div>
-                            </div>
+                    <div role="button" class="row" @click="openDataCollection(record['id'])">
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="text-primary h5">{{ record['name'] }}</div>
+                            <div class="small text-secondary">{{ record['created_at'] |  moment('YYYY MMM DD H:mm') }}</div>
                         </div>
-                    </a>
+                        <div class="col-cols col-sm-12 col-lg-6 text-right">
+                            <text-card label="warehouse" :text="record['warehouse_code']"></text-card>
+                        </div>
+                    </div>
                 </template>
             </swiping-card>
         </template>
@@ -81,8 +82,13 @@
             },
 
             methods: {
+                openDataCollection(data_collection_id)  {
+                    window.location.href = '/data-collector/' + data_collection_id;
+                },
+
                 createCollectionAndRedirect(event) {
                     const payload = {
+                        'warehouse_id': this.currentUser()['warehouse_id'],
                         'name': event.target.value,
                     }
 
@@ -119,6 +125,7 @@
                     this.showLoading();
 
                     const params = this.$router.currentRoute.query;
+                    params['filter[warehouse_id]'] = this.currentUser()['warehouse_id'];
                     params['sort'] = this.getUrlParameter('sort', '-created_at');
                     params['page'] = page;
 
@@ -137,24 +144,6 @@
                         })
                         .finally(() => {
                             this.hideLoading();
-                        });
-                },
-
-                onProductCountRequestResponse(response) {
-                    const payload = {
-                        'product_id': response['product_id'],
-                        'quantity_scanned': response['quantity'],
-                    }
-
-                    this.apiPostDataCollectorRecords(payload)
-                        .then(() => {
-                            this.notifySuccess('Data collected');
-                        })
-                        .catch(e => {
-                            this.displayApiCallError(e);
-                        })
-                        .finally(() => {
-                            this.loadData();
                         });
                 },
 

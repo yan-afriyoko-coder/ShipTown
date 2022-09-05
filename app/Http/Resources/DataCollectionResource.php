@@ -22,9 +22,12 @@ class DataCollectionResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'warehouse_id' => $this->warehouse_id,
             'name' => $this->name,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+
+            'warehouse' => WarehouseResource::make($this->whenLoaded('warehouse')),
         ];
     }
 }
