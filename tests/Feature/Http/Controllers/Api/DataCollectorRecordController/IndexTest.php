@@ -5,8 +5,8 @@ namespace Tests\Feature\Http\Controllers\Api\DataCollectorRecordController;
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
 use App\Models\Product;
+use App\Models\Warehouse;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class IndexTest extends TestCase
@@ -16,7 +16,10 @@ class IndexTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $dataCollection = factory(DataCollection::class)->create(['name' => 'test']);
+        $dataCollection = factory(DataCollection::class)->create([
+            'warehouse_id' => factory(Warehouse::class)->create()->getKey(),
+            'name' => 'test'
+        ]);
 
         factory(DataCollectionRecord::class)->create([
             'data_collection_id' => $dataCollection->getKey(),
