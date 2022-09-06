@@ -191,14 +191,27 @@ class SnsService
 
     /**
      * @param string $message
+     * @param array|null $message_attributes
      * @return Result
+     *
+     * "MessageAttributes" => [
+     *   "sampleAttributeName" => [
+     *     "DataType" => "String",
+     *     "StringValue" => "sampleAttributeValue"
+     *   ],
+     * ],
+     *
      */
-    public static function publishNew(string $message): Result
+    public static function publishNew(string $message, array $message_attributes = null): Result
     {
         $notification = [
             'TargetArn' => self::getConfiguration()->topic_arn,
             'Message'   => $message,
         ];
+
+        if ($message_attributes) {
+            $notification['MessageAttributes'] = $message_attributes;
+        }
 
         return self::client()->publish($notification);
     }

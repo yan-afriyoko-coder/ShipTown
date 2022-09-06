@@ -43,7 +43,7 @@ class PublishOrderProductShipmentWebhooksJob implements ShouldQueue
                 'published_at' => null,
             ])
             ->orderBy('id')
-            ->limit(10);
+            ->limit(1);
 
         $chunk = $query->get();
 
@@ -83,6 +83,14 @@ class PublishOrderProductShipmentWebhooksJob implements ShouldQueue
 
         $payload = collect(['OrderProductShipments' => $records]);
 
-        SnsService::publishNew($payload->toJson());
+        SnsService::publishNew(
+            $payload->toJson(),
+            [
+                "warehouse_code" => [
+                    "DataType" => "String",
+                    "StringValue" => data_get($records->collection->first()->resource->toArray(), 'warehouse.code')
+                ]
+            ]
+        );
     }
 }
