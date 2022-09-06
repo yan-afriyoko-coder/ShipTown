@@ -55,10 +55,6 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
             Listeners\HourlyEventListener::class
         ],
 
-        DailyEvent::class => [
-            Listeners\DailyEventListener::class,
-        ],
-
         OrderProductShipmentCreatedEvent::class => [
             Listeners\OrderProductShipmentCreatedListener::class,
         ],
