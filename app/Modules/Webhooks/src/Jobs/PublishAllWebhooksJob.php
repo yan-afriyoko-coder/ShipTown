@@ -30,6 +30,6 @@ class PublishAllWebhooksJob implements ShouldQueue
         PublishInventoryWebhooksJob::dispatch();
         PublishInventoryMovementWebhooksJob::dispatch();
         PublishOrderProductShipmentWebhooksJob::dispatch();
-        PublishOrdersWebhooksJob::dispatch();
+//        PublishOrdersWebhooksJob::dispatch();
     }
 }
