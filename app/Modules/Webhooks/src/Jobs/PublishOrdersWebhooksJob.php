@@ -90,7 +90,15 @@ class PublishOrdersWebhooksJob implements ShouldQueue
         $payload = collect(['Orders' => $ordersCollection]);
 
         try {
-            SnsService::publishNew($payload->toJson());
+            SnsService::publishNew(
+                $payload->toJson(),
+                [
+                    "warehouse_code" => [
+                        "DataType" => "String",
+                        "StringValue" => '*'
+                    ]
+                ]
+            );
         } catch (Exception $exception) {
             Log::error('Exception occurred when publishing message', [
                 'exception' => $exception->getMessage(),

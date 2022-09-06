@@ -84,6 +84,14 @@ class PublishProductsWebhooksJob implements ShouldQueue
 
         $payload = collect(['Products' => $productsCollection]);
 
-        SnsService::publishNew($payload->toJson());
+        SnsService::publishNew(
+            $payload->toJson(),
+            [
+                "warehouse_code" => [
+                    "DataType" => "String",
+                    "StringValue" => '*'
+                ]
+            ]
+        );
     }
 }
