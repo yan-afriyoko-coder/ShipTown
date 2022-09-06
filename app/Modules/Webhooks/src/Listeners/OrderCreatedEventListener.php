@@ -20,11 +20,11 @@ class OrderCreatedEventListener
      */
     public function handle(OrderCreatedEvent $event)
     {
-        PendingWebhook::query()->firstOrCreate([
-            'model_class' => Order::class,
-            'model_id' => $event->order->getKey(),
-            'reserved_at' => null,
-            'published_at' => null,
-        ]);
+//        PendingWebhook::query()->firstOrCreate([
+//            'model_class' => Order::class,
+//            'model_id' => $event->order->getKey(),
+//            'reserved_at' => null,
+//            'published_at' => null,
+//        ]);
     }
 }

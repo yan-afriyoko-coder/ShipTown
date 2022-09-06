@@ -21,11 +21,11 @@ class OrderUpdatedEventListener
      */
     public function handle(OrderUpdatedEvent $event)
     {
-        PendingWebhook::query()->firstOrCreate([
-            'model_class' => Order::class,
-            'model_id' => $event->order->getKey(),
-            'reserved_at' => null,
-            'published_at' => null,
-        ]);
+//        PendingWebhook::query()->firstOrCreate([
+//            'model_class' => Order::class,
+//            'model_id' => $event->order->getKey(),
+//            'reserved_at' => null,
+//            'published_at' => null,
+//        ]);
     }
 }
