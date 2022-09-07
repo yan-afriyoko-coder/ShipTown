@@ -101,10 +101,14 @@
                 this.apiGetRmsapiConnections({})
                     .then(({ data }) => {
                         data.data.forEach((item, index) => {
+                            item['status'] = 0;
+                            this.configurations.push(item);
+
+                        })
+                        this.configurations.forEach((item, index) => {
                             this.apiGet(item['url'] + '/status')
                                 .then((response) => {
-                                    item['status'] = response.status;
-                                    this.configurations.push(item);
+                                    this.configurations[index]['status'] = response.status;
                                 })
                         })
                     });

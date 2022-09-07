@@ -249,7 +249,7 @@
                 downloadFileAndHideModal($event) {
                     let routeData = this.$router.resolve({
                         path: this.$router.currentRoute.fullPath,
-                        query: {filename: "test.csv"}
+                        query: {filename: this.dataCollection['data']['0']['name'] +".csv"}
                     });
 
                     window.location = routeData.href;
