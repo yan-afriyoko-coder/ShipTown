@@ -30,12 +30,16 @@
                             </td>
                             <td>
                                 {{ configuration.url }}<br>
-                                <div class="text-small"><span class="text-primary">username: </span> {{ configuration.username }}</div>
-                                <div class="text-small"><span class="text-primary">warehouse: </span> {{ configuration.location_id }}</div>
+                                <div class="text-small"><span class="font-weight-bold">username: </span> {{ configuration.username }}</div>
+                                <div class="text-small"><span class="font-weight-bold">warehouse: </span> {{ configuration.location_id }}</div>
+                                <div class="text-small"><span class="font-weight-bold">Password Reset Page: </span> <a :href="configuration.url + '/password/reset'" target="_blank" class="action-link text-primary">link</a></div>
+                                <div class="text-small"><span class="font-weight-bold">Status Page: </span> <a :href="configuration.url + '/status'" target="_blank" class="action-link text-primary">link</a></div>
+                                <div class="text-small"><span class="font-weight-bold">Webhooks: </span> {{ configuration.url + '/api/products-management/webhooks' }}</div>
                             </td>
                             <td>
-                                <a @click="confirmDelete(configuration.id, i)" class="action-link text-danger">DELETE</a>
-                                <a @click="changePassword(configuration.id, i)" class="action-link text-danger">CHANGE PASSWORD</a>
+                                <a @click="confirmDelete(configuration.id, i)" class="action-link text-danger">DELETE</a><br>
+                                <a @click="changePassword(configuration.id, i)" class="action-link text-danger">UPDATE API PASSWORD</a><br>
+                                <br>
                             </td>
                         </tr>
                     </tbody>
