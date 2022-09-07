@@ -8,8 +8,8 @@
             <button v-b-modal="'new-collection-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="plus" class="fa-lg"></font-awesome-icon></button>
         </div>
 
-        <b-modal id="new-collection-modal" centered no-fade hide-header title="New Dats Collection" @shown="setFocusElementById(10, 'collection_name_input')">
-            <input id="collection_name_input" type="text" class="form-control" @keyup.enter="createCollectionAndRedirect" placeholder="New Collection name">
+        <b-modal id="new-collection-modal" centered no-fade hide-header title="New Dats Collection" @ok="createCollectionAndRedirect" @shown="prepareNewCollectionModal">
+            <input id="collection_name_input" v-model="newCollectionName" type="text" @keyup.enter="createCollectionAndRedirect" class="form-control" placeholder="New Collection name">
         </b-modal>
 
         <b-modal id="configuration-modal" autofocus centered no-fade hide-footer title="Data Collection">
@@ -65,6 +65,7 @@
                     data: [],
                     nextUrl: null,
                     page: 1,
+                    newCollectionName: null,
                 };
             },
 
@@ -82,6 +83,12 @@
             },
 
             methods: {
+                prepareNewCollectionModal() {
+                    this.newCollectionName = null;
+                    this.$nextTick(() => {
+                        this.setFocusElementById(10, 'collection_name_input');
+                    });
+                },
                 openDataCollection(data_collection_id)  {
                     window.location.href = '/data-collector/' + data_collection_id;
                 },
@@ -89,7 +96,7 @@
                 createCollectionAndRedirect(event) {
                     const payload = {
                         'warehouse_id': this.currentUser()['warehouse_id'],
-                        'name': event.target.value,
+                        'name': this.newCollectionName,
                     }
 
                     this.apiPostDataCollection(payload)
