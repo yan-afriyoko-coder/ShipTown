@@ -39,13 +39,20 @@ class SendOrderEmailAction extends BaseOrderActionAbstract
             'shipments' => $this->order->orderShipments->toArray(),
         ]);
 
-        Mail::to($this->order->shippingAddress->email)
-            ->send($mailable);
+        try {
+            Mail::to($this->order->shippingAddress->email)->send($mailable);
 
-        activity()->on($this->order)
-            ->causedByAnonymous()
-            ->withProperties(['template_code' => $template->code])
-            ->log('Email was send');
+            activity()->on($this->order)
+                ->causedByAnonymous()
+                ->withProperties(['template_code' => $template->code])
+                ->log('Email was send');
+        } catch (\Exception $exception) {
+            activity()->on($this->order)
+                ->causedByAnonymous()
+                ->log('Failed to send email: '.$exception->getMessage());
+
+            return false;
+        }
 
         return true;
     }
