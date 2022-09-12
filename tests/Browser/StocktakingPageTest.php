@@ -40,7 +40,7 @@ class StocktakingPageTest extends DuskTestCase
                 $browser->driver->getKeyboard()->sendKeys(rand(0, 10000));
                 $browser->driver->getKeyboard()->sendKeys(WebDriverKeys::ENTER);
 
-                $browser->waitForText('Inventory updated')
+                $browser->waitForText('Stocktake updated')
                     ->assertMissing('#quantity-request-input')
                     ->pause(500)
                     ->assertFocused('@barcode-input-field');
@@ -107,7 +107,7 @@ class StocktakingPageTest extends DuskTestCase
             $browser->driver->getKeyboard()->sendKeys(rand(0, 10000));
             $browser->driver->getKeyboard()->sendKeys(WebDriverKeys::ENTER);
 
-            $browser->waitForText('Inventory updated')
+            $browser->waitForText('Stocktake updated')
                 ->assertMissing('#quantity-request-input')
                 ->pause(500)
                 ->assertFocused('@barcode-input-field');
