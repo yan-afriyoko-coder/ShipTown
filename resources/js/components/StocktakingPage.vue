@@ -56,6 +56,11 @@
                         <td class="text-right">{{ itemMovement['quantity_after'] }}</td>
 <!--                        <td class="text-right">{{ itemMovement['inventory']['shelf_location'] }}</td>-->
                     </tr>
+                    <tr class="pb-3">
+                        <td colspan="2" class="text-center">
+                            <a href="/reports/stocktakes">See more</a>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
