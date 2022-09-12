@@ -36,12 +36,12 @@ class RmsapiModuleServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        Every10minEvent::class => [
-            Listeners\Every10minEventListener::class,
+        SyncRequestedEvent::class => [
+            Listeners\SyncRequestedEventListener::class,
         ],
 
-        HourlyEvent::class => [
-            Listeners\HourlyEventListener::class,
+        Every10minEvent::class => [
+            Listeners\Every10minEventListener::class,
         ],
     ];
 }

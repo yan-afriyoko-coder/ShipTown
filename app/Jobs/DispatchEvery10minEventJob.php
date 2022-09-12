@@ -33,8 +33,6 @@ class DispatchEvery10minEventJob implements ShouldQueue
 
         Every10minEvent::dispatch();
 
-        SyncRequestedEvent::dispatch();
-
         Log::info('DispatchEvery10minEvent - dispatched successfully');
     }
 }
