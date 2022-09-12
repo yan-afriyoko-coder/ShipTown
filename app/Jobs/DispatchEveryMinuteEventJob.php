@@ -2,9 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Events\Every10minEvent;
-use App\Events\SyncRequestedEvent;
-use App\Models\Heartbeat;
+use App\Events\EveryMinuteEvent;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -12,15 +10,9 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-/**
- * Class RunHourlyListener.
- */
-class DispatchEvery10minEventJob implements ShouldQueue
+class DispatchEveryMinuteEventJob implements ShouldQueue
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * Execute the job.
@@ -31,7 +23,7 @@ class DispatchEvery10minEventJob implements ShouldQueue
     {
         Log::debug('DispatchEvery10minEvent - dispatching');
 
-        Every10minEvent::dispatch();
+        EveryMinuteEvent::dispatch();
 
         Log::info('DispatchEvery10minEvent - dispatched successfully');
     }

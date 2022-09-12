@@ -28,11 +28,9 @@ class SyncRequestJob implements ShouldQueue
      */
     public function handle()
     {
-        SyncRequestedEvent::dispatch();
-
         Log::info('SyncRequestedEvent dispatched');
 
-        Every10minEvent::dispatch();
+        SyncRequestedEvent::dispatch();
 
         Log::info('Every10minEvent dispatched');
     }
