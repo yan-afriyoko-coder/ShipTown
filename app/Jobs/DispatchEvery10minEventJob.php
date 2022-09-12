@@ -29,12 +29,12 @@ class DispatchEvery10minEventJob implements ShouldQueue
      */
     public function handle()
     {
-        Log::debug('Hourly event - dispatching');
+        Log::debug('DispatchEvery10minEvent - dispatching');
 
         Every10minEvent::dispatch();
 
         SyncRequestedEvent::dispatch();
 
-        Log::info('Hourly event - dispatched successfully');
+        Log::info('DispatchEvery10minEvent - dispatched successfully');
     }
 }
