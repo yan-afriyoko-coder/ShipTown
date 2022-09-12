@@ -35,7 +35,7 @@ class SyncProductsJob implements ShouldQueue
 
         // we want to sync products with smallest quantities first to avoid oversells
         $products = Product::withAllTags(['Available Online', 'Not Synced'])
-            ->whereIn('id', DB::raw("SELECT product_id FROM modules_api2cart_product_links WHERE api2cart_product_id IS NOT NULL"))
+            ->whereRaw('ID IN (SELECT product_id FROM modules_api2cart_product_links WHERE api2cart_product_id IS NOT NULL)')
             ->orderBy('quantity')
             ->orderBy('updated_at')
             ->get();
