@@ -122,7 +122,7 @@
                     'filter[warehouse_id]': this.currentUser()['warehouse_id'],
                     'include': 'product,inventory',
                     'sort': '-id',
-                    'per_page': 25,
+                    'per_page': 10,
                 }
 
                 this.apiGetInventoryMovements(params)
@@ -137,14 +137,13 @@
 
             loadStocktakeSuggestions() {
                 const params = {
-                    'filter[quantity_between]': '-10000000,-1',
-                    'filter[warehouse_id]': this.currentUser()['warehouse_id'],
-                    'include': 'product',
-                    'sort': 'shelve_location,quantity',
-                    'per_page': 2,
+                    'filter[warehouse.id]': this.currentUser()['warehouse_id'],
+                    'include': 'product,warehouse',
+                    'sort': 'points',
+                    'per_page': 10,
                 }
 
-                this.apiGetInventory(params)
+                this.apiGetStocktakeSuggestions(params)
                     .then((response) => {
                         this.stocktakeSuggestions = response.data;
                     })

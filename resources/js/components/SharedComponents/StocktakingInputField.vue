@@ -204,7 +204,7 @@
                         this.displayApiCallError(error);
                     })
                     .finally(() => {
-                            this.$emit('stocktakeSubmitted');
+                        this.$emit('stocktakeSubmitted');
                     });
             },
         },
