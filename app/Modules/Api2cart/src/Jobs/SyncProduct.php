@@ -7,6 +7,7 @@ use App\Modules\Api2cart\src\Api\RequestResponse;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use App\Modules\Api2cart\src\Services\Api2cartService;
 use App\Modules\Api2cart\src\Transformers\ProductTransformer;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -42,6 +43,7 @@ class SyncProduct implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws GuzzleException
      */
     public function handle()
     {
@@ -73,6 +75,7 @@ class SyncProduct implements ShouldQueue
                 ]);
                 break;
             case RequestResponse::RETURN_CODE_OK:
+                $this->product_link->fetchFromApi2cart();
                 $this->product_link->update([
                     'is_in_sync' => null,
                 ]);
