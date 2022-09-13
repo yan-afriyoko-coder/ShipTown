@@ -3,6 +3,7 @@
 namespace App\Modules\Api2cart\src\Listeners;
 
 use App\Modules\Api2cart\src\Jobs\UpdateMissingTypeAndIdJob;
+use App\Modules\Api2cart\src\Jobs\VerifyIfProductsInSyncJob;
 
 class SyncRequestedEventListener
 {
@@ -14,5 +15,6 @@ class SyncRequestedEventListener
     public function handle()
     {
         UpdateMissingTypeAndIdJob::dispatch();
+        VerifyIfProductsInSyncJob::dispatch();
     }
 }
