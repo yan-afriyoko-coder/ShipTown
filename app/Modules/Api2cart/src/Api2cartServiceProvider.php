@@ -45,6 +45,10 @@ class Api2cartServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
+        SyncRequestedEvent::class => [
+            Listeners\SyncRequestedEventListener::class,
+        ],
+
         Every10minEvent::class => [Listeners\Every10minEventListener::class],
 
         HourlyEvent::class => [Listeners\HourlyEventListener::class],
