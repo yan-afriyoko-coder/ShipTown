@@ -34,7 +34,7 @@ class InventoryUpdatedEventListener
 
         Api2cartProductLink::query()
             ->where(['product_id' => $event->inventory->product_id])
-            ->update(['is_in_sync' => false]);
+            ->update(['is_in_sync' => null]);
     }
 
     /**

@@ -31,6 +31,7 @@ class SyncVariantsJob implements ShouldQueue
     {
         Api2cartVariant::query()
             ->where(['is_in_sync' => false])
+            ->orderBy('updated_at', 'desc')
             ->get()
             ->each(function (Api2cartProductLink $link) {
                 SyncVariant::dispatch($link);

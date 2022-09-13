@@ -26,7 +26,7 @@ class ProductTagAttachedEventListener
                         'product_id' => $event->product()->id,
                         'api2cart_connection_id' => $connection->id,
                     ], [
-                        'is_in_sync' => false,
+                        'is_in_sync' => null,
                     ]);
                 });
         }
