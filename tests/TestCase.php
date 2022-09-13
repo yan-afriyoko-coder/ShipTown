@@ -16,6 +16,8 @@ use App\Models\OrderStatus;
 use App\Models\Product;
 use App\Models\ProductAlias;
 use App\Models\Warehouse;
+use App\Modules\Api2cart\src\Models\Api2cartConnection;
+use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
@@ -60,6 +62,9 @@ abstract class TestCase extends BaseTestCase
         Heartbeat::query()->forceDelete();
 
         Module::query()->forceDelete();
+
+        Api2cartProductLink::query()->forceDelete();
+        Api2cartConnection::query()->forceDelete();
 
         RmsapiConnection::query()->forceDelete();
         DataCollection::query()->forceDelete();

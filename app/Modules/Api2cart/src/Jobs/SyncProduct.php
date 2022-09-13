@@ -2,8 +2,11 @@
 
 namespace App\Modules\Api2cart\src\Jobs;
 
+use App\Modules\Api2cart\src\Api\Products;
+use App\Modules\Api2cart\src\Api\RequestResponse;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use App\Modules\Api2cart\src\Services\Api2cartService;
+use App\Modules\Api2cart\src\Transformers\ProductTransformer;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -42,23 +45,38 @@ class SyncProduct implements ShouldQueue
      */
     public function handle()
     {
-        if ($this->product_link->api2cart_product_type === 'configurable') {
-            $this->product_link->product->log('api2cart: configurable products cannot be synced');
-            $this->product_link->product->detachTag('Available Online');
-            $this->product_link->product->detachTag('Not Synced');
-            $this->product_link->product->detachTag('SYNC ERROR');
-            $this->product_link->product->detachTag('CHECK FAILED');
+        if ($this->product_link->api2cart_product_type != 'simple') {
             return;
         }
 
-        $updateSuccess = Api2cartService::updateSku($this->product_link);
-        $updateVerified = Api2cartService::verifyIfProductInSync($this->product_link);
+        $properties = ProductTransformer::toApi2cartPayload($this->product_link);
 
-        if ($updateSuccess && $updateVerified) {
-            $this->product_link->product->detachTag('SYNC ERROR');
-            $this->product_link->product->detachTagSilently('Not Synced');
-        } else {
-            $this->product_link->product->attachTag('SYNC ERROR');
+        $response = Api2cartService::updateSimpleProduct(
+            $this->product_link->api2cartConnection->bridge_api_key,
+            $properties,
+        );
+
+        switch ($response->getReturnCode()) {
+            case RequestResponse::RETURN_CODE_MODEL_NOT_FOUND:
+                // product might not be assigned to store, we try it
+                if (data_get($properties, 'store_id')) {
+                    Products::assignStore(
+                        $this->product_link->api2cartConnection->bridge_api_key,
+                        data_get($properties, 'id'),
+                        data_get($properties, 'store_id')
+                    );
+                }
+
+                $this->product_link->update([
+                    'api2cart_product_type' => null,
+                    'api2cart_product_id' => null
+                ]);
+                break;
+            case RequestResponse::RETURN_CODE_OK:
+                $this->product_link->update([
+                    'is_in_sync' => null,
+                ]);
+                break;
         }
     }
 }

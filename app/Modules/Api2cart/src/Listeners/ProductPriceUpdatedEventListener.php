@@ -4,6 +4,7 @@ namespace App\Modules\Api2cart\src\Listeners;
 
 use App\Events\Product\ProductPriceUpdatedEvent;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
+use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 
 class ProductPriceUpdatedEventListener
 {
@@ -26,6 +27,10 @@ class ProductPriceUpdatedEventListener
             activity()->withoutLogs(function () use ($product_price) {
                 $product_price->product->attachTag('Not Synced');
             });
+
+            Api2cartProductLink::query()
+                ->where(['product_id' => $product_price->product_id])
+                ->update(['synced' => false]);
         }
     }
 }

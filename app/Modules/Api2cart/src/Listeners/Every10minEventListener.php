@@ -6,6 +6,7 @@ use App\Events\Every10minEvent;
 use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
 use App\Modules\Api2cart\src\Jobs\ProcessImportedOrdersJob;
 use App\Modules\Api2cart\src\Jobs\UpdateMissingTypeAndIdJob;
+use App\Modules\Api2cart\src\Jobs\VerifyIfProductsInSyncJob;
 
 class Every10minEventListener
 {
@@ -18,9 +19,11 @@ class Every10minEventListener
      */
     public function handle(Every10minEvent $event)
     {
+        DispatchImportOrdersJobs::dispatch();
+
         UpdateMissingTypeAndIdJob::dispatch();
 
-        DispatchImportOrdersJobs::dispatch();
+        VerifyIfProductsInSyncJob::dispatch();
 
         ProcessImportedOrdersJob::dispatch();
     }

@@ -6,6 +6,7 @@ use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Models\Inventory;
 use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
+use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use Illuminate\Support\Arr;
 
 class InventoryUpdatedEventListener
@@ -30,6 +31,10 @@ class InventoryUpdatedEventListener
         activity()->withoutLogs(function () use ($event) {
             $event->inventory->product->attachTag('Not Synced');
         });
+
+        Api2cartProductLink::query()
+            ->where(['product_id' => $event->inventory->product_id])
+            ->update(['synced' => false]);
     }
 
     /**

@@ -65,8 +65,7 @@ class SyncVariant implements ShouldQueue
                 break;
             case RequestResponse::RETURN_CODE_OK:
                 $this->product_link->update([
-                    'api2cart_product_type' => 'variant',
-                    'api2cart_product_id' => data_get($response->asArray(), 'result.product_id')
+                    'is_in_sync' => null,
                 ]);
                 break;
         }
