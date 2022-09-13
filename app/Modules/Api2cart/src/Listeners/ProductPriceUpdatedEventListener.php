@@ -30,7 +30,7 @@ class ProductPriceUpdatedEventListener
 
             Api2cartProductLink::query()
                 ->where(['product_id' => $product_price->product_id])
-                ->update(['synced' => false]);
+                ->update(['is_in_sync' => false]);
         }
     }
 }
