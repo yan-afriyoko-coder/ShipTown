@@ -28,7 +28,7 @@ class VerifyIfProductsInSyncJob implements ShouldQueue
     {
         $collection = Api2cartProductLink::query()
             ->whereNull('is_in_sync')
-            ->limit(100)
+            ->limit(500)
             ->get();
 
         $collection->each(function (Api2cartProductLink $link) {
