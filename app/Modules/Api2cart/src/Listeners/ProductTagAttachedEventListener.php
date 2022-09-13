@@ -22,10 +22,12 @@ class ProductTagAttachedEventListener
             Api2cartConnection::query()
                 ->get()
                 ->each(function (Api2cartConnection $connection) use ($event) {
-                    Api2cartProductLink::firstOrCreate([
+                    Api2cartProductLink::updateOrCreate([
                         'product_id' => $event->product()->id,
                         'api2cart_connection_id' => $connection->id,
-                    ], []);
+                    ], [
+                        'is_in_sync' => null,
+                    ]);
                 });
         }
     }

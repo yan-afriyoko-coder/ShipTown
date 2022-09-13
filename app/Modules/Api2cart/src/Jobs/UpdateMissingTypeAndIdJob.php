@@ -30,16 +30,12 @@ class UpdateMissingTypeAndIdJob implements ShouldQueue
     {
         $collection = Api2cartProductLink::query()
             ->whereNull('api2cart_product_id')
-            ->limit(10)
+            ->limit(100)
             ->get();
 
         $collection->each(function (Api2cartProductLink $link) {
             $this->updateTypeAndIdOrCreate($link);
         });
-
-        if ($collection->isNotEmpty()) {
-            dispatch(new self());
-        }
     }
 
     /**
