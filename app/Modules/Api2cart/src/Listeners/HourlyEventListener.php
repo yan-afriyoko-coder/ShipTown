@@ -8,6 +8,9 @@ use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
 use App\Modules\Api2cart\src\Jobs\ProcessImportedOrdersJob;
 use App\Modules\Api2cart\src\Jobs\RemoveProductLinksIfNotAvailableOnlineJob;
 use App\Modules\Api2cart\src\Jobs\SyncProductsJob;
+use App\Modules\Api2cart\src\Jobs\SyncVariantsJob;
+use App\Modules\Api2cart\src\Jobs\UpdateMissingTypeAndIdJob;
+use App\Modules\Api2cart\src\Jobs\VerifyIfProductsInSyncJob;
 
 class HourlyEventListener
 {
@@ -20,10 +23,9 @@ class HourlyEventListener
      */
     public function handle(HourlyEvent $event)
     {
-        DispatchImportOrdersJobs::dispatch();
-        ProcessImportedOrdersJob::dispatch();
-
         SyncProductsJob::dispatch();
+        SyncVariantsJob::dispatch();
+
         RemoveProductLinksIfNotAvailableOnlineJob::dispatch();
         DetachNotSyncedTagIfNotAvailableOnlineJob::dispatch();
     }

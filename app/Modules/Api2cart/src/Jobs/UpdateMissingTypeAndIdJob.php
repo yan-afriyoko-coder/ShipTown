@@ -11,7 +11,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class UpdateMissingTypeAndIdJob implements ShouldQueue
 {
@@ -19,7 +18,6 @@ class UpdateMissingTypeAndIdJob implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-    use IsMonitored;
 
     /**
      * Execute the job.
@@ -67,7 +65,7 @@ class UpdateMissingTypeAndIdJob implements ShouldQueue
             );
 
             $link->update([
-                'api2cart_product_type' => 'product',
+                'api2cart_product_type' => 'simple',
                 'api2cart_product_id' => data_get($response->asArray(), 'result.product_id')
             ]);
         }

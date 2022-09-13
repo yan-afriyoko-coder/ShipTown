@@ -97,7 +97,7 @@ class Api2cartService
      * @return RequestResponse
      * @throws GuzzleException
      */
-    private static function updateSimpleProduct(string $store_key, array $data): RequestResponse
+    public static function updateSimpleProduct(string $store_key, array $data): RequestResponse
     {
         $product = collect($data)
             ->only(self::PRODUCT_ALLOWED_KEYS)

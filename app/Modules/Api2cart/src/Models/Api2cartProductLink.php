@@ -35,6 +35,7 @@ use Illuminate\Support\Facades\Log;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property array raw_import
+ * @property bool|null $is_in_sync
  *
  * @method static Builder|Api2cartProductLink newModelQuery()
  * @method static Builder|Api2cartProductLink newQuery()
@@ -63,6 +64,7 @@ class Api2cartProductLink extends BaseModel
      * @var string[]
      */
     protected $fillable = [
+        'is_in_sync',
         'product_id',
         'last_fetched_at',
         'api2cart_connection_id',
@@ -85,6 +87,7 @@ class Api2cartProductLink extends BaseModel
      * @var string[]
      */
     protected $casts = [
+        'api2cart_product_id' => 'integer',
         'last_fetched_data' => 'array',
     ];
 
