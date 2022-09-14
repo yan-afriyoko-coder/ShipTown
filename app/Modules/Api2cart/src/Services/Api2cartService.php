@@ -108,7 +108,7 @@ class Api2cartService
             ])
             ->toArray();
 
-        return Client::GET($store_key, 'product.update.json', $product);
+        return Client::POST($store_key, 'product.update.json', $product);
     }
 
     /**
