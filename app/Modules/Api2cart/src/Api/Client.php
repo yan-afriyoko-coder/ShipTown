@@ -36,9 +36,9 @@ class Client
         Log::debug('API2CART GET', [
             'success'           => $response->isSuccess(),
             'uri'               => $uri,
-            'query'             => $query,
             'response_message'  => $response->asArray(),
             'response_code'     => $response->getResponseRaw()->getStatusCode(),
+            'query'             => $query,
         ]);
 
         return $response;
