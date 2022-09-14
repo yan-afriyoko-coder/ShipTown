@@ -35,6 +35,7 @@ class ProductTransformer
     private static function getBasicData(Api2cartProductLink $productLink): array
     {
         return [
+            'id' => $productLink->api2cart_product_id,
             'product_id' => $productLink->product->getKey(),
             'sku' => $productLink->product->sku,
             'name' => $productLink->product->name,
