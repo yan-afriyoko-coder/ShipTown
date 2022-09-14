@@ -44,6 +44,7 @@ class Api2cartService
      * @param string $sku
      *
      * @return int|null
+     * @throws GuzzleException
      */
     public static function getVariantID(string $store_key, string $sku): ?int
     {
@@ -62,10 +63,11 @@ class Api2cartService
 
     /**
      * @param string $store_key
-     * @param array  $product_data
+     * @param array $product_data
      *
      * @return RequestResponse
      *
+     * @throws GuzzleException
      */
     public static function createSimpleProduct(string $store_key, array $product_data): RequestResponse
     {
@@ -319,6 +321,7 @@ class Api2cartService
      *
      * @return int|null
      *
+     * @throws GuzzleException
      */
     public static function getSimpleProductID(string $store_key, string $sku): ?int
     {
@@ -341,6 +344,7 @@ class Api2cartService
      *
      * @return array
      *
+     * @throws GuzzleException
      */
     public static function getProductTypeAndId(string $store_key, string $sku): array
     {
