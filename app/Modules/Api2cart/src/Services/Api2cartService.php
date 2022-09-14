@@ -130,7 +130,7 @@ class Api2cartService
             ])
             ->toArray();
 
-        return Client::GET($store_key, 'product.variant.update.json', $properties);
+        return Client::POST($store_key, 'product.variant.update.json', $properties);
     }
 
     /**
