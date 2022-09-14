@@ -28,7 +28,7 @@ class Client
             self::getGuzzleClient($connection)->get($uri, ['query' => $query])
         );
 
-        logger('GET', [
+        logger('RMSAPI GET', [
             'uri'      => $uri,
             'query'    => $query,
             'response' => [
@@ -62,7 +62,7 @@ class Client
             ])
         );
 
-        logger('POST', [
+        logger('RMSAPI POST', [
             'uri'      => $uri,
             'json'     => $data,
             'response' => [

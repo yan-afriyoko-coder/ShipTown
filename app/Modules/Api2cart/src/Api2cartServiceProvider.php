@@ -49,21 +49,36 @@ class Api2cartServiceProvider extends BaseModuleServiceProvider
             Listeners\SyncRequestedEventListener::class,
         ],
 
-        Every10minEvent::class => [Listeners\Every10minEventListener::class],
+        Every10minEvent::class => [
+            Listeners\Every10minEventListener::class
+        ],
 
-        HourlyEvent::class => [Listeners\HourlyEventListener::class],
+        HourlyEvent::class => [
+            Listeners\HourlyEventListener::class
+        ],
 
-        DailyEvent::class => [Listeners\DailyEventListener::class],
+        DailyEvent::class => [
+            Listeners\DailyEventListener::class],
 
-        ProductPriceUpdatedEvent::class => [Listeners\ProductPriceUpdatedEventListener::class],
+        ProductPriceUpdatedEvent::class => [
+            Listeners\ProductPriceUpdatedEventListener::class
+        ],
 
-        ProductTagAttachedEvent::class => [Listeners\ProductTagAttachedEventListener::class],
+        ProductTagAttachedEvent::class => [
+            Listeners\ProductTagAttachedEventListener::class
+        ],
 
-        ProductTagDetachedEvent::class => [Listeners\ProductTagDetachedEventListener::class],
+        ProductTagDetachedEvent::class => [
+            Listeners\ProductTagDetachedEventListener::class
+        ],
 
-        InventoryUpdatedEvent::class => [Listeners\InventoryUpdatedEventListener::class],
+        InventoryUpdatedEvent::class => [
+            Listeners\InventoryUpdatedEventListener::class
+        ],
 
-        OrderUpdatedEvent::class => [Listeners\OrderUpdatedEventListener::class]
+        OrderUpdatedEvent::class => [
+            Listeners\OrderUpdatedEventListener::class
+        ]
     ];
 
     /**
