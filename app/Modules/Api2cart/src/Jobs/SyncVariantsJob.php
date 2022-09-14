@@ -31,7 +31,7 @@ class SyncVariantsJob implements ShouldQueue
     {
         Api2cartVariant::query()
             ->where(['is_in_sync' => false])
-            ->orderBy('updated_at', 'desc')
+            ->orderBy('updated_at')
             ->chunk(10, function ($variants) {
                 foreach ($variants as $variant) {
                     SyncVariant::dispatchNow($variant);
