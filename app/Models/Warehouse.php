@@ -50,6 +50,10 @@ class Warehouse extends BaseModel
         'address_id',
     ];
 
+    protected $casts = [
+        'id' => 'integer',
+    ];
+
     /**
      * @return QueryBuilder
      */
