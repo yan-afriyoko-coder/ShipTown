@@ -27,9 +27,8 @@
                                 @foreach ($data as $record)
                                     <tr>
                                         <td><a href='{{ url()->route('reports.restocking', [
-                                                        'title' => 'Negative Stock',
                                                         'select' => 'warehouse_code,product_sku,product_name,quantity_required,quantity_available,quantity_incoming,reorder_point,restock_level,warehouse_quantity',
-                                                        'sort' => 'quantity_available',
+                                                        'sort' => '-warehouse_quantity',
                                                         'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
                                                         'filter[restock_level]' => 0,
@@ -56,7 +55,6 @@
                                 @foreach ($data as $record)
                                     <tr>
                                         <td><a href='{{ url()->route('reports.restocking', [
-                                                        'title' => 'Negative Stock',
                                                         'select' => 'warehouse_code,product_sku,product_name,quantity_required,quantity_available,quantity_incoming,reorder_point,restock_level,warehouse_quantity',
                                                         'sort' => 'quantity_available',
                                                         'per_page' => '999',
@@ -86,7 +84,6 @@
                                     <tr>
                                         <td>
                                             <a href='{{ url()->route('reports.restocking', [
-                                                        'title' => 'Negative Stock',
                                                         'select' => 'warehouse_code,product_sku,product_name,quantity_required,quantity_available,quantity_incoming,reorder_point,restock_level,warehouse_quantity',
                                                         'sort' => 'quantity_available',
                                                         'per_page' => '999',
