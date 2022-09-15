@@ -19,6 +19,35 @@
                             <table class="table table-borderless">
                                 <thead>
                                 <tr>
+                                    <th scope="col">Products No Restock Levels</th>
+                                    <th scope="col" class="text-right"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach ($data as $record)
+                                    <tr>
+                                        <td><a href='{{ url()->route('reports.restocking', [
+                                                        'title' => 'Negative Stock',
+                                                        'select' => 'warehouse_code,product_sku,product_name,quantity_required,quantity_available,quantity_incoming,reorder_point,restock_level,warehouse_quantity',
+                                                        'sort' => 'quantity_available',
+                                                        'per_page' => '999',
+                                                        'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
+                                                        'filter[restock_level]' => 0,
+                                                        'filter[inventory_source_warehouse_code]' => '99',
+                                                        'filter[warehouse_quantity_between]' => '1,99999',
+                                                    ]) }}'>
+                                                {{ data_get($record, 'warehouse_code') }}
+                                            </a>
+                                        </td>
+                                        <td class="text-right">{{ data_get($record, 'missing_restock_levels') === 0 ? '-' : data_get($record, 'missing_restock_levels')}}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+
+                            <table class="table table-borderless">
+                                <thead>
+                                <tr>
                                     <th scope="col">Products Out Of Stock</th>
                                     <th scope="col" class="text-right"></th>
                                 </tr>
