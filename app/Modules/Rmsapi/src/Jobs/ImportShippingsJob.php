@@ -171,6 +171,7 @@ class ImportShippingsJob implements ShouldQueue
         $orderProduct = OrderProduct::query()->where(['custom_unique_reference_id' => $uuid])->first();
 
         if ($orderProduct) {
+            $this->rmsapiConnection->update(['shippings_last_timestamp' => $shippingRecord['DBTimeStamp']]);
             return $orderProduct;
         }
 
