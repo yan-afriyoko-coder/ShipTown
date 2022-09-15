@@ -117,14 +117,14 @@
 
         methods: {
             reloadData() {
-                this.loadRecentStocktakes();
                 this.loadStocktakeSuggestions();
+                this.loadRecentStocktakes();
             },
 
             loadRecentStocktakes() {
                 const params = {
                     'filter[description]': 'stocktake',
-                    'filter[warehouse_id]': this.currentUser()['warehouse_id'],
+                    'filter[warehouse_id]': Number(this.currentUser()['warehouse_id']),
                     'include': 'product,inventory',
                     'sort': '-id',
                     'per_page': 10,

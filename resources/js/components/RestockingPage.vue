@@ -24,7 +24,8 @@
                                 <div class="col-lg-6">
                                     <div class="text-primary h5">{{ record['product_name'] }}</div>
                                     <div>
-                                        sku: <b><a target="_blank" :href="'/products?hide_nav_bar=true&search=' + record['product_sku']">{{ record['product_sku'] }}</a></b>
+                                        sku: <b><a target="_blank" :href="'/products?hide_nav_bar=true&search=' + record['product_sku']">{{ record['product_sku'] }}</a><font-awesome-icon icon="copy" class="fa-xs text-primary ml-2" style="font-size: 0.70rem" role="button" @click="copyToClipBoard(record['product_sku'])"></font-awesome-icon>
+                                    </b>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
