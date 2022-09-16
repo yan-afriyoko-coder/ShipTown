@@ -4,7 +4,7 @@
 
             <div v-if="! disableSwipeRight" class="swiper-slide rounded bg-success text-right" >
                 <div class="swipe-action-container swipe-action-container--right">
-                    <div>SHIP THEM ALL</div>
+                    <slot name="content-left"></slot>
                 </div>
             </div>
 
@@ -18,7 +18,7 @@
 
             <div v-if="! disableSwipeLeft" class="swiper-slide bg-warning rounded">
                 <div class="swipe-action-container swipe-action-container--left text-black-50 font-weight-bold">
-                    <div>SHIP PARTIAL / UNDO</div>
+                    <slot name="content-right"></slot>
                 </div>
             </div>
         </div>

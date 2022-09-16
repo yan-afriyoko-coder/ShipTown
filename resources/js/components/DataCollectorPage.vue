@@ -11,7 +11,7 @@
             </template>
         </swiping-card>
 
-        <div class="row mb-3 pl-1 pr-1 bg-white">
+        <div class="row mb-3 pl-1 pr-1 bg-white flex-nowrap">
             <div class="flex-fill">
                 <product-count-request-input-field @quantityRequestResponse="onProductCountRequestResponse" placeholder="Scan sku or alias"></product-count-request-input-field>
             </div>
@@ -24,7 +24,7 @@
         <template v-for="record in data">
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
                 <template v-slot:content>
-                    <div class="row">
+                    <div class="row" v-bind:class="{ 'disabled': record['quantity_to_scan'] === 0 }">
                         <div class="col-sm-12 col-lg-6 ">
                             <div class="text-primary h5">{{ record['product_name'] }}</div>
                             <div>
