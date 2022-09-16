@@ -1,6 +1,6 @@
 <template>
     <div>
-        <input class="form-control"
+        <input class="form-control" enterkeyhint="done"
                :placeholder="placeholder"
                ref="barcode"
                id="barcodeInput"
