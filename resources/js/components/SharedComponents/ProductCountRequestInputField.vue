@@ -7,7 +7,8 @@
         <b-modal @ok="submitStocktake" id="quantity-request-modal" scrollable centered no-fade hide-header>
             <template v-if="inventory">
                 <div>Name: {{ inventory.product.name }}</div>
-                <div class="small">sku: {{ inventory.product.sku }}</div>
+                <div>sku: <strong>{{ inventory.product.sku }}</strong></div>
+                <div class="mt-2 mb-2">in stock: <strong>{{ inventory.quantity }}</strong></div>
                 <div class="row mt-2">
                     <div class="col-12">
                         <input class="form-control" :placeholder="'quantity'" :class="{ 'border-danger': this.quantity < 0, 'border-success': this.quantity > 0}"
