@@ -11,7 +11,7 @@
             </template>
         </swiping-card>
 
-        <div class="row mb-3 pl-1 pr-1 bg-white">
+        <div class="row mb-3 pl-1 pr-1 bg-white flex-nowrap">
             <div class="flex-fill">
                 <product-count-request-input-field @quantityRequestResponse="onProductCountRequestResponse" placeholder="Scan sku or alias"></product-count-request-input-field>
             </div>
