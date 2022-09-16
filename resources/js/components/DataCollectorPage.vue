@@ -24,7 +24,7 @@
         <template v-for="record in data">
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
                 <template v-slot:content>
-                    <div class="row">
+                    <div class="row" v-bind:class="{ 'disabled': record['quantity_to_scan'] === 0 }">
                         <div class="col-sm-12 col-lg-6 ">
                             <div class="text-primary h5">{{ record['product_name'] }}</div>
                             <div>
