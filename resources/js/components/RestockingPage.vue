@@ -31,6 +31,11 @@
                                         sku: <b><a target="_blank" :href="'/products?hide_nav_bar=true&search=' + record['product_sku']">{{ record['product_sku'] }}</a><font-awesome-icon icon="copy" class="fa-xs text-primary ml-2" style="font-size: 0.70rem" role="button" @click="copyToClipBoard(record['product_sku'])"></font-awesome-icon>
                                     </b>
                                     </div>
+                                    <div>
+                                        <template v-for="tag in record['tags']">
+                                            <a class="badge text-uppercase" :key="tag.id" :href="'products?has_tags=' + tag['name']['en']"> {{ tag['name']['en'] }} </a>
+                                        </template>
+                                    </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="row pt-1">
@@ -146,6 +151,7 @@
                 this.showLoading();
 
                 const params = this.$router.currentRoute.query;
+                params['include'] = 'tags';
                 params['page'] = page;
 
                 this.apiGetRestocking(params)
