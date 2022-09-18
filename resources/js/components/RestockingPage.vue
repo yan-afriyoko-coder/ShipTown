@@ -11,7 +11,11 @@
             <button v-b-modal="'configuration-modal'"  id="config-button" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
-        <b-modal id="configuration-modal" centered no-fade hide-footer title="Data Collection">
+        <b-modal id="configuration-modal" centered no-fade hide-footer hide-header
+                 @shown="setFocusElementById(1,'stocktake-input')"
+                 @hidden="focusOnInputAndReload">
+            <stocktake-input></stocktake-input>
+            <hr>
             <button type="button" @click.prevent="downloadFileAndHideModal" class="col btn mb-1 btn-primary">Download</button>
         </b-modal>
 
@@ -107,6 +111,11 @@
         },
 
         methods: {
+            focusOnInputAndReload() {
+                this.setFocusElementById(1,'barcodeInput');
+                this.loadData();
+            },
+
             downloadFileAndHideModal() {
                 let routeData = this.$router.resolve({
                     path: this.$router.currentRoute.fullPath,
