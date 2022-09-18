@@ -1,9 +1,10 @@
 <template>
     <div>
-        <input :id="input_id" placeholder="Scan SKU to stocktake" type="text" class="form-control" @keyup.enter="showStocktakeModal">
+        <input :id="input_id" placeholder="Scan SKU to stocktake" type="text" class="form-control" pattern="\d*"
+               @keyup.enter="showStocktakeModal" >
 
         <b-modal @ok="submitStocktake" :id="modal_name" scrollable centered no-fade hide-header
-                 @shown="setFocusElementById(100, 'quantity-request-input', true, false)"
+                 @shown="setFocusElementById(100, 'quantity-request-input', true, true)"
                  @hidden="setFocusElementById(100, input_id, true, true)"
         >
             <template v-if="inventory">
