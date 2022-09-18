@@ -10,7 +10,6 @@
                v-model="barcode"
                @focus="simulateSelectAll"
                @keyup.enter="barcodeScanned(barcode)"
-               pattern="\d*"
         />
 
       <b-modal :id="getModalID" @submit="updateShelfLocation" @show="updateShelfLocationShow" @hidden="updateShelfLocationHidden" scrollable centered no-fade hide-header>

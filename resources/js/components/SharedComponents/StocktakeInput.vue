@@ -1,6 +1,6 @@
 <template>
     <div>
-        <input :id="input_id" placeholder="Scan SKU to stocktake" type="text" class="form-control" inputmode="numeric" pattern="\d*"
+        <input :id="input_id" placeholder="Scan SKU to stocktake" type="text" class="form-control"
                @keyup.enter="showStocktakeModal" >
 
         <b-modal @ok="submitStocktake" :id="modal_name" scrollable centered no-fade hide-header
