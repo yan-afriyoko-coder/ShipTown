@@ -24,11 +24,13 @@
                 <div class="col ml-0 pl-0">
                     <div class="card ml-0 pl-0">
                         <div class="card-body pt-2 pl-2">
-                            <div class="row mt-0 small">
+                            <div class="row mt-0">
                                 <div class="col-lg-6">
                                     <div class="text-primary h5">{{ record['product_name'] }}</div>
                                     <div>
-                                        sku: <b><a target="_blank" :href="'/products?hide_nav_bar=true&search=' + record['product_sku']">{{ record['product_sku'] }}</a><font-awesome-icon icon="copy" class="fa-xs text-primary ml-2" style="font-size: 0.70rem" role="button" @click="copyToClipBoard(record['product_sku'])"></font-awesome-icon>
+                                        sku: <b>
+                                        <font-awesome-icon icon="copy" class="fa-xs btn-link" role="button" @click="copyToClipBoard(record['product_sku'])"></font-awesome-icon>
+                                        <a target="_blank" :href="'/products?hide_nav_bar=true&search=' + record['product_sku']">{{ record['product_sku'] }}</a>
                                     </b>
                                     </div>
                                     <div>
@@ -39,7 +41,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="row pt-1">
-                                        <div class="col-6">
+                                        <div class="col-6 small">
                                             <div >
                                                 incoming: <b>{{ record['quantity_incoming'] }}</b>
                                             </div>
@@ -56,13 +58,11 @@
                                                 warehouse_code: <b>{{ record['warehouse_code'] }}</b>
                                             </div>
                                         </div>
-                                        <div :class="'col-3 text-center' + record['quantity_available'] <= 0 ? 'bg-warning' : '' ">
-                                            <small>available</small>
-                                            <h3>{{ record['quantity_available'] }}</h3>
+                                        <div class="col-3">
+                                            <number-card label="available" :number="record['quantity_available']" v-bind:class="{'bg-warning' : record['quantity_available'] < 0 }"></number-card>
                                         </div>
-                                        <div class="col-3 text-center">
-                                            <small>required</small>
-                                            <h3>{{ record['quantity_required'] }}</h3>
+                                        <div class="col-3">
+                                            <number-card label="required" :number="record['quantity_required']"></number-card>
                                         </div>
                                     </div>
                                 </div>
