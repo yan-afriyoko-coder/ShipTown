@@ -26,7 +26,7 @@
         </template>
 
         <template v-for="product in products">
-            <div class="row mt-3">
+            <div class="row">
                 <div class="col">
                     <product-card :product="product" :expanded="products.length === 1"/>
                 </div>
