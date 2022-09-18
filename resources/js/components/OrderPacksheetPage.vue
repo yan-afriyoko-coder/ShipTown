@@ -29,7 +29,7 @@
                 </div>
             </template>
 
-            <div class="row mb-3 pl-1 pr-1">
+            <div class="row mb-1 pb-2 pt-1 sticky-top bg-light" style="z-index: 10;">
                 <div class="flex-fill">
                     <barcode-input-field @barcodeScanned="packBarcode" placeholder="Enter sku or alias to ship 1 piece" ref="barcode"/>
                 </div>

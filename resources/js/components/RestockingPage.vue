@@ -1,7 +1,7 @@
 <template>
     <div class="container dashboard-widgets">
 
-        <div class="row mb-3 pl-1 pr-1" v-if="currentUser['warehouse'] !== null">
+        <div class="row mb-1 pb-2 pt-1 sticky-top bg-light" style="z-index: 10;" v-if="currentUser['warehouse'] !== null">
             <div class="flex-fill">
                 <barcode-input-field placeholder='Search products using name, sku, alias or command'
                                      :url_param_name="'filter[search]'"

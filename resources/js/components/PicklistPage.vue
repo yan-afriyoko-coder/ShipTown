@@ -1,7 +1,6 @@
 <template>
     <div>
-
-        <div class="row mb-3">
+        <div class="row mb-1 pb-2 pt-1 sticky-top bg-light" style="z-index: 10;">
             <div class="col-8">
                 <div class="pl-1 pr-1">
                     <barcode-input-field @barcodeScanned="pickByBarcode" placeholder="Enter sku or alias to pick products"/>
