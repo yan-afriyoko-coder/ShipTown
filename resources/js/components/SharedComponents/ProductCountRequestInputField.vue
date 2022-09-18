@@ -4,7 +4,11 @@
                              @barcodeScanned="barcodeScanned"
         />
 
-        <b-modal @ok="submitStocktake" id="quantity-request-modal" scrollable centered no-fade hide-header>
+        <b-modal @ok="submitStocktake" id="quantity-request-modal" scrollable centered no-fade hide-header
+                 @show="document.getElementById('barcodeInput').readOnly = true"
+                 @shown="setFocusElementById(100, 'quantity-request-input', true, false)"
+                 @hidden="setFocusElementById(300, 'barcodeInput', true, true)"
+        >
             <template v-if="inventory">
                 <div>Name: {{ inventory.product.name }}</div>
                 <div>sku: <strong>{{ inventory.product.sku }}</strong></div>
@@ -52,22 +56,6 @@
                 recentStocktakes: [],
                 stocktakeSuggestions: [],
             };
-        },
-
-        mounted() {
-            this.$root.$on('bv::modal::hidden', (bvEvent, modalId) => {
-                this.setFocusElementById(300, 'barcodeInput', true, true)
-            })
-
-            this.$root.$on('bv::modal::show', (bvEvent, modalId) => {
-                // we need to disable it otherwise b-modal might return focus on it too quickly
-                // and on screen keyboard will stay visible
-                document.getElementById('barcodeInput').readOnly = true;
-            })
-
-            this.$root.$on('bv::modal::shown', (bvEvent, modalId) => {
-                this.setFocusElementById(100, 'quantity-request-input', true, false)
-            })
         },
 
         methods: {

@@ -134,6 +134,11 @@ Vue.component('passport-authorized-clients', require('./components/Settings/Auth
 Vue.component('passport-personal-access-tokens', require('./components/Settings/PersonalAccessTokens.vue').default);
 
 /**
+ * Modals
+ */
+Vue.component('stocktake-input', require('./components/SharedComponents/StocktakeInput.vue').default);
+
+/**
  * Pages
  */
 Vue.component('stocktaking-page', require('./components/StocktakingPage.vue').default);

@@ -49,7 +49,13 @@
             </div>
         </div>
 
-        <b-modal id="configuration-modal" centered no-fade hide-footer title="Data Collection">
+        <b-modal id="configuration-modal" centered no-fade hide-footer hide-header
+                 @shown="setFocusElementById(1,'stocktake-input')"
+                 @hidden="setFocusElementById(1,'barcodeInput')"
+        >
+            <stocktake-input></stocktake-input>
+            <hr>
+
             <a :href="getDownloadLink"  @click.prevent="downloadFileAndHideModal" v-b-toggle class="col btn mb-1 btn-primary">Download</a>
             <hr>
             <vue-csv-import
@@ -86,6 +92,7 @@
 
         </b-modal>
 
+
     </div>
 </template>
 
@@ -118,6 +125,7 @@
 
             data: function() {
                 return {
+                    skuToStocktake: '',
                     dataCollection: null,
                     data: [],
                     nextUrl: null,
