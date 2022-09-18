@@ -55,7 +55,6 @@
         >
             <stocktake-input></stocktake-input>
             <hr>
-
             <a :href="getDownloadLink"  @click.prevent="downloadFileAndHideModal" v-b-toggle class="col btn mb-1 btn-primary">Download</a>
             <hr>
             <vue-csv-import
