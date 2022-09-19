@@ -28,8 +28,7 @@ class SyncProductsJob implements ShouldQueue
     {
         Api2cartSimpleProduct::query()
             ->where(['is_in_sync' => false])
-            ->orderBy('updated_at')
-            ->chunk(10, function ($products) {
+            ->chunkById(10, function ($products) {
                 foreach ($products as $product) {
                     SyncProduct::dispatchNow($product);
                 }
