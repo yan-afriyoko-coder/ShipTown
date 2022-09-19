@@ -64,9 +64,8 @@ class SyncVariant implements ShouldQueue
                 ]);
                 break;
             case RequestResponse::RETURN_CODE_OK:
-                $this->product_link->fetchFromApi2cart();
                 $this->product_link->update([
-                    'is_in_sync' => null,
+                    'is_in_sync' => true,
                 ]);
                 break;
         }

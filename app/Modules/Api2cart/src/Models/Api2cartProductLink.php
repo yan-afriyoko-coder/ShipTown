@@ -94,13 +94,11 @@ class Api2cartProductLink extends BaseModel
     public function setLastFetchedDataAttribute($value)
     {
         $this->is_in_sync                     = null;
-        $this->last_fetched_at                = now();
+        $this->last_fetched_at                = $value ? now() : null;
 
         $sprice_create = data_get($value, 'sprice_create', '2000-01-01 00:00:00');
         $sprice_expire = data_get($value, 'sprice_expire', '2000-01-01 00:00:00');
 
-        $this->api2cart_product_id            = data_get($value, 'id');
-        $this->api2cart_product_type          = data_get($value, 'type');
         $this->api2cart_quantity              = data_get($value, 'quantity');
         $this->api2cart_price                 = data_get($value, 'price');
         $this->api2cart_sale_price            = data_get($value, 'special_price');
@@ -109,45 +107,61 @@ class Api2cartProductLink extends BaseModel
 
         $this->attributes['last_fetched_data'] = json_encode($value);
     }
+
     /**
      */
-    public function isInSync(): bool
+    public static function isInSync(Api2cartProductLink $productLink): bool
     {
-        if ($this->api2cart_product_type === 'configurable') {
+        $link = $productLink->refresh();
+        ray($link);
+
+        $link->is(
+            $link->api2cart_quantity,
+            $link->product->inventory->quantity
+        );
+        if ($link->api2cart_product_type === 'configurable') {
             return true;
         }
 
-        $api2cartDataExpected = ProductTransformer::toApi2cartPayload($this);
+        $differences = [];
 
-        $api2cartDataActual = [
-            'type'          => $this->api2cart_product_type,
-            'id'            => $this->api2cart_product_id,
-            'quantity'      => $this->api2cart_quantity,
-            'price'         => $this->api2cart_price,
-            'special_price' => $this->api2cart_sale_price,
-            'sprice_create' => Api2cartService::formatDateForApi2cart($this->api2cart_sale_price_start_date),
-            'sprice_expire' => Api2cartService::formatDateForApi2cart($this->api2cart_sale_price_end_date),
+        $expected = ProductTransformer::toApi2cartPayload($link);
+
+        $actual = [
+            'type'          => $link->api2cart_product_type,
+            'id'            => $link->api2cart_product_id,
+            'quantity'      => $link->api2cart_quantity,
+            'price'         => $link->api2cart_price,
+            'special_price' => $link->api2cart_sale_price,
+            'sprice_create' => Api2cartService::formatDateForApi2cart($link->api2cart_sale_price_start_date),
+            'sprice_expire' => Api2cartService::formatDateForApi2cart($link->api2cart_sale_price_end_date),
         ];
 
-        $differences = $this->getDifferences($api2cartDataExpected, $api2cartDataActual);
 
-        Log::debug('Sync check', [
-            'type' => $this->api2cart_product_type,
-            'sku' => $this->product->sku,
-            'differences' => $differences,
-            'now' => $api2cartDataActual
-        ]);
+        $differences = $link->getDifferences($expected, $actual);
+
+        ray($expected, $actual, $differences);
+//
+//        ray($expected, $actual, $differences);
+//
+//        Log::debug('Sync check', [
+//            'type' => $link->api2cart_product_type,
+//            'sku' => $link->product->sku,
+//            'differences' => $differences,
+//            'now' => $actual
+//        ]);
 
 
         if (empty($differences)) {
             return true;
         }
 
+        ray($differences);
+
         Log::warning('Sync Check FAILED', [
-            'type' => $this->api2cart_product_type,
-            'sku' => $this->product->sku,
+            'type' => $link->api2cart_product_type,
+            'sku' => $link->product->sku,
             'differences' => $differences,
-            'now' => $api2cartDataActual
         ]);
 
         return false;
@@ -167,7 +181,16 @@ class Api2cartProductLink extends BaseModel
         $keys_to_verify = [];
 
         if (data_get($actual, 'manage_stock', 'False') != 'False') {
-            $keys_to_verify = array_merge($keys_to_verify, ['quantity']);
+            if ($actual['quantity'] === null) {
+                $differences['quantity'] = ['api2cart_quantity is null'];
+            }
+
+            if (doubleval($actual['quantity']) !== doubleval($expected['quantity'])) {
+                $differences['quantity'] = [
+                    'expected' => doubleval($expected['quantity']),
+                    'actual' => doubleval($actual['quantity']),
+                ];
+            }
         }
 
         if (data_get($expected, 'quantity', 0) > 0) {

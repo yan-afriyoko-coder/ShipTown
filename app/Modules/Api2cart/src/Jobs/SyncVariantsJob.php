@@ -33,7 +33,11 @@ class SyncVariantsJob implements ShouldQueue
             ->where(['is_in_sync' => false])
             ->chunkById(10, function ($variants) {
                 foreach ($variants as $variant) {
-                    SyncVariant::dispatchNow($variant);
+                    try {
+                        SyncVariant::dispatchNow($variant);
+                    } catch (Exception $exception) {
+                        report($exception);
+                    }
                 }
             });
     }

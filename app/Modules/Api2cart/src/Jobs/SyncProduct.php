@@ -76,8 +76,8 @@ class SyncProduct implements ShouldQueue
                 break;
             case RequestResponse::RETURN_CODE_OK:
                 $this->product_link->update([
-                    'is_in_sync' => null,
                     'last_fetched_data' => null,
+                    'is_in_sync' => true,
                 ]);
                 break;
         }

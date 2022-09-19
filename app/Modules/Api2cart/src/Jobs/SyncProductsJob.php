@@ -30,7 +30,11 @@ class SyncProductsJob implements ShouldQueue
             ->where(['is_in_sync' => false])
             ->chunkById(10, function ($products) {
                 foreach ($products as $product) {
-                    SyncProduct::dispatchNow($product);
+                    try {
+                        SyncProduct::dispatchNow($product);
+                    } catch (Exception $exception) {
+                        report($exception);
+                    }
                 }
             });
     }
