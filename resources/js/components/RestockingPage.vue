@@ -12,7 +12,7 @@
         </div>
 
         <b-modal id="configuration-modal" centered no-fade hide-footer hide-header
-                 @shown="setFocusElementById(1,'stocktake-input')"
+                 @shown="setFocusElementById(100,'stocktake-input', true, true)"
                  @hidden="focusOnInputAndReload">
             <stocktake-input></stocktake-input>
             <hr>
@@ -117,7 +117,7 @@
 
         methods: {
             focusOnInputAndReload() {
-                this.setFocusElementById(1,'barcodeInput');
+                this.setFocusElementById(100,'barcodeInput', true, true);
                 this.loadData();
             },
 

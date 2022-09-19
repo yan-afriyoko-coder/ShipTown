@@ -58,7 +58,7 @@
             <stocktake-input></stocktake-input>
             <hr>
             <button @click.prevent="transferStockIn" v-b-toggle class="col btn mb-1 btn-primary">Receive Stock IN</button>
-            <button @click.prevent="transferStockOut" v-b-toggle class="col btn mb-1 btn-primary">Receive Stock Out</button>
+            <button @click.prevent="transferStockOut" v-b-toggle class="col btn mb-1 btn-primary">Receive Stock OUT</button>
             <a :href="getDownloadLink"  @click.prevent="downloadFileAndHideModal" v-b-toggle class="col btn mb-1 btn-primary">Download</a>
             <hr>
             <vue-csv-import
