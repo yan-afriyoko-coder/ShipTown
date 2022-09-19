@@ -34,7 +34,7 @@ class FetchSimpleProductsInfoJob implements ShouldQueue
             ->each(function (Api2cartConnection $conn) {
                 Api2cartSimpleProduct::query()
                     ->where(['api2cart_connection_id' => $conn->id])
-                    ->whereNull('last_fetched_data')
+                    ->whereRaw('(last_fetched_at IS NULL OR last_fetched_data IS NULL)')
                     ->chunkById(20, function ($chunk) use ($conn) {
                         $this->fetchApi2cartData($conn, $chunk->pluck('api2cart_product_id')->toArray());
                     });
