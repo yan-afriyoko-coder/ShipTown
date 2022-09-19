@@ -19,11 +19,12 @@ class SyncRequestedEventListener
     public function handle()
     {
         UpdateMissingTypeAndIdJob::dispatch();
-        VerifyIfProductsInSyncJob::dispatch();
         FetchSimpleProductsInfoJob::dispatch();
         FetchVariantsInfoJob::dispatch();
 
         SyncProductsJob::dispatch();
         SyncVariantsJob::dispatch();
+
+        VerifyIfProductsInSyncJob::dispatch();
     }
 }
