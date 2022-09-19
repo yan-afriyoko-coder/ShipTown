@@ -5,17 +5,21 @@
         />
 
         <b-modal @ok="submitStocktake" id="quantity-request-modal" scrollable centered no-fade hide-header
-                 @show="document.getElementById('barcodeInput').readOnly = true"
                  @shown="setFocusElementById(100, 'quantity-request-input', true, false)"
                  @hidden="setFocusElementById(300, 'barcodeInput', true, true)"
         >
             <template v-if="inventory">
-                <div>Name: {{ inventory.product.name }}</div>
-                <div>sku: <strong>{{ inventory.product.sku }}</strong></div>
-                <div class="mt-2 mb-2">in stock: <strong>{{ inventory.quantity }}</strong></div>
-                <div class="row mt-2">
+                <div class="col-sm-12 col-lg-12">
+                    <product-info-card :product="inventory.product"></product-info-card>
+                </div>
+                <div class="col-sm-12 col-lg-12 text-right">
+                    <number-card label="in stock" :number="inventory['quantity']"></number-card>
+
+                    <slot name="custom_cards"></slot>
+                </div>
+                <div class="row">
                     <div class="col-12">
-                        <input class="form-control" :placeholder="'quantity'" :class="{ 'border-danger': this.quantity < 0, 'border-success': this.quantity > 0}"
+                        <input class="form-control" :placeholder="'quantity to add'" :class="{ 'border-danger': this.quantity < 0, 'border-success': this.quantity > 0}"
                                id="quantity-request-input"
                                dusk="quantity-request-input"
                                v-model="quantity"
@@ -73,6 +77,7 @@
 
                 const params = {
                     'filter[sku_or_alias]': barcode,
+                    'filter[warehouse_id]': this.currentUser()['warehouse_id'],
                     'include': 'product'
                 }
 

@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\BaseModel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
 /**
@@ -12,11 +14,19 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property DataCollectionRecord $records
  */
-class DataCollection extends Model
+class DataCollection extends BaseModel
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'warehouse_id',
         'name',
     ];
+
+    public function records(): HasMany
+    {
+        return $this->hasMany(DataCollectionRecord::class);
+    }
 }

@@ -56,7 +56,16 @@ class Report extends Model
     }
 
     /**
-     * @throws ContainerExceptionInterface
+     *
+     */
+    public function toArray()
+    {
+        return $this->queryBuilder()
+            ->simplePaginate(request()->get('per_page', 10))
+            ->appends(request()->query());
+    }
+
+    /**
      * @throws NotFoundExceptionInterface
      * @throws InvalidSelectException
      */
