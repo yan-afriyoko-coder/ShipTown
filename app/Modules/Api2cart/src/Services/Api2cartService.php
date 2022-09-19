@@ -226,6 +226,39 @@ class Api2cartService
     }
 
     /**
+     * @throws GuzzleException
+     */
+    public static function getProductsList(Api2cartConnection $conn, array $product_ids, array $params = null): RequestResponse
+    {
+        $query = [
+            'product_ids' => implode(',', $product_ids),
+            'params' => implode(
+                ',',
+                $params ?? [
+                    'id',
+                    'type',
+                    'model',
+                    'u_model',
+                    'sku',
+                    'u_sku',
+                    'price',
+                    'special_price',
+                    'stores_ids',
+                    'manage_stock',
+                    'quantity',
+                    'inventory',
+                ]
+            ),
+        ];
+
+        if ($conn->magento_store_id !== null) {
+            $query['store_id'] = $conn->magento_store_id;
+        }
+
+        return Client::GET($conn->bridge_api_key, 'product.list.json', $query);
+    }
+
+    /**
      * @param Api2cartConnection $conn
      * @param string $sku
      * @param array|null $fields
@@ -404,7 +437,7 @@ class Api2cartService
      * @param Api2cartConnection $connection
      * @return array
      */
-    private static function transformProduct($product, Api2cartConnection $connection): array
+    public static function transformProduct($product, Api2cartConnection $connection): array
     {
         $product['sku'] = empty($product['u_sku']) ? $product['u_model'] : $product['u_sku'];
         $product['model'] = $product['u_model'];
