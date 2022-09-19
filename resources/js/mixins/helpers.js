@@ -28,7 +28,7 @@ export default {
                 return (value && value !== 0) ? value : '-';
             },
 
-            setFocus: function (input, autoSelectAll = false, hideOnScreenKeyboard = false, delay = 1) {
+            setFocus: function (input, autoSelectAll = false, hideOnScreenKeyboard = false, delay = 100) {
                 setTimeout(() => {
                     if (input === null) {
                         return;
@@ -54,9 +54,7 @@ export default {
             },
 
             setFocusElementById(delay = 1, elementId, autoSelectAll = false, hideOnScreenKeyboard = false) {
-                setTimeout(() => {
-                    this.setFocus(document.getElementById(elementId), autoSelectAll, hideOnScreenKeyboard);
-                }, delay);
+                this.setFocus(document.getElementById(elementId), autoSelectAll, hideOnScreenKeyboard, delay);
             },
 
             isMoreThanPercentageScrolled: function (percentage) {
