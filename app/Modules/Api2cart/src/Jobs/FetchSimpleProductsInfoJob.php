@@ -31,42 +31,46 @@ class FetchSimpleProductsInfoJob implements ShouldQueue
     {
         Api2cartConnection::query()
             ->get()
-            ->each(function (Api2cartConnection $api2cartConnection) {
-                $product_ids = Api2cartSimpleProduct::query()
-                    ->where(['api2cart_connection_id' => $api2cartConnection->id])
+            ->each(function (Api2cartConnection $conn) {
+                Api2cartSimpleProduct::query()
+                    ->where(['api2cart_connection_id' => $conn->id])
                     ->whereNull('last_fetched_data')
                     ->orderBy('updated_at')
-                    ->limit(10)
-                    ->pluck('api2cart_product_id');
-
-                if ($product_ids->isEmpty()) {
-                    return;
-                }
-
-                $response = Api2cartService::getProductsList($api2cartConnection, $product_ids->toArray());
-
-                if ($response->isNotSuccess()) {
-                    throw new RequestException(implode(' ', [
-                            $response->getReturnCode(),
-                            $response->getReturnMessage()
-                        ]));
-                }
-
-                $productRecords = data_get($response->collect(), 'result.product');
-
-                collect($productRecords)
-                    ->each(function ($product) use ($api2cartConnection) {
-                        $productLink = Api2cartSimpleProduct::query()
-                            ->where([
-                                'api2cart_product_id' => $product['id'],
-                                'api2cart_connection_id' => $api2cartConnection->id,
-                            ])->first();
-
-                        $productLink->update([
-                            'is_in_sync' => null,
-                            'last_fetched_data' => Api2cartService::transformProduct($product, $api2cartConnection)
-                        ]);
+                    ->chunk(10, function ($chunk) use ($conn) {
+                        $this->updateProductLinks($conn, $chunk->pluck('api2cart_product_id')->toArray());
                     });
+            });
+    }
+
+    /**
+     * @throws RequestException
+     * @throws GuzzleException
+     */
+    private function updateProductLinks(Api2cartConnection $conn, array $product_ids)
+    {
+        $response = Api2cartService::getProductsList($conn, $product_ids);
+
+        if ($response->isNotSuccess()) {
+            throw new RequestException(implode(' ', [
+                $response->getReturnCode(),
+                $response->getReturnMessage()
+            ]));
+        }
+
+        $productRecords = data_get($response->collect(), 'result.product');
+
+        collect($productRecords)
+            ->each(function ($product) use ($conn) {
+                Api2cartSimpleProduct::query()
+                    ->where([
+                        'api2cart_product_id' => $product['id'],
+                        'api2cart_connection_id' => $conn->id,
+                    ])
+                    ->first()
+                    ->update([
+                        'is_in_sync' => null,
+                        'last_fetched_data' => Api2cartService::transformProduct($product, $conn)
+                    ]);
             });
     }
 }
