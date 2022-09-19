@@ -220,7 +220,9 @@ class Report extends Model
         // add exact filters
         collect($this->fields)
             ->each(function ($full_field_name, $alias) use (&$allowedFilters) {
-                $allowedFilters[] = AllowedFilter::exact($alias, $full_field_name);
+                $allowedFilters[] = AllowedFilter::callback($alias, function ($query, $value) use ($full_field_name) {
+                    return $query->where($full_field_name, '=', $value);
+                });
             });
 
         return $allowedFilters;
