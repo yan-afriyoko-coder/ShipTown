@@ -12,8 +12,8 @@
                @keyup.enter="barcodeScanned(barcode)"
         />
 
-      <b-modal :id="getModalID" @submit="updateShelfLocation" @show="updateShelfLocationShow" @hidden="updateShelfLocationHidden" scrollable centered no-fade hide-header
-        @shown="setFocusElementById(100, 'set-shelf-location-command-modal-input', true, true)"
+      <b-modal :id="getModalID" @submit="updateShelfLocation" @shown="updateShelfLocationShown" @hidden="updateShelfLocationHidden" scrollable centered no-fade hide-header
+
       >
           <div class="h5 text-center">{{ command['name'] }} : {{ command['value'] }}</div>
           <div v-if="shelfLocationModalContinuesScan" class="alert-success text-center mb-2 small">CONTINUES SCAN ENABLED</div>
@@ -76,13 +76,11 @@
         },
 
         methods: {
-            updateShelfLocationShow: function (bvEvent, modalId) {
+            updateShelfLocationShown: function (bvEvent, modalId) {
                 this.shelfLocationModalShowing = true;
                 this.shelfLocationModalContinuesScan = false;
                 this.shelfLocationModalCommandScanCount = 0;
-                // we need to disable it otherwise b-modal might return focus on it too quickly
-                // and on screen keyboard will stay visible
-                document.getElementById('barcodeInput').readOnly = true;
+                this.setFocusElementById(100, 'set-shelf-location-command-modal-input', true, true)
             },
 
             updateShelfLocationHidden: function (bvEvent, modalId) {
