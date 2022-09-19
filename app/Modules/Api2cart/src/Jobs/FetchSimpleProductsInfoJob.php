@@ -35,9 +35,8 @@ class FetchSimpleProductsInfoJob implements ShouldQueue
                 Api2cartSimpleProduct::query()
                     ->where(['api2cart_connection_id' => $conn->id])
                     ->whereNull('last_fetched_data')
-                    ->orderBy('updated_at')
-                    ->chunk(10, function ($chunk) use ($conn) {
-                        $this->updateProductLinks($conn, $chunk->pluck('api2cart_product_id')->toArray());
+                    ->chunkById(20, function ($chunk) use ($conn) {
+                        $this->fetchApi2cartData($conn, $chunk->pluck('api2cart_product_id')->toArray());
                     });
             });
     }
@@ -46,7 +45,7 @@ class FetchSimpleProductsInfoJob implements ShouldQueue
      * @throws RequestException
      * @throws GuzzleException
      */
-    private function updateProductLinks(Api2cartConnection $conn, array $product_ids)
+    private function fetchApi2cartData(Api2cartConnection $conn, array $product_ids)
     {
         $response = Api2cartService::getProductsList($conn, $product_ids);
 

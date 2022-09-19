@@ -232,6 +232,7 @@ class Api2cartService
     {
         $query = [
             'product_ids' => implode(',', $product_ids),
+            'count' => count($product_ids),
             'params' => implode(
                 ',',
                 $params ?? [
