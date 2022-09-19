@@ -39,7 +39,7 @@ class CheckForOutOfSyncInventoryJob implements ShouldQueue
                     'modules_api2cart_product_links.id as api2cart_product_link_id',
                     DB::raw('(
                         modules_api2cart_product_links.api2cart_quantity IS NOT NULL
-                        AND modules_api2cart_product_links.api2cart_quantity = SUM(inventory.quantity)
+                        AND modules_api2cart_product_links.api2cart_quantity = SUM(inventory.quantity_available)
                     ) as actual_is_in_sync'),
                 ])
                 ->leftJoin('inventory', function (JoinClause $join) use ($warehouse_ids) {
