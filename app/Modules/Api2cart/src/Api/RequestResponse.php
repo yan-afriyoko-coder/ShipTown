@@ -2,6 +2,7 @@
 
 namespace App\Modules\Api2cart\src\Api;
 
+use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface;
 
 class RequestResponse
@@ -133,5 +134,10 @@ class RequestResponse
     public function isReturnCodeProductSkuMustBeUnique(): bool
     {
         return $this->isReturnCode(self::RETURN_CODE_PRODUCT_SKU_MUST_BE_UNIQUE);
+    }
+
+    public function collect(): Collection
+    {
+        return collect($this->asArray());
     }
 }

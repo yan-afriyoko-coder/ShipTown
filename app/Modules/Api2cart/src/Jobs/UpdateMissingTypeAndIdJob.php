@@ -6,6 +6,7 @@ use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use App\Modules\Api2cart\src\Services\Api2cartService;
 use App\Modules\Api2cart\src\Transformers\ProductTransformer;
 use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -22,9 +23,10 @@ class UpdateMissingTypeAndIdJob implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @throws Exception
-     *
      * @return void
+     * @throws GuzzleException
+     *
+     * @throws Exception
      */
     public function handle()
     {
@@ -40,6 +42,7 @@ class UpdateMissingTypeAndIdJob implements ShouldQueue
 
     /**
      * @param Api2cartProductLink $link
+     * @throws Exception|GuzzleException
      */
     private function updateTypeAndIdOrCreate(Api2cartProductLink $link): void
     {
@@ -59,6 +62,14 @@ class UpdateMissingTypeAndIdJob implements ShouldQueue
                 $link->api2cartConnection->bridge_api_key,
                 ProductTransformer::toApi2cartPayload($link)
             );
+
+            if ($response->isNotSuccess()) {
+                throw new Exception(implode(' ', [
+                    'API2CART Failed to create simple product -',
+                    $response->getReturnCode(),
+                    $response->getReturnMessage()
+                ]));
+            }
 
             $link->update([
                 'api2cart_product_type' => 'simple',

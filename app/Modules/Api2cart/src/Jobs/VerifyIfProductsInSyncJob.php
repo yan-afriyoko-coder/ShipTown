@@ -28,6 +28,7 @@ class VerifyIfProductsInSyncJob implements ShouldQueue
     {
         $collection = Api2cartProductLink::query()
             ->whereNull('is_in_sync')
+            ->whereNotNull('last_fetched_data')
             ->orderBy('updated_at', 'desc')
             ->limit(500)
             ->get();
