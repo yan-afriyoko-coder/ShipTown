@@ -41,7 +41,6 @@ class FetchVariantsInfoJob implements ShouldQueue
                             );
 
                             $variant->last_fetched_data = $product_now;
-                            $variant->is_in_sync = null;
                             $variant->save();
                         });
                     });

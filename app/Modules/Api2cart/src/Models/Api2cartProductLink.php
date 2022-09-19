@@ -93,8 +93,7 @@ class Api2cartProductLink extends BaseModel
 
     public function setLastFetchedDataAttribute($value)
     {
-        $this->attributes['last_fetched_data'] = json_encode($value);
-
+        $this->is_in_sync                     = null;
         $this->last_fetched_at                = now();
 
         $sprice_create = data_get($value, 'sprice_create', '2000-01-01 00:00:00');
@@ -107,6 +106,8 @@ class Api2cartProductLink extends BaseModel
         $this->api2cart_sale_price            = data_get($value, 'special_price');
         $this->api2cart_sale_price_start_date = Carbon::createFromTimeString($sprice_create)->format('Y-m-d H:i:s');
         $this->api2cart_sale_price_end_date   = Carbon::createFromTimeString($sprice_expire)->format('Y-m-d H:i:s');
+
+        $this->attributes['last_fetched_data'] = json_encode($value);
     }
     /**
      */
