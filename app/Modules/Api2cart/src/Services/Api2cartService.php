@@ -387,7 +387,7 @@ class Api2cartService
 
         if ($product_id) {
             return [
-                'type' => 'product',
+                'type' => 'simple',
                 'id'   => $product_id,
             ];
         }
