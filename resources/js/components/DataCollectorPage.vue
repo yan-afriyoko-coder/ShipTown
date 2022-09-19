@@ -25,15 +25,15 @@
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
                 <template v-slot:content>
                     <div class="row" v-bind:class="{ 'disabled': record['quantity_to_scan'] === 0 }">
-                        <div class="col-sm-12 col-lg-6 ">
+                        <div class="col-sm-12 col-lg-5">
                             <product-info-card :product= "record['product']"></product-info-card>
                         </div>
 
-                        <div class="row col-sm-12 col-lg-6 text-right">
-                            <div class="col-6 text-left small">
-                                in stock: <strong>{{ dashIfZero(Number(record['inventory_quantity'])) }}</strong>
+                        <div class="row col-sm-12 col-lg-7 text-right">
+                            <div class="col-12 col-md-4 text-left small">
+                               <div>in stock: <strong>{{ dashIfZero(Number(record['inventory_quantity'])) }}</strong></div>
                             </div>
-                            <div class="col-6">
+                            <div class="col-12 col-md-8 text-right">
                                 <number-card label="requested" :number="record['quantity_requested']" v-if="record['quantity_requested']"></number-card>
                                 <number-card label="scanned" :number="record['quantity_scanned']" v-bind:class="{ 'bg-warning': record['quantity_requested'] && record['quantity_scanned'] > record['quantity_requested'] }"></number-card>
                                 <number-card label="to scan" :number="record['quantity_to_scan']" v-if="record['quantity_requested']"></number-card>
