@@ -2,9 +2,8 @@
 
 namespace App\Modules\Reports\src\Models;
 
-use App\Models\Inventory;
+use App\Models\Product;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Spatie\QueryBuilder\AllowedFilter;
 
 class RestockingReport extends Report
@@ -18,6 +17,7 @@ class RestockingReport extends Report
         $this->report_name = 'Restocking Report';
 
         $this->defaultSelect = implode(',', [
+            'id',
             'warehouse_code',
             'product_sku',
             'product_name',
@@ -31,20 +31,23 @@ class RestockingReport extends Report
 
         $this->defaultSort = '-quantity_required';
 
+        $this->allowedIncludes = ['tags'];
+
         if (request('title')) {
             $this->report_name = request('title').' ('.$this->report_name.')';
         }
 
-        $this->baseQuery = Inventory::query()
+        $this->baseQuery = Product::query()
+            ->leftJoin('inventory', 'inventory.product_id', '=', 'products.id')
             ->leftJoin('inventory as inventory_source', function ($join) {
                 $join->on('inventory_source.product_id', '=', 'inventory.product_id');
-            })
-            ->leftJoin('products as product', 'inventory.product_id', '=', 'product.id');
+            });
 
         $this->fields = [
+            'id'                                 => 'products.id',
             'warehouse_code'                     => 'inventory.warehouse_code',
-            'product_sku'                        => 'product.sku',
-            'product_name'                       => 'product.name',
+            'product_sku'                        => 'products.sku',
+            'product_name'                       => 'products.name',
             'reorder_point'                      => 'inventory.reorder_point',
             'restock_level'                      => 'inventory.restock_level',
             'quantity_available'                 => 'inventory.quantity_available',
@@ -77,8 +80,8 @@ class RestockingReport extends Report
         $this->addFilter(
             AllowedFilter::callback('search', function ($query, $value) {
                 $query->where(function ($query) use ($value) {
-                    $query->where('product.sku', 'like', '%'.$value.'%')
-                        ->orWhere('product.name', 'like', '%'.$value.'%');
+                    $query->where('products.sku', 'like', '%'.$value.'%')
+                        ->orWhere('products.name', 'like', '%'.$value.'%');
                 });
             })
         );

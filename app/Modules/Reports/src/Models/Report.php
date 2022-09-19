@@ -5,9 +5,9 @@ namespace App\Modules\Reports\src\Models;
 use App\Exceptions\InvalidSelectException;
 use App\Helpers\CsvBuilder;
 use App\Modules\Reports\src\Http\Resources\ReportResource;
+use App\Traits\HasTagsTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Facades\DB;
 use Psr\Container\ContainerExceptionInterface;
@@ -18,6 +18,8 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class Report extends Model
 {
+    use HasTagsTrait;
+
     protected $table = 'report';
     public string $report_name = 'Report';
     public string $view = 'reports.inventory';
@@ -36,7 +38,7 @@ class Report extends Model
     public $baseQuery;
 
     private array $allowedFilters = [];
-    private array $allowedIncludes = [];
+    public array $allowedIncludes = [];
     private array $fieldAliases = [];
 
     /**
@@ -54,7 +56,16 @@ class Report extends Model
     }
 
     /**
-     * @throws ContainerExceptionInterface
+     *
+     */
+    public function toArray()
+    {
+        return $this->queryBuilder()
+            ->simplePaginate(request()->get('per_page', 10))
+            ->appends(request()->query());
+    }
+
+    /**
      * @throws NotFoundExceptionInterface
      * @throws InvalidSelectException
      */
@@ -116,11 +127,11 @@ class Report extends Model
             $this->fieldAliases
         );
 
-        return response((string) $csv, 200, [
-            'Content-Type'              => 'text/csv',
-            'Cache-Control'             => 'no-store, no-cache',
+        return response((string)$csv, 200, [
+            'Content-Type' => 'text/csv',
+            'Cache-Control' => 'no-store, no-cache',
             'Content-Transfer-Encoding' => 'binary',
-            'Content-Disposition'       => 'attachment; filename="'.request('filename', 'report.csv').'"',
+            'Content-Disposition' => 'attachment; filename="' . request('filename', 'report.csv') . '"',
         ]);
     }
 
@@ -183,12 +194,12 @@ class Report extends Model
                 $fieldValue = data_get($this->fields, $selectFieldName);
 
                 if ($fieldValue === null) {
-                    throw new InvalidSelectException('Requested select field(s) `'.$selectFieldName.'` are not allowed.
+                    throw new InvalidSelectException('Requested select field(s) `' . $selectFieldName . '` are not allowed.
                     Allowed select(s) are ' . collect(array_keys($this->fields))->implode(','));
                 }
 
                 if ($fieldValue instanceof Expression) {
-                    $queryBuilder->addSelect(DB::raw('('.$fieldValue.') as '.$selectFieldName));
+                    $queryBuilder->addSelect(DB::raw('(' . $fieldValue . ') as ' . $selectFieldName));
                     return;
                 }
 
@@ -263,7 +274,7 @@ class Report extends Model
                     if ($fieldQuery instanceof Expression) {
                         $query->whereBetween(DB::raw('(' . $fieldQuery . ')'), [floatval($value[0]), floatval($value[1])]);
 
-                        return ;
+                        return;
                     }
 
                     $query->whereBetween($fieldQuery, [floatval($value[0]), floatval($value[1])]);
@@ -292,7 +303,7 @@ class Report extends Model
                 $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($fieldType, $fieldAlias, $filterName, $fieldQuery) {
                     // we add this to make sure query returns no records if array of two values is not specified
                     if ((!is_array($value)) or (count($value) != 2)) {
-                        throw new \Exception($filterName.': Invalid filter value, expected array of two values');
+                        throw new \Exception($filterName . ': Invalid filter value, expected array of two values');
                     }
 
                     if ($fieldQuery instanceof Expression) {
@@ -301,7 +312,7 @@ class Report extends Model
                             [Carbon::parse($value[0]), Carbon::parse($value[1])]
                         );
 
-                        return ;
+                        return;
                     }
 
                     $query->whereBetween($fieldQuery, [Carbon::parse($value[0]), Carbon::parse($value[1])]);

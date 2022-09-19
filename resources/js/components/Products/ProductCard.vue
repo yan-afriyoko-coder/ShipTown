@@ -1,16 +1,10 @@
 <template>
     <div>
-        <div class="row card ml-1 mr-1" >
-            <div class="col p-2 pl-3">
+        <div class="row card p-2" >
+            <div class="col pl-1">
                 <div class="row">
                     <div class="col">
-                        <div class="text-primary h5">{{ product.name }}
-                            <a @click="kickProduct" class="text-white">o</a>
-<!--                            <div class="float-right" data-toggle="modal" data-target="#filterConfigurationModal">-->
-<!--                                <button class="btn btn-success" v-if="quantityOrdered > 0">{{ quantityOrdered }}</button>-->
-<!--                                <font-awesome-icon icon="cart-plus" class="btn-link mt-1 mr-1" role="button" />-->
-<!--                            </div>-->
-                        </div>
+                        <div class="text-primary h5">{{ product.name }}</div>
                     </div>
                 </div>
                 <div class="row text-left">

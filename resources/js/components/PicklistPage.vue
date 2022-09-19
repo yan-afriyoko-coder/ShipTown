@@ -1,13 +1,12 @@
 <template>
     <div>
-
-        <div class="row mb-3">
+        <div class="row mb-1 pb-2 pt-1 sticky-top bg-light" style="z-index: 10;">
             <div class="col-8">
                 <div class="pl-1 pr-1">
                     <barcode-input-field @barcodeScanned="pickByBarcode" placeholder="Enter sku or alias to pick products"/>
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-4 pr-3">
                 <div class="row">
                     <div class="col-7">
                         <input ref="current_location" class="form-control" placeholder="Current shelf"
@@ -15,7 +14,7 @@
                                @keyup.enter="reloadPicks()"/>
                     </div>
                     <div class="col-5 ml-0 pl-0">
-                        <button type="button" class="btn btn-light" data-toggle="modal" data-target="#picklistConfigurationModal" href="#"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+                        <button type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#picklistConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
                     </div>
                 </div>
             </div>

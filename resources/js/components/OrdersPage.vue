@@ -1,7 +1,7 @@
 <template>
     <div>
         <template v-if="getUrlParameter('hide_nav_bar', false) === false">
-            <div class="row mb-3 pl-1 pr-1">
+            <div class="row mb-1 p-1 sticky-top bg-light" style="z-index: 10;">
                 <div class="flex-fill">
                     <barcode-input-field :url_param_name="'search'" @barcodeScanned="findText" placeholder="Search orders using number, sku, alias or command" ref="barcode"/>
                 </div>

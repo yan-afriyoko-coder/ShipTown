@@ -21,26 +21,36 @@ class DataCollectionReport extends Report
                     ->where('inventory.warehouse_id', Auth::user()->warehouse_id);
             });
 
+        $this->allowedIncludes = [
+            'product',
+            'dataCollection',
+            'inventory',
+        ];
+
         $this->fields = [
             'id'                    => 'data_collection_records.id',
+            'product_id'            => 'data_collection_records.product_id',
             'data_collection_id'    => 'data_collection_records.data_collection_id',
             'product_sku'           => 'product.sku',
             'product_name'          => 'product.name',
             'quantity_requested'    => 'data_collection_records.quantity_requested',
             'quantity_scanned'      => 'data_collection_records.quantity_scanned',
             'quantity_to_scan'      => 'data_collection_records.quantity_to_scan',
+            'inventory_quantity'    => 'inventory.quantity',
             'shelf_location'        => 'inventory.shelve_location',
         ];
 
         $this->casts = [
             'id'                    => 'integer',
             'data_collection_id'    => 'integer',
+            'product_id'            => 'integer',
             'product_sku'           => 'string',
             'product_name'          => 'string',
             'shelf_location'        => 'string',
             'quantity_requested'    => 'float',
             'quantity_scanned'      => 'float',
             'quantity_to_scan'      => 'float',
+            'inventory_quantity'    => 'float',
         ];
 
         $this->addFilter(

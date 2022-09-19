@@ -6,11 +6,13 @@ use App\Helpers\HasQuantityRequiredSort;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
  *  @property int    $id
+ *  @property int    $data_collection_id,
  *  @property int    $product_id
  *  @property double $quantity_requested
  *  @property double $quantity_scanned
@@ -19,12 +21,11 @@ use Spatie\QueryBuilder\QueryBuilder;
  *  @property Carbon $updated_at
  *
  *  @property-read Product $product
+ *  @property-read DataCollection $dataCollection
+ *  @property-read Inventory $inventory
  */
 class DataCollectionRecord extends Model
 {
-    /**
-     * @var string[]
-     */
     protected $fillable = [
         'data_collection_id',
         'product_id',
@@ -39,9 +40,21 @@ class DataCollectionRecord extends Model
         'quantity_to_scan'   => 'double',
     ];
 
-    /**
-     * @return QueryBuilder
-     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    public function dataCollection(): BelongsTo
+    {
+        return $this->belongsTo(DataCollection::class);
+    }
+
+    public function inventory(): BelongsTo
+    {
+        return $this->belongsTo(Inventory::class);
+    }
+
     public static function getSpatieQueryBuilder(): QueryBuilder
     {
         $allowedSort = AllowedSort::custom('has_quantity_required', new HasQuantityRequiredSort());
@@ -58,17 +71,10 @@ class DataCollectionRecord extends Model
             ])
             ->allowedIncludes([
                 'product',
+                'inventory',
                 'product.inventory',
                 'product.user_inventory',
             ])
             ->defaultSort($allowedSort, '-updated_at');
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function product(): BelongsTo
-    {
-        return $this->belongsTo(Product::class);
     }
 }

@@ -11,7 +11,7 @@
             </template>
         </swiping-card>
 
-        <div class="row mb-3 pl-1 pr-1 bg-white flex-nowrap">
+        <div class="row mb-1 pb-2 p-1 mt-0 sticky-top bg-light flex-nowrap" style="z-index: 10;">
             <div class="flex-fill">
                 <product-count-request-input-field @quantityRequestResponse="onProductCountRequestResponse" placeholder="Scan sku or alias"></product-count-request-input-field>
             </div>
@@ -26,17 +26,19 @@
                 <template v-slot:content>
                     <div class="row" v-bind:class="{ 'disabled': record['quantity_to_scan'] === 0 }">
                         <div class="col-sm-12 col-lg-6 ">
-                            <div class="text-primary h5">{{ record['product_name'] }}</div>
-                            <div>
-                                product: <b><a target="_blank" :href="'/products?sku=' + record['product_sku']">{{ record['product_sku'] }}</a></b>
-                            </div>
+                            <product-info-card :product= "record['product']"></product-info-card>
                         </div>
 
-                        <div class="row-cols col-sm-12 col-lg-6 text-right">
-                            <number-card label="requested" :number="record['quantity_requested']" v-if="record['quantity_requested']"></number-card>
-                            <number-card label="scanned" :number="record['quantity_scanned']" v-bind:class="{ 'bg-warning': record['quantity_requested'] && record['quantity_scanned'] > record['quantity_requested'] }"></number-card>
-                            <number-card label="to scan" :number="record['quantity_to_scan']" v-if="record['quantity_requested']"></number-card>
-                            <text-card label="shelf" :text="record['shelf_location']"></text-card>
+                        <div class="row col-sm-12 col-lg-6 text-right">
+                            <div class="col-6 text-left small">
+                                in stock: <strong>{{ dashIfZero(Number(record['inventory_quantity'])) }}</strong>
+                            </div>
+                            <div class="col-6">
+                                <number-card label="requested" :number="record['quantity_requested']" v-if="record['quantity_requested']"></number-card>
+                                <number-card label="scanned" :number="record['quantity_scanned']" v-bind:class="{ 'bg-warning': record['quantity_requested'] && record['quantity_scanned'] > record['quantity_requested'] }"></number-card>
+                                <number-card label="to scan" :number="record['quantity_to_scan']" v-if="record['quantity_requested']"></number-card>
+                                <text-card label="shelf" :text="record['shelf_location']"></text-card>
+                            </div>
                         </div>
                     </div>
                 </template>
@@ -49,7 +51,14 @@
             </div>
         </div>
 
-        <b-modal id="configuration-modal" centered no-fade hide-footer title="Data Collection">
+        <b-modal id="configuration-modal" centered no-fade hide-footer hide-header
+                 @shown="setFocusElementById(100,'stocktake-input', true, true)"
+                 @hidden="setFocusElementById(100,'barcodeInput', true, true)"
+        >
+            <stocktake-input></stocktake-input>
+            <hr>
+            <button @click.prevent="transferStockIn" v-b-toggle class="col btn mb-1 btn-primary">Receive Stock IN</button>
+            <button @click.prevent="transferStockOut" v-b-toggle class="col btn mb-1 btn-primary">Receive Stock OUT</button>
             <a :href="getDownloadLink"  @click.prevent="downloadFileAndHideModal" v-b-toggle class="col btn mb-1 btn-primary">Download</a>
             <hr>
             <vue-csv-import
@@ -86,6 +95,7 @@
 
         </b-modal>
 
+
     </div>
 </template>
 
@@ -118,6 +128,8 @@
 
             data: function() {
                 return {
+                    scannedInQuantity: 1,
+                    skuToStocktake: '',
                     dataCollection: null,
                     data: [],
                     nextUrl: null,
@@ -146,6 +158,43 @@
             },
 
             methods: {
+                transferStockOut() {
+                    let data = {
+                        'action': 'transfer_out_scanned',
+                    }
+
+                    this.apiUpdateDataCollection(this.data_collection_id, data)
+                        .then(response => {
+                            this.$snotify.success('Stock transferred out successfully');
+                            this.$bvModal.hide('configuration-modal');
+                            setTimeout(() => {
+                                this.loadData();
+                            }, 1000);
+                        })
+                        .catch(error => {
+                            this.showException(error);
+                        });
+                },
+
+
+                transferStockIn() {
+                    let data = {
+                        'action': 'transfer_in_scanned',
+                    }
+
+                    this.apiUpdateDataCollection(this.data_collection_id, data)
+                        .then(response => {
+                            this.$snotify.success('Stock transferred in successfully');
+                            this.$bvModal.hide('configuration-modal');
+                            setTimeout(() => {
+                                this.loadData();
+                            }, 1000);
+                        })
+                        .catch(error => {
+                            this.showException(error);
+                        });
+                },
+
                 loadMoreWhenNeeded() {
                     if (this.isLoading) {
                         return;
@@ -179,6 +228,7 @@
 
                     const params = this.$router.currentRoute.query;
                     params['filter[data_collection_id]'] = this.data_collection_id;
+                    params['include'] = 'product,inventory';
                     params['per_page'] = this.per_page;
                     params['page'] = page;
 
