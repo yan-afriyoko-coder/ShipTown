@@ -8,9 +8,8 @@
                  @hidden="setFocusElementById(100, input_id, true, true)"
         >
             <template v-if="inventory">
-                <div>SKU: {{ inventory.product.sku }}</div>
-                <div>Name: {{ inventory.product.name }}</div>
-                <div>Stock: {{ inventory.quantity }}</div>
+                <product-info-card :product="inventory.product"></product-info-card>
+                <div class="small">stock: {{ inventory.quantity }}</div>
                 <div class="row mt-2">
                     <div class="col-6">
                         <label class="small" for="adjust-by-request-input">adjust by</label>
@@ -153,6 +152,7 @@
                         }
 
                         this.inventory = e.data.data[0];
+                        this.newQuantity = this.inventory.quantity;
 
                         this.$bvModal.show(this.modal_name);
                     })
