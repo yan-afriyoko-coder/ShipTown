@@ -1,6 +1,6 @@
 <template>
 
-  <div class="swiper-container mb-1">
+  <div class="swiper-container">
     <div class="swiper-wrapper">
 
 <!--      <div class="swiper-slide error bg-success text-right">-->
@@ -9,8 +9,8 @@
 <!--        </div>-->
 <!--      </div>-->
 
-      <div class="swiper-slide">
-          <div class="row ml-1 mr-1 card">
+      <div class="swiper-slide p-1">
+          <div class="row card">
               <div class="col p-2 pl-2 rounded">
                   <div class="row">
                           <h5 class="text-primary">

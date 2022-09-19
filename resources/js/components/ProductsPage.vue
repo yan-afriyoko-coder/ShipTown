@@ -1,7 +1,7 @@
 <template>
     <div>
         <template v-if="getUrlParameter('hide_nav_bar', false) === false">
-            <div class="row mb-1 pb-2 pt-1 sticky-top bg-light" style="z-index: 10;">
+            <div class="row mb-1 pb-2 p-1 sticky-top bg-light" style="z-index: 10;">
                 <div class="flex-fill">
                     <barcode-input-field placeholder="Search products using name, sku, alias or command"
                                          ref="barcode"
@@ -26,7 +26,7 @@
         </template>
 
         <template v-for="product in products">
-            <div class="row">
+            <div class="row p-1">
                 <div class="col">
                     <product-card :product="product" :expanded="products.length === 1"/>
                 </div>

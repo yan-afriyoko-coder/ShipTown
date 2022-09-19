@@ -11,7 +11,7 @@
             </template>
         </swiping-card>
 
-        <div class="row mb-1 pb-2 pt-1 sticky-top bg-light flex-nowrap" style="z-index: 10;">
+        <div class="row mb-1 pb-2 p-1 mt-0 sticky-top bg-light flex-nowrap" style="z-index: 10;">
             <div class="flex-fill">
                 <product-count-request-input-field @quantityRequestResponse="onProductCountRequestResponse" placeholder="Scan sku or alias"></product-count-request-input-field>
             </div>
