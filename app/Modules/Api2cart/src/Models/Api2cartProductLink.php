@@ -131,11 +131,19 @@ class Api2cartProductLink extends BaseModel
 
         $differences = $this->getDifferences($api2cartDataExpected, $api2cartDataActual);
 
+        Log::debug('Sync check', [
+            'type' => $this->api2cart_product_type,
+            'sku' => $this->product->sku,
+            'differences' => $differences,
+            'now' => $api2cartDataActual
+        ]);
+
+
         if (empty($differences)) {
             return true;
         }
 
-        Log::warning('Update Check FAILED', [
+        Log::warning('Sync Check FAILED', [
             'type' => $this->api2cart_product_type,
             'sku' => $this->product->sku,
             'differences' => $differences,
