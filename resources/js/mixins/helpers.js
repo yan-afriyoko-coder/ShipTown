@@ -54,6 +54,11 @@ export default {
             },
 
             setFocusElementById(delay = 1, elementId, autoSelectAll = false, hideOnScreenKeyboard = false) {
+                if (hideOnScreenKeyboard) {
+                    // this simple hack of setting focus when field is read only will
+                    // prevent showing on screen keyboard on mobile devices
+                    document.getElementById(elementId).readOnly = true;
+                }
                 this.setFocus(document.getElementById(elementId), autoSelectAll, hideOnScreenKeyboard, delay);
             },
 
