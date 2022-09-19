@@ -26,15 +26,15 @@ class VerifyIfProductsInSyncJob implements ShouldQueue
      */
     public function handle()
     {
-        $collection = Api2cartProductLink::query()
+        Api2cartProductLink::query()
             ->whereNull('is_in_sync')
             ->whereNotNull('last_fetched_data')
             ->orderBy('updated_at', 'desc')
-            ->limit(500)
-            ->get();
-
-        $collection->each(function (Api2cartProductLink $link) {
-            $link->update(['is_in_sync' => $link->isInSync()]);
-        });
+            ->chunkById(50, function ($chunk) {
+                $chunk->each(function (Api2cartProductLink $link) {
+                    $link->is_in_sync = $link->isInSync();
+                    $link->save();
+                });
+            });
     }
 }
