@@ -39,9 +39,7 @@ class RestockingReport extends Report
 
         $this->baseQuery = Product::query()
             ->leftJoin('inventory', 'inventory.product_id', '=', 'products.id')
-            ->leftJoin('inventory as inventory_source', function ($join) {
-                $join->on('inventory_source.product_id', '=', 'inventory.product_id');
-            });
+            ->leftJoin('inventory as inventory_source', 'inventory_source.product_id', '=', 'inventory.product_id');
 
         $this->fields = [
             'id'                                 => 'products.id',
@@ -60,6 +58,7 @@ class RestockingReport extends Report
 
         $this->casts = [
             'product_name'       => 'string',
+            'warehouse_code'     => 'string',
             'restock_level'      => 'float',
             'reorder_point'      => 'float',
             'quantity_required'  => 'float',
