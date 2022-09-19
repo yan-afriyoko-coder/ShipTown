@@ -7,6 +7,8 @@ use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
 use App\Modules\Api2cart\src\Jobs\FetchSimpleProductsInfoJob;
 use App\Modules\Api2cart\src\Jobs\FetchVariantsInfoJob;
 use App\Modules\Api2cart\src\Jobs\ProcessImportedOrdersJob;
+use App\Modules\Api2cart\src\Jobs\SyncProductsJob;
+use App\Modules\Api2cart\src\Jobs\SyncVariantsJob;
 use App\Modules\Api2cart\src\Jobs\UpdateMissingTypeAndIdJob;
 use App\Modules\Api2cart\src\Jobs\VerifyIfProductsInSyncJob;
 
@@ -22,15 +24,11 @@ class Every10minEventListener
     public function handle(Every10minEvent $event)
     {
         DispatchImportOrdersJobs::dispatch();
-
         UpdateMissingTypeAndIdJob::dispatch();
-
-        VerifyIfProductsInSyncJob::dispatch();
+        FetchSimpleProductsInfoJob::dispatch();
+        FetchVariantsInfoJob::dispatch();
 
         ProcessImportedOrdersJob::dispatch();
-
-        FetchSimpleProductsInfoJob::dispatch();
-
-        FetchVariantsInfoJob::dispatch();
+        VerifyIfProductsInSyncJob::dispatch();
     }
 }
