@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 
 class CheckForOutOfSyncPricesJob implements ShouldQueue
 {
@@ -26,9 +27,12 @@ class CheckForOutOfSyncPricesJob implements ShouldQueue
         $query = Api2cartProductLink::query()
             ->select([
                 'modules_api2cart_product_links.id',
+                'modules_api2cart_product_links.is_in_sync',
                 'modules_api2cart_product_links.product_id',
+                'api2cart_connection.pricing_source_warehouse_id',
                 'modules_api2cart_product_links.api2cart_price',
-                'product_price.price',
+                'product_price.price as actual_price',
+                DB::raw('product_price.*'),
             ])
             ->join('modules_api2cart_connections as api2cart_connection', function ($join) {
                 $join->on('api2cart_connection.id', '=', 'modules_api2cart_product_links.api2cart_connection_id');
@@ -37,13 +41,13 @@ class CheckForOutOfSyncPricesJob implements ShouldQueue
                 $join->on('product_price.product_id', '=', 'modules_api2cart_product_links.product_id');
                 $join->on('product_price.warehouse_id', '=', 'api2cart_connection.pricing_source_warehouse_id');
             })
-            ->whereNotNull('modules_api2cart_product_links.product_id')
-            ->where('product_price.price', '!=', 'modules_api2cart_product_links.api2cart_price');
+            ->whereRaw('(api2cart_connection.pricing_source_warehouse_id IS NOT NULL)')
+            ->whereRaw('(' .
+                '   product_price.id IS NULL ' .
+                '   OR modules_api2cart_product_links.api2cart_price IS NULL ' .
+                '   OR product_price.price != modules_api2cart_product_links.api2cart_price' .
+                ')');
 
-
-        $query->get()->each(function (Api2cartProductLink $productLink) {
-            $productLink->product->attachTag('Not Synced');
-            $productLink->product->log('eCommerce Api2cart: Out Of Sync Pricing, attached NOT SYNCED tag');
-        });
+        $query->limit(1000)->update(['modules_api2cart_product_links.is_in_sync' => false]);
     }
 }

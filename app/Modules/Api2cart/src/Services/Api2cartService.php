@@ -495,7 +495,7 @@ class Api2cartService
         try {
             $productLink->fetchFromApi2cart();
 
-            if ($productLink->isInSync()) {
+            if (Api2cartProductLink::isInSync($productLink)) {
                 $productLink->product->detachTag('CHECK FAILED');
                 return true;
             } else {
