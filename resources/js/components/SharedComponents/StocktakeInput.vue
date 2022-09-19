@@ -4,7 +4,7 @@
                @keyup.enter="showStocktakeModal" >
 
         <b-modal @ok="submitStocktake" :id="modal_name" scrollable centered no-fade hide-header
-                 @shown="setFocusElementById(100, 'quantity-request-input', true, true)"
+                 @shown="setFocusElementById(100, 'quantity-request-input', true, false)"
                  @hidden="setFocusElementById(100, input_id, true, true)"
         >
             <template v-if="inventory">
