@@ -44,6 +44,12 @@
                 return this;
             },
 
+            setUrlParameterAngGo: function(param, value) {
+                this.setUrlParameter(param, value);
+                window.location.reload();
+                return this;
+            },
+
             updateUrlParameters(params) {
                 for (let parameter in params) {
                     this.setUrlParameter(parameter, params[parameter]);
