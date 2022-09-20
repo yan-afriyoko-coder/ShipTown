@@ -14,7 +14,7 @@ use Illuminate\Validation\ValidationException;
 class CsvImportController extends Controller
 {
     /**
-     * @var \string[][]
+     * @var string[][]
      */
     private array $rules = [
         'data_collection_id' => ['required', 'exists:data_collections,id'],
@@ -25,7 +25,7 @@ class CsvImportController extends Controller
         'data.*.quantity_scanned' => ['sometimes', 'numeric'],
     ];
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResource
     {
         $validatedData = Validator::make($request->all(), $this->rules)->validate();
 
@@ -43,6 +43,8 @@ class CsvImportController extends Controller
         });
 
         DB::table($tempTableName)->insert($validatedData['data']);
+
+        ray(DB::table($tempTableName)->get());
 
         DB::statement('
             UPDATE ' . $tempTableName . '

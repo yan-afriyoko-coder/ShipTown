@@ -64,9 +64,10 @@
             <vue-csv-import
                 v-model="csv"
                 headers
+                canIgnore
                 autoMatchFields
                 loadBtnText="Load"
-                :map-fields="['product_sku', 'quantity_requested']">
+                :map-fields="['product_sku', 'quantity_requested', 'quantity_scanned']">
 
                 <template slot="hasHeaders" slot-scope="{headers, toggle}">
                     <label>
@@ -273,6 +274,7 @@
                     const data = this.csv.map(record => ({
                         'product_sku': record.product_sku,
                         'quantity_requested': record.quantity_requested,
+                        'quantity_scanned': record.quantity_scanned,
                     }));
 
                     //we removing header row from csv

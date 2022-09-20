@@ -10,6 +10,7 @@
             <div class="d-block d-md-none mb-0 navbar-dark w-100 bg-primary">
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <a type="button" class="btn btn-primary" href="{{ route('dashboard') }}"><font-awesome-icon icon="chart-bar" class="fa-lg"></font-awesome-icon></a>
+                    <a type="button" class="btn btn-primary" href="{{ route('data-collector') }}"><font-awesome-icon icon="clipboard-list" class="fa-lg" style="size: 0.3rem"></font-awesome-icon></a>
                     <a type="button" class="btn btn-primary " href="{{ route('products') }}">{{ __('Products') }}</a>
                     <a type="button" class="btn btn-primary" href="{{ route('orders') }}">{{ __('Orders') }}</a>
                 </div>
@@ -39,6 +40,9 @@
                     </li>
                     <li class="nav-item d-none d-md-block">
                         <a class="nav-link" href="{{ route('orders') }}">{{ __('Orders') }}</a>
+                    </li>
+                    <li class="nav-item d-none d-md-block">
+                        <a class="nav-link" href="{{ route('data-collector') }}">{{ __('Data Collector') }}</a>
                     </li>
 
                     <!-- Picklist Dropdown -->

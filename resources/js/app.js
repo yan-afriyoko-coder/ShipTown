@@ -45,7 +45,7 @@ import {
     faWarehouse,
     faArchive,
     faCopy,
-    faCartPlus, faAtom, faChartBar, faChartLine,
+    faCartPlus, faAtom, faChartBar, faChartLine, faBox,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -55,6 +55,8 @@ import VueCountdownTimer from 'vuejs-countdown-timer';
 
 library.add(faCog);
 library.add(faQuestionCircle);
+library.add(faBoxOpen);
+library.add(faBox);
 library.add(faUsers);
 library.add(faUserEdit);
 library.add(faUserMinus);
