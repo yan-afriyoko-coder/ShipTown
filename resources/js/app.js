@@ -45,7 +45,7 @@ import {
     faWarehouse,
     faArchive,
     faCopy,
-    faCartPlus,
+    faCartPlus, faAtom, faChartBar, faChartLine,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -70,6 +70,8 @@ library.add(faShoppingCart);
 library.add(faKey);
 library.add(faDesktop);
 library.add(faClipboardList);
+library.add(faChartBar);
+library.add(faChartLine);
 library.add(faPuzzlePiece);
 library.add(faBoxOpen);
 library.add(faEdit);

@@ -9,7 +9,7 @@
 
             <div class="d-block d-md-none mb-0 navbar-dark w-100 bg-primary">
                 <div class="btn-group" role="group" aria-label="Basic example">
-                    <a type="button" class="btn btn-primary" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
+                    <a type="button" class="btn btn-primary" href="{{ route('dashboard') }}"><font-awesome-icon icon="chart-bar" class="fa-lg"></font-awesome-icon></a>
                     <a type="button" class="btn btn-primary " href="{{ route('products') }}">{{ __('Products') }}</a>
                     <a type="button" class="btn btn-primary" href="{{ route('orders') }}">{{ __('Orders') }}</a>
                 </div>
@@ -104,9 +104,7 @@
 
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto text-center text-md-left">
-
-                    <li class="nav-item dropdown">
-                        <!-- User dropdown menu -->
+                    <li class="nav-item dropdown"> <!-- User dropdown menu -->
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ Auth::user()->name }} ({{ Auth::user()->warehouse ? Auth::user()->warehouse->code : 'All Locations' }})<span class="caret"></span>
                         </a>
