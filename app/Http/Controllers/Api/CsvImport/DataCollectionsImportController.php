@@ -20,10 +20,9 @@ class DataCollectionsImportController extends Controller
      */
     private array $rules = [
         'data_collection_name_prefix' => ['required', 'string', 'max:255'],
-//        'data_collection_id' => ['required', 'exists:data_collections,id'],
-//        'data' => ['required', 'array'],
-        'data.*.product_sku' => ['required_if:product_id,null', 'string'],
-        'data.*.product_id' => ['required_if:product_sku,null', 'integer'],
+        'data' => ['required', 'array'],
+        'data.*.product_sku' => ['required_if:product_id,null', 'string', 'exists:products_aliases,alias'],
+        'data.*.product_id' => ['required_if:product_sku,null', 'integer', 'exists:products,id'],
     ];
 
     /**
