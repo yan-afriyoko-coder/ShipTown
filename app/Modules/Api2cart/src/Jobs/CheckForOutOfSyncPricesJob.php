@@ -41,8 +41,9 @@ class CheckForOutOfSyncPricesJob implements ShouldQueue
                 $join->on('product_price.product_id', '=', 'modules_api2cart_product_links.product_id');
                 $join->on('product_price.warehouse_id', '=', 'api2cart_connection.pricing_source_warehouse_id');
             })
-            ->whereRaw('(api2cart_connection.pricing_source_warehouse_id IS NOT NULL)')
-            ->whereRaw('(' .
+            ->whereRaw('(api2cart_connection.pricing_source_warehouse_id IS NOT NULL) ' .
+                'AND api2cart_quantity > 0' .
+                'AND (' .
                 '   product_price.id IS NULL ' .
                 '   OR modules_api2cart_product_links.api2cart_price IS NULL ' .
                 '   OR modules_api2cart_product_links.api2cart_price IS NULL ' .
