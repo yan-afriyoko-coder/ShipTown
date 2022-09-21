@@ -58,6 +58,7 @@ class CheckForOutOfSyncInventoryJob implements ShouldQueue
                 ->orWhereRaw('(actual_is_in_sync = 0 AND is_in_sync = 1)');
 
             $query->limit(1000)->update([
+                'sync_first_failed_at' => DB::raw('IFNULL(sync_first_failed_at, NOW())'),
                 'is_in_sync' => DB::raw('actual_is_in_sync')
             ]);
 

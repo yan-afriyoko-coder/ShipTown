@@ -48,6 +48,9 @@ class CheckForOutOfSyncPricesJob implements ShouldQueue
                 '   OR product_price.price != modules_api2cart_product_links.api2cart_price' .
                 ')');
 
-        $query->limit(1000)->update(['modules_api2cart_product_links.is_in_sync' => false]);
+        $query->limit(1000)->update([
+            'sync_first_failed_at' => DB::raw('IFNULL(sync_first_failed_at, NOW())'),
+            'modules_api2cart_product_links.is_in_sync' => false
+        ]);
     }
 }
