@@ -43,11 +43,16 @@ class CheckForOutOfSyncPricesJob implements ShouldQueue
             })
             ->whereRaw('(api2cart_connection.pricing_source_warehouse_id IS NOT NULL) ' .
                 'AND api2cart_quantity > 0' .
-                'AND (' .
-                '   product_price.id IS NULL ' .
-                '   OR modules_api2cart_product_links.api2cart_price IS NULL ' .
-                '   OR modules_api2cart_product_links.api2cart_price IS NULL ' .
-                '   OR product_price.price != modules_api2cart_product_links.api2cart_price' .
+                'AND ( 1=2 ' .
+                '   OR product_price.id IS NULL ' .
+                '   OR api2cart_price IS NULL ' .
+                '   OR api2cart_sale_price IS NULL ' .
+                '   OR api2cart_sale_price_start_date IS NULL ' .
+                '   OR api2cart_sale_price_end_date IS NULL ' .
+                '   OR product_price.price != api2cart_price' .
+                '   OR product_price.sale_price != api2cart_sale_price' .
+                '   OR product_price.sale_price_start_date != api2cart_sale_price_start_date' .
+                '   OR product_price.sale_price_end_date != api2cart_sale_price_end_date' .
                 ')');
 
         $query->limit(1000)->update([
