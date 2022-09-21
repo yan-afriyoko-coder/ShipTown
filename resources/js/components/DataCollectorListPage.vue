@@ -10,10 +10,45 @@
 
         <b-modal id="new-collection-modal" centered no-fade hide-header title="New Dats Collection" @ok="createCollectionAndRedirect" @shown="prepareNewCollectionModal">
             <input id="collection_name_input" v-model="newCollectionName" type="text" @keyup.enter="createCollectionAndRedirect" class="form-control" placeholder="New Collection name">
+            <hr>
+            <vue-csv-import
+                v-model="csv"
+                headers
+                canIgnore
+                autoMatchFields
+                loadBtnText="Load"
+                :map-fields="map_fields">
+
+                <template slot="hasHeaders" slot-scope="{headers, toggle}">
+                    <label>
+                        <input type="checkbox" id="hasHeaders" :value="headers" @change="toggle">
+                        Headers?
+                    </label>
+                </template>
+
+                <template slot="error">
+                    File type is invalid
+                </template>
+
+                <template slot="thead">
+                    <tr>
+                        <th>My Fields</th>
+                        <th>Column</th>
+                    </tr>
+                </template>
+
+                <template slot="submit" slot-scope="{submit}">
+                    <button @click.prevent="submit">send!</button>
+                </template>
+            </vue-csv-import>
+
+            <button v-if="csv" type="button" @click.prevent="postCsvRecordsToApiAndCloseModal" class="col btn mb-1 btn-primary">Import Records</button>
+
         </b-modal>
 
         <b-modal id="configuration-modal" autofocus centered no-fade hide-footer title="Data Collection">
             <button type="button" @click.prevent="downloadFile" class="col btn mb-1 btn-primary">Download</button>
+
         </b-modal>
 
         <template v-for="record in data">
@@ -62,6 +97,8 @@
 
             data: function() {
                 return {
+                    map_fields: ['product_sku', 'DUB', 'CRK', 'GAL'],
+                    csv: null,
                     data: [],
                     nextUrl: null,
                     page: 1,
@@ -80,15 +117,45 @@
                 window.onscroll = () => this.loadMoreWhenNeeded();
 
                 this.loadData();
+
+                this.apiGetWarehouses()
+                    .then(response => {
+                        this.map_fields = ['product_sku'] . response.data.data.map(warehouse => warehouse.code);
+                    });
             },
 
             methods: {
+                postCsvRecordsToApiAndCloseModal() {
+                    this.csv.shift();
+
+                    const payload = {
+                        'data_collection_name_prefix': this.newCollectionName,
+                        'data': this.csv,
+                    }
+
+                    this.apiPostCsvImportDataCollections(payload)
+                        .then(() => {
+                            this.notifySuccess('Records imported');
+                            this.$bvModal.hide('configuration-modal');
+                        })
+                        .catch(e => {
+                            this.displayApiCallError(e);
+                        })
+                        .finally(() => {
+                            this.loadData();
+                        });
+
+                    this.$bvModal.hide('new-collection-modal');
+                },
+
                 prepareNewCollectionModal() {
+                    this.csv = null;
                     this.newCollectionName = null;
                     this.$nextTick(() => {
                         this.setFocusElementById(10, 'collection_name_input');
                     });
                 },
+
                 openDataCollection(data_collection_id)  {
                     window.location.href = '/data-collector/' + data_collection_id;
                 },
