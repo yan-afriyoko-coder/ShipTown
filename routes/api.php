@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::apiResource('csv-import', 'Api\CsvImportController')->only(['store']);
+Route::apiResource('csv-import/data-collections', 'Api\CsvImport\DataCollectionsImportController')->only(['store']);
 Route::apiResource('stocktake-suggestions', 'Api\StocktakeSuggestionController')->only(['index']);
 
 Route::put('print/order/{order_number}/{view}', 'Api\PrintOrderController@store');
