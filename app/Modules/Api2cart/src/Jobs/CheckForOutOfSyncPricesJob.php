@@ -45,6 +45,7 @@ class CheckForOutOfSyncPricesJob implements ShouldQueue
             ->whereRaw('(' .
                 '   product_price.id IS NULL ' .
                 '   OR modules_api2cart_product_links.api2cart_price IS NULL ' .
+                '   OR modules_api2cart_product_links.api2cart_price IS NULL ' .
                 '   OR product_price.price != modules_api2cart_product_links.api2cart_price' .
                 ')');
 
