@@ -75,3 +75,55 @@ class CheckForOutOfSyncPricesJob implements ShouldQueue
         ]);
     }
 }
+
+//SELECT
+//                modules_api2cart_product_links.id,
+//                modules_api2cart_product_links.is_in_sync,
+//                modules_api2cart_product_links.product_id,
+//                api2cart_connection.pricing_source_warehouse_id,
+//                modules_api2cart_product_links.api2cart_price,
+//                product_price.price as actual_price,
+//
+//                modules_api2cart_product_links.api2cart_sale_price,
+//                product_price.sale_price as actual_sale_price,
+//
+//                modules_api2cart_product_links.api2cart_sale_price_start_date,
+//                CASE
+//                  WHEN product_price.sale_price_start_date < "2000-01-01"
+//                  THEN "2000-01-01"
+//                  ELSE product_price.sale_price_start_date END
+//                  AS actual_sale_price_start_date,
+//
+//                modules_api2cart_product_links.api2cart_sale_price_end_date,
+//                product_price.sale_price_end_date as actual_sale_price_end_date,
+
+//                CASE
+//                  WHEN product_price.sale_price_end_date < "2000-01-01"
+//                  THEN "2000-01-01" ELSE product_price.sale_price_end_date END
+//                  AS actual_sale_price_end_date,
+//
+//                product_price.*
+//
+//FROM modules_api2cart_product_links
+//
+//            LEFT JOIN modules_api2cart_connections as api2cart_connection
+//                ON api2cart_connection.id = modules_api2cart_product_links.api2cart_connection_id
+//            LEFT JOIN products_prices as product_price
+//ON product_price.product_id = modules_api2cart_product_links.product_id
+//AND product_price.warehouse_id = api2cart_connection.pricing_source_warehouse_id
+//
+//WHERE (api2cart_connection.pricing_source_warehouse_id IS NOT NULL)
+//                AND api2cart_quantity > 0
+//AND ( 1=2
+//    OR product_price.id IS NULL
+//OR api2cart_price IS NULL
+//OR api2cart_sale_price IS NULL
+//OR api2cart_sale_price_start_date IS NULL
+//OR api2cart_sale_price_end_date IS NULL
+//OR product_price.price != api2cart_price
+//OR product_price.sale_price != api2cart_sale_price
+//OR CASE WHEN product_price.sale_price_start_date < "2000-01-01" THEN "2000-01-01" ELSE product_price.sale_price_start_date END != api2cart_sale_price_start_date
+//OR CASE WHEN product_price.sale_price_end_date < "2000-01-01" THEN "2000-01-01" ELSE product_price.sale_price_end_date END != api2cart_sale_price_end_date
+//                )
+//
+//LIMIT 10

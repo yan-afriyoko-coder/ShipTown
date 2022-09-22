@@ -65,6 +65,7 @@ class SyncVariant implements ShouldQueue
                 break;
             case RequestResponse::RETURN_CODE_OK:
                 $this->product_link->update([
+                    'last_fetched_data' => null,
                     'is_in_sync' => true,
                 ]);
                 break;
