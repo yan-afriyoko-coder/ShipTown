@@ -6,12 +6,12 @@
                 {{ formated_starting_date }} - {{ formated_ending_date }}
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownDateRange">
-                <a class="dropdown-item" href="?between_dates=today,now">Today</a>
-                <a class="dropdown-item" href="?between_dates=yesterday,today">Yesterday</a>
-                <a class="dropdown-item" href="?between_dates=-7days,now">Last 7 days</a>
-                <a class="dropdown-item" href="?between_dates=this week monday,now">This week</a>
-                <a class="dropdown-item" href="?between_dates=last week monday,this week monday">Last Week</a>
-                <a class="dropdown-item" @click.prevent="showModal">Custom Date</a>
+                <a class="dropdown-item" @click.prevent="applyFilter('today,now')">Today</a>
+                <a class="dropdown-item" @click.prevent="applyFilter('yesterday,today')">Yesterday</a>
+                <a class="dropdown-item" @click.prevent="applyFilter('-7days,now')">Last 7 days</a>
+                <a class="dropdown-item" @click.prevent="applyFilter('this week monday,now')">This week</a>
+                <a class="dropdown-item" @click.prevent="applyFilter('last week monday,this week monday')">Last Week</a>
+                <a class="dropdown-item" @click.prevent="showDateSelectionModal">Custom Date</a>
             </div>
         </div>
     </div>
@@ -34,7 +34,7 @@
             <div class="row">
                 <div class="col text-right">
                     <div>
-                        <button type="button" @click="closeModal" class="btn btn-default">Cancel</button>
+                        <button type="button" @click="closeDateSelectionModal" class="btn btn-default">Cancel</button>
                         <button type="button" @click="validateFilter" class="btn btn-primary">Apply</button>
                     </div>
                 </div>
@@ -46,9 +46,13 @@
 
 <script>
 import moment from "moment"
+import url from "../../mixins/url";
 
 export default {
+    mixins: [url],
+
     props: ['dates'],
+
     data(){
         return {
             formated_starting_date: null,
@@ -59,6 +63,8 @@ export default {
         }
     },
     mounted(){
+        let param = this.dates['url_param_name'] ?? 'between_dates';
+        console.log(param);
         this.formated_starting_date = moment(this.dates.starting_date).format('YYYY-MM-DD hh:mm')
         this.formated_ending_date = moment(this.dates.ending_date).format('YYYY-MM-DD hh:mm')
         this.starting_date = moment(this.dates.starting_date).format('YYYY-MM-DD\Thh:mm')
@@ -72,8 +78,10 @@ export default {
     },
     methods: {
         applyFilter(range){
-            location.href = '?between_dates=' + range;
+            let param = this.dates['url_param_name'] ?? 'between_dates';
+            this.setUrlParameterAngGo(param, range)
         },
+
         validateFilter(){
             if (this.starting_date > this.ending_date) {
                 this.$snotify.warning('Invalid date filter.');
@@ -82,11 +90,11 @@ export default {
             this.applyFilter(this.dateRange)
         },
 
-        showModal() {
+        showDateSelectionModal() {
             document.getElementById('modal-date-selector-widget').showModal()
         },
 
-        closeModal() {
+        closeDateSelectionModal() {
             document.getElementById('modal-date-selector-widget').close();
         }
     }

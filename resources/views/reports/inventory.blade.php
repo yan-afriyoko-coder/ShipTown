@@ -12,6 +12,11 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title text-center">{{ __($report_name) }}</h4>
+                    <div class="row text-right d-block flex-nowrap">
+                        <div class="col text-right">
+                            <div class="">@widget('DateSelectorWidget', ['url_param_name' => 'filter[date_between]'])</div>
+                        </div>
+                    </div>
                     <table class="table-hover w-100">
                         <thead>
                         <tr>
