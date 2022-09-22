@@ -38,6 +38,7 @@ class StocktakesReport extends Report
         ];
 
         $this->casts = [
+            'date'              => 'datetime',
             'quantity_delta'    => 'float',
             'quantity_before'   => 'float',
             'quantity_after'    => 'float',
