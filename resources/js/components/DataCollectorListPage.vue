@@ -97,7 +97,7 @@
 
             data: function() {
                 return {
-                    map_fields: ['product_sku', 'DUB', 'CRK', 'GAL'],
+                    map_fields: [],
                     csv: null,
                     data: [],
                     nextUrl: null,
@@ -120,7 +120,7 @@
 
                 this.apiGetWarehouses()
                     .then(response => {
-                        this.map_fields = ['product_sku'] . response.data.data.map(warehouse => warehouse.code);
+                        this.map_fields = ['product_sku'].concat(response.data.data.map(warehouse => warehouse.code));
                     });
             },
 
