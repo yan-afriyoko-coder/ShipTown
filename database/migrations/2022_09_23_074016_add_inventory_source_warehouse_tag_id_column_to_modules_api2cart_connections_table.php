@@ -18,13 +18,5 @@ class AddInventorySourceWarehouseTagIdColumnToModulesApi2cartConnectionsTable ex
         Schema::table('modules_api2cart_connections', function (Blueprint $table) {
             $table->foreignId('inventory_source_warehouse_tag_id')->nullable()->after('inventory_source_warehouse_tag');
         });
-
-        Api2cartConnection::all()
-            ->each(function (Api2cartConnection $connection) {
-                $tag = Tag::findFromString('magento_stock')->first('id');
-
-                $connection->inventory_source_warehouse_tag_id = $tag->getKey();
-                $connection->save();
-            });
     }
 }
