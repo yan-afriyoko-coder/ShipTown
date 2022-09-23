@@ -27,6 +27,7 @@ class DailyEventListener
         PushOutOfSyncPricingJob::dispatch();
 
         $this->recreateQuantityComparisonView();
+        $this->recreatePricingComparisonView();
     }
 
     public function recreateQuantityComparisonView()
@@ -38,20 +39,66 @@ class DailyEventListener
             $warehouseIds->push(0);
         }
 
-        $query = 'CREATE OR REPLACE VIEW modules_api2cart_product_quantity_discrepancies AS
-        SELECT
-            modules_api2cart_product_links.id                     AS product_link_id,
-            modules_api2cart_product_links.product_id             AS product_id,
-            FLOOR(MAX(api2cart_quantity))                         AS quantity_api2cart,
-            FLOOR(SUM(quantity_available))                        AS quantity_expected
+        $query = '
+CREATE OR REPLACE VIEW modules_api2cart_product_quantity_discrepancies_view AS
+SELECT
+    modules_api2cart_product_links.id                     AS product_link_id,
+    modules_api2cart_product_links.is_in_sync             AS product_link_is_in_sync,
+    FLOOR(MAX(api2cart_quantity))                         AS quantity_api2cart,
+    IF(FLOOR(SUM(quantity_available)) < 0, 0, FLOOR(SUM(quantity_available))) AS quantity_expected
 
-        FROM modules_api2cart_product_links
+FROM modules_api2cart_product_links
 
-        LEFT JOIN inventory
-            ON inventory.product_id = modules_api2cart_product_links.product_id
-            AND inventory.warehouse_id in (' . $warehouseIds->implode(',') . ')
+LEFT JOIN modules_api2cart_connections
+  ON modules_api2cart_connections.id = modules_api2cart_product_links.api2cart_connection_id
 
-        GROUP BY modules_api2cart_product_links.id, modules_api2cart_product_links.product_id
+LEFT JOIN taggables
+  ON taggables.tag_id = modules_api2cart_connections.inventory_source_warehouse_tag_id
+  AND taggables.taggable_type = "App\\Models\\Warehouse"
+
+LEFT JOIN warehouses
+  ON warehouses.id = taggables.taggable_id
+
+LEFT JOIN inventory
+    ON inventory.product_id = modules_api2cart_product_links.product_id
+    AND inventory.warehouse_id = warehouses.id
+
+GROUP BY modules_api2cart_product_links.id
+        ';
+
+        DB::statement($query);
+    }
+
+    private function recreatePricingComparisonView()
+    {
+        $query = '
+CREATE OR REPLACE VIEW modules_api2cart_product_pricing_discrepancies_view AS
+SELECT
+        modules_api2cart_product_links.id                                                   AS id,
+        modules_api2cart_product_links.is_in_sync                                           AS product_link_is_in_sync,
+       (api2cart_price = price)                                                             AS price_in_sync,
+       (api2cart_sale_price = sale_price)                                                   AS sale_price_in_sync,
+       (api2cart_sale_price_start_date = GREATEST("2000-01-01", sale_price_start_date))     AS sale_start_date_in_sync,
+       (api2cart_sale_price_end_date = GREATEST("2000-01-01", sale_price_end_date))         AS sale_end_date_in_sync,
+
+
+       api2cart_price                                       AS api2cart_price,
+       price                                                AS actual_price,
+       api2cart_sale_price                                  AS api2cart_sale_price,
+       sale_price                                           AS actual_sale_price,
+       api2cart_sale_price_start_date                       AS api2cart_sale_price_start_date,
+       GREATEST("2000-01-01", sale_price_start_date)        AS actual_sale_price_start_date,
+       api2cart_sale_price_end_date                         AS api2cart_sale_price_end_date,
+       GREATEST("2000-01-01", sale_price_end_date)          AS actual_sale_price_end_date
+
+FROM modules_api2cart_product_links
+
+LEFT JOIN modules_api2cart_connections
+  on modules_api2cart_connections.id = modules_api2cart_product_links.api2cart_connection_id
+
+LEFT JOIN products_prices
+  on products_prices.product_id = modules_api2cart_product_links.product_id
+  and products_prices.warehouse_id = modules_api2cart_connections.pricing_source_warehouse_id
         ';
 
         DB::statement($query);
