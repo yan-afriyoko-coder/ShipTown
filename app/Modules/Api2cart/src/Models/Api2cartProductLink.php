@@ -3,17 +3,12 @@
 namespace App\Modules\Api2cart\src\Models;
 
 use App\BaseModel;
-use App\Models\Inventory;
 use App\Models\Product;
 use App\Modules\Api2cart\src\Services\Api2cartService;
-use App\Modules\Api2cart\src\Transformers\ProductTransformer;
 use Barryvdh\LaravelIdeHelper\Eloquent;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Class Api2cartProductLink.
@@ -95,12 +90,10 @@ class Api2cartProductLink extends BaseModel
 
     public function setLastFetchedDataAttribute($value)
     {
-        $this->is_in_sync                     = null;
-        $this->last_fetched_at                = $value ? now() : null;
-
         $sprice_create = data_get($value, 'sprice_create', '2000-01-01 00:00:00');
         $sprice_expire = data_get($value, 'sprice_expire', '2000-01-01 00:00:00');
 
+        $this->last_fetched_at                = $value ? now() : null;
         $this->api2cart_quantity              = data_get($value, 'quantity');
         $this->api2cart_price                 = data_get($value, 'price');
         $this->api2cart_sale_price            = data_get($value, 'special_price');
@@ -108,135 +101,6 @@ class Api2cartProductLink extends BaseModel
         $this->api2cart_sale_price_end_date   = Carbon::createFromTimeString($sprice_expire)->format('Y-m-d H:i:s');
 
         $this->attributes['last_fetched_data'] = json_encode($value);
-    }
-
-    /**
-     */
-    public static function isInSync(Api2cartProductLink $productLink): bool
-    {
-        $link = $productLink->refresh();
-        ray($link);
-
-        $link->is(
-            $link->api2cart_quantity,
-            $link->product->inventory->quantity
-        );
-        if ($link->api2cart_product_type === 'configurable') {
-            return true;
-        }
-
-        $differences = [];
-
-        $expected = ProductTransformer::toApi2cartPayload($link);
-
-        $actual = [
-            'type'          => $link->api2cart_product_type,
-            'id'            => $link->api2cart_product_id,
-            'quantity'      => $link->api2cart_quantity,
-            'price'         => $link->api2cart_price,
-            'special_price' => $link->api2cart_sale_price,
-            'sprice_create' => Api2cartService::formatDateForApi2cart($link->api2cart_sale_price_start_date),
-            'sprice_expire' => Api2cartService::formatDateForApi2cart($link->api2cart_sale_price_end_date),
-        ];
-
-
-        $differences = $link->getDifferences($expected, $actual);
-
-        ray($expected, $actual, $differences);
-//
-//        ray($expected, $actual, $differences);
-//
-//        Log::debug('Sync check', [
-//            'type' => $link->api2cart_product_type,
-//            'sku' => $link->product->sku,
-//            'differences' => $differences,
-//            'now' => $actual
-//        ]);
-
-
-        if (empty($differences)) {
-            return true;
-        }
-
-        ray($differences);
-
-        Log::warning('Sync Check FAILED', [
-            'type' => $link->api2cart_product_type,
-            'sku' => $link->product->sku,
-            'differences' => $differences,
-        ]);
-
-        return false;
-    }
-
-    /**
-     * @param array $expected
-     * @param array $actual
-     *
-     * @return array
-     */
-    private function getDifferences(array $expected, array $actual): array
-    {
-        // initialize variables
-        $differences = [];
-
-        $keys_to_verify = [];
-
-        if (data_get($actual, 'manage_stock', 'False') != 'False') {
-            if ($actual['quantity'] === null) {
-                $differences['quantity'] = ['api2cart_quantity is null'];
-            }
-
-            if (doubleval($actual['quantity']) !== doubleval($expected['quantity'])) {
-                $differences['quantity'] = [
-                    'expected' => doubleval($expected['quantity']),
-                    'actual' => doubleval($actual['quantity']),
-                ];
-            }
-        }
-
-        if (data_get($expected, 'quantity', 0) > 0) {
-            $keys_to_verify = array_merge($keys_to_verify, ['price']);
-
-            if ((Arr::has($expected, 'sprice_expire'))
-                && (\Carbon\Carbon::createFromTimeString($expected['sprice_expire'])->isFuture())) {
-                $keys_to_verify = array_merge($keys_to_verify, [
-                    'special_price',
-                    'sprice_create',
-                    'sprice_expire',
-                ]);
-            }
-        }
-
-        $expected_data = Arr::only($expected, $keys_to_verify);
-        $actual_data = Arr::only($actual, $keys_to_verify);
-
-        foreach (array_keys($expected_data) as $key) {
-            if ((!Arr::has($actual_data, $key)) or ($expected_data[$key] != $actual_data[$key])) {
-                $differences[$key] = [
-                    'expected' => $expected_data[$key],
-                    'actual' => $actual_data[$key],
-                ];
-            }
-        }
-
-        return Arr::dot($differences);
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function api2cartConnection(): BelongsTo
-    {
-        return $this->belongsTo(Api2cartConnection::class, 'api2cart_connection_id');
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function product(): BelongsTo
-    {
-        return $this->belongsTo(Product::class);
     }
 
     /**
@@ -254,37 +118,18 @@ class Api2cartProductLink extends BaseModel
     }
 
     /**
-     * @throws GuzzleException
+     * @return BelongsTo
      */
-    public function fetchFromApi2cart(): void
+    public function api2cartConnection(): BelongsTo
     {
-        if ($this->api2cart_product_type === null) {
-            $this->updateTypeAndId()->save();
-        }
+        return $this->belongsTo(Api2cartConnection::class, 'api2cart_connection_id');
+    }
 
-        switch ($this->api2cart_product_type) {
-            case 'simple':
-                $product_now = Api2cartService::getSimpleProductInfoByID(
-                    $this->api2cartConnection,
-                    $this->api2cart_product_id
-                );
-                break;
-            case 'variant':
-                $product_now = Api2cartService::getVariantInfoByID(
-                    $this->api2cartConnection,
-                    $this->api2cart_product_id
-                );
-                break;
-            case 'configurable':
-                $product_now = null;
-                break;
-            default:
-                $product_now = null;
-                Log::warning('Update Check FAILED - Could not find product', ['sku' => $this->product->sku]);
-                break;
-        }
-
-        $this->last_fetched_data = $product_now;
-        $this->save();
+    /**
+     * @return BelongsTo
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
     }
 }
