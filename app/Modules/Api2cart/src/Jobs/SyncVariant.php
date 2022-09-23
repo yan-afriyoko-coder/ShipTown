@@ -55,6 +55,11 @@ class SyncVariant implements ShouldQueue
             ProductTransformer::toApi2cartPayload($this->product_link),
         );
 
+        $this->product_link->update([
+            'last_pushed_at' => now(),
+            'last_pushed_response' => $response->getAsJson(),
+        ]);
+
         switch ($response->getReturnCode()) {
             case RequestResponse::RETURN_CODE_MODEL_NOT_FOUND:
                 // product not found

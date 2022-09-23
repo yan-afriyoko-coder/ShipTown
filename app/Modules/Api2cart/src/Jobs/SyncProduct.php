@@ -58,6 +58,11 @@ class SyncProduct implements ShouldQueue
             $properties,
         );
 
+        $this->product_link->update([
+            'last_pushed_at' => now(),
+            'last_pushed_response' => $response->getAsJson(),
+        ]);
+
         switch ($response->getReturnCode()) {
             case RequestResponse::RETURN_CODE_MODEL_NOT_FOUND:
                 // product might not be assigned to store, we try it
