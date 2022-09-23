@@ -54,7 +54,7 @@ LEFT JOIN modules_api2cart_connections
 
 LEFT JOIN taggables
   ON taggables.tag_id = modules_api2cart_connections.inventory_source_warehouse_tag_id
-  AND taggables.taggable_type = "App\\Models\\Warehouse"
+  AND taggables.taggable_type = "App\\\\Models\\\\Warehouse"
 
 LEFT JOIN warehouses
   ON warehouses.id = taggables.taggable_id
