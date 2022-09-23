@@ -84,8 +84,9 @@ class Api2cartProductLink extends BaseModel
      * @var string[]
      */
     protected $casts = [
-        'api2cart_product_id' => 'integer',
-        'last_fetched_data' => 'array',
+        'api2cart_product_id'  => 'integer',
+        'last_pushed_response' => 'array',
+        'last_fetched_data'    => 'array',
     ];
 
     public function setLastFetchedDataAttribute($value)
