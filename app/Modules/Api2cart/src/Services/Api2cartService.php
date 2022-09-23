@@ -487,36 +487,6 @@ class Api2cartService
     }
 
     /**
-     * @param Api2cartProductLink $productLink
-     * @return bool
-     */
-    public static function verifyIfProductInSync(Api2cartProductLink $productLink): bool
-    {
-        try {
-            $productLink->fetchFromApi2cart();
-
-            if (Api2cartProductLink::isInSync($productLink)) {
-                $productLink->product->detachTag('CHECK FAILED');
-                return true;
-            } else {
-                $productLink->product->attachTag('CHECK FAILED');
-                $productLink->product->log('eCommerce: Sync check failed, see logs');
-                return false;
-            }
-        } catch (ConnectException $exception) {
-            $productLink->product->attachTag('CHECK FAILED');
-            $productLink->product->log('eCommerce: Sync Check timeout, retry scheduled');
-            return false;
-        } catch (GuzzleException $exception) {
-            report($exception);
-            $productLink->product->attachTag('CHECK FAILED');
-            $productLink->product->log('eCommerce: Sync Check failed, see logs for more details');
-            return false;
-        }
-    }
-
-
-    /**
      * @param $date
      *
      * @return string
