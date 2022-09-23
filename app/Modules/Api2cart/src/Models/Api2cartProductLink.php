@@ -66,6 +66,8 @@ class Api2cartProductLink extends BaseModel
     protected $fillable = [
         'is_in_sync',
         'product_id',
+        'last_pushed_at',
+        'last_pushed_response',
         'last_fetched_at',
         'api2cart_connection_id',
         'api2cart_product_type',

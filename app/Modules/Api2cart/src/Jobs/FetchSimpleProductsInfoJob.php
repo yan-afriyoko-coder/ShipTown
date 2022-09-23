@@ -68,7 +68,6 @@ class FetchSimpleProductsInfoJob implements ShouldQueue
                     ])
                     ->first()
                     ->update([
-                        'is_in_sync' => null,
                         'last_fetched_data' => Api2cartService::transformProduct($product, $conn)
                     ]);
             });
