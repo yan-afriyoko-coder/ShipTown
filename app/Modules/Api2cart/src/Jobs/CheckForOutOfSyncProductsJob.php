@@ -2,8 +2,6 @@
 
 namespace App\Modules\Api2cart\src\Jobs;
 
-use App\Modules\Api2cart\src\Models\Api2cartProductLink;
-use App\Modules\Api2cart\src\Models\Api2cartVariant;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -21,16 +19,15 @@ class CheckForOutOfSyncProductsJob implements ShouldQueue
     use SerializesModels;
     use IsMonitored;
 
-    /**
-     * Execute the job.
-     *
-     * @throws Exception
-     *
-     * @return void
-     */
     public function handle()
     {
-        // out of sync quantity
+        $this->invalidateIfQuantityNotMatch();
+        $this->invalidateIfPriceNotMatch();
+        $this->invalidaseIfSalePricingNotMatch();
+    }
+
+    private function invalidateIfQuantityNotMatch(): void
+    {
         DB::statement('
             UPDATE modules_api2cart_product_links as product_link
 
@@ -41,8 +38,10 @@ class CheckForOutOfSyncProductsJob implements ShouldQueue
 
             SET product_link.is_in_sync = 0
         ');
+    }
 
-        // out of sync price
+    private function invalidateIfPriceNotMatch(): void
+    {
         DB::statement('
             UPDATE modules_api2cart_product_links as product_link
 
@@ -54,8 +53,10 @@ class CheckForOutOfSyncProductsJob implements ShouldQueue
 
             SET product_link.is_in_sync = 0
         ');
+    }
 
-        // out of sync sale prices
+    private function invalidaseIfSalePricingNotMatch(): void
+    {
         DB::statement('
             UPDATE modules_api2cart_product_links as product_link
 
