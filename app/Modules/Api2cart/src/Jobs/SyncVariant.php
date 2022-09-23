@@ -57,7 +57,7 @@ class SyncVariant implements ShouldQueue
 
         $this->product_link->update([
             'last_pushed_at' => now(),
-            'last_pushed_response' => $response->getAsJson(),
+            'last_pushed_response' => $response->asArray(),
         ]);
 
         switch ($response->getReturnCode()) {
