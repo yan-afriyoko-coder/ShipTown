@@ -30,6 +30,7 @@ use Illuminate\Support\Collection;
  * @property string|null inventory_warehouse_ids
  * @property int    pricing_source_warehouse_id
  * @property string|null inventory_source_warehouse_tag
+ * @property int $inventory_source_warehouse_tag_id
  *
  * @method static Builder|Api2cartConnection newModelQuery()
  * @method static Builder|Api2cartConnection newQuery()
