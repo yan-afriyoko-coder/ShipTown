@@ -40,7 +40,7 @@ class DailyEventListener
         }
 
         $query = '
-CREATE OR REPLACE VIEW modules_api2cart_product_quantity_discrepancies_view AS
+CREATE OR REPLACE VIEW modules_api2cart_product_quantity_comparison_view AS
 SELECT
     modules_api2cart_product_links.id                     AS product_link_id,
     modules_api2cart_product_links.is_in_sync             AS product_link_is_in_sync,
@@ -72,7 +72,7 @@ GROUP BY modules_api2cart_product_links.id
     private function recreatePricingComparisonView()
     {
         $query = '
-CREATE OR REPLACE VIEW modules_api2cart_product_pricing_discrepancies_view AS
+CREATE OR REPLACE VIEW modules_api2cart_product_pricing_comparison_view AS
 SELECT
         modules_api2cart_product_links.id                                                   AS id,
         modules_api2cart_product_links.is_in_sync                                           AS product_link_is_in_sync,
