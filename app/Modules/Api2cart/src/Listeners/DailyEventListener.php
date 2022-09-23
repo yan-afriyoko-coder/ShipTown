@@ -74,7 +74,7 @@ GROUP BY modules_api2cart_product_links.id
         $query = '
 CREATE OR REPLACE VIEW modules_api2cart_product_pricing_comparison_view AS
 SELECT
-        modules_api2cart_product_links.id                                                   AS id,
+        modules_api2cart_product_links.id                                                   AS product_link_id,
         modules_api2cart_product_links.is_in_sync                                           AS product_link_is_in_sync,
        (api2cart_price = price)                                                             AS price_in_sync,
        (api2cart_sale_price = sale_price)                                                   AS sale_price_in_sync,
