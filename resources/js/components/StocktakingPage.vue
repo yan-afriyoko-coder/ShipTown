@@ -14,30 +14,21 @@
             </div>
         </div>
 
-        <div class="row" >
-            <div class="col">
-                <table class="fullWidth w-100">
-                    <tbody>
-                    <tr v-for="itemMovement in recentStocktakes.data" class="pb-3">
-                        <td>
-                            {{ Number(itemMovement['quantity_after']) }} x {{ itemMovement['product']['sku'] }} - {{ itemMovement['product']['name'] }}<br>
-                            <small>
+            <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
+                <template v-slot:content>
+                    <template v-for="itemMovement in recentStocktakes.data">
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-5">
+                                {{ Number(itemMovement['quantity_after']) }} x {{ itemMovement['product']['sku'] }} - {{ itemMovement['product']['name'] }}<br>
+                            </div>
+                        </div>
+                    </template>
 
-                            </small>
-                        </td>
-                        <td class="text-right"></td>
-                    </tr>
-                    <tr class="pb-3">
-                        <td colspan="2" class="text-center">
-                            <a href="/reports/stocktakes">See more</a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                    <a href="/reports/stocktakes" class="d-block text-center">See more</a>
+                </template>
+            </swiping-card>
 
-        <div class="row col font-weight-bold pb-1">Stocktake suggestions</div>
+        <div class="row col d-block font-weight-bold pb-1 text-uppercase small text-secondary align-content-center text-center">Stocktake suggestions</div>
 
         <template v-for="record in stocktakeSuggestions.data">
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
