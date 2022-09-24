@@ -10,9 +10,38 @@
             <div class="d-block d-md-none mb-0 navbar-dark w-100 bg-primary">
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <a type="button" class="btn btn-primary" href="{{ route('dashboard') }}"><font-awesome-icon icon="chart-bar" class="fa-lg"></font-awesome-icon></a>
-                    <a type="button" class="btn btn-primary" href="{{ route('data-collector') }}"><font-awesome-icon icon="clipboard-list" class="fa-lg" style="size: 0.3rem"></font-awesome-icon></a>
+{{--                    <a type="button" class="btn btn-primary" href="{{ route('data-collector') }}"><font-awesome-icon icon="clipboard-list" class="fa-lg" style="size: 0.3rem"></font-awesome-icon></a>--}}
                     <a type="button" class="btn btn-primary " href="{{ route('products') }}">{{ __('Products') }}</a>
                     <a type="button" class="btn btn-primary" href="{{ route('orders') }}">{{ __('Orders') }}</a>
+
+                    <!-- Reports Dropdown -->
+                    <div class="dropdown position-static">
+                        <!-- User dropdown menu -->
+                        <a id="navbarDropdown3" class="dropdown-toggle btn btn-primary" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            {{ __('Reports') }}<span class="caret"></span>
+                        </a>
+
+                        <!-- Menu Items END -->
+                        <div class="dropdown-menu dropdown-menu-right w-100 text-center bg-primary" aria-labelledby="navbarDropdown">
+                            <a class="btn btn-primary d-block" href="{{ route('performance.dashboard') .'?between_dates=-7days,now' }}">{{ __('Performance Dashboard') }}</a>
+                            <a class="btn btn-primary d-block" href="{{ route('reports.inventory-dashboard') .'?between_dates=-28days,now' }}">{{ __('Inventory Dashboard') }}</a>
+                            <a class="btn btn-primary d-block" href="{{ route('reports.picks') }}">{{ __('Picks') }}</a>
+                            <a class="btn btn-primary d-block" href="{{ route('reports.shipments') }}">{{ __('Shipments') }}</a>
+                            <a class="btn btn-primary d-block" href="{{ route('reports.inventory') }}">{{ __('Inventory') }}</a>
+                            <a class="btn btn-primary d-block" href="{{ route('reports.restocking') }}">{{ __('Restocking') }}</a>
+                            <a class="btn btn-primary d-block" href="{{ route('reports.stocktakes') }}">{{ __('Stocktakes') }}</a>
+                            <a class="btn btn-primary d-block" href="{{ route('activity-log') }}">{{ __('Activity Log') }}</a>
+                            @if(count($navigationMenuReports) > 0)
+                                <hr v-if='{{ count($navigationMenuReports) > 0 }}' class="mb-1 mt-1">
+                                @foreach ($navigationMenuReports as $menu)
+                                    <a class="dropdown-item" href="{{ $menu->url }}">
+                                        {{ $menu->name }}
+                                    </a>
+                                @endforeach
+                            @endif
+
+                        </div>
+                    </div>
                 </div>
                 <button class="navbar-toggler navbar-light float-right border-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon text-white"></span>
@@ -76,7 +105,7 @@
                     </li>
 
                     <!-- Reports Dropdown -->
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown d-none d-md-block">
                         <!-- User dropdown menu -->
                         <a id="navbarDropdown3" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ __('Reports') }}<span class="caret"></span>
