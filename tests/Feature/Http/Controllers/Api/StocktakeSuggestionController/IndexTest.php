@@ -40,7 +40,7 @@ class IndexTest extends TestCase
             'links',
             'data' => [
                 '*' => [
-                    'id'
+                    'inventory_id'
                 ],
             ],
         ]);

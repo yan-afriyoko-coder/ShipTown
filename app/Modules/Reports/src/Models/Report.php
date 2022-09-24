@@ -67,7 +67,7 @@ class Report extends Model
 
     /**
      * @throws NotFoundExceptionInterface
-     * @throws InvalidSelectException
+     * @throws InvalidSelectException|ContainerExceptionInterface
      */
     public function queryBuilder(): QueryBuilder
     {
