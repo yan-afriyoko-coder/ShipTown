@@ -26,7 +26,7 @@ class NegativeInventoryJob implements ShouldQueue
         StocktakeSuggestion::query()->where(['reason' => $reason])->delete();
 
         $inventory = Inventory::query()
-            ->where('quantity', '>', 0)
+            ->where('quantity', '<', 0)
             ->get(['id'])
             ->collect();
 
