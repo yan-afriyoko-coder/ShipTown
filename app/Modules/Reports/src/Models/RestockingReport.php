@@ -3,6 +3,8 @@
 namespace App\Modules\Reports\src\Models;
 
 use App\Models\Product;
+use App\Models\Warehouse;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 
@@ -70,7 +72,10 @@ class RestockingReport extends Report
 
         $this->addFilter(
             AllowedFilter::callback('has_tags', function ($query, $value) {
-                return $query->withAllTags($value);
+                return $query->whereIn(
+                    'inventory_source.warehouse_id',
+                    Warehouse::withAllTags(explode(',', $value))->pluck('id')
+                );
             })
         );
 
