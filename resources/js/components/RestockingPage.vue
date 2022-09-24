@@ -113,6 +113,12 @@
             if (this.getUrlParameter('filter[has_tags]') === null) {
                 this.setUrlParameter('filter[has_tags]', 'fulfilment');
             }
+            if (this.getUrlParameter('filter[warehouse_quantity_between]') === null) {
+                this.setUrlParameter('filter[warehouse_quantity_between]', '1,999999');
+            }
+            if (this.getUrlParameter('sort') === null) {
+                this.setUrlParameter('sort', '-quantity_required');
+            }
 
             this.loadData();
 
