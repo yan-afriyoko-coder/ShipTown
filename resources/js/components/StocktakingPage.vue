@@ -14,6 +14,29 @@
             </div>
         </div>
 
+        <div class="row" >
+            <div class="col">
+                <table class="fullWidth w-100">
+                    <tbody>
+                    <tr v-for="itemMovement in recentStocktakes.data" class="pb-3">
+                        <td>
+                            {{ Number(itemMovement['quantity_after']) }} x {{ itemMovement['product']['sku'] }} - {{ itemMovement['product']['name'] }}<br>
+                            <small>
+
+                            </small>
+                        </td>
+                        <td class="text-right"></td>
+                    </tr>
+                    <tr class="pb-3">
+                        <td colspan="2" class="text-center">
+                            <a href="/reports/stocktakes">See more</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <div class="row col font-weight-bold pb-1">Stocktake suggestions</div>
 
         <template v-for="record in stocktakeSuggestions.data">
@@ -40,34 +63,6 @@
 
         <br>
 
-        <div class="row" >
-            <div class="col">
-                <table class="fullWidth w-100">
-                    <thead>
-                    <tr>
-                        <th colspan="2">Recent stocktakes</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="itemMovement in recentStocktakes.data" class="pb-3">
-                        <td>
-                            {{ itemMovement['product']['name'] }}<br>
-                            <small>
-                                {{ itemMovement['product']['sku'] }}
-                            </small>
-                        </td>
-                        <td class="text-right">{{ itemMovement['quantity_after'] }}</td>
-<!--                        <td class="text-right">{{ itemMovement['inventory']['shelf_location'] }}</td>-->
-                    </tr>
-                    <tr class="pb-3">
-                        <td colspan="2" class="text-center">
-                            <a href="/reports/stocktakes">See more</a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
 
     </div>
 </template>
@@ -96,7 +91,8 @@
         },
 
         mounted() {
-            this.reloadData();
+            this.loadStocktakeSuggestions();
+            this.loadRecentStocktakes();
 
             if (! this.currentUser()['warehouse_id']) {
                 this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
@@ -130,7 +126,7 @@
                     'filter[warehouse_id]': Number(this.currentUser()['warehouse_id']),
                     'include': 'product',
                     'sort': '-id',
-                    'per_page': 10,
+                    'per_page': 2,
                 }
 
                 this.apiGetInventoryMovements(params)
