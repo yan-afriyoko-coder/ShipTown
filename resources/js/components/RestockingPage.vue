@@ -110,6 +110,10 @@
         },
 
         mounted() {
+            if (this.getUrlParameter('filter[has_tags]') === null) {
+                this.setUrlParameter('filter[has_tags]', 'fulfilment');
+            }
+
             this.loadData();
 
             window.onscroll = () => this.loadMore();
