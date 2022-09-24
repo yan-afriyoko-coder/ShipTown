@@ -47,11 +47,12 @@ class CheckForOutOfSyncProductsJob implements ShouldQueue
 
             INNER JOIN modules_api2cart_product_pricing_comparison_view as comparison_view
               ON product_link.id = comparison_view.product_link_id
-              AND comparison_view.quantity_api2cart > 0
               AND comparison_view.product_link_is_in_sync = 1
               AND comparison_view.api2cart_price != comparison_view.actual_price
 
             SET product_link.is_in_sync = 0
+
+            WHERE product_link.api2cart_quantity > 0
         ');
     }
 
