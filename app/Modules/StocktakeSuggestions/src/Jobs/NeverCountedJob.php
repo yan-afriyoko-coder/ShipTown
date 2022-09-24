@@ -26,7 +26,7 @@ class NeverCountedJob implements ShouldQueue
         StocktakeSuggestion::query()->where(['reason' => $reason])->delete();
 
         $inventory = Inventory::query()
-            ->where('quantity', '>', 0)
+            ->where('quantity', '!=', 0)
             ->whereNull('last_counted_at')
             ->get(['id'])
             ->collect();
