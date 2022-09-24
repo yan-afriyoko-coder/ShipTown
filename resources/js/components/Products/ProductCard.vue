@@ -2,22 +2,10 @@
     <div>
         <div class="row card p-2" >
             <div class="col pl-1">
-                <div class="row">
-                    <div class="col">
-                        <div class="text-primary h5">{{ product.name }}</div>
-                    </div>
-                </div>
                 <div class="row text-left">
                     <div class="col-md-6">
-                        <div>
-                            sku:
-                            <font-awesome-icon icon="copy" class="fa-xs btn-link" role="button" @click="copyToClipBoard(product['sku'])"></font-awesome-icon>
-                            <b> <a :href="'/products?search=' + product['sku']">{{ product['sku'] }}</a></b></div>
-                        <div>
-                            <template v-for="tag in product.tags">
-                                <a class="badge text-uppercase" :key="tag.id" :href="'products?has_tags=' + tag.name"> {{ tag.name }} </a>
-                            </template>
-                        </div>
+                        <product-info-card :product= "product"></product-info-card>
+
                     </div>
                     <div class="col-md-6" @click="toggle">
                         <div class="row small font-weight-bold text-right">

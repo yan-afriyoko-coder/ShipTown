@@ -14,26 +14,29 @@
             </div>
         </div>
 
+        <div class="row col font-weight-bold pb-1">Stocktake suggestions</div>
 
-        <div class="row" >
-            <div class="col">
-                <table class="fullWidth w-100">
-                    <thead>
-                        <tr>
-                            <th colspan="3">Stocktake suggestions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="suggestion in stocktakeSuggestions.data">
-                            <td>{{ suggestion['product']['sku'] }}</td>
-                            <td>{{ suggestion['product']['name'] }}</td>
-                            <td class="text-right">{{ suggestion['quantity'] }}</td>
-                            <td class="text-right">{{ suggestion['shelf_location'] }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <template v-for="record in stocktakeSuggestions.data">
+            <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
+                <template v-slot:content>
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-5">
+                            <product-info-card :product= "record['product']"></product-info-card>
+                        </div>
+
+                        <div class="row col-sm-12 col-lg-7 text-right">
+                            <div class="col-12 col-md-4 text-left small">
+                                <div>in stock: <strong>{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</strong></div>
+                            </div>
+                            <div class="col-12 col-md-8 text-right">
+                                <number-card label="points" :number="record['points']"></number-card>
+                                <text-card label="shelf" :number="record['inventory']['shelf_location']"></text-card>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </swiping-card>
+        </template>
 
         <br>
 
@@ -125,7 +128,7 @@
                 const params = {
                     'filter[description]': 'stocktake',
                     'filter[warehouse_id]': Number(this.currentUser()['warehouse_id']),
-                    'include': 'product,inventory',
+                    'include': 'product',
                     'sort': '-id',
                     'per_page': 10,
                 }
@@ -142,10 +145,10 @@
 
             loadStocktakeSuggestions() {
                 const params = {
-                    'filter[warehouse.id]': this.currentUser()['warehouse_id'],
-                    'include': 'product,warehouse',
-                    'sort': 'points',
-                    'per_page': 10,
+                    'filter[warehouse_id]': this.currentUser()['warehouse_id'],
+                    'include': 'product,inventory',
+                    'sort': '-points,inventory_id',
+                    'per_page': 4,
                 }
 
                 this.apiGetStocktakeSuggestions(params)

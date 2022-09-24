@@ -18,7 +18,7 @@ class SyncController extends Controller
      */
     public function index(Request $request)
     {
-        SyncRequestJob::dispatchAfterResponse();
+        SyncRequestJob::dispatch();
 
         info('SyncRequestJob dispatched');
 
