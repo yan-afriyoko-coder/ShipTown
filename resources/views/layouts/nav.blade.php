@@ -94,7 +94,7 @@
                             @if(count($navigationMenuReports) > 0)
                                 <hr v-if='{{ count($navigationMenuReports) > 0 }}' class="mb-1 mt-1">
                                 @foreach ($navigationMenuReports as $menu)
-                                    <a class="dropdown-text-white lightHover" href="{{ $menu->url }}">
+                                    <a class="dropdown-item text-white lightHover" href="{{ $menu->url }}">
                                         {{ $menu->name }}
                                     </a>
                                 @endforeach
