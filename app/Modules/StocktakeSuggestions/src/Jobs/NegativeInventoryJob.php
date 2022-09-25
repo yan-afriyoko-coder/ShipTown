@@ -33,8 +33,13 @@ class NegativeInventoryJob implements ShouldQueue
         $reason = 'stock below 0';
         $points = 20;
 
-        StocktakeSuggestion::query()->where(['reason' => $reason])->delete();
-
+        StocktakeSuggestion::query()
+            ->leftJoin('inventory', 'inventory.id', '=', 'stocktake_suggestions.inventory_id')
+            ->where([
+                'inventory.warehouse_id' => $this->warehouse_id,
+                'reason' => $reason
+            ])
+            ->delete();
         DB::statement('
             INSERT INTO stocktake_suggestions (inventory_id, points, reason, created_at, updated_at)
             SELECT id, ?, ?, NOW(), NOW()
