@@ -2,6 +2,7 @@
 
 namespace App\Modules\Api2cart\src\Listeners;
 
+use App\Modules\Api2cart\src\Jobs\EnsureAllProductLinksExistJob;
 use App\Modules\Api2cart\src\Jobs\FetchSimpleProductsInfoJob;
 use App\Modules\Api2cart\src\Jobs\FetchVariantsInfoJob;
 use App\Modules\Api2cart\src\Jobs\ProcessImportedOrdersJob;
@@ -18,6 +19,7 @@ class SyncRequestedEventListener
      */
     public function handle()
     {
+        EnsureAllProductLinksExistJob::dispatch();
         UpdateMissingTypeAndIdJob::dispatch();
         FetchSimpleProductsInfoJob::dispatch();
         FetchVariantsInfoJob::dispatch();

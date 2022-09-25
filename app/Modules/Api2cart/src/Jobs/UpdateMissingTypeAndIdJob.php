@@ -12,6 +12,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class UpdateMissingTypeAndIdJob implements ShouldQueue
 {
@@ -30,13 +32,21 @@ class UpdateMissingTypeAndIdJob implements ShouldQueue
      */
     public function handle()
     {
+        DB::statement('UPDATE modules_api2cart_product_links SET is_in_sync = 0 WHERE is_in_sync IS NULL');
+
         $collection = Api2cartProductLink::query()
             ->whereNull('api2cart_product_id')
+            ->inRandomOrder()
             ->limit(100)
             ->get();
 
         $collection->each(function (Api2cartProductLink $link) {
-            $this->updateTypeAndIdOrCreate($link);
+            try {
+                $this->updateTypeAndIdOrCreate($link);
+            } catch (Exception $e) {
+                Log::error($e->getMessage());
+                report($e);
+            }
         });
     }
 
@@ -50,6 +60,12 @@ class UpdateMissingTypeAndIdJob implements ShouldQueue
             $link->api2cartConnection->bridge_api_key,
             $link->product->sku
         );
+
+        Api2cartProductLink::query()->where([
+                'api2cart_connection_id' => $link->api2cart_connection_id,
+                'api2cart_product_id' => $typeAndId['id']
+            ])
+            ->delete();
 
         $link->update([
             'api2cart_product_type' => $typeAndId['type'],

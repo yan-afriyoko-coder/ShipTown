@@ -69,13 +69,15 @@ class FetchSimpleProductsInfoJob implements ShouldQueue
                         'original' => $product,
                         'transformed' => $transformedProduct
                     ]);
-                    Api2cartSimpleProduct::query()
+                    $model = Api2cartSimpleProduct::query()
                         ->where([
                             'api2cart_product_id' => $product['id'],
                             'api2cart_connection_id' => $conn->id,
                         ])
-                        ->first()
-                        ->update([
+                        ->first();
+                    Log::debug('model', $model->toArray());
+
+                    $model->update([
                             'last_fetched_data' => $transformedProduct
                         ]);
                 } catch (Exception $e) {
