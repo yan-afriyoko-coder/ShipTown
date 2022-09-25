@@ -58,6 +58,12 @@ class UpdateMissingTypeAndIdJob implements ShouldQueue
             $link->product->sku
         );
 
+        Api2cartProductLink::query()->where([
+                'api2cart_connection_id' => $link->api2cart_connection_id,
+                'api2cart_product_id' => $typeAndId['id']
+            ])
+            ->delete();
+
         $link->update([
             'api2cart_product_type' => $typeAndId['type'],
             'api2cart_product_id' => $typeAndId['id'],
