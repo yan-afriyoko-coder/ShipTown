@@ -19,11 +19,11 @@ class BarcodeScannedToQuantityFieldJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    private Warehouse $warehouse;
+    private Warehouse $warehouse_id;
 
-    public function __construct(Warehouse $warehouse)
+    public function __construct(Warehouse $warehouse_id)
     {
-        $this->warehouse = $warehouse;
+        $this->warehouse_id = $warehouse_id;
     }
 
     public function handle(): bool
@@ -41,7 +41,7 @@ class BarcodeScannedToQuantityFieldJob implements ShouldQueue
               AND quantity > 100000000
             ORDER BY quantity DESC
             LIMIT 100
-        ', [$points, $reason, $this->warehouse->getKey()]);
+        ', [$points, $reason, $this->warehouse_id]);
 
         return true;
     }

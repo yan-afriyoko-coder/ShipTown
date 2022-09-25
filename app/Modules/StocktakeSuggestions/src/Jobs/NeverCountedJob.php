@@ -19,11 +19,11 @@ class NeverCountedJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    private Warehouse $warehouse;
+    private int $warehouse_id;
 
-    public function __construct(Warehouse $warehouse)
+    public function __construct(int $warehouse_id)
     {
-        $this->warehouse = $warehouse;
+        $this->warehouse_id = $warehouse_id;
     }
 
 
@@ -43,7 +43,7 @@ class NeverCountedJob implements ShouldQueue
               AND last_counted_at IS NULL
             ORDER BY quantity ASC
             LIMIT 100
-        ', [$points, $reason, $this->warehouse->getKey()]);
+        ', [$points, $reason, $this->warehouse_id]);
 
         return true;
     }
