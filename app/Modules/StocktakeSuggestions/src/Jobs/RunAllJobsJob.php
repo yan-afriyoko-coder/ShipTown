@@ -4,6 +4,7 @@ namespace App\Modules\StocktakeSuggestions\src\Jobs;
 
 use App\Models\Inventory;
 use App\Models\StocktakeSuggestion;
+use App\Models\Warehouse;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -20,9 +21,11 @@ class RunAllJobsJob implements ShouldQueue
 
     public function handle(): bool
     {
-        NegativeInventoryJob::dispatchNow();
-        NeverCountedJob::dispatchNow();
-        BarcodeScannedToQuantityFieldJob::dispatchNow();
+        Warehouse::query()->get()->each(function (Warehouse $warehouse) {
+            NegativeInventoryJob::dispatchNow($warehouse);
+            NeverCountedJob::dispatchNow($warehouse);
+            BarcodeScannedToQuantityFieldJob::dispatchNow($warehouse);
+        });
 
         return true;
     }
