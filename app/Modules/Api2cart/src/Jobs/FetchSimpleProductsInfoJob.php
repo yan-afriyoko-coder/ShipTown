@@ -13,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class FetchSimpleProductsInfoJob implements ShouldQueue
 {
@@ -63,6 +64,7 @@ class FetchSimpleProductsInfoJob implements ShouldQueue
         collect($productRecords)
             ->each(function ($product) use ($conn) {
                 try {
+                    Log::debug('API2CART Saving simple product data', $product);
                     Api2cartSimpleProduct::query()
                         ->where([
                             'api2cart_product_id' => $product['id'],
