@@ -6,6 +6,7 @@ use App\Modules\Api2cart\src\Exceptions\RequestException;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartSimpleProduct;
 use App\Modules\Api2cart\src\Services\Api2cartService;
+use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -61,15 +62,19 @@ class FetchSimpleProductsInfoJob implements ShouldQueue
 
         collect($productRecords)
             ->each(function ($product) use ($conn) {
-                Api2cartSimpleProduct::query()
-                    ->where([
-                        'api2cart_product_id' => $product['id'],
-                        'api2cart_connection_id' => $conn->id,
-                    ])
-                    ->first()
-                    ->update([
-                        'last_fetched_data' => Api2cartService::transformProduct($product, $conn)
-                    ]);
+                try {
+                    Api2cartSimpleProduct::query()
+                        ->where([
+                            'api2cart_product_id' => $product['id'],
+                            'api2cart_connection_id' => $conn->id,
+                        ])
+                        ->first()
+                        ->update([
+                            'last_fetched_data' => Api2cartService::transformProduct($product, $conn)
+                        ]);
+                } catch (Exception $e) {
+                    report($e);
+                }
             });
     }
 }
