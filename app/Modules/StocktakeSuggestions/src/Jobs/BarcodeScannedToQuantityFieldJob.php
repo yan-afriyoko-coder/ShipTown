@@ -19,9 +19,9 @@ class BarcodeScannedToQuantityFieldJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    private Warehouse $warehouse_id;
+    private int $warehouse_id;
 
-    public function __construct(Warehouse $warehouse_id)
+    public function __construct(int $warehouse_id)
     {
         $this->warehouse_id = $warehouse_id;
     }
