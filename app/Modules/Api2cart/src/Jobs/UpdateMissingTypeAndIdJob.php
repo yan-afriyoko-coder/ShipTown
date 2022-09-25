@@ -12,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class UpdateMissingTypeAndIdJob implements ShouldQueue
@@ -31,6 +32,8 @@ class UpdateMissingTypeAndIdJob implements ShouldQueue
      */
     public function handle()
     {
+        DB::statement('UPDATE modules_api2cart_product_links SET is_in_sync = 0 WHERE is_in_sync IS NULL');
+
         $collection = Api2cartProductLink::query()
             ->whereNull('api2cart_product_id')
             ->inRandomOrder()
