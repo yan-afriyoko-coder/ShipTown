@@ -64,7 +64,11 @@ class FetchSimpleProductsInfoJob implements ShouldQueue
         collect($productRecords)
             ->each(function ($product) use ($conn) {
                 try {
-                    Log::debug('API2CART Saving simple product data', $product);
+                    $transformedProduct = Api2cartService::transformProduct($product, $conn);
+                    Log::debug('API2CART Saving simple product data', [
+                        'original' => $product,
+                        'transformed' => $transformedProduct
+                    ]);
                     Api2cartSimpleProduct::query()
                         ->where([
                             'api2cart_product_id' => $product['id'],
@@ -72,7 +76,7 @@ class FetchSimpleProductsInfoJob implements ShouldQueue
                         ])
                         ->first()
                         ->update([
-                            'last_fetched_data' => Api2cartService::transformProduct($product, $conn)
+                            'last_fetched_data' => $transformedProduct
                         ]);
                 } catch (Exception $e) {
                     report($e);
