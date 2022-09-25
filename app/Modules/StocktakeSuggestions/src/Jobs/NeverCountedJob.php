@@ -4,6 +4,7 @@ namespace App\Modules\StocktakeSuggestions\src\Jobs;
 
 use App\Models\Inventory;
 use App\Models\StocktakeSuggestion;
+use App\Models\Warehouse;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -18,6 +19,13 @@ class NeverCountedJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
+    private Warehouse $warehouse;
+
+    public function __construct(Warehouse $warehouse)
+    {
+        $this->warehouse = $warehouse;
+    }
+
 
     public function handle(): bool
     {
@@ -28,14 +36,14 @@ class NeverCountedJob implements ShouldQueue
 
         DB::statement('
             INSERT INTO stocktake_suggestions (inventory_id, points, reason, created_at, updated_at)
-            SELECT id, ?    , ?, NOW(), NOW()
+            SELECT id, ? , ?, NOW(), NOW()
             FROM inventory
-            WHERE
-              quantity > 0
+            WHERE warehouse_id = ?
+              AND quantity > 0
               AND last_counted_at IS NULL
             ORDER BY quantity ASC
             LIMIT 100
-        ', [$points, $reason]);
+        ', [$points, $reason, $this->warehouse->getKey()]);
 
         return true;
     }
