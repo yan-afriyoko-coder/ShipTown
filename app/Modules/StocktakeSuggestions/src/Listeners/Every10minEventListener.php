@@ -9,6 +9,6 @@ class Every10minEventListener
 {
     public function handle(Every10minEvent $event)
     {
-        RunAllJobsJob::dispatchAfterResponse();
+        RunAllJobsJob::dispatch();
     }
 }
