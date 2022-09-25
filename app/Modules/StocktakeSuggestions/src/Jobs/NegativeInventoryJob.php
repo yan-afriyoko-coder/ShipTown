@@ -19,11 +19,11 @@ class NegativeInventoryJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    private Warehouse $warehouse;
+    private int $warehouse_id;
 
-    public function __construct(Warehouse $warehouse)
+    public function __construct(int $warehouse_id)
     {
-        $this->warehouse = $warehouse;
+        $this->warehouse_id = $warehouse_id;
     }
 
     public function handle(): bool
@@ -41,7 +41,7 @@ class NegativeInventoryJob implements ShouldQueue
               AND quantity < 0
             ORDER BY quantity ASC
             LIMIT 100
-        ', [$points, $reason, $this->warehouse->getKey()]);
+        ', [$points, $reason, $this->warehouse_id]);
 
         return true;
     }
