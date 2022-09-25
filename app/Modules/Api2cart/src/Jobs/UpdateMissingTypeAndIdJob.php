@@ -12,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class UpdateMissingTypeAndIdJob implements ShouldQueue
 {
@@ -32,11 +33,17 @@ class UpdateMissingTypeAndIdJob implements ShouldQueue
     {
         $collection = Api2cartProductLink::query()
             ->whereNull('api2cart_product_id')
+            ->inRandomOrder()
             ->limit(100)
             ->get();
 
         $collection->each(function (Api2cartProductLink $link) {
-            $this->updateTypeAndIdOrCreate($link);
+            try {
+                $this->updateTypeAndIdOrCreate($link);
+            } catch (Exception $e) {
+                Log::error($e->getMessage());
+                report($e);
+            }
         });
     }
 
