@@ -45,6 +45,7 @@ class BelowMinus50InventoryJob implements ShouldQueue
                     WHERE stocktake_suggestions.inventory_id = inventory.id
                     AND stocktake_suggestions.reason = ?
                 )
+            ORDER BY quantity ASC
             LIMIT 500
         ', [$points, $reason, $this->warehouse_id, $reason]);
 

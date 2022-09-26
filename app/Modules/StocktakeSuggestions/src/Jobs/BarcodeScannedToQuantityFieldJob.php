@@ -45,6 +45,7 @@ class BarcodeScannedToQuantityFieldJob implements ShouldQueue
                     WHERE stocktake_suggestions.inventory_id = inventory.id
                     AND stocktake_suggestions.reason = ?
                 )
+            ORDER BY quantity DESC
             LIMIT 500
         ', [$points, $reason, $this->warehouse_id, $reason]);
 
