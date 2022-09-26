@@ -49,7 +49,7 @@ class EnsureAllProductLinksExistJob implements ShouldQueue
           ON product_link.product_id = taggables.taggable_id
           AND product_link.api2cart_connection_id = modules_api2cart_connections.id
 
-        WHERE tag = ? AND taggable_type = "App\\\\Models\\\\Product"
+        WHERE tag_id = ? AND taggable_type = "App\\\\Models\\\\Product"
 
         AND product_link.id IS NULL
         ', [$tag->getKey()]);
