@@ -8,13 +8,14 @@ use App\Http\Resources\InventoryMovementResource;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use App\Services\InventoryService;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class InventoryMovementController extends Controller
 {
-    public function index()
+    public function index(Request $request): AnonymousResourceCollection
     {
         $inventoryMovement = QueryBuilder::for(InventoryMovement::class)
             ->allowedFilters([
@@ -29,9 +30,10 @@ class InventoryMovementController extends Controller
             ])
             ->allowedSorts([
                 'id',
-            ]);
+            ])
+            ->simplePaginate($request->get('per_page', 10));
 
-        return InventoryMovementResource::collection($this->getPaginatedResult($inventoryMovement));
+        return InventoryMovementResource::collection($inventoryMovement);
     }
 
     public function store(InventoryMovementStoreRequest $request): AnonymousResourceCollection
