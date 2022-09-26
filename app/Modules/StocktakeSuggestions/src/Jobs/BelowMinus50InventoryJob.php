@@ -13,7 +13,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 
-class NegativeInventoryJob implements ShouldQueue
+class BelowMinus50InventoryJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -30,15 +30,15 @@ class NegativeInventoryJob implements ShouldQueue
 
     public function handle(): bool
     {
-        $reason = 'stock below 0';
-        $points = 20;
+        $reason = 'stock below -50';
+        $points = 50;
 
         DB::statement('
             INSERT INTO stocktake_suggestions (inventory_id, points, reason, created_at, updated_at)
             SELECT id, ?, ?, NOW(), NOW()
             FROM inventory
             WHERE warehouse_id = ?
-                AND quantity < 0
+                AND quantity < -50
                 AND NOT EXISTS (
                     SELECT NULL
                     FROM stocktake_suggestions

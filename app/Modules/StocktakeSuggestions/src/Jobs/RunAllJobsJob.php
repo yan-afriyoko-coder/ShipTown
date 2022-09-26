@@ -28,6 +28,7 @@ class RunAllJobsJob implements ShouldQueue
                 NegativeInventoryJob::dispatch($warehouse->getKey());
                 NeverCountedJob::dispatch($warehouse->getKey());
                 BarcodeScannedToQuantityFieldJob::dispatch($warehouse->getKey());
+                BelowMinus50InventoryJob::dispatch($warehouse->getKey());
             });
 
         return true;
