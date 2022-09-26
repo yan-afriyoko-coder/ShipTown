@@ -26,6 +26,7 @@ class DailyEventListener
 
         $this->recreateQuantityComparisonView();
         $this->recreatePricingComparisonView();
+        $this->recreateComparisonView();
     }
 
     public function recreateQuantityComparisonView()
@@ -97,6 +98,44 @@ LEFT JOIN modules_api2cart_connections
 LEFT JOIN products_prices
   on products_prices.product_id = modules_api2cart_product_links.product_id
   and products_prices.warehouse_id = modules_api2cart_connections.pricing_source_warehouse_id
+        ';
+
+        DB::statement($query);
+    }
+
+    private function recreateComparisonView()
+    {
+        $query = '
+CREATE OR REPLACE VIEW modules_api2cart_product_comparison_view AS
+SELECT
+  product_links.id,
+  product_links.is_in_sync,
+  product_links.product_id,
+  products.sku,
+  quantity_comparison_view.quantity_api2cart = quantity_comparison_view.quantity_expected as quantity_in_sync,
+  pricing_comparison_view.price_in_sync,
+  pricing_comparison_view.sale_price_in_sync,
+  pricing_comparison_view.sale_start_date_in_sync,
+  pricing_comparison_view.sale_end_date_in_sync,
+  quantity_comparison_view.quantity_expected,
+  quantity_comparison_view.quantity_api2cart,
+
+  pricing_comparison_view.api2cart_price,
+  pricing_comparison_view.actual_price,
+  pricing_comparison_view.api2cart_sale_price,
+  pricing_comparison_view.actual_sale_price,
+  pricing_comparison_view.api2cart_sale_price_start_date,
+  pricing_comparison_view.actual_sale_price_start_date,
+  pricing_comparison_view.api2cart_sale_price_end_date,
+  pricing_comparison_view.actual_sale_price_end_date
+
+FROM modules_api2cart_product_links as product_links
+LEFT JOIN modules_api2cart_product_pricing_comparison_view AS pricing_comparison_view
+  ON pricing_comparison_view.product_link_id = product_links.id
+LEFT JOIN modules_api2cart_product_quantity_comparison_view  AS quantity_comparison_view
+  ON quantity_comparison_view.product_link_id = product_links.id
+LEFT JOIN products
+  ON products.id = product_links.product_id
         ';
 
         DB::statement($query);
