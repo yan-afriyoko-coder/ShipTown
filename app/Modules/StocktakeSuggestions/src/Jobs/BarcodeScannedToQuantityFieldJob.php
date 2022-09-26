@@ -33,23 +33,19 @@ class BarcodeScannedToQuantityFieldJob implements ShouldQueue
         $reason = 'possible barcode scanned into quantity field';
         $points = 50;
 
-        StocktakeSuggestion::query()
-            ->leftJoin('inventory', 'inventory.id', '=', 'stocktake_suggestions.inventory_id')
-            ->where([
-                'inventory.warehouse_id' => $this->warehouse_id,
-                'reason' => $reason
-            ])
-            ->delete();
-
         DB::statement('
             INSERT INTO stocktake_suggestions (inventory_id, points, reason, created_at, updated_at)
             SELECT id, ?, ?, NOW(), NOW()
             FROM inventory
             WHERE warehouse_id = ?
-              AND quantity > 100000000
-            ORDER BY quantity DESC
-            LIMIT 100
-        ', [$points, $reason, $this->warehouse_id]);
+                AND quantity > 100000000
+                AND NOT EXISTS (
+                    SELECT NULL
+                    FROM stocktake_suggestions
+                    WHERE stocktake_suggestions.inventory_id = inventory.id
+                    AND stocktake_suggestions.reason = ?
+                )
+        ', [$points, $reason, $this->warehouse_id, $reason]);
 
         return true;
     }
