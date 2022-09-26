@@ -61,7 +61,7 @@ class Report extends Model
     public function toArray()
     {
         return $this->queryBuilder()
-            ->simplePaginate(request()->get('per_page', 10))
+            ->simplePaginate(request()->get('per_page', $this->perPage))
             ->appends(request()->query());
     }
 

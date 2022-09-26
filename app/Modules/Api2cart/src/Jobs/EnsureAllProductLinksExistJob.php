@@ -26,7 +26,11 @@ class EnsureAllProductLinksExistJob implements ShouldQueue
      */
     public function handle()
     {
-        $tag_id = Tag::findFromString('Available Online')->id;
+        $tag = Tag::findFromString('Available Online');
+
+        if ($tag === null) {
+            return;
+        }
 
         DB::statement('
         INSERT INTO modules_api2cart_product_links (api2cart_connection_id, product_id, updated_at, created_at)
@@ -45,9 +49,9 @@ class EnsureAllProductLinksExistJob implements ShouldQueue
           ON product_link.product_id = taggables.taggable_id
           AND product_link.api2cart_connection_id = modules_api2cart_connections.id
 
-        WHERE tag_id = ? AND taggable_type = "App\\\\Models\\\\Product"
+        WHERE tag = ? AND taggable_type = "App\\\\Models\\\\Product"
 
         AND product_link.id IS NULL
-        ', [$tag_id]);
+        ', [$tag->getKey()]);
     }
 }
