@@ -95,7 +95,7 @@ class DataCollectionsImportController extends Controller
                         )
                         SELECT '. $dataCollector->getKey() .',
                             product_id,
-                            IFNULL(' .$warehouse->code. ', 0) as quantity_scanned,
+                            IFNULL(`' .$warehouse->code. '`, 0) as quantity_scanned,
                             NOW(),
                             NOW()
 
