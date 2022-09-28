@@ -29,6 +29,7 @@ class Client
         );
 
         logger('RMSAPI GET', [
+            'url'      => $connection->url,
             'uri'      => $uri,
             'query'    => $query,
             'response' => [
