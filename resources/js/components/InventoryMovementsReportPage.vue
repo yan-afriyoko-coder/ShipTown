@@ -21,11 +21,12 @@
                     <div class="row">
                         <div class="col-sm-12 col-lg-5">
                             <product-info-card :product= "record['product']"></product-info-card>
+                            <div class="small">at: <strong>{{ record['created_at'] | moment('MMM D h:m') }}</strong></div>
                         </div>
 
                         <div class="row col-sm-12 col-lg-7 text-right">
                             <div class="col-12 col-md-4 text-left small">
-                                <div>at: <strong>{{ record['created_at'] | moment('MMM D h:m') }}</strong></div>
+                                <div>type: <strong>{{ record['description'] }}</strong></div>
                                 <div>by: <strong>{{ record['user'] ? record['user']['name'] : '' }}</strong></div>
                                 <div>shelf: <strong>{{ record['inventory']['shelf_location'] }}</strong></div>
                                 <div>in stock: <strong>{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</strong></div>
