@@ -77,6 +77,10 @@
         },
 
         mounted() {
+            if (this.currentUser()['warehouse']) {
+                this.getUrlFilterOrSet('filter[warehouse_code]', this.currentUser()['warehouse']['code']);
+            }
+
             window.onscroll = () => this.loadMore();
 
             this.loadRecords(1);
