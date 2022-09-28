@@ -52,7 +52,6 @@ class NegativeWarehouseStockJob implements ShouldQueue
                         WHERE stocktake_suggestions.inventory_id = inventory.id
                         AND stocktake_suggestions.reason = ?
                     )
-                ORDER BY inventory.quantity ASC
                 LIMIT 500
         ', [$points, $reason, $warehouses->pluck('id'), $this->warehouse_id, $reason]);
 
