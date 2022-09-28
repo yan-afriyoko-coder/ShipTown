@@ -35,15 +35,15 @@ class NegativeInventoryJob implements ShouldQueue
 
         DB::statement('
             INSERT INTO stocktake_suggestions (inventory_id, points, reason, created_at, updated_at)
-            SELECT id, :points, :reason, NOW(), NOW()
+            SELECT id, ?, ?, NOW(), NOW()
             FROM inventory
-            WHERE warehouse_id = :warehouse_id
+            WHERE warehouse_id = ?
                 AND quantity < 0
                 AND NOT EXISTS (
                     SELECT NULL
                     FROM stocktake_suggestions
                     WHERE stocktake_suggestions.inventory_id = inventory.id
-                    AND stocktake_suggestions.reason = :reason
+                    AND stocktake_suggestions.reason = :?
                 )
             ORDER BY quantity ASC
             LIMIT 500
