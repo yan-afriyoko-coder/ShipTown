@@ -147,6 +147,7 @@ Vue.component('stocktake-input', require('./components/SharedComponents/Stocktak
  * Pages
  */
 Vue.component('stocktaking-page', require('./components/StocktakingPage.vue').default);
+Vue.component('inventory-movements-report-page', require('./components/InventoryMovementsReportPage.vue').default);
 Vue.component('data-collector-list-page', require('./components/DataCollectorListPage.vue').default);
 Vue.component('data-collector-page', require('./components/DataCollectorPage.vue').default);
 
