@@ -54,7 +54,7 @@ class ImportProductsJob implements ShouldQueue
      */
     public function handle(): bool
     {
-        logger('Starting Rmsapi FetchUpdatedProductsJob', ['connection_id' => $this->rmsapiConnection->getKey()]);
+        logger('RMSAPI Starting FetchUpdatedProductsJob', ['connection_id' => $this->rmsapiConnection->getKey()]);
 
         $params = [
             'per_page'            => config('rmsapi.import.products.per_page'),
@@ -65,7 +65,7 @@ class ImportProductsJob implements ShouldQueue
         try {
             $response = RmsapiClient::GET($this->rmsapiConnection, 'api/products', $params);
         } catch (GuzzleException $e) {
-            Log::warning('Failed RMSAPI product fetch', [
+            Log::warning('RMSAPI Failed product fetch', [
                 'code' => $e->getCode(),
                 'message' => $e->getMessage(),
             ]);
@@ -90,7 +90,7 @@ class ImportProductsJob implements ShouldQueue
             'expires_at' => now()->addHour()
         ]);
 
-        info('Downloaded RMSAPI products', [
+        info('RMSAPI Downloaded updated products', [
             'warehouse_code' => $this->rmsapiConnection->location_id,
             'count'          => $response->asArray()['total'],
         ]);

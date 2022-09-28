@@ -27,7 +27,7 @@ class DispatchImportJobs implements ShouldQueue
             ImportProductsJob::dispatch($rmsapiConnection->id);
             ImportShippingsJob::dispatch($rmsapiConnection->id);
 
-            logger('RMSAPI sync jobs dispatched', [
+            logger('RMSAPI Sync jobs dispatched', [
                 'warehouse_code' => $rmsapiConnection->location_id,
                 'connection_id' => $rmsapiConnection->id
             ]);

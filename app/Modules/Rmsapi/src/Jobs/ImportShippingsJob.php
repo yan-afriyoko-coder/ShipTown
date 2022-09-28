@@ -67,7 +67,7 @@ class ImportShippingsJob implements ShouldQueue
         try {
             $response = RmsapiClient::GET($this->rmsapiConnection, 'api/shippings', $params);
         } catch (GuzzleException $e) {
-            Log::warning('Failed RMSAPI shippings fetch', [
+            Log::warning('RMSAPI Failed shippings fetch', [
                 'code' => $e->getCode(),
                 'message' => $e->getMessage(),
             ]);
@@ -76,6 +76,8 @@ class ImportShippingsJob implements ShouldQueue
         }
 
         $records = $response->getResult();
+
+        Log::debug('RMSAPI Downloaded Shippings', ['count' => count($records)]);
 
         $this->importShippingRecords($records);
 
