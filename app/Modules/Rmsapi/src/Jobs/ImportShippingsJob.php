@@ -90,10 +90,12 @@ class ImportShippingsJob implements ShouldQueue
         collect($records)
             ->each(function ($shippingRecord) {
                 DB::transaction(function () use ($shippingRecord) {
-                    Log::debug('Importing shipping record', $shippingRecord);
+                    Log::debug('RMSAPI Importing shipping record', $shippingRecord);
                     $orderProduct = $this->createOrderProductFrom($shippingRecord);
 
                     $this->restockOriginForStockToBalance($orderProduct);
+
+                    $this->rmsapiConnection->update(['shippings_last_timestamp' => $shippingRecord['DBTimeStamp']]);
                 });
             });
     }
@@ -163,8 +165,6 @@ class ImportShippingsJob implements ShouldQueue
      */
     private function createOrderProductFrom($shippingRecord): ?OrderProduct
     {
-        Log::debug('Importing record', ["rmsapi_shipping_record" => $shippingRecord]);
-
         $uuid = $this->rmsapiConnection->location_id . '-shipping.id-' . $shippingRecord['ID'];
 
         $order = $this->firstOrCreateOrder($shippingRecord);
@@ -205,8 +205,6 @@ class ImportShippingsJob implements ShouldQueue
             'total' => $orderProductTotal->total_price + $shippingRecord['ShippingCharge'],
             'total_paid' => $orderProductTotal->total_price + $shippingRecord['ShippingCharge'],
         ]);
-
-        $this->rmsapiConnection->update(['shippings_last_timestamp' => $shippingRecord['DBTimeStamp']]);
 
         return $orderProduct;
     }
