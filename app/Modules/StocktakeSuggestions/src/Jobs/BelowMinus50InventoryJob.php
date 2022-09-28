@@ -2,9 +2,7 @@
 
 namespace App\Modules\StocktakeSuggestions\src\Jobs;
 
-use App\Models\Inventory;
-use App\Models\StocktakeSuggestion;
-use App\Models\Warehouse;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -28,11 +26,27 @@ class BelowMinus50InventoryJob implements ShouldQueue
         $this->warehouse_id = $warehouse_id;
     }
 
+    /**
+     * @throws Exception
+     */
     public function handle(): bool
     {
         $reason = 'stock below -50';
         $points = 50;
 
+        retry(2, function () use ($reason, $points) {
+            $this->runQuery($points, $reason);
+        }, 10);
+
+        return true;
+    }
+
+    /**
+     * @param int $points
+     * @param string $reason
+     */
+    private function runQuery(int $points, string $reason): void
+    {
         DB::statement('
             INSERT INTO stocktake_suggestions (inventory_id, points, reason, created_at, updated_at)
             SELECT id, ?, ?, NOW(), NOW()
@@ -48,7 +62,5 @@ class BelowMinus50InventoryJob implements ShouldQueue
             ORDER BY quantity ASC
             LIMIT 500
         ', [$points, $reason, $this->warehouse_id, $reason]);
-
-        return true;
     }
 }
