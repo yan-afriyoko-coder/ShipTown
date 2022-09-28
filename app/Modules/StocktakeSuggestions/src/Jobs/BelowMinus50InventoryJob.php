@@ -35,19 +35,23 @@ class BelowMinus50InventoryJob implements ShouldQueue
 
         DB::statement('
             INSERT INTO stocktake_suggestions (inventory_id, points, reason, created_at, updated_at)
-            SELECT id, ?, ?, NOW(), NOW()
+            SELECT id, :points, :reason, NOW(), NOW()
             FROM inventory
-            WHERE warehouse_id = ?
+            WHERE warehouse_id = :warehouse_id
                 AND quantity < -50
                 AND NOT EXISTS (
                     SELECT NULL
                     FROM stocktake_suggestions
                     WHERE stocktake_suggestions.inventory_id = inventory.id
-                    AND stocktake_suggestions.reason = ?
+                    AND stocktake_suggestions.reason = :reason
                 )
             ORDER BY quantity ASC
             LIMIT 500
-        ', [$points, $reason, $this->warehouse_id, $reason]);
+        ', [
+            'points' => $points,
+            'reason' => $reason,
+            'warehouse_id' => $this->warehouse_id
+        ]);
 
         return true;
     }
