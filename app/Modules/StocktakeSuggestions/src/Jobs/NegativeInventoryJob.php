@@ -43,7 +43,7 @@ class NegativeInventoryJob implements ShouldQueue
                     SELECT NULL
                     FROM stocktake_suggestions
                     WHERE stocktake_suggestions.inventory_id = inventory.id
-                    AND stocktake_suggestions.reason = :?
+                    AND stocktake_suggestions.reason = ?
                 )
             ORDER BY quantity ASC
             LIMIT 500

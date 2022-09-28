@@ -34,10 +34,7 @@ class NeverCountedJob implements ShouldQueue
         $reason = 'never counted';
         $points = 5;
 
-        DB::statement('DELETE FROM stocktake_suggestions WHERE warehouse_id = ? AND reason = ?', [
-            $this->warehouse_id,
-            $reason,
-        ]);
+        DB::statement('DELETE FROM stocktake_suggestions WHERE reason = ?', [$reason]);
 
 //        DB::statement('
 //            INSERT INTO stocktake_suggestions (inventory_id, points, reason, created_at, updated_at)
