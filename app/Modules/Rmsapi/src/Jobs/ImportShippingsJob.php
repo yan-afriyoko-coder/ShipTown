@@ -90,6 +90,7 @@ class ImportShippingsJob implements ShouldQueue
         collect($records)
             ->each(function ($shippingRecord) {
                 DB::transaction(function () use ($shippingRecord) {
+                    Log::debug('Importing shipping record', $shippingRecord);
                     $orderProduct = $this->createOrderProductFrom($shippingRecord);
 
                     $this->restockOriginForStockToBalance($orderProduct);
