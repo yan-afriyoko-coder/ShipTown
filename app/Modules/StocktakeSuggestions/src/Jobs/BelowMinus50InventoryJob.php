@@ -47,11 +47,7 @@ class BelowMinus50InventoryJob implements ShouldQueue
                 )
             ORDER BY quantity ASC
             LIMIT 500
-        ', [
-            'points' => $points,
-            'reason' => $reason,
-            'warehouse_id' => $this->warehouse_id
-        ]);
+        ', [$points, $reason, $this->warehouse_id, $reason]);
 
         return true;
     }
