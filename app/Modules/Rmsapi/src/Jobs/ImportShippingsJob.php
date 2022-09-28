@@ -94,6 +94,8 @@ class ImportShippingsJob implements ShouldQueue
                     $orderProduct = $this->createOrderProductFrom($shippingRecord);
 
                     $this->restockOriginForStockToBalance($orderProduct);
+
+                    $this->rmsapiConnection->update(['shippings_last_timestamp' => $shippingRecord['DBTimeStamp']]);
                 });
             });
     }
@@ -203,8 +205,6 @@ class ImportShippingsJob implements ShouldQueue
             'total' => $orderProductTotal->total_price + $shippingRecord['ShippingCharge'],
             'total_paid' => $orderProductTotal->total_price + $shippingRecord['ShippingCharge'],
         ]);
-
-        $this->rmsapiConnection->update(['shippings_last_timestamp' => $shippingRecord['DBTimeStamp']]);
 
         return $orderProduct;
     }
