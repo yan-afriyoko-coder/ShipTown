@@ -31,7 +31,7 @@ class BarcodeScannedToQuantityFieldJob implements ShouldQueue
     public function handle(): bool
     {
         $reason = 'possible barcode scanned into quantity field';
-        $points = 50;
+        $points = 100;
 
         DB::statement('
             INSERT INTO stocktake_suggestions (inventory_id, points, reason, created_at, updated_at)

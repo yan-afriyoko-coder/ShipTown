@@ -34,22 +34,31 @@ class NeverCountedJob implements ShouldQueue
         $reason = 'never counted';
         $points = 5;
 
-        DB::statement('
-            INSERT INTO stocktake_suggestions (inventory_id, points, reason, created_at, updated_at)
-            SELECT id, ? , ?, NOW(), NOW()
-            FROM inventory
-            WHERE warehouse_id = ?
-                AND quantity > 0
-                AND last_counted_at IS NULL
-                AND NOT EXISTS (
-                    SELECT NULL
-                    FROM stocktake_suggestions
-                    WHERE stocktake_suggestions.inventory_id = inventory.id
-                    AND stocktake_suggestions.reason = ?
-                )
-            ORDER BY quantity ASC
-            LIMIT 500
-        ', [$points, $reason, $this->warehouse_id, $reason]);
+        DB::statement('DELETE FROM stocktake_suggestions WHERE warehouse_id = :warehouse_id AND reason = :reason', [
+            'warehouse_id' => $this->warehouse_id,
+            'reason' => $reason,
+        ]);
+
+//        DB::statement('
+//            INSERT INTO stocktake_suggestions (inventory_id, points, reason, created_at, updated_at)
+//            SELECT id, :points , :reason, NOW(), NOW()
+//            FROM inventory
+//            WHERE warehouse_id = :warehouse_id
+//                AND quantity > 0
+//                AND last_counted_at IS NULL
+//                AND NOT EXISTS (
+//                    SELECT NULL
+//                    FROM stocktake_suggestions
+//                    WHERE stocktake_suggestions.inventory_id = inventory.id
+//                    AND stocktake_suggestions.reason = :reason
+//                )
+//            ORDER BY quantity ASC
+//            LIMIT 500
+//        ', [
+//            'points' => $points,
+//            'reason' => $reason,
+//            'warehouse_id' => $this->warehouse_id
+//        ]);
 
         return true;
     }
