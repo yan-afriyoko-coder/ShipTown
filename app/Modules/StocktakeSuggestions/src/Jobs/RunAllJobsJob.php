@@ -29,7 +29,7 @@ class RunAllJobsJob implements ShouldQueue
                 NeverCountedJob::dispatch($warehouse->getKey());
                 BarcodeScannedToQuantityFieldJob::dispatch($warehouse->getKey());
                 BelowMinus50InventoryJob::dispatch($warehouse->getKey());
-                NegativeWarehouseStockJob::dispatch();
+                NegativeWarehouseStockJob::dispatch($warehouse->getKey());
             });
 
         return true;
