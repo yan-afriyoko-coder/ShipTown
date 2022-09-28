@@ -6,6 +6,7 @@ use App\BaseModel;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  *
@@ -68,5 +69,10 @@ class InventoryMovement extends BaseModel
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function alias()
+    {
+        return $this->hasMany(ProductAlias::class, 'product_id', 'product_id');
     }
 }

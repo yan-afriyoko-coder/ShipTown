@@ -40,7 +40,7 @@ Route::get('reports/inventory-dashboard', 'Reports\InventoryDashboardController@
 Route::get('reports/shipments', 'Reports\ShipmentController@index')->name('reports.shipments');
 Route::get('reports/inventory', 'Reports\InventoryController@index')->name('reports.inventory');
 Route::get('reports/restocking', 'Reports\RestockingReportController@index')->name('reports.restocking');
-Route::get('reports/stocktakes', 'Reports\StocktakeController@index')->name('reports.stocktakes');
+Route::view('reports/stocktakes', 'reports/inventory-movements')->name('reports.stocktakes');
 
 Route::get('pdf/orders/{order_number}/{template}', 'PdfOrderController@show');
 Route::get('orders/{order_number}/kick', 'OrderKickController@index');
