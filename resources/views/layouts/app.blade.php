@@ -9,7 +9,7 @@
 
     @auth
     <meta name="user-id" content="{{ Auth::user()->id }}">
-    <meta name="current-user" content="{{ \App\Http\Resources\UserResource::make(Auth::user())->toJson() }}">
+    <meta name="current-user" content="{{ \App\Http\Resources\UserResource::make(Auth::user()->load('warehouse'))->toJson() }}">
     @endauth
 
     <title>ship.town @yield('title')</title>

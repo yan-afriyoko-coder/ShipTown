@@ -70,7 +70,6 @@ use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static Builder|User withTrashed()
  * @method static Builder|User withoutTrashed()
- * @mixin Eloquent
  *
  * @property bool $ask_for_shipping_number
  *

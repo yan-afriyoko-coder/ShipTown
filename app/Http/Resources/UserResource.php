@@ -2,18 +2,15 @@
 
 namespace App\Http\Resources;
 
+use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin User
+ */
 class UserResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return array
-     */
-    public function toArray($request)
+    public function toArray($request): array
     {
         $role = $this->roles()->first();
 
@@ -28,6 +25,7 @@ class UserResource extends JsonResource
             'printer_id'              => $this->printer_id,
             'address_label_template'  => $this->address_label_template,
             'ask_for_shipping_number' => $this->ask_for_shipping_number,
+            'warehouse'               => WarehouseResource::make($this->whenLoaded('warehouse'))
         ];
     }
 }
