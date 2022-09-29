@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 // Route 2FA
 Route::get('test', function () {
+    \Illuminate\Support\Facades\DB::statement('SELECT 1');
     NegativeWarehouseStockJob::dispatchNow(9);
     return view('dashboard');
 });
