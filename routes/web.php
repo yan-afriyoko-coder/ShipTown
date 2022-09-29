@@ -13,7 +13,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-// Route 2FA
 Route::resource('verify', 'Auth\TwoFactorController')->only(['index', 'store']);
 
 Route::redirect('', 'dashboard');

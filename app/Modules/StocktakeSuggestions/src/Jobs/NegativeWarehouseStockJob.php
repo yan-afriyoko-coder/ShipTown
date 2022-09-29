@@ -34,7 +34,7 @@ class NegativeWarehouseStockJob implements ShouldQueue
         $points = 20;
 
 
-        $warehouses = Warehouse::withAllTags(['fulfilment'])->get('id');
+        $warehouseIDs = Warehouse::withAllTags(['fulfilment'])->pluck('id');
 
         DB::statement('
             INSERT INTO stocktake_suggestions (inventory_id, points, reason, created_at, updated_at)
@@ -42,7 +42,7 @@ class NegativeWarehouseStockJob implements ShouldQueue
                 FROM inventory
                 RIGHT JOIN inventory as inventory_fullfilment
                     ON inventory_fullfilment.product_id = inventory.product_id
-                    AND inventory_fullfilment.warehouse_id IN (?)
+                    AND inventory_fullfilment.warehouse_id IN (' . implode(',', $warehouseIDs->toArray()) . ')
                     AND inventory_fullfilment.quantity > 0
                 WHERE inventory.warehouse_id = ?
                     AND inventory.quantity < 0
@@ -53,7 +53,7 @@ class NegativeWarehouseStockJob implements ShouldQueue
                         AND stocktake_suggestions.reason = ?
                     )
                 LIMIT 500
-        ', [$points, $reason, $warehouses->pluck('id'), $this->warehouse_id, $reason]);
+        ', [$points, $reason, $this->warehouse_id, $reason]);
 
         return true;
     }

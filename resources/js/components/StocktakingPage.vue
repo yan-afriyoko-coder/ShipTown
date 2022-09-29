@@ -14,19 +14,19 @@
             </div>
         </div>
 
-            <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
-                <template v-slot:content>
-                    <template v-for="itemMovement in recentStocktakes.data">
-                        <div class="row">
-                            <div class="col-sm-12 col-lg-5">
-                                {{ Number(itemMovement['quantity_after']) }} x {{ itemMovement['product']['sku'] }} - {{ itemMovement['product']['name'] }}<br>
-                            </div>
+        <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
+            <template v-slot:content>
+                <template v-for="itemMovement in recentStocktakes.data">
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-5">
+                            {{ Number(itemMovement['quantity_after']) }} x {{ itemMovement['product']['sku'] }} - {{ itemMovement['product']['name'] }}<br>
                         </div>
-                    </template>
-
-                    <a href="/reports/stocktakes" class="d-block text-center">See more</a>
+                    </div>
                 </template>
-            </swiping-card>
+
+                <a href="/reports/stocktakes" class="d-block text-center">See more</a>
+            </template>
+        </swiping-card>
 
         <div class="row col d-block font-weight-bold pb-1 text-uppercase small text-secondary align-content-center text-center">Stocktake suggestions</div>
 
@@ -51,9 +51,6 @@
                 </template>
             </swiping-card>
         </template>
-
-        <br>
-
 
     </div>
 </template>
@@ -82,13 +79,12 @@
         },
 
         mounted() {
-            this.loadStocktakeSuggestions();
-            this.loadRecentStocktakes();
-
             if (! this.currentUser()['warehouse_id']) {
                 this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
                 return;
             }
+
+            this.getUrlFilterOrSet('warehouse_code', this.currentUser()['warehouse']['code']);
 
             this.$root.$on('bv::modal::hidden', (bvEvent, modalId) => {
                 this.setFocusElementById(300, 'barcodeInput', true, true)
@@ -103,6 +99,9 @@
             this.$root.$on('bv::modal::shown', (bvEvent, modalId) => {
                 this.setFocusElementById(100, 'quantity-request-input', true, false)
             })
+
+            this.loadStocktakeSuggestions();
+            this.loadRecentStocktakes();
         },
 
         methods: {
