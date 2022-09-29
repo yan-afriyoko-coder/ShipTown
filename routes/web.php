@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 // Route 2FA
 Route::get('test', function () {
-    NegativeWarehouseStockJob::dispatchNow();
+    NegativeWarehouseStockJob::dispatchNow(9);
 });
 
 Route::resource('verify', 'Auth\TwoFactorController')->only(['index', 'store']);
