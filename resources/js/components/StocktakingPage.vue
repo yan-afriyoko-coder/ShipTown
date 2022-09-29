@@ -26,12 +26,12 @@
 
         <div class="row col d-block font-weight-bold pb-1 text-uppercase small text-secondary align-content-center text-center">Stocktake suggestions</div>
 
-        <div v-if="!stocktakeSuggestions || stocktakeSuggestions.data.length === 0" class="text-center mt-3">
+        <div v-if="(stocktakeSuggestions !== null) && (stocktakeSuggestions.length === 0)" class="text-center mt-3">
             You're all done! <br>
             No more suggestions found.
         </div>
 
-        <template v-if="stocktakeSuggestions" v-for="record in stocktakeSuggestions.data">
+        <template v-if="stocktakeSuggestions" v-for="record in stocktakeSuggestions">
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
                 <template v-slot:content>
                     <div class="row">
@@ -74,10 +74,11 @@
 
         data: function() {
             return {
-                inventory: null,
-                quantity: null,
+                pagesLoaded: 0,
+                reachedEnd: false,
+
                 recentStocktakes: [],
-                stocktakeSuggestions: [],
+                stocktakeSuggestions: null,
             };
         },
 
@@ -89,28 +90,31 @@
 
             this.getUrlFilterOrSet('filter[warehouse_code]', this.currentUser()['warehouse']['code']);
 
-            this.$root.$on('bv::modal::hidden', (bvEvent, modalId) => {
-                this.setFocusElementById(300, 'barcodeInput', true, true)
-            })
-
-            this.$root.$on('bv::modal::show', (bvEvent, modalId) => {
-                // we need to disable it otherwise b-modal might return focus on it too quickly
-                // and on screen keyboard will stay visible
-                document.getElementById('barcodeInput').readOnly = true;
-            })
-
-            this.$root.$on('bv::modal::shown', (bvEvent, modalId) => {
-                this.setFocusElementById(100, 'quantity-request-input', true, false)
-            })
+            window.onscroll = () => this.loadMore();
 
             this.loadStocktakeSuggestions();
             this.loadRecentStocktakes();
+
         },
 
         methods: {
             reloadData() {
                 this.loadStocktakeSuggestions();
                 this.loadRecentStocktakes();
+            },
+
+            loadMore: function () {
+                if (this.isLoading) {
+                    return;
+                }
+
+                if (this.reachedEnd) {
+                    return;
+                }
+
+                if (this.isMoreThanPercentageScrolled(70)) {
+                    this.loadStocktakeSuggestions(++this.pagesLoaded);
+                }
             },
 
             loadRecentStocktakes() {
@@ -132,19 +136,30 @@
             },
 
 
-            loadStocktakeSuggestions() {
+            loadStocktakeSuggestions(page = 1) {
                 this.showLoading();
+
+                if (page === 1) {
+                    this.stocktakeSuggestions = null;
+                }
 
                 const params = {
                     'filter[warehouse_id]': this.currentUser()['warehouse_id'],
                     'include': 'product,inventory',
                     'sort': '-points,inventory_id',
-                    'per_page': 0,
+                    'per_page': 10,
+                    'page': page,
                 }
 
                 this.apiGetStocktakeSuggestions(params)
                     .then((response) => {
-                        this.stocktakeSuggestions = response.data;
+                        if (page === 1) {
+                            this.stocktakeSuggestions = [];
+                        }
+                        this.reachedEnd = response.data.data.length === 0;
+                        this.pagesLoaded = page;
+
+                        this.stocktakeSuggestions = this.stocktakeSuggestions.concat(response.data.data);
                     })
                     .catch((error) => {
                         this.displayApiCallError(error);
