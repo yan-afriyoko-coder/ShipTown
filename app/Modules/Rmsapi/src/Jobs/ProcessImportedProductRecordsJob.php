@@ -75,7 +75,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
             'name' => $importedProduct->raw_import['description'],
         ];
 
-        $product = Product::firstOrCreate(['sku' => $attributes['sku']], $attributes);
+        $product = Product::updateOrCreate(['sku' => $attributes['sku']], $attributes);
 
         $this->attachTags($importedProduct, $product);
 
