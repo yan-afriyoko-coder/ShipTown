@@ -33,8 +33,11 @@ class NegativeWarehouseStockJob implements ShouldQueue
         $reason = 'negative warehouse stock';
         $points = 20;
 
-
         $warehouseIDs = Warehouse::withAllTags(['fulfilment'])->pluck('id');
+
+        if ($warehouseIDs->isEmpty()) {
+            return true;
+        }
 
         DB::statement('
             INSERT INTO stocktake_suggestions (inventory_id, points, reason, created_at, updated_at)
