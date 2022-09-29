@@ -134,7 +134,7 @@
                     'filter[warehouse_id]': this.currentUser()['warehouse_id'],
                     'include': 'product,inventory',
                     'sort': '-points,inventory_id',
-                    'per_page': 4,
+                    'per_page': 20,
                 }
 
                 this.apiGetStocktakeSuggestions(params)
