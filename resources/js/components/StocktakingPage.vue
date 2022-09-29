@@ -8,11 +8,7 @@
             <button id="config-button" disabled type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
-        <div class="row" v-if="isLoading">
-            <div class="col">
-                <div ref="loadingContainerOverride" style="height: 100px"></div>
-            </div>
-        </div>
+        <div class="row col d-block font-weight-bold pb-1 text-uppercase small text-secondary align-content-center text-center">Recent Stocktakes</div>
 
         <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
             <template v-slot:content>
@@ -30,7 +26,12 @@
 
         <div class="row col d-block font-weight-bold pb-1 text-uppercase small text-secondary align-content-center text-center">Stocktake suggestions</div>
 
-        <template v-for="record in stocktakeSuggestions.data">
+        <div v-if="!stocktakeSuggestions || stocktakeSuggestions.data.length === 0" class="text-center mt-3">
+            You're all done! <br>
+            No more suggestions found.
+        </div>
+
+        <template v-if="stocktakeSuggestions" v-for="record in stocktakeSuggestions.data">
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
                 <template v-slot:content>
                     <div class="row">
@@ -51,6 +52,8 @@
                 </template>
             </swiping-card>
         </template>
+
+        <div class="row col" ref="loadingContainerOverride" style="height: 100px"></div>
 
     </div>
 </template>
@@ -84,7 +87,7 @@
                 return;
             }
 
-            this.getUrlFilterOrSet('warehouse_code', this.currentUser()['warehouse']['code']);
+            this.getUrlFilterOrSet('filter[warehouse_code]', this.currentUser()['warehouse']['code']);
 
             this.$root.$on('bv::modal::hidden', (bvEvent, modalId) => {
                 this.setFocusElementById(300, 'barcodeInput', true, true)
@@ -130,11 +133,13 @@
 
 
             loadStocktakeSuggestions() {
+                this.showLoading();
+
                 const params = {
                     'filter[warehouse_id]': this.currentUser()['warehouse_id'],
                     'include': 'product,inventory',
                     'sort': '-points,inventory_id',
-                    'per_page': 20,
+                    'per_page': 0,
                 }
 
                 this.apiGetStocktakeSuggestions(params)
@@ -143,6 +148,9 @@
                     })
                     .catch((error) => {
                         this.displayApiCallError(error);
+                    })
+                    .finally(() => {
+                        this.hideLoading();
                     });
             },
         },
