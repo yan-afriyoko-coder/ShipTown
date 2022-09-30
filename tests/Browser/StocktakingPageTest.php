@@ -19,6 +19,7 @@ class StocktakingPageTest extends DuskTestCase
 
             $browser->loginAs($user)
                 ->visit('/stocktaking')
+                ->pause(500)
                 ->assertFocused('@barcode-input-field');
 
             while (rand(1, 3) !== 1) {
@@ -40,6 +41,7 @@ class StocktakingPageTest extends DuskTestCase
                 $browser->driver->getKeyboard()->sendKeys(rand(0, 10000));
                 $browser->driver->getKeyboard()->sendKeys(WebDriverKeys::ENTER);
 
+
                 $browser->waitForText('Stocktake updated')
                     ->assertMissing('#quantity-request-input')
                     ->pause(500)
@@ -55,6 +57,7 @@ class StocktakingPageTest extends DuskTestCase
 
             $browser->loginAs($user)
                 ->visit('/stocktaking')
+                ->pause(500)
                 ->assertFocused('@barcode-input-field');
 
             /** @var Product $product */
@@ -88,6 +91,7 @@ class StocktakingPageTest extends DuskTestCase
 
             $browser->loginAs($user)
                 ->visit('/stocktaking')
+                ->pause(500)
                 ->assertFocused('@barcode-input-field');
 
             /** @var ProductAlias $alias */
@@ -128,6 +132,7 @@ class StocktakingPageTest extends DuskTestCase
             $browser
                 ->loginAs($user)
                 ->visit('/stocktaking')
+                ->pause(500)
                 ->assertFocused('@barcode-input-field')
                 ->type('@barcode-input-field', 'not-existing-sku')
                 ->keys('@barcode-input-field', '{enter}')
