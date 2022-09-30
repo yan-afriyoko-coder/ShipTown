@@ -151,7 +151,7 @@
 
                 // we double per_page every second page load to avoid hitting the API too hard
                 // and we will limit it to 100-ish per_page
-                if ((this.page % 2 === 0) && (this.per_page < 100)) {
+                if ((this.per_page < 100) && (this.pagesLoaded % 2 === 0)) {
                     this.pagesLoaded = this.pagesLoaded / 2;
                     this.per_page = this.per_page * 2;
                 }
