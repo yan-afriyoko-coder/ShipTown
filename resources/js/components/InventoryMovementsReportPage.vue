@@ -33,7 +33,7 @@
                             </div>
                             <div class="col-12 col-md-8 text-right">
                                 <number-card label="before" :number="record['quantity_before']"></number-card>
-                                <number-card label="delta" :number="record['quantity_delta']"></number-card>
+                                <number-card label="change" :number="record['quantity_delta']"></number-card>
                                 <number-card label="after" :number="record['quantity_after']"></number-card>
                             </div>
                         </div>
