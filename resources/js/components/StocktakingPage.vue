@@ -34,21 +34,7 @@
         <template v-if="stocktakeSuggestions" v-for="record in stocktakeSuggestions">
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
                 <template v-slot:content>
-                    <div class="row">
-                        <div class="col-sm-12 col-lg-5">
-                            <product-info-card :product= "record['product']"></product-info-card>
-                        </div>
-
-                        <div class="row col-sm-12 col-lg-7 text-right">
-                            <div class="col-12 col-md-4 text-left small">
-                                <div>in stock: <strong>{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</strong></div>
-                            </div>
-                            <div class="col-12 col-md-8 text-right">
-                                <number-card label="points" :number="record['points']"></number-card>
-                                <text-card label="shelf" :number="record['inventory']['shelf_location']"></text-card>
-                            </div>
-                        </div>
-                    </div>
+                    <suggestion-record :record="record"></suggestion-record>
                 </template>
             </swiping-card>
         </template>
@@ -64,12 +50,14 @@
     import api from "../mixins/api";
     import helpers from "../mixins/helpers";
     import url from "../mixins/url";
+    import SuggestionRecord from "./StocktakingPage/SuggestionRecord";
 
     export default {
         mixins: [loadingOverlay, url, api, helpers],
 
         components: {
-            BarcodeInputField
+            BarcodeInputField,
+            SuggestionRecord,
         },
 
         data: function() {
