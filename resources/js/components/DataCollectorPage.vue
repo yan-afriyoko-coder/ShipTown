@@ -57,8 +57,9 @@
         >
             <stocktake-input></stocktake-input>
             <hr>
-            <button @click.prevent="transferStockIn" v-b-toggle class="col btn mb-1 btn-primary">Receive Stock IN</button>
-            <button @click.prevent="transferStockOut" v-b-toggle class="col btn mb-1 btn-primary">Receive Stock OUT</button>
+            <button @click.prevent="autoScanAllRequested" v-b-toggle class="col btn mb-2 btn-primary">Auto Scan ALL Request</button>
+            <button @click.prevent="transferStockIn" v-b-toggle class="col btn mb-2 btn-primary">Receive Stock IN</button>
+            <button @click.prevent="transferStockOut" v-b-toggle class="col btn mb-2 btn-primary">Receive Stock OUT</button>
             <a :href="getDownloadLink"  @click.prevent="downloadFileAndHideModal" v-b-toggle class="col btn mb-1 btn-primary">Download</a>
             <hr>
             <vue-csv-import
@@ -186,6 +187,25 @@
                     this.apiUpdateDataCollection(this.data_collection_id, data)
                         .then(response => {
                             this.$snotify.success('Stock transferred in successfully');
+                            this.$bvModal.hide('configuration-modal');
+                            setTimeout(() => {
+                                this.loadData();
+                            }, 1000);
+                        })
+                        .catch(error => {
+                            this.showException(error);
+                        });
+                },
+
+
+                autoScanAllRequested() {
+                    let data = {
+                        'action': 'auto_scan_all_requested',
+                    }
+
+                    this.apiUpdateDataCollection(this.data_collection_id, data)
+                        .then(response => {
+                            this.$snotify.success('Auto scan completed successfully');
                             this.$bvModal.hide('configuration-modal');
                             setTimeout(() => {
                                 this.loadData();

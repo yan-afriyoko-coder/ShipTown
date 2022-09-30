@@ -31,6 +31,12 @@ class DataCollectorService
                 });
         }
 
+        if ($action === 'auto_scan_all_requested') {
+            $dataCollector->records()
+                ->whereNotNull('quantity_requested')
+                ->update(['quantity_scanned' => DB::raw('quantity_requested')]);
+        }
+
         DB::commit();
     }
 
