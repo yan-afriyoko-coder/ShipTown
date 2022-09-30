@@ -104,21 +104,16 @@
         data: function() {
             return {
                 data: [],
+                per_page: 20,
                 reachedEnd: false,
                 pagesLoaded: 0,
             };
         },
 
         mounted() {
-            if (this.getUrlParameter('filter[has_tags]') === null) {
-                this.setUrlParameter('filter[has_tags]', 'fulfilment');
-            }
-            if (this.getUrlParameter('filter[warehouse_quantity_between]') === null) {
-                this.setUrlParameter('filter[warehouse_quantity_between]', '1,999999');
-            }
-            if (this.getUrlParameter('sort') === null) {
-                this.setUrlParameter('sort', '-quantity_required');
-            }
+            this.getUrlFilterOrSet('filter[has_tags]', 'fulfilment');
+            this.getUrlFilterOrSet('filter[warehouse_quantity_between]', '1,999999');
+            this.getUrlFilterOrSet('sort', '-quantity_required');
 
             this.loadData();
 
@@ -154,6 +149,13 @@
                     return;
                 }
 
+                // we double per_page every second page load to avoid hitting the API too hard
+                // and we will limit it to 100-ish per_page
+                if ((this.page % 2 === 0) && (this.per_page < 100)) {
+                    this.pagesLoaded = this.pagesLoaded / 2;
+                    this.per_page = this.per_page * 2;
+                }
+
                 this.loadData(++this.pagesLoaded);
             },
 
@@ -162,6 +164,7 @@
 
                 const params = this.$router.currentRoute.query;
                 params['include'] = 'tags';
+                params['per_page'] = this.per_page;
                 params['page'] = page;
 
                 this.apiGetRestocking(params)
@@ -169,7 +172,7 @@
                         if (page === 1) {
                             this.data = [];
                         }
-                        this.reachedEnd = response.data.data.length === 0;
+                        this.reachedEnd = response.data.data.length < this.per_page;
 
                         this.data = this.data.concat(response.data.data);
                         this.pagesLoaded = page;
