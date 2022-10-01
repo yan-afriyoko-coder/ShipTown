@@ -62,6 +62,7 @@
 
         data: function() {
             return {
+                per_page: 10,
                 pagesLoaded: 0,
                 reachedEnd: false,
 
@@ -100,7 +101,15 @@
                     return;
                 }
 
-                if (this.isMoreThanPercentageScrolled(70)) {
+                if (this.isMoreThanPercentageScrolled(70))
+                {
+                    // we double per_page every second page load to avoid hitting the API too hard
+                    // and we will limit it to 100-ish per_page
+                    if ((this.per_page < 100) && (this.pagesLoaded % 2 === 0)) {
+                        this.pagesLoaded = this.pagesLoaded / 2;
+                        this.per_page = this.per_page * 2;
+                    }
+
                     this.loadStocktakeSuggestions(++this.pagesLoaded);
                 }
             },
@@ -133,7 +142,7 @@
                 let params = {...this.$router.currentRoute.query};
                 params['include'] = 'product,inventory';
                 params['sort'] = '-points,inventory_id';
-                params['per_page'] = 10;
+                params['per_page'] = this.per_page;
                 params['page'] = page;
 
                 this.apiGetStocktakeSuggestions(params)
