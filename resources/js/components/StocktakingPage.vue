@@ -106,13 +106,12 @@
             },
 
             loadRecentStocktakes() {
-                const params = {
-                    'filter[description]': 'stocktake',
-                    'filter[warehouse_id]': Number(this.currentUser()['warehouse_id']),
-                    'include': 'product',
-                    'sort': '-id',
-                    'per_page': 2,
-                }
+                let params = {...this.$router.currentRoute.query};
+                params['filter[description]'] = 'stocktake';
+                params['filter[warehouse_code]'] = this.getUrlParameter('filter[warehouse_code]');
+                params['include'] = 'product';
+                params['sort'] = '-id';
+                params['per_page'] = 2;
 
                 this.apiGetInventoryMovements(params)
                     .then((response) => {
@@ -131,13 +130,11 @@
                     this.stocktakeSuggestions = null;
                 }
 
-                const params = {
-                    'filter[warehouse_id]': this.currentUser()['warehouse_id'],
-                    'include': 'product,inventory',
-                    'sort': '-points,inventory_id',
-                    'per_page': 10,
-                    'page': page,
-                }
+                let params = {...this.$router.currentRoute.query};
+                params['include'] = 'product,inventory';
+                params['sort'] = '-points,inventory_id';
+                params['per_page'] = 10;
+                params['page'] = page;
 
                 this.apiGetStocktakeSuggestions(params)
                     .then((response) => {
