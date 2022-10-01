@@ -38,7 +38,7 @@ class BarcodeScannedToQuantityFieldJob implements ShouldQueue
             SELECT id, ?, ?, NOW(), NOW()
             FROM inventory
             WHERE warehouse_id = ?
-                AND quantity > 100000000
+                AND quantity > 100000
                 AND NOT EXISTS (
                     SELECT NULL
                     FROM stocktake_suggestions
