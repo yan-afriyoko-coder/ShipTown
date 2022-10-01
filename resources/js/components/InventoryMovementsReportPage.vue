@@ -21,7 +21,7 @@
                     <div class="row">
                         <div class="col-sm-12 col-lg-5">
                             <product-info-card :product= "record['product']"></product-info-card>
-                            <div class="small">at: <strong>{{ record['created_at'] | moment('MMM D h:m') }}</strong></div>
+                            <div class="small">at: <strong>{{ record['created_at'] | moment('MMM D HH:mm') }}</strong></div>
                         </div>
 
                         <div class="row col-sm-12 col-lg-7 text-right">
