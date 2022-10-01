@@ -39,6 +39,7 @@ class StoctakeSuggestionReport extends Report
         $this->fields = [
             'inventory_id'                       => 'inventory_id',
             'warehouse_id'                       => 'inventory.warehouse_id',
+            'warehouse_code'                     => 'inventory.warehouse_code',
             'points'                             => DB::raw('sum(points)'),
         ];
 
