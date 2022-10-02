@@ -1,6 +1,6 @@
 @auth
 {{--    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm mb-0">--}}
-    <nav class="navbar navbar-expand-md navbar-light mb-2 p-0 bg-primary" style="z-index: 2000;">
+    <nav class="navbar navbar-expand-md navbar-light mb-2 p-0 bg-primary" style="z-index: 1021">
         <div class="container text-white">
             <div class="d-block mb-0 navbar-dark bg-primary">
                 <div class="btn-group" role="group" aria-label="Basic example">
