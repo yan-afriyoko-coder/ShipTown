@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="row mb-3 pl-1 pr-1 sticky-top" style="z-index: 10;">
+        <div class="row mb-3 pl-1 pr-1 sticky-top">
             <div class="flex-fill">
                 <stocktaking-input-field @stocktakeSubmitted="reloadData"></stocktaking-input-field>
             </div>

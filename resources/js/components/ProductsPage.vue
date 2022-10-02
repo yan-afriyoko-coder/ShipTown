@@ -1,7 +1,7 @@
 <template>
     <div>
         <template v-if="getUrlParameter('hide_nav_bar', false) === false">
-            <div class="row mb-1 pb-2 p-1 sticky-top bg-light" style="z-index: 10;">
+            <div class="row mb-1 pb-2 p-1 sticky-top bg-light">
                 <div class="flex-fill">
                     <barcode-input-field placeholder="Search products using name, sku, alias or command"
                                          ref="barcode"

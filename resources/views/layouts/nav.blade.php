@@ -1,6 +1,6 @@
 @auth
 {{--    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm mb-0">--}}
-    <nav class="navbar navbar-expand-md navbar-light mb-2 p-0 bg-primary">
+    <nav class="navbar navbar-expand-md navbar-light mb-2 p-0 bg-primary" style="z-index: 2000;">
         <div class="container text-white">
             <div class="d-block mb-0 navbar-dark bg-primary">
                 <div class="btn-group" role="group" aria-label="Basic example">
@@ -16,7 +16,7 @@
                         </a>
 
                         <!-- Menu Items END -->
-                        <div class="dropdown-menu dropdown-menu-right w-100 text-center bg-primary" aria-labelledby="navbarDropdown">
+                        <div class="dropdown-menu dropdown-menu-right w-100 text-center bg-primary" aria-labelledby="navbarDropdown" >
                             <a class="btn btn-primary d-block" href="{{ route('stocktaking') }}">{{ __('Stocktaking') }}</a>
                             <a class="btn btn-primary d-block" href="{{ route('reports.restocking') }}">{{ __('Restocking') }}</a>
                             <a class="btn btn-primary d-block" href="{{ route('data-collector') }}">{{ __('Data Collector') }}</a>
