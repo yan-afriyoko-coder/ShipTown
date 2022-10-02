@@ -5,7 +5,6 @@
                 <div class="row text-left">
                     <div class="col-md-6">
                         <product-info-card :product= "product"></product-info-card>
-
                     </div>
                     <div class="col-md-6" @click="toggle">
                         <div class="row small font-weight-bold text-right">

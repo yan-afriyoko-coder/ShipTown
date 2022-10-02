@@ -7,7 +7,7 @@
         </div>
         <div>
             <template v-for="tag in product.tags">
-                <a class="badge text-uppercase" :key="tag.id" :href="'products?has_tags=' + tag.name"> {{ tag.name }} </a>
+                <a class="badge text-uppercase" :key="tag.id" :href="'products?has_tags=' + getTagName(tag)"> {{ getTagName(tag) }} </a>
             </template>
         </div>
     </div>
@@ -24,6 +24,12 @@
         props: {
             product: null,
         },
+
+        methods: {
+            getTagName(tag) {
+                return tag.name instanceof Object ? tag.name['en'] : tag.name
+            }
+        }
     }
 </script>
 
