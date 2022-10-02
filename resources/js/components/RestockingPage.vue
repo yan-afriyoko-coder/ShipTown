@@ -41,10 +41,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="row pt-1">
-                                        <div class="col-6 small">
-                                            <div >
-                                                incoming: <b>{{ record['quantity_incoming'] }}</b>
-                                            </div>
+                                        <div class="col-12 col-md-6 small">
                                             <div >
                                                 warehouse: <b>{{ record['warehouse_quantity'] }}</b>
                                             </div>
@@ -58,10 +55,9 @@
                                                 warehouse_code: <b>{{ record['warehouse_code'] }}</b>
                                             </div>
                                         </div>
-                                        <div class="col-3">
+                                        <div class="col-12 col-sm-6 text-right">
                                             <number-card label="available" :number="record['quantity_available']" v-bind:class="{'bg-warning' : record['quantity_available'] < 0 }"></number-card>
-                                        </div>
-                                        <div class="col-3">
+                                            <number-card label="incoming" :number="record['quantity_incoming']"></number-card>
                                             <number-card label="required" :number="record['quantity_required']"></number-card>
                                         </div>
                                     </div>
