@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
 //            PrintNodeClientSeeder::class,
 //            DpdIrelandSeeder::class,
 //            ProductAliasSeeder::class,
-//            ProductTagsSeeder::class,
+            ProductTagsSeeder::class,
 //            ProductPriceSeeder::class,
 //            SplitOrdersScenarioSeeder::class,
 //            Orders_PackingWebDemoSeeder::class,
