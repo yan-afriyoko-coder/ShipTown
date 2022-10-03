@@ -22,7 +22,6 @@
                 let value = this.getUrlParameter(name);
 
                 if (value === null) {
-                    console.log(value);
                     this.setUrlParameter(name, defaultValue);
                     return defaultValue;
                 }

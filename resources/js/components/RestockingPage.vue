@@ -48,15 +48,18 @@
                                             <div :class=" record['reorder_point'] <= 0 ? 'bg-warning' : ''">
                                                 reorder_point: <b>{{ record['reorder_point'] }}</b>
                                             </div>
-                                            <div :class="record['reorder_point'] <= 0 ? 'bg-warning' : ''">
+                                            <div :class="record['restock_level'] <= 0 ? 'bg-warning' : ''">
                                                 restock_level: <b>{{ record['restock_level'] }}</b>
                                             </div>
                                             <div>
-                                                warehouse_code: <b>{{ record['warehouse_code'] }}</b>
+                                                location: <b>{{ record['warehouse_code'] }}</b>
+                                            </div>
+                                            <div>
+                                                last counted: <b>{{ formatDateTime(record['last_counted_at']) }}</b>
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-6 text-right">
-                                            <number-card label="available" :number="record['quantity_available']" v-bind:class="{'bg-warning' : record['quantity_available'] < 0 }"></number-card>
+                                            <number-card label="in stock" :number="record['quantity_available']" v-bind:class="{'bg-warning' : record['quantity_available'] < 0 }"></number-card>
                                             <number-card label="incoming" :number="record['quantity_incoming']"></number-card>
                                             <number-card label="required" :number="record['quantity_required']"></number-card>
                                         </div>
@@ -79,22 +82,16 @@
 </template>
 
 <script>
-    import loadingOverlay from '../mixins/loading-overlay';
-    import OrderCard from "./Orders/OrderCard";
-    import url from "../mixins/url";
-    import BarcodeInputField from "./SharedComponents/BarcodeInputField";
-    import api from "../mixins/api";
-    import helpers from "../mixins/helpers";
-    import Vue from "vue";
+import loadingOverlay from '../mixins/loading-overlay';
+import url from "../mixins/url";
+import api from "../mixins/api";
+import helpers from "../mixins/helpers";
 
-    export default {
+export default {
         mixins: [loadingOverlay, url, api, helpers],
 
         props: {
             initial_data: null,
-        },
-
-        components: {
         },
 
         data: function() {
