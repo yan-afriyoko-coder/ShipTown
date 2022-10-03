@@ -1,4 +1,5 @@
 import beep from "./beep";
+import moment from "moment";
 
 function getValueOrDefault(value, defaultValue)
 {
@@ -9,6 +10,10 @@ export default {
     mixins: [beep],
 
         methods: {
+            formatDateTime(datetime, format = "MMM D HH:mm", defaultValue = "-") {
+                return datetime ? moment(datetime).format(format) : defaultValue;
+            },
+
             copyToClipBoard(textToCopy){
                 const tmpTextField = document.createElement("textarea")
                 tmpTextField.textContent = textToCopy

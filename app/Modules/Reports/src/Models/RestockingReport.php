@@ -28,7 +28,8 @@ class RestockingReport extends Report
             'quantity_incoming',
             'reorder_point',
             'restock_level',
-            'warehouse_quantity'
+            'warehouse_quantity',
+            'last_counted_at',
         ]);
 
         $this->defaultSort = '-quantity_required';
@@ -53,6 +54,7 @@ class RestockingReport extends Report
             'quantity_available'                 => 'inventory.quantity_available',
             'quantity_incoming'                  => 'inventory.quantity_incoming',
             'quantity_required'                  => 'inventory.quantity_required',
+            'last_counted_at'                    => 'inventory.last_counted_at',
             'warehouse_quantity'                 => 'inventory_source.quantity_available',
             'inventory_source_warehouse_code'    => 'inventory_source.warehouse_code',
             'quantity_to_ship'                   => DB::raw("CASE WHEN inventory_source.quantity_available < inventory.quantity_required THEN inventory_source.quantity_available ELSE inventory.quantity_required END"),
@@ -68,6 +70,7 @@ class RestockingReport extends Report
             'quantity_incoming'  => 'float',
             'warehouse_quantity' => 'float',
             'quantity_to_ship'   => 'float',
+            'last_counted_at'    => 'datetime',
         ];
 
         $this->addFilter(

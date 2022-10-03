@@ -8,6 +8,7 @@
             <div @click="toggleDetails" class="row col-sm-12 col-lg-7 text-right">
                 <div class="col-12 col-md-4 text-left small">
                     <div>in stock: <strong>{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</strong></div>
+                    <div>last counted: <strong>{{ formatDateTime(record['inventory']['last_counted_at']) }}</strong></div>
                 </div>
                 <div class="col-12 col-md-8 text-right">
                     <number-card label="points" :number="record['points']"></number-card>
@@ -49,7 +50,7 @@
         mixins: [loadingOverlay, url, api, helpers],
 
         components: {
-            BarcodeInputField
+            BarcodeInputField,
         },
 
         props: {
