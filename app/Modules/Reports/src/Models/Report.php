@@ -14,6 +14,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\Exceptions\InvalidFilterQuery;
+use Spatie\QueryBuilder\Exceptions\InvalidFilterValue;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class Report extends Model
@@ -170,6 +171,7 @@ class Report extends Model
         $filters = $filters->merge($this->addBetweenDatesFilters());
         $filters = $filters->merge($this->addGreaterThan());
         $filters = $filters->merge($this->addLowerThan());
+        $filters = $filters->merge($this->addNullFilters());
 
         return $filters->toArray();
     }
@@ -394,6 +396,23 @@ class Report extends Model
                     $query->where($this->fields[$alias], '<', floatval($value));
                 });
             });
+
+        return $allowedFilters;
+    }
+
+    private function addNullFilters(): array
+    {
+        $allowedFilters = [];
+
+//        collect($this->fields)
+//            ->each(function ($record, $alias) use (&$allowedFilters) {
+//                $filterName = 'null';
+
+//                InvalidFilterValue::make($filterName);
+                $allowedFilters[] = AllowedFilter::callback('null', function ($query, $value) {
+                    $query->whereNull($this->fields[$value]);
+                });
+//            });
 
         return $allowedFilters;
     }
