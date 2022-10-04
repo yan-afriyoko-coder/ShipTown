@@ -13,6 +13,16 @@
                 <div class="card-body">
                     <h4 class="card-title text-center">{{ __($report_name) }}</h4>
 
+                    <div class="row">
+                        <div class="col-md-8 offset-md-2">
+                            <div class="">
+                                @widget('ReportWidget', [
+                                    'view' => 'reports.StocktakeSuggestionsReport',
+                                    'report' => 'App\Modules\StocktakeSuggestions\src\Reports\StocktakeSuggestionsTotalsReport'
+                                ])
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col-md-8 offset-md-2">
