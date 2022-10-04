@@ -42,11 +42,6 @@ class Report extends Model
     public array $allowedIncludes = [];
     private array $fieldAliases = [];
 
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     * @throws InvalidSelectException
-     */
     public function response($request)
     {
         return $this->toView($request);
@@ -63,15 +58,11 @@ class Report extends Model
         return $this->view();
     }
 
-    /**
-     *
-     */
     public function toArray()
     {
         return $this->queryBuilder()
             ->simplePaginate(request()->get('per_page', $this->perPage))
-            ->appends(request()->query())
-            ->toArray();
+            ->appends(request()->query());
     }
 
     public function queryBuilder(): QueryBuilder
@@ -96,10 +87,6 @@ class Report extends Model
             ->allowedIncludes($this->allowedIncludes);
     }
 
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
     private function view()
     {
         try {
