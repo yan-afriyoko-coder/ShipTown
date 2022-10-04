@@ -7,6 +7,7 @@ use App\Helpers\CsvBuilder;
 use App\Modules\Reports\src\Http\Resources\ReportResource;
 use App\Traits\HasTagsTrait;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Facades\DB;
@@ -14,14 +15,13 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\Exceptions\InvalidFilterQuery;
-use Spatie\QueryBuilder\Exceptions\InvalidFilterValue;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class Report extends Model
 {
     use HasTagsTrait;
 
-    protected $table = 'report';
+    public $table = 'report';
     public string $report_name = 'Report';
     public string $view = 'reports.inventory';
 
@@ -49,6 +49,13 @@ class Report extends Model
      */
     public function response($request)
     {
+        return $this->toView($request);
+    }
+
+    public function toView($request = null)
+    {
+        $request = $request ?? request();
+
         if ($request->has('filename')) {
             return $this->csvDownload();
         }
@@ -63,13 +70,10 @@ class Report extends Model
     {
         return $this->queryBuilder()
             ->simplePaginate(request()->get('per_page', $this->perPage))
-            ->appends(request()->query());
+            ->appends(request()->query())
+            ->toArray();
     }
 
-    /**
-     * @throws NotFoundExceptionInterface
-     * @throws InvalidSelectException|ContainerExceptionInterface
-     */
     public function queryBuilder(): QueryBuilder
     {
         $this->fieldAliases = [];
@@ -116,11 +120,6 @@ class Report extends Model
         return view($this->view, $data);
     }
 
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     * @throws InvalidSelectException
-     */
     public function csvDownload()
     {
         $csv = CsvBuilder::fromQueryBuilder(
@@ -290,7 +289,7 @@ class Report extends Model
 
     /**
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     private function addBetweenDatesFilters(): array
     {
@@ -307,7 +306,7 @@ class Report extends Model
                 $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($fieldType, $fieldAlias, $filterName, $fieldQuery) {
                     // we add this to make sure query returns no records if array of two values is not specified
                     if ((!is_array($value)) or (count($value) != 2)) {
-                        throw new \Exception($filterName . ': Invalid filter value, expected array of two values');
+                        throw new Exception($filterName . ': Invalid filter value, expected array of two values');
                     }
 
                     if ($fieldQuery instanceof Expression) {
@@ -328,7 +327,7 @@ class Report extends Model
 
     /**
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     private function addGreaterThan(): array
     {
@@ -351,7 +350,7 @@ class Report extends Model
 
     /**
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     private function addGreaterThanFloat(): array
     {

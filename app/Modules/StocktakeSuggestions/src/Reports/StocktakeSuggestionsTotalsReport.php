@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Modules\StocktakeSuggestions\src\Reports;
+
+use App\Models\StocktakeSuggestion;
+use App\Modules\Reports\src\Models\Report;
+use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\AllowedFilter;
+
+class StocktakeSuggestionsTotalsReport extends Report
+{
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->report_name = 'Stocktakes Suggestions';
+
+        $this->baseQuery = StocktakeSuggestion::query()
+            ->leftJoin('inventory', 'inventory_id', '=', 'inventory.id')
+            ->groupBy('inventory.warehouse_code');
+
+        $this->fields = [
+            'warehouse_code'      => 'inventory.warehouse_code',
+            'count'               => DB::raw('count(DISTINCT inventory.id)'),
+        ];
+
+        $this->casts = [
+            'count'             => 'integer',
+        ];
+
+        $this->addFilter(
+            AllowedFilter::callback('has_tags', function ($query, $value) {
+                $query->whereHas('product', function ($query) use ($value) {
+                    $query->withAllTags($value);
+                });
+            })
+        );
+    }
+}
