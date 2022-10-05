@@ -186,8 +186,6 @@
                                     <thead>
                                         <tr>
                                             <th>Location</th>
-<!--                                            <th>Stock</th>-->
-<!--                                            <th>Reserved</th>-->
                                             <th>Available</th>
                                             <th>Incoming</th>
                                             <th>Restock Level</th>
@@ -199,8 +197,6 @@
                                     <tbody>
                                         <tr v-for="inventory in product.inventory" :key="inventory.id">
                                             <td><b>{{ inventory.warehouse_code }}</b></td>
-<!--                                            <td>{{ inventory.quantity | numberFormat}}</td>-->
-<!--                                            <td>{{ inventory.quantity_reserved | numberFormat}}</td>-->
                                             <td>{{ inventory.quantity_available | numberFormat}}</td>
                                             <td>{{ inventory.quantity_incoming | numberFormat}}</td>
                                             <td>{{ inventory.restock_level | numberFormat }}</td>
@@ -216,7 +212,10 @@
 
                         <template v-if="currentTab === 'aliases'">
                             <div class="container">
-                                <span v-for="alias in product.aliases" :key="alias.id">{{ alias.alias }}</span>
+
+                                <div v-for="alias in product.aliases" :key="alias.id">
+                                    <div class="badge mb-2">{{ alias.alias }}</div>
+                                </div>
                             </div>
                         </template>
                     </div>
