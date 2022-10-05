@@ -9,6 +9,6 @@ class PacksheetController extends Controller
 {
     public function show(Request $request, $order_id)
     {
-        return view('order-packsheet', ['order_id' => $order_id]);
+        return view('packsheet', ['order_id' => $order_id]);
     }
 }

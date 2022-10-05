@@ -193,6 +193,7 @@
             },
 
             barcodeScanned(barcode) {
+
                 if (this.tryToRunCommand(barcode)) {
                     this.barcode = '';
                     return;
