@@ -17,8 +17,10 @@
                         <div class="col-md-8 offset-md-2">
                             <div class="">
                                 @widget('ReportWidget', [
+                                    'report' => 'App\Modules\StocktakeSuggestions\src\Reports\StocktakeSuggestionsTotalsReport',
                                     'view' => 'reports.StocktakeSuggestionsReport',
-                                    'report' => 'App\Modules\StocktakeSuggestions\src\Reports\StocktakeSuggestionsTotalsReport'
+                                    'sort' => 'warehouse_code',
+                                    'per_page' => 999,
                                 ])
                             </div>
                         </div>

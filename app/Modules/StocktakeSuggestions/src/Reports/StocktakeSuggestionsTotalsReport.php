@@ -17,10 +17,13 @@ class StocktakeSuggestionsTotalsReport extends Report
 
         $this->baseQuery = StocktakeSuggestion::query()
             ->leftJoin('inventory', 'inventory_id', '=', 'inventory.id')
-            ->groupBy('inventory.warehouse_code');
+            ->rightJoin('warehouses', 'inventory.warehouse_id', '=', 'warehouses.id')
+            ->groupBy('warehouses.code');
+
+        $this->defaultSort = 'warehouses.code';
 
         $this->fields = [
-            'warehouse_code'      => 'inventory.warehouse_code',
+            'warehouse_code'      => 'warehouses.code',
             'count'               => DB::raw('count(DISTINCT inventory.id)'),
         ];
 

@@ -25,8 +25,8 @@ class Report extends Model
     public string $report_name = 'Report';
     public string $view = 'reports.inventory';
 
-    protected string $defaultSelect = '';
-    protected ?string $defaultSort = null;
+    public string $defaultSelect = '';
+    public ?string $defaultSort = null;
 
     public array $toSelect = [];
 
