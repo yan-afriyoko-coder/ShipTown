@@ -5,14 +5,10 @@ namespace Tests\Feature\Modules\StocktakeSuggestions;
 use App\Models\Product;
 use App\Models\StocktakeSuggestion;
 use App\Models\Warehouse;
-use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class BasicModuleTest extends TestCase
 {
-    use RefreshDatabase;
-
     /** @test */
     public function test_module_basic_functionality()
     {
@@ -36,6 +32,6 @@ class BasicModuleTest extends TestCase
             'reason' => 'test2',
         ]);
 
-        ray(StocktakeSuggestion::query()->count());
+        $this->assertCount(2, StocktakeSuggestion::query()->get());
     }
 }

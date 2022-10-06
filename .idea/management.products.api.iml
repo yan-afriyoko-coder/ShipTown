@@ -215,6 +215,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/beyondcode/laravel-query-detector" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/laravel/forge-sdk" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/blackfire/php-sdk" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tightenco/ziggy" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
