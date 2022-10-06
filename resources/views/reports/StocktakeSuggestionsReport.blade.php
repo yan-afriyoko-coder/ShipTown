@@ -10,7 +10,7 @@
         @foreach ($data as $record)
             <tr>
                 <td>
-                    <a href=''>
+                    <a :href="route('stocktaking')">
                         {{ data_get($record, $fields[0]) }}
                     </a>
                 </td>
