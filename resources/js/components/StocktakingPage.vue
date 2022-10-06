@@ -20,7 +20,7 @@
                     </div>
                 </template>
 
-                <a href="/reports/stocktakes" class="d-block text-center">See more</a>
+                <a :href="route('reports.inventory-movements', {'filter[description]': 'stocktake'})" class="d-block text-center">See more</a>
             </template>
         </swiping-card>
 

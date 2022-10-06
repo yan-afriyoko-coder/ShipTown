@@ -4,10 +4,20 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+
 require('./bootstrap');
 
 require('./registerServiceWorker');
 window.Vue = require('vue');
+// Vue 2
+import Vue from 'vue'
+
+import route from "ziggy-js";
+Vue.mixin({
+    methods: {
+        route: route
+    }
+});
 
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';

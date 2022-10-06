@@ -9,7 +9,7 @@ use Tests\TestCase;
 /**
  *
  */
-class StocktakesTest extends TestCase
+class Inventory_movementsTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -31,7 +31,7 @@ class StocktakesTest extends TestCase
         parent::setUp();
         $this->user = factory(User::class)->create();
 
-        $this->uri = route('reports.stocktakes');
+        $this->uri = route('reports.inventory-movements');
     }
 
     /** @test */

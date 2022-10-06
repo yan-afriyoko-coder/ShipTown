@@ -64,7 +64,6 @@ export default {
         }
     },
     mounted(){
-        console.log(this.dates);
         this.formatted_starting_date = moment(this.dates.starting_date).format('YYYY-MM-DD hh:mm')
         this.formatted_ending_date = moment(this.dates.ending_date).format('YYYY-MM-DD hh:mm')
         this.starting_date = moment(this.dates.starting_date).format('YYYY-MM-DD\Thh:mm')
