@@ -13,6 +13,12 @@
 
 @import "~vue-snotify/styles/material";
 
+.collapsing {
+    -webkit-transition: none;
+    transition: none;
+    display: none;
+}
+
 .lightHover:hover {
     background-color: #3b89cb;
 }

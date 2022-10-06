@@ -30,15 +30,6 @@
                 <font-awesome-icon icon="bars" class="fa-lg"></font-awesome-icon>
             </button>
 
-            <style>
-                .collapsing {
-                    -webkit-transition: none;
-                    transition: none;
-                    display: none;
-                }
-            </style>
-
-
             <div class="collapse navbar-collapse bg-primary flex-fill" id="navbarSupportedContent" style="transition: none !important;">
                 <!-- Left Side Of Navbar -->
 
