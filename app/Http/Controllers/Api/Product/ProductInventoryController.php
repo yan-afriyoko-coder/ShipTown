@@ -40,7 +40,7 @@ class ProductInventoryController extends Controller
             ->where(['id' => $request->validated()['id']])
             ->first();
 
-        $inventory->update($request->except('id'));
+        $inventory->update($request->validated());
 
         return InventoryResource::collection(collect([$inventory]));
     }

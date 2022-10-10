@@ -14,6 +14,12 @@ export default {
                 return datetime ? moment(datetime).format(format) : defaultValue;
             },
 
+            simulateSelectAll() {
+                setTimeout(() => {
+                    document.execCommand('selectall', null, false);
+                }, 1);
+            },
+
             copyToClipBoard(textToCopy){
                 const tmpTextField = document.createElement("textarea")
                 tmpTextField.textContent = textToCopy
