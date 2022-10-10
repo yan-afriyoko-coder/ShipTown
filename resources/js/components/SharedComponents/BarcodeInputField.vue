@@ -212,13 +212,6 @@
                     this.setFocus(document.getElementById('barcodeInput'), true,true)
                 }, delay);
             },
-
-            simulateSelectAll() {
-                setTimeout(() => {
-                    document.execCommand('selectall', null, false);
-                }, 1);
-            },
-
         }
     }
 </script>

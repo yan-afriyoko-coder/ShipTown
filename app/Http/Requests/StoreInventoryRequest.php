@@ -24,8 +24,10 @@ class StoreInventoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'id'             => ['required', 'integer', 'exists:inventory,id'],
-            'shelf_location' => ['sometimes','string']
+            'id'                => ['required', 'integer', 'exists:inventory,id'],
+            'reorder_point'     => ['sometimes','numeric'],
+            'restock_level'     => ['sometimes','numeric'],
+            'shelf_location'    => ['sometimes','string'],
         ];
     }
 }

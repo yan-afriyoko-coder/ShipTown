@@ -20,56 +20,7 @@
         </b-modal>
 
         <template v-for="record in data">
-            <div class="row mb-3">
-                <div class="col ml-0 pl-0">
-                    <div class="card ml-0 pl-0">
-                        <div class="card-body pt-2 pl-2">
-                            <div class="row mt-0">
-                                <div class="col-lg-6">
-                                    <div class="text-primary h5">{{ record['product_name'] }}</div>
-                                    <div>
-                                        sku: <b>
-                                        <font-awesome-icon icon="copy" class="fa-xs btn-link" role="button" @click="copyToClipBoard(record['product_sku'])"></font-awesome-icon>
-                                        <a target="_blank"  :href="'/products?hide_nav_bar=true&search=' + record['product_sku']">{{ record['product_sku'] }}</a>
-                                    </b>
-                                    </div>
-                                    <div>
-                                        <template v-for="tag in record['tags']">
-                                            <a class="badge text-uppercase" :key="tag.id" @click.prevent="setUrlParameterAngGo('filter[has_tags]', tag['name']['en'])"> {{ tag['name']['en'] }} </a>
-                                        </template>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="row pt-1">
-                                        <div class="col-12 col-md-6 small">
-                                            <div >
-                                                warehouse: <b>{{ record['warehouse_quantity'] }}</b>
-                                            </div>
-                                            <div :class=" record['reorder_point'] <= 0 ? 'bg-warning' : ''">
-                                                reorder_point: <b>{{ record['reorder_point'] }}</b>
-                                            </div>
-                                            <div :class="record['restock_level'] <= 0 ? 'bg-warning' : ''">
-                                                restock_level: <b>{{ record['restock_level'] }}</b>
-                                            </div>
-                                            <div>
-                                                location: <b>{{ record['warehouse_code'] }}</b>
-                                            </div>
-                                            <div>
-                                                last counted: <b>{{ formatDateTime(record['last_counted_at']) }}</b>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-6 text-right">
-                                            <number-card label="in stock" :number="record['quantity_available']" v-bind:class="{'bg-warning' : record['quantity_available'] < 0 }"></number-card>
-                                            <number-card label="incoming" :number="record['quantity_incoming']"></number-card>
-                                            <number-card label="required" :number="record['quantity_required']"></number-card>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <restocking-record-card :record="record"></restocking-record-card>
         </template>
 
         <div class="row">
@@ -100,6 +51,10 @@ export default {
                 per_page: 20,
                 reachedEnd: false,
                 pagesLoaded: 0,
+                selectedRecord: null,
+                newReorderPoint: null,
+                newRestockLevel: null,
+                newQuantityInStock: null,
             };
         },
 
@@ -127,6 +82,14 @@ export default {
                 window.open(routeData.href, '_blank');
 
                 this.$bvModal.hide('configuration-modal');
+            },
+
+            showUpdateRestockingInfoModal(restocking_record) {
+                this.selectedRecord = restocking_record;
+                this.newReorderPoint = restocking_record['reorder_point'];
+                this.newRestockLevel = restocking_record['restock_level'];
+                this.newQuantityInStock = restocking_record['quantity_in_stock'];
+                this.$bvModal.show('update-restocking-info-modal');
             },
 
             loadMore() {
