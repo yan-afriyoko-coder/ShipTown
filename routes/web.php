@@ -41,6 +41,7 @@ Route::get('reports/inventory', 'Reports\InventoryController@index')->name('repo
 Route::get('reports/restocking', 'Reports\RestockingReportController@index')->name('reports.restocking');
 Route::view('reports/inventory-movements', 'reports/inventory-movements')->name('reports.inventory-movements');
 Route::get('reports/stocktake-suggestions', 'Reports\StocktakeSuggestionsReportController@index')->name('reports.stocktake-suggestions');
+Route::get('reports/inventory-movements-summary', 'Reports\InventoryMovementsSummaryController@index')->name('reports.inventory-movements-summary');
 
 Route::get('pdf/orders/{order_number}/{template}', 'PdfOrderController@show');
 Route::get('orders/{order_number}/kick', 'OrderKickController@index');
