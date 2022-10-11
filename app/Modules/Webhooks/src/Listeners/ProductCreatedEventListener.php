@@ -8,13 +8,6 @@ use App\Modules\Webhooks\src\Models\PendingWebhook;
 
 class ProductCreatedEventListener
 {
-    /**
-     * Handle the event.
-     *
-     * @param ProductCreatedEvent $event
-     *
-     * @return void
-     */
     public function handle(ProductCreatedEvent $event)
     {
         PendingWebhook::query()->firstOrCreate([

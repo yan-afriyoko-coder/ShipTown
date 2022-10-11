@@ -18,7 +18,5 @@ class InventoryUpdatedEventListener
             'reserved_at' => null,
             'published_at' => null,
         ]);
-
-        PublishInventoryWebhooksJob::dispatchAfterResponse();
     }
 }
