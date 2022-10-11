@@ -47,13 +47,23 @@
 
                     <div class="row text-center align-content-center" v-if="expanded">
                         <div class="col-12">
-                            <label class="small">required</label>
+                            <label class="small">restock level</label>
                         </div>
                         <div class="col-12 text-nowrap">
                             <div class="input-group mb-3">
-                                <button tabindex="-1" @click="minusNewRequired(record)" class="btn btn-danger" type="button" id="button-addon5">-</button>
-                                <input tabindex="0" @keyup="onUpdateQuantityRequiredEvent" v-model="record['quantity_required']" @focus="simulateSelectAll" type="text" class="form-control" style="font-size: large" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                                <button tabindex="-1" @click="plusNewRequired(record)" class="btn btn-success" type="button" id="button-addon6">+</button>
+                                <button tabindex="-1" @click="updateRestockLevel(Number(record['restock_level']) - 1)" class="btn btn-danger" type="button" id="button-addon3">-</button>
+                                <input tabindex="0" @keyup="onUpdateRestockLevelEvent" v-model="record['restock_level']" @focus="simulateSelectAll" type="text" class="form-control" style="font-size: large" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                                <button tabindex="-1" @click="updateRestockLevel(Number(record['restock_level']) + 1)" class="btn btn-success" type="button" id="button-addon4">+</button>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="small">reorder point</label>
+                        </div>
+                        <div class="col-12 text-nowrap">
+                            <div class="input-group mb-3">
+                                <button tabindex="-1" @click="updateReorderPoint(Number(record['reorder_point']) - 1)" class="btn btn-danger" type="button" id="button-addon5">-</button>
+                                <input tabindex="0" @keyup="onUpdateReorderPointEvent" v-model="record['reorder_point']" @focus="simulateSelectAll" type="text" class="form-control" style="font-size: large" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                                <button tabindex="-1" @click="updateReorderPoint(Number(record['reorder_point']) + 1)" class="btn btn-success" type="button" id="button-addon6">+</button>
                             </div>
                         </div>
                     </div>
@@ -108,13 +118,12 @@ export default {
         },
 
         methods: {
-            focusOnInputAndReload() {
-                this.setFocusElementById(100,'barcodeInput', true, true);
-                this.loadData();
+            onUpdateRestockLevelEvent(keyboard_event) {
+                this.updateRestockLevel(keyboard_event.target.value);
             },
 
-            onUpdateQuantityRequiredEvent(keyboard_event) {
-                this.updateQuantityRequired(keyboard_event.target.value);
+            onUpdateReorderPointEvent(keyboard_event) {
+                this.updateReorderPoint(keyboard_event.target.value);
             },
 
             updateQuantityRequired(value) {
@@ -131,6 +140,9 @@ export default {
                         'restock_level': this.record['restock_level'],
                         'reorder_point': this.record['reorder_point'],
                     })
+                    .then(response => {
+                        this.record['quantity_required'] = response.data.data[0]['quantity_required'];
+                    })
                     .catch(error => {
                         this.record['quantity_required'] = originalQuantityRequired;
                         this.record['restock_level'] = originalRestockLevel;
@@ -138,106 +150,48 @@ export default {
                     });
             },
 
-            plusNewQuantityInStock() {
-                this.newQuantityInStock = Number(this.newQuantityInStock) + 1;
-            },
+            updateRestockLevel(value) {
+                const originalQuantityRequired = Number(this.record['quantity_required']);
+                const originalRestockLevel = Number(this.record['restock_level']);
+                const originalReorderPoint = Number(this.record['reorder_point']);
 
-            minusNewQuantityInStock() {
-                this.newQuantityInStock = Math.max(0, Number(this.newQuantityInStock) - 1);
-            },
+                this.record['restock_level'] = Number(value);
 
-            plusNewRestockLevel() {
-                this.newRestockLevel = Number(this.newRestockLevel) + 1;
-            },
-
-            minusNewRestockLevel() {
-                this.newRestockLevel = Math.max(0, Number(this.newRestockLevel) - 1);
-            },
-
-            plusNewReorderPoint() {
-                this.newReorderPoint = Number(this.newReorderPoint) + 1;
-            },
-
-            minusNewReorderPoint() {
-                this.newReorderPoint = Math.max(0, Number(this.newReorderPoint) - 1);
-            },
-
-            plusNewRequired(record) {
-                this.updateQuantityRequired(Number(record['quantity_required']) + 1);
-            },
-
-            minusNewRequired(record) {
-                this.updateQuantityRequired(Number(record['quantity_required']) - 1);
-            },
-
-
-            downloadFileAndHideModal() {
-                let routeData = this.$router.resolve({
-                    path: this.$router.currentRoute.fullPath,
-                    query: {filename: "restocking-"+ this.getUrlParameter('filter[warehouse_code]')+".csv"}
-                });
-                window.open(routeData.href, '_blank');
-
-                this.$bvModal.hide('configuration-modal');
-            },
-
-            showUpdateRestockingInfoModal(restocking_record) {
-                this.selectedRecord = restocking_record;
-                this.newReorderPoint = restocking_record['reorder_point'];
-                this.newRestockLevel = restocking_record['restock_level'];
-                this.newQuantityInStock = restocking_record['quantity_in_stock'];
-                this.$bvModal.show('update-restocking-info-modal');
-            },
-
-            loadMore() {
-                if (this.isLoading) {
-                    return;
-                }
-
-                if (! this.isMoreThanPercentageScrolled(70)) {
-                    return;
-                }
-
-                if (this.reachedEnd) {
-                    return;
-                }
-
-                // we double per_page every second page load to avoid hitting the API too hard
-                // and we will limit it to 100-ish per_page
-                if ((this.per_page < 100) && (this.pagesLoaded % 2 === 0)) {
-                    this.pagesLoaded = this.pagesLoaded / 2;
-                    this.per_page = this.per_page * 2;
-                }
-
-                this.loadData(++this.pagesLoaded);
-            },
-
-            loadData(page = 1) {
-                this.showLoading();
-
-                const params = this.$router.currentRoute.query;
-                params['include'] = 'tags';
-                params['per_page'] = this.per_page;
-                params['page'] = page;
-
-                this.apiGetRestocking(params)
-                    .then((response) => {
-                        if (page === 1) {
-                            this.data = [];
-                        }
-                        this.reachedEnd = response.data.data.length < this.per_page;
-
-                        this.data = this.data.concat(response.data.data);
-                        this.pagesLoaded = page;
+                this.apiPostInventory({
+                        'id': this.record['inventory_id'],
+                        'restock_level': this.record['restock_level'],
+                        'reorder_point': this.record['reorder_point'],
                     })
-                    .finally(() => {
-                        this.hideLoading();
+                    .then(response => {
+                        this.record['quantity_required'] = response.data.data[0]['quantity_required'];
+                    })
+                    .catch(error => {
+                        this.record['quantity_required'] = originalQuantityRequired;
+                        this.record['restock_level'] = originalRestockLevel;
+                        this.record['reorder_point'] = originalReorderPoint;
                     });
             },
 
-            findText() {
-                this.data = [];
-                this.loadData();
+            updateReorderPoint(value) {
+                const originalQuantityRequired = Number(this.record['quantity_required']);
+                const originalRestockLevel = Number(this.record['restock_level']);
+                const originalReorderPoint = Number(this.record['reorder_point']);
+
+                this.record['reorder_point'] = Number(value);
+
+                this.apiPostInventory({
+                        'id': this.record['inventory_id'],
+                        'restock_level': this.record['restock_level'],
+                        'reorder_point': this.record['reorder_point'],
+                    })
+                    .then(response => {
+                        this.record['quantity_required'] = response.data.data[0]['quantity_required'];
+                    })
+                    .catch(error => {
+                        this.record['quantity_required'] = originalQuantityRequired;
+                        this.record['restock_level'] = originalRestockLevel;
+                        this.record['reorder_point'] = originalReorderPoint;
+                    });
             },
         },
     }

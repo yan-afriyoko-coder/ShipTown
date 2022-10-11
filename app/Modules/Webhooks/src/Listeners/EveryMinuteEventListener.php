@@ -2,12 +2,11 @@
 
 namespace App\Modules\Webhooks\src\Listeners;
 
-use App\Events\Every10minEvent;
 use App\Modules\Webhooks\src\Jobs\PublishAllWebhooksJob;
 
-class Every10minEventListener
+class EveryMinuteEventListener
 {
-    public function handle(Every10minEvent $event)
+    public function handle()
     {
         PublishAllWebhooksJob::dispatch();
     }
