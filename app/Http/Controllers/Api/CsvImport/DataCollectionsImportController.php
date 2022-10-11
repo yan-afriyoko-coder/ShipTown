@@ -79,7 +79,7 @@ class DataCollectionsImportController extends Controller
             }
 
             $warehouses->each(function (Warehouse $warehouse) use ($tempTableName, $request) {
-                if (DB::table($tempTableName)->whereNotNull($warehouse->code)->exists()) {
+                if (DB::table($tempTableName)->whereNotNull($warehouse->code)->where($warehouse->code, '>', 0)->exists()) {
                     $dataCollector = DataCollection::create([
                         'warehouse_id' => $warehouse->id,
                         'name' => implode(' ', [$request->get('data_collection_name_prefix'), $warehouse->code]),
@@ -89,17 +89,17 @@ class DataCollectionsImportController extends Controller
                         INSERT INTO data_collection_records (
                             data_collection_id,
                             product_id,
-                            quantity_scanned,
+                            quantity_requested,
                             created_at,
                             updated_at
                         )
                         SELECT '. $dataCollector->getKey() .',
                             product_id,
-                            IFNULL(`' .$warehouse->code. '`, 0) as quantity_scanned,
+                            IFNULL(`' .$warehouse->code. '`, 0) as quantity_requested,
                             NOW(),
                             NOW()
 
-                        FROM ' . $tempTableName . '
+                        FROM ' . $tempTableName . ' WHERE IFNULL(`' .$warehouse->code. '`, 0)  > 0
                     ');
                 }
             });
