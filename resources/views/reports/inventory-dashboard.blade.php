@@ -40,7 +40,6 @@
                                     <tr>
                                         <td>
                                             <a href='{{ url()->route('reports.restocking', [
-                                                        'select' => 'warehouse_code,product_sku,product_name,quantity_required,quantity_available,quantity_incoming,reorder_point,restock_level,warehouse_quantity',
                                                         'sort' => 'quantity_available',
                                                         'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
@@ -69,7 +68,6 @@
                                     <tr>
                                         <td><a href='{{ url()->route('reports.restocking', [
                                                         'filter[null]' => 'last_counted_at',
-                                                        'select' => 'warehouse_code,product_sku,product_name,quantity_required,quantity_available,quantity_incoming,reorder_point,restock_level,warehouse_quantity',
                                                         'sort' => '-warehouse_quantity',
                                                         'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
@@ -96,7 +94,6 @@
                                 @foreach ($data as $record)
                                     <tr>
                                         <td><a href='{{ url()->route('reports.restocking', [
-                                                        'select' => 'warehouse_code,product_sku,product_name,quantity_required,quantity_available,quantity_incoming,reorder_point,restock_level,warehouse_quantity',
                                                         'sort' => '-warehouse_quantity',
                                                         'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
@@ -124,7 +121,6 @@
                                 @foreach ($data as $record)
                                     <tr>
                                         <td><a href='{{ url()->route('reports.restocking', [
-                                                        'select' => 'warehouse_code,product_sku,product_name,quantity_required,quantity_available,quantity_incoming,reorder_point,restock_level,warehouse_quantity',
                                                         'sort' => 'quantity_available',
                                                         'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
@@ -153,7 +149,6 @@
                                     <tr>
                                         <td>
                                             <a href='{{ url()->route('reports.restocking', [
-                                                        'select' => 'warehouse_code,product_sku,product_name,quantity_required,quantity_available,quantity_incoming,reorder_point,restock_level,warehouse_quantity',
                                                         'sort' => 'quantity_required',
                                                         'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
@@ -182,7 +177,6 @@
                                     <tr>
                                         <td>
                                             <a href='{{ url()->route('reports.restocking', [
-                                                        'select' => 'warehouse_code,product_sku,product_name,quantity_required,quantity_available,quantity_incoming,reorder_point,restock_level,warehouse_quantity',
                                                         'sort' => '-quantity_required,quantity_available',
                                                         'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
