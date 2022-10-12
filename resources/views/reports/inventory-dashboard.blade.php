@@ -26,6 +26,34 @@
                         </div>
                     </div>
 
+                    <table class="table table-borderless">
+                        <thead>
+                        <tr>
+                            <th scope="col">Products Required</th>
+                            <th scope="col" class="text-right"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach ($data as $record)
+                            <tr>
+                                <td>
+                                    <a href='{{ url()->route('reports.restocking', [
+                                                        'sort' => '-quantity_required',
+                                                        'per_page' => '999',
+                                                        'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
+                                                        'filter[quantity_required_between]' => '1,9999',
+                                                        'filter[inventory_source_warehouse_code]' => '99',
+                                                        'filter[warehouse_quantity_between]' => '1,99999999',
+                                                    ]) }}'>
+                                        {{ data_get($record, 'warehouse_code') }}
+                                    </a>
+                                </td>
+                                <td class="text-right">{{ data_get($record, 'wh_products_required') === 0 ? '-' : data_get($record, 'wh_products_required')}}</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+
                     <div class="row">
                         <div class="col-md-8 offset-md-2">
                             <table class="table table-borderless">
@@ -132,34 +160,6 @@
                                             </a>
                                         </td>
                                         <td class="text-right">{{ data_get($record, 'wh_products_out_of_stock') === 0 ? '-' : data_get($record, 'wh_products_out_of_stock')}}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-
-                            <table class="table table-borderless">
-                                <thead>
-                                <tr>
-                                    <th scope="col">Products Required</th>
-                                    <th scope="col" class="text-right"></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach ($data as $record)
-                                    <tr>
-                                        <td>
-                                            <a href='{{ url()->route('reports.restocking', [
-                                                        'sort' => 'quantity_required',
-                                                        'per_page' => '999',
-                                                        'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
-                                                        'filter[quantity_required_between]' => '1,9999',
-                                                        'filter[inventory_source_warehouse_code]' => '99',
-                                                        'filter[warehouse_quantity_between]' => '1,99999999',
-                                                    ]) }}'>
-                                                {{ data_get($record, 'warehouse_code') }}
-                                            </a>
-                                        </td>
-                                        <td class="text-right">{{ data_get($record, 'wh_products_required') === 0 ? '-' : data_get($record, 'wh_products_required')}}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
