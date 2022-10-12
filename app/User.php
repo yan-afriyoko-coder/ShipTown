@@ -72,6 +72,7 @@ use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
  * @method static Builder|User withoutTrashed()
  *
  * @property bool $ask_for_shipping_number
+ * @property string $default_dashboard_uri
  *
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAddressLabelTemplate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAskForShippingNumber($value)
