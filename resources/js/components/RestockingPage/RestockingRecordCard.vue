@@ -56,7 +56,7 @@
                         <div class="col-12 text-nowrap">
                             <div class="input-group mb-3">
                                 <button tabindex="-1" @click="minusRestockLevel" class="btn btn-danger" type="button" id="button-addon3">-</button>
-                                <input tabindex="0" @keyup="onUpdateRestockLevelEvent" v-model="record['restock_level']" @focus="simulateSelectAll" type="text" class="form-control" style="font-size: large" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                                <input tabindex="0" @keyup="onUpdateRestockLevelEvent" v-model="newRestockLevelValue" @focus="simulateSelectAll" type="text" class="form-control" style="font-size: large" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
                                 <button tabindex="-1" @click="plusRestockLevel" class="btn btn-success" type="button" id="button-addon4">+</button>
                             </div>
                         </div>
@@ -66,7 +66,7 @@
                         <div class="col-12 text-nowrap">
                             <div class="input-group mb-3">
                                 <button tabindex="-1" @click="minusReorderPoint" class="btn btn-danger" type="button" id="button-addon5">-</button>
-                                <input tabindex="0" @keyup="onUpdateReorderPointEvent" v-model="record['reorder_point']" @focus="simulateSelectAll" type="text" class="form-control" style="font-size: large" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                                <input tabindex="0" @keyup="onUpdateReorderPointEvent" v-model="newReorderPointValue" @focus="simulateSelectAll" type="text" class="form-control" style="font-size: large" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
                                 <button tabindex="-1" @click="plusReorderPoint" class="btn btn-success" type="button" id="button-addon6">+</button>
                             </div>
                         </div>
@@ -95,6 +95,26 @@ export default {
             return {
                 expanded: false,
             };
+        },
+
+        computed: {
+            newRestockLevelValue: {
+                get: function() {
+                    return Number(this.record['restock_level']);
+                },
+                set: function(newValue) {
+                    this.record['restock_level'] = Number(newValue);
+                }
+            },
+
+            newReorderPointValue: {
+                get: function() {
+                    return Number(this.record['reorder_point']);
+                },
+                set: function(newValue) {
+                    this.record['reorder_point'] = Number(newValue);
+                }
+            },
         },
 
         methods: {
@@ -152,50 +172,38 @@ export default {
                 this.updateReorderPoint(keyboard_event.target.value);
             },
 
-            updateRestockLevel(value) {
+            postInventoryUpdate() {
                 const originalQuantityRequired = Number(this.record['quantity_required']);
                 const originalRestockLevel = Number(this.record['restock_level']);
                 const originalReorderPoint = Number(this.record['reorder_point']);
 
+                this.apiPostInventory({
+                        'id': this.record['inventory_id'],
+                        'restock_level': this.record['restock_level'],
+                        'reorder_point': this.record['reorder_point'],
+                    })
+                    .then(response => {
+                        this.record['quantity_required'] = response.data.data[0]['quantity_required'];
+                    })
+                    .catch(error => {
+                        this.record['quantity_required'] = originalQuantityRequired;
+                        this.record['restock_level'] = originalRestockLevel;
+                        this.record['reorder_point'] = originalReorderPoint;
+                        this.notifyError(error);
+                    });
+            },
+            updateRestockLevel(value) {
                 this.record['restock_level'] = Math.max(0, Number(value));
                 this.record['reorder_point'] = Math.min(Number(this.record['restock_level']), Number(this.record['reorder_point']));
 
-                this.apiPostInventory({
-                        'id': this.record['inventory_id'],
-                        'restock_level': this.record['restock_level'],
-                        'reorder_point': this.record['reorder_point'],
-                    })
-                    .then(response => {
-                        this.record['quantity_required'] = response.data.data[0]['quantity_required'];
-                    })
-                    .catch(error => {
-                        this.record['quantity_required'] = originalQuantityRequired;
-                        this.record['restock_level'] = originalRestockLevel;
-                        this.record['reorder_point'] = originalReorderPoint;
-                    });
+                this.postInventoryUpdate();
             },
 
             updateReorderPoint(value) {
-                const originalQuantityRequired = Number(this.record['quantity_required']);
-                const originalRestockLevel = Number(this.record['restock_level']);
-                const originalReorderPoint = Number(this.record['reorder_point']);
-
                 this.record['reorder_point'] = Math.max(0, Number(value));
                 this.record['restock_level'] = Math.max(Number(this.record['restock_level']), Number(this.record['reorder_point']));
 
-                this.apiPostInventory({
-                        'id': this.record['inventory_id'],
-                        'restock_level': this.record['restock_level'],
-                        'reorder_point': this.record['reorder_point'],
-                    })
-                    .then(response => {
-                        this.record['quantity_required'] = response.data.data[0]['quantity_required'];
-                    })
-                    .catch(error => {
-                        this.record['quantity_required'] = originalQuantityRequired;
-                        this.record['restock_level'] = originalRestockLevel;
-                        this.record['reorder_point'] = originalReorderPoint;
-                    });
+                this.postInventoryUpdate();
             },
         },
     }
