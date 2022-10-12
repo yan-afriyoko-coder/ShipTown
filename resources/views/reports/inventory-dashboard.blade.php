@@ -10,24 +10,17 @@
 {{--                <a class="btn btn-primary btn-sm mt-2 fa-arrow-alt-circle-down"  href="{{ request()->fullUrlWithQuery(['filename' =>  __($report_name).'.csv']) }}">{{ __('Download') }}</a>--}}
 {{--            </div>--}}
 
-            <div class="row col d-block font-weight-bold pt-2 pb-2 text-uppercase small text-secondary align-content-center text-center">{{ __($report_name) }}</div>
 
             <div class="card">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-8 offset-md-2">
+                            <div class="row col d-block font-weight-bold pt-2 pb-2 text-uppercase small text-secondary align-content-center text-center">{{ __($report_name) }}</div>
                             @foreach ($data as $record)
                                 @if(data_get($record,'warehouse_id') === auth()->user()->warehouse_id)
 
-                                <table class="table table-borderless">
-                                    <thead>
+                                <table class="table table-borderless"><tbody>
                                     <tr>
-                                        <th scope="col">Location - {{ data_get($record, 'warehouse_code') }}</th>
-                                        <th scope="col" class="text-right"></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
                                         <td>
                                             <a href='{{ url()->route('reports.restocking', [
                                                         'sort' => '-quantity_required',
@@ -66,7 +59,7 @@
                                                         'filter[inventory_source_warehouse_code]' => '99',
                                                         'filter[warehouse_quantity_between]' => '1,99999999',
                                                     ]) }}'>
-                                                {{ __('Never counted') }}
+                                                {{ __('Never Counted') }}
                                             </a>
                                         </td>
                                         <td class="text-right">{{ data_get($record, 'never_counted') === 0 ? '-' : data_get($record, 'never_counted')}}</td>
