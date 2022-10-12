@@ -43,9 +43,9 @@
                                                         'sort' => 'quantity_available',
                                                         'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
-                                                        'filter[quantity_available_between]' => '-9999,-0.01',
+                                                        'filter[quantity_available_between]' => '-99999999,-0.01',
                                                         'filter[inventory_source_warehouse_code]' => '99',
-                                                        'filter[warehouse_quantity_between]' => '1,99999',
+                                                        'filter[warehouse_quantity_between]' => '1,99999999',
                                                     ]) }}'>
                                                 {{ data_get($record, 'warehouse_code') }}
                                             </a>
@@ -72,7 +72,7 @@
                                                         'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
                                                         'filter[inventory_source_warehouse_code]' => '99',
-                                                        'filter[warehouse_quantity_between]' => '1,99999',
+                                                        'filter[warehouse_quantity_between]' => '1,99999999',
                                                     ]) }}'>
                                                 {{ data_get($record, 'warehouse_code') }}
                                             </a>
@@ -99,7 +99,7 @@
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
                                                         'filter[restock_level]' => 0,
                                                         'filter[inventory_source_warehouse_code]' => '99',
-                                                        'filter[warehouse_quantity_between]' => '1,99999',
+                                                        'filter[warehouse_quantity_between]' => '1,99999999',
                                                     ]) }}'>
                                                 {{ data_get($record, 'warehouse_code') }}
                                             </a>
@@ -126,7 +126,7 @@
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
                                                         'filter[quantity_available]' => 0,
                                                         'filter[inventory_source_warehouse_code]' => '99',
-                                                        'filter[warehouse_quantity_between]' => '1,99999',
+                                                        'filter[warehouse_quantity_between]' => '1,99999999',
                                                     ]) }}'>
                                                 {{ data_get($record, 'warehouse_code') }}
                                             </a>
@@ -154,7 +154,7 @@
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
                                                         'filter[quantity_required_between]' => '1,9999',
                                                         'filter[inventory_source_warehouse_code]' => '99',
-                                                        'filter[warehouse_quantity_between]' => '1,99999',
+                                                        'filter[warehouse_quantity_between]' => '1,99999999',
                                                     ]) }}'>
                                                 {{ data_get($record, 'warehouse_code') }}
                                             </a>
@@ -181,7 +181,7 @@
                                                         'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
                                                         'filter[inventory_source_warehouse_code]' => '99',
-                                                        'filter[warehouse_quantity_between]' => '1,99999',
+                                                        'filter[warehouse_quantity_between]' => '1,99999999',
                                                     ]) }}'>
                                                 {{ data_get($record, 'warehouse_code') }}
                                             </a>
