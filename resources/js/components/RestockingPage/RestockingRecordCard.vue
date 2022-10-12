@@ -152,36 +152,13 @@ export default {
                 this.updateReorderPoint(keyboard_event.target.value);
             },
 
-            updateQuantityRequired(value) {
-                const originalQuantityRequired = this.record['quantity_required'];
-                const originalRestockLevel = this.record['restock_level'];
-                const originalReorderPoint = this.record['reorder_point'];
-
-                this.record['quantity_required'] = Math.max(0, Number(value));
-                this.record['restock_level'] = Number(this.record['quantity_in_stock']) + Number(this.record['quantity_incoming']) + Number(this.record['quantity_required']) ;
-                this.record['reorder_point'] = Number(this.record['quantity_in_stock']) + Number(this.record['quantity_incoming']) ;
-
-                this.apiPostInventory({
-                        'id': this.record['inventory_id'],
-                        'restock_level': this.record['restock_level'],
-                        'reorder_point': this.record['reorder_point'],
-                    })
-                    .then(response => {
-                        this.record['quantity_required'] = response.data.data[0]['quantity_required'];
-                    })
-                    .catch(error => {
-                        this.record['quantity_required'] = originalQuantityRequired;
-                        this.record['restock_level'] = originalRestockLevel;
-                        this.record['reorder_point'] = originalReorderPoint;
-                    });
-            },
-
             updateRestockLevel(value) {
                 const originalQuantityRequired = Number(this.record['quantity_required']);
                 const originalRestockLevel = Number(this.record['restock_level']);
                 const originalReorderPoint = Number(this.record['reorder_point']);
 
                 this.record['restock_level'] = Math.max(0, Number(value));
+                this.record['reorder_point'] = Math.min(Number(this.record['restock_level']), Number(this.record['reorder_point']));
 
                 this.apiPostInventory({
                         'id': this.record['inventory_id'],
@@ -204,6 +181,7 @@ export default {
                 const originalReorderPoint = Number(this.record['reorder_point']);
 
                 this.record['reorder_point'] = Math.max(0, Number(value));
+                this.record['restock_level'] = Math.max(Number(this.record['restock_level']), Number(this.record['reorder_point']));
 
                 this.apiPostInventory({
                         'id': this.record['inventory_id'],
