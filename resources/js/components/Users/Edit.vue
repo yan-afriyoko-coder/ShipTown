@@ -53,6 +53,20 @@
                     </ValidationProvider>
                 </div>
             </div>
+            <div class="form-group row">
+                <label for="edit-dashboard-uri" class="col-sm-3 col-form-label">Dashboard URI</label>
+                <div class="col-sm-9">
+                    <ValidationProvider vid="name" name="name" v-slot="{ errors }">
+                        <input v-model="default_dashboard_uri" :class="{
+                        'form-control': true,
+                        'is-invalid': errors.length > 0,
+                    }" id="edit-dashboard-uri" required>
+                        <div class="invalid-feedback">
+                            {{ errors[0] }}
+                        </div>
+                    </ValidationProvider>
+                </div>
+            </div>
         </form>
     </ValidationObserver>
 </template>
@@ -80,6 +94,7 @@ export default {
                 this.name = user.name;
                 this.roleId = user.role_id;
                 this.warehouseId = user.warehouse_id;
+                this.default_dashboard_uri = user.default_dashboard_uri;
             })
             .finally(this.hideLoading);
     },
@@ -93,17 +108,18 @@ export default {
     data: () => ({
         name: null,
         roleId: null,
-        warehouseId: null
+        warehouseId: null,
+        default_dashboard_uri: null,
     }),
 
     methods: {
-
         submit() {
             this.showLoading();
             this.apiPostUserUpdate(this.id, {
                     name: this.name,
                     role_id: this.roleId,
                     warehouse_id: this.warehouseId,
+                    default_dashboard_uri: this.default_dashboard_uri,
                 })
                 .then(({ data }) => {
                     this.$snotify.success('User updated.');

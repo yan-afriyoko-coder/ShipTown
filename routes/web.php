@@ -11,14 +11,21 @@
 |
 */
 
+use App\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::resource('verify', 'Auth\TwoFactorController')->only(['index', 'store']);
 
+//$data_get = data_get(auth()->user(), 'default_dashboard_uri', 'dashboard');
+
 Route::redirect('', 'dashboard');
 Route::redirect('home', 'dashboard')->name('home');
 
-Route::view('dashboard', 'dashboard')->name('dashboard');
+//Route::redirect('', $data_get);
+Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+
+//Route::view('dashboard', 'dashboard')->name('dashboard');
 Route::view('performance/dashboard', 'performance')->name('performance.dashboard');
 Route::view('products', 'products')->name('products');
 Route::view('picklist', 'picklist')->name('picklist');

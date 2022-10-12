@@ -72,6 +72,7 @@ use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
  * @method static Builder|User withoutTrashed()
  *
  * @property bool $ask_for_shipping_number
+ * @property string $default_dashboard_uri
  *
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAddressLabelTemplate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAskForShippingNumber($value)
@@ -90,7 +91,16 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'warehouse_id', 'printer_id', 'address_label_template', 'ask_for_shipping_number', 'two_factor_code', 'two_factor_expires_at',
+        'name',
+        'email',
+        'password',
+        'warehouse_id',
+        'default_dashboard_uri',
+        'printer_id',
+        'address_label_template',
+        'ask_for_shipping_number',
+        'two_factor_code',
+        'two_factor_expires_at',
     ];
 
     /**

@@ -12,6 +12,7 @@ use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Class UsersController.
@@ -36,6 +37,7 @@ class UserController extends Controller
      * @param UserStoreRequest $request
      *
      * @return UserResource
+     * @throws ValidationException
      */
     public function store(UserStoreRequest $request): UserResource
     {
