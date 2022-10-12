@@ -91,7 +91,16 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'warehouse_id', 'printer_id', 'address_label_template', 'ask_for_shipping_number', 'two_factor_code', 'two_factor_expires_at',
+        'name',
+        'email',
+        'password',
+        'warehouse_id',
+        'default_dashboard_uri',
+        'printer_id',
+        'address_label_template',
+        'ask_for_shipping_number',
+        'two_factor_code',
+        'two_factor_expires_at',
     ];
 
     /**
