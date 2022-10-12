@@ -175,9 +175,27 @@
 
                 this.loadOrderStatuses();
                 this.loadShippingCouriers();
+                this.reloadPageAfterInactivity();
             },
 
             methods: {
+                reloadPageAfterInactivity() {
+                    let time = new Date().getTime();
+
+                    const setActivityTime = (e) => {
+                        if (new Date().getTime() - time >= 60 * 1000) {
+                            this.reloadOrder();
+                        }
+
+                        time = new Date().getTime();
+                    }
+
+                    document.body.addEventListener("scroll", setActivityTime);
+                    document.body.addEventListener("focus", setActivityTime);
+                    document.body.addEventListener("mousemove", setActivityTime);
+                    document.body.addEventListener("keypress", setActivityTime);
+                },
+
                 reloadOrder: function() {
                     this.loadOrderById();
                 },
