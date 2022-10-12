@@ -1,7 +1,13 @@
 <template>
     <div>
-        <input :id="input_id" placeholder="Scan SKU to stocktake" type="text" class="form-control"
-               @keyup.enter="showStocktakeModal" >
+        <input :id="input_id"
+               placeholder="Scan SKU to stocktake"
+               type="text"
+               class="form-control"
+               @keyup.enter="showStocktakeModal"
+               autocomplete="off"
+               enterkeyhint="done"
+        >
 
         <b-modal @ok="submitStocktake" :id="modal_name" scrollable centered no-fade hide-header
                  @shown="setFocusElementById(100, 'quantity-request-input', true, false)"
