@@ -12,32 +12,20 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title text-center">{{ __($report_name) }}</h4>
-
                     <div class="row">
                         <div class="col-md-8 offset-md-2">
-                            <div class="">
-                                @widget('ReportWidget', [
-                                    'report' => 'App\Modules\StocktakeSuggestions\src\Reports\StocktakeSuggestionsTotalsReport',
-                                    'view' => 'reports.StocktakeSuggestionsReport',
-                                    'sort' => 'warehouse_code',
-                                    'per_page' => 999,
-                                ])
-                            </div>
-                        </div>
-                    </div>
-
-                    <table class="table table-borderless">
-                        <thead>
-                        <tr>
-                            <th scope="col">Products Required</th>
-                            <th scope="col" class="text-right"></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach ($data as $record)
-                            <tr>
-                                <td>
-                                    <a href='{{ url()->route('reports.restocking', [
+                            <table class="table table-borderless">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Products Required</th>
+                                    <th scope="col" class="text-right"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach ($data as $record)
+                                    <tr>
+                                        <td>
+                                            <a href='{{ url()->route('reports.restocking', [
                                                         'sort' => '-quantity_required',
                                                         'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
@@ -45,17 +33,26 @@
                                                         'filter[inventory_source_warehouse_code]' => '99',
                                                         'filter[warehouse_quantity_between]' => '1,99999999',
                                                     ]) }}'>
-                                        {{ data_get($record, 'warehouse_code') }}
-                                    </a>
-                                </td>
-                                <td class="text-right">{{ data_get($record, 'wh_products_required') === 0 ? '-' : data_get($record, 'wh_products_required')}}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
+                                                {{ data_get($record, 'warehouse_code') }}
+                                            </a>
+                                        </td>
+                                        <td class="text-right">{{ data_get($record, 'wh_products_required') === 0 ? '-' : data_get($record, 'wh_products_required')}}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
 
-                    <div class="row">
-                        <div class="col-md-8 offset-md-2">
+                            <div class="row">
+                                <div class="col">
+                                        @widget('ReportWidget', [
+                                        'report' => 'App\Modules\StocktakeSuggestions\src\Reports\StocktakeSuggestionsTotalsReport',
+                                        'view' => 'reports.StocktakeSuggestionsReport',
+                                        'sort' => 'warehouse_code',
+                                        'per_page' => 999,
+                                        ])
+                                </div>
+                            </div>
+
                             <table class="table table-borderless">
                                 <thead>
                                 <tr>
