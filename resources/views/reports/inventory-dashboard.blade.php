@@ -23,10 +23,9 @@
                                     <tr>
                                         <td>
                                             <a href='{{ url()->route('reports.restocking', [
-                                                        'sort' => '-quantity_required',
+                                                        'sort' => '-quantity_required,-quantity_incoming',
                                                         'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
-                                                        'filter[quantity_required_between]' => '1,9999',
                                                         'filter[inventory_source_warehouse_code]' => '99',
                                                         'filter[warehouse_quantity_between]' => '1,99999999',
                                                     ]) }}'>
@@ -49,20 +48,6 @@
                                             </a>
                                         </td>
                                         <td class="text-right">{{ data_get($record, 'products_on_minus') === 0 ? '-' : data_get($record, 'products_on_minus')}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href='{{ url()->route('reports.restocking', [
-                                                        'filter[null]' => 'last_counted_at',
-                                                        'sort' => '-warehouse_quantity',
-                                                        'per_page' => '999',
-                                                        'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
-                                                        'filter[inventory_source_warehouse_code]' => '99',
-                                                        'filter[warehouse_quantity_between]' => '1,99999999',
-                                                    ]) }}'>
-                                                {{ __('Never Counted') }}
-                                            </a>
-                                        </td>
-                                        <td class="text-right">{{ data_get($record, 'never_counted') === 0 ? '-' : data_get($record, 'never_counted')}}</td>
                                     </tr>
                                     <tr>
                                         <td><a href='{{ url()->route('reports.restocking', [
@@ -91,6 +76,20 @@
                                             </a>
                                         </td>
                                         <td class="text-right">{{ data_get($record, 'wh_products_out_of_stock') === 0 ? '-' : data_get($record, 'wh_products_out_of_stock')}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href='{{ url()->route('reports.restocking', [
+                                                        'sort' => '-warehouse_quantity',
+                                                        'per_page' => '999',
+                                                        'filter[null]' => 'last_counted_at',
+                                                        'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
+                                                        'filter[inventory_source_warehouse_code]' => '99',
+                                                        'filter[warehouse_quantity_between]' => '1,99999999',
+                                                    ]) }}'>
+                                                {{ __('Never Counted') }}
+                                            </a>
+                                        </td>
+                                        <td class="text-right">{{ data_get($record, 'never_counted') === 0 ? '-' : data_get($record, 'never_counted')}}</td>
                                     </tr>
                                     <tr>
                                         <td>
