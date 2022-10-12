@@ -16,7 +16,8 @@ class AddConnectionIdForeignKeyToRmsapiProductImportsTable extends Migration
         Schema::table('modules_rmsapi_products_imports', function (Blueprint $table) {
             $table->foreign('connection_id')
                 ->references('id')
-                ->on('modules_rmsapi_connections');
+                ->on('modules_rmsapi_connections')
+                ->onDelete('cascade');
         });
     }
 }
