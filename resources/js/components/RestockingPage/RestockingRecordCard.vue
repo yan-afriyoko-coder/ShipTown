@@ -52,7 +52,8 @@
                             <div class="text-nowrap text-right col-lg-12">
                                 <number-card class="" label="reorder point" :number="record['reorder_point']" v-bind:class="{'bg-warning' : record['reorder_point'] <= 0 }"></number-card>
                                 <text-card class="mr-lg-4"  label="last counted" :text="formatDateTime(record['last_counted_at'],'D MMM')" ></text-card>
-                                <number-card label="warehouse" :number="record['warehouse_quantity']" class="mr-lg-4" ></number-card>
+                                <text-card label="" text="" ></text-card>
+                                <number-card label="warehouse" :number="record['warehouse_quantity']" class="" ></number-card>
                             </div>
 
                             <hr>
