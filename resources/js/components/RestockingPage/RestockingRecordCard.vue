@@ -28,8 +28,9 @@
                                         <div class="text-nowrap text-right col-lg-6">
                                         </div>
                                         <div class="text-nowrap text-right col-lg-6">
+                                            <number-card class="mr-lg-4" label="restock level" :number="record['restock_level']" v-bind:class="{'bg-warning' : record['restock_level'] <= 0 }"></number-card>
                                             <number-card label="in stock" :number="record['quantity_available']" v-bind:class="{'bg-warning' : record['quantity_available'] < 0 }"></number-card>
-                                            <number-card label="incoming" :number="record['quantity_incoming']" v-bind:class="{'bg-warning' : record['quantity_incoming'] > 0 }"></number-card>
+                                            <number-card label="incoming" :number="record['quantity_incoming']"></number-card>
                                             <number-card label="required" :number="record['quantity_required']"></number-card>
                                         </div>
                                     </div>
@@ -49,9 +50,8 @@
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="text-nowrap text-right col-lg-12">
-                                <text-card class="mr-lg-4"  label="last counted" :text="formatDateTime(record['last_counted_at'],'D MMM')" ></text-card>
                                 <number-card class="" label="reorder point" :number="record['reorder_point']" v-bind:class="{'bg-warning' : record['reorder_point'] <= 0 }"></number-card>
-                                <number-card class="mr-lg-4" label="restock level" :number="record['restock_level']" v-bind:class="{'bg-warning' : record['restock_level'] <= 0 }"></number-card>
+                                <text-card class="mr-lg-4"  label="last counted" :text="formatDateTime(record['last_counted_at'],'D MMM')" ></text-card>
                                 <number-card label="warehouse" :number="record['warehouse_quantity']" class="mr-lg-4" ></number-card>
                             </div>
 
