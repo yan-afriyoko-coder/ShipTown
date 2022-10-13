@@ -23,11 +23,11 @@
                                     <tr>
                                         <td>
                                             <a href='{{ url()->route('reports.restocking', [
-                                                        'sort' => '-quantity_required,-quantity_incoming',
-                                                        'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
+                                                        'sort' => '-quantity_required,-quantity_incoming,-warehouse_quantity',
                                                         'filter[inventory_source_warehouse_code]' => '99',
                                                         'filter[warehouse_quantity_between]' => '1,99999999',
+                                                        'per_page' => '999',
                                                     ]) }}'>
                                                 {{ __('Products Required') }}
                                             </a>
@@ -37,12 +37,12 @@
                                     <tr>
                                         <td>
                                             <a href='{{ url()->route('reports.restocking', [
-                                                        'sort' => 'quantity_available',
-                                                        'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
+                                                        'sort' => 'quantity_available',
                                                         'filter[quantity_available_between]' => '-99999999,-0.01',
                                                         'filter[inventory_source_warehouse_code]' => '99',
                                                         'filter[warehouse_quantity_between]' => '1,99999999',
+                                                        'per_page' => '999',
                                                     ]) }}'>
                                                 {{ __('Products On Minus') }}
                                             </a>
@@ -51,12 +51,12 @@
                                     </tr>
                                     <tr>
                                         <td><a href='{{ url()->route('reports.restocking', [
-                                                        'sort' => '-warehouse_quantity',
-                                                        'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
+                                                        'sort' => '-quantity_incoming,-quantity_available,-warehouse_quantity',
                                                         'filter[restock_level]' => 0,
                                                         'filter[inventory_source_warehouse_code]' => '99',
                                                         'filter[warehouse_quantity_between]' => '1,99999999',
+                                                        'per_page' => '999',
                                                     ]) }}'>
                                                 {{ __('Missing Restock Levels') }}
                                             </a>
@@ -65,12 +65,12 @@
                                     </tr>
                                     <tr>
                                         <td><a href='{{ url()->route('reports.restocking', [
-                                                        'sort' => 'quantity_available',
-                                                        'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
+                                                        'sort' => 'quantity_available,-quantity_incoming,-warehouse_quantity',
                                                         'filter[quantity_available]' => 0,
                                                         'filter[inventory_source_warehouse_code]' => '99',
                                                         'filter[warehouse_quantity_between]' => '1,99999999',
+                                                        'per_page' => '999',
                                                     ]) }}'>
                                                 {{ __('Out Of Stock') }}
                                             </a>
@@ -79,12 +79,12 @@
                                     </tr>
                                     <tr>
                                         <td><a href='{{ url()->route('reports.restocking', [
-                                                        'sort' => '-warehouse_quantity',
-                                                        'per_page' => '999',
-                                                        'filter[null]' => 'last_counted_at',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
+                                                        'sort' => '-warehouse_quantity',
+                                                        'filter[null]' => 'last_counted_at',
                                                         'filter[inventory_source_warehouse_code]' => '99',
                                                         'filter[warehouse_quantity_between]' => '1,99999999',
+                                                        'per_page' => '999',
                                                     ]) }}'>
                                                 {{ __('Never Counted') }}
                                             </a>
@@ -94,11 +94,11 @@
                                     <tr>
                                         <td>
                                             <a href='{{ url()->route('reports.restocking', [
-                                                        'sort' => '-quantity_required,quantity_available',
-                                                        'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
+                                                        'sort' => '-quantity_required,-quantity_incoming,quantity_available',
                                                         'filter[inventory_source_warehouse_code]' => '99',
                                                         'filter[warehouse_quantity_between]' => '1,99999999',
+                                                        'per_page' => '999',
                                                     ]) }}'>
                                                 {{ __('Restockable') }}
                                             </a>
@@ -122,12 +122,12 @@
                                     <tr>
                                         <td>
                                             <a href='{{ url()->route('reports.restocking', [
-                                                        'sort' => '-quantity_required',
-                                                        'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
+                                                        'sort' => '-quantity_required,-quantity_incoming,-warehouse_quantity',
                                                         'filter[quantity_required_between]' => '1,99999999',
                                                         'filter[inventory_source_warehouse_code]' => '99',
                                                         'filter[warehouse_quantity_between]' => '1,99999999',
+                                                        'per_page' => '999',
                                                     ]) }}'>
                                                 {{ data_get($record, 'warehouse_code') }}
                                             </a>
@@ -161,12 +161,12 @@
                                     <tr>
                                         <td>
                                             <a href='{{ url()->route('reports.restocking', [
-                                                        'sort' => 'quantity_available',
-                                                        'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
+                                                        'sort' => 'quantity_available',
                                                         'filter[quantity_available_between]' => '-99999999,-0.01',
                                                         'filter[inventory_source_warehouse_code]' => '99',
                                                         'filter[warehouse_quantity_between]' => '1,99999999',
+                                                        'per_page' => '999',
                                                     ]) }}'>
                                                 {{ data_get($record, 'warehouse_code') }}
                                             </a>
@@ -188,12 +188,12 @@
                                 @foreach ($data as $record)
                                     <tr>
                                         <td><a href='{{ url()->route('reports.restocking', [
-                                                        'filter[null]' => 'last_counted_at',
-                                                        'sort' => '-warehouse_quantity',
-                                                        'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
+                                                        'sort' => '-warehouse_quantity',
+                                                        'filter[null]' => 'last_counted_at',
                                                         'filter[inventory_source_warehouse_code]' => '99',
                                                         'filter[warehouse_quantity_between]' => '1,99999999',
+                                                        'per_page' => '999',
                                                     ]) }}'>
                                                 {{ data_get($record, 'warehouse_code') }}
                                             </a>
@@ -215,12 +215,12 @@
                                 @foreach ($data as $record)
                                     <tr>
                                         <td><a href='{{ url()->route('reports.restocking', [
-                                                        'sort' => '-warehouse_quantity',
-                                                        'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
+                                                        'sort' => '-quantity_incoming,-quantity_available,-warehouse_quantity',
                                                         'filter[restock_level]' => 0,
                                                         'filter[inventory_source_warehouse_code]' => '99',
                                                         'filter[warehouse_quantity_between]' => '1,99999999',
+                                                        'per_page' => '999',
                                                     ]) }}'>
                                                 {{ data_get($record, 'warehouse_code') }}
                                             </a>
@@ -242,12 +242,12 @@
                                 @foreach ($data as $record)
                                     <tr>
                                         <td><a href='{{ url()->route('reports.restocking', [
-                                                        'sort' => 'quantity_available',
-                                                        'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
+                                                        'sort' => '-quantity_incoming,-warehouse_quantity',
                                                         'filter[quantity_available]' => 0,
                                                         'filter[inventory_source_warehouse_code]' => '99',
                                                         'filter[warehouse_quantity_between]' => '1,99999999',
+                                                        'per_page' => '999',
                                                     ]) }}'>
                                                 {{ data_get($record, 'warehouse_code') }}
                                             </a>
@@ -270,11 +270,11 @@
                                     <tr>
                                         <td>
                                             <a href='{{ url()->route('reports.restocking', [
-                                                        'sort' => '-quantity_required,quantity_available',
-                                                        'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
+                                                        'sort' => '-quantity_required,-quantity_incoming,quantity_available',
                                                         'filter[inventory_source_warehouse_code]' => '99',
                                                         'filter[warehouse_quantity_between]' => '1,99999999',
+                                                        'per_page' => '999',
                                                     ]) }}'>
                                                 {{ data_get($record, 'warehouse_code') }}
                                             </a>
