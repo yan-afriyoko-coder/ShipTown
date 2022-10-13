@@ -17,19 +17,17 @@
                                     <a class="badge text-uppercase" :key="tag.id" @click.prevent="setUrlParameterAngGo('filter[has_tags]', tag['name']['en'])"> {{ tag['name']['en'] }} </a>
                                 </template>
                             </div>
+                            <div class="small">
+                                location: {{ record['warehouse_code'] }}
+                            </div>
                         </div>
                         <div class="col-lg-8">
                             <div class="row pt-1">
                                 <div class="col-12 text-right" @click="expanded = !expanded">
                                     <div class="row">
                                         <div class="text-nowrap text-right col-lg-6">
-                                            <text-card label="location" :text="record['warehouse_code']" ></text-card>
-                                            <text-card class="mr-lg-4"  label="last counted" :text="formatDateTime(record['last_counted_at'],'D MMM')" ></text-card>
-                                            <number-card class="" label="reorder point" :number="record['reorder_point']" v-bind:class="{'bg-warning' : record['reorder_point'] <= 0 }"></number-card>
-                                            <number-card class="mr-lg-4" label="restock level" :number="record['restock_level']" v-bind:class="{'bg-warning' : record['restock_level'] <= 0 }"></number-card>
                                         </div>
                                         <div class="text-nowrap text-right col-lg-6">
-                                            <number-card label="warehouse" :number="record['warehouse_quantity']" class="mr-lg-4" ></number-card>
                                             <number-card label="in stock" :number="record['quantity_available']" v-bind:class="{'bg-warning' : record['quantity_available'] < 0 }"></number-card>
                                             <number-card label="incoming" :number="record['quantity_incoming']" v-bind:class="{'bg-warning' : record['quantity_incoming'] > 0 }"></number-card>
                                             <number-card label="required" :number="record['quantity_required']"></number-card>
@@ -46,30 +44,45 @@
                     </div>
 
                     <div class="row text-center align-content-center" v-if="expanded">
-                        <div class="col-12 text-nowrap">
-                            <stocktake-input></stocktake-input>
+                        <div class="d-sm-none d-md-block col-6">
+
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="text-nowrap text-right col-lg-12">
+                                <text-card class="mr-lg-4"  label="last counted" :text="formatDateTime(record['last_counted_at'],'D MMM')" ></text-card>
+                                <number-card class="" label="reorder point" :number="record['reorder_point']" v-bind:class="{'bg-warning' : record['reorder_point'] <= 0 }"></number-card>
+                                <number-card class="mr-lg-4" label="restock level" :number="record['restock_level']" v-bind:class="{'bg-warning' : record['restock_level'] <= 0 }"></number-card>
+                                <number-card label="warehouse" :number="record['warehouse_quantity']" class="mr-lg-4" ></number-card>
+                            </div>
+
+                            <div class="col-12 text-nowrap">
+                                <stocktake-input :inputId="'stocktake-input-inventory-id-' + record['inventory_id']"></stocktake-input>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="small">restock level</label>
+                            </div>
+                            <div class="col-12 text-nowrap">
+                                <div class="input-group mb-3">
+                                    <button tabindex="-1" @click="minusRestockLevel" class="btn btn-danger" type="button" id="button-addon3">-</button>
+                                    <input tabindex="0" @keyup="onUpdateRestockLevelEvent" v-model="newRestockLevelValue" @focus="simulateSelectAll" type="text" class="form-control" style="font-size: large" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                                    <button tabindex="-1" @click="plusRestockLevel" class="btn btn-success" type="button" id="button-addon4">+</button>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="small">reorder point</label>
+                            </div>
+                            <div class="col-12 text-nowrap">
+                                <div class="input-group mb-3">
+                                    <button tabindex="-1" @click="minusReorderPoint" class="btn btn-danger" type="button" id="button-addon5">-</button>
+                                    <input tabindex="0" @keyup="onUpdateReorderPointEvent" v-model="newReorderPointValue" @focus="simulateSelectAll" type="text" class="form-control" style="font-size: large" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                                    <button tabindex="-1" @click="plusReorderPoint" class="btn btn-success" type="button" id="button-addon6">+</button>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="col-12">
-                            <label class="small">restock level</label>
-                        </div>
-                        <div class="col-12 text-nowrap">
-                            <div class="input-group mb-3">
-                                <button tabindex="-1" @click="minusRestockLevel" class="btn btn-danger" type="button" id="button-addon3">-</button>
-                                <input tabindex="0" @keyup="onUpdateRestockLevelEvent" v-model="newRestockLevelValue" @focus="simulateSelectAll" type="text" class="form-control" style="font-size: large" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                                <button tabindex="-1" @click="plusRestockLevel" class="btn btn-success" type="button" id="button-addon4">+</button>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <label class="small">reorder point</label>
-                        </div>
-                        <div class="col-12 text-nowrap">
-                            <div class="input-group mb-3">
-                                <button tabindex="-1" @click="minusReorderPoint" class="btn btn-danger" type="button" id="button-addon5">-</button>
-                                <input tabindex="0" @keyup="onUpdateReorderPointEvent" v-model="newReorderPointValue" @focus="simulateSelectAll" type="text" class="form-control" style="font-size: large" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                                <button tabindex="-1" @click="plusReorderPoint" class="btn btn-success" type="button" id="button-addon6">+</button>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
