@@ -125,7 +125,7 @@
                                                         'sort' => '-quantity_required',
                                                         'per_page' => '999',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
-                                                        'filter[quantity_required_between]' => '1,9999',
+                                                        'filter[quantity_required_between]' => '1,99999999',
                                                         'filter[inventory_source_warehouse_code]' => '99',
                                                         'filter[warehouse_quantity_between]' => '1,99999999',
                                                     ]) }}'>
