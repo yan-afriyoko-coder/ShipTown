@@ -55,18 +55,28 @@
                                 <number-card label="warehouse" :number="record['warehouse_quantity']" class="mr-lg-4" ></number-card>
                             </div>
 
+                            <hr>
+
                             <div class="col-12 text-nowrap">
                                 <stocktake-input :inputId="'stocktake-input-inventory-id-' + record['inventory_id']"></stocktake-input>
                             </div>
 
-                            <div class="col-12">
+                            <div class="col-12 mt-3">
                                 <label class="small">restock level</label>
                             </div>
                             <div class="col-12 text-nowrap">
                                 <div class="input-group mb-3">
-                                    <button tabindex="-1" @click="minusRestockLevel" class="btn btn-danger" type="button" id="button-addon3">-</button>
-                                    <input tabindex="0" @keyup="onUpdateRestockLevelEvent" v-model="newRestockLevelValue" @focus="simulateSelectAll" type="text" class="form-control" style="font-size: large" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                                    <button tabindex="-1" @click="plusRestockLevel" class="btn btn-success" type="button" id="button-addon4">+</button>
+                                    <button tabindex="-1" @click="minusRestockLevel" class="btn btn-danger mr-3" type="button" id="button-addon3" style="min-width: 45px">-</button>
+                                    <input tabindex="0"
+                                           @keyup="onUpdateRestockLevelEvent"
+                                           v-model="newRestockLevelValue"
+                                           @focus="simulateSelectAll"
+                                           type="number"
+                                           inputmode="numeric"
+                                           class="form-control text-center"
+                                           style="font-size: 24px"
+                                           >
+                                    <button tabindex="-1" @click="plusRestockLevel" class="btn btn-success ml-3" type="button" id="button-addon4" style="min-width: 45px">+</button>
                                 </div>
                             </div>
 
@@ -75,9 +85,17 @@
                             </div>
                             <div class="col-12 text-nowrap">
                                 <div class="input-group mb-3">
-                                    <button tabindex="-1" @click="minusReorderPoint" class="btn btn-danger" type="button" id="button-addon5">-</button>
-                                    <input tabindex="0" @keyup="onUpdateReorderPointEvent" v-model="newReorderPointValue" @focus="simulateSelectAll" type="text" class="form-control" style="font-size: large" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                                    <button tabindex="-1" @click="plusReorderPoint" class="btn btn-success" type="button" id="button-addon6">+</button>
+                                    <button tabindex="-1" @click="minusReorderPoint" class="btn btn-danger mr-3" type="button" id="button-addon5" style="min-width: 45px">-</button>
+                                    <input tabindex="0"
+                                           @keyup="onUpdateReorderPointEvent"
+                                           v-model="newReorderPointValue"
+                                           @focus="simulateSelectAll"
+                                           type="number"
+                                           inputmode="numeric"
+                                           class="form-control text-center"
+                                           style="font-size: 24px"
+                                           >
+                                    <button tabindex="-1" @click="plusReorderPoint" class="btn btn-success ml-3" type="button" id="button-addon6" style="min-width: 45px">+</button>
                                 </div>
                             </div>
                         </div>
