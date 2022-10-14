@@ -4,6 +4,7 @@ namespace App\Modules\Webhooks\src\Jobs;
 
 use App\Http\Resources\InventoryMovementResource;
 use App\Models\InventoryMovement;
+use App\Models\Warehouse;
 use App\Modules\Webhooks\src\Models\PendingWebhook;
 use App\Modules\Webhooks\src\Services\SnsService;
 use Exception;
@@ -33,14 +34,31 @@ class PublishInventoryMovementWebhooksJob implements ShouldQueue
      */
     public function handle()
     {
+        Warehouse::query()
+            ->get('id')
+            ->each(function (Warehouse $warehouse) {
+                $this->publishWarehouseWebhooks($warehouse->getKey());
+            });
+    }
+
+    private function publishWarehouseWebhooks(int $warehouse_id)
+    {
         $query = PendingWebhook::query()
+            ->selectRaw('modules_webhooks_pending_webhooks.*')
+            ->leftJoin(
+                'inventory_movements',
+                'inventory_movements.id',
+                '=',
+                'modules_webhooks_pending_webhooks.model_id'
+            )
             ->where([
                 'model_class' => InventoryMovement::class,
                 'reserved_at' => null,
                 'published_at' => null,
+                'inventory_movements.warehouse_id' => $warehouse_id,
             ])
             ->orderBy('id')
-            ->limit(1);
+            ->limit(5);
 
         $chunk = $query->get();
 
