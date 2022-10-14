@@ -12,8 +12,11 @@ class UpdateInventorySourceWarehouseTagIdOnModulesApi2cartConnections extends Mi
             ->each(function (Api2cartConnection $connection) {
                 $tag = Tag::findFromString('magento_stock');
 
-                $connection->inventory_source_warehouse_tag_id = $tag->getKey();
-                $connection->save();
+                if ($tag) {
+                    $connection->update([
+                        'inventory_source_warehouse_tag_id' => $tag->getKey(),
+                    ]);
+                }
             });
     }
 }
