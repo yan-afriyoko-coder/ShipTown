@@ -35,7 +35,7 @@ class RunHourlyJobs implements ShouldQueue
         Heartbeat::query()->updateOrCreate([
             'code' => self::class,
         ], [
-            'error_message' => 'Hourly jobs dispatched heartbeat missed',
+            'error_message' => 'Hourly jobs heartbeat missed',
             'expires_at' => now()->addHours(2)
         ]);
 
