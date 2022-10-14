@@ -35,22 +35,27 @@ class PublishInventoryMovementWebhooksJob implements ShouldQueue
     public function handle()
     {
         Warehouse::query()
-            ->get('code')
+            ->get('id')
             ->each(function (Warehouse $warehouse) {
-                $this->publishWarehouseWebhooks($warehouse->code);
+                $this->publishWarehouseWebhooks($warehouse->getKey());
             });
     }
 
-    private function publishWarehouseWebhooks(string $warehouse_code)
+    private function publishWarehouseWebhooks(int $warehouse_id)
     {
         $query = PendingWebhook::query()
             ->selectRaw('modules_webhooks_pending_webhooks.*')
-            ->leftJoin('inventory', 'inventory.id', '=', 'modules_webhooks_pending_webhooks.model_id')
+            ->leftJoin(
+                'inventory_movements',
+                'inventory_movements.id',
+                '=',
+                'modules_webhooks_pending_webhooks.model_id'
+            )
             ->where([
                 'model_class' => InventoryMovement::class,
                 'reserved_at' => null,
                 'published_at' => null,
-                'inventory.warehouse_code' => $warehouse_code,
+                'inventory_movements.warehouse_id' => $warehouse_id,
             ])
             ->orderBy('id')
             ->limit(5);
