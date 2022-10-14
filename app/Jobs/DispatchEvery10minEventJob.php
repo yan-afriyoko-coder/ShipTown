@@ -33,6 +33,13 @@ class DispatchEvery10minEventJob implements ShouldQueue
 
         Every10minEvent::dispatch();
 
+        Heartbeat::query()->updateOrCreate([
+            'code' => self::class,
+        ], [
+            'error_message' => 'Every 10 min heartbeat missed',
+            'expires_at' => now()->addHour()
+        ]);
+
         Log::info('DispatchEvery10minEvent - dispatched successfully');
     }
 }

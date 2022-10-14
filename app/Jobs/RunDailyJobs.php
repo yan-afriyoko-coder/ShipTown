@@ -32,7 +32,7 @@ class RunDailyJobs implements ShouldQueue
         Heartbeat::query()->updateOrCreate([
             'code' => self::class,
         ], [
-            'error_message' => 'Daily jobs dispatched heartbeat missed',
+            'error_message' => 'Daily jobs heartbeat missed',
             'expires_at' => now()->addDay()
         ]);
 
