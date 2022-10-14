@@ -46,14 +46,15 @@ class PublishInventoryWebhooksJob implements ShouldQueue
     private function publishInventoryWebhooks(string $warehouse_code): void
     {
         $query = PendingWebhook::query()
-            ->leftJoin('inventory', 'inventory.id', '=', 'pending_webhooks.model_id')
+            ->selectRaw('modules_webhooks_pending_webhooks.*')
+            ->leftJoin('inventory', 'inventory.id', '=', 'modules_webhooks_pending_webhooks.model_id')
             ->where([
                 'model_class' => Inventory::class,
                 'reserved_at' => null,
                 'published_at' => null,
                 'inventory.warehouse_code' => $warehouse_code,
             ])
-            ->orderBy('pending_webhooks.id')
+            ->orderBy('modules_webhooks_pending_webhooks.id')
             ->limit(2);
 
         $chunk = $query->get();
