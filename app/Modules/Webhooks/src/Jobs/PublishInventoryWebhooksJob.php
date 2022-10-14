@@ -6,6 +6,7 @@ use App\Http\Resources\InventoryResource;
 use App\Http\Resources\OrderResource;
 use App\Models\Inventory;
 use App\Models\Order;
+use App\Models\Warehouse;
 use App\Modules\Webhooks\src\Models\PendingWebhook;
 use App\Modules\Webhooks\src\Services\SnsService;
 use Exception;
@@ -35,13 +36,24 @@ class PublishInventoryWebhooksJob implements ShouldQueue
      */
     public function handle()
     {
+        Warehouse::query()
+            ->get('code')
+            ->each(function (Warehouse $warehouse) {
+                $this->publishInventoryWebhooks($warehouse->code);
+            });
+    }
+
+    private function publishInventoryWebhooks(string $warehouse_code): void
+    {
         $query = PendingWebhook::query()
+            ->leftJoin('inventory', 'inventory.id', '=', 'pending_webhooks.model_id')
             ->where([
                 'model_class' => Inventory::class,
                 'reserved_at' => null,
                 'published_at' => null,
+                'inventory.warehouse_code' => $warehouse_code,
             ])
-            ->orderBy('id')
+            ->orderBy('pending_webhooks.id')
             ->limit(2);
 
         $chunk = $query->get();
@@ -67,9 +79,6 @@ class PublishInventoryWebhooksJob implements ShouldQueue
         }
     }
 
-    /**
-     * @param $chunk
-     */
     private function publishInventoryMessage($chunk): void
     {
         $ordersCollection = InventoryResource::collection(
