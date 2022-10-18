@@ -89,7 +89,7 @@ class SplitOrderService
         $this->newOrder = Order::query()
             ->where(['order_number' => $newOrderNumber])
             ->firstOr(function () use ($newOrderNumber) {
-                return $this->originalOrder->replicate();
+                return $this->originalOrder->replicate(['is_fully_paid']);
             });
 
         $this->newOrder->status_code = $this->newOrderStatus;
