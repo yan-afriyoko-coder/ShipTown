@@ -45,7 +45,7 @@ class ProcessImportedOrdersJob implements ShouldQueue
         $orderAttributes = [
             'order_number' => $orderImport->raw_import['id'],
             'total_shipping' => $orderImport->raw_import['totals']['shipping'] ?? 0,
-            'total_discount' => $orderImport->raw_import['totals']['discount'] ?? 0,
+            'total_discounts' => $orderImport->raw_import['totals']['discount'] ?? 0,
             'total' => $orderImport->raw_import['total']['total'] ?? 0,
             'total_paid' => $orderImport->raw_import['total']['total_paid'] ?? 0,
             'shipping_method_code' => $orderImport->shipping_method_code,
