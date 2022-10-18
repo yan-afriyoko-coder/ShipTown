@@ -227,22 +227,25 @@
                                   <td><b> {{ order['order_placed_at'] | moment('MMM DD H:mm') }} </b> </td>
                                 </tr>
                                 <tr>
-                                  <td> shipping_method: </td><td><b> {{ order['shipping_method_code'] }} </b> </td>
+                                  <td> shipping method: </td><td><b> {{ order['shipping_method_code'] }} </b> </td>
                                 </tr>
                                 <tr>
-                                  <td> label_template: </td><td><b> {{ order['label_template'] }} </b> </td>
+                                  <td> label template: </td><td><b> {{ order['label_template'] }} </b> </td>
                                 </tr>
                                 <tr>
-                                  <td> total_products: </td><td><b> {{ order['order_products_totals']['total_price'] }} </b> </td>
+                                  <td> total products: </td><td><b> {{ toNumberOrDash(order['order_products_totals']['total_price']) }} </b> </td>
                                 </tr>
                                 <tr>
-                                  <td> total_shipping: </td><td><b> {{ toNumberOrDash(order['total_shipping']) }} </b> </td>
+                                  <td> total shipping: </td><td><b> {{ toNumberOrDash(order['total_shipping']) }} </b> </td>
                                 </tr>
                                 <tr>
-                                  <td> total: </td><td><b> {{ order['order_products_totals']['total_price'] + order['total_shipping'] }} </b> </td>
+                                  <td> total: </td><td><b> {{ toNumberOrDash(order['order_products_totals']['total_price'] + order['total_shipping']) }} </b> </td>
                                 </tr>
                                 <tr>
-                                  <td> paid: </td><td><b> {{ order['total_paid'] }} </b> </td>
+                                  <td> total discounts: </td><td><b> {{ toNumberOrDash(order['total_discounts']) }} </b> </td>
+                                </tr>
+                                <tr>
+                                  <td> total paid: </td><td><b> {{ toNumberOrDash(order['total_paid']) }} </b> </td>
                                 </tr>
                                 <tr>
                                   <td> picked at: </td><td><b> {{ order['picked_at'] | moment('MMM DD H:mm') }} </b> </td>
