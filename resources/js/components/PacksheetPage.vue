@@ -463,7 +463,7 @@
 
                     for (let element of this.packlist) {
 
-                        if(element.sku_ordered === barcode) {
+                        if(element.sku_ordered.toUpperCase() === barcode.toUpperCase()) {
                             return element;
                         }
 
@@ -475,7 +475,7 @@
                             continue;
                         }
 
-                        if(element.product.sku === barcode) {
+                        if(element.product.sku.toUpperCase() === barcode.toUpperCase()) {
                             return element;
                         }
 
@@ -484,7 +484,7 @@
                         }
 
                         for(let alias of element.product.aliases) {
-                            if(alias.alias === barcode){
+                            if(alias.alias.toUpperCase() === barcode.toUpperCase()){
                                 return element;
                             }
                         }
