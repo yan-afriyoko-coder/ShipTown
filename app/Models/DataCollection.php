@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\BaseModel;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
@@ -15,6 +16,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property DataCollectionRecord $records
+ * @property Warehouse $warehouse
  */
 class DataCollection extends BaseModel
 {
@@ -28,5 +30,10 @@ class DataCollection extends BaseModel
     public function records(): HasMany
     {
         return $this->hasMany(DataCollectionRecord::class);
+    }
+
+    public function warehouse(): BelongsTo
+    {
+        return $this->belongsTo(Warehouse::class);
     }
 }

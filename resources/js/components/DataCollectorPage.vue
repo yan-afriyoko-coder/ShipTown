@@ -24,7 +24,7 @@
         <template v-for="record in data">
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
                 <template v-slot:content>
-                    <div class="row" v-bind:class="{ 'disabled': record['quantity_to_scan'] === 0 }">
+                    <div class="row" >
                         <div class="col-sm-12 col-lg-5">
                             <product-info-card :product= "record['product']"></product-info-card>
                         </div>
@@ -35,7 +35,9 @@
                             </div>
                             <div class="col-12 col-md-8 text-right">
                                 <number-card label="requested" :number="record['quantity_requested']" v-if="record['quantity_requested']"></number-card>
-                                <number-card label="scanned" :number="record['quantity_scanned']" v-bind:class="{ 'bg-warning': record['quantity_requested'] && record['quantity_scanned'] > record['quantity_requested'] }"></number-card>
+                                <number-card label="total out" :number="record['total_transferred_out']" v-if="record['total_transferred_out'] > 0"></number-card>
+                                <number-card label="total in" :number="record['total_transferred_in']" v-if="record['total_transferred_in'] > 0" ></number-card>
+                                <number-card label="scanned" :number="record['quantity_scanned']" v-bind:class="{'bg-warning': record['quantity_requested'] &&  record['quantity_requested'] < record['quantity_scanned'] + record['total_transferred_out'] + record['total_transferred_in']}"></number-card>
                                 <number-card label="to scan" :number="record['quantity_to_scan']" v-if="record['quantity_requested']"></number-card>
                                 <text-card label="shelf" :text="record['shelf_location']"></text-card>
                             </div>
@@ -57,9 +59,12 @@
         >
             <stocktake-input></stocktake-input>
             <hr>
-            <button @click.prevent="autoScanAllRequested" v-b-toggle class="col btn mb-2 btn-primary">Auto Scan ALL Request</button>
-            <button @click.prevent="transferStockIn" v-b-toggle class="col btn mb-2 btn-primary">Receive Stock IN</button>
-            <button @click.prevent="transferStockOut" v-b-toggle class="col btn mb-2 btn-primary">Receive Stock OUT</button>
+            <button @click.prevent="autoScanAllRequested" v-b-toggle class="col btn mb-2 btn-primary">Auto Scan ALL</button>
+            <hr>
+            <button @click.prevent="transferStockIn" v-b-toggle class="col btn mb-2 btn-primary">Transfer IN</button>
+            <button @click.prevent="transferStockOut" v-b-toggle class="col btn mb-2 btn-primary">Transfer OUT</button>
+            <button @click.prevent="transferToWarehouseClick" v-b-toggle class="col btn mb-2 btn-primary">Transfer To...</button>
+            <hr>
             <a :href="getDownloadLink"  @click.prevent="downloadFileAndHideModal" v-b-toggle class="col btn mb-1 btn-primary">Download</a>
             <hr>
             <vue-csv-import
@@ -94,6 +99,15 @@
             </vue-csv-import>
 
             <button v-if="csv" type="button" @click.prevent="postCsvRecordsToApiAndCloseModal" class="col btn mb-1 btn-primary">Import Records</button>
+
+        </b-modal>
+
+        <b-modal id="transferToModal" centered no-fade hide-footer hide-header
+                 @hidden="setFocusElementById(100,'barcodeInput', true, true)"
+        >
+            <template v-for="warehouse in warehouses">
+                <button @click.prevent="transferToWarehouse(warehouse)" v-b-toggle class="col btn mb-2 btn-primary">{{ warehouse.name }}</button>
+            </template>
 
         </b-modal>
 
@@ -138,6 +152,7 @@
                     page: 1,
                     per_page: 10,
                     csv: null,
+                    warehouses: [],
                 };
             },
 
@@ -153,6 +168,11 @@
 
                 this.loadData();
 
+                this.apiGetWarehouses({'per_page': 999})
+                    .then(response => {
+                        this.warehouses = response.data.data;
+                    });
+
                 this.apiGetDataCollectorList({'filter[id]': this.data_collection_id})
                     .then(response => {
                         this.dataCollection = response.data;
@@ -160,6 +180,31 @@
             },
 
             methods: {
+                transferToWarehouseClick() {
+                    this.$bvModal.hide('configuration-modal');
+                    this.$bvModal.show('transferToModal');
+                },
+
+                transferToWarehouse(warehouse) {
+                    let data = {
+                        'data_collector_id': this.data_collection_id,
+                        'destination_warehouse_id': warehouse['id'],
+                    }
+
+                    this.apiDataCollectorActions('transfer-to-warehouse', data)
+                        .then(response => {
+                            this.$snotify.success('Transfer to warehouse initiated');
+                            this.$bvModal.hide('transferToModal');
+                            setTimeout(() => {
+                                this.loadData();
+                            }, 500);
+
+                        })
+                        .catch(error => {
+                            this.showException(error);
+                        });
+                },
+
                 transferStockOut() {
                     let data = {
                         'action': 'transfer_out_scanned',
@@ -190,7 +235,7 @@
                             this.$bvModal.hide('configuration-modal');
                             setTimeout(() => {
                                 this.loadData();
-                            }, 1000);
+                            }, 500);
                         })
                         .catch(error => {
                             this.showException(error);

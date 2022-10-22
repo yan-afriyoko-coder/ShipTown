@@ -34,6 +34,8 @@ class DataCollectionReport extends Report
             'product_sku'           => 'product.sku',
             'product_name'          => 'product.name',
             'quantity_requested'    => 'data_collection_records.quantity_requested',
+            'total_transferred_in'  => 'data_collection_records.total_transferred_in',
+            'total_transferred_out' => 'data_collection_records.total_transferred_out',
             'quantity_scanned'      => 'data_collection_records.quantity_scanned',
             'quantity_to_scan'      => 'data_collection_records.quantity_to_scan',
             'inventory_quantity'    => 'inventory.quantity',

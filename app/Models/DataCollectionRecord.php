@@ -14,6 +14,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  *  @property int    $id
  *  @property int    $data_collection_id,
  *  @property int    $product_id
+ *  @property double $total_transferred_in
+ *  @property double $total_transferred_out
  *  @property double $quantity_requested
  *  @property double $quantity_scanned
  *  @property double $quantity_to_scan
@@ -29,15 +31,20 @@ class DataCollectionRecord extends Model
     protected $fillable = [
         'data_collection_id',
         'product_id',
+        'total_transferred_in',
+        'total_transferred_out',
+        'quantity_requested',
         'quantity_requested',
         'quantity_scanned',
     ];
 
     protected $casts = [
-        'product_id'         => 'int',
-        'quantity_requested' => 'double',
-        'quantity_scanned'   => 'double',
-        'quantity_to_scan'   => 'double',
+        'product_id'            => 'int',
+        'total_transferred_id'  => 'double',
+        'total_transferred_out' => 'double',
+        'quantity_requested'    => 'double',
+        'quantity_scanned'      => 'double',
+        'quantity_to_scan'      => 'double',
     ];
 
     public function product(): BelongsTo
