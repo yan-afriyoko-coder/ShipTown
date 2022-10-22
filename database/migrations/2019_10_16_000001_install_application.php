@@ -19,7 +19,7 @@ class InstallApplication extends Migration
     public function up()
     {
         DB::transaction(function () {
-            Artisan::call('passport:install');
+            Artisan::call('app:install');
             $this->createDefaultConfigurationRecord();
             $this->createDefaultUserRoles();
             $this->createDefaultNavigationLinks();

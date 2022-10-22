@@ -11,28 +11,20 @@ use Ramsey\Uuid\Guid\Guid;
 
 class DataCollectorService
 {
-    public static function runAction(DataCollection $dataCollector, $action)
+    public static function runAction(DataCollection $dataCollection, $action)
     {
         DB::beginTransaction();
 
         if ($action === 'transfer_in_scanned') {
-            $dataCollector->records()
-                ->where('quantity_scanned', '!=', DB::raw(0))
-                ->each(function (DataCollectionRecord $record) {
-                    self::transferIn($record);
-                });
+            self::transferInScanned($dataCollection);
         }
 
         if ($action === 'transfer_out_scanned') {
-            $dataCollector->records()
-                ->where('quantity_scanned', '!=', DB::raw(0))
-                ->each(function (DataCollectionRecord $record) {
-                    self::transferOut($record);
-                });
+            self::transferOutScanned($dataCollection);
         }
 
         if ($action === 'auto_scan_all_requested') {
-            $dataCollector->records()
+            $dataCollection->records()
                 ->whereNotNull('quantity_requested')
                 ->update(['quantity_scanned' => DB::raw('quantity_requested')]);
         }
@@ -40,49 +32,97 @@ class DataCollectorService
         DB::commit();
     }
 
-    private static function transferIn(DataCollectionRecord $record): DataCollectionRecord
+    public static function transferInScanned(DataCollection $dataCollection)
     {
-        $custom_unique_reference_id = implode(':', [
-            'dataCollection', $record->data_collection_id, 'uuid', Guid::uuid4()->toString(),
-        ]);
+        $dataCollection->records()
+            ->where('quantity_scanned', '!=', DB::raw(0))
+            ->each(function (DataCollectionRecord $record) {
+                $custom_unique_reference_id = implode(':', [
+                    'dataCollection',
+                    $record->data_collection_id,
+                    'uuid',
+                    Guid::uuid4()->toString(),
+                ]);
 
-        $inventory = Inventory::firstOrCreate([
-            'warehouse_id' => $record->dataCollection->warehouse_id,
-            'product_id' => $record->product_id
-        ], []);
+                $inventory = Inventory::firstOrCreate([
+                    'warehouse_id' => $record->dataCollection->warehouse_id,
+                    'product_id' => $record->product_id
+                ], []);
 
-        InventoryService::adjustQuantity(
-            $inventory,
-            $record->quantity_scanned,
-            'data collection transfer in',
-            $custom_unique_reference_id
-        );
+                InventoryService::adjustQuantity(
+                    $inventory,
+                    $record->quantity_scanned,
+                    'data collection transfer in',
+                    $custom_unique_reference_id
+                );
 
-        $record->update(['quantity_scanned' => 0]);
-
-        return $record;
+                $record->update([
+                    'total_transferred_in' => $record->total_transferred_in + $record->quantity_scanned,
+                    'quantity_scanned' => 0
+                ]);
+            });
     }
 
-    private static function transferOut(DataCollectionRecord $record): DataCollectionRecord
+    public static function transferOutScanned(DataCollection $dataCollection)
     {
-        $inventory = Inventory::firstOrCreate([
-            'warehouse_id' => $record->dataCollection->warehouse_id,
-            'product_id' => $record->product_id
-        ], []);
+        $dataCollection->records()
+            ->where('quantity_scanned', '!=', DB::raw(0))
+            ->each(function (DataCollectionRecord $record) {
+                $custom_unique_reference_id = implode(':', [
+                    'dataCollection',
+                    $record->data_collection_id,
+                    'uuid',
+                    Guid::uuid4()->toString(),
+                ]);
 
-        $custom_unique_reference_id = implode(':', [
-            'dataCollection', $record->data_collection_id, 'uuid', Guid::uuid4()->toString(),
-        ]);
+                $inventory = Inventory::firstOrCreate([
+                    'warehouse_id' => $record->dataCollection->warehouse_id,
+                    'product_id' => $record->product_id
+                ], []);
 
-        InventoryService::adjustQuantity(
-            $inventory,
-            $record->quantity_scanned * -1,
-            'data collection transfer out',
-            $custom_unique_reference_id
-        );
+                InventoryService::adjustQuantity(
+                    $inventory,
+                    $record->quantity_scanned * -1,
+                    'data collection transfer out',
+                    $custom_unique_reference_id
+                );
 
-        $record->update(['quantity_scanned' => 0]);
+                $record->update([
+                    'total_transferred_out' => $record->total_transferred_out + $record->quantity_scanned,
+                    'quantity_scanned' => 0
+                ]);
+            });
+    }
 
-        return $record;
+    public static function transferScannedTo($dataCollection, $warehouse_id)
+    {
+        // create collection
+        $destinationDataCollection = $dataCollection->replicate();
+
+        DB::transaction(function () use ($warehouse_id, $dataCollection, $destinationDataCollection) {
+            /** @var DataCollection $dataCollection */
+            $destinationDataCollection->warehouse_id = $warehouse_id;
+            $destinationDataCollection->name = implode('', [
+                'Transfer from ',
+                $dataCollection->warehouse->name,
+                ' - ',
+                $dataCollection->name
+            ]);
+            $destinationDataCollection->save();
+
+            // copy records
+            DB::statement(
+                '
+                INSERT INTO data_collection_records (data_collection_id, product_id, quantity_requested, created_at, updated_at)
+                SELECT ?, product_id, quantity_scanned, now(), now()
+                FROM data_collection_records
+                WHERE data_collection_id = ?',
+                [$destinationDataCollection->id, $dataCollection->id]
+            );
+
+            DataCollectorService::transferOutScanned($dataCollection);
+        });
+
+        return $destinationDataCollection;
     }
 }

@@ -24,7 +24,11 @@ class ApiDataCollectorUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'action' => ['sometimes', 'string'],
+            'action' => [
+                'sometimes',
+                'string',
+                'in:transfer_in_scanned,transfer_out_scanned,auto_scan_all_requested,transfer_between_warehouses'
+            ],
         ];
     }
 }

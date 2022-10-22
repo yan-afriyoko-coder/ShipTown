@@ -49,6 +49,8 @@ Route::apiResource('stocktakes', 'Api\StocktakesController')->only(['store']);
 Route::apiResource('data-collector', 'Api\DataCollectorController')->only(['index', 'store', 'update']);
 Route::apiResource('data-collector-records', 'Api\DataCollectorRecordController')->only(['store', 'index']);
 
+RoutesBuilder::apiResource('data-collector-actions/transfer-to-warehouse')->only(['store']);
+
 Route::apiResource('order-check-request', 'Api\OrderCheckRequestController')->only(['store']);
 
 Route::apiResource('orders', 'Api\OrderController')->except('destroy');
