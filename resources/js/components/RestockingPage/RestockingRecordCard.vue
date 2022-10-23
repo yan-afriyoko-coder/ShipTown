@@ -166,11 +166,12 @@ export default {
 
             plusRestockLevel() {
                 if (Number(this.record['restock_level']) === 0) {
-                    this.updateRestockLevel(Number(this.record['quantity_in_stock']) + 1);
+                    this.updateRestockLevel(Math.max(0, Number(this.record['quantity_in_stock'])) + 1);
 
                     if (Number(this.record['reorder_point']) === 0) {
                         this.updateReorderPoint(Math.ceil(Number(this.record['restock_level']) / 2));
                     }
+
                     return;
                 }
 
