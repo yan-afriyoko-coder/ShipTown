@@ -183,7 +183,7 @@
                     let time = new Date().getTime();
 
                     const setActivityTime = (e) => {
-                        if (new Date().getTime() - time >= 60 * 1000) {
+                        if (new Date().getTime() - time >= 60 * 1000 * 5) {
                             this.reloadOrder();
                         }
 
