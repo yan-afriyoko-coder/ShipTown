@@ -91,6 +91,7 @@ class ImportOrdersJobs implements ShouldQueue
         // initialize params
         $params = [
             'params'         => 'force_all',
+            'created_from'   => '2020-01-01 00:00:00',
             'sort_by'        => 'modified_at',
             'sort_direction' => 'asc',
             'count'          => $batchSize,
