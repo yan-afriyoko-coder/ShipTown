@@ -56,7 +56,7 @@ class PublishOrderProductShipmentWebhooksJob implements ShouldQueue
                 'ops.warehouse_id' => $warehouse_id,
             ])
             ->orderBy('modules_webhooks_pending_webhooks.id')
-            ->limit(20);
+            ->limit(50);
 
         $chunk = $query->get();
 
