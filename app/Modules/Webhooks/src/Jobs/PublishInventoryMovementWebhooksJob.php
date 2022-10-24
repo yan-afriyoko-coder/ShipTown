@@ -58,7 +58,7 @@ class PublishInventoryMovementWebhooksJob implements ShouldQueue
                 'inventory_movements.warehouse_id' => $warehouse_id,
             ])
             ->orderBy('id')
-            ->limit(5);
+            ->limit(10);
 
         $chunk = $query->get();
 
