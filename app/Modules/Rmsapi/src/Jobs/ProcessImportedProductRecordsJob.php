@@ -15,6 +15,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 class ProcessImportedProductRecordsJob implements ShouldQueue
 {
@@ -79,6 +80,11 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
         $product = Product::firstOrCreate(['sku' => $attributes['sku']], $attributes);
 
         if ($product->name !== $attributes['name']) {
+            Log::debug('RMSAPI updating product name', [
+                'sku' => $product->sku,
+                'old_name' => $product->name,
+                'new_name' => $attributes['name'],
+            ]);
             $product->update(['name' => $attributes['name']]);
         }
 
@@ -116,6 +122,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
                 ]);
 
             if ($productAlias->product_id !== $product->id) {
+                Log::debug('RMSAPI updating product alias', ['sku' => $product->sku, 'alias' => $alias['alias']]);
                 $productAlias->update(['product_id' => $product->id]);
             }
         }
@@ -143,6 +150,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
             or $i->reorder_point !== Arr::get($ip->raw_import, 'reorder_point', 0)
             or $i->restock_level !== Arr::get($ip->raw_import, 'restock_level', 0)
         ) {
+            Log::debug('RMSAPI Updating product inventory', [$product->sku]);
             $i->update([
                 'quantity'          => Arr::get($ip->raw_import, 'quantity_on_hand', 0),
                 'quantity_reserved' => Arr::get($ip->raw_import, 'quantity_committed', 0),
@@ -174,6 +182,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
             or $p->sale_price_start_date !== $importedProduct->raw_import['sale_price_start_date'] ?? '2000-01-01'
             or $p->sale_price_end_date !== $importedProduct->raw_import['sale_price_start_date'] ?? '2000-01-01'
         ) {
+            Log::debug('RMSAPI Updating product pricing', [$product->sku]);
             $p->update([
                 'price'                 => $importedProduct->raw_import['price'],
                 'sale_price'            => $importedProduct->raw_import['sale_price'],
