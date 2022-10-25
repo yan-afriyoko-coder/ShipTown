@@ -76,8 +76,6 @@ class ImportProductsJob implements ShouldQueue
         if ($response->getResult()) {
             $this->saveImportedProducts($response->getResult());
 
-            ProcessImportedProductRecordsJob::dispatch();
-
             if (isset($response->asArray()['next_page_url'])) {
                 ImportProductsJob::dispatch($this->rmsapiConnection->getKey());
             }
@@ -90,7 +88,7 @@ class ImportProductsJob implements ShouldQueue
             'expires_at' => now()->addHour()
         ]);
 
-        info('RMSAPI Downloaded updated products', [
+        Log::info('RMSAPI Downloaded updated products', [
             'warehouse_code' => $this->rmsapiConnection->location_id,
             'count'          => $response->asArray()['total'],
         ]);

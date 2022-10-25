@@ -23,7 +23,7 @@ class InventoryDashboardPageTest extends DuskTestCase
 
             $browser->loginAs($user)
                     ->visit('/reports/inventory-dashboard')
-                    ->assertSee('Inventory Dashboard');
+                    ->assertSee('INVENTORY DASHBOARD');
         });
     }
 }
