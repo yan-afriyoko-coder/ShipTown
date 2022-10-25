@@ -131,7 +131,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
             ])
             ->first();
 
-        if ($i->quantity !== $ip->raw_import['quantity']
+        if ($i->quantity !== $ip->raw_import['quantity_on_hand']
             or $i->quantity_reserved !== Arr::get($ip->raw_import, 'quantity_committed', 0)
             or $i->quantity_incoming !== Arr::get($ip->raw_import, 'quantity_incoming', 0)
             or $i->shelve_location !== Arr::get($ip->raw_import, 'shelve_location', '')
