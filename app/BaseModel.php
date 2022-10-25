@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @method static first()
  * @method static firstOrCreate(string[] $array, string[] $array1)
- * @method static firstOrUpdate(array $array, array $array1)
  * @method static findOrFail($id)
  * @method static updateOrCreate(array $array, array $array1)
  * @method static where($values)
