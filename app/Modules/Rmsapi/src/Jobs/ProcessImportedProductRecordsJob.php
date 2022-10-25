@@ -108,11 +108,16 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
         }
 
         foreach ($importedProduct->raw_import['aliases'] as $alias) {
-            ProductAlias::query()->updateOrCreate([
-                'alias'       => $alias['alias']
-            ], [
-                'product_id'  => $product->id
-            ]);
+            $productAlias = ProductAlias::query()
+                ->firstOrCreate([
+                    'alias'      => $alias,
+                ], [
+                    'product_id' => $product->id,
+                ]);
+
+            if ($productAlias->product_id !== $product->id) {
+                $productAlias->update(['product_id' => $product->id]);
+            }
         }
     }
 
