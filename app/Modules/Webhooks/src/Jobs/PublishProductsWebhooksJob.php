@@ -44,7 +44,7 @@ class PublishProductsWebhooksJob implements ShouldQueue
                 'published_at' => null,
             ])
             ->orderBy('id')
-            ->limit(20);
+            ->limit(100);
 
         $chunk = $query->get();
 
