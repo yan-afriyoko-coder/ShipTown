@@ -75,7 +75,12 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
             'name' => $importedProduct->raw_import['description'],
         ];
 
-        $product = Product::updateOrCreate(['sku' => $attributes['sku']], $attributes);
+        /** @var Product $product */
+        $product = Product::firstOrCreate(['sku' => $attributes['sku']], $attributes);
+
+        if ($product->name !== $attributes['name']) {
+            $product->update(['name' => $attributes['name']]);
+        }
 
         $this->attachTags($importedProduct, $product);
 
@@ -112,27 +117,36 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
     }
 
     /**
-     * @param RmsapiProductImport $importedProduct
+     * @param RmsapiProductImport $ip
      * @param Product             $product
      */
-    private function importInventory(RmsapiProductImport $importedProduct, Product $product): void
+    private function importInventory(RmsapiProductImport $ip, Product $product): void
     {
-        $connection = RmsapiConnection::query()->find($importedProduct->connection_id);
+        $connection = RmsapiConnection::query()->find($ip->connection_id);
 
-        Inventory::query()
+        $i = Inventory::query()
             ->where([
-                'product_id'        => $product->id,
-                'warehouse_code'    => $connection->location_id,
+                'product_id' => $product->id,
+                'warehouse_code' => $connection->location_id,
             ])
-            ->first()
-            ->update([
-                'quantity'          => Arr::get($importedProduct->raw_import, 'quantity_on_hand', 0),
-                'quantity_reserved' => Arr::get($importedProduct->raw_import, 'quantity_committed', 0),
-                'quantity_incoming' => Arr::get($importedProduct->raw_import, 'quantity_on_order', 0),
-                'shelve_location'   => Arr::get($importedProduct->raw_import, 'rmsmobile_shelve_location', ''),
-                'reorder_point'     => Arr::get($importedProduct->raw_import, 'reorder_point', 0),
-                'restock_level'     => Arr::get($importedProduct->raw_import, 'restock_level', 0),
+            ->first();
+
+        if ($i->quantity !== $ip->raw_import['quantity']
+            or $i->quantity_reserved !== Arr::get($ip->raw_import, 'quantity_committed', 0)
+            or $i->quantity_incoming !== Arr::get($ip->raw_import, 'quantity_incoming', 0)
+            or $i->shelve_location !== Arr::get($ip->raw_import, 'shelve_location', '')
+            or $i->reorder_point !== Arr::get($ip->raw_import, 'reorder_point', 0)
+            or $i->restock_level !== Arr::get($ip->raw_import, 'restock_level', 0)
+        ) {
+            $i->update([
+                'quantity'          => Arr::get($ip->raw_import, 'quantity_on_hand', 0),
+                'quantity_reserved' => Arr::get($ip->raw_import, 'quantity_committed', 0),
+                'quantity_incoming' => Arr::get($ip->raw_import, 'quantity_on_order', 0),
+                'shelve_location'   => Arr::get($ip->raw_import, 'rmsmobile_shelve_location', ''),
+                'reorder_point'     => Arr::get($ip->raw_import, 'reorder_point', 0),
+                'restock_level'     => Arr::get($ip->raw_import, 'restock_level', 0),
             ]);
+        }
     }
 
     /**
@@ -143,18 +157,25 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
     {
         $connection = RmsapiConnection::query()->find($importedProduct->connection_id);
 
-        ProductPrice::query()
+        $p = ProductPrice::query()
             ->where([
-                'product_id'            => $product->id,
-                'warehouse_code'        => $connection->location_id,
+                'product_id' => $product->id,
+                'warehouse_code' => $connection->location_id,
             ])
-            ->first()
-            ->update([
+            ->first();
+
+        if ($p->price !== $importedProduct->raw_import['price']
+            or $p->sale_price !== $importedProduct->raw_import['sale_price']
+            or $p->sale_price_start_date !== $importedProduct->raw_import['sale_price_start_date'] ?? '2000-01-01'
+            or $p->sale_price_end_date !== $importedProduct->raw_import['sale_price_start_date'] ?? '2000-01-01'
+        ) {
+            $p->update([
                 'price'                 => $importedProduct->raw_import['price'],
                 'sale_price'            => $importedProduct->raw_import['sale_price'],
                 'sale_price_start_date' => $importedProduct->raw_import['sale_start_date'] ?? '1899-01-01 00:00:00',
                 'sale_price_end_date'   => $importedProduct->raw_import['sale_end_date'] ?? '1899-01-01 00:00:00',
             ]);
+        }
     }
 
     /**
