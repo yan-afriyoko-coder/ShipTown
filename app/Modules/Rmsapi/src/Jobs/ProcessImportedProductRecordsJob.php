@@ -55,9 +55,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
             ->get();
 
         $records->each(function (RmsapiProductImport $productImport) {
-            retry(2, function () use ($productImport) {
-                $this->import($productImport);
-            });
+            $this->import($productImport);
         });
 
         if (RmsapiProductImport::query()->whereNull('when_processed')->exists()) {
