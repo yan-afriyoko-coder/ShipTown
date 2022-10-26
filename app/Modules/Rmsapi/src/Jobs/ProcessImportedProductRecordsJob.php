@@ -32,27 +32,20 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
      */
     public function handle()
     {
-        retry(5, function () {
-            RmsapiProductImport::query()
-                ->whereNull('when_processed')
-                ->where('reserved_at', '<', now()->subMinutes(5))
-                ->update(['reserved_at' => null]);
-        });
+        $reservationTime = now();
 
-         $reservationTime = now();
-
-         RmsapiProductImport::query()
-             ->whereNull('when_processed')
-             ->whereNull('reserved_at')
-             ->orderBy('id')
-             ->limit(20)
-             ->update(['reserved_at' => $reservationTime]);
+        RmsapiProductImport::query()
+            ->whereNull('when_processed')
+            ->whereNull('reserved_at')
+            ->orderBy('id')
+            ->limit(50)
+            ->update(['reserved_at' => $reservationTime]);
 
         $records = RmsapiProductImport::query()
-            ->whereNull('when_processed')
-            ->where(['reserved_at' => $reservationTime])
-            ->orderBy('id')
-            ->get();
+           ->whereNull('when_processed')
+           ->where(['reserved_at' => $reservationTime])
+           ->orderBy('id')
+           ->get();
 
         $records->each(function (RmsapiProductImport $productImport) {
             $this->import($productImport);

@@ -6,6 +6,7 @@ use App\Modules\Rmsapi\src\Jobs\ImportProductsJob;
 use App\Modules\Rmsapi\src\Jobs\ImportShippingsJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
+use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use Illuminate\Support\Facades\Log;
 
 class EveryMinuteEventListener
@@ -23,5 +24,10 @@ class EveryMinuteEventListener
         }
 
         ProcessImportedProductRecordsJob::dispatch();
+
+        RmsapiProductImport::query()
+            ->whereNull('when_processed')
+            ->where('reserved_at', '<', now()->subMinutes(5))
+            ->update(['reserved_at' => null]);
     }
 }
