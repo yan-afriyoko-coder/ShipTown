@@ -299,6 +299,7 @@ class Api2cartService
                     'stores_ids',
                     'quantity',
                     'inventory',
+                    'group_items',
                 ]
             ),
         ];
