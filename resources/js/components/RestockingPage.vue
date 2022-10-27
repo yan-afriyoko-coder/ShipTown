@@ -60,7 +60,6 @@ export default {
 
         mounted() {
             this.getUrlFilterOrSet('filter[has_tags]', 'fulfilment');
-            this.getUrlFilterOrSet('filter[warehouse_quantity_between]', '1,999999');
             this.getUrlFilterOrSet('sort', '-quantity_required,-quantity_incoming,-warehouse_quantity');
 
             this.loadData();
