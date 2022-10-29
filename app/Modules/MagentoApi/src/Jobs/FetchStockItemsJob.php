@@ -31,7 +31,7 @@ class FetchStockItemsJob implements ShouldQueue
     public function handle()
     {
         $collection = MagentoProduct::query()
-            ->whereNull('stock_items_raw_import')
+            ->whereNull('stock_items_fetched_at')
             ->limit(100)
             ->get();
 
