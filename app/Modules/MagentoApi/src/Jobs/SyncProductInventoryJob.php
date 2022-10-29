@@ -48,19 +48,17 @@ class SyncProductInventoryJob implements ShouldQueue
      */
     private function syncProductInventory(MagentoProductInventoryComparisonView $comparison)
     {
-        $product = $comparison->magentoProduct->product;
-
         $stockItems = new StockItems(new Magento());
 
         $params = [
-            'is_in_stock' => $product->quantity_available > 0,
-            'qty' => $product->quantity_available,
+            'is_in_stock' => $comparison->expected_quantity > 0,
+            'qty' => $comparison->expected_quantity,
         ];
 
-        $response = $stockItems->update($product->sku, $params);
+        $response = $stockItems->update($comparison->magentoProduct->product->sku, $params);
 
         Log::debug('MagentoApi: stockItem update', [
-            'sku'                  => $product->sku,
+            'sku'                  => $comparison->magentoProduct->product->sku,
             'response_status_code' => $response->status(),
             'response_body'        => $response->json(),
             'params'               => $params
