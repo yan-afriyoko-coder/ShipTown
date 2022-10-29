@@ -45,24 +45,5 @@ class EnsureProductRecordsExistJob implements ShouldQueue
                 SELECT product_id FROM modules_magento2api_products
             )
         ", [$tag->getKey(), 'App\\Models\\Product']);
-
-//        $query = Product::withAllTags(['Available Online']);
-//
-//        $this->queueData([
-//            'total_count' => $query->count(),
-//        ]);
-//
-//        $totalCount = $query->count();
-//
-//        $chunkSize = 100;
-//
-//        $query->orderBy('quantity')
-//            ->chunk($chunkSize, function (Collection $products) use ($totalCount, $chunkSize) {
-//                $products->each(function (Product $product) {
-//                    SyncProductStockJob::dispatch($product);
-//                });
-//            });
-//
-//        Log::info('Dispatched Sync MagentoApi Jobs', ['count' => $totalCount]);
     }
 }

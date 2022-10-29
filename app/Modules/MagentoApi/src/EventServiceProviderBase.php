@@ -35,7 +35,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
      */
     protected $listen = [
         SyncRequestedEvent::class => [
-            Listeners\SyncRequestedEvent\DispatchSyncCheckFailedProductsJobListener::class,
+            Listeners\SyncRequestedEventListener::class,
         ],
 
         HourlyEvent::class => [
@@ -43,11 +43,11 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
         ],
 
         ProductTagAttachedEvent::class => [
-            Listeners\ProductTagAttachedEvent\SyncWhenOutOfStockAttachedListener::class,
+            Listeners\ProductTagAttachedEventListener::class,
         ],
 
         ProductTagDetachedEvent::class => [
-            Listeners\ProductTagDetachedEvent\SyncWhenOutOfStockDetachedListener::class,
+            Listeners\ProductTagDetachedEventListener::class,
         ],
     ];
 }
