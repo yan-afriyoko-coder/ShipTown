@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Modules\MagentoApi\src\Listeners\SyncRequestedEvent;
+namespace App\Modules\MagentoApi\src\Listeners;
 
 use App\Events\SyncRequestedEvent;
 use App\Modules\MagentoApi\src\Jobs\EnsureProductRecordsExistJob;
+use App\Modules\MagentoApi\src\Jobs\FetchStockItemsJob;
 use App\Modules\MagentoApi\src\Jobs\SyncCheckFailedProductsJob;
 
-class DispatchSyncCheckFailedProductsJobListener
+class SyncRequestedEventListener
 {
     /**
      * Handle the event.
@@ -19,6 +20,6 @@ class DispatchSyncCheckFailedProductsJobListener
     {
         EnsureProductRecordsExistJob::dispatch();
 
-        SyncCheckFailedProductsJob::dispatch();
+        FetchStockItemsJob::dispatch();
     }
 }

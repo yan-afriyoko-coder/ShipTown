@@ -20,12 +20,12 @@ class ProductTagAttachedEvent
     /**
      * @var Product
      */
-    private Product $product;
+    public Product $product;
 
     /**
      * @var string
      */
-    private string $tag;
+    public string $tag;
 
     /**
      * Create a new event instance.
