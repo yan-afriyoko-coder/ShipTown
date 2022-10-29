@@ -4,6 +4,7 @@ namespace App\Modules\MagentoApi\src\Jobs;
 
 use App\Models\Product;
 use App\Modules\MagentoApi\src\Api\StockItems;
+use App\Modules\MagentoApi\src\Models\MagentoProductInventoryComparisonView;
 use Grayloon\Magento\Magento;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Log;
 /**
  * Class SyncCheckFailedProductsJob.
  */
-class SyncProductStockJob implements ShouldQueue
+class SyncProductInventoryJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -45,26 +46,30 @@ class SyncProductStockJob implements ShouldQueue
      */
     public function handle()
     {
-        if (config('modules.magentoApi.enabled') === false) {
-            return;
-        }
+        MagentoProductInventoryComparisonView::query()
+            ->whereRaw('magento_quantity != expected_quantity')
+            ->get()
+            ->each(function (MagentoProductInventoryComparisonView $comparison) {
+                $this->syncProductInventory($comparison);
 
-        if ($this->syncProductStock($this->product)->ok()) {
-//            $this->product->log('Stock synced with Magento API');
-            $this->product->detachTag('CHECK FAILED');
-        }
+                $comparison->magentoProduct->update([
+                    'stock_items_raw_import' => null,
+                ]);
+            });
     }
 
     /**
      * @return Response|void
      */
-    private function syncProductStock(Product $product)
+    private function syncProductInventory(MagentoProductInventoryComparisonView $comparison)
     {
+        $product = $comparison->magentoProduct->product;
+
         $stockItems = new StockItems(new Magento());
 
         $params = [
             'is_in_stock' => $product->quantity_available > 0,
-            'qty'         => $product->quantity_available,
+            'qty' => $product->quantity_available,
         ];
 
         $response = $stockItems->update($product->sku, $params);
@@ -73,6 +78,7 @@ class SyncProductStockJob implements ShouldQueue
             'sku'                  => $product->sku,
             'response_status_code' => $response->status(),
             'response_body'        => $response->json(),
+            'params'               => $params
         ]);
 
         return $response;
