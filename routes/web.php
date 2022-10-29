@@ -11,6 +11,8 @@
 |
 */
 
+use App\Modules\Api2cart\src\Api\Client;
+use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +20,22 @@ use Illuminate\Support\Facades\Route;
 Route::resource('verify', 'Auth\TwoFactorController')->only(['index', 'store']);
 
 //$data_get = data_get(auth()->user(), 'default_dashboard_uri', 'dashboard');
+Route::get('/test', function () {
+    /** @var Api2cartConnection $connection */
+    $connection = Api2cartConnection::query()->first();
+
+//    $response = \App\Modules\Api2cart\src\Services\Api2cartService::getProductsList($connection, [
+//        'sku' => '820778',
+//    ]);
+
+    $query = [
+        'product_id' => 66550,
+    ];
+
+    $response = Client::GET($connection->bridge_api_key, 'product.variant.info.json', $query)->asArray();
+
+    dd($response);
+});
 
 Route::redirect('', 'dashboard');
 Route::redirect('home', 'dashboard')->name('home');
