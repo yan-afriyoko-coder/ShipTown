@@ -25,21 +25,6 @@ class SyncProductInventoryJob implements ShouldQueue
     use SerializesModels;
 
     /**
-     * @var Product
-     */
-    private Product $product;
-
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct(Product $product)
-    {
-        $this->product = $product;
-    }
-
-    /**
      * Execute the job.
      *
      * @return void
