@@ -25,7 +25,7 @@ class AddConnectionIdColumnToModulesMagento2apiProductsTable extends Migration
         $connection = MagentoConnection::first();
 
         if ($connection) {
-            MagentoProduct::query()->update(['connection_id' => $connection->id,]);
+            MagentoProduct::query()->update(['connection_id' => $connection->id]);
         }
     }
 }
