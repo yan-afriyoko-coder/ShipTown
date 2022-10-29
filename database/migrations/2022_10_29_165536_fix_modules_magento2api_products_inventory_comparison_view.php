@@ -13,7 +13,7 @@ class FixModulesMagento2apiProductsInventoryComparisonView extends Migration
     public function up()
     {
         DB::statement("
-            ALTER VIEW modules_magento2api_products_inventory_comparison_view AS
+            CREATE VIEW modules_magento2api_products_inventory_comparison_view AS
             SELECT modules_magento2api_products.id AS modules_magento2api_products_id,
                    floor(max(modules_magento2api_products.quantity)) AS magento_quantity,
                    if((floor(sum(inventory.quantity_available)) < 0), 0, floor(sum(inventory.quantity_available))) AS expected_quantity
