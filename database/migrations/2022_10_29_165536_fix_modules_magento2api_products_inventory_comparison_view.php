@@ -1,10 +1,9 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
-class CreateModulesMagento2apiProductsInventoryComparisonView extends Migration
+class FixModulesMagento2apiProductsInventoryComparisonView extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +12,8 @@ class CreateModulesMagento2apiProductsInventoryComparisonView extends Migration
      */
     public function up()
     {
-        \Illuminate\Support\Facades\DB::statement("
-            CREATE VIEW modules_magento2api_products_inventory_comparison_view AS
+        DB::statement("
+            ALTER VIEW modules_magento2api_products_inventory_comparison_view AS
             SELECT modules_magento2api_products.id AS modules_magento2api_products_id,
                    floor(max(modules_magento2api_products.quantity)) AS magento_quantity,
                    if((floor(sum(inventory.quantity_available)) < 0), 0, floor(sum(inventory.quantity_available))) AS expected_quantity
@@ -36,7 +35,6 @@ class CreateModulesMagento2apiProductsInventoryComparisonView extends Migration
               and inventory.warehouse_id = warehouses.id
 
             group by modules_magento2api_products.id
-
         ");
     }
 }
