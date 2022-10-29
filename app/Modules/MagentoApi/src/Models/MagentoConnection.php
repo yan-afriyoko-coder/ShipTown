@@ -3,9 +3,7 @@
 namespace App\Modules\MagentoApi\src\Models;
 
 use App\BaseModel;
-use App\Models\Product;
 use Exception;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Crypt;
 
 class MagentoConnection extends BaseModel
@@ -17,11 +15,6 @@ class MagentoConnection extends BaseModel
         'inventory_source_warehouse_tag_id',
         'access_token'
     ];
-
-    public function product(): BelongsTo
-    {
-        return $this->belongsTo(Product::class);
-    }
 
     public function getAccessTokenAttribute(): string
     {
