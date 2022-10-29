@@ -39,7 +39,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
         ],
 
         HourlyEvent::class => [
-            Listeners\HourlyEvent\SyncProductsListener::class,
+            Listeners\HourlyEventListener::class,
         ],
 
         ProductTagAttachedEvent::class => [

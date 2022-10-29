@@ -12,4 +12,9 @@ class StockItems extends AbstractApi
             'stockItem' => $params,
         ]);
     }
+
+    public function geta($sku)
+    {
+        return $this->get('/stockItems/'.$sku, []);
+    }
 }

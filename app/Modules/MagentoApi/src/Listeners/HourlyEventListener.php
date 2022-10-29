@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Modules\MagentoApi\src\Listeners\HourlyEvent;
+namespace App\Modules\MagentoApi\src\Listeners;
 
 use App\Events\HourlyEvent;
 use App\Modules\MagentoApi\src\Jobs\SyncCheckFailedProductsJob;
 
-class SyncProductsListener
+class HourlyEventListener
 {
     /**
      * Handle the event.
@@ -16,10 +16,6 @@ class SyncProductsListener
      */
     public function handle(HourlyEvent $event)
     {
-        if (config('modules.magentoApi.enabled') === false) {
-            return;
-        }
-
         SyncCheckFailedProductsJob::dispatch();
     }
 }
