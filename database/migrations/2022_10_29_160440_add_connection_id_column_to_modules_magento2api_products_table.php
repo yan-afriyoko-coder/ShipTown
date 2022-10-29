@@ -16,10 +16,7 @@ class AddConnectionIdColumnToModulesMagento2apiProductsTable extends Migration
     public function up()
     {
         Schema::table('modules_magento2api_products', function (Blueprint $table) {
-            $table->foreignId('connection_id')
-                ->after('id')
-                ->constrained('modules_magento2api_connections')
-                ->cascadeOnDelete();
+            $table->foreignId('connection_id')->after('id');
         });
 
         $connection = MagentoConnection::first();
