@@ -18,11 +18,5 @@ class AddConnectionIdColumnToModulesMagento2apiProductsTable extends Migration
         Schema::table('modules_magento2api_products', function (Blueprint $table) {
             $table->foreignId('connection_id')->after('id');
         });
-
-        $connection = MagentoConnection::first();
-
-        if ($connection) {
-            MagentoProduct::query()->update(['connection_id' => $connection->id]);
-        }
     }
 }
