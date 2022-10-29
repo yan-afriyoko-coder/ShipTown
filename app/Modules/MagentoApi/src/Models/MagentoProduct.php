@@ -37,7 +37,7 @@ class MagentoProduct extends BaseModel
     public function setStockItemsRawImportAttribute($value)
     {
         $this->attributes['stock_items_raw_import'] = json_encode($value);
-        $this->stock_items_fetched_at = now();
+        $this->stock_items_fetched_at = $value === null ? null : now();
         $this->quantity = data_get($value, 'qty');
         $this->is_in_stock = data_get($value, 'is_in_stock');
     }
