@@ -74,6 +74,5 @@ abstract class TestCase extends BaseTestCase
         MagentoProduct::query()->forceDelete();
 
         ModulesService::updateModulesTable();
-
     }
 }
