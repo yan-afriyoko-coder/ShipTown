@@ -33,12 +33,14 @@ class EnsureProductRecordsExistJob implements ShouldQueue
         $tag = Tag::findFromString('Available Online');
 
         DB::statement("
-            INSERT INTO modules_magento2api_products (product_id, created_at, updated_at)
+            INSERT INTO modules_magento2api_products (connection_id, product_id, created_at, updated_at)
             SELECT
+                modules_magento2api_connections.id,
                 taggables.taggable_id,
                 now(),
                 now()
             FROM taggables
+            LEFT JOIN modules_magento2api_connections ON 1=1
             WHERE taggables.tag_id = ?
             AND taggables.taggable_type = ?
             AND taggables.taggable_id NOT IN (
