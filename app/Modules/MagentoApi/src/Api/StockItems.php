@@ -4,11 +4,24 @@ namespace App\Modules\MagentoApi\src\Api;
 
 use Grayloon\Magento\Api\AbstractApi;
 use Illuminate\Http\Client\Response;
-use phpDocumentor\Reflection\Types\Integer;
-use phpDocumentor\Reflection\Utils;
 
 class StockItems extends AbstractApi
 {
+    public function postProductsSpecialPriceDelete($sku, $store_id, $price, $price_from, $price_to): Response
+    {
+        return $this->post('/products/special-price-delete', [
+            'prices' => [
+                [
+                    'sku' => $sku,
+                    'store_id' => $store_id,
+                    'price' => $price,
+                    'price_from' => $price_from,
+                    'price_to' => $price_to,
+                ]
+            ]
+        ]);
+    }
+
     public function postProductsSpecialPriceInformation($sku): Response
     {
         return $this->post('/products/special-price-information', [

@@ -25,20 +25,32 @@ class MagentoService
         $response = $stockItems->postProductsSpecialPriceInformation($magentoProduct->product->sku);
 
         if ($response->successful()) {
-            $magentoProduct->base_prices_fetched_at = now();
-            $magentoProduct->base_prices_raw_import = $response->json();
-
-            collect($response->json())
+            $specialPrices = collect($response->json())
                 ->filter(function ($item) use ($magentoProduct) {
                     return $item['store_id'] === $magentoProduct->magentoConnection->magento_store_id;
-                })
-                ->each(function ($item) use ($magentoProduct) {
-                    $magentoProduct->magento_price = $item['price'];
                 });
 
+//            if ($specialPrices->count() > 1) {
+//                $specialPrices->each(function ($item) use ($magentoProduct, $stockItems) {
+//                    $stockItems->postProductsSpecialPriceDelete(
+//                        $item['sku'],
+//                        $item['store_id'],
+//                        $item['price'],
+//                        $item['price_from'],
+//                        $item['price_to']
+//                    );
+//                });
+//                $magentoProduct->special_prices_fetched_at = null;
+//                $magentoProduct->special_prices_raw_import = null;
+//                $magentoProduct->save();
+//                return;
+//            }
+
+            $magentoProduct->special_prices_fetched_at = now();
+            $magentoProduct->special_prices_raw_import = $specialPrices->toArray();
             $magentoProduct->save();
         } else {
-            Log::error('Failed to fetch base prices for product '.$magentoProduct->product->sku);
+            Log::error('Failed to fetch sale prices for product '.$magentoProduct->product->sku);
         }
     }
 

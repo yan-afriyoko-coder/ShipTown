@@ -17,6 +17,8 @@ use Illuminate\Support\Carbon;
  * @property array $base_prices_raw_import
  * @property MagentoConnection $magentoConnection
  * @property double $magento_price
+ * @property Carbon $special_prices_fetched_at
+ * @property array $special_prices_raw_import
  */
 class MagentoProduct extends BaseModel
 {
@@ -33,6 +35,8 @@ class MagentoProduct extends BaseModel
         'stock_items_raw_import',
         'base_prices_fetched_at',
         'base_prices_raw_import',
+        'special_prices_fetched_at',
+        'special_prices_raw_import',
     ];
 
     protected $dates = [
