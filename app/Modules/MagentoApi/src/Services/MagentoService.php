@@ -9,6 +9,16 @@ use Illuminate\Support\Facades\Log;
 
 class MagentoService
 {
+    public static function updateBasePrice(string $sku, float $price, int $store_id)
+    {
+        $stockItems = new StockItems(new Magento());
+        $stockItems->postProductsBasePrices(
+            $sku,
+            $price,
+            $store_id
+        );
+    }
+
     public static function fetchSpecialPrices(MagentoProduct $magentoProduct)
     {
         $stockItems = new StockItems(new Magento());

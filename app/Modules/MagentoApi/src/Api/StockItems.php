@@ -4,6 +4,8 @@ namespace App\Modules\MagentoApi\src\Api;
 
 use Grayloon\Magento\Api\AbstractApi;
 use Illuminate\Http\Client\Response;
+use phpDocumentor\Reflection\Types\Integer;
+use phpDocumentor\Reflection\Utils;
 
 class StockItems extends AbstractApi
 {
@@ -72,6 +74,19 @@ class StockItems extends AbstractApi
                     'status' => 1,
                 ]
             ],
+        ]);
+    }
+
+    public function postProductsBasePrices(string $sku, float $price, int $store_id): Response
+    {
+        return $this->post('/products/base-prices', [
+            'prices' => [
+                [
+                'sku' => $sku,
+                'price' => $price,
+                'store_id' => $store_id,
+                ]
+            ]
         ]);
     }
 }
