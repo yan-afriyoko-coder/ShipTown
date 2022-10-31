@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property MagentoProduct $magentoProduct
  * @property integer $magento_store_id
  * @property double $expected_price
+ * @property string $sku
  */
 class MagentoProductPricesComparisonView extends BaseModel
 {
