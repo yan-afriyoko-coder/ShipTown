@@ -37,7 +37,7 @@ class SyncProductBasePricesJob implements ShouldQueue
             ->get()
             ->each(function (MagentoProductPricesComparisonView $comparison) {
                 MagentoService::updateBasePrice(
-                    $comparison->magentoProduct->product->sku,
+                    $comparison->sku,
                     $comparison->expected_price,
                     $comparison->magento_store_id
                 );
