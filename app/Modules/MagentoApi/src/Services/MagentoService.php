@@ -20,7 +20,7 @@ class MagentoService
 
             collect($response->json())
                 ->filter(function ($item) use ($magentoProduct) {
-                    return $item['store_id'] > $magentoProduct->magentoConnection->magento_store_id;
+                    return $item['store_id'] === $magentoProduct->magentoConnection->magento_store_id;
                 })
                 ->each(function ($item) use ($magentoProduct) {
                     $magentoProduct->magento_price = $item['price'];
