@@ -25,31 +25,18 @@ class MagentoService
         $response = $stockItems->postProductsSpecialPriceInformation($magentoProduct->product->sku);
 
         if ($response->successful()) {
-            $specialPrice = collect($response->json())
+            $specialPrices = collect($response->json())
                 ->filter(function ($item) use ($magentoProduct) {
                     return $item['store_id'] === $magentoProduct->magentoConnection->magento_store_id;
-                })
-                ->first;
-            $magentoProduct->magento_sale_price = $specialPrice['price'];
-            $magentoProduct->magento_sale_price_start_date = $specialPrice['price_from'];
-            $magentoProduct->magento_sale_price_end_date = $specialPrice['price_to'];
+                });
 
+            $specialPrice = $specialPrices->first();
 
-//            if ($specialPrices->count() > 1) {
-//                $specialPrices->each(function ($item) use ($magentoProduct, $stockItems) {
-//                    $stockItems->postProductsSpecialPriceDelete(
-//                        $item['sku'],
-//                        $item['store_id'],
-//                        $item['price'],
-//                        $item['price_from'],
-//                        $item['price_to']
-//                    );
-//                });
-//                $magentoProduct->special_prices_fetched_at = null;
-//                $magentoProduct->special_prices_raw_import = null;
-//                $magentoProduct->save();
-//                return;
-//            }
+            if ($specialPrice) {
+                $magentoProduct->magento_sale_price = $specialPrice['price'];
+                $magentoProduct->magento_sale_price_start_date = $specialPrice['price_from'];
+                $magentoProduct->magento_sale_price_end_date = $specialPrice['price_to'];
+            }
 
             $magentoProduct->special_prices_fetched_at = now();
             $magentoProduct->special_prices_raw_import = $response->json();
