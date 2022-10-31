@@ -6,6 +6,7 @@ use App\Events\SyncRequestedEvent;
 use App\Modules\MagentoApi\src\Jobs\EnsureProductRecordsExistJob;
 use App\Modules\MagentoApi\src\Jobs\FetchBasePricesJob;
 use App\Modules\MagentoApi\src\Jobs\FetchStockItemsJob;
+use App\Modules\MagentoApi\src\Jobs\SyncProductBasePricesJob;
 use App\Modules\MagentoApi\src\Jobs\SyncProductInventoryJob;
 
 class SyncRequestedEventListener
@@ -25,5 +26,6 @@ class SyncRequestedEventListener
         FetchBasePricesJob::dispatch();
 
         SyncProductInventoryJob::dispatch();
+        SyncProductBasePricesJob::dispatch();
     }
 }
