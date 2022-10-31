@@ -72,8 +72,8 @@ abstract class TestCase extends BaseTestCase
         DataCollection::query()->forceDelete();
         DataCollectionRecord::query()->forceDelete();
 
-        MagentoConnection::query()->forceDelete();
-        MagentoProduct::query()->forceDelete();
+//        MagentoProduct::query()->forceDelete();
+//        MagentoConnection::query()->forceDelete();
 
         ModulesService::updateModulesTable();
     }
