@@ -9,6 +9,31 @@ use Illuminate\Support\Facades\Log;
 
 class MagentoService
 {
+    public static function fetchBasePrices(MagentoProduct $magentoProduct)
+    {
+        $stockItems = new StockItems(new Magento());
+        $response = $stockItems->postProductsBasePricesInformation($magentoProduct->product->sku);
+
+        if ($response->successful()) {
+            $magentoProduct->base_prices_fetched_at = now();
+            $magentoProduct->base_prices_raw_import = $response->json();
+
+            collect($response->json())
+                ->filter(function ($item) use ($magentoProduct) {
+                    return $item['store_id'] > $magentoProduct->magentoConnection->magento_store_id;
+                })
+                ->each(function ($item) use ($magentoProduct) {
+                    $magentoProduct->magento_price = $item['price'];
+                });
+
+            $magentoProduct->save();
+        } else {
+            Log::error('Failed to fetch base prices for product '.$magentoProduct->product->sku);
+        }
+
+//        self::fetchStockItem($magentoProduct);
+    }
+
     public static function fetchInventory(MagentoProduct $magentoProduct)
     {
         if (config('magento.store_code') === 'all') {

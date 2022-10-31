@@ -21,6 +21,7 @@ use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
+use App\Modules\MagentoApi\src\Models\MagentoConnection;
 use App\Modules\MagentoApi\src\Models\MagentoProduct;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Services\ModulesService;
@@ -71,6 +72,7 @@ abstract class TestCase extends BaseTestCase
         DataCollection::query()->forceDelete();
         DataCollectionRecord::query()->forceDelete();
 
+        MagentoConnection::query()->forceDelete();
         MagentoProduct::query()->forceDelete();
 
         ModulesService::updateModulesTable();

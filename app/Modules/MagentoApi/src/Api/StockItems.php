@@ -7,6 +7,20 @@ use Illuminate\Http\Client\Response;
 
 class StockItems extends AbstractApi
 {
+    public function postProductsSpecialPriceInformation($sku): Response
+    {
+        return $this->post('/products/special-price-information', [
+            'skus' => [$sku]
+        ]);
+    }
+
+    public function postProductsBasePricesInformation($sku): Response
+    {
+        return $this->post('/products/base-prices-information', [
+            'skus' => [$sku]
+        ]);
+    }
+
     public function putStockItems($sku, $params)
     {
         return $this->put('/products/'.$sku.'/stockItems/0', [

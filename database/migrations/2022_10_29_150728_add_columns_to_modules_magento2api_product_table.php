@@ -15,7 +15,7 @@ class AddColumnsToModulesMagento2apiProductTable extends Migration
     {
         Schema::table('modules_magento2api_products', function (Blueprint $table) {
             $table->decimal('quantity', 20)->nullable()->after('product_id');
-            $table->boolean('is_in_stock')->nullable()->after('product_id');
+            $table->boolean('is_in_stock')->nullable()->after('quantity');
         });
     }
 }
