@@ -19,6 +19,9 @@ use Illuminate\Support\Carbon;
  * @property double $magento_price
  * @property Carbon $special_prices_fetched_at
  * @property array $special_prices_raw_import
+ * @property double $magento_sale_price
+ * @property Carbon $magento_sale_price_start_date
+ * @property Carbon $magento_sale_price_end_date
  */
 class MagentoProduct extends BaseModel
 {
@@ -40,13 +43,17 @@ class MagentoProduct extends BaseModel
     ];
 
     protected $dates = [
+        'magento_sale_price_start_date',
+        'magento_sale_price_end_date',
         'stock_items_fetched_at',
         'base_prices_fetched_at',
+        'special_prices_fetched_at',
     ];
 
     protected $casts = [
         'stock_items_raw_import'    => 'array',
         'base_prices_raw_import'    => 'array',
+        'special_prices_raw_import'    => 'array',
     ];
 
     public function product(): BelongsTo

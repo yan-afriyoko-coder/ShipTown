@@ -25,10 +25,15 @@ class MagentoService
         $response = $stockItems->postProductsSpecialPriceInformation($magentoProduct->product->sku);
 
         if ($response->successful()) {
-            $specialPrices = collect($response->json())
+            $specialPrice = collect($response->json())
                 ->filter(function ($item) use ($magentoProduct) {
                     return $item['store_id'] === $magentoProduct->magentoConnection->magento_store_id;
-                });
+                })
+                ->first;
+            $magentoProduct->magento_sale_price = $specialPrice['price'];
+            $magentoProduct->magento_sale_price_start_date = $specialPrice['price_from'];
+            $magentoProduct->magento_sale_price_end_date = $specialPrice['price_to'];
+
 
 //            if ($specialPrices->count() > 1) {
 //                $specialPrices->each(function ($item) use ($magentoProduct, $stockItems) {
@@ -47,7 +52,7 @@ class MagentoService
 //            }
 
             $magentoProduct->special_prices_fetched_at = now();
-            $magentoProduct->special_prices_raw_import = $specialPrices->toArray();
+            $magentoProduct->special_prices_raw_import = $response->json();
             $magentoProduct->save();
         } else {
             Log::error('Failed to fetch sale prices for product '.$magentoProduct->product->sku);
