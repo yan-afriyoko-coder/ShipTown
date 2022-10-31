@@ -3,6 +3,7 @@
 namespace App\Modules\MagentoApi\src\Listeners;
 
 use App\Events\Product\ProductTagAttachedEvent;
+use App\Modules\MagentoApi\src\Models\MagentoConnection;
 use App\Modules\MagentoApi\src\Models\MagentoProduct;
 
 class ProductTagAttachedEventListener
@@ -17,7 +18,14 @@ class ProductTagAttachedEventListener
     public function handle(ProductTagAttachedEvent $event)
     {
         if ($event->tag === 'Available Online') {
-            MagentoProduct::firstOrCreate(['product_id' => $event->product->id], []);
+            MagentoConnection::query()
+                ->get()
+                ->each(function (MagentoConnection $connection) use ($event) {
+                    MagentoProduct::firstOrCreate([
+                        'connection_id' => $connection->getKey(),
+                        'product_id' => $event->product->id
+                    ], []);
+                });
         }
     }
 }

@@ -31,7 +31,7 @@
                                             <number-card class="mr-lg-4" label="restock level" :number="record['restock_level']" v-bind:class="{'bg-warning' : record['restock_level'] <= 0 }"></number-card>
                                             <number-card label="in stock" :number="record['quantity_available']" v-bind:class="{'bg-warning' : record['quantity_available'] < 0 }"></number-card>
                                             <number-card label="incoming" :number="record['quantity_incoming']"></number-card>
-                                            <text-card label="required" text="N/A" v-if="record['warehouse_quantity'] === 0"></text-card>
+                                            <text-card label="required" text="N/A" v-if="Number(record['warehouse_quantity']) === 0"></text-card>
                                             <number-card label="required" :number="record['quantity_required']" v-if="record['warehouse_quantity'] > 0"></number-card>
                                         </div>
                                     </div>

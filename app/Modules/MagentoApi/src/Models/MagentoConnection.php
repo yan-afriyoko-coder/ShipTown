@@ -6,12 +6,16 @@ use App\BaseModel;
 use Exception;
 use Illuminate\Support\Facades\Crypt;
 
+/**
+ * @property integer $magento_store_id
+ */
 class MagentoConnection extends BaseModel
 {
     protected $table = 'modules_magento2api_connections';
 
     protected $fillable = [
         'base_url',
+        'magento_store_id',
         'inventory_source_warehouse_tag_id',
         'access_token'
     ];
