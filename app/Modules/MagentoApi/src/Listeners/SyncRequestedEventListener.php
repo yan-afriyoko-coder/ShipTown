@@ -9,6 +9,7 @@ use App\Modules\MagentoApi\src\Jobs\FetchSpecialPricesJob;
 use App\Modules\MagentoApi\src\Jobs\FetchStockItemsJob;
 use App\Modules\MagentoApi\src\Jobs\SyncProductBasePricesJob;
 use App\Modules\MagentoApi\src\Jobs\SyncProductInventoryJob;
+use App\Modules\MagentoApi\src\Jobs\SyncProductSalePricesJob;
 
 class SyncRequestedEventListener
 {
@@ -29,5 +30,6 @@ class SyncRequestedEventListener
 
         SyncProductInventoryJob::dispatch();
         SyncProductBasePricesJob::dispatch();
+        SyncProductSalePricesJob::dispatch();
     }
 }

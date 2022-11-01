@@ -18,6 +18,21 @@ class MagentoService
             $store_id
         );
     }
+    public static function updateSalePrice(string $sku, float $sale_price, $expected_sale_price_start_date, $expected_sale_price_end_date, int $store_id)
+    {
+        $stockItems = new StockItems(new Magento());
+        $response = $stockItems->postProductsSpecialPrice(
+            $sku,
+            $store_id,
+            $sale_price,
+            $expected_sale_price_start_date,
+            $expected_sale_price_end_date
+        );
+
+        if (! $response->successful()) {
+            Log::error('Failed to fetch sale prices for product '.$sku);
+        }
+    }
 
     public static function fetchSpecialPrices(MagentoProduct $magentoProduct)
     {
@@ -27,10 +42,10 @@ class MagentoService
         if ($response->successful()) {
             $specialPrices = collect($response->json())
                 ->filter(function ($item) use ($magentoProduct) {
-                    return $item['store_id'] === $magentoProduct->magentoConnection->magento_store_id;
+                    return $item['store_id'] == $magentoProduct->magentoConnection->magento_store_id;
                 });
 
-            $specialPrice = $specialPrices->first();
+            $specialPrice = $specialPrices->last();
 
             if ($specialPrice) {
                 $magentoProduct->magento_sale_price = $specialPrice['price'];
