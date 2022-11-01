@@ -16,8 +16,8 @@ use Illuminate\Support\Carbon;
  * @property int         $location_id
  * @property string      $price
  * @property string      $sale_price
- * @property string      $sale_price_start_date
- * @property string      $sale_price_end_date
+ * @property Carbon      $sale_price_start_date
+ * @property Carbon      $sale_price_end_date
  * @property string|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at

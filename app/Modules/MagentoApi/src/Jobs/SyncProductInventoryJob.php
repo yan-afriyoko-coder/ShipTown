@@ -2,17 +2,13 @@
 
 namespace App\Modules\MagentoApi\src\Jobs;
 
-use App\Modules\MagentoApi\src\Api\StockItems;
 use App\Modules\MagentoApi\src\Models\MagentoProductInventoryComparisonView;
 use App\Modules\MagentoApi\src\Services\MagentoService;
-use Grayloon\Magento\Magento;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Http\Client\Response;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Class SyncCheckFailedProductsJob.

@@ -3,13 +3,17 @@
 namespace App\Modules\MagentoApi\src\Models;
 
 use App\BaseModel;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property MagentoProduct $magentoProduct
  * @property integer $magento_store_id
- * @property double $expected_price
  * @property string $sku
+ * @property double $expected_price
+ * @property double $expected_sale_price
+ * @property Carbon $expected_sale_price_start_date
+ * @property Carbon $expected_sale_price_end_date
  */
 class MagentoProductPricesComparisonView extends BaseModel
 {
