@@ -27,20 +27,28 @@ class SyncProductInventoryJob implements ShouldQueue
      */
     public function handle()
     {
-        MagentoProductInventoryComparisonView::query()
+        $collection = MagentoProductInventoryComparisonView::query()
             ->whereRaw('magento_quantity != expected_quantity')
-            ->get()
-            ->each(function (MagentoProductInventoryComparisonView $comparison) {
-                MagentoService::updateInventory(
-                    $comparison->magentoProduct->product->sku,
-                    $comparison->expected_quantity
-                );
+            ->limit(50)
+            ->get();
 
-                $comparison->magentoProduct->update([
-                    'stock_items_fetched_at' => null,
-                    'stock_items_raw_import' => null,
-                    'quantity'               => null,
-                ]);
-            });
+        if ($collection->isEmpty()) {
+            return;
+        }
+
+        $collection->each(function (MagentoProductInventoryComparisonView $comparison) {
+            MagentoService::updateInventory(
+                $comparison->magentoProduct->product->sku,
+                $comparison->expected_quantity
+            );
+
+            $comparison->magentoProduct->update([
+                'stock_items_fetched_at' => null,
+                'stock_items_raw_import' => null,
+                'quantity'               => null,
+            ]);
+        });
+
+        self::dispatch();
     }
 }
