@@ -62,6 +62,6 @@ class SyncProductSalePricesJob implements ShouldQueue
             ]);
         });
 
-        self::dispatch();
+        self::dispatch()->delay(5);
     }
 }
