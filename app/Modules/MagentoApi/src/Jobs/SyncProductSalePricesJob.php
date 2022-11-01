@@ -28,8 +28,8 @@ class SyncProductSalePricesJob implements ShouldQueue
     public function handle()
     {
         $collection = MagentoProductPricesComparisonView::query()
-            ->whereNotNull('special_prices_fetched_at')
-            ->whereRaw('(
+            ->whereRaw('special_prices_fetched_at IS NOT NULL
+            AND (
                 magento_sale_price != expected_sale_price
                 OR magento_sale_price_start_date != expected_sale_price_start_date
                 OR magento_sale_price_end_date != expected_sale_price_end_date
