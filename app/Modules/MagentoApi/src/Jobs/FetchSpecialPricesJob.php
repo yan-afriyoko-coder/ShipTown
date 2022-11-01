@@ -45,7 +45,7 @@ class FetchSpecialPricesJob implements ShouldQueue
         });
 
         if ($collection->isNotEmpty()) {
-            self::dispatch();
+            self::dispatch()->delay(5);
         }
     }
 }
