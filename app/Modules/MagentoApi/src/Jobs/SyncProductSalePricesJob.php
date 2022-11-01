@@ -27,7 +27,7 @@ class SyncProductSalePricesJob implements ShouldQueue
      */
     public function handle()
     {
-        MagentoProductPricesComparisonView::query()
+        $collection = MagentoProductPricesComparisonView::query()
             ->whereRaw('
                 magento_sale_price != expected_sale_price
                 OR magento_sale_price_start_date != expected_sale_price_start_date
@@ -36,23 +36,31 @@ class SyncProductSalePricesJob implements ShouldQueue
                 OR magento_sale_price_start_date IS NULL
                 OR magento_sale_price_end_date IS NULL
             ')
-            ->get()
-            ->each(function (MagentoProductPricesComparisonView $comparison) {
-                MagentoService::updateSalePrice(
-                    $comparison->sku,
-                    $comparison->expected_sale_price,
-                    $comparison->expected_sale_price_start_date,
-                    $comparison->expected_sale_price_end_date,
-                    $comparison->magento_store_id
-                );
+            ->limit(50)
+            ->get();
 
-                $comparison->magentoProduct->update([
-                    'special_prices_fetched_at'     => null,
-                    'special_prices_raw_import'     => null,
-                    'magento_sale_price'            => null,
-                    'magento_sale_price_start_date' => null,
-                    'magento_sale_price_end_date'   => null,
-                ]);
-            });
+        if ($collection->isEmpty()) {
+            return;
+        }
+
+        $collection->each(function (MagentoProductPricesComparisonView $comparison) {
+            MagentoService::updateSalePrice(
+                $comparison->sku,
+                $comparison->expected_sale_price,
+                $comparison->expected_sale_price_start_date,
+                $comparison->expected_sale_price_end_date,
+                $comparison->magento_store_id
+            );
+
+            $comparison->magentoProduct->update([
+                'special_prices_fetched_at'     => null,
+                'special_prices_raw_import'     => null,
+                'magento_sale_price'            => null,
+                'magento_sale_price_start_date' => null,
+                'magento_sale_price_end_date'   => null,
+            ]);
+        });
+
+        self::dispatch();
     }
 }

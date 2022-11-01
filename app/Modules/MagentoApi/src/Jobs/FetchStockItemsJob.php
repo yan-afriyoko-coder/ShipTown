@@ -33,7 +33,7 @@ class FetchStockItemsJob implements ShouldQueue
         $collection = MagentoProduct::query()
             ->whereNull('stock_items_fetched_at')
             ->inRandomOrder()
-            ->limit(10)
+            ->limit(50)
             ->get();
 
         $collection->each(function (MagentoProduct $product) {

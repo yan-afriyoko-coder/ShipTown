@@ -33,7 +33,7 @@ class FetchBasePricesJob implements ShouldQueue
         $collection = MagentoProduct::query()
             ->whereNull('base_prices_fetched_at')
             ->inRandomOrder()
-            ->limit(10)
+            ->limit(50)
             ->get();
 
         $collection->each(function (MagentoProduct $product) {
