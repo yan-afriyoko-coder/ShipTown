@@ -4,6 +4,7 @@ namespace App\Modules\MagentoApi\src\Jobs;
 
 use App\Modules\MagentoApi\src\Models\MagentoProduct;
 use App\Modules\MagentoApi\src\Services\MagentoService;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -36,7 +37,11 @@ class FetchStockItemsJob implements ShouldQueue
             ->get();
 
         $collection->each(function (MagentoProduct $product) {
-            MagentoService::fetchInventory($product);
+            try {
+                MagentoService::fetchInventory($product);
+            } catch (Exception $exception) {
+                report($exception);
+            }
         });
 
         if ($collection->isNotEmpty()) {
