@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class AddTimestampsToModulesMagento2apiProductsPricesComparisonView extends Migration
@@ -29,7 +30,7 @@ class AddTimestampsToModulesMagento2apiProductsPricesComparisonView extends Migr
                 products_prices.sale_price_start_date as expected_sale_price_start_date,
 
                 modules_magento2api_products.magento_sale_price_end_date,
-                products_prices.sale_price_end_date as expected_sale_price_end_date
+                products_prices.sale_price_end_date as expected_sale_price_end_date,
 
                 modules_magento2api_products.base_prices_fetched_at,
                 modules_magento2api_products.special_prices_fetched_at
