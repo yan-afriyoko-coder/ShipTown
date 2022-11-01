@@ -31,7 +31,6 @@ class AddTimestampsToModulesMagento2apiProductsPricesComparisonView extends Migr
                 modules_magento2api_products.magento_sale_price_end_date,
                 products_prices.sale_price_end_date as expected_sale_price_end_date
 
-                modules_magento2api_products.stock_items_fetched_at,
                 modules_magento2api_products.base_prices_fetched_at,
                 modules_magento2api_products.special_prices_fetched_at
 
