@@ -31,8 +31,8 @@ class SetMissingRestockLevels implements ShouldQueue
 
         $collection->each(function (Inventory $inventory) {
             $inventory->update([
-                'restock_level' => ceil($inventory->restock_level),
-                'reorder_point' => ceil($inventory->restock_level) - 1,
+                'restock_level' => ceil($inventory->quantity),
+                'reorder_point' => ceil($inventory->quantity) - 1,
             ]);
         });
 
