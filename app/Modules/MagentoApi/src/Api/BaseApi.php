@@ -10,25 +10,29 @@ class BaseApi extends AbstractApi
 {
     protected function get($path, $parameters = []): Response
     {
-        Log::debug('MAGENTO2API GET: '.$path, $parameters);
-        return parent::get($path, $parameters);
+        $response = parent::get($path, $parameters);
+        Log::debug('MAGENTO2API GET: '.$path, ['response' => $response->json(), 'params' => $parameters]);
+        return $response;
     }
 
     protected function post($path, $parameters = []): Response
     {
-        Log::debug('MAGENTO2API POST: '.$path, $parameters);
-        return parent::post($path, $parameters);
+        $response = parent::post($path, $parameters);
+        Log::debug('MAGENTO2API POST: '.$path, ['response' => $response->json(), 'params' => $parameters]);
+        return $response;
     }
 
     protected function put($path, $parameters = [])
     {
-        Log::debug('MAGENTO2API PUT: '.$path, $parameters);
-        return parent::put($path, $parameters);
+        $response = parent::put($path, $parameters);
+        Log::debug('MAGENTO2API PUT: '.$path, ['response' => $response->json(), 'params' => $parameters]);
+        return $response;
     }
 
     protected function delete($path, $parameters = [])
     {
-        Log::debug('MAGENTO2API DELETE: '.$path, $parameters);
-        return parent::delete($path, $parameters);
+        $response = parent::delete($path, $parameters);
+        Log::debug('MAGENTO2API DELETE: '.$path, ['response' => $response->json(), 'params' => $parameters]);
+        return $response;
     }
 }
