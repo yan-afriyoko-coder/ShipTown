@@ -4,6 +4,7 @@ namespace App\Modules\MagentoApi\src\Jobs;
 
 use App\Modules\MagentoApi\src\Models\MagentoProductPricesComparisonView;
 use App\Modules\MagentoApi\src\Services\MagentoService;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
