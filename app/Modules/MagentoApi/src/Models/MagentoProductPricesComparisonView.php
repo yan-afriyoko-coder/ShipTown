@@ -19,6 +19,15 @@ class MagentoProductPricesComparisonView extends BaseModel
 {
     protected $table = 'modules_magento2api_products_prices_comparison_view';
 
+    protected $casts = [
+        'expected_price' => 'double',
+        'expected_sale_price' => 'double',
+        'magento_sale_price_start_date' => 'datetime',
+        'expected_sale_price_start_date' => 'datetime',
+        'magento_sale_price_end_date' => 'datetime',
+        'expected_sale_price_end_date' => 'datetime',
+    ];
+
     public function magentoProduct(): BelongsTo
     {
         return $this->belongsTo(MagentoProduct::class, 'modules_magento2api_products_id');
