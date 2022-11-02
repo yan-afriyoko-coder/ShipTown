@@ -32,6 +32,7 @@ class RestockingReport extends Report
             'reorder_point',
             'restock_level',
             'warehouse_quantity',
+            'warehouse_has_stock',
             'last_counted_at',
         ]);
 
@@ -62,6 +63,7 @@ class RestockingReport extends Report
             'quantity_required'                  => 'inventory.quantity_required',
             'last_counted_at'                    => 'inventory.last_counted_at',
             'warehouse_quantity'                 => 'inventory_source.quantity_available',
+            'warehouse_has_stock'                => DB::raw('inventory_source.quantity_available > 0'),
             'inventory_source_warehouse_code'    => 'inventory_source.warehouse_code',
             'quantity_to_ship'                   => DB::raw("CASE WHEN inventory_source.quantity_available < inventory.quantity_required THEN inventory_source.quantity_available ELSE inventory.quantity_required END"),
         ];
@@ -76,6 +78,7 @@ class RestockingReport extends Report
             'quantity_available' => 'float',
             'quantity_incoming'  => 'float',
             'warehouse_quantity' => 'float',
+            'warehouse_has_stock'=> 'boolean',
             'quantity_to_ship'   => 'float',
             'last_counted_at'    => 'datetime',
         ];
