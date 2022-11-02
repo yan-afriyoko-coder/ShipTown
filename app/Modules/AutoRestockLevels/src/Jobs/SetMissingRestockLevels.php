@@ -22,6 +22,7 @@ class SetMissingRestockLevels implements ShouldQueue
         $collection = Inventory::query()
             ->where('quantity', '>', 0)
             ->where('restock_level', '=', 0)
+            ->inRandomOrder()
             ->limit(50)
             ->get();
 
