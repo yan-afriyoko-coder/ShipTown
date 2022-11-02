@@ -50,8 +50,8 @@ class SyncProductSalePricesJob implements ShouldQueue
             MagentoService::updateSalePrice(
                 $comparison->sku,
                 $comparison->expected_sale_price,
-                $comparison->expected_sale_price_start_date,
-                $comparison->expected_sale_price_end_date,
+                $comparison->expected_sale_price_start_date->format('Y-m-d H:i:s'),
+                $comparison->expected_sale_price_end_date->format('Y-m-d H:i:s'),
                 $comparison->magento_store_id
             );
 
