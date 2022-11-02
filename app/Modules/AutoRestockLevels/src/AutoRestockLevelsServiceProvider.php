@@ -3,6 +3,7 @@
 namespace App\Modules\AutoRestockLevels\src;
 
 use App\Events\HourlyEvent;
+use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 class AutoRestockLevelsServiceProvider extends BaseModuleServiceProvider
@@ -26,6 +27,10 @@ class AutoRestockLevelsServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
+        SyncRequestedEvent::class => [
+            Listeners\SyncRequestedEventListener::class,
+        ],
+
         HourlyEvent::class => [
             Listeners\HourlyEventListener::class,
         ],
