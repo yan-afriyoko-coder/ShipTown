@@ -23,7 +23,7 @@ class SetMissingRestockLevels implements ShouldQueue
             ->where('quantity', '>', 0)
             ->where('restock_level', '=', 0)
             ->inRandomOrder()
-            ->limit(50)
+            ->limit(100)
             ->get();
 
         if ($collection->isEmpty()) {
