@@ -2,9 +2,7 @@
 
 namespace App;
 
-use App\Models\Warehouse;
 use Barryvdh\LaravelIdeHelper\Eloquent;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -16,7 +14,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method static firstOrCreate(string[] $array, string[] $array1)
  * @method static findOrFail($id)
  * @method static updateOrCreate(array $array, array $array1)
- * @method static where($values)
  * @method static whereBetween(string $string, array $array)
  * @method static whereId(int $id)
  *

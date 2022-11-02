@@ -129,6 +129,21 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
     }
 
     /**
+     * @return bool
+     */
+    public static function installModule(): bool
+    {
+        try {
+            Module::firstOrCreate(['service_provider_class' => get_called_class()], []);
+
+            return true;
+        } catch (Exception $exception) {
+            Log::emergency($exception);
+            return false;
+        }
+    }
+
+    /**
      *
      */
     public static function disableModule()
