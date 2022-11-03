@@ -14,7 +14,7 @@
                             </div>
                             <div>
                                 <template v-for="tag in record['tags']">
-                                    <a class="badge text-uppercase" :key="tag.id" @click.prevent="setUrlParameterAngGo('filter[has_tags]', tag['name']['en'])"> {{ tag['name']['en'] }} </a>
+                                    <a class="badge text-uppercase btn btn-outline-primary" :key="tag.id" @click.prevent="setUrlParameterAngGo('filter[has_tags]', tag['name']['en'])"> {{ tag['name']['en'] }} </a>
                                 </template>
                             </div>
                             <div class="small">
@@ -228,7 +228,7 @@ export default {
             },
             updateRestockLevel(value) {
                 this.record['restock_level'] = Math.max(0, Number(value));
-                this.record['reorder_point'] = Math.min(Number(this.record['restock_level']), Number(this.record['reorder_point']));
+                this.record['reorder_point'] = this.record['restock_level'] - 1;
 
                 this.postInventoryUpdate();
             },
