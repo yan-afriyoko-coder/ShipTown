@@ -16,8 +16,12 @@ class DatabaseSeeder extends Seeder
             ConfigurationSeeder::class,
             WarehousesSeeder::class,
 
+            FulfilmentCenterSeeder::class,
+
             UsersSeeder::class,
             ProductsSeeder::class,
+            ProductsTagsSeeder::class,
+
             PaidOrdersSeeder::class,
             DpdUkTestOrdersSeeder::class,
             WebhooksTestSeeder::class,

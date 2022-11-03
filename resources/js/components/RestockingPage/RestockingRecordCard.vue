@@ -14,7 +14,7 @@
                             </div>
                             <div>
                                 <template v-for="tag in record['tags']">
-                                    <a class="badge text-uppercase" :key="tag.id" @click.prevent="setUrlParameterAngGo('filter[has_tags]', tag['name']['en'])"> {{ tag['name']['en'] }} </a>
+                                    <a class="badge text-uppercase btn btn-outline-primary" :key="tag.id" @click.prevent="setUrlParameterAngGo('filter[has_tags]', tag['name']['en'])"> {{ tag['name']['en'] }} </a>
                                 </template>
                             </div>
                             <div class="small">
