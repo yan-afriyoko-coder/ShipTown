@@ -228,7 +228,7 @@ export default {
             },
             updateRestockLevel(value) {
                 this.record['restock_level'] = Math.max(0, Number(value));
-                this.record['reorder_point'] = Math.min(Number(this.record['restock_level']), Number(this.record['reorder_point']));
+                this.record['reorder_point'] = this.record['restock_level'] - 1;
 
                 this.postInventoryUpdate();
             },
