@@ -85,7 +85,10 @@ class RestockingReport extends Report
 
         $this->addFilter(
             AllowedFilter::callback('has_tags', function ($query, $value) {
-                return $query->withAllTags([$value]);
+                return $query->withAllTags(
+                    'inventory_source.warehouse_id',
+                    Warehouse::withAllTags(explode(',', $value))->pluck('id')
+                );
             })
         );
 
