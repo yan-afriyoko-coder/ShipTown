@@ -4,6 +4,7 @@ namespace App\Modules\DataCollector\src;
 
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
+use App\Models\DataCollectionTransferIn;
 use App\Models\Inventory;
 use App\Services\InventoryService;
 use Illuminate\Support\Facades\DB;
@@ -94,19 +95,19 @@ class DataCollectorService
             });
     }
 
-    public static function transferScannedTo($dataCollection, $warehouse_id)
+    public static function transferScannedTo(DataCollection $sourceDataCollection, int $warehouse_id): DataCollection
     {
         // create collection
-        $destinationDataCollection = $dataCollection->replicate();
+        $destinationDataCollection = $sourceDataCollection->replicate();
 
-        DB::transaction(function () use ($warehouse_id, $dataCollection, $destinationDataCollection) {
-            /** @var DataCollection $dataCollection */
+        DB::transaction(function () use ($warehouse_id, $sourceDataCollection, $destinationDataCollection) {
+            $destinationDataCollection->type = DataCollectionTransferIn::class;
             $destinationDataCollection->warehouse_id = $warehouse_id;
             $destinationDataCollection->name = implode('', [
                 'Transfer from ',
-                $dataCollection->warehouse->name,
+                $sourceDataCollection->warehouse->name,
                 ' - ',
-                $dataCollection->name
+                $sourceDataCollection->name
             ]);
             $destinationDataCollection->save();
 
@@ -117,10 +118,10 @@ class DataCollectorService
                 SELECT ?, product_id, quantity_scanned, now(), now()
                 FROM data_collection_records
                 WHERE data_collection_id = ?',
-                [$destinationDataCollection->id, $dataCollection->id]
+                [$destinationDataCollection->id, $sourceDataCollection->id]
             );
 
-            DataCollectorService::transferOutScanned($dataCollection);
+            DataCollectorService::transferOutScanned($sourceDataCollection);
         });
 
         return $destinationDataCollection;

@@ -17,12 +17,14 @@ use Illuminate\Support\Carbon;
  * @property Carbon $updated_at
  * @property DataCollectionRecord $records
  * @property Warehouse $warehouse
+ * @property string $type
  */
 class DataCollection extends BaseModel
 {
     use SoftDeletes;
 
     protected $fillable = [
+        'type',
         'warehouse_id',
         'name',
     ];
