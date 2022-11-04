@@ -6,10 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Warehouse\StoreRequest;
 use App\Http\Requests\Warehouse\UpdateRequest;
 use App\Http\Resources\WarehouseResource;
-use App\Models\Product;
 use App\Models\Warehouse;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Spatie\Tags\Tag;
 
