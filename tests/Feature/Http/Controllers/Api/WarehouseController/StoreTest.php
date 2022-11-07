@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\WarehouseController;
+namespace Tests\Feature\Http\Controllers\Api\WarehouseController;
 
 use App\Models\Warehouse;
 use App\User;
@@ -29,7 +29,7 @@ class StoreTest extends TestCase
             'code'  => $warehouse->code
         ];
 
-        $response = $this->post(route('api.settings.warehouses.index'), $data);
+        $response = $this->post(route('warehouses.index'), $data);
 
         $response->assertStatus(201);
         $response->assertJsonStructure([

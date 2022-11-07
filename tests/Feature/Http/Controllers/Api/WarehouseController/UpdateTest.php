@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\WarehouseController;
+namespace Tests\Feature\Http\Controllers\Api\WarehouseController;
 
 use App\Models\Warehouse;
 use App\User;
@@ -33,7 +33,7 @@ class UpdateTest extends TestCase
             'tags'  => ['tag1','tag2']
         ];
 
-        $response = $this->put(route('api.settings.warehouses.update', $warehouse), $data);
+        $response = $this->put(route('warehouses.update', $warehouse), $data);
 
         $response->assertOk();
         $response->assertJsonStructure([
