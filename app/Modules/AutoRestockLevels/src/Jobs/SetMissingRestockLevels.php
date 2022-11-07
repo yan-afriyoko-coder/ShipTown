@@ -36,9 +36,9 @@ class SetMissingRestockLevels implements ShouldQueue
             if ($newRestockLevel > 100) {
                 $newReorderPoint = $newRestockLevel * 0.50;
             } elseif ($newRestockLevel > 30) {
-                $newReorderPoint = $newRestockLevel * 0.66;
+                $newReorderPoint = $newRestockLevel * 0.33;
             } elseif ($newRestockLevel > 5) {
-                $newReorderPoint = $newRestockLevel * 0.80;
+                $newReorderPoint = $newRestockLevel * 0.25;
             } else {
                 $newReorderPoint = $newRestockLevel - 1;
             }

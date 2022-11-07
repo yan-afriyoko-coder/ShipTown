@@ -228,7 +228,16 @@ export default {
             },
             updateRestockLevel(value) {
                 this.record['restock_level'] = Math.max(0, Number(value));
-                this.record['reorder_point'] = this.record['restock_level'] - 1;
+
+                if (Number(this.record['restock_level']) > 50) {
+                    this.updateReorderPoint(Math.floor(Number(this.record['restock_level']) * 0.50));
+                } else if (Number(this.record['restock_level']) > 25) {
+                    this.updateReorderPoint(Math.floor(Number(this.record['restock_level']) * 0.33));
+                } else if (Number(this.record['restock_level']) > 5) {
+                    this.updateReorderPoint(Math.floor(Number(this.record['restock_level']) * 0.25));
+                } else {
+                    this.updateReorderPoint(Math.floor(Number(this.record['restock_level']) - 1));
+                }
 
                 this.postInventoryUpdate();
             },
