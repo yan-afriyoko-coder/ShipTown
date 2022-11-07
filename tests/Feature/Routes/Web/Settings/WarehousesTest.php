@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Routes\Web\Admin\Settings;
+namespace Tests\Feature\Routes\Web\Settings;
 
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -16,7 +16,7 @@ class WarehousesTest extends TestCase
     /**
      * @var string
      */
-    protected string $uri = '/admin/settings/warehouses';
+    protected string $uri = '/settings/warehouses';
 
     /**
      * @var User
@@ -47,7 +47,7 @@ class WarehousesTest extends TestCase
 
         $response = $this->get($this->uri);
 
-        $response->assertForbidden();
+        $response->assertSuccessful();
     }
 
     /** @test */

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\WarehouseController;
+namespace Tests\Feature\Http\Controllers\Api\WarehouseController;
 
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -8,8 +8,6 @@ use Tests\TestCase;
 
 class IndexTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -20,7 +18,7 @@ class IndexTest extends TestCase
     /** @test */
     public function test_index_call_returns_ok()
     {
-        $response = $this->get(route('api.settings.warehouses.index', ['include' => 'tags']));
+        $response = $this->get(route('warehouses.index', ['include' => 'tags']));
 
         $response->assertOk();
         $response->assertJsonStructure([

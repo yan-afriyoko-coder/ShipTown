@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\WarehouseController;
+namespace Tests\Feature\Http\Controllers\Api\WarehouseController;
 
 use App\Models\Warehouse;
 use App\User;
@@ -9,8 +9,6 @@ use Tests\TestCase;
 
 class DestroyTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -23,7 +21,7 @@ class DestroyTest extends TestCase
     {
         $warehouse = factory(Warehouse::class)->create();
 
-        $response = $this->delete(route('api.settings.warehouses.destroy', $warehouse));
+        $response = $this->delete(route('warehouses.destroy', $warehouse));
         $response->assertSuccessful();
 
         $this->assertNull(Warehouse::find($warehouse->id));
