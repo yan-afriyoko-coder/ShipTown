@@ -377,8 +377,8 @@
 
             toggle() {
                 this.showDetails = !this.showDetails;
-
                 if (this.showDetails) {
+                    this.loadActiveOrders();
                     this.currentTab = 'prices';
                 }
             },
