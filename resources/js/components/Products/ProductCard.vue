@@ -7,24 +7,26 @@
                         <product-info-card :product= "product"></product-info-card>
                     </div>
                     <div class="col-md-6" @click="toggle">
-                      <div class="table-responsive">
+                      <div class="table-responsive small">
                           <table class="table table-borderless mb-0 w-100">
                             <thead class="small">
-                              <tr class=" text-right">
+                              <tr class="text-right">
                                 <th class="text-left">Location</th>
                                 <th class="text-left">Shelf</th>
                                 <th class="">In Stock</th >
                                 <th class="">Available</th>
+                                <th class="">Incoming</th>
                                 <th class="">Price</th>
                               </tr>
                             </thead>
-                            <tbody class="small">
+                            <tbody class="">
                               <template v-for="inventory in product.inventory">
                                 <tr class="text-right w-auto" v-bind:class="{ 'table-active': inventory['warehouse_code'] === currentUser()['warehouse']['code']}" >
                                   <td class="text-left">{{ inventory.warehouse_code }}</td>
                                   <td class="text-left">{{ inventory.shelf_location }}</td>
                                   <td class="">{{ inventory.quantity | numberFormat }}</td>
                                   <td class="">{{ inventory['quantity_available'] | numberFormat }}</td>
+                                  <td class="">{{ inventory['quantity_incoming'] | numberFormat }}</td>
                                   <td class="">{{ product.prices[inventory.warehouse_code].price }}</td>
                                 </tr>
                               </template>
