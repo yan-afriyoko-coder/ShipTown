@@ -8,7 +8,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\DB;
 
 class SetMissingRestockLevels implements ShouldQueue
 {
@@ -17,9 +16,17 @@ class SetMissingRestockLevels implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
+    private ?int $inventory_id;
+
+    public function __construct(int $inventory_id = null)
+    {
+        $this->inventory_id = $inventory_id;
+    }
+
     public function handle()
     {
         $collection = Inventory::query()
+            ->when($this->inventory_id, fn ($query) => $query->where('id', '=', $this->inventory_id))
             ->where('quantity', '>', 0)
             ->where('restock_level', '=', 0)
             ->inRandomOrder()

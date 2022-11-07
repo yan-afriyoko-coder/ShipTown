@@ -4,7 +4,7 @@ namespace App\Modules\AutoRestockLevels\src\Listeners;
 
 use App\Modules\AutoRestockLevels\src\Jobs\SetMissingRestockLevels;
 
-class HourlyEventListener
+class EveryMinuteEventListener
 {
     public function handle()
     {
