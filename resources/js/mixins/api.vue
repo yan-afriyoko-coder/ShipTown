@@ -418,19 +418,19 @@ export default {
             },
 
             apiGetWarehouses: function (params) {
-                return axios.get('/api/settings/warehouses', {params: params});
+                return axios.get('/api/warehouses', {params: params});
             },
 
             apiPostWarehouses: function (params) {
-                return axios.post('/api/settings/warehouses/', params);
+                return axios.post('/api/warehouses/', params);
             },
 
             apiPutWarehouses: function (id, params) {
-                return axios.put('/api/settings/warehouses/' + id, params);
+                return axios.put('/api/warehouses/' + id, params);
             },
 
             apiDeleteWarehouses: function (id) {
-                return axios.delete('/api/settings/warehouses/' + id);
+                return axios.delete('/api/warehouses/' + id);
             },
 
             apiGetConfiguration: function () {
