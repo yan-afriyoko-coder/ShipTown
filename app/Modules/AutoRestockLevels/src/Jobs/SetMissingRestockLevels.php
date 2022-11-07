@@ -31,9 +31,21 @@ class SetMissingRestockLevels implements ShouldQueue
         }
 
         $collection->each(function (Inventory $inventory) {
+            $newRestockLevel = $inventory->quantity;
+
+            if ($newRestockLevel > 100) {
+                $newReorderPoint = $newRestockLevel * 0.50;
+            } elseif ($newRestockLevel > 30) {
+                $newReorderPoint = $newRestockLevel * 0.66;
+            } elseif ($newRestockLevel > 5) {
+                $newReorderPoint = $newRestockLevel * 0.80;
+            } else {
+                $newReorderPoint = $newRestockLevel - 1;
+            }
+
             $inventory->update([
-                'restock_level' => ceil($inventory->quantity),
-                'reorder_point' => ceil($inventory->quantity) - 1,
+                'restock_level' => ceil($newRestockLevel),
+                'reorder_point' => floor($newReorderPoint),
             ]);
         });
 
