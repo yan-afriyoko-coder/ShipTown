@@ -1,39 +1,27 @@
 <?php
 
-namespace App\Http\Controllers\Api\Settings;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Warehouse\StoreRequest;
 use App\Http\Requests\Warehouse\UpdateRequest;
+use App\Http\Requests\WarehouseIndexRequest;
 use App\Http\Resources\WarehouseResource;
-use App\Models\Product;
 use App\Models\Warehouse;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Http\Request;
+use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Spatie\Tags\Tag;
 
 class WarehouseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return AnonymousResourceCollection
-     */
-    public function index(): AnonymousResourceCollection
+    public function index(WarehouseIndexRequest $request): AnonymousResourceCollection
     {
         $query = Warehouse::getSpatieQueryBuilder();
 
         return WarehouseResource::collection($this->getPaginatedResult($query));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param StoreRequest $request
-     * @return WarehouseResource
-     */
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): WarehouseResource
     {
         $warehouse = new Warehouse;
         $warehouse->fill($request->validated());
@@ -42,13 +30,6 @@ class WarehouseController extends Controller
         return new WarehouseResource($warehouse);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param UpdateRequest $request
-     * @param Warehouse $warehouse
-     * @return WarehouseResource
-     */
     public function update(UpdateRequest $request, Warehouse $warehouse): WarehouseResource
     {
         $warehouse->update($request->validated());
@@ -69,12 +50,13 @@ class WarehouseController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Warehouse $warehouse
-     * @return \Illuminate\Http\Response
+     * @return WarehouseResource
+     * @throws Exception
      */
-    public function destroy(Warehouse $warehouse)
+    public function destroy(Warehouse $warehouse): WarehouseResource
     {
         $warehouse->delete();
 
-        return true;
+        return WarehouseResource::make($warehouse);
     }
 }
