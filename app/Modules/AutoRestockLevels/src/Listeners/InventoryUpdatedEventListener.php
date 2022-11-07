@@ -9,6 +9,8 @@ class InventoryUpdatedEventListener
 {
     public function handle(InventoryUpdatedEvent $event)
     {
-        SetMissingRestockLevels::dispatchNow($event->inventory->id);
+        if ($event->inventory->isAttributeChanged('quantity')) {
+            SetMissingRestockLevels::dispatch();
+        }
     }
 }
