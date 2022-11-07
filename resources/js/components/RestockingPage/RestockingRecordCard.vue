@@ -153,11 +153,7 @@ export default {
         methods: {
             minusRestockLevel() {
                 if (Number(this.record['restock_level']) <= 0) {
-                    this.updateRestockLevel(Number(this.record['quantity_in_stock']) - 1);
-
-                    if (Number(this.record['reorder_point']) === 0) {
-                        this.updateReorderPoint(Math.floor(Number(this.record['restock_level']) / 2));
-                    }
+                    this.updateRestockLevel(Number(this.record['quantity_in_stock']) + Number(this.record['quantity_incoming']) - 1);
 
                     return;
                 }
@@ -167,11 +163,7 @@ export default {
 
             plusRestockLevel() {
                 if (Number(this.record['restock_level']) === 0) {
-                    this.updateRestockLevel(Math.max(0, Number(this.record['quantity_in_stock'])) + 1);
-
-                    if (Number(this.record['reorder_point']) === 0) {
-                        this.updateReorderPoint(Math.ceil(Number(this.record['restock_level']) / 2));
-                    }
+                    this.updateRestockLevel(Math.max(0, Number(this.record['quantity_in_stock']) + Number(this.record['quantity_incoming'])) + 1);
 
                     return;
                 }
