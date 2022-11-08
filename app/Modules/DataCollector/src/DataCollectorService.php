@@ -62,6 +62,8 @@ class DataCollectorService
                     'quantity_scanned' => 0
                 ]);
             });
+
+            $dataCollection->delete();
     }
 
     public static function transferOutScanned(DataCollection $dataCollection)
@@ -93,6 +95,8 @@ class DataCollectorService
                     'quantity_scanned' => 0
                 ]);
             });
+
+        $dataCollection->delete();
     }
 
     public static function transferScannedTo(DataCollection $sourceDataCollection, int $warehouse_id): DataCollection
@@ -104,22 +108,32 @@ class DataCollectorService
             $destinationDataCollection->type = DataCollectionTransferIn::class;
             $destinationDataCollection->warehouse_id = $warehouse_id;
             $destinationDataCollection->name = implode('', [
-                'Transfer from ',
-                $sourceDataCollection->warehouse->name,
-                ' - ',
-                $sourceDataCollection->name
+                $sourceDataCollection->warehouse->code,
+                ' to ',
+                $destinationDataCollection->warehouse->code,
             ]);
             $destinationDataCollection->save();
 
-            // copy records
-            DB::statement(
-                '
-                INSERT INTO data_collection_records (data_collection_id, product_id, quantity_requested, created_at, updated_at)
-                SELECT ?, product_id, quantity_scanned, now(), now()
-                FROM data_collection_records
-                WHERE data_collection_id = ?',
-                [$destinationDataCollection->id, $sourceDataCollection->id]
-            );
+            $sourceDataCollection->records()
+                ->where('quantity_scanned', '!=', DB::raw(0))
+                ->get()
+                ->each(function (DataCollectionRecord $record) use ($destinationDataCollection) {
+                    $destinationDataCollectionRecord = $record->replicate(['quantity_to_scan']);
+                    $destinationDataCollectionRecord->data_collection_id = $destinationDataCollection->id;
+                    $destinationDataCollectionRecord->quantity_requested = $record->quantity_scanned;
+                    $destinationDataCollectionRecord->quantity_scanned = 0;
+                    $destinationDataCollectionRecord->save();
+                });
+
+//            // copy records
+//            DB::statement(
+//                '
+//                INSERT INTO data_collection_records (data_collection_id, product_id, quantity_requested, created_at, updated_at)
+//                SELECT ?, product_id, quantity_scanned, now(), now()
+//                FROM data_collection_records
+//                WHERE quantity_scanned > 0 AND data_collection_id = ?',
+//                [$destinationDataCollection->id, $sourceDataCollection->id]
+//            );
 
             DataCollectorService::transferOutScanned($sourceDataCollection);
         });

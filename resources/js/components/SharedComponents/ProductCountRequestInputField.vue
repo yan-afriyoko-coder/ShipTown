@@ -14,6 +14,7 @@
                 </div>
                 <div class="col-sm-12 col-lg-12 text-right">
                     <number-card label="in stock" :number="inventory['quantity']"></number-card>
+                    <number-card label="requested" :number="requestedQuantity"></number-card>
 
                     <slot name="custom_cards"></slot>
                 </div>
@@ -51,6 +52,7 @@
 
         props: {
             placeholder: '',
+            requestedQuantity: null,
         },
 
         data: function() {
@@ -73,7 +75,7 @@
                 }
 
                 this.inventory = null;
-                this.quantity = null;
+                this.quantity = 1;
 
                 const params = {
                     'filter[sku_or_alias]': barcode,

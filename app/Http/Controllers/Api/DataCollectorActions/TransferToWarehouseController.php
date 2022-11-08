@@ -19,6 +19,8 @@ class TransferToWarehouseController extends Controller
             $request->get('destination_warehouse_id')
         );
 
+        $sourceDataCollection->delete();
+
         return DataCollectionResource::make($destinationDataCollection);
     }
 }
