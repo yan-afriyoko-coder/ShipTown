@@ -1,0 +1,45 @@
+<?php
+
+use App\Models\DataCollection;
+use App\Models\DataCollectionRecord;
+use App\Models\DataCollectionTransferIn;
+use App\Models\Product;
+use App\Models\Warehouse;
+use Illuminate\Database\Seeder;
+
+class DataCollectionsSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        Warehouse::query()
+            ->get()
+            ->each(function ($sourceWarehouse) {
+
+                Warehouse::query()
+                    ->whereNotIn('id', [$sourceWarehouse->id])
+                    ->get()
+                    ->each(function ($destinationWarehouse) use ($sourceWarehouse) {
+                        $dataCollection = factory(DataCollection::class)->create([
+                            'warehouse_id' =>  $destinationWarehouse->getKey(),
+                            'name' => implode(' ', [
+                                $sourceWarehouse->code,
+                                'to',
+                                $destinationWarehouse->code,
+                            ]),
+                            'type' => DataCollectionTransferIn::class,
+                        ]);
+
+                        factory(DataCollectionRecord::class)->create([
+                            'data_collection_id' => $dataCollection->getKey(),
+                            'product_id' => factory(Product::class)->create()->getKey(),
+                            'quantity_requested' => rand(1, 100),
+                        ]);
+                    });
+            });
+    }
+}

@@ -48,18 +48,18 @@
 
         <b-modal id="configuration-modal" autofocus centered no-fade hide-footer title="Data Collection">
             <button type="button" @click.prevent="downloadFile" class="col btn mb-1 btn-primary">Download</button>
-
         </b-modal>
 
         <template v-for="record in data">
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
                 <template v-slot:content>
-                    <div role="button" class="row" @click="openDataCollection(record['id'])">
+                    <div role="button" class="row " @click="openDataCollection(record['id'])">
                         <div class="col-sm-12 col-lg-6">
                             <div class="text-primary h5">{{ record['name'] }}</div>
                             <div class="small text-secondary">{{ record['created_at'] |  moment('YYYY MMM DD H:mm') }}</div>
                         </div>
-                        <div class="col-cols col-sm-12 col-lg-6 text-right">
+                        <div class="col-cols col-sm-12 col-lg-6 bottom text-right">
+                            <text-card label="." text="ARCHIVED" class="float-left text-left" v-if="record['deleted_at'] !== null"></text-card>
                             <text-card label="warehouse" :text="record['warehouse_code']"></text-card>
                         </div>
                     </div>
@@ -224,7 +224,7 @@
                 downloadFile() {
                     let routeData = this.$router.resolve({
                         path: this.$router.currentRoute.fullPath,
-                        query: {filename: "test.csv"}
+                        query: {filename: "DataCollections.csv"}
                     });
                     window.open(routeData.href, '_blank');
                 },

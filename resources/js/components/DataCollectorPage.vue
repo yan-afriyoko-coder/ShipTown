@@ -13,7 +13,11 @@
 
         <div class="row mb-1 pb-2 p-1 mt-0 sticky-top bg-light flex-nowrap" style="z-index: 10;">
             <div class="flex-fill">
-                <product-count-request-input-field @quantityRequestResponse="onProductCountRequestResponse" placeholder="Scan sku or alias"></product-count-request-input-field>
+                <product-count-request-input-field
+                    @quantityRequestResponse="onProductCountRequestResponse"
+                    requestedQuantity="1"
+                    placeholder="Scan sku or alias">
+                </product-count-request-input-field>
             </div>
 
             <barcode-input-field :url_param_name="'filter[shelf_location_greater_than]'" @barcodeScanned="setMinShelfLocation" placeholder="shelf" style="width: 75px" class="text-center ml-2 font-weight-bold"></barcode-input-field>
@@ -57,49 +61,62 @@
                  @shown="setFocusElementById(100,'stocktake-input', true, true)"
                  @hidden="setFocusElementById(100,'barcodeInput', true, true)"
         >
-            <stocktake-input></stocktake-input>
-            <hr>
-            <button @click.prevent="autoScanAllRequested" v-b-toggle class="col btn mb-2 btn-primary">Auto Scan ALL</button>
-            <hr>
-            <button @click.prevent="transferStockIn" v-b-toggle class="col btn mb-2 btn-primary">Transfer IN</button>
-            <button @click.prevent="transferStockOut" v-b-toggle class="col btn mb-2 btn-primary">Transfer OUT</button>
-            <button @click.prevent="transferToWarehouseClick" v-b-toggle class="col btn mb-2 btn-primary">Transfer To...</button>
+            <div v-if="dataCollection['data'][0]['deleted_at'] === null">
+                <stocktake-input></stocktake-input>
+
+                <div v-if="dataCollection['data'][0]['type'] === 'App\\Models\\DataCollectionTransferIn'">
+                    <hr>
+                    <button @click.prevent="receiveAll" v-b-toggle class="col btn mb-2 btn-primary">Receive ALL</button>
+                    <button @click.prevent="transferStockIn" v-b-toggle class="col btn mb-2 btn-primary">Receive Scanned In</button>
+                </div>
+
+                <div v-if="dataCollection['data'][0]['type'] === null">
+                    <hr>
+                    <button @click.prevent="autoScanAll" v-b-toggle class="col btn mb-2 btn-primary">AutoScan ALL Records</button>
+                    <hr>
+                    <button @click.prevent="transferStockIn" v-b-toggle class="col btn mb-2 btn-primary">Transfer IN</button>
+                    <button @click.prevent="transferStockOut" v-b-toggle class="col btn mb-2 btn-primary">Transfer OUT</button>
+                    <button @click.prevent="transferToWarehouseClick" v-b-toggle class="col btn mb-2 btn-primary">Transfer To...</button>
+                </div>
+            </div>
             <hr>
             <a :href="getDownloadLink"  @click.prevent="downloadFileAndHideModal" v-b-toggle class="col btn mb-1 btn-primary">Download</a>
-            <hr>
-            <vue-csv-import
-                v-model="csv"
-                headers
-                canIgnore
-                autoMatchFields
-                loadBtnText="Load"
-                :map-fields="['product_sku', 'quantity_requested', 'quantity_scanned']">
+            <div v-if="dataCollection['data'][0]['deleted_at'] === null">
+                <hr>
+                <vue-csv-import
+                    v-model="csv"
+                    headers
+                    canIgnore
+                    autoMatchFields
+                    loadBtnText="Load"
+                    :map-fields="['product_sku', 'quantity_requested', 'quantity_scanned']">
 
-                <template slot="hasHeaders" slot-scope="{headers, toggle}">
-                    <label>
-                        <input type="checkbox" id="hasHeaders" :value="headers" @change="toggle">
-                        Headers?
-                    </label>
-                </template>
+                    <template slot="hasHeaders" slot-scope="{headers, toggle}">
+                        <label>
+                            <input type="checkbox" id="hasHeaders" :value="headers" @change="toggle">
+                            Headers?
+                        </label>
+                    </template>
 
-                <template slot="error">
-                    File type is invalid
-                </template>
+                    <template slot="error">
+                        File type is invalid
+                    </template>
 
-                <template slot="thead">
-                    <tr>
-                        <th>My Fields</th>
-                        <th>Column</th>
-                    </tr>
-                </template>
+                    <template slot="thead">
+                        <tr>
+                            <th>My Fields</th>
+                            <th>Column</th>
+                        </tr>
+                    </template>
 
-                <template slot="submit" slot-scope="{submit}">
-                    <button @click.prevent="submit">send!</button>
-                </template>
-            </vue-csv-import>
+                    <template slot="submit" slot-scope="{submit}">
+                        <button @click.prevent="submit">send!</button>
+                    </template>
+                </vue-csv-import>
 
-            <button v-if="csv" type="button" @click.prevent="postCsvRecordsToApiAndCloseModal" class="col btn mb-1 btn-primary">Import Records</button>
+                <button v-if="csv" type="button" @click.prevent="postCsvRecordsToApiAndCloseModal" class="col btn mb-1 btn-primary">Import Records</button>
 
+            </div>
         </b-modal>
 
         <b-modal id="transferToModal" centered no-fade hide-footer hide-header
@@ -242,8 +259,21 @@
                         });
                 },
 
+                receiveAll() {
+                    let data = {
+                        'action': 'auto_scan_all_requested',
+                    }
 
-                autoScanAllRequested() {
+                    this.apiUpdateDataCollection(this.data_collection_id, data)
+                        .then(response => {
+                            this.transferStockIn();
+                        })
+                        .catch(error => {
+                            this.showException(error);
+                        });
+                },
+
+                autoScanAll() {
                     let data = {
                         'action': 'auto_scan_all_requested',
                     }
@@ -254,7 +284,7 @@
                             this.$bvModal.hide('configuration-modal');
                             setTimeout(() => {
                                 this.loadData();
-                            }, 1000);
+                            }, 500);
                         })
                         .catch(error => {
                             this.showException(error);
