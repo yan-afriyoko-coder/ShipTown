@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\DataCollectionRecord;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use App\Models\Module;
@@ -14,6 +15,7 @@ use App\Models\Product;
 use App\Models\ProductPrice;
 use App\Models\ShippingLabel;
 use App\Models\Warehouse;
+use App\Observers\DataCollectionRecordObserver;
 use App\Observers\InventoryMovementObserver;
 use App\Observers\InventoryObserver;
 use App\Observers\ModuleObserver;
@@ -62,6 +64,7 @@ class AppServiceProvider extends ServiceProvider
         InventoryMovement::observe(InventoryMovementObserver::class);
 
         ShippingLabel::observe(ShippingLabelObserver::class);
+        DataCollectionRecord::observe(DataCollectionRecordObserver::class);
     }
 
     private function registerEnabledModules(): void
