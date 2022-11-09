@@ -14,8 +14,9 @@
         <div class="row mb-1 pb-2 p-1 mt-0 sticky-top bg-light flex-nowrap" style="z-index: 10;">
             <div class="flex-fill">
                 <product-count-request-input-field
+                    @warehouseId="dataCollection['data']['0']['warehouse_id']"
                     @quantityRequestResponse="onProductCountRequestResponse"
-                    requestedQuantity="1"
+                    requestedQuantity=""
                     placeholder="Scan sku or alias">
                 </product-count-request-input-field>
             </div>
