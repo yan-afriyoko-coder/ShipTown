@@ -5,16 +5,17 @@
         />
 
         <b-modal @ok="submitStocktake" id="quantity-request-modal" scrollable centered no-fade hide-header
-                 @shown="setFocusElementById(100, 'quantity-request-input', true, false)"
+                 @shown="modalShown"
                  @hidden="setFocusElementById(300, 'barcodeInput', true, true)"
         >
-            <template v-if="inventory">
+            <template v-if="product">
                 <div class="col-sm-12 col-lg-12">
-                    <product-info-card :product="inventory.product"></product-info-card>
+                    <product-info-card :product="product"></product-info-card>
                 </div>
-                <div class="col-sm-12 col-lg-12 text-right">
-                    <number-card label="in stock" :number="inventory['quantity']"></number-card>
-                    <number-card label="requested" :number="requestedQuantity"></number-card>
+                <div class="col-sm-12 col-lg-12 text-right mt-3 mb-3">
+                    <number-card label="price" :number="product['prices'][this.currentUser()['warehouse']['code']]['price']" class="float-left"></number-card>
+                    <number-card label="in stock" :number="product['inventory'][this.currentUser()['warehouse']['code']]['quantity']"></number-card>
+<!--                    <number-card label="requested" :number="requestedQuantity"></number-card>-->
 
                     <slot name="custom_cards"></slot>
                 </div>
@@ -57,7 +58,7 @@
 
         data: function() {
             return {
-                inventory: null,
+                product: null,
                 quantity: null,
                 recentStocktakes: [],
                 stocktakeSuggestions: [],
@@ -65,6 +66,10 @@
         },
 
         methods: {
+            modalShown() {
+                this.setFocusElementById(100, 'quantity-request-input', true, false);
+            },
+
             barcodeScanned: async function (barcode) {
                 if (barcode === null) {
                     return;
@@ -74,23 +79,16 @@
                     return;
                 }
 
-                this.inventory = null;
-                this.quantity = 1;
+                this.quantity = null;
 
                 const params = {
                     'filter[sku_or_alias]': barcode,
-                    'filter[warehouse_id]': this.currentUser()['warehouse_id'],
-                    'include': 'product'
-                }
+                    'include': 'inventory,prices',
+                };
 
-                this.apiGetInventory(params)
-                    .then(e => {
-                        if (e.data.meta.total === 0) {
-                            this.notifyError('Product not found - "' + barcode + '"');
-                            return;
-                        }
-
-                        this.inventory = e.data.data[0];
+                this.apiGetProducts(params)
+                    .then(response => {
+                        this.product = response.data.data[0];
 
                         this.$bvModal.show('quantity-request-modal');
                     })
@@ -110,9 +108,9 @@
                 }
 
                 const data = {
-                    'product_sku': this.inventory['product']['sku'],
-                    'product_name': this.inventory['product']['name'],
-                    'product_id': this.inventory['product_id'],
+                    'product_sku': this.product['sku'],
+                    'product_name': this.product['name'],
+                    'product_id': this.product['id'],
                     'quantity':  Number(this.quantity),
                 };
 

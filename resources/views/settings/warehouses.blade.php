@@ -15,7 +15,7 @@
     @endif
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-12">
-            <warehouse-table></warehouse-table>
+            <warehouses-page></warehouses-page>
         </div>
     </div>
 </div>
