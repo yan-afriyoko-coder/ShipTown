@@ -124,7 +124,8 @@ export default {
 
         loadWarehouses() {
             this.apiGetWarehouses({
-                    'per_page': 999
+                    'per_page': 999,
+                    'sort': 'name',
                 })
                 .then(({ data }) => {
                     this.warehouses = data.data;
