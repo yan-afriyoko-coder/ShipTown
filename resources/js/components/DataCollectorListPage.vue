@@ -112,7 +112,8 @@
                     return;
                 }
 
-                this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
+                this.getUrlFilterOrSet('filter[warehouse_code]', Vue.prototype.$currentUser['warehouse']['code']);
+                this.getUrlFilterOrSet('filter[archived]', false);
 
                 window.onscroll = () => this.loadMoreWhenNeeded();
 
