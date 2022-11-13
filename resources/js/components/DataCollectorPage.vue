@@ -184,7 +184,7 @@
 
                 window.onscroll = () => this.loadMoreWhenNeeded();
 
-                this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
+                this.getUrlFilterOrSet('warehouse_code', Vue.prototype.$currentUser['warehouse']['code']);
 
                 this.loadWarehouses();
 
@@ -195,7 +195,7 @@
 
             methods: {
                 loadWarehouses: function () {
-                    this.apiGetWarehouses({'per_page': 999})
+                    this.apiGetWarehouses({'per_page': 999, 'sort': 'name'})
                         .then(response => {
                             this.warehouses = response.data.data;
                         });
@@ -359,7 +359,6 @@
                 },
 
                 onProductCountRequestResponse(response) {
-                    console.log(response);
                     const payload = {
                         'data_collection_id': this.data_collection_id,
                         'product_id': response['product_id'],

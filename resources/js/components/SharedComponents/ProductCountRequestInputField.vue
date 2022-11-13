@@ -88,6 +88,10 @@
 
                 this.apiGetProducts(params)
                     .then(response => {
+                        if (response.data.data.length === 0) {
+                            this.notifyError('No product found with barcode: ' + barcode);
+                            return;
+                        }
                         this.product = response.data.data[0];
 
                         this.$bvModal.show('quantity-request-modal');
