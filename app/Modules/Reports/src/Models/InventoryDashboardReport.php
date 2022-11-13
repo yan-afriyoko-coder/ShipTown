@@ -32,6 +32,7 @@ class InventoryDashboardReport extends Report
             'wh_products_available'      => DB::raw('count(*)'),
             'wh_products_out_of_stock'   => DB::raw('count(CASE WHEN inventory.quantity_available = 0 THEN 1 END)'),
             'wh_products_required'       => DB::raw('count(CASE WHEN inventory.quantity_required > 0 THEN 1 END)'),
+            'wh_products_incoming'       => DB::raw('count(CASE WHEN inventory.quantity_incoming > 0 THEN 1 END)'),
             'wh_products_stock_level_ok' => DB::raw('count(CASE ' .
                 'WHEN (inventory.quantity_required = 0 AND inventory.restock_level > 0) ' .
                 'THEN 1 ' .
@@ -57,6 +58,7 @@ class InventoryDashboardReport extends Report
             'wh_products_available'       => 'float',
             'wh_products_out_of_stock'    => 'float',
             'wh_products_required'        => 'float',
+            'wh_products_incoming'        => 'float',
             'wh_products_stock_level_ok'  => 'float',
         ];
 
