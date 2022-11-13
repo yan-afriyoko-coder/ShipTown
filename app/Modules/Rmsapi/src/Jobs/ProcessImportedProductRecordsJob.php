@@ -136,7 +136,6 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
 
         if ($i->quantity !== $ip->raw_import['quantity_on_hand']
             or $i->quantity_reserved !== Arr::get($ip->raw_import, 'quantity_committed', 0)
-            or $i->quantity_incoming !== Arr::get($ip->raw_import, 'quantity_incoming', 0)
             or $i->shelve_location !== Arr::get($ip->raw_import, 'shelve_location', '')
             or $i->reorder_point !== Arr::get($ip->raw_import, 'reorder_point', 0)
             or $i->restock_level !== Arr::get($ip->raw_import, 'restock_level', 0)
@@ -145,7 +144,6 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
             $i->update([
                 'quantity'          => Arr::get($ip->raw_import, 'quantity_on_hand', 0),
                 'quantity_reserved' => Arr::get($ip->raw_import, 'quantity_committed', 0),
-                'quantity_incoming' => Arr::get($ip->raw_import, 'quantity_on_order', 0),
                 'shelve_location'   => Arr::get($ip->raw_import, 'rmsmobile_shelve_location', ''),
                 'reorder_point'     => Arr::get($ip->raw_import, 'reorder_point', 0),
                 'restock_level'     => Arr::get($ip->raw_import, 'restock_level', 0),
