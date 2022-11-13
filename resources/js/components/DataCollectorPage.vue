@@ -195,7 +195,7 @@
 
             methods: {
                 loadWarehouses: function () {
-                    this.apiGetWarehouses({'per_page': 999})
+                    this.apiGetWarehouses({'per_page': 999, 'sort': 'name'})
                         .then(response => {
                             this.warehouses = response.data.data;
                         });

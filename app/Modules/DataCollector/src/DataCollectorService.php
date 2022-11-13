@@ -5,6 +5,7 @@ namespace App\Modules\DataCollector\src;
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
 use App\Models\DataCollectionTransferIn;
+use App\Models\DataCollectionTransferOut;
 use App\Models\Inventory;
 use App\Services\InventoryService;
 use Illuminate\Support\Facades\DB;
@@ -35,6 +36,8 @@ class DataCollectorService
 
     public static function transferInScanned(DataCollection $dataCollection)
     {
+        $dataCollection->update(['type' => DataCollectionTransferIn::class]);
+
         $dataCollection->records()
             ->where('quantity_scanned', '!=', DB::raw(0))
             ->each(function (DataCollectionRecord $record) {
@@ -68,6 +71,8 @@ class DataCollectorService
 
     public static function transferOutScanned(DataCollection $dataCollection)
     {
+        $dataCollection->update(['type' => DataCollectionTransferOut::class]);
+
         $dataCollection->records()
             ->where('quantity_scanned', '!=', DB::raw(0))
             ->each(function (DataCollectionRecord $record) {
