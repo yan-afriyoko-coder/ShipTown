@@ -200,7 +200,6 @@
                     this.showLoading();
 
                     const params = this.$router.currentRoute.query;
-                    params['filter[warehouse_id]'] = this.currentUser()['warehouse_id'];
                     params['sort'] = this.getUrlParameter('sort', '-created_at');
                     params['page'] = page;
 
