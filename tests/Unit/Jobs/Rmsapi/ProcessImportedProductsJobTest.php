@@ -95,7 +95,6 @@ class ProcessImportedProductsJobTest extends TestCase
             ->where('product_id', '=', $product->id)
             ->where('quantity', '=', $importData->raw_import['quantity_on_hand'])
             ->where('quantity_reserved', '=', $importData->raw_import['quantity_committed'])
-            ->where('quantity_incoming', '=', $importData->raw_import['quantity_on_order'])
             ->exists();
 
         $this->assertTrue($wasInventoryUpdated, 'Inventory not updated correctly');
