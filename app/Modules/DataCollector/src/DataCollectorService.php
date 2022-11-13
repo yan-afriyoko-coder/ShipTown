@@ -113,9 +113,11 @@ class DataCollectorService
             $destinationDataCollection->type = DataCollectionTransferIn::class;
             $destinationDataCollection->warehouse_id = $warehouse_id;
             $destinationDataCollection->name = implode('', [
+                'Transfer from ',
                 $sourceDataCollection->warehouse->code,
-                ' to ',
-                $destinationDataCollection->warehouse->code,
+                ' - ',
+                $destinationDataCollection->name,
+                ''
             ]);
             $destinationDataCollection->save();
 
