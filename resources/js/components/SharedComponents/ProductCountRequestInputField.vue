@@ -108,9 +108,9 @@
                 }
 
                 const data = {
-                    'product_sku': this.inventory['product']['sku'],
-                    'product_name': this.inventory['product']['name'],
-                    'product_id': this.inventory['product_id'],
+                    'product_sku': this.product['sku'],
+                    'product_name': this.product['name'],
+                    'product_id': this.product['id'],
                     'quantity':  Number(this.quantity),
                 };
 

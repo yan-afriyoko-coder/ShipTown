@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="dataCollection">
         <swiping-card>
             <template v-slot:content>
                     <div class="row setting-list">
@@ -26,7 +26,7 @@
             <button v-b-modal="'configuration-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
-        <template v-for="record in data">
+        <template v-for="record in dataCollectionRecords">
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
                 <template v-slot:content>
                     <div class="row" >
@@ -62,62 +62,67 @@
                  @shown="setFocusElementById(100,'stocktake-input', true, true)"
                  @hidden="setFocusElementById(100,'barcodeInput', true, true)"
         >
-            <div v-if="dataCollection['data'][0]['deleted_at'] === null">
-                <stocktake-input></stocktake-input>
+            <div v-if="dataCollection">
+                <div v-if="dataCollection['data'][0]['deleted_at'] === null">
+                    <stocktake-input></stocktake-input>
 
-                <div v-if="dataCollection['data'][0]['type'] === 'App\\Models\\DataCollectionTransferIn'">
-                    <hr>
-                    <button @click.prevent="receiveAll" v-b-toggle class="col btn mb-2 btn-primary">Receive ALL</button>
-                    <button @click.prevent="transferStockIn" v-b-toggle class="col btn mb-2 btn-primary">Receive Scanned In</button>
-                </div>
+                    <div v-if="dataCollection['data'][0]['type'] === 'App\\Models\\DataCollectionTransferIn'">
+                        <hr>
+                        <button @click.prevent="receiveAll" v-b-toggle class="col btn mb-2 btn-primary">Receive ALL</button>
+                        <button @click.prevent="transferStockIn" v-b-toggle class="col btn mb-2 btn-primary">Receive Scanned In</button>
+                    </div>
 
-                <div v-if="dataCollection['data'][0]['type'] === null">
-                    <hr>
-                    <button @click.prevent="autoScanAll" v-b-toggle class="col btn mb-2 btn-primary">AutoScan ALL Records</button>
-                    <hr>
-                    <button @click.prevent="transferStockIn" v-b-toggle class="col btn mb-2 btn-primary">Transfer IN</button>
-                    <button @click.prevent="transferStockOut" v-b-toggle class="col btn mb-2 btn-primary">Transfer OUT</button>
-                    <button @click.prevent="transferToWarehouseClick" v-b-toggle class="col btn mb-2 btn-primary">Transfer To...</button>
+                    <div v-if="dataCollection['data'][0]['type'] === null">
+                        <hr>
+                        <button @click.prevent="autoScanAll" v-b-toggle class="col btn mb-2 btn-primary">AutoScan ALL Records</button>
+                        <hr>
+                        <button @click.prevent="transferStockIn" v-b-toggle class="col btn mb-2 btn-primary">Transfer IN</button>
+                        <button @click.prevent="transferStockOut" v-b-toggle class="col btn mb-2 btn-primary">Transfer OUT</button>
+                        <button @click.prevent="transferToWarehouseClick" v-b-toggle class="col btn mb-2 btn-primary">Transfer To...</button>
+                    </div>
                 </div>
-            </div>
-            <hr>
-            <a :href="getDownloadLink"  @click.prevent="downloadFileAndHideModal" v-b-toggle class="col btn mb-1 btn-primary">Download</a>
-            <div v-if="dataCollection['data'][0]['deleted_at'] === null">
                 <hr>
-                <vue-csv-import
-                    v-model="csv"
-                    headers
-                    canIgnore
-                    autoMatchFields
-                    loadBtnText="Load"
-                    :map-fields="['product_sku', 'quantity_requested', 'quantity_scanned']">
+                <a :href="getDownloadLink"  @click.prevent="downloadFileAndHideModal" v-b-toggle class="col btn mb-1 btn-primary">Download</a>
+                <div v-if="dataCollection['data'][0]['deleted_at'] === null">
+                    <hr>
+                    <vue-csv-import
+                        v-model="csv"
+                        headers
+                        canIgnore
+                        autoMatchFields
+                        loadBtnText="Load"
+                        :map-fields="['product_sku', 'quantity_requested', 'quantity_scanned']">
 
-                    <template slot="hasHeaders" slot-scope="{headers, toggle}">
-                        <label>
-                            <input type="checkbox" id="hasHeaders" :value="headers" @change="toggle">
-                            Headers?
-                        </label>
-                    </template>
+                        <template slot="hasHeaders" slot-scope="{headers, toggle}">
+                            <label>
+                                <input type="checkbox" id="hasHeaders" :value="headers" @change="toggle">
+                                Headers?
+                            </label>
+                        </template>
 
-                    <template slot="error">
-                        File type is invalid
-                    </template>
+                        <template slot="error">
+                            File type is invalid
+                        </template>
 
-                    <template slot="thead">
-                        <tr>
-                            <th>My Fields</th>
-                            <th>Column</th>
-                        </tr>
-                    </template>
+                        <template slot="thead">
+                            <tr>
+                                <th>My Fields</th>
+                                <th>Column</th>
+                            </tr>
+                        </template>
 
-                    <template slot="submit" slot-scope="{submit}">
-                        <button @click.prevent="submit">send!</button>
-                    </template>
-                </vue-csv-import>
+                        <template slot="submit" slot-scope="{submit}">
+                            <button @click.prevent="submit">send!</button>
+                        </template>
+                    </vue-csv-import>
 
-                <button v-if="csv" type="button" @click.prevent="postCsvRecordsToApiAndCloseModal" class="col btn mb-1 btn-primary">Import Records</button>
+                    <button v-if="csv" type="button" @click.prevent="postCsvRecordsToApiAndCloseModal" class="col btn mb-1 btn-primary">Import Records</button>
+
+                </div>
 
             </div>
+
+
         </b-modal>
 
         <b-modal id="transferToModal" centered no-fade hide-footer hide-header
@@ -126,9 +131,7 @@
             <template v-for="warehouse in warehouses">
                 <button @click.prevent="transferToWarehouse(warehouse)" v-b-toggle class="col btn mb-2 btn-primary">{{ warehouse.name }}</button>
             </template>
-
         </b-modal>
-
 
     </div>
 </template>
@@ -165,7 +168,7 @@
                     scannedInQuantity: 1,
                     skuToStocktake: '',
                     dataCollection: null,
-                    data: [],
+                    dataCollectionRecords: [],
                     nextUrl: null,
                     page: 1,
                     per_page: 10,
@@ -173,31 +176,38 @@
                     warehouses: [],
                 };
             },
-
-            mounted() {
+        mounted() {
                 if (! Vue.prototype.$currentUser['warehouse_id']) {
                     this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
                     return;
                 }
 
-                this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
-
                 window.onscroll = () => this.loadMoreWhenNeeded();
 
-                this.loadData();
+                this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
 
-                this.apiGetWarehouses({'per_page': 999})
-                    .then(response => {
-                        this.warehouses = response.data.data;
-                    });
+                this.loadWarehouses();
 
-                this.apiGetDataCollectorList({'filter[id]': this.data_collection_id})
-                    .then(response => {
-                        this.dataCollection = response.data;
-                    });
+                this.loadDataCollectorDetails();
+
+                this.loadDataCollectorRecords();
             },
 
             methods: {
+                loadWarehouses: function () {
+                    this.apiGetWarehouses({'per_page': 999})
+                        .then(response => {
+                            this.warehouses = response.data.data;
+                        });
+                },
+
+                loadDataCollectorDetails: function () {
+                    this.apiGetDataCollector({'filter[id]': this.data_collection_id, 'filter[archived]': true})
+                        .then(response => {
+                            this.dataCollection = response.data;
+                        });
+                },
+
                 transferToWarehouseClick() {
                     this.$bvModal.hide('configuration-modal');
                     this.$bvModal.show('transferToModal');
@@ -214,7 +224,7 @@
                             this.$snotify.success('Transfer to warehouse initiated');
                             this.$bvModal.hide('transferToModal');
                             setTimeout(() => {
-                                this.loadData();
+                                this.loadDataCollectorRecords();
                             }, 500);
 
                         })
@@ -233,7 +243,7 @@
                             this.$snotify.success('Stock transferred out successfully');
                             this.$bvModal.hide('configuration-modal');
                             setTimeout(() => {
-                                this.loadData();
+                                this.loadDataCollectorRecords();
                             }, 1000);
                         })
                         .catch(error => {
@@ -252,7 +262,7 @@
                             this.$snotify.success('Stock transferred in successfully');
                             this.$bvModal.hide('configuration-modal');
                             setTimeout(() => {
-                                this.loadData();
+                                this.loadDataCollectorRecords();
                             }, 500);
                         })
                         .catch(error => {
@@ -284,7 +294,7 @@
                             this.$snotify.success('Auto scan completed successfully');
                             this.$bvModal.hide('configuration-modal');
                             setTimeout(() => {
-                                this.loadData();
+                                this.loadDataCollectorRecords();
                             }, 500);
                         })
                         .catch(error => {
@@ -312,15 +322,15 @@
                         this.per_page = this.per_page * 2;
                     }
 
-                    this.loadData(++this.page);
+                    this.loadDataCollectorRecords(++this.page);
                 },
 
                 setMinShelfLocation (shelfLocation) {
                     this.setUrlParameter( "filter[shelf_location_greater_than]", shelfLocation);
-                    this.loadData();
+                    this.loadDataCollectorRecords();
                 },
 
-                loadData(page = 1) {
+                loadDataCollectorRecords(page = 1) {
                     this.showLoading();
 
                     const params = this.$router.currentRoute.query;
@@ -332,10 +342,11 @@
                     this.apiGetDataCollectorRecords(params)
                         .then((response) => {
                             if (page === 1) {
-                                this.data = response.data.data;
+                                this.dataCollectionRecords = response.data.data;
                             } else {
-                                this.data = this.data.concat(response.data.data);
+                                this.dataCollectionRecords = this.dataCollectionRecords.concat(response.data.data);
                             }
+
                             this.page = response.data['meta']['current_page'];
                             this.nextUrl = response.data['links']['next'];
                         })
@@ -348,6 +359,7 @@
                 },
 
                 onProductCountRequestResponse(response) {
+                    console.log(response);
                     const payload = {
                         'data_collection_id': this.data_collection_id,
                         'product_id': response['product_id'],
@@ -362,7 +374,7 @@
                             this.displayApiCallError(e);
                         })
                         .finally(() => {
-                            this.loadData();
+                            this.loadDataCollectorRecords();
                         });
                 },
 
@@ -390,7 +402,7 @@
                             this.displayApiCallError(e);
                         })
                         .finally(() => {
-                            this.loadData();
+                            this.loadDataCollectorRecords();
                         });
                 },
 

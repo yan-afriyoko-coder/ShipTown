@@ -292,7 +292,6 @@
 
         mounted: function () {
           this.currentTab = 'prices';
-          console.log(this.currentUser()['warehouse']['code']);
         },
 
         watch: {

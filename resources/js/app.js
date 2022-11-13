@@ -201,7 +201,7 @@ Vue.component('order-status-table', require('./components/Settings/OrderStatusTa
 Vue.component('mail-template-table', require('./components/Settings/MailTemplateTable.vue').default);
 Vue.component('navigation-menu-table', require('./components/Settings/NavigationMenuTable.vue').default);
 Vue.component('automation-table', require('./components/Settings/AutomationTable.vue').default);
-Vue.component('warehouse-table', require('./components/Settings/WarehouseTable.vue').default);
+Vue.component('warehouses-page', require('./components/Settings/WarehousesPage.vue').default);
 Vue.component('heartbeats', require('./components/Heartbeats.vue').default);
 Vue.component('api', require('./mixins/api').default);
 Vue.component('webhooks-subscription-page', require('../../app/Modules/Webhooks/resources/js/WebhooksSubscriptionsPage').default);

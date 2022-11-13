@@ -8,12 +8,6 @@ import Vue from "vue";
 export default {
         name: "api",
 
-        data: function () {
-            return {
-                user: null,
-            }
-        },
-
         created() {
             Vue.prototype.$currentUser = JSON.parse(document.querySelector("meta[name='current-user']").getAttribute('content'));
         },
@@ -87,10 +81,6 @@ export default {
                 return this.apiGet('/api/inventory-movements', {params: params});
             },
 
-            apiPostInventoryMovement(data) {
-                return axios.post('/api/inventory-movements', data);
-            },
-
             apiPostStocktakes(data) {
                 return axios.post('/api/stocktakes', data);
             },
@@ -119,7 +109,7 @@ export default {
                 return axios.post('/api/data-collector-records', data);
             },
 
-            apiGetDataCollectorList(params) {
+            apiGetDataCollector(params) {
                 return axios.get('/api/data-collector', {params: params});
             },
 
@@ -439,7 +429,6 @@ export default {
 
             apiSaveConfiguration: function (params) {
                 return axios.post('/api/settings/configurations/', params);
-
             },
 
             apiGetHeartbeats: function () {

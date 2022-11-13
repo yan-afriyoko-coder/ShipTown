@@ -203,7 +203,7 @@
                     params['sort'] = this.getUrlParameter('sort', '-created_at');
                     params['page'] = page;
 
-                    this.apiGetDataCollectorList(params)
+                    this.apiGetDataCollector(params)
                         .then((response) => {
                             if (page === 1) {
                                 this.data = response.data.data;
