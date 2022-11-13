@@ -21,8 +21,8 @@ class HourlyEventListener
     public function handle(HourlyEvent $event)
     {
         EnsureAllProductLinksExistJob::dispatch();
-        SyncProductsJob::dispatch();
-        SyncVariantsJob::dispatch();
+//        SyncProductsJob::dispatch();
+//        SyncVariantsJob::dispatch();
 
         RemoveProductLinksIfNotAvailableOnlineJob::dispatch();
         DetachNotSyncedTagIfNotAvailableOnlineJob::dispatch();
