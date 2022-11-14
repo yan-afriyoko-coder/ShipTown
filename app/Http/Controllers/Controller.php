@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class Controller extends BaseController
@@ -62,11 +64,11 @@ class Controller extends BaseController
 
     /**
      * @param QueryBuilder $query
-     * @param int          $defaultPerPage
+     * @param int $defaultPerPage
      *
      * @return LengthAwarePaginator
      */
-    public function getPaginatedResult(QueryBuilder $query, $defaultPerPage = 10): LengthAwarePaginator
+    public function getPaginatedResult(QueryBuilder $query, int $defaultPerPage = 10): LengthAwarePaginator
     {
         $perPage = request()->get('per_page', $defaultPerPage);
 
