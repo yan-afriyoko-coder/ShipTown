@@ -37,6 +37,7 @@
                         <div class="row col-sm-12 col-lg-7 text-right">
                             <div class="col-12 col-md-4 text-left small">
                                <div>in stock: <strong>{{ dashIfZero(Number(record['inventory_quantity'])) }}</strong></div>
+                               <div>last counted: <strong>{{ formatDateTime(record['inventory_last_counted_at']) }}</strong></div>
                             </div>
                             <div class="col-12 col-md-8 text-right">
                                 <number-card label="requested" :number="record['quantity_requested']" v-if="record['quantity_requested']"></number-card>
