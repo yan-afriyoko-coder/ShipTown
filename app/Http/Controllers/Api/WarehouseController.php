@@ -16,9 +16,10 @@ class WarehouseController extends Controller
 {
     public function index(WarehouseIndexRequest $request): AnonymousResourceCollection
     {
-        $query = Warehouse::getSpatieQueryBuilder();
+        $query = Warehouse::getSpatieQueryBuilder()
+            ->defaultSort('name');
 
-        return WarehouseResource::collection($this->getPaginatedResult($query));
+        return WarehouseResource::collection($this->getPaginatedResult($query, 999));
     }
 
     public function store(StoreRequest $request): WarehouseResource
