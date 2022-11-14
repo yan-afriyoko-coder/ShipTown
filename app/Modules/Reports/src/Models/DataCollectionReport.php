@@ -16,6 +16,7 @@ class DataCollectionReport extends Report
 
         $this->baseQuery = DataCollectionRecord::query()
             ->leftJoin('products as product', 'data_collection_records.product_id', '=', 'product.id')
+            ->leftJoin('data_collections', 'data_collections.id', '=', 'data_collection_records.data_collection_id')
             ->leftJoin('inventory', function ($query) {
                 return $query->on('data_collection_records.product_id', '=', 'inventory.product_id')
                     ->where('inventory.warehouse_id', Auth::user()->warehouse_id);
@@ -31,6 +32,7 @@ class DataCollectionReport extends Report
             'id'                        => 'data_collection_records.id',
             'product_id'                => 'data_collection_records.product_id',
             'data_collection_id'        => 'data_collection_records.data_collection_id',
+            'warehouse_id'              => 'data_collections.warehouse_id',
             'product_sku'               => 'product.sku',
             'product_name'              => 'product.name',
             'quantity_requested'        => 'data_collection_records.quantity_requested',
@@ -46,6 +48,7 @@ class DataCollectionReport extends Report
         $this->casts = [
             'id'                        => 'integer',
             'data_collection_id'        => 'integer',
+            'warehouse_id'              => 'integer',
             'product_id'                => 'integer',
             'product_sku'               => 'string',
             'product_name'              => 'string',

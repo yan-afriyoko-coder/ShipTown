@@ -100,6 +100,15 @@
                                     <button tabindex="-1" @click="plusReorderPoint" class="btn btn-success ml-3" type="button" id="button-addon6" style="min-width: 45px">+</button>
                                 </div>
                             </div>
+
+                            <div v-for="dataCollectionRecord in dataCollectorRecords">
+                                <a :href="'/data-collector/' + dataCollectionRecord['data_collection']['id']">
+                                    <text-card label="" :text="dataCollectionRecord['data_collection']['name']"></text-card>
+                                </a>
+                                <number-card label="requested" :value="dataCollectionRecord['quantity_requested']"></number-card>
+                                <number-card label="scanned" :value="dataCollectionRecord['quantity_scanned']"></number-card>
+                                <number-card label="to scan" :value="dataCollectionRecord['quantity_to_scan']"></number-card>
+                            </div>
                         </div>
 
 
@@ -124,9 +133,29 @@ export default {
             record: null,
         },
 
+        watch: {
+            expanded: function (newValue, oldValue) {
+                console.log(this.record);
+                if (newValue) {
+                    let params = {
+                        'filter[product_id]': this.record['product_id'],
+                        'filter[warehouse_id]': this.currentUser()['warehouse_id'],
+                        'per_page': 100,
+                        'include': 'dataCollection'
+                    };
+
+                    this.apiGetDataCollectorRecords(params)
+                        .then((response) => {
+                            this.dataCollectorRecords = response.data.data;
+                        });
+                }
+            }
+        },
+
         data: function() {
             return {
                 expanded: false,
+                dataCollectorRecords: [],
             };
         },
 
