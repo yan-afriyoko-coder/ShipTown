@@ -47,7 +47,7 @@ Route::apiResource('product/tags', 'Api\Product\ProductTagController')->only(['i
 
 Route::apiResource('inventory-movements', 'Api\InventoryMovementController')->only(['store', 'index']);
 Route::apiResource('stocktakes', 'Api\StocktakesController')->only(['store']);
-Route::apiResource('data-collector', 'Api\DataCollectorController')->only(['index', 'store', 'update']);
+Route::apiResource('data-collector', 'Api\DataCollectorController')->only(['index', 'store', 'update', 'destroy']);
 Route::apiResource('data-collector-records', 'Api\DataCollectorRecordController')->only(['store', 'index']);
 
 RoutesBuilder::apiResource('data-collector-actions/transfer-to-warehouse')->only(['store']);

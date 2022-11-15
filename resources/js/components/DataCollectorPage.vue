@@ -67,20 +67,23 @@
                 <div v-if="dataCollection['data'][0]['deleted_at'] === null">
                     <stocktake-input></stocktake-input>
 
-                    <div v-if="dataCollection['data'][0]['type'] === 'App\\Models\\DataCollectionTransferIn'">
-                        <hr>
-                        <button @click.prevent="receiveAll" v-b-toggle class="col btn mb-2 btn-primary">Receive ALL</button>
-                        <button @click.prevent="transferStockIn" v-b-toggle class="col btn mb-2 btn-primary">Receive Scanned In</button>
-                    </div>
+<!--                    <div v-if="dataCollection['data'][0]['type'] === 'App\\Models\\DataCollectionTransferIn'">-->
+<!--                        <hr>-->
+<!--                        <button @click.prevent="receiveAll" v-b-toggle class="col btn mb-2 btn-primary">Receive ALL</button>-->
+<!--                        <button @click.prevent="transferStockIn" v-b-toggle class="col btn mb-2 btn-primary">Receive Scanned In</button>-->
+<!--                    </div>-->
 
-                    <div v-if="dataCollection['data'][0]['type'] === null">
+<!--                    <div v-if="dataCollection['data'][0]['type'] === null">-->
                         <hr>
                         <button @click.prevent="autoScanAll" v-b-toggle class="col btn mb-2 btn-primary">AutoScan ALL Records</button>
                         <hr>
                         <button @click.prevent="transferStockIn" v-b-toggle class="col btn mb-2 btn-primary">Transfer IN</button>
                         <button @click.prevent="transferStockOut" v-b-toggle class="col btn mb-2 btn-primary">Transfer OUT</button>
                         <button @click.prevent="transferToWarehouseClick" v-b-toggle class="col btn mb-2 btn-primary">Transfer To...</button>
-                    </div>
+<!--                    </div>-->
+
+
+                        <button @click.prevent="archiveCollection" v-b-toggle class="col btn mb-2 btn-primary">Archive Collection</button>
                 </div>
                 <hr>
                 <a :href="getDownloadLink"  @click.prevent="downloadFileAndHideModal" v-b-toggle class="col btn mb-1 btn-primary">Download</a>
@@ -279,6 +282,20 @@
                     this.apiUpdateDataCollection(this.data_collection_id, data)
                         .then(response => {
                             this.transferStockIn();
+                        })
+                        .catch(error => {
+                            this.showException(error);
+                        });
+                },
+
+                archiveCollection() {
+                    this.apiDeleteDataCollection(this.data_collection_id)
+                        .then(response => {
+                            this.$snotify.success('Collection archived successfully');
+                            this.$bvModal.hide('configuration-modal');
+                            setTimeout(() => {
+                                this.loadDataCollectorRecords();
+                            }, 500);
                         })
                         .catch(error => {
                             this.showException(error);

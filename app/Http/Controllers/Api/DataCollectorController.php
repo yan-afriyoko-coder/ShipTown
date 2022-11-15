@@ -39,4 +39,11 @@ class DataCollectorController extends Controller
 
         return DataCollectionResource::make($dataCollector->refresh());
     }
+
+    public function destroy(DataCollection $dataCollector): DataCollectionResource
+    {
+        $dataCollector->delete();
+
+        return DataCollectionResource::make($dataCollector);
+    }
 }
