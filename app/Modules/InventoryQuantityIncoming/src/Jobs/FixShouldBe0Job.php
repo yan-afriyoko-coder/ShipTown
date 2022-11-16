@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 /**
  *
  */
-class FixIncorrectQuantityIncomingJob implements ShouldQueue
+class FixShouldBe0Job implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -27,29 +27,30 @@ class FixIncorrectQuantityIncomingJob implements ShouldQueue
      */
     public function handle()
     {
-        $inventoryRecords = DB::select('
+        $inventoryRecords = DB::select("
             SELECT inventory.id as id,
                     MAX(inventory.product_id) as product_id,
                     MAX(inventory.warehouse_id) as warehouse_id,
                     MAX(inventory.quantity_incoming) as actual_quantity_incoming,
                     SUM(IFNULL(data_collection_records.quantity_requested - data_collection_records.total_transferred_in, 0)) as expected_quantity_incoming
 
-            FROM data_collections
+            FROM inventory
+
+            LEFT JOIN data_collections
+                ON data_collections.warehouse_id = inventory.warehouse_id
+                AND data_collections.deleted_at IS NOT NULL
+                AND data_collections.type = 'App\\Models\\DataCollectionTransferIn'
 
             LEFT JOIN data_collection_records
               ON data_collection_records.data_collection_id = data_collections.id
-
-            LEFT JOIN inventory
-              ON data_collections.warehouse_id = inventory.warehouse_id
               AND data_collection_records.product_id = inventory.product_id
 
-           WHERE data_collections.type = "App\\Models\\DataCollectionTransferIn"
-           AND data_collections.deleted_at IS NULL
+           WHERE inventory.quantity_incoming > 0
 
            GROUP BY inventory.id
 
-           HAVING actual_quantity_incoming <> expected_quantity_incoming
-        ');
+           HAVING actual_quantity_incoming != expected_quantity_incoming
+        ");
 
         collect($inventoryRecords)
             ->each(function ($incorrectRecord) {
