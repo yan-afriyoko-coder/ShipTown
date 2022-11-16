@@ -101,13 +101,23 @@
                                 </div>
                             </div>
 
-                            <div v-for="dataCollectionRecord in dataCollectorRecords">
-                                <a :href="'/data-collector/' + dataCollectionRecord['data_collection']['id']">
-                                    <text-card label="" :text="dataCollectionRecord['data_collection']['name']"></text-card>
-                                </a>
-                                <number-card label="requested" :value="dataCollectionRecord['quantity_requested']"></number-card>
-                                <number-card label="scanned" :value="dataCollectionRecord['quantity_scanned']"></number-card>
-                                <number-card label="to scan" :value="dataCollectionRecord['quantity_to_scan']"></number-card>
+                            <div class="row" v-for="dataCollectionRecord in dataCollectorRecords">
+                                <div class="col-12 col-lg-6 text-left">
+                                    <div>
+                                        <a :href="'/data-collector/' + dataCollectionRecord['data_collection']['id']">
+                                            {{ dataCollectionRecord['data_collection']['name'] }}
+                                        </a>
+                                    </div>
+                                    <div class="text-secondary small">
+                                        {{ formatDateTime(dataCollectionRecord['data_collection']['created_at']) }}
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    <number-card label="requested" :value="dataCollectionRecord['quantity_requested']"></number-card>
+                                    <number-card label="scanned" :value="dataCollectionRecord['quantity_scanned']"></number-card>
+                                    <number-card label="to scan" :value="dataCollectionRecord['quantity_to_scan']"></number-card>
+                                </div>
+                                <hr>
                             </div>
                         </div>
 
@@ -139,7 +149,7 @@ export default {
                     let params = {
                         'filter[product_id]': this.record['product_id'],
                         'filter[warehouse_id]': this.currentUser()['warehouse_id'],
-                        'per_page': 100,
+                        'per_page': 10,
                         'include': 'dataCollection'
                     };
 
