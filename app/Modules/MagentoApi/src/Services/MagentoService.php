@@ -41,11 +41,16 @@ class MagentoService
 
         if ($response->successful()) {
             $specialPrices = collect($response->json())
-                ->filter(function ($item) use ($magentoProduct) {
-                    return $item['store_id'] == $magentoProduct->magentoConnection->magento_store_id;
+                ->filter(function ($apiSpecialPriceRecord) use ($magentoProduct) {
+                    return $apiSpecialPriceRecord['store_id'] == $magentoProduct->magentoConnection->magento_store_id;
                 });
 
-            $specialPrice = $specialPrices->last();
+            // magento sometimes randomly returns multiple special prices for the same store,
+            // so we need to filter them out but only one is valid
+            // randomizing result will match it sometimes, normally 3 special prices are returned,
+            // so we will have statistically 1/3 chance to get the correct one,
+            // it's a quick hack, but it works
+            $specialPrice = $specialPrices[rand(0, $specialPrices->count()-1)];
 
             if ($specialPrice) {
                 $magentoProduct->magento_sale_price = $specialPrice['price'];
