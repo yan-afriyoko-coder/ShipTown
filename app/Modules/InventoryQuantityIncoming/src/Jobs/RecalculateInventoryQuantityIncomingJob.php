@@ -2,6 +2,8 @@
 
 namespace App\Modules\InventoryQuantityIncoming\src\Jobs;
 
+use App\Models\DataCollectionTransferIn;
+use App\Models\DataCollectionTransferOut;
 use App\Models\Inventory;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -36,8 +38,6 @@ class RecalculateInventoryQuantityIncomingJob implements ShouldQueue
      */
     public function handle()
     {
-
-//        dd($this->product_id, $this->warehouse_id);
         $inventoryRecords = DB::select("
             SELECT inventory.id as id,
                     MAX(inventory.product_id) as product_id,
@@ -45,25 +45,24 @@ class RecalculateInventoryQuantityIncomingJob implements ShouldQueue
                     MAX(inventory.quantity_incoming) as actual_quantity_incoming,
                     SUM(IFNULL(data_collection_records.quantity_requested - data_collection_records.total_transferred_in, 0)) as expected_quantity_incoming
 
-            FROM data_collections
+            FROM inventory
+
+            LEFT JOIN data_collections
+                ON data_collections.warehouse_id = inventory.warehouse_id
+                AND data_collections.type = ?
 
             LEFT JOIN data_collection_records
               ON data_collection_records.data_collection_id = data_collections.id
+              AND data_collection_records.product_id = inventory.product_id
 
-            LEFT JOIN inventory
-                ON data_collections.warehouse_id = inventory.warehouse_id
-                AND data_collection_records.product_id = inventory.product_id
-
-           WHERE
-                data_collections.type = 'App\\Models\\DataCollectionTransferIn'
-                AND data_collections.warehouse_id = ?
+           WHERE data_collections.warehouse_id = ?
                 AND data_collection_records.product_id = ?
 
            GROUP BY inventory.id
 
            HAVING actual_quantity_incoming <> expected_quantity_incoming
 
-        ", [$this->warehouse_id, $this->product_id]);
+        ", [DataCollectionTransferIn::class, $this->warehouse_id, $this->product_id]);
 
         collect($inventoryRecords)
             ->each(function ($incorrectRecord) {
