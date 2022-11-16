@@ -4,7 +4,7 @@ namespace App\Modules\InventoryQuantityIncoming\src\Listeners;
 
 use App\Events\DataCollectionRecordDeletedEvent;
 use App\Models\DataCollectionTransferIn;
-use App\Modules\InventoryQuantityIncoming\src\Jobs\FixIncorrectQuantityIncomingJob;
+use App\Modules\InventoryQuantityIncoming\src\Jobs\RecalculateInventoryQuantityIncomingJob;
 
 class DataCollectionRecordDeletedEventListener
 {
@@ -13,7 +13,10 @@ class DataCollectionRecordDeletedEventListener
         $record = $event->dataCollectionRecord;
 
         if ($record->dataCollection->type === DataCollectionTransferIn::class) {
-            FixIncorrectQuantityIncomingJob::dispatchNow($record->product_id, $record->dataCollection->warehouse_id);
+            RecalculateInventoryQuantityIncomingJob::dispatchNow(
+                $record->product_id,
+                $record->dataCollection->warehouse_id
+            );
         }
     }
 }

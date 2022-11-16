@@ -13,12 +13,21 @@ use Illuminate\Support\Facades\DB;
 /**
  *
  */
-class FixIncorrectQuantityIncomingJob implements ShouldQueue
+class RecalculateInventoryQuantityIncomingJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
+
+    public ?int $product_id;
+    public ?int $warehouse_id;
+
+    public function __construct(int $product_id, int $warehouse_id)
+    {
+        $this->product_id = $product_id;
+        $this->warehouse_id = $warehouse_id;
+    }
 
     /**
      * Execute the job.
@@ -27,6 +36,8 @@ class FixIncorrectQuantityIncomingJob implements ShouldQueue
      */
     public function handle()
     {
+
+//        dd($this->product_id, $this->warehouse_id);
         $inventoryRecords = DB::select('
             SELECT inventory.id as id,
                     MAX(inventory.product_id) as product_id,
@@ -40,16 +51,16 @@ class FixIncorrectQuantityIncomingJob implements ShouldQueue
               ON data_collection_records.data_collection_id = data_collections.id
 
             LEFT JOIN inventory
-              ON data_collections.warehouse_id = inventory.warehouse_id
-              AND data_collection_records.product_id = inventory.product_id
+                ON data_collections.warehouse_id = inventory.warehouse_id
+                AND data_collection_records.product_id = inventory.product_id
 
-           WHERE data_collections.type = "App\\Models\\DataCollectionTransferIn"
-           AND data_collections.deleted_at IS NULL
+           WHERE data_collections.warehouse_id = ? AND data_collection_records.product_id = ?
 
            GROUP BY inventory.id
 
            HAVING actual_quantity_incoming <> expected_quantity_incoming
-        ');
+
+        ', [$this->warehouse_id, $this->product_id]);
 
         collect($inventoryRecords)
             ->each(function ($incorrectRecord) {
