@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -28,6 +29,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class DataCollectionRecord extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'data_collection_id',
         'product_id',
