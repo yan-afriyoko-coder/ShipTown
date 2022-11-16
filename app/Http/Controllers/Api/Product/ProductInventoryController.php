@@ -42,6 +42,6 @@ class ProductInventoryController extends Controller
 
         $inventory->update($request->validated());
 
-        return InventoryResource::collection(collect([$inventory]));
+        return InventoryResource::collection(collect([$inventory->refresh()]));
     }
 }
