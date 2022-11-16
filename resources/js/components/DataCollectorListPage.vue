@@ -6,7 +6,13 @@
             </div>
 
             <button v-b-modal="'new-collection-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="plus" class="fa-lg"></font-awesome-icon></button>
+
         </div>
+
+            <div class="custom-control custom-switch m-auto text-right align-content-center">
+                <input type="checkbox" @change="toggleArchivedFilter" class="custom-control-input" id="switch">
+                <label class="custom-control-label" for="switch">Show Archived</label>
+            </div>
 
         <b-modal id="new-collection-modal" centered no-fade hide-header title="New Dats Collection" @ok="createCollectionAndRedirect" @shown="prepareNewCollectionModal">
             <input id="collection_name_input" v-model="newCollectionName" type="text" @keyup.enter="createCollectionAndRedirect" class="form-control" placeholder="New Collection name">
@@ -126,6 +132,11 @@
             },
 
             methods: {
+                toggleArchivedFilter(event) {
+                    this.setUrlParameter('filter[archived]', event.target.checked);
+                    this.loadData();
+                },
+
                 postCsvRecordsToApiAndCloseModal() {
                     this.csv.shift();
 
