@@ -54,7 +54,7 @@ class DataCollectionRecord extends Model
 
     public function dataCollection(): BelongsTo
     {
-        return $this->belongsTo(DataCollection::class);
+        return $this->belongsTo(DataCollection::class)->withTrashed();
     }
 
     public function inventory(): BelongsTo

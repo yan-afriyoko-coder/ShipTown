@@ -135,7 +135,6 @@ export default {
 
         watch: {
             expanded: function (newValue, oldValue) {
-                console.log(this.record);
                 if (newValue) {
                     let params = {
                         'filter[product_id]': this.record['product_id'],
@@ -249,11 +248,10 @@ export default {
             },
             updateRestockLevel(value) {
                 this.record['restock_level'] = Math.max(0, Number(value));
+                this.record['reorder_point'] = Math.ceil(Number(this.record['restock_level']) * 0.32);
 
-                if (Number(this.record['restock_level']) > 3) {
-                    this.updateReorderPoint(Math.ceil(Number(this.record['restock_level']) * 0.32));
-                } else {
-                    this.updateReorderPoint(Math.floor(Number(this.record['restock_level']) - 1));
+                if (Number(this.record['restock_level']) < 4) {
+                    this.record['reorder_point'] = Math.floor(Number(this.record['restock_level']) - 1);
                 }
 
                 this.postInventoryUpdate();
