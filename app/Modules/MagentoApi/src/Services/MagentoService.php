@@ -50,7 +50,9 @@ class MagentoService
             // randomizing result will match it sometimes, normally 3 special prices are returned,
             // so we will have statistically 1/3 chance to get the correct one,
             // it's a quick hack, but it works
-            $specialPrice = $specialPrices[rand(0, $specialPrices->count()-1)];
+            $specialPrices = $specialPrices->shuffle();
+
+            $specialPrice = $specialPrices->first();
 
             if ($specialPrice) {
                 $magentoProduct->magento_sale_price = $specialPrice['price'];
