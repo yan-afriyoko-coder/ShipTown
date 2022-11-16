@@ -43,23 +43,20 @@ class FixIncorrectQuantityIncomingJob implements ShouldQueue
                     MAX(inventory.quantity_incoming) as actual_quantity_incoming,
                     SUM(IFNULL(data_collection_records.quantity_requested - data_collection_records.total_transferred_in, 0)) as expected_quantity_incoming
 
-            FROM inventory
-
-            LEFT JOIN data_collections
-              ON data_collections.warehouse_id = inventory.warehouse_id
-              AND data_collections.deleted_at IS NULL
+            FROM data_collections
 
             LEFT JOIN data_collection_records
               ON data_collection_records.data_collection_id = data_collections.id
+
+            LEFT JOIN inventory
+              ON data_collections.warehouse_id = inventory.warehouse_id
               AND data_collection_records.product_id = inventory.product_id
 
-            WHERE 1=1
-            '.($this->product_id ? ' AND inventory.product_id = '.$this->product_id : '').'
-            '.($this->warehouse_id ? ' AND inventory.warehouse_id = '.$this->warehouse_id : '').'
+           WHERE data_collections.deleted_at IS NULL
 
-            GROUP BY inventory.id
+           GROUP BY inventory.id
 
-            HAVING actual_quantity_incoming != expected_quantity_incoming
+           HAVING actual_quantity_incoming <> expected_quantity_incoming
         ');
 
         collect($inventoryRecords)
