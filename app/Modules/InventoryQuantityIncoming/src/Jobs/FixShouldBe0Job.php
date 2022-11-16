@@ -2,6 +2,7 @@
 
 namespace App\Modules\InventoryQuantityIncoming\src\Jobs;
 
+use App\Models\DataCollectionTransferIn;
 use App\Models\Inventory;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -39,7 +40,7 @@ class FixShouldBe0Job implements ShouldQueue
             LEFT JOIN data_collections
                 ON data_collections.warehouse_id = inventory.warehouse_id
                 AND data_collections.deleted_at IS NOT NULL
-                AND data_collections.type = 'App\\Models\\DataCollectionTransferIn'
+                AND data_collections.type = ?
 
             LEFT JOIN data_collection_records
               ON data_collection_records.data_collection_id = data_collections.id
@@ -51,7 +52,7 @@ class FixShouldBe0Job implements ShouldQueue
            GROUP BY inventory.id
 
            HAVING actual_quantity_incoming != expected_quantity_incoming
-        ");
+        ", [DataCollectionTransferIn::class]);
 
         collect($inventoryRecords)
             ->each(function ($incorrectRecord) {
