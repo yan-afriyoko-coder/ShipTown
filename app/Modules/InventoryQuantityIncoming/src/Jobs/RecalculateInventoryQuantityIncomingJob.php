@@ -38,7 +38,7 @@ class RecalculateInventoryQuantityIncomingJob implements ShouldQueue
     {
 
 //        dd($this->product_id, $this->warehouse_id);
-        $inventoryRecords = DB::select('
+        $inventoryRecords = DB::select("
             SELECT inventory.id as id,
                     MAX(inventory.product_id) as product_id,
                     MAX(inventory.warehouse_id) as warehouse_id,
@@ -54,13 +54,16 @@ class RecalculateInventoryQuantityIncomingJob implements ShouldQueue
                 ON data_collections.warehouse_id = inventory.warehouse_id
                 AND data_collection_records.product_id = inventory.product_id
 
-           WHERE data_collections.warehouse_id = ? AND data_collection_records.product_id = ?
+           WHERE
+                data_collections.type = 'App\\Models\\DataCollectionTransferIn'
+                AND data_collections.warehouse_id = ?
+                AND data_collection_records.product_id = ?
 
            GROUP BY inventory.id
 
            HAVING actual_quantity_incoming <> expected_quantity_incoming
 
-        ', [$this->warehouse_id, $this->product_id]);
+        ", [$this->warehouse_id, $this->product_id]);
 
         collect($inventoryRecords)
             ->each(function ($incorrectRecord) {
