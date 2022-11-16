@@ -45,7 +45,8 @@ class FixShouldBe0Job implements ShouldQueue
               ON data_collection_records.data_collection_id = data_collections.id
               AND data_collection_records.product_id = inventory.product_id
 
-           WHERE inventory.quantity_incoming > 0
+           WHERE
+                inventory.quantity_incoming > 0
 
            GROUP BY inventory.id
 

@@ -43,8 +43,9 @@ class FixIncorrectQuantityIncomingJob implements ShouldQueue
               ON data_collections.warehouse_id = inventory.warehouse_id
               AND data_collection_records.product_id = inventory.product_id
 
-           WHERE data_collections.type = 'App\\Models\\DataCollectionTransferIn'
-           AND data_collections.deleted_at IS NULL
+           WHERE
+                data_collections.type = 'App\\Models\\DataCollectionTransferIn'
+                AND data_collections.deleted_at IS NULL
 
            GROUP BY inventory.id
 
