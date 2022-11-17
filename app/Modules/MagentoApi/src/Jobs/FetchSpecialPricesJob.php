@@ -30,22 +30,16 @@ class FetchSpecialPricesJob implements ShouldQueue
      */
     public function handle()
     {
-        $collection = MagentoProduct::query()
+        MagentoProduct::query()
             ->whereNull('special_prices_fetched_at')
-            ->inRandomOrder()
-            ->limit(50)
-            ->get();
-
-        $collection->each(function (MagentoProduct $product) {
-            try {
-                MagentoService::fetchSpecialPrices($product);
-            } catch (Exception $exception) {
-                report($exception);
-            }
-        });
-
-        if ($collection->isNotEmpty()) {
-            self::dispatch()->delay(5);
-        }
+            ->chunkById(100, function ($products) {
+                collect($products)->each(function (MagentoProduct $product) {
+                    try {
+                        MagentoService::fetchSpecialPrices($product);
+                    } catch (Exception $exception) {
+                        report($exception);
+                    }
+                });
+            });
     }
 }

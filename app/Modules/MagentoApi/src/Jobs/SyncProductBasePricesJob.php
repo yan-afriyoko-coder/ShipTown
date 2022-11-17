@@ -27,31 +27,22 @@ class SyncProductBasePricesJob implements ShouldQueue
      */
     public function handle()
     {
-        $collection = MagentoProductPricesComparisonView::query()
-            ->whereRaw('base_prices_fetched_at IS NOT NULL
-                AND magento_price != expected_price
-            ')
-            ->limit(50)
-            ->get();
+        MagentoProductPricesComparisonView::query()
+            ->whereRaw('base_prices_fetched_at IS NOT NULL AND magento_price != expected_price')
+            ->chunkById(100, function ($products) {
+                collect($products)->each(function (MagentoProductPricesComparisonView $comparison) {
+                    MagentoService::updateBasePrice(
+                        $comparison->sku,
+                        $comparison->expected_price,
+                        $comparison->magento_store_id
+                    );
 
-        if ($collection->isEmpty()) {
-            return;
-        }
-
-        $collection->each(function (MagentoProductPricesComparisonView $comparison) {
-            MagentoService::updateBasePrice(
-                $comparison->sku,
-                $comparison->expected_price,
-                $comparison->magento_store_id
-            );
-
-            $comparison->magentoProduct->update([
-                'base_prices_fetched_at' => null,
-                'base_prices_raw_import' => null,
-                'magento_price'          => null,
-            ]);
-        });
-
-        self::dispatch()->delay(5);
+                    $comparison->magentoProduct->update([
+                        'base_prices_fetched_at' => null,
+                        'base_prices_raw_import' => null,
+                        'magento_price'          => null,
+                    ]);
+                });
+            });
     }
 }
