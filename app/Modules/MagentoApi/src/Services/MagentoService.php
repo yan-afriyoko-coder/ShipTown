@@ -165,7 +165,7 @@ class MagentoService
         $product->update([
             'stock_items_fetched_at' => now(),
             'stock_items_raw_import' => data_get($response->json(), 'items.0'),
-            'quantity'               => data_get($response->json(), 'items.0.quantity'),
+            'quantity'               => data_get($response->json(), 'items.0.quantity') ?: 0,
         ]);
     }
 }
