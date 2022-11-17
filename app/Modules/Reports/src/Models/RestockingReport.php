@@ -93,6 +93,12 @@ class RestockingReport extends Report
         );
 
         $this->addFilter(
+            AllowedFilter::callback('product_has_tags', function ($query, $value) {
+                return $query->hasTags($value);
+            })
+        );
+
+        $this->addFilter(
             AllowedFilter::callback('search', function ($query, $value) {
                 $query->where(function ($query) use ($value) {
                     $query->where('products.sku', 'like', '%'.$value.'%')
