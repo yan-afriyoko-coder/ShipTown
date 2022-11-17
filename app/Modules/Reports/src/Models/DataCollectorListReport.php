@@ -3,6 +3,7 @@
 namespace App\Modules\Reports\src\Models;
 
 use App\Models\DataCollection;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 
 class DataCollectorListReport extends Report
@@ -15,6 +16,13 @@ class DataCollectorListReport extends Report
         $this->baseQuery = DataCollection::query()
             ->leftJoin('warehouses', 'warehouses.id', '=', 'data_collections.warehouse_id');
 
+        $expression = DB::raw('(
+                SELECT count(*)
+                FROM data_collection_records
+                WHERE data_collection_records.data_collection_id = data_collections.id
+                AND data_collection_records.quantity_requested != (data_collection_records.total_transferred_in + data_collection_records.total_transferred_out)
+            )');
+
         $this->fields = [
             'id'                    => 'data_collections.id',
             'warehouse_code'        => 'warehouses.code',
@@ -22,6 +30,7 @@ class DataCollectorListReport extends Report
             'warehouse_id'          => 'warehouse_id',
             'type'                  => 'data_collections.type',
             'name'                  => 'data_collections.name',
+            'differences_count'     =>  $expression,
             'created_at'            => 'data_collections.created_at',
             'updated_at'            => 'data_collections.updated_at',
             'deleted_at'            => 'data_collections.deleted_at',
