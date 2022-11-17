@@ -2,7 +2,7 @@
 
 namespace App\Modules\MagentoApi\src\Services;
 
-use App\Modules\MagentoApi\src\Api\StockItems;
+use App\Modules\MagentoApi\src\Api\MagentoApi;
 use App\Modules\MagentoApi\src\Models\MagentoProduct;
 use Grayloon\Magento\Magento;
 use Illuminate\Support\Arr;
@@ -10,24 +10,28 @@ use Illuminate\Support\Facades\Log;
 
 class MagentoService
 {
+    public static function api(): MagentoApi
+    {
+        return new MagentoApi(new Magento());
+    }
+
     public static function updateBasePrice(string $sku, float $price, int $store_id)
     {
-        $stockItems = new StockItems(new Magento());
-        $stockItems->postProductsBasePrices(
+        self::api()->postProductsBasePrices(
             $sku,
             $price,
             $store_id
         );
     }
-    public static function updateSalePrice(string $sku, float $sale_price, $expected_sale_price_start_date, $expected_sale_price_end_date, int $store_id)
+
+    public static function updateSalePrice(string $sku, float $sale_price, $start_date, $end_date, int $store_id)
     {
-        $stockItems = new StockItems(new Magento());
-        $response = $stockItems->postProductsSpecialPrice(
+        $response = self::api()->postProductsSpecialPrice(
             $sku,
             $store_id,
             $sale_price,
-            $expected_sale_price_start_date,
-            $expected_sale_price_end_date
+            $start_date,
+            $end_date
         );
 
         if (! $response->successful()) {
@@ -37,8 +41,7 @@ class MagentoService
 
     public static function fetchSpecialPrices(MagentoProduct $magentoProduct)
     {
-        $stockItems = new StockItems(new Magento());
-        $response = $stockItems->postProductsSpecialPriceInformation($magentoProduct->product->sku);
+        $response = self::api()->postProductsSpecialPriceInformation($magentoProduct->product->sku);
 
         if ($response->successful()) {
             $specialPrices = collect($response->json())
@@ -71,8 +74,7 @@ class MagentoService
 
     public static function fetchBasePrices(MagentoProduct $magentoProduct)
     {
-        $stockItems = new StockItems(new Magento());
-        $response = $stockItems->postProductsBasePricesInformation($magentoProduct->product->sku);
+        $response = self::api()->postProductsBasePricesInformation($magentoProduct->product->sku);
 
         if ($response->successful()) {
             $magentoProduct->base_prices_fetched_at = now();
@@ -114,14 +116,12 @@ class MagentoService
 
     private static function updateStockItems(string $sku, float $quantity): void
     {
-        $stockItems = new StockItems(new Magento());
-
         $params = [
             'is_in_stock' => $quantity > 0,
             'qty' => $quantity,
         ];
 
-        $response = $stockItems->putStockItems($sku, $params);
+        $response = self::api()->putStockItems($sku, $params);
 
         Log::debug('MagentoApi: stockItem update', [
             'sku'                  => $sku,
@@ -133,9 +133,7 @@ class MagentoService
 
     private static function updateInventorySourceItems(string $sku, float $quantity): void
     {
-        $stockItems = new StockItems(new Magento());
-
-        $response = $stockItems->postInventorySourceItems($sku, config('magento.store_code'), $quantity);
+        $response = self::api()->postInventorySourceItems($sku, config('magento.store_code'), $quantity);
 
         Log::debug('MagentoApi: updateInventorySourceItems', [
             'sku'                  => $sku,
@@ -146,16 +144,14 @@ class MagentoService
 
     private static function fetchStockItem(MagentoProduct $product)
     {
-        $stockItems = new StockItems(new Magento());
+        $response = self::api()->getStockItems($product->product->sku);
 
-        $response = $stockItems->getStockItems($product->product->sku);
-        $product->stock_items_fetched_at = now();
-        $product->stock_items_raw_import = $response->json();
+        $product->stock_items_raw_import    = $response->json();
+        $product->stock_items_fetched_at    = now();
+        $product->quantity                  = null;
 
         if (Arr::has($response->json(), 'qty')) {
             $product->quantity = data_get($response->json(), 'qty') ?: 0;
-        } else {
-            $product->quantity = null;
         }
 
         $product->save();
@@ -163,9 +159,7 @@ class MagentoService
 
     private static function fetchFromInventorySourceItems(MagentoProduct $product)
     {
-        $stockItems = new StockItems(new Magento());
-
-        $response = $stockItems->getInventorySourceItems($product->product->sku, config('magento.store_code'));
+        $response = self::api()->getInventorySourceItems($product->product->sku, config('magento.store_code'));
 
         $product->stock_items_fetched_at = now();
         $product->stock_items_raw_import = data_get($response->json(), 'items.0');

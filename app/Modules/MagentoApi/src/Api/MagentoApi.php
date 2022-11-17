@@ -4,7 +4,7 @@ namespace App\Modules\MagentoApi\src\Api;
 
 use Illuminate\Http\Client\Response;
 
-class StockItems extends BaseApi
+class MagentoApi extends BaseApi
 {
     public function postProducts($sku, $name): Response
     {
