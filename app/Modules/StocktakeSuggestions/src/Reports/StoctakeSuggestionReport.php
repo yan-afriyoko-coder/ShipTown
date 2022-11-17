@@ -20,6 +20,7 @@ class StoctakeSuggestionReport extends Report
         $this->defaultSelect = implode(',', [
             'inventory_id',
             'points',
+            'quantity_in_stock',
         ]);
 
         $this->defaultSort = 'points';
@@ -42,11 +43,13 @@ class StoctakeSuggestionReport extends Report
             'warehouse_id'                       => 'inventory.warehouse_id',
             'warehouse_code'                     => 'inventory.warehouse_code',
             'points'                             => DB::raw('sum(points)'),
+            'quantity_in_stock'                  => DB::raw('max(inventory.quantity)'),
         ];
 
         $this->casts = [
             'warehouse_code'     => 'string',
             'points'             => 'float',
+            'quantity_in_stock'  => 'float',
         ];
 
         $this->addFilter(
