@@ -43,6 +43,6 @@ class SyncProductBasePricesJob implements ShouldQueue
                         'magento_price'          => null,
                     ]);
                 });
-            });
+            }, 'modules_magento2api_products_id');
     }
 }

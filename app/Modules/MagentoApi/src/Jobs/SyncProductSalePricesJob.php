@@ -58,6 +58,6 @@ class SyncProductSalePricesJob implements ShouldQueue
                         'magento_sale_price_end_date'   => null,
                     ]);
                 });
-            });
+            }, 'modules_magento2api_products_id');
     }
 }
