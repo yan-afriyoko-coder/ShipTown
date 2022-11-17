@@ -42,6 +42,6 @@ class SyncProductInventoryJob implements ShouldQueue
                         'quantity'               => null,
                     ]);
                 });
-            });
+            }, 'modules_magento2api_products_id');
     }
 }
