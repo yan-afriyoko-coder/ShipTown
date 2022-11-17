@@ -15,23 +15,25 @@ class DataCollectorService
 {
     public static function runAction(DataCollection $dataCollection, $action)
     {
-        DB::beginTransaction();
-
         if ($action === 'transfer_in_scanned') {
-            self::transferInScanned($dataCollection);
+            DB::transaction(function () use ($dataCollection) {
+                self::transferInScanned($dataCollection);
+            });
         }
 
         if ($action === 'transfer_out_scanned') {
-            self::transferOutScanned($dataCollection);
+            DB::transaction(function () use ($dataCollection) {
+                self::transferOutScanned($dataCollection);
+            });
         }
 
         if ($action === 'auto_scan_all_requested') {
-            $dataCollection->records()
-                ->whereNotNull('quantity_requested')
-                ->update(['quantity_scanned' => DB::raw('quantity_requested')]);
+            DB::transaction(function () use ($dataCollection) {
+                $dataCollection->records()
+                    ->whereNotNull('quantity_requested')
+                    ->update(['quantity_scanned' => DB::raw('quantity_requested')]);
+            });
         }
-
-        DB::commit();
     }
 
     public static function transferInScanned(DataCollection $dataCollection)
