@@ -50,6 +50,8 @@ class EnsureCorrectTotalsJob implements ShouldQueue
         $this->prepareTempTable();
 
         $this->fixMissingOrWrongTotals();
+
+        $this->recalculateTotals();
     }
 
     /**
@@ -119,5 +121,27 @@ class EnsureCorrectTotalsJob implements ShouldQueue
                 OR orders_products_totals.quantity_to_ship         != recalculations.quantity_to_ship_expected
                 OR orders_products_totals.max_updated_at           != recalculations.max_updated_at_expected
             ');
+    }
+
+    private function recalculateTotals()
+    {
+        DB::statement('
+            UPDATE orders
+
+            LEFT JOIN orders_products_totals
+                ON orders_products_totals.order_id = orders.id
+
+            SET total_products = orders_products_totals.total_price
+
+            WHERE orders.total_products != orders_products_totals.total_price
+        ');
+
+        DB::statement('
+            UPDATE orders
+
+            SET total = total_products + total_shipping
+
+            WHERE total != total_products + total_shipping
+        ');
     }
 }
