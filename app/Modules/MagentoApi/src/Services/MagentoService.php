@@ -5,6 +5,7 @@ namespace App\Modules\MagentoApi\src\Services;
 use App\Modules\MagentoApi\src\Api\StockItems;
 use App\Modules\MagentoApi\src\Models\MagentoProduct;
 use Grayloon\Magento\Magento;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
 class MagentoService
@@ -148,12 +149,16 @@ class MagentoService
         $stockItems = new StockItems(new Magento());
 
         $response = $stockItems->getStockItems($product->product->sku);
+        $product->stock_items_fetched_at = now();
+        $product->stock_items_raw_import = $response->json();
 
-        $product->update([
-            'stock_items_fetched_at' => now(),
-            'stock_items_raw_import' => $response->json(),
-            'quantity'               => data_get($response->json(), 'qty') ?: 0,
-        ]);
+        if (Arr::has($response->json(), 'qty')) {
+            $product->quantity = data_get($response->json(), 'qty') ?: 0;
+        } else {
+            $product->quantity = null;
+        }
+
+        $product->save();
     }
 
     private static function fetchFromInventorySourceItems(MagentoProduct $product)
@@ -162,10 +167,15 @@ class MagentoService
 
         $response = $stockItems->getInventorySourceItems($product->product->sku, config('magento.store_code'));
 
-        $product->update([
-            'stock_items_fetched_at' => now(),
-            'stock_items_raw_import' => data_get($response->json(), 'items.0'),
-            'quantity'               => data_get($response->json(), 'items.0.quantity') ?: 0,
-        ]);
+        $product->stock_items_fetched_at = now();
+        $product->stock_items_raw_import = data_get($response->json(), 'items.0');
+
+        if (data_get($response->json(), 'items.0')) {
+            $product->quantity = data_get($response->json(), 'items.0.quantity') ?: 0;
+        } else {
+            $product->quantity = null;
+        }
+
+        $product->save();
     }
 }
