@@ -28,7 +28,7 @@ class SyncProductSalePricesJob implements ShouldQueue
      */
     public function handle()
     {
-        $collection = MagentoProductPricesComparisonView::query()
+        MagentoProductPricesComparisonView::query()
             ->whereRaw('special_prices_fetched_at IS NOT NULL
             AND expected_sale_price > 0
             AND expected_sale_price_end_date > DATE_SUB(now(), INTERVAL 10 DAY)
@@ -40,31 +40,24 @@ class SyncProductSalePricesJob implements ShouldQueue
                 OR magento_sale_price_start_date IS NULL
                 OR magento_sale_price_end_date IS NULL
             )')
-            ->limit(50)
-            ->get();
+            ->chunkById(100, function ($products) {
+                collect($products)->each(function (MagentoProductPricesComparisonView $comparison) {
+                    MagentoService::updateSalePrice(
+                        $comparison->sku,
+                        $comparison->expected_sale_price,
+                        $comparison->expected_sale_price_start_date->format('Y-m-d H:i:s'),
+                        $comparison->expected_sale_price_end_date->format('Y-m-d H:i:s'),
+                        $comparison->magento_store_id
+                    );
 
-        if ($collection->isEmpty()) {
-            return;
-        }
-
-        $collection->each(function (MagentoProductPricesComparisonView $comparison) {
-            MagentoService::updateSalePrice(
-                $comparison->sku,
-                $comparison->expected_sale_price,
-                $comparison->expected_sale_price_start_date->format('Y-m-d H:i:s'),
-                $comparison->expected_sale_price_end_date->format('Y-m-d H:i:s'),
-                $comparison->magento_store_id
-            );
-
-            $comparison->magentoProduct->update([
-                'special_prices_fetched_at'     => null,
-                'special_prices_raw_import'     => null,
-                'magento_sale_price'            => null,
-                'magento_sale_price_start_date' => null,
-                'magento_sale_price_end_date'   => null,
-            ]);
-        });
-
-        self::dispatch()->delay(5);
+                    $comparison->magentoProduct->update([
+                        'special_prices_fetched_at'     => null,
+                        'special_prices_raw_import'     => null,
+                        'magento_sale_price'            => null,
+                        'magento_sale_price_start_date' => null,
+                        'magento_sale_price_end_date'   => null,
+                    ]);
+                });
+            });
     }
 }
