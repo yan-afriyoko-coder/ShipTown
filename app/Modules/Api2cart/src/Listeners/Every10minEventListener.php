@@ -25,11 +25,11 @@ class Every10minEventListener
 
         DispatchImportOrdersJobs::dispatch();
         UpdateMissingTypeAndIdJob::dispatch();
-        FetchSimpleProductsInfoJob::dispatch();
-        FetchVariantsInfoJob::dispatch();
+//        FetchSimpleProductsInfoJob::dispatch();
+//        FetchVariantsInfoJob::dispatch();
 
         ProcessImportedOrdersJob::dispatch();
 
-        CheckForOutOfSyncProductsJob::dispatch();
+//        CheckForOutOfSyncProductsJob::dispatch();
     }
 }
