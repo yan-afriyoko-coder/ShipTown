@@ -62,7 +62,7 @@ export default {
             this.getUrlFilterOrSet('filter[has_tags]', 'fulfilment');
             this.getUrlFilterOrSet('sort', '-warehouse_has_stock,-quantity_required,-quantity_incoming,-warehouse_quantity');
 
-            this.loadData();
+            this.loadRestockingRecords();
 
             window.onscroll = () => this.loadMore();
         },
@@ -70,7 +70,7 @@ export default {
         methods: {
             focusOnInputAndReload() {
                 this.setFocusElementById(100,'barcodeInput', true, true);
-                this.loadData();
+                this.loadRestockingRecords();
             },
 
             downloadFileAndHideModal() {
@@ -111,10 +111,10 @@ export default {
                     this.per_page = this.per_page * 2;
                 }
 
-                this.loadData(++this.pagesLoaded);
+                this.loadRestockingRecords(++this.pagesLoaded);
             },
 
-            loadData(page = 1) {
+            loadRestockingRecords(page = 1) {
                 this.showLoading();
 
                 const params = this.$router.currentRoute.query;
@@ -139,7 +139,7 @@ export default {
 
             findText() {
                 this.data = [];
-                this.loadData();
+                this.loadRestockingRecords();
             },
         },
     }

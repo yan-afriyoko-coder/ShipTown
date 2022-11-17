@@ -4,8 +4,20 @@ namespace App\Modules\MagentoApi\src\Api;
 
 use Illuminate\Http\Client\Response;
 
-class StockItems extends BaseApi
+class MagentoApi extends BaseApi
 {
+    public function postProducts($sku, $name): Response
+    {
+        return $this->post('/products', [
+            'products' => [
+                [
+                    'sku' => $sku,
+                    'name' => $name,
+                ],
+            ],
+        ]);
+    }
+
     public function postProductsSpecialPrice($sku, $store_id, $price, $price_from, $price_to): Response
     {
         return $this->post('/products/special-price', [
