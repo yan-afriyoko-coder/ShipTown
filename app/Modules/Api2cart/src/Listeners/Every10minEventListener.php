@@ -24,7 +24,7 @@ class Every10minEventListener
     {
 
         DispatchImportOrdersJobs::dispatch();
-        UpdateMissingTypeAndIdJob::dispatch();
+//        UpdateMissingTypeAndIdJob::dispatch();
 //        FetchSimpleProductsInfoJob::dispatch();
 //        FetchVariantsInfoJob::dispatch();
 
