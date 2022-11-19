@@ -191,6 +191,12 @@
             },
 
             barcodeScanned(barcode) {
+                this.apiPostActivity({
+                        'description': 'command_input: "' + barcode + '"',
+                    })
+                    .catch((error) => {
+                        this.displayApiCallError(error)
+                    });
 
                 if (this.tryToRunCommand(barcode)) {
                     this.barcode = '';

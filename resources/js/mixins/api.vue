@@ -173,8 +173,12 @@ export default {
                 return axios.post('/api/order/comments', data);
             },
 
-            apiGetOrderActivities: function (params) {
-                return axios.get('/api/logs', {params: params});
+            apiPostActivity: function (data) {
+                return axios.post('/api/activities', data);
+            },
+
+            apiGetActivities: function (params) {
+                return axios.get('/api/activities', {params: params});
             },
 
             apiPostUserMe: function (data) {

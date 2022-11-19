@@ -9,7 +9,9 @@ use App\Http\Requests\Api\ActivityStoreRequest;
 use App\Http\Resources\ActivityResource;
 use App\Http\Resources\LogResource;
 use App\Modules\Reports\src\Models\ActivityReport;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Str;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -38,18 +40,25 @@ class ActivityController extends Controller
 
     /**
      * @param ActivityStoreRequest $request
-     * @return AnonymousResourceCollection
+     * @return JsonResource
      */
-    public function store(ActivityStoreRequest $request): AnonymousResourceCollection
+    public function store(ActivityStoreRequest $request): JsonResource
     {
-        $modelClass = 'App\\Models\\' . Str::ucfirst($request->validated()['subject_type']);
+        $activity = activity();
 
-        $model = app($modelClass)->findOrFail($request->validated()['subject_id']);
+        if ($request->has('subject_type')) {
+            $modelClass = 'App\\Models\\' . Str::ucfirst($request->validated()['subject_type']);
 
-        $activity = activity()
-            ->on($model)
-            ->log($request->validated()['description']);
+            $model = app($modelClass)->findOrFail($request->validated()['subject_id']);
 
-        return ActivityResource::collection([$activity]);
+            $activity->on($model);
+        }
+
+        $activity->log($request->validated()['description']);
+
+        return JsonResource::make([
+            'success' => true,
+            'message' => 'Activity logged successfully',
+        ]);
     }
 }
