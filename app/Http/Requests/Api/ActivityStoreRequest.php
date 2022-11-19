@@ -24,8 +24,8 @@ class ActivityStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'subject_type'  => ['required','string','in:order'],
-            'subject_id'    => ['required', 'integer'],
+            'subject_type'  => ['string','in:order'],
+            'subject_id'    => ['required_with:subject_type', 'integer'],
             'description'   => ['required', 'string'],
         ];
     }
