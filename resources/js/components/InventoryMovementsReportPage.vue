@@ -11,27 +11,50 @@
 
             <button disabled type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#configurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
-        <date-selector-widget :dates="{'url_param_name': 'filter[created_at_between]'}"></date-selector-widget>
 
-        <div class="row col d-block font-weight-bold pb-1 text-uppercase small text-secondary align-content-center text-center">Inventory Movements</div>
+        <div class="row pl-2 p-0">
+            <div class="col-6 text-left align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">
+                Inventory Movements
+            </div>
+            <div class="col-6 text-nowrap">
+                <date-selector-widget :dates="{'url_param_name': 'filter[created_at_between]'}"></date-selector-widget>
+            </div>
+        </div>
 
         <template v-for="record in records">
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
                 <template v-slot:content>
-                    <div class="row">
-                        <div class="col-sm-12 col-lg-5">
+                    <div class="row p-0 h-100">
+                        <div class="col-sm-12 col-lg-5 align-text-top h-100">
                             <product-info-card :product= "record['product']"></product-info-card>
-                            <div class="small">at: <strong>{{ record['created_at'] | moment('MMM D HH:mm') }}</strong></div>
                         </div>
 
                         <div class="row col-sm-12 col-lg-7 text-right">
-                            <div class="col-12 col-md-4 text-left small">
-                                <div>type: <strong>{{ record['description'] }}</strong></div>
-                                <div>by: <strong>{{ record['user'] ? record['user']['name'] : '' }}</strong></div>
-                                <div>shelf: <strong>{{ record['inventory']['shelf_location'] }}</strong></div>
-                                <div>in stock: <strong>{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</strong></div>
+                            <div class="col-12 col-md-3">
+                                <table class="table-borderless small text-left w-100 text-nowrap">
+                                    <tr>
+                                         <td>at:</td>
+                                        <td class="pl-1">{{ record['created_at'] | moment('MMM D HH:mm') }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>type:</td>
+                                        <td class="pl-1">{{ record['description'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>by:</td>
+                                        <td class="pl-1">{{ record['user'] ? record['user']['name'] : '' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>shelf:</td>
+                                        <td class="pl-1">{{ record['inventory']['shelf_location'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>in stock:</td>
+                                        <td class="pl-1">{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</td>
+                                    </tr>
+                                </table>
                             </div>
-                            <div class="col-12 col-md-8 text-right">
+                            <div class="col-12 col-md-9 text-right">
                                 <number-card label="before" :number="record['quantity_before']"></number-card>
                                 <number-card label="change" :number="record['quantity_delta']"></number-card>
                                 <number-card label="after" :number="record['quantity_after']"></number-card>
@@ -150,5 +173,17 @@
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    tr {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    td {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        margin-bottom: 0 !important;
+        margin-top: 0 !important;
     }
 </style>

@@ -3,6 +3,7 @@
 namespace App\Modules\StocktakeSuggestions\src\Reports;
 
 use App\Models\StocktakeSuggestion;
+use App\Models\Warehouse;
 use App\Modules\Reports\src\Models\Report;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -51,6 +52,14 @@ class StoctakeSuggestionReport extends Report
             'points'             => 'float',
             'quantity_in_stock'  => 'float',
         ];
+
+        $this->addFilter(
+            AllowedFilter::callback('product_has_tags', function ($query, $value) {
+                $query->whereHas('product', function ($query) use ($value) {
+                    $query->hasTags($value);
+                });
+            })
+        );
 
         $this->addFilter(
             AllowedFilter::callback('search', function ($query, $value) {
