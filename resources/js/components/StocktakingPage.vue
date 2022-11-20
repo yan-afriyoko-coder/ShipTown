@@ -8,7 +8,14 @@
             <button id="config-button" disabled type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
-        <div class="row col d-block font-weight-bold pb-1 text-uppercase small text-secondary align-content-center text-center">Recent Stocktakes</div>
+        <div class="row p-1 font-weight-bold text-uppercase small text-secondary">
+            <div class="col-6 text-left">
+                Recent Stocktakes
+            </div>
+            <div class="col-6 text-right">
+                <a :href="route('reports.inventory-movements', {'filter[description]': 'stocktake'})">See more</a>
+            </div>
+        </div>
 
         <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
             <template v-slot:content>
@@ -19,8 +26,6 @@
                         </div>
                     </div>
                 </template>
-
-                <a :href="route('reports.inventory-movements', {'filter[description]': 'stocktake'})" class="d-block text-center">See more</a>
             </template>
         </swiping-card>
 
