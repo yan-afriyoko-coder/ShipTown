@@ -10,7 +10,7 @@
         </div>
 
             <div class="custom-control custom-switch m-auto text-right align-content-center">
-                <input type="checkbox" @change="toggleArchivedFilter" class="custom-control-input" id="switch">
+                <input type="checkbox" @change="toggleArchivedFilter" class="custom-control-input" id="switch" v-model="showArchived">
                 <label class="custom-control-label" for="switch">Show Archived</label>
             </div>
 
@@ -104,6 +104,7 @@
 
             data: function() {
                 return {
+                    showArchived: false,
                     map_fields: [],
                     csv: null,
                     data: [],
@@ -120,7 +121,7 @@
                 }
 
                 this.getUrlFilterOrSet('filter[warehouse_code]', Vue.prototype.$currentUser['warehouse']['code']);
-                this.getUrlFilterOrSet('filter[archived]', false);
+                this.showArchived = this.getUrlFilterOrSet('filter[archived]', 'false') === 'true';
 
                 window.onscroll = () => this.loadMoreWhenNeeded();
 
