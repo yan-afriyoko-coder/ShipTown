@@ -9,14 +9,14 @@ class StocktakeSuggestionsSeeder extends \Illuminate\Database\Seeder
      */
     public function run()
     {
-        $inventories = \App\Models\Inventory::all();
-
-        $inventories->each(function (\App\Models\Inventory $inventory) {
-            $stocktakeSuggestion = new \App\Models\StocktakeSuggestion();
-            $stocktakeSuggestion->inventory_id  = $inventory->getKey();
-            $stocktakeSuggestion->points  = 10;
-            $stocktakeSuggestion->reason  = 'Test';
-            $stocktakeSuggestion->save();
-        });
+//        $inventories = \App\Models\Inventory::all();
+//
+//        $inventories->each(function (\App\Models\Inventory $inventory) {
+//            $stocktakeSuggestion = new \App\Models\StocktakeSuggestion();
+//            $stocktakeSuggestion->inventory_id  = $inventory->getKey();
+//            $stocktakeSuggestion->points  = 10;
+//            $stocktakeSuggestion->reason  = 'Test';
+//            $stocktakeSuggestion->save();
+//        });
     }
 }
