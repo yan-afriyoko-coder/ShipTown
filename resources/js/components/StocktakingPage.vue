@@ -8,7 +8,7 @@
             <button id="config-button" disabled type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
-        <div class="row p-1 font-weight-bold text-uppercase small text-secondary">
+        <div class="row pl-2 p-1 font-weight-bold text-uppercase small text-secondary">
             <div class="col-6 text-left">
                 Recent Stocktakes
             </div>
@@ -29,7 +29,14 @@
             </template>
         </swiping-card>
 
-        <div class="row col d-block font-weight-bold pb-1 text-uppercase small text-secondary align-content-center text-center">Stocktake suggestions</div>
+        <div class="row pl-2 p-1 font-weight-bold text-uppercase small text-secondary">
+            <div class="col-12 text-left">
+                Stocktake suggestions
+            </div>
+<!--            <div class="col-6 text-right">-->
+<!--                <a :href="route('reports.inventory-movements', {'filter[description]': 'stocktake'})">Filters</a>-->
+<!--            </div>-->
+        </div>
 
         <div v-if="(stocktakeSuggestions !== null) && (stocktakeSuggestions.length === 0)" class="text-center mt-3">
             You're all done! <br>
@@ -123,6 +130,7 @@
                 let params = {...this.$router.currentRoute.query};
                 params['filter[description]'] = 'stocktake';
                 params['filter[warehouse_code]'] = this.getUrlParameter('filter[warehouse_code]');
+                params['filter[product_has_tags]'] = '';
                 params['include'] = 'product';
                 params['sort'] = '-id';
                 params['per_page'] = 2;

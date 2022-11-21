@@ -9,10 +9,17 @@
 
         </div>
 
-            <div class="custom-control custom-switch m-auto text-right align-content-center">
-                <input type="checkbox" @change="toggleArchivedFilter" class="custom-control-input" id="switch" v-model="showArchived">
-                <label class="custom-control-label" for="switch">Show Archived</label>
+        <div class="row pl-2 p-0 text-uppercase small text-secondary">
+            <div class="col-6 text-left align-bottom pb-0 m-0 font-weight-bold ">
+                Data Collections
             </div>
+            <div class="col-6 text-nowrap">
+                <div class="custom-control custom-switch m-auto text-right align-bottom">
+                    <input type="checkbox" @change="toggleArchivedFilter" class="custom-control-input" id="switch" v-model="showArchived">
+                    <label class="custom-control-label " for="switch">Show Archived</label>
+                </div>
+            </div>
+        </div>
 
         <b-modal id="new-collection-modal" centered no-fade hide-header title="New Dats Collection" @ok="createCollectionAndRedirect" @shown="prepareNewCollectionModal">
             <input id="collection_name_input" v-model="newCollectionName" type="text" @keyup.enter="createCollectionAndRedirect" class="form-control" placeholder="New Collection name">

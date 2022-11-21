@@ -56,6 +56,14 @@ class InventoryMovementsReport extends Report
         ];
 
         $this->addFilter(
+            AllowedFilter::callback('product_has_tags', function ($query, $value) {
+                $query->whereHas('product', function ($query) use ($value) {
+                    $query->hasTags($value);
+                });
+            })
+        );
+
+        $this->addFilter(
             AllowedFilter::callback('has_tags', function ($query, $value) {
                 $query->whereHas('product', function ($query) use ($value) {
                     $query->withAllTags($value);

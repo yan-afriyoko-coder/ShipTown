@@ -2,7 +2,7 @@
 <div>
     <div class="text-right">
         <div class="dropdown">
-            <button class="btn btn-sm btn-outline-primary dropdown-toggle font-weight-bold" type="button" id="dropdownDateRange" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button class="btn btn-sm dropdown-toggle text-primary font-weight-bold" type="button" id="dropdownDateRange" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{ formatted_starting_date }} - {{ formatted_ending_date }}
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownDateRange">

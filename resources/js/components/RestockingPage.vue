@@ -11,6 +11,12 @@
             <button v-b-modal="'configuration-modal'"  id="config-button" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
+        <div class="row pl-2 p-0">
+            <div class="col-12 text-left align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">
+                Restocking
+            </div>
+        </div>
+
         <b-modal id="configuration-modal" centered no-fade hide-footer hide-header
                  @shown="setFocusElementById(100,'stocktake-input', true, true)"
                  @hidden="focusOnInputAndReload">
