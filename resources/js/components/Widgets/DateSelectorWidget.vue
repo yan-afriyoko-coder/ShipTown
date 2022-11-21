@@ -69,6 +69,12 @@ export default {
         this.starting_date = moment(this.dates.starting_date).format('YYYY-MM-DD\Thh:mm')
         this.ending_date = moment(this.dates.ending_date).format('YYYY-MM-DD\Thh:mm')
         this.between_dates = this.dates.between_dates
+
+        // this.applyFilter(this.between_dates)
+        this.setUrlParameter(
+            'filter[created_at_between]',
+            this.getUrlParameter('filter[created_at_between]', '')
+        );
     },
     computed: {
         dateRange(){

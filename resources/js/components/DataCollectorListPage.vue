@@ -6,7 +6,6 @@
             </div>
 
             <button v-b-modal="'new-collection-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="plus" class="fa-lg"></font-awesome-icon></button>
-
         </div>
 
         <div class="row pl-2 p-0 text-uppercase small text-secondary">
@@ -20,6 +19,30 @@
                 </div>
             </div>
         </div>
+
+
+        <template v-for="record in data">
+            <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
+                <template v-slot:content>
+                    <div role="button" class="row " @click="openDataCollection(record['id'])">
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="text-primary">{{ record['name'] }}</div>
+                            <div class="text-secondary small">{{ formatDateTime(record['created_at']) }}</div>
+                        </div>
+                        <div class="col-cols col-sm-12 col-lg-6 bottom text-right">
+                            <text-card label="." text="ARCHIVED" class="float-left text-left" v-if="record['deleted_at'] !== null"></text-card>
+                            <text-card label="warehouse" :text="record['warehouse_code']"></text-card>
+                            <number-card label="differences" :number="record['differences_count']"></number-card>
+                        </div>
+                    </div>
+                </template>
+            </swiping-card>
+        </template>
+
+        <div class="row"><div class="col">
+                <div ref="loadingContainerOverride" style="height: 50px"></div>
+        </div></div>
+
 
         <b-modal id="new-collection-modal" centered no-fade hide-header title="New Dats Collection" @ok="createCollectionAndRedirect" @shown="prepareNewCollectionModal">
             <input id="collection_name_input" v-model="newCollectionName" type="text" @keyup.enter="createCollectionAndRedirect" class="form-control" placeholder="New Collection name">
@@ -62,28 +85,6 @@
         <b-modal id="configuration-modal" autofocus centered no-fade hide-footer title="Data Collection">
             <button type="button" @click.prevent="downloadFile" class="col btn mb-1 btn-primary">Download</button>
         </b-modal>
-
-        <template v-for="record in data">
-            <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
-                <template v-slot:content>
-                    <div role="button" class="row " @click="openDataCollection(record['id'])">
-                        <div class="col-sm-12 col-lg-6">
-                            <div class="text-primary h5">{{ record['name'] }}</div>
-                            <div class="small text-secondary">{{ record['created_at'] |  moment('YYYY MMM DD H:mm') }}</div>
-                        </div>
-                        <div class="col-cols col-sm-12 col-lg-6 bottom text-right">
-                            <text-card label="." text="ARCHIVED" class="float-left text-left" v-if="record['deleted_at'] !== null"></text-card>
-                            <text-card label="warehouse" :text="record['warehouse_code']"></text-card>
-                            <number-card label="differences" :number="record['differences_count']"></number-card>
-                        </div>
-                    </div>
-                </template>
-            </swiping-card>
-        </template>
-
-        <div class="row"><div class="col">
-                <div ref="loadingContainerOverride" style="height: 50px"></div>
-        </div></div>
 
     </div>
 </template>

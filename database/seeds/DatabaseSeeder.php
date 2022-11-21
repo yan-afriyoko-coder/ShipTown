@@ -27,11 +27,11 @@ class DatabaseSeeder extends Seeder
             WebhooksTestSeeder::class,
             InventorySeeder::class,
             RestockingReportSeeder::class,
-            DataCollectionsSeeder::class,
+//            DataCollectionsSeeder::class,
+            DataCollectionsTransferInFromWarehouseSeeder::class,
 
 
             RmsapiConnectionSeeder::class,
-            DataCollectionRecordsSeeder::class,
             StocktakeSuggestionsSeeder::class,
 //            AutomationsSeeder::class,
 //            PrintNodeClientSeeder::class,

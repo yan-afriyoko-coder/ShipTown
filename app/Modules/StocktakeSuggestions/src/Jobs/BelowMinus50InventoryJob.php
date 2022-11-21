@@ -34,9 +34,7 @@ class BelowMinus50InventoryJob implements ShouldQueue
         $reason = 'stock below -50';
         $points = 10;
 
-        retry(2, function () use ($reason, $points) {
-            $this->runQuery($points, $reason);
-        }, 10);
+        $this->runQuery($points, $reason);
 
         return true;
     }
