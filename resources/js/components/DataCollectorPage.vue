@@ -208,6 +208,7 @@
                 loadDataCollectorDetails: function () {
                     this.apiGetDataCollector({'filter[id]': this.data_collection_id, 'filter[archived]': true})
                         .then(response => {
+                            console.log(response.data);
                             this.dataCollection = response.data;
                         });
                 },
