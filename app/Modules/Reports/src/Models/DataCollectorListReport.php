@@ -13,10 +13,11 @@ class DataCollectorListReport extends Report
         parent::__construct($attributes);
 
         $this->report_name = 'Data Collector List';
+
         $this->baseQuery = DataCollection::query()
             ->leftJoin('warehouses', 'warehouses.id', '=', 'data_collections.warehouse_id');
 
-        $expression = DB::raw('(
+        $differences_count = DB::raw('(
                 SELECT count(*)
                 FROM data_collection_records
                 WHERE data_collection_records.data_collection_id = data_collections.id
@@ -30,7 +31,7 @@ class DataCollectorListReport extends Report
             'warehouse_id'          => 'warehouse_id',
             'type'                  => 'data_collections.type',
             'name'                  => 'data_collections.name',
-            'differences_count'     =>  $expression,
+            'differences_count'     =>  $differences_count,
             'created_at'            => 'data_collections.created_at',
             'updated_at'            => 'data_collections.updated_at',
             'deleted_at'            => 'data_collections.deleted_at',
@@ -52,7 +53,7 @@ class DataCollectorListReport extends Report
         $this->addFilter(
             AllowedFilter::callback('archived', function ($query, $value) {
                 if ($value === true) {
-                    $query->onlyTrashed();
+                    $query->withTrashed();
                 }
             })
         );

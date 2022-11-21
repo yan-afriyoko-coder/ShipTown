@@ -25,13 +25,13 @@
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
                 <template v-slot:content>
                     <div class="row p-0 h-100">
-                        <div class="col-sm-12 col-lg-5 align-text-top h-100">
+                        <div class="col-12 col-lg-5 align-text-top">
                             <product-info-card :product= "record['product']"></product-info-card>
                         </div>
 
                         <div class="row col-sm-12 col-lg-7 text-right">
                             <div class="col-12 col-md-3">
-                                <table class="table-borderless small text-left w-100 text-nowrap">
+                                <table class="table-borderless small text-left text-nowrap">
                                     <tr>
                                          <td>at:</td>
                                         <td class="pl-1">{{ record['created_at'] | moment('MMM D HH:mm') }}</td>

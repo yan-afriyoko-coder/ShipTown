@@ -79,7 +79,7 @@
             loadSuggestionDetails() {
                 const params = {
                     'filter[inventory_id]': this.record['inventory_id'],
-                    'include': 'product,inventory,tags',
+                    'include': 'product,inventory',
                     'sort': '-points,inventory_id',
                     'per_page': 999,
                 }

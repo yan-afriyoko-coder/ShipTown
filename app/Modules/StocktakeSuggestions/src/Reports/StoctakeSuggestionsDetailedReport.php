@@ -26,6 +26,7 @@ class StoctakeSuggestionsDetailedReport extends Report
 
         $this->allowedIncludes = [
             'product',
+            'product.tags',
             'inventory',
         ];
 
