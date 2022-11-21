@@ -4,8 +4,8 @@
             <template v-slot:content>
                     <div class="row setting-list">
                         <div class="col-sm-12 col-lg-6">
-                            <div class="text-primary h5">{{ dataCollection ? dataCollection['data']['0']['name'] : '' }}</div>
-                            <div class="small text-secondary">{{ dataCollection ? dataCollection['data']['0']['created_at'] : ''  }}</div>
+                            <div class="text-primary">{{ dataCollection ? dataCollection['data']['0']['name'] : '' }}</div>
+                            <div class="text-secondary small">{{ formatDateTime(dataCollection ? dataCollection['data']['0']['created_at'] : '')  }}</div>
                         </div>
                     </div>
             </template>

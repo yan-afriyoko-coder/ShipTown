@@ -22,19 +22,19 @@
                     <div class="row">
                         <div class="col-sm-12 col-lg-5 text-secondary">
                             <table>
-                <template v-for="itemMovement in recentStocktakes.data">
-                                <tr>
-                                    <td class="text-right">
-                                        {{ Number(itemMovement['quantity_after']) }} x
-                                    </td>
-                                    <td>
-                                        {{ itemMovement['product']['sku'] }}<br>
-                                    </td>
-                                    <td>
-                                        - {{ itemMovement['product']['name'] }}<br>
-                                    </td>
-                                </tr>
-                </template>
+                                <template v-for="itemMovement in recentStocktakes.data">
+                                    <tr>
+                                        <td class="text-right">
+                                            {{ Number(itemMovement['quantity_after']) }} x
+                                        </td>
+                                        <td>
+                                            {{ itemMovement['product']['sku'] }}<br>
+                                        </td>
+                                        <td>
+                                            - {{ itemMovement['product']['name'] }}<br>
+                                        </td>
+                                    </tr>
+                                </template>
                             </table>
                         </div>
                     </div>
