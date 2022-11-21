@@ -175,7 +175,7 @@
                     dataCollectionRecords: [],
                     nextUrl: null,
                     page: 1,
-                    per_page: 10,
+                    per_page: 15,
                     csv: null,
                     warehouses: [],
                 };
