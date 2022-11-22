@@ -52,6 +52,7 @@ class DuskCoverageTest extends TestCase
         $routeName = 'Routes/' . $uri . 'PageTest';
 
         $routeName = str_replace('-', '', $routeName);
+        $routeName = str_replace('_', '', $routeName);
         $routeName = str_replace('.', '', $routeName);
         $routeName = str_replace('{', '', $routeName);
         $routeName = str_replace('}', '', $routeName);
