@@ -42,8 +42,8 @@
                                <div>last counted: <strong>{{ formatDateTime(record['inventory_last_counted_at']) }}</strong></div>
                             </div>
                             <div class="col-12 col-md-8 text-right">
-                                <number-card label="total out" :number="record['total_transferred_out']" v-if="record['total_transferred_out'] > 0"></number-card>
-                                <number-card label="total in" :number="record['total_transferred_in']" v-if="record['total_transferred_in'] > 0" ></number-card>
+                                <number-card label="total out" :number="record['total_transferred_out']" v-if="record['total_transferred_out'] !== 0"></number-card>
+                                <number-card label="total in" :number="record['total_transferred_in']" v-if="record['total_transferred_in'] !== 0" ></number-card>
                                 <number-card label="requested" :number="record['quantity_requested']" v-if="record['quantity_requested']"></number-card>
                                 <number-card label="scanned" :number="record['quantity_scanned']" v-bind:class="{'bg-warning': record['quantity_requested'] &&  record['quantity_requested'] < record['quantity_scanned'] + record['total_transferred_out'] + record['total_transferred_in']}"></number-card>
                                 <number-card label="to scan" :number="record['quantity_to_scan']" v-if="record['quantity_requested']"></number-card>
