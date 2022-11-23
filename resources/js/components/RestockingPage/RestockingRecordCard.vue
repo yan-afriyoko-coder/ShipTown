@@ -101,6 +101,12 @@
                                 </div>
                             </div>
 
+                            <div class="row pl-2 p-0">
+                                <div class="col-12 text-center align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">
+                                    Incoming
+                                </div>
+                            </div>
+
                             <div class="row" v-for="dataCollectionRecord in dataCollectorRecords">
                                 <div class="col-12 col-lg-6 text-left">
                                     <div>
@@ -112,10 +118,9 @@
                                         {{ formatDateTime(dataCollectionRecord['data_collection']['created_at']) }}
                                     </div>
                                 </div>
-                                <div class="col-12 col-lg-6">
-                                    <number-card label="requested" :value="dataCollectionRecord['quantity_requested']"></number-card>
-                                    <number-card label="scanned" :value="dataCollectionRecord['quantity_scanned']"></number-card>
-                                    <number-card label="to scan" :value="dataCollectionRecord['quantity_to_scan']"></number-card>
+                                <div class="col-12 col-lg-6 text-right">
+                                    <number-card label="requested" :number="dataCollectionRecord['quantity_requested']"></number-card>
+                                    <number-card label="outstanding" :number="dataCollectionRecord['quantity_requested'] - dataCollectionRecord['total_transferred_in']"></number-card>
                                 </div>
                                 <hr>
                             </div>

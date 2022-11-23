@@ -67,5 +67,13 @@ class DataCollectionReport extends Report
                 });
             })
         );
+
+        $this->addFilter(
+            AllowedFilter::callback('sku_or_alias', function ($query, $value) {
+                $query->whereHas('product', function ($query) use ($value) {
+                    $query->skuOrAlias($value);
+                });
+            })
+        );
     }
 }
