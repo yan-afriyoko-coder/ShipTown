@@ -4,15 +4,17 @@
                  @shown="modalShown"
                  @hidden="onHidden"
         >
-                <div class="col-sm-12 col-lg-12">
+                <div class="row">
                     <product-info-card :product="product"></product-info-card>
                 </div>
-                <div class="col-sm-12 col-lg-12 text-right mt-3 mb-3">
-<!--                    <number-card label="price" :number="product['prices'][this.currentUser()['warehouse']['code']]['price']" class="float-left"></number-card>-->
-<!--                    <number-card label="in stock" :number="product['inventory'][this.currentUser()['warehouse']['code']]['quantity']"></number-card>-->
+                <div class="row col mt-3 mb-3 small">
+                    <number-card label="price" :number="prices['price']" class="float-left" v-if="prices"></number-card>
+                </div>
+                <div class="row-col text-right mt-3 mb-3">
                     <number-card label="requested" :number="dataCollectionRecord ? dataCollectionRecord['quantity_requested'] : 0"></number-card>
                     <number-card label="scanned" :number="dataCollectionRecord ? dataCollectionRecord['quantity_scanned'] : 0"></number-card>
                     <number-card label="to_scan" :number="dataCollectionRecord ? dataCollectionRecord['quantity_to_scan'] : 0"></number-card>
+<!--                    <number-card label="in stock" :number="product['inventory'][this.currentUser()['warehouse']['code']]['quantity']"></number-card>-->
                 </div>
 
             <div class="row">
@@ -58,8 +60,7 @@
         data: function() {
             return {
                 quantity: null,
-                recentStocktakes: [],
-                stocktakeSuggestions: [],
+                prices: null,
             };
         },
 
@@ -70,24 +71,29 @@
         },
 
         watch: {
-            // product: function (newDataCollectionRecord, oldDataCollectionRecord) {
-            //     this.apiGetProductsPrices({
-            //         product_id: newDataCollectionRecord['product_id'],
-            //         warehouse_code: this.currentUser()['warehouse']['code'],
-            //     }).then(response => {
-            //         this.prices = response.data;
-            //     });
-            // }
+            product: function (newProduct, oldDataCollectionRecord) {
+                if (newProduct === null) {
+                    this.prices = null;
+                    return;
+                }
+
+                this.apiGetProducts({
+                    'filter[id]': newProduct['id'],
+                    'include': 'prices',
+                }).then(response => {
+                    this.prices = response.data.data[0]['prices'][this.currentUser()['warehouse']['code']];
+                });
+            }
         },
 
         methods: {
             onHidden() {
+                this.prices = null;
+                this.quantity = null;
                 this.$emit('hidden');
             },
 
             modalShown() {
-                this.quantity = null;
-                console.log(this.dataCollectionRecord);
                 this.setFocusElementById(100, 'data-collection-record-quantity-request-input', true, false);
             },
 
