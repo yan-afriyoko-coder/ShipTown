@@ -23,6 +23,7 @@
                                     <tr>
                                         <td>
                                             <a href='{{ url()->route('reports.restocking', [
+                                                        'filter[quantity_in_stock_between]' => '-999999,-0.01',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
                                                         'sort' => 'quantity_available',
                                                         'filter[inventory_source_warehouse_code]' => '99',
@@ -134,11 +135,12 @@
                                     <tr>
                                         <td>
                                             <a href='{{ url()->route('reports.restocking', [
-                                                        'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
                                                         'sort' => 'quantity_available',
+                                                        'per_page' => '999',
+                                                        'filter[quantity_in_stock_between]' => '-99999999,0',
+                                                        'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
                                                         'filter[inventory_source_warehouse_code]' => '99',
                                                         'filter[warehouse_quantity_between]' => '1,99999999',
-                                                        'per_page' => '999',
                                                     ]) }}'>
                                                 {{ data_get($record, 'warehouse_code') }}
                                             </a>
