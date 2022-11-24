@@ -137,7 +137,7 @@
                                             <a href='{{ url()->route('reports.restocking', [
                                                         'sort' => 'quantity_available',
                                                         'per_page' => '999',
-                                                        'filter[quantity_in_stock_between]' => '-99999999,0',
+                                                        'filter[quantity_in_stock_between]' => '-99999999,-0.01',
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
                                                         'filter[inventory_source_warehouse_code]' => '99',
                                                         'filter[warehouse_quantity_between]' => '1,99999999',
