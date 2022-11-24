@@ -194,7 +194,10 @@
         methods: {
             onModalHidden() {
                 this.setFocusElementById(100, 'barcodeInput', true, true);
-                this.loadDataCollectorRecords();
+
+                setTimeout(() => {
+                    this.loadDataCollectorRecords();
+                }, 100);
             },
 
             onBarcodeScanned: function (barcode) {
