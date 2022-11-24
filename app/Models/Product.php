@@ -21,6 +21,7 @@ use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -198,10 +199,7 @@ class Product extends BaseModel
     {
         $query->where(function ($query) use ($value) {
             return $query
-                    ->where(['sku' => $value])
-                    ->orWhereHas('aliases', function ($query) use ($value) {
-                        $query->where(['alias' => $value]);
-                    });
+                ->whereIn('id', ProductAlias::query()->select('product_id')->where('alias', $value));
         });
 
         return $query;
