@@ -44,7 +44,7 @@ class FixIncorrectQuantityIncomingJob implements ShouldQueue
 
             LEFT JOIN data_collections
                 ON data_collections.warehouse_id = inventory.warehouse_id
-                AND data_collections.deleted_at IS NOT NULL
+                AND data_collections.deleted_at IS NULL
                 AND data_collections.type = ?
 
             LEFT JOIN data_collection_records
@@ -57,7 +57,7 @@ class FixIncorrectQuantityIncomingJob implements ShouldQueue
            GROUP BY inventory.id
 
            HAVING actual_quantity_incoming != expected_quantity_incoming
-        ", [DataCollectionTransferIn::class]);
+        ", ['App\\Models\\DataCollectionTransferIn']);
 
         collect($inventoryRecords)
             ->each(function ($incorrectRecord) {
@@ -96,7 +96,7 @@ class FixIncorrectQuantityIncomingJob implements ShouldQueue
            GROUP BY inventory.id
 
            HAVING actual_quantity_incoming <> expected_quantity_incoming
-        ", [DataCollectionTransferIn::class]);
+        ", ['App\\Models\\DataCollectionTransferIn']);
 
         collect($inventoryRecords)
             ->each(function ($incorrectRecord) {
