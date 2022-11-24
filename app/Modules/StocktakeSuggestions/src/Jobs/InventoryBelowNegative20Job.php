@@ -11,7 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 
-class BelowMinus50InventoryJob implements ShouldQueue
+class InventoryBelowNegative20Job implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -20,6 +20,7 @@ class BelowMinus50InventoryJob implements ShouldQueue
     use IsMonitored;
 
     private int $warehouse_id;
+    private float $threshold;
 
     public function __construct(int $warehouse_id)
     {
@@ -31,7 +32,7 @@ class BelowMinus50InventoryJob implements ShouldQueue
      */
     public function handle(): bool
     {
-        $reason = 'stock below -50';
+        $reason = 'stock below -20';
         $points = 10;
 
         $this->runQuery($points, $reason);
@@ -50,7 +51,7 @@ class BelowMinus50InventoryJob implements ShouldQueue
             SELECT id, ?, ?, NOW(), NOW()
             FROM inventory
             WHERE warehouse_id = ?
-                AND quantity < -50
+                AND quantity < ?
                 AND NOT EXISTS (
                     SELECT NULL
                     FROM stocktake_suggestions
@@ -59,6 +60,6 @@ class BelowMinus50InventoryJob implements ShouldQueue
                 )
             ORDER BY quantity ASC
             LIMIT 500
-        ', [$points, $reason, $this->warehouse_id, $reason]);
+        ', [$points, $reason, $this->warehouse_id, $this->threshold, $reason]);
     }
 }

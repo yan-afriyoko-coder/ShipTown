@@ -49,7 +49,7 @@ class RecalculateInventoryQuantityIncomingJob implements ShouldQueue
 
             LEFT JOIN data_collections
                 ON data_collections.warehouse_id = inventory.warehouse_id
-                AND data_collections.deleted_at IS NOT NULL
+                AND data_collections.deleted_at IS NULL
                 AND data_collections.type = ?
 
             LEFT JOIN data_collection_records
