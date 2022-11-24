@@ -4,9 +4,9 @@ namespace App\Models;
 
 use App\Helpers\HasQuantityRequiredSort;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -22,6 +22,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  *  @property double $quantity_to_scan
  *  @property Carbon $created_at
  *  @property Carbon $updated_at
+ *
+ *  @method static Builder|Product skuOrAlias($skuOrAlias)
  *
  *  @property-read Product $product
  *  @property-read DataCollection $dataCollection
@@ -86,5 +88,17 @@ class DataCollectionRecord extends Model
                 'product.user_inventory',
             ])
             ->defaultSort($allowedSort, '-updated_at');
+    }
+
+    public function scopeSkuOrAlias($query, string $value)
+    {
+        $query->where(function ($query) use ($value) {
+            return $query
+                ->whereIn('data_collection_records.product_id', ProductAlias::query()
+                    ->select('products_aliases.product_id')
+                    ->where('alias', $value));
+        });
+
+        return $query;
     }
 }
