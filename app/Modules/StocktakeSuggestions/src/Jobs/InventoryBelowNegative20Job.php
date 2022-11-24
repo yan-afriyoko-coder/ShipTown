@@ -34,6 +34,7 @@ class InventoryBelowNegative20Job implements ShouldQueue
     {
         $reason = 'stock below -20';
         $points = 10;
+        $this->threshold = -20;
 
         $this->runQuery($points, $reason);
 
