@@ -49,6 +49,7 @@ class RecalculateInventoryQuantityIncomingJob implements ShouldQueue
 
             LEFT JOIN data_collections
                 ON data_collections.warehouse_id = inventory.warehouse_id
+                AND data_collections.deleted_at IS NOT NULL
                 AND data_collections.type = ?
 
             LEFT JOIN data_collection_records
@@ -61,8 +62,7 @@ class RecalculateInventoryQuantityIncomingJob implements ShouldQueue
            GROUP BY inventory.id
 
            HAVING actual_quantity_incoming <> expected_quantity_incoming
-
-        ", [DataCollectionTransferIn::class, $this->warehouse_id, $this->product_id]);
+        ", ['App\\Models\\DataCollectionTransferIn', $this->warehouse_id, $this->product_id]);
 
         collect($inventoryRecords)
             ->each(function ($incorrectRecord) {
