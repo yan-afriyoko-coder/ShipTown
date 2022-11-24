@@ -94,7 +94,7 @@
             },
 
             modalShown() {
-                this.setFocusElementById(100, 'data-collection-record-quantity-request-input', true, false);
+                this.setFocusElementById(300, 'data-collection-record-quantity-request-input', true, false);
             },
 
             barcodeScanned: async function (barcode) {
