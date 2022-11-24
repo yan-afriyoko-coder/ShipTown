@@ -28,16 +28,15 @@ class RunAllJobsJob implements ShouldQueue
             ->each(function (Warehouse $warehouse) {
                 BarcodeScannedToQuantityFieldJob::dispatchNow($warehouse->getKey());
                 NegativeWarehouseStockJob::dispatchNow($warehouse->getKey());
+                InventoryBelowNegative20Job::dispatchNow($warehouse->getKey());
             });
 
         // for all wa
         Warehouse::query()
-            ->whereIn('code', ['100', '99', 'MUL', 'TRA'])
+            ->whereIn('code', ['100', '99', 'MUL'])
             ->get('id')
             ->each(function (Warehouse $warehouse) {
                 NegativeInventoryJob::dispatchNow($warehouse->getKey());
-                InventoryBelowNegative20Job::dispatchNow($warehouse->getKey());
-//                NeverCountedJob::dispatchNow($warehouse->getKey());
             });
 
         return true;
