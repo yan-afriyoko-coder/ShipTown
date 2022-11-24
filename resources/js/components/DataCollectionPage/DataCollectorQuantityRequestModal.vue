@@ -8,7 +8,7 @@
                     <product-info-card :product="product"></product-info-card>
                 </div>
                 <div class="row col mt-3 mb-3 small">
-                    <number-card label="price" :number="prices['price']" class="float-left" v-if="prices"></number-card>
+                    <number-card label="price" :number="prices ? prices['price'] : 0" class="float-left"></number-card>
                 </div>
                 <div class="row-col text-right mt-3 mb-3">
                     <number-card label="requested" :number="dataCollectionRecord ? dataCollectionRecord['quantity_requested'] : 0"></number-card>
