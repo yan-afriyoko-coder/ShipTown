@@ -2,8 +2,6 @@
 
 namespace App\Modules\Maintenance\src\Jobs;
 
-use App\Models\Inventory;
-use App\Models\Warehouse;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -14,18 +12,6 @@ use Illuminate\Support\Facades\DB;
 class EnsureProductSkusPresentInAliasesJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    private Warehouse $warehouse;
-
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct(Warehouse $warehouse)
-    {
-        $this->warehouse = $warehouse;
-    }
 
     /**
      * Execute the job.
