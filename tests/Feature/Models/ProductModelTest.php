@@ -5,14 +5,11 @@ namespace Tests\Feature\Models;
 use App\Events\Product\ProductTagAttachedEvent;
 use App\Models\Product;
 use App\Services\ProductService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class ProductModelTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function test_if_dispatched_tag_attached_event()
     {
         Event::fake(ProductTagAttachedEvent::class);

@@ -4,13 +4,10 @@ namespace Tests\Feature\Http\Controllers\Api\Order\OrderProductController;
 
 use App\Models\OrderProduct;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class IndexTest extends TestCase
 {
-    use RefreshDatabase;
-
     /** @test */
     public function test_index_call_returns_ok()
     {

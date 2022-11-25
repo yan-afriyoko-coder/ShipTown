@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Modules;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Tests\TestCase;
