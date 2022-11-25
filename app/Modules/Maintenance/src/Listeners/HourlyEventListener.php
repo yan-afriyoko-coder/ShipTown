@@ -4,6 +4,7 @@ namespace App\Modules\Maintenance\src\Listeners;
 
 use App\Events\DailyEvent;
 use App\Events\HourlyEvent;
+use App\Modules\Maintenance\src\Jobs\EnsureProductSkusPresentInAliasesJob;
 use App\Modules\Maintenance\src\Jobs\temp\StockInWarehouse999MonitorJob;
 
 class HourlyEventListener
@@ -18,5 +19,6 @@ class HourlyEventListener
     public function handle(HourlyEvent $event)
     {
         StockInWarehouse999MonitorJob::dispatch();
+        EnsureProductSkusPresentInAliasesJob::dispatch();
     }
 }
