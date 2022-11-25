@@ -53,6 +53,8 @@ $factory->define(RmsapiProductImport::class, function (Faker $faker) {
            "quantity_available":'.$quantity_available.',
            "quantity_committed":'.$quantity_committed.',
            "quantity_discount_id":0,
+           "supplier_code":"supplier234",
+           "supplier_name":"ShipTown Ltd",
            "rmsmobile_shelve_location":"'.Str::upper($faker->randomLetter).$faker->numberBetween(0, 9).'",
            "aliases": [
                 {
