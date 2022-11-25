@@ -4,15 +4,11 @@ namespace Tests\Feature\Http\Controllers\Api\Order\OrderProductShipmentControlle
 
 use App\Models\Order;
 use App\Models\OrderProduct;
-use App\Models\OrderProductShipment;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class StoreTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
