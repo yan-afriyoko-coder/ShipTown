@@ -197,5 +197,9 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
         if ($importedProduct->raw_import['category_name']) {
             $product->attachTag($importedProduct->raw_import['category_name']);
         }
+
+        if ($importedProduct->raw_import['supplier_name']) {
+            $product->attachTag(trim($importedProduct->raw_import['supplier_name']));
+        }
     }
 }
