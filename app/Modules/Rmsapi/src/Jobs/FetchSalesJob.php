@@ -46,7 +46,7 @@ class FetchSalesJob implements ShouldQueue
      */
     public function handle(): bool
     {
-        logger('RMSAPI Starting Import Sales Job', ['connection_id' => $this->rmsapiConnection->getKey()]);
+        Log::info('RMSAPI Starting FetchSalesJob', ['rmsapi_connection_id' => $this->rmsapiConnection->getKey()]);
 
         $params = [
             'per_page'            => config('rmsapi.import.products.per_page'),
@@ -57,7 +57,7 @@ class FetchSalesJob implements ShouldQueue
         try {
             $response = RmsapiClient::GET($this->rmsapiConnection, 'api/transaction-entries', $params);
 
-            dd($response->asArray());
+            Log::info('RMSAPI /transaction-entries', ['response' => $response->asArray()]);
         } catch (GuzzleException $e) {
             Log::warning('RMSAPI Failed product fetch', [
                 'code' => $e->getCode(),
