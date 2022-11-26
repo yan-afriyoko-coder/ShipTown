@@ -2,8 +2,6 @@
 
 namespace App\Modules\StocktakeSuggestions\src\Jobs;
 
-use App\Models\Inventory;
-use App\Models\StocktakeSuggestion;
 use App\Models\Warehouse;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -40,8 +38,8 @@ class NegativeWarehouseStockJob implements ShouldQueue
         }
 
         DB::statement('
-            INSERT INTO stocktake_suggestions (inventory_id, points, reason, created_at, updated_at)
-                SELECT DISTINCT inventory.id, ?, ?, now(), now()
+            INSERT INTO stocktake_suggestions (inventory_id, product_id, warehouse_id, points, reason, created_at, updated_at)
+                SELECT DISTINCT inventory.id, inventory.product_id, inventory.warehouse_id, ?, ?, now(), now()
                 FROM inventory
                 RIGHT JOIN inventory as inventory_fullfilment
                     ON inventory_fullfilment.product_id = inventory.product_id

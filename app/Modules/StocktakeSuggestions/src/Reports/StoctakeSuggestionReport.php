@@ -3,7 +3,6 @@
 namespace App\Modules\StocktakeSuggestions\src\Reports;
 
 use App\Models\StocktakeSuggestion;
-use App\Models\Warehouse;
 use App\Modules\Reports\src\Models\Report;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -20,6 +19,8 @@ class StoctakeSuggestionReport extends Report
 
         $this->defaultSelect = implode(',', [
             'inventory_id',
+            'product_id',
+            'warehouse_id',
             'points',
             'quantity_in_stock',
         ]);
@@ -29,7 +30,8 @@ class StoctakeSuggestionReport extends Report
         $this->allowedIncludes = [
             'product',
             'product.tags',
-            'inventory',
+            'product.prices',
+            'inventory'
         ];
 
         if (request('title')) {
@@ -40,8 +42,9 @@ class StoctakeSuggestionReport extends Report
             ->leftJoin('inventory', 'inventory.id', '=', 'stocktake_suggestions.inventory_id');
 
         $this->fields = [
-            'inventory_id'                       => 'inventory_id',
-            'warehouse_id'                       => 'inventory.warehouse_id',
+            'inventory_id'                       => 'stocktake_suggestions.inventory_id',
+            'product_id'                         => 'stocktake_suggestions.product_id',
+            'warehouse_id'                       => 'stocktake_suggestions.warehouse_id',
             'warehouse_code'                     => 'inventory.warehouse_code',
             'points'                             => DB::raw('sum(points)'),
             'quantity_in_stock'                  => DB::raw('max(inventory.quantity)'),
