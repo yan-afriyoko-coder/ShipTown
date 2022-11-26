@@ -57,7 +57,7 @@ class FetchSalesJob implements ShouldQueue
         try {
             $response = RmsapiClient::GET($this->rmsapiConnection, 'api/transaction-entries', $params);
 
-            Log::info('RMSAPI /transaction-entries', ['response' => $response->asArray()]);
+            Log::info('RMSAPI fetched transaction-entries', ['response' => $response->asArray()]);
         } catch (GuzzleException $e) {
             Log::warning('RMSAPI Failed product fetch', [
                 'code' => $e->getCode(),
