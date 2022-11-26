@@ -9,7 +9,7 @@
                 <div class="col-12 col-md-4 text-left small">
                     <div :class="{ 'bg-warning':  Number(record['inventory']['quantity_available']) < 0}">in stock: <strong>{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</strong></div>
                     <div>last counted: <strong>{{ formatDateTime(record['inventory']['last_counted_at']) }}</strong></div>
-                    <div>price: <strong>{{ Number(record['product']['prices']['DUB']['price']) }}</strong></div>
+                    <div>price: <strong>{{ Number(record['product']['prices'][currentUser()['warehouse_code']]['price']) }}</strong></div>
                 </div>
                 <div class="col-12 col-md-8 text-right">
                     <number-card label="points" :number="record['points']"></number-card>
