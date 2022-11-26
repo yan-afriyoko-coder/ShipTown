@@ -9,7 +9,8 @@
                 <div class="col-12 col-md-4 text-left small">
                     <div :class="{ 'bg-warning':  Number(record['inventory']['quantity_available']) < 0}">in stock: <strong>{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</strong></div>
                     <div>last counted: <strong>{{ formatDateTime(record['inventory']['last_counted_at']) }}</strong></div>
-                    <div>price: <strong>{{ Number(record['product']['prices'][currentUser()['warehouse_code']]['price']) }}</strong></div>
+
+                    <div>price: <strong>{{ Number(productPrice) }}</strong></div>
                 </div>
                 <div class="col-12 col-md-8 text-right">
                     <number-card label="points" :number="record['points']"></number-card>
@@ -46,55 +47,62 @@ import helpers from "../../mixins/helpers";
 import url from "../../mixins/url";
 
 export default {
-        name: 'SuggestionRecord',
+      name: 'SuggestionRecord',
 
-        mixins: [loadingOverlay, url, api, helpers],
+      mixins: [loadingOverlay, url, api, helpers],
 
-        components: {
-            BarcodeInputField,
-        },
+      components: {
+          BarcodeInputField,
+      },
 
-        props: {
-            record: {
-                type: Object,
-                required: true
-            }
-        },
+      props: {
+          record: {
+              type: Object,
+              required: true
+          }
+      },
 
-        data: function() {
-            return {
-                showDetails: false,
-                suggestionDetails: null,
-            };
-        },
+      data: function() {
+          return {
+              showDetails: false,
+              suggestionDetails: null,
+          };
+      },
 
-        methods: {
-            toggleDetails() {
-                this.showDetails = !this.showDetails;
+      computed: {
+          productPrice: function() {
+            return this.record['product']['prices'][this.currentUser()['warehouse']['code']]['price'];
+          }
+      },
 
-                if (this.showDetails) {
-                    this.loadSuggestionDetails();
-                }
-            },
 
-            loadSuggestionDetails() {
-                const params = {
-                    'filter[inventory_id]': this.record['inventory_id'],
-                    'include': 'product,inventory',
-                    'sort': '-points,inventory_id',
-                    'per_page': 999,
-                }
+      methods: {
+          toggleDetails() {
+              this.showDetails = !this.showDetails;
 
-                this.apiGetStocktakeSuggestionsDetails(params)
-                    .then((response) => {
-                        this.suggestionDetails = response.data.data;
-                    })
-                    .catch((error) => {
-                        this.displayApiCallError(error);
-                    });
-            },
-        },
-    }
+              if (this.showDetails) {
+                  this.loadSuggestionDetails();
+              }
+          },
+
+          loadSuggestionDetails() {
+              const params = {
+                  'filter[inventory_id]': this.record['inventory_id'],
+                  'include': 'product,inventory',
+                  'sort': '-points,inventory_id',
+                  'per_page': 999,
+              }
+
+              this.apiGetStocktakeSuggestionsDetails(params)
+                  .then((response) => {
+                      this.suggestionDetails = response.data.data;
+                  })
+                  .catch((error) => {
+                      this.displayApiCallError(error);
+                  });
+          },
+      },
+  }
 </script>
 
 <style lang="scss" scoped>
