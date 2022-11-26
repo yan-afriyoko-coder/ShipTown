@@ -45,9 +45,6 @@
             <div class="col-12 text-left">
                 Stocktake suggestions
             </div>
-<!--            <div class="col-6 text-right">-->
-<!--                <a :href="route('reports.inventory-movements', {'filter[description]': 'stocktake'})">Filters</a>-->
-<!--            </div>-->
         </div>
 
         <div v-if="(stocktakeSuggestions !== null) && (stocktakeSuggestions.length === 0)" class="text-center mt-3">
