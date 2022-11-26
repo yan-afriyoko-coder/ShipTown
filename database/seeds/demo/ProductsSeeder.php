@@ -13,6 +13,8 @@ class ProductsSeeder extends Seeder
      */
     public function run()
     {
+        factory(Product::class)->create(['sku' => '57', 'description' => 'ShipTown Test Product - 57']);
+
         $this->createSkuWithAliases([
             '01',
             '02',
@@ -36,6 +38,7 @@ class ProductsSeeder extends Seeder
     {
         foreach ($skuList as $sku) {
             if (!Product::query()->where('sku', '=', $sku)->exists()) {
+                /** @var Product $product */
                 $product = factory(Product::class)->create(['sku' => $sku]);
 
                 factory(ProductAlias::class)->create([

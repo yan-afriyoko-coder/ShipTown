@@ -2,9 +2,6 @@
 
 namespace App\Modules\StocktakeSuggestions\src\Jobs;
 
-use App\Models\Inventory;
-use App\Models\StocktakeSuggestion;
-use App\Models\Warehouse;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -37,8 +34,8 @@ class NeverCountedJob implements ShouldQueue
         DB::statement('DELETE FROM stocktake_suggestions WHERE reason = ?', [$reason]);
 
 //        DB::statement('
-//            INSERT INTO stocktake_suggestions (inventory_id, points, reason, created_at, updated_at)
-//            SELECT id, ? , ?, NOW(), NOW()
+//            INSERT INTO stocktake_suggestions (inventory_id, product_id, warehouse_id, points, reason, created_at, updated_at)
+//            SELECT id, product_id, warehouse_id, ? , ?, NOW(), NOW()
 //            FROM inventory
 //            WHERE warehouse_id = ?
 //                AND quantity > 0

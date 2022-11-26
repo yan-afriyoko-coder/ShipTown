@@ -165,7 +165,7 @@
                 }
 
                 let params = {...this.$router.currentRoute.query};
-                params['include'] = 'product,inventory,product.tags';
+                params['include'] = 'product,inventory,product.tags,product.prices';
                 params['sort'] = this.getUrlParameter('sort', '-points,quantity_in_stock,inventory_id');
                 params['per_page'] = this.per_page;
                 params['page'] = page;

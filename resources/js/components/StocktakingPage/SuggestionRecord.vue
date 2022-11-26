@@ -9,6 +9,7 @@
                 <div class="col-12 col-md-4 text-left small">
                     <div :class="{ 'bg-warning':  Number(record['inventory']['quantity_available']) < 0}">in stock: <strong>{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</strong></div>
                     <div>last counted: <strong>{{ formatDateTime(record['inventory']['last_counted_at']) }}</strong></div>
+                    <div>price: <strong>{{ Number(record['product']['prices']['DUB']['price']) }}</strong></div>
                 </div>
                 <div class="col-12 col-md-8 text-right">
                     <number-card label="points" :number="record['points']"></number-card>
@@ -38,13 +39,13 @@
 </template>
 
 <script>
-    import loadingOverlay from '../../mixins/loading-overlay';
-    import BarcodeInputField from "./../SharedComponents/BarcodeInputField";
-    import api from "../../mixins/api";
-    import helpers from "../../mixins/helpers";
-    import url from "../../mixins/url";
+import loadingOverlay from '../../mixins/loading-overlay';
+import BarcodeInputField from "./../SharedComponents/BarcodeInputField";
+import api from "../../mixins/api";
+import helpers from "../../mixins/helpers";
+import url from "../../mixins/url";
 
-    export default {
+export default {
         name: 'SuggestionRecord',
 
         mixins: [loadingOverlay, url, api, helpers],

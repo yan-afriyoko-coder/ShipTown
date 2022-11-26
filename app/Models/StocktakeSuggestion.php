@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 /**
  *
@@ -27,13 +26,13 @@ class StocktakeSuggestion extends Model
         return $this->belongsTo(Inventory::class);
     }
 
-    public function product(): HasOneThrough
+    public function product(): BelongsTo
     {
-        return $this->hasOneThrough(Product::class, Inventory::class, 'id', 'id', 'inventory_id', 'product_id');
+        return $this->belongsTo(Product::class);
     }
 
-    public function warehouse(): HasOneThrough
+    public function warehouse(): BelongsTo
     {
-        return $this->hasOneThrough(Warehouse::class, Inventory::class, 'id', 'id', 'inventory_id', 'warehouse_id');
+        return $this->belongsTo(Warehouse::class);
     }
 }
