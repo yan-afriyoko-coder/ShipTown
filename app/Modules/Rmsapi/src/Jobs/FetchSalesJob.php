@@ -51,13 +51,11 @@ class FetchSalesJob implements ShouldQueue
         $params = [
             'per_page'            => config('rmsapi.import.products.per_page'),
             'order_by'            => 'db_change_stamp:asc',
-            'min:db_change_stamp' => $this->rmsapiConnection->products_last_timestamp,
+            'min:db_change_stamp' => 0, // $this->rmsapiConnection->products_last_timestamp,
         ];
 
         try {
             $response = RmsapiClient::GET($this->rmsapiConnection, 'api/transaction-entries', $params);
-
-            Log::info('RMSAPI fetched transaction-entries', ['response' => $response->asArray()]);
         } catch (GuzzleException $e) {
             Log::warning('RMSAPI Failed product fetch', [
                 'code' => $e->getCode(),
