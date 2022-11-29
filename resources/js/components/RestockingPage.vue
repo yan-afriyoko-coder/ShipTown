@@ -98,30 +98,6 @@ export default {
                     });
             },
 
-            quickLoadRestockingRecords(page = 1) {
-                this.showLoading();
-
-                const params = this.$router.currentRoute.query;
-                params['include'] = 'tags';
-                params['include'] = 'tags';
-                params['per_page'] = this.per_page;
-                params['page'] = 1;
-
-                this.apiGetRestocking(params)
-                    .then((response) => {
-                        if (page === 1) {
-                            this.data = [];
-                        }
-                        this.reachedEnd = response.data.data.length < this.per_page;
-
-                        this.data = this.data.concat(response.data.data);
-                        this.pagesLoaded = page;
-                    })
-                    .finally(() => {
-                        this.hideLoading();
-                    });
-            },
-
             focusOnInputAndReload() {
                 this.setFocusElementById(100,'barcodeInput', true, true);
                 this.loadRestockingRecords();

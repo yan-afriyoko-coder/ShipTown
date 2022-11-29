@@ -16,23 +16,32 @@ class RestockingReportSeeder extends Seeder
         $source_warehouse = Warehouse::whereCode('99')->first()
             ?? factory(Warehouse::class)->create(['code' => '99']);
 
-        $destination_warehouse = Warehouse::whereCode('DUB')->first()
-            ?? factory(Warehouse::class)->create(['code' => 'DUB']);
-
         $products = factory(Product::class, 10)->create();
 
-        $products->each(function (Product $product) use ($source_warehouse, $destination_warehouse) {
+        $products->each(function (Product $product) use ($source_warehouse) {
             InventoryService::adjustQuantity(
                 $product->inventory($source_warehouse->code)->first(),
-                rand(3, 13),
+                rand(30, 100),
                 'stocktake for Restocking report sample'
             );
 
-            InventoryService::adjustQuantity(
-                $product->inventory($destination_warehouse->code)->first(),
-                rand(-13, -3),
-                'simulate stock sold, but not received yet'
-            );
+//            InventoryService::adjustQuantity(
+//                $product->inventory($destination_warehouse->code)->first(),
+//                rand(-13, -3),
+//                'simulate stock sold, but not received yet'
+//            );
         });
+
+        $destination_warehouse = Warehouse::whereCode('DUB')->first()
+            ?? factory(Warehouse::class)->create(['code' => 'DUB']);
+
+        Inventory::query()->where([
+            'warehouse_code' => $destination_warehouse->code,
+        ])->update([
+            'quantity' => 0,
+            'quantity_incoming' => 0,
+            'reorder_point' => 0,
+            'restock_level' => 10,
+        ]);
     }
 }

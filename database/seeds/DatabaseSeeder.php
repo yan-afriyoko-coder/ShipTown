@@ -26,7 +26,9 @@ class DatabaseSeeder extends Seeder
             DpdUkTestOrdersSeeder::class,
             WebhooksTestSeeder::class,
             InventorySeeder::class,
+
             RestockingReportSeeder::class,
+
 //            DataCollectionsSeeder::class,
             DataCollectionsTransferInFromWarehouseSeeder::class,
 
