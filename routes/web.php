@@ -19,6 +19,10 @@ Route::redirect('', 'dashboard');
 Route::redirect('home', 'dashboard')->name('home');
 
 Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+Route::get('fulfilment-dashboard', 'DashboardController@index')->name('fulfilment-dashboard');
+Route::get('inventory-dashboard', 'Reports\InventoryDashboardController@index')->name('inventory-dashboard');
+
+Route::get('reports/inventory-dashboard', 'Reports\InventoryDashboardController@index')->name('reports.inventory-dashboard');
 
 Route::view('performance/dashboard', 'performance')->name('performance.dashboard');
 Route::view('products', 'products')->name('products');
@@ -37,7 +41,6 @@ Route::view('autopilot/packlist', 'autopilot/packlist')->name('autopilot.packlis
 Route::resource('order/packsheet', 'Order\PacksheetController')->only(['show']);
 
 Route::view('reports/picks', 'reports/picks_report')->name('reports.picks');
-Route::get('reports/inventory-dashboard', 'Reports\InventoryDashboardController@index')->name('reports.inventory-dashboard');
 Route::get('reports/shipments', 'Reports\ShipmentController@index')->name('reports.shipments');
 Route::get('reports/inventory', 'Reports\InventoryController@index')->name('reports.inventory');
 Route::get('reports/restocking', 'Reports\RestockingReportController@index')->name('reports.restocking');
