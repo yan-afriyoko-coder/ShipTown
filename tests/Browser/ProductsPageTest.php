@@ -3,6 +3,7 @@
 namespace Tests\Browser;
 
 use App\Models\Product;
+use App\Models\Warehouse;
 use App\User;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
@@ -20,6 +21,8 @@ class ProductsPageTest extends DuskTestCase
     public function testBasicExample()
     {
         $this->browse(function (Browser $browser) {
+            factory(Warehouse::class)->create();
+
             /** @var Product $product */
             $product = factory(Product::class)->create();
 
@@ -40,7 +43,7 @@ class ProductsPageTest extends DuskTestCase
      *
      * @return void
      */
-    public function test_products_empy()
+    public function test_products_empty()
     {
         Product::query()->forceDelete();
 
