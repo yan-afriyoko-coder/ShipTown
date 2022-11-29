@@ -21,7 +21,8 @@ class IsFullyPaidCondition extends BaseOrderConditionAbstract
 
         return $query->whereHas('orderProductsTotals', function (Builder $query) use ($expectedBoolValue) {
             $query->whereRaw('(
-                    ((total_paid > 0) OR (total_discounts > 0))
+                    ((total_products > 0) OR (total_paid > 0))
+                    AND ((total_paid > 0) OR (total_discounts > 0))
                     AND ((total_paid + total_discounts) >= total_price + total_shipping)
                 ) = ?
                 ', [$expectedBoolValue]);
