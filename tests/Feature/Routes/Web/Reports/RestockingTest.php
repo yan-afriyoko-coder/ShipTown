@@ -58,7 +58,7 @@ class RestockingTest extends TestCase
 
         $response = $this->get($this->uri);
 
-        $response->assertRedirect();
+        $response->assertSuccessful();
     }
 
     /** @test */
@@ -73,6 +73,6 @@ class RestockingTest extends TestCase
 
         $response = $this->get($this->uri);
 
-        $response->assertRedirect();
+        $response->assertSuccessful();
     }
 }
