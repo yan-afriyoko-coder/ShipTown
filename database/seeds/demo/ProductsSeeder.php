@@ -13,7 +13,7 @@ class ProductsSeeder extends Seeder
      */
     public function run()
     {
-        factory(Product::class)->create(['sku' => '57', 'description' => 'ShipTown Test Product - 57']);
+        factory(Product::class)->create(['sku' => '57', 'name' => 'ShipTown Test Product - 57']);
 
         $this->createSkuWithAliases([
             '01',
