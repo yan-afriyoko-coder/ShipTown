@@ -20,7 +20,11 @@ class RestockingController extends Controller
 
         $anonymousResourceCollection = JsonResource::collection($resource);
 
-        Cache::put('cached_restocking_report_user_id_'. auth()->id(), $anonymousResourceCollection, 60);
+        if ($request->has('cache_name')) {
+            $keyName = implode('_', ['cached_restocking_report', 'user_id', auth()->id(), $request->get('cache_name')]);
+
+            Cache::put($keyName, $anonymousResourceCollection, 300);
+        }
 
         return $anonymousResourceCollection;
     }
