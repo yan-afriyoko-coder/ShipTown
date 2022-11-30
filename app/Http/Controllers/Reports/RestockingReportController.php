@@ -32,7 +32,7 @@ class RestockingReportController extends Controller
         }
 
         return view('reports.restocking-report', [
-            'cached_restocking_report' => Cache::get('cached_restocking_report')
+            'cached_restocking_report' => Cache::get('cached_restocking_report_user_id_'. auth()->id())
         ]);
     }
 }
