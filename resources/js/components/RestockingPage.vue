@@ -87,6 +87,8 @@ export default {
                 params['per_page'] = this.per_page;
                 params['page'] = page;
 
+                params['cache_name'] = page === 1 ? params['cache_name'] : '';
+
                 this.apiGetRestocking(params)
                     .then((response) => {
                         if (page === 1) {
