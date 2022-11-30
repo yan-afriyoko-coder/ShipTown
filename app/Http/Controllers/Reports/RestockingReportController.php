@@ -31,8 +31,14 @@ class RestockingReportController extends Controller
             return $report->response($request);
         }
 
-        return view('reports.restocking-report', [
-            'cached_restocking_report' => Cache::get('cached_restocking_report_user_id_'. auth()->id())
-        ]);
+        if ($request->has('cache_name')) {
+            $keyName = implode('_', ['cached_restocking_report', 'user_id', auth()->id(), $request->get('cache_name')]);
+
+            return view('reports.restocking-report', [
+                'cached_restocking_report' => Cache::get($keyName)
+            ]);
+        }
+
+        return view('reports.restocking-report');
     }
 }
