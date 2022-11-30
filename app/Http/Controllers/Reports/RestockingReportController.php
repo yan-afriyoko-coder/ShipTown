@@ -10,6 +10,7 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
 class RestockingReportController extends Controller
@@ -30,6 +31,8 @@ class RestockingReportController extends Controller
             return $report->response($request);
         }
 
-        return view('reports.restocking-report');
+        return view('reports.restocking-report', [
+            'cached_restocking_report' => Cache::get('cached_restocking_report')
+        ]);
     }
 }

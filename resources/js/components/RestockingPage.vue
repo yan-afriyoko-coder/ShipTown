@@ -72,6 +72,10 @@ export default {
             this.loadRestockingRecords();
 
             window.onscroll = () => this.loadMore();
+
+            if (this.initial_data) {
+                this.data = this.initial_data;
+            }
         },
 
         methods: {
