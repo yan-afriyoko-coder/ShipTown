@@ -45,7 +45,6 @@
             </div>
         </div>
 
-
         <b-modal id="new-collection-modal" centered no-fade hide-header title="New Dats Collection" @ok="createCollectionAndRedirect" @shown="prepareNewCollectionModal">
             <input id="collection_name_input" v-model="newCollectionName" type="text" @keyup.enter="createCollectionAndRedirect" class="form-control" placeholder="New Collection name">
             <hr>
@@ -129,19 +128,18 @@
                     this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
                     return;
                 }
-                this.showLoading();
-                //
-                // this.getUrlFilterOrSet('filter[warehouse_code]', Vue.prototype.$currentUser['warehouse']['code']);
-                // this.showArchived = this.getUrlFilterOrSet('filter[archived]', 'false') === 'true';
-                //
-                // window.onscroll = () => this.loadMoreWhenNeeded();
-                //
-                // this.loadData();
-                //
-                // this.apiGetWarehouses()
-                //     .then(response => {
-                //         this.map_fields = ['product_sku'].concat(response.data.data.map(warehouse => warehouse.code));
-                //     });
+
+                this.getUrlFilterOrSet('filter[warehouse_code]', Vue.prototype.$currentUser['warehouse']['code']);
+                this.showArchived = this.getUrlFilterOrSet('filter[archived]', 'false') === 'true';
+
+                window.onscroll = () => this.loadMoreWhenNeeded();
+
+                this.loadData();
+
+                this.apiGetWarehouses()
+                    .then(response => {
+                        this.map_fields = ['product_sku'].concat(response.data.data.map(warehouse => warehouse.code));
+                    });
             },
 
             methods: {
