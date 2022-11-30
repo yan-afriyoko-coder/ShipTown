@@ -60,7 +60,7 @@
             </swiping-card>
         </template>
 
-        <div class="row col" ref="loadingContainerOverride" style="height: 100px"></div>
+        <div class="row col" ref="loadingContainerOverride" style="height: 32px"></div>
 
     </div>
 </template>
@@ -163,7 +163,7 @@
 
                 let params = {...this.$router.currentRoute.query};
                 params['include'] = 'product,inventory,product.tags,product.prices';
-                params['sort'] = this.getUrlParameter('sort', '-points,quantity_in_stock,inventory_id');
+                params['sort'] = this.getUrlParameter('sort', '-points,');
                 params['per_page'] = this.per_page;
                 params['page'] = page;
 

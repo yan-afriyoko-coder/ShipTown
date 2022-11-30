@@ -39,9 +39,11 @@
             </swiping-card>
         </template>
 
-        <div class="row"><div class="col">
-                <div ref="loadingContainerOverride" style="height: 50px"></div>
-        </div></div>
+        <div class="row">
+            <div class="col">
+                <div ref="loadingContainerOverride" style="height: 32px"></div>
+            </div>
+        </div>
 
 
         <b-modal id="new-collection-modal" centered no-fade hide-header title="New Dats Collection" @ok="createCollectionAndRedirect" @shown="prepareNewCollectionModal">
@@ -127,18 +129,19 @@
                     this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
                     return;
                 }
-
-                this.getUrlFilterOrSet('filter[warehouse_code]', Vue.prototype.$currentUser['warehouse']['code']);
-                this.showArchived = this.getUrlFilterOrSet('filter[archived]', 'false') === 'true';
-
-                window.onscroll = () => this.loadMoreWhenNeeded();
-
-                this.loadData();
-
-                this.apiGetWarehouses()
-                    .then(response => {
-                        this.map_fields = ['product_sku'].concat(response.data.data.map(warehouse => warehouse.code));
-                    });
+                this.showLoading();
+                //
+                // this.getUrlFilterOrSet('filter[warehouse_code]', Vue.prototype.$currentUser['warehouse']['code']);
+                // this.showArchived = this.getUrlFilterOrSet('filter[archived]', 'false') === 'true';
+                //
+                // window.onscroll = () => this.loadMoreWhenNeeded();
+                //
+                // this.loadData();
+                //
+                // this.apiGetWarehouses()
+                //     .then(response => {
+                //         this.map_fields = ['product_sku'].concat(response.data.data.map(warehouse => warehouse.code));
+                //     });
             },
 
             methods: {

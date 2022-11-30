@@ -31,6 +31,10 @@ export default {
                     if (this.isLoading) {
                         this.loader = this.$loading.show({
                             container: this.$refs.loadingContainerOverride ?? this.$refs.loadingContainer,
+                            loader: 'dots',
+                            width: 16,
+                            height: 16,
+                            opacity: 0,
                         });
                     }
                  },

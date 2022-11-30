@@ -57,7 +57,7 @@
 
         <div class="row">
             <div class="col">
-                <div ref="loadingContainerOverride" style="height: 50px"></div>
+                <div ref="loadingContainerOverride" style="height: 32px"></div>
             </div>
         </div>
 

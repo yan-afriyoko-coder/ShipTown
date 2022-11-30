@@ -37,9 +37,21 @@ class NegativeWarehouseStockJob implements ShouldQueue
             return true;
         }
 
+        DB::statement("
+            DELETE FROM stocktake_suggestions
+            WHERE warehouse_id IN (?)
+            AND reason = ?
+        ", [$warehouseIDs->implode(','), $reason]);
+
         DB::statement('
             INSERT INTO stocktake_suggestions (inventory_id, product_id, warehouse_id, points, reason, created_at, updated_at)
-                SELECT DISTINCT inventory.id, inventory.product_id, inventory.warehouse_id, ?, ?, now(), now()
+                SELECT DISTINCT inventory.id as inventory_id,
+                    inventory.product_id as product_id,
+                    inventory.warehouse_id as warehouse_id,
+                    20 + ABS(inventory.quantity) as points,
+                    ? as reason,
+                    now() as created_at,
+                    now() as updated_at
                 FROM inventory
                 RIGHT JOIN inventory as inventory_fullfilment
                     ON inventory_fullfilment.product_id = inventory.product_id
