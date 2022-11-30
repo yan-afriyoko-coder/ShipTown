@@ -39,10 +39,11 @@
             </swiping-card>
         </template>
 
-        <div class="row"><div class="col">
-                <div ref="loadingContainerOverride" style="height: 50px"></div>
-        </div></div>
-
+        <div class="row">
+            <div class="col">
+                <div ref="loadingContainerOverride" style="height: 32px"></div>
+            </div>
+        </div>
 
         <b-modal id="new-collection-modal" centered no-fade hide-header title="New Dats Collection" @ok="createCollectionAndRedirect" @shown="prepareNewCollectionModal">
             <input id="collection_name_input" v-model="newCollectionName" type="text" @keyup.enter="createCollectionAndRedirect" class="form-control" placeholder="New Collection name">
