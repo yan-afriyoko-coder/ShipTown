@@ -111,7 +111,11 @@
 
         methods: {
             findText(search) {
+                this.setUrlParameter('filter[created_at_between]', '');
+                this.setUrlParameter('filter[description]', '');
+                this.setUrlParameter('per_page', 20);
                 this.setUrlParameter('search', search);
+                this.setUrlParameter('sort', '-created_at');
                 this.reloadProducts();
             },
 
