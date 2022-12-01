@@ -24,6 +24,7 @@ class DataCollectionResource extends JsonResource
             'id' => $this->id,
             'warehouse_id' => $this->warehouse_id,
             'name' => $this->name,
+            'deleted_at' => $this->deleted_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
 

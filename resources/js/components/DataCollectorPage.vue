@@ -248,7 +248,6 @@
                 this.apiDataCollectorActions('transfer-to-warehouse', data)
                     .then(response => {
                         this.$snotify.success('Transfer to warehouse initiated');
-                        this.$bvModal.hide('transferToModal');
                         setTimeout(() => {
                             this.loadDataCollectorRecords();
                         }, 500);
@@ -257,6 +256,8 @@
                     .catch(error => {
                         this.showException(error);
                     });
+
+                this.$bvModal.hide('transferToModal');
             },
 
             transferStockOut() {
@@ -445,26 +446,22 @@
                     });
             },
 
-            downloadFileAndHideModal($event) {
+            downloadFileAndHideModal() {
+                window.open(this.getDownloadLink, '_blank');
+
+                this.$bvModal.hide('configuration-modal');
+            },
+        },
+
+        computed: {
+            getDownloadLink() {
                 let routeData = this.$router.resolve({
                     path: this.$router.currentRoute.fullPath,
                     query: {
                         'select': 'product_sku,product_name,quantity_requested,quantity_to_scan,quantity_scanned',
                         'filter[data_collection_id]': this.data_collection_id,
-                        filename: this.dataCollection['data']['0']['name'] +".csv"
+                        filename: this.dataCollection['name'] +".csv"
                     }
-                });
-
-                window.location = routeData.href;
-
-                this.$bvModal.hide('configuration-modal');
-            },
-        },
-        computed: {
-            getDownloadLink() {
-                let routeData = this.$router.resolve({
-                    path: this.$router.currentRoute.fullPath,
-                    query: {filename: "test.csv"}
                 });
 
                 return routeData.href;
