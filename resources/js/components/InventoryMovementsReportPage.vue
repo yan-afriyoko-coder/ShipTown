@@ -38,7 +38,7 @@
                                     </tr>
                                     <tr>
                                         <td>type:</td>
-                                        <td class="pl-1">{{ record['description'] }}</td>
+                                        <td class="pl-1"><a href="" @click="setUrlParameter('filter[description]', record['description'] )">{{ record['description'] }}</a></td>
                                     </tr>
                                     <tr>
                                         <td>by:</td>

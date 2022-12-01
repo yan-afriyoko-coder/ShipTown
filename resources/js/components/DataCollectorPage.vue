@@ -5,7 +5,10 @@
                     <div class="row setting-list">
                         <div class="col-sm-12 col-lg-6">
                             <div class="text-primary">{{ dataCollection ? dataCollection['name'] : '' }}</div>
-                            <div class="text-secondary small">{{ formatDateTime(dataCollection ? ['created_at'] : '')  }}</div>
+                            <div class="text-secondary small">{{ formatDateTime(dataCollection ? dataCollection['created_at'] : '')  }}</div>
+                        </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <text-card class="fa-pull-right" :label="formatDateTime(dataCollection ? dataCollection['deleted_at'] : '')" text="ARCHIVED"></text-card>
                         </div>
                     </div>
             </template>
@@ -62,11 +65,11 @@
         </div>
 
         <b-modal id="configuration-modal" centered no-fade hide-footer hide-header
-                 @shown="setFocusElementById(100,'stocktake-input', true, true)"
+                 @shown="onShownConfigurationModal"
                  @hidden="setFocusElementById(100,'barcodeInput', true, true)"
         >
             <div v-if="dataCollection">
-                <div v-if="dataCollection['deleted_at'] === null">
+                <div v-if="dataCollection['deleted_at'] === null" :class="{ 'disabled': true }">
                     <stocktake-input></stocktake-input>
                     <hr>
                     <button @click.prevent="autoScanAll" v-b-toggle class="col btn mb-2 btn-primary">AutoScan ALL Records</button>
@@ -172,6 +175,7 @@
                     per_page: 15,
                     csv: null,
                     warehouses: [],
+                    buttonsEnabled: false,
                 };
             },
         mounted() {
@@ -198,6 +202,11 @@
                 setTimeout(() => {
                     this.loadDataCollectorRecords();
                 }, 100);
+            },
+
+            onShownConfigurationModal() {
+                this.setFocusElementById(100,'stocktake-input', true, true);
+                this.buttonsEnabled = true;
             },
 
             onBarcodeScanned: function (barcode) {
@@ -261,6 +270,8 @@
             },
 
             transferStockOut() {
+                this.buttonsEnabled = false;
+
                 let data = {
                     'action': 'transfer_out_scanned',
                 }
