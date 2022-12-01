@@ -40,6 +40,8 @@ class DataCollectorService
     {
         $dataCollection->update(['type' => DataCollectionTransferIn::class]);
 
+        $dataCollection->delete();
+
         $dataCollection->records()
             ->where('quantity_scanned', '!=', DB::raw(0))
             ->each(function (DataCollectionRecord $record) {
@@ -67,13 +69,13 @@ class DataCollectorService
                     'quantity_scanned' => 0
                 ]);
             });
-
-            $dataCollection->delete();
     }
 
     public static function transferOutScanned(DataCollection $dataCollection)
     {
         $dataCollection->update(['type' => DataCollectionTransferOut::class]);
+
+        $dataCollection->delete();
 
         $dataCollection->records()
             ->where('quantity_scanned', '!=', DB::raw(0))
@@ -102,8 +104,6 @@ class DataCollectorService
                     'quantity_scanned' => 0
                 ]);
             });
-
-        $dataCollection->delete();
     }
 
     public static function transferScannedTo(DataCollection $sourceDataCollection, int $warehouse_id): DataCollection
@@ -133,16 +133,6 @@ class DataCollectorService
                     $destinationDataCollectionRecord->quantity_scanned = 0;
                     $destinationDataCollectionRecord->save();
                 });
-
-//            // copy records
-//            DB::statement(
-//                '
-//                INSERT INTO data_collection_records (data_collection_id, product_id, quantity_requested, created_at, updated_at)
-//                SELECT ?, product_id, quantity_scanned, now(), now()
-//                FROM data_collection_records
-//                WHERE quantity_scanned > 0 AND data_collection_id = ?',
-//                [$destinationDataCollection->id, $sourceDataCollection->id]
-//            );
 
             DataCollectorService::transferOutScanned($sourceDataCollection);
         });

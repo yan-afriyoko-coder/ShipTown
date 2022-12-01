@@ -14,12 +14,12 @@ class TransferToWarehouseController extends Controller
     {
         $sourceDataCollection = DataCollection::findOrFail($request->get('data_collector_id'));
 
+        $sourceDataCollection->delete();
+
         $destinationDataCollection = DataCollectorService::transferScannedTo(
             $sourceDataCollection,
             $request->get('destination_warehouse_id')
         );
-
-        $sourceDataCollection->delete();
 
         return DataCollectionResource::make($destinationDataCollection);
     }

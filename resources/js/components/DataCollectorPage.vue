@@ -248,7 +248,6 @@
                 this.apiDataCollectorActions('transfer-to-warehouse', data)
                     .then(response => {
                         this.$snotify.success('Transfer to warehouse initiated');
-                        this.$bvModal.hide('transferToModal');
                         setTimeout(() => {
                             this.loadDataCollectorRecords();
                         }, 500);
@@ -257,6 +256,8 @@
                     .catch(error => {
                         this.showException(error);
                     });
+
+                this.$bvModal.hide('transferToModal');
             },
 
             transferStockOut() {
