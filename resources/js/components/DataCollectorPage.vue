@@ -5,10 +5,10 @@
                     <div class="row setting-list">
                         <div class="col-sm-12 col-lg-6">
                             <div class="text-primary">{{ dataCollection ? dataCollection['name'] : '' }}</div>
-                            <div class="text-secondary small">{{ formatDateTime(dataCollection ? dataCollection['created_at'] : '')  }}</div>
+                            <div class="text-secondary small">{{ formatDateTime(dataCollection ? dataCollection['created_at'] : '', 'dddd - MMM D HH:mm')  }}</div>
                         </div>
-                        <div class="col-sm-12 col-lg-6">
-                            <text-card class="fa-pull-right" :label="formatDateTime(dataCollection ? dataCollection['deleted_at'] : '')" text="ARCHIVED"></text-card>
+                        <div class="col-sm-12 col-lg-6" v-if="dataCollection && dataCollection['deleted_at']">
+                            <text-card class="fa-pull-right" :label="formatDateTime(dataCollection ? dataCollection['deleted_at'] : '', 'dddd - MMM D HH:mm')" text="ARCHIVED"></text-card>
                         </div>
                     </div>
             </template>
