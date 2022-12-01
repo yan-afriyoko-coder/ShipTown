@@ -74,9 +74,9 @@
 
                         <!-- Menu Items END -->
                         <div class="dropdown-menu left bg-primary" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item text-white lightHover" href="{{ route('inventory-dashboard') }}">{{ __('Inventory Dashboard') }}</a>
-                            <a class="dropdown-item text-white lightHover" href="{{ route('fulfilment-dashboard') }}">{{ __('Fulfilment Dashboard') }}</a>
-                            <a class="dropdown-item text-white lightHover" href="{{ route('performance.dashboard') .'?between_dates=-7days,now' }}">{{ __('Fulfilment Performance') }}</a>
+                            <a class="dropdown-item text-white lightHover" href="{{ route('inventory-dashboard') }}">{{ __('Warehouse Inventory Dashboard') }}</a>
+                            <a class="dropdown-item text-white lightHover" href="{{ route('fulfilment-dashboard') }}">{{ __('FC Dashboard') }}</a>
+                            <a class="dropdown-item text-white lightHover" href="{{ route('performance.dashboard') .'?between_dates=-7days,now' }}">{{ __('FC Performance') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.picks') }}">{{ __('Picks') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.shipments') }}">{{ __('Shipments') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory') }}">{{ __('Inventory') }}</a>
