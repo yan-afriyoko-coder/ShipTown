@@ -109,7 +109,7 @@ class DataCollectorService
     public static function transferScannedTo(DataCollection $sourceDataCollection, int $warehouse_id): DataCollection
     {
         // create collection
-        $destinationDataCollection = $sourceDataCollection->replicate();
+        $destinationDataCollection = $sourceDataCollection->replicate(['deleted_at']);
 
         DB::transaction(function () use ($warehouse_id, $sourceDataCollection, $destinationDataCollection) {
             $destinationDataCollection->type = DataCollectionTransferIn::class;
