@@ -7,14 +7,15 @@
                 <div class="row">
                     <product-info-card :product="product"></product-info-card>
                 </div>
-                <div class="row col mt-3 mb-3 small">
-                    <number-card label="price" :number="prices ? prices['price'] : 0" class="float-left"></number-card>
+                <div class="row-col text-right mt-3 mb-3">
+                    <number-card label="price" :number="prices ? prices['price'] : 0"></number-card>
+                    <number-card label="quantity" :number="productNew ? productNew['inventory'][this.currentUser()['warehouse']['code']]['quantity'] : 0"></number-card>
+                    <text-card label="shelf" :text="productNew ? productNew['inventory'][this.currentUser()['warehouse']['code']]['shelf_location'] : 0"></text-card>
                 </div>
                 <div class="row-col text-right mt-3 mb-3">
-                    <number-card label="requested" :number="dataCollectionRecord ? dataCollectionRecord['quantity_requested'] : 0"></number-card>
+                    <number-card :class="{ 'bg-warning': dataCollectionRecord && dataCollectionRecord['quantity_requested'] > productNew['inventory'][this.currentUser()['warehouse']['code']]['quantity']}" label="requested" :number="dataCollectionRecord ? dataCollectionRecord['quantity_requested'] : 0"></number-card>
                     <number-card label="scanned" :number="dataCollectionRecord ? dataCollectionRecord['quantity_scanned'] : 0"></number-card>
                     <number-card label="to_scan" :number="dataCollectionRecord ? dataCollectionRecord['quantity_to_scan'] : 0"></number-card>
-<!--                    <number-card label="in stock" :number="product['inventory'][this.currentUser()['warehouse']['code']]['quantity']"></number-card>-->
                 </div>
 
             <div class="row">
@@ -59,6 +60,7 @@
 
         data: function() {
             return {
+                productNew: null,
                 quantity: null,
                 prices: null,
             };
@@ -79,8 +81,9 @@
 
                 this.apiGetProducts({
                     'filter[id]': newProduct['id'],
-                    'include': 'prices',
+                    'include': 'prices,inventory',
                 }).then(response => {
+                    this.productNew = response.data.data[0];
                     this.prices = response.data.data[0]['prices'][this.currentUser()['warehouse']['code']];
                 });
             }
