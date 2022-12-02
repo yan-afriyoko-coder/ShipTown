@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\BaseModel;
+use App\Traits\LogsActivityTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,6 +24,12 @@ use Illuminate\Support\Carbon;
 class DataCollection extends BaseModel
 {
     use SoftDeletes;
+    use LogsActivityTrait;
+
+    protected static $logAttributes = [
+        'deleted_at',
+        'type',
+    ];
 
     protected $fillable = [
         'type',
