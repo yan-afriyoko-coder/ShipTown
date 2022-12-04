@@ -15,7 +15,7 @@
         "aws/aws-sdk-php-laravel": "3.6.*",
         "barryvdh/laravel-dompdf": "^0.9",
         "blackfire/php-sdk": "^1.31",
-        "doctrine/dbal": "^2.0",
+        "doctrine/dbal": "^2.6",
         "dompdf/dompdf": "^1.0",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
@@ -23,14 +23,14 @@
         "guzzlehttp/guzzle": "^6.3.1|^7.0.1",
         "hulkur/laravel-hasmany-keyby": "^2.0",
         "laravel/forge-sdk": "^3.13",
-        "laravel/framework": "7.30.*",
+        "laravel/framework": "^7.29",
         "laravel/passport": "^9.3",
         "laravel/tinker": "^2.5",
-        "laravel/ui": "^2.5",
+        "laravel/ui": "^2.0",
         "lcobucci/jwt": "^3.4.6",
         "league/csv": "^9.6",
         "makeabledk/laravel-factory-enhanced": "^2.1",
-        "milon/barcode": "^7.0",
+        "milon/barcode": "^9.0",
         "rap2hpoutre/laravel-log-viewer": "^1.7",
         "romanzipp/laravel-queue-monitor": "2.1.*",
         "sentry/sentry-laravel": "^2.4",
@@ -38,9 +38,9 @@
         "spatie/laravel-activitylog": "^3.17",
         "spatie/laravel-database-mail-templates": "^3.4",
         "spatie/laravel-permission": "^4.0",
-        "spatie/laravel-query-builder": "^3.3",
+        "spatie/laravel-query-builder": "^4.0",
         "spatie/laravel-ray": "^1.17",
-        "spatie/laravel-tags": "^2.0",
+        "spatie/laravel-tags": "^2.6",
         "thomasjohnkane/snooze": "^1.0",
         "tightenco/ziggy": "^1.5"
     },
@@ -98,7 +98,6 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
             "@install-hooks"
         ],
-        "post-install-cmd": [
-        ]
+        "post-install-cmd": []
     }
 }

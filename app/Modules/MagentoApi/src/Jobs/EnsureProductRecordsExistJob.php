@@ -46,6 +46,6 @@ class EnsureProductRecordsExistJob implements ShouldQueue
             AND taggables.taggable_id NOT IN (
                 SELECT product_id FROM modules_magento2api_products
             )
-        ", [$tag->getKey(), 'App\\Models\\Product']);
+        ", [$tag->getKey(), \App\Models\Product::class]);
     }
 }
