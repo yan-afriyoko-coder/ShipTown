@@ -15,7 +15,7 @@ class UpdateTest extends TestCase
     private function simulationTest()
     {
         $mailTemplate = new MailTemplate();
-        $mailTemplate->mailable = 'App\Mail\ShipmentConfirmationMail';
+        $mailTemplate->mailable = \App\Mail\ShipmentConfirmationMail::class;
         $mailTemplate->subject = 'testing Subject';
         $mailTemplate->reply_to = 'test@example.com';
         $mailTemplate->to = 'test@example.com';

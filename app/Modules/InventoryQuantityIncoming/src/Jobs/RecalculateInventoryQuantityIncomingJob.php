@@ -62,7 +62,7 @@ class RecalculateInventoryQuantityIncomingJob implements ShouldQueue
            GROUP BY inventory.id
 
            HAVING actual_quantity_incoming <> expected_quantity_incoming
-        ", ['App\\Models\\DataCollectionTransferIn', $this->warehouse_id, $this->product_id]);
+        ", [\App\Models\DataCollectionTransferIn::class, $this->warehouse_id, $this->product_id]);
 
         collect($inventoryRecords)
             ->each(function ($incorrectRecord) {

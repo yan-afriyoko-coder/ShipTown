@@ -57,7 +57,7 @@ class FixIncorrectQuantityIncomingJob implements ShouldQueue
            GROUP BY inventory.id
 
            HAVING actual_quantity_incoming != expected_quantity_incoming
-        ", ['App\\Models\\DataCollectionTransferIn']);
+        ", [\App\Models\DataCollectionTransferIn::class]);
 
         collect($inventoryRecords)
             ->each(function ($incorrectRecord) {
@@ -96,7 +96,7 @@ class FixIncorrectQuantityIncomingJob implements ShouldQueue
            GROUP BY inventory.id
 
            HAVING actual_quantity_incoming <> expected_quantity_incoming
-        ", ['App\\Models\\DataCollectionTransferIn']);
+        ", [\App\Models\DataCollectionTransferIn::class]);
 
         collect($inventoryRecords)
             ->each(function ($incorrectRecord) {

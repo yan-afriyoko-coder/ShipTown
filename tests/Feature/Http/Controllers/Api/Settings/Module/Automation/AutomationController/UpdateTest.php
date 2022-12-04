@@ -33,18 +33,18 @@ class UpdateTest extends TestCase
             'priority' => 1,
             'conditions' => [
                 [
-                    'condition_class' => 'App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition',
+                    'condition_class' => \App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition::class,
                     'condition_value' => 'paid'
                 ],
                 [
-                    'condition_class' => 'App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition',
+                    'condition_class' => \App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition::class,
                     'condition_value' => 'paid'
                 ]
             ],
             'actions' => [
                 [
                     'priority' => 1,
-                    'action_class' => 'App\Modules\Automations\src\Actions\Order\SetStatusCodeAction',
+                    'action_class' => \App\Modules\Automations\src\Actions\Order\SetStatusCodeAction::class,
                     'action_value' => 'store_pickup',
                 ]
             ]
