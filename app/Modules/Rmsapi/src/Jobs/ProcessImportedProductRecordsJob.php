@@ -136,7 +136,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
 
         if ($inventory->quantity !== $ip->raw_import['quantity_on_hand']) {
             $quantityDelta = $ip->raw_import['quantity_on_hand'] - $inventory->quantity;
-            InventoryService::adjustQuantity($inventory, $quantityDelta, 'RMS import adjustment');
+            InventoryService::adjustQuantity($inventory, $quantityDelta, 'rms_adjustment');
         }
 
         if ($inventory->quantity_reserved !== Arr::get($ip->raw_import, 'quantity_committed', 0)
