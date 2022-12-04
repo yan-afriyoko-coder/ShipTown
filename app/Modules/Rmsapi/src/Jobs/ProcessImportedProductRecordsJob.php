@@ -8,6 +8,7 @@ use App\Models\ProductAlias;
 use App\Models\ProductPrice;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
+use App\Services\InventoryService;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -126,21 +127,24 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
     {
         $connection = RmsapiConnection::query()->find($ip->connection_id);
 
-        $i = Inventory::query()
+        $inventory = Inventory::query()
             ->where([
                 'product_id' => $product->id,
                 'warehouse_code' => $connection->location_id,
             ])
             ->first();
 
-        if ($i->quantity !== $ip->raw_import['quantity_on_hand']
-            or $i->quantity_reserved !== Arr::get($ip->raw_import, 'quantity_committed', 0)
-            or $i->shelve_location !== Arr::get($ip->raw_import, 'shelve_location', '')
-            or $i->reorder_point !== Arr::get($ip->raw_import, 'reorder_point', 0)
-            or $i->restock_level !== Arr::get($ip->raw_import, 'restock_level', 0)
+        if ($inventory->quantity !== $ip->raw_import['quantity_on_hand']) {
+            $quantityDelta = $ip->raw_import['quantity_on_hand'] - $inventory->quantity;
+            InventoryService::adjustQuantity($inventory, $quantityDelta, 'RMS import adjustment');
+        }
+
+        if ($inventory->quantity_reserved !== Arr::get($ip->raw_import, 'quantity_committed', 0)
+            or $inventory->shelve_location !== Arr::get($ip->raw_import, 'shelve_location', '')
+            or $inventory->reorder_point !== Arr::get($ip->raw_import, 'reorder_point', 0)
+            or $inventory->restock_level !== Arr::get($ip->raw_import, 'restock_level', 0)
         ) {
-            $i->update([
-                'quantity'          => Arr::get($ip->raw_import, 'quantity_on_hand', 0),
+            $inventory->update([
                 'quantity_reserved' => Arr::get($ip->raw_import, 'quantity_committed', 0),
                 'shelve_location'   => Arr::get($ip->raw_import, 'rmsmobile_shelve_location', ''),
                 'reorder_point'     => Arr::get($ip->raw_import, 'reorder_point', 0),
