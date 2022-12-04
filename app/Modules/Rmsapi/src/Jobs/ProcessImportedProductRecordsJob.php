@@ -17,6 +17,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class ProcessImportedProductRecordsJob implements ShouldQueue
 {
@@ -134,7 +135,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
             ])
             ->first();
 
-        if ($inventory->quantity !== $ip->raw_import['quantity_on_hand']) {
+        if ($inventory->quantity !== floatval($ip->raw_import['quantity_on_hand'])) {
             $quantityDelta = $ip->raw_import['quantity_on_hand'] - $inventory->quantity;
             InventoryService::adjustQuantity($inventory, $quantityDelta, 'rms_adjustment');
         }
