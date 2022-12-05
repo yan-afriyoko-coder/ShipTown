@@ -97,7 +97,7 @@ trait HasTagsTrait
                 if ($this->doesNotHaveTags([$tag])) {
                     return;
                 }
-                $this->originalDetachTags($tag, $type);
+                $this->originalDetachTags([$tag], $type);
                 $this->onTagDetached($tag);
                 $this->log('detached "'.$tag.'" tag');
             });
