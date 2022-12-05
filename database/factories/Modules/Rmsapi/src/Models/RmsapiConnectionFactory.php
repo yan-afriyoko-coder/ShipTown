@@ -1,15 +1,15 @@
 <?php
 
-
-
 namespace Database\Factories\Modules\Rmsapi\src\Models;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Warehouse;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class RmsapiConnectionFactory extends Factory
 {
+    protected $model = RmsapiConnection::class;
+
     /**
      * Define the model's default state.
      *

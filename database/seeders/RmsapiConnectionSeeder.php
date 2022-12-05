@@ -19,7 +19,9 @@ class RmsapiConnectionSeeder extends Seeder
             return;
         }
 
-        RmsapiConnection::factory()->create([
+        RmsapiModuleServiceProvider::enableModule();
+
+        App\Modules\Rmsapi\src\Models\RmsapiConnection::factory()->create([
             'location_id' => env('TEST_RMSAPI_WAREHOUSE_CODE'),
             'url' => env('TEST_RMSAPI_URL'),
             'username' => env('TEST_RMSAPI_USERNAME'),

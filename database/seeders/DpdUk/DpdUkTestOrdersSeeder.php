@@ -29,7 +29,7 @@ class DpdUkTestOrdersSeeder extends Seeder
         $this->createOrderWithTooLongStreetAddress();
 
         /** @var Connection $connection */
-        $connection = Connection::factory()->make();
+        $connection = Connection::factory()->create();
         $connection->collectionAddress()->associate($testAddress);
         $connection->save();
     }

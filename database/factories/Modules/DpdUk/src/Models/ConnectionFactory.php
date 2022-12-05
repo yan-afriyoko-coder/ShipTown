@@ -4,12 +4,14 @@
 
 namespace Database\Factories\Modules\DpdUk\src\Models;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\OrderAddress;
 use App\Modules\DpdUk\src\Models\Connection;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ConnectionFactory extends Factory
 {
+    protected $model = Connection::class;
+
     /**
      * Define the model's default state.
      *

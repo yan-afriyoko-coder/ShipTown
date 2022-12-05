@@ -4,6 +4,7 @@ namespace Database\Seeders\Demo;
 
 use App\Models\NavigationMenu;
 use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
 use App\Modules\Automations\src\Conditions\Order\IsFullyPackedCondition;
 use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
@@ -19,9 +20,13 @@ class PaidOrdersSeeder extends Seeder
      */
     public function run()
     {
-        Order::factory()->count(1)
-            ->with('orderProducts', 1)
+        $order = Order::factory()
+            ->count(1)
             ->create(['status_code' => 'paid']);
+
+        OrderProduct::factory()
+            ->count(1)
+            ->create(['order_id' => $order->first()->getKey()]);
 
         $this->createOrders();
         $this->createNavigationMenu();
@@ -30,21 +35,33 @@ class PaidOrdersSeeder extends Seeder
 
     private function createOrders(): void
     {
-        Order::factory()->count(10)
-            ->with('orderProducts', 1)
-            ->create(['status_code' => 'paid']);
+        Order::factory()
+            ->count(10)
+            ->create(['status_code' => 'paid'])
+            ->each(function (Order $order) {
+                OrderProduct::factory()->count(1)->create(['order_id' => $order->getKey()]);
+            });
 
-        Order::factory()->count(10)
-            ->with('orderProducts', 2)
-            ->create(['status_code' => 'paid']);
+        Order::factory()
+            ->count(10)
+            ->create(['status_code' => 'paid'])
+            ->each(function (Order $order) {
+                OrderProduct::factory()->count(2)->create(['order_id' => $order->getKey()]);
+            });
 
-        Order::factory()->count(10)
-            ->with('orderProducts', 3)
-            ->create(['status_code' => 'paid']);
+        Order::factory()
+            ->count(10)
+            ->create(['status_code' => 'paid'])
+            ->each(function (Order $order) {
+                OrderProduct::factory()->count(3)->create(['order_id' => $order->getKey()]);
+            });
 
-        Order::factory()->count(10)
-            ->with('orderProducts', 4)
-            ->create(['status_code' => 'paid']);
+        Order::factory()
+            ->count(10)
+            ->create(['status_code' => 'paid'])
+            ->each(function (Order $order) {
+                OrderProduct::factory()->count(4)->create(['order_id' => $order->getKey()]);
+            });
 
         Order::query()->get()
             ->each(function (Order $order) {

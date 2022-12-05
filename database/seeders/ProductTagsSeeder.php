@@ -15,9 +15,9 @@ class ProductTagsSeeder extends Seeder
      */
     public function run()
     {
-        Tag::factory()->create(['name' => 'slow']);
-        Tag::factory()->create(['name' => 'discontinued']);
-        Tag::factory()->create(['name' => 'best seller']);
+        Tag::query()->firstOrCreate(['name' => 'slow']);
+        Tag::query()->firstOrCreate(['name' => 'discontinued']);
+        Tag::query()->firstOrCreate(['name' => 'best seller']);
 
         Tag::all()->each(function ($tag) {
             Product::query()->inRandomOrder()->first()->attachTag($tag);
