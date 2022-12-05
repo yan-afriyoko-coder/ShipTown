@@ -4,16 +4,12 @@ namespace Tests\Feature\Http\Controllers\Api\OrderController;
 
 use App\Models\Order;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Http;
 use Laravel\Passport\Passport;
 use Spatie\Tags\Tag;
 use Tests\TestCase;
 
 class IndexTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * @return void
      */
@@ -30,7 +26,16 @@ class IndexTest extends TestCase
 
         $order->attachTag('Test');
 
-        $response = $this->json('GET', '/api/orders?filter[has_tags]=Test&include=activities,activities.causer,shipping_address,order_shipments,order_products,order_products.product,order_products.product.aliases,packer,order_comments,order_comments.user');
+        $response = $this->json('GET', implode(',', [
+            '/api/orders?filter[has_tags]=Test&include=activities',
+            'activities.causer,shipping_address',
+            'order_shipments,order_products,order_products.product',
+            'order_products.product.aliases,packer,order_comments,order_comments.user'
+        ]));
+
+        ray($response->getContent());
+
+        $response->assertSuccessful();
 
         $this->assertEquals(1, $response->json()['meta']['total']);
     }

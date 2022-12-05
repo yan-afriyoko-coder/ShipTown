@@ -17,6 +17,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedInclude;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\Tags\Tag;
 
@@ -541,33 +542,33 @@ class Order extends BaseModel
     }
 
     /**
-     * @return HasMany|OrderProduct
+     * @return HasMany
      */
-    public function orderProducts()
+    public function orderProducts(): HasMany
     {
         return $this->hasMany(OrderProduct::class);
     }
 
     /**
-     * @return HasMany | Packlist
+     * @return HasMany
      */
-    public function packlist()
+    public function packlist(): HasMany
     {
         return $this->hasMany(Packlist::class);
     }
 
     /**
-     * @return BelongsTo | OrderAddress
+     * @return BelongsTo
      */
-    public function shippingAddress()
+    public function shippingAddress(): BelongsTo
     {
         return $this->belongsTo(OrderAddress::class);
     }
 
     /**
-     * @return BelongsTo | User
+     * @return BelongsTo
      */
-    public function packer()
+    public function packer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'packer_user_id');
     }
@@ -604,7 +605,6 @@ class Order extends BaseModel
         return QueryBuilder::for(Order::class)
             ->allowedFilters([
                 AllowedFilter::scope('search', 'whereHasText')->ignore([null, '']),
-
                 AllowedFilter::exact('status', 'status_code'),
                 AllowedFilter::exact('id', 'id'),
                 AllowedFilter::exact('order_id', 'id'),
@@ -628,18 +628,18 @@ class Order extends BaseModel
                 AllowedFilter::scope('without_tags', 'withoutAllTags'),
             ])
             ->allowedIncludes([
-                'activities',
-                'activities.causer',
-                'shipping_address',
-                'order_shipments',
-                'order_products',
-                'order_products_totals',
-                'order_products.product',
-                'order_products.product.aliases',
-                'packer',
-                'order_comments',
-                'order_comments.user',
-                'tags',
+                AllowedInclude::relationship('activities', 'activities'),
+                AllowedInclude::relationship('activities.causer', 'activities.causer'),
+                AllowedInclude::relationship('shipping_address', 'shippingAddress'),
+                AllowedInclude::relationship('order_shipments', 'orderShipments'),
+                AllowedInclude::relationship('order_products', 'orderProducts'),
+                AllowedInclude::relationship('order_products_totals', 'orderProductsTotals'),
+                AllowedInclude::relationship('order_products.product', 'orderProducts.product'),
+                AllowedInclude::relationship('order_products.product.aliases', 'orderProducts.product.aliases'),
+                AllowedInclude::relationship('packer', 'packer'),
+                AllowedInclude::relationship('order_comments', 'orderComments'),
+                AllowedInclude::relationship('order_comments.user', 'orderComments.user'),
+                AllowedInclude::relationship('tags', 'tags'),
             ])
             ->allowedSorts([
                 'updated_at',
