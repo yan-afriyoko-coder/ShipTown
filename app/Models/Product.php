@@ -130,13 +130,9 @@ class Product extends BaseModel
         'quantity_reserved'     => 0,
         'quantity_available'    => 0,
     ];
-
-    protected $dates = [
-        'sale_price_start_date',
-        'sale_price_end_date',
-    ];
-
     protected $casts = [
+        'sale_price_start_date' => 'datetime',
+        'sale_price_end_date' => 'datetime',
         'quantity'           => 'float',
         'quantity_reserved'  => 'float',
         'quantity_available' => 'float',

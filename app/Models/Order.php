@@ -165,6 +165,10 @@ class Order extends BaseModel
     ];
 
     protected $casts = [
+        'picked_at' => 'datetime',
+        'packed_at' => 'datetime',
+        'order_placed_at' => 'datetime',
+        'order_closed_at' => 'datetime',
         'is_active'         => 'boolean',
         'is_on_hold'        => 'boolean',
         'is_editing'        => 'boolean',
@@ -190,14 +194,6 @@ class Order extends BaseModel
         'is_packed',
         'age_in_days',
     ];
-
-    protected $dates = [
-        'picked_at',
-        'packed_at',
-        'order_placed_at',
-        'order_closed_at',
-    ];
-
     /**
      * @return Builder
      */
