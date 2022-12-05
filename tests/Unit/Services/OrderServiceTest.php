@@ -161,9 +161,14 @@ class OrderServiceTest extends TestCase
         $product = Product::factory()->create();
 
         /** @var Order $order */
-        $order = Order::factory()
-            ->with('orderProducts')
+        $order = Order::factory(1)
             ->create();
+
+        OrderProduct::factory(1)
+            ->create([
+                'order_id' => $order->id,
+                'product_id' => $product->id,
+            ]);
 
         /** @var OrderProduct $orderProduct */
         $orderProduct = $order->orderProducts->first();
@@ -194,11 +199,16 @@ class OrderServiceTest extends TestCase
         /** @var Warehouse $warehouse */
         $warehouse = Warehouse::factory()->create();
 
-        Product::factory()->create();
+        $product = Product::factory()->create();
 
         $order = Order::factory()
-            ->with('orderProducts')
             ->create();
+
+        OrderProduct::factory(1)
+            ->create([
+                'order_id' => $order->id,
+                'product_id' => $product->id,
+            ]);
 
         /** @var OrderProduct $orderProduct */
         $orderProduct = $order->orderProducts->first();
