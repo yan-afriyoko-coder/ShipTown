@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "7.4.*",
+        "php": "8.1.*",
         "ext-json": "*",
         "ext-simplexml": "*",
         "arrilot/laravel-widgets": "3.13.*",
@@ -47,7 +47,7 @@
         "barryvdh/laravel-debugbar": "^3.5",
         "barryvdh/laravel-ide-helper": "2.8.*",
         "beyondcode/laravel-query-detector": "^1.6",
-        "bpocallaghan/generators": "6.06",
+        "bpocallaghan/generators": "^7.0",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "jasonmccreary/laravel-test-assertions": "^2.0",
