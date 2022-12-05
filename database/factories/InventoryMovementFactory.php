@@ -4,12 +4,11 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Inventory;
-use App\Models\InventoryMovement;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class InventoryMovementFactory extends Factory
 {
