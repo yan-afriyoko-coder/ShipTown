@@ -20,7 +20,6 @@ Route::view('activity-log', 'activity-log')->name('activity-log');
 
 Route::prefix('settings')->group(function () {
     Route::view('general', 'settings/general')->name('settings.general');
-    Route::view('modules', 'settings/modules')->name('settings.modules');
     Route::view('order-statuses', 'settings/order-statuses')->name('settings.order_statuses');
     Route::view('printnode', 'settings/printnode')->name('settings.printnode');
     Route::view('rmsapi', 'settings/rmsapi')->name('settings.rmsapi');
@@ -33,12 +32,12 @@ Route::prefix('settings')->group(function () {
         ->name('settings.mail_template_preview');
     Route::view('navigation-menu', 'settings/navigation-menu')->name('settings.navigation_menu');
     Route::view('automations', 'settings/automations')->name('settings.automations');
-    Route::view('modules/dpd-uk', 'settings/dpd-uk')->name('settings.modules.dpd-uk');
 
-    Route::group(function () {
-        Route::get('modules/webhooks/subscriptions', [Admin\Settings\Modules\Webhooks\SubscriptionController::class, 'index'])
+    Route::view('modules', 'settings/modules')->name('settings.modules');
+    Route::view('modules/dpd-uk', 'settings/dpd-uk')->name('settings.modules.dpd-uk');
+    Route::get('modules/webhooks/subscriptions', [
+        Admin\Settings\Modules\Webhooks\SubscriptionController::class, 'index'])
             ->name('webhooks::subscriptions');
-    });
 });
 
 Route::prefix('tools')->group(function () {

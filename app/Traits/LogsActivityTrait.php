@@ -2,15 +2,19 @@
 
 namespace App\Traits;
 
-use Illuminate\Support\Facades\Log;
+use App\BaseModel;
+use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
+/**
+ * Trait LogsActivityTrait.
+ *
+ * @mixin BaseModel
+ */
 trait LogsActivityTrait
 {
     use LogsActivity;
 
-    protected static bool $logOnlyDirty = true;
-    protected static bool $submitEmptyLogs = false;
 
     public function log($message, array $properties = []): self
     {
@@ -28,5 +32,13 @@ trait LogsActivityTrait
             ->log($message);
 
         return $this;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }
