@@ -31,8 +31,12 @@ class RefillWebPickingStatusListJobTest extends TestCase
         Product::factory()->count(30)->create();
 
         Order::factory()->count(150)
-            ->with('orderProducts', 2)
-            ->create(['status_code' => 'paid']);
+            ->create(['status_code' => 'paid'])
+            ->each(function (Order $order) {
+                OrderProduct::factory()
+                    ->count(rand(1, 5))
+                    ->create(['order_id' => $order->id]);
+            });
 
         HourlyEvent::dispatch();
 
