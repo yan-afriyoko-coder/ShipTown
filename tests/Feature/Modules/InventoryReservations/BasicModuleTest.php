@@ -24,16 +24,16 @@ class BasicModuleTest extends TestCase
     public function test_if_reserves_correctly()
     {
         /** @var Order $product */
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
 
         /** @var OrderStatus $orderStatus */
-        $orderStatus = factory(OrderStatus::class)->create(['order_active' => true]);
+        $orderStatus = OrderStatus::factory()->create(['order_active' => true]);
 
         /** @var Order $order */
-        $order = factory(Order::class)->create(['status_code' => $orderStatus->code]);
+        $order = Order::factory()->create(['status_code' => $orderStatus->code]);
 
         /** @var OrderProduct $orderProduct */
-        $orderProduct = factory(OrderProduct::class)->create([
+        $orderProduct = OrderProduct::factory()->create([
             'order_id' => $order->getKey(),
             'product_id' => $product->getKey()
         ]);

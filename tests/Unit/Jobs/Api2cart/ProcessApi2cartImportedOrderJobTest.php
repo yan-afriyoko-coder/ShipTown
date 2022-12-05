@@ -22,7 +22,7 @@ class ProcessApi2cartImportedOrderJobTest extends TestCase
         OrderProduct::query()->forceDelete();
         Api2cartOrderImports::query()->forceDelete();
 
-        $importedOrder = factory(Api2cartOrderImports::class)->create();
+        $importedOrder = Api2cartOrderImports::factory()->create();
 
         // act
         ProcessImportedOrdersJob::dispatch($importedOrder);

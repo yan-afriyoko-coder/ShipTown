@@ -21,11 +21,11 @@ class SyncProductJobTest extends TestCase
         Api2cartConnection::query()->forceDelete();
 
         /** @var Warehouse $warehouse */
-        $warehouse = factory(Warehouse::class)->create();
+        $warehouse = Warehouse::factory()->create();
 
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
 
-         factory(Api2cartConnection::class)->create([
+         Api2cartConnection::factory()->create([
             'pricing_location_id'   => $warehouse->code,
          ]);
 

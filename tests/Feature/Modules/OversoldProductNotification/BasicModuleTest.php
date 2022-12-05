@@ -29,7 +29,7 @@ class BasicModuleTest extends TestCase
             ->update(['to' => 'arthur@youritsolutions.ie, arthur2@youritsolutions']);
 
         /** @var Product $product */
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
         $product->attachTag('oversold');
 
         Mail::assertSent(OversoldProductMail::class, 1);

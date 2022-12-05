@@ -12,15 +12,15 @@ class UpdateTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = factory(User::class)->create()->assignRole('admin');
+        $admin = User::factory()->create()->assignRole('admin');
         $this->actingAs($admin, 'api');
     }
 
     /** @test */
     public function test_store_call_returns_ok()
     {
-        $user = factory(User::class)->create();
-        $warehouse = factory(Warehouse::class)->create();
+        $user = User::factory()->create();
+        $warehouse = Warehouse::factory()->create();
 
         $response = $this->put(route('users.update', $user), [
             'name'          => 'Test User',

@@ -12,6 +12,6 @@ class Api2CartOrderImportSeeder extends Seeder
      */
     public function run()
     {
-        factory(Api2cartOrderImports::class)->create();
+        Api2cartOrderImports::factory()->create();
     }
 }

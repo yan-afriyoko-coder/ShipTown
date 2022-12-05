@@ -21,7 +21,7 @@ class BasicModuleTest extends TestCase
         ScurriServiceProvider::enableModule();
 
         /** @var Order $order */
-        $order = factory(Order::class)->create();
+        $order = Order::factory()->create();
 
         Mockery::mock('alias:'.Scurri::class)
             ->shouldReceive('createShippingLabel')

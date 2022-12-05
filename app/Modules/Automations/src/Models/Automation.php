@@ -2,6 +2,7 @@
 
 namespace App\Modules\Automations\src\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\Builder;
@@ -19,6 +20,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Automation extends BaseModel
 {
+    use HasFactory;
+
     /**
      * @var string
      */

@@ -11,7 +11,7 @@ class IntegrationTest extends TestCase
 {
     public function test_if_store_returns_ok_response()
     {
-        $address = factory(OrderAddress::class)->create([
+        $address = OrderAddress::factory()->create([
             'company'      => 'TEST COMPANY',
             'address1'     => 'ATHLONE BUISNESS PARK',
             'address2'     => 'DUBLIN ROAD',
@@ -24,11 +24,11 @@ class IntegrationTest extends TestCase
         ]);
 
         /** @var Order $order */
-        $order = factory(Order::class)->create([
+        $order = Order::factory()->create([
             'shipping_address_id' => $address->getKey(),
         ]);
 
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'address_label_template' => 'dpd_label',
         ]);
 

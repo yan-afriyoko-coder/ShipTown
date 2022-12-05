@@ -41,7 +41,7 @@ class DpdIntegrationJobTest extends TestCase
      */
     public function if_record_id_matches()
     {
-        $address = factory(OrderAddress::class)->create([
+        $address = OrderAddress::factory()->create([
             'company'      => 'DPD Test',
             'first_name'   => 'DPD',
             'last_name'    => 'Depot',
@@ -54,11 +54,11 @@ class DpdIntegrationJobTest extends TestCase
             'country_code' => 'IRL',
         ]);
 
-        $order = factory(Order::class)->create([
+        $order = Order::factory()->create([
             'shipping_address_id' => $address->getKey(),
         ]);
 
-        factory(OrderProduct::class, 2)->create(['order_id' => $order->getKey()]);
+        OrderProduct::factory()->count(2)->create(['order_id' => $order->getKey()]);
 
         try {
             Dpd::shipOrder($order);

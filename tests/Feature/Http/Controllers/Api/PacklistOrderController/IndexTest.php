@@ -17,20 +17,20 @@ class IndexTest extends TestCase
     /** @test */
     public function test_index_call_returns_ok()
     {
-        factory(OrderStatus::class)->create([
+        OrderStatus::factory()->create([
             'code' => 'packing',
             'name' => 'packing',
             'order_active' => true,
             'order_on_hold' => false,
         ]);
 
-        $warehouse = factory(Warehouse::class)->create();
+        $warehouse = Warehouse::factory()->create();
 
-        $order = factory(Order::class)->create(['status_code' => 'packing']);
-        factory(OrderProduct::class)->create(['order_id' => $order->getKey()]);
+        $order = Order::factory()->create(['status_code' => 'packing']);
+        OrderProduct::factory()->create(['order_id' => $order->getKey()]);
 
         /** @var User $user */
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'location_id' => $warehouse->getKey()
         ]);
 
@@ -52,16 +52,16 @@ class IndexTest extends TestCase
     /** @test */
     public function test_index_call_returns_422()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        factory(OrderStatus::class)->create([
+        OrderStatus::factory()->create([
             'code' => 'packing',
             'name' => 'packing',
             'order_active' => true,
             'order_on_hold' => false,
         ]);
 
-        factory(Order::class)->create(['status_code' => 'packing']);
+        Order::factory()->create(['status_code' => 'packing']);
 
         $response = $this->actingAs($user, 'api')->getJson(route('packlist.order.index'));
 

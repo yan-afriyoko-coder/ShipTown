@@ -2,6 +2,7 @@
 
 namespace App\Modules\Api2cart\src\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Carbon\Carbon;
@@ -43,6 +44,8 @@ use Illuminate\Support\Collection;
  */
 class Api2cartOrderImports extends BaseModel
 {
+    use HasFactory;
+
     /**
      * @var string
      */

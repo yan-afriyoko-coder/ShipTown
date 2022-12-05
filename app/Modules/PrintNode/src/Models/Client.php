@@ -2,6 +2,7 @@
 
 namespace App\Modules\PrintNode\src\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Database\Eloquent\Model;
 use Psr\Http\Message\ResponseInterface;
@@ -26,6 +27,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class Client extends Model
 {
+    use HasFactory;
+
     /**
      * @var string
      */

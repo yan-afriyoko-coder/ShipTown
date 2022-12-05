@@ -29,7 +29,7 @@ class Personal_access_tokensTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = factory(User::class)->create();
+        $this->user = User::factory()->create();
         $this->actingAs($this->user, 'web');
     }
 

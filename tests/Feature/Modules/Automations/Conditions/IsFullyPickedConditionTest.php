@@ -14,18 +14,18 @@ class IsFullyPickedConditionTest extends TestCase
     {
         parent::setUp();
 
-        $order1 = factory(Order::class)->create();
-        $order2 = factory(Order::class)->create();
-        $order3 = factory(Order::class)->create();
+        $order1 = Order::factory()->create();
+        $order2 = Order::factory()->create();
+        $order3 = Order::factory()->create();
 
         /** @var OrderProduct $orderProduct1 */
-        $orderProduct1 = factory(OrderProduct::class)->create(['order_id' => $order1->getKey()]);
+        $orderProduct1 = OrderProduct::factory()->create(['order_id' => $order1->getKey()]);
 
         /** @var OrderProduct $orderProduct2 */
-        $orderProduct2 = factory(OrderProduct::class)->create(['order_id' => $order2->getKey()]);
+        $orderProduct2 = OrderProduct::factory()->create(['order_id' => $order2->getKey()]);
 
         /** @var OrderProduct $orderProduct3 */
-        $orderProduct3 = factory(OrderProduct::class)->create(['order_id' => $order3->getKey()]);
+        $orderProduct3 = OrderProduct::factory()->create(['order_id' => $order3->getKey()]);
 
         $orderProduct1->update(['quantity_picked' => $orderProduct1->quantity_ordered]);
     }

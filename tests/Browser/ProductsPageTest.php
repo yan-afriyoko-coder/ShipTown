@@ -21,12 +21,12 @@ class ProductsPageTest extends DuskTestCase
     public function testBasicExample()
     {
         $this->browse(function (Browser $browser) {
-            factory(Warehouse::class)->create();
+            Warehouse::factory()->create();
 
             /** @var Product $product */
-            $product = factory(Product::class)->create();
+            $product = Product::factory()->create();
 
-            $user = factory(User::class)->create();
+            $user = User::factory()->create();
 
             $browser->loginAs($user)
                 ->visit('/products')
@@ -47,7 +47,7 @@ class ProductsPageTest extends DuskTestCase
     {
         Product::query()->forceDelete();
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)

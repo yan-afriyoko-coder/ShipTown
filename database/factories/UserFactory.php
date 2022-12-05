@@ -1,10 +1,12 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Warehouse;
 use App\User;
-use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
 /*
@@ -18,28 +20,40 @@ use Illuminate\Support\Str;
 |
 */
 
-$factory->define(User::class, function (Faker $faker) {
-    $warehouse = Warehouse::query()->inRandomOrder()->first() ?? factory(Warehouse::class)->create();
-
-    $email = $faker->unique()->safeEmail;
-
-    while (User::query()->where(['email' => $email])->exists()) {
-        $email = $faker->unique()->safeEmail;
-    }
-
-    return [
-        'name'              => $faker->firstName .' '. $faker->lastName,
-        'warehouse_id'      => $warehouse->getKey(),
-        'email'             => $faker->unique()->safeEmail,
-        'email_verified_at' => now(),
-        'password'          => bcrypt('secret123'), // password
-        'remember_token'    => Str::random(10),
-    ];
-});
 
 // Add a dummy state so we can assign the role on a callback
-$factory->state(User::class, 'admin', []);
 
-$factory->afterCreatingState(App\User::class, 'admin', function ($user, $faker) {
-    $user->assignRole('admin');
-});
+class UserFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        $warehouse = Warehouse::query()->inRandomOrder()->first() ?? Warehouse::factory()->create();
+
+        $email = $this->faker->unique()->safeEmail;
+
+        while (User::query()->where(['email' => $email])->exists()) {
+            $email = $this->faker->unique()->safeEmail;
+        }
+
+        return [
+            'name'              => $this->faker->firstName .' '. $this->faker->lastName,
+            'warehouse_id'      => $warehouse->getKey(),
+            'email'             => $this->faker->unique()->safeEmail,
+            'email_verified_at' => now(),
+            'password'          => bcrypt('secret123'), // password
+            'remember_token'    => Str::random(10),
+        ];
+    }
+
+    public function admin()
+    {
+        return $this->afterCreating(function ($user) {
+            $user->assignRole('admin');
+        })->state([]);
+    }
+}

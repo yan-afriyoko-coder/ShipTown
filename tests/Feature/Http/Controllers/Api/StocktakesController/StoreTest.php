@@ -13,10 +13,10 @@ class StoreTest extends TestCase
     /** @test */
     public function test_store_call_returns_ok()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $product = factory(Product::class)->create();
-        $warehouse = factory(Warehouse::class)->create();
+        $product = Product::factory()->create();
+        $warehouse = Warehouse::factory()->create();
 
         $response = $this->actingAs($user, 'api')
             ->postJson(route('stocktakes.store'), [

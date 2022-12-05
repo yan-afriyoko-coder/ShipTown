@@ -1,26 +1,36 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+
+namespace Database\Factories\Modules\Rmsapi\src\Models;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
-use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
-$factory->define(RmsapiProductImport::class, function (Faker $faker) {
-    $connection = factory(RmsapiConnection::class)->create();
+class RmsapiProductImportFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        $connection = RmsapiConnection::factory()->create();
 
-    $random_department  = $faker->randomElement(['household', 'bedding', 'fashion', 'baby']);
-    $random_category    = $faker->randomElement(['category1', 'category2', 'category3', 'category4']);
-    $quantity_on_hand   = random_int(0, 1000);
-    $quantity_committed = random_int(0, $quantity_on_hand);
-    $quantity_available = $quantity_on_hand - $quantity_committed;
-    $reorder_point      = random_int(0, 100);
-    $restock_level      = random_int(0, $reorder_point);
+        $random_department  = $this->faker->randomElement(['household', 'bedding', 'fashion', 'baby']);
+        $random_category    = $this->faker->randomElement(['category1', 'category2', 'category3', 'category4']);
+        $quantity_on_hand   = random_int(0, 1000);
+        $quantity_committed = random_int(0, $quantity_on_hand);
+        $quantity_available = $quantity_on_hand - $quantity_committed;
+        $reorder_point      = random_int(0, 100);
+        $restock_level      = random_int(0, $reorder_point);
 
-    return [
-        'connection_id' => $connection->id,
-        'raw_import'    => json_decode('{
+        return [
+            'connection_id' => $connection->id,
+            'raw_import'    => json_decode('{
            "id":1,
            "cost":110.34,
            "price":'.(random_int(1, 100000) / 100).',
@@ -55,20 +65,21 @@ $factory->define(RmsapiProductImport::class, function (Faker $faker) {
            "quantity_discount_id":0,
            "supplier_code":"supplier234",
            "supplier_name":"ShipTown Ltd",
-           "rmsmobile_shelve_location":"'.Str::upper($faker->randomLetter).$faker->numberBetween(0, 9).'",
+           "rmsmobile_shelve_location":"'.Str::upper($this->faker->randomLetter).$this->faker->numberBetween(0, 9).'",
            "aliases": [
                 {
                     "id": 1,
-                    "alias": "'.(string) $faker->unique()->randomNumber(6).'-alias",
+                    "alias": "'.(string) $this->faker->unique()->randomNumber(6).'-alias",
                     "item_id": 1
                 },
                 {
                     "id": 2,
-                    "alias": "'.(string) $faker->unique()->randomNumber(6).'-alias",
+                    "alias": "'.(string) $this->faker->unique()->randomNumber(6).'-alias",
                     "item_id": 1
                 }
            ]
         }
     '),
-    ];
-});
+        ];
+    }
+}

@@ -1,13 +1,24 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\MailTemplate;
-use Faker\Generator as Faker;
 
-$factory->define(MailTemplate::class, function (Faker $faker) {
-    return [
-        'mailable' => \App\Mail\OrderMail::class,
-        'html_template' => $faker->randomHtml(),
-    ];
-});
+class MailTemplateFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'mailable' => \App\Mail\OrderMail::class,
+            'html_template' => $this->faker->randomHtml(),
+        ];
+    }
+}

@@ -15,7 +15,7 @@ class StocktakingPageTest extends DuskTestCase
     public function test_succesful_stocktake_action()
     {
         $this->browse(function (Browser $browser) {
-            $user = User::first() ?? factory(User::class)->create();
+            $user = User::first() ?? User::factory()->create();
 
             $browser->loginAs($user)
                 ->visit('/stocktaking')
@@ -24,7 +24,7 @@ class StocktakingPageTest extends DuskTestCase
 
             while (rand(1, 3) !== 1) {
                 /** @var Product $product */
-                $product = Product::query()->inRandomOrder()->first() ?? factory(Product::class)->create();
+                $product = Product::query()->inRandomOrder()->first() ?? Product::factory()->create();
 
                 $browser->assertFocused('@barcode-input-field')
                     ->screenshot('StocktakingPage');
@@ -53,7 +53,7 @@ class StocktakingPageTest extends DuskTestCase
     public function test_if_negative_quantity_not_allowed()
     {
         $this->browse(function (Browser $browser) {
-            $user = User::first() ?? factory(User::class)->create();
+            $user = User::first() ?? User::factory()->create();
 
             $browser->loginAs($user)
                 ->visit('/stocktaking')
@@ -61,7 +61,7 @@ class StocktakingPageTest extends DuskTestCase
                 ->assertFocused('@barcode-input-field');
 
             /** @var Product $product */
-            $product = Product::query()->inRandomOrder()->first() ?? factory(Product::class)->create();
+            $product = Product::query()->inRandomOrder()->first() ?? Product::factory()->create();
 
             $browser->assertFocused('@barcode-input-field');
 
@@ -87,7 +87,7 @@ class StocktakingPageTest extends DuskTestCase
     public function test_if_alias_scans()
     {
         $this->browse(function (Browser $browser) {
-            $user = User::first() ?? factory(User::class)->create();
+            $user = User::first() ?? User::factory()->create();
 
             $browser->loginAs($user)
                 ->visit('/stocktaking')
@@ -95,7 +95,7 @@ class StocktakingPageTest extends DuskTestCase
                 ->assertFocused('@barcode-input-field');
 
             /** @var ProductAlias $alias */
-            $alias = ProductAlias::query()->inRandomOrder()->first() ?? factory(ProductAlias::class)->create();
+            $alias = ProductAlias::query()->inRandomOrder()->first() ?? ProductAlias::factory()->create();
 
             $browser->assertFocused('@barcode-input-field');
 
@@ -127,7 +127,7 @@ class StocktakingPageTest extends DuskTestCase
     public function test_if_notifies_when_product_not_found()
     {
         $this->browse(function (Browser $browser) {
-            $user = factory(User::class)->create();
+            $user = User::factory()->create();
 
             $browser
                 ->loginAs($user)

@@ -23,13 +23,13 @@ class UpdateOrderClosedAtTest extends TestCase
         RmsapiProductImport::query()->forceDelete();
         Order::query()->forceDelete();
 
-        factory(OrderStatus::class)->create([
+        OrderStatus::factory()->create([
             'code'         => 'pending',
             'name'         => 'pending',
             'order_active' => 1,
         ]);
 
-        $order = factory(Order::class)->create([
+        $order = Order::factory()->create([
             'status_code'     => 'open',
             'order_closed_at' => null,
         ]);
@@ -50,13 +50,13 @@ class UpdateOrderClosedAtTest extends TestCase
         RmsapiProductImport::query()->forceDelete();
         Order::query()->forceDelete();
 
-        factory(OrderStatus::class)->create([
+        OrderStatus::factory()->create([
             'code'         => 'closed',
             'name'         => 'closed',
             'order_active' => 0,
         ]);
 
-        $order = factory(Order::class)->create([
+        $order = Order::factory()->create([
             'status_code'     => 'open',
             'order_closed_at' => null,
         ]);

@@ -32,8 +32,8 @@ class BasicModuleTest extends TestCase
 
         WebhooksServiceProviderBase::enableModule();
 
-        factory(Product::class)->create();
-        factory(Warehouse::class)->create();
+        Product::factory()->create();
+        Warehouse::factory()->create();
 
         /** @var Inventory $inventory */
         $inventory = Inventory::first();

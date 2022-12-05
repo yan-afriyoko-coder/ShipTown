@@ -15,7 +15,7 @@ class NewOrdersCountsWidgetTest extends TestCase
      */
     public function testExample()
     {
-        factory(Order::class)->create(['order_placed_at' => now()]);
+        Order::factory()->create(['order_placed_at' => now()]);
 
         $widget = new NewOrdersCounts();
 

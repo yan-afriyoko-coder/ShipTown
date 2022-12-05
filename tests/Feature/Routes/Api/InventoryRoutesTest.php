@@ -25,7 +25,7 @@ class InventoryRoutesTest extends TestCase
     public function testGetRouteAuthorized()
     {
         Passport::actingAs(
-            factory(User::class)->create()
+            User::factory()->create()
         );
 
         $response = $this->get('/api/product/inventory');
@@ -46,7 +46,7 @@ class InventoryRoutesTest extends TestCase
     public function testIfCantPostWithoutData()
     {
         Passport::actingAs(
-            factory(User::class)->create()
+            User::factory()->create()
         );
 
         $response = $this->postJson('/api/product/inventory', []);
@@ -57,14 +57,14 @@ class InventoryRoutesTest extends TestCase
     public function testQuantityUpdate()
     {
         Passport::actingAs(
-            factory(User::class)->create()
+            User::factory()->create()
         );
 
         /** @var Warehouse $warehouse */
-        $warehouse = factory(Warehouse::class)->create();
+        $warehouse = Warehouse::factory()->create();
 
         /** @var Product $product */
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
 
         $inventory = Inventory::first();
 

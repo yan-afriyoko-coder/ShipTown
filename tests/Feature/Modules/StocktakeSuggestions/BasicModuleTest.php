@@ -13,8 +13,8 @@ class BasicModuleTest extends TestCase
     public function test_module_basic_functionality()
     {
         /** @var Product $product */
-        $product = factory(Product::class)->create();
-        $warehouse = factory(Warehouse::class)->create();
+        $product = Product::factory()->create();
+        $warehouse = Warehouse::factory()->create();
 
         $inventory = $product->inventory()->first();
 

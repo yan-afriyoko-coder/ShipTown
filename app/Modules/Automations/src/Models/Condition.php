@@ -2,6 +2,7 @@
 
 namespace App\Modules\Automations\src\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use App\Models\Order;
 use App\Modules\Automations\src\Abstracts\BaseOrderConditionAbstract;
@@ -16,6 +17,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Condition extends BaseModel
 {
+    use HasFactory;
+
     protected $table = 'modules_automations_conditions';
 
     protected $fillable = [

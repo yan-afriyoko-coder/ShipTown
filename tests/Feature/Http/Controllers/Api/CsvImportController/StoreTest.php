@@ -16,18 +16,18 @@ class StoreTest extends TestCase
     /** @test */
     public function test_store_call_returns_ok()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         /** @var Warehouse $warehouse */
-        $warehouse = factory(Warehouse::class)->create();
+        $warehouse = Warehouse::factory()->create();
 
-        $dataCollection = factory(DataCollection::class)->create([
+        $dataCollection = DataCollection::factory()->create([
             'warehouse_id' => $warehouse->id,
             'name' => 'test'
         ]);
 
         /** @var Product $product */
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
 
         $response = $this->actingAs($user, 'api')->postJson(route('csv-import.store'), [
             'data_collection_id' => $dataCollection->getKey(),

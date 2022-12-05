@@ -20,7 +20,7 @@ class IndexTest extends TestCase
 
         SnsService::subscribeToTopic('https://test.com');
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $this->actingAs($user, 'api');
     }

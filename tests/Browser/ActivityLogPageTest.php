@@ -21,9 +21,9 @@ class ActivityLogPageTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             /** @var Product $product */
-            $product = factory(Product::class)->create();
+            $product = Product::factory()->create();
 
-            $user = factory(User::class)->create();
+            $user = User::factory()->create();
             $user->assignRole('admin');
 
             $browser->loginAs($user)
@@ -44,7 +44,7 @@ class ActivityLogPageTest extends DuskTestCase
     {
         Product::query()->forceDelete();
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)

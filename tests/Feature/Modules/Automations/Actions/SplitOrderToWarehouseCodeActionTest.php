@@ -31,8 +31,8 @@ class SplitOrderToWarehouseCodeActionTest extends TestCase
 
         AutomationsServiceProvider::enableModule();
 
-        $warehouses = factory(Warehouse::class, $random_number)->create();
-        $products = factory(Product::class, $random_number)->create();
+        $warehouses = Warehouse::factory()->count($random_number)->create();
+        $products = Product::factory()->count($random_number)->create();
 
         $warehouses->each(function (Warehouse $warehouse) use ($products) {
             $product = $products->shift();
@@ -46,7 +46,7 @@ class SplitOrderToWarehouseCodeActionTest extends TestCase
         });
 
         /** @var  $order */
-        $order = factory(Order::class)->create(['status_code' => 'split_order']);
+        $order = Order::factory()->create(['status_code' => 'split_order']);
 
         Product::all()->each(function (Product $product) use ($order) {
             $orderProduct = new OrderProduct();

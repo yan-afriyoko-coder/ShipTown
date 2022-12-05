@@ -14,14 +14,14 @@ class DestroyTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = factory(User::class)->create()->assignRole('admin');
+        $admin = User::factory()->create()->assignRole('admin');
         $this->actingAs($admin, 'api');
     }
 
     /** @test */
     public function test_destroy_call_returns_ok()
     {
-        $api2cart = factory(Api2cartConnection::class)->create();
+        $api2cart = Api2cartConnection::factory()->create();
         $response = $this->delete(route('api.settings.module.api2cart.connections.destroy', $api2cart));
         $response->assertStatus(200);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use App\User;
 use Carbon\Carbon;
@@ -24,6 +25,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class InventoryMovement extends BaseModel
 {
+    use HasFactory;
+
     /**
      * @var string[]
      */

@@ -10,7 +10,7 @@ class ShowTest extends TestCase
     /** @test */
     public function test_show_call_returns_ok()
     {
-        $user = factory(User::class)->create()->assignRole('admin');
+        $user = User::factory()->create()->assignRole('admin');
 
         $response = $this->actingAs($user, 'api')->getJson(route('users.show', $user->id));
 

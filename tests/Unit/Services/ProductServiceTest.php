@@ -14,7 +14,7 @@ class ProductServiceTest extends TestCase
 {
     public function testFindByAlias()
     {
-        $alias = factory(ProductAlias::class)->create();
+        $alias = ProductAlias::factory()->create();
 
         $this->assertNotNull(
             ProductService::findByAlias($alias->alias)
@@ -29,7 +29,7 @@ class ProductServiceTest extends TestCase
     public function testIfReservesCorrectly()
     {
         Passport::actingAs(
-            factory(User::class)->create()
+            User::factory()->create()
         );
 
         Event::fake();
@@ -63,7 +63,7 @@ class ProductServiceTest extends TestCase
     public function testIfReleasesQuantityCorrectly()
     {
         Passport::actingAs(
-            factory(User::class)->create()
+            User::factory()->create()
         );
 
         Event::fake();

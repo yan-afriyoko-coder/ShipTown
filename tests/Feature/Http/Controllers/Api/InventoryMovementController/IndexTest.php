@@ -11,9 +11,9 @@ class IndexTest extends TestCase
     /** @test */
     public function test_index_call_returns_ok()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        factory(InventoryMovement::class)->create();
+        InventoryMovement::factory()->create();
 
         $response = $this->actingAs($user, 'api')->getJson(route('inventory-movements.index', [
             'include' => 'product,warehouse,user'

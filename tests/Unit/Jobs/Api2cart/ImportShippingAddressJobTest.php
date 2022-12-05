@@ -25,7 +25,7 @@ class ImportShippingAddressJobTest extends TestCase
         OrderAddress::query()->forceDelete();
         Api2cartOrderImports::query()->forceDelete();
 
-        $import = factory(Api2cartOrderImports::class)->create();
+        $import = Api2cartOrderImports::factory()->create();
         $import = $import->refresh();
 
         ProcessImportedOrdersJob::dispatch();

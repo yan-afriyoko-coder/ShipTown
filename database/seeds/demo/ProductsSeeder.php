@@ -13,7 +13,7 @@ class ProductsSeeder extends Seeder
      */
     public function run()
     {
-        factory(Product::class)->create(['sku' => '57', 'name' => 'ShipTown Test Product - 57']);
+        Product::factory()->create(['sku' => '57', 'name' => 'ShipTown Test Product - 57']);
 
         $this->createSkuWithAliases([
             '01',
@@ -26,10 +26,10 @@ class ProductsSeeder extends Seeder
             '3276000690573'
         ]);
 
-        factory(Product::class, 50)->create();
+        Product::factory()->count(50)->create();
 
-        factory(ProductAlias::class)->create([
-            'product_id' => factory(Product::class)->create()->getKey(),
+        ProductAlias::factory()->create([
+            'product_id' => Product::factory()->create()->getKey(),
             'alias'      => '45',
         ]);
     }
@@ -39,14 +39,14 @@ class ProductsSeeder extends Seeder
         foreach ($skuList as $sku) {
             if (!Product::query()->where('sku', '=', $sku)->exists()) {
                 /** @var Product $product */
-                $product = factory(Product::class)->create(['sku' => $sku]);
+                $product = Product::factory()->create(['sku' => $sku]);
 
-                factory(ProductAlias::class)->create([
+                ProductAlias::factory()->create([
                     'product_id' => $product->getKey(),
                     'alias'      => $product->sku.'-alias',
                 ]);
 
-                factory(ProductAlias::class)->create([
+                ProductAlias::factory()->create([
                     'product_id' => $product->getKey(),
                     'alias'      => $product->sku.'a',
                 ]);

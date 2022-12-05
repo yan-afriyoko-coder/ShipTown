@@ -15,7 +15,7 @@ class ProductModelTest extends TestCase
         Event::fake(ProductTagAttachedEvent::class);
 
         /** @var Product $product */
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
 
         $product->attachTag('test-fads');
 

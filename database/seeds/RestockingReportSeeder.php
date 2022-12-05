@@ -14,9 +14,9 @@ class RestockingReportSeeder extends Seeder
         /** @var Warehouse $source_warehouse */
 
         $source_warehouse = Warehouse::whereCode('99')->first()
-            ?? factory(Warehouse::class)->create(['code' => '99']);
+            ?? Warehouse::factory()->create(['code' => '99']);
 
-        $products = factory(Product::class, 10)->create();
+        $products = Product::factory()->count(10)->create();
 
         $products->each(function (Product $product) use ($source_warehouse) {
             InventoryService::adjustQuantity(
@@ -33,7 +33,7 @@ class RestockingReportSeeder extends Seeder
         });
 
         $destination_warehouse = Warehouse::whereCode('DUB')->first()
-            ?? factory(Warehouse::class)->create(['code' => 'DUB']);
+            ?? Warehouse::factory()->create(['code' => 'DUB']);
 
         Inventory::query()->where([
             'warehouse_code' => $destination_warehouse->code,

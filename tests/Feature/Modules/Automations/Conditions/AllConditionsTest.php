@@ -23,13 +23,13 @@ class AllConditionsTest extends TestCase
         OrderStatus::query()->forceDelete();
         Automation::query()->forceDelete();
 
-        $automation = factory(Automation::class)->create();
+        $automation = Automation::factory()->create();
 
         AutomationService::availableConditions()
             ->pluck('class')
             ->each(function ($condition_class) use ($automation) {
                 // add each condition to automation
-                factory(Condition::class)->create([
+                Condition::factory()->create([
                     'automation_id'     => $automation->getKey(),
                     'condition_class'   => $condition_class,
                     'condition_value'   => ''
@@ -47,7 +47,7 @@ class AllConditionsTest extends TestCase
     public function test_if_thorws_any_exception()
     {
         try {
-            factory(Order::class)->create();
+            Order::factory()->create();
 
             RunEnabledAutomationsJob::dispatch();
         } catch (Exception $exception) {

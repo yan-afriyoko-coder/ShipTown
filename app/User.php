@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Warehouse;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -79,6 +80,8 @@ use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
  */
 class User extends Authenticatable
 {
+    use HasFactory;
+
     use HasApiTokens;
     use Notifiable;
     use HasRoles;

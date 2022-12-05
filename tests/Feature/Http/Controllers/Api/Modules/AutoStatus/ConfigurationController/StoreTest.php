@@ -14,14 +14,14 @@ class StoreTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = factory(User::class)->create()->assignRole('admin');
+        $admin = User::factory()->create()->assignRole('admin');
         $this->actingAs($admin, 'api');
     }
 
     /** @test */
     public function test_store_call_returns_ok()
     {
-        $configuration = factory(AutoStatusPickingConfiguration::class)->make();
+        $configuration = AutoStatusPickingConfiguration::factory()->make();
 
         $response = $this->postJson(route('modules.autostatus.picking.configuration.store'), $configuration->toArray());
 

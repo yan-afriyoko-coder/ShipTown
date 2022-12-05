@@ -33,7 +33,7 @@ class UpdateTest extends TestCase
     public function test_update_call_returns_ok()
     {
         Passport::actingAs(
-            factory(User::class)->states('admin')->create()
+            User::factory()->admin()->create()
         );
 
         $response = $this->simulationTest();
@@ -51,7 +51,7 @@ class UpdateTest extends TestCase
     public function test_update_call_should_loggedin_as_admin()
     {
         Passport::actingAs(
-            factory(User::class)->create()
+            User::factory()->create()
         );
 
         $response = $this->simulationTest();

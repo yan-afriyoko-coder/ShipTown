@@ -13,13 +13,13 @@ class StoreTest extends TestCase
     /** @test */
     public function test_store_call_returns_ok()
     {
-        $dataCollection = factory(DataCollection::class)->create();
-        $user = factory(User::class)->create();
+        $dataCollection = DataCollection::factory()->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user, 'api')
             ->postJson(route('api.data-collector-actions.transfer-to-warehouse.store'), [
                 'data_collector_id' => $dataCollection->getKey(),
-                'destination_warehouse_id' => factory(Warehouse::class)->create()->getKey(),
+                'destination_warehouse_id' => Warehouse::factory()->create()->getKey(),
             ]);
 
         ray($response->json());

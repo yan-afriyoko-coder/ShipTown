@@ -21,14 +21,14 @@ class SendOrderEmailActionTest extends TestCase
         Mail::fake();
 
         /** @var MailTemplate $template */
-        $template = factory(MailTemplate::class)->create([
+        $template = MailTemplate::factory()->create([
             'code' => 'shipment_confirmation',
             'subject' => 'We shipped your order!',
             'mailable' => OrderMail::class,
             'html_template' => 'Hi Xyz, We shipped your order'
         ]);
 
-        $order = factory(Order::class)->create();
+        $order = Order::factory()->create();
         $action = new SendOrderEmailAction($order);
 
         // act

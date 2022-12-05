@@ -17,9 +17,9 @@ class ClearOrderPackerAssignmentJobTest extends TestCase
         // prepare
         Order::query()->forceDelete();
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        factory(Order::class)->create([
+        Order::factory()->create([
             'packed_at'      => null,
             'packer_user_id' => $user->getKey(),
             'updated_at'     => Carbon::now()->subHours(11),
@@ -46,11 +46,11 @@ class ClearOrderPackerAssignmentJobTest extends TestCase
     {
         Order::query()->forceDelete();
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $this->actingAs($user);
 
-        factory(Order::class)->create([
+        Order::factory()->create([
             'packed_at'      => null,
             'packer_user_id' => $user->getKey(),
             'updated_at'     => Carbon::now()->subHours(14),

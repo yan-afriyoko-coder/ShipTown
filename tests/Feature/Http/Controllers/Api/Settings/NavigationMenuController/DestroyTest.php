@@ -29,7 +29,7 @@ class DestroyTest extends TestCase
     public function test_delete_call_returns_ok()
     {
         Passport::actingAs(
-            factory(User::class)->states('admin')->create()
+            User::factory()->admin()->create()
         );
 
         $response = $this->simulationTest();

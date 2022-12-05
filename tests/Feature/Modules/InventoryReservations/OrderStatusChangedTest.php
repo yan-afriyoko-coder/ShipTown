@@ -15,7 +15,7 @@ class OrderStatusChangedTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = factory(User::class)->create()->assignRole('admin');
+        $admin = User::factory()->create()->assignRole('admin');
         $this->actingAs($admin, 'api');
 
         EventServiceProviderBase::enableModule();
@@ -24,19 +24,19 @@ class OrderStatusChangedTest extends TestCase
     /** @test */
     public function test_if_releases_quantity_when_status_changed()
     {
-        factory(OrderStatus::class)->create([
+        OrderStatus::factory()->create([
             'code'           => 'open',
             'name'           => 'open',
             'order_active'   => true,
         ]);
 
-        factory(OrderStatus::class)->create([
+        OrderStatus::factory()->create([
             'code'           => 'cancelled',
             'name'           => 'cancelled',
             'order_active'   => false,
         ]);
 
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
 
         $randomQuantity = rand(1, 30);
 

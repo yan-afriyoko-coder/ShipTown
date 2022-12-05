@@ -14,7 +14,7 @@ class ProductPriceSeeder extends Seeder
         \App\Models\Product::query()
             ->get()
             ->each(function (\App\Models\Product $product) {
-                factory(\App\Models\ProductPrice::class)
+                \App\Models\ProductPrice::factory()
                     ->create([
                         'product_id'  => $product->id,
                         'location_id' => 100,
@@ -24,7 +24,7 @@ class ProductPriceSeeder extends Seeder
         \App\Models\Product::query()
             ->get()
             ->each(function (\App\Models\Product $product) {
-                factory(\App\Models\ProductPrice::class)
+                \App\Models\ProductPrice::factory()
                     ->create([
                         'product_id'  => $product->id,
                         'location_id' => 99,

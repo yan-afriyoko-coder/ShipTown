@@ -18,7 +18,7 @@ class ClosedOrdersSeeder extends Seeder
 
         do {
             $orderClosedAt = Carbon::now()->subDays(rand(0, 7));
-            factory(Order::class)
+            Order::factory()
                 ->with('orderProducts', rand(1, 4))
                 ->create([
                     'order_closed_at' => $orderClosedAt,

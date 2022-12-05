@@ -26,11 +26,11 @@ class RefillWebPickingStatusListJobTest extends TestCase
         OrderProduct::query()->forceDelete();
         Order::query()->forceDelete();
 
-        factory(OrderStatus::class)->create(['code' => 'paid']);
+        OrderStatus::factory()->create(['code' => 'paid']);
 
-        factory(Product::class, 30)->create();
+        Product::factory()->count(30)->create();
 
-        factory(Order::class, 150)
+        Order::factory()->count(150)
             ->with('orderProducts', 2)
             ->create(['status_code' => 'paid']);
 

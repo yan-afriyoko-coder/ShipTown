@@ -26,7 +26,7 @@ class DataCollectionsTransferInFromWarehouseSeeder extends Seeder
             ->whereNotIn('id', [$warehouse->id])
             ->get()
             ->each(function ($destinationWarehouse) use ($warehouse) {
-                $dataCollection = factory(DataCollection::class)->create([
+                $dataCollection = DataCollection::factory()->create([
                     'warehouse_id' =>  $destinationWarehouse->getKey(),
                     'name' => implode('', [
                         'Transfer from ',
@@ -35,7 +35,7 @@ class DataCollectionsTransferInFromWarehouseSeeder extends Seeder
                     'type' => DataCollectionTransferIn::class,
                 ]);
 
-                factory(DataCollectionRecord::class, 3)->create([
+                DataCollectionRecord::factory()->count(3)->create([
                     'data_collection_id' => $dataCollection->getKey(),
                 ]);
             });

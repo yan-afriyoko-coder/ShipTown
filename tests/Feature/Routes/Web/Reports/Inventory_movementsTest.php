@@ -29,7 +29,7 @@ class Inventory_movementsTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = factory(User::class)->create();
+        $this->user = User::factory()->create();
 
         $this->uri = route('reports.inventory-movements');
     }

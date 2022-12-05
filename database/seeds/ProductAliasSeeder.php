@@ -12,7 +12,7 @@ class ProductAliasSeeder extends Seeder
      */
     public function run()
     {
-        factory(ProductAlias::class, 10)->create();
+        ProductAlias::factory()->count(10)->create();
 
         $this->createAliases([
             '45',
@@ -28,7 +28,7 @@ class ProductAliasSeeder extends Seeder
             $aliasExists = ProductAlias::query()->where(['alias' => $alias])->exists();
 
             if (!$aliasExists) {
-                factory(ProductAlias::class)
+                ProductAlias::factory()
                     ->create(['alias' => $alias]);
             }
         }

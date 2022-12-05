@@ -2,6 +2,7 @@
 
 namespace App\Modules\DpdUk\src\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use App\Models\OrderAddress;
 use App\Traits\Encryptable;
@@ -36,6 +37,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class Connection extends BaseModel
 {
+    use HasFactory;
+
     use Encryptable;
 
     protected $table = 'modules_dpduk_connections';

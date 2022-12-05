@@ -2,6 +2,7 @@
 
 namespace App\Modules\Rmsapi\src\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -36,6 +37,8 @@ use Illuminate\Support\Facades\Crypt;
  */
 class RmsapiConnection extends Model
 {
+    use HasFactory;
+
     protected $table = 'modules_rmsapi_connections';
 
     protected $fillable = [

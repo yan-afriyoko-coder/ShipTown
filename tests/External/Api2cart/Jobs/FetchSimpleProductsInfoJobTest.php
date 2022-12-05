@@ -24,20 +24,20 @@ class FetchSimpleProductsInfoJobTest extends TestCase
     public function testExample()
     {
         /** @var Warehouse $warehouse */
-        $warehouse = factory(Warehouse::class)->create();
+        $warehouse = Warehouse::factory()->create();
 
-        $api2cartConnection = factory(Api2cartConnection::class)->create([
+        $api2cartConnection = Api2cartConnection::factory()->create([
             'pricing_source_warehouse_id' => $warehouse->getKey()
         ]);
 
-        $productLink1 = factory(Api2cartProductLink::class)->create([
+        $productLink1 = Api2cartProductLink::factory()->create([
             'api2cart_connection_id' => $api2cartConnection->getKey(),
-            'product_id' => factory(Product::class)->create()->getKey(),
+            'product_id' => Product::factory()->create()->getKey(),
         ]);
 
-        $productLink2 = factory(Api2cartProductLink::class)->create([
+        $productLink2 = Api2cartProductLink::factory()->create([
             'api2cart_connection_id' => $api2cartConnection->getKey(),
-            'product_id' => factory(Product::class)->create()->getKey(),
+            'product_id' => Product::factory()->create()->getKey(),
         ]);
 
         UpdateMissingTypeAndIdJob::dispatch();

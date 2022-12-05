@@ -24,15 +24,15 @@ class OrderNumberEqualsConditionTest extends TestCase
         ray()->clearAll();
 
 
-        $automation = factory(Automation::class)->create();
+        $automation = Automation::factory()->create();
 
-        factory(Condition::class)->create([
+        Condition::factory()->create([
             'automation_id'     => $automation->getKey(),
             'condition_class'   => OrderNumberEqualsCondition::class,
             'condition_value'   => '123456'
         ]);
 
-        factory(Action::class)->create([
+        Action::factory()->create([
             'automation_id'     => $automation->getKey(),
             'action_class'   => SetStatusCodeAction::class,
             'action_value'   => 'new_status_code'
@@ -48,13 +48,13 @@ class OrderNumberEqualsConditionTest extends TestCase
      */
     public function testExample()
     {
-        factory(OrderStatus::class)->create(['code' => 'active', 'order_active' => true]);
+        OrderStatus::factory()->create(['code' => 'active', 'order_active' => true]);
 
-        $order1 = factory(Order::class)->create(['order_number' => '000000', 'status_code' => 'active']);
-        factory(OrderProduct::class)->create(['order_id' => $order1->getKey()]);
+        $order1 = Order::factory()->create(['order_number' => '000000', 'status_code' => 'active']);
+        OrderProduct::factory()->create(['order_id' => $order1->getKey()]);
 
-        $order2 = factory(Order::class)->create(['order_number' => '123456', 'status_code' => 'active']);
-        factory(OrderProduct::class)->create(['order_id' => $order2->getKey()]);
+        $order2 = Order::factory()->create(['order_number' => '123456', 'status_code' => 'active']);
+        OrderProduct::factory()->create(['order_id' => $order2->getKey()]);
 
         RunEnabledAutomationsJob::dispatch();
 

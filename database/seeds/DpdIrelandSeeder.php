@@ -15,7 +15,7 @@ class DpdIrelandSeeder extends Seeder
     public function run()
     {
         if(env('TEST_DPD_USER')) {
-            factory(\App\Modules\DpdIreland\src\Models\DpdIreland::class)->create();
+            \App\Modules\DpdIreland\src\Models\DpdIreland::factory()->create();
             $this->createTestOrder();
         }
     }
@@ -26,7 +26,7 @@ class DpdIrelandSeeder extends Seeder
     private function createTestOrder(): void
     {
         /** @var OrderAddress $testAddress */
-        $testAddress = factory(OrderAddress::class)->make();
+        $testAddress = OrderAddress::factory()->make();
         $testAddress->first_name = 'John';
         $testAddress->last_name = 'Smith';
         $testAddress->phone = '12345678901';
@@ -41,10 +41,10 @@ class DpdIrelandSeeder extends Seeder
         $testAddress->save();
 
         /** @var Order $order */
-        $order = factory(Order::class)->make();
+        $order = Order::factory()->make();
         $order->order_number = 'TEST-IRL';
         $order->shippingAddress()->associate($testAddress);
         $order->save();
-        factory(OrderProduct::class, 3)->create(['order_id' => $order->getKey()]);
+        OrderProduct::factory()->count(3)->create(['order_id' => $order->getKey()]);
     }
 }

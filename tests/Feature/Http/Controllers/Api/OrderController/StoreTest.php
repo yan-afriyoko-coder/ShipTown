@@ -14,7 +14,7 @@ class StoreTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = factory(User::class)->create()->assignRole('admin');
+        $admin = User::factory()->create()->assignRole('admin');
         $this->actingAs($admin, 'api');
     }
 
@@ -57,7 +57,7 @@ class StoreTest extends TestCase
         ];
 
         Passport::actingAs(
-            factory(User::class)->create()
+            User::factory()->create()
         );
 
         $this->postJson('api/orders', $data)
@@ -87,7 +87,7 @@ class StoreTest extends TestCase
         ];
 
         Passport::actingAs(
-            factory(User::class)->create()
+            User::factory()->create()
         );
 
         $this->json('POST', 'api/orders', $data)
@@ -101,7 +101,7 @@ class StoreTest extends TestCase
         ];
 
         Passport::actingAs(
-            factory(User::class)->create()
+            User::factory()->create()
         );
 
         $this->json('POST', 'api/orders', $data)

@@ -11,12 +11,12 @@ class ProductLinesCountTest extends TestCase
     public function testIfProductLineCountIsPopulatedCorrectly()
     {
         /** @var Order $order */
-        $order = factory(Order::class)->create();
+        $order = Order::factory()->create();
 
         $orderProductCount = rand(1, 5);
 
         $order->orderProducts()->saveMany(
-            factory(OrderProduct::class, $orderProductCount)->make()
+            OrderProduct::factory()->count($orderProductCount)->make()
         );
 
         $order = $order->refresh();

@@ -17,8 +17,8 @@ class DetachNotSyncedTagIfNotAvailableOnlineJobTest extends TestCase
      */
     public function testExample()
     {
-        $product1 = factory(Product::class)->create();
-        $product2 = factory(Product::class)->create();
+        $product1 = Product::factory()->create();
+        $product2 = Product::factory()->create();
 
         $product1->attachTag('Not Synced');
         $product2->attachTag('Not Synced');

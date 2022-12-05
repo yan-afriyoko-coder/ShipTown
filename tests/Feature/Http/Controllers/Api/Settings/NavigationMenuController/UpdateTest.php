@@ -37,7 +37,7 @@ class UpdateTest extends TestCase
     public function test_update_call_returns_ok()
     {
         Passport::actingAs(
-            factory(User::class)->states('admin')->create()
+            User::factory()->admin()->create()
         );
 
         $response = $this->simulationTest();
@@ -55,7 +55,7 @@ class UpdateTest extends TestCase
     public function test_update_call_should_loggedin_as_admin()
     {
         Passport::actingAs(
-            factory(User::class)->create()
+            User::factory()->create()
         );
 
         $response = $this->simulationTest();
@@ -66,7 +66,7 @@ class UpdateTest extends TestCase
     public function test_all_field_is_required()
     {
         Passport::actingAs(
-            factory(User::class)->states('admin')->create()
+            User::factory()->admin()->create()
         );
 
         $response = $this->simulationTest([]);
@@ -81,7 +81,7 @@ class UpdateTest extends TestCase
     public function test_group_not_packlist_or_picklist()
     {
         Passport::actingAs(
-            factory(User::class)->states('admin')->create()
+            User::factory()->admin()->create()
         );
 
         $response = $this->simulationTest([

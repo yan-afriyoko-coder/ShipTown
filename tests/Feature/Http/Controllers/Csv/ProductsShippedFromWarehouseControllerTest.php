@@ -14,7 +14,7 @@ class ProductsShippedFromWarehouseControllerTest extends TestCase
      */
     public function index_returns_an_ok_response()
     {
-        $user = factory(\App\User::class)->create();
+        $user = \App\User::factory()->create();
 
         $response = $this->actingAs($user)->get(route('warehouse_shipped.csv'));
 

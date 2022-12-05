@@ -67,7 +67,7 @@ class SplitOrdersScenarioSeeder extends Seeder
     private function ensurePackingStatusExists(): void
     {
         /** @var OrderStatus $newStatus */
-        $newStatus = factory(OrderStatus::class)->make(['name' => 'packing', 'code' => 'packing']);
+        $newStatus = OrderStatus::factory()->make(['name' => 'packing', 'code' => 'packing']);
         OrderStatus::firstOrCreate(['code' => 'packing'], $newStatus->toArray());
     }
 
@@ -76,7 +76,7 @@ class SplitOrdersScenarioSeeder extends Seeder
      */
     protected function createSampleProducts(int $count)
     {
-        $this->sampleProducts = factory(Product::class, $count)->create();
+        $this->sampleProducts = Product::factory()->count($count)->create();
     }
 
     /**
@@ -85,7 +85,7 @@ class SplitOrdersScenarioSeeder extends Seeder
     protected function createSampleSplitOrders(int $count)
     {
         /** @var Order $order */
-        $orders = factory(Order::class, $count)->make();
+        $orders = Order::factory()->count($count)->make();
 
         $orders->each(function (Order $order) {
             $order->is_editing = true;
@@ -128,7 +128,7 @@ class SplitOrdersScenarioSeeder extends Seeder
     protected function createSampleSplitSingleProductsOrders(int $count)
     {
         /** @var Order $order */
-        $orders = factory(Order::class, $count)->make();
+        $orders = Order::factory()->count($count)->make();
 
         $orders->each(function (Order $order) {
             $order->is_editing = true;

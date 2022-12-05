@@ -62,7 +62,7 @@ class MultiAutomationsTest extends TestCase
 
     public function testExample()
     {
-        factory(OrderProduct::class, 10)->create();
+        OrderProduct::factory()->count(10)->create();
 
         Order::query()->update(['status_code' => 'status1']);
 

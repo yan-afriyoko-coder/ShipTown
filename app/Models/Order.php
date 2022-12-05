@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use App\Traits\HasTagsTrait;
 use App\Traits\LogsActivityTrait;
@@ -128,6 +129,8 @@ use Spatie\Tags\Tag;
  */
 class Order extends BaseModel
 {
+    use HasFactory;
+
     use LogsActivityTrait;
     use HasTagsTrait;
 

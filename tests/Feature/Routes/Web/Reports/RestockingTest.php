@@ -31,7 +31,7 @@ class RestockingTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = factory(User::class)->create();
+        $this->user = User::factory()->create();
     }
 
     /** @test */
@@ -53,8 +53,8 @@ class RestockingTest extends TestCase
     {
         $this->actingAs($this->user, 'web');
 
-        factory(Warehouse::class)->create();
-        factory(Product::class)->create();
+        Warehouse::factory()->create();
+        Product::factory()->create();
 
         $response = $this->get($this->uri);
 
@@ -68,8 +68,8 @@ class RestockingTest extends TestCase
 
         $this->user->assignRole('admin');
 
-        factory(Warehouse::class)->create();
-        factory(Product::class)->create();
+        Warehouse::factory()->create();
+        Product::factory()->create();
 
         $response = $this->get($this->uri);
 

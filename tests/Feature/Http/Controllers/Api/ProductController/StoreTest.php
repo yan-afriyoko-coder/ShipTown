@@ -14,7 +14,7 @@ class StoreTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = factory(User::class)->create()->assignRole('admin');
+        $admin = User::factory()->create()->assignRole('admin');
         $this->actingAs($admin, 'api');
     }
 
@@ -46,7 +46,7 @@ class StoreTest extends TestCase
 
     public function test_store_available_product_return_ok()
     {
-        $produc = factory(Product::class)->create();
+        $produc = Product::factory()->create();
         $params = [
             'sku' => $produc->sku,
             'name' => 'Product Name',

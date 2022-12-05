@@ -22,10 +22,10 @@ class BasicModuleTest extends TestCase
     public function test_module_basic_functionality()
     {
         /** Connection */
-        $connection = factory(Connection::class)->create();
+        $connection = Connection::factory()->create();
 
         /** @var Order $order */
-        $order = factory(Order::class)->create();
+        $order = Order::factory()->create();
 
         $shippingLabel = new ShippingLabel([
             'order_id' => $order->id,

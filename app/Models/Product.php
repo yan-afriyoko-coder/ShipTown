@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
@@ -93,6 +94,8 @@ use Spatie\Tags\Tag;
  */
 class Product extends BaseModel
 {
+    use HasFactory;
+
     use LogsActivityTrait;
     use HasTagsTrait;
     use SoftDeletes;

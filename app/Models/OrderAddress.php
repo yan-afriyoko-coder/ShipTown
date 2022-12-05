@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Exception;
@@ -64,6 +65,8 @@ use Illuminate\Support\Facades\Crypt;
  */
 class OrderAddress extends BaseModel
 {
+    use HasFactory;
+
     protected $table = 'orders_addresses';
 
     protected $fillable = [

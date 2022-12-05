@@ -2,6 +2,7 @@
 
 namespace App\Modules\Api2cart\src\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use App\Models\Product;
 use App\Modules\Api2cart\src\Services\Api2cartService;
@@ -53,6 +54,8 @@ use Illuminate\Support\Carbon;
  */
 class Api2cartProductLink extends BaseModel
 {
+    use HasFactory;
+
     protected $table = 'modules_api2cart_product_links';
 
     /**

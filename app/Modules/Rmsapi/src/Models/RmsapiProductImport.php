@@ -2,6 +2,7 @@
 
 namespace App\Modules\Rmsapi\src\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -37,6 +38,8 @@ use Illuminate\Support\Carbon;
  */
 class RmsapiProductImport extends Model
 {
+    use HasFactory;
+
     protected $table = 'modules_rmsapi_products_imports';
 
     protected $fillable = [

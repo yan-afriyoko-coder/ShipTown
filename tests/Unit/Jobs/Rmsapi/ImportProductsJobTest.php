@@ -22,9 +22,9 @@ class ImportProductsJobTest extends TestCase
         RmsapiProductImport::query()->delete();
 
         // prepare defaults
-        $rmsapiConnection = factory(RmsapiConnection::class)->create();
+        $rmsapiConnection = RmsapiConnection::factory()->create();
         $productCount = random_int(10, 100);
-        $products = factory(RmsapiProductImport::class, $productCount)->make();
+        $products = RmsapiProductImport::factory()->count($productCount)->make();
 
         $productsCollection = collect($products)
             ->map(function ($product) {

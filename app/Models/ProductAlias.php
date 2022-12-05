@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -31,6 +32,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class ProductAlias extends Model
 {
+    use HasFactory;
+
     protected $table = 'products_aliases';
 
     protected $fillable = [

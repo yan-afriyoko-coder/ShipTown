@@ -11,7 +11,7 @@ class SettingModulesTest extends TestCase
     public function test_setting_modules_page_can_be_rendered()
     {
         $this->actingAs(
-            factory(User::class)->states('admin')->create()
+            User::factory()->admin()->create()
         );
         $response = $this->get(route('settings.modules'));
 
@@ -28,7 +28,7 @@ class SettingModulesTest extends TestCase
     public function test_access_setting_modules_page_should_loggedin_as_admin()
     {
         $this->actingAs(
-            factory(User::class)->create()
+            User::factory()->create()
         );
         $response = $this->get(route('settings.modules'));
 

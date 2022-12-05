@@ -18,7 +18,7 @@ class OrderProductsRoutesTest extends TestCase
     public function testAuthenticatedGet()
     {
         Passport::actingAs(
-            factory(User::class)->create()
+            User::factory()->create()
         );
 
         $response = $this->get('/api/order/products');

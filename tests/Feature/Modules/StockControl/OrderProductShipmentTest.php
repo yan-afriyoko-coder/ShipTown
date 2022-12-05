@@ -18,13 +18,13 @@ class OrderProductShipmentTest extends TestCase
         StockControlServiceProvider::enableModule();
 
         /** @var Product $product */
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
 
         /** @var Warehouse $warehouse */
-        $warehouse = factory(Warehouse::class)->create();
+        $warehouse = Warehouse::factory()->create();
 
         /** @var OrderProduct $orderProduct */
-        $orderProduct = factory(OrderProduct::class)->create();
+        $orderProduct = OrderProduct::factory()->create();
 
         $orderShipment = OrderProductShipment::create([
             'warehouse_id' => $warehouse->id,

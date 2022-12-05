@@ -16,13 +16,13 @@ class IndexTest extends TestCase
     public function test_has_tags_filter_exists()
     {
         Passport::actingAs(
-            factory(User::class)->create()
+            User::factory()->create()
         );
 
         Order::query()->forceDelete();
         Tag::query()->forceDelete();
 
-        $order = factory(Order::class)->create();
+        $order = Order::factory()->create();
 
         $order->attachTag('Test');
 
@@ -48,13 +48,13 @@ class IndexTest extends TestCase
     public function test_has_tags_filter_missing()
     {
         Passport::actingAs(
-            factory(User::class)->create()
+            User::factory()->create()
         );
 
         Order::query()->forceDelete();
         Tag::query()->forceDelete();
 
-        $order = factory(Order::class)->create();
+        $order = Order::factory()->create();
 
         $response = $this->get('api/orders?filter[has_tags]=Test');
 
@@ -65,9 +65,9 @@ class IndexTest extends TestCase
     public function test_index_call_returns_ok()
     {
         Order::query()->forceDelete();
-        factory(Order::class)->create();
+        Order::factory()->create();
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user, 'api')->getJson(route('orders.index'));
 

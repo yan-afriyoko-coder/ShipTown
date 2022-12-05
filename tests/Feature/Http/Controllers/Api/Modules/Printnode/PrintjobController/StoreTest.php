@@ -13,7 +13,7 @@ class StoreTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $user = factory(User::class)->create()->assignRole('user');
+        $user = User::factory()->create()->assignRole('user');
         $this->actingAs($user, 'api');
     }
 

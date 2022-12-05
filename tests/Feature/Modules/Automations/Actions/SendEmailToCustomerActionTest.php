@@ -16,8 +16,8 @@ class SendEmailToCustomerActionTest extends TestCase
      */
     public function test_successful_notification()
     {
-        $order = factory(Order::class)->create();
-        $orderShipment = factory(ShippingLabel::class)->create();
+        $order = Order::factory()->create();
+        $orderShipment = ShippingLabel::factory()->create();
 
         $action = new SendEmailToCustomerAction($order);
 
@@ -40,14 +40,14 @@ class SendEmailToCustomerActionTest extends TestCase
     public function test_success_when_template_specified()
     {
         /** @var MailTemplate $template */
-        $template = factory(MailTemplate::class)->create([
+        $template = MailTemplate::factory()->create([
             'code' => 'shipment_confirmation',
             'subject' => 'test email',
             'mailable' => OrderMail::class,
             'html_template' => ''
         ]);
 
-        $order = factory(Order::class)->create();
+        $order = Order::factory()->create();
 
         $action = new SendEmailToCustomerAction($order);
 

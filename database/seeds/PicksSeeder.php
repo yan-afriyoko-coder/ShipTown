@@ -12,6 +12,6 @@ class PicksSeeder extends Seeder
      */
     public function run()
     {
-        factory(Pick::class, rand(1000, 2000))->create();
+        Pick::factory()->count(rand(1000, 2000))->create();
     }
 }

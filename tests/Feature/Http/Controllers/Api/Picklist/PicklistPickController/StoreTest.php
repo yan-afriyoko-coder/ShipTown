@@ -15,9 +15,9 @@ class StoreTest extends TestCase
     /** @test */
     public function store_returns_an_ok_response()
     {
-        $user = factory(User::class)->create();
-        $order = factory(Order::class)->create();
-        $orderProduct = factory(OrderProduct::class)->create(['order_id' => $order->id]);
+        $user = User::factory()->create();
+        $order = Order::factory()->create();
+        $orderProduct = OrderProduct::factory()->create(['order_id' => $order->id]);
 
         $response = $this->actingAs($user, 'api')->postJson(route('picks.store'), [
             'product_id'               => $orderProduct->product_id,

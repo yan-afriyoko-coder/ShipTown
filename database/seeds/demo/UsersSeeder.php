@@ -17,7 +17,7 @@ class UsersSeeder extends Seeder
         if (User::query()
             ->where('email', '=', 'admin@products.management')
             ->doesntExist()) {
-            $user = factory(User::class, 1)->create([
+            $user = User::factory()->count(1)->create([
                 'name' => 'Artur Hanusek',
                 'email' => 'admin@products.management',
                 'warehouse_id' => Warehouse::firstOrCreate(['code' => 'DUB'], ['name' => 'Dublin'])->getKey(),
@@ -29,7 +29,7 @@ class UsersSeeder extends Seeder
         if (User::query()
             ->where('email', '=', 'user@products.management')
             ->doesntExist()) {
-            $user = factory(User::class, 1)->create(['email' => 'user@products.management']);
+            $user = User::factory()->count(1)->create(['email' => 'user@products.management']);
             $user->first()->assignRole('user');
         }
     }

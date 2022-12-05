@@ -14,13 +14,13 @@ class PacksheetPageTest extends DuskTestCase
     public function test_succesful_stocktake_action()
     {
         $this->browse(function (Browser $browser) {
-            $user = User::first() ?? factory(User::class)->create();
+            $user = User::first() ?? User::factory()->create();
 
             /** @var Order $order */
-            $order = factory(Order::class)->create();
+            $order = Order::factory()->create();
 
             /** @var OrderProduct $orderProduct */
-            $orderProduct = factory(OrderProduct::class)->create(['order_id' => $order->getKey()]);
+            $orderProduct = OrderProduct::factory()->create(['order_id' => $order->getKey()]);
 
             $browser->loginAs($user)
                 ->visit('/order/packsheet/'. $order->getKey().'?hide_nav_bar=true')

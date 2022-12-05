@@ -1,13 +1,23 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+
+namespace Database\Factories\Modules\Api2cart\src\Models;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
-use Faker\Generator as Faker;
 
-$factory->define(Api2cartOrderImports::class, function (Faker $faker) {
-    return [
-        'raw_import' => json_decode('
+class Api2cartOrderImportsFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'raw_import' => json_decode('
         {
            "id":"56962",
            "order_id":"56962",
@@ -231,5 +241,6 @@ $factory->define(Api2cartOrderImports::class, function (Faker $faker) {
            ]
         }
         ', true),
-    ];
-});
+        ];
+    }
+}

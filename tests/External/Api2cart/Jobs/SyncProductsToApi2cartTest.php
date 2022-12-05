@@ -21,14 +21,14 @@ class SyncProductsToApi2cartTest extends TestCase
     public function testExample()
     {
         /** @var Warehouse $warehouse */
-        $warehouse = factory(Warehouse::class)->create(['code' => '99', 'name' => '99']);
+        $warehouse = Warehouse::factory()->create(['code' => '99', 'name' => '99']);
         $warehouse->attachTag('magento_stock');
 
-        $product = factory(Product::class)
+        $product = Product::factory()
             ->with('inventory')
             ->create();
 
-        factory(Api2cartConnection::class)->create([
+        Api2cartConnection::factory()->create([
             'bridge_api_key'   => config('api2cart.api2cart_test_store_key'),
             'magento_store_id' => null,
             'inventory_source_warehouse_tag' => 'magento_stock',
@@ -45,18 +45,18 @@ class SyncProductsToApi2cartTest extends TestCase
     public function test_basic()
     {
 //        /** @var Warehouse $warehouse */
-//        $warehouse = factory(Warehouse::class)->create();
+//        $warehouse = Warehouse::factory()->create();
 //        $warehouse->attachTag('api2cart');
 //
-//        $api2cartConnection = factory(Api2cartConnection::class)->create([
+//        $api2cartConnection = Api2cartConnection::factory()->create([
 //            'inventory_source_warehouse_tag' => 'api2cart',
 //            'pricing_source_warehouse_id' => $warehouse->getKey()
 //        ]);
 //
 //        /** @var Api2cartProductLink $productLink1 */
-//        $productLink1 = factory(Api2cartProductLink::class)->create([
+//        $productLink1 = Api2cartProductLink::factory()->create([
 //            'api2cart_connection_id' => $api2cartConnection->getKey(),
-//            'product_id' => factory(Product::class)->create()->getKey(),
+//            'product_id' => Product::factory()->create()->getKey(),
 //            'is_in_sync' => true,
 //        ]);
 //

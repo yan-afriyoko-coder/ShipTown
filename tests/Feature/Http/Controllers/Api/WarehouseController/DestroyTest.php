@@ -12,14 +12,14 @@ class DestroyTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = factory(User::class)->create()->assignRole('admin');
+        $admin = User::factory()->create()->assignRole('admin');
         $this->actingAs($admin, 'api');
     }
 
     /** @test */
     public function test_destroy_call_returns_ok()
     {
-        $warehouse = factory(Warehouse::class)->create();
+        $warehouse = Warehouse::factory()->create();
 
         $response = $this->delete(route('warehouses.destroy', $warehouse));
         $response->assertSuccessful();

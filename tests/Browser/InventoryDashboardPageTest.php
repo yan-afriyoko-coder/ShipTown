@@ -19,7 +19,7 @@ class InventoryDashboardPageTest extends DuskTestCase
     public function testExample()
     {
         $this->browse(function (Browser $browser) {
-            $user = factory(User::class)->create();
+            $user = User::factory()->create();
 
             $browser->loginAs($user)
                     ->visit('/reports/inventory-dashboard')

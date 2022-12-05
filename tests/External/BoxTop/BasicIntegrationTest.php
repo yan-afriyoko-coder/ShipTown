@@ -23,7 +23,7 @@ class BasicIntegrationTest extends TestCase
     public function test_successful_order_to_pick_integration()
     {
         /** @var Order $order */
-        $order = factory(Order::class)->create();
+        $order = Order::factory()->create();
         $order->shippingAddress->company = "BoxTop Technologies Ltd";
         $order->shippingAddress->full_name = "Reece Ipient";
         $order->shippingAddress->address1 = "Providence House";
@@ -46,12 +46,12 @@ class BasicIntegrationTest extends TestCase
             ->first();
 
         /** @var Product $product */
-        $product = factory(Product::class)->create([
+        $product = Product::factory()->create([
             'sku' => $randomProduct->SKUNumber,
             'name' => $randomProduct->SKUName,
         ]);
 
-        factory(OrderProduct::class)->create([
+        OrderProduct::factory()->create([
             'order_id' => $order->getKey(),
             'product_id' => $product->getKey(),
             'sku_ordered' => $product->sku,

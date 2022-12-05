@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use App\Traits\LogsActivityTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,6 +24,8 @@ use Illuminate\Support\Carbon;
  */
 class DataCollection extends BaseModel
 {
+    use HasFactory;
+
     use SoftDeletes;
     use LogsActivityTrait;
 

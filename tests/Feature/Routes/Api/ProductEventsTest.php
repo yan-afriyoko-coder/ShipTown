@@ -29,7 +29,7 @@ class ProductEventsTest extends TestCase
     public function testIfProductCreatedEventIsDispatchedWithRequiredFields()
     {
         Passport::actingAs(
-            factory(User::class)->create()
+            User::factory()->create()
         );
 
         // Assign
@@ -60,13 +60,13 @@ class ProductEventsTest extends TestCase
     public function testIfProductUpdatedEventIsDispatchedWithRequiredFields()
     {
         Passport::actingAs(
-            factory(User::class)->create()
+            User::factory()->create()
         );
 
         // Assign
         Event::fake();
 
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
 
         $product_update = [
             'sku'   => $product['sku'],

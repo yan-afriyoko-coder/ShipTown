@@ -18,13 +18,13 @@ class UpdateTest extends TestCase
     {
         $randomQuantity = 10;
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         /** @var Product $product */
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
 
         /** @var Warehouse $warehouse */
-        $warehouse = factory(Warehouse::class)->create();
+        $warehouse = Warehouse::factory()->create();
 
         /** @var Inventory $inventory */
         $inventory = Inventory::firstOrCreate([
@@ -33,13 +33,13 @@ class UpdateTest extends TestCase
         ], []);
 
         /** @var DataCollection $dataCollector */
-        $dataCollector = factory(DataCollection::class)->create([
+        $dataCollector = DataCollection::factory()->create([
             'warehouse_id' => $warehouse->id,
             'name' => 'Test',
         ]);
 
         /** @var DataCollectionRecord $dataCollectorRecord */
-        $dataCollectorRecord = factory(DataCollectionRecord::class)->create([
+        $dataCollectorRecord = DataCollectionRecord::factory()->create([
             'data_collection_id' => $dataCollector->id,
             'inventory_id' => $inventory->id,
             'product_id' => $inventory->product_id,
@@ -72,13 +72,13 @@ class UpdateTest extends TestCase
     {
         $randomQuantity = 10;
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         /** @var Product $product */
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
 
         /** @var Warehouse $warehouse */
-        $warehouse = factory(Warehouse::class)->create();
+        $warehouse = Warehouse::factory()->create();
 
         /** @var Inventory $inventory */
         $inventory = Inventory::firstOrCreate([
@@ -87,13 +87,13 @@ class UpdateTest extends TestCase
         ], []);
 
         /** @var DataCollection $dataCollector */
-        $dataCollector = factory(DataCollection::class)->create([
+        $dataCollector = DataCollection::factory()->create([
             'warehouse_id' => $warehouse->id,
             'name' => 'Test',
         ]);
 
         /** @var DataCollectionRecord $dataCollectorRecord */
-        $dataCollectorRecord = factory(DataCollectionRecord::class)->create([
+        $dataCollectorRecord = DataCollectionRecord::factory()->create([
             'data_collection_id' => $dataCollector->id,
             'inventory_id' => $inventory->id,
             'product_id' => $inventory->product_id,

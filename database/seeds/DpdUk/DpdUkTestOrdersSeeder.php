@@ -27,7 +27,7 @@ class DpdUkTestOrdersSeeder extends Seeder
         $this->createOrderWithTooLongStreetAddress();
 
         /** @var Connection $connection */
-        $connection = factory(Connection::class)->make();
+        $connection = Connection::factory()->make();
         $connection->collectionAddress()->associate($testAddress);
         $connection->save();
     }
@@ -38,7 +38,7 @@ class DpdUkTestOrdersSeeder extends Seeder
     private function createTestOrder(): OrderAddress
     {
         /** @var OrderAddress $testAddress */
-        $testAddress = factory(OrderAddress::class)->make();
+        $testAddress = OrderAddress::factory()->make();
         $testAddress->first_name = 'My';
         $testAddress->last_name = 'Contact';
         $testAddress->phone = '0121 500 2500';
@@ -52,11 +52,11 @@ class DpdUkTestOrdersSeeder extends Seeder
         $testAddress->save();
 
         /** @var Order $order */
-        $order = factory(Order::class)->make();
+        $order = Order::factory()->make();
         $order->order_number .= '-DPDUK';
         $order->shippingAddress()->associate($testAddress);
         $order->save();
-        factory(OrderProduct::class, 3)->create(['order_id' => $order->getKey()]);
+        OrderProduct::factory()->count(3)->create(['order_id' => $order->getKey()]);
         return $testAddress;
     }
 
@@ -66,7 +66,7 @@ class DpdUkTestOrdersSeeder extends Seeder
     private function createOrderWithTooLongStreetAddress(): void
     {
         /** @var OrderAddress $testAddress */
-        $testAddress = factory(OrderAddress::class)->make();
+        $testAddress = OrderAddress::factory()->make();
         $testAddress->first_name = 'My';
         $testAddress->last_name = 'Contact';
         $testAddress->phone = '0121 500 2500';
@@ -80,11 +80,11 @@ class DpdUkTestOrdersSeeder extends Seeder
         $testAddress->save();
 
         /** @var Order $order */
-        $order = factory(Order::class)->make();
+        $order = Order::factory()->make();
         $order->order_number .= '-DPDUK-ADDRESS1-TOO-LONG';
         $order->shippingAddress()->associate($testAddress);
         $order->save();
-        factory(OrderProduct::class, 3)->create(['order_id' => $order->getKey()]);
+        OrderProduct::factory()->count(3)->create(['order_id' => $order->getKey()]);
     }
 
     /**
@@ -93,7 +93,7 @@ class DpdUkTestOrdersSeeder extends Seeder
     private function createOrderWithWrongPostCode(): void
     {
         /** @var OrderAddress $testAddress */
-        $testAddress = factory(OrderAddress::class)->make();
+        $testAddress = OrderAddress::factory()->make();
         $testAddress->first_name = 'My';
         $testAddress->last_name = 'Contact';
         $testAddress->phone = '0121 500 2500';
@@ -107,10 +107,10 @@ class DpdUkTestOrdersSeeder extends Seeder
         $testAddress->save();
 
         /** @var Order $order */
-        $order = factory(Order::class)->make();
+        $order = Order::factory()->make();
         $order->order_number .= '-DPDUK-WRONG-POSTCODE';
         $order->shippingAddress()->associate($testAddress);
         $order->save();
-        factory(OrderProduct::class, 3)->create(['order_id' => $order->getKey()]);
+        OrderProduct::factory()->count(3)->create(['order_id' => $order->getKey()]);
     }
 }

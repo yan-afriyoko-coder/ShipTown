@@ -24,7 +24,7 @@ class DataCollectionsSeeder extends Seeder
                     ->whereNotIn('id', [$sourceWarehouse->id])
                     ->get()
                     ->each(function ($destinationWarehouse) use ($sourceWarehouse) {
-                        $dataCollection = factory(DataCollection::class)->create([
+                        $dataCollection = DataCollection::factory()->create([
                             'warehouse_id' =>  $destinationWarehouse->getKey(),
                             'name' => implode(' ', [
                                 $sourceWarehouse->code,
@@ -34,9 +34,9 @@ class DataCollectionsSeeder extends Seeder
                             'type' => DataCollectionTransferIn::class,
                         ]);
 
-                        factory(DataCollectionRecord::class)->create([
+                        DataCollectionRecord::factory()->create([
                             'data_collection_id' => $dataCollection->getKey(),
-                            'product_id' => factory(Product::class)->create()->getKey(),
+                            'product_id' => Product::factory()->create()->getKey(),
                             'quantity_requested' => rand(1, 100),
                         ]);
                     });

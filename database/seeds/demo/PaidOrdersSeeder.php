@@ -17,7 +17,7 @@ class PaidOrdersSeeder extends Seeder
      */
     public function run()
     {
-        factory(Order::class, 1)
+        Order::factory()->count(1)
             ->with('orderProducts', 1)
             ->create(['status_code' => 'paid']);
 
@@ -28,19 +28,19 @@ class PaidOrdersSeeder extends Seeder
 
     private function createOrders(): void
     {
-        factory(Order::class, 10)
+        Order::factory()->count(10)
             ->with('orderProducts', 1)
             ->create(['status_code' => 'paid']);
 
-        factory(Order::class, 10)
+        Order::factory()->count(10)
             ->with('orderProducts', 2)
             ->create(['status_code' => 'paid']);
 
-        factory(Order::class, 10)
+        Order::factory()->count(10)
             ->with('orderProducts', 3)
             ->create(['status_code' => 'paid']);
 
-        factory(Order::class, 10)
+        Order::factory()->count(10)
             ->with('orderProducts', 4)
             ->create(['status_code' => 'paid']);
 

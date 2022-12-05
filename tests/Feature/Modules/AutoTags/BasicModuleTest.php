@@ -20,10 +20,10 @@ class BasicModuleTest extends TestCase
 
     public function test_if_attaches_tag()
     {
-        $warehouse = factory(Warehouse::class)->create();
+        $warehouse = Warehouse::factory()->create();
 
         /** @var Product $product */
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
 
         $product->inventory->first()->update([
             'quantity' => 0,
@@ -37,10 +37,10 @@ class BasicModuleTest extends TestCase
 
     public function test_if_detaches_tag()
     {
-        $warehouse = factory(Warehouse::class)->create();
+        $warehouse = Warehouse::factory()->create();
 
         /** @var Product $product */
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
 
         $product->inventory->first()->update([
             'quantity' => 0,

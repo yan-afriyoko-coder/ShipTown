@@ -23,7 +23,7 @@ class Orders_PackingWebDemoSeeder extends Seeder
 
         NavigationMenu::insert($menu);
 
-        factory(Order::class, 10)
+        Order::factory()->count(10)
             ->with('orderProducts', 4)
             ->create(['status_code' => 'packing_web']);
 

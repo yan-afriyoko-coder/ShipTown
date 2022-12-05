@@ -13,9 +13,9 @@ class ShowTest extends TestCase
 
     public function test_show_call_returns_ok()
     {
-        $order = factory(Order::class)->create();
+        $order = Order::factory()->create();
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user, 'api')->getJson(route('orders.show', $order));
         $response->assertOk();
@@ -46,7 +46,7 @@ class ShowTest extends TestCase
 
     public function test_show_call_not_found()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user, 'api')->getJson(route('orders.show', 0));
         $response->assertStatus(404);

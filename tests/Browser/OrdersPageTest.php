@@ -23,9 +23,9 @@ class OrdersPageTest extends DuskTestCase
         Order::query()->forceDelete();
 
         $this->browse(function (Browser $browser) {
-            $orderProduct = factory(OrderProduct::class, 15)->create();
+            $orderProduct = OrderProduct::factory()->count(15)->create();
 
-            $user = factory(User::class)->create();
+            $user = User::factory()->create();
 
             $browser->loginAs($user)
                 ->visit('/orders')
@@ -48,7 +48,7 @@ class OrdersPageTest extends DuskTestCase
     {
         Order::query()->forceDelete();
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)

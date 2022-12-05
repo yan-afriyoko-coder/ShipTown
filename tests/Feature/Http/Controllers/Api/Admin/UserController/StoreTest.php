@@ -15,14 +15,14 @@ class StoreTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = factory(User::class)->create()->assignRole('admin');
+        $admin = User::factory()->create()->assignRole('admin');
         $this->actingAs($admin, 'api');
     }
 
     /** @test */
     public function test_store_call_returns_ok()
     {
-        $warehouse = factory(Warehouse::class)->create();
+        $warehouse = Warehouse::factory()->create();
 
         $response = $this->post(route('users.store'), [
             'name'          => 'Test User',
@@ -36,7 +36,7 @@ class StoreTest extends TestCase
 
     public function test_add_deleted_user_return_ok()
     {
-        $user = factory(User::class)->create()->assignRole('user');
+        $user = User::factory()->create()->assignRole('user');
         $user->delete();
 
         $response = $this->post(route('users.store'), [
