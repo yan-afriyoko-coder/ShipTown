@@ -47,7 +47,7 @@ Route::prefix('tools')->group(function () {
         ->name('tools.log-viewer');
 
     // github.com/romanzipp/Laravel-Queue-Monitor
-    Route::group(['prefix' => 'queue-monitor'], function () {
+    Route::prefix('queue-monitor')->group(function () {
         Route::queueMonitor();
     });
 });

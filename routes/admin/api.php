@@ -19,7 +19,7 @@ Route::apiResource('admin/users', 'Api\Admin\UserController')->only(['index', 's
 
 Route::apiResource('modules/autostatus/picking/configuration', 'Api\Modules\AutoStatus\ConfigurationController', ['as' => 'modules.autostatus.picking'])->only('index', 'store');
 
-Route::group(['prefix' => 'settings', 'namespace' => 'Api\Settings', 'as' => 'api.settings.'], function () {
+Route::prefix('settings')->namespace('Api\Settings')->name('api.settings.')->group(function () {
     Route::apiResource('modules', 'ModuleController')->only(['index', 'update']);
     Route::apiResource('order-statuses', 'OrderStatusController')->only(['index', 'store', 'update', 'destroy']);
     Route::apiResource('mail-templates', 'MailTemplateController')->only(['index', 'update']);
@@ -28,25 +28,25 @@ Route::group(['prefix' => 'settings', 'namespace' => 'Api\Settings', 'as' => 'ap
     Route::apiResource('configurations', 'ConfigurationController')->only(['index', 'store']);
 
     // modules
-    Route::group(['prefix' => 'modules', 'namespace' => 'Module', 'as' => 'module.'], function () {
+    Route::prefix('modules')->namespace('Module')->name('module.')->group(function () {
         // api2cart
-        Route::group(['prefix' => 'api2cart', 'namespace' => 'Api2cart', 'as' => 'api2cart.'], function () {
+        Route::prefix('api2cart')->namespace('Api2cart')->name('api2cart.')->group(function () {
             Route::apiResource('connections', 'Api2cartConnectionController')->only(['index', 'store', 'destroy']);
             Route::apiResource('products', 'ProductsController')->only(['index']);
         });
 
         // dpdireland
-        Route::group(['prefix' => 'dpd-ireland', 'namespace' => 'DpdIreland', 'as' => 'dpd-ireland.'], function () {
+        Route::prefix('dpd-ireland')->namespace('DpdIreland')->name('dpd-ireland.')->group(function () {
             Route::apiResource('connections', 'DpdIrelandController')->only(['index', 'store', 'destroy']);
         });
 
         // printnode
-        Route::group(['prefix' => 'printnode', 'namespace' => 'Printnode', 'as' => 'printnode.'], function () {
+        Route::prefix('printnode')->namespace('Printnode')->name('printnode.')->group(function () {
             Route::apiResource('printjobs', 'PrintJobController')->only(['store']);
             Route::apiResource('clients', 'ClientController')->only(['index', 'store', 'destroy']);
         });
         // rms_api
-        Route::group(['prefix' => 'rms_api', 'namespace' => 'Rmsapi', 'as' => 'rmsapi.'], function () {
+        Route::prefix('rms_api')->namespace('Rmsapi')->name('rmsapi.')->group(function () {
             Route::apiResource('connections', 'RmsapiConnectionController')->only(['index', 'store', 'destroy']);
         });
 
