@@ -1,0 +1,31 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Modules\Rmsapi\src\Models\RmsapiConnection;
+use App\Modules\Rmsapi\src\RmsapiModuleServiceProvider;
+use Illuminate\Database\Seeder;
+
+class RmsapiConnectionSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        if (empty(env('TEST_RMSAPI_WAREHOUSE_CODE'))) {
+            return;
+        }
+
+        RmsapiConnection::factory()->create([
+            'location_id' => env('TEST_RMSAPI_WAREHOUSE_CODE'),
+            'url' => env('TEST_RMSAPI_URL'),
+            'username' => env('TEST_RMSAPI_USERNAME'),
+            'password' => env('TEST_RMSAPI_PASSWORD'),
+        ]);
+
+        RmsapiModuleServiceProvider::enableModule();
+    }
+}
