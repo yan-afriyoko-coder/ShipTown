@@ -4,11 +4,13 @@
 
 namespace Database\Factories\Modules\Api2cart\src\Models;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class Api2cartOrderImportsFactory extends Factory
 {
+    protected $model = Api2cartOrderImports::class;
+
     /**
      * Define the model's default state.
      *

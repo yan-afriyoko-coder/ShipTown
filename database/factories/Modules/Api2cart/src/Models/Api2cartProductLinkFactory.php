@@ -4,13 +4,15 @@
 
 namespace Database\Factories\Modules\Api2cart\src\Models;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Product;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class Api2cartProductLinkFactory extends Factory
 {
+    protected $model = Api2cartProductLink::class;
+
     /**
      * Define the model's default state.
      *
