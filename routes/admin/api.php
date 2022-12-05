@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\Admin;
+use App\Http\Controllers\Api\Modules\AutoStatus;
+use App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,44 +17,44 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Routes for users with the admin role only]
-Route::apiResource('admin/user/roles', 'Api\Admin\UserRoleController', ['as' => 'admin.users'])->only(['index'])->middleware('can:list roles');
-Route::apiResource('admin/users', 'Api\Admin\UserController')->only(['index', 'store', 'show', 'update', 'destroy'])->middleware('can:manage users');
+Route::apiResource('admin/user/roles', Api\Admin\UserRoleController::class, ['as' => 'admin.users'])->only(['index'])->middleware('can:list roles');
+Route::apiResource('admin/users', Api\Admin\UserController::class)->only(['index', 'store', 'show', 'update', 'destroy'])->middleware('can:manage users');
 
-Route::apiResource('modules/autostatus/picking/configuration', 'Api\Modules\AutoStatus\ConfigurationController', ['as' => 'modules.autostatus.picking'])->only('index', 'store');
+Route::apiResource('modules/autostatus/picking/configuration', Api\Modules\AutoStatus\ConfigurationController::class, ['as' => 'modules.autostatus.picking'])->only('index', 'store');
 
-Route::prefix('settings')->namespace('Api\Settings')->name('api.settings.')->group(function () {
-    Route::apiResource('modules', 'ModuleController')->only(['index', 'update']);
-    Route::apiResource('order-statuses', 'OrderStatusController')->only(['index', 'store', 'update', 'destroy']);
-    Route::apiResource('mail-templates', 'MailTemplateController')->only(['index', 'update']);
-    Route::apiResource('navigation-menu', 'NavigationMenuController')->only(['index', 'store', 'update', 'destroy']);
+Route::prefix('settings')->name('api.settings.')->group(function () {
+    Route::apiResource('modules', Api\Settings\ModuleController::class)->only(['index', 'update']);
+    Route::apiResource('order-statuses', Api\Settings\OrderStatusController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::apiResource('mail-templates', Api\Settings\MailTemplateController::class)->only(['index', 'update']);
+    Route::apiResource('navigation-menu', Api\Settings\NavigationMenuController::class)->only(['index', 'store', 'update', 'destroy']);
 
-    Route::apiResource('configurations', 'ConfigurationController')->only(['index', 'store']);
+    Route::apiResource('configurations', Api\Settings\ConfigurationController::class)->only(['index', 'store']);
 
     // modules
-    Route::prefix('modules')->namespace('Module')->name('module.')->group(function () {
+    Route::prefix('modules')->name('module.')->group(function () {
         // api2cart
-        Route::prefix('api2cart')->namespace('Api2cart')->name('api2cart.')->group(function () {
-            Route::apiResource('connections', 'Api2cartConnectionController')->only(['index', 'store', 'destroy']);
-            Route::apiResource('products', 'ProductsController')->only(['index']);
+        Route::prefix('api2cart')->name('api2cart.')->group(function () {
+            Route::apiResource('connections', Api\Settings\Module\Api2cart\Api2cartConnectionController::class)->only(['index', 'store', 'destroy']);
+            Route::apiResource('products', Api\Settings\Module\Api2cart\ProductsController::class)->only(['index']);
         });
 
         // dpdireland
-        Route::prefix('dpd-ireland')->namespace('DpdIreland')->name('dpd-ireland.')->group(function () {
-            Route::apiResource('connections', 'DpdIrelandController')->only(['index', 'store', 'destroy']);
+        Route::prefix('dpd-ireland')->name('dpd-ireland.')->group(function () {
+            Route::apiResource('connections', Api\Settings\Module\DpdIreland\DpdIrelandController::class)->only(['index', 'store', 'destroy']);
         });
 
         // printnode
-        Route::prefix('printnode')->namespace('Printnode')->name('printnode.')->group(function () {
-            Route::apiResource('printjobs', 'PrintJobController')->only(['store']);
-            Route::apiResource('clients', 'ClientController')->only(['index', 'store', 'destroy']);
+        Route::prefix('printnode')->name('printnode.')->group(function () {
+            Route::apiResource('printjobs', Api\Settings\Module\Printnode\PrintJobController::class)->only(['store']);
+            Route::apiResource('clients', Api\Settings\Module\Printnode\ClientController::class)->only(['index', 'store', 'destroy']);
         });
         // rms_api
-        Route::prefix('rms_api')->namespace('Rmsapi')->name('rmsapi.')->group(function () {
-            Route::apiResource('connections', 'RmsapiConnectionController')->only(['index', 'store', 'destroy']);
+        Route::prefix('rms_api')->name('rmsapi.')->group(function () {
+            Route::apiResource('connections', Api\Settings\Module\Rmsapi\RmsapiConnectionController::class)->only(['index', 'store', 'destroy']);
         });
 
         // Automations
-        Route::get('automations/config', 'Automation\AutomationController@getConfig')->name('automations.config');
-        Route::apiResource('automations', 'Automation\AutomationController')->only(['index', 'store', 'show', 'update', 'destroy']);
+        Route::get('automations/config', [Api\Settings\Module\Automation\AutomationController::class, 'getConfig'])->name('automations.config');
+        Route::apiResource('automations', Api\Settings\Module\Automation\AutomationController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     });
 });

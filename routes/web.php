@@ -11,18 +11,29 @@
 |
 */
 
+use App\Http\Controllers\Auth;
+use App\Http\Controllers\Order;
+use App\Http\Controllers\Csv;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DataCollectorController;
+use App\Http\Controllers\OrderKickController;
+use App\Http\Controllers\PdfOrderController;
+use App\Http\Controllers\ProductKickController;
+use App\Http\Controllers\Products24hKickController;
+use App\Http\Controllers\Reports;
+use App\Http\Controllers\ShippingLabelController;
 use Illuminate\Support\Facades\Route;
 
-Route::resource('verify', 'Auth\TwoFactorController')->only(['index', 'store']);
+Route::resource('verify', Auth\TwoFactorController::class)->only(['index', 'store']);
 
 Route::redirect('', 'dashboard');
 Route::redirect('home', 'dashboard')->name('home');
 
-Route::get('dashboard', 'DashboardController@index')->name('dashboard');
-Route::get('fulfilment-dashboard', 'DashboardController@index')->name('fulfilment-dashboard');
-Route::get('inventory-dashboard', 'Reports\InventoryDashboardController@index')->name('inventory-dashboard');
+Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('fulfilment-dashboard', [DashboardController::class, 'index'])->name('fulfilment-dashboard');
+Route::get('inventory-dashboard', [Reports\InventoryDashboardController::class, 'index'])->name('inventory-dashboard');
 
-Route::get('reports/inventory-dashboard', 'Reports\InventoryDashboardController@index')->name('reports.inventory-dashboard');
+Route::get('reports/inventory-dashboard', [Reports\InventoryDashboardController::class, 'index'])->name('reports.inventory-dashboard');
 
 Route::view('performance/dashboard', 'performance')->name('performance.dashboard');
 Route::view('products', 'products')->name('products');
@@ -31,29 +42,29 @@ Route::view('orders', 'orders')->name('orders');
 Route::view('stocktaking', 'stocktaking')->name('stocktaking');
 Route::view('setting-profile', 'setting-profile')->name('setting-profile');
 Route::view('data-collector', 'data-collector-list')->name('data-collector');
-Route::get('data-collector/{data_collection_id}', 'DataCollectorController@index')->name('data-collector-show');
+Route::get('data-collector/{data_collection_id}', [DataCollectorController::class, 'index'])->name('data-collector-show');
 Route::view('settings/warehouses', 'settings/warehouses')->name('settings.warehouses');
 
-Route::get('shipping-labels/{shipping_label}', 'ShippingLabelController@show')->name('shipping-labels');
+Route::get('shipping-labels/{shipping_label}', [ShippingLabelController::class, 'show'])->name('shipping-labels');
 
 Route::view('autopilot/packlist', 'autopilot/packlist')->name('autopilot.packlist');
 
-Route::resource('order/packsheet', 'Order\PacksheetController')->only(['show']);
+Route::resource('order/packsheet', Order\PacksheetController::class)->only(['show']);
 
 Route::view('reports/picks', 'reports/picks_report')->name('reports.picks');
-Route::get('reports/shipments', 'Reports\ShipmentController@index')->name('reports.shipments');
-Route::get('reports/inventory', 'Reports\InventoryController@index')->name('reports.inventory');
-Route::get('reports/restocking', 'Reports\RestockingReportController@index')->name('reports.restocking');
+Route::get('reports/shipments', [Reports\ShipmentController::class, 'index'])->name('reports.shipments');
+Route::get('reports/inventory', [Reports\InventoryController::class, 'index'])->name('reports.inventory');
+Route::get('reports/restocking', [Reports\RestockingReportController::class, 'index'])->name('reports.restocking');
 Route::view('reports/inventory-movements', 'reports/inventory-movements')->name('reports.inventory-movements');
-Route::get('reports/stocktake-suggestions', 'Reports\StocktakeSuggestionsReportController@index')->name('reports.stocktake-suggestions');
-Route::get('reports/inventory-movements-summary', 'Reports\InventoryMovementsSummaryController@index')->name('reports.inventory-movements-summary');
+Route::get('reports/stocktake-suggestions', [Reports\StocktakeSuggestionsReportController::class, 'index'])->name('reports.stocktake-suggestions');
+Route::get('reports/inventory-movements-summary', [Reports\InventoryMovementsSummaryController::class, 'index'])->name('reports.inventory-movements-summary');
 
-Route::get('pdf/orders/{order_number}/{template}', 'PdfOrderController@show');
-Route::get('orders/{order_number}/kick', 'OrderKickController@index');
-Route::get('products/last24h/kick', 'Products24hKickController@index');
-Route::get('products/{sku}/kick', 'ProductKickController@index');
-Route::get('csv/ready_order_shipments', 'Csv\ReadyOrderShipmentController@index')->name('ready_order_shipments_as_csv');
-Route::get('csv/order_shipments', 'Csv\PartialOrderShipmentController@index')->name('partial_order_shipments_as_csv');
-Route::get('csv/products/picked', 'Csv\ProductsPickedInWarehouse@index')->name('warehouse_picks.csv');
-Route::get('csv/products/shipped', 'Csv\ProductsShippedFromWarehouseController@index')->name('warehouse_shipped.csv');
-Route::get('csv/boxtop/stock', 'Csv\BoxTopStockController@index')->name('boxtop-warehouse-stock.csv');
+Route::get('pdf/orders/{order_number}/{template}', [PdfOrderController::class, 'show']);
+Route::get('orders/{order_number}/kick', [OrderKickController::class, 'index']);
+Route::get('products/last24h/kick', [Products24hKickController::class, 'index']);
+Route::get('products/{sku}/kick', [ProductKickController::class, 'index']);
+Route::get('csv/ready_order_shipments', [Csv\ReadyOrderShipmentController::class, 'index'])->name('ready_order_shipments_as_csv');
+Route::get('csv/order_shipments', [Csv\PartialOrderShipmentController::class, 'index'])->name('partial_order_shipments_as_csv');
+Route::get('csv/products/picked', [Csv\ProductsPickedInWarehouse::class, 'index'])->name('warehouse_picks.csv');
+Route::get('csv/products/shipped', [Csv\ProductsShippedFromWarehouseController::class, 'index'])->name('warehouse_shipped.csv');
+Route::get('csv/boxtop/stock', [Csv\BoxTopStockController::class, 'index'])->name('boxtop-warehouse-stock.csv');
