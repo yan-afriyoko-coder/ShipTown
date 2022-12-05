@@ -4,17 +4,21 @@
 
 namespace Database\Factories\Modules\Rmsapi\src\Models;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
+use Exception;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 class RmsapiProductImportFactory extends Factory
 {
+    protected $model = RmsapiProductImport::class;
+
     /**
      * Define the model's default state.
      *
      * @return array
+     * @throws Exception
      */
     public function definition()
     {
