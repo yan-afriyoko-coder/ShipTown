@@ -11,7 +11,7 @@ use Tests\TestCase;
 /**
  *
  */
-class ShippingLabelTest extends TestCase
+class Shipping_labelTest extends TestCase
 {
     use RefreshDatabase;
 
