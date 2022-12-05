@@ -91,7 +91,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        Route::middleware(['api', 'auth:api'])
+        Route::middleware(['auth:api'])
             ->prefix('api')
             ->group(base_path('routes/api.php'));
     }
@@ -105,7 +105,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapAdminApiRoutes()
     {
-        Route::middleware(['api', 'auth:api', 'role:admin'])
+        Route::middleware(['auth:api', 'role:admin'])
             ->prefix('api')
             ->group(base_path('routes/admin/api.php'));
     }

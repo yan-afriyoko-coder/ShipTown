@@ -15,17 +15,17 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            ConfigurationSeeder::class,
-            WarehousesSeeder::class,
+            Demo\ConfigurationSeeder::class,
+            Demo\WarehousesSeeder::class,
 
             FulfilmentCenterSeeder::class,
 
-            UsersSeeder::class,
-            ProductsSeeder::class,
+            Demo\UsersSeeder::class,
+            Demo\ProductsSeeder::class,
             ProductsTagsSeeder::class,
 
-            PaidOrdersSeeder::class,
-            DpdUkTestOrdersSeeder::class,
+            Demo\PaidOrdersSeeder::class,
+            DpdUk\DpdUkTestOrdersSeeder::class,
             WebhooksTestSeeder::class,
             InventorySeeder::class,
 

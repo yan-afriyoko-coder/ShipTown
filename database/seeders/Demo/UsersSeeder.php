@@ -2,9 +2,11 @@
 
 namespace Database\Seeders\Demo;
 
+use App\Http\Controllers\Api\Admin\UserRoleController;
 use App\Models\Warehouse;
 use App\User;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
 
 class UsersSeeder extends Seeder
 {
@@ -19,12 +21,13 @@ class UsersSeeder extends Seeder
         if (User::query()
             ->where('email', '=', 'admin@products.management')
             ->doesntExist()) {
-            $user = User::factory()->count(1)->create([
+            /** @var User $user */
+            $user = User::factory()->create([
                 'name' => 'Artur Hanusek',
                 'email' => 'admin@products.management',
                 'warehouse_id' => Warehouse::firstOrCreate(['code' => 'DUB'], ['name' => 'Dublin'])->getKey(),
             ]);
-            $user->first()->assignRole('admin');
+            $user->assignRole(Role::findByName('admin'));
         }
 
         // create user
@@ -32,7 +35,7 @@ class UsersSeeder extends Seeder
             ->where('email', '=', 'user@products.management')
             ->doesntExist()) {
             $user = User::factory()->count(1)->create(['email' => 'user@products.management']);
-            $user->first()->assignRole('user');
+            $user->first()->assignRole(Role::findByName('user'));
         }
     }
 }
