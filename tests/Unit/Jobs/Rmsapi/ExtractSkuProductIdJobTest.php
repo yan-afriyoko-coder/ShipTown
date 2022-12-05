@@ -35,7 +35,7 @@ class ExtractSkuProductIdJobTest extends TestCase
         ]);
 
         // do
-        ProcessImportedProductRecordsJob::dispatchNow();
+        ProcessImportedProductRecordsJob::dispatchSync();
 
         // assert
         $this->assertFalse(
