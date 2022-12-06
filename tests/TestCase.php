@@ -76,5 +76,8 @@ abstract class TestCase extends BaseTestCase
         MagentoConnection::query()->forceDelete();
 
         ModulesService::updateModulesTable();
+
+        // now re-register all the roles and permissions (clears cache and reloads relations)
+        $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->registerPermissions();
     }
 }
