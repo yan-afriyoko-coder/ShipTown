@@ -14,8 +14,7 @@ class UserStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        // Allow if not same user and has permissions.
-        return $this->user()->can('manage users');
+        return $this->user()->hasRole('admin', 'api');
     }
 
     /**

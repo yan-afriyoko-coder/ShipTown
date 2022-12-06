@@ -12,6 +12,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Spatie\Permission\Models\Role;
 
 /**
  * Class UsersController.
@@ -40,7 +41,8 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request): UserResource
     {
-        $user = User::where('email', $request->email)->onlyTrashed()->first();
+        $user = User::query()->where('email', $request->validated()['email'])->onlyTrashed()->first();
+
         if ($user) {
             $user->restore();
             $user->update($request->validated());
@@ -56,7 +58,9 @@ class UserController extends Controller
             );
         }
 
-        $user->assignRole($request->role_id);
+        $roles = Role::findById($request->get('role_id'), 'api');
+
+        $user->assignRole($roles);
 
         return new UserResource($user);
     }
