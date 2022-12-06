@@ -250,9 +250,11 @@ class OrderServiceTest extends TestCase
         /** @var Warehouse $warehouse */
         $warehouse = Warehouse::factory()->create();
 
-        $order = Order::factory()
-            ->with('orderProducts', 1)
-            ->create();
+        /** @var Order $order */
+        $order = Order::factory()->create();
+
+        OrderProduct::factory(1)
+            ->create(['order_id' => $order->id]);
 
         /** @var OrderProduct $orderProduct */
         $orderProduct = $order->orderProducts->first();
