@@ -292,9 +292,6 @@ class Product extends BaseModel
         });
     }
 
-    /**
-     * @return HasMany|Inventory
-     */
     public function inventory(string $warehouse_code = null): HasMany
     {
         return $this->hasMany(Inventory::class)

@@ -9,14 +9,11 @@ use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Services\OrderService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class OrderServiceTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function testIfUpdatesProductsQuantitiesAreCorrect()
     {
         $orderFake = Order::factory()->make();
@@ -150,10 +147,7 @@ class OrderServiceTest extends TestCase
      */
     public function testCanFulfillMethod()
     {
-        Order::query()->forceDelete();
-        Product::query()->forceDelete();
-        Inventory::query()->forceDelete();
-
+        ray()->showQueries();
         /** @var Warehouse $warehouse */
         $warehouse = Warehouse::factory()->create();
 
@@ -161,20 +155,20 @@ class OrderServiceTest extends TestCase
         $product = Product::factory()->create();
 
         /** @var Order $order */
-        $order = Order::factory(1)
-            ->create();
+        $order = Order::factory()->create();
 
-        OrderProduct::factory(1)
+        /** @var OrderProduct $orderProduct */
+        $orderProduct = OrderProduct::factory()
             ->create([
                 'order_id' => $order->id,
                 'product_id' => $product->id,
             ]);
 
-        /** @var OrderProduct $orderProduct */
-        $orderProduct = $order->orderProducts->first();
+        $inventory = $orderProduct->product->inventory($warehouse->code)->first();
 
-        $orderProduct->product->inventory($warehouse->code)->update([
+        $inventory->update([
             'quantity'          => $orderProduct->quantity_ordered,
+            'quantity_available' => 0,
             'quantity_reserved' => 0,
         ]);
 
@@ -199,10 +193,11 @@ class OrderServiceTest extends TestCase
         /** @var Warehouse $warehouse */
         $warehouse = Warehouse::factory()->create();
 
+        /** @var Product $product */
         $product = Product::factory()->create();
 
-        $order = Order::factory()
-            ->create();
+        /** @var Order $order */
+        $order = Order::factory()->create();
 
         OrderProduct::factory(1)
             ->create([
