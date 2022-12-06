@@ -3,27 +3,29 @@
 namespace Tests\Feature\Http\Controllers\Api\Admin\UserController;
 
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class DestroyTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $admin = User::factory()->create()->assignRole('admin');
-        $this->actingAs($admin, 'api');
-    }
-
     /** @test */
     public function test_destroy_call_returns_ok()
     {
-        $user = User::factory()->create()->assignRole('user');
+        /** @var User $admin */
+        $admin = User::factory()->create();
+        $admin->assignRole(Role::findOrCreate('admin', 'api'));
+        $admin->givePermissionTo(Permission::findOrCreate('manage users', 'api'));
 
-        $response = $this->delete('api/admin/users/'.$user->id);
+        /** @var User $userToDelete */
+        $userToDelete = User::factory()->create();
+
+        $response = $this->actingAs($admin, 'api')->delete('api/admin/users/'.$userToDelete->id);
+
+        ray($response->json());
 
         $response->assertOk();
 
-        $this->assertDatabaseMissing('users', ['id' => $user->id, 'deleted_at' => null]);
+        $this->assertDatabaseMissing('users', ['id' => $userToDelete->id, 'deleted_at' => null]);
     }
 }

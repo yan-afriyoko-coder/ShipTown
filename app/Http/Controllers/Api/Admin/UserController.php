@@ -8,7 +8,6 @@ use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\User;
-use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
@@ -103,16 +102,17 @@ class UserController extends Controller
      * DELETE api/admin/users.
      *
      * @param UserDeleteRequest $request
-     * @param User              $user
-     *
-     * @throws Exception
-     *
+     * @param int $user_id_to_delete
      * @return UserResource
      */
-    public function destroy(UserDeleteRequest $request, User $user)
+    public function destroy(UserDeleteRequest $request, int $user_id_to_delete): UserResource
     {
+        abort_if($user_id_to_delete === $request->user()->getKey(), 403, 'You can not delete yourself');
+
+        $user = User::query()->findOrFail($user_id_to_delete);
+
         $user->delete();
 
-        return new UserResource($user);
+        return UserResource::make($user);
     }
 }
