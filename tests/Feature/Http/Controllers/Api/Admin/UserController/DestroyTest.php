@@ -8,8 +8,6 @@ use Tests\TestCase;
 
 class DestroyTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
