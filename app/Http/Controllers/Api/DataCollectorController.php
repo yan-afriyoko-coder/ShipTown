@@ -29,21 +29,23 @@ class DataCollectorController extends Controller
         return DataCollectionResource::make($dc);
     }
 
-    public function update(ApiDataCollectorUpdateRequest $request, DataCollection $dataCollector): DataCollectionResource
+    public function update(ApiDataCollectorUpdateRequest $request, int $data_collection_id): DataCollectionResource
     {
-        $dataCollector->update($request->validated());
+        $data_collector = DataCollection::findOrFail($data_collection_id);
+        $data_collector->update($request->validated());
 
-        optional($request->get('action'), function ($action) use ($dataCollector) {
-            DataCollectorService::runAction($dataCollector, $action);
+        optional($request->get('action'), function ($action) use ($data_collector) {
+            DataCollectorService::runAction($data_collector, $action);
         });
 
-        return DataCollectionResource::make($dataCollector->refresh());
+        return DataCollectionResource::make($data_collector->refresh());
     }
 
-    public function destroy(DataCollection $dataCollector): DataCollectionResource
+    public function destroy(int $data_collection_id): DataCollectionResource
     {
-        $dataCollector->delete();
+        $data_collector = DataCollection::findOrFail($data_collection_id);
+        $data_collector->delete();
 
-        return DataCollectionResource::make($dataCollector);
+        return DataCollectionResource::make($data_collector);
     }
 }
