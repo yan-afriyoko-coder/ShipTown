@@ -93,12 +93,13 @@ class OrderController extends Controller
 
     /**
      * @param Request $request
-     * @param Order   $order
-     *
+     * @param int $order_id
      * @return JsonResource
      */
-    public function show(Request $request, Order $order): JsonResource
+    public function show(Request $request, int $order_id): JsonResource
     {
+        $order = Order::findOrFail($order_id);
+
         return new JsonResource($order);
     }
 }
