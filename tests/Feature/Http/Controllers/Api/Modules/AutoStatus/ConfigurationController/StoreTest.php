@@ -4,13 +4,10 @@ namespace Tests\Feature\Http\Controllers\Api\Modules\AutoStatus\ConfigurationCon
 
 use App\Models\AutoStatusPickingConfiguration;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class StoreTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
