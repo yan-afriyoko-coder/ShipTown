@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 /**
  * Class UserUpdateRequest
@@ -20,8 +21,7 @@ class UserUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Allow if same user or has permissions.
-        return $this->user->id == $this->user()->id || $this->user()->can('manage users');
+        return $this->user()->hasRole('admin', 'api');
     }
 
     /**
@@ -29,17 +29,50 @@ class UserUpdateRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
+        $updatedUserId = $this->route('user');
+
         return [
-            'name'                  => [
-                'sometimes', 'required', 'string', 'max:255', 'unique:users,name,'.$this->user->id
+            'name' => [
+                'string',
+                'sometimes',
+                'required',
+                'max:255',
+                Rule::unique('users', 'name')->ignore($updatedUserId),
             ],
-            'email'                 => ['sometimes', 'required', 'string', 'email', 'max:255', 'unique:users,email,'.$this->user->id],
-            'default_dashboard_uri' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'role_id'       => ['sometimes', 'exists:roles,id'],
-            'printer_id'    => ['sometimes', 'numeric'],
-            'warehouse_id'  => ['nullable', 'exists:warehouses,id'],
+
+            'email' => [
+                'email',
+                'string',
+                'sometimes',
+                'required',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($updatedUserId),
+            ],
+
+            'default_dashboard_uri' => [
+                'nullable',
+                'string',
+                'sometimes',
+                'max:255'
+            ],
+
+            'role_id' => Rule::when($updatedUserId !== $this->user()->id, [
+                'required',
+                'integer',
+                Rule::exists('roles', 'id')->where('guard_name', 'api'),
+            ]),
+
+            'printer_id' => [
+                'sometimes',
+                'numeric'
+            ],
+
+            'warehouse_id' => [
+                'nullable',
+                'exists:warehouses,id'
+            ],
         ];
     }
 }

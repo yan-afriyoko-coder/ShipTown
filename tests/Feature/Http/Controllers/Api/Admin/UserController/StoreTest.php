@@ -40,7 +40,7 @@ class StoreTest extends TestCase
         $response = $this->post(route('users.store'), [
             'name'      => $user->name,
             'email'     => $user->email,
-            'role_id'   => Role::first()->id,
+            'role_id'   => Role::findOrCreate('user', 'api')->id,
         ]);
 
         $response->assertStatus(200);

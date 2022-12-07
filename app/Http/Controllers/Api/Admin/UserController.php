@@ -81,25 +81,26 @@ class UserController extends Controller
      * PUT api/admin/users.
      *
      * @param UserUpdateRequest $request
-     * @param User              $user
-     *
+     * @param int $user_id
      * @return UserResource
      */
-    public function update(UserUpdateRequest $request, User $user): UserResource
+    public function update(UserUpdateRequest $request, int $user_id): UserResource
     {
-        $updateData = collect($request->validated());
+        $updatedUser = User::query()->findOrFail($user_id);
+
+        $updateData = collect();
+        $updatedUser->fill($updateData->toArray());
 
         // Not allowed to update your own role
-        if ($request->user()->id === $user->id) {
+        if ($request->user()->id === $updatedUser->getKey()) {
             $updateData->forget('role_id');
         } else {
-            $user->syncRoles([$request->role_id]);
+            $updatedUser->syncRoles([$request->validated()['role_id']]);
         }
 
-        $user->fill($updateData->toArray());
-        $user->save();
+        $updatedUser->save();
 
-        return new UserResource($user);
+        return new UserResource($updatedUser);
     }
 
     /**

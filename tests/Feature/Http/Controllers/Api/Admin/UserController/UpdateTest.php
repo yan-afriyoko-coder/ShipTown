@@ -12,7 +12,9 @@ class UpdateTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = User::factory()->create()->assignRole('admin');
+        /** @var User $admin */
+        $admin = User::factory()->create();
+        $admin->assignRole(Role::findOrCreate('admin', 'api'));
         $this->actingAs($admin, 'api');
     }
 
@@ -20,14 +22,18 @@ class UpdateTest extends TestCase
     public function test_store_call_returns_ok()
     {
         $user = User::factory()->create();
+        $role = Role::findOrCreate('user', 'api');
         $warehouse = Warehouse::factory()->create();
 
-        $response = $this->put(route('users.update', $user), [
-            'name'          => 'Test User',
-            'email'         => 'testing@example.com',
-            'role_id'       => Role::first()->id,
-            'warehouse_id'  => $warehouse->id
-        ]);
+
+        $data = [
+            'name' => 'Test User',
+            'email' => 'testing@example.com',
+            'role_id' => $role->getKey(),
+            'warehouse_id' => $warehouse->getKey(),
+        ];
+
+        $response = $this->put(route('users.update', $user), $data);
 
         $response->assertStatus(200);
     }
