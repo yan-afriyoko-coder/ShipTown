@@ -1,14 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\CsvImport;
-use App\Http\Controllers\Api\Order;
-use App\Http\Controllers\Api\Picklist;
-use App\Http\Controllers\Api\Product;
-use App\Http\Controllers\Api\Run;
-use App\Http\Controllers\Api\Settings;
-use App\Http\Controllers\Api\Settings\Module\Printnode;
 use App\Http\Controllers\Api;
-use App\RoutesBuilder;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,9 +20,9 @@ Route::apiResource('stocktake-suggestions-details', Api\StocktakeSuggestionDetai
 
 Route::put('print/order/{order_number}/{view}', [Api\PrintOrderController::class, 'store']);
 
-RoutesBuilder::apiResource('modules/dpd-uk/dpd-uk-connections')->only(['index']);
-RoutesBuilder::apiResource('modules/printnode/printjobs')->only(['store']);
-RoutesBuilder::apiResource('modules/webhooks/subscriptions')->only(['index', 'store']);
+Route::apiResource('modules/dpd-uk/dpd-uk-connections', Api\Modules\DpdUk\DpdUkConnectionController::class)->only(['index']);
+Route::apiResource('modules/printnode/printjobs', Api\Settings\Module\Printnode\PrintJobController::class)->only(['store']);
+Route::apiResource('modules/webhooks/subscriptions', Api\Modules\Webhooks\SubscriptionController::class)->only(['index', 'store']);
 
 Route::apiResource('shipments', Api\ShipmentControllerNew::class, ['as' => 'new'])->only(['store']);
 Route::apiResource('shipping-services', Api\ShippingServiceController::class)->only(['index']);
@@ -57,8 +49,13 @@ Route::apiResource('inventory-movements', Api\InventoryMovementController::class
 Route::apiResource('stocktakes', Api\StocktakesController::class)->only(['store']);
 Route::apiResource('data-collector', Api\DataCollectorController::class)->only(['index', 'store', 'update', 'destroy']);
 Route::apiResource('data-collector-records', Api\DataCollectorRecordController::class)->only(['store', 'index']);
-
-RoutesBuilder::apiResource('data-collector-actions/transfer-to-warehouse')->only(['store']);
+Route::apiResource(
+    'data-collector-actions/transfer-to-warehouse',
+    Api\DataCollectorActions\TransferToWarehouseController::class,
+    [
+        'as' => 'api.data-collector-actions',
+    ]
+)->only(['store']);
 
 Route::apiResource('order-check-request', Api\OrderCheckRequestController::class)->only(['store']);
 
