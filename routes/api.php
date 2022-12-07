@@ -20,9 +20,28 @@ Route::apiResource('stocktake-suggestions-details', Api\StocktakeSuggestionDetai
 
 Route::put('print/order/{order_number}/{view}', [Api\PrintOrderController::class, 'store']);
 
-Route::apiResource('modules/dpd-uk/dpd-uk-connections', Api\Modules\DpdUk\DpdUkConnectionController::class)->only(['index']);
-Route::apiResource('modules/printnode/printjobs', Api\Settings\Module\Printnode\PrintJobController::class)->only(['store']);
-Route::apiResource('modules/webhooks/subscriptions', Api\Modules\Webhooks\SubscriptionController::class)->only(['index', 'store']);
+Route::apiResource(
+    'modules/dpd-uk/dpd-uk-connections',
+    Api\Modules\DpdUk\DpdUkConnectionController::class,
+    [
+        'as' => 'api.modules.dpd-uk',
+    ]
+)->only(['index']);
+Route::apiResource(
+    'modules/printnode/printjobs',
+    Api\Settings\Module\Printnode\PrintJobController::class,
+    [
+        'as' => 'api.modules.printnode',
+    ]
+)
+->only(['store']);
+Route::apiResource(
+    'modules/webhooks/subscriptions',
+    Api\Modules\Webhooks\SubscriptionController::class,
+    [
+    'as' => 'api.modules.webhooks',
+    ]
+)->only(['index', 'store']);
 
 Route::apiResource('shipments', Api\ShipmentControllerNew::class, ['as' => 'new'])->only(['store']);
 Route::apiResource('shipping-services', Api\ShippingServiceController::class)->only(['index']);
