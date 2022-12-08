@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\BaseModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Makeable\LaravelFactory\HasFactory;
 
 /**
  *
@@ -11,8 +12,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int points
  * @property string reason
  */
-class StocktakeSuggestion extends Model
+class StocktakeSuggestion extends BaseModel
 {
+    use HasFactory;
+
     protected $table = 'stocktake_suggestions';
 
     protected $fillable = [
