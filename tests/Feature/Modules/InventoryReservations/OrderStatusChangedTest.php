@@ -10,8 +10,6 @@ use Tests\TestCase;
 
 class OrderStatusChangedTest extends TestCase
 {
-//    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -36,6 +34,7 @@ class OrderStatusChangedTest extends TestCase
             'order_active'   => false,
         ]);
 
+        /** @var Product $product */
         $product = Product::factory()->create();
 
         $randomQuantity = rand(1, 30);
