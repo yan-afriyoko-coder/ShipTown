@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\BaseModel;
+use Makeable\LaravelFactory\HasFactory;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -11,8 +12,10 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property string code
  * @property string service_provider_class
  */
-class ShippingService extends Model
+class ShippingService extends BaseModel
 {
+    use HasFactory;
+
     protected $fillable = [
         'code',
         'service_provider_class',
