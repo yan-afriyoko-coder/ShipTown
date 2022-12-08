@@ -3,6 +3,7 @@
 namespace App\Modules\Automations\src\Models;
 
 use App\BaseModel;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @property integer automation_id
@@ -11,6 +12,8 @@ use App\BaseModel;
  */
 class Action extends BaseModel
 {
+    use HasFactory;
+
     protected $table = 'modules_automations_actions';
 
     protected $fillable = [
