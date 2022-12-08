@@ -3,16 +3,14 @@
 namespace Database\Factories;
 
 use App\Models\Order;
+use App\Models\OrderShipment;
 use App\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderShipmentFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
+    protected $model = OrderShipment::class;
+
     public function definition(): array
     {
         $shipping_number = $this->faker->toUpper(implode('', [
