@@ -11,13 +11,6 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ModuleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @param ModuleIndexRequest $request
-     *
-     * @return AnonymousResourceCollection
-     */
     public function index(ModuleIndexRequest $request): AnonymousResourceCollection
     {
         $modules = Module::query()->get();
@@ -27,16 +20,10 @@ class ModuleController extends Controller
         return ModuleResource::collection($collection);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param ModuleUpdateRequest $request
-     * @param Module $module
-     *
-     * @return ModuleResource
-     */
-    public function update(ModuleUpdateRequest $request, Module $module): ModuleResource
+    public function update(ModuleUpdateRequest $request, int $module_id): ModuleResource
     {
+        $module = Module::query()->findOrFail($module_id);
+
         $module->update($request->validated());
 
         return ModuleResource::make($module->refresh());
