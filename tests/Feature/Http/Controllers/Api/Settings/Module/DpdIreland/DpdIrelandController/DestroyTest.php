@@ -4,13 +4,11 @@ namespace Tests\Feature\Http\Controllers\Api\Settings\Module\DpdIreland\DpdIrela
 
 use App\Modules\DpdIreland\src\Models\DpdIreland;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class DestroyTest extends TestCase
 {
-    use RefreshDatabase;
-
     /** @test */
     public function test_delete_config()
     {
@@ -32,10 +30,15 @@ class DestroyTest extends TestCase
 
         /** @var User $user * */
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Role::findOrCreate('admin', 'api'));
+        $this->actingAs($user, 'api');
 
-        $response = $this->actingAs($user, 'api')
-            ->delete(route('api.settings.module.dpd-ireland.connections.destroy', ['connection' => $connection->getKey()]));
+        $response = $this->delete(route('api.settings.module.dpd-ireland.connections.destroy', [
+                'connection' => $connection->getKey()
+            ]));
+
+        ray($response->json());
+
         $response->assertOk();
 
         $this->assertEquals(0, DpdIreland::count());

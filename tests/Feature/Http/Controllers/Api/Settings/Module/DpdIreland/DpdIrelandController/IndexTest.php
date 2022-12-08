@@ -4,13 +4,10 @@ namespace Tests\Feature\Http\Controllers\Api\Settings\Module\DpdIreland\DpdIrela
 
 use App\Modules\DpdIreland\src\Models\DpdIreland;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class IndexTest extends TestCase
 {
-    use RefreshDatabase;
-
     /** @test */
     public function test_index_call_with_config()
     {

@@ -7,7 +7,6 @@ use App\Http\Requests\StoreDpdIrelandRequest;
 use App\Http\Resources\DpdIrelandConfigurationResource;
 use App\Modules\DpdIreland\src\Client;
 use App\Modules\DpdIreland\src\Models\DpdIreland;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -15,25 +14,24 @@ class DpdIrelandController extends Controller
 {
     public function index(Request $request): JsonResource
     {
-        $config = DpdIreland::firstOrFail();
+        $connection = DpdIreland::firstOrFail();
 
-        return DpdIrelandConfigurationResource::make($config);
+        return DpdIrelandConfigurationResource::make($connection);
     }
 
     public function store(StoreDpdIrelandRequest $request): JsonResource
     {
-        $config = DpdIreland::updateOrCreate([], $request->validated());
+        $connection = DpdIreland::updateOrCreate([], $request->validated());
 
         Client::clearCache();
 
-        return DpdIrelandConfigurationResource::make($config);
+        return DpdIrelandConfigurationResource::make($connection);
     }
 
-    /**
-     * @throws Exception
-     */
-    public function destroy(Request $request, DpdIreland $connection)
+    public function destroy(Request $request, int $connection_id): DpdIrelandConfigurationResource
     {
+        $connection = DpdIreland::findOrFail($connection_id);
+
         $connection->delete();
 
         return DpdIrelandConfigurationResource::make($connection);
