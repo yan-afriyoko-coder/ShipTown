@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace Database\Factories\Modules\Api2cart\src\Models;
 
 use App\Models\Product;
@@ -13,12 +11,7 @@ class Api2cartProductLinkFactory extends Factory
 {
     protected $model = Api2cartProductLink::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    public function definition(): array
     {
         $connection = Api2cartConnection::query()->inRandomOrder()->first() ?? Api2cartConnection::factory()->create();
         $product = Product::query()->inRandomOrder()->first() ?? Product::factory()->create();

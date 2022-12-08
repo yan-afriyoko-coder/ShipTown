@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace Database\Factories\Modules\Api2cart\src\Models;
 
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
@@ -11,12 +9,7 @@ class Api2cartOrderImportsFactory extends Factory
 {
     protected $model = Api2cartOrderImports::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    public function definition(): array
     {
         return [
             'raw_import' => json_decode('
