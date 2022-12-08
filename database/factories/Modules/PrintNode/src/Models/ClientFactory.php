@@ -1,20 +1,15 @@
 <?php
 
-
-
 namespace Database\Factories\Modules\PrintNode\src\Models;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Modules\PrintNode\src\Models\Client;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ClientFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    protected $model = Client::class;
+
+    public function definition(): array
     {
         return [
             'api_key' => $this->faker->text(20)

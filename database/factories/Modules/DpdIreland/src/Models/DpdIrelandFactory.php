@@ -1,19 +1,15 @@
 <?php
 
-
-
 namespace Database\Factories\Modules\DpdIreland\src\Models;
 
+use App\Modules\DpdIreland\src\Models\DpdIreland;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class DpdIrelandFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    protected $model = DpdIreland::class;
+
+    public function definition(): array
     {
         return [
             'live'              => false,

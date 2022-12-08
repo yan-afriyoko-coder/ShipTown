@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace Database\Factories\Modules\DpdUk\src\Models;
 
 use App\Models\OrderAddress;
@@ -12,12 +10,7 @@ class ConnectionFactory extends Factory
 {
     protected $model = Connection::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    public function definition(): array
     {
         $address = OrderAddress::query()->first() ?? OrderAddress::factory()->create();
 

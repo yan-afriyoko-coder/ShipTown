@@ -1,12 +1,9 @@
 <?php
 
-
-
 namespace Database\Factories\Modules\Rmsapi\src\Models;
 
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
-use Exception;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -14,30 +11,24 @@ class RmsapiProductImportFactory extends Factory
 {
     protected $model = RmsapiProductImport::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     * @throws Exception
-     */
-    public function definition()
+    public function definition(): array
     {
         $connection = RmsapiConnection::factory()->create();
 
         $random_department  = $this->faker->randomElement(['household', 'bedding', 'fashion', 'baby']);
         $random_category    = $this->faker->randomElement(['category1', 'category2', 'category3', 'category4']);
-        $quantity_on_hand   = random_int(0, 1000);
-        $quantity_committed = random_int(0, $quantity_on_hand);
+        $quantity_on_hand   = rand(0, 1000);
+        $quantity_committed = rand(0, $quantity_on_hand);
         $quantity_available = $quantity_on_hand - $quantity_committed;
-        $reorder_point      = random_int(0, 100);
-        $restock_level      = random_int(0, $reorder_point);
+        $reorder_point      = rand(0, 100);
+        $restock_level      = rand(0, $reorder_point);
 
         return [
-            'connection_id' => $connection->id,
+            'connection_id' => $connection->getKey(),
             'raw_import'    => json_decode('{
            "id":1,
            "cost":110.34,
-           "price":'.(random_int(1, 100000) / 100).',
+           "price":'.(rand(1, 100000) / 100).',
            "active":1,
            "item_id":1,
            "price_a":0,
@@ -47,7 +38,7 @@ class RmsapiProductImportFactory extends Factory
            "sale_price":0,
            "category_id":9,
            "description":"R/C Glider",
-           "is_web_item":'.random_int(0, 1).',
+           "is_web_item":'.rand(0, 1).',
            "supplier_id":2,
            "date_created":"2003-06-03 17:17:23",
            "department_id":5,
@@ -57,10 +48,10 @@ class RmsapiProductImportFactory extends Factory
            "restock_level":'. $restock_level .',
            "sale_end_date":null,
            "food_stampable":0,
-           "db_change_stamp":'.random_int(1000, 100000).',
+           "db_change_stamp":'.rand(1000, 100000).',
            "sale_start_date":null,
            "quantity_on_hand":'.$quantity_on_hand.',
-           "quantity_on_order":'.random_int(10, 20).',
+           "quantity_on_order":'.rand(10, 20).',
            "sub_description_1":"",
            "sub_description_2":"",
            "sub_description_3":"",
@@ -73,12 +64,12 @@ class RmsapiProductImportFactory extends Factory
            "aliases": [
                 {
                     "id": 1,
-                    "alias": "'.(string) $this->faker->unique()->randomNumber(6).'-alias",
+                    "alias": "'. $this->faker->unique()->randomNumber(6) .'-alias",
                     "item_id": 1
                 },
                 {
                     "id": 2,
-                    "alias": "'.(string) $this->faker->unique()->randomNumber(6).'-alias",
+                    "alias": "'. $this->faker->unique()->randomNumber(6) .'-alias",
                     "item_id": 1
                 }
            ]

@@ -10,12 +10,7 @@ class RmsapiConnectionFactory extends Factory
 {
     protected $model = RmsapiConnection::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    public function definition(): array
     {
         $warehouse = Warehouse::query()->inRandomOrder()->first() ?? Warehouse::factory()->create();
 
