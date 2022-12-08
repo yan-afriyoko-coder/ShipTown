@@ -1,23 +1,19 @@
 <?php
 
-
-
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Mail\OrderMail;
 use App\Models\MailTemplate;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class MailTemplateFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    protected $model = MailTemplate::class;
+
+    public function definition(): array
     {
         return [
-            'mailable' => \App\Mail\OrderMail::class,
+            'mailable' => OrderMail::class,
             'html_template' => $this->faker->randomHtml(),
         ];
     }

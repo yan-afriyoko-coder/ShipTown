@@ -1,24 +1,21 @@
 <?php
 
-
-
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderStatus;
 use App\User;
+use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
+use DateTimeZone;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    protected $model = Order::class;
+
+    public function definition(): array
     {
         $shippingAddress = OrderAddress::factory()->create();
 
@@ -28,8 +25,9 @@ class OrderFactory extends Factory
         do {
             try {
                 $dateTime = $this->faker->dateTimeBetween('-7days', now());
-                \Carbon\Carbon::parse($dateTime, new \DateTimeZone('UTC'));
+                Carbon::parse($dateTime, new DateTimeZone('UTC'));
             } catch (InvalidFormatException $exception) {
+                report($exception);
                 $dateTime = null;
             }
         } while ($dateTime === null);

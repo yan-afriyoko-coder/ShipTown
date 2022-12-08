@@ -1,10 +1,9 @@
 <?php
 
-
-
 namespace Database\Factories;
 
 use App\Models\Inventory;
+use App\Models\InventoryMovement;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\User;
@@ -12,22 +11,23 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class InventoryMovementFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    protected $model = InventoryMovement::class;
+
+    public function definition(): array
     {
-        $user = User::first() ?? User::factory()->create();
+        $user = User::query()->inRandomOrder()->first() ?? User::factory()->create();
 
         /** @var Inventory $inventory */
         $inventory = Inventory::first();
 
         if ($inventory === null) {
-            $warehouse = Warehouse::first() ?? Warehouse::factory()->create();
-            $product = Product::first() ?? Product::factory()->create();
-            $inventory = Inventory::first();
+            Warehouse::first() ?? Warehouse::factory()->create();
+            Product::first() ?? Product::factory()->create();
+            $inventory = Inventory::create([
+                'warehouse_id' => Warehouse::first()->getKey(),
+                'product_id' => Product::first()->getKey(),
+                'quantity' => 0,
+            ]);
         }
 
         $quantity_delta = rand(1, 100);

@@ -1,20 +1,15 @@
 <?php
 
-
-
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\OrderStatus;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderStatusFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    protected $model = OrderStatus::class;
+
+    public function definition(): array
     {
         $availableStatuses = [
             'open',

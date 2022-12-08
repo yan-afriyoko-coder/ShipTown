@@ -1,21 +1,16 @@
 <?php
 
-
-
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\DataCollection;
 use App\Models\Warehouse;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class DataCollectionFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    protected $model = DataCollection::class;
+
+    public function definition(): array
     {
         $warehouse = Warehouse::first() ?? Warehouse::factory()->create();
         return [

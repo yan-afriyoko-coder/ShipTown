@@ -1,22 +1,17 @@
 <?php
 
-
-
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
 use App\Models\Product;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class DataCollectionRecordFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    protected $model = DataCollectionRecord::class;
+
+    public function definition(): array
     {
         $product = Product::query()->inRandomOrder()->first() ?? Product::factory()->create();
         $data_collection = DataCollection::query()->inRandomOrder()->first() ?? DataCollection::factory()->create();

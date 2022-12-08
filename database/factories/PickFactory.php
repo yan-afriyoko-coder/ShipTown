@@ -1,22 +1,17 @@
 <?php
 
-
-
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Pick;
 use App\Models\Product;
 use App\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PickFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    protected $model = Pick::class;
+
+    public function definition(): array
     {
         $product = Product::query()->inRandomOrder()->first() ?? Product::factory();
 
