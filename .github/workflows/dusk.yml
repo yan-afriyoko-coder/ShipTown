@@ -1,4 +1,4 @@
-name: PHP 8.1 - Dust
+name: PHP 8.1 - Dusk
 on: [push]
 
 env:
