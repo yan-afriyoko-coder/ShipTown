@@ -4,17 +4,15 @@ namespace Tests\Feature\Http\Controllers\Api\Settings\Module\Api2cart\Api2cartCo
 
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class DestroyTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = User::factory()->create()->assignRole('admin');
+        $admin = User::factory()->create()->assignRole(Role::findOrCreate('admin', 'api'));
         $this->actingAs($admin, 'api');
     }
 

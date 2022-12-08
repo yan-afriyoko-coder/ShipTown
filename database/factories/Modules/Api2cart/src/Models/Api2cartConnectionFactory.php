@@ -1,21 +1,16 @@
 <?php
 
-
-
 namespace Database\Factories\Modules\Api2cart\src\Models;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class Api2cartConnectionFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    protected $model = Api2cartConnection::class;
+
+    public function definition(): array
     {
         $warehouse = Warehouse::query()->inRandomOrder()->first() ?? Warehouse::factory()->create();
 
