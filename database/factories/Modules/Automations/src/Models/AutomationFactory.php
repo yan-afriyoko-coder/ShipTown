@@ -1,20 +1,15 @@
 <?php
 
-
-
 namespace Database\Factories\Modules\Automations\src\Models;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Modules\Automations\src\Models\Automation;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AutomationFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    protected $model = Automation::class;
+
+    public function definition(): array
     {
         return [
             'name' => $this->faker->sentence(3),
