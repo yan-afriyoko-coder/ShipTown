@@ -25,7 +25,7 @@ class UpdateRequest extends FormRequest
     {
         return [
             'name'  => 'sometimes|string|max:250',
-            'code'  => ['sometimes','string','max:5','unique:warehouses,code,'.$this->warehouse->id],
+            'code'  => ['sometimes','string','max:5','unique:warehouses,code,'.$this->warehouse_id],
             'tags'  => 'sometimes|array',
         ];
     }
