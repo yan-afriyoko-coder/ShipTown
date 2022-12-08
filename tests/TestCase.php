@@ -21,6 +21,7 @@ use App\Modules\Api2cart\src\Models\Api2cartProductLink;
 use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
+use App\Modules\DpdIreland\src\Models\DpdIreland;
 use App\Modules\MagentoApi\src\Models\MagentoConnection;
 use App\Modules\MagentoApi\src\Models\MagentoProduct;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
@@ -74,6 +75,8 @@ abstract class TestCase extends BaseTestCase
 
         MagentoProduct::query()->forceDelete();
         MagentoConnection::query()->forceDelete();
+
+        DpdIreland::query()->forceDelete();
 
         ModulesService::updateModulesTable();
 
