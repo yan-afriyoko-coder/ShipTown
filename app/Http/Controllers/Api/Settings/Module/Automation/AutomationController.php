@@ -51,26 +51,21 @@ class AutomationController extends Controller
             DB::beginTransaction();
 
             $automation->fill($request->only(['name', 'event_class', 'enabled', 'priority', 'description']));
+            $automation->save();
 
             // filter out empty conditions and actions
             $conditions = collect($request->validated()['conditions'])
-                ->filter(function ($condition) {
+                ->filter(function (array $condition) {
                     return $condition['condition_class'] != "";
                 });
 
             $actions = collect($request->validated()['actions'])
-                ->filter(function ($action) {
+                ->filter(function (array $action) {
                     return $action['action_class'] != "";
                 });
 
-            // create conditions and actions
-            if (count($conditions)) {
-                $automation->conditions()->createMany($request->validated()['conditions']);
-            }
-
-            if (count($actions)) {
-                $automation->actions()->createMany($request->validated()['actions']);
-            }
+            $automation->conditions()->createMany($conditions);
+            $automation->actions()->createMany($actions);
 
             DB::commit();
 
@@ -107,9 +102,20 @@ class AutomationController extends Controller
             $automation->conditions()->delete();
             $automation->actions()->delete();
 
-            // Insert new
-            $automation->conditions()->createMany($request->validated()['conditions']);
-            $automation->actions()->createMany($request->validated()['actions']);
+            // filter out empty conditions and actions
+            $conditions = collect($request->validated()['conditions'])
+                ->filter(function (array $condition) {
+                    return $condition['condition_class'] != "";
+                });
+
+            $actions = collect($request->validated()['actions'])
+                ->filter(function (array $action) {
+                    return $action['action_class'] != "";
+                });
+
+            // create conditions and actions
+            $automation->conditions()->createMany($conditions);
+            $automation->actions()->createMany($actions);
 
             DB::commit();
         } catch (\Exception $e) {

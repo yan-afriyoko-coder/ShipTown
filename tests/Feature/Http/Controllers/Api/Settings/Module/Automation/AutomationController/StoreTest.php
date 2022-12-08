@@ -2,18 +2,21 @@
 
 namespace Tests\Feature\Http\Controllers\Api\Settings\Module\Automation\AutomationController;
 
+use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
+use App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition;
+use App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class StoreTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = User::factory()->create()->assignRole('admin');
+        /** @var User $admin */
+        $admin = User::factory()->create();
+        $admin = $admin->assignRole(Role::findOrCreate('admin', 'api'));
         $this->actingAs($admin, 'api');
     }
 
@@ -27,18 +30,18 @@ class StoreTest extends TestCase
             'priority' => 1,
             'conditions' => [
                 [
-                    'condition_class' => \App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition::class,
+                    'condition_class' => CanFulfillFromLocationCondition::class,
                     'condition_value' => 'paid'
                 ],
                 [
-                    'condition_class' => \App\Modules\Automations\src\Conditions\Order\ShippingMethodCodeEqualsCondition::class,
+                    'condition_class' => ShippingMethodCodeEqualsCondition::class,
                     'condition_value' => 'paid'
                 ]
             ],
             'actions' => [
                 [
                     'priority' => 1,
-                    'action_class' => \App\Modules\Automations\src\Actions\Order\SetStatusCodeAction::class,
+                    'action_class' => SetStatusCodeAction::class,
                     'action_value' => 'store_pickup',
                 ]
             ]
