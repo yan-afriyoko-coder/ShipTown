@@ -5,17 +5,17 @@ namespace Tests\Feature\Http\Controllers\Api\Settings\Module\Automation\Automati
 use App\Events\Order\OrderCreatedEvent;
 use App\Modules\Automations\src\Models\Automation;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class ShowTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = User::factory()->create()->assignRole('admin');
+        /** @var User $admin */
+        $admin = User::factory()->create();
+        $admin = $admin->assignRole(Role::findOrCreate('admin', 'api'));
         $this->actingAs($admin, 'api');
     }
 
@@ -30,7 +30,10 @@ class ShowTest extends TestCase
 
         $response = $this->get(route('api.settings.module.automations.show', $automation));
 
+        ray($response->json());
+
         $response->assertOk();
+
         $response->assertJsonStructure([
             'data' => [
                 'id',
