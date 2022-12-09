@@ -77,6 +77,8 @@ use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
  *
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAddressLabelTemplate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAskForShippingNumber($value)
+ *
+ * @mixin HasRoles
  */
 class User extends Authenticatable
 {

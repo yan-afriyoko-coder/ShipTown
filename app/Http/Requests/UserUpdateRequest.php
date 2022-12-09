@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Role;
 
 /**
  * Class UserUpdateRequest
@@ -21,7 +22,7 @@ class UserUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->hasRole('admin', 'api');
+        return $this->user()->hasRole('admin');
     }
 
     /**
@@ -61,7 +62,7 @@ class UserUpdateRequest extends FormRequest
             'role_id' => Rule::when($updatedUserId !== $this->user()->id, [
                 'required',
                 'integer',
-                Rule::exists('roles', 'id')->where('guard_name', 'api'),
+                Rule::exists('roles', 'id'),
             ]),
 
             'printer_id' => [

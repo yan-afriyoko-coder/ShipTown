@@ -27,7 +27,7 @@ class UsersSeeder extends Seeder
                 'email' => 'admin@products.management',
                 'warehouse_id' => Warehouse::firstOrCreate(['code' => 'DUB'], ['name' => 'Dublin'])->getKey(),
             ]);
-            $user->assignRole(Role::findByName('admin'));
+            $user->assignRole(Role::findOrCreate('admin'));
         }
 
         // create user
@@ -35,7 +35,7 @@ class UsersSeeder extends Seeder
             ->where('email', '=', 'user@products.management')
             ->doesntExist()) {
             $user = User::factory()->count(1)->create(['email' => 'user@products.management']);
-            $user->first()->assignRole(Role::findByName('user'));
+            $user->first()->assignRole(Role::findOrCreate('user'));
         }
     }
 }
