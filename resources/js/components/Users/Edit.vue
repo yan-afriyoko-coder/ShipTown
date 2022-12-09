@@ -96,7 +96,12 @@ export default {
                 this.warehouseId = user.warehouse_id;
                 this.default_dashboard_uri = user.default_dashboard_uri;
             })
-            .finally(this.hideLoading);
+            .catch(e => {
+                this.displayApiCallError(e);
+            })
+            .finally(
+                this.hideLoading
+            );
     },
 
     props: {
@@ -125,12 +130,8 @@ export default {
                     this.$snotify.success('User updated.');
                     this.$emit('onUpdated');
                 })
-                .catch((error) => {
-                    if (error.response) {
-                        if (error.response.status === 422) {
-                            this.$refs.form.setErrors(error.response.data.errors);
-                        }
-                    }
+                .catch(e => {
+                    this.displayApiCallError(e);
                 })
                 .finally(this.hideLoading);
         },

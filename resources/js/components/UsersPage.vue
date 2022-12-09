@@ -112,6 +112,9 @@ export default {
                 })
                 .then(({ data }) => {
                     this.users = data.data;
+                })
+                .catch(e => {
+                    this.displayApiCallError(e);
                 });
         },
 
@@ -119,6 +122,9 @@ export default {
             this.apiGetUserRoles()
                 .then(({ data }) => {
                     this.roles = data.data;
+                })
+                .catch(e => {
+                    this.displayApiCallError(e);
                 });
         },
 
@@ -131,7 +137,7 @@ export default {
                     this.warehouses = data.data;
                 })
                 .catch(e => {
-                    this.showError('Request failed: ' + e.message);
+                    this.displayApiCallError(e);
                 });
         },
 
@@ -191,6 +197,9 @@ export default {
                 .then(() => {
                     this.$snotify.success('User deactivated.');
                     this.loadUsers()
+                })
+                .catch(e => {
+                    this.displayApiCallError(e);
                 });
         },
     },

@@ -64,7 +64,7 @@ export default {
                     'address_label_template': this.selected_address_label_template
                 })
                 .catch(e => {
-                    this.showException(e);
+                    this.displayApiCallError(e);
                 });
 
             this.loadShippingServices();
@@ -75,7 +75,7 @@ export default {
                     'ask_for_shipping_number': this.selected_ask_for_shipping_number
                 })
                 .catch(e => {
-                    this.showError('Request failed: ' + e.message);
+                    this.displayApiCallError(e);
                 });
         },
 
@@ -84,8 +84,8 @@ export default {
                 .then(({ data }) => {
                     this.shipping_services = data.data;
                 })
-                .catch(() => {
-                    this.notifyError('Error occurred while loading packlist');
+                .catch(e => {
+                    this.displayApiCallError(e);
                 });
         }
     },
