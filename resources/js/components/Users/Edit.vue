@@ -23,7 +23,6 @@
                                 'form-control': true,
                                 'is-invalid': errors.length > 0,
                             }"
-                            name="role_id"
                             id="edit-role_id">
                             <option value="" disabled>Select role</option>
                             <option v-for="(role, i) in roles" :key="i" :value="role.id">
@@ -87,12 +86,13 @@ export default {
     mounted() {
         this.showLoading();
         this.apiGetUsers({
-                'filter[user_id]': this.id
+                'filter[user_id]': this.id,
+                'include': 'roles,warehouse',
             })
             .then(({ data }) => {
                 const user = data.data[0];
                 this.name = user.name;
-                this.roleId = user.role_id;
+                this.roleId = user['roles'][0]['id'];
                 this.warehouseId = user.warehouse_id;
                 this.default_dashboard_uri = user.default_dashboard_uri;
             })

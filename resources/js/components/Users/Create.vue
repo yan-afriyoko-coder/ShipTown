@@ -110,7 +110,6 @@ export default {
             };
             this.apiPostUserStore(data)
                 .then(({ data }) => {
-                    this.$snotify.success('User created.');
                     this.$emit('onCreated');
                 })
                 .catch((error) => {

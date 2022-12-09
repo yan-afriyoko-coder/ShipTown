@@ -139,6 +139,8 @@ class User extends Authenticatable
                 AllowedFilter::exact('user_id', 'id'),
             ])
             ->allowedIncludes([
+                'roles',
+                'warehouse',
             ])
             ->allowedSorts([
             ]);

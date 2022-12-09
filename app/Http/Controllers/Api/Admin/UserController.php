@@ -37,7 +37,6 @@ class UserController extends Controller
      * @param UserStoreRequest $request
      *
      * @return UserResource
-     * @throws ValidationException
      */
     public function store(UserStoreRequest $request): UserResource
     {
@@ -45,22 +44,23 @@ class UserController extends Controller
 
         if ($user) {
             $user->restore();
-            $user->update($request->validated());
         } else {
-            $this->validate($request, [
-                'email' => 'unique:users,email',
-                'name'  => 'unique:users,name'
-            ]);
-
-            $user = User::create($request->validated() + ['password' => bcrypt(Str::random(8))]);
-            Password::sendResetLink(
-                $request->only('email')
-            );
+            $user = new User();
         }
 
-        $roles = Role::findById($request->get('role_id'), 'api');
+        $attributes = $request->validated();
+        $attributes['password'] = bcrypt(Str::random(32));
 
-        $user->assignRole($roles);
+        $user->fill($attributes);
+        $user->save();
+
+        dispatch(function () use ($user) {
+            Password::sendResetLink(['email' => $user->email]);
+        })->afterResponse();
+
+        $role = Role::findById($request->validated()['role_id'], 'web');
+
+        $user->assignRole($role);
 
         return new UserResource($user);
     }
@@ -88,14 +88,15 @@ class UserController extends Controller
     {
         $updatedUser = User::query()->findOrFail($user_id);
 
-        $updateData = collect();
+        $updateData = collect($request->validated());
         $updatedUser->fill($updateData->toArray());
 
         // Not allowed to update your own role
         if ($request->user()->id === $updatedUser->getKey()) {
             $updateData->forget('role_id');
         } else {
-            $updatedUser->syncRoles([$request->validated()['role_id']]);
+            $role = Role::findById($request->validated()['role_id'], 'web');
+            $updatedUser->syncRoles([$role]);
         }
 
         $updatedUser->save();
