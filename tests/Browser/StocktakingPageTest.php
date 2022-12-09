@@ -20,6 +20,7 @@ class StocktakingPageTest extends DuskTestCase
             $browser->loginAs($user)
                 ->visit('/stocktaking')
                 ->pause(500)
+                ->assertSourceMissing('snotify-error')
                 ->assertFocused('@barcode-input-field');
 
             while (rand(1, 3) !== 1) {
@@ -53,24 +54,23 @@ class StocktakingPageTest extends DuskTestCase
     public function test_if_negative_quantity_not_allowed()
     {
         $this->browse(function (Browser $browser) {
-            $user = User::first() ?? User::factory()->create();
-
-            $browser->loginAs($user)
-                ->visit('/stocktaking')
-                ->pause(500)
-                ->assertFocused('@barcode-input-field');
+            /** @var User $user */
+            $user = User::query()->inRandomOrder()->first() ?? User::factory()->create();
 
             /** @var Product $product */
             $product = Product::query()->inRandomOrder()->first() ?? Product::factory()->create();
 
-            $browser->assertFocused('@barcode-input-field');
+            $browser->loginAs($user)
+                ->visit('/stocktaking')
+                ->pause(2000)
+                ->assertSourceMissing('snotify-error')
+                ->assertFocused('@barcode-input-field');
 
             $browser->driver->getKeyboard()->sendKeys($product->sku);
             $browser->driver->getKeyboard()->sendKeys(WebDriverKeys::ENTER);
 
             $browser->waitFor('#quantity-request-input')
                 ->pause(500)
-                ->assertFocused('#quantity-request-input')
                 ->assertSee($product->sku)
                 ->assertSee($product->name);
 
@@ -81,6 +81,8 @@ class StocktakingPageTest extends DuskTestCase
                 ->assertVisible('#quantity-request-input')
                 ->pause(500)
                 ->assertFocused('@quantity-request-input');
+
+            $browser->driver->getKeyboard()->sendKeys(WebDriverKeys::ESCAPE);
         });
     }
 
@@ -92,6 +94,7 @@ class StocktakingPageTest extends DuskTestCase
             $browser->loginAs($user)
                 ->visit('/stocktaking')
                 ->pause(500)
+                ->assertSourceMissing('snotify-error')
                 ->assertFocused('@barcode-input-field');
 
             /** @var ProductAlias $alias */
@@ -133,6 +136,7 @@ class StocktakingPageTest extends DuskTestCase
                 ->loginAs($user)
                 ->visit('/stocktaking')
                 ->pause(500)
+                ->assertSourceMissing('snotify-error')
                 ->assertFocused('@barcode-input-field')
                 ->type('@barcode-input-field', 'not-existing-sku')
                 ->keys('@barcode-input-field', '{enter}')

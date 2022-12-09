@@ -19,11 +19,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class InventoryMovementController extends Controller
 {
-    /**
-     * @throws InvalidSelectException
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
     public function index(Request $request): AnonymousResourceCollection
     {
         $report = new InventoryMovementsReport();

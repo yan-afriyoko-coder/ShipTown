@@ -55,6 +55,10 @@ class InventoryMovementsReport extends Report
                 });
             })
         );
+        $this->addFilter(
+            AllowedFilter::exact('warehouse_code', 'inventory.warehouse_code')
+        );
+
 
         $this->addFilter(
             AllowedFilter::callback('has_tags', function ($query, $value) {
