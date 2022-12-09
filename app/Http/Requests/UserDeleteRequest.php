@@ -13,7 +13,7 @@ class UserDeleteRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->hasRole('admin', 'api');
+        return $this->user()->hasRole('admin');
     }
 
     /**
