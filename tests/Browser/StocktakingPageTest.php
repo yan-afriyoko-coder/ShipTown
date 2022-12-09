@@ -25,7 +25,7 @@ class StocktakingPageTest extends DuskTestCase
 
             while (rand(1, 3) !== 1) {
                 /** @var Product $product */
-                $product = Product::query()->inRandomOrder()->first() ?? Product::factory()->create();
+                $product = Product::factory()->create();
 
                 $browser->assertFocused('@barcode-input-field')
                     ->screenshot('StocktakingPage');
@@ -62,7 +62,7 @@ class StocktakingPageTest extends DuskTestCase
 
             $browser->loginAs($user)
                 ->visit('/stocktaking')
-                ->pause(2000)
+                ->pause(500)
                 ->assertSourceMissing('snotify-error')
                 ->assertFocused('@barcode-input-field');
 

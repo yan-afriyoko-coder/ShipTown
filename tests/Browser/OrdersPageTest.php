@@ -30,9 +30,10 @@ class OrdersPageTest extends DuskTestCase
             $browser->loginAs($user)
                 ->visit('/orders')
                 ->disableFitOnFailure()
-                ->pause(2000)
+                ->pause(500)
+                ->assertFocused('@barcode-input-field')
                 ->screenshot('OrdersPage')
-                ->waitForText($orderProduct->first()->order->order_number, 5)
+                ->waitForText($orderProduct->first()->order->order_number)
                 ->assertSee($orderProduct->first()->order->order_number);
         });
     }
