@@ -2,10 +2,12 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Session;
 use App\Models\Warehouse;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -83,18 +85,12 @@ use Thomasjohnkane\Snooze\Traits\SnoozeNotifiable;
 class User extends Authenticatable
 {
     use HasFactory;
-
     use HasApiTokens;
     use Notifiable;
     use HasRoles;
     use SnoozeNotifiable;
     use SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'name',
         'email',
@@ -108,29 +104,16 @@ class User extends Authenticatable
         'two_factor_expires_at',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password', 'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
         'email_verified_at'       => 'datetime',
         'ask_for_shipping_number' => 'bool',
         'two_factor_expires_at'   => 'datetime',
     ];
 
-    /**
-     * @return QueryBuilder
-     */
     public static function getSpatieQueryBuilder(): QueryBuilder
     {
         return QueryBuilder::for(User::class)
@@ -141,6 +124,7 @@ class User extends Authenticatable
             ->allowedIncludes([
                 'roles',
                 'warehouse',
+                'sessions',
             ])
             ->allowedSorts([
             ]);
@@ -168,11 +152,13 @@ class User extends Authenticatable
         $this->save();
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function warehouse(): BelongsTo
     {
         return $this->belongsTo(Warehouse::class);
+    }
+
+    public function sessions(): HasMany
+    {
+        return $this->hasMany(Session::class);
     }
 }

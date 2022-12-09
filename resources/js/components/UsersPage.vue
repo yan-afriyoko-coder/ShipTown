@@ -21,6 +21,11 @@
                                 <br>
                                 {{ user.email }}
                             </td>
+                            <td style="vertical-align:middle">
+                                <div v-for="session in user['sessions']">
+                                    {{ unixToDateTime(session['last_activity']) }}
+                                </div>
+                            </td>
                             <td style="vertical-align:middle">{{ user.roles[0] ? user.roles[0]['name'] : '' }}</td>
                             <td style="vertical-align:middle">
                                 <a v-if="isNotSelf(user.id)" @click.prevent="onDeleteClick(user.id)">
@@ -81,6 +86,7 @@ import Create from './Users/Create';
 import Edit from './Users/Edit';
 import api from "../mixins/api";
 import Vue from "vue";
+import moment from "moment";
 
 export default {
     mixins: [api],
@@ -103,9 +109,13 @@ export default {
     }),
 
     methods: {
+        unixToDateTime: function (time) {
+            return moment.unix(time).format('YYYY-MM-DD HH:mm:ss');
+        },
+
         loadUsers() {
             this.apiGetUsers({
-                    'include': 'roles,warehouse',
+                    'include': 'roles,warehouse,sessions',
                     'per_page': 999
                 })
                 .then(({ data }) => {

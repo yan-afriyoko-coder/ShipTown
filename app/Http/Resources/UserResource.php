@@ -24,7 +24,8 @@ class UserResource extends JsonResource
             'ask_for_shipping_number' => $this->ask_for_shipping_number,
 
             'roles'                   => RoleResource::make($this->whenLoaded('roles')),
-            'warehouse'               => WarehouseResource::make($this->whenLoaded('warehouse'))
+            'warehouse'               => WarehouseResource::make($this->whenLoaded('warehouse')),
+            'sessions'                => JsonResource::make($this->whenLoaded('sessions')),
         ];
     }
 }
