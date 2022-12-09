@@ -21,11 +21,11 @@ class RmsapiConnectionSeeder extends Seeder
 
         RmsapiModuleServiceProvider::enableModule();
 
-        App\Modules\Rmsapi\src\Models\RmsapiConnection::factory()->create([
-            'location_id' => env('TEST_RMSAPI_WAREHOUSE_CODE'),
-            'url' => env('TEST_RMSAPI_URL'),
-            'username' => env('TEST_RMSAPI_USERNAME'),
-            'password' => env('TEST_RMSAPI_PASSWORD'),
+        RmsapiConnection::factory()->create([
+            'location_id'   => env('TEST_RMSAPI_WAREHOUSE_CODE'),
+            'url'           => env('TEST_RMSAPI_URL'),
+            'username'      => env('TEST_RMSAPI_USERNAME'),
+            'password'      => env('TEST_RMSAPI_PASSWORD'),
         ]);
 
         RmsapiModuleServiceProvider::enableModule();
