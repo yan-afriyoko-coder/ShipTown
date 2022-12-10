@@ -3,13 +3,10 @@
 namespace Tests\Feature\Http\Controllers\Api\Settings\UserMeController;
 
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class StoreTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -34,10 +31,15 @@ class StoreTest extends TestCase
                 'name',
                 'email',
                 'location_id',
-                'role_id',
-                'role_name',
                 'printer_id',
-                'address_label_template'
+                'address_label_template',
+                'roles' => [
+                    '*' => [
+                        'id',
+                        'name',
+                        'guard_name',
+                    ],
+                ],
             ],
         ]);
     }

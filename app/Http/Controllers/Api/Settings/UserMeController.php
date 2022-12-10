@@ -17,7 +17,7 @@ class UserMeController extends Controller
      *
      * @return UserResource
      */
-    public function index(Request $request)
+    public function index(Request $request): UserResource
     {
         return new UserResource($request->user());
     }
@@ -31,6 +31,6 @@ class UserMeController extends Controller
     {
         $request->user()->update($request->validated());
 
-        return new UserResource($request->user());
+        return UserResource::make($request->user()->load('roles'));
     }
 }
