@@ -28,7 +28,6 @@ class UpdateTest extends TestCase
 
         $data = [
             'name' => 'Test User',
-            'email' => 'testing@example.com',
             'role_id' => $role->getKey(),
             'warehouse_id' => $warehouse->getKey(),
         ];

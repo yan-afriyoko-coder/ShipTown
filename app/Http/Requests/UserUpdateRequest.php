@@ -40,16 +40,6 @@ class UserUpdateRequest extends FormRequest
                 'sometimes',
                 'required',
                 'max:255',
-                Rule::unique('users', 'name')->ignore($updatedUserId),
-            ],
-
-            'email' => [
-                'email',
-                'string',
-                'sometimes',
-                'required',
-                'max:255',
-                Rule::unique('users', 'email')->ignore($updatedUserId),
             ],
 
             'default_dashboard_uri' => [
