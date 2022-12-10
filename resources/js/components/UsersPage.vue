@@ -23,7 +23,7 @@
                             </td>
                             <td style="vertical-align:middle">
                                 <div v-for="session in user['sessions']">
-                                    <div :title="session['user_agent']">
+                                    <div :title="session['user_agent']" class="badge border-0" :class="isSessionActive(session['last_activity'])">
                                         {{ formatDateTime(session['last_activity']) }}
                                     </div>
                                 </div>
@@ -111,6 +111,13 @@ export default {
     }),
 
     methods: {
+        isSessionActive(lastActivity) {
+            const now = moment();
+            const last = moment(lastActivity);
+            const diff = now.diff(last, 'minutes');
+            return diff < 10 ? 'badge-success' : '';
+        },
+
         loadUsers() {
             this.apiGetUsers({
                     'include': 'roles,warehouse,sessions',
