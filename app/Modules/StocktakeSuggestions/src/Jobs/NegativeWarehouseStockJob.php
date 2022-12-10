@@ -48,7 +48,7 @@ class NegativeWarehouseStockJob implements ShouldQueue
                 SELECT DISTINCT inventory.id as inventory_id,
                     inventory.product_id as product_id,
                     inventory.warehouse_id as warehouse_id,
-                    20 + ABS(inventory.quantity) as points,
+                    ? + ABS(inventory.quantity) as points,
                     ? as reason,
                     now() as created_at,
                     now() as updated_at
