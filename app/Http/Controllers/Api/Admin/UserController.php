@@ -11,7 +11,6 @@ use App\User;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 use Spatie\Permission\Models\Role;
 
 /**
@@ -58,22 +57,17 @@ class UserController extends Controller
             Password::sendResetLink(['email' => $user->email]);
         })->afterResponse();
 
-        $role = Role::findById($request->validated()['role_id'], 'web');
+        $role = Role::findById($request->validated()['role_id']);
 
         $user->assignRole($role);
 
         return new UserResource($user);
     }
 
-    /**
-     * SHOW api/admin/users.
-     *
-     * @param User $user
-     *
-     * @return UserResource
-     */
-    public function show(User $user): UserResource
+    public function show(int $user_id): UserResource
     {
+        $user = User::query()->with('roles')->findOrFail($user_id);
+
         return new UserResource($user);
     }
 
@@ -95,7 +89,7 @@ class UserController extends Controller
         if ($request->user()->id === $updatedUser->getKey()) {
             $updateData->forget('role_id');
         } else {
-            $role = Role::findById($request->validated()['role_id'], 'web');
+            $role = Role::findById($request->validated()['role_id']);
             $updatedUser->syncRoles([$role]);
         }
 

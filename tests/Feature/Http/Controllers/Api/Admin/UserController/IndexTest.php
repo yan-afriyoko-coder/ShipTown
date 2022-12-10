@@ -15,7 +15,8 @@ class IndexTest extends TestCase
         $user = User::factory()->create();
         $user->assignRole(Role::findOrCreate('admin', 'api'));
 
-        $response = $this->actingAs($user, 'api')->getJson(route('users.index'));
+        $response = $this->actingAs($user, 'api')
+            ->getJson(route('users.index', ['include' => 'roles']));
 
         $response->assertOk();
 
@@ -29,8 +30,13 @@ class IndexTest extends TestCase
                     'id',
                     'name',
                     'email',
-                    'role_id',
                     'printer_id',
+                    'roles' => [
+                        '*' => [
+                            'id',
+                            'name',
+                        ],
+                    ],
                 ],
             ],
         ]);

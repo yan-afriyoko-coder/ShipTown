@@ -14,7 +14,8 @@ class StoreTest extends TestCase
         parent::setUp();
         /** @var User $admin */
         $admin = User::factory()->create();
-        $admin->assignRole(Role::findOrCreate('admin', 'api'));
+        $roles = Role::findOrCreate('admin');
+        $admin->assignRole($roles);
         $this->actingAs($admin, 'api');
     }
 
@@ -22,9 +23,8 @@ class StoreTest extends TestCase
     public function test_store_call_returns_ok()
     {
         $warehouse = Warehouse::factory()->create();
-
         $testData = User::factory()->make()->toArray();
-        $testData['role_id'] = Role::findOrCreate('user', 'api')->id;
+        $testData['role_id'] = Role::findOrCreate('user')->id;
 
         $response = $this->postJson(route('users.store'), $testData);
 
@@ -40,7 +40,7 @@ class StoreTest extends TestCase
         $response = $this->post(route('users.store'), [
             'name'      => $user->name,
             'email'     => $user->email,
-            'role_id'   => Role::findOrCreate('user', 'api')->id,
+            'role_id'   => Role::findOrCreate('user')->id,
         ]);
 
         $response->assertStatus(200);

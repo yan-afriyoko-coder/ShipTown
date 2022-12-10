@@ -20,10 +20,14 @@ use Illuminate\Support\Carbon;
  */
 class Session extends Model
 {
+    protected $hidden = [
+        'id',
+        'payload'
+    ];
+
     protected $casts = [
         'last_activity' => 'datetime',
     ];
-    protected $hidden = ['id', 'payload'];
 
     public function user(): BelongsTo
     {

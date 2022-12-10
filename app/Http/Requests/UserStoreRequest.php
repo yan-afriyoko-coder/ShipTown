@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UserStoreRequest extends FormRequest
 {
@@ -14,7 +14,7 @@ class UserStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->hasRole('admin');
+        return $this->user()->hasRole('admin', 'web');
     }
 
     /**
@@ -25,11 +25,32 @@ class UserStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'                   => ['required', 'string', 'max:255', 'unique:users,name'],
-            'email'                  => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'role_id'                => ['required', 'exists:roles,id'],
-            'warehouse_id'           => ['nullable', 'exists:warehouses,id'],
-            'default_dashboard_uri'  => ['nullable', 'string', 'max:255'],
+            'name' => [
+                'required', 'string',
+                'max:255',
+                Rule::unique('users', 'name')->whereNull('deleted_at')
+            ],
+
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')->whereNull('deleted_at')
+            ],
+
+            'role_id' => [
+                'required',
+                'exists:roles,id'],
+
+            'warehouse_id' => [
+                'nullable',
+                'exists:warehouses,id'],
+
+            'default_dashboard_uri' => [
+                'nullable',
+                'string',
+                'max:255'],
         ];
     }
 }

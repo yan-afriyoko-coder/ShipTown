@@ -12,16 +12,23 @@ class ShowTest extends TestCase
     {
         $user = User::factory()->create()->assignRole('admin');
 
-        $response = $this->actingAs($user, 'api')->getJson(route('users.show', $user->id));
+        $response = $this->actingAs($user, 'api')
+            ->getJson(route('users.show', $user->id));
 
         $response->assertOk();
+
         $response->assertJsonStructure([
             'data' => [
                 'id',
                 'name',
                 'email',
-                'role_id',
                 'printer_id',
+                'roles' => [
+                    '*' => [
+                        'id',
+                        'name',
+                    ],
+                ],
             ],
         ]);
     }

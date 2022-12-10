@@ -14,7 +14,7 @@ class UpdateTest extends TestCase
         parent::setUp();
         /** @var User $admin */
         $admin = User::factory()->create();
-        $admin->assignRole(Role::findOrCreate('admin', 'api'));
+        $admin->assignRole(Role::findOrCreate('admin'));
         $this->actingAs($admin, 'api');
     }
 
@@ -22,7 +22,7 @@ class UpdateTest extends TestCase
     public function test_store_call_returns_ok()
     {
         $user = User::factory()->create();
-        $role = Role::findOrCreate('user', 'api');
+        $role = Role::findOrCreate('user');
         $warehouse = Warehouse::factory()->create();
 
 
