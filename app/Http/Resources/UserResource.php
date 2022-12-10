@@ -23,9 +23,9 @@ class UserResource extends JsonResource
             'address_label_template'  => $this->address_label_template,
             'ask_for_shipping_number' => $this->ask_for_shipping_number,
 
-            'roles'                   => RoleResource::make($this->whenLoaded('roles')),
+            'roles'                   => RoleResource::collection($this->whenLoaded('roles')),
             'warehouse'               => WarehouseResource::make($this->whenLoaded('warehouse')),
-            'sessions'                => JsonResource::make($this->whenLoaded('sessions')),
+            'sessions'                => SessionResource::collection($this->whenLoaded('sessions')),
         ];
     }
 }

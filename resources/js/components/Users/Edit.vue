@@ -40,7 +40,7 @@
                                 'form-control': true,
                                 'is-invalid': errors.length > 0,
                             }"
-                            id="create-warehouse_id" required>
+                            id="create-warehouse_id">
                             <option value=""></option>
                             <option v-for="warehouse in warehouses" :key="warehouse.id" :value="warehouse.id">
                                 {{ warehouse.name }}
@@ -133,7 +133,9 @@ export default {
                 .catch(e => {
                     this.displayApiCallError(e);
                 })
-                .finally(this.hideLoading);
+                .finally(() => {
+                    this.hideLoading();
+                });
         },
     },
 

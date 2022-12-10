@@ -23,7 +23,9 @@
                             </td>
                             <td style="vertical-align:middle">
                                 <div v-for="session in user['sessions']">
-                                    {{ unixToDateTime(session['last_activity']) }}
+                                    <div :title="session['user_agent']">
+                                        {{ formatDateTime(session['last_activity']) }}
+                                    </div>
                                 </div>
                             </td>
                             <td style="vertical-align:middle">{{ user.roles[0] ? user.roles[0]['name'] : '' }}</td>
@@ -109,10 +111,6 @@ export default {
     }),
 
     methods: {
-        unixToDateTime: function (time) {
-            return moment.unix(time).format('YYYY-MM-DD HH:mm:ss');
-        },
-
         loadUsers() {
             this.apiGetUsers({
                     'include': 'roles,warehouse,sessions',
