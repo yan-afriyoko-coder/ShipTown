@@ -25,9 +25,6 @@ class ResyncSyncErrorsTaggedJob implements ShouldQueue
     {
         Product::withAllTags(['SYNC ERROR'])
             ->each(function (Product $product) {
-                activity()->withoutLogs(function () use ($product) {
-                    $product->attachTag('Not Synced');
-                });
                 $product->detachTag('SYNC ERROR');
             });
     }
