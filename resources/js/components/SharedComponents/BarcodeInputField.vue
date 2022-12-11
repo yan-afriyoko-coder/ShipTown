@@ -74,6 +74,30 @@
         },
 
         methods: {
+            barcodeScanned(barcode) {
+              this.apiPostActivity({
+                  'log_name': 'search',
+                  'description': barcode,
+                })
+                .catch((error) => {
+                    this.displayApiCallError(error)
+                });
+
+              if (this.tryToRunCommand(barcode)) {
+                this.barcode = '';
+                return;
+              }
+
+              if(this.url_param_name) {
+                this.setUrlParameter(this.url_param_name, barcode);
+              }
+
+              this.$emit('barcodeScanned', barcode);
+
+              this.setFocusOnBarcodeInput();
+              this.simulateSelectAll();
+            },
+
             updateShelfLocationShown: function (bvEvent, modalId) {
                 this.shelfLocationModalShowing = true;
                 this.shelfLocationModalContinuesScan = false;
@@ -188,29 +212,6 @@
                 }
 
                 this.$bvModal.hide('set-shelf-location-command-modal');
-            },
-
-            barcodeScanned(barcode) {
-                this.apiPostActivity({
-                        'description': 'command_input: "' + barcode + '"',
-                    })
-                    .catch((error) => {
-                        this.displayApiCallError(error)
-                    });
-
-                if (this.tryToRunCommand(barcode)) {
-                    this.barcode = '';
-                    return;
-                  }
-
-                if(this.url_param_name) {
-                    this.setUrlParameter(this.url_param_name, barcode);
-                }
-
-                this.$emit('barcodeScanned', barcode);
-
-                this.setFocusOnBarcodeInput();
-                this.simulateSelectAll();
             },
 
             setFocusOnBarcodeInput(delay = 1) {
