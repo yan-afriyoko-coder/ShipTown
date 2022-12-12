@@ -14,7 +14,7 @@ class PacksheetPageTest extends DuskTestCase
     public function test_succesful_stocktake_action()
     {
         $this->browse(function (Browser $browser) {
-            $user = User::first() ?? User::factory()->create();
+            $user = User::factory()->create();
 
             /** @var Order $order */
             $order = Order::factory()->create();
