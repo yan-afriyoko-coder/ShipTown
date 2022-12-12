@@ -15,7 +15,7 @@ class StocktakingPageTest extends DuskTestCase
     public function test_succesful_stocktake_action()
     {
         $this->browse(function (Browser $browser) {
-            $user = User::first() ?? User::factory()->create();
+            $user = User::factory()->create();
 
             $browser->loginAs($user)
                 ->visit('/stocktaking')
@@ -89,7 +89,8 @@ class StocktakingPageTest extends DuskTestCase
     public function test_if_alias_scans()
     {
         $this->browse(function (Browser $browser) {
-            $user = User::first() ?? User::factory()->create();
+            /** @var User $user */
+            $user = User::factory()->create();
 
             $browser->loginAs($user)
                 ->visit('/stocktaking')

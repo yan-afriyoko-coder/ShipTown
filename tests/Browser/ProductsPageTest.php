@@ -18,7 +18,7 @@ class ProductsPageTest extends DuskTestCase
      *
      * @return void
      */
-    public function testBasicExample()
+    public function test_user_access()
     {
         $this->browse(function (Browser $browser) {
             Warehouse::factory()->create();
