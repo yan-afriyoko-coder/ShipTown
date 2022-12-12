@@ -8,6 +8,7 @@
                     <a type="button" class="btn btn-primary " href="{{ route('products') }}">{{ __('Products') }}</a>
                     <a type="button" class="btn btn-primary" href="{{ route('orders') }}">{{ __('Orders') }}</a>
 
+                    @if(Auth::user()->warehouse_id)
                     <!-- Reports Dropdown -->
                     <div class="dropdown position-static">
                         <!-- User dropdown menu -->
@@ -22,6 +23,7 @@
                             <a class="btn btn-primary d-block" href="{{ route('data-collector') }}">{{ __('Data Collector') }}</a>
                         </div>
                     </div>
+                    @endif
                 </div>
 
             </div>

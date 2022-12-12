@@ -21,7 +21,7 @@
                             </thead>
                             <tbody class="">
                               <template v-for="inventory in product.inventory">
-                                <tr class="text-right w-auto" v-bind:class="{ 'table-active': currentUser() && inventory['warehouse_code'] === currentUser()['warehouse']['code']}" >
+                                <tr class="text-right w-auto" v-bind:class="{ 'table-active': currentUser()['warehouse'] !== null && inventory['warehouse_code'] === currentUser()['warehouse']['code']}" >
                                   <td class="text-left">{{ inventory['warehouse_code'] }}</td>
                                   <td class="text-left">{{ inventory['shelf_location'] }}</td>
                                   <td class="">{{ inventory['quantity | numberFormat'] }}</td>
@@ -116,7 +116,7 @@
                                     <tbody>
                                        <template v-for="price in product['prices']">
 
-                                        <tr :key="price.id" v-bind:class="{ 'table-active': currentUser() && price['location_id'] === currentUser()['warehouse']['code']}" >
+                                        <tr :key="price.id" v-bind:class="{ 'table-active': currentUser()['warehouse'] && price['location_id'] === currentUser()['warehouse']['code']}" >
                                             <td>{{ price['location_id'] }}</td>
                                             <td class="text-right">{{ price['sale_price'] }}</td>
                                             <td class="text-right">{{ price['sale_price_start_date'] }}</td>
@@ -144,7 +144,7 @@
                                     </thead>
                                     <tbody>
                                     <template v-for="inventory in product.inventory" >
-                                        <tr class="" v-bind:class="{ 'table-active': currentUser() && inventory['warehouse_code'] === currentUser()['warehouse']['code']}">
+                                        <tr class="" v-bind:class="{ 'table-active': currentUser()['warehouse'] && inventory['warehouse_code'] === currentUser()['warehouse']['code']}">
                                             <td>{{ inventory['warehouse_code'] }}</td>
                                             <td>{{ toNumberOrDash(inventory['quantity'])}}</td>
                                             <td>{{ toNumberOrDash(inventory['quantity_reserved'])}}</td>

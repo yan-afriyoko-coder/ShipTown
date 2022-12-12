@@ -15,7 +15,8 @@
             </div>
         </template>
 
-        <template  v-if="products.length === 0 && !isLoading" >
+
+        <template  v-if="products !== null && products.length === 0" >
             <div class="row">
                 <div class="col">
                     <div class="alert alert-info" role="alert">
