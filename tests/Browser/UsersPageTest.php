@@ -23,6 +23,7 @@ class UsersPageTest extends DuskTestCase
             $admin->assignRole('admin');
 
             $browser->loginAs($admin)
+                ->disableFitOnFailure()
                 ->visit('/admin/settings/users')
                 ->assertSee('Users')
                 ->assertSee($admin->name);
