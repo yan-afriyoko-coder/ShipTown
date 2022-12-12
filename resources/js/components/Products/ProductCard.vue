@@ -21,13 +21,13 @@
                             </thead>
                             <tbody class="">
                               <template v-for="inventory in product.inventory">
-                                <tr class="text-right w-auto" v-bind:class="{ 'table-active': inventory['warehouse_code'] === currentUser()['warehouse']['code']}" >
-                                  <td class="text-left">{{ inventory.warehouse_code }}</td>
-                                  <td class="text-left">{{ inventory.shelf_location }}</td>
-                                  <td class="">{{ inventory.quantity | numberFormat }}</td>
+                                <tr class="text-right w-auto" v-bind:class="{ 'table-active': currentUser() && inventory['warehouse_code'] === currentUser()['warehouse']['code']}" >
+                                  <td class="text-left">{{ inventory['warehouse_code'] }}</td>
+                                  <td class="text-left">{{ inventory['shelf_location'] }}</td>
+                                  <td class="">{{ inventory['quantity | numberFormat'] }}</td>
                                   <td class="">{{ inventory['quantity_available'] | numberFormat }}</td>
                                   <td class="">{{ inventory['quantity_incoming'] | numberFormat }}</td>
-                                  <td class="">{{ product.prices[inventory.warehouse_code].price }}</td>
+                                  <td class="">{{ product.prices[inventory['warehouse_code']]['price'] }}</td>
                                 </tr>
                               </template>
                             </tbody>
@@ -116,7 +116,7 @@
                                     <tbody>
                                        <template v-for="price in product['prices']">
 
-                                        <tr :key="price.id" v-bind:class="{ 'table-active': price['location_id'] === currentUser()['warehouse']['code']}" >
+                                        <tr :key="price.id" v-bind:class="{ 'table-active': currentUser() && price['location_id'] === currentUser()['warehouse']['code']}" >
                                             <td>{{ price['location_id'] }}</td>
                                             <td class="text-right">{{ price['sale_price'] }}</td>
                                             <td class="text-right">{{ price['sale_price_start_date'] }}</td>
@@ -144,7 +144,7 @@
                                     </thead>
                                     <tbody>
                                     <template v-for="inventory in product.inventory" >
-                                        <tr class="" v-bind:class="{ 'table-active': inventory['warehouse_code'] === currentUser()['warehouse']['code']}">
+                                        <tr class="" v-bind:class="{ 'table-active': currentUser() && inventory['warehouse_code'] === currentUser()['warehouse']['code']}">
                                             <td>{{ inventory['warehouse_code'] }}</td>
                                             <td>{{ toNumberOrDash(inventory['quantity'])}}</td>
                                             <td>{{ toNumberOrDash(inventory['quantity_reserved'])}}</td>
@@ -168,9 +168,6 @@
                                 </div>
                             </div>
                         </template>
-
-
-
 
                       <div class="row col d-block font-weight-bold pb-1 text-uppercase small text-secondary align-content-center text-center">ORDERS</div>
 
@@ -224,53 +221,12 @@
                           <hr>
                         </div>
                       </template>
-
-
                     </div>
                 </div>
-
-
-
-
-
-
-
             </div>
-
         </div>
 
         <div class="spacer-bottom row mb-4 mt-4" v-if="showDetails"></div>
-
-        <div class="modal fade widget-configuration-modal" id="filterConfigurationModal" ref="filterConfigurationModal" tabindex="-1" role="dialog" aria-labelledby="picklistConfigurationModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Settings: Packlist</h5>
-                        <div class="widget-tools-container">
-<!--                            <font-awesome-icon icon="question-circle" :content="helpText" v-tippy></font-awesome-icon>-->
-                        </div>
-                    </div>
-                    <div class="modal-body" style="margin: 0 auto 0;">
-                        <button type="button" class="btn mb-1 btn-info" @click="orderProduct(0)">0</button><br>
-                        <button type="button" class="btn mb-1 btn-info" @click="orderProduct(12)">12</button><br>
-                        <button type="button" class="btn mb-1 btn-info" @click="orderProduct(24)">24</button><br>
-                        <button type="button" class="btn mb-1 btn-info" @click="orderProduct(36)">36</button><br>
-                        <button type="button" class="btn mb-1 btn-info" @click="orderProduct(36)">MORE</button><br>
-<!--                        <form method="POST" @submit.prevent="handleSubmit">-->
-<!--                            <div class="form-group">-->
-<!--                                <label class="form-label" for="selectStatus">Inventory Location ID</label>-->
-<!--                                <input v-model="filters['inventory_source_location_id']" type="number" class="form-control" />-->
-<!--                            </div>-->
-
-<!--                            <slot name="actions" v-bind:filters="filters"></slot>-->
-<!--                        </form>-->
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" @click.prevent="handleSubmit" class="btn btn-primary">OK</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
     </div>
 </template>
