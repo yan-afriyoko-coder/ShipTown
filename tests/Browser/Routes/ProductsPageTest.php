@@ -2,36 +2,52 @@
 
 namespace Tests\Browser\Routes;
 
+use App\Models\Product;
+use App\Models\Warehouse;
 use App\User;
+use Exception;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
 
 class ProductsPageTest extends DuskTestCase
 {
-    private string $uri = '';
+    private string $uri = 'products';
+
+    /**
+     * @throws Exception
+     */
+    protected function setUp(): void
+    {
+        if (empty($this->uri)) {
+            throw new Exception('Please set the $uri property in your test class.');
+        }
+
+        parent::setUp();
+    }
 
     /**
      * @throws Throwable
      */
     public function testUserAccess()
     {
-        if (empty($this->uri)) {
-            $this->markTestIncomplete('URI is not set');
-        }
-
         $this->browse(function (Browser $browser) {
             /** @var User $user */
             $user = User::factory()->create();
             $user->assignRole('user');
 
+            /** @var Product $product */
+            $product = Product::factory()->create();
+
+            Warehouse::factory()->create();
+
             $browser->disableFitOnFailure()
                 ->loginAs($user)
                 ->visit($this->uri)
                 ->pause(300)
+                ->assertRouteIs($this->uri)
                 ->assertSourceMissing('snotify-error')
-                ->assertSourceMissing('snotify-error')
-                ->pause(1);
+                ->assertSee($product->name);
         });
     }
 
@@ -40,10 +56,6 @@ class ProductsPageTest extends DuskTestCase
      */
     public function testAdminAccess()
     {
-        if (empty($this->uri)) {
-            $this->markTestIncomplete('URI is not set');
-        }
-
         $this->browse(function (Browser $browser) {
             /** @var User $admin */
             $admin = User::factory()->create();
@@ -53,8 +65,8 @@ class ProductsPageTest extends DuskTestCase
                 ->loginAs($admin)
                 ->visit($this->uri)
                 ->pause(300)
-                ->assertSourceMissing('snotify-error')
-                ->pause(1);
+                ->assertRouteIs($this->uri)
+                ->assertSourceMissing('snotify-error');
         });
     }
 
@@ -63,10 +75,6 @@ class ProductsPageTest extends DuskTestCase
      */
     public function testGuestAccess()
     {
-        if (empty($this->uri)) {
-            $this->markTestIncomplete('URI is not set');
-        }
-
         $this->browse(function (Browser $browser) {
             $browser->disableFitOnFailure()
                 ->logout()
