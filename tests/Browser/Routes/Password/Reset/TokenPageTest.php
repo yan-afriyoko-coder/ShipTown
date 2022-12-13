@@ -2,21 +2,77 @@
 
 namespace Tests\Browser\Routes\Password\Reset;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use App\User;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
-/**
- *
- */
-class TokenPageTest extends TestCase
+use Throwable;
+
+class TokenPageTest extends DuskTestCase
 {
+    private string $uri = '';
+
     /**
-     * A Dusk test example.
-     *
-     * @return void
+     * @throws Throwable
      */
-    public function testExample()
+    public function testUserAccess()
     {
-        // TODO: please create test
+        if (empty($this->uri)) {
+            $this->markTestIncomplete('URI is not set');
+        }
+
+        $this->browse(function (Browser $browser) {
+            /** @var User $user */
+            $user = User::factory()->create();
+            $user->assignRole('user');
+
+            $browser->disableFitOnFailure()
+                ->loginAs($user)
+                ->visit($this->uri)
+                ->pause(300)
+                ->assertSourceMissing('snotify-error')
+                ->assertSourceMissing('snotify-error')
+                ->pause(1);
+        });
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testAdminAccess()
+    {
+        if (empty($this->uri)) {
+            $this->markTestIncomplete('URI is not set');
+        }
+
+        $this->browse(function (Browser $browser) {
+            /** @var User $admin */
+            $admin = User::factory()->create();
+            $admin->assignRole('admin');
+
+            $browser->disableFitOnFailure()
+                ->loginAs($admin)
+                ->visit($this->uri)
+                ->pause(300)
+                ->assertSourceMissing('snotify-error')
+                ->pause(1);
+        });
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testGuestAccess()
+    {
+        if (empty($this->uri)) {
+            $this->markTestIncomplete('URI is not set');
+        }
+
+        $this->browse(function (Browser $browser) {
+            $browser->disableFitOnFailure()
+                ->logout()
+                ->visit($this->uri)
+                ->assertRouteIs('login')
+                ->assertSee('Login');
+        });
     }
 }

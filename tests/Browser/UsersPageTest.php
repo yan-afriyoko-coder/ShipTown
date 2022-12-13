@@ -25,6 +25,7 @@ class UsersPageTest extends DuskTestCase
             $browser->loginAs($admin)
                 ->disableFitOnFailure()
                 ->visit('/admin/settings/users')
+                ->pause(300)
                 ->assertSee('Users')
                 ->assertSee($admin->name);
         });

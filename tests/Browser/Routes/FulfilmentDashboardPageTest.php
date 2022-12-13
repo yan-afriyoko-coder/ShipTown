@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Browser\Routes\Reports;
+namespace Tests\Browser\Routes;
 
 use App\User;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
 
-class InventoryDashboardPageTest extends DuskTestCase
+class FulfilmentDashboardPageTest extends DuskTestCase
 {
     private string $uri = '';
 
