@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Warehouse;
 use App\User;
 use Exception;
+use Facebook\WebDriver\WebDriverKeys;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
@@ -24,6 +25,36 @@ class ProductsPageTest extends DuskTestCase
         }
 
         parent::setUp();
+    }
+
+    /**
+     * A basic browser test example.
+     *
+     * @throws Throwable
+     *
+     * @return void
+     */
+    public function testNoProducts()
+    {
+        Product::query()->forceDelete();
+
+        /** @var User $user */
+        $user = User::factory()->create();
+        $user->assignRole('user');
+
+        $this->browse(function (Browser $browser) use ($user) {
+            $browser->disableFitOnFailure()
+                ->loginAs($user)
+                ->visit($this->uri)
+                ->pause(300)
+                ->waitForText('No products found.')
+                ->assertSee('No products found.')
+                ->assertFocused('@barcode-input-field')
+                ->type('@barcode-input-field', '')
+                ->keys('@barcode-input-field', [WebDriverKeys::ENTER])
+                ->pause(300)
+                ->assertSourceMissing('snotify-error');
+        });
     }
 
     /**
@@ -47,7 +78,8 @@ class ProductsPageTest extends DuskTestCase
                 ->pause(300)
                 ->assertRouteIs($this->uri)
                 ->assertSourceMissing('snotify-error')
-                ->assertSee($product->name);
+                ->assertSee($product->name)
+                ->assertFocused('@barcode-input-field');
         });
     }
 
