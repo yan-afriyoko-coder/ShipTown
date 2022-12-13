@@ -75,27 +75,29 @@
 
         methods: {
             barcodeScanned(barcode) {
-              this.apiPostActivity({
-                  'log_name': 'search',
-                  'description': barcode,
-                })
-                .catch((error) => {
-                    this.displayApiCallError(error)
-                });
+                if (barcode !== '') {
+                    this.apiPostActivity({
+                      'log_name': 'search',
+                      'description': barcode,
+                    })
+                    .catch((error) => {
+                        this.displayApiCallError(error)
+                    });
+                }
 
-              if (this.tryToRunCommand(barcode)) {
-                this.barcode = '';
-                return;
-              }
+                if (this.tryToRunCommand(barcode)) {
+                    this.barcode = '';
+                    return;
+                }
 
-              if(this.url_param_name) {
-                this.setUrlParameter(this.url_param_name, barcode);
-              }
+                if(this.url_param_name) {
+                    this.setUrlParameter(this.url_param_name, barcode);
+                }
 
-              this.$emit('barcodeScanned', barcode);
+                this.$emit('barcodeScanned', barcode);
 
-              this.setFocusOnBarcodeInput();
-              this.simulateSelectAll();
+                this.setFocusOnBarcodeInput();
+                this.simulateSelectAll();
             },
 
             updateShelfLocationShown: function (bvEvent, modalId) {
