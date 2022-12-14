@@ -79,6 +79,10 @@ class ProductsPageTest extends DuskTestCase
                 ->assertRouteIs($this->uri)
                 ->assertSourceMissing('snotify-error')
                 ->assertSee($product->name)
+                ->type('@barcode-input-field', $product->sku)
+                ->keys('@barcode-input-field', [WebDriverKeys::ENTER])
+                ->pause(300)
+                ->assertSourceMissing('snotify-error')
                 ->assertFocused('@barcode-input-field');
         });
     }

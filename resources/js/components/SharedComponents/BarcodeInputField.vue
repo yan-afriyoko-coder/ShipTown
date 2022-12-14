@@ -75,7 +75,7 @@
 
         methods: {
             barcodeScanned(barcode) {
-                if (barcode !== '') {
+                if (barcode && barcode !== '') {
                     this.apiPostActivity({
                       'log_name': 'search',
                       'description': barcode,
@@ -129,6 +129,10 @@
             },
 
             tryToRunCommand: function (textEntered) {
+                if (textEntered === null || textEntered === '') {
+                    return false;
+                }
+
                 this.lastCommand = textEntered;
 
                 let command = this.lastCommand.split(':');
