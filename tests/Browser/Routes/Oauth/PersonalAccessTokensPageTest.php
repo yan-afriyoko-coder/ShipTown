@@ -1,6 +1,6 @@
 <?php
 
-namespace {{namespaceWithoutApp}};
+namespace Tests\Browser\Routes\Oauth;
 
 use App\User;
 use Exception;
@@ -8,7 +8,7 @@ use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
 
-class {{class}} extends DuskTestCase
+class PersonalAccessTokensPageTest extends DuskTestCase
 {
     private string $uri = '';
 
