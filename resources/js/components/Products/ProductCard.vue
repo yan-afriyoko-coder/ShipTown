@@ -336,12 +336,9 @@
                 this.showDetails = !this.showDetails;
                 if (this.showDetails) {
                     this.loadActiveOrders();
+                    this.loadCompletedOrders(10);
                     this.currentTab = 'prices';
                 }
-            },
-
-            kickProduct: function () {
-                this.apiKickProduct(this.product['sku']);
             },
 
             loadActiveOrders: function () {
@@ -360,7 +357,6 @@
             },
 
             loadCompletedOrders: function (count = 5) {
-                this.statusMessageOrder = "Loading orders ..."
                 const params = {
                     'filter[product_id]': this.product['id'],
                     'filter[order.is_active]': false,
