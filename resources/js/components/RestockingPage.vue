@@ -12,7 +12,7 @@
         </div>
 
         <div class="row pl-2 p-0">
-            <div class="col-12 text-left align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">
+            <div id="blue" class="col-12 text-left align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">
                 Restocking
             </div>
         </div>
@@ -31,7 +31,7 @@
 
         <div class="row">
             <div class="col">
-                <div ref="loadingContainerOverride" style="height: 32px"></div>
+                <div ref="loadingContainerOverride" dusk="loadingContainerOverride" style="height: 32px"></div>
             </div>
         </div>
     </div>
@@ -98,6 +98,9 @@ export default {
 
                         this.data = this.data.concat(response.data.data);
                         this.pagesLoaded = page;
+                    })
+                    .catch((error) => {
+                        this.showException(error);
                     })
                     .finally(() => {
                         this.hideLoading();
