@@ -11,24 +11,22 @@ use Throwable;
 
 class OrdersPageTest extends DuskTestCase
 {
-    private string $uri = 'orders';
+    private string $uri = '/orders';
 
     /**
-     * @throws Exception
+     * @throws Throwable
      */
-    protected function setUp(): void
+    public function testBasics()
     {
-        if (empty($this->uri)) {
-            throw new Exception('Please set the $uri property in your test class.');
-        }
-
-        parent::setUp();
+        $this->basicUserAccessTest($this->uri, true);
+        $this->basicAdminAccessTest($this->uri, true);
+        $this->basicGuestAccessTest($this->uri);
     }
 
     /**
      * @throws Throwable
      */
-    public function testUserAccess()
+    public function testIfOrdersDisplay()
     {
         $this->browse(function (Browser $browser) {
             /** @var User $user */
@@ -41,43 +39,7 @@ class OrdersPageTest extends DuskTestCase
             $browser->disableFitOnFailure()
                 ->loginAs($user)
                 ->visit($this->uri)
-                ->pause(300)
-                ->assertRouteIs($this->uri)
-                ->assertSourceMissing('snotify-error')
-                ->assertSee($order->order_number);
-        });
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testAdminAccess()
-    {
-        $this->browse(function (Browser $browser) {
-            /** @var User $admin */
-            $admin = User::factory()->create();
-            $admin->assignRole('admin');
-
-            $browser->disableFitOnFailure()
-                ->loginAs($admin)
-                ->visit($this->uri)
-                ->pause(300)
-                ->assertRouteIs($this->uri)
-                ->assertSourceMissing('snotify-error');
-        });
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testGuestAccess()
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->disableFitOnFailure()
-                ->logout()
-                ->visit($this->uri)
-                ->assertRouteIs('login')
-                ->assertSee('Login');
+                ->waitForText($order->order_number);
         });
     }
 }
