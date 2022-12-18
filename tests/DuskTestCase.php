@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\Models\OrderProduct;
 use App\User;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
@@ -13,6 +14,13 @@ use Throwable;
 abstract class DuskTestCase extends BaseTestCase
 {
     use CreatesApplication;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+
+    }
 
     /**
      * Prepare for Dusk test execution.

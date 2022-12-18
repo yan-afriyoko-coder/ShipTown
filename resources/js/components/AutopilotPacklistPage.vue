@@ -2,7 +2,7 @@
     <div>
         <div v-if="! order_id" class="row text-center mt-3" >
             <div class="col">
-                <button type="button"  class="btn btn-primary" @click.prevent="loadNextOrder">
+                <button dusk="startAutopilotButton" type="button"  class="btn btn-primary" @click.prevent="loadNextOrder">
                     Start AutoPilot Packing
                 </button>
             </div>
@@ -56,8 +56,8 @@
                 this.orders = [];
 
                 let params = {
-                    'filter[status]': this.getUrlParameter('status','picking'),
-                    'filter[inventory_source_warehouse_id]': this.getUrlParameter('inventory_source_warehouse_id'),
+                    'filter[status]': this.getUrlParameter('status',''),
+                    'filter[inventory_source_warehouse_id]': this.getUrlParameter('inventory_source_warehouse_id', this.currentUser()['warehouse_id']),
                     'sort': this.getUrlParameter('sort', 'order_placed_at'),
                 };
 
