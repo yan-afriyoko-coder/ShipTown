@@ -3,9 +3,7 @@
 namespace Tests\Browser\Routes;
 
 use App\Models\Product;
-use App\Models\Warehouse;
 use App\User;
-use Exception;
 use Facebook\WebDriver\WebDriverKeys;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
@@ -13,26 +11,24 @@ use Throwable;
 
 class ProductsPageTest extends DuskTestCase
 {
-    private string $uri = 'products';
+    private string $uri = '/products';
 
     /**
-     * @throws Exception
+     * @throws Throwable
      */
-    protected function setUp(): void
+    public function testBasics()
     {
-        if (empty($this->uri)) {
-            throw new Exception('Please set the $uri property in your test class.');
-        }
-
-        parent::setUp();
+        $this->basicUserAccessTest($this->uri, true);
+        $this->basicAdminAccessTest($this->uri, true);
+        $this->basicGuestAccessTest($this->uri);
     }
 
     /**
      * A basic browser test example.
      *
+     * @return void
      * @throws Throwable
      *
-     * @return void
      */
     public function testNoProducts()
     {
@@ -48,38 +44,7 @@ class ProductsPageTest extends DuskTestCase
                 ->visit($this->uri)
                 ->pause(300)
                 ->waitForText('No products found.')
-                ->assertSee('No products found.')
-                ->assertFocused('@barcode-input-field')
                 ->type('@barcode-input-field', '')
-                ->keys('@barcode-input-field', [WebDriverKeys::ENTER])
-                ->pause(300)
-                ->assertSourceMissing('snotify-error');
-        });
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testUserAccess()
-    {
-        $this->browse(function (Browser $browser) {
-            /** @var User $user */
-            $user = User::factory()->create();
-            $user->assignRole('user');
-
-            /** @var Product $product */
-            $product = Product::factory()->create();
-
-            Warehouse::factory()->create();
-
-            $browser->disableFitOnFailure()
-                ->loginAs($user)
-                ->visit($this->uri)
-                ->pause(300)
-                ->assertRouteIs($this->uri)
-                ->assertSourceMissing('snotify-error')
-                ->assertSee($product->name)
-                ->type('@barcode-input-field', $product->sku)
                 ->keys('@barcode-input-field', [WebDriverKeys::ENTER])
                 ->pause(300)
                 ->assertSourceMissing('snotify-error')
@@ -90,33 +55,23 @@ class ProductsPageTest extends DuskTestCase
     /**
      * @throws Throwable
      */
-    public function testAdminAccess()
+    public function testIfDisplaysProducts()
     {
         $this->browse(function (Browser $browser) {
-            /** @var User $admin */
-            $admin = User::factory()->create();
-            $admin->assignRole('admin');
+            /** @var User $user */
+            $user = User::factory()->create();
+            $user->assignRole('user');
+
+            /** @var Product $product */
+            $product = Product::factory()->create();
 
             $browser->disableFitOnFailure()
-                ->loginAs($admin)
+                ->loginAs($user)
                 ->visit($this->uri)
-                ->pause(300)
-                ->assertRouteIs($this->uri)
-                ->assertSourceMissing('snotify-error');
-        });
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testGuestAccess()
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->disableFitOnFailure()
-                ->logout()
-                ->visit($this->uri)
-                ->assertRouteIs('login')
-                ->assertSee('Login');
+                ->type('@barcode-input-field', $product->sku)
+                ->keys('@barcode-input-field', [WebDriverKeys::ENTER])
+                ->waitForText($product->name)
+                ->assertFocused('@barcode-input-field');
         });
     }
 }
