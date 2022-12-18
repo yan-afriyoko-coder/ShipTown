@@ -7,7 +7,7 @@ use Throwable;
 
 class StocktakingPageTest extends DuskTestCase
 {
-    private string $uri = 'stocktaking';
+    private string $uri = '/stocktaking';
 
     /**
      * @throws Throwable
