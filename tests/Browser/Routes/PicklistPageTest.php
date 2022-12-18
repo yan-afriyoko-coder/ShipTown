@@ -2,9 +2,6 @@
 
 namespace Tests\Browser\Routes;
 
-use App\User;
-use Exception;
-use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
 
