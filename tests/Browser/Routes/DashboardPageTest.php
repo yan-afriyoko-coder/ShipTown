@@ -9,65 +9,35 @@ use Throwable;
 
 class DashboardPageTest extends DuskTestCase
 {
-    private string $uri = 'dashboard';
+    private string $uri = '/dashboard';
+
+    /**
+     * @throws Throwable
+     */
+    public function testBasics()
+    {
+        $this->basicUserAccessTest($this->uri, true);
+        $this->basicAdminAccessTest($this->uri, true);
+        $this->basicGuestAccessTest($this->uri);
+    }
 
     /**
      * @throws Throwable
      */
     public function testUserAccess()
     {
-        $this->browse(function (Browser $b) {
+        $this->browse(function (Browser $browser) {
             /** @var User $user */
             $user = User::factory()->create();
             $user->assignRole('user');
 
-            $b->disableFitOnFailure();
-            $b->loginAs($user);
-            $b->visit($this->uri);
-            $b->pause(300);
-            $b->assertRouteIs($this->uri);
-            $b->assertSourceMissing('snotify-error');
-            $b->assertSee('Orders - Packed');
-        });
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testAdminAccess()
-    {
-        $this->browse(function (Browser $browser) {
-            /** @var User $admin */
-            $admin = User::factory()->create();
-            $admin->assignRole('admin');
-
-            $this->browse(function (Browser $b) {
-                /** @var User $user */
-                $user = User::factory()->create();
-                $user->assignRole('user');
-
-                $b->disableFitOnFailure();
-                $b->loginAs($user);
-                $b->visit($this->uri);
-                $b->pause(300);
-                $b->assertRouteIs($this->uri);
-                $b->assertSourceMissing('snotify-error');
-                $b->assertSee('Orders - Packed');
-            });
-        });
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testGuestAccess()
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->disableFitOnFailure()
-                ->logout()
-                ->visit($this->uri)
-                ->assertRouteIs('login')
-                ->assertSee('Login');
+            $browser->disableFitOnFailure();
+            $browser->loginAs($user);
+            $browser->visit($this->uri);
+            $browser->pause(300);
+            $browser->assertSee('Orders - Packed');
+            $browser->assertSee('Orders - Active');
+            $browser->assertSee('Active Orders By Age');
         });
     }
 }

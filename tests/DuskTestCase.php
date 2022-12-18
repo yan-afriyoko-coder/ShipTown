@@ -95,9 +95,9 @@ abstract class DuskTestCase extends BaseTestCase
     /**
      * @throws Throwable
      */
-    public function basicGuestAccessTest(string $uri, bool $allowed)
+    public function basicGuestAccessTest(string $uri)
     {
-        $this->browse(function (Browser $browser) use ($uri, $allowed) {
+        $this->browse(function (Browser $browser) use ($uri) {
             $browser->disableFitOnFailure();
             $browser->logout();
             $browser->visit($uri);
