@@ -10,75 +10,21 @@ use Throwable;
 
 class FulfilmentDashboardPageTest extends DuskTestCase
 {
-    private string $uri = '';
+    private string $uri = '/fulfilment-dashboard';
+
+    /**
+     * @throws Throwable
+     */
+    public function testBasics()
+    {
+        $this->basicUserAccessTest($this->uri, true);
+        $this->basicAdminAccessTest($this->uri, true);
+        $this->basicGuestAccessTest($this->uri);
+    }
 
     public function testIncomplete()
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
     }
-
-//    /**
-//     * @throws Exception
-//     */
-//    protected function setUp(): void
-//    {
-//        if (empty($this->uri)) {
-//            throw new Exception('Please set the $uri property in your test class.');
-//        }
-//
-//        parent::setUp();
-//    }
-//
-//    /**
-//     * @throws Throwable
-//     */
-//    public function testUserAccess()
-//    {
-//        $this->browse(function (Browser $browser) {
-//            /** @var User $user */
-//            $user = User::factory()->create();
-//            $user->assignRole('user');
-//
-//            $browser->disableFitOnFailure()
-//                ->loginAs($user)
-//                ->visit($this->uri)
-//                ->pause(300)
-//                ->assertRouteIs($this->uri)
-//                ->assertSourceMissing('snotify-error');
-//        });
-//    }
-//
-//    /**
-//     * @throws Throwable
-//     */
-//    public function testAdminAccess()
-//    {
-//        $this->browse(function (Browser $browser) {
-//            /** @var User $admin */
-//            $admin = User::factory()->create();
-//            $admin->assignRole('admin');
-//
-//            $browser->disableFitOnFailure()
-//                ->loginAs($admin)
-//                ->visit($this->uri)
-//                ->pause(300)
-//                ->assertRouteIs($this->uri)
-//                ->assertSourceMissing('snotify-error');
-//        });
-//    }
-//
-//    /**
-//     * @throws Throwable
-//     */
-//    public function testGuestAccess()
-//    {
-//        $this->browse(function (Browser $browser) {
-//            $browser->disableFitOnFailure()
-//                ->logout()
-//                ->visit($this->uri)
-//                ->assertRouteIs('login')
-//                ->assertSee('Login');
-//        });
-//    }
 }
 
