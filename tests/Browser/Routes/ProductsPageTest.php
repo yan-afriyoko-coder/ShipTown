@@ -3,6 +3,7 @@
 namespace Tests\Browser\Routes;
 
 use App\Models\Product;
+use App\Models\Warehouse;
 use App\User;
 use Facebook\WebDriver\WebDriverKeys;
 use Laravel\Dusk\Browser;
@@ -58,8 +59,10 @@ class ProductsPageTest extends DuskTestCase
     public function testIfDisplaysProducts()
     {
         $this->browse(function (Browser $browser) {
+            $warehouse = Warehouse::factory()->create();
+
             /** @var User $user */
-            $user = User::factory()->create();
+            $user = User::factory()->create(['warehouse_id' => $warehouse->getKey()]);
             $user->assignRole('user');
 
             Product::factory()->create();

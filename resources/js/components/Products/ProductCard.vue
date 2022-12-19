@@ -36,7 +36,6 @@
                     </div>
                 </div>
 
-
                 <div v-if="!showDetails" @click="toggle" class="row text-center text-secondary" >
                     <div class="col offset-md-6">
                         <font-awesome-icon icon="chevron-down" class="fa fa-xs"></font-awesome-icon>

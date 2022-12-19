@@ -26,7 +26,7 @@
             </div>
         </template>
 
-        <template v-for="product in products">
+        <template v-if="products" v-for="product in products">
             <div class="row p-1">
                 <div class="col">
                     <product-card :product="product" :expanded="products.length === 1"/>
@@ -64,7 +64,7 @@
                 lastPageLoaded: 1,
                 lastPage: 1,
 
-                products: [],
+                products: null,
             };
         },
 
