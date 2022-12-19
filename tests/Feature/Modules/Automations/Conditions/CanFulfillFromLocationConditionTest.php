@@ -10,14 +10,10 @@ use App\Models\Warehouse;
 use App\Modules\Automations\src\Conditions\Order\CanFulfillFromLocationCondition;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use function factory;
 
 class CanFulfillFromLocationConditionTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * A basic feature test example.
      *
@@ -69,9 +65,6 @@ class CanFulfillFromLocationConditionTest extends TestCase
         /** @var Warehouse $warehouse */
         $warehouse = Warehouse::factory()->create();
 
-        /** @var Product $product */
-        $product = Product::factory()->create();
-
         /** @var Automation $automation */
         $automation = Automation::factory()->create([
             'enabled' => true,
@@ -90,12 +83,10 @@ class CanFulfillFromLocationConditionTest extends TestCase
         /** @var OrderProduct $orderProduct */
         $orderProduct = OrderProduct::factory()->create(['order_id' => $order->getKey()]);
 
-        Inventory::updateOrCreate([
-            'product_id' => $product->getKey(),
-            'location_id' => $warehouse->code
-        ], [
-            'quantity' => 100,
-        ]);
+        $orderProduct->product
+            ->inventory()
+            ->where(['warehouse_code' => $warehouse->code])
+            ->update(['quantity' => 100]);
 
         $this->assertTrue($condition->isTrue($order));
     }

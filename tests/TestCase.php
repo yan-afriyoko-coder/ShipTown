@@ -36,6 +36,7 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
     use AdditionalAssertions;
+    use ResetsDatabase;
 
     protected function setUp(): void
     {
@@ -43,44 +44,5 @@ abstract class TestCase extends BaseTestCase
 
         ray()->clearAll();
         ray()->className($this)->blue();
-
-        Activity::query()->forceDelete();
-
-        Product::query()->forceDelete();
-        Inventory::query()->forceDelete();
-        ProductAlias::query()->forceDelete();
-        OrderProduct::query()->forceDelete();
-        Order::query()->forceDelete();
-        OrderStatus::query()->forceDelete();
-        Warehouse::query()->forceDelete();
-        Tag::query()->forceDelete();
-        OrderProductTotal::query()->forceDelete();
-        InventoryMovement::query()->forceDelete();
-
-        Automation::query()->forceDelete();
-        Condition::query()->forceDelete();
-        Action::query()->forceDelete();
-        CacheLock::query()->forceDelete();
-        InventoryMovement::query()->forceDelete();
-        Heartbeat::query()->forceDelete();
-
-        Module::query()->forceDelete();
-
-        Api2cartProductLink::query()->forceDelete();
-        Api2cartConnection::query()->forceDelete();
-
-        RmsapiConnection::query()->forceDelete();
-        DataCollection::query()->forceDelete();
-        DataCollectionRecord::query()->forceDelete();
-
-        MagentoProduct::query()->forceDelete();
-        MagentoConnection::query()->forceDelete();
-
-        DpdIreland::query()->forceDelete();
-
-        ModulesService::updateModulesTable();
-
-        // now re-register all the roles and permissions (clears cache and reloads relations)
-        $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->registerPermissions();
     }
 }
