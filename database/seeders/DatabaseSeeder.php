@@ -19,30 +19,22 @@ class DatabaseSeeder extends Seeder
             Demo\UsersSeeder::class,
             Demo\ProductsSeeder::class,
             Demo\WarehousesSeeder::class,
-
-            FulfilmentCenterSeeder::class,
-
-            ProductsTagsSeeder::class,
-
             Demo\PaidOrdersSeeder::class,
-            DpdUk\DpdUkTestOrdersSeeder::class,
-            WebhooksTestSeeder::class,
+            Demo\ProductsTagsSeeder::class,
+
             InventorySeeder::class,
+            ProductPriceSeeder::class,
 
-            RestockingReportSeeder::class,
-
+//            RestockingReportSeeder::class,
 //            DataCollectionsSeeder::class,
-            DataCollectionsTransferInFromWarehouseSeeder::class,
-
-
-            RmsapiConnectionSeeder::class,
-            StocktakeSuggestionsSeeder::class,
+//            DataCollectionsTransferInFromWarehouseSeeder::class,
+//            RmsapiConnectionSeeder::class,
+//            StocktakeSuggestionsSeeder::class,
 //            AutomationsSeeder::class,
 //            PrintNodeClientSeeder::class,
 //            DpdIrelandSeeder::class,
 //            ProductAliasSeeder::class,
-            ProductTagsSeeder::class,
-//            ProductPriceSeeder::class,
+//            ProductTagsSeeder::class,
 //            SplitOrdersScenarioSeeder::class,
 //            Orders_PackingWebDemoSeeder::class,
 //            Orders_StorePickupDemoSeeder::class,
@@ -50,8 +42,12 @@ class DatabaseSeeder extends Seeder
 //            ClosedOrdersSeeder::class,
 //            PicksSeeder::class,
 //            OrderShipmentsSeeder::class,
+
+//        Modules Seeders
+//            WebhooksTestSeeder::class,
+//            DpdUk\DpdUkTestOrdersSeeder::class,
         ]);
 
-        RunHourlyJobs::dispatchNow();
+        RunHourlyJobs::dispatchSync();
     }
 }

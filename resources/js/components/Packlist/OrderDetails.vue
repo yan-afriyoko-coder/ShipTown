@@ -12,6 +12,7 @@
 
                     <div class="col-5 col-md-4 col-lg-3 align-text-top">
                         <div class="small font-weight-bold">{{ order['status_code'] }}</div>
+                        <div class="small font-weight-bold">{{ order['created_at'] }}</div>
                         <div class="small">{{ order['label_template'] }}</div>
                     </div>
 

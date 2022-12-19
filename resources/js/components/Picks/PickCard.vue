@@ -12,15 +12,17 @@
                     <div class="row ml-1 mr-1">
                         <div class="col p-2 pl-3 rounded">
                             <div class="row">
-                                <div class="col-md-8">
+                                <div class="col-md-8 col-lg-6">
                                     <div class="text-primary h5">{{ pick['name_ordered'] }}</div>
                                     <div>sku: <b> {{ pick['sku_ordered'] }} </b></div>
                                     <div>product: <b> <a target="_blank" :href="'/products?sku=' + product_sku ">{{ product_sku }}</a></b></div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4 col-lg-6">
                                     <div class="row">
-                                        <div class="col-6 small ">
-                                            <div>stock: <b> {{ Number(pick['inventory_source_quantity']) }} </b></div>
+                                        <div class="col-6 small" >
+                                            <div v-bind:class="{ 'bg-warning': Number(pick['inventory_source_quantity']) === 0 }">
+                                                stock: <b> {{ Number(pick['inventory_source_quantity']) }} </b>
+                                            </div>
                                         </div>
                                         <div class="col-2 text-center" v-bind:class="{ 'bg-warning': Number(pick['total_quantity_to_pick']) !== 1 }">
                                             <small>to pick</small>

@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\Demo;
 
 use App\Models\Product;
 use Illuminate\Database\Seeder;
@@ -17,7 +17,7 @@ class ProductsTagsSeeder extends Seeder
         $products = Product::all();
 
         $products->each(function (Product $product) {
-            $product->attachTag('product');
+            $product->attachTag('Available Online');
         });
     }
 }

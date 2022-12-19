@@ -44,11 +44,7 @@ class OrderFactory extends Factory
         ];
 
         if (! $orderStatus->order_active) {
-            $user = User::query()->inRandomOrder()->first('id') ?? User::factory()->create();
-
             $newOrder['order_closed_at'] = $this->faker->dateTimeBetween($newOrder['order_placed_at'], now());
-            $newOrder['packer_user_id'] = $user->getKey();
-            $newOrder['packed_at'] = $newOrder['order_closed_at'];
         }
 
         return $newOrder;

@@ -3,64 +3,71 @@
         <div class="row card p-2" >
             <div class="col pl-1">
                 <div class="row text-left">
-                    <div class="col-md-6">
+                    <div class="col-md-6 col-lg-5">
                         <product-info-card :product= "product"></product-info-card>
                     </div>
-                    <div class="col-md-6" @click="toggle">
+                    <div class="col-md-6 col-lg-7" @click="toggle">
                       <div class="table-responsive small">
-                          <table class="table table-borderless mb-0 w-100">
-                            <thead class="small">
-                              <tr class="text-right">
-                                <th class="text-left">Location</th>
-                                <th class="text-left">Shelf</th>
-                                <th class="">In Stock</th >
-                                <th class="">Available</th>
-                                <th class="">Incoming</th>
-                                <th class="">Price</th>
+
+                          <table class="table table-borderless small mb-0 w-100 text-right">
+                              <thead>
+                              <tr class="small">
+                                  <th class="text-left">Location</th>
+                                  <th class="text-left">Shelf</th>
+                                  <th>Available</th>
+                                  <th class="d-none d-md-table-cell">Reserved</th>
+                                  <th class="d-none d-md-table-cell">In Stock</th>
+                                  <th>Incoming</th>
+<!--                                  <th><div class="d-md-none">RL</div><div class="d-none d-md-table-cell">Restock Level</div></th>-->
+<!--                                  <th><div class="d-md-none">RP</div><div class="d-none d-md-table-cell">Reorder Point</div></th>-->
+                                  <th class="d-none d-md-table-cell">Required</th>
+                                  <th>Price</th>
                               </tr>
-                            </thead>
-                            <tbody class="">
-                              <template v-for="inventory in product.inventory">
-                                <tr class="text-right w-auto" v-bind:class="{ 'table-active': currentUser()['warehouse'] !== null && inventory['warehouse_code'] === currentUser()['warehouse']['code']}" >
-                                  <td class="text-left">{{ inventory['warehouse_code'] }}</td>
-                                  <td class="text-left">{{ inventory['shelf_location'] }}</td>
-                                  <td class="">{{ inventory['quantity | numberFormat'] }}</td>
-                                  <td class="">{{ inventory['quantity_available'] | numberFormat }}</td>
-                                  <td class="">{{ inventory['quantity_incoming'] | numberFormat }}</td>
-                                  <td class="">{{ product.prices[inventory['warehouse_code']]['price'] }}</td>
-                                </tr>
+                              </thead>
+                              <tbody>
+                              <template v-for="inventory in product.inventory" >
+                                  <tr class="" v-bind:class="{ 'table-active': currentUser()['warehouse'] && inventory['warehouse_code'] === currentUser()['warehouse']['code']}">
+                                      <td class="text-left">{{ inventory['warehouse_code'] }}</td>
+                                      <td class="text-left">{{ inventory['shelf_location'] }}</td>
+                                      <td>{{ toNumberOrDash(inventory['quantity_available'])}}</td>
+                                      <td class="d-none d-md-table-cell">{{ toNumberOrDash(inventory['quantity_reserved'])}}</td>
+                                      <td class="d-none d-md-table-cell">{{ toNumberOrDash(inventory['quantity'])}}</td>
+                                      <td>{{ toNumberOrDash(inventory['quantity_incoming']) }}</td>
+                                      <td class="d-none d-md-table-cell">{{ toNumberOrDash(inventory['quantity_required']) }}</td>
+                                      <td>{{ toNumberOrDash(product.prices[inventory['warehouse_code']]['price']) }}</td>
+                                  </tr>
                               </template>
-                            </tbody>
+                              </tbody>
                           </table>
                         </div>
                     </div>
                 </div>
 
                 <div v-if="!showDetails" @click="toggle" class="row text-center text-secondary" >
-                    <div class="col offset-md-6">
+                    <div class="col offset-md-6 offset-lg-5">
                         <font-awesome-icon icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
                     </div>
                 </div>
 
                 <div v-else @click="toggle" class="row text-center">
-                    <div class="col offset-md-6">
+                    <div class="col offset-md-6 offset-lg-5">
                         <font-awesome-icon icon="chevron-up" class="fa fa-xs text-secondary"></font-awesome-icon>
                     </div>
                 </div>
 
                 <div class="row" v-if="showDetails">
-                    <div class="col offset-md-6">
+                    <div class="col offset-md-6 offset-lg-5">
                         <div class="row tabs-container mb-2">
                             <ul class="nav nav-tabs">
                                 <li class="nav-item">
-                                  <a class="nav-link p-0 pl-2 pr-2 active"  @click.prevent="currentTab = 'prices'" data-toggle="tab" href="#">
-                                    Pricing
-                                  </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link p-0 pl-2 pr-2"  @click.prevent="currentTab = 'inventory'" data-toggle="tab" href="#">
+                                    <a class="nav-link p-0 pl-2 pr-2 active"  @click.prevent="currentTab = 'inventory'" data-toggle="tab" href="#">
                                         Inventory
                                     </a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link p-0 pl-2 pr-2"  @click.prevent="currentTab = 'prices'" data-toggle="tab" href="#">
+                                    Pricing
+                                  </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link p-0 pl-2 pr-2"  @click.prevent="currentTab = 'aliases'" data-toggle="tab" href="#">
@@ -79,6 +86,92 @@
                                 </li>
                             </ul>
                         </div>
+
+                        <template v-if="currentTab === 'inventory'">
+                            <div class="table-responsive small">
+                                <table class="table table-borderless mb-0 w-100 small text-right">
+                                    <thead>
+                                    <tr class="small">
+                                        <th class="text-left">Warehouse</th>
+                                        <th>Required</th>
+                                        <th>Reorder Point</th>
+                                        <th>Restock Level</th>
+                                        <th class="d-none d-md-table-cell">In Stock</th>
+                                        <th class="d-none d-md-table-cell">Reserved</th>
+                                        <th>Incoming</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <template v-for="inventory in product.inventory" >
+                                        <tr class="" v-bind:class="{ 'table-active': currentUser()['warehouse'] && inventory['warehouse_code'] === currentUser()['warehouse']['code']}">
+                                            <td class="text-left">{{ inventory['warehouse_code'] }}</td>
+                                            <td>{{ toNumberOrDash(inventory['quantity_required']) }}</td>
+                                            <td>{{ toNumberOrDash(inventory['reorder_point']) }}</td>
+                                            <td>{{ toNumberOrDash(inventory['restock_level']) }}</td>
+                                            <td class="d-none d-md-table-cell">{{ toNumberOrDash(inventory['quantity'])}}</td>
+                                            <td class="d-none d-md-table-cell">{{ toNumberOrDash(inventory['quantity_reserved'])}}</td>
+                                            <td>{{ toNumberOrDash(inventory['quantity_incoming']) }}</td>
+                                        </tr>
+                                    </template>
+                                    </tbody>
+                                </table>
+
+                                <hr>
+
+                                <div class="row col d-block font-weight-bold pb-1 text-uppercase small text-secondary align-content-center text-center">ORDERS</div>
+
+                                <template>
+                                    <div>
+                                        {{ statusMessageOrder }}
+                                    </div>
+                                    <div v-if="!orders.length" class="text-center text-secondary small">
+                                        No orders found
+                                    </div>
+                                    <div v-for="orderProduct in orders" :key="orderProduct.id">
+                                        <div class="row text-left mb-2">
+                                            <div class="col">
+                                                <div>
+                                                    <a target="_blank" :href="getProductLink(orderProduct)">
+                                                        #{{ orderProduct['order']['order_number']}}
+                                                    </a>
+                                                </div>
+                                                <div class="small">
+                                                    {{ orderProduct['order']['order_placed_at'] | moment('MMM DD')  }}
+                                                </div>
+                                                <div class="small">
+                                                    {{ orderProduct['order']['status_code']}}
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="row justify-content-end text-center">
+                                                    <div class="cold d-none d-sm-block">
+                                                        <small>ordered</small>
+                                                        <h3>{{ Math.ceil(orderProduct['quantity_ordered']) }}</h3>
+                                                    </div>
+                                                    <div class="col">
+                                                        <small>picked</small>
+                                                        <h3>{{ dashIfZero(Number(orderProduct['quantity_picked'])) }}</h3>
+                                                    </div>
+                                                    <div class="col">
+                                                        <small>skipped</small>
+                                                        <h3>{{ dashIfZero(Number(orderProduct['quantity_skipped_picking'])) }}</h3>
+                                                    </div>
+                                                    <div class="col d-none d-sm-block">
+                                                        <small>shipped</small>
+                                                        <h3>{{ dashIfZero(Number(orderProduct['quantity_shipped']))  }}</h3>
+                                                    </div>
+                                                    <div class="col">
+                                                        <small>to ship</small>
+                                                        <h3>{{ dashIfZero(Number(orderProduct['quantity_to_ship']))  }}</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+
+                            </div>
+                        </template>
 
                         <template v-if="currentTab === 'activityLog'">
                             <div>
@@ -127,38 +220,6 @@
                             </div>
                         </template>
 
-                        <template v-if="currentTab === 'inventory'">
-                          <div class="table-responsive">
-                            <table class="table table-borderless mb-0 w-100 small">
-                                    <thead>
-                                        <tr class="small">
-                                            <th>Location</th>
-                                            <th>In Stock</th>
-                                            <th>Reserved</th>
-                                            <th>Incoming</th>
-                                            <th><div class="d-md-none">RL</div><div class="d-none d-md-table-cell">Restock Level</div></th>
-                                            <th><div class="d-md-none">RP</div><div class="d-none d-md-table-cell">Reorder Point</div></th>
-                                            <th class="text-right">Required</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    <template v-for="inventory in product.inventory" >
-                                        <tr class="" v-bind:class="{ 'table-active': currentUser()['warehouse'] && inventory['warehouse_code'] === currentUser()['warehouse']['code']}">
-                                            <td>{{ inventory['warehouse_code'] }}</td>
-                                            <td>{{ toNumberOrDash(inventory['quantity'])}}</td>
-                                            <td>{{ toNumberOrDash(inventory['quantity_reserved'])}}</td>
-                                            <td>{{ toNumberOrDash(inventory['quantity_incoming']) }}</td>
-                                            <td>{{ toNumberOrDash(inventory['restock_level']) }}</td>
-                                            <td>{{ toNumberOrDash(inventory['reorder_point']) }}</td>
-                                            <td class="text-right">{{ toNumberOrDash(inventory['quantity_required']) }}</td>
-                                        </tr>
-                                    </template>
-                                    </tbody>
-                                </table>
-
-                            </div>
-                        </template>
-
                         <template v-if="currentTab === 'aliases'">
                             <div class="container">
 
@@ -168,64 +229,10 @@
                             </div>
                         </template>
 
-                      <div class="row col d-block font-weight-bold pb-1 text-uppercase small text-secondary align-content-center text-center">ORDERS</div>
-
-                      <template>
-                        <div>
-                          {{ statusMessageOrder }}
-                        </div>
-                        <div v-if="!orders.length" class="text-center text-secondary small">
-                          No orders found
-                        </div>
-                        <div v-for="orderProduct in orders" :key="orderProduct.id">
-                          <div class="row text-left mb-2">
-                            <div class="col">
-                              <div>
-                                <a target="_blank" :href="getProductLink(orderProduct)">
-                                  #{{ orderProduct['order']['order_number']}}
-                                </a>
-                              </div>
-                              <div class="small">
-                                {{ orderProduct['order']['order_placed_at'] | moment('MMM DD')  }}
-                              </div>
-                              <div class="small">
-                                {{ orderProduct['order']['status_code']}}
-                              </div>
-                            </div>
-                            <div class="col">
-                              <div class="row justify-content-end text-center">
-                                <div class="cold d-none d-sm-block">
-                                  <small>ordered</small>
-                                  <h3>{{ Math.ceil(orderProduct['quantity_ordered']) }}</h3>
-                                </div>
-                                <div class="col">
-                                  <small>picked</small>
-                                  <h3>{{ dashIfZero(Number(orderProduct['quantity_picked'])) }}</h3>
-                                </div>
-                                <div class="col">
-                                  <small>skipped</small>
-                                  <h3>{{ dashIfZero(Number(orderProduct['quantity_skipped_picking'])) }}</h3>
-                                </div>
-                                <div class="col d-none d-sm-block">
-                                  <small>shipped</small>
-                                  <h3>{{ dashIfZero(Number(orderProduct['quantity_shipped']))  }}</h3>
-                                </div>
-                                <div class="col">
-                                  <small>to ship</small>
-                                  <h3>{{ dashIfZero(Number(orderProduct['quantity_to_ship']))  }}</h3>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <hr>
-                        </div>
-                      </template>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="spacer-bottom row mb-4 mt-4" v-if="showDetails"></div>
 
     </div>
 </template>
@@ -246,7 +253,7 @@
         },
 
         mounted: function () {
-          this.currentTab = 'prices';
+          this.currentTab = 'inventory';
         },
 
         watch: {
@@ -336,7 +343,7 @@
                 if (this.showDetails) {
                     this.loadActiveOrders();
                     this.loadCompletedOrders(10);
-                    this.currentTab = 'prices';
+                    this.currentTab = 'inventory';
                 }
             },
 

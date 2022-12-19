@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Product;
+use App\Models\ProductPrice;
 use Illuminate\Database\Seeder;
 
 class ProductPriceSeeder extends Seeder
@@ -13,24 +15,17 @@ class ProductPriceSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\Product::query()
-            ->get()
-            ->each(function (\App\Models\Product $product) {
-                \App\Models\ProductPrice::factory()
-                    ->create([
-                        'product_id'  => $product->id,
-                        'location_id' => 100,
-                    ]);
-            });
+        Product::query()
+            ->chunkById(50, function ($productsList) {
+                foreach ($productsList as $product) {
+                    $randomPrice = rand(1, 100) - 0.05;
 
-        \App\Models\Product::query()
-            ->get()
-            ->each(function (\App\Models\Product $product) {
-                \App\Models\ProductPrice::factory()
-                    ->create([
-                        'product_id'  => $product->id,
-                        'location_id' => 99,
-                    ]);
+                    ProductPrice::query()
+                        ->where('product_id', '=', $product->getKey())
+                        ->update([
+                            'price' => $randomPrice,
+                        ]);
+                }
             });
     }
 }
