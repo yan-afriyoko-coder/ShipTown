@@ -10,6 +10,7 @@
 /.idea
 /.idea/*
 .env
+.env.dusk
 .env.testing
 .phpunit.result.cache
 Homestead.json

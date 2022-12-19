@@ -73,8 +73,13 @@ abstract class DuskTestCase extends BaseTestCase
             $browser->assertDontSee('SERVER ERROR');
 
             $browser->pause(1000);
-            $browser->assertPathIs($uri);
             $browser->assertSourceMissing('snotify-error');
+
+            if ($allowed) {
+                $browser->assertPathIs($uri);
+            } else {
+                $browser->assertPathIs('login');
+            }
         });
     }
 
@@ -95,23 +100,33 @@ abstract class DuskTestCase extends BaseTestCase
             $browser->assertDontSee('SERVER ERROR');
 
             $browser->pause(1000);
-            $browser->assertPathIs($uri);
             $browser->assertSourceMissing('snotify-error');
+
+            if ($allowed) {
+                $browser->assertPathIs($uri);
+            } else {
+                $browser->assertPathIs('login');
+            }
         });
     }
 
     /**
      * @throws Throwable
      */
-    public function basicGuestAccessTest(string $uri)
+    public function basicGuestAccessTest(string $uri, bool $allowed = false)
     {
-        $this->browse(function (Browser $browser) use ($uri) {
+        $this->browse(function (Browser $browser) use ($uri, $allowed) {
             $browser->disableFitOnFailure();
             $browser->logout();
             $browser->visit($uri);
+            $browser->pause(1000);
 
-            $browser->assertPathIs('/login');
-            $browser->assertSee('Login');
+            if ($allowed) {
+                $browser->assertPathIs($uri);
+            } else {
+                $browser->assertPathIs('/login');
+                $browser->assertSee('Login');
+            }
         });
     }
 }

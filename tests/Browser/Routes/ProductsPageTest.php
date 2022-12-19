@@ -62,13 +62,16 @@ class ProductsPageTest extends DuskTestCase
             $user = User::factory()->create();
             $user->assignRole('user');
 
-            /** @var Product $product */
-            $product = Product::factory()->create();
+            Product::factory()->create();
 
             $browser->disableFitOnFailure()
                 ->loginAs($user)
-                ->visit($this->uri)
-                ->type('@barcode-input-field', $product->sku)
+                ->visit($this->uri);
+
+            /** @var Product $product */
+            $product = Product::factory()->create();
+
+            $browser->type('@barcode-input-field', $product->sku)
                 ->keys('@barcode-input-field', [WebDriverKeys::ENTER])
                 ->waitForText($product->name)
                 ->assertFocused('@barcode-input-field');

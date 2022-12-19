@@ -4,7 +4,6 @@ namespace Tests\Browser\Routes;
 
 use App\Models\Order;
 use App\User;
-use Exception;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
@@ -26,20 +25,30 @@ class OrdersPageTest extends DuskTestCase
     /**
      * @throws Throwable
      */
-    public function testIfOrdersDisplay()
+    public function testBasicScenarios()
     {
-        $this->browse(function (Browser $browser) {
-            /** @var User $user */
-            $user = User::factory()->create();
-            $user->assignRole('user');
+        /** @var User $user */
+        $user = User::factory()->create();
+        $user->assignRole('user');
+
+        /** @var Order $order */
+        $order = Order::factory()->create(['status_code' => 'paid']);
+
+        $this->browse(function (Browser $browser) use ($user, $order) {
+            $browser->disableFitOnFailure();
+            $browser->loginAs($user);
+
+            $browser->visit($this->uri);
+            $browser->waitForText($order->order_number);
+            $browser->assertSee($order->status_code);
 
             /** @var Order $order */
-            $order = Order::factory()->create(['status_code' => 'paid']);
+            $order = Order::factory()->create();
 
-            $browser->disableFitOnFailure()
-                ->loginAs($user)
-                ->visit($this->uri)
-                ->waitForText($order->order_number);
+            $browser->type('@barcode-input-field', $order->order_number);
+            $browser->keys('@barcode-input-field', '{enter}');
+            $browser->waitForText($order->order_number);
+            $browser->assertSee($order->status_code);
         });
     }
 }

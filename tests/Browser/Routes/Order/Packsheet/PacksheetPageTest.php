@@ -2,6 +2,8 @@
 
 namespace Tests\Browser\Routes\Order\Packsheet;
 
+use App\Models\Order;
+use App\Models\OrderProduct;
 use App\User;
 use Exception;
 use Laravel\Dusk\Browser;
@@ -10,75 +12,53 @@ use Throwable;
 
 class PacksheetPageTest extends DuskTestCase
 {
-    private string $uri = '';
+    private string $uri = '/order/packsheet';
 
-    public function testIncomplete()
+    /**
+     * @throws Throwable
+     */
+    public function testBasics()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $order = Order::factory()->create();
+
+        $newUri = implode('', [$this->uri, '/', $order->getKey()]);
+
+        $this->basicUserAccessTest($newUri, true);
+        $this->basicAdminAccessTest($newUri, true);
+        $this->basicGuestAccessTest($newUri);
     }
 
-//    /**
-//     * @throws Exception
-//     */
-//    protected function setUp(): void
-//    {
-//        if (empty($this->uri)) {
-//            throw new Exception('Please set the $uri property in your test class.');
-//        }
-//
-//        parent::setUp();
-//    }
-//
-//    /**
-//     * @throws Throwable
-//     */
-//    public function testUserAccess()
-//    {
-//        $this->browse(function (Browser $browser) {
-//            /** @var User $user */
-//            $user = User::factory()->create();
-//            $user->assignRole('user');
-//
-//            $browser->disableFitOnFailure()
-//                ->loginAs($user)
-//                ->visit($this->uri)
-//                ->pause(300)
-//                ->assertRouteIs($this->uri)
-//                ->assertSourceMissing('snotify-error');
-//        });
-//    }
-//
-//    /**
-//     * @throws Throwable
-//     */
-//    public function testAdminAccess()
-//    {
-//        $this->browse(function (Browser $browser) {
-//            /** @var User $admin */
-//            $admin = User::factory()->create();
-//            $admin->assignRole('admin');
-//
-//            $browser->disableFitOnFailure()
-//                ->loginAs($admin)
-//                ->visit($this->uri)
-//                ->pause(300)
-//                ->assertRouteIs($this->uri)
-//                ->assertSourceMissing('snotify-error');
-//        });
-//    }
-//
-//    /**
-//     * @throws Throwable
-//     */
-//    public function testGuestAccess()
-//    {
-//        $this->browse(function (Browser $browser) {
-//            $browser->disableFitOnFailure()
-//                ->logout()
-//                ->visit($this->uri)
-//                ->assertRouteIs('login')
-//                ->assertSee('Login');
-//        });
-//    }
-}
+    /**
+     * @throws Throwable
+     */
+    public function testBasicScenarios()
+    {
+        /** @var Order $order */
+        $order = Order::factory()->create();
+        OrderProduct::factory()->count(5)->create(['order_id' => $order->getKey()]);
 
+        $newUri = implode('', [$this->uri, '/', $order->getKey()]);
+
+        $this->browse(function (Browser $browser) use ($newUri, $order) {
+            /** @var User $user */
+            $user = User::factory()->create();
+            $user->assignRole('user');
+
+            $browser->disableFitOnFailure();
+
+            $browser->loginAs($user);
+            $browser->visit($newUri);
+            $browser->waitUntilMissingText('No products found', 1);
+            $browser->assertSourceMissing('snotify-error');
+            $browser->pause(500);
+            $browser->assertSee($order->order_number);
+
+            /** @var OrderProduct $randomOrderProduct */
+            $randomOrderProduct = $order->orderProducts()->inRandomOrder()->first();
+
+            $browser->type('@barcode-input-field', $randomOrderProduct->sku_ordered);
+            $browser->keys('@barcode-input-field', '{enter}');
+            $browser->waitForText('1 x shipped');
+        });
+    }
+}
