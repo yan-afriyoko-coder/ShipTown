@@ -14,13 +14,7 @@ use Throwable;
 abstract class DuskTestCase extends BaseTestCase
 {
     use CreatesApplication;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-
-    }
+    use ResetsDatabase;
 
     /**
      * Prepare for Dusk test execution.

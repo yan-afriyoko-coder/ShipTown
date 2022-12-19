@@ -4,6 +4,7 @@ namespace Tests\Browser\Routes\Autopilot;
 
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\OrderStatus;
 use App\User;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
@@ -32,8 +33,12 @@ class PacklistPageTest extends DuskTestCase
         $user = User::factory()->create();
         $user->assignRole('user');
 
+        /** @var OrderStatus $orderStatus */
+        $orderStatus = OrderStatus::factory()->create(['name' => 'paid', 'order_active' => true]);
+
         /** @var Order $order */
-        $order = Order::factory()->create(['status_code' => 'paid']);
+        $order = Order::factory()->create();
+        $order->update(['order_status' => $orderStatus->code]);
 
         /** @var OrderProduct $orderProduct */
         $orderProduct = OrderProduct::factory()->create(['order_id' => $order->getKey()]);
@@ -49,14 +54,14 @@ class PacklistPageTest extends DuskTestCase
         $order->update(['total_paid' => $order->total]);
 
 
-        $this->browse(function (Browser $browser) use ($user) {
+        $this->browse(function (Browser $browser) use ($user, $order) {
             $browser->disableFitOnFailure();
 
             $browser->loginAs($user);
             $browser->visit($this->uri);
             $browser->waitFor('@startAutopilotButton', 1);
             $browser->click('@startAutopilotButton');
-            $browser->pause(3000);
+            $browser->waitForText($order->order_number, 1);
             $browser->assertSourceMissing('snotify-error');
         });
     }
