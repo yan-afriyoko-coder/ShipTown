@@ -32,7 +32,7 @@ export default {
             },
 
             toNumberOrDash(value) {
-                return this.dashIfZero(Number(value));
+                return this.dashIfZero(Number(value)).toLocaleString().replace(',', ' ');
             },
 
             dashIfZero(value) {

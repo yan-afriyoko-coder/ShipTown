@@ -16,10 +16,8 @@
                                   <th class="text-left">Shelf</th>
                                   <th>Available</th>
                                   <th class="d-none d-md-table-cell">Reserved</th>
-                                  <th class="d-none d-md-table-cell">In Stock</th>
+<!--                                  <th class="d-none d-md-table-cell">In Stock</th>-->
                                   <th>Incoming</th>
-<!--                                  <th><div class="d-md-none">RL</div><div class="d-none d-md-table-cell">Restock Level</div></th>-->
-<!--                                  <th><div class="d-md-none">RP</div><div class="d-none d-md-table-cell">Reorder Point</div></th>-->
                                   <th class="d-none d-md-table-cell">Required</th>
                                   <th>Price</th>
                               </tr>
@@ -31,10 +29,10 @@
                                       <td class="text-left">{{ inventory['shelf_location'] }}</td>
                                       <td>{{ toNumberOrDash(inventory['quantity_available'])}}</td>
                                       <td class="d-none d-md-table-cell">{{ toNumberOrDash(inventory['quantity_reserved'])}}</td>
-                                      <td class="d-none d-md-table-cell">{{ toNumberOrDash(inventory['quantity'])}}</td>
+<!--                                      <td class="d-none d-md-table-cell">{{ toNumberOrDash(inventory['quantity'])}}</td>-->
                                       <td>{{ toNumberOrDash(inventory['quantity_incoming']) }}</td>
                                       <td class="d-none d-md-table-cell">{{ toNumberOrDash(inventory['quantity_required']) }}</td>
-                                      <td>{{ toNumberOrDash(product.prices[inventory['warehouse_code']]['price']) }}</td>
+                                      <td class="ml-2">{{ toNumberOrDash(product.prices[inventory['warehouse_code']]['price']) }}</td>
                                   </tr>
                               </template>
                               </tbody>
@@ -91,26 +89,30 @@
                             <div class="table-responsive small">
                                 <table class="table table-borderless mb-0 w-100 small text-right">
                                     <thead>
-                                    <tr class="small">
-                                        <th class="text-left">Warehouse</th>
-                                        <th>Required</th>
-                                        <th>Reorder Point</th>
-                                        <th>Restock Level</th>
-                                        <th class="d-none d-md-table-cell">In Stock</th>
+                                    <tr class="small text-right">
+                                    <th class="text-left">Warehouse</th>
+                                        <th class="d-table-cell d-md-none">RL</th>
+                                        <th class="d-none d-md-table-cell">Restock Level</th>
+
+                                        <th class="d-table-cell d-md-none pl-2">RP</th>
+                                        <th class="d-none d-md-table-cell">Reorder Point</th>
+
+                                        <th>In Stock</th>
                                         <th class="d-none d-md-table-cell">Reserved</th>
                                         <th>Incoming</th>
+                                        <th>Required</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <template v-for="inventory in product.inventory" >
                                         <tr class="" v-bind:class="{ 'table-active': currentUser()['warehouse'] && inventory['warehouse_code'] === currentUser()['warehouse']['code']}">
                                             <td class="text-left">{{ inventory['warehouse_code'] }}</td>
-                                            <td>{{ toNumberOrDash(inventory['quantity_required']) }}</td>
-                                            <td>{{ toNumberOrDash(inventory['reorder_point']) }}</td>
                                             <td>{{ toNumberOrDash(inventory['restock_level']) }}</td>
-                                            <td class="d-none d-md-table-cell">{{ toNumberOrDash(inventory['quantity'])}}</td>
+                                            <td>{{ toNumberOrDash(inventory['reorder_point']) }}</td>
+                                            <td>{{ toNumberOrDash(inventory['quantity'])}}</td>
                                             <td class="d-none d-md-table-cell">{{ toNumberOrDash(inventory['quantity_reserved'])}}</td>
                                             <td>{{ toNumberOrDash(inventory['quantity_incoming']) }}</td>
+                                            <td>{{ toNumberOrDash(inventory['quantity_required']) }}</td>
                                         </tr>
                                     </template>
                                     </tbody>
@@ -177,25 +179,27 @@
                             <div>
                                 {{ statusMessageActivity }}
                             </div>
-                          <table>
-                            <tr v-for="activity in activityLog" class="container" :key="activity.id">
-                              <td class="align-text-top" :title="activity['created_at'] | moment('YYYY-MM-DD H:mm:ss') ">
-                                {{ activity['created_at'] | moment('MMM DD')  }} {{ activity['created_at'] | moment('H:mm')  }}:
-                              </td>
-                              <td>
-                                <div class="row">
-                                  <b>{{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }} </b>  &nbsp; {{ activity['description'] }}
-                                </div>
-                                <div class="flex-row" v-for="(value, name) in activity['properties']['attributes'] ? activity['properties']['attributes'] : activity['properties']">
-                                   {{ name }} = {{ value }}
-                                </div>
-                              </td>
-                            </tr>
-                          </table>
+                            <div class="table-responsive">
+                              <table class="">
+                                <tr v-for="activity in activityLog" class="container" :key="activity.id">
+                                  <td class="align-text-top" :title="activity['created_at'] | moment('YYYY-MM-DD H:mm:ss') ">
+                                    {{ activity['created_at'] | moment('MMM DD')  }} {{ activity['created_at'] | moment('H:mm')  }}:
+                                  </td>
+                                  <td class="small">
+                                    <div class="row">
+                                      <b>{{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }} </b>  &nbsp; {{ activity['description'] }}
+                                    </div>
+                                    <div class="flex-row" v-for="(value, name) in activity['properties']['attributes'] ? activity['properties']['attributes'] : activity['properties']">
+                                       {{ name }} = {{ value }}
+                                    </div>
+                                  </td>
+                                </tr>
+                              </table>
+                            </div>
                         </template>
 
                         <template v-if="currentTab === 'prices'">
-                          <div class="table-responsive">
+                          <div class="table-responsive small">
                             <table class="table table-borderless mb-0 w-100 small">
                                     <thead>
                                         <tr class="small">
