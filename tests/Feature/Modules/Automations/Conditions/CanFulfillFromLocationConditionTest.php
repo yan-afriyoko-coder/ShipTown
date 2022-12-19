@@ -24,9 +24,6 @@ class CanFulfillFromLocationConditionTest extends TestCase
         /** @var Warehouse $warehouse */
         $warehouse = Warehouse::factory()->create();
 
-        /** @var Product $product */
-        $product = Product::factory()->create();
-
         /** @var Automation $automation */
         $automation = Automation::factory()->create([
             'enabled' => true,
@@ -45,12 +42,10 @@ class CanFulfillFromLocationConditionTest extends TestCase
         /** @var OrderProduct $orderProduct */
         $orderProduct = OrderProduct::factory()->create(['order_id' => $order->getKey()]);
 
-        Inventory::updateOrCreate([
-            'product_id' => $product->getKey(),
-            'location_id' => $warehouse->code
-        ], [
-            'quantity' => $orderProduct->quantity_ordered - 1,
-        ]);
+        $orderProduct->product
+            ->inventory()
+            ->where(['warehouse_code' => $warehouse->code])
+            ->update(['quantity' => $orderProduct->quantity_ordered - 1]);
 
         $this->assertFalse($condition->isTrue($order));
     }
@@ -96,13 +91,10 @@ class CanFulfillFromLocationConditionTest extends TestCase
      *
      * @return void
      */
-    public function test_can_not_fulfill_condition()
+    public function testCanNotFulfillCondition()
     {
         /** @var Warehouse $warehouse */
         $warehouse = Warehouse::factory()->create();
-
-        /** @var Product $product */
-        $product = Product::factory()->create();
 
         /** @var Automation $automation */
         $automation = Automation::factory()->create([
@@ -116,16 +108,17 @@ class CanFulfillFromLocationConditionTest extends TestCase
             'condition_value' => $warehouse->code
         ]);
 
-        Inventory::updateOrCreate([
-            'product_id' => $product->getKey(),
-            'location_id' => $warehouse->code
-        ], [
-            'quantity' => 0,
-        ]);
-
         /** @var Order $order */
         $order = Order::factory()->create([]);
-        OrderProduct::factory()->create(['order_id' => $order->getKey()]);
+
+        /** @var OrderProduct $orderProduct */
+        $orderProduct = OrderProduct::factory()->create(['order_id' => $order->getKey()]);
+
+        $orderProduct->product
+            ->inventory()
+            ->where(['warehouse_code' => $warehouse->code])
+            ->update(['quantity' => 0]);
+
 
         $this->assertFalse($condition->isTrue($order));
     }
@@ -140,9 +133,6 @@ class CanFulfillFromLocationConditionTest extends TestCase
         /** @var Warehouse $warehouse */
         $warehouse = Warehouse::factory()->create();
 
-        /** @var Product $product */
-        $product = Product::factory()->create();
-
         /** @var Automation $automation */
         $automation = Automation::factory()->create([
             'enabled' => true,
@@ -155,16 +145,16 @@ class CanFulfillFromLocationConditionTest extends TestCase
             'condition_value' => $warehouse->code
         ]);
 
-        Inventory::updateOrCreate([
-            'product_id' => $product->getKey(),
-            'location_id' => $warehouse->code
-        ], [
-            'quantity' => 100,
-        ]);
-
         /** @var Order $order */
         $order = Order::factory()->create([]);
-        OrderProduct::factory()->create(['order_id' => $order->getKey()]);
+
+        /** @var OrderProduct $orderProduct */
+        $orderProduct = OrderProduct::factory()->create(['order_id' => $order->getKey()]);
+
+        $orderProduct->product
+            ->inventory()
+            ->where(['warehouse_code' => $warehouse->code])
+            ->update(['quantity' => 100]);
 
         $this->assertTrue($condition->isTrue($order));
     }
