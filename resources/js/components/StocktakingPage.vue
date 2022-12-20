@@ -8,40 +8,37 @@
             <button id="config-button" disabled type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
-        <div class="row pl-2 p-1 font-weight-bold text-uppercase small text-secondary">
-            <div class="col-6 text-left">
-                Recent Stocktakes
-            </div>
-            <div class="col-6 text-right">
-                <a :href="route('reports.inventory-movements', {'filter[description]': 'stocktake'})">See more</a>
-            </div>
-        </div>
 
-        <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
-            <template v-slot:content>
-                    <div class="row">
-                        <div class="col-sm-12 col-lg-5 text-secondary">
-                            <table>
-                                <template v-for="itemMovement in recentStocktakes.data">
-                                    <tr>
-                                        <td class="text-right">
-                                            {{ Number(itemMovement['quantity_after']) }} x
-                                        </td>
-                                        <td>
-                                            {{ itemMovement['product']['sku'] }}<br>
-                                        </td>
-                                        <td>
-                                            - {{ itemMovement['product']['name'] }}<br>
-                                        </td>
-                                    </tr>
-                                </template>
-                            </table>
-                        </div>
-                    </div>
-            </template>
-        </swiping-card>
+        <template v-if="recentStocktakes.data && recentStocktakes.data.length > 0">
+            <div class="row pl-2 p-1 font-weight-bold text-uppercase small text-secondary">
+                <div class="col-6 text-left">
+                    Recent Stocktakes
+                </div>
+                <div class="col-6 text-right">
+                    <a :href="route('reports.inventory-movements', {'filter[description]': 'stocktake'})">See more</a>
+                </div>
+            </div>
 
-        <div class="row pl-2 p-1 font-weight-bold text-uppercase small text-secondary">
+            <div class="row card text-secondary">
+                <table>
+                    <template v-for="itemMovement in recentStocktakes.data">
+                        <tr>
+                            <td class="text-right">
+                                {{ Number(itemMovement['quantity_after']) }} x
+                            </td>
+                            <td>
+                                {{ itemMovement['product']['sku'] }}<br>
+                            </td>
+                            <td>
+                                - {{ itemMovement['product']['name'] }}<br>
+                            </td>
+                        </tr>
+                    </template>
+                </table>
+            </div>
+        </template>
+
+        <div class="row mt-2 pl-2 p-1 font-weight-bold text-uppercase small text-secondary">
             <div class="col-12 text-left">
                 Stocktake suggestions
             </div>
