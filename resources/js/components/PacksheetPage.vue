@@ -88,11 +88,13 @@
                 <br>
                 <br>
                 <button type="button" class="col btn mb-1 btn-primary" @click.prevent="askForShippingNumber">Add Shipping Number</button>
+                <br>
+                <br>
+                <button :disabled="previous_order_id === null" type="button" class="col btn btn-primary" @click.prevent="openPreviousOrder">Open Previous Order</button>
             </template>
 
             <template v-slot:footer>
                 <div class="flex-fill">
-                    <button :disabled="previous_order_id === null"  type="button" class="btn btn-primary  float-left" @click.prevent="openPreviousOrder">Open Previous Order</button>
                 </div>
             </template>
 

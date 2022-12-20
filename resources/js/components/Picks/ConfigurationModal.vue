@@ -3,10 +3,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div ref="loadingContainer" class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Picklist</h5>
-                    <div class="widget-tools-container">
-                        <font-awesome-icon icon="question-circle" :content="helpText" v-tippy></font-awesome-icon>
-                    </div>
+                  <stocktake-input></stocktake-input>
                 </div>
                 <div class="modal-body" style="margin: 0 auto 0;">
                     <form method="POST" @submit.prevent="handleSubmit">
@@ -49,7 +46,7 @@ export default {
     },
 
     mounted() {
-        this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id'])
+        this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
     },
 
     computed: {
