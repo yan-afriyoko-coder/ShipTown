@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             Demo\ProductsSeeder::class,
             Demo\WarehousesSeeder::class,
             Demo\PaidOrdersSeeder::class,
+            Demo\TestOrdersSeeder::class,
             Demo\ProductsTagsSeeder::class,
 
             InventorySeeder::class,

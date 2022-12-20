@@ -1,42 +1,29 @@
 <template>
-    <div class="col" v-if="order">
-        <div class="row ml-1 mr-1 card">
-            <div class="col p-2 pl-2 rounded">
-                <div class="row">
+    <div v-if="order">
+        <div class="card">
+            <div class="row rounded p-2">
+                <div class="col-12 col-lg-6">
                     <h5 class="text-primary">
                         <font-awesome-icon icon="copy" class="fa-xs" role="button" @click="copyToClipBoard(order['order_number'])"></font-awesome-icon>
                         <a :href="'/orders/?search=' + order['order_number']">{{ order['order_number'] }}</a>
                     </h5>
+
+                    <div class="small font-weight-bold">{{ order['status_code'] }}</div>
+                    <div class="small font-weight-bold">{{ formatDateTime(order['created_at']) }}</div>
+                    <div class="small">{{ order['label_template'] }}</div>
                 </div>
-                <div class="row align-text-top">
-
-                    <div class="col-5 col-md-4 col-lg-3 align-text-top">
-                        <div class="small font-weight-bold">{{ order['status_code'] }}</div>
-                        <div class="small font-weight-bold">{{ order['created_at'] }}</div>
-                        <div class="small">{{ order['label_template'] }}</div>
+                <div class="col text-right small">
+                    <number-card :number="order['age_in_days']" label="age"/>
+                    <div class="d-none d-md-inline-block">
+                        <number-card :number="order['order_products_totals']['total_price']" label="total" ></number-card>
                     </div>
-
-                    <div class="col text-center">
-                        <div class="row ">
-                            <div class="col">
-                                <small> age </small>
-                                <h5> {{ order['age_in_days'] }}</h5>
-                            </div>
-                            <div class="col">
-                                <small> products </small>
-                                <h5> {{ order['order_products_totals']['count'] }} </h5>
-                            </div>
-                            <div class="col">
-                                <small> quantity </small>
-                                <h5> {{ order['order_products_totals']['quantity_ordered'] }} </h5>
-                            </div>
-                            <div class="col d-none d-sm-block">
-                                <small> total </small>
-                                <h5>{{ order['order_products_totals']['total_price'] }}</h5>
-                            </div>
-                        </div>
+                    <number-card :number="order['order_products_totals']['count']" label="lines"/>
+                    <number-card :number="order['order_products_totals']['quantity_ordered']" label="ordered"/>
+                    <div class="d-none d-md-inline-block">
+                        <number-card :number="order['order_products_totals']['quantity_picked']" label="picked" ></number-card>
+                        <number-card :number="order['order_products_totals']['quantity_shipped']" label="shipped" ></number-card>
                     </div>
-
+                    <number-card :number="order['order_products_totals']['quantity_to_ship']" label="to ship"/>
                 </div>
             </div>
         </div>

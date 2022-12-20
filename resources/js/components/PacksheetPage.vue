@@ -173,14 +173,18 @@
                 }
                 this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
 
-                this.reloadOrder();
+                this.reloadData();
 
-                this.loadOrderStatuses();
-                this.loadShippingCouriers();
                 this.reloadPageAfterInactivity();
             },
 
             methods: {
+                reloadData() {
+                    this.reloadOrder();
+                    this.loadOrderStatuses();
+                    this.loadShippingCouriers();
+                },
+
                 reloadPageAfterInactivity() {
                     let time = new Date().getTime();
 
@@ -253,20 +257,15 @@
                 },
 
                 loadOrderById: function (order_id = null) {
-                    this.showLoading();
-
                     this.canClose = true;
                     this.order = null;
+
                     this.somethingHasBeenPackedDuringThisSession = false;
 
                     let params = {
                         'filter[order_id]': this.order_id,
                         'include': 'order_products_totals,order_comments,order_comments.user',
                     };
-
-                    if (order_id) {
-                        params['filter[order_id]'] = order_id;
-                    }
 
                     return this.apiGetOrders(params)
                         .then(({data}) => {
@@ -275,15 +274,12 @@
                         })
                         .catch(() => {
                             this.notifyError('Error occurred while loading order');
-                        })
-                        .finally(() => {
-                            this.hideLoading();
-                        })
+                        });
                 },
 
                 loadOrderProducts: function() {
                     const params = {
-                        'filter[order_id]': this.order.id,
+                        'filter[order_id]': this.order_id,
                         'filter[warehouse_id]': this.getUrlParameter('warehouse_id'),
                         'sort': 'inventory_source_shelf_location,sku_ordered',
                         'include': 'product,product.aliases',
