@@ -21,7 +21,7 @@
                   </div>
                 <div class="row align-text-top">
 
-                    <div class="col-5 col-md-4 col-lg-6 align-text-top">
+                    <div class="col-5 col-md-4 col-lg-5 align-text-top">
                         <div class="small font-weight-bold">{{ order['status_code'] }}</div>
                         <div class="small">{{ order['label_template'] }} </div>
                         <template v-for="tag in order.tags">
@@ -79,14 +79,13 @@
                 </div>
 
 
-                <div class="row text-center text-secondary" v-if="!orderDetailsVisible" @click="toggleOrderDetails">
+                <div class="row text-center text-secondary offset-5" v-if="!orderDetailsVisible" @click="toggleOrderDetails">
                     <div class="col">
                         <font-awesome-icon icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
                     </div>
                 </div>
 
-                <div v-if="orderDetailsVisible">
-
+                <div v-if="orderDetailsVisible" class="offset-md-5">
                     <div class="row text-center" @click="toggleOrderDetails">
                         <div class="col">
                             <font-awesome-icon icon="chevron-up" class="fa fa-xs text-secondary"></font-awesome-icon>
@@ -105,35 +104,35 @@
                         </div>
                     </template>
 
-                    <div class="row tabs-container mb-2">
+                    <div class="row tabs-container mb-2 small">
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
-                                <a class="nav-link active p-0 pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'productsOrdered'" >
+                                <a class="nav-link active p-0 pl-1 pr-1" data-toggle="tab" href="#" @click.prevent="currentTab = 'productsOrdered'" >
                                     Products
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link p-0 pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'shippingAddress'" >
+                                <a class="nav-link p-0 pl-1 pr-1" data-toggle="tab" href="#" @click.prevent="currentTab = 'shippingAddress'" >
                                     Address
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link p-0 pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderDetails'" >
+                                <a class="nav-link p-0 pl-1 pr-1" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderDetails'" >
                                     Details
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link p-0 pl-2 pr-2" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderActivities'" >
+                                <a class="nav-link p-0 pl-1 pr-1" data-toggle="tab" href="#" @click.prevent="currentTab = 'orderActivities'" >
                                     Activity
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link p-0 pl-2 pr-2" target="_blank" :href="'/order/packsheet/' + order['id'] + '?hide_nav_bar=true'">
+                                <a class="nav-link p-0 pl-1 pr-1" target="_blank" :href="'/order/packsheet/' + order['id'] + '?hide_nav_bar=true'">
                                     Packsheet
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a v-if="sharingAvailable()" class="nav-link p-0 pl-2 pr-2" @click.prevent="shareLink" href="#">
+                                <a v-if="sharingAvailable()" class="nav-link p-0 pl-1 pr-1" @click.prevent="shareLink" href="#">
                                     <font-awesome-icon icon="share-alt" class="fas fa-sm"></font-awesome-icon>
                                 </a>
                             </li>
@@ -144,19 +143,17 @@
                         <template v-for="order_product in order_products">
 
                             <div class="row text-left mb-2">
-                                <div class="col-md-4 col-lg-6">
+                                <div class="col-12">
                                     <small>{{ order_product['name_ordered'] }} &nbsp;</small>
                                     <div class="small"><a target="_blank" :href="getProductLink(order_product)">{{ order_product['sku_ordered'] }}</a>&nbsp;</div>
                                 </div>
-                                <div class="col">
+                                <div class="col offset-lg-3">
                                     <div class="row text-center">
                                         <div class="col">
-                                            <small> ordered </small>
-                                            <h4>{{ toNumberOrDash(order_product['quantity_ordered']) }}</h4>
+                                            <number-card label="ordered" :number="order_product['quantity_ordered']"></number-card>
                                         </div>
                                         <div class="col bg-warning" v-if="Number(order_product['quantity_split']) > 0">
-                                            <small> split </small>
-                                            <h4>{{ toNumberOrDash(order_product['quantity_split']) }}</h4>
+                                            <number-card label="split" :number="order_product['quantity_split']"></number-card>
                                         </div>
                                         <div class="col d-none d-md-block text-right">
                                             <div class="text-center w-100">
@@ -165,24 +162,19 @@
                                             <span class="pr-0 mr-2 h4">{{ Math.floor(order_product['price']) }}<span class="ml-0 pl-0" style="font-size: 8pt"><template v-if="order_product['price'] % 1 === 0"> .00</template><template v-if="order_product['price'] % 1 > 0"> .{{ Math.floor(order_product['price'] % 1 * 100) }} </template></span></span>
                                         </div>
                                         <div class="col">
-                                            <small> picked </small>
-                                            <h4>{{ toNumberOrDash(order_product['quantity_picked']) }}</h4>
+                                            <number-card label="picked" :number="order_product['quantity_picked']"></number-card>
                                         </div>
                                         <div class="col bg-warning" v-if="Number(order_product['quantity_skipped_picking']) > 0">
-                                            <small> skipped </small>
-                                            <h4>{{ toNumberOrDash(order_product['quantity_skipped_picking']) }}</h4>
+                                            <number-card label="skipped" :number="order_product['quantity_skipped_picking']"></number-card>
                                         </div>
                                         <div class="col d-none d-sm-block">
-                                            <small> shipped </small>
-                                            <h4>{{ toNumberOrDash(order_product['quantity_shipped'])  }}</h4>
+                                            <number-card label="shipped" :number="order_product['quantity_shipped']"></number-card>
                                         </div>
                                         <div class="col">
-                                            <small> to ship </small>
-                                            <h4>{{ toNumberOrDash(order_product['quantity_to_ship'])  }}</h4>
+                                            <number-card label="to ship" :number="order_product['quantity_to_ship']"></number-card>
                                         </div>
                                         <div class="col" v-bind:class="{ 'bg-warning': ifHasEnoughStock(order_product) }">
-                                            <small> inventory </small>
-                                            <h4>{{ toNumberOrDash(getProductQuantity(order_product)) }}</h4>
+                                            <number-card label="inventory" :number="getProductQuantity(order_product)"></number-card>
                                         </div>
                                     </div>
                                 </div>

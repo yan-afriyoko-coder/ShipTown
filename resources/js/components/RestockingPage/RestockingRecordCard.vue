@@ -2,59 +2,51 @@
     <div class="row mb-3">
         <div class="col ml-0 pl-0">
             <div class="card ml-0 pl-0">
-                <div class="card-body pt-2 pl-2">
-                    <div class="row mt-0">
-                        <div class="col-lg-4">
-                            <div class="text-primary h5">{{ record['product_name'] }}</div>
-                            <div>
-                                sku: <b>
-                                <font-awesome-icon icon="copy" class="fa-xs btn-link" role="button" @click="copyToClipBoard(record['product_sku'])"></font-awesome-icon>
-                                <a target="_blank"  :href="'/products?hide_nav_bar=true&search=' + record['product_sku']">{{ record['product_sku'] }}</a>
-                            </b>
-                            </div>
-                            <div>
-                                <template v-for="tag in record['tags']">
-                                    <a class="badge text-uppercase btn btn-outline-primary" :key="tag.id" @click.prevent="setUrlParameterAngGo('filter[product_has_tags]', tag['name']['en'])"> {{ tag['name']['en'] }} </a>
-                                </template>
-                            </div>
-                            <div class="small">
-                                location: {{ record['warehouse_code'] }}
-                            </div>
+                <div class="row card-body pt-2 pl-2">
+                    <div class="col-lg-5">
+                        <div class="text-primary h5">{{ record['product_name'] }}</div>
+                        <div>
+                            sku: <b>
+                            <font-awesome-icon icon="copy" class="fa-xs btn-link" role="button" @click="copyToClipBoard(record['product_sku'])"></font-awesome-icon>
+                            <a target="_blank"  :href="'/products?hide_nav_bar=true&search=' + record['product_sku']">{{ record['product_sku'] }}</a>
+                        </b>
                         </div>
-                        <div class="col-lg-8">
-                            <div class="row pt-1">
-                                <div class="col-12 text-right" @click="expanded = !expanded">
-                                    <div class="row">
-                                        <div class="text-nowrap text-right col-lg-6">
-                                        </div>
-                                        <div class="text-nowrap text-right col-lg-6">
-                                            <number-card class="mr-lg-4" label="restock level" :number="record['restock_level']" v-bind:class="{'bg-warning' : record['restock_level'] <= 0 }"></number-card>
-                                            <number-card label="in stock" :number="record['quantity_available']" v-bind:class="{'bg-warning' : record['quantity_available'] < 0 }"></number-card>
-                                            <number-card label="incoming" :number="record['quantity_incoming']"></number-card>
-                                            <text-card label="required" text="N/A" v-if="Number(record['warehouse_quantity']) === 0"></text-card>
-                                            <number-card label="required" :number="record['quantity_required']" v-if="record['warehouse_quantity'] > 0"></number-card>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div>
+                            <template v-for="tag in record['tags']">
+                                <a class="badge text-uppercase btn btn-outline-primary" :key="tag.id" @click.prevent="setUrlParameterAngGo('filter[product_has_tags]', tag['name']['en'])"> {{ tag['name']['en'] }} </a>
+                            </template>
+                        </div>
+                        <div class="text-secondary small">
+                            location: {{ record['warehouse_code'] }}
+                        </div>
+                        <div class="text-secondary small">
+                            last counted at: {{ formatDateTime(record['last_counted_at'],'D MMM') }}
                         </div>
                     </div>
 
-                    <div @click="expanded = !expanded" class="text-center d-inline-block align-text-top col-sm-12 border-0 p-sm-0 pt-1">
-                        <font-awesome-icon v-if="expanded" icon="chevron-up" class="fa fa-xs text-secondary"></font-awesome-icon>
+                    <div class="col-lg-7 text-left text-md-right" @click="expanded = !expanded">
+                        <number-card label="warehouse" :number="record['warehouse_quantity']" class="" ></number-card>
+                        <number-card label="reorder point" :number="record['reorder_point']" v-bind:class="{'bg-warning' : record['reorder_point'] <= 0 }"></number-card>
+                        <number-card label="restock level" :number="record['restock_level']" v-bind:class="{'bg-warning' : record['restock_level'] <= 0 }"></number-card>
+                        <text-card label="" text="" class="d-md-none"></text-card>
+                        <text-card label="" text="" class="d-md-none"></text-card>
+                        <number-card label="in stock" :number="record['quantity']" v-bind:class="{'bg-warning' : record['quantity'] < 0 }"></number-card>
+                        <number-card label="incoming" :number="record['quantity_incoming']"></number-card>
+                        <text-card label="required" text="N/A" v-if="Number(record['warehouse_quantity']) === 0"></text-card>
+                        <number-card label="required" :number="record['quantity_required']" v-if="record['warehouse_quantity'] > 0"></number-card>
+                    </div>
+
+                    <div @click="expanded = !expanded" class="text-center text-secondary offset-lg-6 col-lg-6">
+                        <font-awesome-icon v-if="expanded" icon="chevron-up" class="fa fa-xs"></font-awesome-icon>
                         <font-awesome-icon v-if="!expanded" icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
                     </div>
 
-                    <div class="row text-center align-content-center" v-if="expanded">
-                        <div class="d-sm-none d-md-block col-6">
-
-                        </div>
-                        <div class="col-sm-12 col-md-6">
-                            <div class="text-nowrap text-right col-lg-12">
-                                <number-card class="" label="reorder point" :number="record['reorder_point']" v-bind:class="{'bg-warning' : record['reorder_point'] <= 0 }"></number-card>
-                                <text-card class="mr-lg-4"  label="last counted" :text="formatDateTime(record['last_counted_at'],'D MMM')" ></text-card>
-                                <text-card label="" text="" ></text-card>
-                                <number-card label="warehouse" :number="record['warehouse_quantity']" class="" ></number-card>
+                    <div class="row text-center align-content-center offset-lg-6 col-lg-6" v-if="expanded">
+                            <div class="text-right">
+<!--                                <number-card class="" label="reorder point" :number="record['reorder_point']" v-bind:class="{'bg-warning' : record['reorder_point'] <= 0 }"></number-card>-->
+<!--                                <text-card class="mr-lg-4"  label="last counted" :text="formatDateTime(record['last_counted_at'],'D MMM')" ></text-card>-->
+<!--                                <text-card label="" text="" ></text-card>-->
+<!--                                <number-card label="warehouse" :number="record['warehouse_quantity']" class="" ></number-card>-->
                             </div>
 
                             <hr>

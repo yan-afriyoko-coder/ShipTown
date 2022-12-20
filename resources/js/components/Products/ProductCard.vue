@@ -56,27 +56,27 @@
                         <div class="row tabs-container mb-2">
                             <ul class="nav nav-tabs">
                                 <li class="nav-item">
-                                    <a class="nav-link p-0 pl-2 pr-2 active"  @click.prevent="currentTab = 'inventory'" data-toggle="tab" href="#">
+                                    <a class="nav-link p-0 pl-1 pr-1 pr-lg-2 active"  @click.prevent="currentTab = 'inventory'" data-toggle="tab" href="#">
                                         Inventory
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                  <a class="nav-link p-0 pl-2 pr-2"  @click.prevent="currentTab = 'prices'" data-toggle="tab" href="#">
+                                  <a class="nav-link p-0 pl-1 pr-1 pr-lg-2"  @click.prevent="currentTab = 'prices'" data-toggle="tab" href="#">
                                     Pricing
                                   </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link p-0 pl-2 pr-2"  @click.prevent="currentTab = 'aliases'" data-toggle="tab" href="#">
+                                    <a class="nav-link p-0 pl-1 pr-1 pr-lg-2"  @click.prevent="currentTab = 'aliases'" data-toggle="tab" href="#">
                                         Aliases
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                  <a class="nav-link p-0 pl-2 pr-2"  @click.prevent="currentTab = 'activityLog'" data-toggle="tab" href="#">
+                                  <a class="nav-link p-0 pl-1 pr-1 pr-lg-2"  @click.prevent="currentTab = 'activityLog'" data-toggle="tab" href="#">
                                     Activity
                                   </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a v-if="sharingAvailable()" @click.prevent="shareLink" class="nav-link p-0 pl-2 pr-2" href="#">
+                                    <a v-if="sharingAvailable()" @click.prevent="shareLink" class="nav-link p-0 pl-1 pr-1 pr-lg-2" href="#">
                                         <font-awesome-icon icon="share-alt" class="fas fa-sm"></font-awesome-icon>
                                     </a>
                                 </li>
