@@ -3,7 +3,7 @@
         <div class="col ml-0 pl-0">
             <div class="card ml-0 pl-0">
                 <div class="row card-body pt-2 pl-2">
-                    <div class="col-lg-5">
+                    <div class="col-lg-4">
                         <div class="text-primary h5">{{ record['product_name'] }}</div>
                         <div>
                             sku: <b>
@@ -16,49 +16,37 @@
                                 <a class="badge text-uppercase btn btn-outline-primary" :key="tag.id" @click.prevent="setUrlParameterAngGo('filter[product_has_tags]', tag['name']['en'])"> {{ tag['name']['en'] }} </a>
                             </template>
                         </div>
-                        <div class="text-secondary small">
-                            location: {{ record['warehouse_code'] }}
+                    </div>
+                    <div class="col-lg-3 small">
+                        <div>location: <b>{{ record['warehouse_code'] }}</b></div>
+                        <div>last counted at: <b>{{ formatDateTime(record['last_counted_at'],'D MMM HH:MM') }}</b></div>
+                    </div>
+                    <div class="col">
+                        <div class="text-center" @click="expanded = !expanded">
+                            <number-card class="fa-pull-left" label="warehouse" :number="record['warehouse_quantity']"></number-card>
+                            <number-card label="restock level" :number="record['restock_level']" v-bind:class="{'bg-warning' : record['restock_level'] <= 0 }"></number-card>
+                            <number-card label="reorder point" :number="record['reorder_point']" v-bind:class="{'bg-warning' : record['reorder_point'] <= 0 }"></number-card>
+                            <number-card label="in stock" :number="record['quantity']" v-bind:class="{'bg-warning' : record['quantity'] < 0 }"></number-card>
+                            <number-card label="incoming" :number="record['quantity_incoming']"></number-card>
+                            <number-card class="fa-pull-right" label="required" :number="record['quantity_required']" v-if="record['warehouse_quantity'] > 0"></number-card>
+                            <text-card class="fa-pull-right" label="required" text="N/A" v-if="Number(record['warehouse_quantity']) === 0"></text-card>
                         </div>
-                        <div class="text-secondary small">
-                            last counted at: {{ formatDateTime(record['last_counted_at'],'D MMM') }}
+
+                        <div @click="expanded = !expanded" class="text-center text-secondary">
+                            <font-awesome-icon v-if="expanded" icon="chevron-up" class="fa fa-xs"></font-awesome-icon>
+                            <font-awesome-icon v-if="!expanded" icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
                         </div>
-                    </div>
 
-                    <div class="col-lg-7 text-right text-md-right" @click="expanded = !expanded">
-                        <number-card label="warehouse" :number="record['warehouse_quantity']" class="" ></number-card>
-                        <number-card label="restock level" :number="record['restock_level']" v-bind:class="{'bg-warning' : record['restock_level'] <= 0 }"></number-card>
-                        <number-card label="reorder point" :number="record['reorder_point']" v-bind:class="{'bg-warning' : record['reorder_point'] <= 0 }"></number-card>
-<!--                        <text-card label="" text="" class="d-md-none"></text-card>-->
-<!--                        <text-card label="" text="" class="d-md-none"></text-card>-->
-                        <number-card label="in stock" :number="record['quantity']" v-bind:class="{'bg-warning' : record['quantity'] < 0 }"></number-card>
-                        <number-card label="incoming" :number="record['quantity_incoming']"></number-card>
-                        <text-card label="required" text="N/A" v-if="Number(record['warehouse_quantity']) === 0"></text-card>
-                        <number-card label="required" :number="record['quantity_required']" v-if="record['warehouse_quantity'] > 0"></number-card>
-                    </div>
-
-                    <div @click="expanded = !expanded" class="text-center text-secondary offset-lg-6 col-lg-6">
-                        <font-awesome-icon v-if="expanded" icon="chevron-up" class="fa fa-xs"></font-awesome-icon>
-                        <font-awesome-icon v-if="!expanded" icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
-                    </div>
-
-                    <div class="row text-center align-content-center offset-lg-6 col-lg-6" v-if="expanded">
-                            <div class="text-right">
-<!--                                <number-card class="" label="reorder point" :number="record['reorder_point']" v-bind:class="{'bg-warning' : record['reorder_point'] <= 0 }"></number-card>-->
-<!--                                <text-card class="mr-lg-4"  label="last counted" :text="formatDateTime(record['last_counted_at'],'D MMM')" ></text-card>-->
-<!--                                <text-card label="" text="" ></text-card>-->
-<!--                                <number-card label="warehouse" :number="record['warehouse_quantity']" class="" ></number-card>-->
-                            </div>
-
-                            <hr>
-
-                            <div class="col-12 text-nowrap">
+                        <div v-if="expanded">
+                            <div class="row-col">
                                 <stocktake-input :inputId="'stocktake-input-inventory-id-' + record['inventory_id']"></stocktake-input>
                             </div>
 
-                            <div class="col-12 mt-3">
-                                <label class="small">restock level</label>
+                            <div class="row-col text-center mt-3 small text-secondary">
+                                restock level
                             </div>
-                            <div class="col-12 text-nowrap">
+
+                            <div class="row-col text-nowrap">
                                 <div class="input-group mb-3">
                                     <button tabindex="-1" @click="minusRestockLevel" class="btn btn-danger mr-3" type="button" id="button-addon3" style="min-width: 45px">-</button>
                                     <input tabindex="0"
@@ -69,15 +57,16 @@
                                            inputmode="numeric"
                                            class="form-control text-center"
                                            style="font-size: 24px"
-                                           >
+                                    >
                                     <button tabindex="-1" @click="plusRestockLevel" class="btn btn-success ml-3" type="button" id="button-addon4" style="min-width: 45px">+</button>
                                 </div>
                             </div>
 
-                            <div class="col-12">
-                                <label class="small">reorder point</label>
+                            <div class="row-col text-center mt-3 small text-secondary">
+                                reorder point
                             </div>
-                            <div class="col-12 text-nowrap">
+
+                            <div class="row-col text-nowrap">
                                 <div class="input-group mb-3">
                                     <button tabindex="-1" @click="minusReorderPoint" class="btn btn-danger mr-3" type="button" id="button-addon5" style="min-width: 45px">-</button>
                                     <input tabindex="0"
@@ -88,19 +77,18 @@
                                            inputmode="numeric"
                                            class="form-control text-center"
                                            style="font-size: 24px"
-                                           >
+                                    >
                                     <button tabindex="-1" @click="plusReorderPoint" class="btn btn-success ml-3" type="button" id="button-addon6" style="min-width: 45px">+</button>
                                 </div>
                             </div>
 
-                            <div class="row pl-2 p-0">
-                                <div class="col-12 text-center align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">
+
+                            <div class="row-col text-center align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">
                                     Incoming
-                                </div>
                             </div>
 
                             <div class="row" v-for="dataCollectionRecord in dataCollectorRecords">
-                                <div class="col-12 col-lg-6 text-left">
+                                <div class="col text-left">
                                     <div>
                                         <a :href="'/data-collector/' + dataCollectionRecord['data_collection']['id']">
                                             {{ dataCollectionRecord['data_collection']['name'] }}
@@ -110,12 +98,20 @@
                                         {{ formatDateTime(dataCollectionRecord['data_collection']['created_at']) }}
                                     </div>
                                 </div>
-                                <div class="col-12 col-lg-6 text-right">
+                                <div class="col text-right">
                                     <number-card label="requested" :number="dataCollectionRecord['quantity_requested']"></number-card>
                                     <number-card label="outstanding" :number="dataCollectionRecord['quantity_requested'] - dataCollectionRecord['total_transferred_in']"></number-card>
                                 </div>
                                 <hr>
                             </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row text-center align-content-center offset-lg-6 col-lg-6" v-if="expanded">
+                            <hr>
+
+
                         </div>
 
 
