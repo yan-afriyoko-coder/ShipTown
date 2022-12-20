@@ -6,8 +6,8 @@
                     <div class="col-md-6 col-lg-7 mb-2">
                         <product-info-card :product= "product"></product-info-card>
                     </div>
-                    <div class="col-md-6 col-lg-5" @click="toggle">
-                        <div class="table-responsive small">
+                    <div class="col-md-6 col-lg-5">
+                        <div class="table-responsive small" @click="toggle">
                             <table class="table table-borderless small mb-0 w-100 text-right">
                                <thead>
                                   <tr class="small">
@@ -163,25 +163,19 @@
                             </template>
 
                             <template v-if="currentTab === 'activityLog'">
-                                <div>
-                                    {{ statusMessageActivity }}
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="">
-                                        <tr v-for="activity in activityLog" class="container" :key="activity.id">
-                                            <td class="align-text-top" :title="activity['created_at'] | moment('YYYY-MM-DD H:mm:ss') ">
-                                                {{ activity['created_at'] | moment('MMM DD')  }} {{ activity['created_at'] | moment('H:mm')  }}:
-                                            </td>
-                                            <td class="small">
-                                                <div class="row">
-                                                    <b>{{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }} </b>  &nbsp; {{ activity['description'] }}
-                                                </div>
-                                                <div class="flex-row" v-for="(value, name) in activity['properties']['attributes'] ? activity['properties']['attributes'] : activity['properties']">
-                                                    {{ name }} = {{ value }}
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
+                                <div class="row small" v-for="activity in activityLog" :key="activity.id">
+                                    <span :title="formatDateTime(activity['created_at'], 'YYYY-MM-DD H:mm:ss')">
+                                        {{ formatDateTime(activity['created_at'], 'MMM DD H:mm')  }}:
+                                    </span>
+                                    <span class="flex-nowrap ml-1">
+                                        {{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }}
+                                    </span>
+                                    <span class="flex-nowrap ml-1">
+                                        {{ activity['description'] }}
+                                    </span>
+                                    <div class="col-12 pl-3 text-nowrap" v-for="(value, name) in activity['properties']['attributes'] ? activity['properties']['attributes'] : activity['properties']">
+                                        {{ name }} = {{ value }}
+                                    </div>
                                 </div>
                             </template>
 
@@ -298,18 +292,6 @@
         created: function () {
             if (this.expanded) {
                 this.toggle();
-            }
-        },
-
-      filters: {
-            numberFormat: (x) => {
-                x = parseInt(x).toString();
-
-                if (x ==='0') return '-';
-
-                var pattern = /(-?\d+)(\d{3})/;
-                while (pattern.test(x)) x = x.replace(pattern, "$1 $2");
-                return x;
             }
         },
 

@@ -38,10 +38,6 @@
                         </div>
 
                         <div v-if="expanded">
-                            <div class="row-col">
-                                <stocktake-input :inputId="'stocktake-input-inventory-id-' + record['inventory_id']"></stocktake-input>
-                            </div>
-
                             <div class="row-col text-center mt-3 small text-secondary">
                                 restock level
                             </div>
