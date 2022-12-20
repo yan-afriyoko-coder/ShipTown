@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="row mb-3 pl-1 pr-1 bg-white">
+        <div class="row mb-1 pb-2 p-1 sticky-top bg-light">
             <div class="flex-fill">
                 <barcode-input-field placeholder="Search"></barcode-input-field>
             </div>

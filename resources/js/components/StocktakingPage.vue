@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="row mb-3 pl-1 pr-1 sticky-top">
+        <div class="row mb-1 pb-2 p-1 sticky-top bg-light">
             <div class="flex-fill">
                 <stocktaking-input-field @stocktakeSubmitted="reloadData"></stocktaking-input-field>
             </div>
@@ -9,7 +9,7 @@
         </div>
 
 
-        <template v-if="recentStocktakes.data && recentStocktakes.data.length > 0">
+        <template v-if="recentStocktakes.data">
             <div class="row pl-2 p-1 font-weight-bold text-uppercase small text-secondary">
                 <div class="col-6 text-left">
                     Recent Stocktakes
@@ -18,24 +18,19 @@
                     <a :href="route('reports.inventory-movements', {'filter[description]': 'stocktake'})">See more</a>
                 </div>
             </div>
-
-            <div class="row card text-secondary">
-                <table>
-                    <template v-for="itemMovement in recentStocktakes.data">
-                        <tr>
-                            <td class="text-right">
-                                {{ Number(itemMovement['quantity_after']) }} x
-                            </td>
-                            <td>
-                                {{ itemMovement['product']['sku'] }}<br>
-                            </td>
-                            <td>
-                                - {{ itemMovement['product']['name'] }}<br>
-                            </td>
-                        </tr>
-                    </template>
-                </table>
+            <div class="text-secondary small text-center" v-if="recentStocktakes.data.length === 0">
+                &nbsp; No recent stocktakes found
             </div>
+
+                        <div class="row card text-secondary p-1 pl-2 mb-2" v-if="recentStocktakes.data.length > 0">
+                            <template v-for="itemMovement in recentStocktakes.data">
+                                    <div>
+                                        {{ Number(itemMovement['quantity_after']) }} x
+                                        {{ itemMovement['product']['sku'] }}
+                                        - {{ itemMovement['product']['name'] }}
+                                    </div>
+                            </template>
+                        </div>
         </template>
 
         <div class="row mt-2 pl-2 p-1 font-weight-bold text-uppercase small text-secondary">
@@ -44,7 +39,7 @@
             </div>
         </div>
 
-        <div v-if="(stocktakeSuggestions !== null) && (stocktakeSuggestions.length === 0)" class="text-center mt-3">
+        <div v-if="(stocktakeSuggestions !== null) && (stocktakeSuggestions.length === 0)" class="text-secondary small text-center mt-3">
             You're all done! <br>
             No more suggestions found.
         </div>

@@ -11,10 +11,15 @@
                     />
                 </div>
 
-                <button disabled type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+                <button type="button" v-b-modal="'quick-actions-modal'" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
             </div>
         </template>
 
+        <div class="row pl-2 p-0">
+            <div class="col-12 text-left align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">
+                Products
+            </div>
+        </div>
 
         <template  v-if="isLoading === false && products !== null && products.length === 0" >
             <div class="row">
@@ -39,6 +44,13 @@
                 <div ref="loadingContainerOverride" style="height: 32px"></div>
             </div>
         </div>
+
+        <b-modal id="quick-actions-modal" centered no-fade hide-footer hide-header
+                 @shown="setFocusElementById(100,'stocktake-input', true, true)"
+                 @hidden="setFocusElementById(100,'barcodeInput', true, true)">
+            <stocktake-input></stocktake-input>
+            <hr>
+        </b-modal>
 
     </div>
 </template>
