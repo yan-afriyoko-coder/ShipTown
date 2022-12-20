@@ -279,25 +279,22 @@
                         </div>
                     </div>
 
-                    <div class="container" v-if="currentTab === 'orderActivities'">
-                        <template v-for="activity in order_activities">
-                            <div class="d-flex flex-column flex-md-row align-middle">
-                                <div class="d-none d-md-block align-middle" :title="activity['created_at'] | moment('YYYY-MM-DD H:mm:ss') ">
-                                    {{ activity['created_at'] | moment('MMM DD')  }} <small>@</small> {{ activity['created_at'] | moment('H:mm')  }}:
-                                </div>
-                                <div class="small flex-row d-block d-md-none align-middle">
-                                    {{ activity['created_at'] | moment('MMM DD')  }}
-                                    {{ activity['created_at'] | moment('H:mm')  }}:
-                                </div>
-                                <div class="pl-sm-0 pl-md-1">
-                                    <b>
-                                        {{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }}:
-                                    </b>
-                                    {{ activity['description'] }} {{ activity['properties']['attributes'] ? activity['properties']['attributes'] : activity['properties'] }}
-                                </div>
+                    <template v-if="currentTab === 'orderActivities'">
+                        <div class="row small" v-for="activity in order_activities" :key="activity.id">
+                                    <span :title="formatDateTime(activity['created_at'], 'YYYY-MM-DD H:mm:ss')">
+                                        {{ formatDateTime(activity['created_at'], 'MMM DD H:mm')  }}:
+                                    </span>
+                            <span class="flex-nowrap ml-1">
+                                        {{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }}
+                                    </span>
+                            <span class="flex-nowrap ml-1">
+                                        {{ activity['description'] }}
+                                    </span>
+                            <div class="col-12 pl-3 text-nowrap" v-for="(value, name) in activity['properties']['attributes'] ? activity['properties']['attributes'] : activity['properties']">
+                                {{ name }} = {{ value }}
                             </div>
-                        </template>
-                    </div>
+                        </div>
+                    </template>
 
                 </div>
               </div>

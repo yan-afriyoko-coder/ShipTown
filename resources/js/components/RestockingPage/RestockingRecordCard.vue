@@ -17,18 +17,18 @@
                             </template>
                         </div>
                     </div>
-                    <div class="col-lg-3 small">
+                    <div class="col mt-1 mb-1 small">
                         <div>location: <b>{{ record['warehouse_code'] }}</b></div>
                         <div>last counted at: <b>{{ formatDateTime(record['last_counted_at'],'D MMM HH:MM') }}</b></div>
+                        <div>warehouse stock: <b>{{ record['warehouse_quantity'] }}</b></div>
                     </div>
-                    <div class="col">
-                        <div class="text-center" @click="expanded = !expanded">
-                            <number-card class="fa-pull-left" label="warehouse" :number="record['warehouse_quantity']"></number-card>
-                            <number-card label="restock level" :number="record['restock_level']" v-bind:class="{'bg-warning' : record['restock_level'] <= 0 }"></number-card>
+                    <div class="col-lg-4">
+                        <div class="row-col text-center" @click="expanded = !expanded">
+                            <div class="d-none d-md-inline"><number-card label="restock level" :number="record['restock_level']" v-bind:class="{'bg-warning' : record['restock_level'] <= 0 }"></number-card></div>
                             <number-card label="reorder point" :number="record['reorder_point']" v-bind:class="{'bg-warning' : record['reorder_point'] <= 0 }"></number-card>
                             <number-card label="in stock" :number="record['quantity']" v-bind:class="{'bg-warning' : record['quantity'] < 0 }"></number-card>
                             <number-card label="incoming" :number="record['quantity_incoming']"></number-card>
-                            <number-card class="fa-pull-right" label="required" :number="record['quantity_required']" v-if="record['warehouse_quantity'] > 0"></number-card>
+                            <number-card label="required" :number="record['quantity_required']" v-if="record['warehouse_quantity'] > 0"></number-card>
                             <text-card class="fa-pull-right" label="required" text="N/A" v-if="Number(record['warehouse_quantity']) === 0"></text-card>
                         </div>
 
@@ -38,25 +38,6 @@
                         </div>
 
                         <div v-if="expanded">
-                            <div class="row-col text-center mt-3 small text-secondary">
-                                restock level
-                            </div>
-
-                            <div class="row-col text-nowrap">
-                                <div class="input-group mb-3">
-                                    <button tabindex="-1" @click="minusRestockLevel" class="btn btn-danger mr-3" type="button" id="button-addon3" style="min-width: 45px">-</button>
-                                    <input tabindex="0"
-                                           @keyup="onUpdateRestockLevelEvent"
-                                           v-model="newRestockLevelValue"
-                                           @focus="simulateSelectAll"
-                                           type="number"
-                                           inputmode="numeric"
-                                           class="form-control text-center"
-                                           style="font-size: 24px"
-                                    >
-                                    <button tabindex="-1" @click="plusRestockLevel" class="btn btn-success ml-3" type="button" id="button-addon4" style="min-width: 45px">+</button>
-                                </div>
-                            </div>
 
                             <div class="row-col text-center mt-3 small text-secondary">
                                 reorder point
@@ -78,6 +59,24 @@
                                 </div>
                             </div>
 
+                            <div class="row-col text-center mt-3 small text-secondary">
+                                restock level
+                            </div>
+                            <div class="row-col text-nowrap">
+                                <div class="input-group mb-3">
+                                    <button tabindex="-1" @click="minusRestockLevel" class="btn btn-danger mr-3" type="button" id="button-addon3" style="min-width: 45px">-</button>
+                                    <input tabindex="0"
+                                           @keyup="onUpdateRestockLevelEvent"
+                                           v-model="newRestockLevelValue"
+                                           @focus="simulateSelectAll"
+                                           type="number"
+                                           inputmode="numeric"
+                                           class="form-control text-center"
+                                           style="font-size: 24px"
+                                    >
+                                    <button tabindex="-1" @click="plusRestockLevel" class="btn btn-success ml-3" type="button" id="button-addon4" style="min-width: 45px">+</button>
+                                </div>
+                            </div>
 
                             <div class="row-col text-center align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">
                                     Incoming
