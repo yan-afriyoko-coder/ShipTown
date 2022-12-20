@@ -32,6 +32,7 @@ class FetchBasePricesJob implements ShouldQueue
     {
         MagentoProduct::query()
             ->whereNull('base_prices_fetched_at')
+            ->orWhereNull('base_prices_raw_import')
             ->chunkById(100, function ($products) {
                 collect($products)->each(function (MagentoProduct $product) {
                     try {
