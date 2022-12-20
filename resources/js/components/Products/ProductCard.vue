@@ -16,7 +16,6 @@
                                   <th class="text-left">Shelf</th>
                                   <th>Available</th>
                                   <th class="d-none d-md-table-cell">Reserved</th>
-<!--                                  <th class="d-none d-md-table-cell">In Stock</th>-->
                                   <th>Incoming</th>
                                   <th class="d-none d-md-table-cell">Required</th>
                                   <th>Price</th>
@@ -29,7 +28,6 @@
                                       <td class="text-left">{{ inventory['shelf_location'] }}</td>
                                       <td>{{ toNumberOrDash(inventory['quantity_available'])}}</td>
                                       <td class="d-none d-md-table-cell">{{ toNumberOrDash(inventory['quantity_reserved'])}}</td>
-<!--                                      <td class="d-none d-md-table-cell">{{ toNumberOrDash(inventory['quantity'])}}</td>-->
                                       <td>{{ toNumberOrDash(inventory['quantity_incoming']) }}</td>
                                       <td class="d-none d-md-table-cell">{{ toNumberOrDash(inventory['quantity_required']) }}</td>
                                       <td class="ml-2">{{ toNumberOrDash(product.prices[inventory['warehouse_code']]['price']) }}</td>
