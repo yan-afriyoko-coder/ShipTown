@@ -24,12 +24,12 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-7 text-left text-md-right" @click="expanded = !expanded">
+                    <div class="col-lg-7 text-right text-md-right" @click="expanded = !expanded">
                         <number-card label="warehouse" :number="record['warehouse_quantity']" class="" ></number-card>
-                        <number-card label="reorder point" :number="record['reorder_point']" v-bind:class="{'bg-warning' : record['reorder_point'] <= 0 }"></number-card>
                         <number-card label="restock level" :number="record['restock_level']" v-bind:class="{'bg-warning' : record['restock_level'] <= 0 }"></number-card>
-                        <text-card label="" text="" class="d-md-none"></text-card>
-                        <text-card label="" text="" class="d-md-none"></text-card>
+                        <number-card label="reorder point" :number="record['reorder_point']" v-bind:class="{'bg-warning' : record['reorder_point'] <= 0 }"></number-card>
+<!--                        <text-card label="" text="" class="d-md-none"></text-card>-->
+<!--                        <text-card label="" text="" class="d-md-none"></text-card>-->
                         <number-card label="in stock" :number="record['quantity']" v-bind:class="{'bg-warning' : record['quantity'] < 0 }"></number-card>
                         <number-card label="incoming" :number="record['quantity_incoming']"></number-card>
                         <text-card label="required" text="N/A" v-if="Number(record['warehouse_quantity']) === 0"></text-card>
