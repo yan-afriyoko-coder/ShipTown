@@ -6,7 +6,6 @@ use App\Models\Inventory;
 use App\Models\Product;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -36,13 +35,8 @@ class UpdateProductQuantityJob implements ShouldQueue
             ->where(['product_id' => $this->product_id])
             ->sum('quantity');
 
-        $product = Product::query()
+        Product::query()
             ->where(['id' => $this->product_id])
-            ->where('quantity', '!=', $newQuantity)
-            ->get();
-
-        $product->each(function (Product $product) use ($newQuantity) {
-            $product->update(['quantity' => $newQuantity]);
-        });
+            ->update(['quantity' => $newQuantity]);
     }
 }
