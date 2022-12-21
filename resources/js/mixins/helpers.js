@@ -101,7 +101,11 @@ export default {
                     ]
                 };
 
-                this.$snotify.error(message, options ?? defaultOptions);
+                let finalOptions = {...defaultOptions, ...options};
+
+                console.log(finalOptions);
+
+                this.$snotify.error(message, finalOptions);
             },
 
             notifyError: function (message, options = null) {

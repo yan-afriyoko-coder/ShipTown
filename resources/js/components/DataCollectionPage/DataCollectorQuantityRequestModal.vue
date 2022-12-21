@@ -13,7 +13,7 @@
                     <text-card label="shelf" :text="productNew ? productNew['inventory'][this.currentUser()['warehouse']['code']]['shelf_location'] : 0"></text-card>
                 </div>
                 <div class="row-col text-right mt-3 mb-3">
-                    <number-card :class="{ 'bg-warning': dataCollectionRecord && dataCollectionRecord['quantity_requested'] > productNew['inventory'][this.currentUser()['warehouse']['code']]['quantity']}" label="requested" :number="dataCollectionRecord ? dataCollectionRecord['quantity_requested'] : 0"></number-card>
+                    <number-card :class="{ 'bg-warning': productNew && dataCollectionRecord && dataCollectionRecord['quantity_requested'] > productNew['inventory'][this.currentUser()['warehouse']['code']]['quantity']}" label="requested" :number="dataCollectionRecord ? dataCollectionRecord['quantity_requested'] : 0"></number-card>
                     <number-card label="scanned" :number="dataCollectionRecord ? dataCollectionRecord['quantity_scanned'] : 0"></number-card>
                     <number-card label="to_scan" :number="dataCollectionRecord ? dataCollectionRecord['quantity_to_scan'] : 0"></number-card>
                 </div>
@@ -132,8 +132,6 @@
             },
 
             submitStocktake: function () {
-                this.$bvModal.hide('data-collector-quantity-request-modal');
-
                 if (this.quantity === null) {
                     return;
                 }
@@ -142,7 +140,15 @@
                     return;
                 }
 
-                console.log(this.dataCollection);
+                if (this.quantity.length > 7) {
+                    this.notifyError('Quantity is too large', {'timeout': 5000});
+                    this.setFocusElementById(100,'data-collection-record-quantity-request-input', true, false);
+                    return;
+                }
+
+                this.$bvModal.hide('data-collector-quantity-request-modal');
+
+                console.log(this.quantity.length > 7);
 
                 const data = {
                     'data_collection_id': this.dataCollection['id'],
