@@ -2,7 +2,6 @@
 
 namespace Database\Seeders\Demo;
 
-use App\Http\Controllers\Api\Admin\UserRoleController;
 use App\Models\Warehouse;
 use App\User;
 use Illuminate\Database\Seeder;
@@ -17,25 +16,25 @@ class UsersSeeder extends Seeder
      */
     public function run()
     {
-        // create admin
-        if (User::query()
-            ->where('email', '=', 'admin@products.management')
-            ->doesntExist()) {
-            /** @var User $user */
-            $user = User::factory()->create([
-                'name' => 'Artur Hanusek',
-                'email' => 'admin@products.management',
-                'warehouse_id' => Warehouse::firstOrCreate(['code' => 'DUB'], ['name' => 'Dublin'])->getKey(),
-            ]);
-            $user->assignRole(Role::findOrCreate('admin'));
-        }
+        /** @var User $admin */
+        $admin = User::query()->firstOrCreate([
+            'email' => 'admin@products.management',
+        ], [
+            'name' => 'Artur Hanusek',
+            'warehouse_id' => Warehouse::firstOrCreate(['code' => 'DUB'], ['name' => 'Dublin'])->getKey(),
+            'password' => bcrypt('secret123'),
+        ]);
+        $admin->assignRole(Role::findOrCreate('admin'));
 
-        // create user
-        if (User::query()
-            ->where('email', '=', 'user@products.management')
-            ->doesntExist()) {
-            $user = User::factory()->count(1)->create(['email' => 'user@products.management']);
-            $user->first()->assignRole(Role::findOrCreate('user'));
-        }
+
+        /** @var User $user */
+        $user = User::query()->firstOrCreate([
+            'email' => 'user@products.management',
+        ], [
+            'name' => 'Johny Melavo',
+            'warehouse_id' => Warehouse::firstOrCreate(['code' => 'CRK'], ['name' => 'Cork'])->getKey(),
+            'password' => bcrypt('secret123'),
+        ]);
+        $user->assignRole(Role::findOrCreate('user'));
     }
 }
