@@ -4,7 +4,7 @@
                              @barcodeScanned="barcodeScanned"
         />
 
-        <b-modal @ok="submitStocktake" id="quantity-request-modal" scrollable centered no-fade hide-header>
+        <b-modal @ok="submitStocktake" id="quantity-request-modal" scrollable no-fade hide-header>
             <template v-if="inventory">
                 <div>SKU: {{ inventory.product.sku }}</div>
                 <div>Name: {{ inventory.product.name }}</div>
