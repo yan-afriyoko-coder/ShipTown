@@ -1,18 +1,18 @@
 <template>
     <div v-if="order">
         <div class="card">
-            <div class="row rounded p-2">
-                <div class="col-12 col-lg-6">
+            <div class="row rounded p-2 ">
+                <div class="col-lg-6">
                     <h5 class="text-primary">
                         <font-awesome-icon icon="copy" class="fa-xs" role="button" @click="copyToClipBoard(order['order_number'])"></font-awesome-icon>
                         <a :href="'/orders/?search=' + order['order_number']">{{ order['order_number'] }}</a>
                     </h5>
 
-                    <div class="small font-weight-bold">{{ order['status_code'] }}</div>
                     <div class="small font-weight-bold">{{ formatDateTime(order['created_at']) }}</div>
+                    <div class="small font-weight-bold">{{ order['status_code'] }}</div>
                     <div class="small">{{ order['label_template'] }}</div>
                 </div>
-                <div class="col text-right small">
+                <div class="col-lg-6 text-right small">
                     <number-card :number="order['age_in_days']" label="age"/>
                     <div class="d-none d-md-inline-block">
                         <number-card :number="order['order_products_totals']['total_price']" label="total" ></number-card>

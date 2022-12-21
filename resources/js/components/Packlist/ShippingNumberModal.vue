@@ -1,5 +1,5 @@
 <template>
-    <div class="modal fade set-shipping-number-modal"  id="shippingNumberModal" tabindex="-1" role="dialog" aria-labelledby="setShippingNumberModalLabel" aria-hidden="true">
+    <div class="modal fade set-shipping-number-modal" @ id="shippingNumberModal" tabindex="-1" role="dialog" aria-labelledby="setShippingNumberModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div ref="setShippingNumberModal" class="modal-content">
                 <div class="modal-header">
