@@ -27,7 +27,7 @@ class DetectAndFixIncorrectQuantityJob implements ShouldQueue
      */
     public function handle()
     {
-        $query = Product::query()
+        $result = Product::query()
             ->whereRaw(/** @lang mysql */  "
                 id IN (
                     select
@@ -46,19 +46,18 @@ class DetectAndFixIncorrectQuantityJob implements ShouldQueue
                     having max(products.quantity) != sum(inventory.quantity)
                 )
                 ")
-            ->limit(200);
+            ->limit(200)
+            ->get();
 
-        $result = $query->get();
-
-        while ($result->count() > 0) {
-            Log::warning('Found products with incorrect quantity: ', ['count' => $result->count()]);
-
-            $result->each(function (Product $product) {
-                UpdateProductQuantityJob::dispatch($product->getKey());
-                UpdateProductQuantityReservedJob::dispatch($product->getKey());
-            });
-
-            $result = $query->get();
+        if ($result->isEmpty()) {
+            return;
         }
+
+        Log::warning('Found products with incorrect quantity: ', ['count' => $result->count()]);
+
+        $result->each(function (Product $product) {
+            UpdateProductQuantityJob::dispatch($product->getKey());
+            UpdateProductQuantityReservedJob::dispatch($product->getKey());
+        });
     }
 }
