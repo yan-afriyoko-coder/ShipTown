@@ -110,6 +110,10 @@ export default {
 
     methods: {
         pickByBarcode(barcode) {
+            if (barcode === '') {
+                return;
+            }
+
             let pickItem = this.findPickItem(barcode);
 
             if(!pickItem) {
@@ -158,9 +162,7 @@ export default {
         reloadPicks() {
             this.setFocusOnBarcodeInput(500);
 
-            this.showLoading();
-
-            this.picklist = [];
+            // this.picklist = [];
             const params = {
                 'include': 'product,product.aliases',
                 'sort': 'inventory_source_shelf_location,sku_ordered',
@@ -178,9 +180,6 @@ export default {
                 })
                 .catch( error => {
                     this.$snotify.error('Action failed (Http code  '+ error.response.status+')');
-                })
-                .finally( () => {
-                        this.hideLoading();
                 });
         },
 
@@ -217,6 +216,7 @@ export default {
                     this.displayPickedNotification(pick, pick['quantity_required']);
                     this.beep();
                     this.removeFromPicklist(pick);
+                    this.reloadPicks();
                 });
             this.setFocusOnBarcodeInput();
         },
