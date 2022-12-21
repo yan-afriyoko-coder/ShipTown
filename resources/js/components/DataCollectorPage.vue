@@ -210,6 +210,10 @@
             },
 
             onBarcodeScanned: function (barcode) {
+                if (barcode === '') {
+                    return;
+                }
+
                 this.scannedProduct = null;
                 this.scannedDataCollectionRecord = null;
 
