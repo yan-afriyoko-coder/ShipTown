@@ -462,7 +462,7 @@
                         })
                         .then((data) => {
                             this.somethingHasBeenPackedDuringThisSession = true;
-                            this.displayPackedNotification(data.data);
+                            this.notifySuccess(data.data.data.quantity_shipped + ' x ' + '' + ' shipped');
                         })
                         .catch((error) => {
                             this.apiActivitiesPost({
@@ -614,17 +614,6 @@
                     }
 
                     this.loadOrder(this.previous_order_id);
-                },
-
-                displayPackedNotification: function (order_product_shipment) {
-                    const msg =  order_product_shipment.data.quantity_shipped + ' x ' + '' + ' shipped';
-                    this.$snotify.confirm(msg, {
-                        timeout: 3000,
-                        showProgressBar: false,
-                        pauseOnHover: true,
-                        icon: false,
-                        buttons: []
-                    });
                 },
 
                 updateLabelTemplate: function () {
