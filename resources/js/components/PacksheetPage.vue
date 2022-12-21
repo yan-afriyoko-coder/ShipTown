@@ -70,23 +70,24 @@
             <input id="shipping_number_input" class="form-control" placeholder="Scan shipping number"
                    v-model="shippingNumberInput"
                    @focus="simulateSelectAll"
-                   @keypress.enter="addShippingNumber"/>
+                   @keypress.enter.prevent="addShippingNumber"/>
             <hr>
             <div class="text-right">
-                <button type="button" @click="closeAskForShippingNumberModal" class="btn btn-secondary">Cancel</button>
+                <button type="button" @click.prevent="closeAskForShippingNumberModal" class="btn btn-secondary">Cancel</button>
                 <button type="button" @click.prevent="addShippingNumber" class="btn btn-primary">OK</button>
             </div>
         </b-modal>
 
-        <b-modal id="filtersModal" ref="filtersModal" centered no-fade hide-footer hide-header @hidden="setFocusOnBarcodeInput(100)">
+        <b-modal id="filtersModal" ref="filtersModal" centered no-fade hide-footer hide-header
+                 @hidden="setFocusOnBarcodeInput(100)">
                 <div class="form-group">
-                    <label class="form-label" for="selectStatus">Status</label>
+                    <label class="form-label">Status</label>
                     <select id="selectStatus" class="form-control" @change="changeStatus" v-model="order.status_code">
                         <option v-for="orderStatus in orderStatuses" :value="orderStatus.code" :key="orderStatus.id">{{ orderStatus.code }}</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label" for="selectStatus">Courier</label>
+                    <label class="form-label">Courier</label>
                     <select id="courierSelect" class="form-control" @change="updateLabelTemplate" v-model="order.label_template">
                         <option :value="''"></option>
                         <option v-for="shippingCourier in shippingCouriers" :value="shippingCourier.code" :key="shippingCourier.code">{{shippingCourier.code}}</option>
@@ -178,6 +179,8 @@
                     if (this.order['is_packed'] === true) {
                         return;
                     }
+
+                    this.somethingHasBeenPackedDuringThisSession = false;
 
                     this.completeOrder();
                 },
@@ -390,6 +393,7 @@
                 },
 
                 showShippingNumberRequestModal() {
+                    this.$refs.filtersModal.hide();
                     this.$refs.shippingNumberModal2.show();
                 },
 
@@ -413,9 +417,12 @@
 
                     this.apiPostOrderShipment(data)
                         .then(() => {
+                            this.$refs.shippingNumberModal2.hide();
+
                             if(this.packlist.length === 0) {
                                 this.$emit('orderCompleted')
                             }
+
                             this.notifySuccess('Shipping number saved');
                         })
                         .catch(() => {
@@ -436,14 +443,14 @@
                     this.order['is_packed'] = true;
                     this.order['packer_user_id'] = Vue.prototype.$currentUser['id'];
 
-                    return await this.apiUpdateOrder(this.order['id'],{
+                    return await this.apiUpdateOrder(this.order_id,{
                             'is_packed': true,
                             'packer_user_id': Vue.prototype.$currentUser['id']
                         })
                         .catch((error) => {
                             this.apiActivitiesPost({
                                 'subject_type': 'order',
-                                'subject_id': this.order.id,
+                                'subject_id': this.order_id,
                                 'description': 'Error occurred when marking order as packed'
                             });
                             this.notifyError('Error: '+error.response.message);
@@ -467,7 +474,7 @@
                         .catch((error) => {
                             this.apiActivitiesPost({
                                 'subject_type': 'order',
-                                'subject_id': this.order.id,
+                                'subject_id': this.order_id,
                                 'description': 'Error occurred when shipping products, try again'
                             });
                             this.displayApiCallError(error);
@@ -580,7 +587,7 @@
 
                     let params = {
                         'shipping_service_code': shipping_service_code,
-                        'order_id': this.order.id
+                        'order_id': this.order_id
                     };
 
                     return this.apiPostShippingLabel(params)
