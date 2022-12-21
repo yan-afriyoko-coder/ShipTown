@@ -22,15 +22,15 @@
                 &nbsp; No recent stocktakes found
             </div>
 
-                        <div class="row card text-secondary p-1 pl-2 mb-2" v-if="recentStocktakes.data.length > 0">
-                            <template v-for="itemMovement in recentStocktakes.data">
-                                    <div>
-                                        {{ Number(itemMovement['quantity_after']) }} x
-                                        {{ itemMovement['product']['sku'] }}
-                                        - {{ itemMovement['product']['name'] }}
-                                    </div>
-                            </template>
+            <div class="row card text-secondary p-1 pl-2 mb-2" v-if="recentStocktakes.data.length > 0">
+                <template v-for="itemMovement in recentStocktakes.data">
+                        <div>
+                            {{ Number(itemMovement['quantity_after']) }} x
+                            {{ itemMovement['product']['sku'] }}
+                            - {{ itemMovement['product']['name'] }}
                         </div>
+                </template>
+            </div>
         </template>
 
         <div class="row mt-2 pl-2 p-1 font-weight-bold text-uppercase small text-secondary">

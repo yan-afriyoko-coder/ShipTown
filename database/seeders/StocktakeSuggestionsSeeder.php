@@ -1,8 +1,12 @@
 <?php
+
 namespace Database\Seeders;
 
+use App\Models\Inventory;
+use App\Models\StocktakeSuggestion;
+use Illuminate\Database\Seeder;
 
-class StocktakeSuggestionsSeeder extends \Illuminate\Database\Seeder
+class StocktakeSuggestionsSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,14 +15,15 @@ class StocktakeSuggestionsSeeder extends \Illuminate\Database\Seeder
      */
     public function run()
     {
-//        $inventories = \App\Models\Inventory::all();
-//
-//        $inventories->each(function (\App\Models\Inventory $inventory) {
-//            $stocktakeSuggestion = new \App\Models\StocktakeSuggestion();
-//            $stocktakeSuggestion->inventory_id  = $inventory->getKey();
-//            $stocktakeSuggestion->points  = 10;
-//            $stocktakeSuggestion->reason  = 'Test';
-//            $stocktakeSuggestion->save();
-//        });
+        $inventories = Inventory::query()->inRandomOrder()->limit(10)->get();
+
+        $inventories->each(function (Inventory $inventory) {
+            $stocktakeSuggestion = new StocktakeSuggestion();
+            $stocktakeSuggestion->product_id  = $inventory->product_id;
+            $stocktakeSuggestion->inventory_id  = $inventory->getKey();
+            $stocktakeSuggestion->points  = 20;
+            $stocktakeSuggestion->reason  = 'Manual stoctake request';
+            $stocktakeSuggestion->save();
+        });
     }
 }

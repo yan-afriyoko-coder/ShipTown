@@ -11,6 +11,7 @@ use Makeable\LaravelFactory\HasFactory;
  * @property int inventory_id
  * @property int points
  * @property string reason
+ * @property int $product_id
  */
 class StocktakeSuggestion extends BaseModel
 {

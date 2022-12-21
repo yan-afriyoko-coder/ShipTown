@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Jobs\RunHourlyJobs;
+use App\Models\StocktakeSuggestion;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -24,6 +25,7 @@ class DatabaseSeeder extends Seeder
             Demo\ProductsTagsSeeder::class,
 
             InventorySeeder::class,
+            StocktakeSuggestionsSeeder::class,
             ProductPriceSeeder::class,
 
 //            RestockingReportSeeder::class,
