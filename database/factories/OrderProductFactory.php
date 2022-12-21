@@ -21,7 +21,7 @@ class OrderProductFactory extends Factory
         $randomQuantityOrdered = Arr::random([1, 1, 1, 1, 2, 2, 3, 3]) * Arr::random([1, 1, 1, 1, 1, 1, 1, 1, 2, 3]);
 
         /** @var Product $product */
-        $product = Product::factory()->create();
+        $product = Product::query()->inRandomOrder()->first() ?? Product::factory()->create();
 
         return [
             'order_id'         => function () {
