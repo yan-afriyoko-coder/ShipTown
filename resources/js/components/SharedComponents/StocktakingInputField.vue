@@ -134,7 +134,7 @@
             })
 
             this.$root.$on('bv::modal::shown', (bvEvent, modalId) => {
-                this.setFocusElementById(100, 'quantity-request-input', true, false)
+                this.setFocusElementById(300, 'quantity-request-input', true, false)
             })
         },
 
