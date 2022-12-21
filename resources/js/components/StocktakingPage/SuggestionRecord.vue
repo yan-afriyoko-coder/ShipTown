@@ -18,24 +18,21 @@
                 </div>
             </div>
         </div>
-        <div @click="toggleDetails" v-if="!showDetails" class="row text-center text-secondary">
+
+        <div @click="toggleDetails" class="row text-center text-secondary">
             <div class="col">
-                <font-awesome-icon icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
+                <font-awesome-icon v-if="!showDetails" icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
+                <font-awesome-icon v-if="showDetails"  icon="chevron-up" class="fa fa-xs text-secondary"></font-awesome-icon>
             </div>
         </div>
 
-        <template v-if="showDetails" @click="toggleDetails" >
-            <div class="row text-center">
-                <div class="col">
-                    <font-awesome-icon icon="chevron-up" class="fa fa-xs text-secondary"></font-awesome-icon>
-                </div>
-            </div>
+       <template v-if="showDetails" @click="toggleDetails" >
             <div class="row" v-for="detail in suggestionDetails">
                 <div class="col">
                     {{ detail['points'] }} points - {{ detail['reason'] }}
                 </div>
             </div>
-        </template>
+       </template>
     </div>
 </template>
 
