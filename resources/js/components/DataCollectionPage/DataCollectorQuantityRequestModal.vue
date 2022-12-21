@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-modal @ok="submitStocktake" id="data-collector-quantity-request-modal" scrollable centered no-fade hide-header
+        <b-modal @ok="submitStocktake" id="data-collector-quantity-request-modal" scrollable no-fade hide-header
                  @shown="modalShown"
                  @hidden="onHidden"
         >
