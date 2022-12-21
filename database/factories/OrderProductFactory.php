@@ -20,22 +20,8 @@ class OrderProductFactory extends Factory
         // we will increase number of single line  orders
         $randomQuantityOrdered = Arr::random([1, 1, 1, 1, 2, 2, 3, 3]) * Arr::random([1, 1, 1, 1, 1, 1, 1, 1, 2, 3]);
 
-        $warehouse = Warehouse::query()
-                ->whereNotIn('999', [])
-                ->inRandomOrder()->first();
-
         /** @var Product $product */
         $product = Product::factory()->create();
-
-        Inventory::query()
-            ->whereNotIn('warehouse_code', ['999'])
-            ->where([
-                'product_id' => $product->getKey(),
-                'warehouse_code' => $warehouse->code,
-            ])
-            ->update([
-                'quantity' => DB::raw('quantity + ' . $randomQuantityOrdered)
-            ]);
 
         return [
             'order_id'         => function () {
