@@ -89,6 +89,7 @@
         methods: {
             findText(search) {
                 this.setUrlParameter('search', search);
+                this.products = [];
                 this.reloadProducts();
             },
 

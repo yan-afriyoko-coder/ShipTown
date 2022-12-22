@@ -85,11 +85,11 @@
         methods: {
             findText(param) {
                 this.setUrlParameter('search', param);
+                this.orders = [];
                 this.reloadOrders();
             },
 
             reloadOrders(e) {
-                this.orders = [];
                 this.loadOrderList();
             },
 
@@ -118,7 +118,12 @@
 
                 this.apiGetOrders(params)
                     .then(({ data }) => {
-                        this.orders = this.orders.concat(data.data);
+                        if (page === 1) {
+                            this.orders = data.data;
+                        } else {
+                            this.orders = this.orders.concat(data.data);
+                        }
+
                         this.lastPage = data.meta.last_page
                         this.lastPageLoaded = page;
                     })
