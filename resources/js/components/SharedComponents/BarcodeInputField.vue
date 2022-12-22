@@ -217,7 +217,7 @@
                     return;
                 }
 
-                this.$bvModal.hide('set-shelf-location-command-modal');
+                this.$bvModal.hide(this.getModalID);
             },
 
             setFocusOnBarcodeInput(delay = 1) {
