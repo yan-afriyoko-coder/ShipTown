@@ -176,7 +176,6 @@ Vue.component('restocking-record-card', require('./components/RestockingPage/Res
 Vue.component('data-collector-quantity-request-modal', require('./components/DataCollectionPage/DataCollectorQuantityRequestModal.vue').default);
 
 Vue.component('barcode-input-field', require('./components/SharedComponents/BarcodeInputField.vue').default);
-Vue.component('stocktaking-input-field', require('./components/SharedComponents/StocktakingInputField.vue').default);
 Vue.component('product-count-request-input-field', require('./components/SharedComponents/ProductCountRequestInputField.vue').default);
 Vue.component('restocking-page', require('./components/RestockingPage.vue').default);
 Vue.component('products-table', require('./components/ProductsPage.vue').default);

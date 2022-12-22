@@ -2,7 +2,7 @@
     <div>
         <div class="row mb-1 pb-2 p-1 sticky-top bg-light">
             <div class="flex-fill">
-                <stocktaking-input-field @stocktakeSubmitted="reloadData"></stocktaking-input-field>
+                <stocktake-input @stocktakeSubmitted="reloadData"></stocktake-input>
             </div>
 
             <button id="config-button" disabled type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
@@ -149,10 +149,6 @@
             loadStocktakeSuggestions(page = 1) {
                 this.showLoading();
 
-                if (page === 1) {
-                    this.stocktakeSuggestions = null;
-                }
-
                 let params = {...this.$router.currentRoute.query};
                 params['include'] = 'product,inventory,product.tags,product.prices';
                 params['sort'] = this.getUrlParameter('sort', '-points,');
@@ -163,11 +159,13 @@
                     .then((response) => {
                         if (page === 1) {
                             this.stocktakeSuggestions = [];
+                            this.stocktakeSuggestions = response.data.data;
+                        } else {
+                            this.stocktakeSuggestions = this.stocktakeSuggestions.concat(response.data.data);
                         }
                         this.reachedEnd = response.data.data.length === 0;
                         this.pagesLoaded = page;
 
-                        this.stocktakeSuggestions = this.stocktakeSuggestions.concat(response.data.data);
                     })
                     .catch((error) => {
                         this.displayApiCallError(error);
