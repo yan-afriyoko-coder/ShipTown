@@ -74,7 +74,13 @@ export default {
             window.onscroll = () => this.loadMore();
 
             if (this.initial_data) {
-                this.data = this.initial_data;
+                // this is dirty trick to "simulate" data reload for better UX
+                setTimeout(() => {
+                    if (this.data.length > 0) {
+                        return;
+                    }
+                    this.data = this.initial_data;
+                }, 100);
             }
         },
 
