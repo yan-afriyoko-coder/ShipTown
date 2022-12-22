@@ -78,7 +78,7 @@
             </div>
         </b-modal>
 
-        <b-modal id="filtersModal" ref="filtersModal" centered no-fade hide-footer hide-header
+        <b-modal id="filtersModal" ref="filtersModal" no-fade hide-footer hide-header
                  @hidden="setFocusOnBarcodeInput(100)">
                 <div class="form-group">
                     <label class="form-label">Status</label>

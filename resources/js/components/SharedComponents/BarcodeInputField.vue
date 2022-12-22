@@ -12,7 +12,7 @@
                @keyup.enter="barcodeScanned(barcode)"
         />
 
-      <b-modal :id="getModalID" @submit="updateShelfLocation" @shown="updateShelfLocationShown" @hidden="updateShelfLocationHidden" scrollable centered no-fade hide-header>
+      <b-modal :id="getModalID" @submit="updateShelfLocation" @shown="updateShelfLocationShown" @hidden="updateShelfLocationHidden" scrollable no-fade hide-header>
           <div class="h5 text-center">{{ command['name'] }} : {{ command['value'] }}</div>
           <div v-if="shelfLocationModalContinuesScan" class="alert-success text-center mb-2 small">CONTINUES SCAN ENABLED</div>
 

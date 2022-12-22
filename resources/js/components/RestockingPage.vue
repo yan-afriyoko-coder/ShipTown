@@ -17,7 +17,7 @@
             </div>
         </div>
 
-        <b-modal id="configuration-modal" centered no-fade hide-footer hide-header
+        <b-modal id="configuration-modal" no-fade hide-footer hide-header
                  @shown="setFocusElementById(100,'stocktake-input', true, true)"
                  @hidden="focusOnInputAndReload">
             <stocktake-input></stocktake-input>
