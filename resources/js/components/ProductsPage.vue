@@ -93,7 +93,6 @@
             },
 
             reloadProducts() {
-                this.products = [];
                 this.loadProductList();
             },
 
@@ -114,9 +113,10 @@
                 this.apiGetProducts(params)
                     .then(({data}) => {
                         if (page === 1) {
-                            this.products = [];
+                            this.products = data.data;
+                        } else {
+                            this.products = this.products.concat(data.data);
                         }
-                        this.products = this.products.concat(data.data);
                         this.lastPage = data.meta.last_page;
                         this.lastPageLoaded = page;
                     })
