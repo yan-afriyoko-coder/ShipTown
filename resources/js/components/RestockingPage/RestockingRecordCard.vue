@@ -26,7 +26,7 @@
                         <div class="row-col text-center" @click="expanded = !expanded">
                             <div class="d-none d-md-inline"><number-card label="restock level" :number="record['restock_level']" v-bind:class="{'bg-warning' : record['restock_level'] <= 0 }"></number-card></div>
                             <number-card label="reorder point" :number="record['reorder_point']" v-bind:class="{'bg-warning' : record['reorder_point'] <= 0 }"></number-card>
-                            <number-card label="in stock" :number="record['quantity']" v-bind:class="{'bg-warning' : record['quantity'] < 0 }"></number-card>
+                            <number-card label="in stock" :number="record['quantity_in_stock']" v-bind:class="{'bg-warning' : record['quantity_in_stock'] < 0 }"></number-card>
                             <number-card label="incoming" :number="record['quantity_incoming']"></number-card>
                             <number-card label="required" :number="record['quantity_required']" v-if="record['warehouse_quantity'] > 0"></number-card>
                             <text-card class="fa-pull-right" label="required" text="N/A" v-if="Number(record['warehouse_quantity']) === 0"></text-card>
@@ -72,6 +72,7 @@
                                            type="number"
                                            inputmode="numeric"
                                            class="form-control text-center"
+                                           v-bind:class="{ 'alert-danger': newRestockLevelValue < newReorderPointValue }"
                                            style="font-size: 24px"
                                     >
                                     <button tabindex="-1" @click="plusRestockLevel" class="btn btn-success ml-3" type="button" id="button-addon4" style="min-width: 45px">+</button>
@@ -178,9 +179,8 @@ export default {
 
         methods: {
             minusRestockLevel() {
-                if (Number(this.record['restock_level']) <= 0) {
-                    this.updateRestockLevel(Number(this.record['quantity_in_stock']) + Number(this.record['quantity_incoming']) - 1);
-
+                if (Number(this.newRestockLevelValue) - 1 < Number(this.newReorderPointValue)) {
+                    this.updateRestockLevel(Number(this.record['reorder_point']));
                     return;
                 }
 
@@ -188,9 +188,8 @@ export default {
             },
 
             plusRestockLevel() {
-                if (Number(this.record['restock_level']) === 0) {
-                    this.updateRestockLevel(Math.max(0, Number(this.record['quantity_in_stock']) + Number(this.record['quantity_incoming'])) + 1);
-
+                if (Number(this.newRestockLevelValue) < Number(this.newReorderPointValue)) {
+                    this.updateRestockLevel(Number(this.record['reorder_point']));
                     return;
                 }
 
@@ -199,7 +198,7 @@ export default {
 
             minusReorderPoint() {
                 if (Number(this.record['reorder_point']) === 0) {
-                    this.updateReorderPoint(Math.ceil(Number(this.record['quantity_in_stock']) / 2) - 1);
+                    this.updateReorderPoint(Math.ceil(Number(this.record['quantity_in_stock']) / 3));
                     return;
                 }
 
@@ -207,12 +206,6 @@ export default {
             },
 
             plusReorderPoint() {
-                if (Number(this.record['reorder_point']) === 0) {
-                    let value = Math.min(this.record['quantity_in_stock'], this.record['restock_level'], );
-                    this.updateReorderPoint(Math.ceil(Number(value) / 2) + 1);
-                    return;
-                }
-
                 this.updateReorderPoint(Number(this.record['reorder_point']) + 1);
             },
 
@@ -244,20 +237,31 @@ export default {
                         this.notifyError(error);
                     });
             },
-            updateRestockLevel(value) {
-                this.record['restock_level'] = Math.max(0, Number(value));
-                this.record['reorder_point'] = Math.ceil(Number(this.record['restock_level']) * 0.32);
 
-                if (Number(this.record['restock_level']) < 4) {
-                    this.record['reorder_point'] = Math.floor(Number(this.record['restock_level']) - 1);
+            updateRestockLevel(value) {
+                if (this.record['reorder_point'] > value) {
+                    return;
                 }
+
+                this.record['restock_level'] = value;
 
                 this.postInventoryUpdate();
             },
 
             updateReorderPoint(value) {
-                this.record['reorder_point'] = Math.max(0, Number(value));
-                this.record['restock_level'] = Math.max(Number(this.record['restock_level']), Number(this.record['reorder_point']));
+                let newValue = Math.max(0, Number(value));
+
+                if (this.record['reorder_point'] > 0) {
+                    let ratio = this.record['restock_level'] / this.record['reorder_point'];
+
+                    if (ratio < 1) {
+                        ratio = 3;
+                    }
+
+                    this.record['restock_level'] = Math.ceil(newValue * ratio);
+                }
+
+                this.record['reorder_point'] = newValue;
 
                 this.postInventoryUpdate();
             },
