@@ -124,6 +124,8 @@
                 this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
                 this.$bvModal.hide(this.modal_name);
             }
+
+            this.setFocusElementById(100, this.input_id, true, true);
         },
 
         methods: {
