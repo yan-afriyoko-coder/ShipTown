@@ -85,13 +85,14 @@
         },
 
         mounted() {
+            console.log(this.currentUser());
             if (! this.currentUser()['warehouse_id']) {
                 this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
                 return;
             }
 
-            this.getUrlFilterOrSet('filter[warehouse_code]', this.currentUser()['warehouse']['code']);
-
+            // this.getUrlFilterOrSet('filter[warehouse_code]', this.currentUser()['warehouse']['code']);
+3
             window.onscroll = () => this.loadMore();
 
             this.loadStocktakeSuggestions();

@@ -161,10 +161,11 @@ class StocktakingPageTest extends DuskTestCase
                 ->visit($this->uri)
                 ->pause(500)
                 ->assertSourceMissing('snotify-error')
-                ->assertFocused('@barcode-input-field')
-                ->type('@barcode-input-field', 'not-existing-sku')
-                ->keys('@barcode-input-field', '{enter}')
-                ->waitForText('Product not found');
+                ->assertFocused('#stocktake-input')
+                ->type('#stocktake-input', 'not-existing-sku')
+                ->keys('#stocktake-input', '{enter}')
+                ->waitForText('Product not found')
+                ->assertSourceHas('snotify-error');
         });
     }
 }
