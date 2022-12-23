@@ -38,16 +38,16 @@ class StocktakingPageTest extends DuskTestCase
                 ->visit($this->uri)
                 ->pause(500)
                 ->assertSourceMissing('snotify-error')
-                ->assertFocused('@barcode-input-field');
+                ->assertFocused('#stocktake-input');
 
             while (rand(1, 3) !== 1) {
                 /** @var Product $product */
                 $product = Product::factory()->create();
 
-                $browser->assertFocused('@barcode-input-field')
+                $browser->assertFocused('#stocktake-input')
                     ->screenshot('StocktakingPage');
-                $browser->type('@barcode-input-field', $product->sku);
-                $browser->keys('@barcode-input-field', '{enter}');
+                $browser->type('#stocktake-input', $product->sku);
+                $browser->keys('#stocktake-input', '{enter}');
 
                 $browser->waitFor('#quantity-request-input');
                 $browser->pause(500);
@@ -61,7 +61,7 @@ class StocktakingPageTest extends DuskTestCase
                 $browser->waitForText('Stocktake updated');
                 $browser->assertMissing('#quantity-request-input');
                 $browser->pause(500);
-                $browser->assertFocused('@barcode-input-field');
+                $browser->assertFocused('#stocktake-input');
             }
         });
     }
@@ -83,8 +83,7 @@ class StocktakingPageTest extends DuskTestCase
             $browser->loginAs($user)
                 ->visit($this->uri)
                 ->pause(500)
-                ->assertSourceMissing('snotify-error')
-                ->assertFocused('@barcode-input-field');
+                ->assertSourceMissing('snotify-error');
 
             $browser->driver->getKeyboard()->sendKeys($product->sku);
             $browser->driver->getKeyboard()->sendKeys(WebDriverKeys::ENTER);
@@ -97,12 +96,14 @@ class StocktakingPageTest extends DuskTestCase
             $browser->driver->getKeyboard()->sendKeys(-1);
             $browser->driver->getKeyboard()->sendKeys(WebDriverKeys::ENTER);
 
-            $browser->waitForText('Minus quantity not allowed')
-                ->assertVisible('#quantity-request-input')
-                ->pause(500)
-                ->assertFocused('@quantity-request-input');
+            $browser->waitForText('Minus quantity not allowed');
+            $browser->assertVisible('#quantity-request-input');
+            $browser->assertFocused('#quantity-request-input');
 
             $browser->driver->getKeyboard()->sendKeys(WebDriverKeys::ESCAPE);
+
+            $browser->pause(500);
+            $browser->assertFocused('#stocktake-input');
         });
     }
 
@@ -121,12 +122,12 @@ class StocktakingPageTest extends DuskTestCase
                 ->visit($this->uri)
                 ->pause(500)
                 ->assertSourceMissing('snotify-error')
-                ->assertFocused('@barcode-input-field');
+                ->assertFocused('#stocktake-input');
 
             /** @var ProductAlias $alias */
             $alias = ProductAlias::query()->inRandomOrder()->first() ?? ProductAlias::factory()->create();
 
-            $browser->assertFocused('@barcode-input-field');
+            $browser->assertFocused('#stocktake-input');
 
             $browser->driver->getKeyboard()->sendKeys($alias->product->sku);
             $browser->driver->getKeyboard()->sendKeys(WebDriverKeys::ENTER);
@@ -143,7 +144,7 @@ class StocktakingPageTest extends DuskTestCase
             $browser->waitForText('Stocktake updated')
                 ->assertMissing('#quantity-request-input')
                 ->pause(500)
-                ->assertFocused('@barcode-input-field');
+                ->assertFocused('#stocktake-input');
         });
     }
 
