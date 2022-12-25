@@ -32,7 +32,7 @@ export default {
             },
 
             toNumberOrDash(value) {
-                return this.dashIfZero(Number(value));
+                return this.dashIfZero(Number(value)).toLocaleString().replace(',', ' ');
             },
 
             dashIfZero(value) {
@@ -101,7 +101,9 @@ export default {
                     ]
                 };
 
-                this.$snotify.error(message, options ?? defaultOptions);
+                let finalOptions = {...defaultOptions, ...options};
+
+                this.$snotify.error(message, finalOptions);
             },
 
             notifyError: function (message, options = null) {

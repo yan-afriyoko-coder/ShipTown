@@ -63,9 +63,9 @@ export default {
         this.apiGetPrintNodePrinters()
             .then(({ data }) => {
                 this.printers = data.data;
-            }).catch(e => {
-                this.errorMessage = e.message;
-                this.showError('Request failed: ' + e.message);
+            })
+            .catch(e => {
+                this.displayApiCallError(e);
             });
     },
 
@@ -82,6 +82,9 @@ export default {
                 })
                 .then(({ data }) => {
                     this.defaultPrinter = data.printer_id;
+                })
+                .catch(e => {
+                    this.displayApiCallError(e);
                 });
         },
 
@@ -96,8 +99,7 @@ export default {
                     this.$snotify.info('Test page sent to PrintNode');
                 })
                 .catch(e => {
-                    this.errorMessage = e.message;
-                    this.showError('Request failed: ' + e.message);
+                    this.displayApiCallError(e);
                 });
         },
 
@@ -113,8 +115,7 @@ export default {
                     this.$snotify.info('Test page sent to PrintNode');
                 })
                 .catch(e => {
-                    this.errorMessage = e.message;
-                    this.showError('Request failed: ' + e.message);
+                    this.displayApiCallError(e);
                 });
         },
 

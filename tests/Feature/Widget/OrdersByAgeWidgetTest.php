@@ -15,7 +15,7 @@ class OrdersByAgeWidgetTest extends TestCase
      */
     public function testIfRuns()
     {
-        factory(Order::class)->create();
+        Order::factory()->create();
 
         $widget = new OrdersByAgeWidget();
 

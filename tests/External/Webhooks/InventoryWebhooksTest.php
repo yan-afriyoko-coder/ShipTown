@@ -19,8 +19,8 @@ class InventoryWebhooksTest extends TestCase
 
         Bus::fake();
 
-        factory(Product::class)->create();
-        factory(Warehouse::class)->create();
+        Product::factory()->create();
+        Warehouse::factory()->create();
 
         $inventory = Inventory::where([
             'product_id' => Product::first()->getKey(),

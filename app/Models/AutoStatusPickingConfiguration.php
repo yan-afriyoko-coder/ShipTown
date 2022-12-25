@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -30,6 +31,8 @@ use Illuminate\Support\Carbon;
  */
 class AutoStatusPickingConfiguration extends Model
 {
+    use HasFactory;
+
     protected $table = 'modules_autostatus_picking_configurations';
 
     /**

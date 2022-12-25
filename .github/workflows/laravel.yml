@@ -1,4 +1,4 @@
-name: PHP 7.4
+name: PHP 8.1 - PHPUnit
 on: [push]
 
 env:
@@ -16,7 +16,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.4
+          php-version: 8.1
       - name: Prepare The Environment
         run: cp .env.example .env
       - name: Create Database

@@ -19,8 +19,8 @@ class BasicModuleTest extends TestCase
     {
         InventoryTotalsServiceProvider::enableModule();
 
-        $product = factory(Product::class)->create();
-        $warehouse = factory(Warehouse::class)->create();
+        $product = Product::factory()->create();
+        $warehouse = Warehouse::factory()->create();
 
         $randomQuantity = rand(1, 100);
 

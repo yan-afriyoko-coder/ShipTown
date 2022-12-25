@@ -25,10 +25,10 @@ class StoreTest extends TestCase
     /** @test */
     public function test_store_call_returns_ok()
     {
-        $user = factory(User::class)->create();
-        $order = factory(Order::class)->create();
+        $user = User::factory()->create();
+        $order = Order::factory()->create();
 
-        factory(ShippingService::class)->create([
+        ShippingService::factory()->create([
             'code' => 'test_service',
             'service_provider_class' => TestShipmentService::class
         ]);

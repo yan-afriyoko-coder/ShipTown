@@ -14,7 +14,7 @@ class IndexTest extends TestCase
     public function test_index_call_returns_ok()
     {
         /** @var User $user * */
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $user->assignRole('admin');
 
         $response = $this->actingAs($user, 'api')->getJson(route('api.settings.module.api2cart.connections.index'));

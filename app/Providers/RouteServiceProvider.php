@@ -2,20 +2,14 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Http\Request;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    /**
-     * This namespace is applied to your controller routes.
-     *
-     * In addition, it is set as the URL generator's root namespace.
-     *
-     * @var string
-     */
-    protected $namespace = 'App\Http\Controllers';
-
     /**
      * The path to the "home" route for your application.
      *
@@ -30,28 +24,22 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->configureRateLimiting();
 
-        parent::boot();
+        $this->routes(function () {
+            $this->mapPublicRoutes();
+
+            $this->mapWebRoutes();
+
+            $this->mapApiRoutes();
+
+            $this->mapAdminWebRoutes();
+
+            $this->mapAdminApiRoutes();
+        });
     }
 
-    /**
-     * Define the routes for the application.
-     *
-     * @return void
-     */
-    public function map()
-    {
-        $this->mapPublicRoutes();
 
-        $this->mapWebRoutes();
-
-        $this->mapApiRoutes();
-
-        $this->mapAdminWebRoutes();
-
-        $this->mapAdminApiRoutes();
-    }
 
     /**
      * Define the "public" web routes for the application.
@@ -64,7 +52,6 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapPublicRoutes()
     {
         Route::middleware(['web'])
-             ->namespace($this->namespace)
              ->group(base_path('routes/public.php'));
     }
 
@@ -78,7 +65,6 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapWebRoutes()
     {
         Route::middleware(['web', 'auth', 'twofactor'])
-             ->namespace($this->namespace)
              ->group(base_path('routes/web.php'));
     }
 
@@ -93,7 +79,6 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::middleware(['web', 'auth', 'role:admin', 'twofactor'])
             ->prefix('admin')
-            ->namespace($this->namespace)
             ->group(base_path('routes/admin/web.php'));
     }
 
@@ -106,9 +91,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        Route::middleware(['api', 'auth:api'])
+        Route::middleware(['auth:api'])
             ->prefix('api')
-            ->namespace($this->namespace)
             ->group(base_path('routes/api.php'));
     }
 
@@ -121,9 +105,20 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapAdminApiRoutes()
     {
-        Route::middleware(['api', 'auth:api', 'role:admin'])
+        Route::middleware(['auth:api', 'role:admin'])
             ->prefix('api')
-            ->namespace($this->namespace)
             ->group(base_path('routes/admin/api.php'));
+    }
+
+    /**
+     * Configure the rate limiters for the application.
+     *
+     * @return void
+     */
+    protected function configureRateLimiting()
+    {
+        RateLimiter::for('api', function (Request $request) {
+            return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
+        });
     }
 }

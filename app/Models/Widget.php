@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\BaseModel;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -26,7 +27,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Widget whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class Widget extends Model
+class Widget extends BaseModel
 {
     protected $fillable = [
         'config',

@@ -9,7 +9,7 @@
                enterkeyhint="done"
         >
 
-        <b-modal @ok="submitStocktake" :id="modal_name" scrollable centered no-fade hide-header
+        <b-modal @ok="submitStocktake" :id="modal_name" scrollable no-fade hide-header
                  @shown="setFocusElementById(100, 'quantity-request-input', true, false)"
                  @hidden="setFocusElementById(100, input_id, true, true)"
         >
@@ -124,6 +124,8 @@
                 this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
                 this.$bvModal.hide(this.modal_name);
             }
+
+            this.setFocusElementById(100, this.input_id, true, true);
         },
 
         methods: {

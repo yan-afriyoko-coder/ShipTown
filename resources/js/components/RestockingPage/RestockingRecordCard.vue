@@ -2,90 +2,48 @@
     <div class="row mb-3">
         <div class="col ml-0 pl-0">
             <div class="card ml-0 pl-0">
-                <div class="card-body pt-2 pl-2">
-                    <div class="row mt-0">
-                        <div class="col-lg-4">
-                            <div class="text-primary h5">{{ record['product_name'] }}</div>
-                            <div>
-                                sku: <b>
-                                <font-awesome-icon icon="copy" class="fa-xs btn-link" role="button" @click="copyToClipBoard(record['product_sku'])"></font-awesome-icon>
-                                <a target="_blank"  :href="'/products?hide_nav_bar=true&search=' + record['product_sku']">{{ record['product_sku'] }}</a>
-                            </b>
-                            </div>
-                            <div>
-                                <template v-for="tag in record['tags']">
-                                    <a class="badge text-uppercase btn btn-outline-primary" :key="tag.id" @click.prevent="setUrlParameterAngGo('filter[product_has_tags]', tag['name']['en'])"> {{ tag['name']['en'] }} </a>
-                                </template>
-                            </div>
-                            <div class="small">
-                                location: {{ record['warehouse_code'] }}
-                            </div>
+                <div class="row card-body pt-2 pl-2">
+                    <div class="col-lg-4">
+                        <div class="text-primary h5">{{ record['product_name'] }}</div>
+                        <div>
+                            sku: <b>
+                            <font-awesome-icon icon="copy" class="fa-xs btn-link" role="button" @click="copyToClipBoard(record['product_sku'])"></font-awesome-icon>
+                            <a target="_blank"  :href="'/products?hide_nav_bar=true&search=' + record['product_sku']">{{ record['product_sku'] }}</a>
+                        </b>
                         </div>
-                        <div class="col-lg-8">
-                            <div class="row pt-1">
-                                <div class="col-12 text-right" @click="expanded = !expanded">
-                                    <div class="row">
-                                        <div class="text-nowrap text-right col-lg-6">
-                                        </div>
-                                        <div class="text-nowrap text-right col-lg-6">
-                                            <number-card class="mr-lg-4" label="restock level" :number="record['restock_level']" v-bind:class="{'bg-warning' : record['restock_level'] <= 0 }"></number-card>
-                                            <number-card label="in stock" :number="record['quantity_available']" v-bind:class="{'bg-warning' : record['quantity_available'] < 0 }"></number-card>
-                                            <number-card label="incoming" :number="record['quantity_incoming']"></number-card>
-                                            <text-card label="required" text="N/A" v-if="Number(record['warehouse_quantity']) === 0"></text-card>
-                                            <number-card label="required" :number="record['quantity_required']" v-if="record['warehouse_quantity'] > 0"></number-card>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div>
+                            <template v-for="tag in record['tags']">
+                                <a class="badge text-uppercase btn btn-outline-primary" :key="tag.id" @click.prevent="setUrlParameterAngGo('filter[product_has_tags]', tag['name']['en'])"> {{ tag['name']['en'] }} </a>
+                            </template>
                         </div>
                     </div>
-
-                    <div @click="expanded = !expanded" class="text-center d-inline-block align-text-top col-sm-12 border-0 p-sm-0 pt-1">
-                        <font-awesome-icon v-if="expanded" icon="chevron-up" class="fa fa-xs text-secondary"></font-awesome-icon>
-                        <font-awesome-icon v-if="!expanded" icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
+                    <div class="col mt-1 mb-1 small">
+                        <div>location: <b>{{ record['warehouse_code'] }}</b></div>
+                        <div>last counted at: <b>{{ formatDateTime(record['last_counted_at'],'D MMM HH:MM') }}</b></div>
+                        <div>warehouse stock: <b>{{ record['warehouse_quantity'] }}</b></div>
                     </div>
-
-                    <div class="row text-center align-content-center" v-if="expanded">
-                        <div class="d-sm-none d-md-block col-6">
-
+                    <div class="col-lg-4">
+                        <div class="row-col text-center" @click="expanded = !expanded">
+                            <div class="d-none d-md-inline"><number-card label="restock level" :number="record['restock_level']" v-bind:class="{'bg-warning' : record['restock_level'] <= 0 }"></number-card></div>
+                            <number-card label="reorder point" :number="record['reorder_point']" v-bind:class="{'bg-warning' : record['reorder_point'] <= 0 }"></number-card>
+                            <number-card label="in stock" :number="record['quantity_in_stock']" v-bind:class="{'bg-warning' : record['quantity_in_stock'] < 0 }"></number-card>
+                            <number-card label="incoming" :number="record['quantity_incoming']"></number-card>
+                            <number-card label="required" :number="record['quantity_required']" v-if="record['warehouse_quantity'] > 0"></number-card>
+                            <text-card class="fa-pull-right" label="required" text="N/A" v-if="Number(record['warehouse_quantity']) === 0"></text-card>
                         </div>
-                        <div class="col-sm-12 col-md-6">
-                            <div class="text-nowrap text-right col-lg-12">
-                                <number-card class="" label="reorder point" :number="record['reorder_point']" v-bind:class="{'bg-warning' : record['reorder_point'] <= 0 }"></number-card>
-                                <text-card class="mr-lg-4"  label="last counted" :text="formatDateTime(record['last_counted_at'],'D MMM')" ></text-card>
-                                <text-card label="" text="" ></text-card>
-                                <number-card label="warehouse" :number="record['warehouse_quantity']" class="" ></number-card>
+
+                        <div @click="expanded = !expanded" class="text-center text-secondary">
+                            <font-awesome-icon v-if="expanded" icon="chevron-up" class="fa fa-xs"></font-awesome-icon>
+                            <font-awesome-icon v-if="!expanded" icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
+                        </div>
+
+                        <div v-if="expanded">
+
+                            <div class="row-col text-center mt-3 small text-secondary">
+                                reorder point
                             </div>
 
-                            <hr>
-
-                            <div class="col-12 text-nowrap">
-                                <stocktake-input :inputId="'stocktake-input-inventory-id-' + record['inventory_id']"></stocktake-input>
-                            </div>
-
-                            <div class="col-12 mt-3">
-                                <label class="small">restock level</label>
-                            </div>
-                            <div class="col-12 text-nowrap">
-                                <div class="input-group mb-3">
-                                    <button tabindex="-1" @click="minusRestockLevel" class="btn btn-danger mr-3" type="button" id="button-addon3" style="min-width: 45px">-</button>
-                                    <input tabindex="0"
-                                           @keyup="onUpdateRestockLevelEvent"
-                                           v-model="newRestockLevelValue"
-                                           @focus="simulateSelectAll"
-                                           type="number"
-                                           inputmode="numeric"
-                                           class="form-control text-center"
-                                           style="font-size: 24px"
-                                           >
-                                    <button tabindex="-1" @click="plusRestockLevel" class="btn btn-success ml-3" type="button" id="button-addon4" style="min-width: 45px">+</button>
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <label class="small">reorder point</label>
-                            </div>
-                            <div class="col-12 text-nowrap">
+                            <div class="row-col text-nowrap">
                                 <div class="input-group mb-3">
                                     <button tabindex="-1" @click="minusReorderPoint" class="btn btn-danger mr-3" type="button" id="button-addon5" style="min-width: 45px">-</button>
                                     <input tabindex="0"
@@ -96,19 +54,37 @@
                                            inputmode="numeric"
                                            class="form-control text-center"
                                            style="font-size: 24px"
-                                           >
+                                    >
                                     <button tabindex="-1" @click="plusReorderPoint" class="btn btn-success ml-3" type="button" id="button-addon6" style="min-width: 45px">+</button>
                                 </div>
                             </div>
 
-                            <div class="row pl-2 p-0">
-                                <div class="col-12 text-center align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">
-                                    Incoming
+                            <div class="row-col text-center mt-3 small text-secondary">
+                                restock level
+                            </div>
+                            <div class="row-col text-nowrap">
+                                <div class="input-group mb-3">
+                                    <button tabindex="-1" @click="minusRestockLevel" class="btn btn-danger mr-3" type="button" id="button-addon3" style="min-width: 45px">-</button>
+                                    <input tabindex="0"
+                                           @keyup="onUpdateRestockLevelEvent"
+                                           v-model="newRestockLevelValue"
+                                           @focus="simulateSelectAll"
+                                           type="number"
+                                           inputmode="numeric"
+                                           class="form-control text-center"
+                                           v-bind:class="{ 'alert-danger': newRestockLevelValue < newReorderPointValue }"
+                                           style="font-size: 24px"
+                                    >
+                                    <button tabindex="-1" @click="plusRestockLevel" class="btn btn-success ml-3" type="button" id="button-addon4" style="min-width: 45px">+</button>
                                 </div>
                             </div>
 
+                            <div class="row-col text-center align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">
+                                    Incoming
+                            </div>
+
                             <div class="row" v-for="dataCollectionRecord in dataCollectorRecords">
-                                <div class="col-12 col-lg-6 text-left">
+                                <div class="col text-left">
                                     <div>
                                         <a :href="'/data-collector/' + dataCollectionRecord['data_collection']['id']">
                                             {{ dataCollectionRecord['data_collection']['name'] }}
@@ -118,12 +94,20 @@
                                         {{ formatDateTime(dataCollectionRecord['data_collection']['created_at']) }}
                                     </div>
                                 </div>
-                                <div class="col-12 col-lg-6 text-right">
+                                <div class="col text-right">
                                     <number-card label="requested" :number="dataCollectionRecord['quantity_requested']"></number-card>
                                     <number-card label="outstanding" :number="dataCollectionRecord['quantity_requested'] - dataCollectionRecord['total_transferred_in']"></number-card>
                                 </div>
                                 <hr>
                             </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row text-center align-content-center offset-lg-6 col-lg-6" v-if="expanded">
+                            <hr>
+
+
                         </div>
 
 
@@ -195,9 +179,8 @@ export default {
 
         methods: {
             minusRestockLevel() {
-                if (Number(this.record['restock_level']) <= 0) {
-                    this.updateRestockLevel(Number(this.record['quantity_in_stock']) + Number(this.record['quantity_incoming']) - 1);
-
+                if (Number(this.newRestockLevelValue) - 1 < Number(this.newReorderPointValue)) {
+                    this.updateRestockLevel(Number(this.record['reorder_point']));
                     return;
                 }
 
@@ -205,9 +188,8 @@ export default {
             },
 
             plusRestockLevel() {
-                if (Number(this.record['restock_level']) === 0) {
-                    this.updateRestockLevel(Math.max(0, Number(this.record['quantity_in_stock']) + Number(this.record['quantity_incoming'])) + 1);
-
+                if (Number(this.newRestockLevelValue) < Number(this.newReorderPointValue)) {
+                    this.updateRestockLevel(Number(this.record['reorder_point']));
                     return;
                 }
 
@@ -216,7 +198,7 @@ export default {
 
             minusReorderPoint() {
                 if (Number(this.record['reorder_point']) === 0) {
-                    this.updateReorderPoint(Math.ceil(Number(this.record['quantity_in_stock']) / 2) - 1);
+                    this.updateReorderPoint(Math.ceil(Number(this.record['quantity_in_stock']) / 3));
                     return;
                 }
 
@@ -224,12 +206,6 @@ export default {
             },
 
             plusReorderPoint() {
-                if (Number(this.record['reorder_point']) === 0) {
-                    let value = Math.min(this.record['quantity_in_stock'], this.record['restock_level'], );
-                    this.updateReorderPoint(Math.ceil(Number(value) / 2) + 1);
-                    return;
-                }
-
                 this.updateReorderPoint(Number(this.record['reorder_point']) + 1);
             },
 
@@ -261,20 +237,31 @@ export default {
                         this.notifyError(error);
                     });
             },
-            updateRestockLevel(value) {
-                this.record['restock_level'] = Math.max(0, Number(value));
-                this.record['reorder_point'] = Math.ceil(Number(this.record['restock_level']) * 0.32);
 
-                if (Number(this.record['restock_level']) < 4) {
-                    this.record['reorder_point'] = Math.floor(Number(this.record['restock_level']) - 1);
+            updateRestockLevel(value) {
+                if (this.record['reorder_point'] > value) {
+                    return;
                 }
+
+                this.record['restock_level'] = value;
 
                 this.postInventoryUpdate();
             },
 
             updateReorderPoint(value) {
-                this.record['reorder_point'] = Math.max(0, Number(value));
-                this.record['restock_level'] = Math.max(Number(this.record['restock_level']), Number(this.record['reorder_point']));
+                let newValue = Math.max(0, Number(value));
+
+                if (this.record['reorder_point'] > 0) {
+                    let ratio = this.record['restock_level'] / this.record['reorder_point'];
+
+                    if (ratio < 1) {
+                        ratio = 3;
+                    }
+
+                    this.record['restock_level'] = Math.ceil(newValue * ratio);
+                }
+
+                this.record['reorder_point'] = newValue;
 
                 this.postInventoryUpdate();
             },

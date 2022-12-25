@@ -14,7 +14,7 @@ class UpdateTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = factory(User::class)->create()->assignRole('admin');
+        $admin = User::factory()->create()->assignRole('admin');
         $this->actingAs($admin, 'api');
     }
 
@@ -22,10 +22,10 @@ class UpdateTest extends TestCase
     public function test_update_call_returns_ok()
     {
         /** @var Warehouse $warehouse */
-        $warehouse = factory(Warehouse::class)->create();
+        $warehouse = Warehouse::factory()->create();
 
         /** @var Warehouse $newWarehouse */
-        $newWarehouse = factory(Warehouse::class)->make();
+        $newWarehouse = Warehouse::factory()->make();
 
         $data = [
             'name'  => $newWarehouse->name,

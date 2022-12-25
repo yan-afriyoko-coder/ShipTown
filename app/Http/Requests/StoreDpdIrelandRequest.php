@@ -2,56 +2,31 @@
 
 namespace App\Http\Requests;
 
-use App\Modules\DpdIreland\src\Models\DpdIreland;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class StoreDpdIrelandRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     * If no configuration found, token, user, and password field is required.
-     *
-     * @return array
-     */
-    public function rules()
+    public function rules(): array
     {
-        $baseRule = [
-            'user'              => 'required',
+        return [
+            'user'              => 'required|string',
+            'token'             => 'required|string',
+            'password'          => 'required|string',
             'live'              => 'required|boolean',
-            'contact'           => 'required',
-            'contact_telephone' => 'required',
-            'contact_email'     => 'sometimes',
-            'business_name'     => 'sometimes',
-            'address_line_1'    => 'sometimes',
-            'address_line_2'    => 'sometimes',
-            'address_line_3'    => 'required',
-            'address_line_4'    => 'required',
+            'contact'           => 'required|string',
+            'contact_telephone' => 'required|string',
+            'contact_email'     => 'sometimes|string',
+            'business_name'     => 'sometimes|string',
+            'address_line_1'    => 'sometimes|string',
+            'address_line_2'    => 'sometimes|string',
+            'address_line_3'    => 'required|string',
+            'address_line_4'    => 'required|string',
             'country_code'      => 'required|in:IE,IRL,UK,GB',
         ];
-
-        $config = DpdIreland::first();
-
-        if (!$config) {
-            return array_merge($baseRule, [
-                'token'    => 'required',
-                'password' => 'required',
-            ]);
-        }
-
-        return array_merge($baseRule, [
-            'token'    => ['sometimes', Rule::notIn(['*****', ''])],
-            'password' => ['sometimes', Rule::notIn(['*****', ''])],
-        ]);
     }
 }

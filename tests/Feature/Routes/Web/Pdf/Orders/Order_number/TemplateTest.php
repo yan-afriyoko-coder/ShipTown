@@ -35,8 +35,8 @@ class TemplateTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = factory(User::class)->create();
-        $this->order = factory(Order::class)->create();
+        $this->user = User::factory()->create();
+        $this->order = Order::factory()->create();
 
         $this->uri = '/pdf/orders/'.$this->order->order_number. '/address_label';
     }

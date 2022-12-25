@@ -1,17 +1,31 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
 use App\Models\OrderAddress;
-use Faker\Generator as Faker;
+use App\Models\Warehouse;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
-$factory->define(\App\Models\Warehouse::class, function (Faker $faker) {
-    $address_id = factory(OrderAddress::class)->create();
+class WarehouseFactory extends Factory
+{
+    protected $model = Warehouse::class;
 
-    $randomCode = $faker->randomLetter . $faker->randomLetter . $faker->randomLetter . $faker->randomLetter;
-    return [
-        'name'  => $faker->city,
-        'code'  => \Illuminate\Support\Str::upper($randomCode),
-        'address_id' => $address_id,
-    ];
-});
+    public function definition(): array
+    {
+        $address_id = OrderAddress::factory()->create();
+
+        $randomCode = implode('', [
+            $this->faker->randomLetter,
+            $this->faker->randomLetter,
+            $this->faker->randomLetter,
+            $this->faker->randomLetter
+        ]);
+
+        return [
+            'name'  => $this->faker->city,
+            'code'  => Str::upper($randomCode),
+            'address_id' => $address_id,
+        ];
+    }
+}

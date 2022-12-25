@@ -21,7 +21,7 @@ class MultiConditionsTest extends TestCase
         parent::setUp();
 
         /** @var OrderProduct $orderProduct */
-        $orderProduct = factory(OrderProduct::class)->create();
+        $orderProduct = OrderProduct::factory()->create();
 
         /** @var Automation $automation1 */
         $automation1 = Automation::create([

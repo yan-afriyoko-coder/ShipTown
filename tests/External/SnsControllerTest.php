@@ -19,7 +19,7 @@ class SnsControllerTest extends TestCase
     public function testTopicCreateSubscribeDelete()
     {
         $this->actingAs(
-            factory(User::class)->create()
+            User::factory()->create()
         );
 
         $snsClient = new SnsService('testTopic');

@@ -2,30 +2,22 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
 
 class LogResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param Request $request
-     *
-     * @return array
-     */
     public function toArray($request): array
     {
         return [
-            'created_at'   => $this->created_at,
-            'id'           => $this->id,
-            'description'  => $this->description,
-            'subject_id'   => $this->subject_id,
-            'subject_type' => $this->subject_type,
-            'causer_id'    => $this->causer_id,
-            'causer_type'  => $this->causer_type,
-            'properties'   => $this->properties,
+            'created_at'   => data_get($this, 'created_at'),
+            'id'           => data_get($this, 'id'),
+            'description'  => data_get($this, 'description'),
+            'subject_id'   => data_get($this, 'subject_id'),
+            'subject_type' => data_get($this, 'subject_type'),
+            'causer_id'    => data_get($this, 'causer_id'),
+            'causer_type'  => data_get($this, 'causer_type'),
+            'properties'   => data_get($this, 'properties'),
             'changes'      => $this->getChanges(),
             'causer'       => $this->whenLoaded('causer'),
         ];

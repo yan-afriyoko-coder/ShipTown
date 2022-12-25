@@ -11,11 +11,12 @@
 |
 */
 
+use App\Http\Controllers\ManifestController;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('manifest.json', 'ManifestController@index');
+Route::get('manifest.json', [ManifestController::class, 'index']);
 
 Route::view('help', 'help');
 

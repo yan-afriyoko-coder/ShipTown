@@ -13,12 +13,12 @@ class StoreTest extends TestCase
     public function test_store_call_returns_ok()
     {
         /** @var Product $product */
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
 
         /** @var Warehouse $warehouse */
-        $warehouse = factory(Warehouse::class)->create();
+        $warehouse = Warehouse::factory()->create();
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user, 'api')->postJson(route('csv-import-data-collections.store'), [
             'data_collection_name_prefix' => 'test',

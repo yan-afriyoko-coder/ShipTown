@@ -7,13 +7,11 @@ use App\Http\Requests\OrderStatus\StoreRequest;
 use App\Http\Requests\OrderStatus\UpdateRequest;
 use App\Http\Resources\OrderStatusResource;
 use App\Models\OrderStatus;
-use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Validation\ValidationException;
 
 class OrderStatusController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -27,10 +25,6 @@ class OrderStatusController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param StoreRequest $request
-     * @return OrderStatusResource
      * @throws ValidationException
      */
     public function store(StoreRequest $request): OrderStatusResource
@@ -49,34 +43,25 @@ class OrderStatusController extends Controller
         return OrderStatusResource::make($orderStatus);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param UpdateRequest $request
-     * @param OrderStatus $orderStatus
-     * @return OrderStatusResource
-     */
-    public function update(UpdateRequest $request, OrderStatus $orderStatus): OrderStatusResource
+    public function update(UpdateRequest $request, int $order_status_id): OrderStatusResource
     {
-        $orderStatus->fill($request->validated());
-        $orderStatus->save();
+        $orderStatus = OrderStatus::findOrFail($order_status_id);
+
+        $orderStatus->update($request->validated());
 
         return OrderStatusResource::make($orderStatus);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param OrderStatus $orderStatus
-     * @return void
-     * @throws Exception
-     */
-    public function destroy(OrderStatus $orderStatus)
+    public function destroy(int $order_status_id): OrderStatusResource
     {
+        $orderStatus = OrderStatus::findOrFail($order_status_id);
+
         if ($orderStatus->order_active || $orderStatus->sync_ecommerce) {
             abort(401, "This order statuses cannot archived");
         }
 
         $orderStatus->delete();
+
+        return OrderStatusResource::make($orderStatus);
     }
 }

@@ -58,16 +58,11 @@ class OrderController extends Controller
         return response()->json($order);
     }
 
-    /**
-     * @param UpdateRequest $request
-     * @param Order         $order
-     *
-     * @return JsonResource
-     */
-    public function update(UpdateRequest $request, Order $order): JsonResource
+    public function update(UpdateRequest $request, int $order_id): JsonResource
     {
-        $attributes = $request->validated();
+        $order = Order::findOrFail($order_id);
 
+        $attributes = $request->validated();
 
         if ($request->has('label_template') && $request->get('label_template') === null) {
             // we don't want turn off ConvertEmptyStringToNulls middleware
@@ -93,12 +88,13 @@ class OrderController extends Controller
 
     /**
      * @param Request $request
-     * @param Order   $order
-     *
+     * @param int $order_id
      * @return JsonResource
      */
-    public function show(Request $request, Order $order): JsonResource
+    public function show(Request $request, int $order_id): JsonResource
     {
+        $order = Order::findOrFail($order_id);
+
         return new JsonResource($order);
     }
 }

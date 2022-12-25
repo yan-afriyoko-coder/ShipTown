@@ -48,7 +48,7 @@ class BasicModuleTest extends TestCase
     public function test_module_basic_functionality()
     {
         /** @var Order $order */
-        $order = factory(Order::class)->create();
+        $order = Order::factory()->create();
 
         $shippingService = new NextDayShippingService();
         $shippingLabelCollection = $shippingService->ship($order->getKey());

@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 return [
 
     /*
@@ -211,6 +213,9 @@ return [
     */
 
     'aliases' => [
+        'Js' => Illuminate\Support\Js::class,
+        'RateLimiter' => Illuminate\Support\Facades\RateLimiter::class,
+        'Date' => Illuminate\Support\Facades\Date::class,
 
         'App'          => Illuminate\Support\Facades\App::class,
         'Arr'          => Illuminate\Support\Arr::class,

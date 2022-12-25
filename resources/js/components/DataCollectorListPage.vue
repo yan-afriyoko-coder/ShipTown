@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="row mb-3 pl-1 pr-1 bg-white">
+        <div class="row mb-1 pb-2 p-1 sticky-top bg-light">
             <div class="flex-fill">
                 <barcode-input-field placeholder="Search"></barcode-input-field>
             </div>
@@ -45,7 +45,7 @@
             </div>
         </div>
 
-        <b-modal id="new-collection-modal" centered no-fade hide-header title="New Dats Collection" @ok="createCollectionAndRedirect" @shown="prepareNewCollectionModal">
+        <b-modal id="new-collection-modal" no-fade hide-header title="New Data Collection" @ok="createCollectionAndRedirect" @shown="prepareNewCollectionModal">
             <input id="collection_name_input" v-model="newCollectionName" type="text" @keyup.enter="createCollectionAndRedirect" class="form-control" placeholder="New Collection name">
             <hr>
             <vue-csv-import

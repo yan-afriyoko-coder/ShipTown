@@ -19,12 +19,12 @@ class ImportShippingsTest extends TestCase
     public function test_module_basic_functionality()
     {
         /** @var Product $product */
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
 
         /** @var Warehouse $warehouse */
-        $warehouse = factory(Warehouse::class)->create();
+        $warehouse = Warehouse::factory()->create();
 
-        $connection = factory(RmsapiConnection::class)->create(['location_id' => $warehouse->code]);
+        $connection = RmsapiConnection::factory()->create(['location_id' => $warehouse->code]);
 
         $job = new ImportShippingsJob($connection->getKey());
         $records = [

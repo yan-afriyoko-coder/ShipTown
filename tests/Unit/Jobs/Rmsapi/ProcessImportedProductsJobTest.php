@@ -25,7 +25,7 @@ class ProcessImportedProductsJobTest extends TestCase
         ProductAlias::query()->forceDelete();
         Tag::query()->forceDelete();
 
-        $importData = factory(RmsapiProductImport::class)->create();
+        $importData = RmsapiProductImport::factory()->create();
 
         $raw_import = $importData->raw_import;
         $raw_import['is_web_item'] = 1;
@@ -51,7 +51,7 @@ class ProcessImportedProductsJobTest extends TestCase
         Product::query()->forceDelete();
         ProductAlias::query()->forceDelete();
 
-        factory(RmsapiProductImport::class)->create();
+        RmsapiProductImport::factory()->create();
 
         // act
         $job = new ProcessImportedProductRecordsJob();
@@ -69,8 +69,8 @@ class ProcessImportedProductsJobTest extends TestCase
         Product::query()->forceDelete();
         Inventory::query()->forceDelete();
 
-//        factory(Warehouse::class)->create();
-        $importData = factory(RmsapiProductImport::class)->create();
+//        Warehouse::factory()->create();
+        $importData = RmsapiProductImport::factory()->create();
 
         // act
         $job = new ProcessImportedProductRecordsJob();

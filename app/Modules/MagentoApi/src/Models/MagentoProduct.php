@@ -41,16 +41,12 @@ class MagentoProduct extends BaseModel
         'special_prices_fetched_at',
         'special_prices_raw_import',
     ];
-
-    protected $dates = [
-        'magento_sale_price_start_date',
-        'magento_sale_price_end_date',
-        'stock_items_fetched_at',
-        'base_prices_fetched_at',
-        'special_prices_fetched_at',
-    ];
-
     protected $casts = [
+        'magento_sale_price_start_date' => 'datetime',
+        'magento_sale_price_end_date' => 'datetime',
+        'stock_items_fetched_at' => 'datetime',
+        'base_prices_fetched_at' => 'datetime',
+        'special_prices_fetched_at' => 'datetime',
         'stock_items_raw_import'    => 'array',
         'base_prices_raw_import'    => 'array',
         'special_prices_raw_import'    => 'array',

@@ -20,12 +20,12 @@ class RefillOldOrdersPickingJobTest extends TestCase
      */
     public function testExample()
     {
-        $order = factory(Order::class)->create([
+        $order = Order::factory()->create([
             'order_placed_at' => Carbon::now()->subDays(100),
             'status_code'     => 'processing',
         ]);
 
-        factory(OrderProduct::class)->create([
+        OrderProduct::factory()->create([
             'order_id' => $order->id,
         ]);
 

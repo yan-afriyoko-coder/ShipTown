@@ -11,11 +11,17 @@
                     />
                 </div>
 
-                <button disabled type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+                <button type="button" v-b-modal="'quick-actions-modal'" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
             </div>
         </template>
 
-        <template  v-if="products.length === 0 && !isLoading" >
+        <div class="row pl-2 p-0">
+            <div class="col-12 text-left align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">
+                Products
+            </div>
+        </div>
+
+        <template  v-if="isLoading === false && products !== null && products.length === 0" >
             <div class="row">
                 <div class="col">
                     <div class="alert alert-info" role="alert">
@@ -25,7 +31,7 @@
             </div>
         </template>
 
-        <template v-for="product in products">
+        <template v-if="products" v-for="product in products">
             <div class="row p-1">
                 <div class="col">
                     <product-card :product="product" :expanded="products.length === 1"/>
@@ -38,6 +44,13 @@
                 <div ref="loadingContainerOverride" style="height: 32px"></div>
             </div>
         </div>
+
+        <b-modal id="quick-actions-modal" no-fade hide-footer hide-header
+                 @shown="setFocusElementById(100,'stocktake-input', true, true)"
+                 @hidden="setFocusElementById(100,'barcodeInput', true, true)">
+            <stocktake-input></stocktake-input>
+            <hr>
+        </b-modal>
 
     </div>
 </template>
@@ -63,7 +76,7 @@
                 lastPageLoaded: 1,
                 lastPage: 1,
 
-                products: [],
+                products: null,
             };
         },
 
@@ -76,11 +89,11 @@
         methods: {
             findText(search) {
                 this.setUrlParameter('search', search);
+                this.products = [];
                 this.reloadProducts();
             },
 
             reloadProducts() {
-                this.products = [];
                 this.loadProductList();
             },
 
@@ -101,9 +114,10 @@
                 this.apiGetProducts(params)
                     .then(({data}) => {
                         if (page === 1) {
-                            this.products = [];
+                            this.products = data.data;
+                        } else {
+                            this.products = this.products.concat(data.data);
                         }
-                        this.products = this.products.concat(data.data);
                         this.lastPage = data.meta.last_page;
                         this.lastPageLoaded = page;
                     })

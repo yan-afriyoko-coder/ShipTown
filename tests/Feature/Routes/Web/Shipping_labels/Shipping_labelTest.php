@@ -11,7 +11,7 @@ use Tests\TestCase;
 /**
  *
  */
-class ShippingLabelTest extends TestCase
+class Shipping_labelTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -31,13 +31,13 @@ class ShippingLabelTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $order = factory(Order::class)->create();
-        $shippingLabel = factory(ShippingLabel::class)->create([
+        $order = Order::factory()->create();
+        $shippingLabel = ShippingLabel::factory()->create([
             'order_id' => $order->getKey(),
             'shipping_number' => 'test'
         ]);
         $this->uri = route('shipping-labels', [$shippingLabel->getKey()]);
-        $this->user = factory(User::class)->create();
+        $this->user = User::factory()->create();
     }
 
     /** @test */

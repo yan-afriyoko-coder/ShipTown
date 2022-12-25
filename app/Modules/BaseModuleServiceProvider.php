@@ -81,6 +81,7 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
 
             return $module->enabled;
         } catch (Exception $exception) {
+            report($exception);
             return false;
         }
     }
@@ -97,9 +98,10 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
         }
 
         $module->enabled = true;
+
         if (! $module->save()) {
             return false;
-        };
+        }
 
         app()->singleton(get_called_class(), get_called_class());
 
@@ -115,15 +117,13 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
     {
         try {
             /** @var Module $module */
-            $module = Module::where(['service_provider_class' => get_called_class()])->first();
+            $module = Module::query()->where(['service_provider_class' => get_called_class()])->first();
 
-            if ($module) {
-                $module->forceDelete();
-            }
+            $module?->forceDelete();
 
             return true;
         } catch (Exception $exception) {
-            Log::emergency($exception);
+            report($exception);
             return false;
         }
     }

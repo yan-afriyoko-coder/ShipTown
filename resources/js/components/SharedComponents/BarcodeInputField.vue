@@ -12,7 +12,7 @@
                @keyup.enter="barcodeScanned(barcode)"
         />
 
-      <b-modal :id="getModalID" @submit="updateShelfLocation" @shown="updateShelfLocationShown" @hidden="updateShelfLocationHidden" scrollable centered no-fade hide-header>
+      <b-modal :id="getModalID" @submit="updateShelfLocation" @shown="updateShelfLocationShown" @hidden="updateShelfLocationHidden" scrollable no-fade hide-header>
           <div class="h5 text-center">{{ command['name'] }} : {{ command['value'] }}</div>
           <div v-if="shelfLocationModalContinuesScan" class="alert-success text-center mb-2 small">CONTINUES SCAN ENABLED</div>
 
@@ -74,6 +74,32 @@
         },
 
         methods: {
+            barcodeScanned(barcode) {
+                if (barcode && barcode !== '') {
+                    this.apiPostActivity({
+                      'log_name': 'search',
+                      'description': barcode,
+                    })
+                    .catch((error) => {
+                        this.displayApiCallError(error)
+                    });
+                }
+
+                if (this.tryToRunCommand(barcode)) {
+                    this.barcode = '';
+                    return;
+                }
+
+                if(this.url_param_name) {
+                    this.setUrlParameter(this.url_param_name, barcode);
+                }
+
+                this.$emit('barcodeScanned', barcode);
+
+                this.setFocusOnBarcodeInput();
+                this.simulateSelectAll();
+            },
+
             updateShelfLocationShown: function (bvEvent, modalId) {
                 this.shelfLocationModalShowing = true;
                 this.shelfLocationModalContinuesScan = false;
@@ -103,6 +129,10 @@
             },
 
             tryToRunCommand: function (textEntered) {
+                if (textEntered === null || textEntered === '') {
+                    return false;
+                }
+
                 this.lastCommand = textEntered;
 
                 let command = this.lastCommand.split(':');
@@ -187,30 +217,7 @@
                     return;
                 }
 
-                this.$bvModal.hide('set-shelf-location-command-modal');
-            },
-
-            barcodeScanned(barcode) {
-                this.apiPostActivity({
-                        'description': 'command_input: "' + barcode + '"',
-                    })
-                    .catch((error) => {
-                        this.displayApiCallError(error)
-                    });
-
-                if (this.tryToRunCommand(barcode)) {
-                    this.barcode = '';
-                    return;
-                  }
-
-                if(this.url_param_name) {
-                    this.setUrlParameter(this.url_param_name, barcode);
-                }
-
-                this.$emit('barcodeScanned', barcode);
-
-                this.setFocusOnBarcodeInput();
-                this.simulateSelectAll();
+                this.$bvModal.hide(this.getModalID);
             },
 
             setFocusOnBarcodeInput(delay = 1) {

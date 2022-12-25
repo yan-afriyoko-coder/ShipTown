@@ -282,8 +282,9 @@
                                     <tr>
                                         <td><a href='{{ url()->route('reports.restocking', [
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
-                                                        'sort' => '-quantity_incoming,-warehouse_quantity',
+                                                        'sort' => '-restock_level',
                                                         'filter[quantity_available]' => 0,
+                                                        'filter[restock_level_between]' => '0.01,999999',
                                                         'filter[inventory_source_warehouse_code]' => '99',
                                                         'filter[warehouse_quantity_between]' => '1,99999999',
                                                         'per_page' => '999',

@@ -55,9 +55,8 @@ class InstallApplication extends Migration
 
     private function createDefaultUserRoles(): void
     {
-        Role::firstOrCreate(['name' => 'user']);
-
-        $admin = Role::firstOrCreate(['name' => 'admin']);
+        Role::findOrCreate('user');
+        $admin = Role::findOrCreate('admin');
 
         $defaultAdminPermissions = ['manage users', 'list users', 'invite users', 'list roles'];
 

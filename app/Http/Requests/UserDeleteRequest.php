@@ -13,8 +13,7 @@ class UserDeleteRequest extends FormRequest
      */
     public function authorize()
     {
-        // Allow if not same user and has permissions.
-        return $this->user()->can('manage users') && $this->user->id != $this->user()->id;
+        return $this->user()->hasRole('admin');
     }
 
     /**

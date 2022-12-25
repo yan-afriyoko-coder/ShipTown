@@ -4,26 +4,24 @@ namespace Tests\Feature\Http\Controllers\Api\Settings\Modules\RunAutomationContr
 
 use App\Modules\Automations\src\Models\Automation;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class StoreTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = factory(User::class)->create()->assignRole('user');
+        $admin = User::factory()->create()->assignRole(Role::findOrCreate('user', 'api'));
         $this->actingAs($admin, 'api');
     }
 
     /** @test */
     public function test_store_call_returns_ok()
     {
-        $automation = factory(Automation::class)->create();
+        $automation = Automation::factory()->create();
 
-        $response = $this->post(route('settings.modules.automations.run'),[
+        $response = $this->post(route('settings.modules.automations.run'), [
             'automation_id' => $automation->getKey()
         ]);
 

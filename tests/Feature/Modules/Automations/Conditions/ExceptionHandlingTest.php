@@ -20,9 +20,9 @@ class ExceptionHandlingTest extends TestCase
         OrderStatus::query()->forceDelete();
         Automation::query()->forceDelete();
 
-        $automation = factory(Automation::class)->create();
+        $automation = Automation::factory()->create();
 
-        factory(Condition::class)->create([
+        Condition::factory()->create([
             'automation_id'     => $automation->getKey(),
             'condition_class'   => ExceptionTestCondition::class,
             'condition_value'   => ''
@@ -39,7 +39,7 @@ class ExceptionHandlingTest extends TestCase
     public function testExample()
     {
         try {
-            factory(Order::class)->create();
+            Order::factory()->create();
 
             RunEnabledAutomationsJob::dispatch();
         } catch (Exception $exception) {

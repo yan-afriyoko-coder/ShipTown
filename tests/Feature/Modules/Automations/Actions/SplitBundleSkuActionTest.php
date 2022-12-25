@@ -22,11 +22,11 @@ class SplitBundleSkuActionTest extends TestCase
     {
         parent::setUp();
 
-        $this->order = factory(Order::class)->create();
+        $this->order = Order::factory()->create();
 
         /** @var Product $bundle_sku */
-        $bundle_sku = factory(Product::class)->create(['sku' => 'BUNDLE_SKU']);
-        factory(OrderProduct::class)->create([
+        $bundle_sku = Product::factory()->create(['sku' => 'BUNDLE_SKU']);
+        OrderProduct::factory()->create([
             'order_id' => $this->order->getKey(),
             'product_id' => $bundle_sku->getKey(),
             'sku_ordered' => $bundle_sku->sku,
@@ -36,20 +36,20 @@ class SplitBundleSkuActionTest extends TestCase
         ]);
 
         /** @var Product $bundle_product_1 */
-        $bundle_product_1 = factory(Product::class)->create(['sku' => 'BUNDLE_PRODUCT_1']);
+        $bundle_product_1 = Product::factory()->create(['sku' => 'BUNDLE_PRODUCT_1']);
         $bundle_product_1->prices()->update([
             'price' => 75,
         ]);
 
         /** @var Product $bundle_product_1 */
-        $bundle_product_1 = factory(Product::class)->create(['sku' => 'BUNDLE_PRODUCT_2']);
+        $bundle_product_1 = Product::factory()->create(['sku' => 'BUNDLE_PRODUCT_2']);
         $bundle_product_1->prices()->update([
             'price' => 75,
         ]);
 
         /** @var Product $random_sku */
-        $random_sku = factory(Product::class)->create(['sku' => 'RANDOM_SKU']);
-        factory(OrderProduct::class)->create([
+        $random_sku = Product::factory()->create(['sku' => 'RANDOM_SKU']);
+        OrderProduct::factory()->create([
             'order_id' => $this->order->getKey(),
             'product_id' => $random_sku->getKey(),
             'sku_ordered' => $random_sku->sku,

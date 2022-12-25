@@ -8,7 +8,6 @@ use App\Http\Requests\Warehouse\UpdateRequest;
 use App\Http\Requests\WarehouseIndexRequest;
 use App\Http\Resources\WarehouseResource;
 use App\Models\Warehouse;
-use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Spatie\Tags\Tag;
 
@@ -24,15 +23,15 @@ class WarehouseController extends Controller
 
     public function store(StoreRequest $request): WarehouseResource
     {
-        $warehouse = new Warehouse;
-        $warehouse->fill($request->validated());
-        $warehouse->save();
+        $warehouse = Warehouse::create($request->validated());
 
-        return new WarehouseResource($warehouse);
+        return WarehouseResource::make($warehouse);
     }
 
-    public function update(UpdateRequest $request, Warehouse $warehouse): WarehouseResource
+    public function update(UpdateRequest $request, int $warehouse_id): WarehouseResource
     {
+        $warehouse = Warehouse::findOrFail($warehouse_id);
+
         $warehouse->update($request->validated());
 
         $tags = data_get($request->validated(), 'tags', []);
@@ -44,18 +43,13 @@ class WarehouseController extends Controller
 
         $warehouse->tags()->sync($tags->pluck('id'));
 
-        return new WarehouseResource($warehouse);
+        return WarehouseResource::make($warehouse);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Warehouse $warehouse
-     * @return WarehouseResource
-     * @throws Exception
-     */
-    public function destroy(Warehouse $warehouse): WarehouseResource
+    public function destroy(int $warehouse_id): WarehouseResource
     {
+        $warehouse = Warehouse::findOrFail($warehouse_id);
+
         $warehouse->delete();
 
         return WarehouseResource::make($warehouse);

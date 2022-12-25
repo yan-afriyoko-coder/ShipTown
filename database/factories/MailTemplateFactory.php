@@ -1,13 +1,20 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
+use App\Mail\OrderMail;
 use App\Models\MailTemplate;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(MailTemplate::class, function (Faker $faker) {
-    return [
-        'mailable' => \App\Mail\OrderMail::class,
-        'html_template' => $faker->randomHtml(),
-    ];
-});
+class MailTemplateFactory extends Factory
+{
+    protected $model = MailTemplate::class;
+
+    public function definition(): array
+    {
+        return [
+            'mailable' => OrderMail::class,
+            'html_template' => $this->faker->randomHtml(),
+        ];
+    }
+}

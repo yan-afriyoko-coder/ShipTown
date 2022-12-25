@@ -1,24 +1,34 @@
 <?php
 
-/** @var Factory $factory */
+namespace Database\Factories;
 
 use App\Models\Order;
 use App\Models\OrderShipment;
 use App\User;
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(OrderShipment::class, function (Faker $faker) {
-    $shipping_number = $faker->toUpper($faker->randomLetter.$faker->randomLetter.'100'.$faker->randomNumber(8));
+class OrderShipmentFactory extends Factory
+{
+    protected $model = OrderShipment::class;
 
-    $order = Order::query()->inRandomOrder()->first() ?? factory(Order::class)->create();
-    $user = User::query()->inRandomOrder()->first() ?? factory(User::class)->create();
+    public function definition(): array
+    {
+        $shipping_number = $this->faker->toUpper(implode('', [
+            $this->faker->randomLetter,
+            $this->faker->randomLetter,
+            '100',
+            $this->faker->randomNumber(8)
+        ]));
 
-    return [
-        'order_id'        => $order->getKey(),
-        'carrier'         => $faker->randomElement(['DPD', 'UPS', 'SEUR', 'DHL', 'MRW', 'DPD Ireland', 'DPD UK']),
-        'shipping_number' => $shipping_number,
-        'tracking_url'    => $faker->url,
-        'user_id'         => $user->getKey(),
-    ];
-});
+        $order = Order::query()->inRandomOrder()->first() ?? Order::factory()->create();
+        $user = User::query()->inRandomOrder()->first() ?? User::factory()->create();
+
+        return [
+            'order_id'        => $order->getKey(),
+            'carrier'         => $this->faker->randomElement(['DPD', 'UPS', 'SEUR', 'DHL', 'DPD Ireland', 'DPD UK']),
+            'shipping_number' => $shipping_number,
+            'tracking_url'    => $this->faker->url,
+            'user_id'         => $user->getKey(),
+        ];
+    }
+}

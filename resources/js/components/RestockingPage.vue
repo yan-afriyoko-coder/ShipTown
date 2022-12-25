@@ -1,7 +1,7 @@
 <template>
     <div class="container dashboard-widgets">
 
-        <div class="row mb-1 pb-2 pt-1 sticky-top bg-light" style="z-index: 10;" v-if="currentUser['warehouse'] !== null">
+        <div class="row mb-1 pb-2 p-1 sticky-top bg-light" style="z-index: 10;" v-if="currentUser['warehouse'] !== null">
             <div class="flex-fill">
                 <barcode-input-field placeholder='Search products using name, sku, alias or command'
                                      :url_param_name="'filter[search]'"
@@ -17,7 +17,7 @@
             </div>
         </div>
 
-        <b-modal id="configuration-modal" centered no-fade hide-footer hide-header
+        <b-modal id="configuration-modal" no-fade hide-footer hide-header
                  @shown="setFocusElementById(100,'stocktake-input', true, true)"
                  @hidden="focusOnInputAndReload">
             <stocktake-input></stocktake-input>
@@ -31,7 +31,7 @@
 
         <div class="row">
             <div class="col">
-                <div ref="loadingContainerOverride" style="height: 32px"></div>
+                <div ref="loadingContainerOverride" dusk="loadingContainerOverride" style="height: 32px"></div>
             </div>
         </div>
     </div>
@@ -74,7 +74,13 @@ export default {
             window.onscroll = () => this.loadMore();
 
             if (this.initial_data) {
-                this.data = this.initial_data;
+                // this is dirty trick to "simulate" data reload for better UX
+                setTimeout(() => {
+                    if (this.data.length > 0) {
+                        return;
+                    }
+                    this.data = this.initial_data;
+                }, 100);
             }
         },
 
@@ -98,6 +104,9 @@ export default {
 
                         this.data = this.data.concat(response.data.data);
                         this.pagesLoaded = page;
+                    })
+                    .catch((error) => {
+                        this.showException(error);
                     })
                     .finally(() => {
                         this.hideLoading();

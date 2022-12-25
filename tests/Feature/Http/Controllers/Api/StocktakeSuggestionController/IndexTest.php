@@ -14,12 +14,12 @@ class IndexTest extends TestCase
     /** @test */
     public function test_index_call_returns_ok()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        factory(Product::class)->create();
-        factory(Warehouse::class)->create();
+        Product::factory()->create();
+        Warehouse::factory()->create();
 
-        factory(StocktakeSuggestion::class)->create(
+        StocktakeSuggestion::factory()->create(
             [
                 'inventory_id' => Inventory::first()->getKey(),
                 'points' => 1,

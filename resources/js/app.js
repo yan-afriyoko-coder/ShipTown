@@ -8,11 +8,11 @@
 require('./bootstrap');
 
 require('./registerServiceWorker');
-window.Vue = require('vue');
+window.Vue = require('vue').default;
+
 // Vue 2
 import Vue from 'vue'
 
-import route from "ziggy-js";
 Vue.mixin({
     methods: {
         route: route
@@ -137,9 +137,7 @@ Vue.use(Snotify, {
 /**
  * Third Party mixins
  */
-Vue.component('pagination', require('laravel-vue-pagination'));
 Vue.component('font-awesome-icon', FontAwesomeIcon);
-Vue.component("tippy", TippyComponent);
 
 /**
  * Application mixins
@@ -166,8 +164,8 @@ Vue.component('data-collector-page', require('./components/DataCollectorPage.vue
  */
 Vue.component('date-selector-widget', require('./components/Widgets/DateSelectorWidget.vue').default);
 Vue.component('autopilot-packlist-page', require('./components/AutopilotPacklistPage.vue').default);
-Vue.component('dpd-configuration', require('./components/Settings/DpdConfiguration').default);
-Vue.component('dpd-uk-configuration', require('./components/Settings/DpdUkConfiguration').default);
+Vue.component('dpd-configuration', require('./components/Settings/DpdConfiguration.vue').default);
+Vue.component('dpd-uk-configuration', require('./components/Settings/DpdUkConfiguration.vue').default);
 
 Vue.component('text-card', require('./components/SharedComponents/TextCard.vue').default);
 Vue.component('number-card', require('./components/SharedComponents/NumberCard.vue').default);
@@ -178,7 +176,6 @@ Vue.component('restocking-record-card', require('./components/RestockingPage/Res
 Vue.component('data-collector-quantity-request-modal', require('./components/DataCollectionPage/DataCollectorQuantityRequestModal.vue').default);
 
 Vue.component('barcode-input-field', require('./components/SharedComponents/BarcodeInputField.vue').default);
-Vue.component('stocktaking-input-field', require('./components/SharedComponents/StocktakingInputField.vue').default);
 Vue.component('product-count-request-input-field', require('./components/SharedComponents/ProductCountRequestInputField.vue').default);
 Vue.component('restocking-page', require('./components/RestockingPage.vue').default);
 Vue.component('products-table', require('./components/ProductsPage.vue').default);
@@ -205,8 +202,8 @@ Vue.component('navigation-menu-table', require('./components/Settings/Navigation
 Vue.component('automation-table', require('./components/Settings/AutomationTable.vue').default);
 Vue.component('warehouses-page', require('./components/Settings/WarehousesPage.vue').default);
 Vue.component('heartbeats', require('./components/Heartbeats.vue').default);
-Vue.component('api', require('./mixins/api').default);
-Vue.component('webhooks-subscription-page', require('../../app/Modules/Webhooks/resources/js/WebhooksSubscriptionsPage').default);
+Vue.component('api', require('./mixins/api.vue').default);
+Vue.component('webhooks-subscription-page', require('../../app/Modules/Webhooks/resources/js/WebhooksSubscriptionsPage.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

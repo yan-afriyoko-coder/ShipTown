@@ -3,19 +3,20 @@
 namespace Tests\Feature\Http\Controllers\Api\Admin\UserController;
 
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class IndexTest extends TestCase
 {
-    use RefreshDatabase;
-
     /** @test */
     public function test_index_call_returns_ok()
     {
-        $user = factory(User::class)->create()->assignRole('admin');
+        /** @var User $user */
+        $user = User::factory()->create();
+        $user->assignRole(Role::findOrCreate('admin', 'api'));
 
-        $response = $this->actingAs($user, 'api')->getJson(route('users.index'));
+        $response = $this->actingAs($user, 'api')
+            ->getJson(route('users.index', ['include' => 'roles']));
 
         $response->assertOk();
 
@@ -29,8 +30,13 @@ class IndexTest extends TestCase
                     'id',
                     'name',
                     'email',
-                    'role_id',
                     'printer_id',
+                    'roles' => [
+                        '*' => [
+                            'id',
+                            'name',
+                        ],
+                    ],
                 ],
             ],
         ]);

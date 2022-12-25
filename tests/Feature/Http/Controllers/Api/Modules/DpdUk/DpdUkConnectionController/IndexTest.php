@@ -14,9 +14,9 @@ class IndexTest extends TestCase
     /** @test */
     public function test_index_call_returns_ok()
     {
-        factory(Connection::class)->create();
+        Connection::factory()->create();
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user, 'api')
             ->getJson(route('api.modules.dpd-uk.dpd-uk-connections.index'));

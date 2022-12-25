@@ -22,7 +22,7 @@ class PrintDpdLabelControllerTest extends TestCase
      */
     public function storeReturnsOkResponse()
     {
-        $address = factory(OrderAddress::class)->create([
+        $address = OrderAddress::factory()->create([
             'company'      => 'TEST COMPANY',
             'address1'     => 'ATHLONE BUISNESS PARK',
             'address2'     => 'DUBLIN ROAD',
@@ -35,13 +35,13 @@ class PrintDpdLabelControllerTest extends TestCase
         ]);
 
         /** @var Order $order */
-        $order = factory(Order::class)->create([
+        $order = Order::factory()->create([
             'shipping_address_id' => $address->getKey(),
         ]);
 
-        factory(OrderProduct::class, 2)->create(['order_id' => $order->getKey()]);
+        OrderProduct::factory()->count(2)->create(['order_id' => $order->getKey()]);
 
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'address_label_template' => 'dpd_label',
         ]);
 

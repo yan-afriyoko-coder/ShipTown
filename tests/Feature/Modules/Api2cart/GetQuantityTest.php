@@ -21,16 +21,16 @@ class GetQuantityTest extends TestCase
     {
         parent::setUp();
 
-        factory(Warehouse::class, 10)->create();
+        Warehouse::factory()->count(10)->create();
 
-        $product1 = factory(Product::class)->create();
-        $product2 = factory(Product::class)->create();
+        $product1 = Product::factory()->create();
+        $product2 = Product::factory()->create();
 
         Inventory::query()->each(function (Inventory $inventory) {
             $inventory->update(['quantity' => 1]);
         });
 
-        $api2cartConnection = factory(Api2cartConnection::class)
+        $api2cartConnection = Api2cartConnection::factory()
             ->create(['inventory_source_warehouse_tag' => 'magento_stock']);
 
         $this->productLink = new Api2cartProductLink();

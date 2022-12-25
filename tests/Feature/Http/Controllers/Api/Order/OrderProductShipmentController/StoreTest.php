@@ -12,7 +12,7 @@ class StoreTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = factory(User::class)->create()->assignRole('user');
+        $admin = User::factory()->create()->assignRole('user');
         $this->actingAs($admin, 'api');
     }
 
@@ -20,10 +20,10 @@ class StoreTest extends TestCase
     public function test_store_call_returns_ok()
     {
         /** @var Order $order */
-        $order = factory(Order::class)->create();
+        $order = Order::factory()->create();
 
         /** @var OrderProduct $orderProduct */
-        $orderProduct = factory(OrderProduct::class)->create(['order_id' => $order->getKey()]);
+        $orderProduct = OrderProduct::factory()->create(['order_id' => $order->getKey()]);
 
         $response = $this->postJson('/api/orders/products/shipments', [
             'product_id'       => $orderProduct->product_id,

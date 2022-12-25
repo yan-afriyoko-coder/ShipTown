@@ -18,8 +18,8 @@ class BasicModuleTest extends TestCase
     {
         InventoryQuantityIncomingServiceProvider::enableModule();
 
-        $warehouse = factory(Warehouse::class)->create();
-        $product = factory(Product::class)->create();
+        $warehouse = Warehouse::factory()->create();
+        $product = Product::factory()->create();
 
         $inventory = Inventory::query()->where([
             'warehouse_id' => $warehouse->getKey(),
@@ -33,7 +33,7 @@ class BasicModuleTest extends TestCase
         ]);
 
         /** @var DataCollection $dataCollection */
-        $dataCollection = factory(DataCollection::class)->create([
+        $dataCollection = DataCollection::factory()->create([
             'type' => DataCollectionTransferIn::class,
             'name' => 'Test',
             'warehouse_id' => $warehouse->getKey(),
@@ -51,8 +51,8 @@ class BasicModuleTest extends TestCase
     {
         InventoryQuantityIncomingServiceProvider::enableModule();
 
-        $warehouse = factory(Warehouse::class)->create();
-        $product = factory(Product::class)->create();
+        $warehouse = Warehouse::factory()->create();
+        $product = Product::factory()->create();
 
         $inventory = Inventory::query()->where([
             'warehouse_id' => $warehouse->getKey(),
@@ -66,7 +66,7 @@ class BasicModuleTest extends TestCase
         ]);
 
         /** @var DataCollection $dataCollection */
-        $dataCollection = factory(DataCollection::class)->create([
+        $dataCollection = DataCollection::factory()->create([
             'type' => DataCollectionTransferIn::class,
             'name' => 'Test',
             'warehouse_id' => $warehouse->getKey(),
@@ -88,8 +88,8 @@ class BasicModuleTest extends TestCase
     {
         InventoryQuantityIncomingServiceProvider::enableModule();
 
-        $warehouse = factory(Warehouse::class)->create();
-        $product = factory(Product::class)->create();
+        $warehouse = Warehouse::factory()->create();
+        $product = Product::factory()->create();
 
         $inventory = Inventory::query()->where([
             'warehouse_id' => $warehouse->getKey(),
@@ -103,7 +103,7 @@ class BasicModuleTest extends TestCase
         ]);
 
         /** @var DataCollection $dataCollection */
-        $dataCollection = factory(DataCollection::class)->create([
+        $dataCollection = DataCollection::factory()->create([
             'type' => DataCollectionTransferIn::class,
             'name' => 'Test',
             'warehouse_id' => $warehouse->getKey(),
@@ -120,8 +120,8 @@ class BasicModuleTest extends TestCase
     {
         InventoryQuantityIncomingServiceProvider::enableModule();
 
-        $warehouse = factory(Warehouse::class)->create();
-        $product = factory(Product::class)->create();
+        $warehouse = Warehouse::factory()->create();
+        $product = Product::factory()->create();
 
         $inventory = Inventory::query()->where([
             'warehouse_id' => $warehouse->getKey(),
@@ -135,7 +135,7 @@ class BasicModuleTest extends TestCase
         ]);
 
         /** @var DataCollection $dataCollection */
-        $dataCollection = factory(DataCollection::class)->create([
+        $dataCollection = DataCollection::factory()->create([
             'type' => DataCollectionTransferIn::class,
             'name' => 'Test',
             'warehouse_id' => $warehouse->getKey(),

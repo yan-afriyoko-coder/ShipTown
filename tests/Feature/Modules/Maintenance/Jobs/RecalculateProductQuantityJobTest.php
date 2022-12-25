@@ -22,9 +22,13 @@ class RecalculateProductQuantityJobTest extends TestCase
         Order::query()->forceDelete();
         OrderProduct::query()->forceDelete();
 
-        factory(Order::class)
-            ->with('orderProducts', 2)
+        $order = Order::factory()
             ->create(['status_code' => 'paid']);
+
+        OrderProduct::factory()
+            ->create([
+                'order_id' => $order->id,
+            ]);
 
         Product::query()->update([
             'quantity' => 0,

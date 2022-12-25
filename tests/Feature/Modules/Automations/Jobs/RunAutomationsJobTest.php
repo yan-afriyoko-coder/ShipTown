@@ -45,24 +45,24 @@ class RunAutomationsJobTest extends TestCase
         ray(Order::all()->toArray());
 
         /** @var Order $order */
-        $order = factory(Order::class)->create(['status_code' => 'paid']);
-        factory(OrderProduct::class)->create(['order_id' => $order->getKey()]);
+        $order = Order::factory()->create(['status_code' => 'paid']);
+        OrderProduct::factory()->create(['order_id' => $order->getKey()]);
 
         /** @var Order $order */
-        $order = factory(Order::class)->create(['status_code' => 'paid']);
-        factory(OrderProduct::class)->create(['order_id' => $order->getKey()]);
+        $order = Order::factory()->create(['status_code' => 'paid']);
+        OrderProduct::factory()->create(['order_id' => $order->getKey()]);
 
         /** @var Order $order */
-        $order = factory(Order::class)->create(['status_code' => 'paid']);
-        factory(OrderProduct::class)->create(['order_id' => $order->getKey()]);
+        $order = Order::factory()->create(['status_code' => 'paid']);
+        OrderProduct::factory()->create(['order_id' => $order->getKey()]);
 
         /** @var Order $order */
-        $order = factory(Order::class)->create(['status_code' => 'paid']);
-        factory(OrderProduct::class)->create(['order_id' => $order->getKey()]);
+        $order = Order::factory()->create(['status_code' => 'paid']);
+        OrderProduct::factory()->create(['order_id' => $order->getKey()]);
 
         /** @var Order $order */
-        $order = factory(Order::class)->create(['status_code' => 'paid']);
-        factory(OrderProduct::class)->create(['order_id' => $order->getKey()]);
+        $order = Order::factory()->create(['status_code' => 'paid']);
+        OrderProduct::factory()->create(['order_id' => $order->getKey()]);
     }
 
     /**

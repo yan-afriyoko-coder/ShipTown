@@ -19,12 +19,6 @@ class InventoryMovementsReport extends Report
         $this->report_name = 'Stocktakes Report';
 
         $this->baseQuery = InventoryMovement::query()
-            ->leftJoin('inventory', function ($join) {
-                $join->on('inventory_movements.product_id', '=', 'inventory.product_id');
-                $join->on('inventory_movements.warehouse_id', '=', 'inventory.warehouse_id');
-            })
-            ->leftJoin('products as product', 'inventory_movements.product_id', '=', 'product.id')
-            ->leftJoin('users as user', 'inventory_movements.user_id', '=', 'user.id')
             ->orderBy('inventory_movements.id', 'desc');
 
         $this->allowedIncludes = [
@@ -37,7 +31,6 @@ class InventoryMovementsReport extends Report
         $this->fields = [
             'id'                => 'inventory_movements.id',
             'created_at'        => 'inventory_movements.created_at',
-            'warehouse_code'    => 'inventory.warehouse_code',
             'quantity_delta'    => 'inventory_movements.quantity_delta',
             'quantity_before'   => 'inventory_movements.quantity_before',
             'quantity_after'    => 'inventory_movements.quantity_after',
@@ -62,6 +55,10 @@ class InventoryMovementsReport extends Report
                 });
             })
         );
+        $this->addFilter(
+            AllowedFilter::exact('warehouse_code', 'inventory.warehouse_code')
+        );
+
 
         $this->addFilter(
             AllowedFilter::callback('has_tags', function ($query, $value) {
@@ -80,23 +77,23 @@ class InventoryMovementsReport extends Report
         );
     }
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function product(): BelongsTo
-    {
-        return $this->belongsTo(Product::class);
-    }
-
-    public function inventory(): BelongsTo
-    {
-        return $this->belongsTo(Inventory::class);
-    }
-
-    public function warehouse(): BelongsTo
-    {
-        return $this->belongsTo(Warehouse::class);
-    }
+//    public function user(): BelongsTo
+//    {
+//        return $this->belongsTo(User::class);
+//    }
+//
+//    public function product(): BelongsTo
+//    {
+//        return $this->belongsTo(Product::class);
+//    }
+//
+//    public function inventory(): BelongsTo
+//    {
+//        return $this->belongsTo(Inventory::class);
+//    }
+//
+//    public function warehouse(): BelongsTo
+//    {
+//        return $this->belongsTo(Warehouse::class);
+//    }
 }

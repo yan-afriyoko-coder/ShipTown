@@ -2,21 +2,21 @@
 
 namespace Tests\Browser\Routes;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
-/**
- *
- */
-class ManifestjsonPageTest extends TestCase
+use Throwable;
+
+class ManifestjsonPageTest extends DuskTestCase
 {
+    private string $uri = '/manifest.json';
+
     /**
-     * A Dusk test example.
-     *
-     * @return void
+     * @throws Throwable
      */
-    public function testExample()
+    public function testBasics()
     {
-        // TODO: please create test
+        $this->basicUserAccessTest($this->uri, true);
+        $this->basicAdminAccessTest($this->uri, true);
+        $this->basicGuestAccessTest($this->uri, true);
     }
 }
+

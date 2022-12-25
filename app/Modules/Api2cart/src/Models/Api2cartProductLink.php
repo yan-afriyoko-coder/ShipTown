@@ -2,6 +2,7 @@
 
 namespace App\Modules\Api2cart\src\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use App\Models\Product;
 use App\Modules\Api2cart\src\Services\Api2cartService;
@@ -53,6 +54,8 @@ use Illuminate\Support\Carbon;
  */
 class Api2cartProductLink extends BaseModel
 {
+    use HasFactory;
+
     protected $table = 'modules_api2cart_product_links';
 
     /**
@@ -74,20 +77,15 @@ class Api2cartProductLink extends BaseModel
         'api2cart_sale_price_end_date',
         'last_fetched_data',
     ];
-
-    protected $dates = [
-        'sale_price_start_date',
-        'sale_price_end_date',
-    ];
-
     /**
      * @var string[]
      */
     protected $casts = [
+        'sale_price_start_date' => 'datetime',
+        'sale_price_end_date' => 'datetime',
         'api2cart_product_id'  => 'integer',
         'last_pushed_response' => 'array',
-        'last_fetched_data'    => 'array',
-    ];
+        'last_fetched_data'    => 'array',    ];
 
     public function setLastFetchedDataAttribute($value)
     {

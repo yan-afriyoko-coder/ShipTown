@@ -26,7 +26,7 @@ class StockInWarehouse999MonitorJobTest extends TestCase
         Warehouse::firstOrCreate(['code' => '999']);
 
         /** @var Product $product */
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
 
         $inventory = $product->inventory->first;
         $inventory->update(['quantity' => 1]);

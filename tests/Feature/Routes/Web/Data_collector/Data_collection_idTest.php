@@ -31,7 +31,7 @@ class Data_collection_idTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = factory(User::class)->create();
+        $this->user = User::factory()->create();
     }
 
     /** @test */
@@ -53,8 +53,8 @@ class Data_collection_idTest extends TestCase
     {
         $this->actingAs($this->user, 'web');
 
-        $dataCollection = factory(DataCollection::class)->create([
-            'warehouse_id' => factory(Warehouse::class)->create()->getKey(),
+        $dataCollection = DataCollection::factory()->create([
+            'warehouse_id' => Warehouse::factory()->create()->getKey(),
             'name' => 'test'
         ]);
 
@@ -70,8 +70,8 @@ class Data_collection_idTest extends TestCase
 
         $this->actingAs($this->user, 'web');
 
-        $dataCollection = factory(DataCollection::class)->create([
-            'warehouse_id' => factory(Warehouse::class)->create()->getKey(),
+        $dataCollection = DataCollection::factory()->create([
+            'warehouse_id' => Warehouse::factory()->create()->getKey(),
             'name' => 'test'
         ]);
 

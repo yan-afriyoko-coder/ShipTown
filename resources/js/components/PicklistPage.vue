@@ -1,21 +1,24 @@
 <template>
     <div>
         <div class="row mb-1 pb-2 pt-1 sticky-top bg-light">
-            <div class="col-8">
+            <div class="col-8 col-lg-10">
                 <div class="pl-1 pr-1">
-                    <barcode-input-field @barcodeScanned="pickByBarcode" placeholder="Enter sku or alias to pick products"/>
+                    <barcode-input-field placeholder="Enter sku or alias to pick products"
+                                         ref="barcode"
+                                         :url_param_name="'search'"
+                                         @barcodeScanned="pickByBarcode"
+                    />
                 </div>
             </div>
-            <div class="col-4 pr-3">
+            <div class="col pr-2">
                 <div class="row">
-                    <div class="col-7">
-                        <input ref="current_location" class="form-control" placeholder="Current shelf"
+                    <div class="col">
+                        <input ref="current_location" class="form-control w-100" placeholder="Current shelf"
                                v-model="current_shelf_location"
                                @keyup.enter="reloadPicks()"/>
                     </div>
-                    <div class="col-5 ml-0 pl-0">
-                        <button type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#picklistConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
-                    </div>
+
+                    <button v-b-modal="'quick-actions-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
                 </div>
             </div>
         </div>
@@ -41,8 +44,11 @@
             </div>
         </div>
 
-        <!--     Modal -->
-        <picklist-configuration-modal id='picklistConfigurationModal' @btnSaveClicked="reloadPicks" />
+        <b-modal id="quick-actions-modal" no-fade hide-footer hide-header
+                 @shown="setFocusElementById(100,'stocktake-input', true, true)"
+                 @hidden="setFocusOnBarcodeInput(100)">
+            <stocktake-input></stocktake-input>
+        </b-modal>
 
     </div>
 </template>
@@ -57,11 +63,12 @@ import url from "../mixins/url";
 import beep from "../mixins/beep";
 import api from "../mixins/api";
 import Vue from "vue";
+import helpers from "../mixins/helpers";
 
 export default {
     name: "PicksTable",
 
-    mixins: [loadingOverlay, url, beep, api, BarcodeInputField],
+    mixins: [loadingOverlay, url, beep, api, BarcodeInputField, helpers],
 
     components: {
         'pick-card': PickCard,
@@ -103,6 +110,10 @@ export default {
 
     methods: {
         pickByBarcode(barcode) {
+            if (barcode === '') {
+                return;
+            }
+
             let pickItem = this.findPickItem(barcode);
 
             if(!pickItem) {
@@ -151,9 +162,7 @@ export default {
         reloadPicks() {
             this.setFocusOnBarcodeInput(500);
 
-            this.showLoading();
-
-            this.picklist = [];
+            // this.picklist = [];
             const params = {
                 'include': 'product,product.aliases',
                 'sort': 'inventory_source_shelf_location,sku_ordered',
@@ -171,9 +180,6 @@ export default {
                 })
                 .catch( error => {
                     this.$snotify.error('Action failed (Http code  '+ error.response.status+')');
-                })
-                .finally( () => {
-                        this.hideLoading();
                 });
         },
 
@@ -210,6 +216,7 @@ export default {
                     this.displayPickedNotification(pick, pick['quantity_required']);
                     this.beep();
                     this.removeFromPicklist(pick);
+                    this.reloadPicks();
                 });
             this.setFocusOnBarcodeInput();
         },

@@ -14,7 +14,7 @@ class IndexTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $this->actingAs($user, 'api');
     }
 

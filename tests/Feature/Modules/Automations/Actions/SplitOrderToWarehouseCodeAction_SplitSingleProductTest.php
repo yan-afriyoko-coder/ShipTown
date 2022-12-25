@@ -30,10 +30,10 @@ class SplitOrderToWarehouseCodeAction_SplitSingleProductTest extends TestCase
     {
         AutomationsServiceProvider::enableModule();
 
-        $warehouses = factory(Warehouse::class, 3)->create();
+        $warehouses = Warehouse::factory()->count(3)->create();
 
         /** @var Product $product */
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
 
 
         $warehouses->each(function (Warehouse $warehouse) use ($product) {
@@ -47,7 +47,7 @@ class SplitOrderToWarehouseCodeAction_SplitSingleProductTest extends TestCase
         });
 
         /** @var  $order */
-        $order = factory(Order::class)->create(['status_code' => 'packing']);
+        $order = Order::factory()->create(['status_code' => 'packing']);
 
         $orderProduct = new OrderProduct();
         $orderProduct->order_id = $order->getKey();

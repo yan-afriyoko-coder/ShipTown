@@ -16,11 +16,11 @@ class RemoveProductLinksIfNotAvailableOnlineJobTest extends TestCase
      */
     public function testExample()
     {
-        $product1 = factory(Product::class)->create();
-        $product2 = factory(Product::class)->create();
+        $product1 = Product::factory()->create();
+        $product2 = Product::factory()->create();
 
-        factory(Api2cartProductLink::class)->create(['product_id' => $product1->getKey()]);
-        factory(Api2cartProductLink::class)->create(['product_id' => $product2->getKey()]);
+        Api2cartProductLink::factory()->create(['product_id' => $product1->getKey()]);
+        Api2cartProductLink::factory()->create(['product_id' => $product2->getKey()]);
 
         $product2->attachTag('Available Online');
 

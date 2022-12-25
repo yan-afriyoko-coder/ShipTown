@@ -23,7 +23,6 @@
                                 'form-control': true,
                                 'is-invalid': errors.length > 0,
                             }"
-                            name="role_id"
                             id="edit-role_id">
                             <option value="" disabled>Select role</option>
                             <option v-for="(role, i) in roles" :key="i" :value="role.id">
@@ -41,7 +40,7 @@
                                 'form-control': true,
                                 'is-invalid': errors.length > 0,
                             }"
-                            id="create-warehouse_id" required>
+                            id="create-warehouse_id">
                             <option value=""></option>
                             <option v-for="warehouse in warehouses" :key="warehouse.id" :value="warehouse.id">
                                 {{ warehouse.name }}
@@ -87,16 +86,22 @@ export default {
     mounted() {
         this.showLoading();
         this.apiGetUsers({
-                'filter[user_id]': this.id
+                'filter[user_id]': this.id,
+                'include': 'roles,warehouse',
             })
             .then(({ data }) => {
                 const user = data.data[0];
                 this.name = user.name;
-                this.roleId = user.role_id;
+                this.roleId = user['roles'][0]['id'];
                 this.warehouseId = user.warehouse_id;
                 this.default_dashboard_uri = user.default_dashboard_uri;
             })
-            .finally(this.hideLoading);
+            .catch(e => {
+                this.displayApiCallError(e);
+            })
+            .finally(
+                this.hideLoading
+            );
     },
 
     props: {
@@ -125,14 +130,12 @@ export default {
                     this.$snotify.success('User updated.');
                     this.$emit('onUpdated');
                 })
-                .catch((error) => {
-                    if (error.response) {
-                        if (error.response.status === 422) {
-                            this.$refs.form.setErrors(error.response.data.errors);
-                        }
-                    }
+                .catch(e => {
+                    this.displayApiCallError(e);
                 })
-                .finally(this.hideLoading);
+                .finally(() => {
+                    this.hideLoading();
+                });
         },
     },
 

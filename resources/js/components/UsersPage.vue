@@ -15,17 +15,21 @@
             <div class="card-body">
                 <table v-if="users.length > 0" class="table table-borderless table-responsive mb-0">
                     <tbody>
-                        <tr v-for="(user, i) in users" :key="i">
+                        <tr v-for="(user, i) in users" :key="'user-' + i" @click="onEditClick(user.id)">
                             <td>
                                 <strong>{{ user.name }}</strong>
                                 <br>
                                 {{ user.email }}
                             </td>
-                            <td style="vertical-align:middle">{{ user.role_name }}</td>
                             <td style="vertical-align:middle">
-                                <a @click.prevent="onEditClick(user.id)">
-                                    <font-awesome-icon icon="user-edit"></font-awesome-icon>
-                                </a>
+                                <div v-for="session in user['sessions']">
+                                    <div :title="session['user_agent']" class="badge border-0" :class="isSessionActive(session['last_activity'])">
+                                        {{ formatDateTime(session['last_activity']) }}
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="vertical-align:middle">{{ user.roles[0] ? user.roles[0]['name'] : '' }}</td>
+                            <td style="vertical-align:middle">
                                 <a v-if="isNotSelf(user.id)" @click.prevent="onDeleteClick(user.id)">
                                     <font-awesome-icon icon="user-minus"></font-awesome-icon>
                                 </a>
@@ -40,7 +44,7 @@
             </div>
         </div>
         <!-- The modals -->
-        <b-modal ref="createModal" id="create-modal" title="Add User" @ok="handleAddOk">
+        <b-modal ref="createModal" id="create-modal" title="Add User" @ok="handleAddOk" no-fade>
             <create-modal
                 ref="createForm"
                 :roles="roles"
@@ -57,7 +61,7 @@
                 </b-button>
             </template>
         </b-modal>
-        <b-modal ref="editModal" id="edit-modal" title="Edit User" @ok="handleEditOk">
+        <b-modal ref="editModal" id="edit-modal" title="Edit User" @ok="handleEditOk" no-fade>
             <edit-modal
                 ref="editForm"
                 v-if="selectedId"
@@ -84,6 +88,7 @@ import Create from './Users/Create';
 import Edit from './Users/Edit';
 import api from "../mixins/api";
 import Vue from "vue";
+import moment from "moment";
 
 export default {
     mixins: [api],
@@ -106,12 +111,23 @@ export default {
     }),
 
     methods: {
+        isSessionActive(lastActivity) {
+            const now = moment();
+            const last = moment(lastActivity);
+            const diff = now.diff(last, 'minutes');
+            return diff < 10 ? 'badge-success' : '';
+        },
+
         loadUsers() {
             this.apiGetUsers({
+                    'include': 'roles,warehouse,sessions',
                     'per_page': 999
                 })
                 .then(({ data }) => {
                     this.users = data.data;
+                })
+                .catch(e => {
+                    this.displayApiCallError(e);
                 });
         },
 
@@ -119,6 +135,9 @@ export default {
             this.apiGetUserRoles()
                 .then(({ data }) => {
                     this.roles = data.data;
+                })
+                .catch(e => {
+                    this.displayApiCallError(e);
                 });
         },
 
@@ -131,7 +150,7 @@ export default {
                     this.warehouses = data.data;
                 })
                 .catch(e => {
-                    this.showError('Request failed: ' + e.message);
+                    this.displayApiCallError(e);
                 });
         },
 
@@ -191,6 +210,9 @@ export default {
                 .then(() => {
                     this.$snotify.success('User deactivated.');
                     this.loadUsers()
+                })
+                .catch(e => {
+                    this.displayApiCallError(e);
                 });
         },
     },

@@ -2,6 +2,7 @@
 
 namespace App\Modules\DpdIreland\src\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use App\Models\OrderAddress;
 use App\Traits\Encryptable;
@@ -59,6 +60,8 @@ use Log;
  */
 class DpdIreland extends BaseModel
 {
+    use HasFactory;
+
     use Encryptable;
 
     protected $table = 'modules_dpd-ireland_configuration';

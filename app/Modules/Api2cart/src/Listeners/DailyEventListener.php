@@ -4,7 +4,6 @@ namespace App\Modules\Api2cart\src\Listeners;
 
 use App\Events\DailyEvent;
 use App\Models\Warehouse;
-use App\Modules\Api2cart\src\Jobs\ResyncCheckFailedTaggedJob;
 use App\Modules\Api2cart\src\Jobs\ResyncLastDayJob;
 use App\Modules\Api2cart\src\Jobs\ResyncSyncErrorsTaggedJob;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +19,6 @@ class DailyEventListener
      */
     public function handle(DailyEvent $event)
     {
-        ResyncCheckFailedTaggedJob::dispatch();
         ResyncLastDayJob::dispatch();
         ResyncSyncErrorsTaggedJob::dispatch();
 

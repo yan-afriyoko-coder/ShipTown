@@ -124,7 +124,9 @@
                 this.apiGet('/api/modules/webhooks/subscriptions', {})
                     .then(({ data }) => {
                         this.subscriptions = data.data['response']['Subscriptions'];
-                    }).catch((error) => {
+                    })
+                    .catch((e) => {
+                        this.displayApiCallError(e);
                         this.has_configuration = false;
                     });
             },
@@ -142,8 +144,8 @@
                         this.getConfiguration()
                         this.$bvModal.hide('new-subscription-modal');
                     })
-                    .catch((error) => {
-                        this.displayApiCallError(error);
+                    .catch((e) => {
+                        this.displayApiCallError(e);
                     });
 
                 this.getConfiguration();

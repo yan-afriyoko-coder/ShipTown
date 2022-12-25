@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use App\Traits\LogsActivityTrait;
 use Barryvdh\LaravelIdeHelper\Eloquent;
@@ -79,6 +80,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class OrderProduct extends BaseModel
 {
+    use HasFactory;
+
     use SoftDeletes;
     use LogsActivityTrait;
 

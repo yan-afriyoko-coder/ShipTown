@@ -8,11 +8,10 @@ use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\User;
-use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
+use Spatie\Permission\Models\Role;
 
 /**
  * Class UsersController.
@@ -37,40 +36,38 @@ class UserController extends Controller
      * @param UserStoreRequest $request
      *
      * @return UserResource
-     * @throws ValidationException
      */
     public function store(UserStoreRequest $request): UserResource
     {
-        $user = User::where('email', $request->email)->onlyTrashed()->first();
+        $user = User::query()->where('email', $request->validated()['email'])->onlyTrashed()->first();
+
         if ($user) {
             $user->restore();
-            $user->update($request->validated());
         } else {
-            $this->validate($request, [
-                'email' => 'unique:users,email',
-                'name'  => 'unique:users,name'
-            ]);
-
-            $user = User::create($request->validated() + ['password' => bcrypt(Str::random(8))]);
-            Password::sendResetLink(
-                $request->only('email')
-            );
+            $user = new User();
         }
 
-        $user->assignRole($request->role_id);
+        $attributes = $request->validated();
+        $attributes['password'] = bcrypt(Str::random(32));
+
+        $user->fill($attributes);
+        $user->save();
+
+        dispatch(function () use ($user) {
+            Password::sendResetLink(['email' => $user->email]);
+        })->afterResponse();
+
+        $role = Role::findById($request->validated()['role_id']);
+
+        $user->assignRole($role);
 
         return new UserResource($user);
     }
 
-    /**
-     * SHOW api/admin/users.
-     *
-     * @param User $user
-     *
-     * @return UserResource
-     */
-    public function show(User $user): UserResource
+    public function show(int $user_id): UserResource
     {
+        $user = User::query()->with('roles')->findOrFail($user_id);
+
         return new UserResource($user);
     }
 
@@ -78,41 +75,44 @@ class UserController extends Controller
      * PUT api/admin/users.
      *
      * @param UserUpdateRequest $request
-     * @param User              $user
-     *
+     * @param int $user_id
      * @return UserResource
      */
-    public function update(UserUpdateRequest $request, User $user): UserResource
+    public function update(UserUpdateRequest $request, int $user_id): UserResource
     {
+        $updatedUser = User::query()->findOrFail($user_id);
+
         $updateData = collect($request->validated());
+        $updatedUser->fill($updateData->toArray());
 
         // Not allowed to update your own role
-        if ($request->user()->id === $user->id) {
+        if ($request->user()->id === $updatedUser->getKey()) {
             $updateData->forget('role_id');
         } else {
-            $user->syncRoles([$request->role_id]);
+            $role = Role::findById($request->validated()['role_id']);
+            $updatedUser->syncRoles([$role]);
         }
 
-        $user->fill($updateData->toArray());
-        $user->save();
+        $updatedUser->save();
 
-        return new UserResource($user);
+        return new UserResource($updatedUser);
     }
 
     /**
      * DELETE api/admin/users.
      *
      * @param UserDeleteRequest $request
-     * @param User              $user
-     *
-     * @throws Exception
-     *
+     * @param int $user_id_to_delete
      * @return UserResource
      */
-    public function destroy(UserDeleteRequest $request, User $user)
+    public function destroy(UserDeleteRequest $request, int $user_id_to_delete): UserResource
     {
+        abort_if($user_id_to_delete === $request->user()->getKey(), 403, 'You can not delete yourself');
+
+        $user = User::query()->findOrFail($user_id_to_delete);
+
         $user->delete();
 
-        return new UserResource($user);
+        return UserResource::make($user);
     }
 }

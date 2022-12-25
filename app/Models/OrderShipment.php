@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use App\User;
 use Barryvdh\LaravelIdeHelper\Eloquent;
@@ -45,6 +46,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class OrderShipment extends BaseModel
 {
+    use HasFactory;
+
     protected $table = 'orders_shipments';
 
     /**

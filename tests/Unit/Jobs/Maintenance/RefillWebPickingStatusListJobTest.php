@@ -26,13 +26,17 @@ class RefillWebPickingStatusListJobTest extends TestCase
         OrderProduct::query()->forceDelete();
         Order::query()->forceDelete();
 
-        factory(OrderStatus::class)->create(['code' => 'paid']);
+        OrderStatus::factory()->create(['code' => 'paid']);
 
-        factory(Product::class, 30)->create();
+        Product::factory()->count(30)->create();
 
-        factory(Order::class, 150)
-            ->with('orderProducts', 2)
-            ->create(['status_code' => 'paid']);
+        Order::factory()->count(150)
+            ->create(['status_code' => 'paid'])
+            ->each(function (Order $order) {
+                OrderProduct::factory()
+                    ->count(rand(1, 5))
+                    ->create(['order_id' => $order->id]);
+            });
 
         HourlyEvent::dispatch();
 

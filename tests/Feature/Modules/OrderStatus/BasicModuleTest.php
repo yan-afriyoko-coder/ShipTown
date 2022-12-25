@@ -12,9 +12,9 @@ class BasicModuleTest extends TestCase
     public function test_if_order_is_active_updates()
     {
         /** @var OrderStatus $orderStatus */
-        $orderStatus = factory(OrderStatus::class)->create(['order_active' => true]);
+        $orderStatus = OrderStatus::factory()->create(['order_active' => true]);
 
-        factory(Order::class)->create(['status_code' => $orderStatus->code]);
+        Order::factory()->create(['status_code' => $orderStatus->code]);
 
         $this->assertDatabaseHas('orders', ['is_active' => true]);
 
@@ -28,9 +28,9 @@ class BasicModuleTest extends TestCase
         OrderStatusServiceProvider::enableModule();
 
         /** @var OrderStatus $orderStatus */
-        $orderStatus = factory(OrderStatus::class)->create(['order_on_hold' => true]);
+        $orderStatus = OrderStatus::factory()->create(['order_on_hold' => true]);
 
-        factory(Order::class)->create(['status_code' => $orderStatus->code, 'is_on_hold' => true]);
+        Order::factory()->create(['status_code' => $orderStatus->code, 'is_on_hold' => true]);
 
         $this->assertDatabaseHas('orders', ['is_on_hold' => true]);
 

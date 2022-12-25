@@ -23,7 +23,7 @@ class Report extends Model
 
     public $table = 'report';
     public string $report_name = 'Report';
-    public string $view = 'reports.inventory';
+    public string $view = 'report-default';
 
     public string $defaultSelect = '';
     public ?string $defaultSort = null;

@@ -28,7 +28,7 @@ class ImportProductsJobTest extends TestCase
         RmsapiConnection::query()->delete();
         RmsapiProductImport::query()->delete();
 
-        $connection = factory(RmsapiConnection::class)->create([
+        $connection = RmsapiConnection::factory()->create([
             'location_id'  => env('TEST_RMSAPI_WAREHOUSE_CODE'),
             'url'          => env('TEST_RMSAPI_URL'),
             'username'     => env('TEST_RMSAPI_USERNAME'),

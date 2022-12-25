@@ -30,8 +30,8 @@ class PreviewTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = factory(User::class)->create();
-        $mailTemplate = factory(MailTemplate::class)->create();
+        $this->user = User::factory()->create();
+        $mailTemplate = MailTemplate::factory()->create();
 
         $this->uri = route('settings.mail_template_preview', ['mailTemplate' => $mailTemplate]);
     }

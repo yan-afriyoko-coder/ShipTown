@@ -2,21 +2,43 @@
 
 namespace Tests\Browser\Routes;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use App\User;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
-/**
- *
- */
-class DashboardPageTest extends TestCase
+use Throwable;
+
+class DashboardPageTest extends DuskTestCase
 {
+    private string $uri = '/dashboard';
+
     /**
-     * A Dusk test example.
-     *
-     * @return void
+     * @throws Throwable
      */
-    public function testExample()
+    public function testBasics()
     {
-        // TODO: please create test
+        $this->basicUserAccessTest($this->uri, true);
+        $this->basicAdminAccessTest($this->uri, true);
+        $this->basicGuestAccessTest($this->uri);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testUserAccess()
+    {
+        $this->browse(function (Browser $browser) {
+            /** @var User $user */
+            $user = User::factory()->create();
+            $user->assignRole('user');
+
+            $browser->disableFitOnFailure();
+            $browser->loginAs($user);
+            $browser->visit($this->uri);
+            $browser->pause(300);
+            $browser->assertSee('Orders - Packed');
+            $browser->assertSee('Orders - Active');
+            $browser->assertSee('Active Orders By Age');
+        });
     }
 }
+

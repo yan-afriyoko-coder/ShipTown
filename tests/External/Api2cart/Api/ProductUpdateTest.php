@@ -48,20 +48,20 @@ class ProductUpdateTest extends TestCase
         parent::setUp();
 
         /** @var Warehouse $warehouse */
-        $warehouse = factory(Warehouse::class)->create(['code' => '99', 'name' => '99']);
+        $warehouse = Warehouse::factory()->create(['code' => '99', 'name' => '99']);
 
         $warehouse->attachTag('magento_stock');
 
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
 
-        $api2cart_connection = factory(Api2cartConnection::class)->create([
+        $api2cart_connection = Api2cartConnection::factory()->create([
             'pricing_location_id' => '99',
             'bridge_api_key' => config('api2cart.api2cart_test_store_key'),
             'inventory_source_warehouse_tag' => 'magento_stock',
             'pricing_source_warehouse_id' => $warehouse->getKey()
         ]);
 
-        $this->api2cart_product_link = factory(Api2cartProductLink::class)->create([]);
+        $this->api2cart_product_link = Api2cartProductLink::factory()->create([]);
         $this->api2cart_product_link->product()->associate($product);
         $this->api2cart_product_link->api2cartConnection()->associate($api2cart_connection);
     }

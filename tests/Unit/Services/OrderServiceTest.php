@@ -9,17 +9,14 @@ use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Services\OrderService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class OrderServiceTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function testIfUpdatesProductsQuantitiesAreCorrect()
     {
-        $orderFake = factory(Order::class)->make();
+        $orderFake = Order::factory()->make();
         $randomCount = rand(1, 10);
 
         OrderAddress::query()->forceDelete();
@@ -30,8 +27,8 @@ class OrderServiceTest extends TestCase
             'status_code'      => $orderFake->status_code,
             'total'            => 12.40,
             'total_paid'       => 12.40,
-            'order_products'   => factory(OrderProduct::class, 2)->make()->toArray(),
-            'shipping_address' => factory(OrderAddress::class)->make()->toArray(),
+            'order_products'   => OrderProduct::factory()->count(2)->make()->toArray(),
+            'shipping_address' => OrderAddress::factory()->make()->toArray(),
         ];
 
         $quantityExpected = collect($attributes['order_products'])->sum(function ($orderProduct) {
@@ -45,7 +42,7 @@ class OrderServiceTest extends TestCase
 
         $attributes['order_products'] = array_merge(
             $attributes['order_products'],
-            factory(OrderProduct::class, $randomCount)->make()->toArray()
+            OrderProduct::factory()->count($randomCount)->make()->toArray()
         );
 
         $quantityExpected = collect($attributes['order_products'])->sum(function ($orderProduct) {
@@ -58,7 +55,7 @@ class OrderServiceTest extends TestCase
 
     public function testIfUpdatesProductsCorrectly()
     {
-        $orderFake = factory(Order::class)->make();
+        $orderFake = Order::factory()->make();
         $randomCount = rand(1, 10);
 
         OrderAddress::query()->forceDelete();
@@ -69,8 +66,8 @@ class OrderServiceTest extends TestCase
             'status_code'      => $orderFake->status_code,
             'total'            => 12.40,
             'total_paid'       => 12.40,
-            'order_products'   => factory(OrderProduct::class, 2)->make()->toArray(),
-            'shipping_address' => factory(OrderAddress::class)->make()->toArray(),
+            'order_products'   => OrderProduct::factory()->count(2)->make()->toArray(),
+            'shipping_address' => OrderAddress::factory()->make()->toArray(),
         ];
 
         $order = OrderService::updateOrCreate($attributes);
@@ -78,7 +75,7 @@ class OrderServiceTest extends TestCase
 
         $attributes['order_products'] = array_merge(
             $attributes['order_products'],
-            factory(OrderProduct::class, $randomCount)->make()->toArray()
+            OrderProduct::factory()->count($randomCount)->make()->toArray()
         );
 
         $order = OrderService::updateOrCreate($attributes);
@@ -98,7 +95,7 @@ class OrderServiceTest extends TestCase
         // this way we disable it
         Event::fake();
 
-        $orderFake = factory(Order::class)->make();
+        $orderFake = Order::factory()->make();
 
         OrderAddress::query()->forceDelete();
         Order::query()->forceDelete();
@@ -108,8 +105,8 @@ class OrderServiceTest extends TestCase
             'status_code'      => $orderFake->status_code,
             'total'            => 12.40,
             'total_paid'       => 12.40,
-            'order_products'   => factory(OrderProduct::class, 2)->make()->toArray(),
-            'shipping_address' => factory(OrderAddress::class)->make()->toArray(),
+            'order_products'   => OrderProduct::factory()->count(2)->make()->toArray(),
+            'shipping_address' => OrderAddress::factory()->make()->toArray(),
         ];
 
         $order = OrderService::updateOrCreate($attributes);
@@ -130,7 +127,7 @@ class OrderServiceTest extends TestCase
         OrderProduct::query()->forceDelete();
         Order::query()->forceDelete();
 
-        $order = factory(Order::class)->make();
+        $order = Order::factory()->make();
 
         $attributes = [
             'order_number'     => $order->order_number,
@@ -150,26 +147,28 @@ class OrderServiceTest extends TestCase
      */
     public function testCanFulfillMethod()
     {
-        Order::query()->forceDelete();
-        Product::query()->forceDelete();
-        Inventory::query()->forceDelete();
-
+        ray()->showQueries();
         /** @var Warehouse $warehouse */
-        $warehouse = factory(Warehouse::class)->create();
+        $warehouse = Warehouse::factory()->create();
 
         /** @var Product $product */
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
 
         /** @var Order $order */
-        $order = factory(Order::class)
-            ->with('orderProducts')
-            ->create();
+        $order = Order::factory()->create();
 
         /** @var OrderProduct $orderProduct */
-        $orderProduct = $order->orderProducts->first();
+        $orderProduct = OrderProduct::factory()
+            ->create([
+                'order_id' => $order->id,
+                'product_id' => $product->id,
+            ]);
 
-        $orderProduct->product->inventory($warehouse->code)->update([
+        $inventory = $orderProduct->product->inventory($warehouse->code)->first();
+
+        $inventory->update([
             'quantity'          => $orderProduct->quantity_ordered,
+            'quantity_available' => 0,
             'quantity_reserved' => 0,
         ]);
 
@@ -192,13 +191,19 @@ class OrderServiceTest extends TestCase
         Inventory::query()->forceDelete();
 
         /** @var Warehouse $warehouse */
-        $warehouse = factory(Warehouse::class)->create();
+        $warehouse = Warehouse::factory()->create();
 
-        factory(Product::class)->create();
+        /** @var Product $product */
+        $product = Product::factory()->create();
 
-        $order = factory(Order::class)
-            ->with('orderProducts')
-            ->create();
+        /** @var Order $order */
+        $order = Order::factory()->create();
+
+        OrderProduct::factory(1)
+            ->create([
+                'order_id' => $order->id,
+                'product_id' => $product->id,
+            ]);
 
         /** @var OrderProduct $orderProduct */
         $orderProduct = $order->orderProducts->first();
@@ -220,11 +225,13 @@ class OrderServiceTest extends TestCase
     public function testFailedCanFulfill()
     {
         /** @var Warehouse $warehouse */
-        $warehouse = factory(Warehouse::class)->create();
+        $warehouse = Warehouse::factory()->create();
 
-        $order = factory(Order::class)
-            ->with('orderProducts', 1)
-            ->create();
+        /** @var Order $order */
+        $order = Order::factory()->create();
+
+        OrderProduct::factory(1)
+            ->create(['order_id' => $order->id]);
 
         /** @var OrderProduct $orderProduct */
         $orderProduct = $order->orderProducts->first();
@@ -241,11 +248,13 @@ class OrderServiceTest extends TestCase
     public function testSuccessfulCanFulfill()
     {
         /** @var Warehouse $warehouse */
-        $warehouse = factory(Warehouse::class)->create();
+        $warehouse = Warehouse::factory()->create();
 
-        $order = factory(Order::class)
-            ->with('orderProducts', 1)
-            ->create();
+        /** @var Order $order */
+        $order = Order::factory()->create();
+
+        OrderProduct::factory(1)
+            ->create(['order_id' => $order->id]);
 
         /** @var OrderProduct $orderProduct */
         $orderProduct = $order->orderProducts->first();

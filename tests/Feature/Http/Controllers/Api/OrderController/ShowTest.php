@@ -4,21 +4,22 @@ namespace Tests\Feature\Http\Controllers\Api\OrderController;
 
 use App\Models\Order;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ShowTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function test_show_call_returns_ok()
     {
-        $order = factory(Order::class)->create();
+        $order = Order::factory()->create();
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user, 'api')->getJson(route('orders.show', $order));
+
+        ray($response->json());
+
         $response->assertOk();
+
         $response->assertJsonStructure([
             'data' => [
                 'id',
@@ -46,7 +47,7 @@ class ShowTest extends TestCase
 
     public function test_show_call_not_found()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user, 'api')->getJson(route('orders.show', 0));
         $response->assertStatus(404);

@@ -2,21 +2,21 @@
 
 namespace Tests\Browser\Routes\Reports;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
-/**
- *
- */
-class RestockingPageTest extends TestCase
+use Throwable;
+
+class RestockingPageTest extends DuskTestCase
 {
+    private string $uri = '/reports/restocking';
+
     /**
-     * A Dusk test example.
-     *
-     * @return void
+     * @throws Throwable
      */
-    public function testExample()
+    public function testBasics()
     {
-        // TODO: please create test
+        $this->basicUserAccessTest($this->uri, true);
+        $this->basicAdminAccessTest($this->uri, true);
+        $this->basicGuestAccessTest($this->uri);
     }
 }
+

@@ -22,7 +22,7 @@ class JobsDispatchTests extends TestCase
 
         RmsapiModuleServiceProvider::enableModule();
 
-        factory(RmsapiConnection::class)->create();
+        RmsapiConnection::factory()->create();
 
         DispatchImportJobs::dispatchNow();
 
@@ -41,7 +41,7 @@ class JobsDispatchTests extends TestCase
 
         RmsapiModuleServiceProvider::enableModule();
 
-        factory(RmsapiConnection::class)->create();
+        RmsapiConnection::factory()->create();
 
         (new SyncRequestJob())->handle();
 

@@ -13,13 +13,11 @@ use Illuminate\Http\Response;
  */
 class MailTemplatePreviewController extends Controller
 {
-    /**
-     * @param Request $request
-     * @param MailTemplate $mailTemplate
-     * @return Application|ResponseFactory|Response
-     */
-    public function index(Request $request, MailTemplate $mailTemplate)
+    public function index(Request $request, int $mailTemplate_id): Response|Application|ResponseFactory
     {
+        /** @var MailTemplate $mailTemplate */
+        $mailTemplate = MailTemplate::query()->findOrFail($mailTemplate_id);
+
         return response($mailTemplate->html_template);
     }
 }

@@ -29,7 +29,7 @@ class StoreTest extends TestCase
     public function test_store_call_returns_ok()
     {
         Passport::actingAs(
-            factory(User::class)->states('admin')->create()
+            User::factory()->admin()->create()
         );
 
         $response = $this->simulationTest();
@@ -47,7 +47,7 @@ class StoreTest extends TestCase
     public function test_store_call_should_loggedin_as_admin()
     {
         Passport::actingAs(
-            factory(User::class)->create()
+            User::factory()->create()
         );
 
         $response = $this->simulationTest();
@@ -58,7 +58,7 @@ class StoreTest extends TestCase
     public function test_code_cannot_duplicate()
     {
         Passport::actingAs(
-            factory(User::class)->states('admin')->create()
+            User::factory()->admin()->create()
         );
 
         $this->simulationTest();
@@ -72,7 +72,7 @@ class StoreTest extends TestCase
     public function test_add_deleted_status_return_ok()
     {
         Passport::actingAs(
-            factory(User::class)->states('admin')->create()
+            User::factory()->admin()->create()
         );
 
         $orderStatus = OrderStatus::create([

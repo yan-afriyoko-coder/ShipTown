@@ -14,15 +14,15 @@ class UpdateTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = factory(User::class)->create()->assignRole('admin');
+        $admin = User::factory()->create()->assignRole('admin');
         $this->actingAs($admin, 'api');
     }
 
     /** @test */
     public function test_update_call_returns_ok()
     {
-        $order = factory(Order::class)->create();
-        $user = factory(User::class)->create();
+        $order = Order::factory()->create();
+        $user = User::factory()->create();
 
         $response = $this->putJson(route('orders.update', [$order]), [
             'status_code'    => 'test_status_code',

@@ -12,12 +12,12 @@ class IndexTest extends TestCase
     /** @test */
     public function test_index_call_returns_ok()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         /** @var Warehouse $warehouse */
-        $warehouse = factory(Warehouse::class)->create();
+        $warehouse = Warehouse::factory()->create();
 
-        factory(DataCollection::class)->create([
+        DataCollection::factory()->create([
             'warehouse_id' => $warehouse->id,
             'name' => 'test'
         ]);

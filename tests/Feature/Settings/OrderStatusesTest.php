@@ -15,7 +15,7 @@ class OrderStatusesTest extends TestCase
     public function test_setting_order_statuses_page_can_be_rendered()
     {
         $this->actingAs(
-            factory(User::class)->states('admin')->create()
+            User::factory()->admin()->create()
         );
 
         $response = $this->get(route('settings.order_statuses'));
@@ -34,7 +34,7 @@ class OrderStatusesTest extends TestCase
     public function test_access_setting_order_statuses_page_should_loggedin_as_admin()
     {
         $this->actingAs(
-            factory(User::class)->create()
+            User::factory()->create()
         );
 
         $response = $this->get(route('settings.order_statuses'));

@@ -19,26 +19,26 @@ class RecalculateQuantityReservedJobTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = factory(User::class)->create()->assignRole('admin');
+        $admin = User::factory()->create()->assignRole('admin');
         $this->actingAs($admin, 'api');
 
         EventServiceProviderBase::enableModule();
 
         if (Warehouse::whereCode('999')->doesntExist()) {
-            factory(Warehouse::class)->create(['code' => '999']);
+            Warehouse::factory()->create(['code' => '999']);
         }
     }
 
     /** @test */
     public function test_if_recalculates_correctly()
     {
-        factory(OrderStatus::class)->create([
+        OrderStatus::factory()->create([
             'code'          => 'new',
             'name'          => 'new',
             'order_active'  => true,
         ]);
 
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
 
         $random_quantity = rand(1, 20);
 
@@ -69,7 +69,7 @@ class RecalculateQuantityReservedJobTest extends TestCase
     /** @test */
     public function test_if_recalculates_correctly_if_0_reserved()
     {
-        factory(Product::class)->create();
+        Product::factory()->create();
 
         Inventory::query()->where(['warehouse_code' => '999'])->update(['quantity_reserved' => 4]);
 

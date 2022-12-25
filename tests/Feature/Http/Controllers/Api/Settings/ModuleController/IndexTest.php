@@ -15,7 +15,7 @@ class IndexTest extends TestCase
     public function test_index_call_returns_ok()
     {
         Passport::actingAs(
-            factory(User::class)->states('admin')->create()
+            User::factory()->admin()->create()
         );
 
         $response = $this->get(route('api.settings.modules.index'));
@@ -33,7 +33,7 @@ class IndexTest extends TestCase
     public function test_index_call_should_loggedin_as_admin()
     {
         Passport::actingAs(
-            factory(User::class)->create()
+            User::factory()->create()
         );
 
         $response = $this->get(route('api.settings.modules.index'));

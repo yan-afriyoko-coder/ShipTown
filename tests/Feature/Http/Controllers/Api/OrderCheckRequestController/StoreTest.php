@@ -14,7 +14,7 @@ class StoreTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = factory(User::class)->create()->assignRole('admin');
+        $admin = User::factory()->create()->assignRole('admin');
         $this->actingAs($admin, 'api');
     }
 
@@ -22,7 +22,7 @@ class StoreTest extends TestCase
     public function test_store_call_returns_ok()
     {
         /** @var Order $order */
-        $order = factory(Order::class)->create();
+        $order = Order::factory()->create();
 
         $response = $this->postJson(route('order-check-request.store'), [
             'order_id' => $order->getKey()

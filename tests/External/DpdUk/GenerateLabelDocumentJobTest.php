@@ -34,7 +34,7 @@ class GenerateLabelDocumentJobTest extends TestCase
         }
 
         /** @var OrderAddress $testAddress */
-        $testAddress = factory(OrderAddress::class)->make();
+        $testAddress = OrderAddress::factory()->make();
         $testAddress->first_name      = 'My';
         $testAddress->last_name       = 'Contact';
         $testAddress->phone           = '0121 500 2500';
@@ -48,11 +48,11 @@ class GenerateLabelDocumentJobTest extends TestCase
         $testAddress->save();
 
         /** @var Connection $connection */
-        $connection = factory(Connection::class)->make();
+        $connection = Connection::factory()->make();
         $connection->collection_address_id = $testAddress->getKey();
         $connection->save();
 
-        $order = factory(Order::class)->create();
+        $order = Order::factory()->create();
         $shipment = (new DpdUkService())->ship($order->getKey());
 
         $this->assertGreaterThan(0, $shipment->count());

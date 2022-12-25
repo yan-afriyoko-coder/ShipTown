@@ -14,10 +14,10 @@ class IndexTest extends TestCase
     {
         Activity::query()->forceDelete();
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         // product creation will generate some logs
-        factory(Product::class)->create();
+        Product::factory()->create();
 
         $response = $this->actingAs($user, 'api')->getJson(route('logs.index'));
 

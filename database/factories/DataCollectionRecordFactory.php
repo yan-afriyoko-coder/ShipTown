@@ -1,20 +1,25 @@
 <?php
 
-/** @var Factory $factory */
+namespace Database\Factories;
 
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
 use App\Models\Product;
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(DataCollectionRecord::class, function (Faker $faker) {
-    $product = Product::query()->inRandomOrder()->first() ?? factory(Product::class)->create();
-    $data_collection = DataCollection::query()->inRandomOrder()->first() ?? factory(DataCollection::class)->create();
+class DataCollectionRecordFactory extends Factory
+{
+    protected $model = DataCollectionRecord::class;
 
-    return [
-        'data_collection_id' => $data_collection->getKey(),
-        'product_id' => $product->getKey(),
-        'quantity_requested' => rand(1, 100),
-    ];
-});
+    public function definition(): array
+    {
+        $product = Product::query()->inRandomOrder()->first() ?? Product::factory()->create();
+        $data_collection = DataCollection::query()->inRandomOrder()->first() ?? DataCollection::factory()->create();
+
+        return [
+            'data_collection_id' => $data_collection->getKey(),
+            'product_id' => $product->getKey(),
+            'quantity_requested' => rand(1, 100),
+        ];
+    }
+}

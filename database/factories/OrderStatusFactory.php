@@ -1,48 +1,53 @@
 <?php
 
-/** @var Factory $factory */
+namespace Database\Factories;
 
 use App\Models\OrderStatus;
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(OrderStatus::class, function (Faker $faker) {
-    $availableStatuses = [
-        'open',
-        'closed',
-        'pending',
-        'ready',
-        'on_hold',
-        'authorized',
-        'paid',
-        'fulfilled',
-        'overdue',
-        'refunded',
-        'unpaid',
-        'voided',
-        'in_transit',
-        'canceled',
-        'completed',
-        'awaiting',
-        'cannot_fulfill',
-        'packing_dublin',
-        'packing_galway',
-        'packing_warehouse',
-        'ready_for_collection',
-        'collection_dublin',
-        'collection_galway',
-    ];
+class OrderStatusFactory extends Factory
+{
+    protected $model = OrderStatus::class;
 
-    $status = $faker->randomElement($availableStatuses);
+    public function definition(): array
+    {
+        $availableStatuses = [
+            'open',
+            'closed',
+            'pending',
+            'ready',
+            'on_hold',
+            'authorized',
+            'paid',
+            'fulfilled',
+            'overdue',
+            'refunded',
+            'unpaid',
+            'voided',
+            'in_transit',
+            'canceled',
+            'completed',
+            'awaiting',
+            'cannot_fulfill',
+            'packing_dublin',
+            'packing_galway',
+            'packing_warehouse',
+            'ready_for_collection',
+            'collection_dublin',
+            'collection_galway',
+        ];
 
-    while (OrderStatus::query()->where(['code' => $status])->exists()) {
-        $status = $faker->randomElement($availableStatuses);
+        $status = $this->faker->randomElement($availableStatuses);
+
+        while (OrderStatus::query()->where(['code' => $status])->exists()) {
+            $status = $this->faker->randomElement($availableStatuses);
+        }
+
+        return [
+            'code'           => $status,
+            'name'           => $status,
+            'order_active'   => $this->faker->boolean,
+            'order_on_hold'  => $this->faker->boolean,
+        ];
     }
-
-    return [
-        'code'           => $status,
-        'name'           => $status,
-        'order_active'   => $faker->boolean,
-        'order_on_hold'  => $faker->boolean,
-    ];
-});
+}

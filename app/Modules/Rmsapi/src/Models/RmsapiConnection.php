@@ -2,9 +2,10 @@
 
 namespace App\Modules\Rmsapi\src\Models;
 
+use App\BaseModel;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Crypt;
 
@@ -34,8 +35,10 @@ use Illuminate\Support\Facades\Crypt;
  * @method static Builder|RmsapiConnection whereUsername($value)
  * @mixin Eloquent
  */
-class RmsapiConnection extends Model
+class RmsapiConnection extends BaseModel
 {
+    use HasFactory;
+
     protected $table = 'modules_rmsapi_connections';
 
     protected $fillable = [

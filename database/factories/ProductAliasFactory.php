@@ -1,19 +1,26 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
+use App\Models\Product;
 use App\Models\ProductAlias;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(ProductAlias::class, function (Faker $faker) {
-    $product = \App\Models\Product::query()->inRandomOrder()->first();
+class ProductAliasFactory extends Factory
+{
+    protected $model = ProductAlias::class;
 
-    if (empty($product)) {
-        $product = factory(\App\Models\Product::class)->create();
+    public function definition(): array
+    {
+        $product = Product::query()->inRandomOrder()->first();
+
+        if (empty($product)) {
+            $product = Product::factory()->create();
+        }
+
+        return [
+            'product_id' => $product->getKey(),
+            'alias'      => $this->faker->ean13,
+        ];
     }
-
-    return [
-        'product_id' => $product->getKey(),
-        'alias'      => $faker->ean13,
-    ];
-});
+}

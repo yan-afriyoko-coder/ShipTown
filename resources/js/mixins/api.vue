@@ -4,9 +4,11 @@
 
 <script>
 import Vue from "vue";
-
+import helpers from "./helpers";
 export default {
         name: "api",
+
+        mixins: [helpers],
 
         created() {
             Vue.prototype.$currentUser = JSON.parse(document.querySelector("meta[name='current-user']").getAttribute('content'));

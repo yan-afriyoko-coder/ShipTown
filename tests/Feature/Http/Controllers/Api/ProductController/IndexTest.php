@@ -15,9 +15,9 @@ class IndexTest extends TestCase
     public function test_index_call_returns_ok()
     {
         Product::query()->forceDelete();
-        factory(Product::class)->create();
+        Product::factory()->create();
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user, 'api')->getJson(route('products.index', [
             'include' => [

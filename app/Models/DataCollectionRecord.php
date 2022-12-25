@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Helpers\HasQuantityRequiredSort;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -31,6 +32,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class DataCollectionRecord extends Model
 {
+    use HasFactory;
+
     use SoftDeletes;
 
     protected $fillable = [

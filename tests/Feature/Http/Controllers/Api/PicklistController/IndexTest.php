@@ -15,11 +15,11 @@ class IndexTest extends TestCase
     /** @test */
     public function test_index_call_returns_ok()
     {
-        $warehouse = factory(Warehouse::class)->create();
+        $warehouse = Warehouse::factory()->create();
 //        OrderProduct::query()->forceDelete();
-        $orderProduct = factory(OrderProduct::class)->create();
+        $orderProduct = OrderProduct::factory()->create();
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user, 'api')->getJson(route('picklist.index'));
 

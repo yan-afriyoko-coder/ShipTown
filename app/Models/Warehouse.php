@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use App\Traits\HasTagsTrait;
 use App\Traits\LogsActivityTrait;
@@ -41,6 +42,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class Warehouse extends BaseModel
 {
+    use HasFactory;
+
     use LogsActivityTrait;
     use HasTagsTrait;
 

@@ -1,53 +1,45 @@
 <template>
     <div>
-        <div class="row mb-3 pl-1 pr-1 sticky-top">
+        <div class="row mb-1 pb-2 p-1 sticky-top bg-light">
             <div class="flex-fill">
-                <stocktaking-input-field @stocktakeSubmitted="reloadData"></stocktaking-input-field>
+                <stocktake-input @stocktakeSubmitted="reloadData"></stocktake-input>
             </div>
 
             <button id="config-button" disabled type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
-        <div class="row pl-2 p-1 font-weight-bold text-uppercase small text-secondary">
-            <div class="col-6 text-left">
-                Recent Stocktakes
-            </div>
-            <div class="col-6 text-right">
-                <a :href="route('reports.inventory-movements', {'filter[description]': 'stocktake'})">See more</a>
-            </div>
-        </div>
 
-        <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
-            <template v-slot:content>
-                    <div class="row">
-                        <div class="col-sm-12 col-lg-5 text-secondary">
-                            <table>
-                                <template v-for="itemMovement in recentStocktakes.data">
-                                    <tr>
-                                        <td class="text-right">
-                                            {{ Number(itemMovement['quantity_after']) }} x
-                                        </td>
-                                        <td>
-                                            {{ itemMovement['product']['sku'] }}<br>
-                                        </td>
-                                        <td>
-                                            - {{ itemMovement['product']['name'] }}<br>
-                                        </td>
-                                    </tr>
-                                </template>
-                            </table>
+        <template v-if="recentStocktakes.data">
+            <div class="row pl-2 p-1 font-weight-bold text-uppercase small text-secondary">
+                <div class="col-6 text-left">
+                    Recent Stocktakes
+                </div>
+                <div class="col-6 text-right">
+                    <a :href="route('reports.inventory-movements', {'filter[description]': 'stocktake'})">See more</a>
+                </div>
+            </div>
+            <div class="text-secondary small text-center" v-if="recentStocktakes.data.length === 0">
+                &nbsp; No recent stocktakes found
+            </div>
+
+            <div class="row card text-secondary p-1 pl-2 mb-2" v-if="recentStocktakes.data.length > 0">
+                <template v-for="itemMovement in recentStocktakes.data">
+                        <div>
+                            {{ Number(itemMovement['quantity_after']) }} x
+                            {{ itemMovement['product']['sku'] }}
+                            - {{ itemMovement['product']['name'] }}
                         </div>
-                    </div>
-            </template>
-        </swiping-card>
+                </template>
+            </div>
+        </template>
 
-        <div class="row pl-2 p-1 font-weight-bold text-uppercase small text-secondary">
+        <div class="row mt-2 pl-2 p-1 font-weight-bold text-uppercase small text-secondary">
             <div class="col-12 text-left">
                 Stocktake suggestions
             </div>
         </div>
 
-        <div v-if="(stocktakeSuggestions !== null) && (stocktakeSuggestions.length === 0)" class="text-center mt-3">
+        <div v-if="(stocktakeSuggestions !== null) && (stocktakeSuggestions.length === 0)" class="text-secondary small text-center mt-3">
             You're all done! <br>
             No more suggestions found.
         </div>
@@ -93,13 +85,14 @@
         },
 
         mounted() {
+            console.log(this.currentUser());
             if (! this.currentUser()['warehouse_id']) {
                 this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
                 return;
             }
 
-            this.getUrlFilterOrSet('filter[warehouse_code]', this.currentUser()['warehouse']['code']);
-
+            // this.getUrlFilterOrSet('filter[warehouse_code]', this.currentUser()['warehouse']['code']);
+3
             window.onscroll = () => this.loadMore();
 
             this.loadStocktakeSuggestions();
@@ -157,10 +150,6 @@
             loadStocktakeSuggestions(page = 1) {
                 this.showLoading();
 
-                if (page === 1) {
-                    this.stocktakeSuggestions = null;
-                }
-
                 let params = {...this.$router.currentRoute.query};
                 params['include'] = 'product,inventory,product.tags,product.prices';
                 params['sort'] = this.getUrlParameter('sort', '-points,');
@@ -171,11 +160,13 @@
                     .then((response) => {
                         if (page === 1) {
                             this.stocktakeSuggestions = [];
+                            this.stocktakeSuggestions = response.data.data;
+                        } else {
+                            this.stocktakeSuggestions = this.stocktakeSuggestions.concat(response.data.data);
                         }
                         this.reachedEnd = response.data.data.length === 0;
                         this.pagesLoaded = page;
 
-                        this.stocktakeSuggestions = this.stocktakeSuggestions.concat(response.data.data);
                     })
                     .catch((error) => {
                         this.displayApiCallError(error);

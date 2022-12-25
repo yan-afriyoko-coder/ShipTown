@@ -13,16 +13,16 @@ class StoreTest extends TestCase
     /** @test */
     public function test_store_call_returns_ok()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $dataCollection = factory(DataCollection::class)->create([
-            'warehouse_id' => factory(Warehouse::class)->create()->getKey(),
+        $dataCollection = DataCollection::factory()->create([
+            'warehouse_id' => Warehouse::factory()->create()->getKey(),
             'name' => 'test'
         ]);
 
         $response = $this->actingAs($user, 'api')->postJson(route('data-collector-records.store'), [
             'data_collection_id' => $dataCollection->getKey(),
-            'product_id'=> factory(Product::class)->create()->getKey(),
+            'product_id'=> Product::factory()->create()->getKey(),
             'quantity_scanned' => rand(0, 100),
         ]);
 

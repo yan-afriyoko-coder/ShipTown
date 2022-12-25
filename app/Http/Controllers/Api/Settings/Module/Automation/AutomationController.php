@@ -7,20 +7,12 @@ use App\Http\Requests\Automations\StoreRequest;
 use App\Http\Requests\Automations\UpdateRequest;
 use App\Http\Resources\AutomationResource;
 use App\Modules\Automations\src\Models\Automation;
-use App\Modules\Automations\src\Models\Condition;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
 class AutomationController extends Controller
 {
-
-    /**
-     * Display a listing of avaliable config automation.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function getConfig()
     {
         $configs = config('automations');
@@ -51,64 +43,56 @@ class AutomationController extends Controller
      * @return AutomationResource
      * @throws Throwable
      */
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): AutomationResource
     {
+        $automation = new Automation();
+
         try {
             DB::beginTransaction();
 
-            $dataAutomation = $request->only(['name', 'event_class', 'enabled', 'priority', 'description']);
-            $automation = Automation::create($dataAutomation);
+            $automation->fill($request->only(['name', 'event_class', 'enabled', 'priority', 'description']));
+            $automation->save();
 
-            $conditions = collect($request->conditions)
-                ->filter(function ($condition) {
+            // filter out empty conditions and actions
+            $conditions = collect($request->validated()['conditions'])
+                ->filter(function (array $condition) {
                     return $condition['condition_class'] != "";
                 });
 
-            $actions = collect($request->actions)
-                ->filter(function ($action) {
+            $actions = collect($request->validated()['actions'])
+                ->filter(function (array $action) {
                     return $action['action_class'] != "";
                 });
 
-            if (count($conditions)) {
-                $automation->conditions()->createMany($request->conditions);
-            }
-
-            if (count($actions)) {
-                $automation->actions()->createMany($request->actions);
-            }
+            $automation->conditions()->createMany($conditions);
+            $automation->actions()->createMany($actions);
 
             DB::commit();
+
+            return new AutomationResource($automation);
         } catch (\Exception $e) {
             DB::rollback();
-            ray($e);
+            report($e);
             abort(500, "Something wrong");
         }
 
         return new AutomationResource($automation);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Modules\Automations\src\Models\Automation  $automation
-     * @return AutomationResource
-     */
-    public function show(Automation $automation)
+    public function show(int $automation_id): AutomationResource
     {
-        $automation->load('conditions', 'actions');
+        $automation = Automation::query()
+            ->with(['conditions', 'actions'])
+            ->findOrFail($automation_id);
 
-        return new AutomationResource($automation);
+        return AutomationResource::make($automation);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  UpdateRequest  $request
-     * @param  \App\Modules\Automations\src\Models\Automation  $automation
-     * @return AutomationResource
-     */
-    public function update(UpdateRequest $request, Automation $automation)
+    public function update(UpdateRequest $request, int $automation_id): AutomationResource
     {
+        /** @var Automation $automation */
+        $automation = Automation::query()->findOrFail($automation_id);
+
         try {
             DB::beginTransaction();
             $dataAutomation = $request->only(['name', 'event_class', 'enabled', 'priority', 'description']);
@@ -118,29 +102,37 @@ class AutomationController extends Controller
             $automation->conditions()->delete();
             $automation->actions()->delete();
 
-            // Insert new
-            $automation->conditions()->createMany($request->conditions);
-            $automation->actions()->createMany($request->actions);
+            // filter out empty conditions and actions
+            $conditions = collect($request->validated()['conditions'])
+                ->filter(function (array $condition) {
+                    return $condition['condition_class'] != "";
+                });
+
+            $actions = collect($request->validated()['actions'])
+                ->filter(function (array $action) {
+                    return $action['action_class'] != "";
+                });
+
+            // create conditions and actions
+            $automation->conditions()->createMany($conditions);
+            $automation->actions()->createMany($actions);
 
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
+            report($e);
             abort(500, "Something wrong");
         }
 
         return new AutomationResource($automation);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Modules\Automations\src\Models\Automation  $automation
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Automation $automation)
+    public function destroy(int $automation_id): AutomationResource
     {
+        $automation = Automation::query()->findOrFail($automation_id);
+
         $automation->delete();
 
-        return true;
+        return AutomationResource::make($automation);
     }
 }

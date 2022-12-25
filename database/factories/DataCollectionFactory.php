@@ -1,16 +1,21 @@
 <?php
 
-/** @var Factory $factory */
+namespace Database\Factories;
 
 use App\Models\DataCollection;
 use App\Models\Warehouse;
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(DataCollection::class, function (Faker $faker) {
-    $warehouse = Warehouse::first() ?? factory(Warehouse::class)->create();
-    return [
-        'warehouse_id' => $warehouse->getKey(),
-        'name' => $faker->word,
-    ];
-});
+class DataCollectionFactory extends Factory
+{
+    protected $model = DataCollection::class;
+
+    public function definition(): array
+    {
+        $warehouse = Warehouse::first() ?? Warehouse::factory()->create();
+        return [
+            'warehouse_id' => $warehouse->getKey(),
+            'name' => $this->faker->word,
+        ];
+    }
+}

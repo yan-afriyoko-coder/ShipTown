@@ -30,10 +30,10 @@ class KickTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = factory(User::class)->create();
+        $this->user = User::factory()->create();
 
         /** @var Order $order */
-        $order = factory(Order::class)->create();
+        $order = Order::factory()->create();
 
         $this->uri = 'orders/' . $order->order_number . '/kick';
     }

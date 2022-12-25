@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
@@ -93,6 +94,8 @@ use Spatie\Tags\Tag;
  */
 class Product extends BaseModel
 {
+    use HasFactory;
+
     use LogsActivityTrait;
     use HasTagsTrait;
     use SoftDeletes;
@@ -130,13 +133,9 @@ class Product extends BaseModel
         'quantity_reserved'     => 0,
         'quantity_available'    => 0,
     ];
-
-    protected $dates = [
-        'sale_price_start_date',
-        'sale_price_end_date',
-    ];
-
     protected $casts = [
+        'sale_price_start_date' => 'datetime',
+        'sale_price_end_date' => 'datetime',
         'quantity'           => 'float',
         'quantity_reserved'  => 'float',
         'quantity_available' => 'float',
@@ -293,9 +292,6 @@ class Product extends BaseModel
         });
     }
 
-    /**
-     * @return HasMany|Inventory
-     */
     public function inventory(string $warehouse_code = null): HasMany
     {
         return $this->hasMany(Inventory::class)

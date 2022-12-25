@@ -14,13 +14,13 @@ class StoreTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $user = factory(User::class)->create()->assignRole('user');
+        $user = User::factory()->create()->assignRole('user');
         $this->actingAs($user, 'api');
     }
 
     public function test_successful()
     {
-        $order = factory(Order::class)->create();
+        $order = Order::factory()->create();
 
         $response = $this->postJson(route('new.shipments.store'), [
             'order_id' => $order->getKey(),

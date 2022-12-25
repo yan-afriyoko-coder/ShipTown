@@ -19,7 +19,7 @@ class International_CHE_Test extends TestCase
     {
 //        $this->markTestIncomplete();
 
-        $address = factory(OrderAddress::class)->create([
+        $address = OrderAddress::factory()->create([
             'company'      => 'DPD Test',
             'first_name'   => 'DPD',
             'last_name'    => 'Depot',
@@ -32,11 +32,11 @@ class International_CHE_Test extends TestCase
             'country_code' => 'CHE',
         ]);
 
-        $order = factory(Order::class)->create([
+        $order = Order::factory()->create([
             'shipping_address_id' => $address->getKey(),
         ]);
 
-        factory(OrderProduct::class, 2)->create(['order_id' => $order->getKey()]);
+        OrderProduct::factory()->count(2)->create(['order_id' => $order->getKey()]);
 
         try {
             Dpd::shipOrder($order);

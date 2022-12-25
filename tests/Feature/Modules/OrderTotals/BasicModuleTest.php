@@ -13,7 +13,7 @@ class BasicModuleTest extends TestCase
         OrderTotalsServiceProvider::enableModule();
 
         /** @var OrderProduct $orderProduct */
-        $orderProduct = factory(OrderProduct::class)->create();
+        $orderProduct = OrderProduct::factory()->create();
 
         $orderProduct = $orderProduct->refresh();
 

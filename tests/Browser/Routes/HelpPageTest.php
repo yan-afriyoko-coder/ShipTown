@@ -2,21 +2,25 @@
 
 namespace Tests\Browser\Routes;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
-/**
- *
- */
-class HelpPageTest extends TestCase
+use Throwable;
+
+class HelpPageTest extends DuskTestCase
 {
+    private string $uri = '/help';
+
     /**
-     * A Dusk test example.
-     *
-     * @return void
+     * @throws Throwable
      */
-    public function testExample()
+    public function testBasics()
     {
-        // TODO: please create test
+        $this->basicUserAccessTest($this->uri, true);
+        $this->basicAdminAccessTest($this->uri, true);
+        $this->basicGuestAccessTest($this->uri, true);
+    }
+
+    public function testIncomplete()
+    {
+        $this->markTestIncomplete('This test has not been implemented yet.');
     }
 }

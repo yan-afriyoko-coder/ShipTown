@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -65,6 +66,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class Pick extends Model
 {
+    use HasFactory;
+
     use SoftDeletes;
 
     /**

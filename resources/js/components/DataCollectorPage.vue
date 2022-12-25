@@ -64,7 +64,7 @@
             </div>
         </div>
 
-        <b-modal id="configuration-modal" centered no-fade hide-footer hide-header
+        <b-modal id="configuration-modal" no-fade hide-footer hide-header
                  @shown="onShownConfigurationModal"
                  @hidden="setFocusElementById(100,'barcodeInput', true, true)"
         >
@@ -123,7 +123,7 @@
 
         </b-modal>
 
-        <b-modal id="transferToModal" centered no-fade hide-footer hide-header
+        <b-modal id="transferToModal" no-fade hide-footer hide-header
                  @hidden="setFocusElementById(100,'barcodeInput', true, true)"
         >
             <template v-for="warehouse in warehouses">
@@ -210,6 +210,10 @@
             },
 
             onBarcodeScanned: function (barcode) {
+                if (barcode === '') {
+                    return;
+                }
+
                 this.scannedProduct = null;
                 this.scannedDataCollectionRecord = null;
 

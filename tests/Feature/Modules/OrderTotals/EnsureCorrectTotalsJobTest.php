@@ -25,11 +25,11 @@ class EnsureCorrectTotalsJobTest extends TestCase
     {
         // Create Order with order product
         /** @var OrderProduct $orderProduct */
-        $orderProduct = factory(OrderProduct::class)->create();
+        $orderProduct = OrderProduct::factory()->create();
         $orderProduct = $orderProduct->refresh();
 
         // create order without any orderProduct
-        factory(Order::class)->create();
+        Order::factory()->create();
 
         OrderProductTotal::query()->forceDelete();
 

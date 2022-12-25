@@ -15,7 +15,7 @@ class ProductsPickedInWarehouseTest extends TestCase
      */
     public function index_returns_an_ok_response()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)->get(route('warehouse_picks.csv'));
 

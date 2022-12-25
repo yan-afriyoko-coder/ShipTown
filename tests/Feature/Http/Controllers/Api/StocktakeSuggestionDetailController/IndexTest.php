@@ -17,10 +17,10 @@ class IndexTest extends TestCase
     /** @test */
     public function test_index_call_returns_ok()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $product = factory(Product::class)->create();
-        $warehouse = factory(Warehouse::class)->create();
+        $product = Product::factory()->create();
+        $warehouse = Warehouse::factory()->create();
 
         $inventory = Inventory::query()->where([
                 'product_id' => $product->id,

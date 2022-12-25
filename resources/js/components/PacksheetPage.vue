@@ -17,7 +17,7 @@
         </div>
 
         <div v-if="!isLoading">
-            <div class="row mb-3">
+            <div class="row-col mb-3">
                 <order-details :order="order" />
             </div>
 
@@ -29,12 +29,12 @@
                 </div>
             </template>
 
-            <div class="row mb-1 pb-2 pt-1 sticky-top bg-light" style="z-index: 10;">
+            <div class="row m-1 pb-2 sticky-top bg-light" style="z-index: 10;">
                 <div class="flex-fill">
                     <barcode-input-field @barcodeScanned="packBarcode" placeholder="Enter sku or alias to ship 1 piece" ref="barcode"/>
                 </div>
 
-                <button type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#filterConfigurationModal"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+                <button type="button" v-b-modal="'filtersModal'" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
             </div>
 
             <template v-if="orderProducts.length === 0" >
@@ -62,21 +62,32 @@
                     </div>
                 </div>
             </template>
-
         </div>
 
-        <set-shipping-number-modal ref="shippingNumberModal" @shippingNumberUpdated="addShippingNumber"></set-shipping-number-modal>
+        <b-modal ref="shippingNumberModal2" no-fade hide-footer hide-header
+                 @shown="setFocusElementById(300,'shipping_number_input', true, false)"
+                 @hidden="setFocusOnBarcodeInput(100)">
+            <input id="shipping_number_input" class="form-control" placeholder="Scan shipping number"
+                   v-model="shippingNumberInput"
+                   @focus="simulateSelectAll"
+                   @keypress.enter.prevent="addShippingNumber"/>
+            <hr>
+            <div class="text-right">
+                <button type="button" @click.prevent="closeAskForShippingNumberModal" class="btn btn-secondary">Cancel</button>
+                <button type="button" @click.prevent="addShippingNumber" class="btn btn-primary">OK</button>
+            </div>
+        </b-modal>
 
-        <filters-modal ref="filtersModal">
-            <template v-slot:actions="slotScopes">
+        <b-modal id="filtersModal" ref="filtersModal" no-fade hide-footer hide-header
+                 @hidden="setFocusOnBarcodeInput(100)">
                 <div class="form-group">
-                    <label class="form-label" for="selectStatus">Status</label>
+                    <label class="form-label">Status</label>
                     <select id="selectStatus" class="form-control" @change="changeStatus" v-model="order.status_code">
                         <option v-for="orderStatus in orderStatuses" :value="orderStatus.code" :key="orderStatus.id">{{ orderStatus.code }}</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label" for="selectStatus">Courier</label>
+                    <label class="form-label">Courier</label>
                     <select id="courierSelect" class="form-control" @change="updateLabelTemplate" v-model="order.label_template">
                         <option :value="''"></option>
                         <option v-for="shippingCourier in shippingCouriers" :value="shippingCourier.code" :key="shippingCourier.code">{{shippingCourier.code}}</option>
@@ -87,16 +98,16 @@
                 <button type="button" @click.prevent="printShippingLabel('address_label')" class="col btn mb-1 btn-primary">Print Address Label</button>
                 <br>
                 <br>
-                <button type="button" class="col btn mb-1 btn-primary" @click.prevent="askForShippingNumber">Add Shipping Number</button>
-            </template>
-
-            <template v-slot:footer>
-                <div class="flex-fill">
-                    <button :disabled="previous_order_id === null"  type="button" class="btn btn-primary  float-left" @click.prevent="openPreviousOrder">Open Previous Order</button>
+                <button type="button" class="col btn mb-1 btn-primary" @click.prevent="showShippingNumberRequestModal">Add Shipping Number</button>
+                <br>
+                <br>
+                <button :disabled="previous_order_id === null" type="button" class="col btn btn-primary" @click.prevent="openPreviousOrder">Open Previous Order</button>
+                <hr>
+                <div class="text-right">
+                    <button @click="closeFilersModal" type="button" class="btn btn-secondary">Cancel</button>
+                    <button disabled type="button" class="btn btn-primary">OK</button>
                 </div>
-            </template>
-
-        </filters-modal>
+        </b-modal>
 
     </div>
 </template>
@@ -141,6 +152,8 @@
                     orderStatuses: [],
                     shippingCouriers: [],
 
+                    shippingNumberInput: '',
+
                     packlist: null,
                     packed: [],
 
@@ -150,14 +163,24 @@
                 };
             },
             watch: {
-                packlist() {
-                    if(    this.order === null
-                        || this.order.is_packed
-                        || this.somethingHasBeenPackedDuringThisSession === false
-                        || this.packlist === null
-                        || this.packlist.length > 0) {
+                order() {
+                    if (this.order === null) {
                         return;
                     }
+
+                    if (this.somethingHasBeenPackedDuringThisSession === false) {
+                        return;
+                    }
+
+                    if (this.order['order_products_totals']['quantity_to_ship'] > 0) {
+                        return;
+                    }
+
+                    if (this.order['is_packed'] === true) {
+                        return;
+                    }
+
+                    this.somethingHasBeenPackedDuringThisSession = false;
 
                     this.completeOrder();
                 },
@@ -171,20 +194,28 @@
                 }
                 this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
 
-                this.reloadOrder();
+                this.reloadData();
 
                 this.loadOrderStatuses();
                 this.loadShippingCouriers();
+
                 this.reloadPageAfterInactivity();
+
+                $('#shippingNumberModal2').modal();
             },
 
             methods: {
+                reloadData() {
+                    this.loadOrder();
+                    this.loadOrderProducts();
+                },
+
                 reloadPageAfterInactivity() {
                     let time = new Date().getTime();
 
                     const setActivityTime = (e) => {
                         if (new Date().getTime() - time >= 60 * 1000 * 5) {
-                            this.reloadOrder();
+                            this.loadOrder();
                         }
 
                         time = new Date().getTime();
@@ -194,10 +225,6 @@
                     document.body.addEventListener("focus", setActivityTime);
                     document.body.addEventListener("mousemove", setActivityTime);
                     document.body.addEventListener("keypress", setActivityTime);
-                },
-
-                reloadOrder: function() {
-                    this.loadOrderById();
                 },
 
                 checkIfPacker: async function() {
@@ -240,48 +267,35 @@
                     await this.autoPrintLabelIfNeeded();
 
                     if (Vue.prototype.$currentUser['ask_for_shipping_number'] === true) {
-                        this.askForShippingNumber();
+                        this.showShippingNumberRequestModal();
                         return;
                     }
 
                     if((this.packlist.length === 0) && this.canClose) {
-                        console.log('emitting orderCompleted event')
                         this.$emit('orderCompleted')
                     }
                 },
 
-                loadOrderById: function (order_id = null) {
-                    this.showLoading();
-
+                loadOrder: function () {
                     this.canClose = true;
-                    this.order = null;
-                    this.somethingHasBeenPackedDuringThisSession = false;
 
                     let params = {
                         'filter[order_id]': this.order_id,
                         'include': 'order_products_totals,order_comments,order_comments.user',
                     };
 
-                    if (order_id) {
-                        params['filter[order_id]'] = order_id;
-                    }
-
                     return this.apiGetOrders(params)
                         .then(({data}) => {
                             this.order = data.meta.total > 0 ? data.data[0] : null;
-                            this.loadOrderProducts();
                         })
-                        .catch(() => {
-                            this.notifyError('Error occurred while loading order');
-                        })
-                        .finally(() => {
-                            this.hideLoading();
-                        })
+                        .catch((error) => {
+                            this.displayApiCallError(error);
+                        });
                 },
 
                 loadOrderProducts: function() {
                     const params = {
-                        'filter[order_id]': this.order.id,
+                        'filter[order_id]': this.order_id,
                         'filter[warehouse_id]': this.getUrlParameter('warehouse_id'),
                         'sort': 'inventory_source_shelf_location,sku_ordered',
                         'include': 'product,product.aliases',
@@ -294,7 +308,6 @@
 
                             this.packed = this.orderProducts.filter(orderProduct => Number(orderProduct['quantity_to_ship']) === 0);
                             this.packlist = this.orderProducts.filter(orderProduct => Number(orderProduct['quantity_to_ship']) > 0);
-
                         })
                         .catch(() => {
                             this.notifyError('Error occurred while loading packlist');
@@ -366,7 +379,7 @@
 
                     this.apiUpdateOrder(this.order['id'], {'status_code': this.order.status_code})
                         .then((response) => {
-                            this.order = response.data.data
+                            this.reloadData();
                             this.notifySuccess('Status changed')
                         })
                         .catch(() => {
@@ -379,21 +392,37 @@
                         });
                 },
 
-                askForShippingNumber() {
+                showShippingNumberRequestModal() {
                     this.$refs.filtersModal.hide();
-                    $('#shippingNumberModal').modal();
+                    this.$refs.shippingNumberModal2.show();
                 },
 
-                addShippingNumber(shipping_number) {
+                closeAskForShippingNumberModal() {
+                    this.$refs.shippingNumberModal2.hide();
+                },
+
+                closeFilersModal() {
+                    this.$refs.filtersModal.hide();
+                },
+
+                addShippingNumber() {
+                    if (this.shippingNumberInput === '') {
+                        return;
+                    }
+
                     let data = {
-                        'order_id': this.order['id'],
-                        'shipping_number': shipping_number,
+                        'order_id': this.order_id,
+                        'shipping_number': this.shippingNumberInput,
                     };
+
                     this.apiPostOrderShipment(data)
                         .then(() => {
+                            this.$refs.shippingNumberModal2.hide();
+
                             if(this.packlist.length === 0) {
                                 this.$emit('orderCompleted')
                             }
+
                             this.notifySuccess('Shipping number saved');
                         })
                         .catch(() => {
@@ -407,17 +436,21 @@
                 },
 
                 markAsPacked: async function () {
+                    if (this.order['is_packed'] === true) {
+                        return;
+                    }
+
                     this.order['is_packed'] = true;
                     this.order['packer_user_id'] = Vue.prototype.$currentUser['id'];
 
-                    return await this.apiUpdateOrder(this.order['id'],{
+                    return await this.apiUpdateOrder(this.order_id,{
                             'is_packed': true,
                             'packer_user_id': Vue.prototype.$currentUser['id']
                         })
                         .catch((error) => {
                             this.apiActivitiesPost({
                                 'subject_type': 'order',
-                                'subject_id': this.order.id,
+                                'subject_id': this.order_id,
                                 'description': 'Error occurred when marking order as packed'
                             });
                             this.notifyError('Error: '+error.response.message);
@@ -436,18 +469,18 @@
                         })
                         .then((data) => {
                             this.somethingHasBeenPackedDuringThisSession = true;
-                            this.displayPackedNotification(data.data);
+                            this.notifySuccess(data.data.data.quantity_shipped + ' x ' + '' + ' shipped');
                         })
                         .catch((error) => {
                             this.apiActivitiesPost({
                                 'subject_type': 'order',
-                                'subject_id': this.order.id,
+                                'subject_id': this.order_id,
                                 'description': 'Error occurred when shipping products, try again'
                             });
                             this.displayApiCallError(error);
                         })
                         .finally(() => {
-                            this.loadOrderProducts();
+                            this.reloadData();
                         });
                 },
 
@@ -554,7 +587,7 @@
 
                     let params = {
                         'shipping_service_code': shipping_service_code,
-                        'order_id': this.order.id
+                        'order_id': this.order_id
                     };
 
                     return this.apiPostShippingLabel(params)
@@ -587,32 +620,20 @@
                         return;
                     }
 
-                    this.loadOrderById(this.previous_order_id);
-                },
-
-                displayPackedNotification: function (order_product_shipment) {
-                    const msg =  order_product_shipment.data.quantity_shipped + ' x ' + '' + ' shipped';
-                    this.$snotify.confirm(msg, {
-                        timeout: 3000,
-                        showProgressBar: false,
-                        pauseOnHover: true,
-                        icon: false,
-                        buttons: []
-                    });
+                    this.loadOrder(this.previous_order_id);
                 },
 
                 updateLabelTemplate: function () {
                     this.$refs.filtersModal.hide();
-                    this.setFocusOnBarcodeInput(500);
 
-                    this.apiUpdateOrder(this.order['id'], {
+                    this.apiUpdateOrder(this.order_id, {
                             'label_template': this.order.label_template
                         })
-                        .then((response) => {
-                            this.order = response.data.data
+                        .then(() => {
+                            this.reloadData();
                         })
-                        .catch(() => {
-                            this.notifyError('Error when changing status');
+                        .catch((error) => {
+                            this.displayApiCallError(error);
                         });
                 }
             },

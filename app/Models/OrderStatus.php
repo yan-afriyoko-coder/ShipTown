@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -35,6 +36,8 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class OrderStatus extends BaseModel
 {
+    use HasFactory;
+
     use SoftDeletes;
 
     protected $table = 'orders_statuses';

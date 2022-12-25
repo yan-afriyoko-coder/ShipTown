@@ -21,7 +21,7 @@ class OrderCreatedTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = factory(User::class)->create()->assignRole('admin');
+        $admin = User::factory()->create()->assignRole('admin');
         $this->actingAs($admin, 'api');
 
         EventServiceProviderBase::enableModule();
@@ -30,13 +30,13 @@ class OrderCreatedTest extends TestCase
     /** @test */
     public function test_if_reserves_quantity_when_order_created()
     {
-        factory(OrderStatus::class)->create([
+        OrderStatus::factory()->create([
             'code'           => 'new',
             'name'           => 'new',
             'order_active'   => true,
         ]);
 
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
 
         $this->assertDatabaseHas('products', ['quantity_reserved' => 0]);
 

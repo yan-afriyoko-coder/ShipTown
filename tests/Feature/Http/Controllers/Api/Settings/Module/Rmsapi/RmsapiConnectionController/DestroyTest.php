@@ -14,14 +14,14 @@ class DestroyTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = factory(User::class)->create()->assignRole('admin');
+        $admin = User::factory()->create()->assignRole('admin');
         $this->actingAs($admin, 'api');
     }
 
     /** @test */
     public function test_destroy_call_returns_ok()
     {
-        $rmsApi = factory(RmsapiConnection::class)->create();
+        $rmsApi = RmsapiConnection::factory()->create();
 
         $response = $this->delete(route('api.settings.module.rmsapi.connections.destroy', $rmsApi));
         $response->assertStatus(200);

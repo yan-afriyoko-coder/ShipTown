@@ -16,12 +16,12 @@ class IncludeShippingAddressTest extends TestCase
     public function testIfCanIncludeShippingAddress()
     {
         Passport::actingAs(
-            factory(User::class)->create()
+            User::factory()->create()
         );
 
-        $address = factory(OrderAddress::class)->create();
+        $address = OrderAddress::factory()->create();
 
-        $order = factory(Order::class)->create([
+        $order = Order::factory()->create([
             'shipping_address_id' => $address->id,
         ]);
 

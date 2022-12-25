@@ -26,16 +26,16 @@ class ExtractSkuProductIdJobTest extends TestCase
 
         RmsapiProductImport::query()->delete();
 
-        factory(Warehouse::class)->create();
+        Warehouse::factory()->create();
 
-        factory(RmsapiProductImport::class, 5)->create([
+        RmsapiProductImport::factory()->count(5)->create([
             'sku'            => null,
             'product_id'     => null,
             'when_processed' => null,
         ]);
 
         // do
-        ProcessImportedProductRecordsJob::dispatchNow();
+        ProcessImportedProductRecordsJob::dispatchSync();
 
         // assert
         $this->assertFalse(

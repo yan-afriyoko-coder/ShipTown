@@ -14,14 +14,14 @@ class StoreTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = factory(User::class)->create()->assignRole('admin');
+        $admin = User::factory()->create()->assignRole('admin');
         $this->actingAs($admin, 'api');
     }
 
     /** @test */
     public function test_store_call_returns_ok()
     {
-        $client = factory(Client::class)->make();
+        $client = Client::factory()->make();
 
         $response = $this->post(route('api.settings.module.printnode.clients.store', $client));
 

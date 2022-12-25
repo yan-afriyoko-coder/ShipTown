@@ -17,16 +17,13 @@ class OrderProductShipmentTest extends TestCase
     {
         StockControlServiceProvider::enableModule();
 
-        /** @var Product $product */
-        $product = factory(Product::class)->create();
-
         /** @var Warehouse $warehouse */
-        $warehouse = factory(Warehouse::class)->create();
+        $warehouse = Warehouse::factory()->create();
 
         /** @var OrderProduct $orderProduct */
-        $orderProduct = factory(OrderProduct::class)->create();
+        $orderProduct = OrderProduct::factory()->create();
 
-        $orderShipment = OrderProductShipment::create([
+        OrderProductShipment::create([
             'warehouse_id' => $warehouse->id,
             'order_id' => $orderProduct->order_id,
             'order_product_id' => $orderProduct->id,
@@ -38,6 +35,9 @@ class OrderProductShipmentTest extends TestCase
 
         ray(Inventory::all()->toArray());
 
-        $this->assertEquals(-4, $product->inventory($warehouse->code)->first()->quantity);
+        /** @var Inventory $inventory */
+        $inventory = $orderProduct->product->inventory($warehouse->code)->first();
+
+        $this->assertEquals(-4, $inventory->quantity);
     }
 }
