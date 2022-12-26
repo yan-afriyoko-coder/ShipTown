@@ -50,6 +50,17 @@ class OutdatedCountsJob implements ShouldQueue
                 )
         ', [$points, $reason, $this->warehouse_id, $reason]);
 
+
+        DB::statement('
+            DELETE stocktake_suggestions
+            FROM stocktake_suggestions
+            LEFT JOIN inventory ON inventory.id = stocktake_suggestions.inventory_id
+
+            WHERE reason = ?
+
+            AND inventory.quantity = 0
+        ', [$reason]);
+
         return true;
     }
 }
