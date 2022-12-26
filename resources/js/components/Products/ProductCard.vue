@@ -10,7 +10,7 @@
                         <div class="table-responsive small" @click="toggle">
                             <table class="table table-borderless mb-0 w-100 text-right">
                                <thead>
-                                  <tr>
+                                  <tr class="small font-weight-bold">
                                       <th class="text-left">Location</th>
                                       <th class="text-left">Shelf</th>
                                       <th>Available</th>
@@ -73,10 +73,10 @@
                             </div>
 
                             <template v-if="currentTab === 'inventory'">
-                                <div class="table-responsive small">
-                                    <table class="table table-borderless mb-0 w-100 small text-right">
+                                <div class="table-responsive">
+                                    <table class="table table-borderless mb-0 w-100 text-right small">
                                         <thead>
-                                        <tr class="small text-right">
+                                        <tr class="small font-weight-bold">
                                             <th class="text-left">Warehouse</th>
                                             <th class="d-table-cell d-md-none">RL</th>
                                             <th class="d-none d-md-table-cell">Restock Level</th>
@@ -162,28 +162,11 @@
                                 </div>
                             </template>
 
-                            <template v-if="currentTab === 'activityLog'">
-                                <div class="row small" v-for="activity in activityLog" :key="activity.id">
-                                    <span :title="formatDateTime(activity['created_at'], 'YYYY-MM-DD H:mm:ss')">
-                                        {{ formatDateTime(activity['created_at'], 'MMM DD H:mm')  }}:
-                                    </span>
-                                    <span class="flex-nowrap ml-1">
-                                        {{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }}
-                                    </span>
-                                    <span class="flex-nowrap ml-1">
-                                        {{ activity['description'] }}
-                                    </span>
-                                    <div class="col-12 pl-3 text-nowrap" v-for="(value, name) in activity['properties']['attributes'] ? activity['properties']['attributes'] : activity['properties']">
-                                        {{ name }} = {{ value }}
-                                    </div>
-                                </div>
-                            </template>
-
                             <template v-if="currentTab === 'prices'">
-                                <div class="table-responsive small">
+                                <div class="table-responsive">
                                     <table class="table table-borderless mb-0 w-100 small">
                                         <thead>
-                                        <tr class="small">
+                                        <tr class="small font-weight-bold">
                                             <th>Location</th>
                                             <th class="text-right">Sale Price</th>
                                             <th class="text-right">Start Date</th>
@@ -192,7 +175,6 @@
                                         </thead>
                                         <tbody>
                                         <template v-for="price in product['prices']">
-
                                             <tr :key="price.id" v-bind:class="{ 'table-active': currentUser()['warehouse'] && price['location_id'] === currentUser()['warehouse']['code']}" >
                                                 <td>{{ price['location_id'] }}</td>
                                                 <td class="text-right">{{ price['sale_price'] }}</td>
@@ -212,6 +194,24 @@
                                         <div class="badge mb-2">{{ alias.alias }}</div>
                                     </div>
                                 </div>
+                            </template>
+
+
+                            <template v-if="currentTab === 'activityLog'">
+                              <div class="row small" v-for="activity in activityLog" :key="activity.id">
+                                      <span :title="formatDateTime(activity['created_at'], 'YYYY-MM-DD H:mm:ss')">
+                                          {{ formatDateTime(activity['created_at'], 'MMM DD H:mm')  }}:
+                                      </span>
+                                <span class="flex-nowrap ml-1">
+                                          {{ activity['causer'] === null ? 'AutoPilot' : activity['causer']['name'] }}
+                                      </span>
+                                <span class="flex-nowrap ml-1">
+                                          {{ activity['description'] }}
+                                      </span>
+                                <div class="col-12 pl-3 text-nowrap" v-for="(value, name) in activity['properties']['attributes'] ? activity['properties']['attributes'] : activity['properties']">
+                                  {{ name }} = {{ value }}
+                                </div>
+                              </div>
                             </template>
 
                         </div>
