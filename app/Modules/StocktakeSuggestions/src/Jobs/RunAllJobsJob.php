@@ -2,15 +2,12 @@
 
 namespace App\Modules\StocktakeSuggestions\src\Jobs;
 
-use App\Models\Inventory;
-use App\Models\StocktakeSuggestion;
 use App\Models\Warehouse;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class RunAllJobsJob implements ShouldQueue
 {
@@ -26,18 +23,18 @@ class RunAllJobsJob implements ShouldQueue
         Warehouse::query()
             ->get('id')
             ->each(function (Warehouse $warehouse) {
-                BarcodeScannedToQuantityFieldJob::dispatchSync($warehouse->getKey());
-                NegativeWarehouseStockJob::dispatchSync($warehouse->getKey());
-                OutdatedCountsJob::dispatchSync($warehouse->getKey());
+                BarcodeScannedToQuantityFieldJob::dispatch($warehouse->getKey());
+                NegativeWarehouseStockJob::dispatch($warehouse->getKey());
+                OutdatedCountsJob::dispatch($warehouse->getKey());
             });
 
-        // for all wa
-        Warehouse::query()
-            ->whereIn('code', ['100', '99', 'MUL'])
-            ->get('id')
-            ->each(function (Warehouse $warehouse) {
-                NegativeInventoryJob::dispatchSync($warehouse->getKey());
-            });
+//        // for all warehouses
+//        Warehouse::query()
+//            ->whereIn('code', ['100', '99', 'MUL'])
+//            ->get('id')
+//            ->each(function (Warehouse $warehouse) {
+//                NegativeInventoryJob::dispatch($warehouse->getKey());
+//            });
 
         return true;
     }
