@@ -31,8 +31,6 @@ class OutdatedCountsJob implements ShouldQueue
         $reason = 'never counted';
         $points = 1;
 
-        DB::statement('DELETE FROM stocktake_suggestions WHERE reason = ?', [$reason]);
-
         DB::statement('
             INSERT INTO stocktake_suggestions (inventory_id, product_id, warehouse_id, points, reason, created_at, updated_at)
             SELECT id, product_id, warehouse_id, ? , ?, NOW(), NOW()
@@ -50,9 +48,18 @@ class OutdatedCountsJob implements ShouldQueue
                     WHERE stocktake_suggestions.inventory_id = inventory.id
                     AND stocktake_suggestions.reason = ?
                 )
-            ORDER BY quantity ASC
-            LIMIT 500
         ', [$points, $reason, $this->warehouse_id, $reason]);
+
+
+        DB::statement('
+            DELETE stocktake_suggestions
+            FROM stocktake_suggestions
+            LEFT JOIN inventory ON inventory.id = stocktake_suggestions.inventory_id
+
+            WHERE reason = ?
+
+            AND inventory.quantity = 0
+        ', [$reason]);
 
         return true;
     }
