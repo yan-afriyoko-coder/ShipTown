@@ -31,7 +31,7 @@ class OutdatedCountsJob implements ShouldQueue
         $reason = 'never counted';
         $points = 1;
 
-        DB::statement('
+        DB::statement("
             INSERT INTO stocktake_suggestions (inventory_id, product_id, warehouse_id, points, reason, created_at, updated_at)
             SELECT id, product_id, warehouse_id, ? , ?, NOW(), NOW()
             FROM inventory
@@ -40,7 +40,7 @@ class OutdatedCountsJob implements ShouldQueue
                 AND (
                     last_counted_at IS NULL
                     OR last_counted_at < NOW() - INTERVAL 6 MONTH
-                    OR last_counted_at < "1 Jan 2022"
+                    OR last_counted_at < '1 Jan 2022'
                 )
                 AND NOT EXISTS (
                     SELECT NULL
@@ -48,7 +48,7 @@ class OutdatedCountsJob implements ShouldQueue
                     WHERE stocktake_suggestions.inventory_id = inventory.id
                     AND stocktake_suggestions.reason = ?
                 )
-        ', [$points, $reason, $this->warehouse_id, $reason]);
+        ", [$points, $reason, $this->warehouse_id, $reason]);
 
 
         DB::statement('
