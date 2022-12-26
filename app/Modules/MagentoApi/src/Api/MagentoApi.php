@@ -6,6 +6,11 @@ use Illuminate\Http\Client\Response;
 
 class MagentoApi extends BaseApi
 {
+    public function getOrders(): Response
+    {
+        return $this->get('/orders');
+    }
+
     public function postProducts($sku, $name): Response
     {
         return $this->post('/products', [
@@ -21,21 +26,6 @@ class MagentoApi extends BaseApi
     public function postProductsSpecialPrice($sku, $store_id, $price, $price_from, $price_to): Response
     {
         return $this->post('/products/special-price', [
-            'prices' => [
-                [
-                    'sku' => $sku,
-                    'store_id' => $store_id,
-                    'price' => $price,
-                    'price_from' => $price_from,
-                    'price_to' => $price_to,
-                ]
-            ]
-        ]);
-    }
-
-    public function postProductsSpecialPriceDelete($sku, $store_id, $price, $price_from, $price_to): Response
-    {
-        return $this->post('/products/special-price-delete', [
             'prices' => [
                 [
                     'sku' => $sku,
