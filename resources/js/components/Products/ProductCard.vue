@@ -8,9 +8,9 @@
                     </div>
                     <div class="col-md-6 col-lg-5">
                         <div class="table-responsive small" @click="toggle">
-                            <table class="table table-borderless small mb-0 w-100 text-right">
+                            <table class="table table-borderless mb-0 w-100 text-right">
                                <thead>
-                                  <tr class="small">
+                                  <tr>
                                       <th class="text-left">Location</th>
                                       <th class="text-left">Shelf</th>
                                       <th>Available</th>
