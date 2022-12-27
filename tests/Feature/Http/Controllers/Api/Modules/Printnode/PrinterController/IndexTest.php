@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\Module\Printnode\PrinterController;
+namespace Tests\Feature\Http\Controllers\Api\Modules\Printnode\PrinterController;
 
 use App\User;
 use Tests\TestCase;

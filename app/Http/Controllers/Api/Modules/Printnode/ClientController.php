@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Settings\Module\Printnode;
+namespace App\Http\Controllers\Api\Modules\Printnode;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePrintNodeClientRequest;

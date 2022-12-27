@@ -29,7 +29,7 @@ Route::apiResource(
 )->only(['index']);
 Route::apiResource(
     'modules/printnode/printjobs',
-    Api\Settings\Module\Printnode\PrintJobController::class,
+    Api\Modules\Printnode\PrintJobController::class,
     [
         'as' => 'api.modules.printnode',
     ]
@@ -100,5 +100,5 @@ Route::apiResource('heartbeats', Api\HeartbeatsController::class)->only(['index'
 
 Route::resource(
     'modules/printnode/printers',
-    Api\Settings\Module\Printnode\PrinterController::class
+    Api\Modules\Printnode\PrinterController::class
 )->only(['index']);
