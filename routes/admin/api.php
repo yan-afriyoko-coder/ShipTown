@@ -17,8 +17,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Routes for users with the admin role only]
-Route::apiResource('admin/user/roles', Api\Admin\UserRoleController::class, ['as' => 'admin.users'])->only(['index']);
-Route::apiResource('admin/users', Api\Admin\UserController::class);
+Route::apiResource('admin/user/roles', Api\UserRoleController::class, ['as' => 'admin.users'])->only(['index']);
+Route::apiResource('admin/users', Api\UserController::class);
 
 Route::apiResource('modules/autostatus/picking/configuration', Api\Modules\AutoStatus\ConfigurationController::class, ['as' => 'modules.autostatus.picking'])->only('index', 'store');
 

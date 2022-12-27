@@ -17,7 +17,7 @@ class UserFactory extends Factory
 
         $email = $this->faker->unique()->safeEmail;
 
-        while (User::query()->where(['email' => $email])->exists()) {
+        while (User::withTrashed()->where(['email' => $email])->exists()) {
             $email = $this->faker->unique()->safeEmail;
         }
 
