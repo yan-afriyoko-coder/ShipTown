@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Settings;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MailTemplate\UpdateRequest;
@@ -33,7 +33,7 @@ class MailTemplateController extends Controller
     public function update(UpdateRequest $request, MailTemplate $mailTemplate)
     {
         $data = $request->validated();
-        
+
         if (isset($data['to'])) {
             $data['to'] = implode(", ", $data['to']);
         }

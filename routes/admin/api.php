@@ -19,7 +19,7 @@ Route::apiResource('admin/user/roles', Api\UserRoleController::class, ['as' => '
 Route::apiResource('admin/users', Api\UserController::class);
 Route::apiResource('settings/modules', Api\ModuleController::class, ['as' => 'api.settings'])->only(['index', 'update']);
 Route::apiResource('settings/order-statuses', Api\OrderStatusController::class, ['as' => 'api.settings'])->only(['index', 'store', 'update', 'destroy']);
-Route::apiResource('settings/mail-templates', Api\Settings\MailTemplateController::class, ['as' => 'api.settings'])->only(['index', 'update']);
+Route::apiResource('settings/mail-templates', Api\MailTemplateController::class, ['as' => 'api.settings'])->only(['index', 'update']);
 Route::apiResource('settings/navigation-menu', Api\Settings\NavigationMenuController::class, ['as' => 'api.settings'])->only(['index', 'store', 'update', 'destroy']);
 Route::apiResource('settings/configurations', Api\Settings\ConfigurationController::class, ['as' => 'api.settings'])->only(['index', 'store']);
 Route::apiResource('settings/modules/api2cart/connections', Api\Settings\Module\Api2cart\Api2cartConnectionController::class, ['as' => 'api.settings.module.api2cart'])->only(['index', 'store', 'destroy']);

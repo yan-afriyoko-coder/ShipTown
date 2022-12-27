@@ -1,17 +1,14 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\MailTemplateController;
+namespace Tests\Feature\Http\Controllers\Api\MailTemplateController;
 
 use App\Models\MailTemplate;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class UpdateTest extends TestCase
 {
-    use RefreshDatabase;
-
     private function simulationTest()
     {
         $mailTemplate = new MailTemplate();
