@@ -23,6 +23,7 @@ Route::apiResource('settings/mail-templates', Api\Settings\MailTemplateControlle
 Route::apiResource('settings/navigation-menu', Api\Settings\NavigationMenuController::class, ['as' => 'api.settings'])->only(['index', 'store', 'update', 'destroy']);
 Route::apiResource('settings/configurations', Api\Settings\ConfigurationController::class, ['as' => 'api.settings'])->only(['index', 'store']);
 Route::apiResource('settings/modules/api2cart/connections', Api\Settings\Module\Api2cart\Api2cartConnectionController::class, ['as' => 'api.settings.module.api2cart'])->only(['index', 'store', 'destroy']);
+Route::apiResource('settings/modules/api2cart/products', Api\Settings\Module\Api2cart\ProductsController::class, ['as' => 'api.settings.module.api2cart'])->only(['index']);
 
 Route::apiResource('modules/autostatus/picking/configuration', Api\Modules\AutoStatus\ConfigurationController::class, ['as' => 'modules.autostatus.picking'])->only('index', 'store');
 
@@ -31,7 +32,6 @@ Route::prefix('settings')->name('api.settings.')->group(function () {
     Route::prefix('modules')->name('module.')->group(function () {
         // api2cart
         Route::prefix('api2cart')->name('api2cart.')->group(function () {
-            Route::apiResource('products', Api\Settings\Module\Api2cart\ProductsController::class)->only(['index']);
         });
 
         // dpdireland
