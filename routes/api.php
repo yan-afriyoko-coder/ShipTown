@@ -62,4 +62,4 @@ Route::apiResource('settings/user/me', Api\UserMeController::class)->only(['inde
 Route::apiResource('settings/widgets', Api\WidgetController::class)->only(['store', 'update']);
 Route::apiResource('navigation-menu', Api\NavigationMenuController::class)->only(['index']);
 Route::apiResource('heartbeats', Api\HeartbeatsController::class)->only(['index']);
-Route::resource('modules/printnode/printers', Api\Modules\Printnode\PrinterController::class)->only(['index']);
+Route::apiResource('modules/printnode/printers', Api\Modules\Printnode\PrinterController::class)->only(['index']);
