@@ -1,15 +1,12 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\Module\Automation\AutomationController;
+namespace Tests\Feature\Http\Controllers\Api\Modules\Automation\AutomationController;
 
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class IndexTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();

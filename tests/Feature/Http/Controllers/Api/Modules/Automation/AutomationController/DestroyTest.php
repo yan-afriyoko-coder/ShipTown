@@ -1,17 +1,13 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\Module\Automation\AutomationController;
+namespace Tests\Feature\Http\Controllers\Api\Modules\Automation\AutomationController;
 
-use App\Events\Order\OrderCreatedEvent;
 use App\Modules\Automations\src\Models\Automation;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class DestroyTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();

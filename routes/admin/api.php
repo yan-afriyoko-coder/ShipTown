@@ -28,6 +28,6 @@ Route::apiResource('settings/modules/dpd-ireland/connections', Api\Modules\DpdIr
 Route::apiResource('settings/modules/printnode/printjobs', Api\Modules\Printnode\PrintJobController::class, ['as' => 'api.settings.module.printnode'])->only(['store']);
 Route::apiResource('settings/modules/printnode/clients', Api\Modules\Printnode\ClientController::class, ['as' => 'api.settings.module.printnode'])->only(['index', 'store', 'destroy']);
 Route::apiResource('settings/modules/rms_api/connections', Api\Modules\Rmsapi\RmsapiConnectionController::class, ['as' => 'api.settings.module.rmsapi'])->only(['index', 'store', 'destroy']);
-Route::get('settings/automations/config', [Api\Settings\Module\Automation\AutomationController::class, 'getConfig'])->name('api.settings.module.automations.config');
-Route::apiResource('settings/automations', Api\Settings\Module\Automation\AutomationController::class, ['as' => 'api.settings.module'])->only(['index', 'store', 'show', 'update', 'destroy']);
+Route::get('settings/automations/config', [Api\Modules\Automation\AutomationController::class, 'getConfig'])->name('api.settings.module.automations.config');
+Route::apiResource('settings/automations', Api\Modules\Automation\AutomationController::class, ['as' => 'api.settings.module'])->only(['index', 'store', 'show', 'update', 'destroy']);
 Route::apiResource('modules/autostatus/picking/configuration', Api\Modules\AutoStatus\ConfigurationController::class, ['as' => 'modules.autostatus.picking'])->only('index', 'store');

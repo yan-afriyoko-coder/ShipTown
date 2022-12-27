@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Settings\Module\Automation;
+namespace App\Http\Controllers\Api\Modules\Automation;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Automations\StoreRequest;
@@ -15,11 +15,7 @@ class AutomationController extends Controller
 {
     public function getConfig()
     {
-        $configs = config('automations');
-
-        ray($configs);
-
-        return $configs;
+        return config('automations');
     }
 
     /**
