@@ -1,16 +1,13 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\Module\Rmsapi\RmsapiConnectionController;
+namespace Tests\Feature\Http\Controllers\Api\Modules\Rmsapi\RmsapiConnectionController;
 
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class DestroyTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();

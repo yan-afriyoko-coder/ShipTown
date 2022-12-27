@@ -24,10 +24,10 @@ Route::apiResource('settings/navigation-menu', Api\NavigationMenuController::cla
 Route::apiResource('settings/configurations', Api\ConfigurationController::class, ['as' => 'api.settings'])->only(['index', 'store']);
 Route::apiResource('settings/modules/api2cart/connections', Api\Modules\Api2cart\Api2cartConnectionController::class, ['as' => 'api.settings.module.api2cart'])->only(['index', 'store', 'destroy']);
 Route::apiResource('settings/modules/api2cart/products', Api\Modules\Api2cart\ProductsController::class, ['as' => 'api.settings.module.api2cart'])->only(['index']);
-Route::apiResource('settings/modules/dpd-ireland/connections', Api\Settings\Module\DpdIreland\DpdIrelandController::class, ['as' => 'api.settings.module.dpd-ireland'])->only(['index', 'store', 'destroy']);
+Route::apiResource('settings/modules/dpd-ireland/connections', Api\Modules\DpdIreland\DpdIrelandController::class, ['as' => 'api.settings.module.dpd-ireland'])->only(['index', 'store', 'destroy']);
 Route::apiResource('settings/modules/printnode/printjobs', Api\Settings\Module\Printnode\PrintJobController::class, ['as' => 'api.settings.module.printnode'])->only(['store']);
 Route::apiResource('settings/modules/printnode/clients', Api\Settings\Module\Printnode\ClientController::class, ['as' => 'api.settings.module.printnode'])->only(['index', 'store', 'destroy']);
-Route::apiResource('settings/modules/rms_api/connections', Api\Settings\Module\Rmsapi\RmsapiConnectionController::class, ['as' => 'api.settings.module.rmsapi'])->only(['index', 'store', 'destroy']);
+Route::apiResource('settings/modules/rms_api/connections', Api\Modules\Rmsapi\RmsapiConnectionController::class, ['as' => 'api.settings.module.rmsapi'])->only(['index', 'store', 'destroy']);
 Route::get('settings/automations/config', [Api\Settings\Module\Automation\AutomationController::class, 'getConfig'])->name('api.settings.module.automations.config');
 Route::apiResource('settings/automations', Api\Settings\Module\Automation\AutomationController::class, ['as' => 'api.settings.module'])->only(['index', 'store', 'show', 'update', 'destroy']);
 Route::apiResource('modules/autostatus/picking/configuration', Api\Modules\AutoStatus\ConfigurationController::class, ['as' => 'modules.autostatus.picking'])->only('index', 'store');

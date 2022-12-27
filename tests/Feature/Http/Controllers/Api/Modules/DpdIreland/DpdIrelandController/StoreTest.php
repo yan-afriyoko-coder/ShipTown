@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\Module\DpdIreland\DpdIrelandController;
+namespace Tests\Feature\Http\Controllers\Api\Modules\DpdIreland\DpdIrelandController;
 
 use App\User;
 use Tests\TestCase;

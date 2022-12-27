@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\Module\Rmsapi\RmsapiConnectionController;
+namespace Tests\Feature\Http\Controllers\Api\Modules\Rmsapi\RmsapiConnectionController;
 
 use App\User;
 use Tests\TestCase;

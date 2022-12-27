@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Settings\Module\DpdIreland;
+namespace App\Http\Controllers\Api\Modules\DpdIreland;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreDpdIrelandRequest;

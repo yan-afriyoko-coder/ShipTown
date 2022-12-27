@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Api\Settings\Module\Rmsapi;
+namespace App\Http\Controllers\Api\Modules\Rmsapi;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreConfigurationRmsApiRequest;
 use App\Http\Resources\RmsapiConnectionResource;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Crypt;
 
 /**
  * Class RmsapiConnectionController.
@@ -41,7 +41,7 @@ class RmsapiConnectionController extends Controller
     /**
      * @param RmsapiConnection $connection
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return Application|ResponseFactory|Response
      */
