@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Settings\Module\Api2cart;
+namespace App\Http\Controllers\Api\Modules\Api2cart;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Api2cart\src\Exceptions\RequestException;

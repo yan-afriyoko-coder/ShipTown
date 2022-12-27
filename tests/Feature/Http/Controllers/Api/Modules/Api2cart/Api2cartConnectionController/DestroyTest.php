@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\Module\Api2cart\Api2cartConnectionController;
+namespace Tests\Feature\Http\Controllers\Api\Modules\Api2cart\Api2cartConnectionController;
 
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\User;

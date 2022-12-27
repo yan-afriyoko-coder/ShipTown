@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\Module\Api2cart\ProductsController;
+namespace Tests\Feature\Http\Controllers\Api\Modules\Api2cart\ProductsController;
 
 use Tests\TestCase;
 
