@@ -19,14 +19,13 @@ Route::apiResource('admin/user/roles', Api\UserRoleController::class, ['as' => '
 Route::apiResource('admin/users', Api\UserController::class);
 Route::apiResource('settings/modules', Api\ModuleController::class, ['as' => 'api.settings'])->only(['index', 'update']);
 Route::apiResource('settings/order-statuses', Api\OrderStatusController::class, ['as' => 'api.settings'])->only(['index', 'store', 'update', 'destroy']);
+Route::apiResource('settings/mail-templates', Api\Settings\MailTemplateController::class, ['as' => 'api.settings'])->only(['index', 'update']);
+Route::apiResource('settings/navigation-menu', Api\Settings\NavigationMenuController::class, ['as' => 'api.settings'])->only(['index', 'store', 'update', 'destroy']);
+Route::apiResource('settings/configurations', Api\Settings\ConfigurationController::class, ['as' => 'api.settings'])->only(['index', 'store']);
 
 Route::apiResource('modules/autostatus/picking/configuration', Api\Modules\AutoStatus\ConfigurationController::class, ['as' => 'modules.autostatus.picking'])->only('index', 'store');
+
 Route::prefix('settings')->name('api.settings.')->group(function () {
-    Route::apiResource('mail-templates', Api\Settings\MailTemplateController::class)->only(['index', 'update']);
-    Route::apiResource('navigation-menu', Api\Settings\NavigationMenuController::class)->only(['index', 'store', 'update', 'destroy']);
-
-    Route::apiResource('configurations', Api\Settings\ConfigurationController::class)->only(['index', 'store']);
-
     // modules
     Route::prefix('modules')->name('module.')->group(function () {
         // api2cart

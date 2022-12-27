@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\OrderStatusController;
+namespace Tests\Feature\Http\Controllers\Api\OrderStatusController;
 
 use App\Models\OrderStatus;
 use App\User;
