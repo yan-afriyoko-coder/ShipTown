@@ -18,10 +18,10 @@ use Illuminate\Support\Facades\Route;
 Route::apiResource('admin/user/roles', Api\UserRoleController::class, ['as' => 'admin.users'])->only(['index']);
 Route::apiResource('admin/users', Api\UserController::class);
 Route::apiResource('settings/modules', Api\ModuleController::class, ['as' => 'api.settings'])->only(['index', 'update']);
+Route::apiResource('settings/order-statuses', Api\OrderStatusController::class, ['as' => 'api.settings'])->only(['index', 'store', 'update', 'destroy']);
 
 Route::apiResource('modules/autostatus/picking/configuration', Api\Modules\AutoStatus\ConfigurationController::class, ['as' => 'modules.autostatus.picking'])->only('index', 'store');
 Route::prefix('settings')->name('api.settings.')->group(function () {
-    Route::apiResource('order-statuses', Api\Settings\OrderStatusController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::apiResource('mail-templates', Api\Settings\MailTemplateController::class)->only(['index', 'update']);
     Route::apiResource('navigation-menu', Api\Settings\NavigationMenuController::class)->only(['index', 'store', 'update', 'destroy']);
 

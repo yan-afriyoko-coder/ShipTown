@@ -4,13 +4,10 @@ namespace Tests\Feature\Http\Controllers\Api\Settings\OrderStatusController;
 
 use App\Models\OrderStatus;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class DestroyTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();

@@ -4,14 +4,11 @@ namespace Tests\Feature\Http\Controllers\Api\Settings\OrderStatusController;
 
 use App\Models\OrderStatus;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class StoreTest extends TestCase
 {
-    use RefreshDatabase;
-
     private function simulationTest()
     {
         $response = $this->post(route('api.settings.order-statuses.store'), [
