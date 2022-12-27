@@ -30,10 +30,6 @@ Route::apiResource('modules/autostatus/picking/configuration', Api\Modules\AutoS
 Route::prefix('settings')->name('api.settings.')->group(function () {
     // modules
     Route::prefix('modules')->name('module.')->group(function () {
-        // api2cart
-        Route::prefix('api2cart')->name('api2cart.')->group(function () {
-        });
-
         // dpdireland
         Route::prefix('dpd-ireland')->name('dpd-ireland.')->group(function () {
             Route::apiResource('connections', Api\Settings\Module\DpdIreland\DpdIrelandController::class)->only(['index', 'store', 'destroy']);
