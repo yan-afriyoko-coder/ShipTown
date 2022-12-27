@@ -1,16 +1,13 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\ModuleController;
+namespace Tests\Feature\Http\Controllers\Api\ModuleController;
 
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class IndexTest extends TestCase
 {
-    use RefreshDatabase;
-
     /** @test */
     public function test_index_call_returns_ok()
     {

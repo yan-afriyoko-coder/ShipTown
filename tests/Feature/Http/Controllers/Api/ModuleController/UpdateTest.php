@@ -1,11 +1,10 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\ModuleController;
+namespace Tests\Feature\Http\Controllers\Api\ModuleController;
 
 use App\Models\Module;
 use App\Modules\BaseModuleServiceProvider;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\TestResponse;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
@@ -17,8 +16,6 @@ class TestModule extends BaseModuleServiceProvider {
 
 class UpdateTest extends TestCase
 {
-    use RefreshDatabase;
-
     private function simulationTest(): TestResponse
     {
         TestModule::enableModule();

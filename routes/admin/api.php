@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\Admin;
-use App\Http\Controllers\Api\Modules\AutoStatus;
 use App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Route;
 
@@ -23,7 +21,7 @@ Route::apiResource('admin/users', Api\UserController::class);
 Route::apiResource('modules/autostatus/picking/configuration', Api\Modules\AutoStatus\ConfigurationController::class, ['as' => 'modules.autostatus.picking'])->only('index', 'store');
 
 Route::prefix('settings')->name('api.settings.')->group(function () {
-    Route::apiResource('modules', Api\Settings\ModuleController::class)->only(['index', 'update']);
+    Route::apiResource('modules', Api\ModuleController::class)->only(['index', 'update']);
     Route::apiResource('order-statuses', Api\Settings\OrderStatusController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::apiResource('mail-templates', Api\Settings\MailTemplateController::class)->only(['index', 'update']);
     Route::apiResource('navigation-menu', Api\Settings\NavigationMenuController::class)->only(['index', 'store', 'update', 'destroy']);
