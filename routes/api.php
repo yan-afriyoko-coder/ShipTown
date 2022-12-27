@@ -51,7 +51,7 @@ Route::apiResource('orders', Api\OrderController::class)->except('destroy');
 Route::apiResource('order/products', Api\Order\OrderProductController::class, ['as' => 'order'])->only(['index', 'update']);
 Route::apiResource('orders/products/shipments', Api\Order\OrderProductShipmentController::class)->only(['store']);
 Route::apiResource('order/shipments', Api\Order\OrderShipmentController::class)->only(['index', 'store']);
-Route::apiResource('order/comments', Api\Order\OrderCommentController::class)->only(['index', 'store']);
+Route::apiResource('order/comments', Api\OrderCommentController::class)->only(['index', 'store']);
 Route::apiResource('order-statuses', Api\OrderStatusController::class)->only(['index']);
 Route::apiResource('picklist', Api\PicklistController::class)->only(['index']);
 Route::apiResource('picklist/picks', Api\Picklist\PicklistPickController::class)->only(['store']);
