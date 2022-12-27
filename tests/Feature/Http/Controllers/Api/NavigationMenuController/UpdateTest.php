@@ -1,20 +1,17 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\NavigationMenuController;
+namespace Tests\Feature\Http\Controllers\Api\NavigationMenuController;
 
 use App\Models\NavigationMenu;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class UpdateTest extends TestCase
 {
-    use RefreshDatabase;
-
     private function simulationTest($body = null)
     {
-        if(is_null($body)){
+        if (is_null($body)) {
             $body = [
                 'name'  => 'testing',
                 'url'   => 'testing',

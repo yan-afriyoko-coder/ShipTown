@@ -1,16 +1,13 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\ConfigurationController;
+namespace Tests\Feature\Http\Controllers\Api\ConfigurationController;
 
 use App\Models\Configuration;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class StoreTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();

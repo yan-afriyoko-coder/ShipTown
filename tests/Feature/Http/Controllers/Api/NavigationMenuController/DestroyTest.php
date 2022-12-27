@@ -1,17 +1,14 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\NavigationMenuController;
+namespace Tests\Feature\Http\Controllers\Api\NavigationMenuController;
 
 use App\Models\NavigationMenu;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class DestroyTest extends TestCase
 {
-    use RefreshDatabase;
-
     private function simulationTest()
     {
         $navigationMenu = NavigationMenu::create([
