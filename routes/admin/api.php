@@ -33,14 +33,6 @@ Route::apiResource('modules/autostatus/picking/configuration', Api\Modules\AutoS
 Route::prefix('settings')->name('api.settings.')->group(function () {
     // modules
     Route::prefix('modules')->name('module.')->group(function () {
-        // dpdireland
-        Route::prefix('dpd-ireland')->name('dpd-ireland.')->group(function () {
-        });
-
-        // printnode
-        Route::prefix('printnode')->name('printnode.')->group(function () {
-        });
-
         // rms_api
         Route::prefix('rms_api')->name('rmsapi.')->group(function () {
             Route::apiResource('connections', Api\Settings\Module\Rmsapi\RmsapiConnectionController::class)->only(['index', 'store', 'destroy']);
