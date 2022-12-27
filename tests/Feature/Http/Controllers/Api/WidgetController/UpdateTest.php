@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\WidgetController;
+namespace Tests\Feature\Http\Controllers\Api\WidgetController;
 
 use App\Models\Widget;
 use App\User;
@@ -9,8 +9,6 @@ use Tests\TestCase;
 
 class UpdateTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();

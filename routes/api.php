@@ -93,7 +93,7 @@ Route::apiResource('picklist/picks', Api\Picklist\PicklistPickController::class)
 Route::apiResource('packlist/order', Api\PacklistOrderController::class, ['as' => 'packlist'])->only(['index']);
 
 Route::apiResource('settings/user/me', Api\Settings\UserMeController::class)->only(['index', 'store']);
-Route::apiResource('settings/widgets', Api\Settings\WidgetController::class)->only(['store', 'update']);
+Route::apiResource('settings/widgets', Api\WidgetController::class)->only(['store', 'update']);
 Route::apiResource('navigation-menu', Api\NavigationMenuController::class)->only(['index']);
 Route::apiResource('heartbeats', Api\HeartbeatsController::class)->only(['index']);
 

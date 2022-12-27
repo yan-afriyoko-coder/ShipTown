@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\WidgetController;
+namespace Tests\Feature\Http\Controllers\Api\WidgetController;
 
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -8,8 +8,6 @@ use Tests\TestCase;
 
 class StoreTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
