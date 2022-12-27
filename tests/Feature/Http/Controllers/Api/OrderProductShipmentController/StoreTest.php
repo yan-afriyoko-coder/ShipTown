@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Order\OrderProductShipmentController;
+namespace Tests\Feature\Http\Controllers\Api\OrderProductShipmentController;
 
 use App\Models\Order;
 use App\Models\OrderProduct;

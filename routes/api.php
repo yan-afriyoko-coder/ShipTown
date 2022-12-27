@@ -49,7 +49,7 @@ Route::apiResource('data-collector-actions/transfer-to-warehouse', Api\DataColle
 Route::apiResource('order-check-request', Api\OrderCheckRequestController::class)->only(['store']);
 Route::apiResource('orders', Api\OrderController::class)->except('destroy');
 Route::apiResource('order/products', Api\OrderProductController::class, ['as' => 'order'])->only(['index', 'update']);
-Route::apiResource('orders/products/shipments', Api\Order\OrderProductShipmentController::class)->only(['store']);
+Route::apiResource('orders/products/shipments', Api\OrderProductShipmentController::class)->only(['store']);
 Route::apiResource('order/shipments', Api\Order\OrderShipmentController::class)->only(['index', 'store']);
 Route::apiResource('order/comments', Api\OrderCommentController::class)->only(['index', 'store']);
 Route::apiResource('order-statuses', Api\OrderStatusController::class)->only(['index']);
