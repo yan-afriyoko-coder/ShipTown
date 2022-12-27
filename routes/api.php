@@ -20,28 +20,9 @@ Route::apiResource('stocktake-suggestions-details', Api\StocktakeSuggestionDetai
 
 Route::put('print/order/{order_number}/{view}', [Api\PrintOrderController::class, 'store']);
 
-Route::apiResource(
-    'modules/dpd-uk/dpd-uk-connections',
-    Api\Modules\DpdUk\DpdUkConnectionController::class,
-    [
-        'as' => 'api.modules.dpd-uk',
-    ]
-)->only(['index']);
-Route::apiResource(
-    'modules/printnode/printjobs',
-    Api\Modules\Printnode\PrintJobController::class,
-    [
-        'as' => 'api.modules.printnode',
-    ]
-)
-->only(['store']);
-Route::apiResource(
-    'modules/webhooks/subscriptions',
-    Api\Modules\Webhooks\SubscriptionController::class,
-    [
-    'as' => 'api.modules.webhooks',
-    ]
-)->only(['index', 'store']);
+Route::apiResource('modules/dpd-uk/dpd-uk-connections', Api\Modules\DpdUk\DpdUkConnectionController::class, ['as' => 'api.modules.dpd-uk'])->only(['index']);
+Route::apiResource('modules/printnode/printjobs', Api\Modules\Printnode\PrintJobController::class, ['as' => 'api.modules.printnode'])->only(['store']);
+Route::apiResource('modules/webhooks/subscriptions', Api\Modules\Webhooks\SubscriptionController::class, ['as' => 'api.modules.webhooks'])->only(['index', 'store']);
 
 Route::apiResource('shipments', Api\ShipmentControllerNew::class, ['as' => 'new'])->only(['store']);
 Route::apiResource('shipping-services', Api\ShippingServiceController::class)->only(['index']);
@@ -68,13 +49,7 @@ Route::apiResource('inventory-movements', Api\InventoryMovementController::class
 Route::apiResource('stocktakes', Api\StocktakesController::class)->only(['store']);
 Route::apiResource('data-collector', Api\DataCollectorController::class)->only(['index', 'store', 'update', 'destroy']);
 Route::apiResource('data-collector-records', Api\DataCollectorRecordController::class)->only(['store', 'index']);
-Route::apiResource(
-    'data-collector-actions/transfer-to-warehouse',
-    Api\DataCollectorActions\TransferToWarehouseController::class,
-    [
-        'as' => 'api.data-collector-actions',
-    ]
-)->only(['store']);
+Route::apiResource('data-collector-actions/transfer-to-warehouse', Api\DataCollectorActions\TransferToWarehouseController::class, ['as' => 'api.data-collector-actions'])->only(['store']);
 
 Route::apiResource('order-check-request', Api\OrderCheckRequestController::class)->only(['store']);
 
@@ -97,8 +72,4 @@ Route::apiResource('settings/widgets', Api\WidgetController::class)->only(['stor
 Route::apiResource('navigation-menu', Api\NavigationMenuController::class)->only(['index']);
 Route::apiResource('heartbeats', Api\HeartbeatsController::class)->only(['index']);
 
-
-Route::resource(
-    'modules/printnode/printers',
-    Api\Modules\Printnode\PrinterController::class
-)->only(['index']);
+Route::resource('modules/printnode/printers', Api\Modules\Printnode\PrinterController::class)->only(['index']);
