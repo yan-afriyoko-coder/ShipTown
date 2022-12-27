@@ -25,9 +25,6 @@ Route::apiResource('csv-import', Api\CsvImportController::class)->only(['store']
 Route::apiResource('csv-import/data-collections', Api\CsvImport\DataCollectionsImportController::class)->names('csv-import-data-collections')->only(['store']);
 Route::apiResource('stocktake-suggestions', Api\StocktakeSuggestionController::class)->only(['index']);
 Route::apiResource('stocktake-suggestions-details', Api\StocktakeSuggestionDetailController::class)->only(['index']);
-Route::apiResource('modules/dpd-uk/dpd-uk-connections', Api\Modules\DpdUk\DpdUkConnectionController::class, ['as' => 'api.modules.dpd-uk'])->only(['index']);
-Route::apiResource('modules/printnode/printjobs', Api\Modules\Printnode\PrintJobController::class, ['as' => 'api.modules.printnode'])->only(['store']);
-Route::apiResource('modules/webhooks/subscriptions', Api\Modules\Webhooks\SubscriptionController::class, ['as' => 'api.modules.webhooks'])->only(['index', 'store']);
 Route::apiResource('shipments', Api\ShipmentControllerNew::class, ['as' => 'new'])->only(['store']);
 Route::apiResource('shipping-services', Api\ShippingServiceController::class)->only(['index']);
 Route::apiResource('shipping-labels', Api\ShippingLabelController::class)->only(['store']);
@@ -62,4 +59,8 @@ Route::apiResource('settings/user/me', Api\UserMeController::class)->only(['inde
 Route::apiResource('settings/widgets', Api\WidgetController::class)->only(['store', 'update']);
 Route::apiResource('navigation-menu', Api\NavigationMenuController::class)->only(['index']);
 Route::apiResource('heartbeats', Api\HeartbeatsController::class)->only(['index']);
+
+Route::apiResource('modules/dpd-uk/dpd-uk-connections', Api\Modules\DpdUk\DpdUkConnectionController::class, ['as' => 'api.modules.dpd-uk'])->only(['index']);
 Route::apiResource('modules/printnode/printers', Api\Modules\Printnode\PrinterController::class)->only(['index']);
+Route::apiResource('modules/printnode/printjobs', Api\Modules\Printnode\PrintJobController::class, ['as' => 'api.modules.printnode'])->only(['store']);
+Route::apiResource('modules/webhooks/subscriptions', Api\Modules\Webhooks\SubscriptionController::class, ['as' => 'api.modules.webhooks'])->only(['index', 'store']);
