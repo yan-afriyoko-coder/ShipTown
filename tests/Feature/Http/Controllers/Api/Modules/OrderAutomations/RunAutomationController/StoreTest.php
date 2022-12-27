@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\Modules\RunAutomationController;
+namespace Tests\Feature\Http\Controllers\Api\Modules\OrderAutomations\RunAutomationController;
 
 use App\Modules\Automations\src\Models\Automation;
 use App\User;

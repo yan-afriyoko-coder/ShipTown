@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Api\Settings\Modules;
+namespace App\Http\Controllers\Api\Modules\OrderAutomations;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RunAutomationRequest;
-use App\Models\CacheLock;
 use App\Modules\Automations\src\Jobs\RunAutomationJob;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;

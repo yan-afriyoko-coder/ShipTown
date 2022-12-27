@@ -48,7 +48,7 @@ Route::apiResource('shipping-services', Api\ShippingServiceController::class)->o
 Route::apiResource('shipping-labels', Api\ShippingLabelController::class)->only(['store']);
 Route::apiResource('restocking', Api\RestockingController::class)->only(['index']);
 
-Route::post('settings/modules/automations/run', [Api\Settings\Modules\RunAutomationController::class, 'store'])->name('settings.modules.automations.run');
+Route::post('settings/modules/automations/run', [Api\Modules\OrderAutomations\RunAutomationController::class, 'store'])->name('settings.modules.automations.run');
 
 Route::apiResource('run/sync', Api\Run\SyncController::class)->only('index');
 Route::apiResource('run/sync/api2cart', Api\Run\SyncApi2CartController::class)->only('index');
