@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Modules\Automation\AutomationController;
+namespace Tests\Feature\Http\Controllers\Api\Modules\OrderAutomations\AutomationController;
 
 use App\Events\Order\OrderCreatedEvent;
 use App\Modules\Automations\src\Models\Automation;
@@ -28,7 +28,7 @@ class ShowTest extends TestCase
             'event_class' => OrderCreatedEvent::class,
         ]);
 
-        $response = $this->get(route('api.settings.module.automations.show', $automation));
+        $response = $this->get(route('api.settings.module.automations.show', $automation->getKey()));
 
         ray($response->json());
 

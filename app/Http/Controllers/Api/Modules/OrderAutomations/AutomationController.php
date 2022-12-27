@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Modules\Automation;
+namespace App\Http\Controllers\Api\Modules\OrderAutomations;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Automations\StoreRequest;
@@ -13,11 +13,6 @@ use Throwable;
 
 class AutomationController extends Controller
 {
-    public function getConfig()
-    {
-        return config('automations');
-    }
-
     /**
      * Display a listing of the resource.
      *

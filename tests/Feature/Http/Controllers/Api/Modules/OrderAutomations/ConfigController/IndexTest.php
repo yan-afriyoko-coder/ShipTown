@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Modules\Automation\AutomationController;
+namespace Tests\Feature\Http\Controllers\Api\Modules\OrderAutomations\ConfigController;
 
 use App\Modules\Automations\src\AutomationsServiceProvider;
 use App\User;
 use Tests\TestCase;
 
-class GetConfigTest extends TestCase
+class IndexTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -20,7 +20,7 @@ class GetConfigTest extends TestCase
     /** @test */
     public function test_get_config_call_returns_ok()
     {
-        $response = $this->get(route('api.settings.module.automations.config'));
+        $response = $this->get(route('api.settings.module.automations.config.index'));
 
         ray($response->json());
 
