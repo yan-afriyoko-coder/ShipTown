@@ -32,7 +32,7 @@ Route::apiResource('shipments', Api\ShipmentControllerNew::class, ['as' => 'new'
 Route::apiResource('shipping-services', Api\ShippingServiceController::class)->only(['index']);
 Route::apiResource('shipping-labels', Api\ShippingLabelController::class)->only(['store']);
 Route::apiResource('restocking', Api\RestockingController::class)->only(['index']);
-Route::post('settings/modules/automations/run', [Api\Modules\OrderAutomations\RunAutomationController::class, 'store'])->name('settings.modules.automations.run');
+Route::apiResource('settings/modules/automations/run', Api\Modules\OrderAutomations\RunAutomationController::class, ['as' => 'settings.modules.automations'])->only(['store']);
 Route::apiResource('run/sync', Api\Run\SyncController::class)->only('index');
 Route::apiResource('run/sync/api2cart', Api\Run\SyncApi2CartController::class)->only('index');
 Route::apiResource('run/hourly/jobs', Api\Run\HourlyJobsController::class, ['as' => 'run.hourly'])->only('index');
