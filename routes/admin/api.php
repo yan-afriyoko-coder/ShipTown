@@ -27,19 +27,7 @@ Route::apiResource('settings/modules/api2cart/products', Api\Settings\Module\Api
 Route::apiResource('settings/modules/dpd-ireland/connections', Api\Settings\Module\DpdIreland\DpdIrelandController::class, ['as' => 'api.settings.module.dpd-ireland'])->only(['index', 'store', 'destroy']);
 Route::apiResource('settings/modules/printnode/printjobs', Api\Settings\Module\Printnode\PrintJobController::class, ['as' => 'api.settings.module.printnode'])->only(['store']);
 Route::apiResource('settings/modules/printnode/clients', Api\Settings\Module\Printnode\ClientController::class, ['as' => 'api.settings.module.printnode'])->only(['index', 'store', 'destroy']);
-
+Route::apiResource('settings/modules/rms_api/connections', Api\Settings\Module\Rmsapi\RmsapiConnectionController::class, ['as' => 'api.settings.module.rmsapi'])->only(['index', 'store', 'destroy']);
+Route::get('settings/automations/config', [Api\Settings\Module\Automation\AutomationController::class, 'getConfig'])->name('api.settings.module.automations.config');
+Route::apiResource('settings/automations', Api\Settings\Module\Automation\AutomationController::class, ['as' => 'api.settings.module'])->only(['index', 'store', 'show', 'update', 'destroy']);
 Route::apiResource('modules/autostatus/picking/configuration', Api\Modules\AutoStatus\ConfigurationController::class, ['as' => 'modules.autostatus.picking'])->only('index', 'store');
-
-Route::prefix('settings')->name('api.settings.')->group(function () {
-    // modules
-    Route::prefix('modules')->name('module.')->group(function () {
-        // rms_api
-        Route::prefix('rms_api')->name('rmsapi.')->group(function () {
-            Route::apiResource('connections', Api\Settings\Module\Rmsapi\RmsapiConnectionController::class)->only(['index', 'store', 'destroy']);
-        });
-
-        // Automations
-        Route::get('automations/config', [Api\Settings\Module\Automation\AutomationController::class, 'getConfig'])->name('automations.config');
-        Route::apiResource('automations', Api\Settings\Module\Automation\AutomationController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
-    });
-});
