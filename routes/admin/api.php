@@ -24,6 +24,9 @@ Route::apiResource('settings/navigation-menu', Api\Settings\NavigationMenuContro
 Route::apiResource('settings/configurations', Api\Settings\ConfigurationController::class, ['as' => 'api.settings'])->only(['index', 'store']);
 Route::apiResource('settings/modules/api2cart/connections', Api\Settings\Module\Api2cart\Api2cartConnectionController::class, ['as' => 'api.settings.module.api2cart'])->only(['index', 'store', 'destroy']);
 Route::apiResource('settings/modules/api2cart/products', Api\Settings\Module\Api2cart\ProductsController::class, ['as' => 'api.settings.module.api2cart'])->only(['index']);
+Route::apiResource('settings/modules/dpd-ireland/connections', Api\Settings\Module\DpdIreland\DpdIrelandController::class, ['as' => 'api.settings.module.dpd-ireland'])->only(['index', 'store', 'destroy']);
+Route::apiResource('settings/modules/printnode/printjobs', Api\Settings\Module\Printnode\PrintJobController::class, ['as' => 'api.settings.module.printnode'])->only(['store']);
+Route::apiResource('settings/modules/printnode/clients', Api\Settings\Module\Printnode\ClientController::class, ['as' => 'api.settings.module.printnode'])->only(['index', 'store', 'destroy']);
 
 Route::apiResource('modules/autostatus/picking/configuration', Api\Modules\AutoStatus\ConfigurationController::class, ['as' => 'modules.autostatus.picking'])->only('index', 'store');
 
@@ -32,14 +35,12 @@ Route::prefix('settings')->name('api.settings.')->group(function () {
     Route::prefix('modules')->name('module.')->group(function () {
         // dpdireland
         Route::prefix('dpd-ireland')->name('dpd-ireland.')->group(function () {
-            Route::apiResource('connections', Api\Settings\Module\DpdIreland\DpdIrelandController::class)->only(['index', 'store', 'destroy']);
         });
 
         // printnode
         Route::prefix('printnode')->name('printnode.')->group(function () {
-            Route::apiResource('printjobs', Api\Settings\Module\Printnode\PrintJobController::class)->only(['store']);
-            Route::apiResource('clients', Api\Settings\Module\Printnode\ClientController::class)->only(['index', 'store', 'destroy']);
         });
+
         // rms_api
         Route::prefix('rms_api')->name('rmsapi.')->group(function () {
             Route::apiResource('connections', Api\Settings\Module\Rmsapi\RmsapiConnectionController::class)->only(['index', 'store', 'destroy']);

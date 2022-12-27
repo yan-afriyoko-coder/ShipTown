@@ -24,6 +24,7 @@ use App\Modules\Automations\src\Models\Condition;
 use App\Modules\DpdIreland\src\Models\DpdIreland;
 use App\Modules\MagentoApi\src\Models\MagentoConnection;
 use App\Modules\MagentoApi\src\Models\MagentoProduct;
+use App\Modules\PrintNode\src\Models\Client;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Services\ModulesService;
 use Spatie\Activitylog\Models\Activity;
@@ -60,6 +61,7 @@ trait ResetsDatabase
 
         Module::query()->forceDelete();
 
+        Client::query()->forceDelete();
         Api2cartProductLink::query()->forceDelete();
         Api2cartConnection::query()->forceDelete();
 
