@@ -85,14 +85,13 @@
         },
 
         mounted() {
-            console.log(this.currentUser());
             if (! this.currentUser()['warehouse_id']) {
                 this.$snotify.error('You do not have warehouse assigned. Please contact administrator', {timeout: 50000});
                 return;
             }
 
-            // this.getUrlFilterOrSet('filter[warehouse_code]', this.currentUser()['warehouse']['code']);
-3
+            this.getUrlFilterOrSet('filter[warehouse_code]', this.currentUser()['warehouse']['code']);
+
             window.onscroll = () => this.loadMore();
 
             this.loadStocktakeSuggestions();
@@ -151,8 +150,9 @@
                 this.showLoading();
 
                 let params = {...this.$router.currentRoute.query};
+                params['filter[warehouse_code]'] = this.getUrlParameter('filter[warehouse_code]');
                 params['include'] = 'product,inventory,product.tags,product.prices';
-                params['sort'] = this.getUrlParameter('sort', '-points,');
+                params['sort'] = this.getUrlParameter('sort', '-points');
                 params['per_page'] = this.per_page;
                 params['page'] = page;
 
