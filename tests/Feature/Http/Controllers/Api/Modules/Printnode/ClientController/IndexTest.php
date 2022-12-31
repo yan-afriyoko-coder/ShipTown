@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\OrderStatusController;
+namespace Tests\Feature\Http\Controllers\Api\Modules\Printnode\ClientController;
 
-use App\Models\OrderStatus;
+use App\Modules\PrintNode\src\Models\Client;
 use App\User;
 use Tests\TestCase;
 
@@ -18,9 +18,9 @@ class IndexTest extends TestCase
     /** @test */
     public function test_index_call_returns_ok()
     {
-        OrderStatus::factory()->create();
+        Client::factory()->create();
 
-        $response = $this->get('api/order-statuses');
+        $response = $this->get(route('api.settings.module.printnode.clients.index'));
 
         $response->assertSuccessful();
     }

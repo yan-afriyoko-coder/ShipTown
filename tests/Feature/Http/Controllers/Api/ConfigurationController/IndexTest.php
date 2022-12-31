@@ -1,8 +1,7 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\OrderStatusController;
+namespace Tests\Feature\Http\Controllers\Api\ConfigurationController;
 
-use App\Models\OrderStatus;
 use App\User;
 use Tests\TestCase;
 
@@ -18,10 +17,12 @@ class IndexTest extends TestCase
     /** @test */
     public function test_index_call_returns_ok()
     {
-        OrderStatus::factory()->create();
-
-        $response = $this->get('api/order-statuses');
-
-        $response->assertSuccessful();
+        $response = $this->get(route('api.settings.configurations.index'));
+        $response->assertOk();
+        $response->assertJsonStructure([
+            'data' => [
+                'business_name'
+            ],
+        ]);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\OrderStatusController;
+namespace Tests\Feature\Http\Controllers\Api\ModuleController;
 
 use App\User;
 use Laravel\Passport\Passport;
@@ -15,14 +15,14 @@ class IndexTest extends TestCase
             User::factory()->admin()->create()
         );
 
-        $response = $this->get(route('api.settings.order-statuses.index'));
+        $response = $this->get(route('api.settings.modules.index'));
 
         $response->assertSuccessful();
     }
 
     public function test_index_call_should_be_loggedin()
     {
-        $response = $this->get(route('api.settings.order-statuses.index'));
+        $response = $this->get(route('api.settings.modules.index'));
 
         $response->assertRedirect(route('login'));
     }
@@ -33,7 +33,7 @@ class IndexTest extends TestCase
             User::factory()->create()
         );
 
-        $response = $this->get(route('api.settings.order-statuses.index'));
+        $response = $this->get(route('api.settings.modules.index'));
 
         $response->assertForbidden();
     }
