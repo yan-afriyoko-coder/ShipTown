@@ -11,7 +11,7 @@ use App\Modules\PrintNode\src\Resources\PrintJobResource;
 /**
  * Class PrintJobController.
  */
-class PrintjobController extends Controller
+class PrintJobController extends Controller
 {
     /**
      * @param StorePrintJobRequest $request
