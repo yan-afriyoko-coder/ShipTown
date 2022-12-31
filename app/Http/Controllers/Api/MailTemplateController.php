@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MailTemplate\UpdateRequest;
+use App\Http\Requests\MailTemplateIndexRequest;
 use App\Http\Resources\MailTemplateResource;
 use App\Models\MailTemplate;
 use Illuminate\Http\Request;
@@ -14,9 +15,10 @@ class MailTemplateController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param MailTemplateIndexRequest $request
+     * @return AnonymousResourceCollection
      */
-    public function index() : AnonymousResourceCollection
+    public function index(MailTemplateIndexRequest $request) : AnonymousResourceCollection
     {
         $mailTemplates = MailTemplate::all();
 
