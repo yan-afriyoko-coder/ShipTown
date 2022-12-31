@@ -1,9 +1,7 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Modules\Printnode\PrintjobController;
+namespace Tests\Feature\Http\Controllers\Api\Modules\Printnode\PrintJobController;
 
-use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class StoreTest extends TestCase
