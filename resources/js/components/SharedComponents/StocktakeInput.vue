@@ -15,6 +15,7 @@
         >
             <template v-if="inventory">
                 <product-info-card :product="inventory.product"></product-info-card>
+                <div class="small" v-bind:class="{ 'bg-warning': inventory['last_counted_at'] !== null && isCountedRecently(inventory['last_counted_at'], 7)}">last counted: <strong>{{ formatDateTime(inventory['last_counted_at']) }}</strong></div>
                 <div class="small">stock: {{ inventory.quantity }}</div>
                 <div class="row mt-2">
                     <div class="col-6">
@@ -56,6 +57,7 @@
     import api from "../../mixins/api";
     import helpers from "../../mixins/helpers";
     import url from "../../mixins/url";
+    import moment from "moment";
 
     export default {
         mixins: [url, api, helpers],
@@ -129,6 +131,10 @@
         },
 
         methods: {
+            isCountedRecently(last_counted_at, days) {
+                return moment(last_counted_at).isAfter(moment(last_counted_at).subtract(days, 'days'));
+            },
+
             showStocktakeModal(event) {
                 this.stocktakeSKU(event.target.value);
             },
