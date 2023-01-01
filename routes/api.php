@@ -21,11 +21,10 @@ Route::put('print/order/{order_number}/{view}', [Api\PrintOrderController::class
 // its job is to fetch next order and block it so no other user gets it again
 Route::apiResource('packlist/order', Api\PacklistOrderController::class, ['as' => 'packlist'])->only(['index']);
 
-Route::apiResource('csv-import', Api\CsvImportController::class)->only(['store']);
 Route::apiResource('csv-import/data-collections', Api\CsvImport\DataCollectionsImportController::class)->names('csv-import-data-collections')->only(['store']);
+Route::apiResource('csv-import', Api\CsvImportController::class)->only(['store']);
 Route::apiResource('stocktake-suggestions', Api\StocktakeSuggestionController::class)->only(['index']);
 Route::apiResource('stocktake-suggestions-details', Api\StocktakeSuggestionDetailController::class)->only(['index']);
-Route::apiResource('shipments', Api\ShipmentControllerNew::class, ['as' => 'new'])->only(['store']);
 Route::apiResource('shipping-services', Api\ShippingServiceController::class)->only(['index']);
 Route::apiResource('shipping-labels', Api\ShippingLabelController::class)->only(['store']);
 Route::apiResource('restocking', Api\RestockingController::class)->only(['index']);
@@ -70,6 +69,7 @@ Route::apiResource('modules/autostatus/picking/configuration', Api\Modules\AutoS
 
 Route::group(['as' => 'api.'], function () {
     Route::apiResource('inventory', Api\InventoryController::class)->only(['index', 'store']);
+    Route::apiResource('shipments', Api\ShipmentController::class)->only(['store']);
 
     Route::apiResource('settings/modules', Api\ModuleController::class, ['as' => 'settings'])->only(['index', 'update']);
     Route::apiResource('settings/order-statuses', Api\OrderStatusController::class, ['as' => 'settings'])->only(['index', 'store', 'update', 'destroy']);
