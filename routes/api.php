@@ -29,7 +29,6 @@ Route::apiResource('shipments', Api\ShipmentControllerNew::class, ['as' => 'new'
 Route::apiResource('shipping-services', Api\ShippingServiceController::class)->only(['index']);
 Route::apiResource('shipping-labels', Api\ShippingLabelController::class)->only(['store']);
 Route::apiResource('restocking', Api\RestockingController::class)->only(['index']);
-Route::apiResource('settings/modules/automations/run', Api\Modules\OrderAutomations\RunAutomationController::class, ['as' => 'settings.modules.automations'])->only(['store']);
 Route::apiResource('run/sync', Api\Run\SyncController::class)->only('index');
 Route::apiResource('run/sync/api2cart', Api\Run\SyncApi2CartController::class)->only('index');
 Route::apiResource('run/hourly/jobs', Api\Run\HourlyJobsController::class, ['as' => 'run.hourly'])->only('index');
@@ -55,8 +54,6 @@ Route::apiResource('order/comments', Api\OrderCommentController::class)->only(['
 Route::apiResource('order-statuses', Api\OrderStatusController::class)->only(['index']);
 Route::apiResource('picklist', Api\PicklistController::class)->only(['index']);
 Route::apiResource('picklist/picks', Api\Picklist\PicklistPickController::class)->only(['store']);
-Route::apiResource('settings/user/me', Api\UserMeController::class)->only(['index', 'store']);
-Route::apiResource('settings/widgets', Api\WidgetController::class)->only(['store', 'update']);
 Route::apiResource('navigation-menu', Api\NavigationMenuController::class)->only(['index']);
 Route::apiResource('heartbeats', Api\HeartbeatsController::class)->only(['index']);
 
@@ -68,6 +65,9 @@ Route::apiResource('modules/webhooks/subscriptions', Api\Modules\Webhooks\Subscr
 Route::apiResource('admin/user/roles', Api\UserRoleController::class, ['as' => 'admin.users'])->only(['index']);
 Route::apiResource('admin/users', Api\UserController::class);
 
+Route::apiResource('settings/user/me', Api\UserMeController::class)->only(['index', 'store']);
+Route::apiResource('settings/widgets', Api\WidgetController::class)->only(['store', 'update']);
+Route::apiResource('settings/modules/automations/run', Api\Modules\OrderAutomations\RunAutomationController::class, ['as' => 'settings.modules.automations'])->only(['store']);
 Route::apiResource('settings/modules', Api\ModuleController::class, ['as' => 'api.settings'])->only(['index', 'update']);
 Route::apiResource('settings/order-statuses', Api\OrderStatusController::class, ['as' => 'api.settings'])->only(['index', 'store', 'update', 'destroy']);
 Route::apiResource('settings/mail-templates', Api\MailTemplateController::class, ['as' => 'api.settings'])->only(['index', 'update']);
