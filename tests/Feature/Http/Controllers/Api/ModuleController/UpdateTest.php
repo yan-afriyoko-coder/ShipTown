@@ -22,7 +22,7 @@ class UpdateTest extends TestCase
 
         $module = Module::where(['service_provider_class' => TestModule::class])->first();
 
-        return $this->put(route('api.settings.modules.update', $module));
+        return $this->put(route('api.modules.update', $module));
     }
 
     /** @test */
