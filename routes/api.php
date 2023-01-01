@@ -71,3 +71,4 @@ Route::apiResource('admin/users', Api\UserController::class);
 Route::apiResource('settings/modules', Api\ModuleController::class, ['as' => 'api.settings'])->only(['index', 'update']);
 Route::apiResource('settings/order-statuses', Api\OrderStatusController::class, ['as' => 'api.settings'])->only(['index', 'store', 'update', 'destroy']);
 Route::apiResource('settings/mail-templates', Api\MailTemplateController::class, ['as' => 'api.settings'])->only(['index', 'update']);
+Route::apiResource('settings/navigation-menu', Api\NavigationMenuController::class, ['as' => 'api.settings'])->only(['index', 'store', 'update', 'destroy']);

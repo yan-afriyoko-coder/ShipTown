@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\NavigationMenu\StoreRequest;
 use App\Http\Requests\NavigationMenu\UpdateRequest;
+use App\Http\Requests\NavigationMenuDestroyRequest;
+use App\Http\Requests\NavigationMenuIndexRequest;
 use App\Http\Resources\NavigationMenuResource;
 use App\Models\NavigationMenu;
 use Exception;
@@ -17,7 +19,7 @@ class NavigationMenuController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function index(): AnonymousResourceCollection
+    public function index(NavigationMenuIndexRequest $request): AnonymousResourceCollection
     {
         $navigationMenu = NavigationMenu::getSpatieQueryBuilder();
 
@@ -58,7 +60,7 @@ class NavigationMenuController extends Controller
      * @return NavigationMenuResource
      * @throws Exception
      */
-    public function destroy(NavigationMenu $navigationMenu): NavigationMenuResource
+    public function destroy(NavigationMenuDestroyRequest $request, NavigationMenu $navigationMenu): NavigationMenuResource
     {
         $navigationMenu->delete();
 
