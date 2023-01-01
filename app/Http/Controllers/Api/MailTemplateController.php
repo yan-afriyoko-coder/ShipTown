@@ -28,8 +28,8 @@ class MailTemplateController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request $request
-     * @param  MailTemplate $mailTemplate
+     * @param UpdateRequest $request
+     * @param MailTemplate $mailTemplate
      * @return MailTemplateResource
      */
     public function update(UpdateRequest $request, MailTemplate $mailTemplate)
