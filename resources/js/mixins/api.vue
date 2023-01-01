@@ -353,13 +353,8 @@ export default {
             apiPutOrderStatus: function (id, params) { return axios.put('/api/order-statuses/' + id, params)},
             apiDeleteOrderStatus: function (id) { return axios.delete('/api/settings/order-statuses/' + id)},
 
-            apiGetMailTemplate: function () {
-                return axios.get('/api/settings/mail-templates');
-            },
-
-            apiPutMailTemplate: function (id, params) {
-                return axios.put('/api/settings/mail-templates/' + id, params);
-            },
+            apiGetMailTemplate: function () { return axios.get('/api/mail-templates')},
+            apiPutMailTemplate: function (id, params) { return axios.put('/api/mail-templates/' + id, params)},
 
             apiGetNavigationMenu: function (params = {}) {
                 return axios.get('/api/settings/navigation-menu', {params: params});
