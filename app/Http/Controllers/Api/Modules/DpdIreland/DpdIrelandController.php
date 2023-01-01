@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Modules\DpdIreland;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DpdIrelandConnectionDestroyRequest;
 use App\Http\Requests\StoreDpdIrelandRequest;
 use App\Http\Resources\DpdIrelandConfigurationResource;
 use App\Modules\DpdIreland\src\Client;
@@ -12,7 +13,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class DpdIrelandController extends Controller
 {
-    public function index(Request $request): JsonResource
+    public function index(DpdIrelandConnectionDestroyRequest $request): JsonResource
     {
         $connection = DpdIreland::firstOrFail();
 
@@ -28,7 +29,7 @@ class DpdIrelandController extends Controller
         return DpdIrelandConfigurationResource::make($connection);
     }
 
-    public function destroy(Request $request, int $connection_id): DpdIrelandConfigurationResource
+    public function destroy(DpdIrelandConnectionDestroyRequest $request, int $connection_id): DpdIrelandConfigurationResource
     {
         $connection = DpdIreland::findOrFail($connection_id);
 
