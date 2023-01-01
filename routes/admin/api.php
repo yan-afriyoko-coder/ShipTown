@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Routes for users with the admin role only]
-Route::apiResource('settings/modules/printnode/printjobs', Api\Modules\Printnode\PrintJobController::class, ['as' => 'api.settings.module.printnode'])->only(['store']);
 Route::apiResource('settings/modules/printnode/clients', Api\Modules\Printnode\ClientController::class, ['as' => 'api.settings.module.printnode'])->only(['index', 'store', 'destroy']);
 Route::apiResource('settings/modules/rms_api/connections', Api\Modules\Rmsapi\RmsapiConnectionController::class, ['as' => 'api.settings.module.rmsapi'])->only(['index', 'store', 'destroy']);
 Route::apiResource('settings/automations/config', Api\Modules\OrderAutomations\ConfigController::class, ['as' => 'api.settings.module.automations'])->only(['index']);

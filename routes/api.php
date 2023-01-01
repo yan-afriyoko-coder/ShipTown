@@ -76,3 +76,4 @@ Route::apiResource('settings/configurations', Api\ConfigurationController::class
 Route::apiResource('settings/modules/api2cart/connections', Api\Modules\Api2cart\Api2cartConnectionController::class, ['as' => 'api.settings.module.api2cart'])->only(['index', 'store', 'destroy']);
 Route::apiResource('settings/modules/api2cart/products', Api\Modules\Api2cart\ProductsController::class, ['as' => 'api.settings.module.api2cart'])->only(['index']);
 Route::apiResource('settings/modules/dpd-ireland/connections', Api\Modules\DpdIreland\DpdIrelandController::class, ['as' => 'api.settings.module.dpd-ireland'])->only(['index', 'store', 'destroy']);
+Route::apiResource('settings/modules/printnode/printjobs', Api\Modules\Printnode\PrintJobController::class, ['as' => 'api.settings.module.printnode'])->only(['store']);
