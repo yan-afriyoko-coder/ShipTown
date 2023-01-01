@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Configuration\StoreRequest;
+use App\Http\Requests\ConfigurationIndexRequest;
 use App\Http\Resources\ConfigurationResource;
 use App\Models\Configuration;
 
@@ -14,7 +15,7 @@ class ConfigurationController extends Controller
      *
      * @return ConfigurationResource
      */
-    public function index(): ConfigurationResource
+    public function index(ConfigurationIndexRequest $request): ConfigurationResource
     {
         $configuration = Configuration::first();
 
