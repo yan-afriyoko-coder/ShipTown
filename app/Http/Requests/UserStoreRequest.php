@@ -31,16 +31,19 @@ class UserStoreRequest extends FormRequest
 
             'role_id' => [
                 'required',
-                'exists:roles,id'],
+                'exists:roles,id',
+            ],
 
             'warehouse_id' => [
                 'nullable',
-                'exists:warehouses,id'],
+                'exists:warehouses,id',
+            ],
 
             'default_dashboard_uri' => [
                 'nullable',
                 'string',
-                'max:255'],
+                'max:255'
+            ],
         ];
     }
 }
