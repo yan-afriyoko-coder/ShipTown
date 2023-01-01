@@ -331,13 +331,8 @@ export default {
                 return axios.post('/api/picklist/picks', data);
             },
 
-            apiGetModules: function () {
-                return axios.get('/api/settings/modules');
-            },
-
-            apiPostModule: function (id, params) {
-                return axios.put('/api/settings/modules/' + id, params);
-            },
+            apiGetModules: function () { return axios.get('/api/modules')},
+            apiPostModule: function (id, params) { return axios.put('/api/modules/' + id, params)},
 
 
             apiGetShippingServices: function (params = {}) {
@@ -356,21 +351,10 @@ export default {
             apiGetMailTemplate: function () { return axios.get('/api/mail-templates')},
             apiPutMailTemplate: function (id, params) { return axios.put('/api/mail-templates/' + id, params)},
 
-            apiGetNavigationMenu: function (params = {}) {
-                return axios.get('/api/settings/navigation-menu', {params: params});
-            },
-
-            apiPostNavigationMenu: function (params) {
-                return axios.post('/api/settings/navigation-menu/', params);
-            },
-
-            apiPutNavigationMenu: function (id, params) {
-                return axios.put('/api/settings/navigation-menu/' + id, params);
-            },
-
-            apiDeleteNavigationMenu: function (id) {
-                return axios.delete('/api/settings/navigation-menu/' + id);
-            },
+            apiGetNavigationMenu: function (params = {}) { return axios.get('/api/navigation-menu', {params: params})},
+            apiPostNavigationMenu: function (params) { return axios.post('/api/navigation-menu/', params)},
+            apiPutNavigationMenu: function (id, params) { return axios.put('/api/navigation-menu/' + id, params)},
+            apiDeleteNavigationMenu: function (id) { return axios.delete('/api/navigation-menu/' + id)},
 
             apiGetAutomationConfig: function() {
                 return axios.get('/api/settings/modules/automations/config');
