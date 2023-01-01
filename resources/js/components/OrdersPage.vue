@@ -127,9 +127,12 @@
                         this.lastPage = data.meta.last_page
                         this.lastPageLoaded = page;
                     })
+                    .catch((error) => {
+                        this.displayApiCallError(error)
+                    })
                     .finally(() => {
                         this.hideLoading();
-                    })
+                    });
 
                 return this;
             },
