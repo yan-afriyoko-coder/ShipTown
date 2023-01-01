@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserDeleteRequest;
+use App\Http\Requests\UserIndexRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
@@ -18,12 +19,7 @@ use Spatie\Permission\Models\Role;
  */
 class UserController extends Controller
 {
-    /**
-     * GET api/admin/users.
-     *
-     * @return AnonymousResourceCollection
-     */
-    public function index(): AnonymousResourceCollection
+    public function index(UserIndexRequest $request): AnonymousResourceCollection
     {
         $query = User::getSpatieQueryBuilder();
 
