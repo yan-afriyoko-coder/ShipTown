@@ -339,9 +339,6 @@ export default {
                 return axios.put('/api/settings/modules/' + id, params);
             },
 
-            apiGetOrderStatus: function (params) {
-                return axios.get('/api/order-statuses', {params: params});
-            },
 
             apiGetShippingServices: function (params = {}) {
                 return axios.get('/api/shipping-services', {params: params});
@@ -351,17 +348,10 @@ export default {
                 return axios.post('/api/shipping-labels', params);
             },
 
-            apiPostOrderStatus: function (params) {
-                return axios.post('/api/settings/order-statuses', params);
-            },
-
-            apiPutOrderStatus: function (id, params) {
-                return axios.put('/api/settings/order-statuses/' + id, params);
-            },
-
-            apiDeleteOrderStatus: function (id, params) {
-                return axios.delete('/api/settings/order-statuses/' + id);
-            },
+            apiGetOrderStatus: function (params) { return axios.get('/api/orders-statuses', {params: params})},
+            apiPostOrderStatus: function (params) { return axios.post('/api/order-statuses', params);},
+            apiPutOrderStatus: function (id, params) { return axios.put('/api/order-statuses/' + id, params)},
+            apiDeleteOrderStatus: function (id) { return axios.delete('/api/settings/order-statuses/' + id)},
 
             apiGetMailTemplate: function () {
                 return axios.get('/api/settings/mail-templates');
