@@ -67,3 +67,5 @@ Route::apiResource('modules/webhooks/subscriptions', Api\Modules\Webhooks\Subscr
 
 Route::apiResource('admin/user/roles', Api\UserRoleController::class, ['as' => 'admin.users'])->only(['index']);
 Route::apiResource('admin/users', Api\UserController::class);
+
+Route::apiResource('settings/modules', Api\ModuleController::class, ['as' => 'api.settings'])->only(['index', 'update']);
