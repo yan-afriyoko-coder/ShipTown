@@ -71,17 +71,13 @@ export default {
                 return this.apiGet('/api/stocktake-suggestions-details', {params: params});
             },
 
-            apiGetInventory(params) {
-                return axios.get('/api/product/inventory', {params: params});
-            },
 
             apiGetRestocking(params) {
                 return axios.get('/api/restocking', {params: params});
             },
 
-            apiPostInventory(data) {
-                return this.apiPost('/api/product/inventory', data);
-            },
+            apiInventoryPost(data) { return this.apiPost('/api/inventory', data)},
+            apiInventoryGet(params) { return this.apiGet('/api/inventory', {params: params})},
 
             apiGetInventoryMovements(params) {
                 return this.apiGet('/api/inventory-movements', {params: params});

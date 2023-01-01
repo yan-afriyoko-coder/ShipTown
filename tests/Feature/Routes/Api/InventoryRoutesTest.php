@@ -6,18 +6,14 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class InventoryRoutesTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function testGetRouteUnauthorized()
     {
-        $response = $this->get('/api/product/inventory');
+        $response = $this->get(route('api.inventory.store'));
 
         $response->assertStatus(302);
     }
@@ -28,7 +24,7 @@ class InventoryRoutesTest extends TestCase
             User::factory()->create()
         );
 
-        $response = $this->get('/api/product/inventory');
+        $response = $this->get(route('api.inventory.store'));
 
         $response->assertStatus(200);
     }
@@ -38,7 +34,7 @@ class InventoryRoutesTest extends TestCase
      */
     public function testIfPostRouteIsProtected()
     {
-        $response = $this->post('api/product/inventory');
+        $response = $this->post(route('api.inventory.store'));
 
         $response->assertStatus(302);
     }
@@ -49,7 +45,7 @@ class InventoryRoutesTest extends TestCase
             User::factory()->create()
         );
 
-        $response = $this->postJson('/api/product/inventory', []);
+        $response = $this->postJson(route('api.inventory.store'), []);
 
         $response->assertStatus(422);
     }
@@ -74,7 +70,7 @@ class InventoryRoutesTest extends TestCase
             'quantity_reserved' => rand(10, 50),
         ];
 
-        $response = $this->postJson('/api/product/inventory', $update);
+        $response = $this->postJson(route('api.inventory.store'), $update);
 
         $response->assertStatus(200);
     }

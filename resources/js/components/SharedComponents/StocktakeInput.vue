@@ -157,7 +157,7 @@
                     'include': 'product'
                 }
 
-                this.apiGetInventory(params)
+                this.apiInventoryGet(params)
                     .then(e => {
                         if (e.data.meta.total === 0) {
                             this.notifyError('Product not found - "' + sku + '"');

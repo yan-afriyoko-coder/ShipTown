@@ -38,7 +38,6 @@ Route::apiResource('activities', Api\ActivityController::class)->only(['index', 
 Route::apiResource('warehouses', Api\WarehouseController::class)->only(['index', 'store', 'update', 'destroy']);
 Route::apiResource('products', Api\ProductController::class)->only(['index', 'store']);
 Route::apiResource('product/aliases', Api\Product\ProductAliasController::class, ['as' => 'product'])->only(['index']);
-Route::apiResource('product/inventory', Api\Product\ProductInventoryController::class)->only(['index', 'store']);
 Route::apiResource('product/tags', Api\Product\ProductTagController::class)->only(['index']);
 Route::apiResource('inventory-movements', Api\InventoryMovementController::class)->only(['store', 'index']);
 Route::apiResource('stocktakes', Api\StocktakesController::class)->only(['store']);
@@ -82,3 +81,7 @@ Route::apiResource('settings/modules/rms_api/connections', Api\Modules\Rmsapi\Rm
 Route::apiResource('settings/automations/config', Api\Modules\OrderAutomations\ConfigController::class, ['as' => 'api.settings.module.automations'])->only(['index']);
 Route::apiResource('settings/automations', Api\Modules\OrderAutomations\AutomationController::class, ['as' => 'api.settings.module'])->only(['index', 'store', 'show', 'update', 'destroy']);
 Route::apiResource('modules/autostatus/picking/configuration', Api\Modules\AutoStatus\ConfigurationController::class, ['as' => 'modules.autostatus.picking'])->only('index', 'store');
+
+Route::group(['as' => 'api.'], function () {
+    Route::apiResource('inventory', Api\InventoryController::class)->only(['index', 'store']);
+});

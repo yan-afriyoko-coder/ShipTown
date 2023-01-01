@@ -1,18 +1,15 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Product\ProductInventoryController;
+namespace Tests\Feature\Http\Controllers\Api\InventoryController;
 
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class StoreTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -35,7 +32,7 @@ class StoreTest extends TestCase
             'shelve_location' => 'test',
         ];
 
-        $response = $this->post("api/product/inventory", $params);
+        $response = $this->post(route('api.inventory.index'), $params);
 
         ray($response->json());
 
