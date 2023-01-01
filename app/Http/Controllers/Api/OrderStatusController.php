@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderStatus\StoreRequest;
 use App\Http\Requests\OrderStatus\UpdateRequest;
+use App\Http\Requests\OrderStatusDestroyRequest;
 use App\Http\Requests\OrderStatusIndexRequest;
 use App\Http\Resources\OrderStatusResource;
 use App\Models\OrderStatus;
@@ -54,7 +55,7 @@ class OrderStatusController extends Controller
         return OrderStatusResource::make($orderStatus);
     }
 
-    public function destroy(int $order_status_id): OrderStatusResource
+    public function destroy(OrderStatusDestroyRequest $request, int $order_status_id): OrderStatusResource
     {
         $orderStatus = OrderStatus::findOrFail($order_status_id);
 

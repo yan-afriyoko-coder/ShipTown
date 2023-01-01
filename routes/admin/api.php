@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Routes for users with the admin role only]
-Route::apiResource('settings/order-statuses', Api\OrderStatusController::class, ['as' => 'api.settings'])->only(['index', 'store', 'update', 'destroy']);
 Route::apiResource('settings/mail-templates', Api\MailTemplateController::class, ['as' => 'api.settings'])->only(['index', 'update']);
 Route::apiResource('settings/navigation-menu', Api\NavigationMenuController::class, ['as' => 'api.settings'])->only(['index', 'store', 'update', 'destroy']);
 Route::apiResource('settings/configurations', Api\ConfigurationController::class, ['as' => 'api.settings'])->only(['index', 'store']);
