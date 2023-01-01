@@ -402,13 +402,8 @@ export default {
                 return axios.delete('/api/warehouses/' + id);
             },
 
-            apiGetConfiguration: function () {
-                return axios.get('/api/settings/configurations/');
-            },
-
-            apiSaveConfiguration: function (params) {
-                return axios.post('/api/settings/configurations/', params);
-            },
+            apiGetConfiguration: function () { return axios.get('/api/configurations/') },
+            apiSaveConfiguration: function (params) { return axios.post('/api/configurations/', params) },
 
             apiGetHeartbeats: function () {
                 return axios.get('/api/heartbeats/');

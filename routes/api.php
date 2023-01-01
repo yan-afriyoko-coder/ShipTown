@@ -75,7 +75,7 @@ Route::group(['as' => 'api.'], function () {
     Route::apiResource('mail-templates', Api\MailTemplateController::class)->only(['index', 'update']);
     Route::apiResource('navigation-menu', Api\NavigationMenuController::class)->except(['show']);
 
-    Route::apiResource('settings/configurations', Api\ConfigurationController::class)->only(['index', 'store']);
+    Route::apiResource('configurations', Api\ConfigurationController::class)->only(['index', 'store']);
 
     Route::apiResource('settings/automations/config', Api\Modules\OrderAutomations\ConfigController::class, ['as' => 'settings.module.automations'])->only(['index']);
     Route::apiResource('settings/automations', Api\Modules\OrderAutomations\AutomationController::class, ['as' => 'settings.module'])->only(['index', 'store', 'show', 'update', 'destroy']);
