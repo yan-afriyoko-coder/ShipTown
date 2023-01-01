@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api\Modules\OrderAutomations;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Automations\StoreRequest;
 use App\Http\Requests\Automations\UpdateRequest;
+use App\Http\Requests\OrderAutomationDestoyRequest;
+use App\Http\Requests\OrderAutomationIndexRequest;
+use App\Http\Requests\OrderAutomationShowRequest;
 use App\Http\Resources\AutomationResource;
 use App\Modules\Automations\src\Models\Automation;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -18,7 +21,7 @@ class AutomationController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function index(): AnonymousResourceCollection
+    public function index(OrderAutomationIndexRequest $request): AnonymousResourceCollection
     {
         $automations = Automation::query()
             ->orderBy('priority')
@@ -70,7 +73,7 @@ class AutomationController extends Controller
         return new AutomationResource($automation);
     }
 
-    public function show(int $automation_id): AutomationResource
+    public function show(OrderAutomationShowRequest $request, int $automation_id): AutomationResource
     {
         $automation = Automation::query()
             ->with(['conditions', 'actions'])
@@ -118,7 +121,7 @@ class AutomationController extends Controller
         return new AutomationResource($automation);
     }
 
-    public function destroy(int $automation_id): AutomationResource
+    public function destroy(OrderAutomationDestoyRequest $request, int $automation_id): AutomationResource
     {
         $automation = Automation::query()->findOrFail($automation_id);
 
