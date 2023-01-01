@@ -73,3 +73,4 @@ Route::apiResource('settings/order-statuses', Api\OrderStatusController::class, 
 Route::apiResource('settings/mail-templates', Api\MailTemplateController::class, ['as' => 'api.settings'])->only(['index', 'update']);
 Route::apiResource('settings/navigation-menu', Api\NavigationMenuController::class, ['as' => 'api.settings'])->only(['index', 'store', 'update', 'destroy']);
 Route::apiResource('settings/configurations', Api\ConfigurationController::class, ['as' => 'api.settings'])->only(['index', 'store']);
+Route::apiResource('settings/modules/api2cart/connections', Api\Modules\Api2cart\Api2cartConnectionController::class, ['as' => 'api.settings.module.api2cart'])->only(['index', 'store', 'destroy']);
