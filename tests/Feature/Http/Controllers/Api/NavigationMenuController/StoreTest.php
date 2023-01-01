@@ -18,7 +18,7 @@ class StoreTest extends TestCase
             ];
         }
 
-        $response = $this->post(route('api.settings.navigation-menu.store'), $body);
+        $response = $this->post(route('api.navigation-menu.store'), $body);
 
         return $response;
     }

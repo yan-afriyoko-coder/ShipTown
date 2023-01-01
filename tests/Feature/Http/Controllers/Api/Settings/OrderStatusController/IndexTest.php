@@ -15,7 +15,7 @@ class IndexTest extends TestCase
             User::factory()->create()
         );
 
-        $response = $this->get(route('api.settings.order-statuses.index'));
+        $response = $this->get(route('api.order-statuses.index'));
 
         $response->assertSuccessful();
     }

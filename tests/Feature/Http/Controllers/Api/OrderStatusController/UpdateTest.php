@@ -17,7 +17,7 @@ class UpdateTest extends TestCase
             'reserves_stock' => 1,
             'sync_ecommerce' => 0,
         ]);
-        $response = $this->put(route('api.settings.order-statuses.update', $orderStatus), [
+        $response = $this->put(route('api.order-statuses.update', $orderStatus), [
             'order_active'      => 0,
             'reserves_stock'    => 0,
             'sync_ecommerce'    => 0

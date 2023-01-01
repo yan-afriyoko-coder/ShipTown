@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Settings\OrderStatusController;
+namespace Tests\Feature\Http\Controllers\Api\OrderStatusController;
 
 use App\Models\OrderStatus;
 use App\User;
@@ -25,7 +25,7 @@ class DestroyTest extends TestCase
             'sync_ecommerce' => 0,
         ]);
 
-        $response = $this->delete(route('api.settings.order-statuses.destroy', $orderStatus));
+        $response = $this->delete(route('api.order-statuses.destroy', $orderStatus));
         $response->assertOk();
     }
 
@@ -38,7 +38,7 @@ class DestroyTest extends TestCase
             'sync_ecommerce' => 0,
         ]);
 
-        $response = $this->delete(route('api.settings.order-statuses.destroy', $orderStatus));
+        $response = $this->delete(route('api.order-statuses.destroy', $orderStatus));
         $response->assertStatus(401);
     }
 
@@ -51,7 +51,7 @@ class DestroyTest extends TestCase
             'sync_ecommerce' => 1,
         ]);
 
-        $response = $this->delete(route('api.settings.order-statuses.destroy', $orderStatus));
+        $response = $this->delete(route('api.order-statuses.destroy', $orderStatus));
         $response->assertStatus(401);
     }
 }
