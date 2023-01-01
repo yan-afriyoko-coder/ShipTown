@@ -25,7 +25,7 @@ class DestroyTest extends TestCase
             'sync_ecommerce' => 0,
         ]);
 
-        $response = $this->delete(route('api.order-statuses.destroy', $orderStatus));
+        $response = $this->delete(route('api.orders-statuses.destroy', $orderStatus));
         $response->assertOk();
     }
 
@@ -38,7 +38,7 @@ class DestroyTest extends TestCase
             'sync_ecommerce' => 0,
         ]);
 
-        $response = $this->delete(route('api.order-statuses.destroy', $orderStatus));
+        $response = $this->delete(route('api.orders-statuses.destroy', $orderStatus));
         $response->assertStatus(401);
     }
 
@@ -51,7 +51,7 @@ class DestroyTest extends TestCase
             'sync_ecommerce' => 1,
         ]);
 
-        $response = $this->delete(route('api.order-statuses.destroy', $orderStatus));
+        $response = $this->delete(route('api.orders-statuses.destroy', $orderStatus));
         $response->assertStatus(401);
     }
 }

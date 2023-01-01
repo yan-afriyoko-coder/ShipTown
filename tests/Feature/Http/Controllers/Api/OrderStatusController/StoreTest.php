@@ -11,7 +11,7 @@ class StoreTest extends TestCase
 {
     private function simulationTest()
     {
-        $response = $this->post('api/settings/order-statuses', [
+        $response = $this->post('api/orders-statuses', [
             'name'              => 'Test Create',
             'code'              => 'test-create',
             'order_active'      => 0,
@@ -82,7 +82,7 @@ class StoreTest extends TestCase
 
         $orderStatus->delete();
 
-        $response = $this->post(route('api.order-statuses.store'), [
+        $response = $this->post(route('api.orders-statuses.store'), [
             'name'              => $orderStatus->name,
             'code'              => $orderStatus->code,
             'order_active'      => 0,
