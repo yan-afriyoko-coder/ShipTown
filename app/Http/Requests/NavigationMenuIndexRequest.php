@@ -4,11 +4,11 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ModuleIndexRequest extends FormRequest
+class NavigationMenuIndexRequest extends FormRequest
 {
-    public function authorize(): bool
+    public function authorize():bool
     {
-        return $this->user()->hasRole('admin');
+        return true;
     }
 
     public function rules(): array

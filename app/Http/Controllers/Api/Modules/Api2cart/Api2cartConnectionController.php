@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\Modules\Api2cart;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api2cartConnectionDestroyRequest;
+use App\Http\Requests\Api2cartConnectionIndexRequest;
 use App\Http\Requests\StoreApi2cartConnectionRequest;
 use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
@@ -21,7 +23,7 @@ class Api2cartConnectionController extends Controller
     /**
      * @return AnonymousResourceCollection
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Api2cartConnectionIndexRequest $request): AnonymousResourceCollection
     {
         return JsonResource::collection(Api2cartConnection::all());
     }
@@ -49,7 +51,7 @@ class Api2cartConnectionController extends Controller
      *
      * @return Application|ResponseFactory|Response
      */
-    public function destroy(Api2cartConnection $connection)
+    public function destroy(Api2cartConnectionDestroyRequest $request, Api2cartConnection $connection)
     {
         $connection->delete();
         return response('ok');

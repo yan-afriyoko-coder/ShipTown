@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ModuleIndexRequest extends FormRequest
+class MailTemplateIndexRequest extends FormRequest
 {
     public function authorize(): bool
     {

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\Modules\Printnode;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PrintNodeClientDestroyRequest;
+use App\Http\Requests\PrintNodeClientIndexRequest;
 use App\Http\Requests\StorePrintNodeClientRequest;
 use App\Modules\PrintNode\src\Models\Client;
 use App\Modules\PrintNode\src\PrintNode;
@@ -13,7 +15,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ClientController extends Controller
 {
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(PrintNodeClientIndexRequest $request): AnonymousResourceCollection
     {
         return PrintNodeClientResource::collection($this->getPaginatedResult(Client::getSpatieQueryBuilder()));
     }
@@ -35,7 +37,7 @@ class ClientController extends Controller
     /**
      * @throws Exception
      */
-    public function destroy(Request $request, Client $client)
+    public function destroy(PrintNodeClientDestroyRequest $request, Client $client)
     {
         $client->delete();
 

@@ -4,9 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ModuleIndexRequest extends FormRequest
+class OrderAutomationConfigIndexRequest extends FormRequest
 {
-    public function authorize(): bool
+    public function authorize():bool
     {
         return $this->user()->hasRole('admin');
     }
