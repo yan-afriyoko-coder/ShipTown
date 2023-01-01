@@ -15,4 +15,3 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Routes for users with the admin role only]
-Route::apiResource('modules/autostatus/picking/configuration', Api\Modules\AutoStatus\ConfigurationController::class, ['as' => 'modules.autostatus.picking'])->only('index', 'store');
