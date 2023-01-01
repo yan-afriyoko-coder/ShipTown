@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\Modules\Rmsapi;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RmsapiConnectionDestroyRequest;
+use App\Http\Requests\RmsapiConnectionIndexRequest;
 use App\Http\Requests\StoreConfigurationRmsApiRequest;
 use App\Http\Resources\RmsapiConnectionResource;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
@@ -20,7 +22,7 @@ class RmsapiConnectionController extends Controller
     /**
      * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(RmsapiConnectionIndexRequest $request)
     {
         return RmsapiConnectionResource::collection(RmsapiConnection::all());
     }
@@ -45,7 +47,7 @@ class RmsapiConnectionController extends Controller
      *
      * @return Application|ResponseFactory|Response
      */
-    public function destroy(RmsapiConnection $connection)
+    public function destroy(RmsapiConnectionDestroyRequest $request, RmsapiConnection $connection)
     {
         $connection->delete();
 
