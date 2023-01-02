@@ -12,7 +12,7 @@ class IndexTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user, 'api')->getJson(route('activities.index'));
+        $response = $this->actingAs($user, 'api')->getJson(route('api.activities.index'));
 
         $response->assertOk();
         $response->assertJsonStructure([

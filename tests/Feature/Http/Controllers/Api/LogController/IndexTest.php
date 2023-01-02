@@ -19,7 +19,7 @@ class IndexTest extends TestCase
         // product creation will generate some logs
         Product::factory()->create();
 
-        $response = $this->actingAs($user, 'api')->getJson(route('logs.index'));
+        $response = $this->actingAs($user, 'api')->getJson(route('api.logs.index'));
 
         $response->assertOk();
 

@@ -15,7 +15,7 @@ class IndexTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user, 'api')->getJson(route('shipping-services.index'));
+        $response = $this->actingAs($user, 'api')->getJson(route('api.shipping-services.index'));
 
         $response->assertOk();
         $response->assertJsonStructure([

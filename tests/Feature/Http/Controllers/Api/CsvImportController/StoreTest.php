@@ -29,7 +29,7 @@ class StoreTest extends TestCase
         /** @var Product $product */
         $product = Product::factory()->create();
 
-        $response = $this->actingAs($user, 'api')->postJson(route('csv-import.store'), [
+        $response = $this->actingAs($user, 'api')->postJson(route('api.csv-import.store'), [
             'data_collection_id' => $dataCollection->getKey(),
             'data' => [
                 [

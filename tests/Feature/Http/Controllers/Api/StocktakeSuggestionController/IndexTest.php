@@ -27,7 +27,7 @@ class IndexTest extends TestCase
             ]
         );
 
-        $response = $this->actingAs($user, 'api')->getJson(route('stocktake-suggestions.index'));
+        $response = $this->actingAs($user, 'api')->getJson(route('api.stocktake-suggestions.index'));
 
         ray($response->json());
 

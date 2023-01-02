@@ -22,17 +22,10 @@ Route::put('print/order/{order_number}/{view}', [Api\PrintOrderController::class
 Route::apiResource('packlist/order', Api\PacklistOrderController::class, ['as' => 'packlist'])->only(['index']);
 
 Route::apiResource('csv-import/data-collections', Api\CsvImport\DataCollectionsImportController::class)->names('csv-import-data-collections')->only(['store']);
-Route::apiResource('csv-import', Api\CsvImportController::class)->only(['store']);
-Route::apiResource('stocktake-suggestions', Api\StocktakeSuggestionController::class)->only(['index']);
-Route::apiResource('stocktake-suggestions-details', Api\StocktakeSuggestionDetailController::class)->only(['index']);
-Route::apiResource('shipping-services', Api\ShippingServiceController::class)->only(['index']);
-Route::apiResource('shipping-labels', Api\ShippingLabelController::class)->only(['store']);
 Route::apiResource('run/sync', Api\Run\SyncController::class)->only('index');
 Route::apiResource('run/sync/api2cart', Api\Run\SyncApi2CartController::class)->only('index');
 Route::apiResource('run/hourly/jobs', Api\Run\HourlyJobsController::class, ['as' => 'run.hourly'])->only('index');
 Route::apiResource('run/daily/jobs', Api\Run\DailyJobsController::class, ['as' => 'run.daily'])->only('index');
-Route::apiResource('logs', Api\LogController::class)->only(['index']);
-Route::apiResource('activities', Api\ActivityController::class)->only(['index', 'store']);
 Route::apiResource('product/aliases', Api\Product\ProductAliasController::class, ['as' => 'product'])->only(['index']);
 Route::apiResource('product/tags', Api\Product\ProductTagController::class)->only(['index']);
 Route::apiResource('data-collector-records', Api\DataCollectorRecordController::class)->only(['store', 'index']);
@@ -68,6 +61,14 @@ Route::group(['as' => 'api.'], function () {
     Route::apiResource('inventory-movements', Api\InventoryMovementController::class)->only(['store', 'index']);
     Route::apiResource('stocktakes', Api\StocktakesController::class)->only(['store']);
     Route::apiResource('data-collector', Api\DataCollectorController::class)->except(['show']);
+
+    Route::apiResource('logs', Api\LogController::class)->only(['index']);
+    Route::apiResource('activities', Api\ActivityController::class)->only(['index', 'store']);
+    Route::apiResource('csv-import', Api\CsvImportController::class)->only(['store']);
+    Route::apiResource('stocktake-suggestions', Api\StocktakeSuggestionController::class)->only(['index']);
+    Route::apiResource('stocktake-suggestions-details', Api\StocktakeSuggestionDetailController::class)->only(['index']);
+    Route::apiResource('shipping-services', Api\ShippingServiceController::class)->only(['index']);
+    Route::apiResource('shipping-labels', Api\ShippingLabelController::class)->only(['store']);
 
     Route::apiResource('settings/automations/config', Api\Modules\OrderAutomations\ConfigController::class, ['as' => 'settings.module.automations'])->only(['index']);
     Route::apiResource('settings/automations', Api\Modules\OrderAutomations\AutomationController::class, ['as' => 'settings.module'])->only(['index', 'store', 'show', 'update', 'destroy']);
