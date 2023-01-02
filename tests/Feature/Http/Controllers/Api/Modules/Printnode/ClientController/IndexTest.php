@@ -20,7 +20,7 @@ class IndexTest extends TestCase
     {
         Client::factory()->create();
 
-        $response = $this->get(route('api.settings.module.printnode.clients.index'));
+        $response = $this->get(route('api.modules.printnode.clients.index'));
 
         $response->assertSuccessful();
     }

@@ -33,7 +33,7 @@ class DestroyTest extends TestCase
         $user->assignRole(Role::findOrCreate('admin', 'api'));
         $this->actingAs($user, 'api');
 
-        $response = $this->delete(route('api.settings.module.dpd-ireland.connections.destroy', [
+        $response = $this->delete(route('api.modules.dpd-ireland.connections.destroy', [
                 'connection' => $connection->getKey()
             ]));
 

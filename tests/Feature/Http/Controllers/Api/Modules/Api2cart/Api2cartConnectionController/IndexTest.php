@@ -17,7 +17,7 @@ class IndexTest extends TestCase
         $user = User::factory()->create();
         $user->assignRole('admin');
 
-        $response = $this->actingAs($user, 'api')->getJson(route('api.settings.module.api2cart.connections.index'));
+        $response = $this->actingAs($user, 'api')->getJson(route('api.modules.api2cart.connections.index'));
 
         $response->assertOk();
         $response->assertJsonStructure([

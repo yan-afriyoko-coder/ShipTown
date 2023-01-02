@@ -123,13 +123,7 @@ export default {
                 return axios.get('/api/data-collector-records', {params: params});
             },
 
-            apiKickProduct: function(sku) {
-              return axios.get('/products/' + sku  + '/kick/', {params: null});
-            },
-
-            apiModuleEcommerceProductInfo: function(params) {
-                return axios.get('/api/settings/modules/api2cart/products', {params: params});
-            },
+            apiModuleEcommerceProductInfo: function(params) { return axios.get('/api/modules/api2cart/products', {params: params}) },
 
             apiGetOrders: function(params) {
                 return axios.get('/api/orders', {params: params});
@@ -211,41 +205,25 @@ export default {
                 return axios.get('/api/admin/user/roles', {params: params});
             },
 
-            apiGetModulePrintnodeClients: function (params) {
-                return axios.get('/api/settings/modules/printnode/clients', {params: params})
-            },
+            apiGetModulePrintnodeClients: function (params) { return axios.get('/api/modules/printnode/clients', {params: params}) },
 
-            apiPostModulePrintnodeClients: function (data) {
-                return axios.post('/api/settings/modules/printnode/clients', data);
-            },
+            apiPostModulePrintnodeClients: function (data) { return axios.post('/api/modules/printnode/clients', data) },
 
-            apiDeletePrintnodeClient: function (id) {
-                return axios.delete(`/api/settings/modules/printnode/clients/${id}`, {});
-            },
+            apiDeletePrintnodeClient: function (id) { return axios.delete(`/api/modules/printnode/clients/${id}`, {}) },
 
-            apiGetApi2cartConnections: function (params) {
-                return axios.get('/api/settings/modules/api2cart/connections', {params: params});
-            },
+            apiGetApi2cartConnections: function (params) { return axios.get('/api/modules/api2cart/connections', {params: params}) },
 
-            apiDeleteApi2cartConnection: function (connection_id) {
-                return axios.delete(`/api/settings/modules/api2cart/connections/${connection_id}`);
-            },
+            apiDeleteApi2cartConnection: function (connection_id) { return axios.delete(`/api/modules/api2cart/connections/${connection_id}`) },
 
-            apiGetDpdConfiguration: function () {
-                return axios.get(`/api/settings/modules/dpd-ireland/connections`);
-            },
+            apiGetDpdConfiguration: function () { return axios.get(`/api/modules/dpd-ireland/connections`) },
 
             apiGetDpdUkConnections() {
                 return axios.get(`/api/modules/dpd-uk/dpd-uk-connections`);
             },
 
-            apiPostDpdConfiguration: function (data) {
-                return axios.post(`/api/settings/modules/dpd-ireland/connections`, data);
-            },
+            apiPostDpdConfiguration: function (data) { return axios.post(`/api/modules/dpd-ireland/connections`, data) },
 
-            apiDeleteDpdConfiguration: function (id) {
-                return axios.delete(`/api/settings/modules/dpd-ireland/connections/${id}`);
-            },
+            apiDeleteDpdConfiguration: function (id) { return axios.delete(`/api/modules/dpd-ireland/connections/${id}`) },
 
             apiGetOauthTokens: function () {
                 return axios.get('/oauth/tokens');
@@ -287,25 +265,15 @@ export default {
                 return axios.get('/api/modules/printnode/printers');
             },
 
-            apiPostPrintnodePrintJob: function (data) {
-                return axios.post('/api/modules/printnode/printjobs', data);
-            },
+            apiPostPrintnodePrintJob: function (data) { return axios.post('/api/modules/printnode/printjobs', data) },
 
-            apiPostRmsapiConnections: function (data) {
-                return axios.post('/api/settings/modules/rms_api/connections', data);
-            },
+            apiPostRmsapiConnections: function (data) { return axios.post('/api/modules/rms_api/connections', data) },
 
-            apiGetRmsapiConnections: function (params) {
-                return axios.get('/api/settings/modules/rms_api/connections', {params: params});
-            },
+            apiGetRmsapiConnections: function (params) { return axios.get('/api/modules/rms_api/connections', {params: params}) },
 
-            apiDeleteRmsapiConnection: function (connection_id) {
-                return axios.delete(`/api/settings/modules/rms_api/connections/${connection_id}`);
-            },
+            apiDeleteRmsapiConnection: function (connection_id) { return axios.delete(`/api/modules/rms_api/connections/${connection_id}`) },
 
-            apiPostApi2cartConnection: function (data) {
-                return axios.post('/api/settings/modules/api2cart/connections', data);
-            },
+            apiPostApi2cartConnection: function (data) { return axios.post('/api/modules/api2cart/connections', data) },
 
             apiPostWidget: function (data) {
                 return axios.post('/api/widgets', data);

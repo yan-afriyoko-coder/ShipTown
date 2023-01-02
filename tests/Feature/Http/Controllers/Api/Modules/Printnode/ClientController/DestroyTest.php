@@ -20,7 +20,7 @@ class DestroyTest extends TestCase
     {
         $client = Client::factory()->create();
 
-        $response = $this->delete(route('api.settings.module.printnode.clients.destroy', $client));
+        $response = $this->delete(route('api.modules.printnode.clients.destroy', $client));
 
         $response->assertSuccessful();
     }

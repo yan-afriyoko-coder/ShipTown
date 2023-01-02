@@ -20,7 +20,7 @@ class DestroyTest extends TestCase
     {
         $rmsApi = RmsapiConnection::factory()->create();
 
-        $response = $this->delete(route('api.settings.module.rmsapi.connections.destroy', $rmsApi));
+        $response = $this->delete(route('api.modules.rmsapi.connections.destroy', $rmsApi));
         $response->assertStatus(200);
     }
 }
