@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Order\OrderShipmentController;
+namespace Tests\Feature\Http\Controllers\Api\OrderShipmentController;
 
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
