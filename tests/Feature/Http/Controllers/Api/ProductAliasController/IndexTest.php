@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Product\ProductAliasController;
+namespace Tests\Feature\Http\Controllers\Api\ProductAliasController;
 
 use App\User;
 use Tests\TestCase;

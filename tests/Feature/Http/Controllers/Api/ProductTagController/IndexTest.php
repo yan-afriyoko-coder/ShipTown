@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Product\ProductTagController;
+namespace Tests\Feature\Http\Controllers\Api\ProductTagController;
 
 use App\User;
 use Tests\TestCase;
