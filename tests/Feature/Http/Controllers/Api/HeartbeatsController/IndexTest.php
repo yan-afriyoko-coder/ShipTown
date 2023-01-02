@@ -31,7 +31,7 @@ class IndexTest extends TestCase
             ]
         );
 
-        $response = $this->get(route('heartbeats.index'));
+        $response = $this->get(route('api.heartbeats.index'));
         $response->assertOk();
         $response->assertJsonStructure([
             'data' => [

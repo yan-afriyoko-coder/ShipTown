@@ -50,7 +50,6 @@ Route::apiResource('order/shipments', Api\Order\OrderShipmentController::class)-
 Route::apiResource('order/comments', Api\OrderCommentController::class)->only(['index', 'store']);
 Route::apiResource('order-statuses', Api\OrderStatusController::class)->only(['index']);
 Route::apiResource('picklist/picks', Api\Picklist\PicklistPickController::class)->only(['store']);
-Route::apiResource('heartbeats', Api\HeartbeatsController::class)->only(['index']);
 
 Route::apiResource('modules/printnode/printers', Api\Modules\Printnode\PrinterController::class)->only(['index']);
 
@@ -69,6 +68,7 @@ Route::group(['as' => 'api.'], function () {
     Route::apiResource('picklist', Api\PicklistController::class)->only(['index']);
     Route::apiResource('shipments', Api\ShipmentController::class)->only(['store']);
     Route::apiResource('modules', Api\ModuleController::class)->only(['index', 'update']);
+    Route::apiResource('heartbeats', Api\HeartbeatsController::class)->only(['index']);
     Route::apiResource('orders-statuses', Api\OrderStatusController::class)->except(['show']);
     Route::apiResource('mail-templates', Api\MailTemplateController::class)->only(['index', 'update']);
     Route::apiResource('navigation-menu', Api\NavigationMenuController::class)->except(['show']);
