@@ -53,7 +53,7 @@ class NegativeWarehouseStockJob implements ShouldQueue
                     now() as created_at,
                     now() as updated_at
                 FROM inventory
-                RIGHT JOIN inventory as inventory_fullfilment
+                INNER JOIN inventory as inventory_fullfilment
                     ON inventory_fullfilment.product_id = inventory.product_id
                     AND inventory_fullfilment.warehouse_id IN (' . implode(',', $warehouseIDs->toArray()) . ')
                     AND inventory_fullfilment.quantity > 0
@@ -65,7 +65,6 @@ class NegativeWarehouseStockJob implements ShouldQueue
                         WHERE stocktake_suggestions.inventory_id = inventory.id
                         AND stocktake_suggestions.reason = ?
                     )
-                LIMIT 500
         ', [$points, $reason, $this->warehouse_id, $reason]);
 
         return true;
