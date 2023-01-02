@@ -28,9 +28,19 @@ class NegativeInventoryJob implements ShouldQueue
     public function handle(): bool
     {
         $reason = 'stock below 0';
-        $points = 10;
+        $points = 1;
 
-        DB::statement('DELETE FROM stocktake_suggestions WHERE reason = ?', [$reason]);
+        DB::statement('
+            DELETE stocktake_suggestions
+            FROM stocktake_suggestions
+            INNER JOIN inventory
+                ON inventory.id = stocktake_suggestions.inventory_id
+                AND inventory.quantity >= 0
+
+            WHERE stocktake_suggestions.warehouse_id = ?
+            AND stocktake_suggestions.reason = ?
+        ', [$this->warehouse_id, $reason]);
+
 
         DB::statement('
             INSERT INTO stocktake_suggestions (inventory_id, product_id, warehouse_id, points, reason, created_at, updated_at)
@@ -44,8 +54,6 @@ class NegativeInventoryJob implements ShouldQueue
                     WHERE stocktake_suggestions.inventory_id = inventory.id
                     AND stocktake_suggestions.reason = ?
                 )
-            ORDER BY quantity ASC
-            LIMIT 500
         ', [$points, $reason, $this->warehouse_id, $reason]);
 
         return true;
