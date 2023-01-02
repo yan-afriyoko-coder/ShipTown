@@ -46,7 +46,7 @@ class UpdateTest extends TestCase
                 ]
             ]
         ];
-        $response = $this->put(route('api.settings.module.automations.update', $automation->id), $data);
+        $response = $this->put(route('api.modules.automations.update', $automation->id), $data);
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'data' => [

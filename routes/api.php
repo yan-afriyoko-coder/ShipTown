@@ -69,8 +69,6 @@ Route::group(['as' => 'api.'], function () {
     Route::apiResource('shipping-services', Api\ShippingServiceController::class)->only(['index']);
     Route::apiResource('shipping-labels', Api\ShippingLabelController::class)->only(['store']);
 
-    Route::apiResource('settings/automations/config', Api\Modules\OrderAutomations\ConfigController::class, ['as' => 'settings.module.automations'])->only(['index']);
-    Route::apiResource('settings/automations', Api\Modules\OrderAutomations\AutomationController::class, ['as' => 'settings.module'])->only(['index', 'store', 'show', 'update', 'destroy']);
 
     Route::apiResource('settings/modules/api2cart/connections', Api\Modules\Api2cart\Api2cartConnectionController::class, ['as' => 'settings.module.api2cart'])->only(['index', 'store', 'destroy']);
     Route::apiResource('settings/modules/api2cart/products', Api\Modules\Api2cart\ProductsController::class, ['as' => 'settings.module.api2cart'])->only(['index']);
@@ -82,4 +80,9 @@ Route::group(['as' => 'api.'], function () {
     Route::apiResource('modules/dpd-uk/dpd-uk-connections', Api\Modules\DpdUk\DpdUkConnectionController::class, ['as' => 'modules.dpd-uk'])->only(['index']);
     Route::apiResource('modules/printnode/printjobs', Api\Modules\Printnode\PrintJobController::class, ['as' => 'modules.printnode'])->only(['store']);
     Route::apiResource('modules/webhooks/subscriptions', Api\Modules\Webhooks\SubscriptionController::class, ['as' => 'modules.webhooks'])->only(['index', 'store']);
+});
+
+Route::group(['prefix' => 'modules', 'as' => 'api.modules.'], function () {
+    Route::apiResource('automations/config', Api\Modules\OrderAutomations\ConfigController::class, ['as' => 'automations'])->only(['index']);
+    Route::apiResource('automations', Api\Modules\OrderAutomations\AutomationController::class);
 });

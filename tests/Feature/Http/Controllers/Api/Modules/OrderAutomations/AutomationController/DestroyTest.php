@@ -23,7 +23,7 @@ class DestroyTest extends TestCase
             'priority' => 1,
         ]);
 
-        $response = $this->delete(route('api.settings.module.automations.destroy', $automation));
+        $response = $this->delete(route('api.modules.automations.destroy', $automation));
         $response->assertOk();
     }
 }

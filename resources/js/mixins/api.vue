@@ -356,34 +356,18 @@ export default {
             apiPutNavigationMenu: function (id, params) { return axios.put('/api/navigation-menu/' + id, params)},
             apiDeleteNavigationMenu: function (id) { return axios.delete('/api/navigation-menu/' + id)},
 
-            apiGetAutomationConfig: function() {
-                return axios.get('/api/settings/modules/automations/config');
-            },
+            apiGetAutomationConfig: function() { return axios.get('/api/modules/automations/config') },
 
-            apiGetAutomations: function () {
-                return axios.get('/api/settings/modules/automations');
-            },
-
-            apiShowAutomations: function (id) {
-                return axios.get('/api/settings/modules/automations/' + id);
-            },
-
-            apiPostAutomations: function (params) {
-                return axios.post('/api/settings/modules/automations/', params);
-            },
-
-            apiPutAutomations: function (id, params) {
-                return axios.put('/api/settings/modules/automations/' + id, params);
-            },
+            apiGetAutomations: function () { return axios.get('/api/modules/automations') },
+            apiShowAutomations: function (id) { return axios.get('/api/modules/automations/' + id) },
+            apiPostAutomations: function (params) { return axios.post('/api/modules/automations/', params) },
+            apiPutAutomations: function (id, params) { return axios.put('/api/modules/automations/' + id, params) },
+            apiDeleteAutomations: function (id) { return axios.delete('/api/modules/automations/' + id) },
 
             apiRunAutomation: function (id) {
                 return axios.post('/api/settings/modules/automations/run', {
                     'automation_id': id
                 });
-            },
-
-            apiDeleteAutomations: function (id) {
-                return axios.delete('/api/settings/modules/automations/' + id);
             },
 
             apiGetWarehouses: function (params) {
