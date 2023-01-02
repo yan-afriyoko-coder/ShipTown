@@ -18,7 +18,7 @@ class IndexTest extends TestCase
     /** @test */
     public function test_index_call_returns_ok()
     {
-        $response = $this->get(route('warehouses.index', ['include' => 'tags']));
+        $response = $this->get(route('api.warehouses.index', ['include' => 'tags']));
 
         $response->assertOk();
         $response->assertJsonStructure([

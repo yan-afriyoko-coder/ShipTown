@@ -29,7 +29,7 @@ class StoreTest extends TestCase
             'code'  => $warehouse->code
         ];
 
-        $response = $this->post(route('warehouses.index'), $data);
+        $response = $this->post(route('api.warehouses.index'), $data);
 
         $response->assertStatus(201);
         $response->assertJsonStructure([

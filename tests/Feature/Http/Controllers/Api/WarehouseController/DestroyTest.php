@@ -21,7 +21,7 @@ class DestroyTest extends TestCase
     {
         $warehouse = Warehouse::factory()->create();
 
-        $response = $this->delete(route('warehouses.destroy', $warehouse));
+        $response = $this->delete(route('api.warehouses.destroy', $warehouse));
         $response->assertSuccessful();
 
         $this->assertNull(Warehouse::find($warehouse->id));

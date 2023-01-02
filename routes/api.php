@@ -33,7 +33,6 @@ Route::apiResource('run/hourly/jobs', Api\Run\HourlyJobsController::class, ['as'
 Route::apiResource('run/daily/jobs', Api\Run\DailyJobsController::class, ['as' => 'run.daily'])->only('index');
 Route::apiResource('logs', Api\LogController::class)->only(['index']);
 Route::apiResource('activities', Api\ActivityController::class)->only(['index', 'store']);
-Route::apiResource('warehouses', Api\WarehouseController::class)->only(['index', 'store', 'update', 'destroy']);
 Route::apiResource('product/aliases', Api\Product\ProductAliasController::class, ['as' => 'product'])->only(['index']);
 Route::apiResource('product/tags', Api\Product\ProductTagController::class)->only(['index']);
 Route::apiResource('inventory-movements', Api\InventoryMovementController::class)->only(['store', 'index']);
@@ -47,12 +46,12 @@ Route::apiResource('orders/products/shipments', Api\OrderProductShipmentControll
 Route::apiResource('order/shipments', Api\Order\OrderShipmentController::class)->only(['index', 'store']);
 Route::apiResource('order/comments', Api\OrderCommentController::class)->only(['index', 'store']);
 Route::apiResource('picklist/picks', Api\Picklist\PicklistPickController::class)->only(['store']);
-Route::apiResource('modules/printnode/printers', Api\Modules\Printnode\PrinterController::class)->only(['index']);
 Route::apiResource('admin/user/roles', Api\UserRoleController::class, ['as' => 'admin.users'])->only(['index']);
 Route::apiResource('admin/users', Api\UserController::class);
 Route::apiResource('settings/user/me', Api\UserMeController::class)->only(['index', 'store']);
 Route::apiResource('settings/widgets', Api\WidgetController::class)->only(['store', 'update']);
 Route::apiResource('settings/modules/automations/run', Api\Modules\OrderAutomations\RunAutomationController::class, ['as' => 'settings.modules.automations'])->only(['store']);
+Route::apiResource('modules/printnode/printers', Api\Modules\Printnode\PrinterController::class)->only(['index']);
 Route::apiResource('modules/autostatus/picking/configuration', Api\Modules\AutoStatus\ConfigurationController::class, ['as' => 'modules.autostatus.picking'])->only('index', 'store');
 
 Route::group(['as' => 'api.'], function () {
@@ -68,6 +67,7 @@ Route::group(['as' => 'api.'], function () {
     Route::apiResource('shipments', Api\ShipmentController::class)->only(['store']);
     Route::apiResource('restocking', Api\RestockingController::class)->only(['index']);
     Route::apiResource('orders', Api\OrderController::class)->except('destroy');
+    Route::apiResource('warehouses', Api\WarehouseController::class)->only(['index', 'store', 'update', 'destroy']);
 
     Route::apiResource('settings/automations/config', Api\Modules\OrderAutomations\ConfigController::class, ['as' => 'settings.module.automations'])->only(['index']);
     Route::apiResource('settings/automations', Api\Modules\OrderAutomations\AutomationController::class, ['as' => 'settings.module'])->only(['index', 'store', 'show', 'update', 'destroy']);
