@@ -69,20 +69,18 @@ Route::group(['as' => 'api.'], function () {
     Route::apiResource('shipping-services', Api\ShippingServiceController::class)->only(['index']);
     Route::apiResource('shipping-labels', Api\ShippingLabelController::class)->only(['store']);
 
-
     Route::apiResource('settings/modules/api2cart/connections', Api\Modules\Api2cart\Api2cartConnectionController::class, ['as' => 'settings.module.api2cart'])->only(['index', 'store', 'destroy']);
     Route::apiResource('settings/modules/api2cart/products', Api\Modules\Api2cart\ProductsController::class, ['as' => 'settings.module.api2cart'])->only(['index']);
     Route::apiResource('settings/modules/dpd-ireland/connections', Api\Modules\DpdIreland\DpdIrelandController::class, ['as' => 'settings.module.dpd-ireland'])->only(['index', 'store', 'destroy']);
     Route::apiResource('settings/modules/printnode/printjobs', Api\Modules\Printnode\PrintJobController::class, ['as' => 'settings.module.printnode'])->only(['store']);
     Route::apiResource('settings/modules/printnode/clients', Api\Modules\Printnode\ClientController::class, ['as' => 'settings.module.printnode'])->only(['index', 'store', 'destroy']);
     Route::apiResource('settings/modules/rms_api/connections', Api\Modules\Rmsapi\RmsapiConnectionController::class, ['as' => 'settings.module.rmsapi'])->only(['index', 'store', 'destroy']);
-
-    Route::apiResource('modules/dpd-uk/dpd-uk-connections', Api\Modules\DpdUk\DpdUkConnectionController::class, ['as' => 'modules.dpd-uk'])->only(['index']);
-    Route::apiResource('modules/printnode/printjobs', Api\Modules\Printnode\PrintJobController::class, ['as' => 'modules.printnode'])->only(['store']);
-    Route::apiResource('modules/webhooks/subscriptions', Api\Modules\Webhooks\SubscriptionController::class, ['as' => 'modules.webhooks'])->only(['index', 'store']);
 });
 
 Route::group(['prefix' => 'modules', 'as' => 'api.modules.'], function () {
     Route::apiResource('automations/config', Api\Modules\OrderAutomations\ConfigController::class, ['as' => 'automations'])->only(['index']);
     Route::apiResource('automations', Api\Modules\OrderAutomations\AutomationController::class);
+    Route::apiResource('dpd-uk/dpd-uk-connections', Api\Modules\DpdUk\DpdUkConnectionController::class, ['as' => 'dpd-uk'])->only(['index']);
+    Route::apiResource('printnode/printjobs', Api\Modules\Printnode\PrintJobController::class, ['as' => 'printnode'])->only(['store']);
+    Route::apiResource('webhooks/subscriptions', Api\Modules\Webhooks\SubscriptionController::class, ['as' => 'webhooks'])->only(['index', 'store']);
 });
