@@ -9,8 +9,6 @@ use Tests\TestCase;
 
 class StoreTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -41,8 +39,10 @@ class StoreTest extends TestCase
         ];
 
         $response = $this->postJson('api/orders', $data);
-//        dd($response->getContent());
-        $response->assertStatus(200, );
+
+        ray($response->json());
+
+        $response->assertStatus(200);
 
         $this->assertDatabaseHas('orders', ['order_number' => $data['order_number']]);
     }

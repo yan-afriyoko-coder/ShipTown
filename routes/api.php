@@ -27,7 +27,6 @@ Route::apiResource('stocktake-suggestions', Api\StocktakeSuggestionController::c
 Route::apiResource('stocktake-suggestions-details', Api\StocktakeSuggestionDetailController::class)->only(['index']);
 Route::apiResource('shipping-services', Api\ShippingServiceController::class)->only(['index']);
 Route::apiResource('shipping-labels', Api\ShippingLabelController::class)->only(['store']);
-Route::apiResource('restocking', Api\RestockingController::class)->only(['index']);
 Route::apiResource('run/sync', Api\Run\SyncController::class)->only('index');
 Route::apiResource('run/sync/api2cart', Api\Run\SyncApi2CartController::class)->only('index');
 Route::apiResource('run/hourly/jobs', Api\Run\HourlyJobsController::class, ['as' => 'run.hourly'])->only('index');
@@ -43,35 +42,32 @@ Route::apiResource('data-collector', Api\DataCollectorController::class)->only([
 Route::apiResource('data-collector-records', Api\DataCollectorRecordController::class)->only(['store', 'index']);
 Route::apiResource('data-collector-actions/transfer-to-warehouse', Api\DataCollectorActions\TransferToWarehouseController::class, ['as' => 'api.data-collector-actions'])->only(['store']);
 Route::apiResource('order-check-request', Api\OrderCheckRequestController::class)->only(['store']);
-Route::apiResource('orders', Api\OrderController::class)->except('destroy');
 Route::apiResource('order/products', Api\OrderProductController::class, ['as' => 'order'])->only(['index', 'update']);
 Route::apiResource('orders/products/shipments', Api\OrderProductShipmentController::class)->only(['store']);
 Route::apiResource('order/shipments', Api\Order\OrderShipmentController::class)->only(['index', 'store']);
 Route::apiResource('order/comments', Api\OrderCommentController::class)->only(['index', 'store']);
 Route::apiResource('picklist/picks', Api\Picklist\PicklistPickController::class)->only(['store']);
-
 Route::apiResource('modules/printnode/printers', Api\Modules\Printnode\PrinterController::class)->only(['index']);
-
 Route::apiResource('admin/user/roles', Api\UserRoleController::class, ['as' => 'admin.users'])->only(['index']);
 Route::apiResource('admin/users', Api\UserController::class);
-
 Route::apiResource('settings/user/me', Api\UserMeController::class)->only(['index', 'store']);
 Route::apiResource('settings/widgets', Api\WidgetController::class)->only(['store', 'update']);
 Route::apiResource('settings/modules/automations/run', Api\Modules\OrderAutomations\RunAutomationController::class, ['as' => 'settings.modules.automations'])->only(['store']);
-
 Route::apiResource('modules/autostatus/picking/configuration', Api\Modules\AutoStatus\ConfigurationController::class, ['as' => 'modules.autostatus.picking'])->only('index', 'store');
 
 Route::group(['as' => 'api.'], function () {
-    Route::apiResource('products', Api\ProductController::class)->only(['index', 'store']);
-    Route::apiResource('inventory', Api\InventoryController::class)->only(['index', 'store']);
-    Route::apiResource('picklist', Api\PicklistController::class)->only(['index']);
-    Route::apiResource('shipments', Api\ShipmentController::class)->only(['store']);
-    Route::apiResource('modules', Api\ModuleController::class)->only(['index', 'update']);
-    Route::apiResource('heartbeats', Api\HeartbeatsController::class)->only(['index']);
-    Route::apiResource('orders-statuses', Api\OrderStatusController::class)->except(['show']);
-    Route::apiResource('mail-templates', Api\MailTemplateController::class)->only(['index', 'update']);
-    Route::apiResource('navigation-menu', Api\NavigationMenuController::class)->except(['show']);
     Route::apiResource('configurations', Api\ConfigurationController::class)->only(['index', 'store']);
+    Route::apiResource('heartbeats', Api\HeartbeatsController::class)->only(['index']);
+    Route::apiResource('inventory', Api\InventoryController::class)->only(['index', 'store']);
+    Route::apiResource('mail-templates', Api\MailTemplateController::class)->only(['index', 'update']);
+    Route::apiResource('modules', Api\ModuleController::class)->only(['index', 'update']);
+    Route::apiResource('navigation-menu', Api\NavigationMenuController::class)->except(['show']);
+    Route::apiResource('orders-statuses', Api\OrderStatusController::class)->except(['show']);
+    Route::apiResource('picklist', Api\PicklistController::class)->only(['index']);
+    Route::apiResource('products', Api\ProductController::class)->only(['index', 'store']);
+    Route::apiResource('shipments', Api\ShipmentController::class)->only(['store']);
+    Route::apiResource('restocking', Api\RestockingController::class)->only(['index']);
+    Route::apiResource('orders', Api\OrderController::class)->except('destroy');
 
     Route::apiResource('settings/automations/config', Api\Modules\OrderAutomations\ConfigController::class, ['as' => 'settings.module.automations'])->only(['index']);
     Route::apiResource('settings/automations', Api\Modules\OrderAutomations\AutomationController::class, ['as' => 'settings.module'])->only(['index', 'store', 'show', 'update', 'destroy']);

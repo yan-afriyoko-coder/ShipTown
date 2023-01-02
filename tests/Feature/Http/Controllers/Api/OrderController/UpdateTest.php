@@ -4,13 +4,10 @@ namespace Tests\Feature\Http\Controllers\Api\OrderController;
 
 use App\Models\Order;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class UpdateTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -24,7 +21,7 @@ class UpdateTest extends TestCase
         $order = Order::factory()->create();
         $user = User::factory()->create();
 
-        $response = $this->putJson(route('orders.update', [$order]), [
+        $response = $this->putJson(route('api.orders.update', [$order]), [
             'status_code'    => 'test_status_code',
             'packer_user_id' => $user->getKey(),
         ]);
