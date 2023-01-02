@@ -19,7 +19,7 @@ class StoreTest extends TestCase
         $warehouse = Warehouse::factory()->create();
 
         $response = $this->actingAs($user, 'api')
-            ->postJson(route('stocktakes.store'), [
+            ->postJson(route('api.stocktakes.store'), [
                 'warehouse_id' => $warehouse->getKey(),
                 'product_id' => $product->getKey(),
                 'new_quantity' => 0

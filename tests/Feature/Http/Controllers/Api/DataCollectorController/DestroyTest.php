@@ -16,7 +16,7 @@ class DestroyTest extends TestCase
         $dataCollector = DataCollection::factory()->create();
 
         $response = $this->actingAs($user, 'api')
-            ->delete(route('data-collector.destroy', $dataCollector->getKey()));
+            ->delete(route('api.data-collector.destroy', $dataCollector->getKey()));
 
         $response->assertOk();
 

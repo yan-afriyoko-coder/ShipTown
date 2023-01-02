@@ -46,7 +46,7 @@ class UpdateTest extends TestCase
             'quantity_scanned' => $randomQuantity,
         ]);
 
-        $response = $this->actingAs($user, 'api')->putJson(route('data-collector.update', [
+        $response = $this->actingAs($user, 'api')->putJson(route('api.data-collector.update', [
             'data_collector' => $dataCollector->getKey(),
         ]), [
             'action' => 'transfer_in_scanned',
@@ -100,7 +100,7 @@ class UpdateTest extends TestCase
             'quantity_scanned' => $randomQuantity,
         ]);
 
-        $response = $this->actingAs($user, 'api')->putJson(route('data-collector.update', [
+        $response = $this->actingAs($user, 'api')->putJson(route('api.data-collector.update', [
             'data_collector' => $dataCollector->getKey(),
         ]), [
             'action' => 'transfer_out_scanned',

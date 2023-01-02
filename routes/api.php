@@ -35,9 +35,6 @@ Route::apiResource('logs', Api\LogController::class)->only(['index']);
 Route::apiResource('activities', Api\ActivityController::class)->only(['index', 'store']);
 Route::apiResource('product/aliases', Api\Product\ProductAliasController::class, ['as' => 'product'])->only(['index']);
 Route::apiResource('product/tags', Api\Product\ProductTagController::class)->only(['index']);
-Route::apiResource('inventory-movements', Api\InventoryMovementController::class)->only(['store', 'index']);
-Route::apiResource('stocktakes', Api\StocktakesController::class)->only(['store']);
-Route::apiResource('data-collector', Api\DataCollectorController::class)->only(['index', 'store', 'update', 'destroy']);
 Route::apiResource('data-collector-records', Api\DataCollectorRecordController::class)->only(['store', 'index']);
 Route::apiResource('data-collector-actions/transfer-to-warehouse', Api\DataCollectorActions\TransferToWarehouseController::class, ['as' => 'api.data-collector-actions'])->only(['store']);
 Route::apiResource('order-check-request', Api\OrderCheckRequestController::class)->only(['store']);
@@ -68,6 +65,9 @@ Route::group(['as' => 'api.'], function () {
     Route::apiResource('restocking', Api\RestockingController::class)->only(['index']);
     Route::apiResource('orders', Api\OrderController::class)->except('destroy');
     Route::apiResource('warehouses', Api\WarehouseController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::apiResource('inventory-movements', Api\InventoryMovementController::class)->only(['store', 'index']);
+    Route::apiResource('stocktakes', Api\StocktakesController::class)->only(['store']);
+    Route::apiResource('data-collector', Api\DataCollectorController::class)->except(['show']);
 
     Route::apiResource('settings/automations/config', Api\Modules\OrderAutomations\ConfigController::class, ['as' => 'settings.module.automations'])->only(['index']);
     Route::apiResource('settings/automations', Api\Modules\OrderAutomations\AutomationController::class, ['as' => 'settings.module'])->only(['index', 'store', 'show', 'update', 'destroy']);
