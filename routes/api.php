@@ -49,7 +49,6 @@ Route::apiResource('orders/products/shipments', Api\OrderProductShipmentControll
 Route::apiResource('order/shipments', Api\Order\OrderShipmentController::class)->only(['index', 'store']);
 Route::apiResource('order/comments', Api\OrderCommentController::class)->only(['index', 'store']);
 Route::apiResource('order-statuses', Api\OrderStatusController::class)->only(['index']);
-Route::apiResource('picklist', Api\PicklistController::class)->only(['index']);
 Route::apiResource('picklist/picks', Api\Picklist\PicklistPickController::class)->only(['store']);
 Route::apiResource('heartbeats', Api\HeartbeatsController::class)->only(['index']);
 
@@ -67,6 +66,7 @@ Route::apiResource('modules/autostatus/picking/configuration', Api\Modules\AutoS
 Route::group(['as' => 'api.'], function () {
     Route::apiResource('products', Api\ProductController::class)->only(['index', 'store']);
     Route::apiResource('inventory', Api\InventoryController::class)->only(['index', 'store']);
+    Route::apiResource('picklist', Api\PicklistController::class)->only(['index']);
     Route::apiResource('shipments', Api\ShipmentController::class)->only(['store']);
     Route::apiResource('modules', Api\ModuleController::class)->only(['index', 'update']);
     Route::apiResource('orders-statuses', Api\OrderStatusController::class)->except(['show']);

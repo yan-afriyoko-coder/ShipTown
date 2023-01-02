@@ -21,7 +21,7 @@ class IndexTest extends TestCase
 
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user, 'api')->getJson(route('picklist.index'));
+        $response = $this->actingAs($user, 'api')->getJson(route('api.picklist.index'));
 
         $response->assertOk();
 
