@@ -29,19 +29,21 @@ class NegativeInventoryJob implements ShouldQueue
     {
         $reason = 'stock below 0';
         $points = 1;
+        $warehouse_id = $this->warehouse_id;
 
-        DB::statement('
-            DELETE stocktake_suggestions
-            FROM stocktake_suggestions
-            INNER JOIN inventory
-                ON inventory.id = stocktake_suggestions.inventory_id
-                AND inventory.quantity >= 0
+        $this->insertNewSuggestions($warehouse_id, $reason, $points);
+        $this->deleteIncorrectSuggestions($warehouse_id, $reason);
 
-            WHERE stocktake_suggestions.warehouse_id = ?
-            AND stocktake_suggestions.reason = ?
-        ', [$this->warehouse_id, $reason]);
+        return true;
+    }
 
-
+    /**
+     * @param int $points
+     * @param string $reason
+     * @param int $warehouse_id
+     */
+    private function insertNewSuggestions(int $warehouse_id, string $reason, int $points): void
+    {
         DB::statement('
             INSERT INTO stocktake_suggestions (inventory_id, product_id, warehouse_id, points, reason, created_at, updated_at)
             SELECT id, product_id, warehouse_id, ?, ?, NOW(), NOW()
@@ -54,8 +56,24 @@ class NegativeInventoryJob implements ShouldQueue
                     WHERE stocktake_suggestions.inventory_id = inventory.id
                     AND stocktake_suggestions.reason = ?
                 )
-        ', [$points, $reason, $this->warehouse_id, $reason]);
+        ', [$points, $reason, $warehouse_id, $reason]);
+    }
 
-        return true;
+    /**
+     * @param int $warehouse_id
+     * @param string $reason
+     */
+    private function deleteIncorrectSuggestions(int $warehouse_id, string $reason): void
+    {
+        DB::statement('
+            DELETE stocktake_suggestions
+            FROM stocktake_suggestions
+            INNER JOIN inventory
+                ON inventory.id = stocktake_suggestions.inventory_id
+                AND inventory.quantity >= 0
+
+            WHERE stocktake_suggestions.warehouse_id = ?
+            AND stocktake_suggestions.reason = ?
+        ', [$warehouse_id, $reason]);
     }
 }

@@ -31,18 +31,40 @@ class NegativeWarehouseStockJob implements ShouldQueue
         $reason = 'negative warehouse stock';
         $points = 20;
 
-        $warehouseIDs = Warehouse::withAllTags(['fulfilment'])->pluck('id');
+        $fulfilmentWarehousesIDs = Warehouse::withAllTags(['fulfilment'])->pluck('id');
 
-        if ($warehouseIDs->isEmpty()) {
+        if ($fulfilmentWarehousesIDs->isEmpty()) {
+            DB::statement("DELETE FROM stocktake_suggestions WHERE reason = ?", [$reason]);
             return true;
         }
 
+        $this->insertNewSuggestions($this->warehouse_id, $reason, $points, $fulfilmentWarehousesIDs);
+        $this->deleteIncorrectSuggestions($this->warehouse_id, $reason);
+        $this->deleteSuggestionsForFulfilmentWarehouses($fulfilmentWarehousesIDs, $reason);
+
+        return true;
+    }
+
+    /**
+     * @param $warehouseIDs
+     * @param string $reason
+     */
+    private function deleteSuggestionsForFulfilmentWarehouses($warehouseIDs, string $reason): void
+    {
         DB::statement("
             DELETE FROM stocktake_suggestions
             WHERE warehouse_id IN (?)
             AND reason = ?
         ", [$warehouseIDs->implode(','), $reason]);
+    }
 
+    /**
+     * @param $fulfilmentWarehousesIDs
+     * @param int $startingPoints
+     * @param string $reason
+     */
+    private function insertNewSuggestions(int $warehouse_id, string $reason, int $startingPoints, $fulfilmentWarehousesIDs): void
+    {
         DB::statement('
             INSERT INTO stocktake_suggestions (inventory_id, product_id, warehouse_id, points, reason, created_at, updated_at)
                 SELECT DISTINCT inventory.id as inventory_id,
@@ -55,7 +77,7 @@ class NegativeWarehouseStockJob implements ShouldQueue
                 FROM inventory
                 INNER JOIN inventory as inventory_fullfilment
                     ON inventory_fullfilment.product_id = inventory.product_id
-                    AND inventory_fullfilment.warehouse_id IN (' . implode(',', $warehouseIDs->toArray()) . ')
+                    AND inventory_fullfilment.warehouse_id IN (?)
                     AND inventory_fullfilment.quantity > 0
                 WHERE inventory.warehouse_id = ?
                     AND inventory.quantity < 0
@@ -65,8 +87,23 @@ class NegativeWarehouseStockJob implements ShouldQueue
                         WHERE stocktake_suggestions.inventory_id = inventory.id
                         AND stocktake_suggestions.reason = ?
                     )
-        ', [$points, $reason, $this->warehouse_id, $reason]);
+        ', [$startingPoints, $reason, $fulfilmentWarehousesIDs->implode(','), $warehouse_id, $reason]);
+    }
 
-        return true;
+    /**
+     * @param string $reason
+     */
+    private function deleteIncorrectSuggestions(int $warehouse_id, string $reason): void
+    {
+        DB::statement('
+            DELETE stocktake_suggestions
+            FROM stocktake_suggestions
+            INNER JOIN inventory
+                ON inventory.id = stocktake_suggestions.inventory_id
+                AND inventory.quantity = 0
+
+            WHERE stocktake_suggestions.warehouse_id = ?
+            AND stocktake_suggestions.reason = ?
+        ', [$warehouse_id, $reason]);
     }
 }
