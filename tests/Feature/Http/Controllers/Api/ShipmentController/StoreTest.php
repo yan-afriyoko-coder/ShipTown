@@ -1,16 +1,13 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\ShipmentControllerNew;
+namespace Tests\Feature\Http\Controllers\Api\ShipmentController;
 
 use App\Models\Order;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class StoreTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -22,7 +19,7 @@ class StoreTest extends TestCase
     {
         $order = Order::factory()->create();
 
-        $response = $this->postJson(route('new.shipments.store'), [
+        $response = $this->postJson(route('api.shipments.store'), [
             'order_id' => $order->getKey(),
             'shipping_number' => 'test',
             'carrier' => 'dpd_uk',
@@ -35,7 +32,7 @@ class StoreTest extends TestCase
     /** @test */
     public function test_empty()
     {
-        $response = $this->postJson(route('new.shipments.store'), []);
+        $response = $this->postJson(route('api.shipments.store'), []);
 
         $response->assertStatus(422);
     }

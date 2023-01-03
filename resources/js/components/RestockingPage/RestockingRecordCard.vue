@@ -222,7 +222,7 @@ export default {
                 const originalRestockLevel = Number(this.record['restock_level']);
                 const originalReorderPoint = Number(this.record['reorder_point']);
 
-                this.apiPostInventory({
+                this.apiInventoryPost({
                         'id': this.record['inventory_id'],
                         'restock_level': this.record['restock_level'],
                         'reorder_point': this.record['reorder_point'],

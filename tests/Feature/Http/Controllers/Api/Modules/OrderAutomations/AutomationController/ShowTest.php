@@ -28,7 +28,7 @@ class ShowTest extends TestCase
             'event_class' => OrderCreatedEvent::class,
         ]);
 
-        $response = $this->get(route('api.settings.module.automations.show', $automation->getKey()));
+        $response = $this->get(route('api.modules.automations.show', $automation->getKey()));
 
         ray($response->json());
 

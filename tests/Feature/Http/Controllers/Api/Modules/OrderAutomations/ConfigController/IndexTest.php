@@ -20,7 +20,7 @@ class IndexTest extends TestCase
     /** @test */
     public function test_get_config_call_returns_ok()
     {
-        $response = $this->get(route('api.settings.module.automations.config.index'));
+        $response = $this->get(route('api.modules.automations.config.index'));
 
         ray($response->json());
 

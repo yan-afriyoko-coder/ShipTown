@@ -20,7 +20,7 @@ class StoreTest extends TestCase
     {
         $client = Client::factory()->make();
 
-        $response = $this->post(route('api.settings.module.printnode.clients.store', $client));
+        $response = $this->post(route('api.modules.printnode.clients.store', $client));
 
         $response->assertStatus(400);
     }

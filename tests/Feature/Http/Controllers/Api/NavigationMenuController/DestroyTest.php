@@ -17,7 +17,7 @@ class DestroyTest extends TestCase
             'group' => 'picklist',
         ]);
 
-        $response = $this->delete(route('api.settings.navigation-menu.destroy', $navigationMenu));
+        $response = $this->delete(route('api.navigation-menu.destroy', $navigationMenu));
 
         return $response;
     }

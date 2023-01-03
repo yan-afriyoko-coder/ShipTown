@@ -14,7 +14,7 @@ class ShowTest extends TestCase
 
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user, 'api')->getJson(route('orders.show', $order));
+        $response = $this->actingAs($user, 'api')->getJson(route('api.orders.show', $order));
 
         ray($response->json());
 
@@ -49,7 +49,7 @@ class ShowTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user, 'api')->getJson(route('orders.show', 0));
+        $response = $this->actingAs($user, 'api')->getJson(route('api.orders.show', 0));
         $response->assertStatus(404);
     }
 }

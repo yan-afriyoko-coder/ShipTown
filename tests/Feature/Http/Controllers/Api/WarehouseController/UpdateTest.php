@@ -33,7 +33,7 @@ class UpdateTest extends TestCase
             'tags'  => ['tag1','tag2']
         ];
 
-        $response = $this->put(route('warehouses.update', $warehouse), $data);
+        $response = $this->put(route('api.warehouses.update', $warehouse), $data);
 
         $response->assertOk();
         $response->assertJsonStructure([

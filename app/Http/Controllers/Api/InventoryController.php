@@ -1,20 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Api\Product;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreInventoryRequest;
 use App\Http\Resources\InventoryResource;
 use App\Models\Inventory;
-use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class ProductInventoryController.
  */
-class ProductInventoryController extends Controller
+class InventoryController extends Controller
 {
     /**
      * @param Request $request

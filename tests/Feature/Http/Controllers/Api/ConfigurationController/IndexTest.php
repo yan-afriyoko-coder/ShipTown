@@ -17,7 +17,7 @@ class IndexTest extends TestCase
     /** @test */
     public function test_index_call_returns_ok()
     {
-        $response = $this->get(route('api.settings.configurations.index'));
+        $response = $this->get(route('api.configurations.index'));
         $response->assertOk();
         $response->assertJsonStructure([
             'data' => [

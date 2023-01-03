@@ -15,7 +15,7 @@ class StoreTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->actingAs($user, 'api')
-            ->postJson(route('activities.store', [
+            ->postJson(route('api.activities.store', [
                 'subject_type' => 'order',
                 'subject_id' => $order->getKey(),
                 'description' => 'test message',

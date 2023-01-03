@@ -14,7 +14,7 @@ class StoreTest extends TestCase
         $user = User::factory()->create();
         $user->assignRole('admin');
 
-        $response = $this->actingAs($user, 'api')->json('post', route('api.settings.module.dpd-ireland.connections.store'), [
+        $response = $this->actingAs($user, 'api')->json('post', route('api.modules.dpd-ireland.connections.store'), [
             'live'              => false,
             'user'              => 'someuser',
             'password'          => 'somepassword',
@@ -40,7 +40,7 @@ class StoreTest extends TestCase
         $user = User::factory()->create();
         $user->assignRole('admin');
 
-        $response = $this->actingAs($user, 'api')->json('post', route('api.settings.module.dpd-ireland.connections.store'), [
+        $response = $this->actingAs($user, 'api')->json('post', route('api.modules.dpd-ireland.connections.store'), [
             'live'              => false,
             'token'             => 'sometoken',
             'contact'           => 'DPD Contact',

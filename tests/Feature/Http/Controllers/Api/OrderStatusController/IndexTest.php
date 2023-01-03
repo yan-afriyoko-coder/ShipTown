@@ -20,7 +20,7 @@ class IndexTest extends TestCase
     {
         OrderStatus::factory()->create();
 
-        $response = $this->get('api/order-statuses');
+        $response = $this->get('api/orders-statuses');
 
         $response->assertSuccessful();
     }

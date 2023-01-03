@@ -186,7 +186,7 @@
                     return ;
                 }
 
-                this.apiGetInventory({
+                this.apiInventoryGet({
                         'filter[sku_or_alias]': textEntered,
                         'filter[warehouse_id]': this.currentUser()['warehouse_id'],
                     })
@@ -197,7 +197,7 @@
                         }
 
                         const inventory = response.data.data[0];
-                        this.apiPostInventory({
+                        this.apiInventoryPost({
                                 'id': inventory['id'],
                                 'shelve_location': this.command['value'],
                             })

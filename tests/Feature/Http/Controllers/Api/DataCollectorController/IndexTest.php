@@ -22,7 +22,7 @@ class IndexTest extends TestCase
             'name' => 'test'
         ]);
 
-        $response = $this->actingAs($user, 'api')->getJson(route('data-collector.index'));
+        $response = $this->actingAs($user, 'api')->getJson(route('api.data-collector.index'));
 
         ray($response->json());
 

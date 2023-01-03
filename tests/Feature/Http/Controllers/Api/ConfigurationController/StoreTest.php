@@ -22,7 +22,7 @@ class StoreTest extends TestCase
             'business_name' => 'Some name',
         ]);
 
-        $response = $this->post(route('api.settings.configurations.store'), [
+        $response = $this->post(route('api.configurations.store'), [
             'business_name' => 'new name',
         ]);
         $response->assertOk();

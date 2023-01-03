@@ -15,14 +15,14 @@ class IndexTest extends TestCase
             User::factory()->admin()->create()
         );
 
-        $response = $this->get(route('api.settings.mail-templates.index'));
+        $response = $this->get(route('api.mail-templates.index'));
 
         $response->assertSuccessful();
     }
 
     public function test_index_call_should_be_loggedin()
     {
-        $response = $this->get(route('api.settings.mail-templates.index'));
+        $response = $this->get(route('api.mail-templates.index'));
 
         $response->assertRedirect(route('login'));
     }
@@ -33,7 +33,7 @@ class IndexTest extends TestCase
             User::factory()->create()
         );
 
-        $response = $this->get(route('api.settings.mail-templates.index'));
+        $response = $this->get(route('api.mail-templates.index'));
 
         $response->assertForbidden();
     }

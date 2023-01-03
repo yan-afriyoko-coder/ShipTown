@@ -20,8 +20,6 @@ class TestShipmentService extends ShippingServiceAbstract
 
 class StoreTest extends TestCase
 {
-    use RefreshDatabase;
-
     /** @test */
     public function test_store_call_returns_ok()
     {
@@ -34,7 +32,7 @@ class StoreTest extends TestCase
         ]);
 
         $response = $this->actingAs($user, 'api')
-            ->postJson(route('shipping-labels.store'), [
+            ->postJson(route('api.shipping-labels.store'), [
                 'shipping_service_code' => 'test_service',
                 'order_id' => $order->getKey(),
             ]);

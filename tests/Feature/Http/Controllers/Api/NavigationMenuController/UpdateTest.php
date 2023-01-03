@@ -25,7 +25,7 @@ class UpdateTest extends TestCase
             'group' => 'picklist',
         ]);
 
-        $response = $this->put(route('api.settings.navigation-menu.update', $navigationMenu), $body);
+        $response = $this->put(route('api.navigation-menu.update', $navigationMenu), $body);
 
         return $response;
     }

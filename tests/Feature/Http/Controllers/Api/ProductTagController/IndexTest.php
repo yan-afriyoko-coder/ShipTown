@@ -1,25 +1,23 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Order\OrderShipmentController;
+namespace Tests\Feature\Http\Controllers\Api\ProductTagController;
 
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class IndexTest extends TestCase
 {
-    use RefreshDatabase;
-
     /** @test */
     public function test_index_call_returns_ok()
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user, 'api')->getJson(route('shipments.index'));
+        $response = $this->actingAs($user, 'api')->getJson(route('tags.index'));
 
         $response->assertOk();
-
         $response->assertJsonStructure([
+            'meta',
+            'links',
             'data' => [
                 '*' => [
                 ],

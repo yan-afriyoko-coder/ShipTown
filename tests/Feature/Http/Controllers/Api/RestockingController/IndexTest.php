@@ -16,7 +16,7 @@ class IndexTest extends TestCase
         Product::factory()->create();
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user, 'api')->getJson(route('restocking.index'));
+        $response = $this->actingAs($user, 'api')->getJson(route('api.restocking.index'));
 
         ray($response->json());
 

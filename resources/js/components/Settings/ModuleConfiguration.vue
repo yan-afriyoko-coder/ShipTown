@@ -48,6 +48,8 @@ export default {
             this.apiGetModules()
                 .then(({ data }) => {
                     this.modules = data.data;
+                }).catch((error) => {
+                    this.displayApiCallError(error);
                 });
         },
 

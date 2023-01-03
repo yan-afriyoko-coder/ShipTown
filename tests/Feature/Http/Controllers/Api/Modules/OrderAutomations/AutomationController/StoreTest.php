@@ -46,7 +46,7 @@ class StoreTest extends TestCase
                 ]
             ]
         ];
-        $response = $this->post(route('api.settings.module.automations.store'), $data);
+        $response = $this->post(route('api.modules.automations.store'), $data);
 
         $response->assertStatus(201);
         $response->assertJsonStructure([

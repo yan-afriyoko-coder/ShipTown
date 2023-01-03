@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\Product\ProductInventoryController;
+namespace Tests\Feature\Http\Controllers\Api\InventoryController;
 
 use App\Models\Product;
 use App\Models\Warehouse;
@@ -18,7 +18,7 @@ class IndexTest extends TestCase
         Product::factory()->create();
 
         $response = $this->actingAs($user, 'api')
-            ->getJson(route('inventory.index', [
+            ->getJson(route('api.inventory.index', [
                 'include' => [
                     'product',
                 ],

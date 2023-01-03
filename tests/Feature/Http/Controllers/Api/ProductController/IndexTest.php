@@ -9,8 +9,6 @@ use Tests\TestCase;
 
 class IndexTest extends TestCase
 {
-    use RefreshDatabase;
-
     /** @test */
     public function test_index_call_returns_ok()
     {
@@ -19,7 +17,7 @@ class IndexTest extends TestCase
 
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user, 'api')->getJson(route('products.index', [
+        $response = $this->actingAs($user, 'api')->getJson(route('api.products.index', [
             'include' => [
                 'inventory',
                 'aliases',

@@ -17,7 +17,7 @@ class IndexTest extends TestCase
 
         InventoryMovement::factory()->create();
 
-        $response = $this->actingAs($user, 'api')->getJson(route('inventory-movements.index', [
+        $response = $this->actingAs($user, 'api')->getJson(route('api.inventory-movements.index', [
             'include' => 'product,warehouse,user'
         ]));
 
