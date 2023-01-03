@@ -43,7 +43,7 @@ class BarcodeScannedToQuantityFieldJob implements ShouldQueue
      * @param string $reason
      * @param int $warehouse_id
      */
-    private function insertNewSuggestions(int $warehouse_id, int $points, string $reason): void
+    private function insertNewSuggestions(int $warehouse_id, string $reason, int $points): void
     {
         DB::statement('
             INSERT INTO stocktake_suggestions (inventory_id, product_id, warehouse_id, points, reason, created_at, updated_at)
@@ -58,7 +58,6 @@ class BarcodeScannedToQuantityFieldJob implements ShouldQueue
                     AND stocktake_suggestions.reason = ?
                 )
             ORDER BY quantity DESC
-            LIMIT 500
         ', [$points, $reason, $warehouse_id, $reason]);
     }
 
