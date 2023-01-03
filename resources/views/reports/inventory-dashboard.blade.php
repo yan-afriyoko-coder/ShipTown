@@ -123,6 +123,17 @@
                                 @endif
                             @endforeach
 
+                            <div class="row">
+                                <div class="col">
+                                    @widget('ReportWidget', [
+                                    'report' => 'App\Modules\StocktakeSuggestions\src\Reports\StocktakeSuggestionsTotalsReport',
+                                    'view' => 'reports.StocktakeSuggestionsReport',
+                                    'sort' => 'warehouse_code',
+                                    'per_page' => 999,
+                                    ])
+                                </div>
+                            </div>
+
                             <table class="table table-borderless">
                                 <thead>
                                 <tr>
@@ -204,17 +215,6 @@
                                 @endforeach
                                 </tbody>
                             </table>
-
-                            <div class="row">
-                                <div class="col">
-                                        @widget('ReportWidget', [
-                                        'report' => 'App\Modules\StocktakeSuggestions\src\Reports\StocktakeSuggestionsTotalsReport',
-                                        'view' => 'reports.StocktakeSuggestionsReport',
-                                        'sort' => 'warehouse_code',
-                                        'per_page' => 999,
-                                        ])
-                                </div>
-                            </div>
 
                             <table class="table table-borderless">
                                 <thead>
