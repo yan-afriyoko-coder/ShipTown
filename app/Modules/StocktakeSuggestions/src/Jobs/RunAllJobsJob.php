@@ -28,13 +28,13 @@ class RunAllJobsJob implements ShouldQueue
                 OutdatedCountsJob::dispatch($warehouse->getKey());
             });
 
-//        // for all warehouses
-//        Warehouse::query()
-//            ->whereIn('code', ['100', '99', 'MUL'])
-//            ->get('id')
-//            ->each(function (Warehouse $warehouse) {
-//                NegativeInventoryJob::dispatch($warehouse->getKey());
-//            });
+        // for all warehouses
+        Warehouse::query()
+            ->whereIn('code', ['100', '99', 'MUL'])
+            ->get('id')
+            ->each(function (Warehouse $warehouse) {
+                NegativeInventoryJob::dispatch($warehouse->getKey());
+            });
 
         return true;
     }

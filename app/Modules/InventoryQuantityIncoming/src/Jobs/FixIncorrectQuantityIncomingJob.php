@@ -52,7 +52,7 @@ class FixIncorrectQuantityIncomingJob implements ShouldQueue
               AND data_collection_records.product_id = inventory.product_id
 
            WHERE
-                inventory.quantity_incoming > 0
+                inventory.quantity_incoming != 0
 
            GROUP BY inventory.id
 
