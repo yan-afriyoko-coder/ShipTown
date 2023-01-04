@@ -115,7 +115,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
         $inventory = Inventory::query()
             ->where([
                 'product_id' => $product->id,
-                'warehouse_code' => $connection->location_id,
+                'warehouse_id' => $connection->warehouse_id,
             ])
             ->first();
 
@@ -149,7 +149,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
         $p = ProductPrice::query()
             ->where([
                 'product_id' => $product->id,
-                'warehouse_code' => $connection->location_id,
+                'warehouse_id' => $connection->warehouse_id,
             ])
             ->first();
 

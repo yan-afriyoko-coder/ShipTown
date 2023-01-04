@@ -15,7 +15,7 @@ class AddWarehouseIdColumnToRmsapiConnectionsTable extends Migration
      */
     public function up()
     {
-        Schema::table('rmsapi_connections', function (Blueprint $table) {
+        Schema::table('modules_rmsapi_connections', function (Blueprint $table) {
             $table->foreignId('warehouse_id')->nullable()->after('id');
 
             $table->foreign('warehouse_id')
