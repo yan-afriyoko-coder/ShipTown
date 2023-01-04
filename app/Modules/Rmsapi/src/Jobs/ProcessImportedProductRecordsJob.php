@@ -35,7 +35,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
      */
     public function handle()
     {
-        $maxRunCount = 20;
+        $maxRunCount = 50;
 
         do {
             $this->processImportedProducts(100);
