@@ -9,6 +9,7 @@ use App\Models\ProductPrice;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use App\Services\InventoryService;
+use App\Traits\IsMonitored;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,7 +18,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 
 class ProcessImportedProductRecordsJob implements ShouldQueue
 {
@@ -25,6 +25,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
+    use IsMonitored;
 
     /**
      * Execute the job.
