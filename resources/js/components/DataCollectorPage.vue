@@ -28,6 +28,7 @@
             :dataCollection="dataCollection"
             :dataCollectionRecord="scannedDataCollectionRecord"
             :product="scannedProduct"
+            @productCountCollected="submitCount"
             @hidden="onModalHidden">
         </data-collector-quantity-request-modal>
 
@@ -72,15 +73,28 @@
                 <div v-if="dataCollection['deleted_at'] === null" :class="{ 'disabled': true }">
                     <stocktake-input></stocktake-input>
                     <hr>
-                    <button :disabled="! buttonsEnabled" @click.prevent="autoScanAll" v-b-toggle class="col btn mb-2 btn-primary">AutoScan ALL Records</button>
+
+                    <div class="row mb-2">
+                        <div class="col">
+                            <div class="setting-title">Single Scan mode</div>
+                            <div class="setting-desc">It will not ask for quantity when scanned <br> 1 will be used as default</div>
+                        </div>
+                        <div class="custom-control custom-switch m-auto text-right align-content-center float-right w-auto">
+                            <input type="checkbox" @change="toggleSingleScanMode" class="custom-control-input" id="singleScanToggle" v-model="singleScanEnabled">
+                            <label class="custom-control-label" for="singleScanToggle"></label>
+                        </div>
+                    </div>
                     <hr>
+                    <button :disabled="! buttonsEnabled" @click.prevent="autoScanAll" v-b-toggle class="col btn mb-2 btn-primary">AutoScan ALL Records</button>
+                    <br>
+                    <br>
                     <button :disabled="! buttonsEnabled" @click.prevent="transferStockIn" v-b-toggle class="col btn mb-2 btn-primary">Transfer IN</button>
                     <button :disabled="! buttonsEnabled" @click.prevent="transferStockOut" v-b-toggle class="col btn mb-2 btn-primary">Transfer OUT</button>
                     <button :disabled="! buttonsEnabled" @click.prevent="transferToWarehouseClick" v-b-toggle class="col btn mb-2 btn-primary">Transfer To...</button>
                     <button :disabled="! buttonsEnabled" @click.prevent="importAsStocktake" v-b-toggle class="col btn mb-2 btn-primary">Import As Stocktake</button>
                     <button :disabled="! buttonsEnabled" @click.prevent="archiveCollection" v-b-toggle class="col btn mb-2 btn-primary">Archive Collection</button>
                 </div>
-                <hr>
+                <br>
                 <a :class="{ 'disabled': ! buttonsEnabled }" :href="getDownloadLink"  @click.prevent="downloadFileAndHideModal" v-b-toggle class="col btn mb-1 btn-primary">Download</a>
                 <div v-if="dataCollection['deleted_at'] === null">
                     <hr>
@@ -164,6 +178,7 @@
 
             data: function() {
                 return {
+                    singleScanEnabled: false,
                     scannedDataCollectionRecord: null,
                     scannedProduct: null,
                     scannedProductPrices: null,
@@ -194,6 +209,18 @@
             },
 
         methods: {
+            submitCount(data) {
+                this.apiPostDataCollectorRecords(data)
+                    .then(response => {
+                        this.notifySuccess('Data collection record added');
+                        this.$emit('dataCollectionRecordAdded', response.data.data);
+                        this.reloadDataCollection();
+                    })
+                    .catch((error) => {
+                        this.displayApiCallError(error);
+                    });
+            },
+
             reloadDataCollection() {
                 this.loadDataCollectorDetails();
                 this.loadDataCollectorRecords();
@@ -221,10 +248,31 @@
                 this.scannedDataCollectionRecord = null;
 
                 this.apiGetProducts({
-                    'filter[sku_or_alias]': barcode,
-                }).then(response => {
-                    this.scannedProduct = response.data.data[0];
-                });
+                        'filter[sku_or_alias]': barcode,
+                    })
+                    .then(response => {
+                        if (response.data.data.length === 0) {
+                            this.notifyError('Product "' + barcode + '" not found');
+                            return;
+                        }
+
+                        this.scannedProduct = response.data.data[0];
+
+                        if (this.singleScanEnabled) {
+                            this.submitCount({
+                                'data_collection_id': this.data_collection_id,
+                                'product_id': this.scannedProduct['id'],
+                                'quantity_scanned': 1,
+                            });
+
+                            return;
+                        }
+
+                        this.$root.$emit('barcodeScanned', barcode);
+                    })
+                    .catch((error) => {
+                        this.displayApiCallError(error);
+                    });
 
                 this.apiGetDataCollectorRecords({
                     'filter[data_collection_id]': this.data_collection_id,
@@ -232,8 +280,12 @@
                 }).then(response => {
                     this.scannedDataCollectionRecord = response.data.data[0];
                 });
+            },
 
-                this.$root.$emit('barcodeScanned', barcode);
+            toggleSingleScanMode() {
+                setTimeout(() => {
+                    this.hideBvModal('configuration-modal');
+                }, 200)
             },
 
             loadWarehouses: function () {
@@ -488,7 +540,11 @@
             downloadFileAndHideModal() {
                 window.open(this.getDownloadLink, '_blank');
 
-                this.$bvModal.hide('configuration-modal');
+                this.hideBvModal('configuration-modal')
+            },
+
+            hideBvModal(ref) {
+                this.$bvModal.hide(ref);
             },
         },
 
@@ -511,5 +567,41 @@
 
 
 <style lang="scss">
+.setting-list{
+    width: 100%;
+    color: #495057;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 5px;
+}
 
+.setting-list:hover, .setting-list:focus {
+    color: #495057;
+    text-decoration: none;
+    background-color: #f8f9fa;
+}
+
+.setting-icon{
+    padding: 1rem;
+    margin-right: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 0.25rem;
+}
+
+.setting-icon:hover{
+    background-color: unset;
+}
+
+.setting-title{
+    color: #3490dc;
+    font-weight: bolder;
+    /*font-size: 1rem;*/
+    /*line-height: 1.2;*/
+    margin-bottom: 2px;
+}
+
+.setting-desc{
+    color: #6c757d;
+    font-size: 10pt;
+}
 </style>

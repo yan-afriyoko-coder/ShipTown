@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-modal @ok="submitStocktake" id="data-collector-quantity-request-modal" scrollable no-fade hide-header
+        <b-modal @ok="submitCount" id="data-collector-quantity-request-modal" scrollable no-fade hide-header
                  @shown="modalShown"
                  @hidden="onHidden"
         >
@@ -33,7 +33,7 @@
                            v-model="quantity"
                            type="number"
                            inputmode="numeric"
-                           @keyup.enter="submitStocktake"
+                           @keyup.enter="submitCount"
                     />
                 </div>
             </div>
@@ -136,7 +136,7 @@
                     });
             },
 
-            submitStocktake: function () {
+            submitCount: function () {
                 if (this.quantity === null) {
                     return;
                 }
@@ -153,22 +153,13 @@
 
                 this.$bvModal.hide('data-collector-quantity-request-modal');
 
-                console.log(this.quantity.length > 7);
-
                 const data = {
                     'data_collection_id': this.dataCollection['id'],
                     'product_id': this.product['id'],
                     'quantity_scanned':  Number(this.quantity),
                 };
 
-                this.apiPostDataCollectorRecords(data)
-                    .then(response => {
-                        this.notifySuccess('Data collection record added');
-                        this.$emit('dataCollectionRecordAdded', response.data.data);
-                    })
-                    .catch((error) => {
-                        this.displayApiCallError(error);
-                    });
+                this.$emit('productCountCollected', data);
             },
         },
     }
