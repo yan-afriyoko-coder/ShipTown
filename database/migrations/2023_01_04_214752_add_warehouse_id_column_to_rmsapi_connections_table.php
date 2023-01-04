@@ -20,7 +20,8 @@ class AddWarehouseIdColumnToRmsapiConnectionsTable extends Migration
 
             $table->foreign('warehouse_id')
                 ->references('id')
-                ->on('warehouses');
+                ->on('warehouses')
+                ->cascadeOnDelete();
         });
 
         RmsapiConnection::all()

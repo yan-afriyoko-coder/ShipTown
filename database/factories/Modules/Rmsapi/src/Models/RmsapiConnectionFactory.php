@@ -15,6 +15,7 @@ class RmsapiConnectionFactory extends Factory
         $warehouse = Warehouse::query()->inRandomOrder()->first() ?? Warehouse::factory()->create();
 
         return [
+            'warehouse_id'   => $warehouse->id,
             'location_id'    => $warehouse->code,
             'url'            => $this->faker->url,
             'username'       => $this->faker->companyEmail,
