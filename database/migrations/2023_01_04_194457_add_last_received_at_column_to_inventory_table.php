@@ -13,6 +13,10 @@ class AddLastReceivedAtColumnToInventoryTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasColumn('inventory', 'first_received_at')) {
+            return;
+        }
+
         Schema::table('inventory', function (Blueprint $table) {
             $table->dateTime('first_received_at')->nullable()->after('restock_level');
             $table->dateTime('last_received_at')->nullable()->after('first_received_at');
