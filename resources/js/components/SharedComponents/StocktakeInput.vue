@@ -15,7 +15,7 @@
         >
             <template v-if="inventory">
                 <product-info-card :product="inventory.product"></product-info-card>
-                <div class="small" v-bind:class="{ 'bg-warning': inventory['last_counted_at'] !== null && isCountedRecently(inventory['last_counted_at'], 7)}">last counted: <strong>{{ formatDateTime(inventory['last_counted_at']) }}</strong></div>
+                <div class="small" v-bind:class="{ 'bg-warning': inventory['last_counted_at'] !== null && isCountedRecently(inventory['last_counted_at'], 28)}">last counted: <strong>{{ formatDateTime(inventory['last_counted_at']) }}</strong></div>
                 <div class="small">stock: {{ inventory.quantity }}</div>
                 <div class="row mt-2">
                     <div class="col-6">
