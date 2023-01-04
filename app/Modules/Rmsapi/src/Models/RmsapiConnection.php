@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Crypt;
  * App\Models\RmsapiConnection.
  *
  * @property int         $id
+ * @property int         $warehouse_id
  * @property string      $location_id
  * @property string      $url
  * @property string      $username
@@ -42,6 +43,7 @@ class RmsapiConnection extends BaseModel
     protected $table = 'modules_rmsapi_connections';
 
     protected $fillable = [
+        'warehouse_id',
         'location_id',
         'url',
         'username',
