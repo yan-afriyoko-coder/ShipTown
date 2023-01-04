@@ -34,12 +34,12 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
      */
     public function handle()
     {
-        $ranCount = 0;
+        $maxRunCount = 20;
 
         do {
             $this->processImportedProducts(50);
-            $ranCount++;
-        } while ($ranCount < 10 and RmsapiProductImport::query()->whereNull('when_processed')->exists());
+            $maxRunCount--;
+        } while ($maxRunCount > 0 and RmsapiProductImport::query()->whereNull('when_processed')->exists());
     }
 
     /**
