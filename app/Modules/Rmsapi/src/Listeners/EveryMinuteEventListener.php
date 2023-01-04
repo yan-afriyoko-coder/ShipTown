@@ -24,10 +24,5 @@ class EveryMinuteEventListener
         }
 
         ProcessImportedProductRecordsJob::dispatch();
-
-        RmsapiProductImport::query()
-            ->whereNull('when_processed')
-            ->where('reserved_at', '<', now()->subMinutes(5))
-            ->update(['reserved_at' => null]);
     }
 }
