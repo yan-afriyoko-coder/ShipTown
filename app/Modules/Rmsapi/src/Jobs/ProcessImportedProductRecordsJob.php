@@ -35,10 +35,10 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
      */
     public function handle()
     {
-        $maxRunCount = 50;
+        $maxRunCount = 10;
 
         do {
-            $this->processImportedProducts(100);
+            $this->processImportedProducts(200);
             $maxRunCount--;
         } while ($maxRunCount > 0 and RmsapiProductImport::query()->whereNull('when_processed')->exists());
     }
