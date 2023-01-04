@@ -34,30 +34,13 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
      */
     public function handle()
     {
-        $reservationTime = now();
+        $ranCount = 0;
 
-        RmsapiProductImport::query()
-            ->whereNull('when_processed')
-            ->whereNull('reserved_at')
-            ->orderBy('id')
-            ->limit(50)
-            ->update(['reserved_at' => $reservationTime]);
-
-        $records = RmsapiProductImport::query()
-           ->whereNull('when_processed')
-           ->where(['reserved_at' => $reservationTime])
-           ->orderBy('id')
-           ->get();
-
-        $records->each(function (RmsapiProductImport $productImport) {
-            $this->import($productImport);
-        });
-
-        if (RmsapiProductImport::query()->whereNull('when_processed')->exists()) {
-            ProcessImportedProductRecordsJob::dispatch();
-        }
+        do {
+            $this->processImportedProducts(50);
+            $ranCount++;
+        } while ($ranCount < 10 and RmsapiProductImport::query()->whereNull('when_processed')->exists());
     }
-
 
     /**
      * @param RmsapiProductImport $importedProduct
@@ -206,5 +189,27 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
         if ($importedProduct->raw_import['supplier_name']) {
             $product->attachTag(trim($importedProduct->raw_import['supplier_name']));
         }
+    }
+
+    private function processImportedProducts(int $batch_size): void
+    {
+        $reservationTime = now();
+
+        RmsapiProductImport::query()
+            ->whereNull('when_processed')
+            ->whereNull('reserved_at')
+            ->orderBy('id')
+            ->limit($batch_size)
+            ->update(['reserved_at' => $reservationTime]);
+
+        $records = RmsapiProductImport::query()
+            ->whereNull('when_processed')
+            ->where(['reserved_at' => $reservationTime])
+            ->orderBy('id')
+            ->get();
+
+        $records->each(function (RmsapiProductImport $productImport) {
+            $this->import($productImport);
+        });
     }
 }
