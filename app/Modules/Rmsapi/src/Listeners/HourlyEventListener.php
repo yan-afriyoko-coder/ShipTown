@@ -2,14 +2,12 @@
 
 namespace App\Modules\Rmsapi\src\Listeners;
 
-use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
+use App\Modules\Rmsapi\src\Jobs\CleanupProductsImportTableJob;
 
 class HourlyEventListener
 {
     public function handle()
     {
-        RmsapiProductImport::query()
-            ->where('when_processed', '<', now()->subDays(7))
-            ->forceDelete();
+        CleanupProductsImportTableJob::dispatch();
     }
 }
