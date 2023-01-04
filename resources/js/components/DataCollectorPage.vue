@@ -72,15 +72,16 @@
                 <div v-if="dataCollection['deleted_at'] === null" :class="{ 'disabled': true }">
                     <stocktake-input></stocktake-input>
                     <hr>
-                    <button @click.prevent="autoScanAll" v-b-toggle class="col btn mb-2 btn-primary">AutoScan ALL Records</button>
+                    <button :disabled="! buttonsEnabled" @click.prevent="autoScanAll" v-b-toggle class="col btn mb-2 btn-primary">AutoScan ALL Records</button>
                     <hr>
-                    <button @click.prevent="transferStockIn" v-b-toggle class="col btn mb-2 btn-primary">Transfer IN</button>
-                    <button @click.prevent="transferStockOut" v-b-toggle class="col btn mb-2 btn-primary">Transfer OUT</button>
-                    <button @click.prevent="transferToWarehouseClick" v-b-toggle class="col btn mb-2 btn-primary">Transfer To...</button>
-                    <button @click.prevent="archiveCollection" v-b-toggle class="col btn mb-2 btn-primary">Archive Collection</button>
+                    <button :disabled="! buttonsEnabled" @click.prevent="transferStockIn" v-b-toggle class="col btn mb-2 btn-primary">Transfer IN</button>
+                    <button :disabled="! buttonsEnabled" @click.prevent="transferStockOut" v-b-toggle class="col btn mb-2 btn-primary">Transfer OUT</button>
+                    <button :disabled="! buttonsEnabled" @click.prevent="transferToWarehouseClick" v-b-toggle class="col btn mb-2 btn-primary">Transfer To...</button>
+                    <button :disabled="! buttonsEnabled" @click.prevent="importAsStocktake" v-b-toggle class="col btn mb-2 btn-primary">Import As Stocktake</button>
+                    <button :disabled="! buttonsEnabled" @click.prevent="archiveCollection" v-b-toggle class="col btn mb-2 btn-primary">Archive Collection</button>
                 </div>
                 <hr>
-                <a :href="getDownloadLink"  @click.prevent="downloadFileAndHideModal" v-b-toggle class="col btn mb-1 btn-primary">Download</a>
+                <a :class="{ 'disabled': ! buttonsEnabled }" :href="getDownloadLink"  @click.prevent="downloadFileAndHideModal" v-b-toggle class="col btn mb-1 btn-primary">Download</a>
                 <div v-if="dataCollection['deleted_at'] === null">
                     <hr>
                     <vue-csv-import
@@ -167,7 +168,6 @@
                     scannedProduct: null,
                     scannedProductPrices: null,
                     scannedInQuantity: 1,
-                    skuToStocktake: '',
                     dataCollection: null,
                     dataCollectionRecords: [],
                     nextUrl: null,
@@ -190,17 +190,20 @@
 
                 this.loadWarehouses();
 
-                this.loadDataCollectorDetails();
-
-                this.loadDataCollectorRecords();
+                this.reloadDataCollection();
             },
 
         methods: {
+            reloadDataCollection() {
+                this.loadDataCollectorDetails();
+                this.loadDataCollectorRecords();
+            },
+
             onModalHidden() {
                 this.setFocusElementById(100, 'barcodeInput', true, true);
 
                 setTimeout(() => {
-                    this.loadDataCollectorRecords();
+                    this.reloadDataCollection();
                 }, 100);
             },
 
@@ -262,7 +265,7 @@
                     .then(response => {
                         this.$snotify.success('Transfer to warehouse initiated');
                         setTimeout(() => {
-                            this.loadDataCollectorRecords();
+                            this.reloadDataCollection();
                         }, 500);
 
                     })
@@ -285,7 +288,7 @@
                         this.$snotify.success('Stock transferred out successfully');
                         this.$bvModal.hide('configuration-modal');
                         setTimeout(() => {
-                            this.loadDataCollectorRecords();
+                            this.reloadDataCollection();
                         }, 1000);
                     })
                     .catch(error => {
@@ -304,7 +307,7 @@
                         this.$snotify.success('Stock transferred in successfully');
                         this.$bvModal.hide('configuration-modal');
                         setTimeout(() => {
-                            this.loadDataCollectorRecords();
+                            this.reloadDataCollection();
                         }, 500);
                     })
                     .catch(error => {
@@ -320,6 +323,27 @@
                 this.apiUpdateDataCollection(this.data_collection_id, data)
                     .then(response => {
                         this.transferStockIn();
+                        this.reloadDataCollection();
+                    })
+                    .catch(error => {
+                        this.showException(error);
+                    });
+            },
+
+            importAsStocktake() {
+                this.buttonsEnabled = false;
+
+                let data = {
+                    'action': 'import_as_stocktake',
+                }
+
+                this.apiUpdateDataCollection(this.data_collection_id, data)
+                    .then(response => {
+                        this.$snotify.success('Stocktake imported successfully');
+                        this.$bvModal.hide('configuration-modal');
+                        setTimeout(() => {
+                            this.reloadDataCollection();
+                        }, 500);
                     })
                     .catch(error => {
                         this.showException(error);
@@ -332,7 +356,7 @@
                         this.$snotify.success('Collection archived successfully');
                         this.$bvModal.hide('configuration-modal');
                         setTimeout(() => {
-                            this.loadDataCollectorRecords();
+                            this.reloadDataCollection();
                         }, 500);
                     })
                     .catch(error => {
@@ -350,7 +374,7 @@
                         this.$snotify.success('Auto scan completed successfully');
                         this.$bvModal.hide('configuration-modal');
                         setTimeout(() => {
-                            this.loadDataCollectorRecords();
+                            this.reloadDataCollection();
                         }, 500);
                     })
                     .catch(error => {
@@ -429,7 +453,7 @@
                         this.displayApiCallError(e);
                     })
                     .finally(() => {
-                        this.loadDataCollectorRecords();
+                        this.reloadDataCollection();
                     });
             },
 
@@ -457,7 +481,7 @@
                         this.displayApiCallError(e);
                     })
                     .finally(() => {
-                        this.loadDataCollectorRecords();
+                        this.reloadDataCollection();
                     });
             },
 

@@ -7,6 +7,7 @@ use App\Http\Requests\StocktakesStoreRequest;
 use App\Http\Resources\InventoryMovementResource;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
+use App\Services\InventoryService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

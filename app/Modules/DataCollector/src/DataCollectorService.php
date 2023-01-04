@@ -4,10 +4,13 @@ namespace App\Modules\DataCollector\src;
 
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
+use App\Models\DataCollectionStocktake;
 use App\Models\DataCollectionTransferIn;
 use App\Models\DataCollectionTransferOut;
 use App\Models\Inventory;
+use App\Models\InventoryMovement;
 use App\Services\InventoryService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Guid\Guid;
 
@@ -32,6 +35,12 @@ class DataCollectorService
                 $dataCollection->records()
                     ->whereNotNull('quantity_requested')
                     ->update(['quantity_scanned' => DB::raw('quantity_requested')]);
+            });
+        }
+
+        if ($action === 'import_as_stocktake') {
+            DB::transaction(function () use ($dataCollection) {
+                self::importAsStocktake($dataCollection);
             });
         }
     }
@@ -73,7 +82,7 @@ class DataCollectorService
 
     public static function transferOutScanned(DataCollection $dataCollection)
     {
-        $dataCollection->update(['type' => DataCollectionTransferOut::class]);
+        $dataCollection->update(['type' => DataCollectionStocktake::class]);
 
         $dataCollection->delete();
 
@@ -138,5 +147,41 @@ class DataCollectorService
         });
 
         return $destinationDataCollection;
+    }
+
+    public static function importAsStocktake(DataCollection $dataCollection)
+    {
+        $dataCollection->delete();
+
+        $dataCollection->records()
+            ->where('quantity_scanned', '!=', DB::raw(0))
+            ->get()
+            ->each(function (DataCollectionRecord $record) use ($dataCollection) {
+                /** @var Inventory $inventory */
+                $inventory = Inventory::where([
+                        'product_id' => $record->product_id,
+                        'warehouse_id' => $dataCollection->warehouse_id,
+                    ])
+                    ->first();
+
+                $quantityDelta = $record->quantity_scanned - $inventory->quantity;
+
+                /** @var InventoryMovement $inventoryMovement */
+                $inventoryMovement = InventoryMovement::query()->create([
+                    'inventory_id' => $inventory->id,
+                    'product_id' => $inventory->product_id,
+                    'warehouse_id' => $inventory->warehouse_id,
+                    'quantity_before' => $inventory->quantity,
+                    'quantity_delta' => $quantityDelta,
+                    'quantity_after' => $inventory->quantity + $quantityDelta,
+                    'description' => 'stocktake',
+                    'user_id' => Auth::id(),
+                ]);
+
+                $inventory->update([
+                    'quantity' => $inventoryMovement->quantity_after,
+                    'last_counted_at' => now()
+                ]);
+            });
     }
 }

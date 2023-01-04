@@ -27,7 +27,8 @@ class ApiDataCollectorUpdateRequest extends FormRequest
             'action' => [
                 'sometimes',
                 'string',
-                'in:transfer_in_scanned,transfer_out_scanned,auto_scan_all_requested,transfer_between_warehouses'
+                'in:transfer_in_scanned,transfer_out_scanned,' .
+                'auto_scan_all_requested,transfer_between_warehouses,import_as_stocktake'
             ],
         ];
     }
