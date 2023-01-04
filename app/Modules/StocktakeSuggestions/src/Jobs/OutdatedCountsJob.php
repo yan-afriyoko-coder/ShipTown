@@ -51,8 +51,8 @@ class OutdatedCountsJob implements ShouldQueue
                 AND quantity != 0
                 AND (
                     last_counted_at IS NULL
-                    OR last_counted_at < NOW() - INTERVAL 6 MONTH
-                    OR last_counted_at < '2022-01-01 00:00:00'
+                    OR last_counted_at < NOW() - INTERVAL 12 MONTH
+                    OR last_counted_at < '2021-12-31 00:00:00'
                 )
                 AND NOT EXISTS (
                     SELECT NULL
