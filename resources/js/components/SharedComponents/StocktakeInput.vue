@@ -191,6 +191,12 @@
                     return;
                 }
 
+                if (Number(this.newQuantity) > 99999) {
+                    this.notifyError('incorrect quantity entered');
+                    this.setFocusElementById(100, 'quantity-request-input', true, false)
+                    return;
+                }
+
                 this.$bvModal.hide(this.modal_name);
 
                 const stocktakeData = {
