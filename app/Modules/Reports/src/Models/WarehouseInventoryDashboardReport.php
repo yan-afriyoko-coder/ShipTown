@@ -17,7 +17,7 @@ class WarehouseInventoryDashboardReport extends Report
 
         $this->view = 'reports.inventory-dashboard';
 
-        $this->report_name = 'Warehouse Inventory Dashboard';
+        $this->report_name = 'Inventory Dashboard';
 
         if (request('title')) {
             $this->report_name = request('title').' ('.$this->report_name.')';
