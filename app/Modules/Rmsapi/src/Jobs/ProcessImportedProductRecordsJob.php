@@ -210,7 +210,13 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
             ->get();
 
         $records->each(function (RmsapiProductImport $productImport) {
-            $this->import($productImport);
+            try {
+                retry(3, function () use ($productImport) {
+                    $this->import($productImport);
+                }, 100);
+            } catch (Exception $e) {
+                report($e);
+            }
         });
     }
 }
