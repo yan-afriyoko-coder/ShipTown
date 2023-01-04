@@ -10,7 +10,7 @@
         @foreach ($data as $record)
             <tr>
                 <td>
-                    <a :href="route('stocktaking')">
+                    <a href="{{ route('stocktaking', ['filter[warehouse_code]' => data_get($record, $fields[0])]) }}">
                         {{ data_get($record, $fields[0]) }}
                     </a>
                 </td>
