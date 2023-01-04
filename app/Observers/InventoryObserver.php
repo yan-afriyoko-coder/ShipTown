@@ -7,13 +7,17 @@ use App\Models\Inventory;
 
 class InventoryObserver
 {
-    /**
-     * Handle the inventory "updated" event.
-     *
-     * @param Inventory $inventory
-     *
-     * @return void
-     */
+    public function updating(Inventory $inventory)
+    {
+        if ($inventory->quantity > $inventory->getOriginal('quantity')) {
+            $inventory->last_received_at = now();
+
+            if (! $inventory->first_received_at) {
+                $inventory->first_received_at = now();
+            }
+        }
+    }
+
     public function updated(Inventory $inventory)
     {
         InventoryUpdatedEvent::dispatch($inventory);
