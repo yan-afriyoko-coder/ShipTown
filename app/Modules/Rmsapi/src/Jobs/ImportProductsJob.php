@@ -107,6 +107,7 @@ class ImportProductsJob implements ShouldQueue
             return [
                 'connection_id' => $this->rmsapiConnection->getKey(),
                 'batch_uuid'    => $this->batch_uuid,
+                'sku'           => $product['item_code'],
                 'raw_import'    => json_encode($product),
                 'created_at'    => $time,
                 'updated_at'    => $time,

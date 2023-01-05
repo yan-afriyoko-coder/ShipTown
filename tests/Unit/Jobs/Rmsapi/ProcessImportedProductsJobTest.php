@@ -6,6 +6,7 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductAlias;
 use App\Models\Warehouse;
+use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -31,10 +32,10 @@ class ProcessImportedProductsJobTest extends TestCase
         $raw_import['is_web_item'] = 1;
         $importData->update(['raw_import' => $raw_import]);
 
-        // act
-        $job = new ProcessImportedProductRecordsJob();
-
-        $job->handle();
+        // do
+        foreach (RmsapiConnection::all() as $rmsapiConnection) {
+            ProcessImportedProductRecordsJob::dispatch($rmsapiConnection->id);
+        }
 
         // assert
         $this->assertEquals(
@@ -53,10 +54,10 @@ class ProcessImportedProductsJobTest extends TestCase
 
         RmsapiProductImport::factory()->create();
 
-        // act
-        $job = new ProcessImportedProductRecordsJob();
-
-        $job->handle();
+        // do
+        foreach (RmsapiConnection::all() as $rmsapiConnection) {
+            ProcessImportedProductRecordsJob::dispatch($rmsapiConnection->id);
+        }
 
         // assert
         $this->assertTrue(ProductAlias::query()->exists(), 'Product aliases were not imported');
@@ -72,10 +73,10 @@ class ProcessImportedProductsJobTest extends TestCase
 //        Warehouse::factory()->create();
         $importData = RmsapiProductImport::factory()->create();
 
-        // act
-        $job = new ProcessImportedProductRecordsJob();
-
-        $job->handle();
+        // do
+        foreach (RmsapiConnection::all() as $rmsapiConnection) {
+            ProcessImportedProductRecordsJob::dispatch($rmsapiConnection->id);
+        }
 
         // get product
         $product = Product::query()->where(['sku' => $importData->raw_import['item_code']])->first('id');

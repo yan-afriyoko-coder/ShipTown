@@ -27,6 +27,13 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
     use SerializesModels;
     use IsMonitored;
 
+    private int $connection_id;
+
+    public function __construct(int $connection_id)
+    {
+        $this->connection_id = $connection_id;
+    }
+
     /**
      * Execute the job.
      *
@@ -35,7 +42,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
      */
     public function handle()
     {
-        $maxRunCount = 10;
+        $maxRunCount = 1;
 
         do {
             $this->processImportedProducts(200);
@@ -199,6 +206,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
         RmsapiProductImport::query()
             ->whereNull('when_processed')
             ->whereNull('reserved_at')
+            ->where('connection_id', $this->connection_id)
             ->orderBy('id')
             ->limit($batch_size)
             ->update(['reserved_at' => $reservationTime]);
@@ -206,6 +214,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
         $records = RmsapiProductImport::query()
             ->whereNull('when_processed')
             ->where(['reserved_at' => $reservationTime])
+            ->where('connection_id', $this->connection_id)
             ->orderBy('id')
             ->get();
 
