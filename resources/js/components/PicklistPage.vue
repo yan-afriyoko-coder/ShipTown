@@ -23,7 +23,7 @@
             </div>
         </div>
 
-        <div v-if="picklist.length === 0 && !isLoading" class="row" >
+        <div v-if="picklist !== null && picklist.length === 0" class="row" >
             <div class="col">
                 <div class="alert alert-info" role="alert">
                     No picks found
@@ -38,7 +38,7 @@
         </div>
 
 
-        <div class="row">
+        <div class="row" v-if="isLoading">
             <div class="col">
                 <div ref="loadingContainerOverride" style="height: 32px"></div>
             </div>
@@ -103,7 +103,7 @@ export default {
 
     data: function() {
         return {
-            picklist: [],
+            picklist: null,
             current_shelf_location: ''
         };
     },
@@ -160,6 +160,8 @@ export default {
         },
 
         reloadPicks() {
+            this.showLoading();
+
             this.setFocusOnBarcodeInput(500);
 
             // this.picklist = [];
@@ -180,6 +182,9 @@ export default {
                 })
                 .catch( error => {
                     this.$snotify.error('Action failed (Http code  '+ error.response.status+')');
+                })
+                .finally( () => {
+                    this.hideLoading();
                 });
         },
 
