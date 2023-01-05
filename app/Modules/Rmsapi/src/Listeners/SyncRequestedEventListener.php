@@ -17,13 +17,12 @@ class SyncRequestedEventListener
             ImportProductsJob::dispatch($rmsapiConnection->id);
             ImportShippingsJob::dispatch($rmsapiConnection->id);
             FetchSalesJob::dispatch($rmsapiConnection->id);
+            ProcessImportedProductRecordsJob::dispatch($rmsapiConnection->id);
 
             Log::debug('RMSAPI Sync jobs dispatched', [
                 'warehouse_code' => $rmsapiConnection->location_id,
                 'connection_id' => $rmsapiConnection->id
             ]);
         }
-
-        ProcessImportedProductRecordsJob::dispatch();
     }
 }
