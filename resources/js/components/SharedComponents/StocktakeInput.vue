@@ -132,7 +132,9 @@
 
         methods: {
             isCountedRecently(last_counted_at, days) {
-                return moment(last_counted_at).isAfter(moment(last_counted_at).subtract(days, 'days'));
+                const minDateAllowed = moment().subtract(days, 'days');
+
+                return moment(last_counted_at).isAfter(minDateAllowed);
             },
 
             showStocktakeModal(event) {
