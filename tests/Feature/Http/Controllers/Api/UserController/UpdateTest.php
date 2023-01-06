@@ -12,9 +12,12 @@ class UpdateTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        Role::query()->forceDelete();
         /** @var User $admin */
         $admin = User::factory()->create();
         $admin->assignRole(Role::findOrCreate('admin'));
+
         $this->actingAs($admin, 'api');
     }
 
@@ -22,9 +25,10 @@ class UpdateTest extends TestCase
     public function test_store_call_returns_ok()
     {
         $user = User::factory()->create();
-        $role = Role::findOrCreate('user');
-        $warehouse = Warehouse::factory()->create();
 
+        $role = Role::findOrCreate('user', 'web');
+
+        $warehouse = Warehouse::factory()->create();
 
         $data = [
             'name' => 'Test User',

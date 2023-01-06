@@ -31,7 +31,7 @@ class UsersSeeder extends Seeder
         $user = User::query()->firstOrCreate([
             'email' => 'user@products.management',
         ], [
-            'name' => 'Johny Melavo',
+            'name' => 'Johny Melabo',
             'warehouse_id' => Warehouse::firstOrCreate(['code' => 'CRK'], ['name' => 'Cork'])->getKey(),
             'password' => bcrypt('secret123'),
         ]);
