@@ -86,7 +86,8 @@ class UserController extends Controller
         if ($request->user()->id === $updatedUser->getKey()) {
             $updateData->forget('role_id');
         } else {
-            $role = Role::findById($request->validated()['role_id']);
+            $role = Role::findById($request->validated()['role_id'], 'web');
+
             $updatedUser->syncRoles([$role]);
         }
 
