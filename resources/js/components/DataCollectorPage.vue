@@ -95,7 +95,7 @@
                     <button :disabled="! buttonsEnabled" @click.prevent="archiveCollection" v-b-toggle class="col btn mb-2 btn-primary">Archive Collection</button>
                 </div>
                 <br>
-                <a :class="{ 'disabled': ! buttonsEnabled }" :href="getDownloadLink"  @click.prevent="downloadFileAndHideModal" v-b-toggle class="col btn mb-1 btn-primary">Download</a>
+                <a :href="getDownloadLink"  @click.prevent="downloadFileAndHideModal" v-b-toggle class="col btn mb-1 btn-primary">Download</a>
                 <div v-if="dataCollection['deleted_at'] === null">
                     <hr>
                     <vue-csv-import
