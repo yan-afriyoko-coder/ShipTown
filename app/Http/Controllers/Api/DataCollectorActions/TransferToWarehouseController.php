@@ -16,10 +16,6 @@ class TransferToWarehouseController extends Controller
         $destinationDataCollection = null;
 
         DB::transaction(function () use ($request, &$destinationDataCollection) {
-            /** @var DataCollection $dataCollection */
-            $dataCollection = DataCollection::create($request->validated());
-
-            DataCollectorService::runAction($dataCollection, 'transfer_in_scanned');
             $sourceDataCollection = DataCollection::findOrFail($request->get('data_collector_id'));
 
             $sourceDataCollection->delete();
