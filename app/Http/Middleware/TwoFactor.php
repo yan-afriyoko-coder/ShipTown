@@ -18,7 +18,7 @@ class TwoFactor
      */
     public function handle(Request $request, Closure $next)
     {
-        if (! config('two_factor_auth.enabled')) {
+        if (config('two_factor_auth.disabled')) {
             return $next($request);
         }
 
@@ -26,17 +26,14 @@ class TwoFactor
             return $next($request);
         }
 
-        /** @var User $user */
-        $user = auth()->user();
-
-        if ($user->two_factor_code) {
-            if ($user->two_factor_expires_at->isPast()) {
-                Auth::logout();
-            }
-
-            return redirect()->route('verify.index');
+        if ($request->user()->two_factor_code === null) {
+            return $next($request);
         }
 
-        return $next($request);
+        if ($request->user()->two_factor_expires_at->isPast()) {
+            Auth::logout();
+        }
+
+        return redirect()->route('verify.index');
     }
 }

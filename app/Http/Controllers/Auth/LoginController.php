@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Notifications\TwoFactorCode;
+use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 
@@ -44,11 +45,13 @@ class LoginController extends Controller
      *
      * @return void
      */
-    protected function authenticated(Request $request, $user)
+    protected function authenticated(Request $request, User $user)
     {
-        if (config('two_factor_auth.enabled')) {
-            $user->generateTwoFactorCode();
-            $user->notify(new TwoFactorCode());
+        if (config('two_factor_auth.disabled')) {
+            return;
         }
+
+        $user->generateTwoFactorCode();
+        $user->notify(new TwoFactorCode());
     }
 }
