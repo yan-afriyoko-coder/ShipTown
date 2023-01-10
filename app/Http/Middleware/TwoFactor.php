@@ -18,15 +18,9 @@ class TwoFactor
      */
     public function handle(Request $request, Closure $next)
     {
-        if (config('two_factor_auth.disabled')) {
-            return $next($request);
-        }
-
-        if ($request->is('verify')) {
-            return $next($request);
-        }
-
-        if ($request->user()->two_factor_code === null) {
+        if (config('two_factor_auth.disabled')
+            || $request->is('verify')
+            || $request->user()->two_factor_code === null) {
             return $next($request);
         }
 
