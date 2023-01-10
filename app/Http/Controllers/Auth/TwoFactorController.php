@@ -10,22 +10,18 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TwoFactorController extends Controller
 {
     public function index(TwoFactorControllerIndexRequest $request): View|Factory|Application|RedirectResponse
     {
-        /** @var User $user */
-        $user = auth()->user();
-
-        if ($user->two_factor_code === null) {
+        if ($request->user()->two_factor_code === null) {
             return redirect()->home();
         }
 
-        if ($request->input('two_factor_code') === $user->two_factor_code) {
-            $user->resetTwoFactorCode();
+        if ($request->input('two_factor_code') === $request->user()->two_factor_code) {
+            $request->user()->resetTwoFactorCode();
             return redirect()->home();
         }
 
@@ -34,17 +30,12 @@ class TwoFactorController extends Controller
 
     public function store(TwoFactorStoreRequest $request): RedirectResponse
     {
-        /** @var User $user */
-        $user = auth()->user();
-
-        if ($request->input('two_factor_code') !== $user->two_factor_code) {
+        if ($request->input('two_factor_code') !== $request->user()->two_factor_code) {
             Auth::logoutCurrentDevice();
-
-            return redirect()->route('login')
-                ->withErrors(['two_factor_code' => 'Invalid code']);
+            return redirect()->route('login')->withErrors(['two_factor_code' => 'Invalid code']);
         }
 
-        $user->resetTwoFactorCode();
+        $request->user()->resetTwoFactorCode();
 
         return redirect()->home();
     }
