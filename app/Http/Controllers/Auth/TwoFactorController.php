@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TwoFactorStoreRequest;
 use App\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -27,12 +28,9 @@ class TwoFactorController extends Controller
         return view('auth.twoFactor');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(TwoFactorStoreRequest $request): RedirectResponse
     {
-        $request->validate([
-            'two_factor_code' => 'integer|required',
-        ]);
-
+        /** @var User $user */
         $user = auth()->user();
 
         if ($request->input('two_factor_code') == $user->two_factor_code) {
