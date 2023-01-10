@@ -82,7 +82,7 @@ class DataCollectorService
 
     public static function transferOutScanned(DataCollection $dataCollection)
     {
-        $dataCollection->update(['type' => DataCollectionStocktake::class]);
+        $dataCollection->update(['type' => DataCollectionTransferOut::class]);
 
         $dataCollection->delete();
 
