@@ -3,15 +3,19 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TwoFactorControllerIndexRequest;
 use App\Http\Requests\TwoFactorStoreRequest;
 use App\User;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TwoFactorController extends Controller
 {
-    public function index(Request $request)
+    public function index(TwoFactorControllerIndexRequest $request): View|Factory|Application|RedirectResponse
     {
         /** @var User $user */
         $user = auth()->user();
@@ -33,17 +37,15 @@ class TwoFactorController extends Controller
         /** @var User $user */
         $user = auth()->user();
 
-        if ($request->input('two_factor_code') == $user->two_factor_code) {
-            $user->resetTwoFactorCode();
-            return redirect()->home();
+        if ($request->input('two_factor_code') !== $user->two_factor_code) {
+            Auth::logoutCurrentDevice();
+
+            return redirect()->route('login')
+                ->withErrors(['two_factor_code' => 'Invalid code']);
         }
 
-        if ($request->input('two_factor_code')) {
-            Auth::logout();
-            return redirect()->home();
-        }
+        $user->resetTwoFactorCode();
 
-        return redirect()->back()
-            ->withErrors(['two_factor_code' => 'The two factor code you have entered does not match']);
+        return redirect()->home();
     }
 }
