@@ -22,7 +22,7 @@ class TwoFactorController extends Controller
 
         if ($request->input('two_factor_code') === $user->two_factor_code) {
             $user->resetTwoFactorCode();
-            return redirect()->route('dashboard');
+            return redirect()->home();
         }
 
         return view('auth.twoFactor');
@@ -35,16 +35,15 @@ class TwoFactorController extends Controller
 
         if ($request->input('two_factor_code') == $user->two_factor_code) {
             $user->resetTwoFactorCode();
-            return redirect()->route('dashboard');
+            return redirect()->home();
         }
 
         if ($request->input('two_factor_code')) {
             Auth::logout();
-            return redirect()->route('login');
+            return redirect()->home();
         }
 
         return redirect()->back()
-            ->withErrors(['two_factor_code' =>
-                'The two factor code you have entered does not match']);
+            ->withErrors(['two_factor_code' => 'The two factor code you have entered does not match']);
     }
 }
