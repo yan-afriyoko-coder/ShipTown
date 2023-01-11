@@ -3,6 +3,7 @@
 namespace App\Modules\DataCollector\src;
 
 use App\Events\Every10minEvent;
+use App\Events\SyncRequestedEvent;
 use App\Models\ShippingService;
 use App\Modules\BaseModuleServiceProvider;
 
@@ -37,6 +38,10 @@ class DataCollectorServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
+        SyncRequestedEvent::class => [
+            Listeners\SyncRequestedEventListener::class,
+        ],
+
         Every10minEvent::class => [
             Listeners\Every10minEventListener::class,
         ],
