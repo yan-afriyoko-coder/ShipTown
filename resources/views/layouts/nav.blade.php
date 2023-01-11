@@ -85,6 +85,7 @@
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-movements') }}">{{ __('Inventory Movements') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.inventory-movements-summary') }}">{{ __('Inventory Movements Summary') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.restocking') }}">{{ __('Restocking') }}</a>
+                            <a class="dropdown-item text-white lightHover" href="{{ route('reports.stocktake-suggestions.index') }}">{{ __('Stocktake Suggestions') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('activity-log') }}">{{ __('Activity Log') }}</a>
                             @if(count($navigationMenuReports) > 0)
                                 <hr v-if='{{ count($navigationMenuReports) > 0 }}' class="mb-1 mt-1">

@@ -33,7 +33,6 @@ Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard'
 Route::get('fulfilment-dashboard', [DashboardController::class, 'index'])->name('fulfilment-dashboard');
 Route::get('inventory-dashboard', [Reports\InventoryDashboardController::class, 'index'])->name('inventory-dashboard');
 
-Route::get('reports/inventory-dashboard', [Reports\InventoryDashboardController::class, 'index'])->name('reports.inventory-dashboard');
 
 Route::view('performance/dashboard', 'performance')->name('performance.dashboard');
 Route::view('products', 'products')->name('products');
@@ -51,13 +50,18 @@ Route::view('autopilot/packlist', 'autopilot/packlist')->name('autopilot.packlis
 
 Route::resource('order/packsheet', Order\PacksheetController::class)->only(['show']);
 
-Route::view('reports/picks', 'reports/picks_report')->name('reports.picks');
-Route::get('reports/shipments', [Reports\ShipmentController::class, 'index'])->name('reports.shipments');
-Route::get('reports/inventory', [Reports\InventoryController::class, 'index'])->name('reports.inventory');
-Route::get('reports/restocking', [Reports\RestockingReportController::class, 'index'])->name('reports.restocking');
-Route::view('reports/inventory-movements', 'reports/inventory-movements')->name('reports.inventory-movements');
-Route::get('reports/stocktake-suggestions', [Reports\StocktakeSuggestionsReportController::class, 'index'])->name('reports.stocktake-suggestions');
-Route::get('reports/inventory-movements-summary', [Reports\InventoryMovementsSummaryController::class, 'index'])->name('reports.inventory-movements-summary');
+Route::group(['as' => 'reports.'], function () {
+    Route::resource('reports/stocktake-suggestions', Reports\StocktakeSuggestionsController::class)->only('index');
+
+    Route::get('reports/inventory-dashboard', [Reports\InventoryDashboardController::class, 'index'])->name('inventory-dashboard');
+    Route::view('reports/picks', 'reports/picks_report')->name('picks');
+    Route::get('reports/shipments', [Reports\ShipmentController::class, 'index'])->name('shipments');
+    Route::get('reports/inventory', [Reports\InventoryController::class, 'index'])->name('inventory');
+    Route::get('reports/restocking', [Reports\RestockingReportController::class, 'index'])->name('restocking');
+    Route::view('reports/inventory-movements', 'reports/inventory-movements')->name('inventory-movements');
+    Route::get('reports/stocktake-suggestions-totals', [Reports\StocktakeSuggestionsTotalsReportController::class, 'index'])->name('stocktake-suggestions-totals');
+    Route::get('reports/inventory-movements-summary', [Reports\InventoryMovementsSummaryController::class, 'index'])->name('inventory-movements-summary');
+});
 
 Route::get('pdf/orders/{order_number}/{template}', [PdfOrderController::class, 'show']);
 Route::get('orders/{order_number}/kick', [OrderKickController::class, 'index']);
