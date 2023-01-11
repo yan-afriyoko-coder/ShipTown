@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Routes\Web;
 
-use App\User;
 use Tests\TestCase;
 
 /**
@@ -13,13 +12,6 @@ class VerifyTest extends TestCase
     protected string $uri = '/verify';
 
     protected mixed $user;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->user = User::factory()->create();
-        putenv("DISABLE_2FA=false");
-    }
 
     /** @test */
     public function test_if_uri_set()
