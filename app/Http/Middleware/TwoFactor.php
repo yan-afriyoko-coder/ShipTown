@@ -2,30 +2,23 @@
 
 namespace App\Http\Middleware;
 
-use App\User;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class TwoFactor
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param Request $request
-     * @param Closure $next
-     * @return mixed
-     */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): mixed
     {
-        if (config('two_factor_auth.disabled')
-            || $request->is('verify')
-            || $request->user()->two_factor_code === null) {
+        if (config('two_factor_auth.disabled')) {
             return $next($request);
         }
 
-        if ($request->user()->two_factor_expires_at->isPast()) {
-            Auth::logout();
+        if ($request->is('verify')) {
+            return $next($request);
+        }
+
+        if ($request->cookie('device_guid') !== null) {
+            return $next($request);
         }
 
         return redirect()->route('verify.index');
