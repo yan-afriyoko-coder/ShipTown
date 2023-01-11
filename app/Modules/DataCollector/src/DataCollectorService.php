@@ -5,7 +5,6 @@ namespace App\Modules\DataCollector\src;
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
 use App\Models\DataCollectionTransferIn;
-use App\Models\DataCollectionTransferOut;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use App\Modules\DataCollector\src\Jobs\TransferOutJob;
