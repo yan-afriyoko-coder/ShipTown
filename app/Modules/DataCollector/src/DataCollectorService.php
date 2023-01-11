@@ -4,11 +4,11 @@ namespace App\Modules\DataCollector\src;
 
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
-use App\Models\DataCollectionStocktake;
 use App\Models\DataCollectionTransferIn;
 use App\Models\DataCollectionTransferOut;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
+use App\Modules\DataCollector\src\Jobs\TransferOutJob;
 use App\Services\InventoryService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -25,9 +25,7 @@ class DataCollectorService
         }
 
         if ($action === 'transfer_out_scanned') {
-            DB::transaction(function () use ($dataCollection) {
-                self::transferOutScanned($dataCollection);
-            });
+            TransferOutJob::dispatchAfterResponse($dataCollection->id);
         }
 
         if ($action === 'auto_scan_all_requested') {
