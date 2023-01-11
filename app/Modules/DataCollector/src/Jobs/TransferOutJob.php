@@ -27,7 +27,7 @@ class TransferOutJob implements ShouldQueue
 
     public int $data_collection_id;
 
-    public function __construct($data_collection_id)
+    public function __construct(int $data_collection_id = null)
     {
         $this->data_collection_id = $data_collection_id;
     }
