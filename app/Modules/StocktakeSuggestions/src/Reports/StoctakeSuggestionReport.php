@@ -13,16 +13,17 @@ class StoctakeSuggestionReport extends Report
     {
         parent::__construct($attributes);
 
-        $this->view = 'reports.inventory-report';
-
         $this->report_name = 'Stocktake Suggestions';
 
         $this->defaultSelect = implode(',', [
+            'warehouse_code',
+            'product_sku',
+            'product_name',
+            'points',
+            'quantity_in_stock',
             'inventory_id',
             'product_id',
             'warehouse_id',
-            'points',
-            'quantity_in_stock',
         ]);
 
         $this->defaultSort = 'points';
@@ -39,7 +40,13 @@ class StoctakeSuggestionReport extends Report
         }
 
         $this->baseQuery = StocktakeSuggestion::query()
-            ->leftJoin('inventory', 'inventory.id', '=', 'stocktake_suggestions.inventory_id');
+            ->leftJoin('inventory', 'inventory.id', '=', 'stocktake_suggestions.inventory_id')
+            ->leftJoin('products', 'products.id', '=', 'stocktake_suggestions.product_id')
+            ->groupBy([
+                'stocktake_suggestions.inventory_id',
+                'stocktake_suggestions.product_id',
+                'stocktake_suggestions.warehouse_id'
+            ]);
 
         $this->fields = [
             'inventory_id'                       => 'stocktake_suggestions.inventory_id',
@@ -48,12 +55,19 @@ class StoctakeSuggestionReport extends Report
             'warehouse_code'                     => 'inventory.warehouse_code',
             'points'                             => DB::raw('sum(points)'),
             'quantity_in_stock'                  => DB::raw('max(inventory.quantity)'),
+            'product_sku'                        => DB::raw('max(products.sku)'),
+            'product_name'                        => DB::raw('max(products.name)'),
         ];
 
         $this->casts = [
-            'warehouse_code'     => 'string',
-            'points'             => 'float',
-            'quantity_in_stock'  => 'float',
+            'inventory_id'                       => 'integer',
+            'product_id'                         => 'integer',
+            'warehouse_id'                       => 'integer',
+            'warehouse_code'                     => 'string',
+            'points'                             => 'float',
+            'quantity_in_stock'                  => 'float',
+            'product_sku'                        => 'string',
+            'product_name'                       => 'string',
         ];
 
         $this->addFilter(

@@ -8,9 +8,9 @@ use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
 
-class StocktakeSuggestionsPageTest extends DuskTestCase
+class StocktakeSuggestionsTotalsPageTest extends DuskTestCase
 {
-    private string $uri = '/reports/stocktake-suggestions';
+    private string $uri = '/reports/stocktake-suggestions-totals';
 
     /**
      * @throws Exception

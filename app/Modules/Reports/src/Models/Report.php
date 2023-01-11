@@ -42,12 +42,12 @@ class Report extends Model
     public array $allowedIncludes = [];
     private array $fieldAliases = [];
 
-    public function response($request)
+    public function response($request): mixed
     {
         return $this->toView($request);
     }
 
-    public function toView($request = null)
+    public function toView($request = null): mixed
     {
         $request = $request ?? request();
 
@@ -87,7 +87,7 @@ class Report extends Model
             ->allowedIncludes($this->allowedIncludes);
     }
 
-    private function view()
+    private function view(): mixed
     {
         try {
             $queryBuilder = $this->queryBuilder()

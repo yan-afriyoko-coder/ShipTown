@@ -51,13 +51,15 @@ Route::view('autopilot/packlist', 'autopilot/packlist')->name('autopilot.packlis
 Route::resource('order/packsheet', Order\PacksheetController::class)->only(['show']);
 
 Route::group(['as' => 'reports.'], function () {
+    Route::resource('reports/stocktake-suggestions', Reports\StocktakeSuggestionsController::class)->only('index');
+
     Route::get('reports/inventory-dashboard', [Reports\InventoryDashboardController::class, 'index'])->name('inventory-dashboard');
     Route::view('reports/picks', 'reports/picks_report')->name('picks');
     Route::get('reports/shipments', [Reports\ShipmentController::class, 'index'])->name('shipments');
     Route::get('reports/inventory', [Reports\InventoryController::class, 'index'])->name('inventory');
     Route::get('reports/restocking', [Reports\RestockingReportController::class, 'index'])->name('restocking');
     Route::view('reports/inventory-movements', 'reports/inventory-movements')->name('inventory-movements');
-    Route::get('reports/stocktake-suggestions', [Reports\StocktakeSuggestionsReportController::class, 'index'])->name('stocktake-suggestions');
+    Route::get('reports/stocktake-suggestions-totals', [Reports\StocktakeSuggestionsTotalsReportController::class, 'index'])->name('stocktake-suggestions-totals');
     Route::get('reports/inventory-movements-summary', [Reports\InventoryMovementsSummaryController::class, 'index'])->name('inventory-movements-summary');
 });
 
