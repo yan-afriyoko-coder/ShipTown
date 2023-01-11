@@ -21,10 +21,12 @@ class DataCollectorService
             DB::transaction(function () use ($dataCollection) {
                 self::transferInScanned($dataCollection);
             });
+            return;
         }
 
         if ($action === 'transfer_out_scanned') {
-            TransferOutJob::dispatchAfterResponse($dataCollection->id);
+            TransferOutJob::dispatch($dataCollection->id);
+            return;
         }
 
         if ($action === 'auto_scan_all_requested') {
@@ -33,12 +35,14 @@ class DataCollectorService
                     ->whereNotNull('quantity_requested')
                     ->update(['quantity_scanned' => DB::raw('quantity_requested')]);
             });
+            return;
         }
 
         if ($action === 'import_as_stocktake') {
             DB::transaction(function () use ($dataCollection) {
                 self::importAsStocktake($dataCollection);
             });
+            return;
         }
     }
 
@@ -105,7 +109,7 @@ class DataCollectorService
                     $destinationDataCollectionRecord->save();
                 });
 
-            TransferOutJob::dispatchAfterResponse($sourceDataCollection->id);
+            TransferOutJob::dispatch($sourceDataCollection->id);
         });
 
         return $destinationDataCollection;
