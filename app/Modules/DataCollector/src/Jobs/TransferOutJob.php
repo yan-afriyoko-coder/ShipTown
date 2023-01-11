@@ -3,6 +3,8 @@
 namespace App\Modules\DataCollector\src\Jobs;
 
 use App\Models\DataCollection;
+use App\Models\DataCollectionRecord;
+use App\Models\DataCollectionTransferOut;
 use App\Modules\DataCollector\src\DataCollectorService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -33,10 +35,19 @@ class TransferOutJob implements ShouldQueue
     public function handle()
     {
         /** @var DataCollection $dataCollection */
-        $dataCollection = DataCollection::query()->find($this->data_collection_id);
+        $dataCollection = DataCollection::withTrashed()
+            ->findOrFail($this->data_collection_id);
+        $dataCollection->update(['type' => DataCollectionTransferOut::class]);
+        $dataCollection->delete();
 
-        DB::transaction(function () use ($dataCollection) {
-            DataCollectorService::transferOutScanned($dataCollection);
-        });
+        $dataCollection->records()
+            ->where('quantity_scanned', '!=', DB::raw(0))
+            ->chunkById(100, function ($records) {
+                $records->each(function (DataCollectionRecord $record) {
+                    DB::transaction(function () use ($record) {
+                        DataCollectorService::transferOutRecord($record);
+                    });
+                });
+            });
     }
 }

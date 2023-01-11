@@ -5,7 +5,6 @@ namespace App\Modules\DataCollector\src;
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
 use App\Models\DataCollectionTransferIn;
-use App\Models\DataCollectionTransferOut;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use App\Modules\DataCollector\src\Jobs\TransferOutJob;
@@ -78,41 +77,6 @@ class DataCollectorService
             });
     }
 
-    public static function transferOutScanned(DataCollection $dataCollection)
-    {
-        $dataCollection->update(['type' => DataCollectionTransferOut::class]);
-
-        $dataCollection->delete();
-
-        $dataCollection->records()
-            ->where('quantity_scanned', '!=', DB::raw(0))
-            ->each(function (DataCollectionRecord $record) {
-                $custom_unique_reference_id = implode(':', [
-                    'dataCollection',
-                    $record->data_collection_id,
-                    'uuid',
-                    Guid::uuid4()->toString(),
-                ]);
-
-                $inventory = Inventory::firstOrCreate([
-                    'warehouse_id' => $record->dataCollection->warehouse_id,
-                    'product_id' => $record->product_id
-                ], []);
-
-                InventoryService::adjustQuantity(
-                    $inventory,
-                    $record->quantity_scanned * -1,
-                    'data collection transfer out',
-                    $custom_unique_reference_id
-                );
-
-                $record->update([
-                    'total_transferred_out' => $record->total_transferred_out + $record->quantity_scanned,
-                    'quantity_scanned' => 0
-                ]);
-            });
-    }
-
     public static function transferScannedTo(DataCollection $sourceDataCollection, int $warehouse_id): DataCollection
     {
         // create collection
@@ -141,7 +105,7 @@ class DataCollectorService
                     $destinationDataCollectionRecord->save();
                 });
 
-            DataCollectorService::transferOutScanned($sourceDataCollection);
+            TransferOutJob::dispatchAfterResponse($sourceDataCollection->id);
         });
 
         return $destinationDataCollection;
@@ -181,5 +145,35 @@ class DataCollectorService
                     'last_counted_at' => now()
                 ]);
             });
+    }
+
+    /**
+     * @param DataCollectionRecord $record
+     */
+    public static function transferOutRecord(DataCollectionRecord $record): void
+    {
+        $custom_unique_reference_id = implode(':', [
+            'dataCollection',
+            $record->data_collection_id,
+            'uuid',
+            Guid::uuid4()->toString(),
+        ]);
+
+        $inventory = Inventory::firstOrCreate([
+            'warehouse_id' => $record->dataCollection->warehouse_id,
+            'product_id' => $record->product_id
+        ], []);
+
+        InventoryService::adjustQuantity(
+            $inventory,
+            $record->quantity_scanned * -1,
+            'data collection transfer out',
+            $custom_unique_reference_id
+        );
+
+        $record->update([
+            'total_transferred_out' => $record->total_transferred_out + $record->quantity_scanned,
+            'quantity_scanned' => 0
+        ]);
     }
 }
