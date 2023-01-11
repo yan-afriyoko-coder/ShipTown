@@ -3,7 +3,6 @@
 namespace Tests\Feature\Routes\Web;
 
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
@@ -11,21 +10,10 @@ use Tests\TestCase;
  */
 class VerifyTest extends TestCase
 {
-    use RefreshDatabase;
-
-    /**
-     * @var string
-     */
     protected string $uri = '/verify';
 
-    /**
-     * @var User
-     */
-    protected User $user;
+    protected mixed $user;
 
-    /**
-     *
-     */
     protected function setUp(): void
     {
         parent::setUp();

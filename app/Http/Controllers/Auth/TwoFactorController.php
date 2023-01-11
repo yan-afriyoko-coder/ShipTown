@@ -3,50 +3,66 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\User;
+use App\Http\Requests\TwoFactorControllerIndexRequest;
+use App\Http\Requests\TwoFactorStoreRequest;
+use App\Notifications\TwoFactorCode;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Ramsey\Uuid\Guid\Guid;
 
 class TwoFactorController extends Controller
 {
-    public function index(Request $request)
-    {
-        /** @var User $user */
-        $user = auth()->user();
+    private int $lifetimeInMinutes = 60 * 24 * 7;
 
-        if ($user->two_factor_code === null) {
+    public function index(TwoFactorControllerIndexRequest $request): mixed
+    {
+        if (config('two_factor_auth.disabled')) {
             return redirect()->home();
         }
 
-        if ($request->input('two_factor_code') === $user->two_factor_code) {
+        if ($request->cookie('device_guid') !== null) {
+            return redirect()->home();
+        }
+
+        $user = $request->user();
+
+        if ($user->two_factor_expires_at && $user->two_factor_expires_at->isPast()) {
+            Auth::logoutCurrentDevice();
             $user->resetTwoFactorCode();
-            return redirect()->route('dashboard');
+            return redirect()->route('login')->withErrors(['two_factor_code' => 'Invalid code']);
+        }
+
+        if ($request->has('two_factor_code')) {
+            if ($user->two_factor_code === $request->input('two_factor_code')) {
+                $user->resetTwoFactorCode();
+                return redirect()->home()->withCookie(cookie('device_guid', Guid::uuid4(), $this->lifetimeInMinutes));
+            }
+
+            if ($user->two_factor_code !== $request->input('two_factor_code')) {
+                Auth::logoutCurrentDevice();
+                $user->resetTwoFactorCode();
+                return redirect()->route('login')->withErrors(['two_factor_code' => 'Invalid code']);
+            }
+        }
+
+        if ($user->two_factor_code === null) {
+            $user->generateTwoFactorCode();
+            $user->notify(new TwoFactorCode());
         }
 
         return view('auth.twoFactor');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(TwoFactorStoreRequest $request): RedirectResponse
     {
-        $request->validate([
-            'two_factor_code' => 'integer|required',
-        ]);
-
-        $user = auth()->user();
-
-        if ($request->input('two_factor_code') == $user->two_factor_code) {
-            $user->resetTwoFactorCode();
-            return redirect()->route('dashboard');
+        if ($request->input('two_factor_code') !== $request->user()->two_factor_code) {
+            Auth::logoutCurrentDevice();
+            $request->user()->resetTwoFactorCode();
+            return redirect()->route('login')->withErrors(['two_factor_code' => 'Invalid code']);
         }
 
-        if ($request->input('two_factor_code')) {
-            Auth::logout();
-            return redirect()->route('login');
-        }
+        $request->user()->resetTwoFactorCode();
 
-        return redirect()->back()
-            ->withErrors(['two_factor_code' =>
-                'The two factor code you have entered does not match']);
+        return redirect()->home()->withCookie(cookie('device_guid', Guid::uuid4(), $this->lifetimeInMinutes));
     }
 }
