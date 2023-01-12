@@ -113,6 +113,8 @@ class ProductService
                     -$p2_inventory->quantity,
                     'merging to "'.$product1->sku.'"'
                 );
+
+                $p2_inventory->update(['quantity_reserved' => 0]);
             });
     }
 }
