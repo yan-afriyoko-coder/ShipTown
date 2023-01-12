@@ -95,24 +95,26 @@ class ProductService
 
         Inventory::query()
             ->where(['product_id' => $product2->id])
-            ->where('quantity', '!=', 0)
+            ->where('quantity_available', '!=', 0)
             ->get()
             ->each(function (Inventory $p2_inventory) use ($product1, $product2) {
                 $p1_inventory = Inventory::query()
                     ->where(['product_id' => $product1->id, 'warehouse_id' => $p2_inventory->warehouse_id])
                     ->first();
 
-                InventoryService::adjustQuantity(
-                    $p1_inventory,
-                    $p2_inventory->quantity,
-                    'merging from "'.$product2->sku.'"'
-                );
+                if ($p2_inventory->quantity != 0) {
+                    InventoryService::adjustQuantity(
+                        $p1_inventory,
+                        $p2_inventory->quantity,
+                        'merging from "'.$product2->sku.'"'
+                    );
 
-                InventoryService::adjustQuantity(
-                    $p2_inventory,
-                    -$p2_inventory->quantity,
-                    'merging to "'.$product1->sku.'"'
-                );
+                    InventoryService::adjustQuantity(
+                        $p2_inventory,
+                        -$p2_inventory->quantity,
+                        'merging to "'.$product1->sku.'"'
+                    );
+                }
 
                 $p2_inventory->update(['quantity_reserved' => 0]);
             });
