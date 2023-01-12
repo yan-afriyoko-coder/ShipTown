@@ -87,6 +87,7 @@
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.restocking') }}">{{ __('Restocking') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('reports.stocktake-suggestions.index') }}">{{ __('Stocktake Suggestions') }}</a>
                             <a class="dropdown-item text-white lightHover" href="{{ route('activity-log') }}">{{ __('Activity Log') }}</a>
+                            <a class="dropdown-item text-white lightHover" href="{{ url('products-merge?sku1=45&sku2=44') }}">{{ __('products-merge') }}</a>
                             @if(count($navigationMenuReports) > 0)
                                 <hr v-if='{{ count($navigationMenuReports) > 0 }}' class="mb-1 mt-1">
                                 @foreach ($navigationMenuReports as $menu)

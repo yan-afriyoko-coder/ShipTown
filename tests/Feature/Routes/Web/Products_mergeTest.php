@@ -1,29 +1,31 @@
 <?php
 
-namespace {{namespaceWithoutApp}};
+namespace Tests\Feature\Routes\Web;
 
+use App\Models\Product;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
  *
  */
-class {{class}} extends TestCase
+class Products_mergeTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * @var string
      */
-    protected string $uri = '';
+    protected string $uri = '/products-merge?sku1=sku1&sku2=sku2';
 
     protected mixed $user;
 
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->user = User::factory()->create();
+
+        Product::factory()->create(['sku' => 'sku1']);
+        Product::factory()->create(['sku' => 'sku2']);
     }
 
     /** @test */
@@ -47,7 +49,7 @@ class {{class}} extends TestCase
 
         $response = $this->get($this->uri);
 
-        $response->assertForbidden();
+        $response->assertSuccessful();
     }
 
     /** @test */
@@ -59,6 +61,6 @@ class {{class}} extends TestCase
 
         $response = $this->get($this->uri);
 
-        $response->assertForbidden();
+        $response->assertSuccessful();
     }
 }

@@ -1,16 +1,17 @@
 <?php
 
-namespace {{namespaceWithoutApp}};
+namespace Tests\Browser\Routes;
 
+use App\Models\Product;
 use App\User;
 use Exception;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
 
-class {{class}} extends DuskTestCase
+class ProductsMergePageTest extends DuskTestCase
 {
-    private string $uri = '';
+    private string $uri = '/products-merge';
 
     /**
      * @throws Exception
@@ -22,6 +23,9 @@ class {{class}} extends DuskTestCase
         }
 
         parent::setUp();
+
+        Product::factory()->create(['sku' => 'sku1']);
+        Product::factory()->create(['sku' => 'sku2']);
     }
 
     /**
@@ -36,7 +40,7 @@ class {{class}} extends DuskTestCase
 
             $browser->disableFitOnFailure()
                 ->loginAs($user)
-                ->visit($this->uri)
+                ->visit($this->uri.'?sku1=sku1&sku2=sku2')
                 ->pause(300)
                 ->assertPathIs($this->uri)
                 ->assertSourceMissing('snotify-error');
@@ -55,7 +59,7 @@ class {{class}} extends DuskTestCase
 
             $browser->disableFitOnFailure()
                 ->loginAs($admin)
-                ->visit($this->uri)
+                ->visit($this->uri.'?sku1=sku1&sku2=sku2')
                 ->pause(300)
                 ->assertPathIs($this->uri)
                 ->assertSourceMissing('snotify-error');
@@ -70,7 +74,7 @@ class {{class}} extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->disableFitOnFailure()
                 ->logout()
-                ->visit($this->uri)
+                ->visit($this->uri.'?sku1=sku1&sku2=sku2')
                 ->assertRouteIs('login')
                 ->assertSee('Login');
         });

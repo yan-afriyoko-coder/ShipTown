@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductAlias;
+use Barryvdh\LaravelIdeHelper\Alias;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -75,5 +77,42 @@ class ProductService
         Log::warning('Could not release quantity - SKU does not exist', ['sku' => $sku]);
 
         return false;
+    }
+
+    public static function merge(string $sku1, string $sku2)
+    {
+        /** @var Product $product1 */
+        $product1 = Product::findBySKU($sku1);
+
+        /** @var Product $product2 */
+        $product2 = Product::findBySKU($sku2);
+
+        // Merge product2 into product
+        $product2->update(['sku' => 'merged_to_'.$sku1.'_'.time()]);
+        $product2->aliases()->update(['product_id' => $product1->id]);
+
+        ProductAlias::query()->updateOrCreate(['alias' => $sku2], ['product_id' => $product1->id]);
+
+        Inventory::query()
+            ->where(['product_id' => $product2->id])
+            ->where('quantity', '!=', 0)
+            ->get()
+            ->each(function (Inventory $p2_inventory) use ($product1, $product2) {
+                $p1_inventory = Inventory::query()
+                    ->where(['product_id' => $product1->id, 'warehouse_id' => $p2_inventory->warehouse_id])
+                    ->first();
+
+                InventoryService::adjustQuantity(
+                    $p1_inventory,
+                    $p2_inventory->quantity,
+                    'merging from "'.$product2->sku.'"'
+                );
+
+                InventoryService::adjustQuantity(
+                    $p2_inventory,
+                    -$p2_inventory->quantity,
+                    'merging to "'.$product1->sku.'"'
+                );
+            });
     }
 }

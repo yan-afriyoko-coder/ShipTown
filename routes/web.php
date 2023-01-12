@@ -20,6 +20,7 @@ use App\Http\Controllers\OrderKickController;
 use App\Http\Controllers\PdfOrderController;
 use App\Http\Controllers\ProductKickController;
 use App\Http\Controllers\Products24hKickController;
+use App\Http\Controllers\ProductsMergeController;
 use App\Http\Controllers\Reports;
 use App\Http\Controllers\ShippingLabelController;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,7 @@ Route::redirect('home', 'dashboard')->name('home');
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('fulfilment-dashboard', [DashboardController::class, 'index'])->name('fulfilment-dashboard');
 Route::get('inventory-dashboard', [Reports\InventoryDashboardController::class, 'index'])->name('inventory-dashboard');
+Route::get('products-merge', [ProductsMergeController::class, 'index'])->name('products-merge');
 
 
 Route::view('performance/dashboard', 'performance')->name('performance.dashboard');
