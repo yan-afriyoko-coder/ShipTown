@@ -35,9 +35,5 @@ class AutoRestockLevelsServiceProvider extends BaseModuleServiceProvider
         EveryMinuteEvent::class => [
             Listeners\EveryMinuteEventListener::class,
         ],
-
-        InventoryUpdatedEvent::class => [
-            Listeners\InventoryUpdatedEventListener::class,
-        ],
     ];
 }
