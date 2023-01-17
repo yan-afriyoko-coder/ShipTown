@@ -8,9 +8,13 @@
             <div @click="toggleDetails" class="row col-sm-12 col-lg-7 text-right">
                 <div class="col-12 col-md-4 text-left small">
                     <div :class="{ 'bg-warning':  Number(record['inventory']['quantity_available']) < 0}">in stock: <strong>{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</strong></div>
-                    <div>last counted: <strong>{{ formatDateTime(record['inventory']['last_counted_at']) }}</strong></div>
-
+                    <div>last counted at: <strong>{{ formatDateTime(record['inventory']['last_counted_at']) }}</strong></div>
                     <div>price: <strong>{{ Number(productPrice) }}</strong></div>
+                    <template v-if="expanded">
+                        <div>first received at: <strong>{{ formatDateTime(record['inventory']['first_received_at']) }}</strong></div>
+                        <div>last received at: <strong>{{ formatDateTime(record['inventory']['last_received_at']) }}</strong></div>
+                    </template>
+
                 </div>
                 <div class="col-12 col-md-8 text-right">
                     <number-card label="points" :number="record['points']"></number-card>
@@ -21,12 +25,12 @@
 
         <div @click="toggleDetails" class="row text-center text-secondary">
             <div class="col">
-                <font-awesome-icon v-if="!showDetails" icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
-                <font-awesome-icon v-if="showDetails"  icon="chevron-up" class="fa fa-xs text-secondary"></font-awesome-icon>
+                <font-awesome-icon v-if="!expanded" icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
+                <font-awesome-icon v-if="expanded" icon="chevron-up" class="fa fa-xs text-secondary"></font-awesome-icon>
             </div>
         </div>
 
-       <template v-if="showDetails" @click="toggleDetails" >
+       <template v-if="expanded" @click="toggleDetails" >
             <div class="row" v-for="detail in suggestionDetails">
                 <div class="col">
                     {{ detail['points'] }} points - {{ detail['reason'] }}
@@ -61,7 +65,7 @@ export default {
 
       data: function() {
           return {
-              showDetails: false,
+              expanded: false,
               suggestionDetails: null,
           };
       },
@@ -75,9 +79,9 @@ export default {
 
       methods: {
           toggleDetails() {
-              this.showDetails = !this.showDetails;
+              this.expanded = !this.expanded;
 
-              if (this.showDetails) {
+              if (this.expanded) {
                   this.loadSuggestionDetails();
               }
           },

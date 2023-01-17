@@ -88,10 +88,10 @@
                     <button :disabled="! buttonsEnabled" @click.prevent="autoScanAll" v-b-toggle class="col btn mb-2 btn-primary">AutoScan ALL Records</button>
                     <br>
                     <br>
-                    <button :disabled="! buttonsEnabled" @click.prevent="transferStockIn" v-b-toggle class="col btn mb-2 btn-primary">Transfer IN</button>
-                    <button :disabled="! buttonsEnabled" @click.prevent="transferStockOut" v-b-toggle class="col btn mb-2 btn-primary">Transfer OUT</button>
+                    <button :disabled="! buttonsEnabled" @click.prevent="transferStockIn" v-b-toggle class="col btn mb-2 btn-primary">Transfer In</button>
                     <button :disabled="! buttonsEnabled" @click.prevent="transferToWarehouseClick" v-b-toggle class="col btn mb-2 btn-primary">Transfer To...</button>
                     <button :disabled="! buttonsEnabled" @click.prevent="importAsStocktake" v-b-toggle class="col btn mb-2 btn-primary">Import As Stocktake</button>
+                    <button :disabled="! buttonsEnabled" @click.prevent="transferStockOut" v-b-toggle class="col btn mb-2 btn-primary">Deduct From Stock</button>
                     <button :disabled="! buttonsEnabled" @click.prevent="archiveCollection" v-b-toggle class="col btn mb-2 btn-primary">Archive Collection</button>
                 </div>
                 <br>
