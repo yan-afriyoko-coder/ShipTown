@@ -174,6 +174,7 @@ class Product extends BaseModel
 
                 AllowedFilter::scope('search', 'whereHasText'),
                 AllowedFilter::scope('has_tags', 'hasTags'),
+                AllowedFilter::scope('product_has_tags', 'hasTags'),
                 AllowedFilter::scope('without_tags', 'withoutAllTags'),
                 AllowedFilter::scope('sku_or_alias', 'skuOrAlias'),
             ])
