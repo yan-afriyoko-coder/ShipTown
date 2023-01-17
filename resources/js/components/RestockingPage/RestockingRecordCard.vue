@@ -21,6 +21,10 @@
                         <div>location: <b>{{ record['warehouse_code'] }}</b></div>
                         <div>last counted at: <b>{{ formatDateTime(record['last_counted_at'],'D MMM HH:MM') }}</b></div>
                         <div>warehouse stock: <b>{{ record['warehouse_quantity'] }}</b></div>
+                        <template v-if="expanded">
+                            <div>first received at: <b>{{ formatDateTime(record['first_received_at'],'D MMM HH:MM') }}</b></div>
+                            <div>last received at: <b>{{ formatDateTime(record['last_received_at'],'D MMM HH:MM') }}</b></div>
+                        </template>
                     </div>
                     <div class="col-lg-4">
                         <div class="row-col text-center" @click="expanded = !expanded">
