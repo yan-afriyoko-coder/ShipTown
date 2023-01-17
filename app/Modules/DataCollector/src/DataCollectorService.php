@@ -157,8 +157,7 @@ class DataCollectorService
     public static function transferOutRecord(DataCollectionRecord $record): void
     {
         $custom_unique_reference_id = implode(':', [
-            'dataCollection', $record->data_collection_id,
-            'uuid', Guid::uuid4()->toString(),
+            'data_collection_record_id', $record->getKey()
         ]);
 
         $inventory = Inventory::firstOrCreate([
