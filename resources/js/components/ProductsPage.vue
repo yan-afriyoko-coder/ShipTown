@@ -100,16 +100,16 @@
             loadProductList: function(page = 1) {
                 this.showLoading();
 
-                const params = {
-                    'filter[sku]': this.getUrlParameter('sku'),
-                    'filter[search]': this.getUrlParameter('search'),
-                    'filter[has_tags]': this.getUrlParameter('has_tags'),
-                    'filter[without_tags]': this.getUrlParameter('without_tags'),
-                    'sort': this.getUrlParameter('sort', '-quantity'),
-                    'include': 'inventory,tags,prices,aliases,inventory.warehouse',
-                    'per_page': this.getUrlParameter('per_page', 25),
-                    'page': page
-                }
+                const params = this.$router.currentRoute.query;
+                params['filter[data_collection_id]'] = this.data_collection_id;
+                params['filter[sku]'] = this.getUrlParameter('sku');
+                params['filter[search]'] = this.getUrlParameter('search');
+                params['filter[has_tags]'] = this.getUrlParameter('has_tags');
+                params['filter[without_tags]'] = this.getUrlParameter('without_tags');
+                params['include'] = 'inventory,tags,prices,aliases,inventory.warehouse';
+                params['per_page'] = this.per_page;
+                params['page'] = page;
+                params['sort'] = this.getUrlParameter('sort', '-quantity');
 
                 this.apiGetProducts(params)
                     .then(({data}) => {
