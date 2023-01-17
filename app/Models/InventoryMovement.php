@@ -22,6 +22,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int user_id
  * @property Carbon created_at
  * @property Carbon updated_at
+ *
+ * @property Product $product
  */
 class InventoryMovement extends BaseModel
 {
