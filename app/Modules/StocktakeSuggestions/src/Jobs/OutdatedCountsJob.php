@@ -54,7 +54,7 @@ class OutdatedCountsJob implements ShouldQueue
                     OR last_counted_at < NOW() - INTERVAL 12 MONTH
                     OR last_counted_at < '2021-12-31 00:00:00'
                 )
-                AND (first_received_at IS NULL OR DATEDIFF(now(), first_received_at) > 14)
+                AND (first_received_at IS NULL OR DATEDIFF(now(), first_received_at) > 7 * 4)
                 AND NOT EXISTS (
                     SELECT NULL
                     FROM stocktake_suggestions
