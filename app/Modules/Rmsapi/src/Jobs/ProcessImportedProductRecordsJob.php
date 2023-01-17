@@ -197,6 +197,18 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
         if ($importedProduct->raw_import['supplier_name']) {
             $product->attachTag(trim($importedProduct->raw_import['supplier_name']));
         }
+
+        if ($importedProduct->raw_import['sub_description_1']) {
+            $product->attachTag(trim($importedProduct->raw_import['sub_description_1'], 'sub_description_1'));
+        }
+
+        if ($importedProduct->raw_import['sub_description_2']) {
+            $product->attachTag(trim($importedProduct->raw_import['sub_description_2'], 'sub_description_2'));
+        }
+
+        if ($importedProduct->raw_import['sub_description_3']) {
+            $product->attachTag(trim($importedProduct->raw_import['sub_description_3'], 'sub_description_3'));
+        }
     }
 
     private function processImportedProducts(int $batch_size): void
