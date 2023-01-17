@@ -1,28 +1,12 @@
 <?php
 
+use App\Modules\NonInventoryProductTag\src\NonInventoryProductTagServiceProvider;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 class InstallNonInventoryProductTagModule extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
-        //
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        //
+        NonInventoryProductTagServiceProvider::installModule();
     }
 }
