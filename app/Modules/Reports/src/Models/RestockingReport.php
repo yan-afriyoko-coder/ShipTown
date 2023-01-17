@@ -35,6 +35,8 @@ class RestockingReport extends Report
             'warehouse_quantity',
             'warehouse_has_stock',
             'last_counted_at',
+            'first_received_at',
+            'last_received_at',
         ]);
 
         $this->defaultSort = '-quantity_required';
@@ -64,6 +66,8 @@ class RestockingReport extends Report
             'quantity_incoming'                  => 'inventory.quantity_incoming',
             'quantity_required'                  => 'inventory.quantity_required',
             'last_counted_at'                    => 'inventory.last_counted_at',
+            'first_received_at'                  => 'inventory.first_received_at',
+            'last_received_at'                   => 'inventory.last_received_at',
             'warehouse_quantity'                 => 'inventory_source.quantity_available',
             'warehouse_has_stock'                => DB::raw('inventory_source.quantity_available > 0'),
             'inventory_source_warehouse_code'    => 'inventory_source.warehouse_code',
