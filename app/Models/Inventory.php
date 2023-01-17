@@ -30,6 +30,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property float       $quantity_required
  * @property float       $restock_level
  * @property float       $reorder_point
+ * @property Carbon|null $last_movement_at
  * @property Carbon|null $first_received_at
  * @property Carbon|null $last_received_at
  * @property Carbon|null $first_sold_at

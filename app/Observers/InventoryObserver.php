@@ -9,12 +9,23 @@ class InventoryObserver
 {
     public function updating(Inventory $inventory)
     {
-        if ($inventory->quantity > $inventory->getOriginal('quantity')) {
-            $inventory->last_received_at = now();
+        $newQuantity = $inventory->quantity;
+        $oldQuantity = $inventory->getOriginal('quantity');
 
-            if (! $inventory->first_received_at) {
-                $inventory->first_received_at = now();
-            }
+        if ($newQuantity === $oldQuantity) {
+            return;
+        }
+
+        $inventory->last_movement_at = now();
+
+        if ($newQuantity > $oldQuantity) {
+            $inventory->last_received_at = now();
+            $inventory->first_received_at = $inventory->first_received_at ?? now();
+        }
+
+        if ($newQuantity < $oldQuantity) {
+            $inventory->last_sold_at = now();
+            $inventory->first_sold_at = $inventory->first_sold_at ?? now();
         }
     }
 
