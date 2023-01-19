@@ -73,7 +73,7 @@ export default {
 
       computed: {
           productItemMovementLink() {
-              return '/reports/inventory-movements?hide_nav_bar=true&search=' + this.record['product']['sku'];
+              return '/reports/inventory-movements?hide_nav_bar=true&filter[search]=' + this.record['product']['sku'];
           },
 
           productPrice: function() {
