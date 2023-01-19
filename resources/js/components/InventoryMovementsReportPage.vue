@@ -65,9 +65,19 @@
             </swiping-card>
         </template>
 
+        <template  v-if="isLoading === false && records !== null && records.length === 0" >
+            <div class="row">
+                <div class="col">
+                    <div class="alert alert-info" role="alert">
+                        No records found.
+                    </div>
+                </div>
+            </div>
+        </template>
+
         <div class="row">
             <div class="col">
-                <div ref="loadingContainerOverride"></div>
+                <div ref="loadingContainerOverride" style="height: 32px"></div>
             </div>
         </div>
 
@@ -95,7 +105,7 @@
                 pagesLoaded: 0,
                 reachedEnd: false,
 
-                records: [],
+                records: null,
             };
         },
 
@@ -146,7 +156,6 @@
                     .finally(() => {
                         this.hideLoading();
                     });
-                return this;
             },
 
             loadMore: function () {
