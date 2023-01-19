@@ -67,6 +67,10 @@ class DataCollectorService
                     'product_id' => $record->product_id
                 ], []);
 
+                if (InventoryMovement::where('custom_unique_reference_id', $custom_unique_reference_id)->exists()) {
+                    return true;
+                }
+
                 InventoryService::adjustQuantity(
                     $inventory,
                     $record->quantity_scanned,
