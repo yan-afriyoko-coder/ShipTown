@@ -11,7 +11,7 @@
                     <div>last counted at: <strong>{{ formatDateTime(record['inventory']['last_counted_at']) }}</strong></div>
                     <div>price: <strong>{{ Number(productPrice) }}</strong></div>
                     <template v-if="expanded">
-                        <div>last movement at: <strong>{{ formatDateTime(record['inventory']['last_movement_at']) }}</strong></div>
+                        <div>last movement at: <strong><a :href="productItemMovementLink" target="_blank">{{ formatDateTime(record['inventory']['last_movement_at']) }}</a></strong></div>
                         <div>last received at: <strong>{{ formatDateTime(record['inventory']['last_received_at']) }}</strong></div>
                         <div>first received at: <strong>{{ formatDateTime(record['inventory']['first_received_at']) }}</strong></div>
                     </template>
@@ -72,6 +72,10 @@ export default {
       },
 
       computed: {
+          productItemMovementLink() {
+              return '/reports/inventory-movements?hide_nav_bar=true&search=' + this.record['product']['sku'];
+          },
+
           productPrice: function() {
             return this.record['product']['prices'][this.currentUser()['warehouse']['code']]['price'];
           }
