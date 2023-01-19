@@ -67,15 +67,20 @@ class DataCollectorService
                     'product_id' => $record->product_id
                 ], []);
 
-                InventoryService::adjustQuantity(
-                    $inventory,
-                    $record->quantity_scanned,
-                    'data collection transfer in',
-                    $custom_unique_reference_id
-                );
+                $uniqueReferenceRecord = InventoryMovement::query()
+                    ->where('custom_unique_reference_id', $custom_unique_reference_id);
+
+                if (! $uniqueReferenceRecord->exists()) {
+                    InventoryService::adjustQuantity(
+                        $inventory,
+                        $record->quantity_scanned,
+                        'data collection transfer in',
+                        $custom_unique_reference_id
+                    );
+                }
 
                 $record->update([
-                    'total_transferred_in' => $record->total_transferred_in + $record->quantity_scanned,
+                    'total_transferred_in' => $record->quantity_scanned,
                     'quantity_scanned' => 0
                 ]);
             });
