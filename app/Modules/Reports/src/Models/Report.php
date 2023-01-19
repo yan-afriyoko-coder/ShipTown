@@ -8,6 +8,7 @@ use App\Modules\Reports\src\Http\Resources\ReportResource;
 use App\Traits\HasTagsTrait;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Facades\DB;
@@ -401,5 +402,10 @@ class Report extends Model
 //            });
 
         return $allowedFilters;
+    }
+
+    public function simplePaginatedCollection(): Paginator
+    {
+        return $this->queryBuilder()->simplePaginate(request()->get('per_page', 10));
     }
 }

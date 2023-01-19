@@ -21,6 +21,8 @@ class StoctakeSuggestionReport extends Report
             'product_name',
             'points',
             'quantity_in_stock',
+            'last_movement_at',
+            'last_counted_at',
             'inventory_id',
             'product_id',
             'warehouse_id',
@@ -53,10 +55,12 @@ class StoctakeSuggestionReport extends Report
             'product_id'                         => 'stocktake_suggestions.product_id',
             'warehouse_id'                       => 'stocktake_suggestions.warehouse_id',
             'warehouse_code'                     => 'inventory.warehouse_code',
+            'last_movement_at'                   => 'inventory.last_movement_at',
+            'last_counted_at'                    => 'inventory.last_counted_at',
             'points'                             => DB::raw('sum(points)'),
             'quantity_in_stock'                  => DB::raw('max(inventory.quantity)'),
             'product_sku'                        => DB::raw('max(products.sku)'),
-            'product_name'                        => DB::raw('max(products.name)'),
+            'product_name'                       => DB::raw('max(products.name)'),
         ];
 
         $this->casts = [

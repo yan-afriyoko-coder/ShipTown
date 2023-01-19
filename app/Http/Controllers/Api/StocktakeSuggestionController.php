@@ -14,10 +14,6 @@ class StocktakeSuggestionController extends Controller
     {
         $report = new StoctakeSuggestionReport();
 
-        $query = $report->queryBuilder()
-//            ->groupBy(['stocktake_suggestions.inventory_id', 'stocktake_suggestions.product_id', 'stocktake_suggestions.warehouse_id'])
-            ->simplePaginate(request()->get('per_page', 10));
-
-        return JsonResource::collection($query);
+        return JsonResource::collection($report->simplePaginatedCollection());
     }
 }
