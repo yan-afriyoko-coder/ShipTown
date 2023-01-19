@@ -1,26 +1,24 @@
 <template>
     <div>
         <div class="row">
-            <div class="col-sm-12 col-lg-5">
+            <div class="col-sm-12 col-md-5">
                 <product-info-card :product= "record['product']"></product-info-card>
             </div>
 
-            <div @click="toggleDetails" class="row col-sm-12 col-lg-7 text-right">
-                <div class="col-12 col-md-4 text-left small">
-                    <div :class="{ 'bg-warning':  Number(record['inventory']['quantity_available']) < 0}">in stock: <strong>{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</strong></div>
-                    <div>last counted at: <strong>{{ formatDateTime(record['inventory']['last_counted_at']) }}</strong></div>
-                    <div>price: <strong>{{ Number(productPrice) }}</strong></div>
-                    <template v-if="expanded">
-                        <div>last movement at: <strong><a :href="productItemMovementLink" target="_blank">{{ formatDateTime(record['inventory']['last_movement_at']) }}</a></strong></div>
-                        <div>last received at: <strong>{{ formatDateTime(record['inventory']['last_received_at']) }}</strong></div>
-                        <div>first received at: <strong>{{ formatDateTime(record['inventory']['first_received_at']) }}</strong></div>
-                    </template>
+            <div class="col-sm-12 col-md-3 text-left small">
+                <div :class="{ 'bg-warning':  Number(record['inventory']['quantity_available']) < 0}">in stock: <strong>{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</strong></div>
+                <div>last counted at: <strong>{{ formatDateTime(record['inventory']['last_counted_at']) }}</strong></div>
+                <div>price: <strong>{{ Number(productPrice) }}</strong></div>
+                <template v-if="expanded">
+                    <div>last movement at: <strong><a :href="productItemMovementLink" target="_blank">{{ formatDateTime(record['inventory']['last_movement_at']) }}</a></strong></div>
+                    <div>last received at: <strong>{{ formatDateTime(record['inventory']['last_received_at']) }}</strong></div>
+                    <div>first received at: <strong>{{ formatDateTime(record['inventory']['first_received_at']) }}</strong></div>
+                </template>
 
-                </div>
-                <div class="col-12 col-md-8 text-right">
+            </div>
+            <div @click="toggleDetails" class="col-sm-12 col-md-4 text-right">
                     <number-card label="points" :number="record['points']"></number-card>
                     <text-card label="shelf" :number="record['inventory']['shelf_location']"></text-card>
-                </div>
             </div>
         </div>
 

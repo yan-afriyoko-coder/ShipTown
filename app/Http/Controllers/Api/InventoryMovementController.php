@@ -26,24 +26,6 @@ class InventoryMovementController extends Controller
         $resource = $report->queryBuilder()
             ->simplePaginate($request->get('per_page', 10));
 
-//        dd($resource);
-//        $inventoryMovement = QueryBuilder::for(InventoryMovement::class)
-//            ->allowedFilters([
-//                AllowedFilter::exact('description'),
-//                AllowedFilter::exact('warehouse_id'),
-//            ])
-//            ->allowedIncludes([
-//                'inventory',
-//                'product',
-//                'warehouse',
-//                'user',
-//            ])
-//            ->allowedSorts([
-//                'id',
-//                'created_at'
-//            ])
-//            ->simplePaginate($request->get('per_page', 10));
-
         return InventoryMovementResource::collection($resource);
     }
 
