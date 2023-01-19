@@ -11,8 +11,9 @@
                     <div>last counted at: <strong>{{ formatDateTime(record['inventory']['last_counted_at']) }}</strong></div>
                     <div>price: <strong>{{ Number(productPrice) }}</strong></div>
                     <template v-if="expanded">
-                        <div>first received at: <strong>{{ formatDateTime(record['inventory']['first_received_at']) }}</strong></div>
+                        <div>last movement at: <strong>{{ formatDateTime(record['inventory']['last_movement_at']) }}</strong></div>
                         <div>last received at: <strong>{{ formatDateTime(record['inventory']['last_received_at']) }}</strong></div>
+                        <div>first received at: <strong>{{ formatDateTime(record['inventory']['first_received_at']) }}</strong></div>
                     </template>
 
                 </div>
