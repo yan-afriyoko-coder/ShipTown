@@ -62,26 +62,24 @@ class DataCollectorService
                     Guid::uuid4()->toString(),
                 ]);
 
-                $inventory = Inventory::firstOrCreate([
-                    'warehouse_id' => $record->dataCollection->warehouse_id,
-                    'product_id' => $record->product_id
-                ], []);
+                if (! InventoryMovement::query()->where('custom_unique_reference_id', $unique_reference_id)->exists()) {
+                    $inventory = Inventory::firstOrCreate([
+                        'warehouse_id' => $record->dataCollection->warehouse_id,
+                        'product_id' => $record->product_id
+                    ], []);
 
-                if (InventoryMovement::query()->where('custom_unique_reference_id', $unique_reference_id)->exists()) {
-                    return true;
+                    InventoryService::adjustQuantity(
+                        $inventory,
+                        $record->quantity_scanned,
+                        'data collection transfer in',
+                        $unique_reference_id
+                    );
+
+                    $record->update([
+                        'total_transferred_in' => $record->quantity_scanned,
+                        'quantity_scanned' => 0
+                    ]);
                 }
-
-                InventoryService::adjustQuantity(
-                    $inventory,
-                    $record->quantity_scanned,
-                    'data collection transfer in',
-                    $unique_reference_id
-                );
-
-                $record->update([
-                    'total_transferred_in' => $record->quantity_scanned,
-                    'quantity_scanned' => 0
-                ]);
             });
     }
 
