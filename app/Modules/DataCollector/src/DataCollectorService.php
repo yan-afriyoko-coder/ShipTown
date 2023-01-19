@@ -55,7 +55,7 @@ class DataCollectorService
         $dataCollection->records()
             ->where('quantity_scanned', '!=', DB::raw(0))
             ->each(function (DataCollectionRecord $record) {
-                $custom_unique_reference_id = implode(':', [
+                $unique_reference_id = implode(':', [
                     'dataCollection',
                     $record->data_collection_id,
                     'uuid',
@@ -67,17 +67,16 @@ class DataCollectorService
                     'product_id' => $record->product_id
                 ], []);
 
-                $uniqueReferenceRecord = InventoryMovement::query()
-                    ->where('custom_unique_reference_id', $custom_unique_reference_id);
-
-                if (! $uniqueReferenceRecord->exists()) {
-                    InventoryService::adjustQuantity(
-                        $inventory,
-                        $record->quantity_scanned,
-                        'data collection transfer in',
-                        $custom_unique_reference_id
-                    );
+                if (InventoryMovement::query()->where('custom_unique_reference_id', $unique_reference_id)->exists()) {
+                    return true;
                 }
+
+                InventoryService::adjustQuantity(
+                    $inventory,
+                    $record->quantity_scanned,
+                    'data collection transfer in',
+                    $unique_reference_id
+                );
 
                 $record->update([
                     'total_transferred_in' => $record->quantity_scanned,
