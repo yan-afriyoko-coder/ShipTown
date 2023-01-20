@@ -33,6 +33,10 @@
                             <div class="col-12 col-md-3">
                                 <table class="table-borderless small text-left text-nowrap">
                                     <tr>
+                                         <td>movement id:</td>
+                                        <td class="pl-1">{{ record['id'] }}</td>
+                                    </tr>
+                                    <tr>
                                          <td>at:</td>
                                         <td class="pl-1">{{ record['created_at'] | moment('MMM D HH:mm') }}</td>
                                     </tr>
