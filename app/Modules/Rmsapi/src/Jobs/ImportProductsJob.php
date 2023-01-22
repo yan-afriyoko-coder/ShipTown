@@ -13,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
@@ -127,5 +128,15 @@ class ImportProductsJob implements ShouldQueue
         RmsapiConnection::find($this->rmsapiConnection->getKey())->update([
             'products_last_timestamp' => $productsCollection->last()['db_change_stamp'],
         ]);
+
+        DB::statement('
+            UPDATE modules_rmsapi_product_imports
+            LEFT JOIN products_aliases
+                ON modules_rmsapi_product_imports.sku = products_aliases.alias
+
+            SET modules_rmsapi_product_imports.product_id = products_aliases.product_id
+
+            WHERE modules_rmsapi_product_imports.product_id IS NULL
+        ');
     }
 }
