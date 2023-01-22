@@ -218,8 +218,8 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
 
         RmsapiProductImport::query()
             ->leftJoin('inventory', function (JoinClause $join) {
-                $join->on('inventory.product_id', '=', 'rmsapi_product_imports.product_id')
-                    ->on('inventory.warehouse_id', '=', 'rmsapi_product_imports.warehouse_id');
+                $join->on('inventory.product_id', '=', 'modules_rmsapi_products_imports.product_id')
+                    ->on('inventory.warehouse_id', '=', 'modules_rmsapi_products_imports.warehouse_id');
             })
             ->whereNull('modules_rmsapi_products_imports.when_processed')
             ->whereNull('modules_rmsapi_products_imports.reserved_at')
