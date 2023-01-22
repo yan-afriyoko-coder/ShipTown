@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  *
  * @property int id
+ * @property string $custom_unique_reference_id
  * @property int inventory_id
  * @property int product_id
  * @property int warehouse_id
