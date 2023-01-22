@@ -10,10 +10,6 @@
                 <div @click="toggleDetails" >price: <strong>{{ Number(productPrice) }}</strong></div>
                 <div>last movement at: <strong><a :href="productItemMovementLink" target="_blank">{{ formatDateTime(record['inventory']['last_movement_at']) }}</a></strong></div>
                 <div @click="toggleDetails" >last counted at: <strong>{{ formatDateTime(record['inventory']['last_counted_at']) }}</strong></div>
-                <template v-if="expanded">
-                    <div @click="toggleDetails" >last received at: <strong>{{ formatDateTime(record['inventory']['last_received_at']) }}</strong></div>
-                    <div @click="toggleDetails" >first received at: <strong>{{ formatDateTime(record['inventory']['first_received_at']) }}</strong></div>
-                </template>
             </div>
             <div @click="toggleDetails" class="col-sm-12 col-md-4 text-right">
                     <number-card label="points" :number="record['points']"></number-card>
@@ -29,8 +25,12 @@
         </div>
 
        <template v-if="expanded" @click="toggleDetails" >
-            <div class="row" v-for="detail in suggestionDetails">
-                <div class="col">
+            <div class="row small" v-for="detail in suggestionDetails">
+                <div class="col-12 mb-3">
+                    <div @click="toggleDetails" >last received at: <strong>{{ formatDateTime(record['inventory']['last_received_at']) }}</strong></div>
+                    <div @click="toggleDetails" >first received at: <strong>{{ formatDateTime(record['inventory']['first_received_at']) }}</strong></div>
+                </div>
+                <div class="col-12">
                     {{ detail['points'] }} points - {{ detail['reason'] }}
                 </div>
             </div>
