@@ -13,6 +13,7 @@ use App\Traits\IsMonitored;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -216,12 +217,17 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
         $reservationTime = now();
 
         RmsapiProductImport::query()
-            ->whereNull('when_processed')
-            ->whereNull('reserved_at')
-            ->where('connection_id', $this->connection_id)
-            ->orderBy('id')
+            ->leftJoin('inventory', function (JoinClause $join) {
+                $join->on('inventory.product_id', '=', 'rmsapi_product_imports.product_id')
+                    ->on('inventory.warehouse_id', '=', 'rmsapi_product_imports.warehouse_id');
+            })
+            ->whereNull('modules_rmsapi_products_imports.when_processed')
+            ->whereNull('modules_rmsapi_products_imports.reserved_at')
+            ->where('modules_rmsapi_products_imports.connection_id', $this->connection_id)
+            ->orderByRaw('(inventory.quantity != modules_rmsapi_products_imports.quantity_on_hand) DESC, ' .
+                'modules_rmsapi_products_imports.id ASC')
             ->limit($batch_size)
-            ->update(['reserved_at' => $reservationTime]);
+            ->update(['modules_rmsapi_products_imports.reserved_at' => $reservationTime]);
 
         $records = RmsapiProductImport::query()
             ->whereNull('when_processed')
