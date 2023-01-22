@@ -130,13 +130,13 @@ class ImportProductsJob implements ShouldQueue
         ]);
 
         DB::statement('
-            UPDATE modules_rmsapi_product_imports
+            UPDATE modules_rmsapi_products_imports
             LEFT JOIN products_aliases
-                ON modules_rmsapi_product_imports.sku = products_aliases.alias
+                ON modules_rmsapi_products_imports.sku = products_aliases.alias
 
-            SET modules_rmsapi_product_imports.product_id = products_aliases.product_id
+            SET modules_rmsapi_products_imports.product_id = products_aliases.product_id
 
-            WHERE modules_rmsapi_product_imports.product_id IS NULL
+            WHERE modules_rmsapi_products_imports.product_id IS NULL
         ');
     }
 }
