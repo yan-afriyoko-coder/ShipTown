@@ -27,9 +27,9 @@ class PublishAllWebhooksJob implements ShouldQueue
      */
     public function handle()
     {
-        PublishInventoryWebhooksJob::dispatch();
         PublishInventoryMovementWebhooksJob::dispatch();
         PublishOrderProductShipmentWebhooksJob::dispatch();
+        PublishInventoryWebhooksJob::dispatch();
 //        PublishOrdersWebhooksJob::dispatch();
     }
 }

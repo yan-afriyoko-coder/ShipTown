@@ -25,11 +25,11 @@
         </div>
 
        <template v-if="expanded" @click="toggleDetails" >
+           <div class="row col-12 mb-3">
+                <div @click="toggleDetails" >last received at: <strong>{{ formatDateTime(record['inventory']['last_received_at']) }}</strong></div>
+                <div @click="toggleDetails" >first received at: <strong>{{ formatDateTime(record['inventory']['first_received_at']) }}</strong></div>
+            </div>
             <div class="row small" v-for="detail in suggestionDetails">
-                <div class="col-12 mb-3">
-                    <div @click="toggleDetails" >last received at: <strong>{{ formatDateTime(record['inventory']['last_received_at']) }}</strong></div>
-                    <div @click="toggleDetails" >first received at: <strong>{{ formatDateTime(record['inventory']['first_received_at']) }}</strong></div>
-                </div>
                 <div class="col-12">
                     {{ detail['points'] }} points - {{ detail['reason'] }}
                 </div>
