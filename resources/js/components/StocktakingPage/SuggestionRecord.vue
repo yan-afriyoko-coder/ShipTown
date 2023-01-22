@@ -6,15 +6,14 @@
             </div>
 
             <div class="col-sm-12 col-md-3 text-left small">
-                <div :class="{ 'bg-warning':  Number(record['inventory']['quantity_available']) < 0}">in stock: <strong>{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</strong></div>
-                <div>last counted at: <strong>{{ formatDateTime(record['inventory']['last_counted_at']) }}</strong></div>
-                <div>price: <strong>{{ Number(productPrice) }}</strong></div>
+                <div @click="toggleDetails"  :class="{ 'bg-warning':  Number(record['inventory']['quantity_available']) < 0}">in stock: <strong>{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</strong></div>
+                <div @click="toggleDetails" >price: <strong>{{ Number(productPrice) }}</strong></div>
+                <div>last movement at: <strong><a :href="productItemMovementLink" target="_blank">{{ formatDateTime(record['inventory']['last_movement_at']) }}</a></strong></div>
+                <div @click="toggleDetails" >last counted at: <strong>{{ formatDateTime(record['inventory']['last_counted_at']) }}</strong></div>
                 <template v-if="expanded">
-                    <div>last movement at: <strong><a :href="productItemMovementLink" target="_blank">{{ formatDateTime(record['inventory']['last_movement_at']) }}</a></strong></div>
-                    <div>last received at: <strong>{{ formatDateTime(record['inventory']['last_received_at']) }}</strong></div>
-                    <div>first received at: <strong>{{ formatDateTime(record['inventory']['first_received_at']) }}</strong></div>
+                    <div @click="toggleDetails" >last received at: <strong>{{ formatDateTime(record['inventory']['last_received_at']) }}</strong></div>
+                    <div @click="toggleDetails" >first received at: <strong>{{ formatDateTime(record['inventory']['first_received_at']) }}</strong></div>
                 </template>
-
             </div>
             <div @click="toggleDetails" class="col-sm-12 col-md-4 text-right">
                     <number-card label="points" :number="record['points']"></number-card>
