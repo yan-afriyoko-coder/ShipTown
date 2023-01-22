@@ -22,7 +22,7 @@
                         </h6>
                         <div class="form-group row">
                             <div class="col">
-                                <input autocomplete="off" id="two_factor_code" type="text" class="form-control @error('two_factor_code') is-invalid @enderror" name="two_factor_code" value="{{ old('two_factor_code') }}" required autofocus>
+                                <input autocomplete="off" id="two_factor_code" type="number" class="form-control @error('two_factor_code') is-invalid @enderror" name="two_factor_code" value="{{ old('two_factor_code') }}" required autofocus>
 
                                 @error('two_factor_code')
                                     <span class="invalid-feedback" role="alert">
