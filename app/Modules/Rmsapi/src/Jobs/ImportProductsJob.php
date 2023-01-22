@@ -3,9 +3,9 @@
 namespace App\Modules\Rmsapi\src\Jobs;
 
 use App\Models\Heartbeat;
+use App\Modules\Rmsapi\src\Api\Client as RmsapiClient;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
-use App\Modules\Rmsapi\src\Api\Client as RmsapiClient;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
@@ -66,6 +66,8 @@ class ImportProductsJob implements ShouldQueue
         try {
             $response = RmsapiClient::GET($this->rmsapiConnection, 'api/products', $params);
         } catch (GuzzleException $e) {
+            report($e);
+
             Log::warning('RMSAPI Failed product fetch', [
                 'code' => $e->getCode(),
                 'message' => $e->getMessage(),
