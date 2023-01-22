@@ -25,13 +25,17 @@
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
                 <template v-slot:content>
                     <div class="row p-0 h-100">
-                        <div class="col-12 col-lg-5 align-text-top">
+                        <div class="col-12 col-lg-4 align-text-top h-100">
                             <product-info-card :product= "record['product']"></product-info-card>
                         </div>
 
-                        <div class="row col-sm-12 col-lg-7 text-right">
+                        <div class="row col-sm-12 col-lg-8 text-right">
                             <div class="col-12 col-md-3">
                                 <table class="table-borderless small text-left text-nowrap">
+                                    <tr>
+                                        <td>unique id:</td>
+                                        <td class="pl-1">{{ record['custom_unique_reference_id'] }}</td>
+                                    </tr>
                                     <tr>
                                          <td>movement id:</td>
                                         <td class="pl-1">{{ record['id'] }}</td>
@@ -58,7 +62,7 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div class="col-12 col-md-9 text-right">
+                            <div class="col-12 col-md-9 text-right align-text-top h-100">
                                 <number-card label="before" :number="record['quantity_before']"></number-card>
                                 <number-card label="change" :number="record['quantity_delta']"></number-card>
                                 <number-card label="after" :number="record['quantity_after']"></number-card>
