@@ -106,6 +106,7 @@ class ImportProductsJob implements ShouldQueue
         $insertData = $productsCollection->map(function ($product) use ($time) {
             return [
                 'connection_id'         => $this->rmsapiConnection->getKey(),
+                'warehouse_id'          => $this->rmsapiConnection->warehouse_id,
                 'batch_uuid'            => $this->batch_uuid,
                 'sku'                   => $product['item_code'],
                 'quantity_on_hand'      => $product['quantity_on_hand'],
