@@ -10,31 +10,39 @@
                 <div @click="toggleDetails" >price: <strong>{{ Number(productPrice) }}</strong></div>
                 <div><div @click="toggleDetails" class="d-inline">last movement at:</div> <strong><a :href="productItemMovementLink" target="_blank">{{ formatDateTime(record['inventory']['last_movement_at']) }}</a></strong></div>
                 <div @click="toggleDetails" >last counted at: <strong>{{ formatDateTime(record['inventory']['last_counted_at']) }}</strong></div>
+
+                <template v-if="expanded" @click="toggleDetails" >
+                    <div class="row mb-3">
+                        <div class="col-12" @click="toggleDetails" >last received at: <strong>{{ formatDateTime(record['inventory']['last_received_at']) }}</strong></div>
+                        <div class="col-12" @click="toggleDetails" >first received at: <strong>{{ formatDateTime(record['inventory']['first_received_at']) }}</strong></div>
+                    </div>
+                    <div class="row" v-for="detail in suggestionDetails">
+                        <div class="col">
+                            {{ detail['points'] }} points - {{ detail['reason'] }}
+                        </div>
+                    </div>
+                </template>
+
             </div>
+
             <div @click="toggleDetails" class="col-sm-12 col-md-4 text-right">
-                    <number-card label="points" :number="record['points']"></number-card>
-                    <text-card label="shelf" :number="record['inventory']['shelf_location']"></text-card>
-            </div>
-        </div>
-
-        <div @click="toggleDetails" class="row text-center text-secondary">
-            <div class="col">
-                <font-awesome-icon v-if="!expanded" icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
-                <font-awesome-icon v-if="expanded" icon="chevron-up" class="fa fa-xs text-secondary"></font-awesome-icon>
-            </div>
-        </div>
-
-       <template v-if="expanded" @click="toggleDetails" >
-           <div class="row small mb-3">
-                <div class="col-12" @click="toggleDetails" >last received at: <strong>{{ formatDateTime(record['inventory']['last_received_at']) }}</strong></div>
-                <div class="col-12" @click="toggleDetails" >first received at: <strong>{{ formatDateTime(record['inventory']['first_received_at']) }}</strong></div>
-            </div>
-            <div class="row small" v-for="detail in suggestionDetails">
-                <div class="col-12">
-                    {{ detail['points'] }} points - {{ detail['reason'] }}
+                <div class="row">
+                    <div class="col">
+                        <number-card label="points" :number="record['points']"></number-card>
+                        <text-card label="shelf" :number="record['inventory']['shelf_location']"></text-card>
+                    </div>
                 </div>
+
+                <div class="row">
+                    <div class="col text-center">
+                        <font-awesome-icon v-if="!expanded" icon="chevron-down" class="fa fa-xs"></font-awesome-icon>
+                        <font-awesome-icon v-if="expanded" icon="chevron-up" class="fa fa-xs text-secondary"></font-awesome-icon>
+                    </div>
+                </div>
+
             </div>
-       </template>
+        </div>
+
     </div>
 </template>
 

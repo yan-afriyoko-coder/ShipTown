@@ -18,16 +18,17 @@
                         </div>
                     </div>
                     <div class="col mt-1 mb-1 small">
-                        <div>location: <b>{{ record['warehouse_code'] }}</b></div>
-                        <div>last counted at: <b>{{ formatDateTime(record['last_counted_at'],'D MMM HH:MM') }}</b></div>
-                        <div>warehouse stock: <b>{{ record['warehouse_quantity'] }}</b></div>
-                        <template v-if="expanded">
-                            <div>first received at: <b>{{ formatDateTime(record['first_received_at'],'D MMM HH:MM') }}</b></div>
-                            <div>last received at: <b>{{ formatDateTime(record['last_received_at'],'D MMM HH:MM') }}</b></div>
+                        <div @click="expanded = !expanded">location: <b>{{ record['warehouse_code'] }}</b></div>
+                        <div @click="expanded = !expanded">warehouse stock: <b>{{ record['warehouse_quantity'] }}</b></div>
+                        <div><div @click="expanded = !expanded" class="d-inline">last movement at:</div> <strong><a :href="productItemMovementLink" target="_blank">{{ formatDateTime(record['last_movement_at']) }}</a></strong></div>
+                        <div @click="expanded = !expanded">last counted at: <b>{{ formatDateTime(record['last_counted_at'],'D MMM HH:MM') }}</b></div>
+                        <template @click="expanded = !expanded" v-if="expanded">
+                            <div @click="expanded = !expanded">first received at: <b>{{ formatDateTime(record['first_received_at'],'D MMM HH:MM') }}</b></div>
+                            <div @click="expanded = !expanded">last received at: <b>{{ formatDateTime(record['last_received_at'],'D MMM HH:MM') }}</b></div>
                         </template>
                     </div>
-                    <div class="col-lg-4">
-                        <div class="row-col text-center" @click="expanded = !expanded">
+                    <div class="col-lg-4" @click="expanded = !expanded">
+                        <div class="row-col text-center">
                             <div class="d-none d-md-inline"><number-card label="restock level" :number="record['restock_level']" v-bind:class="{'bg-warning' : record['restock_level'] <= 0 }"></number-card></div>
                             <number-card label="reorder point" :number="record['reorder_point']" v-bind:class="{'bg-warning' : record['reorder_point'] <= 0 }"></number-card>
                             <number-card label="in stock" :number="record['quantity_in_stock']" v-bind:class="{'bg-warning' : record['quantity_in_stock'] < 0 }"></number-card>
@@ -162,6 +163,10 @@ export default {
         },
 
         computed: {
+            productItemMovementLink() {
+                return '/reports/inventory-movements?hide_nav_bar=true&filter[search]=' + this.record['product_sku'];
+            },
+
             newRestockLevelValue: {
                 get: function() {
                     return Number(this.record['restock_level']);

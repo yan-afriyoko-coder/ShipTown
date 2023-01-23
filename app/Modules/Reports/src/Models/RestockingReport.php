@@ -34,6 +34,7 @@ class RestockingReport extends Report
             'restock_level',
             'warehouse_quantity',
             'warehouse_has_stock',
+            'last_movement_at',
             'last_counted_at',
             'first_received_at',
             'last_received_at',
@@ -65,6 +66,7 @@ class RestockingReport extends Report
             'quantity_available'                 => 'inventory.quantity_available',
             'quantity_incoming'                  => 'inventory.quantity_incoming',
             'quantity_required'                  => 'inventory.quantity_required',
+            'last_movement_at'                   => 'inventory.last_movement_at',
             'last_counted_at'                    => 'inventory.last_counted_at',
             'first_received_at'                  => 'inventory.first_received_at',
             'last_received_at'                   => 'inventory.last_received_at',
@@ -86,6 +88,7 @@ class RestockingReport extends Report
             'warehouse_quantity' => 'float',
             'warehouse_has_stock'=> 'boolean',
             'quantity_to_ship'   => 'float',
+            "last_movement_at"   => 'datetime',
             'last_counted_at'    => 'datetime',
         ];
 
