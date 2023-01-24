@@ -190,27 +190,27 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
         }
 
         if ($importedProduct->raw_import['department_name']) {
-            $product->updateTag('department_name', trim($importedProduct->raw_import['department_name']));
+            $product->syncTagByTag('rms_department_name', trim($importedProduct->raw_import['department_name']));
         }
 
         if ($importedProduct->raw_import['category_name']) {
-            $product->updateTag('category_name', trim($importedProduct->raw_import['category_name']));
+            $product->syncTagByTag('rms_category_name', trim($importedProduct->raw_import['category_name']));
         }
 
         if ($importedProduct->raw_import['supplier_name']) {
-            $product->updateTag('rms_supplier_name', trim($importedProduct->raw_import['supplier_name']));
+            $product->syncTagByTag('rms_supplier_name', trim($importedProduct->raw_import['supplier_name']));
         }
 
         if ($importedProduct->raw_import['sub_description_1']) {
-            $product->updateTag('sub_description_1', trim($importedProduct->raw_import['sub_description_1']));
+            $product->syncTagByTag('rms_sub_description_1', trim($importedProduct->raw_import['sub_description_1']));
         }
 
         if ($importedProduct->raw_import['sub_description_2']) {
-            $product->updateTag('sub_description_2', trim($importedProduct->raw_import['sub_description_2']));
+            $product->syncTagByTag('rms_sub_description_2', trim($importedProduct->raw_import['sub_description_2']));
         }
 
         if ($importedProduct->raw_import['sub_description_3']) {
-            $product->updateTag('sub_description_3', trim($importedProduct->raw_import['sub_description_3']));
+            $product->syncTagByTag('rms_sub_description_3', trim($importedProduct->raw_import['sub_description_3']));
         }
     }
 
