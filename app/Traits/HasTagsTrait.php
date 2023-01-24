@@ -149,4 +149,15 @@ trait HasTagsTrait
     {
         return !$this->hasTags($tags);
     }
+
+
+    public function updateTag(string $tagType, string $tagName)
+    {
+        $tag = $this->tags()->where(['type' => $tagType])->first();
+        if ($tag) {
+            $this->detachTag($tag);
+        }
+
+        $this->attachTag($tagName, $tagType);
+    }
 }
