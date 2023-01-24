@@ -151,7 +151,7 @@ trait HasTagsTrait
     }
 
 
-    public function updateTag(string $tagType, string $tagName)
+    public function syncTagByTag(string $tagType, string $tagName)
     {
         $tag = $this->tags()->where(['type' => $tagType])->first();
         if ($tag) {
