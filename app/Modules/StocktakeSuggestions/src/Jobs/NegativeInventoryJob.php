@@ -68,12 +68,12 @@ class NegativeInventoryJob implements ShouldQueue
         DB::statement('
             DELETE stocktake_suggestions
             FROM stocktake_suggestions
-            INNER JOIN inventory
+            LEFT JOIN inventory
                 ON inventory.id = stocktake_suggestions.inventory_id
-                AND inventory.quantity >= 0
 
             WHERE stocktake_suggestions.warehouse_id = ?
             AND stocktake_suggestions.reason = ?
+            AND inventory.quantity >= 0
         ', [$warehouse_id, $reason]);
     }
 }
