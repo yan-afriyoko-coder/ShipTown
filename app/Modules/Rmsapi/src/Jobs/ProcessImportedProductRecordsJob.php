@@ -181,6 +181,8 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
      */
     private function attachTags(RmsapiProductImport $importedProduct, Product $product): void
     {
+        $product->tags()->detach();
+
         if ($importedProduct->raw_import['is_web_item']) {
             $product->attachTag('Available Online');
         } else {
@@ -188,27 +190,27 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
         }
 
         if ($importedProduct->raw_import['department_name']) {
-            $product->attachTag($importedProduct->raw_import['department_name']);
+            $product->updateTag('department_name', trim($importedProduct->raw_import['department_name']));
         }
 
         if ($importedProduct->raw_import['category_name']) {
-            $product->attachTag($importedProduct->raw_import['category_name']);
+            $product->updateTag('category_name', trim($importedProduct->raw_import['category_name']));
         }
 
         if ($importedProduct->raw_import['supplier_name']) {
-            $product->attachTag(trim($importedProduct->raw_import['supplier_name']));
+            $product->updateTag('rms_supplier_name', trim($importedProduct->raw_import['supplier_name']));
         }
 
         if ($importedProduct->raw_import['sub_description_1']) {
-            $product->attachTag(trim($importedProduct->raw_import['sub_description_1'], 'sub_description_1'));
+            $product->updateTag('sub_description_1', trim($importedProduct->raw_import['sub_description_1']));
         }
 
         if ($importedProduct->raw_import['sub_description_2']) {
-            $product->attachTag(trim($importedProduct->raw_import['sub_description_2'], 'sub_description_2'));
+            $product->updateTag('sub_description_2', trim($importedProduct->raw_import['sub_description_2']));
         }
 
         if ($importedProduct->raw_import['sub_description_3']) {
-            $product->attachTag(trim($importedProduct->raw_import['sub_description_3'], 'sub_description_3'));
+            $product->updateTag('sub_description_3', trim($importedProduct->raw_import['sub_description_3']));
         }
     }
 
