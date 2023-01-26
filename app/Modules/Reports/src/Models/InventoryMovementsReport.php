@@ -58,7 +58,10 @@ class InventoryMovementsReport extends Report
         );
 
         $this->addFilter(
-            AllowedFilter::exact('warehouse_code', 'inventory.warehouse_code')
+            AllowedFilter::callback('warehouse_code', function ($query, $value) {
+                $warehouse = Warehouse::whereCode($value)->firstOrFail();
+                $query->where('warehouse_id', $warehouse->getKey());
+            })
         );
 
         $this->addFilter(
