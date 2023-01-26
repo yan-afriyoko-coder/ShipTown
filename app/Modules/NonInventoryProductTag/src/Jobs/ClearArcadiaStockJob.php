@@ -27,13 +27,38 @@ class ClearArcadiaStockJob implements ShouldQueue
             ->get()
             ->pluck('id');
 
-        Inventory::query()->whereIn('product_id', $productIds)
+        $query = Inventory::query()->whereIn('product_id', $productIds)
+            ->inRandomOrder()
             ->where('quantity', '!=', 0)
-            ->get()
-            ->each(function (Inventory $inventory) {
-                InventoryService::adjustQuantity($inventory, -$inventory->quantity, 'non_inventory_product_adjustment');
+            ->limit(100);
+
+        $max_rounds = 5;
+
+        do {
+            $inventoryCollection = $query->get();
+
+            $inventoryCollection->each(function (Inventory $inventory) {
+                $this->clearToO($inventory);
             });
 
+            $max_rounds--;
+        } while ($inventoryCollection->count() > 0 && $max_rounds > 0);
+
         return true;
+    }
+
+    /**
+     * @param Inventory $inventory
+     */
+    private function clearToO(Inventory $inventory): void
+    {
+        $inventory->refresh();
+        if ($inventory->quantity != 0) {
+            InventoryService::adjustQuantity(
+                $inventory,
+                -$inventory->quantity,
+                'non_inventory_product_adjustment'
+            );
+        }
     }
 }
