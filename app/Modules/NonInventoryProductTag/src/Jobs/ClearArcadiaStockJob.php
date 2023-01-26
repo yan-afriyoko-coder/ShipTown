@@ -22,7 +22,7 @@ class ClearArcadiaStockJob implements ShouldQueue
 
     public function handle(): bool
     {
-        $productIds = Product::withAllTags(Tag::findFromStringOfAnyType('ARCADIA DEAL JAN 2023'))
+        $productIds = Product::withAnyTags(Tag::findFromStringOfAnyType('ARCADIA DEAL JAN 2023'))
             ->where('quantity', '!=', 0)
             ->get()
             ->pluck('id');
