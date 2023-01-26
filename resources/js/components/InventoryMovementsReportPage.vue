@@ -25,11 +25,11 @@
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
                 <template v-slot:content>
                     <div class="row p-0 h-100">
-                        <div class="col-12 col-lg-4 align-text-top h-100">
+                        <div class="col-12 col-lg-4 align-text-top">
                             <product-info-card :product= "record['product']"></product-info-card>
                         </div>
 
-                        <div class="row col-sm-12 col-lg-8 text-right">
+                        <div class="row col-sm-12 col-lg-8 text-right mt-1">
                             <div class="col-12 col-md-3">
                                 <table class="table-borderless small text-left text-nowrap">
                                     <tr>
@@ -139,6 +139,7 @@
 
             reloadProducts() {
                 this.products = [];
+                console.log('reloading products');
                 this.loadRecords();
             },
 
@@ -146,7 +147,7 @@
                 this.showLoading();
 
                 let params = this.$router.currentRoute.query;
-                params['include'] = 'product,inventory,user';
+                params['include'] = 'product,inventory,user,product.tags';
                 params['sort'] = '-created_at';
                 params['page'] = page;
 

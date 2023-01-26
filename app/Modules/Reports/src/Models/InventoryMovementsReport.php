@@ -26,6 +26,7 @@ class InventoryMovementsReport extends Report
             'product',
             'warehouse',
             'user',
+            'product.tags'
         ];
 
         $this->fields = [
