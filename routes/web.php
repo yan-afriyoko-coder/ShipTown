@@ -27,11 +27,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('verify', Auth\TwoFactorController::class)->only(['index', 'store']);
 
-Route::get('test', function () {
-    \App\Modules\NonInventoryProductTag\src\Jobs\ClearArcadiaStockJob::dispatchSync();
-    return view('test');
-});
-
 Route::redirect('', 'dashboard');
 Route::redirect('home', 'dashboard')->name('home');
 
