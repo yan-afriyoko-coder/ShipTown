@@ -36,11 +36,13 @@ class BasicModuleTest extends TestCase
 
     public function test_basic()
     {
-        /** @var Product $product */
-        $product = Product::factory()->create();
-
         /** @var Warehouse $warehouse */
         $warehouse = Warehouse::factory()->create();
+
+        /** @var Product $product */
+        $product = Product::factory()->create();
+        /** @var Product $product2 */
+        $product2 = Product::factory()->create();
 
         /** @var Inventory $inventory */
         $inventory = Inventory::query()
@@ -50,7 +52,11 @@ class BasicModuleTest extends TestCase
             ])
             ->first();
 
+        /** @var Inventory $product2Inventory */
+        $product2Inventory = $product2->inventory($warehouse->code)->first();
+
         InventoryService::adjustQuantity($inventory, 10, 'test');
+        InventoryService::adjustQuantity($product2Inventory, 10, 'test');
 
         $product->attachTag('ARCADIA DEAL JAN 2023', 'rms_sub_description3');
 
@@ -58,6 +64,6 @@ class BasicModuleTest extends TestCase
 
         $inventory1 = Inventory::query()->where('quantity', '!=', 0);
 
-        $this->assertFalse($inventory1->exists());
+        $this->assertEquals(1, $inventory1->count());
     }
 }
