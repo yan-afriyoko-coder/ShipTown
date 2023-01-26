@@ -27,12 +27,12 @@ class ClearArcadiaStockJob implements ShouldQueue
             ->get()
             ->pluck('id');
 
-//        Inventory::query()->whereIn('product_id', $productIds)
-//            ->where('quantity', '!=', 0)
-//            ->get()
-//            ->each(function (Inventory $inventory) {
-//                InventoryService::adjustQuantity($inventory, -$inventory->quantity, 'non_inventory_product_adjustment');
-//            });
+        Inventory::query()->whereIn('product_id', $productIds)
+            ->where('quantity', '!=', 0)
+            ->get()
+            ->each(function (Inventory $inventory) {
+                InventoryService::adjustQuantity($inventory, -$inventory->quantity, 'non_inventory_product_adjustment');
+            });
 
         return true;
     }
