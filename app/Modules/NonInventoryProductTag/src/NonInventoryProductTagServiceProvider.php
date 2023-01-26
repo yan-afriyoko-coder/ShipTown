@@ -3,6 +3,7 @@
 namespace App\Modules\NonInventoryProductTag\src;
 
 use App\Events\InventoryMovementCreatedEvent;
+use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
 use Exception;
 
@@ -37,9 +38,13 @@ class NonInventoryProductTagServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        InventoryMovementCreatedEvent::class => [
-            Listeners\InventoryMovementCreatedEventListener::class,
+        SyncRequestedEvent::class => [
+            Listeners\SyncRequestedEventListener::class,
         ],
+
+//        InventoryMovementCreatedEvent::class => [
+//            Listeners\InventoryMovementCreatedEventListener::class,
+//        ],
     ];
 
     /**
