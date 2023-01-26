@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Spatie\Tags\Tag;
 
 class ClearArcadiaStockJob implements ShouldQueue
 {
@@ -21,11 +22,10 @@ class ClearArcadiaStockJob implements ShouldQueue
 
     public function handle(): bool
     {
-        $productIds = Product::withAllTagsOfAnyType('ARCADIA DEAL JAN 2023')
+        $productIds = Product::withAnyTags(Tag::findFromStringOfAnyType('ARCADIA DEAL JAN 2023'))
             ->where('quantity', '!=', 0)
             ->get()
             ->pluck('id');
-
 
         Inventory::query()->whereIn('product_id', $productIds)
             ->where('quantity', '!=', 0)
