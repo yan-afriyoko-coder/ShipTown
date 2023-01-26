@@ -26,6 +26,7 @@ class ClearArcadiaStockJob implements ShouldQueue
             ->get()
             ->pluck('id');
 
+        dd($productIds);
 
         Inventory::query()->whereIn('product_id', $productIds)
             ->where('quantity', '!=', 0)
