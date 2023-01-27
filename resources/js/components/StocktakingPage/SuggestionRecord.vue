@@ -28,8 +28,9 @@
             <div @click="toggleDetails" class="col-sm-12 col-md-4 text-right">
                 <div class="row">
                     <div class="col">
+                        <text-card label="location" :text="record['inventory']['warehouse_code']"></text-card>
                         <number-card label="points" :number="record['points']"></number-card>
-                        <text-card label="shelf" :number="record['inventory']['shelf_location']"></text-card>
+                        <text-card label="shelf" :text="record['inventory']['shelf_location']"></text-card>
                     </div>
                 </div>
 
@@ -78,11 +79,11 @@ export default {
 
       computed: {
           productItemMovementLink() {
-              return '/reports/inventory-movements?hide_nav_bar=true&filter[search]=' + this.record['product']['sku'];
+              return '/reports/inventory-movements?hide_nav_bar=true&filter[search]=' + this.record['product']['sku'] +'&filter[warehouse_code]=' + this.record['inventory']['warehouse_code'];
           },
 
           productPrice: function() {
-            return this.record['product']['prices'][this.currentUser()['warehouse']['code']]['price'];
+            return this.record['product']['prices'][this.record['inventory']['warehouse_code']]['price'];
           }
       },
 
