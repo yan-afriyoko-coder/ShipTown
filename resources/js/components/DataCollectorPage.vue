@@ -244,6 +244,11 @@
                     return;
                 }
 
+                if (this.dataCollection['deleted_at'] !== null) {
+                    this.notifyError('This collection is already archived');
+                    return;
+                }
+
                 this.scannedProduct = null;
                 this.scannedDataCollectionRecord = null;
 
