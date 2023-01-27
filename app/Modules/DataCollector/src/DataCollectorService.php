@@ -4,6 +4,7 @@ namespace App\Modules\DataCollector\src;
 
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
+use App\Models\DataCollectionStocktake;
 use App\Models\DataCollectionTransferIn;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
@@ -119,6 +120,8 @@ class DataCollectorService
 
     public static function importAsStocktake(DataCollection $dataCollection)
     {
+        $dataCollection->update(['type' => DataCollectionStocktake::class]);
+
         $dataCollection->delete();
 
         $dataCollection->records()
