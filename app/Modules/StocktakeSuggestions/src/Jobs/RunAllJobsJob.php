@@ -27,6 +27,7 @@ class RunAllJobsJob implements ShouldQueue
                 NegativeWarehouseStockJob::dispatch($warehouse->getKey());
                 OutdatedCountsJob::dispatch($warehouse->getKey());
                 NegativeInventoryJob::dispatch($warehouse->getKey());
+                NoMovementJob::dispatch($warehouse->getKey());
             });
 
         return true;
