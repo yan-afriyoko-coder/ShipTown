@@ -34,19 +34,19 @@ class NoMovementJob implements ShouldQueue
     {
         DB::statement("
             INSERT INTO stocktake_suggestions (inventory_id, product_id, warehouse_id, points, reason, created_at, updated_at)
-            SELECT id, product_id, warehouse_id, ? , ?, NOW(), NOW()
+            SELECT inventory.id, inventory.product_id, inventory.warehouse_id, ? , ?, NOW(), NOW()
             FROM `inventory`
 
             LEFT JOIN products_prices
                 ON products_prices.product_id = inventory.product_id
                 AND products_prices.warehouse_id = inventory.warehouse_id
 
-            WHERE warehouse_id = ?
-            AND quantity != 0
-            AND quantity_available > 100
+            WHERE inventory.warehouse_id = ?
+            AND inventory.quantity != 0
+            AND inventory.quantity_available > 100
             AND products_prices.price > 5
-            AND DATEDIFF(now(), last_movement_at) > 7
-            AND last_movement_at > last_counted_at
+            AND DATEDIFF(now(), inventory.last_movement_at) > 7
+            AND inventory.last_movement_at > inventory.last_counted_at
             AND NOT EXISTS (
                 SELECT NULL
                 FROM stocktake_suggestions
