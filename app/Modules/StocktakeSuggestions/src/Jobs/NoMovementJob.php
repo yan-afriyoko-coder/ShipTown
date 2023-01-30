@@ -19,39 +19,32 @@ class NoMovementJob implements ShouldQueue
     use IsMonitored;
 
     private int $warehouse_id;
+    private string $reason;
+    private int $points;
 
     public function __construct(int $warehouse_id)
     {
         $this->warehouse_id = $warehouse_id;
+
+        $this->reason = 'quantity>100, price>5 and no movement for 7 days, scan product to verify barcode and stock';
+        $this->points = 3;
     }
 
-    public function handle(): bool
-    {
-        $reason = 'over 100 in stock and no movement for 7 days';
-        $points = 3;
-
-        $this->insertNewSuggestions($this->warehouse_id, $reason, $points);
-//        $this->deleteIncorrectSuggestions($this->warehouse_id, $reason);
-
-        return true;
-    }
-
-    /**
-     * @param int $points
-     * @param string $reason
-     * @param int $warehouse_id
-     */
-    private function insertNewSuggestions(int $warehouse_id, string $reason, int $points): void
+    public function handle()
     {
         DB::statement("
             INSERT INTO stocktake_suggestions (inventory_id, product_id, warehouse_id, points, reason, created_at, updated_at)
-
             SELECT id, product_id, warehouse_id, ? , ?, NOW(), NOW()
             FROM `inventory`
+
+            LEFT JOIN products_prices
+                ON products_prices.product_id = inventory.product_id
+                AND products_prices.warehouse_id = inventory.warehouse_id
 
             WHERE warehouse_id = ?
             AND quantity != 0
             AND quantity_available > 100
+            AND products_prices.price > 5
             AND DATEDIFF(now(), last_movement_at) > 7
             AND last_movement_at > last_counted_at
             AND NOT EXISTS (
@@ -60,31 +53,6 @@ class NoMovementJob implements ShouldQueue
                 WHERE stocktake_suggestions.inventory_id = inventory.id
                 AND stocktake_suggestions.reason = ?
             )
-        ", [$points, $reason, $warehouse_id, $reason]);
-
-        //                AND (
-//                    last_counted_at IS NULL
-//                    OR last_counted_at < NOW() - INTERVAL 12 MONTH
-//                    OR last_counted_at < '2021-12-31 00:00:00'
-//                )
-//                AND (first_received_at IS NULL OR first_received_at < '2023-01-01 00:00:00')
-    }
-
-    /**
-     * @param int $warehouse_id
-     * @param string $reason
-     */
-    private function deleteIncorrectSuggestions(int $warehouse_id, string $reason): void
-    {
-        DB::statement('
-            DELETE stocktake_suggestions
-            FROM stocktake_suggestions
-            INNER JOIN inventory
-                ON inventory.id = stocktake_suggestions.inventory_id
-
-            WHERE stocktake_suggestions.warehouse_id = ?
-            AND stocktake_suggestions.reason = ?
-            AND inventory.quantity = 0
-        ', [$warehouse_id, $reason]);
+        ", [$this->points, $this->reason, $this->warehouse_id, $this->reason]);
     }
 }
