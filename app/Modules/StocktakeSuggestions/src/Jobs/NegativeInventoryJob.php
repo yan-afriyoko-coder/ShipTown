@@ -27,7 +27,7 @@ class NegativeInventoryJob implements ShouldQueue
 
     public function handle(): bool
     {
-        $reason = 'stock below 0';
+        $reason = 'negative stock - have you received in the stock correctly?';
         $points = 1;
         $warehouse_id = $this->warehouse_id;
 

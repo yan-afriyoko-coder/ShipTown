@@ -4,6 +4,7 @@ namespace App\Modules\StocktakeSuggestions\src\Reports;
 
 use App\Models\StocktakeSuggestion;
 use App\Modules\Reports\src\Models\Report;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 
@@ -26,6 +27,7 @@ class StoctakeSuggestionReport extends Report
             'inventory_id',
             'product_id',
             'warehouse_id',
+            'suggestion_details'
         ]);
 
         $this->defaultSort = 'points';
@@ -34,7 +36,7 @@ class StoctakeSuggestionReport extends Report
             'product',
             'product.tags',
             'product.prices',
-            'inventory'
+            'inventory',
         ];
 
         if (request('title')) {
@@ -51,16 +53,19 @@ class StoctakeSuggestionReport extends Report
             ]);
 
         $this->fields = [
-            'inventory_id'                       => 'stocktake_suggestions.inventory_id',
-            'product_id'                         => 'stocktake_suggestions.product_id',
-            'warehouse_id'                       => 'stocktake_suggestions.warehouse_id',
-            'warehouse_code'                     => 'inventory.warehouse_code',
-            'last_movement_at'                   => 'inventory.last_movement_at',
-            'last_counted_at'                    => 'inventory.last_counted_at',
-            'points'                             => DB::raw('sum(points)'),
-            'quantity_in_stock'                  => DB::raw('max(inventory.quantity)'),
-            'product_sku'                        => DB::raw('max(products.sku)'),
-            'product_name'                       => DB::raw('max(products.name)'),
+            'inventory_id'          => 'stocktake_suggestions.inventory_id',
+            'product_id'            => 'stocktake_suggestions.product_id',
+            'warehouse_id'          => 'stocktake_suggestions.warehouse_id',
+            'warehouse_code'        => 'inventory.warehouse_code',
+            'last_movement_at'      => 'inventory.last_movement_at',
+            'last_counted_at'       => 'inventory.last_counted_at',
+            'product_sku'           => DB::raw('max(products.sku)'),
+            'product_name'          => DB::raw('max(products.name)'),
+            'points'                => DB::raw('sum(points)'),
+            'quantity_in_stock'     => DB::raw('max(inventory.quantity)'),
+            'suggestion_details'    => DB::raw("group_concat(" .
+                " concat(stocktake_suggestions.points, ' points - ', stocktake_suggestions.reason)" .
+                " separator '\n')"),
         ];
 
         $this->casts = [
@@ -90,5 +95,10 @@ class StoctakeSuggestionReport extends Report
                 });
             })
         );
+    }
+
+    public function suggestionDetails(): HasMany
+    {
+        return $this->hasMany(StocktakeSuggestion::class, 'inventory_id', 'inventory_id');
     }
 }

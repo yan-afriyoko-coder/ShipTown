@@ -5,7 +5,17 @@
                 <product-info-card :product= "record['product']"></product-info-card>
             </div>
 
-            <div class="col-sm-12 col-md-3 text-left small">
+            <div class="col-sm-12 col-md-3 text-left small mt-2 mb-1">
+                <div class="row">
+                    <div class="col">
+                        {{ record['suggestion_details'] }}
+                    </div>
+                </div>
+<!--                <div class="row" v-for="detail in suggestionDetails">-->
+<!--                    <div class="col">-->
+<!--                        {{ detail['points'] }} points - {{ detail['reason'] }}-->
+<!--                    </div>-->
+<!--                </div>-->
                 <div @click="toggleDetails"  :class="{ 'bg-warning':  Number(record['inventory']['quantity_available']) < 0}">in stock: <strong>{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</strong></div>
                 <div @click="toggleDetails" >price: <strong>{{ Number(productPrice) }}</strong></div>
                 <div><div @click="toggleDetails" class="d-inline">last movement at:</div> <strong><a :href="productItemMovementLink" target="_blank">{{ formatDateTime(record['inventory']['last_movement_at']) }}</a></strong></div>
@@ -15,11 +25,6 @@
                     <div class="row mb-3">
                         <div class="col-12" @click="toggleDetails" >last received at: <strong>{{ formatDateTime(record['inventory']['last_received_at']) }}</strong></div>
                         <div class="col-12" @click="toggleDetails" >first received at: <strong>{{ formatDateTime(record['inventory']['first_received_at']) }}</strong></div>
-                    </div>
-                    <div class="row" v-for="detail in suggestionDetails">
-                        <div class="col">
-                            {{ detail['points'] }} points - {{ detail['reason'] }}
-                        </div>
                     </div>
                 </template>
 
@@ -91,27 +96,6 @@ export default {
       methods: {
           toggleDetails() {
               this.expanded = !this.expanded;
-
-              if (this.expanded) {
-                  this.loadSuggestionDetails();
-              }
-          },
-
-          loadSuggestionDetails() {
-              const params = {
-                  'filter[inventory_id]': this.record['inventory_id'],
-                  'include': 'product,inventory',
-                  'sort': '-points,inventory_id',
-                  'per_page': 999,
-              }
-
-              this.apiGetStocktakeSuggestionsDetails(params)
-                  .then((response) => {
-                      this.suggestionDetails = response.data.data;
-                  })
-                  .catch((error) => {
-                      this.displayApiCallError(error);
-                  });
           },
       },
   }
