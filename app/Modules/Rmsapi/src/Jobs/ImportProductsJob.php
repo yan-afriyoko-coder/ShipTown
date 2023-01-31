@@ -137,7 +137,8 @@ class ImportProductsJob implements ShouldQueue
               SELECT ID FROM (
                 SELECT min(id)
                 FROM `modules_rmsapi_products_imports`
-                WHERE `when_processed` IS NULL
+                WHERE when_processed IS NULL
+                AND reserved_at IS NULL
                 GROUP BY SKU
                 HAVING count(*) > 1
               ) as tbl
