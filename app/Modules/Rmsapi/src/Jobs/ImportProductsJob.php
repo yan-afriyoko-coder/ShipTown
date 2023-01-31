@@ -124,12 +124,26 @@ class ImportProductsJob implements ShouldQueue
 
         // we will use insert instead of create as this is way faster
         // method of inputting bulk of records to database
-        // this won't invoke any events (not 100% sure)
+        // this won't invoke any events
         RmsapiProductImport::query()->insert($insertData->toArray());
 
         RmsapiConnection::find($this->rmsapiConnection->getKey())->update([
             'products_last_timestamp' => $productsCollection->last()['db_change_stamp'],
         ]);
+
+        DB::statement('
+            DELETE FROM modules_rmsapi_products_imports
+            WHERE ID IN (
+              SELECT ID FROM (
+                SELECT min(id)
+                FROM `modules_rmsapi_products_imports`
+                WHERE when_processed IS NULL
+                AND reserved_at IS NULL
+                GROUP BY SKU
+                HAVING count(*) > 1
+              ) as tbl
+            )
+        ');
 
         DB::statement('
             UPDATE modules_rmsapi_products_imports
