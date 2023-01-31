@@ -51,6 +51,7 @@ class ProductPrice extends BaseModel
         'warehouse_id',
         'location_id',
         'warehouse_code',
+        'cost',
         'price',
         'sale_price',
         'sale_price_start_date',
