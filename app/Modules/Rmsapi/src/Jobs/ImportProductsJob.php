@@ -63,37 +63,39 @@ class ImportProductsJob implements ShouldQueue
             'min:db_change_stamp' => $this->rmsapiConnection->products_last_timestamp,
         ];
 
-        try {
-            $response = RmsapiClient::GET($this->rmsapiConnection, 'api/products', $params);
-        } catch (GuzzleException $e) {
-            report($e);
+        $roundsLeft = 3;
 
-            Log::warning('RMSAPI Failed product fetch', [
-                'code' => $e->getCode(),
-                'message' => $e->getMessage(),
+        do {
+            try {
+                $response = RmsapiClient::GET($this->rmsapiConnection, 'api/products', $params);
+            } catch (GuzzleException $e) {
+                report($e);
+
+                Log::warning('RMSAPI Failed product fetch', [
+                    'code' => $e->getCode(),
+                    'message' => $e->getMessage(),
+                ]);
+
+                return false;
+            }
+
+            if ($response->getResult()) {
+                $this->saveImportedProducts($response->getResult());
+            }
+
+            Log::info('RMSAPI Downloaded updated products', [
+                'warehouse_code' => $this->rmsapiConnection->location_id,
+                'count'          => $response->asArray()['total'],
             ]);
 
-            return false;
-        }
-
-        if ($response->getResult()) {
-            $this->saveImportedProducts($response->getResult());
-
-            if (isset($response->asArray()['next_page_url'])) {
-                ImportProductsJob::dispatch($this->rmsapiConnection->getKey());
-            }
-        }
+            $roundsLeft--;
+        } while ((isset($response->asArray()['next_page_url'])) && ($roundsLeft > 0));
 
         Heartbeat::query()->updateOrCreate([
             'code' => 'models_rmsapi_successful_fetch_warehouseId_'.$this->rmsapiConnection->location_id,
         ], [
             'error_message' => 'RMSAPI not synced for last hour WarehouseID: '.$this->rmsapiConnection->location_id,
             'expires_at' => now()->addHour()
-        ]);
-
-        Log::info('RMSAPI Downloaded updated products', [
-            'warehouse_code' => $this->rmsapiConnection->location_id,
-            'count'          => $response->asArray()['total'],
         ]);
 
         return true;
