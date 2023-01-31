@@ -64,8 +64,7 @@ class StoctakeSuggestionReport extends Report
             'points'                => DB::raw('sum(points)'),
             'quantity_in_stock'     => DB::raw('max(inventory.quantity)'),
             'suggestion_details'    => DB::raw("group_concat(" .
-                " concat(stocktake_suggestions.points, ' points - ', stocktake_suggestions.reason)" .
-                " separator '\n')"),
+                "concat(stocktake_suggestions.points, ' points - ', stocktake_suggestions.reason, CHAR(13))"),
         ];
 
         $this->casts = [
