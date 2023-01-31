@@ -15,6 +15,7 @@ use Illuminate\Support\Carbon;
  * @property int         $warehouse_id
  * @property int         $location_id
  * @property string      $price
+ * @property string      $cost
  * @property string      $sale_price
  * @property Carbon      $sale_price_start_date
  * @property Carbon      $sale_price_end_date
