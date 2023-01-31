@@ -2,29 +2,37 @@
 
 namespace App\Http\Resources;
 
+use App\Models\ProductPrice;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin ProductPrice
+ */
 class ProductPriceResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
-            'created_at'            => $this->created_at,
-            'deleted_at'            => $this->deleted_at,
             'id'                    => $this->id,
-            'location_id'           => $this->location_id,
-            'price'                 => $this->price,
             'product_id'            => $this->product_id,
+            'warehouse_id'          => $this->warehouse_id,
+            'warehouse_code'        => $this->warehouse_code,
+            'cost'                  => $this->cost,
+            'price'                 => $this->price,
             'sale_price'            => $this->sale_price,
             'sale_price_end_date'   => $this->sale_price_end_date,
             'sale_price_start_date' => $this->sale_price_start_date,
+            'created_at'            => $this->created_at,
             'updated_at'            => $this->updated_at,
+            'deleted_at'            => $this->deleted_at,
+            'location_id'           => $this->location_id,
         ];
     }
 }
