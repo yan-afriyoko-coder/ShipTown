@@ -162,6 +162,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
             ->first();
 
         if ($p->price !== $importedProduct->raw_import['price']
+            or $p->cost !== $importedProduct->raw_import['cost']
             or $p->sale_price !== $importedProduct->raw_import['sale_price']
             or $p->sale_price_start_date !== $importedProduct->raw_import['sale_price_start_date'] ?? '2000-01-01'
             or $p->sale_price_end_date !== $importedProduct->raw_import['sale_price_start_date'] ?? '2000-01-01'
