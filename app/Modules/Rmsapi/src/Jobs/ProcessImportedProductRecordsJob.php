@@ -46,20 +46,6 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
     {
         $maxRunCount = 3;
 
-        DB::statement('
-            DELETE FROM modules_rmsapi_products_imports
-            WHERE ID IN (
-              SELECT ID FROM (
-                SELECT min(id)
-                FROM `modules_rmsapi_products_imports`
-                WHERE when_processed IS NULL
-                AND reserved_at IS NULL
-                GROUP BY SKU
-                HAVING count(*) > 1
-              ) as tbl
-            )
-        ');
-
         do {
             $this->processImportedProducts(200);
             $maxRunCount--;

@@ -134,6 +134,21 @@ class ImportProductsJob implements ShouldQueue
         ]);
 
         DB::statement('
+            DELETE FROM modules_rmsapi_products_imports
+            WHERE ID IN (
+              SELECT ID FROM (
+                SELECT min(id)
+                FROM `modules_rmsapi_products_imports`
+                WHERE when_processed IS NULL
+                AND reserved_at IS NULL
+                AND sku IS NOT NULL
+                GROUP BY SKU
+                HAVING count(*) > 1
+              ) as tbl
+            )
+        ');
+
+        DB::statement('
             UPDATE modules_rmsapi_products_imports
             LEFT JOIN products_aliases
                 ON modules_rmsapi_products_imports.sku = products_aliases.alias
