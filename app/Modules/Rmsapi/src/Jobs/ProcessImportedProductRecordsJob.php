@@ -18,6 +18,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ProcessImportedProductRecordsJob implements ShouldQueue
@@ -44,6 +45,20 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
     public function handle()
     {
         $maxRunCount = 3;
+
+        DB::statement('
+            DELETE FROM modules_rmsapi_products_imports
+            WHERE ID IN (
+              SELECT ID FROM (
+                SELECT min(id)
+                FROM `modules_rmsapi_products_imports`
+                WHERE when_processed IS NULL
+                AND reserved_at IS NULL
+                GROUP BY SKU
+                HAVING count(*) > 1
+              ) as tbl
+            )
+        ');
 
         do {
             $this->processImportedProducts(200);
