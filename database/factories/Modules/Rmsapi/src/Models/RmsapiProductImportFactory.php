@@ -34,7 +34,7 @@ class RmsapiProductImportFactory extends Factory
            "price_a":0,
            "price_b":0,
            "price_c":0,
-           "item_code":"11200",
+           "item_code":"'. $this->faker->randomNumber(6).'",
            "sale_price":0,
            "category_id":9,
            "description":"R/C Glider",

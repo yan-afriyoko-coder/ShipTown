@@ -79,44 +79,45 @@ class ProductService
         return false;
     }
 
-    public static function merge(string $sku1, string $sku2)
+    public static function merge(string $skuToKeep, string $skuToMerge)
     {
-        /** @var Product $product1 */
-        $product1 = Product::findBySKU($sku1);
+        /** @var Product $productToKeep */
+        $productToKeep = Product::findBySKU($skuToKeep);
 
-        /** @var Product $product2 */
-        $product2 = Product::findBySKU($sku2);
+        /** @var Product $productToMerge */
+        $productToMerge = Product::findBySKU($skuToMerge);
 
-        // Merge product2 into product
-        $product2->update(['sku' => 'merged_to_'.$sku1.'_'.time()]);
-        $product2->aliases()->update(['product_id' => $product1->id]);
+        // Merge productToMerge into product
+        $productToMerge->update(['sku' => 'merged_to_'.$skuToKeep.'_'.time()]);
+        $productToMerge->aliases()->update(['product_id' => $productToKeep->id]);
 
-        ProductAlias::query()->updateOrCreate(['alias' => $sku2], ['product_id' => $product1->id]);
+        ProductAlias::query()->updateOrCreate(['alias' => $skuToMerge], ['product_id' => $productToKeep->id]);
 
         Inventory::query()
-            ->where(['product_id' => $product2->id])
+            ->where(['product_id' => $productToMerge->id])
             ->where('quantity_available', '!=', 0)
             ->get()
-            ->each(function (Inventory $p2_inventory) use ($product1, $product2) {
-                $p1_inventory = Inventory::query()
-                    ->where(['product_id' => $product1->id, 'warehouse_id' => $p2_inventory->warehouse_id])
+            ->each(function (Inventory $productToMergeInventory) use ($productToKeep, $productToMerge) {
+                $productToKeepInventory = Inventory::query()
+                    ->where([
+                        'product_id' => $productToKeep->id,
+                        'warehouse_id' => $productToMergeInventory->warehouse_id
+                    ])
                     ->first();
 
-                if ($p2_inventory->quantity != 0) {
-                    InventoryService::adjustQuantity(
-                        $p1_inventory,
-                        $p2_inventory->quantity,
-                        'merging from "'.$product2->sku.'"'
-                    );
+                InventoryService::adjustQuantity(
+                    $productToKeepInventory,
+                    $productToMergeInventory->quantity,
+                    'merging from "'.$productToMerge->sku.'"'
+                );
 
-                    InventoryService::adjustQuantity(
-                        $p2_inventory,
-                        -$p2_inventory->quantity,
-                        'merging to "'.$product1->sku.'"'
-                    );
-                }
+                InventoryService::adjustQuantity(
+                    $productToMergeInventory,
+                    -$productToMergeInventory->quantity,
+                    'merging to "'.$productToKeep->sku.'"'
+                );
 
-                $p2_inventory->update(['quantity_reserved' => 0]);
+                $productToMergeInventory->update(['quantity_reserved' => 0]);
             });
     }
 }
