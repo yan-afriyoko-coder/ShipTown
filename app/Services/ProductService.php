@@ -90,6 +90,7 @@ class ProductService
         // Merge productToMerge into product
         $productToMerge->update(['sku' => 'merged_to_'.$skuToKeep.'_'.time()]);
         $productToMerge->aliases()->update(['product_id' => $productToKeep->id]);
+        $productToMerge->tags()->delete();
 
         ProductAlias::query()->updateOrCreate(['alias' => $skuToMerge], ['product_id' => $productToKeep->id]);
 
