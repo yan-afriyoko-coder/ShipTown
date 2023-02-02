@@ -27,6 +27,10 @@ class OutdatedCountsJob implements ShouldQueue
 
     public function handle(): bool
     {
+        if (now()->month !== 1) {
+            return true;
+        }
+
         $reason = 'never counted';
         $points = 1;
 
@@ -52,9 +56,12 @@ class OutdatedCountsJob implements ShouldQueue
                 AND (
                     last_counted_at IS NULL
                     OR last_counted_at < NOW() - INTERVAL 12 MONTH
-                    OR last_counted_at < '2021-12-31 00:00:00'
+                    OR last_counted_at < '" . now()->startOfMonth()->format('Y-m-d H:i:s') ."'
                 )
-                AND (first_received_at IS NULL OR first_received_at < '2023-01-01 00:00:00')
+                AND (
+                    first_received_at IS NULL
+                    OR first_received_at < '" . now()->startOfMonth()->format('Y-m-d H:i:s') ."'
+                )
                 AND NOT EXISTS (
                     SELECT NULL
                     FROM stocktake_suggestions
