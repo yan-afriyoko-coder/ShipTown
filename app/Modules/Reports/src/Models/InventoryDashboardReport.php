@@ -27,7 +27,6 @@ class InventoryDashboardReport extends Report
             'warehouse_id'               => 'warehouses.id',
             'warehouse_code'             => 'warehouses.code',
             'missing_restock_levels'     => DB::raw('count(CASE WHEN inventory.restock_level <= 0 THEN 1 END)'),
-            'products_on_minus'          => DB::raw('count(CASE WHEN inventory.quantity_available < 0 THEN 1 END)'),
             'wh_products_available'      => DB::raw('count(*)'),
             'wh_products_out_of_stock'   => DB::raw('count(CASE WHEN inventory.quantity_available = 0 AND inventory.restock_level > 0 THEN 1 END)'),
             'wh_products_required'       => DB::raw('count(CASE WHEN inventory.quantity_required > 0 THEN 1 END)'),
