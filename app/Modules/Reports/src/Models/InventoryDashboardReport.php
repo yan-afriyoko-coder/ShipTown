@@ -24,11 +24,9 @@ class InventoryDashboardReport extends Report
         }
 
         $this->fields = [
-            'warehouse_id'               => 'inventory.warehouse_id',
-            'warehouse_code'             => 'inventory.warehouse_code',
-            'never_counted'              => DB::raw('count(CASE WHEN inventory.last_counted_at IS NULL THEN 1 END)'),
+            'warehouse_id'               => 'warehouses.id',
+            'warehouse_code'             => 'warehouses.code',
             'missing_restock_levels'     => DB::raw('count(CASE WHEN inventory.restock_level <= 0 THEN 1 END)'),
-            'products_on_minus'          => DB::raw('count(CASE WHEN inventory.quantity_available < 0 THEN 1 END)'),
             'wh_products_available'      => DB::raw('count(*)'),
             'wh_products_out_of_stock'   => DB::raw('count(CASE WHEN inventory.quantity_available = 0 AND inventory.restock_level > 0 THEN 1 END)'),
             'wh_products_required'       => DB::raw('count(CASE WHEN inventory.quantity_required > 0 THEN 1 END)'),
@@ -44,17 +42,17 @@ class InventoryDashboardReport extends Report
                 $join->on('inventory_source.product_id', '=', 'inventory.product_id');
             })
             ->leftJoin('products as product', 'inventory.product_id', '=', 'product.id')
+            ->rightJoin('warehouses', 'inventory.warehouse_id', '=', 'warehouses.id')
             ->where('inventory_source.warehouse_code', '=', '99')
             ->where('inventory_source.quantity_available', '>', 0)
             ->whereNotIn('inventory.warehouse_code', ['99','999','100'])
-            ->groupBy('inventory.warehouse_code', 'inventory.warehouse_id');
+            ->groupBy('warehouses.code', 'warehouses.id');
 
         $this->setPerPage(100);
 
         $this->casts = [
             'warehouse_id'                => 'integer',
             'warehouse_code'              => 'string',
-            'products_on_minus'           => 'float',
             'wh_products_available'       => 'float',
             'wh_products_out_of_stock'    => 'float',
             'wh_products_required'        => 'float',
