@@ -91,20 +91,6 @@
                                         <td class="text-right">{{ data_get($record, 'wh_products_out_of_stock') === 0 ? '-' : data_get($record, 'wh_products_out_of_stock')}}</td>
                                     </tr>
                                     <tr>
-                                        <td><a href='{{ url()->route('reports.restocking', [
-                                                        'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
-                                                        'sort' => '-warehouse_quantity',
-                                                        'filter[null]' => 'last_counted_at',
-                                                        'filter[inventory_source_warehouse_code]' => '99',
-                                                        'filter[warehouse_quantity_between]' => '1,99999999',
-                                                        'per_page' => '999',
-                                                    ]) }}'>
-                                                {{ __('Never Counted') }}
-                                            </a>
-                                        </td>
-                                        <td class="text-right">{{ data_get($record, 'never_counted') === 0 ? '-' : data_get($record, 'never_counted')}}</td>
-                                    </tr>
-                                    <tr>
                                         <td>
                                             <a href='{{ url()->route('reports.restocking', [
                                                         'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
@@ -211,33 +197,6 @@
                                             </a>
                                         </td>
                                         <td class="text-right">{{ data_get($record, 'wh_products_incoming') === 0 ? '-' : data_get($record, 'wh_products_incoming')}}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-
-                            <table class="table table-borderless">
-                                <thead>
-                                <tr>
-                                    <th scope="col">Never Counted</th>
-                                    <th scope="col" class="text-right"></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach ($data as $record)
-                                    <tr>
-                                        <td><a href='{{ url()->route('reports.restocking', [
-                                                        'filter[warehouse_code]' => data_get($record, 'warehouse_code'),
-                                                        'sort' => '-warehouse_quantity',
-                                                        'filter[null]' => 'last_counted_at',
-                                                        'filter[inventory_source_warehouse_code]' => '99',
-                                                        'filter[warehouse_quantity_between]' => '1,99999999',
-                                                        'per_page' => '999',
-                                                    ]) }}'>
-                                                {{ data_get($record, 'warehouse_code') }}
-                                            </a>
-                                        </td>
-                                        <td class="text-right">{{ data_get($record, 'never_counted') === 0 ? '-' : data_get($record, 'never_counted')}}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
