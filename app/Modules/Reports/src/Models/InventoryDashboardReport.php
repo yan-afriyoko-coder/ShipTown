@@ -53,7 +53,6 @@ class InventoryDashboardReport extends Report
         $this->casts = [
             'warehouse_id'                => 'integer',
             'warehouse_code'              => 'string',
-            'products_on_minus'           => 'float',
             'wh_products_available'       => 'float',
             'wh_products_out_of_stock'    => 'float',
             'wh_products_required'        => 'float',
