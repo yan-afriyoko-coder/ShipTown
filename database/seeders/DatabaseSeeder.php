@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Jobs\RunHourlyJobs;
+use App\Modules\QueueMonitor\src\QueueMonitorServiceProvider;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,6 +15,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        QueueMonitorServiceProvider::enableModule();
+
         $this->call([
             Demo\ConfigurationSeeder::class,
             Demo\WarehousesSeeder::class,

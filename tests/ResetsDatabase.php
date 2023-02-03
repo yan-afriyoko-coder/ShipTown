@@ -27,6 +27,7 @@ use App\Modules\MagentoApi\src\Models\MagentoProduct;
 use App\Modules\PrintNode\src\Models\Client;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Services\ModulesService;
+use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Tags\Tag;
 
@@ -75,6 +76,8 @@ trait ResetsDatabase
         DpdIreland::query()->forceDelete();
 
         ModulesService::updateModulesTable();
+
+//        DB::table('modules_queue_monitor_jobs')->truncate();
 
         // now re-register all the roles and permissions (clears cache and reloads relations)
         $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->registerPermissions();
