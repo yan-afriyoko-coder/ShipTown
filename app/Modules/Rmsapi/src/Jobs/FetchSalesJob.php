@@ -5,6 +5,7 @@ namespace App\Modules\Rmsapi\src\Jobs;
 use App\Modules\Rmsapi\src\Api\Client as RmsapiClient;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
+use App\Modules\Rmsapi\src\Models\RmsapiSaleImport;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
@@ -35,7 +36,7 @@ class FetchSalesJob implements ShouldQueue
      */
     public function __construct(int $rmsapiConnectionId)
     {
-        $this->rmsapiConnection = RmsapiConnection::find($rmsapiConnectionId);
+        $this->rmsapiConnection = RmsapiConnection::query()->find($rmsapiConnectionId);
     }
 
     /**
@@ -56,6 +57,11 @@ class FetchSalesJob implements ShouldQueue
 
         try {
             $response = RmsapiClient::GET($this->rmsapiConnection, 'api/transaction-entries', $params);
+
+            RmsapiSaleImport::query()->create([
+                'connection_id' => $this->rmsapiConnection->getKey(),
+                'raw_import'    => $response->getResult(),
+            ]);
         } catch (GuzzleException $e) {
             Log::warning('RMSAPI Failed product fetch', [
                 'code' => $e->getCode(),
