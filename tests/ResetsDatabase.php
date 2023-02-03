@@ -77,7 +77,7 @@ trait ResetsDatabase
 
         ModulesService::updateModulesTable();
 
-        DB::table('modules_queue_monitor_jobs')->truncate();
+//        DB::table('modules_queue_monitor_jobs')->truncate();
 
         // now re-register all the roles and permissions (clears cache and reloads relations)
         $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->registerPermissions();

@@ -39,15 +39,13 @@ class QueueMonitorServiceProvider extends BaseModuleServiceProvider
      */
     protected $listen = [];
 
-    /**
-     * @throws Exception
-     */
-    public function boot()
-    {
-        parent::boot();
 
-        $this->app->extend(Dispatcher::class, function ($dispatcher, $app) {
+    public static function loaded(): bool
+    {
+        app()->extend(Dispatcher::class, function ($dispatcher, $app) {
             return new QueueMonitorDispatcher($app, $dispatcher);
         });
+
+        return parent::loaded();
     }
 }

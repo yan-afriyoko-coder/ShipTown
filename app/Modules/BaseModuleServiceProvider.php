@@ -52,6 +52,13 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
         parent::boot();
     }
 
+    public static function loaded(): bool
+    {
+        // this method is fired when module booted and enabled
+        // return false if you want to prevent loading
+        return true;
+    }
+
 
     public static function enabling(): bool
     {
