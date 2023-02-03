@@ -5,7 +5,7 @@ namespace Tests\Unit\Jobs\Rmsapi;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Warehouse;
-use App\Modules\Rmsapi\src\Jobs\FetchSalesJob;
+use App\Modules\Rmsapi\src\Jobs\ImportSalesJob;
 use App\Modules\Rmsapi\src\Jobs\ImportProductsJob;
 use App\Modules\Rmsapi\src\Jobs\ImportShippingsJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
