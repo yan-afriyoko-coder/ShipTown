@@ -3,6 +3,7 @@
 namespace App\Modules\DataCollector\src\Jobs;
 
 use App\Models\DataCollection;
+use App\Models\DataCollectionTransferIn;
 use App\Models\DataCollectionTransferOut;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,7 +16,7 @@ use romanzipp\QueueMonitor\Traits\IsMonitored;
 /**
  * Class SyncCheckFailedProductsJob.
  */
-class EnsureAllTransferredOutJob implements ShouldQueue
+class EnsureCorrectlyArchived implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -25,9 +26,7 @@ class EnsureAllTransferredOutJob implements ShouldQueue
 
     public function handle()
     {
-        DataCollection::onlyTrashed()
-            ->distinct()
-            ->select('data_collections.id')
+        DataCollection::onlyTrashed()->distinct()->select('data_collections.id')
             ->rightJoin('data_collection_records', function ($join) {
                 $join->on('data_collection_records.data_collection_id', '=', 'data_collections.id');
                 $join->on('data_collection_records.quantity_scanned', '!=', DB::raw(0));
@@ -36,6 +35,17 @@ class EnsureAllTransferredOutJob implements ShouldQueue
             ->get()
             ->each(function (DataCollection $dataCollection) {
                 TransferOutJob::dispatch($dataCollection->id);
+            });
+
+        DataCollection::onlyTrashed()->distinct()->select('data_collections.id')
+            ->rightJoin('data_collection_records', function ($join) {
+                $join->on('data_collection_records.data_collection_id', '=', 'data_collections.id');
+                $join->on('data_collection_records.quantity_scanned', '!=', DB::raw(0));
+            })
+            ->where('type', DataCollectionTransferIn::class)
+            ->get()
+            ->each(function (DataCollection $dataCollection) {
+                TransferInJob::dispatch($dataCollection->id);
             });
     }
 }

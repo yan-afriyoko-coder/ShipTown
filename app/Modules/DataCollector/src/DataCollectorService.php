@@ -9,6 +9,7 @@ use App\Models\DataCollectionTransferIn;
 use App\Models\DataCollectionTransferOut;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
+use App\Modules\DataCollector\src\Jobs\TransferInJob;
 use App\Modules\DataCollector\src\Jobs\TransferOutJob;
 use App\Services\InventoryService;
 use Illuminate\Support\Facades\Auth;
@@ -20,9 +21,10 @@ class DataCollectorService
     public static function runAction(DataCollection $dataCollection, $action)
     {
         if ($action === 'transfer_in_scanned') {
-            DB::transaction(function () use ($dataCollection) {
-                self::transferInScanned($dataCollection);
-            });
+            $dataCollection->update(['type' => DataCollectionTransferIn::class]);
+            $dataCollection->delete();
+
+            TransferInJob::dispatch($dataCollection->id);
             return;
         }
 
@@ -47,45 +49,7 @@ class DataCollectorService
             DB::transaction(function () use ($dataCollection) {
                 self::importAsStocktake($dataCollection);
             });
-            return;
         }
-    }
-
-    public static function transferInScanned(DataCollection $dataCollection)
-    {
-        $dataCollection->update(['type' => DataCollectionTransferIn::class]);
-
-        $dataCollection->delete();
-
-        $dataCollection->records()
-            ->where('quantity_scanned', '!=', DB::raw(0))
-            ->each(function (DataCollectionRecord $record) {
-                $unique_reference_id = implode(':', [
-                    'dataCollection',
-                    $record->data_collection_id,
-                    'uuid',
-                    Guid::uuid4()->toString(),
-                ]);
-
-                if (! InventoryMovement::query()->where('custom_unique_reference_id', $unique_reference_id)->exists()) {
-                    $inventory = Inventory::firstOrCreate([
-                        'warehouse_id' => $record->dataCollection->warehouse_id,
-                        'product_id' => $record->product_id
-                    ], []);
-
-                    InventoryService::adjustQuantity(
-                        $inventory,
-                        $record->quantity_scanned,
-                        'data collection transfer in',
-                        $unique_reference_id
-                    );
-
-                    $record->update([
-                        'total_transferred_in' => $record->quantity_scanned,
-                        'quantity_scanned' => 0
-                    ]);
-                }
-            });
     }
 
     public static function transferScannedTo(DataCollection $sourceDataCollection, int $warehouse_id): DataCollection
@@ -163,11 +127,34 @@ class DataCollectorService
     /**
      * @param DataCollectionRecord $record
      */
+    public static function transferInRecord(DataCollectionRecord $record): void
+    {
+        $custom_unique_reference_id = 'data_collection_record_id:' . $record->getKey();
+
+        $inventory = Inventory::firstOrCreate([
+            'warehouse_id' => $record->dataCollection->warehouse_id,
+            'product_id' => $record->product_id
+        ], []);
+
+        InventoryService::adjustQuantity(
+            $inventory,
+            $record->quantity_scanned,
+            'data collection transfer in',
+            $custom_unique_reference_id
+        );
+
+        $record->update([
+            'total_transferred_in' => $record->total_transferred_in + $record->quantity_scanned,
+            'quantity_scanned' => 0
+        ]);
+    }
+
+    /**
+     * @param DataCollectionRecord $record
+     */
     public static function transferOutRecord(DataCollectionRecord $record): void
     {
-        $custom_unique_reference_id = implode(':', [
-            'data_collection_record_id', $record->getKey()
-        ]);
+        $custom_unique_reference_id = 'data_collection_record_id:' . $record->getKey();
 
         $inventory = Inventory::firstOrCreate([
             'warehouse_id' => $record->dataCollection->warehouse_id,
