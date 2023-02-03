@@ -15,7 +15,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class FetchSalesJob implements ShouldQueue
+class ImportSalesJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -50,18 +50,13 @@ class FetchSalesJob implements ShouldQueue
         Log::info('RMSAPI Starting FetchSalesJob', ['rmsapi_connection_id' => $this->rmsapiConnection->getKey()]);
 
         $params = [
-            'per_page'            => config('rmsapi.import.products.per_page'),
+            'per_page'            => 500,
             'order_by'            => 'db_change_stamp:asc',
-            'min:db_change_stamp' => 0, // $this->rmsapiConnection->products_last_timestamp,
+            'min:db_change_stamp' => $this->rmsapiConnection->sales_last_timestamp,
         ];
 
         try {
             $response = RmsapiClient::GET($this->rmsapiConnection, 'api/transaction-entries', $params);
-
-            RmsapiSaleImport::query()->create([
-                'connection_id' => $this->rmsapiConnection->getKey(),
-                'raw_import'    => $response->getResult(),
-            ]);
         } catch (GuzzleException $e) {
             Log::warning('RMSAPI Failed product fetch', [
                 'code' => $e->getCode(),
@@ -71,15 +66,11 @@ class FetchSalesJob implements ShouldQueue
             return false;
         }
 
-//
-//        if ($response->getResult()) {
-//            $this->saveImportedProducts($response->getResult());
-//
-//            if (isset($response->asArray()['next_page_url'])) {
-//                ImportProductsJob::dispatch($this->rmsapiConnection->getKey());
-//            }
-//        }
-//
+
+        if ($response->getResult()) {
+            $this->saveImportedRecords($response->getResult());
+        }
+
 //        Heartbeat::query()->updateOrCreate([
 //            'code' => 'models_rmsapi_successful_fetch_warehouseId_'.$this->rmsapiConnection->location_id,
 //        ], [
@@ -87,38 +78,37 @@ class FetchSalesJob implements ShouldQueue
 //            'expires_at' => now()->addHour()
 //        ]);
 //
-//        Log::info('RMSAPI Downloaded updated products', [
-//            'warehouse_code' => $this->rmsapiConnection->location_id,
-//            'count'          => $response->asArray()['total'],
-//        ]);
+        Log::info('RMSAPI Downloaded transactions', [
+            'warehouse_code' => $this->rmsapiConnection->location_id,
+            'count'          => $response->asArray()['total'],
+            ''
+        ]);
 
         return true;
     }
 
-    public function saveImportedProducts(array $productList)
+    public function saveImportedRecords(array $records)
     {
-        // we will use the same time for all records to speed up process
         $time = now()->toDateTimeString();
 
-        $productsCollection = collect($productList);
+        $recordsCollection = collect($records);
 
-        $insertData = $productsCollection->map(function ($product) use ($time) {
+        $data = $recordsCollection->map(function ($record) use ($time) {
             return [
                 'connection_id' => $this->rmsapiConnection->getKey(),
-                'batch_uuid'    => $this->batch_uuid,
-                'raw_import'    => json_encode($product),
+                'raw_import'    => json_encode($record),
                 'created_at'    => $time,
                 'updated_at'    => $time,
             ];
         });
 
-        // we will use insert instead of create as this is way faster
-        // method of inputting bulk of records to database
-        // this won't invoke any events (not 100% sure)
-        RmsapiProductImport::query()->insert($insertData->toArray());
+        // for performance reasons we will use insert instead of create
+        RmsapiSaleImport::query()->insert($data->toArray());
 
-        RmsapiConnection::find($this->rmsapiConnection->getKey())->update([
-            'products_last_timestamp' => $productsCollection->last()['db_change_stamp'],
-        ]);
+        RmsapiConnection::query()
+            ->where(['id' => $this->rmsapiConnection->getKey()])
+            ->update([
+                'sales_last_timestamp' => $recordsCollection->last()['db_change_stamp'],
+            ]);
     }
 }
