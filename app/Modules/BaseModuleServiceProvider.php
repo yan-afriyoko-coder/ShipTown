@@ -114,6 +114,8 @@ abstract class BaseModuleServiceProvider extends EventServiceProvider
 
         App::register(get_called_class());
 
+        self::loaded();
+
         return true;
     }
 
