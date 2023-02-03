@@ -15,11 +15,15 @@ class QueueMonitorDispatcher extends Dispatcher
 
     public function dispatchToQueue($command)
     {
-        DB::table('modules_queue_monitor_jobs')->insert([
-            'uuid' => Guid::uuid4()->toString(),
-            'job_class' => get_class($command),
-            'dispatched_at' => now(),
-        ]);
+        try {
+            DB::table('modules_queue_monitor_jobs')->insert([
+                'uuid' => Guid::uuid4()->toString(),
+                'job_class' => get_class($command),
+                'dispatched_at' => now(),
+            ]);
+        } catch (\Exception $e) {
+            // do nothing
+        }
 
         return parent::dispatchToQueue($command);
     }
