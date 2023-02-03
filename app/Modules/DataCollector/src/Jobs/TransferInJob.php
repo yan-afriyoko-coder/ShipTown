@@ -4,9 +4,8 @@ namespace App\Modules\DataCollector\src\Jobs;
 
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
-use App\Models\DataCollectionTransferOut;
+use App\Models\DataCollectionTransferIn;
 use App\Modules\DataCollector\src\DataCollectorService;
-use App\Services\InventoryService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -37,7 +36,7 @@ class TransferInJob implements ShouldQueue
     {
         /** @var DataCollection $dataCollection */
         $dataCollection = DataCollection::withTrashed()->findOrFail($this->data_collection_id);
-        $dataCollection->update(['type' => DataCollectionTransferOut::class]);
+        $dataCollection->update(['type' => DataCollectionTransferIn::class]);
         $dataCollection->delete();
 
         $dataCollection->records()
