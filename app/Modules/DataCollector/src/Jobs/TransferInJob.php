@@ -6,6 +6,7 @@ use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
 use App\Models\DataCollectionTransferOut;
 use App\Modules\DataCollector\src\DataCollectorService;
+use App\Services\InventoryService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -17,7 +18,7 @@ use romanzipp\QueueMonitor\Traits\IsMonitored;
 /**
  * Class SyncCheckFailedProductsJob.
  */
-class TransferOutJob implements ShouldQueue
+class TransferInJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -45,7 +46,7 @@ class TransferOutJob implements ShouldQueue
                 $records->each(function (DataCollectionRecord $record) {
                     retry(5, function () use ($record) {
                         DB::transaction(function () use ($record) {
-                            DataCollectorService::transferOutRecord($record);
+                            DataCollectorService::transferInRecord($record);
                         });
                     }, 1000);
                 });

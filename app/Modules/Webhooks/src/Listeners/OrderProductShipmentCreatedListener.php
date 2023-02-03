@@ -17,7 +17,5 @@ class OrderProductShipmentCreatedListener
             'reserved_at' => null,
             'published_at' => null,
         ]);
-
-        PublishOrderProductShipmentWebhooksJob::dispatchAfterResponse();
     }
 }
