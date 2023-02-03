@@ -6,6 +6,7 @@ use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
 use App\Models\DataCollectionStocktake;
 use App\Models\DataCollectionTransferIn;
+use App\Models\DataCollectionTransferOut;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use App\Modules\DataCollector\src\Jobs\TransferOutJob;
@@ -26,6 +27,9 @@ class DataCollectorService
         }
 
         if ($action === 'transfer_out_scanned') {
+            $dataCollection->update(['type' => DataCollectionTransferOut::class]);
+            $dataCollection->delete();
+
             TransferOutJob::dispatch($dataCollection->id);
             return;
         }

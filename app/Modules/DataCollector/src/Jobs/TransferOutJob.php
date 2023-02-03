@@ -35,8 +35,7 @@ class TransferOutJob implements ShouldQueue
     public function handle()
     {
         /** @var DataCollection $dataCollection */
-        $dataCollection = DataCollection::withTrashed()
-            ->findOrFail($this->data_collection_id);
+        $dataCollection = DataCollection::withTrashed()->findOrFail($this->data_collection_id);
         $dataCollection->update(['type' => DataCollectionTransferOut::class]);
         $dataCollection->delete();
 
