@@ -17,7 +17,7 @@ class AddCommentColumnToModulesRmsapiSalesImportTable extends Migration
     {
         RmsapiSaleImport::query()->forceDelete();
 
-        Schema::table('modules_rmsapi_sales_import', function (Blueprint $table) {
+        Schema::table('modules_rmsapi_sales_imports', function (Blueprint $table) {
             $table->string('sku')->nullable()->after('processed_at');
             $table->decimal('price', 20)->nullable()->after('sku');
             $table->decimal('quantity', 20)->nullable()->after('price');
