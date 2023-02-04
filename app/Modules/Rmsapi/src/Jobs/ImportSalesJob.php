@@ -2,6 +2,7 @@
 
 namespace App\Modules\Rmsapi\src\Jobs;
 
+use App\Models\Heartbeat;
 use App\Modules\Rmsapi\src\Api\Client as RmsapiClient;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
@@ -14,6 +15,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class ImportSalesJob implements ShouldQueue
 {
@@ -22,29 +24,13 @@ class ImportSalesJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    /**
-     * @var RmsapiConnection
-     */
     private RmsapiConnection $rmsapiConnection;
 
-    /**
-     * Create a new job instance.
-     *
-     * @param int $rmsapiConnectionId
-     *
-     * @throws Exception
-     */
     public function __construct(int $rmsapiConnectionId)
     {
         $this->rmsapiConnection = RmsapiConnection::query()->find($rmsapiConnectionId);
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return boolean
-     *
-     */
     public function handle(): bool
     {
         Log::info('RMSAPI Starting FetchSalesJob', ['rmsapi_connection_id' => $this->rmsapiConnection->getKey()]);
@@ -58,7 +44,7 @@ class ImportSalesJob implements ShouldQueue
         try {
             $response = RmsapiClient::GET($this->rmsapiConnection, 'api/transaction-entries', $params);
         } catch (GuzzleException $e) {
-            Log::warning('RMSAPI Failed product fetch', [
+            Log::warning('RMSAPI Failed sales fetch', [
                 'code' => $e->getCode(),
                 'message' => $e->getMessage(),
             ]);
@@ -66,21 +52,20 @@ class ImportSalesJob implements ShouldQueue
             return false;
         }
 
-
         if ($response->getResult()) {
             $this->saveImportedRecords($response->getResult());
         }
 
-//        Heartbeat::query()->updateOrCreate([
-//            'code' => 'models_rmsapi_successful_fetch_warehouseId_'.$this->rmsapiConnection->location_id,
-//        ], [
-//            'error_message' => 'RMSAPI not synced for last hour WarehouseID: '.$this->rmsapiConnection->location_id,
-//            'expires_at' => now()->addHour()
-//        ]);
-//
-        Log::info('RMSAPI Downloaded transactions', [
+        Heartbeat::query()->updateOrCreate([
+            'code' => 'models_rmsapi_successful_fetch_warehouseId_'.$this->rmsapiConnection->location_id,
+        ], [
+            'error_message' => 'RMSAPI not synced for last hour WarehouseID: '.$this->rmsapiConnection->location_id,
+            'expires_at' => now()->addHour()
+        ]);
+
+        Log::info('RMSAPI Downloaded sales', [
             'warehouse_code' => $this->rmsapiConnection->location_id,
-            'count'          => $response->asArray()['total'],
+            'left'          => $response->asArray()['total'],
             ''
         ]);
 
@@ -94,16 +79,20 @@ class ImportSalesJob implements ShouldQueue
         $recordsCollection = collect($salesRecords);
 
         $data = $recordsCollection->map(function ($saleRecord) use ($time) {
+            $isImportedFromPM = Str::startsWith($saleRecord['comment'], ['PM_OrderProductShipment_']);
+
             return [
                 'connection_id'         => $this->rmsapiConnection->getKey(),
-                'sku'                   => data_get($saleRecord, 'sku', ''),
-                'price'                 => data_get($saleRecord, 'price', ''),
-                'quantity'              => data_get($saleRecord, 'quantity', ''),
-                'transaction_time'      => data_get($saleRecord, 'transaction_time', ''),
-                'transaction_number'    => data_get($saleRecord, 'transaction_number', ''),
-                'transaction_entry_id'  => data_get($saleRecord, 'transaction_entry_id', ''),
-                'comment'               => data_get($saleRecord, 'comment', ''),
+                'sku'                   => $saleRecord['sku'],
+                'price'                 => $saleRecord['price'],
+                'quantity'              => $saleRecord['quantity'],
+                'transaction_time'      => $saleRecord['transaction_time'],
+                'transaction_number'    => $saleRecord['transaction_number'],
+                'transaction_entry_id'  => $saleRecord['transaction_entry_id'],
+                'comment'               => $saleRecord['comment'],
                 'raw_import'            => json_encode($saleRecord),
+                'reserved_at'           => $isImportedFromPM ? $time : null,
+                'processed_at'          => $isImportedFromPM ? $time : null,
                 'created_at'            => $time,
                 'updated_at'            => $time,
             ];
