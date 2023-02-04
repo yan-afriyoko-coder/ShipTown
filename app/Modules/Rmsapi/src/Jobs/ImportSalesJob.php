@@ -87,18 +87,25 @@ class ImportSalesJob implements ShouldQueue
         return true;
     }
 
-    public function saveImportedRecords(array $records)
+    public function saveImportedRecords(array $salesRecords)
     {
         $time = now()->toDateTimeString();
 
-        $recordsCollection = collect($records);
+        $recordsCollection = collect($salesRecords);
 
-        $data = $recordsCollection->map(function ($record) use ($time) {
+        $data = $recordsCollection->map(function ($saleRecord) use ($time) {
             return [
-                'connection_id' => $this->rmsapiConnection->getKey(),
-                'raw_import'    => json_encode($record),
-                'created_at'    => $time,
-                'updated_at'    => $time,
+                'connection_id'         => $this->rmsapiConnection->getKey(),
+                'sku'                   => data_get($saleRecord, 'sku', ''),
+                'price'                 => data_get($saleRecord, 'price', ''),
+                'quantity'              => data_get($saleRecord, 'quantity', ''),
+                'transaction_time'      => data_get($saleRecord, 'transaction_time', ''),
+                'transaction_number'    => data_get($saleRecord, 'transaction_number', ''),
+                'transaction_entry_id'  => data_get($saleRecord, 'transaction_entry_id', ''),
+                'comment'               => data_get($saleRecord, 'comment', ''),
+                'raw_import'            => json_encode($saleRecord),
+                'created_at'            => $time,
+                'updated_at'            => $time,
             ];
         });
 

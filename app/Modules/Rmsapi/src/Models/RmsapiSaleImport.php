@@ -12,28 +12,16 @@ use Illuminate\Support\Carbon;
  * App\Models\RmsapiProductImport.
  *
  * @property int         $id
- * @property int         $connection_id
- * @property string|null $batch_uuid
  * @property Carbon|null $reserved_at
+ * @property int         $connection_id
  * @property Carbon|null $when_processed
  * @property int|null    $product_id
  * @property string|null $sku
  * @property array       $raw_import
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property string|null $comment
  *
- * @method static Builder|RmsapiProductImport newModelQuery()
- * @method static Builder|RmsapiProductImport newQuery()
- * @method static Builder|RmsapiProductImport query()
- * @method static Builder|RmsapiProductImport whereBatchUuid($value)
- * @method static Builder|RmsapiProductImport whereConnectionId($value)
- * @method static Builder|RmsapiProductImport whereCreatedAt($value)
- * @method static Builder|RmsapiProductImport whereId($value)
- * @method static Builder|RmsapiProductImport whereProductId($value)
- * @method static Builder|RmsapiProductImport whereRawImport($value)
- * @method static Builder|RmsapiProductImport whereSku($value)
- * @method static Builder|RmsapiProductImport whereUpdatedAt($value)
- * @method static Builder|RmsapiProductImport whereWhenProcessed($value)
  * @mixin Eloquent
  */
 class RmsapiSaleImport extends Model
@@ -46,6 +34,13 @@ class RmsapiSaleImport extends Model
         'connection_id',
         'reserved_at',
         'when_processed',
+        'sku',
+        'price',
+        'quantity',
+        'transaction_time',
+        'transaction_number',
+        'transaction_entry_id',
+        'comment',
         'raw_import',
     ];
 
