@@ -46,7 +46,7 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
     public function handle()
     {
         RmsapiSaleImport::query()
-            ->whereNull('when_processed')
+            ->whereNull('processed_at')
             ->where('comment', 'like', 'PM_OrderProductShipment_%')
             ->update(['reserved_at' => now(), 'processed_at' => now()]);
 
