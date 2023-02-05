@@ -39,11 +39,6 @@ class RunWarehouseJobs implements ShouldQueue
             new ProcessImportedSalesRecordsJob($this->connection_id),
         ])->dispatch();
 
-        Bus::chain([
-            new ImportProductsJob($this->connection_id),
-            new ProcessImportedProductRecordsJob($this->connection_id),
-        ])->dispatch();
-
         ImportShippingsJob::dispatch($this->connection_id);
     }
 }
