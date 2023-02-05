@@ -2,6 +2,7 @@
 
 namespace App\Modules\Rmsapi\src;
 
+use App\Events\Every10minEvent;
 use App\Events\EveryMinuteEvent;
 use App\Events\HourlyEvent;
 use App\Events\SyncRequestedEvent;
@@ -41,6 +42,10 @@ class RmsapiModuleServiceProvider extends BaseModuleServiceProvider
 
         EveryMinuteEvent::class => [
             Listeners\EveryMinuteEventListener::class,
+        ],
+
+        Every10minEvent::class => [
+            Listeners\Every10minEventListener::class,
         ],
 
         HourlyEvent::class => [
