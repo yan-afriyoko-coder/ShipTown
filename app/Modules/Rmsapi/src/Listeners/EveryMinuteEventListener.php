@@ -6,6 +6,7 @@ use App\Modules\Rmsapi\src\Jobs\ImportProductsJob;
 use App\Modules\Rmsapi\src\Jobs\ImportSalesJob;
 use App\Modules\Rmsapi\src\Jobs\ImportShippingsJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
+use App\Modules\Rmsapi\src\Jobs\RunWarehouseJobs;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use Illuminate\Support\Facades\Log;
@@ -15,10 +16,7 @@ class EveryMinuteEventListener
     public function handle()
     {
         foreach (RmsapiConnection::all() as $rmsapiConnection) {
-            ImportSalesJob::dispatch($rmsapiConnection->id);
-            ImportProductsJob::dispatch($rmsapiConnection->id);
-            ImportShippingsJob::dispatch($rmsapiConnection->id);
-            ProcessImportedProductRecordsJob::dispatch($rmsapiConnection->id);
+            RunWarehouseJobs::dispatch($rmsapiConnection->id);
 
             Log::debug('RMSAPI Sync jobs dispatched', [
                 'warehouse_code' => $rmsapiConnection->location_id,
