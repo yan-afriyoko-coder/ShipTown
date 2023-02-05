@@ -16,16 +16,6 @@ class Every10minEventListener
      */
     public function handle()
     {
-        foreach (RmsapiConnection::all() as $rmsapiConnection) {
-            Bus::chain([
-                new ImportProductsJob($rmsapiConnection->id),
-                new ProcessImportedProductRecordsJob($rmsapiConnection->id),
-            ])->dispatch();
-
-            Log::debug('RMSAPI Sync jobs dispatched', [
-                'warehouse_code' => $rmsapiConnection->location_id,
-                'connection_id' => $rmsapiConnection->id
-            ]);
-        }
+        //
     }
 }
