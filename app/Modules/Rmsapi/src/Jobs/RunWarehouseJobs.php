@@ -34,7 +34,6 @@ class RunWarehouseJobs implements ShouldQueue
     public function handle()
     {
         ImportSalesJob::dispatchSync($this->connection_id);
-        ExcludeOrderShipmentImportsJob::dispatchSync($this->connection_id);
         ProcessImportedSalesRecordsJob::dispatchSync($this->connection_id);
 
         ImportProductsJob::dispatchSync($this->connection_id);
