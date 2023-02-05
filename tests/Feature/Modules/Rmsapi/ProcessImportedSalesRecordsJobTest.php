@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Modules\Rmsapi;
 
+use App\Models\Product;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedSalesRecordsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiSaleImport;
@@ -11,16 +12,21 @@ class ProcessImportedSalesRecordsJobTest extends TestCase
 {
     public function testIfImportsSale()
     {
-        /** @var RmsapiConnection $rmsapiConnection */
-        $rmsapiConnection = RmsapiConnection::factory()->create();
-
+        // prepare
         /** @var RmsapiSaleImport $saleRecord */
-        $saleRecord = RmsapiSaleImport::create([
-            'connection_id' => $rmsapiConnection->id,
-            'comment' => ''
-        ]);
+        $saleRecord = RmsapiSaleImport::factory()->create();
 
-        ProcessImportedSalesRecordsJob::dispatchSync($rmsapiConnection->id);
+        // execute
+        ProcessImportedSalesRecordsJob::dispatchSync($saleRecord->rmsapiConnection->id);
+
+        // assert
+        $product = Product::findBySKU($saleRecord->sku);
+
+        $this->assertDatabaseHas('inventory_movements', [
+            'product_id' => $product->getKey(),
+            'description' => 'rms_sale',
+            'quantity_delta' => $saleRecord->quantity * -1,
+        ]);
 
         $this->assertDatabaseMissing('modules_rmsapi_sales_imports', [
             'id' => $saleRecord->id,

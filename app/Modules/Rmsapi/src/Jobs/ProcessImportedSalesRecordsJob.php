@@ -4,22 +4,15 @@ namespace App\Modules\Rmsapi\src\Jobs;
 
 use App\Models\Inventory;
 use App\Models\Product;
-use App\Models\ProductAlias;
-use App\Models\ProductPrice;
-use App\Modules\Rmsapi\src\Models\RmsapiConnection;
-use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Models\RmsapiSaleImport;
 use App\Services\InventoryService;
 use App\Traits\IsMonitored;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ProcessImportedSalesRecordsJob implements ShouldQueue
@@ -62,6 +55,7 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
     {
         $reservationTime = now();
 
+        // reserve records
         RmsapiSaleImport::query()
             ->where('connection_id', $this->connection_id)
             ->where('comment', 'not like', 'PM_OrderProductShipment_%')
@@ -69,7 +63,8 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
             ->limit($batch_size)
             ->update(['reserved_at' => $reservationTime]);
 
-        $records = RmsapiSaleImport::query()
+        // process records
+        RmsapiSaleImport::query()
             ->where([
                 'connection_id' => $this->connection_id,
                 'reserved_at' => $reservationTime
@@ -77,21 +72,39 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
             ->whereNull('processed_at')
             ->where('comment', 'not like', 'PM_OrderProductShipment_%')
             ->orderBy('id')
-            ->get();
-
-        $records->each(function (RmsapiSaleImport $salesRecord) {
-            try {
-                retry(3, function () use ($salesRecord) {
-                    $this->import($salesRecord);
-                }, 100);
-            } catch (Exception $e) {
-                report($e);
-            }
-        });
+            ->get()
+            ->each(function (RmsapiSaleImport $salesRecord) {
+                try {
+                    retry(3, function () use ($salesRecord) {
+                        $this->import($salesRecord);
+                    }, 100);
+                } catch (Exception $e) {
+                    report($e);
+                    Log::emergency($e->getMessage(), $e->getTrace());
+                }
+            });
     }
 
     private function import(RmsapiSaleImport $salesRecord)
     {
+        $product = Product::query()
+            ->whereHas('aliases', function ($join) use ($salesRecord) {
+                $join->where('alias', $salesRecord->sku);
+            })
+            ->first();
+
+        $inventory = Inventory::query()
+            ->where('product_id', $product->id)
+            ->where('warehouse_id', $salesRecord->rmsapiConnection->warehouse_id)
+            ->first();
+
+        InventoryService::adjustQuantity(
+            $inventory,
+            $salesRecord->quantity * -1,
+            'rms_sale',
+            $salesRecord->transaction_entry_id
+        );
+
         $salesRecord->update(['processed_at' => now()]);
     }
 }

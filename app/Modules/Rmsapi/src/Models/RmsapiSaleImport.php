@@ -3,8 +3,8 @@
 namespace App\Modules\Rmsapi\src\Models;
 
 use App\BaseModel;
-use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
@@ -14,14 +14,18 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $reserved_at
  * @property int         $connection_id
  * @property Carbon|null $when_processed
- * @property int|null    $product_id
  * @property string|null $sku
- * @property array       $raw_import
+ * @property float|null  $quantity
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property Carbon|null $transaction_time
+ * @property int|null    $transaction_number
+ * @property int|null    $transaction_entry_id
  * @property string|null $comment
+ * @property array       $raw_import
  *
- * @mixin Eloquent
+ * @property RmsapiConnection $rmsapiConnection
+ *
  */
 class RmsapiSaleImport extends BaseModel
 {
@@ -54,4 +58,9 @@ class RmsapiSaleImport extends BaseModel
     protected $attributes = [
         'raw_import' => '{}',
     ];
+
+    public function rmsapiConnection(): BelongsTo
+    {
+        return $this->belongsTo(RmsapiConnection::class, 'connection_id');
+    }
 }
