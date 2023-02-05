@@ -39,7 +39,6 @@ class ImportProductsJob implements ShouldQueue
      *
      * @param int $rmsapiConnectionId
      *
-     * @throws Exception
      */
     public function __construct(int $rmsapiConnectionId)
     {
