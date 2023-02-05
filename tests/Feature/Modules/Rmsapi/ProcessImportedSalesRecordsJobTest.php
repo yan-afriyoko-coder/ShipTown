@@ -9,7 +9,26 @@ use Tests\TestCase;
 
 class ProcessImportedSalesRecordsJobTest extends TestCase
 {
-    public function testExample()
+    public function testIfImportsSale()
+    {
+        /** @var RmsapiConnection $rmsapiConnection */
+        $rmsapiConnection = RmsapiConnection::factory()->create();
+
+        /** @var RmsapiSaleImport $saleRecord */
+        $saleRecord = RmsapiSaleImport::create([
+            'connection_id' => $rmsapiConnection->id,
+            'comment' => ''
+        ]);
+
+        ProcessImportedSalesRecordsJob::dispatchSync($rmsapiConnection->id);
+
+        $this->assertDatabaseMissing('modules_rmsapi_sales_imports', [
+            'id' => $saleRecord->id,
+            'processed_at' => null,
+        ]);
+    }
+
+    public function testIfSkipsOrderProductShipmentsTransactions()
     {
         /** @var RmsapiConnection $rmsapiConnection */
         $rmsapiConnection = RmsapiConnection::factory()->create();
