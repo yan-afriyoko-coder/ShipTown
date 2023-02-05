@@ -3,6 +3,7 @@
 namespace App\Modules\Rmsapi\src\Jobs;
 
 use App\Models\Inventory;
+use App\Models\InventoryMovement;
 use App\Models\Product;
 use App\Modules\Rmsapi\src\Models\RmsapiSaleImport;
 use App\Services\InventoryService;
@@ -13,6 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ProcessImportedSalesRecordsJob implements ShouldQueue
@@ -76,8 +78,10 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
             ->each(function (RmsapiSaleImport $salesRecord) {
                 try {
                     retry(3, function () use ($salesRecord) {
-                        $this->import($salesRecord);
-                    }, 100);
+                        DB::transaction(function () use ($salesRecord) {
+                            $this->import($salesRecord);
+                        });
+                    }, 1000);
                 } catch (Exception $e) {
                     report($e);
                     Log::emergency($e->getMessage(), $e->getTrace());
@@ -87,6 +91,13 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
 
     private function import(RmsapiSaleImport $salesRecord)
     {
+        $unique_reference_id = implode(':', ['rms_transaction_entry_id', $salesRecord->transaction_entry_id]);
+
+        if (InventoryMovement::query()->where('custom_unique_reference_id', $unique_reference_id)->exists()) {
+            $salesRecord->update(['processed_at' => now()]);
+            return;
+        }
+
         $product = Product::query()
             ->whereHas('aliases', function ($join) use ($salesRecord) {
                 $join->where('alias', $salesRecord->sku);
@@ -102,7 +113,7 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
             $inventory,
             $salesRecord->quantity * -1,
             'rms_sale',
-            $salesRecord->transaction_entry_id
+            $unique_reference_id
         );
 
         $salesRecord->update(['processed_at' => now()]);

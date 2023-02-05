@@ -244,10 +244,13 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
         $records->each(function (RmsapiProductImport $productImport) {
             try {
                 retry(3, function () use ($productImport) {
-                    $this->import($productImport);
-                }, 100);
+                    DB::transaction(function () use ($productImport) {
+                        $this->import($productImport);
+                    });
+                }, 1000);
             } catch (Exception $e) {
                 report($e);
+                Log::emergency($e->getMessage(), $e->getTrace());
             }
         });
     }
