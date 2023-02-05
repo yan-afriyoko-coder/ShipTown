@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Bus;
 
 class RunWarehouseJobs implements ShouldQueue
 {
@@ -33,11 +34,15 @@ class RunWarehouseJobs implements ShouldQueue
      */
     public function handle()
     {
-        ImportSalesJob::dispatchSync($this->connection_id);
-        ProcessImportedSalesRecordsJob::dispatchSync($this->connection_id);
+        Bus::chain([
+            new ImportSalesJob($this->connection_id),
+            new ProcessImportedSalesRecordsJob($this->connection_id),
+        ])->dispatch();
 
-        ImportProductsJob::dispatchSync($this->connection_id);
-        ProcessImportedProductRecordsJob::dispatch($this->connection_id);
+        Bus::chain([
+            new ImportProductsJob($this->connection_id),
+            new ProcessImportedProductRecordsJob($this->connection_id),
+        ])->dispatch();
 
         ImportShippingsJob::dispatch($this->connection_id);
     }
