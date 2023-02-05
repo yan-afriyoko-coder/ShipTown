@@ -37,8 +37,8 @@ class RunWarehouseJobs implements ShouldQueue
         ProcessImportedSalesRecordsJob::dispatchSync($this->connection_id);
 
         ImportProductsJob::dispatchSync($this->connection_id);
-        ProcessImportedProductRecordsJob::dispatchSync($this->connection_id);
+        ProcessImportedProductRecordsJob::dispatch($this->connection_id);
 
-        ImportShippingsJob::dispatchSync($this->connection_id);
+        ImportShippingsJob::dispatch($this->connection_id);
     }
 }
