@@ -91,7 +91,11 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
 
     private function import(RmsapiSaleImport $salesRecord)
     {
-        $unique_reference_id = implode(':', ['rms_transaction_entry_id', $salesRecord->transaction_entry_id]);
+        $unique_reference_id = implode(':', [
+            'rms_transaction', $salesRecord->transaction_number,
+            'store_id', data_get($salesRecord->raw_import, 'store_id', 0),
+            'entry_id', $salesRecord->transaction_entry_id
+        ]);
 
         if (InventoryMovement::query()->where('custom_unique_reference_id', $unique_reference_id)->exists()) {
             $salesRecord->update(['processed_at' => now()]);
