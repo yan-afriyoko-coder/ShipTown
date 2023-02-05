@@ -33,8 +33,8 @@ class RunWarehouseJobs implements ShouldQueue
      */
     public function handle()
     {
-        ImportSalesJob::dispatch($this->connection_id);
-        ProcessImportedSalesRecordsJob::dispatch($this->connection_id);
+        ImportSalesJob::dispatchSync($this->connection_id);
+        ProcessImportedSalesRecordsJob::dispatchSync($this->connection_id);
 
         ImportProductsJob::dispatchSync($this->connection_id);
         ProcessImportedProductRecordsJob::dispatch($this->connection_id);
