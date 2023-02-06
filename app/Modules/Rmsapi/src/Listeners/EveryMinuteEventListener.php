@@ -17,11 +17,11 @@ class EveryMinuteEventListener
     public function handle()
     {
         foreach (RmsapiConnection::all() as $rmsapiConnection) {
-            Bus::chain([
-                new ImportSalesJob($rmsapiConnection->id),
-                new MarkAllAsProcessedTemporaryJob($rmsapiConnection->id),
+//            Bus::chain([
+//                new ImportSalesJob($rmsapiConnection->id),
+//                new MarkAllAsProcessedTemporaryJob($rmsapiConnection->id),
 //                new ProcessImportedSalesRecordsJob($rmsapiConnection->id),
-            ])->dispatch();
+//            ])->dispatch();
 
             ImportShippingsJob::dispatch($rmsapiConnection->id);
 
