@@ -128,24 +128,23 @@ class ImportProductsJob implements ShouldQueue
         // this won't invoke any events
         RmsapiProductImport::query()->insert($insertData->toArray());
 
-        RmsapiConnection::find($this->rmsapiConnection->getKey())->update([
-            'products_last_timestamp' => $productsCollection->last()['db_change_stamp'],
-        ]);
+        RmsapiConnection::find($this->rmsapiConnection->getKey())
+            ->update(['products_last_timestamp' => $productsCollection->last()['db_change_stamp']]);
 
-//        DB::statement('
-//            DELETE FROM modules_rmsapi_products_imports
-//            WHERE ID IN (
-//              SELECT ID FROM (
-//                SELECT min(id)
-//                FROM `modules_rmsapi_products_imports`
-//                WHERE when_processed IS NULL
-//                AND reserved_at IS NULL
-//                AND sku IS NOT NULL
-//                GROUP BY SKU
-//                HAVING count(*) > 1
-//              ) as tbl
-//            )
-//        ');
+        DB::statement('
+            DELETE FROM modules_rmsapi_products_imports
+            WHERE ID IN (
+              SELECT ID FROM (
+                SELECT min(id)
+                FROM `modules_rmsapi_products_imports`
+                WHERE when_processed IS NULL
+                AND reserved_at IS NULL
+                AND sku IS NOT NULL
+                GROUP BY connection_id, SKU
+                HAVING count(*) > 1
+              ) as tbl
+            )
+        ');
 
         DB::statement('
             UPDATE modules_rmsapi_products_imports
