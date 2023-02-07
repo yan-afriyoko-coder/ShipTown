@@ -103,6 +103,9 @@ class ImportProductsJob implements ShouldQueue
         return true;
     }
 
+    /**
+     * @throws Exception
+     */
     public function saveImportedProducts(array $productList)
     {
         // we will use the same time for all records to speed up process
@@ -148,14 +151,16 @@ class ImportProductsJob implements ShouldQueue
 //            )
 //        ');
 
-        DB::statement('
-            UPDATE modules_rmsapi_products_imports
-            LEFT JOIN products_aliases
-                ON modules_rmsapi_products_imports.sku = products_aliases.alias
+        retry(5, function () {
+            DB::statement('
+                UPDATE modules_rmsapi_products_imports
+                LEFT JOIN products_aliases
+                    ON modules_rmsapi_products_imports.sku = products_aliases.alias
 
-            SET modules_rmsapi_products_imports.product_id = products_aliases.product_id
+                SET modules_rmsapi_products_imports.product_id = products_aliases.product_id
 
-            WHERE modules_rmsapi_products_imports.product_id IS NULL
-        ');
+                WHERE modules_rmsapi_products_imports.product_id IS NULL
+            ');
+        }, 100);
     }
 }
