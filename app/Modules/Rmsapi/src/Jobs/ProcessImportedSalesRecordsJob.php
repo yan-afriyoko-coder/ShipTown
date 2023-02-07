@@ -53,17 +53,22 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
         } while ($maxRunCount > 0 and RmsapiSaleImport::query()->whereNull('processed_at')->exists());
     }
 
+    /**
+     * @throws Exception
+     */
     private function processImportedRecords(int $batch_size): void
     {
         $reservationTime = now();
 
         // reserve records
-        RmsapiSaleImport::query()
-            ->where('connection_id', $this->connection_id)
-            ->where('comment', 'not like', 'PM_OrderProductShipment_%')
-            ->orderBy('id')
-            ->limit($batch_size)
-            ->update(['reserved_at' => $reservationTime]);
+        retry(5, function () use ($batch_size, $reservationTime) {
+            RmsapiSaleImport::query()
+                ->where('connection_id', $this->connection_id)
+                ->where('comment', 'not like', 'PM_OrderProductShipment_%')
+                ->orderBy('id')
+                ->limit($batch_size)
+                ->update(['reserved_at' => $reservationTime]);
+        }, 1000);
 
         // process records
         RmsapiSaleImport::query()
