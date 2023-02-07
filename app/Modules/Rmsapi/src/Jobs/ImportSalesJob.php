@@ -67,7 +67,7 @@ class ImportSalesJob implements ShouldQueue
             ]);
 
             $roundsLeft--;
-        } while ($roundsLeft-- > 0);
+        } while ((isset($response->asArray()['next_page_url'])) && ($roundsLeft > 0));
 
         Heartbeat::query()->updateOrCreate([
             'code' => 'modules_rmsapi_successful_sales_fetch_warehouseId_'.$this->rmsConnection->location_id,
