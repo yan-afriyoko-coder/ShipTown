@@ -217,22 +217,28 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private function processImportedProducts(int $batch_size): void
     {
         $reservationTime = now();
 
-        RmsapiProductImport::query()
-            ->leftJoin('inventory', function (JoinClause $join) {
-                $join->on('inventory.product_id', '=', 'modules_rmsapi_products_imports.product_id')
-                    ->on('inventory.warehouse_id', '=', 'modules_rmsapi_products_imports.warehouse_id');
-            })
-            ->whereNull('modules_rmsapi_products_imports.when_processed')
-            ->whereNull('modules_rmsapi_products_imports.reserved_at')
-            ->where('modules_rmsapi_products_imports.connection_id', $this->connection_id)
-            ->orderByRaw('(inventory.quantity != modules_rmsapi_products_imports.quantity_on_hand) DESC, ' .
-                'modules_rmsapi_products_imports.id ASC')
-            ->limit($batch_size)
-            ->update(['modules_rmsapi_products_imports.reserved_at' => $reservationTime]);
+        retry(5, function () use ($batch_size, $reservationTime) {
+            RmsapiProductImport::query()
+                ->leftJoin('inventory', function (JoinClause $join) {
+                    $join->on('inventory.product_id', '=', 'modules_rmsapi_products_imports.product_id')
+                        ->on('inventory.warehouse_id', '=', 'modules_rmsapi_products_imports.warehouse_id');
+                })
+                ->whereNull('modules_rmsapi_products_imports.when_processed')
+                ->whereNull('modules_rmsapi_products_imports.reserved_at')
+                ->where('modules_rmsapi_products_imports.connection_id', $this->connection_id)
+                ->orderByRaw('(inventory.quantity != modules_rmsapi_products_imports.quantity_on_hand) DESC, ' .
+                    'modules_rmsapi_products_imports.id ASC')
+                ->limit($batch_size)
+                ->update(['modules_rmsapi_products_imports.reserved_at' => $reservationTime]);
+        }, 1000);
+
 
         $records = RmsapiProductImport::query()
             ->whereNull('when_processed')
