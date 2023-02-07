@@ -131,8 +131,7 @@ class ImportProductsJob implements ShouldQueue
         // this won't invoke any events
         RmsapiProductImport::query()->insert($insertData->toArray());
 
-        RmsapiConnection::find($this->rmsConnection->getKey())
-            ->update(['products_last_timestamp' => $productsCollection->last()['db_change_stamp']]);
+        $this->rmsConnection->update(['products_last_timestamp' => $productsCollection->last()['db_change_stamp']]);
 
 //        DB::statement('
 //            DELETE FROM modules_rmsapi_products_imports

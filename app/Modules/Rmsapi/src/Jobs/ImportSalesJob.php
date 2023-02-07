@@ -107,8 +107,6 @@ class ImportSalesJob implements ShouldQueue
         // for performance reasons we will use insert instead of create
         RmsapiSaleImport::query()->insert($data->toArray());
 
-        $this->rmsConnection->update([
-            'sales_last_timestamp' => $recordsCollection->last()['db_change_stamp'],
-        ]);
+        $this->rmsConnection->update(['sales_last_timestamp' => $recordsCollection->last()['db_change_stamp']]);
     }
 }
