@@ -27,7 +27,7 @@ class ImportProductsJob implements ShouldQueue
     /**
      * @var RmsapiConnection
      */
-    private RmsapiConnection $rmsapiConnection;
+    private RmsapiConnection $rmsConnection;
 
     /**
      * @var string
@@ -42,7 +42,7 @@ class ImportProductsJob implements ShouldQueue
      */
     public function __construct(int $rmsapiConnectionId)
     {
-        $this->rmsapiConnection = RmsapiConnection::find($rmsapiConnectionId);
+        $this->rmsConnection = RmsapiConnection::find($rmsapiConnectionId);
         $this->batch_uuid = Uuid::uuid4()->toString();
     }
 
@@ -54,19 +54,21 @@ class ImportProductsJob implements ShouldQueue
      */
     public function handle(): bool
     {
-        logger('RMSAPI Starting FetchUpdatedProductsJob', ['connection_id' => $this->rmsapiConnection->getKey()]);
+        logger('RMSAPI Starting FetchUpdatedProductsJob', ['connection_id' => $this->rmsConnection->getKey()]);
 
-        $params = [
-            'per_page'            => config('rmsapi.import.products.per_page'),
-            'order_by'            => 'db_change_stamp:asc',
-            'min:db_change_stamp' => $this->rmsapiConnection->products_last_timestamp,
-        ];
-
-        $roundsLeft = 3;
+        $roundsLeft = 10;
 
         do {
+            $this->rmsConnection->refresh();
+
+            $params = [
+                'per_page'            => config('rmsapi.import.products.per_page'),
+                'order_by'            => 'db_change_stamp:asc',
+                'min:db_change_stamp' => $this->rmsConnection->products_last_timestamp,
+            ];
+
             try {
-                $response = RmsapiClient::GET($this->rmsapiConnection, 'api/products', $params);
+                $response = RmsapiClient::GET($this->rmsConnection, 'api/products', $params);
             } catch (GuzzleException $e) {
                 report($e);
 
@@ -83,17 +85,18 @@ class ImportProductsJob implements ShouldQueue
             }
 
             Log::info('RMSAPI Downloaded updated products', [
-                'warehouse_code' => $this->rmsapiConnection->location_id,
-                'count'          => $response->asArray()['total'],
+                'warehouse_code' => $this->rmsConnection->location_id,
+                'count'          => count($response->getResult()),
+                'left'           => $response->asArray()['total'],
             ]);
 
             $roundsLeft--;
         } while ((isset($response->asArray()['next_page_url'])) && ($roundsLeft > 0));
 
         Heartbeat::query()->updateOrCreate([
-            'code' => 'models_rmsapi_successful_fetch_warehouseId_'.$this->rmsapiConnection->location_id,
+            'code' => 'models_rmsapi_successful_fetch_warehouseId_'.$this->rmsConnection->location_id,
         ], [
-            'error_message' => 'RMSAPI not synced for last hour WarehouseID: '.$this->rmsapiConnection->location_id,
+            'error_message' => 'RMSAPI not synced for last hour WarehouseID: '.$this->rmsConnection->location_id,
             'expires_at' => now()->addHour()
         ]);
 
@@ -109,8 +112,8 @@ class ImportProductsJob implements ShouldQueue
 
         $insertData = $productsCollection->map(function ($product) use ($time) {
             return [
-                'connection_id'         => $this->rmsapiConnection->getKey(),
-                'warehouse_id'          => $this->rmsapiConnection->warehouse_id,
+                'connection_id'         => $this->rmsConnection->getKey(),
+                'warehouse_id'          => $this->rmsConnection->warehouse_id,
                 'batch_uuid'            => $this->batch_uuid,
                 'sku'                   => $product['item_code'],
                 'quantity_on_hand'      => $product['quantity_on_hand'],
@@ -128,7 +131,7 @@ class ImportProductsJob implements ShouldQueue
         // this won't invoke any events
         RmsapiProductImport::query()->insert($insertData->toArray());
 
-        RmsapiConnection::find($this->rmsapiConnection->getKey())
+        RmsapiConnection::find($this->rmsConnection->getKey())
             ->update(['products_last_timestamp' => $productsCollection->last()['db_change_stamp']]);
 
 //        DB::statement('
