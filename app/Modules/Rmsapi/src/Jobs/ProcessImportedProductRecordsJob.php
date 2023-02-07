@@ -44,10 +44,11 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
      */
     public function handle()
     {
-        $maxRunCount = 3;
+        $batch_size = 200;
+        $maxRunCount = 10000 / $batch_size; // 10000 is the max batch size in 10min
 
         do {
-            $this->processImportedProducts(200);
+            $this->processImportedProducts($batch_size);
             $maxRunCount--;
         } while ($maxRunCount > 0 and RmsapiProductImport::query()->whereNull('when_processed')->exists());
     }

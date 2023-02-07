@@ -33,7 +33,7 @@ class ImportSalesJob implements ShouldQueue
     {
         Log::info('RMSAPI Starting FetchSalesJob', ['rmsapi_connection_id' => $this->rmsConnection->getKey()]);
 
-        $roundsLeft = 10;
+        $roundsLeft = 2;
 
         do {
             $this->rmsConnection->refresh();
