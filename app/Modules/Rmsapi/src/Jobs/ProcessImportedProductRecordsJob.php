@@ -45,7 +45,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
     public function handle()
     {
         $batch_size = 200;
-        $maxRunCount = 10000 / $batch_size; // 10000 is the max batch size in 10min
+        $maxRunCount = 1000 / $batch_size;
 
         do {
             $this->processImportedProducts($batch_size);

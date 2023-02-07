@@ -34,7 +34,7 @@ class ImportSalesJob implements ShouldQueue
         Log::info('RMSAPI Starting FetchSalesJob', ['rmsapi_connection_id' => $this->rmsConnection->getKey()]);
 
         $per_page = 500;
-        $roundsLeft = 10000 / 10 / $per_page;
+        $roundsLeft = 1000 / $per_page;
 
         do {
             $this->rmsConnection->refresh();
@@ -67,7 +67,7 @@ class ImportSalesJob implements ShouldQueue
             ]);
 
             $roundsLeft--;
-        } while ($roundsLeft-- > 0);
+        } while ((isset($response->asArray()['next_page_url'])) && ($roundsLeft > 0));
 
         Heartbeat::query()->updateOrCreate([
             'code' => 'modules_rmsapi_successful_sales_fetch_warehouseId_'.$this->rmsConnection->location_id,

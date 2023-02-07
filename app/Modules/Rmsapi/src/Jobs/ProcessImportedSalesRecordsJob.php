@@ -45,10 +45,11 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
             ->where('comment', 'like', 'PM_OrderProductShipment_%')
             ->update(['reserved_at' => now(), 'processed_at' => now()]);
 
-        $maxRunCount = 5;
+        $batch_size = 200;
+        $maxRunCount = 1000 / $batch_size;
 
         do {
-            $this->processImportedRecords(200);
+            $this->processImportedRecords($batch_size);
             $maxRunCount--;
         } while ($maxRunCount > 0 and RmsapiSaleImport::query()->whereNull('processed_at')->exists());
     }

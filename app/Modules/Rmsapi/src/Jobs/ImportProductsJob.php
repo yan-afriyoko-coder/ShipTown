@@ -58,7 +58,7 @@ class ImportProductsJob implements ShouldQueue
         logger('RMSAPI Starting FetchUpdatedProductsJob', ['connection_id' => $this->rmsConnection->getKey()]);
 
         $per_page = 500;
-        $roundsLeft = 10000 / 10 / $per_page; // 10000 is the max number of products RMSAPI will import in 10min
+        $roundsLeft = 1000 / $per_page;
 
         do {
             $this->rmsConnection->refresh();
