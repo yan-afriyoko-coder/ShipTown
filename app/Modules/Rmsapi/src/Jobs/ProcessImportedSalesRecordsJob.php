@@ -45,7 +45,7 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
             ->where('comment', 'like', 'PM_OrderProductShipment_%')
             ->update(['reserved_at' => now(), 'processed_at' => now()]);
 
-        $maxRunCount = 3;
+        $maxRunCount = 5;
 
         do {
             $this->processImportedRecords(200);

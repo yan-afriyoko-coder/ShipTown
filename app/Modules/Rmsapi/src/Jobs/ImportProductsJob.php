@@ -51,18 +51,20 @@ class ImportProductsJob implements ShouldQueue
      *
      * @return boolean
      *
+     * @throws Exception
      */
     public function handle(): bool
     {
         logger('RMSAPI Starting FetchUpdatedProductsJob', ['connection_id' => $this->rmsConnection->getKey()]);
 
-        $roundsLeft = 10;
+        $per_page = 500;
+        $roundsLeft = 10000 / $per_page; // 10000 is the max number of products RMSAPI will import in 10min
 
         do {
             $this->rmsConnection->refresh();
 
             $params = [
-                'per_page'            => config('rmsapi.import.products.per_page'),
+                'per_page'            => $per_page,
                 'order_by'            => 'db_change_stamp:asc',
                 'min:db_change_stamp' => $this->rmsConnection->products_last_timestamp,
             ];
