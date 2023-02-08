@@ -71,30 +71,30 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
                 ->orderBy('id')
                 ->limit($batch_size)
                 ->update(['reserved_at' => $reservationTime]);
-        }, 1000);
 
-        // process records
-        RmsapiSaleImport::query()
-            ->where([
-                'connection_id' => $this->connection_id,
-                'reserved_at' => $reservationTime
-            ])
-            ->whereNull('processed_at')
-            ->where('comment', 'not like', 'PM_OrderProductShipment_%')
-            ->orderBy('id')
-            ->get()
-            ->each(function (RmsapiSaleImport $salesRecord) {
-                try {
-                    retry(3, function () use ($salesRecord) {
-                        DB::transaction(function () use ($salesRecord) {
-                            $this->import($salesRecord);
-                        });
-                    }, 1000);
-                } catch (Exception $e) {
-                    report($e);
-                    Log::emergency($e->getMessage(), $e->getTrace());
-                }
-            });
+            // process records
+            RmsapiSaleImport::query()
+                ->where([
+                    'connection_id' => $this->connection_id,
+                    'reserved_at' => $reservationTime
+                ])
+                ->whereNull('processed_at')
+                ->where('comment', 'not like', 'PM_OrderProductShipment_%')
+                ->orderBy('id')
+                ->get()
+                ->each(function (RmsapiSaleImport $salesRecord) {
+                    try {
+                        retry(3, function () use ($salesRecord) {
+                            DB::transaction(function () use ($salesRecord) {
+                                $this->import($salesRecord);
+                            });
+                        }, 1000);
+                    } catch (Exception $e) {
+                        report($e);
+                        Log::emergency($e->getMessage(), $e->getTrace());
+                    }
+                });
+        }, 1000);
     }
 
     private function import(RmsapiSaleImport $salesRecord)
