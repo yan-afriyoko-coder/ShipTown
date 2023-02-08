@@ -66,6 +66,8 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
             RmsapiSaleImport::query()
                 ->where('connection_id', $this->connection_id)
                 ->where('comment', 'not like', 'PM_OrderProductShipment_%')
+                ->whereNull('reserved_at')
+                ->whereNull('processed_at')
                 ->orderBy('id')
                 ->limit($batch_size)
                 ->update(['reserved_at' => $reservationTime]);
