@@ -60,9 +60,9 @@ class PublishInventoryMovementWebhooksJob implements ShouldQueue
             ->orderBy('id')
             ->limit(100);
 
-        $chunk = $query->get();
+        do {
+            $chunk = $query->get();
 
-        while ($chunk->isNotEmpty()) {
             $pendingWebhookIds = $chunk->pluck('id');
 
             try {
@@ -79,8 +79,11 @@ class PublishInventoryMovementWebhooksJob implements ShouldQueue
                 throw $exception;
             }
 
+            // we're adding small delay preventing overloading the queue
+            sleep(1);
+
             $chunk = $query->get();
-        }
+        } while ($chunk->isNotEmpty());
     }
 
     /**
