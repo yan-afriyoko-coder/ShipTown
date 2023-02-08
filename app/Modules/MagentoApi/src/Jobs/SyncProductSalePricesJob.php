@@ -33,7 +33,7 @@ class SyncProductSalePricesJob implements ShouldQueue
             AND expected_sale_price > 0
             AND expected_sale_price_end_date > DATE_SUB(now(), INTERVAL 10 DAY)
             AND (
-                magento_sale_price != expected_sale_price
+                IFNULL(magento_sale_price, 0) != expected_sale_price
                 OR magento_sale_price_start_date != expected_sale_price_start_date
                 OR magento_sale_price_end_date != expected_sale_price_end_date
                 OR magento_sale_price IS NULL
