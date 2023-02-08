@@ -21,11 +21,6 @@ class EveryMinuteEventListener
                 new ProcessImportedSalesRecordsJob($rmsapiConnection->id),
             ])->dispatch();
 
-            Bus::chain([
-                new ImportProductsJob($rmsapiConnection->id),
-                new ProcessImportedProductRecordsJob($rmsapiConnection->id),
-            ])->dispatch();
-
             ImportShippingsJob::dispatch($rmsapiConnection->id);
 
             Log::debug('RMSAPI Sync jobs dispatched', [
