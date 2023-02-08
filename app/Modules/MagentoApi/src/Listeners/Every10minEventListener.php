@@ -2,6 +2,7 @@
 
 namespace App\Modules\MagentoApi\src\Listeners;
 
+use App\Modules\MagentoApi\src\Jobs\EnsureCorrectRecordsJob;
 use App\Modules\MagentoApi\src\Jobs\EnsureProductRecordsExistJob;
 use App\Modules\MagentoApi\src\Jobs\FetchBasePricesJob;
 use App\Modules\MagentoApi\src\Jobs\FetchSpecialPricesJob;
@@ -15,6 +16,7 @@ class Every10minEventListener
     public function handle()
     {
         EnsureProductRecordsExistJob::dispatch();
+        EnsureCorrectRecordsJob::dispatch();
 
         FetchStockItemsJob::dispatch();
         FetchBasePricesJob::dispatch();
