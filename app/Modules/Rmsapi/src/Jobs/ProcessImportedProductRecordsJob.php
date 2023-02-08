@@ -227,38 +227,32 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
 
         retry(5, function () use ($batch_size, $reservationTime) {
             RmsapiProductImport::query()
-                ->leftJoin('inventory', function (JoinClause $join) {
-                    $join->on('inventory.product_id', '=', 'modules_rmsapi_products_imports.product_id')
-                        ->on('inventory.warehouse_id', '=', 'modules_rmsapi_products_imports.warehouse_id');
-                })
-                ->whereNull('modules_rmsapi_products_imports.when_processed')
-                ->whereNull('modules_rmsapi_products_imports.reserved_at')
-                ->where('modules_rmsapi_products_imports.connection_id', $this->connection_id)
-                ->orderByRaw('(inventory.quantity != modules_rmsapi_products_imports.quantity_on_hand) DESC, ' .
-                    'modules_rmsapi_products_imports.id ASC')
+                ->whereNull('when_processed')
+                ->whereNull('reserved_at')
+                ->where('connection_id', $this->connection_id)
+                ->orderByRaw('id ASC')
                 ->limit($batch_size)
-                ->update(['modules_rmsapi_products_imports.reserved_at' => $reservationTime]);
+                ->update(['reserved_at' => $reservationTime]);
+
+            $records = RmsapiProductImport::query()
+                ->whereNull('when_processed')
+                ->where(['reserved_at' => $reservationTime])
+                ->where('connection_id', $this->connection_id)
+                ->orderBy('id')
+                ->get();
+
+            $records->each(function (RmsapiProductImport $productImport) {
+                try {
+                    retry(3, function () use ($productImport) {
+                        DB::transaction(function () use ($productImport) {
+                            $this->import($productImport);
+                        });
+                    }, 1000);
+                } catch (Exception $e) {
+                    report($e);
+                    Log::emergency($e->getMessage(), $e->getTrace());
+                }
+            });
         }, 1000);
-
-
-        $records = RmsapiProductImport::query()
-            ->whereNull('when_processed')
-            ->where(['reserved_at' => $reservationTime])
-            ->where('connection_id', $this->connection_id)
-            ->orderBy('id')
-            ->get();
-
-        $records->each(function (RmsapiProductImport $productImport) {
-            try {
-                retry(3, function () use ($productImport) {
-                    DB::transaction(function () use ($productImport) {
-                        $this->import($productImport);
-                    });
-                }, 1000);
-            } catch (Exception $e) {
-                report($e);
-                Log::emergency($e->getMessage(), $e->getTrace());
-            }
-        });
     }
 }
