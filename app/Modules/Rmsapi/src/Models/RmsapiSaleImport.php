@@ -35,6 +35,7 @@ class RmsapiSaleImport extends BaseModel
 
     protected $fillable = [
         'connection_id',
+        'inventory_movement_id',
         'reserved_at',
         'processed_at',
         'sku',
