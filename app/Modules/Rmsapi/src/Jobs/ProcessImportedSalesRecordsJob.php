@@ -103,8 +103,15 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
             'entry_id', $salesRecord->transaction_entry_id
         ]);
 
-        if (InventoryMovement::query()->where('custom_unique_reference_id', $unique_reference_id)->exists()) {
-            $salesRecord->update(['processed_at' => now()]);
+        $inventoryMovement = InventoryMovement::query()
+            ->where('custom_unique_reference_id', $unique_reference_id)
+            ->first();
+
+        if ($inventoryMovement) {
+            $salesRecord->update([
+                'inventory_movement_id' => $inventoryMovement->getKey(),
+                'processed_at' => now()
+            ]);
             return;
         }
 
@@ -115,17 +122,20 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
             ->first();
 
         $inventory = Inventory::query()
-            ->where('product_id', $product->id)
+            ->where('product_id', $product->getKey())
             ->where('warehouse_id', $salesRecord->rmsapiConnection->warehouse_id)
             ->first();
 
-        InventoryService::adjustQuantity(
+        $inventoryMovement = InventoryService::adjustQuantity(
             $inventory,
             $salesRecord->quantity * -1,
             'rms_sale',
             $unique_reference_id
         );
 
-        $salesRecord->update(['processed_at' => now()]);
+        $salesRecord->update([
+            'inventory_movement_id' => $inventoryMovement->getKey(),
+            'processed_at' => now()
+        ]);
     }
 }
