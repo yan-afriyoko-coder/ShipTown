@@ -57,9 +57,9 @@ class PublishInventoryWebhooksJob implements ShouldQueue
             ->orderBy('modules_webhooks_pending_webhooks.id')
             ->limit(100);
 
-        do {
-            $chunk = $query->get();
+        $chunk = $query->get();
 
+        while ($chunk->isNotEmpty()) {
             $pendingWebhookIds = $chunk->pluck('id');
 
             try {
@@ -76,11 +76,8 @@ class PublishInventoryWebhooksJob implements ShouldQueue
                 throw $exception;
             }
 
-            // Sleep for 1 second to avoid hitting the SNS rate limit
-            sleep(1);
-
             $chunk = $query->get();
-        } while ($chunk->isNotEmpty());
+        }
     }
 
     private function publishInventoryMessage($chunk): void

@@ -58,9 +58,9 @@ class PublishOrderProductShipmentWebhooksJob implements ShouldQueue
             ->orderBy('modules_webhooks_pending_webhooks.id')
             ->limit(100);
 
-        do {
-            $chunk = $query->get();
+        $chunk = $query->get();
 
+        while ($chunk->isNotEmpty()) {
             $pendingWebhookIds = $chunk->pluck('id');
 
             try {
@@ -77,11 +77,8 @@ class PublishOrderProductShipmentWebhooksJob implements ShouldQueue
                 throw $exception;
             }
 
-            // sleep for 1 second to avoid hitting the sns rate limit
-            sleep(1);
-
             $chunk = $query->get();
-        } while ($chunk->isNotEmpty());
+        }
     }
 
     /**
