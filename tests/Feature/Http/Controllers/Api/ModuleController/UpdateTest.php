@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers\Api\ModuleController;
 
 use App\Models\Module;
+use App\Modules\BaseModuleServiceProvider;
 use App\User;
 use Illuminate\Testing\TestResponse;
 use Laravel\Passport\Passport;
