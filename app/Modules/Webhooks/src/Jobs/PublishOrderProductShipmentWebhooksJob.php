@@ -61,6 +61,10 @@ class PublishOrderProductShipmentWebhooksJob implements ShouldQueue
         do {
             $chunk = $query->get();
 
+            if ($chunk->isEmpty()) {
+                break;
+            }
+
             $pendingWebhookIds = $chunk->pluck('id');
 
             try {
