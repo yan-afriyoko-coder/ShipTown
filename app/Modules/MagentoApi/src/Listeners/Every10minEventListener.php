@@ -16,7 +16,6 @@ class Every10minEventListener
     public function handle()
     {
         EnsureProductRecordsExistJob::dispatch();
-        EnsureCorrectRecordsJob::dispatch();
 
         FetchStockItemsJob::dispatch();
         FetchBasePricesJob::dispatch();
