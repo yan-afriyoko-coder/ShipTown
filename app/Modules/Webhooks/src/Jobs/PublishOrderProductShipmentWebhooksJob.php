@@ -79,8 +79,6 @@ class PublishOrderProductShipmentWebhooksJob implements ShouldQueue
 
             // sleep for 1 second to avoid hitting the sns rate limit
             sleep(1);
-
-            $chunk = $query->get();
         } while ($chunk->isNotEmpty());
     }
 

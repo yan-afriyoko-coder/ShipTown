@@ -78,8 +78,6 @@ class PublishInventoryWebhooksJob implements ShouldQueue
 
             // Sleep for 1 second to avoid hitting the SNS rate limit
             sleep(1);
-
-            $chunk = $query->get();
         } while ($chunk->isNotEmpty());
     }
 

@@ -81,8 +81,6 @@ class PublishInventoryMovementWebhooksJob implements ShouldQueue
 
             // we're adding small delay preventing overloading the queue
             sleep(1);
-
-            $chunk = $query->get();
         } while ($chunk->isNotEmpty());
     }
 
