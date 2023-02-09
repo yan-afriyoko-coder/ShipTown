@@ -2,17 +2,10 @@
 
 namespace App\Modules\Webhooks\src;
 
-use App\Events\DailyEvent;
-use App\Events\Every10minEvent;
 use App\Events\EveryMinuteEvent;
-use App\Events\HourlyEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\InventoryMovementCreatedEvent;
-use App\Events\Order\OrderCreatedEvent;
-use App\Events\Order\OrderUpdatedEvent;
 use App\Events\OrderProductShipmentCreatedEvent;
-use App\Events\Product\ProductCreatedEvent;
-use App\Events\Product\ProductUpdatedEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
 use Exception;
