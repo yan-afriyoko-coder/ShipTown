@@ -28,7 +28,7 @@ class SyncProductInventoryJob implements ShouldQueue
     public function handle()
     {
         MagentoProductInventoryComparisonView::query()
-            ->whereRaw('stock_items_fetched_at IS NOT NULL AND IFNULL(magento_quantity) != expected_quantity')
+            ->whereRaw('stock_items_fetched_at IS NOT NULL AND IFNULL(magento_quantity, 0) != expected_quantity')
             ->chunkById(100, function ($products) {
                 collect($products)->each(function (MagentoProductInventoryComparisonView $comparison) {
                     MagentoService::updateInventory(
