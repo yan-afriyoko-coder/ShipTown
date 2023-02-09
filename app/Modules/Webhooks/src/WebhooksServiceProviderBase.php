@@ -61,10 +61,6 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
             Listeners\OrderProductShipmentCreatedListener::class,
         ],
 
-        ProductCreatedEvent::class => [
-            Listeners\ProductCreatedEventListener::class,
-        ],
-
         InventoryMovementCreatedEvent::class => [
             Listeners\InventoryMovementCreatedEventListener::class,
         ],
