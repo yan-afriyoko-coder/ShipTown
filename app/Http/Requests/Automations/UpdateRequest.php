@@ -33,8 +33,10 @@ class UpdateRequest extends FormRequest
             'description' => 'nullable|string',
             'enabled' => 'required|boolean',
             'priority' => 'required|numeric',
+            'conditions' => 'array',
             'conditions.*.condition_class' => ['nullable', Rule::in($available_conditions_classes)],
             'conditions.*.condition_value' => 'nullable|string',
+            'actions' => 'array',
             'actions.*.action_class' => ['nullable', Rule::in($available_action_classes)],
             'actions.*.action_value' => 'nullable|string'
         ];

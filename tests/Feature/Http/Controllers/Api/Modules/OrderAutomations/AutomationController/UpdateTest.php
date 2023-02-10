@@ -15,6 +15,27 @@ class UpdateTest extends TestCase
         $this->actingAs($admin, 'api');
     }
 
+    public function test_basic_scenarios()
+    {
+        $automation = Automation::create([
+            'name' => 'Store Pickup',
+            'priority' => 1,
+        ]);
+
+        $route = route('api.modules.automations.update', $automation->getKey());
+
+        $this->put($route, [
+                'name' => 'Test Automation',
+                'enabled' => true,
+                'priority' => rand(1, 100),
+                'conditions' => [],
+                'actions' => [],
+            ])
+            ->assertStatus(200);
+
+        $this->assertTrue(true);
+    }
+
     /** @test */
     public function test_update_call_returns_ok()
     {
@@ -46,6 +67,7 @@ class UpdateTest extends TestCase
                 ]
             ]
         ];
+
         $response = $this->put(route('api.modules.automations.update', $automation->id), $data);
         $response->assertStatus(200);
         $response->assertJsonStructure([
