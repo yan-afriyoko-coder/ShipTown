@@ -886,6 +886,11 @@ class CoreV1 extends Migration
             $table->index('quantity');
             $table->index('quantity_reserved');
             $table->index('quantity_incoming');
+
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products')
+                ->onDelete('cascade');
         });
 
         $this->installSpatiePermissions();
