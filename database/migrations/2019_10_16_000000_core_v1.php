@@ -854,6 +854,8 @@ class CoreV1 extends Migration
             $table->timestamps();
 
             $table->index(['reserved_at', 'published_at']);
+            $table->index('published_at');
+            $table->index('reserved_at');
         });
 
         Schema::create('modules_webhooks_configuration', function (Blueprint $table) {
