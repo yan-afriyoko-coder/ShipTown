@@ -845,6 +845,7 @@ class CoreV1 extends Migration
             $table->id();
             $table->string('model_class');
             $table->foreignId('model_id');
+            $table->json('message');
             $table->timestamp('reserved_at')->nullable();
             $table->timestamp('available_at')->nullable();
             $table->timestamp('published_at')->nullable();
