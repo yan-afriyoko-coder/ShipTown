@@ -15,7 +15,7 @@ class HeartbeatsController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        $heartbeats = Heartbeat::expired()->get();
+        $heartbeats = Heartbeat::expired()->limit(2)->get();
 
         return HeartbeatResources::collection($heartbeats);
     }
