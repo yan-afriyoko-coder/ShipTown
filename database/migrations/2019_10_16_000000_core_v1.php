@@ -722,6 +722,7 @@ class CoreV1 extends Migration
             $table->timestamps();
 
             $table->index('order_number');
+            $table->index('when_processed');
 
             $table->foreign('order_id')
                 ->references('id')
