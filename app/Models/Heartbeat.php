@@ -15,8 +15,12 @@ class Heartbeat extends Model
         'expires_at'
     ];
 
+    protected $dates = [
+        'expires_at'
+    ];
+
     public function scopeExpired($query)
     {
-        return $query->where('expires_at', "<", now());
+        return $query->where('expires_at', '<', now());
     }
 }
