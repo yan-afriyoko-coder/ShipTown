@@ -65,7 +65,7 @@
             </div>
         </div>
 
-        <b-modal id="configuration-modal" no-fade hide-footer hide-header
+        <b-modal id="configuration-modal" no-fade hide-header
                  @shown="onShownConfigurationModal"
                  @hidden="setFocusElementById(100,'barcodeInput', true, true)"
         >
@@ -135,14 +135,33 @@
 
             </div>
 
+            <template #modal-footer>
+                <b-button
+                    variant="outline-secondary"
+                    class="float-right"
+                    @click="$bvModal.hide('configuration-modal');"
+                >
+                    Close
+                </b-button>
+            </template>
 
         </b-modal>
 
-        <b-modal id="transferToModal" no-fade hide-footer hide-header
+        <b-modal id="transferToModal" no-fade hide-header
                  @hidden="setFocusElementById(100,'barcodeInput', true, true)"
         >
             <template v-for="warehouse in warehouses">
                 <button @click.prevent="transferToWarehouse(warehouse)" v-b-toggle class="col btn mb-2 btn-primary">{{ warehouse.name }}</button>
+            </template>
+
+            <template #modal-footer>
+                <b-button
+                    variant="outline-secondary"
+                    class="float-right"
+                    @click="$bvModal.hide('transferToModal');"
+                >
+                    Close
+                </b-button>
             </template>
         </b-modal>
 
