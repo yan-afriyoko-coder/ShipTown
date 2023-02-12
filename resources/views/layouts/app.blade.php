@@ -32,7 +32,9 @@
 </head>
 <body>
     <div id="app">
+        @auth
         <heartbeats></heartbeats>
+        @endauth
 
         @if((request()->input('hide_nav_bar', false) === false))
             @include('layouts.nav')
