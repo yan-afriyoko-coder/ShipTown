@@ -194,6 +194,7 @@ class CoreV1 extends Migration
             $table->index('quantity');
             $table->index('quantity_reserved');
             $table->index('quantity_available');
+            $table->index('deleted_at');
         });
 
         Schema::create('products_aliases', function (Blueprint $table) {
