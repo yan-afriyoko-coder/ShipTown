@@ -928,6 +928,7 @@ class CoreV1 extends Migration
                 ->onDelete('cascade');
             $table->string('name');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('stocktake_suggestions', function (Blueprint $table) {
