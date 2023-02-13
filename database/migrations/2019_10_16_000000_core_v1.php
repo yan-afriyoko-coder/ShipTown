@@ -965,11 +965,19 @@ class CoreV1 extends Migration
             $table->id();
             $table->foreignId('connection_id');
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
+            $table->decimal('magento_price', 10)->nullable();
+            $table->decimal('magento_sale_price', 10)->nullable();
+            $table->timestamp('magento_sale_price_start_date')->nullable();
+            $table->timestamp('magento_sale_price_end_date')->nullable();
             $table->boolean('is_inventory_in_sync')->nullable();
             $table->decimal('quantity', 20)->nullable();
             $table->boolean('is_in_stock')->nullable();
             $table->timestamp('stock_items_fetched_at')->nullable();
             $table->json('stock_items_raw_import')->nullable();
+            $table->timestamp('base_prices_fetched_at')->nullable();
+            $table->json('base_prices_raw_import')->nullable();
+            $table->timestamp('special_prices_fetched_at')->nullable();
+            $table->json('special_prices_raw_import')->nullable();
             $table->timestamps();
         });
 
