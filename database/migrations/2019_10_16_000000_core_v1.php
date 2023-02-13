@@ -933,6 +933,7 @@ class CoreV1 extends Migration
                 ->comment('CASE WHEN quantity_requested - total_transferred_out - total_transferred_in - quantity_scanned < quantity_scanned THEN 0 ' .
                     'ELSE quantity_requested - total_transferred_out - total_transferred_in - quantity_scanned - quantity_scanned END');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('product_id')
                 ->references('id')
