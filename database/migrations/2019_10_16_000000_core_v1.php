@@ -942,6 +942,7 @@ class CoreV1 extends Migration
 
         Schema::create('data_collections', function (Blueprint $table) {
             $table->id();
+            $table->string('type')->nullable();
             $table->foreignId('warehouse_id')
                 ->references('id')
                 ->on('warehouses')
