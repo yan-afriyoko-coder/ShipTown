@@ -709,9 +709,9 @@ class CoreV1 extends Migration
             $table->unsignedBigInteger('product_id')->nullable();
             $table->string('sku')->nullable();
             $table->decimal('quantity_on_hand')->nullable();
-            $table->decimal('quantity_on_order')->nullable();
-            $table->decimal('quantity_available')->nullable();
             $table->decimal('quantity_committed')->nullable();
+            $table->decimal('quantity_available')->nullable();
+            $table->decimal('quantity_on_order')->nullable();
             $table->json('raw_import');
             $table->timestamps();
 
