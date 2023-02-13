@@ -530,6 +530,7 @@ class CoreV1 extends Migration
             $table->foreignId('warehouse_id');
             $table->string('location_id')->default('');
             $table->string('warehouse_code', 5)->nullable(false);
+            $table->decimal('cost', 20, 2)->default(0);
             $table->decimal('price', 10)->default(99999);
             $table->decimal('sale_price', 10)->default(99999);
             $table->date('sale_price_start_date')->default('2000-01-01');
