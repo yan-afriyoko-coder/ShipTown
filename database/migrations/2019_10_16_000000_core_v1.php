@@ -921,6 +921,10 @@ class CoreV1 extends Migration
 
         Schema::create('data_collections', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('warehouse_id')
+                ->references('id')
+                ->on('warehouses')
+                ->onDelete('cascade');
             $table->string('name');
             $table->timestamps();
         });
