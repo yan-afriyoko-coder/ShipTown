@@ -967,8 +967,8 @@ class CoreV1 extends Migration
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->decimal('magento_price', 10)->nullable();
             $table->decimal('magento_sale_price', 10)->nullable();
-            $table->timestamp('magento_sale_price_start_date')->nullable();
-            $table->timestamp('magento_sale_price_end_date')->nullable();
+            $table->dateTime('magento_sale_price_start_date')->nullable();
+            $table->dateTime('magento_sale_price_end_date')->nullable();
             $table->boolean('is_inventory_in_sync')->nullable();
             $table->decimal('quantity', 20)->nullable();
             $table->boolean('is_in_stock')->nullable();
