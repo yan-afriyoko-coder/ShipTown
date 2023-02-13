@@ -1049,6 +1049,11 @@ class CoreV1 extends Migration
                 });
         }
 
+        Schema::create('modules_queue_monitor_jobs', function (Blueprint $table) {
+            $table->uuid('uuid')->unique();
+            $table->string('job_class')->index();
+            $table->timestamp('dispatched_at')->default(DB::raw('CURRENT_TIMESTAMP'))->index();
+        });
 
 
         $this->installSpatiePermissions();
