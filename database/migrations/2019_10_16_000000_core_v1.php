@@ -708,10 +708,10 @@ class CoreV1 extends Migration
             $table->dateTime('when_processed')->nullable();
             $table->unsignedBigInteger('product_id')->nullable();
             $table->string('sku')->nullable();
-            $table->decimal('quantity_on_hand')->nullable();
-            $table->decimal('quantity_committed')->nullable();
-            $table->decimal('quantity_available')->nullable();
-            $table->decimal('quantity_on_order')->nullable();
+            $table->decimal('quantity_on_hand', 20)->nullable();
+            $table->decimal('quantity_committed', 20)->nullable();
+            $table->decimal('quantity_available', 20)->nullable();
+            $table->decimal('quantity_on_order', 20)->nullable();
             $table->json('raw_import');
             $table->timestamps();
 
