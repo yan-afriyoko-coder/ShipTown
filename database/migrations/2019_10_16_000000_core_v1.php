@@ -812,6 +812,7 @@ class CoreV1 extends Migration
 
         Schema::create('inventory_movements', function (Blueprint $table) {
             $table->id();
+            $table->string('custom_unique_reference_id')->nullable()->unique();
             $table->foreignId('inventory_id');
             $table->foreignId('product_id');
             $table->foreignId('warehouse_id');
