@@ -393,7 +393,7 @@ class CoreV1 extends Migration
 
         Schema::create('orders_products_totals', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id');
+            $table->foreignId('order_id')->unique();
             $table->integer('count')->default(0);
             $table->decimal('quantity_ordered', 20)->default(0);
             $table->decimal('quantity_split', 20)->default(0);

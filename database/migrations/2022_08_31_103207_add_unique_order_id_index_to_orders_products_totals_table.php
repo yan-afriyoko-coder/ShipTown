@@ -28,10 +28,6 @@ class AddUniqueOrderIdIndexToOrdersProductsTotalsTable extends Migration
 
         ');
 
-        Schema::table('orders_products_totals', function (Blueprint $table) {
-            $table->unique('order_id');
-        });
-
         \App\Modules\OrderTotals\src\Jobs\EnsureAllRecordsExistsJob::dispatch();
         \App\Modules\OrderTotals\src\Jobs\EnsureCorrectTotalsJob::dispatch();
     }
