@@ -964,6 +964,7 @@ class CoreV1 extends Migration
             $table->timestamps();
 
             $table->index('reason');
+            $table->index(['warehouse_id', 'reason']);
         });
 
         Schema::create('modules_magento2api_products', function (Blueprint $table) {
