@@ -225,12 +225,12 @@ class CoreV1 extends Migration
             $table->string('fax')->default('');
             $table->string('website')->default('');
             $table->string('region')->default('');
-            $table->string('first_name_encrypted')->nullable();
-            $table->string('last_name_encrypted')->nullable();
-            $table->string('email_encrypted')->nullable();
-            $table->string('phone_encrypted')->nullable();
-            $table->softDeletes();
+            $table->longText('first_name_encrypted')->nullable();
+            $table->longText('last_name_encrypted')->nullable();
+            $table->longText('email_encrypted')->nullable();
+            $table->longText('phone_encrypted')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('warehouses', function (Blueprint $table) {
