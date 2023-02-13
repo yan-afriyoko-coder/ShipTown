@@ -692,9 +692,14 @@ class CoreV1 extends Migration
             $table->index('when_processed');
 
             $table->foreign('product_id')
-                ->on('products')
                 ->references('id')
+                ->on('products')
                 ->onDelete('SET NULL');
+
+            $table->foreign('connection_id')
+                ->references('id')
+                ->on('modules_rmsapi_connections')
+                ->onDelete('cascade');
         });
 
         Schema::create('modules_api2cart_connections', function (Blueprint $table) {
