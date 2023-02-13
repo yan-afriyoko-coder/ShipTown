@@ -922,13 +922,15 @@ class CoreV1 extends Migration
                 ->references('id')
                 ->on('inventory');
             $table->foreignId('product_id');
+            $table->double('total_transferred_in', 10)->default(0);
+            $table->double('total_transferred_out', 10)->default(0);
             $table->decimal('quantity_requested', 20)->nullable();
             $table->decimal('quantity_scanned', 20)->default(0);
             $table->decimal('quantity_to_scan', 20)
-                ->storedAs('CASE WHEN quantity_requested < quantity_scanned THEN 0 ' .
-                'ELSE quantity_requested - quantity_scanned END')
-                ->comment('CASE WHEN quantity_requested < quantity_scanned THEN 0 ' .
-                'ELSE quantity_requested - quantity_scanned END');
+                ->storedAs('CASE WHEN quantity_requested - total_transferred_out - total_transferred_in - quantity_scanned < quantity_scanned THEN 0 ' .
+                    'ELSE quantity_requested - total_transferred_out - total_transferred_in - quantity_scanned END')
+                ->comment('CASE WHEN quantity_requested - total_transferred_out - total_transferred_in - quantity_scanned < quantity_scanned THEN 0 ' .
+                    'ELSE quantity_requested - total_transferred_out - total_transferred_in - quantity_scanned - quantity_scanned END');
             $table->timestamps();
 
             $table->foreign('product_id')
