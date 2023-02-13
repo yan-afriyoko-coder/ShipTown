@@ -1028,7 +1028,7 @@ class CoreV1 extends Migration
 
         Schema::create('modules_rmsapi_sales_imports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('connection_id')->constrained('modules_rmsapi_connections');
+            $table->foreignId('connection_id');
             $table->dateTime('reserved_at')->nullable();
             $table->dateTime('processed_at')->nullable();
             $table->string('sku')->nullable();
@@ -1040,6 +1040,11 @@ class CoreV1 extends Migration
             $table->string('comment')->nullable();
             $table->json('raw_import');
             $table->timestamps();
+
+            $table->foreign('connection_id')
+                ->references('id')
+                ->on('modules_rmsapi_connections')
+                ->onDelete('cascade');
         });
 
         if (!Schema::hasColumn(config('activitylog.table_name'), 'event')) {
