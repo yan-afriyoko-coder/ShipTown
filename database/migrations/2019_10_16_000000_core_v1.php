@@ -751,6 +751,7 @@ class CoreV1 extends Migration
             $table->decimal('api2cart_sale_price', 10, 2)->nullable();
             $table->date('api2cart_sale_price_start_date')->nullable();
             $table->date('api2cart_sale_price_end_date')->nullable();
+            $table->boolean('is_in_sync')->default(true);
             $table->timestamps();
 
             $table->foreign('product_id')
