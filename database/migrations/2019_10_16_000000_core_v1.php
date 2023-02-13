@@ -268,6 +268,7 @@ class CoreV1 extends Migration
                     'ELSE 0 END');
             $table->decimal('reorder_point', 20)->default(0);
             $table->decimal('restock_level', 20)->default(0);
+            $table->timestamp('last_counted_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
 
