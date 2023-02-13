@@ -912,6 +912,11 @@ class CoreV1 extends Migration
                 'ELSE quantity_requested - quantity_scanned END');
             $table->timestamps();
 
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products')
+                ->onDelete('cascade');
+
         });
 
         Schema::create('data_collections', function (Blueprint $table) {
