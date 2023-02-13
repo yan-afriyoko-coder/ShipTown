@@ -1004,6 +1004,14 @@ class CoreV1 extends Migration
             $table->timestamps();
         });
 
+        if (!Schema::hasColumn(config('activitylog.table_name'), 'event')) {
+            Schema::connection(config('activitylog.database_connection'))
+                ->table(config('activitylog.table_name'), function (Blueprint $table) {
+                    $table->string('event')->nullable()->after('subject_type');
+                });
+        }
+
+
         $this->installSpatiePermissions();
     }
 
