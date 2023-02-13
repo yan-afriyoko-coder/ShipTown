@@ -901,6 +901,7 @@ class CoreV1 extends Migration
 
         Schema::create('data_collection_records', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('data_collection_id')->constrained()->onDelete('cascade');
             $table->foreignId('product_id');
             $table->decimal('quantity_requested', 20)->nullable();
             $table->decimal('quantity_scanned', 20)->default(0);
@@ -910,6 +911,7 @@ class CoreV1 extends Migration
                 ->comment('CASE WHEN quantity_requested < quantity_scanned THEN 0 ' .
                 'ELSE quantity_requested - quantity_scanned END');
             $table->timestamps();
+
         });
 
         Schema::create('data_collections', function (Blueprint $table) {
