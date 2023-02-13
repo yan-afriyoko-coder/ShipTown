@@ -922,6 +922,7 @@ class CoreV1 extends Migration
                 ->references('id')
                 ->on('inventory');
             $table->foreignId('product_id');
+            $table->unsignedBigInteger('warehouse_id')->nullable();
             $table->double('total_transferred_in', 10)->default(0);
             $table->double('total_transferred_out', 10)->default(0);
             $table->decimal('quantity_requested', 20)->nullable();
