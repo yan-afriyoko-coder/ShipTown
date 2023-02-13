@@ -317,6 +317,9 @@ class CoreV1 extends Migration
             $table->boolean('is_active')->nullable(false)->default(0);
             $table->boolean('is_on_hold')->default(false);
             $table->boolean('is_editing')->default(0);
+            $table->boolean('is_fully_paid')
+                ->storedAs('total_paid >= total - total_discounts')
+                ->comment('total_paid >= total - total_discounts');
             $table->decimal('total_products')->default(0);
             $table->decimal('total_shipping')->default(0);
             $table->decimal('total', 10)->default(0);
