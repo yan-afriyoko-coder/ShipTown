@@ -963,6 +963,7 @@ class CoreV1 extends Migration
 
         Schema::create('modules_magento2api_products', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('connection_id');
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->decimal('quantity', 20)->nullable();
             $table->boolean('is_in_stock')->nullable();
