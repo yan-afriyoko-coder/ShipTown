@@ -270,9 +270,18 @@ class CoreV1 extends Migration
                     'ELSE 0 END');
             $table->decimal('reorder_point', 20)->default(0);
             $table->decimal('restock_level', 20)->default(0);
+            $table->dateTime('first_received_at')->nullable();
+            $table->dateTime('last_received_at')->nullable();
+            $table->dateTime('first_sold_at')->nullable();
+            $table->dateTime('last_sold_at')->nullable();
             $table->timestamp('last_counted_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
+
+            $table->dateTime('first_received_at')->nullable()->after('restock_level');
+            $table->dateTime('last_received_at')->nullable()->after('first_received_at');
+            $table->dateTime('first_sold_at')->nullable()->after('last_received_at');
+            $table->dateTime('last_sold_at')->nullable()->after('first_sold_at');
 
             $table->index('product_id');
             $table->index('warehouse_code');
