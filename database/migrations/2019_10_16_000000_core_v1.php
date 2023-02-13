@@ -702,6 +702,7 @@ class CoreV1 extends Migration
         Schema::create('modules_rmsapi_products_imports', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('connection_id');
+            $table->foreignId('warehouse_id')->nullable();
             $table->uuid('batch_uuid')->nullable();
             $table->timestamp('reserved_at')->nullable();
             $table->dateTime('when_processed')->nullable();
@@ -714,6 +715,7 @@ class CoreV1 extends Migration
             $table->json('raw_import');
             $table->timestamps();
 
+
             $table->index('when_processed');
 
             $table->foreign('product_id')
@@ -725,6 +727,11 @@ class CoreV1 extends Migration
                 ->references('id')
                 ->on('modules_rmsapi_connections')
                 ->onDelete('cascade');
+
+            $table->foreign('warehouse_id')
+                ->references('id')
+                ->on('warehouses')
+                ->cascadeOnDelete();
         });
 
         Schema::create('modules_api2cart_connections', function (Blueprint $table) {
