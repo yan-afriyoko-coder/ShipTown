@@ -946,6 +946,8 @@ class CoreV1 extends Migration
             $table->integer('points');
             $table->string('reason');
             $table->timestamps();
+
+            $table->index('reason');
         });
 
         $this->installSpatiePermissions();
