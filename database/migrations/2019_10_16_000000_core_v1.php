@@ -971,6 +971,14 @@ class CoreV1 extends Migration
             $table->timestamps();
         });
 
+        Schema::create('modules_magento2api_connections', function (Blueprint $table) {
+            $table->id();
+            $table->string('base_url');
+            $table->integer('inventory_source_warehouse_tag_id')->nullable();
+            $table->string('access_token_encrypted')->nullable();
+            $table->timestamps();
+        });
+
         $this->installSpatiePermissions();
     }
 
