@@ -17,9 +17,5 @@ class CreateApi2cartConnctionProductIdUniqueIndex extends Migration
                 HAVING count(*) > 1) as tbl
             )
         ');
-
-        Schema::table('modules_api2cart_product_links', function (Blueprint $table) {
-            $table->unique(['api2cart_connection_id', 'api2cart_product_id'], 'api2cart_connection_product_id_unique');
-        });
     }
 }

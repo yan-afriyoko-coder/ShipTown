@@ -767,6 +767,8 @@ class CoreV1 extends Migration
                 ->references('id')
                 ->on('modules_api2cart_connections')
                 ->onDelete('CASCADE');
+
+            $table->unique(['api2cart_connection_id', 'api2cart_product_id'], 'api2cart_connection_product_id_unique');
         });
 
         Schema::create('configurations', function (Blueprint $table) {
