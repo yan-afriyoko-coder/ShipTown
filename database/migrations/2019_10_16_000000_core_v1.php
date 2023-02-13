@@ -692,7 +692,7 @@ class CoreV1 extends Migration
             $table->string('password');
             $table->unsignedBigInteger('products_last_timestamp')->default(0);
             $table->unsignedBigInteger('shippings_last_timestamp')->default(0);
-            $table->integer('sales_last_timestamp')->default(0);
+            $table->unsignedBigInteger('sales_last_timestamp')->default(0);
             $table->timestamps();
 
             $table->foreign('warehouse_id')
