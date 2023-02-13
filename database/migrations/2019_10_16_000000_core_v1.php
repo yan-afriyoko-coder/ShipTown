@@ -745,6 +745,7 @@ class CoreV1 extends Migration
             $table->foreignId('api2cart_connection_id');
             $table->string('api2cart_product_type')->nullable();
             $table->string('api2cart_product_id')->nullable();
+            $table->timestamp('sync_first_failed_at')->nullable();
             $table->dateTime('last_fetched_at')->nullable();
             $table->json('last_fetched_data')->nullable();
             $table->decimal('api2cart_quantity', 10, 2)->nullable();
