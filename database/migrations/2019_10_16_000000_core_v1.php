@@ -282,6 +282,7 @@ class CoreV1 extends Migration
             $table->index('quantity_required');
             $table->index('restock_level');
             $table->index('reorder_point');
+            $table->index('last_counted_at');
 
             $table->foreign('product_id')
                 ->references('id')
