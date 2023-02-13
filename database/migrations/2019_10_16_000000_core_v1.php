@@ -912,6 +912,12 @@ class CoreV1 extends Migration
             $table->timestamps();
         });
 
+        Schema::create('data_collections', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+
         $this->installSpatiePermissions();
     }
 
