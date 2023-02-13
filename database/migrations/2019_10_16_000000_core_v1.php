@@ -915,6 +915,18 @@ class CoreV1 extends Migration
                 ->onDelete('cascade');
         });
 
+        Schema::create('data_collections', function (Blueprint $table) {
+            $table->id();
+            $table->string('type')->nullable();
+            $table->foreignId('warehouse_id')
+            ->references('id')
+                ->on('warehouses')
+                ->onDelete('cascade');
+            $table->string('name');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
         Schema::create('data_collection_records', function (Blueprint $table) {
             $table->id();
             $table->foreignId('data_collection_id')->constrained()->onDelete('cascade');
@@ -940,18 +952,6 @@ class CoreV1 extends Migration
                 ->on('products')
                 ->onDelete('cascade');
 
-        });
-
-        Schema::create('data_collections', function (Blueprint $table) {
-            $table->id();
-            $table->string('type')->nullable();
-            $table->foreignId('warehouse_id')
-                ->references('id')
-                ->on('warehouses')
-                ->onDelete('cascade');
-            $table->string('name');
-            $table->timestamps();
-            $table->softDeletes();
         });
 
         Schema::create('stocktake_suggestions', function (Blueprint $table) {
