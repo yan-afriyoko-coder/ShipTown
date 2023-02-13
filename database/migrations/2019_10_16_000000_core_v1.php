@@ -986,6 +986,7 @@ class CoreV1 extends Migration
             $table->string('base_url');
             $table->integer('magento_store_id')->nullable();
             $table->integer('inventory_source_warehouse_tag_id')->nullable();
+            $table->integer('pricing_source_warehouse_id')->nullable();
             $table->string('access_token_encrypted')->nullable();
             $table->timestamps();
         });
