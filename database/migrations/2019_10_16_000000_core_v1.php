@@ -899,6 +899,14 @@ class CoreV1 extends Migration
                 ->onDelete('cascade');
         });
 
+        Schema::create('data_collection_records', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->nullable();
+            $table->foreignId('product_id');
+            $table->double('quantity');
+            $table->timestamps();
+        });
+
         $this->installSpatiePermissions();
     }
 
