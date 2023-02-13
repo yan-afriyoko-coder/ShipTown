@@ -957,6 +957,7 @@ class CoreV1 extends Migration
         Schema::create('stocktake_suggestions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('inventory_id')->references('id')->on('inventory')->cascadeOnDelete();
+            $table->foreignId('warehouse_id')->nullable()->references('id')->on('warehouses')->cascadeOnDelete();
             $table->integer('points');
             $table->string('reason');
             $table->timestamps();
