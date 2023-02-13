@@ -1028,6 +1028,7 @@ class CoreV1 extends Migration
 
         Schema::create('modules_rmsapi_sales_imports', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('inventory_movement_id')->nullable();
             $table->foreignId('connection_id');
             $table->dateTime('reserved_at')->nullable();
             $table->dateTime('processed_at')->nullable();
@@ -1040,6 +1041,11 @@ class CoreV1 extends Migration
             $table->string('comment')->nullable();
             $table->json('raw_import');
             $table->timestamps();
+
+            $table->foreign('inventory_movement_id')
+                ->references('id')
+                ->on('inventory_movements')
+                ->onDelete('SET NULL');
 
             $table->foreign('connection_id')
                 ->references('id')
