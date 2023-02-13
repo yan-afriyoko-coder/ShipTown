@@ -903,6 +903,9 @@ class CoreV1 extends Migration
         Schema::create('data_collection_records', function (Blueprint $table) {
             $table->id();
             $table->foreignId('data_collection_id')->constrained()->onDelete('cascade');
+            $table->foreignId('inventory_id')->nullable()
+                ->references('id')
+                ->on('inventory');
             $table->foreignId('product_id');
             $table->decimal('quantity_requested', 20)->nullable();
             $table->decimal('quantity_scanned', 20)->default(0);
