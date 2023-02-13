@@ -903,7 +903,13 @@ class CoreV1 extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable();
             $table->foreignId('product_id');
-            $table->double('quantity');
+            $table->decimal('quantity_expected', 20)->nullable();
+            $table->decimal('quantity_collected', 20)->default(0);
+            $table->decimal('quantity_required', 20)
+                ->storedAs('CASE WHEN quantity_expected < quantity_collected THEN 0 ' .
+                    'ELSE quantity_expected - quantity_collected END')
+                ->comment('CASE WHEN quantity_expected < quantity_collected THEN 0 ' .
+                    'ELSE quantity_expected - quantity_collected END');
             $table->timestamps();
         });
 
