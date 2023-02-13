@@ -900,8 +900,8 @@ class CoreV1 extends Migration
             $table->decimal('quantity_reserved', 20)->default(0);
             $table->decimal('quantity_incoming', 20)->default(0);
             $table->decimal('quantity_available', 20)
-            ->storedAs('quantity - quantity_reserved')
-            ->comment('quantity - quantity_reserved');
+                ->storedAs('quantity - quantity_reserved')
+                ->comment('quantity - quantity_reserved');
             $table->softDeletes();
             $table->timestamps();
 
@@ -919,7 +919,7 @@ class CoreV1 extends Migration
             $table->id();
             $table->string('type')->nullable();
             $table->foreignId('warehouse_id')
-            ->references('id')
+                ->references('id')
                 ->on('warehouses')
                 ->onDelete('cascade');
             $table->string('name');
@@ -951,12 +951,12 @@ class CoreV1 extends Migration
                 ->references('id')
                 ->on('products')
                 ->onDelete('cascade');
-
         });
 
         Schema::create('stocktake_suggestions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('inventory_id')->references('id')->on('inventory')->cascadeOnDelete();
+            $table->foreignId('product_id')->nullable()->references('id')->on('products')->cascadeOnDelete();
             $table->foreignId('warehouse_id')->nullable()->references('id')->on('warehouses')->cascadeOnDelete();
             $table->integer('points');
             $table->string('reason');
