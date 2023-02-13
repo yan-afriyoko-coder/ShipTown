@@ -965,6 +965,7 @@ class CoreV1 extends Migration
             $table->id();
             $table->foreignId('connection_id');
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
+            $table->boolean('is_inventory_in_sync')->nullable();
             $table->decimal('quantity', 20)->nullable();
             $table->boolean('is_in_stock')->nullable();
             $table->timestamp('stock_items_fetched_at')->nullable();
