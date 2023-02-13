@@ -1031,6 +1031,13 @@ class CoreV1 extends Migration
             $table->foreignId('connection_id')->constrained('modules_rmsapi_connections');
             $table->dateTime('reserved_at')->nullable();
             $table->dateTime('processed_at')->nullable();
+            $table->string('sku')->nullable();
+            $table->decimal('price', 20)->nullable();
+            $table->decimal('quantity', 20)->nullable();
+            $table->timestamp('transaction_time')->nullable();
+            $table->string('transaction_number')->nullable();
+            $table->integer('transaction_entry_id')->nullable();
+            $table->string('comment')->nullable();
             $table->json('raw_import');
             $table->timestamps();
         });
