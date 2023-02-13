@@ -740,6 +740,7 @@ class CoreV1 extends Migration
 
         Schema::create('modules_api2cart_product_links', function (Blueprint $table) {
             $table->id();
+            $table->boolean('is_in_sync')->nullable()->index();
             $table->foreignId('product_id');
             $table->foreignId('api2cart_connection_id');
             $table->string('api2cart_product_type')->nullable();
@@ -751,7 +752,6 @@ class CoreV1 extends Migration
             $table->decimal('api2cart_sale_price', 10, 2)->nullable();
             $table->date('api2cart_sale_price_start_date')->nullable();
             $table->date('api2cart_sale_price_end_date')->nullable();
-            $table->boolean('is_in_sync')->default(true);
             $table->timestamps();
 
             $table->foreign('product_id')
