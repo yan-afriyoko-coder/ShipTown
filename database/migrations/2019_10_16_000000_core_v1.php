@@ -684,6 +684,7 @@ class CoreV1 extends Migration
 
         Schema::create('modules_rmsapi_connections', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('warehouse_id')->nullable();
             $table->string('location_id');
             $table->string('url');
             $table->string('username');
@@ -691,6 +692,11 @@ class CoreV1 extends Migration
             $table->unsignedBigInteger('products_last_timestamp')->default(0);
             $table->unsignedBigInteger('shippings_last_timestamp')->default(0);
             $table->timestamps();
+
+            $table->foreign('warehouse_id')
+                ->references('id')
+                ->on('warehouses')
+                ->cascadeOnDelete();
         });
 
         Schema::create('modules_rmsapi_products_imports', function (Blueprint $table) {
