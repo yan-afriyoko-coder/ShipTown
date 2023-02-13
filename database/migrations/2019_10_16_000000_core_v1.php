@@ -28,6 +28,7 @@ class CoreV1 extends Migration
             $table->string('password');
             $table->string('two_factor_code')->nullable();
             $table->dateTime('two_factor_expires_at')->nullable();
+            $table->string('default_dashboard_uri')->nullable();
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();
