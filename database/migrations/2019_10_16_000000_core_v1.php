@@ -702,6 +702,7 @@ class CoreV1 extends Migration
             $table->string('type')->default('');
             $table->string('url')->default('');
             $table->string('inventory_source_warehouse_tag')->nullable();
+            $table->foreignId('inventory_source_warehouse_tag_id')->nullable();
             $table->foreignId('pricing_source_warehouse_id')->nullable();
             $table->char('prefix', 10)->default('');
             $table->string('bridge_api_key')->nullable();
