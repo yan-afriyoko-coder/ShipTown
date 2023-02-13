@@ -901,15 +901,14 @@ class CoreV1 extends Migration
 
         Schema::create('data_collection_records', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable();
             $table->foreignId('product_id');
-            $table->decimal('quantity_expected', 20)->nullable();
-            $table->decimal('quantity_collected', 20)->default(0);
-            $table->decimal('quantity_required', 20)
-                ->storedAs('CASE WHEN quantity_expected < quantity_collected THEN 0 ' .
-                    'ELSE quantity_expected - quantity_collected END')
-                ->comment('CASE WHEN quantity_expected < quantity_collected THEN 0 ' .
-                    'ELSE quantity_expected - quantity_collected END');
+            $table->decimal('quantity_requested', 20)->nullable();
+            $table->decimal('quantity_scanned', 20)->default(0);
+            $table->decimal('quantity_to_scan', 20)
+                ->storedAs('CASE WHEN quantity_requested < quantity_scanned THEN 0 ' .
+                'ELSE quantity_requested - quantity_scanned END')
+                ->comment('CASE WHEN quantity_requested < quantity_scanned THEN 0 ' .
+                'ELSE quantity_requested - quantity_scanned END');
             $table->timestamps();
         });
 
