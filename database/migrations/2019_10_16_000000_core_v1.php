@@ -279,11 +279,6 @@ class CoreV1 extends Migration
             $table->softDeletes();
             $table->timestamps();
 
-            $table->dateTime('first_received_at')->nullable()->after('restock_level');
-            $table->dateTime('last_received_at')->nullable()->after('first_received_at');
-            $table->dateTime('first_sold_at')->nullable()->after('last_received_at');
-            $table->dateTime('last_sold_at')->nullable()->after('first_sold_at');
-
             $table->index('product_id');
             $table->index('warehouse_code');
             $table->index('shelve_location');
