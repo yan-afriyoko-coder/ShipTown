@@ -929,6 +929,14 @@ class CoreV1 extends Migration
             $table->timestamps();
         });
 
+        Schema::create('stocktake_suggestions', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('inventory_id')->references('id')->on('inventory')->cascadeOnDelete();
+            $table->integer('points');
+            $table->string('reason');
+            $table->timestamps();
+        });
+
         $this->installSpatiePermissions();
     }
 
