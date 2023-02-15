@@ -3,6 +3,12 @@
 use App\Models\Configuration;
 use App\Models\MailTemplate;
 use App\Models\NavigationMenu;
+use App\Modules\AutoRestockLevels\src\AutoRestockLevelsServiceProvider;
+use App\Modules\DataCollector\src\DataCollectorServiceProvider;
+use App\Modules\InventoryQuantityIncoming\src\InventoryQuantityIncomingServiceProvider;
+use App\Modules\NonInventoryProductTag\src\NonInventoryProductTagServiceProvider;
+use App\Modules\QueueMonitor\src\QueueMonitorServiceProvider;
+use App\Modules\StocktakeSuggestions\src\StocktakeSuggestionsServiceProvider;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +36,13 @@ class InstallApplication extends Migration
 
             \App\Services\ModulesService::updateModulesTable();
         });
+
+        StocktakeSuggestionsServiceProvider::enableModule();
+        AutoRestockLevelsServiceProvider::installModule();
+        InventoryQuantityIncomingServiceProvider::installModule();
+        DataCollectorServiceProvider::installModule();
+        NonInventoryProductTagServiceProvider::installModule();
+        QueueMonitorServiceProvider::installModule();
     }
 
     private function createDefaultNavigationLinks(): void
@@ -393,7 +406,8 @@ class InstallApplication extends Migration
 </table>
 
 </body>
-</html>']);
+</html>'
+        ]);
     }
 
     private function createShipmentConfirmationNotificationTemplate()
