@@ -131,6 +131,12 @@ class DataCollectorService
 
     public static function transferInRecord(DataCollectionRecord $record): void
     {
+        $record->refresh();
+
+        if ($record->quantity_scanned == 0) {
+            return;
+        }
+
         DB::transaction(function () use ($record) {
             $inventory = Inventory::firstOrCreate([
                 'warehouse_id' => $record->dataCollection->warehouse_id,
