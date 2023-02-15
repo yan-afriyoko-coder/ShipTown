@@ -1,5 +1,5 @@
 name: PHP 8.1 - PHPUnit
-on: [push]
+on: [push, pull_request]
 
 env:
   APP_URL: "http://127.0.0.1:8000"
