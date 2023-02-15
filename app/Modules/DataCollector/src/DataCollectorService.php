@@ -25,7 +25,6 @@ class DataCollectorService
                 'type' => DataCollectionTransferIn::class,
                 'currently_running_task' => DataCollectionTransferIn::class,
             ]);
-//            $dataCollection->delete();
 
             TransferInJob::dispatch($dataCollection->id);
             return;
@@ -141,7 +140,7 @@ class DataCollectorService
             $custom_unique_reference_id = implode(':', [
                 'data_collection_id' , $record->data_collection_id,
                 'data_collection_record_id' , $record->getKey(),
-                Guid::uuid4()->toString()
+                $record->updated_at
             ]);
 
             InventoryService::adjustQuantity(
@@ -165,7 +164,8 @@ class DataCollectorService
     {
         $custom_unique_reference_id = implode(':', [
             'data_collection_id' , $record->data_collection_id,
-            'data_collection_record_id' , $record->getKey()
+            'data_collection_record_id' , $record->getKey(),
+            $record->updated_at
         ]);
 
         $inventory = Inventory::firstOrCreate([
