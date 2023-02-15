@@ -40,22 +40,25 @@ class TransferInJob implements ShouldQueue
             'type' => DataCollectionTransferIn::class,
             'currently_running_task' => DataCollectionTransferIn::class
         ]);
-        $dataCollection->delete();
 
         $dataCollection->records()
             ->where('quantity_scanned', '!=', DB::raw(0))
             ->chunkById(100, function ($records) {
                 $records->each(function (DataCollectionRecord $record) {
-                    retry(5, function () use ($record) {
-                        DB::transaction(function () use ($record) {
-                            DataCollectorService::transferInRecord($record);
-                        });
-                    }, 1000);
+                    DataCollectorService::transferInRecord($record);
                 });
             });
 
-        if ($dataCollection->records()->where('quantity_scanned', '!=', DB::raw(0))->count() === 0) {
+        if ($dataCollection->records()->where('quantity_scanned', '!=', 0)->exists() === false) {
             $dataCollection->update(['currently_running_task' => null]);
+        }
+
+        $everythingHasBeenTransferredIn = ! $dataCollection->records()
+                ->whereRaw('quantity_requested > total_transferred_in')
+                ->exists();
+
+        if ($everythingHasBeenTransferredIn) {
+            $dataCollection->delete();
         }
     }
 }

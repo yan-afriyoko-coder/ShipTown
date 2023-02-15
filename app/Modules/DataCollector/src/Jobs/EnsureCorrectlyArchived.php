@@ -37,12 +37,8 @@ class EnsureCorrectlyArchived implements ShouldQueue
                 TransferOutJob::dispatch($dataCollection->id);
             });
 
-        DataCollection::onlyTrashed()->distinct()->select('data_collections.id')
-            ->rightJoin('data_collection_records', function ($join) {
-                $join->on('data_collection_records.data_collection_id', '=', 'data_collections.id');
-                $join->on('data_collection_records.quantity_scanned', '!=', DB::raw(0));
-            })
-            ->where('type', DataCollectionTransferIn::class)
+        DataCollection::withTrashed()->distinct()->select('data_collections.id')
+            ->where('currently_running_task', DataCollectionTransferIn::class)
             ->get()
             ->each(function (DataCollection $dataCollection) {
                 TransferInJob::dispatch($dataCollection->id);
