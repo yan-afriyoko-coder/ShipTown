@@ -129,27 +129,30 @@ class DataCollectorService
      */
     public static function transferInRecord(DataCollectionRecord $record): void
     {
-        $custom_unique_reference_id = implode(':', [
-            'data_collection_id' , $record->data_collection_id,
-            'data_collection_record_id' , $record->getKey()
-        ]);
-
         $inventory = Inventory::firstOrCreate([
             'warehouse_id' => $record->dataCollection->warehouse_id,
             'product_id' => $record->product_id
         ], []);
 
-        InventoryService::adjustQuantity(
-            $inventory,
-            $record->quantity_scanned,
-            'data collection transfer in',
-            $custom_unique_reference_id
-        );
+        DB::transaction(function () use ($inventory, $record) {
+            $custom_unique_reference_id = implode(':', [
+                'data_collection_id' , $record->data_collection_id,
+                'data_collection_record_id' , $record->getKey(),
+                Guid::uuid4()->toString()
+            ]);
 
-        $record->update([
-            'total_transferred_in' => $record->total_transferred_in + $record->quantity_scanned,
-            'quantity_scanned' => 0
-        ]);
+            InventoryService::adjustQuantity(
+                $inventory,
+                $record->quantity_scanned,
+                'data collection transfer in',
+                $custom_unique_reference_id
+            );
+
+            $record->update([
+                'total_transferred_in' => $record->total_transferred_in + $record->quantity_scanned,
+                'quantity_scanned' => 0
+            ]);
+        });
     }
 
     /**
