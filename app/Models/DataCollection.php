@@ -32,12 +32,14 @@ class DataCollection extends BaseModel
     protected static $logAttributes = [
         'deleted_at',
         'type',
+        'currently_running_task'
     ];
 
     protected $fillable = [
         'type',
         'warehouse_id',
         'name',
+        'currently_running_task'
     ];
 
     public function records(): HasMany

@@ -36,7 +36,10 @@ class TransferInJob implements ShouldQueue
     {
         /** @var DataCollection $dataCollection */
         $dataCollection = DataCollection::withTrashed()->findOrFail($this->data_collection_id);
-        $dataCollection->update(['type' => DataCollectionTransferIn::class]);
+        $dataCollection->update([
+            'type' => DataCollectionTransferIn::class,
+            'currently_running_task' => DataCollectionTransferIn::class
+        ]);
         $dataCollection->delete();
 
         $dataCollection->records()
@@ -50,5 +53,9 @@ class TransferInJob implements ShouldQueue
                     }, 1000);
                 });
             });
+
+        if ($dataCollection->records()->where('quantity_scanned', '!=', DB::raw(0))->count() === 0) {
+            $dataCollection->update(['currently_running_task' => null]);
+        }
     }
 }
