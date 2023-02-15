@@ -21,6 +21,8 @@ use Illuminate\Support\Carbon;
  * @property DataCollectionRecord $records
  * @property Warehouse $warehouse
  * @property string $type
+ * @property string $currently_running_task
+ *
  */
 class DataCollection extends BaseModel
 {
