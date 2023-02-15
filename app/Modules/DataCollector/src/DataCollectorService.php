@@ -129,9 +129,9 @@ class DataCollectorService
      */
     public static function transferInRecord(DataCollectionRecord $record): void
     {
-        $custom_unique_reference_id = implode(',', [
-            'data_collection_id:' , $record->data_collection_id,
-            'data_collection_record_id:' , $record->getKey()
+        $custom_unique_reference_id = implode(':', [
+            'data_collection_id' , $record->data_collection_id,
+            'data_collection_record_id' , $record->getKey()
         ]);
 
         $inventory = Inventory::firstOrCreate([
@@ -157,9 +157,9 @@ class DataCollectorService
      */
     public static function transferOutRecord(DataCollectionRecord $record): void
     {
-        $custom_unique_reference_id = implode(',', [
-            'data_collection_id:' , $record->data_collection_id,
-            'data_collection_record_id:' , $record->getKey()
+        $custom_unique_reference_id = implode(':', [
+            'data_collection_id' , $record->data_collection_id,
+            'data_collection_record_id' , $record->getKey()
         ]);
 
         $inventory = Inventory::firstOrCreate([
