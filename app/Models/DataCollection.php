@@ -21,6 +21,8 @@ use Illuminate\Support\Carbon;
  * @property DataCollectionRecord $records
  * @property Warehouse $warehouse
  * @property string $type
+ * @property string $currently_running_task
+ *
  */
 class DataCollection extends BaseModel
 {
@@ -32,12 +34,14 @@ class DataCollection extends BaseModel
     protected static $logAttributes = [
         'deleted_at',
         'type',
+        'currently_running_task'
     ];
 
     protected $fillable = [
         'type',
         'warehouse_id',
         'name',
+        'currently_running_task'
     ];
 
     public function records(): HasMany
