@@ -38,11 +38,19 @@
             </div>
         </div>
 
-        <b-modal id="quick-actions-modal" no-fade hide-footer hide-header
+        <b-modal id="quick-actions-modal" no-fade hide-header
                  @shown="setFocusElementById(100,'stocktake-input', true, true)"
                  @hidden="setFocusElementById(100,'barcodeInput', true, true)">
             <stocktake-input></stocktake-input>
             <hr>
+            <template #modal-footer>
+                <b-button variant="secondary" class="float-right" @click="$bvModal.hide('quick-actions-modal');">
+                    Cancel
+                </b-button>
+                <b-button variant="primary" class="float-right" @click="$bvModal.hide('quick-actions-modal');">
+                    OK
+                </b-button>
+            </template>
         </b-modal>
 
     </div>

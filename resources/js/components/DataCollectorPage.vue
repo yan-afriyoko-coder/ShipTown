@@ -70,10 +70,9 @@
                  @hidden="setFocusElementById(100,'barcodeInput', true, true)"
         >
             <div v-if="dataCollection">
+                <stocktake-input></stocktake-input>
                 <div v-if="dataCollection['deleted_at'] === null" :class="{ 'disabled': true }">
-                    <stocktake-input></stocktake-input>
                     <hr>
-
                     <div class="row mb-2">
                         <div class="col">
                             <div class="setting-title">Single Scan mode</div>
@@ -136,12 +135,11 @@
             </div>
 
             <template #modal-footer>
-                <b-button
-                    variant="outline-secondary"
-                    class="float-right"
-                    @click="$bvModal.hide('configuration-modal');"
-                >
-                    Close
+                <b-button variant="secondary" class="float-right" @click="$bvModal.hide('configuration-modal');">
+                    Cancel
+                </b-button>
+                <b-button variant="primary" class="float-right" @click="$bvModal.hide('configuration-modal');">
+                    OK
                 </b-button>
             </template>
 

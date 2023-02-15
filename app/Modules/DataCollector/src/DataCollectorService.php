@@ -21,15 +21,21 @@ class DataCollectorService
     public static function runAction(DataCollection $dataCollection, $action)
     {
         if ($action === 'transfer_in_scanned') {
-            $dataCollection->update(['type' => DataCollectionTransferIn::class]);
-            $dataCollection->delete();
+            $dataCollection->update([
+                'type' => DataCollectionTransferIn::class,
+                'currently_running_task' => DataCollectionTransferIn::class,
+            ]);
+//            $dataCollection->delete();
 
             TransferInJob::dispatch($dataCollection->id);
             return;
         }
 
         if ($action === 'transfer_out_scanned') {
-            $dataCollection->update(['type' => DataCollectionTransferOut::class]);
+            $dataCollection->update([
+                'type' => DataCollectionTransferOut::class,
+                'currently_running_task' => DataCollectionTransferOut::class
+            ]);
             $dataCollection->delete();
 
             TransferOutJob::dispatch($dataCollection->id);
@@ -124,17 +130,14 @@ class DataCollectorService
             });
     }
 
-    /**
-     * @param DataCollectionRecord $record
-     */
     public static function transferInRecord(DataCollectionRecord $record): void
     {
-        $inventory = Inventory::firstOrCreate([
-            'warehouse_id' => $record->dataCollection->warehouse_id,
-            'product_id' => $record->product_id
-        ], []);
+        DB::transaction(function () use ($record) {
+            $inventory = Inventory::firstOrCreate([
+                'warehouse_id' => $record->dataCollection->warehouse_id,
+                'product_id' => $record->product_id
+            ], []);
 
-        DB::transaction(function () use ($inventory, $record) {
             $custom_unique_reference_id = implode(':', [
                 'data_collection_id' , $record->data_collection_id,
                 'data_collection_record_id' , $record->getKey(),
