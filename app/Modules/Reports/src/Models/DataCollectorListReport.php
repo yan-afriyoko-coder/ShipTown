@@ -17,7 +17,7 @@ class DataCollectorListReport extends Report
         $this->baseQuery = DataCollection::query()
             ->leftJoin('warehouses', 'warehouses.id', '=', 'data_collections.warehouse_id');
 
-        $differences_count = DB::raw('(
+        $differences_count_subquery = DB::raw('(
                 SELECT count(*)
                 FROM data_collection_records
                 WHERE data_collection_records.data_collection_id = data_collections.id
@@ -31,10 +31,11 @@ class DataCollectorListReport extends Report
             'warehouse_id'          => 'warehouse_id',
             'type'                  => 'data_collections.type',
             'name'                  => 'data_collections.name',
-            'differences_count'     =>  $differences_count,
+            'differences_count'     =>  $differences_count_subquery,
             'created_at'            => 'data_collections.created_at',
             'updated_at'            => 'data_collections.updated_at',
             'deleted_at'            => 'data_collections.deleted_at',
+            'currently_running_task'=> 'data_collections.currently_running_task',
         ];
 
         $this->casts = [
@@ -48,6 +49,7 @@ class DataCollectorListReport extends Report
 
             'warehouses_code'        => 'string',
             'warehouses_name'        => 'string',
+            'currently_running_task' => 'string',
         ];
 
         $this->addFilter(
