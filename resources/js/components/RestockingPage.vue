@@ -26,7 +26,7 @@
         </b-modal>
 
         <template v-for="record in data">
-            <restocking-record-card :record="record"></restocking-record-card>
+            <restocking-record-card :record="record" :key="record.id" @showModalMovement=showModalMovement></restocking-record-card>
         </template>
 
         <div class="row">
@@ -34,6 +34,19 @@
                 <div ref="loadingContainerOverride" dusk="loadingContainerOverride" style="height: 32px"></div>
             </div>
         </div>
+
+        <b-modal id="show-inventory-movements" size="lg" title="Inventory Movements" scrollable no-fade>
+            <inventory-movement-list :product_sku="this.showMovementSku" class="pb-4" />
+            <template #modal-footer>
+                <b-button
+                    variant="outline-secondary"
+                    class="float-right"
+                    @click="$bvModal.hide('show-inventory-movements')"
+                >
+                    Close
+                </b-button>
+            </template>
+        </b-modal>
     </div>
 
 </template>
@@ -43,8 +56,11 @@ import loadingOverlay from '../mixins/loading-overlay';
 import url from "../mixins/url";
 import api from "../mixins/api";
 import helpers from "../mixins/helpers";
+import InventoryMovementList from './SharedComponents/InventoryMovementList';
 
 export default {
+        components: { InventoryMovementList },
+
         mixins: [loadingOverlay, url, api, helpers],
 
         props: {
@@ -61,6 +77,7 @@ export default {
                 newReorderPoint: null,
                 newRestockLevel: null,
                 newQuantityInStock: null,
+                showMovementSku: null
             };
         },
 
@@ -165,6 +182,11 @@ export default {
                 this.data = [];
                 this.loadRestockingRecords();
             },
+
+            showModalMovement(product_sku) {
+                this.showMovementSku = product_sku
+                this.$bvModal.show('show-inventory-movements')
+            }
         },
     }
 </script>
