@@ -9,36 +9,21 @@
                 </div>
             </div>
             <div class="card-body">
-                <table class="table table-borderless table-responsive mb-0">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th class="w-100 text-right">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-if="errorMessage">
-                            <td colspan="5" class="alert-danger">{{ errorMessage }}</td>
-                        </tr>
-                        <tr v-if="(!errorMessage && printers.length === 0)">
-                            <td colspan="5">No printers found.</td>
-                        </tr>
-                        <tr v-for="printer in printers" :key="printer.id" :class="{'table-primary': isDefaultPrinter(printer.id)}">
-                            <td>
-                                {{ printer.name }} <br>
-                                <span class="small text-secondary">
-                                    {{ printer.computer.name }}<br>
-                                    <status-icon :status="printer.state === 'online'" class="small" /> {{ printer.id }}
+
+                <div class="row mb-2" v-for="printer in printers" :key="printer['id']" :class="{'table-primary': isDefaultPrinter(printer['id'])}">
+                    <div class="col-lg-6 col-md-12">
+                        {{ printer['name'] }} <br>
+                        <span class="small text-secondary">
+                                    {{ printer['computer']['name'] }}<br>
+                                    <status-icon :status="printer['state'] === 'online'" class="small" /> {{ printer['id'] }}
                                 </span>
-                            </td>
-                            <td class="text-right">
-                                <button type="button" @click.prevent="printTestPage(printer)" class="btn btn-primary btn-sm mb-1">PDF Test</button>
-                                <button type="button" @click.prevent="printEplTestPage(printer)" class="btn btn-primary btn-sm mb-1">EPL Test</button>
-                                <button type="button" @click.prevent="setUserPrinter(printer.id)" v-if="!isDefaultPrinter(printer.id)" class="btn btn-primary btn-sm mb-1">Use</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                    </div>
+                    <div class="col text-right">
+                        <button type="button" @click.prevent="printTestPage(printer)" class="btn btn-primary btn-sm mb-1">PDF Test</button>
+                        <button type="button" @click.prevent="printEplTestPage(printer)" class="btn btn-primary btn-sm mb-1">EPL Test</button>
+                        <button type="button" @click.prevent="setUserPrinter(printer['id'])" v-if="!isDefaultPrinter(printer['id'])" class="btn btn-primary btn-sm mb-1">Use</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -36,7 +36,8 @@ class DatabaseSeeder extends Seeder
 //            RmsapiConnectionSeeder::class,
 //            StocktakeSuggestionsSeeder::class,
 //            AutomationsSeeder::class,
-//            PrintNodeClientSeeder::class,
+
+            PrintNodeClientSeeder::class,
 //            DpdIrelandSeeder::class,
 //            ProductAliasSeeder::class,
 //            ProductTagsSeeder::class,
