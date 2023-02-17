@@ -35,18 +35,7 @@
             </div>
         </div>
 
-        <b-modal id="show-inventory-movements" size="lg" title="Inventory Movements" scrollable no-fade>
-            <inventory-movement-list :product_sku="this.showMovementSku" class="pb-4" />
-            <template #modal-footer>
-                <b-button
-                    variant="outline-secondary"
-                    class="float-right"
-                    @click="$bvModal.hide('show-inventory-movements')"
-                >
-                    Close
-                </b-button>
-            </template>
-        </b-modal>
+        <modal-inventory-movement :product_sku="showMovementSku" />
     </div>
 
 </template>
@@ -56,10 +45,12 @@ import loadingOverlay from '../mixins/loading-overlay';
 import url from "../mixins/url";
 import api from "../mixins/api";
 import helpers from "../mixins/helpers";
-import InventoryMovementList from './SharedComponents/InventoryMovementList';
+import ModalInventoryMovement from './SharedComponents/ModalInventoryMovement';
 
 export default {
-        components: { InventoryMovementList },
+        components: {
+            ModalInventoryMovement
+        },
 
         mixins: [loadingOverlay, url, api, helpers],
 

@@ -161,9 +161,6 @@ export default {
         },
 
         computed: {
-            productItemMovementLink() {
-                return '/reports/inventory-movements?hide_nav_bar=true&filter[search]=' + this.record['product_sku'];
-            },
 
             newRestockLevelValue: {
                 get: function() {
