@@ -40,7 +40,6 @@ class TransferOutJob implements ShouldQueue
             'type' => DataCollectionTransferOut::class,
             'currently_running_task' => DataCollectionTransferOut::class
         ]);
-        $dataCollection->delete();
 
         $dataCollection->records()
             ->where('quantity_scanned', '!=', DB::raw(0))
@@ -54,8 +53,16 @@ class TransferOutJob implements ShouldQueue
                 });
             });
 
-        if ($dataCollection->records()->where('quantity_scanned', '!=', DB::raw(0))->count() === 0) {
+        if ($dataCollection->records()->where('quantity_scanned', '!=', DB::raw(0))->exists() === false) {
             $dataCollection->update(['currently_running_task' => null]);
+        }
+
+        $everythingHasBeenTransferredOut = !$dataCollection->records()
+            ->whereRaw('quantity_requested > total_transferred_out')
+            ->exists();
+
+        if ($everythingHasBeenTransferredOut) {
+            $dataCollection->delete();
         }
     }
 }
