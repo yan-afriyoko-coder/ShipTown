@@ -42,6 +42,7 @@ class DataCollectionReport extends Report
             'quantity_to_scan'          => 'data_collection_records.quantity_to_scan',
             'inventory_quantity'        => 'inventory.quantity',
             'inventory_last_counted_at' => 'inventory.last_counted_at',
+            'last_movement_at'          => 'inventory.last_movement_at',
             'shelf_location'            => 'inventory.shelve_location',
         ];
 
