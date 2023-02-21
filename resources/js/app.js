@@ -202,6 +202,7 @@ Vue.component('navigation-menu-table', require('./components/Settings/Navigation
 Vue.component('automation-table', require('./components/Settings/AutomationTable.vue').default);
 Vue.component('warehouses-page', require('./components/Settings/WarehousesPage.vue').default);
 Vue.component('magento-api-configuration-page', require('./components/Settings/MagentoApiConfigurationPage.vue').default);
+Vue.component('reservation-warehouse', require('./components/Settings/ReservationWarehouse.vue').default);
 Vue.component('heartbeats', require('./components/Heartbeats.vue').default);
 Vue.component('api', require('./mixins/api.vue').default);
 Vue.component('webhooks-subscription-page', require('../../app/Modules/Webhooks/resources/js/WebhooksSubscriptionsPage.vue').default);

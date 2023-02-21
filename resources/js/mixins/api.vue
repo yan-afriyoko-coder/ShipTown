@@ -364,6 +364,9 @@ export default {
             apiGetMagentoApiConnections: function (params) { return axios.get('/api/modules/magento-api/connections/', {params}) },
             apiPostMagentoApiConnection: function (params) { return axios.post(`/api/modules/magento-api/connections/`, params) },
             apiDeleteMagentoApiConnection: function (id) { return axios.delete(`/api/modules/magento-api/connections/${id}`) },
+
+            apiGetReservationWarehouse: function () { return axios.get('/api/modules/reservation-warehouse') },
+            apiSaveReservationWarehouse: function (params) { return axios.post('/api/modules/reservation-warehouse', params) },
         }
     }
 </script>
