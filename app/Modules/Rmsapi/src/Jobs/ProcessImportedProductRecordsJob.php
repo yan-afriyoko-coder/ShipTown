@@ -129,10 +129,10 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
             ])
             ->first();
 
-        if ($inventory->quantity !== floatval($ip->raw_import['quantity_on_hand'])) {
-            $quantityDelta = $ip->raw_import['quantity_on_hand'] - $inventory->quantity;
-            InventoryService::adjustQuantity($inventory, $quantityDelta, 'rms_adjustment');
-        }
+//        if ($inventory->quantity !== floatval($ip->raw_import['quantity_on_hand'])) {
+//            $quantityDelta = $ip->raw_import['quantity_on_hand'] - $inventory->quantity;
+//            InventoryService::adjustQuantity($inventory, $quantityDelta, 'rms_adjustment');
+//        }
 
         if ($inventory->quantity_reserved !== Arr::get($ip->raw_import, 'quantity_committed', 0)
             or $inventory->reorder_point !== Arr::get($ip->raw_import, 'reorder_point', 0)
