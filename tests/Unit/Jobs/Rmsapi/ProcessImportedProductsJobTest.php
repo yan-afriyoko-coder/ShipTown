@@ -5,12 +5,10 @@ namespace Tests\Unit\Jobs\Rmsapi;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductAlias;
-use App\Models\Warehouse;
+use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
-use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Event;
 use Spatie\Tags\Tag;
 use Tests\TestCase;
 
@@ -70,7 +68,7 @@ class ProcessImportedProductsJobTest extends TestCase
         Product::query()->forceDelete();
         Inventory::query()->forceDelete();
 
-//        Warehouse::factory()->create();
+        /** @var RmsapiProductImport $importData */
         $importData = RmsapiProductImport::factory()->create();
 
         // do
