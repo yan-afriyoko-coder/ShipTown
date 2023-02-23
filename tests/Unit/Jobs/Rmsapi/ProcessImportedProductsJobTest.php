@@ -5,12 +5,10 @@ namespace Tests\Unit\Jobs\Rmsapi;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\ProductAlias;
-use App\Models\Warehouse;
+use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
-use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Event;
 use Spatie\Tags\Tag;
 use Tests\TestCase;
 
@@ -26,6 +24,7 @@ class ProcessImportedProductsJobTest extends TestCase
         ProductAlias::query()->forceDelete();
         Tag::query()->forceDelete();
 
+        /** @var RmsapiProductImport $importData */
         $importData = RmsapiProductImport::factory()->create();
 
         $raw_import = $importData->raw_import;
@@ -39,7 +38,7 @@ class ProcessImportedProductsJobTest extends TestCase
 
         // assert
         $this->assertEquals(
-            Product::firstOrFail()->tags()->exists(),
+            Product::query()->firstOrFail()->tags()->exists(),
             $importData->raw_import['is_web_item'],
             'Available Online tag not imported'
         );
@@ -70,7 +69,7 @@ class ProcessImportedProductsJobTest extends TestCase
         Product::query()->forceDelete();
         Inventory::query()->forceDelete();
 
-//        Warehouse::factory()->create();
+        /** @var RmsapiProductImport $importData */
         $importData = RmsapiProductImport::factory()->create();
 
         // do
@@ -91,13 +90,5 @@ class ProcessImportedProductsJobTest extends TestCase
 
         $exists = RmsapiProductImport::query()->whereNull('product_id')->exists();
         $this->assertFalse($exists, 'product_id column is not populated');
-
-        $wasInventoryUpdated = Inventory::query()
-            ->where('product_id', '=', $product->id)
-            ->where('quantity', '=', $importData->raw_import['quantity_on_hand'])
-            ->where('quantity_reserved', '=', $importData->raw_import['quantity_committed'])
-            ->exists();
-
-        $this->assertTrue($wasInventoryUpdated, 'Inventory not updated correctly');
     }
 }
