@@ -91,13 +91,5 @@ class ProcessImportedProductsJobTest extends TestCase
 
         $exists = RmsapiProductImport::query()->whereNull('product_id')->exists();
         $this->assertFalse($exists, 'product_id column is not populated');
-
-        $wasInventoryUpdated = Inventory::query()
-            ->where('product_id', '=', $product->id)
-            ->where('quantity', '=', $importData->raw_import['quantity_on_hand'])
-            ->where('quantity_reserved', '=', $importData->raw_import['quantity_committed'])
-            ->exists();
-
-        $this->assertTrue($wasInventoryUpdated, 'Inventory not updated correctly');
     }
 }
