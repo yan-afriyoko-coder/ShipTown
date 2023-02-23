@@ -14,6 +14,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $reserved_at
  * @property int         $connection_id
  * @property Carbon|null $when_processed
+ * @property string|null $uuid
+ * @property string|null $type
  * @property string|null $sku
  * @property float|null  $quantity
  * @property Carbon|null $created_at
@@ -38,6 +40,8 @@ class RmsapiSaleImport extends BaseModel
         'inventory_movement_id',
         'reserved_at',
         'processed_at',
+        'uuid',
+        'type',
         'sku',
         'price',
         'quantity',
