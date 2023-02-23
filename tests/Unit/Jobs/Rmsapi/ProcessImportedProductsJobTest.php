@@ -24,6 +24,7 @@ class ProcessImportedProductsJobTest extends TestCase
         ProductAlias::query()->forceDelete();
         Tag::query()->forceDelete();
 
+        /** @var RmsapiProductImport $importData */
         $importData = RmsapiProductImport::factory()->create();
 
         $raw_import = $importData->raw_import;
@@ -37,7 +38,7 @@ class ProcessImportedProductsJobTest extends TestCase
 
         // assert
         $this->assertEquals(
-            Product::firstOrFail()->tags()->exists(),
+            Product::query()->firstOrFail()->tags()->exists(),
             $importData->raw_import['is_web_item'],
             'Available Online tag not imported'
         );
