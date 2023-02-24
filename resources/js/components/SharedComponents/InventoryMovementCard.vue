@@ -50,9 +50,10 @@
 <script>
 
 import helpers from "./../../mixins/helpers";
+import url from "../../mixins/url";
 
 export default {
-    mixins: [helpers],
+    mixins: [helpers, url],
     props: {
         record: {
             type: Object,
