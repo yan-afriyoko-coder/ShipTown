@@ -75,5 +75,6 @@ Route::prefix('admin')->middleware(['web', 'auth', 'role:admin', 'twofactor'])->
     // Settings
     Route::prefix('settings')->group(function () {
         Route::view('modules/magento-api', 'settings/magento-api')->name('settings.modules.magento-api');
+        Route::view('modules/inventory-reservations', 'settings/inventory-reservations')->name('settings.modules.inventory-reservations');
     });
 });
