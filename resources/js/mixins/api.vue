@@ -365,8 +365,8 @@ export default {
             apiPostMagentoApiConnection: function (params) { return axios.post(`/api/modules/magento-api/connections/`, params) },
             apiDeleteMagentoApiConnection: function (id) { return axios.delete(`/api/modules/magento-api/connections/${id}`) },
 
-            apiGetInventoryReservationsConfig: function () { return axios.get('/api/modules/inventory-reservations/') },
-            apiUpdateInventoryReservationsConfig: function (id, params) { return axios.put('/api/modules/inventory-reservations/' + id, params) },
+            apiGetInventoryReservationsConfig: function () { return axios.get('/api/modules/inventory-reservations/configuration') },
+            apiUpdateInventoryReservationsConfig: function (id, params) { return axios.put('/api/modules/inventory-reservations/configuration/' + id, params) },
         }
     }
 </script>
