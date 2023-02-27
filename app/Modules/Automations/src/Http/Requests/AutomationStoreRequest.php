@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Automations;
+namespace App\Modules\Automations\src\Http\Requests;
 
 use App\Modules\Automations\src\Services\AutomationService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreRequest extends FormRequest
+class AutomationStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
