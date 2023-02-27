@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Modules\DpdIreland\src\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DpdIrelandConnectionDestroyRequest extends FormRequest
+class DpdIrelandIndexRequest extends FormRequest
 {
     public function authorize():bool
     {
