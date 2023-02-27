@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Modules\Api2cart\src\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreApi2cartConnectionRequest extends FormRequest
+class Api2cartConnectionStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

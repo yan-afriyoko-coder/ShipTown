@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api\Modules\Api2cart;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api2cartConnectionDestroyRequest;
-use App\Http\Requests\Api2cartConnectionIndexRequest;
-use App\Http\Requests\StoreApi2cartConnectionRequest;
+use App\Modules\Api2cart\src\Http\Requests\Api2cartConnectionDestroyRequest;
+use App\Modules\Api2cart\src\Http\Requests\Api2cartConnectionIndexRequest;
+use App\Modules\Api2cart\src\Http\Requests\Api2cartConnectionStoreRequest;
 use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use Exception;
@@ -29,11 +29,11 @@ class Api2cartConnectionController extends Controller
     }
 
     /**
-     * @param StoreApi2cartConnectionRequest $request
+     * @param Api2cartConnectionStoreRequest $request
      *
      * @return JsonResource
      */
-    public function store(StoreApi2cartConnectionRequest $request): JsonResource
+    public function store(Api2cartConnectionStoreRequest $request): JsonResource
     {
         $config = new Api2cartConnection();
         $config->fill($request->only($config->getFillable()));
