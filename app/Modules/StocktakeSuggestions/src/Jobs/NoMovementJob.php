@@ -43,7 +43,7 @@ class NoMovementJob implements ShouldQueue
 
             WHERE inventory.warehouse_id = ?
             AND inventory.quantity != 0
-            AND inventory.quantity_available * products_prices.price > 500
+            AND inventory.quantity_available * products_prices.price > 100
             AND products_prices.price > 5
             AND DATEDIFF(now(), inventory.last_movement_at) > 7
             AND inventory.last_movement_at > inventory.last_counted_at
