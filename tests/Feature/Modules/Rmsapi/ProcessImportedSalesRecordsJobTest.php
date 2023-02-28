@@ -33,7 +33,7 @@ class ProcessImportedSalesRecordsJobTest extends TestCase
         $this->assertDatabaseHas('inventory_movements', [
             'product_id' => $product->getKey(),
             'description' => 'rms_sale',
-            'quantity_delta' => $saleRecord->quantity * -1,
+            'quantity_delta' => $saleRecord->quantity,
         ]);
 
         $this->assertDatabaseCount('inventory_movements', 1);
@@ -59,7 +59,7 @@ class ProcessImportedSalesRecordsJobTest extends TestCase
         $this->assertDatabaseHas('inventory_movements', [
             'product_id' => $product->getKey(),
             'description' => 'rms_sale',
-            'quantity_delta' => $saleRecord->quantity * -1,
+            'quantity_delta' => $saleRecord->quantity,
         ]);
 
         $this->assertDatabaseMissing('modules_rmsapi_sales_imports', [
