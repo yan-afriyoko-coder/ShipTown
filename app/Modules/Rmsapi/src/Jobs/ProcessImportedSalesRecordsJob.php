@@ -126,7 +126,7 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
 
         $inventoryMovement = InventoryService::adjustQuantity(
             $inventory,
-            $salesRecord->quantity * -1,
+            $salesRecord->quantity,
             $salesRecord->type,
             $unique_reference_id
         );
