@@ -24,7 +24,7 @@ class RmsapiSaleImportFactory extends Factory
             'uuid' => 'rms_transaction:12324:store_id:12:entry_id:123',
             'type' => 'rms_sale',
             'sku' => $product->sku,
-            'quantity' => $this->faker->numberBetween(1, 100),
+            'quantity' => $this->faker->numberBetween(1, 100) * -1,
             'transaction_number' => $this->faker->numberBetween(100000, 200000),
             'transaction_entry_id' => $this->faker->numberBetween(700000, 900000),
             'comment' => ''
