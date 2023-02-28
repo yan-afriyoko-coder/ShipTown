@@ -11,15 +11,11 @@
                         {{ record['suggestion_details'] }}
                     </div>
                 </div>
-<!--                <div class="row" v-for="detail in suggestionDetails">-->
-<!--                    <div class="col">-->
-<!--                        {{ detail['points'] }} points - {{ detail['reason'] }}-->
-<!--                    </div>-->
-<!--                </div>-->
                 <div @click="toggleDetails"  :class="{ 'bg-warning':  Number(record['inventory']['quantity_available']) < 0}">in stock: <strong>{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</strong></div>
                 <div @click="toggleDetails" >price: <strong>{{ Number(productPrice) }}</strong></div>
-                <div><div @click="toggleDetails" class="d-inline">last movement at:</div> <strong><a :href="productItemMovementLink" target="_blank">{{ formatDateTime(record['inventory']['last_movement_at']) }}</a></strong></div>
                 <div @click="toggleDetails" >last counted at: <strong>{{ formatDateTime(record['inventory']['last_counted_at']) }}</strong></div>
+                <div @click="toggleDetails" >last sold at: <strong>{{ formatDateTime(record['inventory']['last_sold_at']) }}</strong></div>
+                <div><div @click="toggleDetails" class="d-inline">last movement at:</div> <strong><a :href="productItemMovementLink" target="_blank">{{ formatDateTime(record['inventory']['last_movement_at']) }}</a></strong></div>
 
                 <template v-if="expanded" @click="toggleDetails" >
                     <div class="row mb-3">
