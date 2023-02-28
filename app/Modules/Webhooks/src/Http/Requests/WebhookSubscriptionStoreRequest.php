@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Modules\Webhooks\src\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class WebhookSubscriptionIndexRequest extends FormRequest
+class WebhookSubscriptionStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class WebhookSubscriptionIndexRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'endpoint' => ['required', 'string', 'starts_with:https://']
         ];
     }
 }
