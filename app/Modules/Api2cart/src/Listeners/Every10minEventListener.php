@@ -22,10 +22,6 @@ class Every10minEventListener
      */
     public function handle(Every10minEvent $event)
     {
-
-        DispatchImportOrdersJobs::dispatch();
-        ProcessImportedOrdersJob::dispatch();
-
 //        UpdateMissingTypeAndIdJob::dispatch();
 //        FetchSimpleProductsInfoJob::dispatch();
 //        FetchVariantsInfoJob::dispatch();
