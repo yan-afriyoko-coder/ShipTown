@@ -26,7 +26,7 @@ class NoMovementJob implements ShouldQueue
     {
         $this->warehouse_id = $warehouse_id;
 
-        $this->reason = 'retail value > 500, price>5 and no movement for 7 days, scan product to verify barcode and stock';
+        $this->reason = 'retail value > 100, price>5 and no movement for 7 days, scan product to verify barcode and stock';
         $this->points = 3;
     }
 
