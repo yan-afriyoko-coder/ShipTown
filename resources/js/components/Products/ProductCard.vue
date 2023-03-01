@@ -332,7 +332,8 @@
                     'filter[product_id]': this.product['id'],
                     'filter[order.is_active]': true,
                     'sort': 'id',
-                    'include': 'order'
+                    'include': 'order',
+                    'per_page': 999
                 }
                 this.apiGetOrderProducts(params)
                     .then(({data}) => {
