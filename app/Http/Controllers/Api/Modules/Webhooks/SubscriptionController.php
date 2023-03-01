@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\Modules\Webhooks;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\WebhookSubscriptionStoreRequest;
 use App\Http\Resources\SubscriptionResource;
+use App\Modules\Webhooks\src\Http\Requests\WebhookSubscriptionStoreRequest;
 use App\Modules\Webhooks\src\Services\SnsService;
 use Aws\Exception\AwsException;
 use Aws\Result;

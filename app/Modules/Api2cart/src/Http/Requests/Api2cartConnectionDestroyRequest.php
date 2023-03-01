@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Modules\Api2cart\src\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OrderAutomationDestoyRequest extends FormRequest
+class Api2cartConnectionDestroyRequest extends FormRequest
 {
     public function authorize():bool
     {

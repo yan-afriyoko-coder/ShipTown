@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Modules\PrintNode\src\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OrderAutomationShowRequest extends FormRequest
+class ClientDestroyRequest extends FormRequest
 {
     public function authorize():bool
     {

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Modules\Printnode;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StorePrintJobRequest;
+use App\Modules\PrintNode\src\Http\Requests\PrintJobStoreRequest;
 use App\Modules\PrintNode\src\Models\PrintJob;
 use App\Modules\PrintNode\src\PrintNode;
 use App\Modules\PrintNode\src\Resources\PrintJobResource;
@@ -14,11 +14,11 @@ use App\Modules\PrintNode\src\Resources\PrintJobResource;
 class PrintJobController extends Controller
 {
     /**
-     * @param StorePrintJobRequest $request
+     * @param PrintJobStoreRequest $request
      *
      * @return PrintJobResource
      */
-    public function store(StorePrintJobRequest $request): PrintJobResource
+    public function store(PrintJobStoreRequest $request): PrintJobResource
     {
         $printJob = new PrintJob($request->validated());
 

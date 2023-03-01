@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Modules\PrintNode\src\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DpdIrelandConnectionDestroyRequest extends FormRequest
+class ClientIndexRequest extends FormRequest
 {
     public function authorize():bool
     {

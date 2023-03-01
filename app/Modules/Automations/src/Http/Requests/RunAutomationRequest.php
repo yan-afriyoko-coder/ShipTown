@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Modules\Automations\src\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StorePrintNodeClientRequest extends FormRequest
+class RunAutomationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return $this->user()->hasRole('admin');
+        return true;
     }
 
     /**
@@ -21,10 +21,10 @@ class StorePrintNodeClientRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'api_key' => ['sometimes'],
+            'automation_id' => 'required|integer|exists:modules_automations,id'
         ];
     }
 }

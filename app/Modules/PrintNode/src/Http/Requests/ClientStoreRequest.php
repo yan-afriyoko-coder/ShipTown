@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Modules\PrintNode\src\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class WebhookSubscriptionIndexRequest extends FormRequest
+class ClientStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class WebhookSubscriptionIndexRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user()->hasRole('admin');
     }
 
     /**
@@ -24,7 +24,7 @@ class WebhookSubscriptionIndexRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'api_key' => ['sometimes'],
         ];
     }
 }

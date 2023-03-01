@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Modules\DpdIreland\src\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreDpdIrelandRequest extends FormRequest
+class DpdIrelandStoreRequest extends FormRequest
 {
     public function authorize(): bool
     {

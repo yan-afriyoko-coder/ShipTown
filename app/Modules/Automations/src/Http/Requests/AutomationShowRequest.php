@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Modules\Automations\src\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OrderAutomationConfigIndexRequest extends FormRequest
+class AutomationShowRequest extends FormRequest
 {
     public function authorize():bool
     {

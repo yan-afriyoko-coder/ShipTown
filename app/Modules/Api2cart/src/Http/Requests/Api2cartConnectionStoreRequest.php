@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Modules\Api2cart\src\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreConfigurationRmsApiRequest extends FormRequest
+class Api2cartConnectionStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,10 @@ class StoreConfigurationRmsApiRequest extends FormRequest
     public function rules()
     {
         return [
-            'location_id'    => ['required_if:id,null'],
-            'url'            => 'required_if:id,null|url',
-            'username'       => 'required_if:id,null',
-            'password'       => 'required_if:id,null',
-            'warehouse_code' => 'sometimes|max:5|exists:warehouse,code',
+            'location_id'    => 'required',
+            'url'            => 'required|url',
+            'type'           => 'required',
+            'bridge_api_key' => 'required',
         ];
     }
 }
