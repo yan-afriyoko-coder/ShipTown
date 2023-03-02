@@ -17,7 +17,6 @@ class TransferToWarehouseController extends Controller
         $destinationDataCollection = null;
 
         DB::transaction(function () use ($request, &$destinationDataCollection) {
-            $warehouse = Warehouse::query()->findOrFail($request->get('destination_warehouse_id'));
             $sourceDataCollection = DataCollection::findOrFail($request->get('data_collector_id'));
 
             $destinationDataCollection = DataCollectorService::transferScannedTo(
