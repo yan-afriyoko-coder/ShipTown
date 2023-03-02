@@ -18,18 +18,12 @@ class TransferToWarehouseController extends Controller
 
         DB::transaction(function () use ($request, &$destinationDataCollection) {
             $warehouse = Warehouse::query()->findOrFail($request->get('destination_warehouse_id'));
-
             $sourceDataCollection = DataCollection::findOrFail($request->get('data_collector_id'));
-            $sourceDataCollection->delete();
 
             $destinationDataCollection = DataCollectorService::transferScannedTo(
                 $sourceDataCollection,
                 $request->get('destination_warehouse_id')
             );
-
-            $sourceDataCollection->update([
-                'name' => implode('', ['Transfer To ', $warehouse->code, ' - ', $sourceDataCollection->name])
-            ]);
         });
 
         return DataCollectionResource::make($destinationDataCollection);

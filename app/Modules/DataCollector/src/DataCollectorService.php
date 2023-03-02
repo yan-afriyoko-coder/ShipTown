@@ -59,10 +59,11 @@ class DataCollectorService
 
     public static function transferScannedTo(DataCollection $sourceDataCollection, int $warehouse_id): DataCollection
     {
-        // create collection
-        $destinationDataCollection = $sourceDataCollection->replicate(['deleted_at']);
+        $destinationDataCollection = null;
 
-        DB::transaction(function () use ($warehouse_id, $sourceDataCollection, $destinationDataCollection) {
+        DB::transaction(function () use ($warehouse_id, $sourceDataCollection, &$destinationDataCollection) {
+            // create collection
+            $destinationDataCollection = $sourceDataCollection->replicate(['deleted_at']);
             $destinationDataCollection->type = DataCollectionTransferIn::class;
             $destinationDataCollection->warehouse_id = $warehouse_id;
             $destinationDataCollection->name = implode('', [
@@ -73,6 +74,16 @@ class DataCollectorService
                 ''
             ]);
             $destinationDataCollection->save();
+
+            $sourceDataCollection->delete();
+            $sourceDataCollection->update([
+                'name' => implode(' ', [
+                    'Transfer To',
+                    $destinationDataCollection->warehouse->code,
+                    '-',
+                    $sourceDataCollection->name
+                ])
+            ]);
 
             $sourceDataCollection->records()
                 ->where('quantity_scanned', '!=', DB::raw(0))
