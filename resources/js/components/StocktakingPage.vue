@@ -33,10 +33,9 @@
             </div>
         </template>
 
-        <div class="row mt-2 pl-2 p-1 font-weight-bold text-uppercase small text-secondary">
-            <div class="col-12 text-left">
-                Stocktake suggestions
-            </div>
+        <div class="d-flex justify-content-between align-items-center mt-2 pl-2 p-1 font-weight-bold text-uppercase small text-secondary">
+            Stocktake suggestions
+            <button class="btn btn-sm btn-primary" @click="downloadStocktakeSuggestion">Download</button>
         </div>
 
         <div v-if="(stocktakeSuggestions !== null) && (stocktakeSuggestions.length === 0)" class="text-secondary small text-center mt-3">
@@ -145,7 +144,6 @@
                     });
             },
 
-
             loadStocktakeSuggestions(page = 1) {
                 this.showLoading();
 
@@ -175,6 +173,22 @@
                         this.hideLoading();
                     });
             },
+
+            downloadStocktakeSuggestion() {
+                let params = {...this.$router.currentRoute.query};
+                params['filter[warehouse_code]'] = this.getUrlParameter('filter[warehouse_code]');
+                params['sort'] = this.getUrlParameter('sort', '-points');
+                params['filename'] = 'Stocktake Suggestions.csv'
+
+                let routeData = this.$router.resolve({
+                    path: '/reports/stocktake-suggestions',
+                    query: params
+                });
+
+                let routeLink = routeData.href
+
+                window.open(routeLink, '_blank')
+            }
         },
     }
 </script>
