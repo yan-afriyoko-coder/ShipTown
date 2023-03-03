@@ -30,7 +30,6 @@ Route::apiResource('product/aliases', Api\ProductAliasController::class, ['as' =
 Route::apiResource('product/tags', Api\ProductTagController::class)->only(['index']);
 Route::apiResource('data-collector-records', Api\DataCollectorRecordController::class)->only(['store', 'index']);
 Route::apiResource('data-collector-actions/transfer-to-warehouse', Api\DataCollectorActions\TransferToWarehouseController::class, ['as' => 'api.data-collector-actions'])->only(['store']);
-Route::apiResource('order-check-request', Api\OrderCheckRequestController::class)->only(['store']);
 Route::apiResource('order/products', Api\OrderProductController::class, ['as' => 'order'])->only(['index', 'update']);
 Route::apiResource('orders/products/shipments', Api\OrderProductShipmentController::class)->only(['store']);
 Route::apiResource('order/shipments', Api\OrderShipmentController::class)->only(['index', 'store']);

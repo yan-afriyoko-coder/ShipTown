@@ -484,10 +484,6 @@ export default {
             return '/shipping-labels/' + shipment['id'];
         },
 
-        kickOrder: function () {
-            this.apiPostOrderCheckRequest({'order_id': this.order['id']});
-        },
-
         sharingAvailable() {
             return navigator.share;
         },

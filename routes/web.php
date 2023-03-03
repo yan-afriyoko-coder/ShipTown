@@ -66,9 +66,6 @@ Route::group(['as' => 'reports.'], function () {
 });
 
 Route::get('pdf/orders/{order_number}/{template}', [PdfOrderController::class, 'show']);
-Route::get('orders/{order_number}/kick', [OrderKickController::class, 'index']);
-Route::get('products/last24h/kick', [Products24hKickController::class, 'index']);
-Route::get('products/{sku}/kick', [ProductKickController::class, 'index']);
 Route::get('csv/ready_order_shipments', [Csv\ReadyOrderShipmentController::class, 'index'])->name('ready_order_shipments_as_csv');
 Route::get('csv/order_shipments', [Csv\PartialOrderShipmentController::class, 'index'])->name('partial_order_shipments_as_csv');
 Route::get('csv/products/picked', [Csv\ProductsPickedInWarehouse::class, 'index'])->name('warehouse_picks.csv');
