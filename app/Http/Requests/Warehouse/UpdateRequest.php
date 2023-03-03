@@ -4,28 +4,21 @@ namespace App\Http\Requests\Warehouse;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property int $warehouse_id
+ */
 class UpdateRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name'  => 'sometimes|string|max:250',
-            'code'  => ['sometimes','string','max:5','unique:warehouses,code,'.$this->warehouse_id],
+            'code'  => ['sometimes', 'string', 'max:5'],
             'tags'  => 'sometimes|array',
         ];
     }
