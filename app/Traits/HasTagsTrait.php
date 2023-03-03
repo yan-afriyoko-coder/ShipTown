@@ -150,12 +150,11 @@ trait HasTagsTrait
         return !$this->hasTags($tags);
     }
 
-
-    public function syncTagByType(string $tagType, string $tagName)
+    public function syncTagByType(string $tagType, string $tagName): void
     {
         $tag = $this->tags()->where(['type' => $tagType])->first();
 
-        if ($tag) {
+        if ($tag && $tag->name !== $tagName) {
             $this->detachTag($tag);
         }
 
