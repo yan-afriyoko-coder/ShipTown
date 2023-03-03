@@ -22,13 +22,5 @@ class SyncRequestedEventListener
     {
         DispatchImportOrdersJobs::dispatch();
         ProcessImportedOrdersJob::dispatch();
-
-//        EnsureAllProductLinksExistJob::dispatch();
-//        UpdateMissingTypeAndIdJob::dispatch();
-//        FetchSimpleProductsInfoJob::dispatch();
-//        FetchVariantsInfoJob::dispatch();
-
-//        SyncProductsJob::dispatch();
-//        SyncVariantsJob::dispatch();
     }
 }
