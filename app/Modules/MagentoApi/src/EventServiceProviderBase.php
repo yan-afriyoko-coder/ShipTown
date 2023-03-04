@@ -25,6 +25,11 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     public static string $module_description = 'Module provides connectivity to Magento 2.0 API';
 
     /**
+     * @var string
+     */
+    public static string $settings_link = '/admin/settings/modules/magento-api';
+
+    /**
      * @var bool
      */
     public static bool $autoEnable = false;
