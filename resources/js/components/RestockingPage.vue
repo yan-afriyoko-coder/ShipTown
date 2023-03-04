@@ -13,7 +13,7 @@
 
         <div class="row pl-2 p-0">
             <div class="col-12 text-left align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">
-                Restocking
+                TOOLS > RESTOCKING
             </div>
         </div>
 
