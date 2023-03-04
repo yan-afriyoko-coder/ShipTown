@@ -15,10 +15,13 @@
                 <div @click="toggleDetails" >price: <strong>{{ Number(productPrice) }}</strong></div>
                 <div @click="toggleDetails" >last counted at: <strong>{{ formatDateTime(record['inventory']['last_counted_at']) }}</strong></div>
                 <div @click="toggleDetails" >last sold at: <strong>{{ formatDateTime(record['inventory']['last_sold_at']) }}</strong></div>
-                <div><div @click="toggleDetails" class="d-inline">last movement at:</div> <strong><a :href="productItemMovementLink" target="_blank">{{ formatDateTime(record['inventory']['last_movement_at']) }}</a></strong></div>
+                <div>
+                    <div @click="toggleDetails" class="d-inline">last movement at:</div>
+                    <strong @click="showModalMovement(record['product_sku'])" class="text-primary cursor-pointer">{{ formatDateTime(record['inventory']['last_movement_at']) }}</strong>
+                </div>
 
-                <template v-if="expanded" @click="toggleDetails" >
-                    <div class="row mb-3">
+                <template v-if="expanded">
+                    <div class="row mb-3" @click="toggleDetails" >
                         <div class="col-12" @click="toggleDetails" >last received at: <strong>{{ formatDateTime(record['inventory']['last_received_at']) }}</strong></div>
                         <div class="col-12" @click="toggleDetails" >first received at: <strong>{{ formatDateTime(record['inventory']['first_received_at']) }}</strong></div>
                     </div>
@@ -45,6 +48,8 @@
             </div>
         </div>
 
+        <modal-inventory-movement :product_sku="showMovementSku" />
+
     </div>
 </template>
 
@@ -54,6 +59,7 @@ import BarcodeInputField from "./../SharedComponents/BarcodeInputField";
 import api from "../../mixins/api";
 import helpers from "../../mixins/helpers";
 import url from "../../mixins/url";
+import ModalInventoryMovement from '../SharedComponents/ModalInventoryMovement';
 
 export default {
       name: 'SuggestionRecord',
@@ -62,6 +68,7 @@ export default {
 
       components: {
           BarcodeInputField,
+          ModalInventoryMovement
       },
 
       props: {
@@ -75,14 +82,11 @@ export default {
           return {
               expanded: false,
               suggestionDetails: null,
+              showMovementSku: null
           };
       },
 
       computed: {
-          productItemMovementLink() {
-              return '/reports/inventory-movements?hide_nav_bar=true&filter[search]=' + this.record['product']['sku'] +'&filter[warehouse_code]=' + this.record['inventory']['warehouse_code'];
-          },
-
           productPrice: function() {
             return this.record['product']['prices'][this.record['inventory']['warehouse_code']]['price'];
           }
@@ -93,6 +97,12 @@ export default {
           toggleDetails() {
               this.expanded = !this.expanded;
           },
+
+
+          showModalMovement(product_sku) {
+            this.showMovementSku = product_sku
+            this.$bvModal.show('show-inventory-movements')
+          }
       },
   }
 </script>
