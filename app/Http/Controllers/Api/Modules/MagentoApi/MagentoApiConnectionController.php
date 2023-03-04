@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\Modules\MagentoApi;
 
 use App\Http\Controllers\Controller;
-use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
 use App\Modules\MagentoApi\src\Http\Requests\MagentoApiConnectionDestroyRequest;
 use App\Modules\MagentoApi\src\Http\Requests\MagentoApiConnectionIndexRequest;
 use App\Modules\MagentoApi\src\Http\Requests\MagentoApiConnectionStoreRequest;
@@ -23,9 +22,10 @@ class MagentoApiConnectionController extends Controller
     {
         $config = new MagentoConnection();
         $config->fill($request->only($config->getFillable()));
+        $config->save();
 
         $tag = Tag::findOrCreate($request->tag);
-
+        $config->attachTag($tag);
         $config->inventory_source_warehouse_tag_id = $tag->id;
         $config->save();
 
