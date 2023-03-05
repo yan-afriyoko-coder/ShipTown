@@ -2,77 +2,35 @@
 
 namespace Tests\Browser\Routes\Admin\Settings\Modules;
 
+use App\Modules\MagentoApi\src\EventServiceProviderBase;
 use App\User;
-use Exception;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
-use Throwable;
 
 class MagentoApiPageTest extends DuskTestCase
 {
-    private string $uri = '';
+    private string $uri = '/admin/settings/modules/magento-api';
 
-    /**
-     * @throws Exception
-     */
-    protected function setUp(): void
+    public function testBasics()
     {
-        if (empty($this->uri)) {
-            throw new Exception('Please set the $uri property in your test class.');
-        }
+        EventServiceProviderBase::enableModule();
 
-        parent::setUp();
+        $this->basicAdminAccessTest($this->uri, true);
+        $this->basicUserAccessTest($this->uri, false);
+        $this->basicGuestAccessTest($this->uri);
     }
 
-    /**
-     * @throws Throwable
-     */
-    public function testUserAccess()
+    public function testPage()
     {
-        $this->browse(function (Browser $browser) {
-            /** @var User $user */
-            $user = User::factory()->create();
-            $user->assignRole('user');
+        EventServiceProviderBase::enableModule();
 
-            $browser->disableFitOnFailure()
-                ->loginAs($user)
+        $user = User::factory()->create();
+        $user->assignRole('admin');
+
+        $this->browse(function (Browser $browser) use ($user) {
+            $browser->loginAs($user)
                 ->visit($this->uri)
-                ->pause(300)
-                ->assertPathIs($this->uri)
-                ->assertSourceMissing('snotify-error');
-        });
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testAdminAccess()
-    {
-        $this->browse(function (Browser $browser) {
-            /** @var User $admin */
-            $admin = User::factory()->create();
-            $admin->assignRole('admin');
-
-            $browser->disableFitOnFailure()
-                ->loginAs($admin)
-                ->visit($this->uri)
-                ->pause(300)
-                ->assertPathIs($this->uri)
-                ->assertSourceMissing('snotify-error');
-        });
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testGuestAccess()
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->disableFitOnFailure()
-                ->logout()
-                ->visit($this->uri)
-                ->assertRouteIs('login')
-                ->assertSee('Login');
+                ->assertSee('Magento Api Configurations');
         });
     }
 }
