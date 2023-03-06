@@ -42,7 +42,7 @@ trait HasTagsTrait
      */
     public function hasTags(array $tags = null): bool
     {
-        return static::withAllTagsOfAnyType($tags)->whereId($this->getKey())->exists();
+        return static::withAllTags($tags)->whereId($this->getKey())->exists();
     }
 
     public function scopeHasTags(Builder $query, $tags): Builder
@@ -70,6 +70,7 @@ trait HasTagsTrait
                     if ($this->hasTags([$tag])) {
                         return;
                     }
+
                     $this->originalAttachTags([$tag], $type);
 
                     // if LogsActivityTrait is used, we log it
