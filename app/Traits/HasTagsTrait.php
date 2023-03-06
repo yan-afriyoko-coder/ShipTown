@@ -5,12 +5,10 @@ namespace App\Traits;
 use ArrayAccess;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 use Spatie\Tags\HasTags;
 use Spatie\Tags\Tag;
 
-/**
- * @method static withAllTags(string[] $array)
- */
 trait HasTagsTrait
 {
     use HasTags {
@@ -50,7 +48,9 @@ trait HasTagsTrait
         $tags = collect(func_get_args());
         $tags->shift();
 
-        $toArray = $tags->toArray();
+        $toArray = $tags->map(function ($tag) {
+            return Str::slug($tag);
+        })->toArray();
 
         return $this->scopeWithAllTagsOfAnyType($query, $toArray);
     }
