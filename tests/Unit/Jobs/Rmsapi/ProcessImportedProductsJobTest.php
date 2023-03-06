@@ -8,14 +8,11 @@ use App\Models\ProductAlias;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Tags\Tag;
 use Tests\TestCase;
 
 class ProcessImportedProductsJobTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function testIfAddsAvailableOnlineTag()
     {
         // prepare
