@@ -5,6 +5,8 @@ namespace App\Traits;
 use ArrayAccess;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\Tags\HasTags;
 use Spatie\Tags\Tag;
@@ -48,11 +50,17 @@ trait HasTagsTrait
         $tags = collect(func_get_args());
         $tags->shift();
 
-        $toArray = $tags->map(function ($tag) {
+        $tags = $tags->map(function ($tag) {
             return Str::slug($tag);
-        })->toArray();
+        });
 
-        return $this->scopeWithAllTagsOfAnyType($query, $toArray);
+        $query->whereHas('tags', function (Builder $query) use ($tags) {
+            $tags->each(function ($tag) use ($query) {
+                $query->where(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(slug, '$.\"en\"'))"), $tag);
+            });
+        });
+
+        return $query;
     }
 
     /**
