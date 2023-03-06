@@ -42,7 +42,7 @@ trait HasTagsTrait
      */
     public function hasTags(array $tags = null): bool
     {
-        return static::withAllTags($tags)->whereId($this->getKey())->exists();
+        return static::withAllTagsOfAnyType($tags)->whereId($this->getKey())->exists();
     }
 
     public function scopeHasTags(Builder $query, $tags): Builder
@@ -52,7 +52,7 @@ trait HasTagsTrait
 
         $toArray = $tags->toArray();
 
-        return $this->traitHasTagsScopeWithAllTags($query, $toArray);
+        return $this->scopeWithAllTagsOfAnyType($query, $toArray);
     }
 
     /**

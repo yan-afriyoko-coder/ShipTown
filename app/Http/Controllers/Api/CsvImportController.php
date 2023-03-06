@@ -18,11 +18,10 @@ class CsvImportController extends Controller
      */
     private array $rules = [
         'data_collection_id' => ['required', 'exists:data_collections,id'],
-//        'data' => ['required', 'array'],
         'data.*.product_sku' => ['required_if:product_id,null', 'string'],
         'data.*.product_id' => ['required_if:product_sku,null', 'integer'],
-        'data.*.quantity_requested' => ['sometimes', 'numeric'],
-        'data.*.quantity_scanned' => ['sometimes', 'numeric'],
+        'data.*.quantity_requested' => ['nullable', 'numeric'],
+        'data.*.quantity_scanned' => ['nullable', 'numeric'],
     ];
 
     public function store(Request $request): JsonResource
