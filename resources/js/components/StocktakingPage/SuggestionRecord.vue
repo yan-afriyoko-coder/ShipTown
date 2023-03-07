@@ -17,7 +17,7 @@
                 <div @click="toggleDetails" >last sold at: <strong>{{ formatDateTime(record['inventory']['last_sold_at']) }}</strong></div>
                 <div>
                     <div @click="toggleDetails" class="d-inline">last movement at:</div>
-                    <strong @click="showModalMovement(record['product_sku'])" class="text-primary cursor-pointer">{{ formatDateTime(record['inventory']['last_movement_at']) }}</strong>
+                    <strong @click="showInventoryMovementModal(record['product_sku'])" class="text-primary cursor-pointer">{{ formatDateTime(record['inventory']['last_movement_at']) }}</strong>
                 </div>
 
                 <template v-if="expanded">
@@ -48,8 +48,6 @@
             </div>
         </div>
 
-        <modal-inventory-movement :product_sku="showMovementSku" />
-
     </div>
 </template>
 
@@ -67,8 +65,7 @@ export default {
       mixins: [loadingOverlay, url, api, helpers],
 
       components: {
-          BarcodeInputField,
-          ModalInventoryMovement
+          BarcodeInputField
       },
 
       props: {
@@ -95,13 +92,11 @@ export default {
 
       methods: {
           toggleDetails() {
-              this.expanded = !this.expanded;
+            this.expanded = !this.expanded;
           },
 
-
-          showModalMovement(product_sku) {
-            this.showMovementSku = product_sku
-            this.$bvModal.show('show-inventory-movements')
+          showInventoryMovementModal(product_sku) {
+            this.$emit('showModalMovement', product_sku);
           }
       },
   }

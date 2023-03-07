@@ -46,10 +46,12 @@
         <template v-if="stocktakeSuggestions" v-for="record in stocktakeSuggestions">
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
                 <template v-slot:content>
-                    <suggestion-record :record="record"></suggestion-record>
+                    <suggestion-record :record="record" @showModalMovement=showModalMovement></suggestion-record>
                 </template>
             </swiping-card>
         </template>
+
+        <modal-inventory-movement :product_sku="showMovementSku" />
 
         <div class="row col" ref="loadingContainerOverride" style="height: 32px"></div>
 
@@ -63,6 +65,7 @@
     import helpers from "../mixins/helpers";
     import url from "../mixins/url";
     import SuggestionRecord from "./StocktakingPage/SuggestionRecord";
+    import ModalInventoryMovement from "./SharedComponents/ModalInventoryMovement";
 
     export default {
         mixins: [loadingOverlay, url, api, helpers],
@@ -70,6 +73,7 @@
         components: {
             BarcodeInputField,
             SuggestionRecord,
+            ModalInventoryMovement,
         },
 
         data: function() {
@@ -80,6 +84,7 @@
 
                 recentStocktakes: [],
                 stocktakeSuggestions: null,
+                showMovementSku: null,
             };
         },
 
@@ -99,6 +104,11 @@
         },
 
         methods: {
+            showModalMovement(product_sku) {
+                this.showMovementSku = product_sku;
+                this.$bvModal.show('show-inventory-movements');
+            },
+
             reloadData() {
                 this.loadStocktakeSuggestions();
                 this.loadRecentStocktakes();
