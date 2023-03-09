@@ -30,7 +30,6 @@ Route::apiResource('product/aliases', Api\ProductAliasController::class, ['as' =
 Route::apiResource('product/tags', Api\ProductTagController::class)->only(['index']);
 Route::apiResource('data-collector-records', Api\DataCollectorRecordController::class)->only(['store', 'index']);
 Route::apiResource('data-collector-actions/transfer-to-warehouse', Api\DataCollectorActions\TransferToWarehouseController::class, ['as' => 'api.data-collector-actions'])->only(['store']);
-Route::apiResource('order-check-request', Api\OrderCheckRequestController::class)->only(['store']);
 Route::apiResource('order/products', Api\OrderProductController::class, ['as' => 'order'])->only(['index', 'update']);
 Route::apiResource('orders/products/shipments', Api\OrderProductShipmentController::class)->only(['store']);
 Route::apiResource('order/shipments', Api\OrderShipmentController::class)->only(['index', 'store']);
@@ -81,4 +80,5 @@ Route::group(['prefix' => 'modules', 'as' => 'api.modules.'], function () {
     Route::apiResource('printnode/printjobs', Api\Modules\Printnode\PrintJobController::class, ['as' => 'printnode'])->only(['store']);
     Route::apiResource('rms_api/connections', Api\Modules\Rmsapi\RmsapiConnectionController::class, ['as' => 'rmsapi'])->only(['index', 'store', 'destroy']);
     Route::apiResource('webhooks/subscriptions', Api\Modules\Webhooks\SubscriptionController::class, ['as' => 'webhooks'])->only(['index', 'store']);
+    Route::apiResource('magento-api/connections', Api\Modules\MagentoApi\MagentoApiConnectionController::class, ['as' => 'magento-api'])->only(['index', 'store', 'destroy']);
 });

@@ -90,6 +90,8 @@ class ImportSalesJob implements ShouldQueue
 
             return [
                 'connection_id'         => $this->rmsConnection->getKey(),
+                'uuid'                  => $saleRecord['uuid'],
+                'type'                  => $saleRecord['type'],
                 'sku'                   => $saleRecord['sku'],
                 'price'                 => $saleRecord['price'],
                 'quantity'              => $saleRecord['quantity'],

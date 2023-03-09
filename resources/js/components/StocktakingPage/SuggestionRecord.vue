@@ -11,18 +11,17 @@
                         {{ record['suggestion_details'] }}
                     </div>
                 </div>
-<!--                <div class="row" v-for="detail in suggestionDetails">-->
-<!--                    <div class="col">-->
-<!--                        {{ detail['points'] }} points - {{ detail['reason'] }}-->
-<!--                    </div>-->
-<!--                </div>-->
                 <div @click="toggleDetails"  :class="{ 'bg-warning':  Number(record['inventory']['quantity_available']) < 0}">in stock: <strong>{{ dashIfZero(Number(record['inventory']['quantity_available'])) }}</strong></div>
                 <div @click="toggleDetails" >price: <strong>{{ Number(productPrice) }}</strong></div>
-                <div><div @click="toggleDetails" class="d-inline">last movement at:</div> <strong><a :href="productItemMovementLink" target="_blank">{{ formatDateTime(record['inventory']['last_movement_at']) }}</a></strong></div>
                 <div @click="toggleDetails" >last counted at: <strong>{{ formatDateTime(record['inventory']['last_counted_at']) }}</strong></div>
+                <div @click="toggleDetails" >last sold at: <strong>{{ formatDateTime(record['inventory']['last_sold_at']) }}</strong></div>
+                <div>
+                    <div @click="toggleDetails" class="d-inline">last movement at:</div>
+                    <strong @click="showInventoryMovementModal(record['product_sku'])" class="text-primary cursor-pointer">{{ formatDateTime(record['inventory']['last_movement_at']) }}</strong>
+                </div>
 
-                <template v-if="expanded" @click="toggleDetails" >
-                    <div class="row mb-3">
+                <template v-if="expanded">
+                    <div class="row mb-3" @click="toggleDetails" >
                         <div class="col-12" @click="toggleDetails" >last received at: <strong>{{ formatDateTime(record['inventory']['last_received_at']) }}</strong></div>
                         <div class="col-12" @click="toggleDetails" >first received at: <strong>{{ formatDateTime(record['inventory']['first_received_at']) }}</strong></div>
                     </div>
@@ -58,6 +57,7 @@ import BarcodeInputField from "./../SharedComponents/BarcodeInputField";
 import api from "../../mixins/api";
 import helpers from "../../mixins/helpers";
 import url from "../../mixins/url";
+import ModalInventoryMovement from '../SharedComponents/ModalInventoryMovement';
 
 export default {
       name: 'SuggestionRecord',
@@ -65,7 +65,7 @@ export default {
       mixins: [loadingOverlay, url, api, helpers],
 
       components: {
-          BarcodeInputField,
+          BarcodeInputField
       },
 
       props: {
@@ -79,14 +79,11 @@ export default {
           return {
               expanded: false,
               suggestionDetails: null,
+              showMovementSku: null
           };
       },
 
       computed: {
-          productItemMovementLink() {
-              return '/reports/inventory-movements?hide_nav_bar=true&filter[search]=' + this.record['product']['sku'] +'&filter[warehouse_code]=' + this.record['inventory']['warehouse_code'];
-          },
-
           productPrice: function() {
             return this.record['product']['prices'][this.record['inventory']['warehouse_code']]['price'];
           }
@@ -95,8 +92,12 @@ export default {
 
       methods: {
           toggleDetails() {
-              this.expanded = !this.expanded;
+            this.expanded = !this.expanded;
           },
+
+          showInventoryMovementModal(product_sku) {
+            this.$emit('showModalMovement', product_sku);
+          }
       },
   }
 </script>

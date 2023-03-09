@@ -16,6 +16,15 @@
                             <div>
                                 <div class="small font-weight-bold">{{ order['status_code'] }}</div>
                                 <div class="small">{{ order['label_template'] }}</div>
+
+                                <div class="small">Shipping Numbers:
+                                    <template v-for="shipment in order['order_shipments']">
+                                        <a :href="shipment['tracking_url']" target="_blank" class="text-wrap mr-1">
+                                            {{ shipment['shipping_number'] }}
+                                        </a>
+                                    </template>
+                                </div>
+
                                 <template v-for="tag in order.tags">
                                     <a class="badge text-uppercase" :key="tag.id" :href="'orders?has_tags=' + tag.name">
                                         {{ tag.name }} </a>
@@ -74,7 +83,6 @@
                                         order['order_comments'][0]['user'] ? order['order_comments'][0]['user']['name'] : 'AutoPilot'
                                     }}:</b> {{ order['order_comments'][0]['comment'] }}
                             </div>
-
 
                             <div class="row text-center text-secondary"
                                  @click="toggleOrderDetails">
@@ -474,10 +482,6 @@ export default {
 
         shippingContentUrl: function (shipment) {
             return '/shipping-labels/' + shipment['id'];
-        },
-
-        kickOrder: function () {
-            this.apiPostOrderCheckRequest({'order_id': this.order['id']});
         },
 
         sharingAvailable() {

@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api\Modules\OrderAutomations;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Automations\StoreRequest;
-use App\Http\Requests\Automations\UpdateRequest;
-use App\Http\Requests\OrderAutomationDestoyRequest;
-use App\Http\Requests\OrderAutomationIndexRequest;
-use App\Http\Requests\OrderAutomationShowRequest;
 use App\Http\Resources\AutomationResource;
 use App\Modules\Automations\src\Models\Automation;
+use App\Modules\Automations\src\Http\Requests\AutomationDestoyRequest;
+use App\Modules\Automations\src\Http\Requests\AutomationIndexRequest;
+use App\Modules\Automations\src\Http\Requests\AutomationShowRequest;
+use App\Modules\Automations\src\Http\Requests\AutomationStoreRequest;
+use App\Modules\Automations\src\Http\Requests\AutomationUpdateRequest;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -21,7 +21,7 @@ class AutomationController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function index(OrderAutomationIndexRequest $request): AnonymousResourceCollection
+    public function index(AutomationIndexRequest $request): AnonymousResourceCollection
     {
         $automations = Automation::query()
             ->orderBy('priority')
@@ -33,11 +33,11 @@ class AutomationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param StoreRequest $request
+     * @param AutomationStoreRequest $request
      * @return AutomationResource
      * @throws Throwable
      */
-    public function store(StoreRequest $request): AutomationResource
+    public function store(AutomationStoreRequest $request): AutomationResource
     {
         $automation = new Automation();
 
@@ -73,7 +73,7 @@ class AutomationController extends Controller
         return new AutomationResource($automation);
     }
 
-    public function show(OrderAutomationShowRequest $request, int $automation_id): AutomationResource
+    public function show(AutomationShowRequest $request, int $automation_id): AutomationResource
     {
         $automation = Automation::query()
             ->with(['conditions', 'actions'])
@@ -82,7 +82,7 @@ class AutomationController extends Controller
         return AutomationResource::make($automation);
     }
 
-    public function update(UpdateRequest $request, int $automation_id): AutomationResource
+    public function update(AutomationUpdateRequest $request, int $automation_id): AutomationResource
     {
         /** @var Automation $automation */
         $automation = Automation::query()->findOrFail($automation_id);
@@ -121,7 +121,7 @@ class AutomationController extends Controller
         return new AutomationResource($automation);
     }
 
-    public function destroy(OrderAutomationDestoyRequest $request, int $automation_id): AutomationResource
+    public function destroy(AutomationDestoyRequest $request, int $automation_id): AutomationResource
     {
         $automation = Automation::query()->findOrFail($automation_id);
 

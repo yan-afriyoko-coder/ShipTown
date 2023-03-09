@@ -66,11 +66,17 @@ Route::group(['as' => 'reports.'], function () {
 });
 
 Route::get('pdf/orders/{order_number}/{template}', [PdfOrderController::class, 'show']);
-Route::get('orders/{order_number}/kick', [OrderKickController::class, 'index']);
-Route::get('products/last24h/kick', [Products24hKickController::class, 'index']);
-Route::get('products/{sku}/kick', [ProductKickController::class, 'index']);
 Route::get('csv/ready_order_shipments', [Csv\ReadyOrderShipmentController::class, 'index'])->name('ready_order_shipments_as_csv');
 Route::get('csv/order_shipments', [Csv\PartialOrderShipmentController::class, 'index'])->name('partial_order_shipments_as_csv');
 Route::get('csv/products/picked', [Csv\ProductsPickedInWarehouse::class, 'index'])->name('warehouse_picks.csv');
 Route::get('csv/products/shipped', [Csv\ProductsShippedFromWarehouseController::class, 'index'])->name('warehouse_shipped.csv');
 Route::get('csv/boxtop/stock', [Csv\BoxTopStockController::class, 'index'])->name('boxtop-warehouse-stock.csv');
+
+
+// Admin Routes
+Route::prefix('admin')->middleware(['web', 'auth', 'role:admin', 'twofactor'])->group(function () {
+    // Settings
+    Route::prefix('settings')->group(function () {
+        Route::view('modules/magento-api', 'settings/magento-api')->name('settings.modules.magento-api');
+    });
+});

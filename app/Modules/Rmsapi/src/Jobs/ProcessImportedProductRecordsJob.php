@@ -129,19 +129,12 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
             ])
             ->first();
 
-        if ($inventory->quantity !== floatval($ip->raw_import['quantity_on_hand'])) {
-            $quantityDelta = $ip->raw_import['quantity_on_hand'] - $inventory->quantity;
-            InventoryService::adjustQuantity($inventory, $quantityDelta, 'rms_adjustment');
-        }
-
         if ($inventory->quantity_reserved !== Arr::get($ip->raw_import, 'quantity_committed', 0)
-            or $inventory->shelve_location !== Arr::get($ip->raw_import, 'shelve_location', '')
             or $inventory->reorder_point !== Arr::get($ip->raw_import, 'reorder_point', 0)
             or $inventory->restock_level !== Arr::get($ip->raw_import, 'restock_level', 0)
         ) {
             $inventory->update([
                 'quantity_reserved' => Arr::get($ip->raw_import, 'quantity_committed', 0),
-                'shelve_location'   => Arr::get($ip->raw_import, 'rmsmobile_shelve_location', ''),
                 'reorder_point'     => Arr::get($ip->raw_import, 'reorder_point', 0),
                 'restock_level'     => Arr::get($ip->raw_import, 'restock_level', 0),
             ]);
@@ -194,27 +187,27 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
         }
 
         if ($importedProduct->raw_import['department_name']) {
-            $product->syncTagByTag('rms_department_name', trim($importedProduct->raw_import['department_name']));
+            $product->syncTagByType('rms_department_name', trim($importedProduct->raw_import['department_name']));
         }
 
         if ($importedProduct->raw_import['category_name']) {
-            $product->syncTagByTag('rms_category_name', trim($importedProduct->raw_import['category_name']));
+            $product->syncTagByType('rms_category_name', trim($importedProduct->raw_import['category_name']));
         }
 
         if ($importedProduct->raw_import['supplier_name']) {
-            $product->syncTagByTag('rms_supplier_name', trim($importedProduct->raw_import['supplier_name']));
+            $product->syncTagByType('rms_supplier_name', trim($importedProduct->raw_import['supplier_name']));
         }
 
         if ($importedProduct->raw_import['sub_description_1']) {
-            $product->syncTagByTag('rms_sub_description_1', trim($importedProduct->raw_import['sub_description_1']));
+            $product->syncTagByType('rms_sub_description_1', trim($importedProduct->raw_import['sub_description_1']));
         }
 
         if ($importedProduct->raw_import['sub_description_2']) {
-            $product->syncTagByTag('rms_sub_description_2', trim($importedProduct->raw_import['sub_description_2']));
+            $product->syncTagByType('rms_sub_description_2', trim($importedProduct->raw_import['sub_description_2']));
         }
 
         if ($importedProduct->raw_import['sub_description_3']) {
-            $product->syncTagByTag('rms_sub_description_3', trim($importedProduct->raw_import['sub_description_3']));
+            $product->syncTagByType('rms_sub_description_3', trim($importedProduct->raw_import['sub_description_3']));
         }
     }
 

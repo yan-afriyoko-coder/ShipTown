@@ -5,12 +5,12 @@ namespace App\Traits;
 use ArrayAccess;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Spatie\Tags\HasTags;
 use Spatie\Tags\Tag;
 
-/**
- * @method static withAllTags(string[] $array)
- */
 trait HasTagsTrait
 {
     use HasTags {
@@ -50,9 +50,17 @@ trait HasTagsTrait
         $tags = collect(func_get_args());
         $tags->shift();
 
-        $toArray = $tags->toArray();
+        $tags = $tags->map(function ($tag) {
+            return Str::slug($tag);
+        });
 
-        return $this->traitHasTagsScopeWithAllTags($query, $toArray);
+        $query->whereHas('tags', function (Builder $query) use ($tags) {
+            $tags->each(function ($tag) use ($query) {
+                $query->where(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(slug, '$.\"en\"'))"), $tag);
+            });
+        });
+
+        return $query;
     }
 
     /**
@@ -70,6 +78,7 @@ trait HasTagsTrait
                     if ($this->hasTags([$tag])) {
                         return;
                     }
+
                     $this->originalAttachTags([$tag], $type);
 
                     // if LogsActivityTrait is used, we log it
@@ -150,11 +159,11 @@ trait HasTagsTrait
         return !$this->hasTags($tags);
     }
 
-
-    public function syncTagByTag(string $tagType, string $tagName)
+    public function syncTagByType(string $tagType, string $tagName): void
     {
         $tag = $this->tags()->where(['type' => $tagType])->first();
-        if ($tag) {
+
+        if ($tag && $tag->name !== $tagName) {
             $this->detachTag($tag);
         }
 

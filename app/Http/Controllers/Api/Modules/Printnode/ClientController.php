@@ -3,24 +3,23 @@
 namespace App\Http\Controllers\Api\Modules\Printnode;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PrintNodeClientDestroyRequest;
-use App\Http\Requests\PrintNodeClientIndexRequest;
-use App\Http\Requests\StorePrintNodeClientRequest;
+use App\Modules\PrintNode\src\Http\Requests\ClientDestroyRequest;
+use App\Modules\PrintNode\src\Http\Requests\ClientIndexRequest;
+use App\Modules\PrintNode\src\Http\Requests\ClientStoreRequest;
 use App\Modules\PrintNode\src\Models\Client;
 use App\Modules\PrintNode\src\PrintNode;
 use App\Modules\PrintNode\src\Resources\PrintNodeClientResource;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ClientController extends Controller
 {
-    public function index(PrintNodeClientIndexRequest $request): AnonymousResourceCollection
+    public function index(ClientIndexRequest $request): AnonymousResourceCollection
     {
         return PrintNodeClientResource::collection($this->getPaginatedResult(Client::getSpatieQueryBuilder()));
     }
 
-    public function store(StorePrintNodeClientRequest $request): PrintNodeClientResource
+    public function store(ClientStoreRequest $request): PrintNodeClientResource
     {
         $printNodeClient = Client::query()->firstOrNew([], []);
         $printNodeClient->fill($request->validated());
@@ -37,7 +36,7 @@ class ClientController extends Controller
     /**
      * @throws Exception
      */
-    public function destroy(PrintNodeClientDestroyRequest $request, Client $client)
+    public function destroy(ClientDestroyRequest $request, Client $client)
     {
         $client->delete();
 

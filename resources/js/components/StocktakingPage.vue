@@ -33,10 +33,9 @@
             </div>
         </template>
 
-        <div class="row mt-2 pl-2 p-1 font-weight-bold text-uppercase small text-secondary">
-            <div class="col-12 text-left">
-                Stocktake suggestions
-            </div>
+        <div class="d-flex justify-content-between align-items-center mt-2 pl-2 p-1 font-weight-bold text-uppercase small text-secondary">
+            Stocktake suggestions
+            <button class="btn btn-sm btn-primary" @click="downloadStocktakeSuggestion">Download</button>
         </div>
 
         <div v-if="(stocktakeSuggestions !== null) && (stocktakeSuggestions.length === 0)" class="text-secondary small text-center mt-3">
@@ -47,10 +46,12 @@
         <template v-if="stocktakeSuggestions" v-for="record in stocktakeSuggestions">
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
                 <template v-slot:content>
-                    <suggestion-record :record="record"></suggestion-record>
+                    <suggestion-record :record="record" @showModalMovement=showModalMovement></suggestion-record>
                 </template>
             </swiping-card>
         </template>
+
+        <modal-inventory-movement :product_sku="showMovementSku" />
 
         <div class="row col" ref="loadingContainerOverride" style="height: 32px"></div>
 
@@ -64,6 +65,7 @@
     import helpers from "../mixins/helpers";
     import url from "../mixins/url";
     import SuggestionRecord from "./StocktakingPage/SuggestionRecord";
+    import ModalInventoryMovement from "./SharedComponents/ModalInventoryMovement";
 
     export default {
         mixins: [loadingOverlay, url, api, helpers],
@@ -71,6 +73,7 @@
         components: {
             BarcodeInputField,
             SuggestionRecord,
+            ModalInventoryMovement,
         },
 
         data: function() {
@@ -81,6 +84,7 @@
 
                 recentStocktakes: [],
                 stocktakeSuggestions: null,
+                showMovementSku: null,
             };
         },
 
@@ -100,6 +104,11 @@
         },
 
         methods: {
+            showModalMovement(product_sku) {
+                this.showMovementSku = product_sku;
+                this.$bvModal.show('show-inventory-movements');
+            },
+
             reloadData() {
                 this.loadStocktakeSuggestions();
                 this.loadRecentStocktakes();
@@ -145,7 +154,6 @@
                     });
             },
 
-
             loadStocktakeSuggestions(page = 1) {
                 this.showLoading();
 
@@ -175,6 +183,22 @@
                         this.hideLoading();
                     });
             },
+
+            downloadStocktakeSuggestion() {
+                let params = {...this.$router.currentRoute.query};
+                params['filter[warehouse_code]'] = this.getUrlParameter('filter[warehouse_code]');
+                params['sort'] = this.getUrlParameter('sort', '-points');
+                params['filename'] = 'Stocktake Suggestions.csv'
+
+                let routeData = this.$router.resolve({
+                    path: '/reports/stocktake-suggestions',
+                    query: params
+                });
+
+                let routeLink = routeData.href
+
+                window.open(routeLink, '_blank')
+            }
         },
     }
 </script>

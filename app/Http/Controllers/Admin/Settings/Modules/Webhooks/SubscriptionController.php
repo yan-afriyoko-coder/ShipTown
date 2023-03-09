@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin\Settings\Modules\Webhooks;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\WebhookSubscriptionIndexRequest;
+use App\Modules\Webhooks\src\Http\Requests\WebhookSubscriptionIndexRequest;
 use App\Modules\Webhooks\src\WebhooksServiceProviderBase;
 
 class SubscriptionController extends Controller

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api\Modules\Rmsapi;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RmsapiConnectionDestroyRequest;
-use App\Http\Requests\RmsapiConnectionIndexRequest;
-use App\Http\Requests\StoreConfigurationRmsApiRequest;
 use App\Http\Resources\RmsapiConnectionResource;
+use App\Modules\Rmsapi\src\Http\Requests\RmsapiConnectionDestroyRequest;
+use App\Modules\Rmsapi\src\Http\Requests\RmsapiConnectionIndexRequest;
+use App\Modules\Rmsapi\src\Http\Requests\RmsapiConnectionStoreRequest;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -28,11 +28,11 @@ class RmsapiConnectionController extends Controller
     }
 
     /**
-     * @param StoreConfigurationRmsApiRequest $request
+     * @param RmsapiConnectionStoreRequest $request
      *
      * @return RmsapiConnectionResource
      */
-    public function store(StoreConfigurationRmsApiRequest $request)
+    public function store(RmsapiConnectionStoreRequest $request)
     {
         $rmsapiConnection = RmsapiConnection::query()
             ->updateOrCreate(['id' => $request->get('id')], $request->validated());

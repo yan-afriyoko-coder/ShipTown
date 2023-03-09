@@ -27,10 +27,6 @@ class InventoryUpdatedEventListener
             return;
         }
 
-        activity()->withoutLogs(function () use ($event) {
-            $event->inventory->product->attachTag('Not Synced');
-        });
-
         Api2cartProductLink::query()
             ->where(['product_id' => $event->inventory->product_id])
             ->update(['is_in_sync' => false]);

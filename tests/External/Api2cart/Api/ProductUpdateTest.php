@@ -70,11 +70,7 @@ class ProductUpdateTest extends TestCase
      */
     public function test_if_updates_stock_if_no_location_source_specified()
     {
-        $this->api2cart_product_link->product->attachTags(['Not Synced']);
-
         $job = new SyncProduct($this->api2cart_product_link);
         $job->handle();
-
-        $this->assertFalse($this->api2cart_product_link->product->hasTags(['Not Synced']));
     }
 }

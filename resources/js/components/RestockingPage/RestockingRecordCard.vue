@@ -21,11 +21,18 @@
                         <div @click="expanded = !expanded">location: <b>{{ record['warehouse_code'] }}</b></div>
                         <div @click="expanded = !expanded">price: <b>{{ record['warehouse_quantity'] }}</b></div>
                         <div @click="expanded = !expanded">warehouse stock: <b>{{ record['warehouse_quantity'] }}</b></div>
-                        <div><div @click="expanded = !expanded" class="d-inline">last movement at:</div> <strong><a :href="productItemMovementLink" target="_blank">{{ formatDateTime(record['last_movement_at']) }}</a></strong></div>
+                        <div>
+                            <div @click="expanded = !expanded" class="d-inline">last sold at: </div>
+                            <strong @click="showInventoryMovementModal" class="text-primary cursor-pointer">{{ formatDateTime(record['last_sold_at']) }}</strong>
+                        </div>
+                        <div>
+                            <div @click="expanded = !expanded" class="d-inline">last received at:</div>
+                            <strong @click="showInventoryMovementModal" class="text-primary cursor-pointer">{{ formatDateTime(record['last_received_at']) }}</strong>
+                        </div>
                         <div @click="expanded = !expanded">last counted at: <b>{{ formatDateTime(record['last_counted_at'],'D MMM HH:MM') }}</b></div>
                         <template @click="expanded = !expanded" v-if="expanded">
+                            <div @click="expanded = !expanded">last movement at: <b>{{ formatDateTime(record['last_movement_at'],'D MMM HH:MM') }}</b></div>
                             <div @click="expanded = !expanded">first received at: <b>{{ formatDateTime(record['first_received_at'],'D MMM HH:MM') }}</b></div>
-                            <div @click="expanded = !expanded">last received at: <b>{{ formatDateTime(record['last_received_at'],'D MMM HH:MM') }}</b></div>
                         </template>
                     </div>
                     <div class="col-lg-4">
@@ -111,12 +118,7 @@
 
 
                     <div class="row text-center align-content-center offset-lg-6 col-lg-6" v-if="expanded">
-                            <hr>
-
-
-                        </div>
-
-
+                        <hr>
                     </div>
                 </div>
             </div>
@@ -164,9 +166,6 @@ export default {
         },
 
         computed: {
-            productItemMovementLink() {
-                return '/reports/inventory-movements?hide_nav_bar=true&filter[search]=' + this.record['product_sku'];
-            },
 
             newRestockLevelValue: {
                 get: function() {
@@ -275,8 +274,13 @@ export default {
 
                 this.postInventoryUpdate();
             },
+
+            showInventoryMovementModal() {
+                this.$emit('showModalMovement', this.record['product_sku'])
+            },
         },
     }
+
 </script>
 
 <style lang="scss" scoped>

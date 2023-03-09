@@ -24,10 +24,6 @@ class ProductPriceUpdatedEventListener
         }
 
         if (Api2cartConnection::where(['pricing_source_warehouse_id' => $product_price->warehouse_id])->exists()) {
-            activity()->withoutLogs(function () use ($product_price) {
-                $product_price->product->attachTag('Not Synced');
-            });
-
             Api2cartProductLink::query()
                 ->where(['product_id' => $product_price->product_id])
                 ->update(['is_in_sync' => false]);

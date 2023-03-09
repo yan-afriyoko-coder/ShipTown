@@ -35,58 +35,8 @@ class SyncProductsToApi2cartTest extends TestCase
             'pricing_source_warehouse_id' => $warehouse->getKey()
         ]);
 
-        $product->attachTags(['Available Online', 'Not Synced']);
+        $product->attachTags(['Available Online']);
 
-        $this->assertTrue(Product::withAllTags(['Not Synced'])->exists());
-
-        SyncProductsJob::dispatchNow();
-    }
-
-    public function test_basic()
-    {
-//        /** @var Warehouse $warehouse */
-//        $warehouse = Warehouse::factory()->create();
-//        $warehouse->attachTag('api2cart');
-//
-//        $api2cartConnection = Api2cartConnection::factory()->create([
-//            'inventory_source_warehouse_tag' => 'api2cart',
-//            'pricing_source_warehouse_id' => $warehouse->getKey()
-//        ]);
-//
-//        /** @var Api2cartProductLink $productLink1 */
-//        $productLink1 = Api2cartProductLink::factory()->create([
-//            'api2cart_connection_id' => $api2cartConnection->getKey(),
-//            'product_id' => Product::factory()->create()->getKey(),
-//            'is_in_sync' => true,
-//        ]);
-//
-//        CheckForOutOfSyncProductsJob::dispatch();
-//        $this->assertDatabaseMissing('modules_api2cart_product_links', ['is_in_sync' => true]);
-//
-//        UpdateMissingTypeAndIdJob::dispatch();
-//
-//        SyncProductsJob::dispatch();
-//        FetchSimpleProductsInfoJob::dispatch();
-//
-//        ray()->showQueries();
-//
-//        CheckForOutOfSyncProductsJob::dispatch();
-//        $this->assertDatabaseHas('modules_api2cart_product_links', ['is_in_sync' => true]);
-//
-//        Api2cartProductLink::query()->update([
-//            'last_fetched_data' => null,
-//            'is_in_sync' => null,
-//            'api2cart_quantity' => 2
-//        ]);
-//        CheckForOutOfSyncProductsJob::dispatch();
-//        $this->assertDatabaseMissing('modules_api2cart_product_links', ['is_in_sync' => false]);
-//
-//        Api2cartProductLink::query()->update(['last_fetched_data' => null]);
-//        Api2cartProductLink::query()->update(['api2cart_quantity' => null]);
-//        CheckForOutOfSyncProductsJob::dispatch();
-//        $this->assertDatabaseMissing('modules_api2cart_product_links', ['is_in_sync' => false]);
-//
-//        FetchSimpleProductsInfoJob::dispatch();
-//        $this->assertDatabaseMissing('modules_api2cart_product_links', ['last_fetched_data' => null]);
+        SyncProductsJob::dispatchSync();
     }
 }

@@ -46,7 +46,7 @@ class CoreV1 extends Migration
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
-                ->onDelete('cascade');
+                ->nullOnDelete();
         });
 
         Schema::create('oauth_auth_codes', function (Blueprint $table) {
