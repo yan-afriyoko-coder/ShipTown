@@ -93,25 +93,29 @@
                             </div>
 
                             <div class="row-col text-center align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">
-                                    Incoming
+                                Incoming
                             </div>
 
-                            <div class="row" v-for="dataCollectionRecord in dataCollectorRecords">
-                                <div class="col text-left">
-                                    <div>
-                                        <a :href="'/data-collector/' + dataCollectionRecord['data_collection']['id']">
-                                            {{ dataCollectionRecord['data_collection']['name'] }}
-                                        </a>
+                            <div  v-for="dataCollectionRecord in dataCollectorRecords" :key="dataCollectionRecord['id']">
+                                <div class="d-flex justify-content-between">
+                                    <div class="">
+                                        <div class="text-secondary small">
+                                            <a :href="'/data-collector/' + dataCollectionRecord['data_collection']['id']">
+                                                <small class="small">{{ dataCollectionRecord['data_collection']['name'] }}</small>
+                                            </a>
+                                        </div>
+                                        <div class="text-secondary small">
+                                            <small class="small">
+                                            {{ formatDateTime(dataCollectionRecord['data_collection']['created_at']) }}
+                                            </small>
+                                        </div>
                                     </div>
-                                    <div class="text-secondary small">
-                                        {{ formatDateTime(dataCollectionRecord['data_collection']['created_at']) }}
+                                    <div class="">
+                                        <number-card label="requested" :number="dataCollectionRecord['quantity_requested']"></number-card>
+                                        <number-card label="outstanding" :number="dataCollectionRecord['quantity_requested'] - dataCollectionRecord['total_transferred_in']"></number-card>
                                     </div>
                                 </div>
-                                <div class="col text-right">
-                                    <number-card label="requested" :number="dataCollectionRecord['quantity_requested']"></number-card>
-                                    <number-card label="outstanding" :number="dataCollectionRecord['quantity_requested'] - dataCollectionRecord['total_transferred_in']"></number-card>
-                                </div>
-                                <hr>
+                                <hr />
                             </div>
                         </div>
                     </div>
