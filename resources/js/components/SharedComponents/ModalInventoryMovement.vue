@@ -2,7 +2,7 @@
     <b-modal id="show-inventory-movements" size="lg" scrollable no-fade hide-header>
 
         <div class="d-flex justify-content-between mb-2">
-            <h5>Inventory Movements</h5>
+            <h6>Inventory Movements</h6>
             <a v-if="hasNextPage" :href="productItemMovementLink">See more</a>
         </div>
 
@@ -14,6 +14,15 @@
             </swiping-card>
         </template>
 
+        <div class="d-flex align-items-center justify-content-center" style="height:100px" v-if="!isLoading && !records.length">
+            No records found
+        </div>
+
+        <div class="row" v-if="isLoading">
+            <div class="col">
+                <div ref="loadingContainerOverride" style="height: 100px"></div>
+            </div>
+        </div>
 
         <div class="d-flex justify-content-end">
             <a v-if="hasNextPage" :href="productItemMovementLink">See more</a>
@@ -21,6 +30,7 @@
 
         <template #modal-footer>
             <b-button
+                v-show="!isLoading"
                 variant="outline-secondary"
                 class="float-right"
                 @click="$bvModal.hide('show-inventory-movements')"
@@ -34,12 +44,13 @@
 <script>
 
 import api from "../../mixins/api";
+import loadingOverlay from '../../mixins/loading-overlay';
 import InventoryMovementCard from './InventoryMovementCard';
 
 export default {
     components: { InventoryMovementCard },
 
-    mixins: [api],
+    mixins: [api, loadingOverlay],
 
     props: {
         product_sku: {
@@ -69,6 +80,7 @@ export default {
 
     methods: {
         loadRecords: function(page = 1) {
+            this.showLoading();
             this.records = []
 
             let params = {
@@ -89,6 +101,9 @@ export default {
                     this.records = this.records.concat(data.data);
                     this.hasNextPage = data.links.next != null
                 })
+                .finally(() => {
+                    this.hideLoading();
+                });
         },
     }
 }
