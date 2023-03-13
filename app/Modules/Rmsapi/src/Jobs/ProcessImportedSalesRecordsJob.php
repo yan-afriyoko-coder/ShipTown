@@ -32,11 +32,11 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
     {
         $this->connection_id = $connection_id;
     }
-
-    public function middleware(): array
-    {
-        return [(new WithoutOverlapping())->dontRelease()];
-    }
+//
+//    public function middleware(): array
+//    {
+//        return [(new WithoutOverlapping())->dontRelease()];
+//    }
 
     public function handle()
     {
