@@ -6,6 +6,8 @@ use App\Modules\BaseModuleServiceProvider;
 use App\Modules\QueueMonitor\src\Dispatcher\QueueMonitorDispatcher;
 use Exception;
 use Illuminate\Bus\Dispatcher;
+use Illuminate\Queue\Events\JobProcessed;
+use Illuminate\Queue\Events\JobProcessing;
 
 /**
  * Class Api2cartServiceProvider.
@@ -37,7 +39,15 @@ class QueueMonitorServiceProvider extends BaseModuleServiceProvider
      *
      * @var array
      */
-    protected $listen = [];
+    protected $listen = [
+        JobProcessing::class => [
+            Listeners\JobProcessingListener::class,
+        ],
+
+        JobProcessed::class => [
+            Listeners\JobProcessedListener::class,
+        ],
+    ];
 
 
     public static function loaded(): bool
