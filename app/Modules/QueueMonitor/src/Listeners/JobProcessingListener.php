@@ -17,13 +17,15 @@ class JobProcessingListener
                     'dispatched_at' => now(),
                     'processing_at' => now()
                 ]);
+
+                return;
             }
 
             DB::table('modules_queue_monitor_jobs')
                 ->where(['uuid' => null, 'job_class' => $event->job->payload()['displayName']])
                 ->update(['uuid' => $event->job->payload()['uuid'], 'processing_at' => now()]);
         } catch (Exception $e) {
-            // do nothing
+            report($e);
         }
     }
 }

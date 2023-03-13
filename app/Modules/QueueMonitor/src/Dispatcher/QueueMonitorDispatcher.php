@@ -23,7 +23,7 @@ class QueueMonitorDispatcher extends Dispatcher
                 'dispatched_at' => now(),
             ]);
         } catch (Exception $e) {
-            // do nothing
+            report($e);
         }
 
         return parent::dispatchToQueue($command);
