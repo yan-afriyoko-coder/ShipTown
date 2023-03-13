@@ -9,12 +9,7 @@ class JobProcessedListener
     public function handle($event)
     {
         DB::table('modules_queue_monitor_jobs')
-            ->where([
-                'uuid' =>  $event->job->getJobId(),
-                'job_class' => get_class($event->job),
-            ])
-            ->update([
-                'processed_at' => now()
-            ]);
+            ->where('uuid', $event->job->payload()['uuid'])
+            ->update(['processed_at' => now()]);
     }
 }

@@ -8,8 +8,10 @@ class AddProcessedAtColumnToModulesQueueMonitorJobsTable extends Migration
 {
     public function up()
     {
-        Schema::table('modules_queue_monitor_jobs', function (Blueprint $table) {
-            $table->timestamp('processed_at')->nullable()->after('processing_at');
-        });
+        if (! Schema::hasColumn('modules_queue_monitor_jobs', 'processed_at')) {
+            Schema::table('modules_queue_monitor_jobs', function (Blueprint $table) {
+                $table->timestamp('processed_at')->nullable()->after('processing_at');
+            });
+        }
     }
 }
