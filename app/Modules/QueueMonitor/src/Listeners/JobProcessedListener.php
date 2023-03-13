@@ -14,7 +14,7 @@ class JobProcessedListener
                 ->where('uuid', $event->job->payload()['uuid'])
                 ->update(['processed_at' => now()]);
         } catch (Exception $e) {
-            // do nothing
+            report($e);
         }
     }
 }
