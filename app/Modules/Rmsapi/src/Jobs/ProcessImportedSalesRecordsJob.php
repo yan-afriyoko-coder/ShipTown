@@ -32,12 +32,6 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
         $this->connection_id = $connection_id;
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     * @throws Exception
-     */
     public function handle()
     {
         RmsapiSaleImport::query()
@@ -54,9 +48,6 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
         } while ($maxRunCount > 0 and RmsapiSaleImport::query()->whereNull('processed_at')->exists());
     }
 
-    /**
-     * @throws Exception
-     */
     private function processImportedRecords(int $batch_size): void
     {
         $reservationTime = now();
