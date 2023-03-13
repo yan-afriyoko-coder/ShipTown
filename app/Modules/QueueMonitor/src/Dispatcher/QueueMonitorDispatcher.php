@@ -15,8 +15,6 @@ class QueueMonitorDispatcher extends Dispatcher
 
     public function dispatchToQueue($command)
     {
-        ray('$command', $command);
-
         try {
             DB::table('modules_queue_monitor_jobs')->insert([
                 'uuid' => null,
@@ -27,11 +25,6 @@ class QueueMonitorDispatcher extends Dispatcher
             // do nothing
         }
 
-        $command->test = 'test';
-        $dispatchToQueue = parent::dispatchToQueue($command);
-
-        ray('dispatchToQueue', $dispatchToQueue);
-
-        return $dispatchToQueue;
+        return parent::dispatchToQueue($command);
     }
 }
