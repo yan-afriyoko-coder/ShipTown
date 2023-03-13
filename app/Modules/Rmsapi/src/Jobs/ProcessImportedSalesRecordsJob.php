@@ -13,6 +13,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -30,6 +31,11 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
     public function __construct(int $connection_id)
     {
         $this->connection_id = $connection_id;
+    }
+
+    public function middleware(): array
+    {
+        return [new WithoutOverlapping()];
     }
 
     public function handle()
