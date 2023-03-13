@@ -2,6 +2,7 @@
 
 namespace App\Modules\QueueMonitor\src\Dispatcher;
 
+use Exception;
 use Illuminate\Bus\Dispatcher;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Guid\Guid;
@@ -21,7 +22,7 @@ class QueueMonitorDispatcher extends Dispatcher
                 'job_class' => get_class($command),
                 'dispatched_at' => now(),
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // do nothing
         }
 
