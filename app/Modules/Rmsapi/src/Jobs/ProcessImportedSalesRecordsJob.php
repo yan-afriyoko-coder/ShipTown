@@ -13,6 +13,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -32,12 +33,11 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
         $this->connection_id = $connection_id;
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     * @throws Exception
-     */
+    public function middleware(): array
+    {
+        return [new WithoutOverlapping()];
+    }
+
     public function handle()
     {
         RmsapiSaleImport::query()
@@ -54,9 +54,6 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
         } while ($maxRunCount > 0 and RmsapiSaleImport::query()->whereNull('processed_at')->exists());
     }
 
-    /**
-     * @throws Exception
-     */
     private function processImportedRecords(int $batch_size): void
     {
         $reservationTime = now();
