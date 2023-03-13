@@ -1066,8 +1066,9 @@ class CoreV1 extends Migration
             $table->uuid('uuid')->unique();
             $table->string('job_class')->index();
             $table->timestamp('dispatched_at')->default(DB::raw('CURRENT_TIMESTAMP'))->index();
+            $table->timestamp('processing_at')->nullable();
+            $table->timestamp('processed_at')->nullable();
         });
-
 
         $this->installSpatiePermissions();
 
