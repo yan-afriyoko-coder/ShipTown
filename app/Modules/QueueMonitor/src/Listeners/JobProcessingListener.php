@@ -16,6 +16,7 @@ class JobProcessingListener
                         'uuid' => null,
                         'job_class' => $event->job->payload()['displayName']])
                     ->oldest('dispatched_at')
+                    ->first()
                     ->update(['uuid' => $event->job->payload()['uuid'], 'processing_at' => now()]);
             } else {
                 DB::table('modules_queue_monitor_jobs')->insert([
