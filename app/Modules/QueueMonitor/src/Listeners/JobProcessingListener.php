@@ -17,6 +17,8 @@ class JobProcessingListener
                     'dispatched_at' => now(),
                     'processing_at' => now()
                 ]);
+
+                return;
             }
 
             DB::table('modules_queue_monitor_jobs')
