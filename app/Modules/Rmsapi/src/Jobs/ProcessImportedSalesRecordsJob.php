@@ -35,7 +35,7 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
 
     public function middleware(): array
     {
-        return [new WithoutOverlapping()];
+        return [(new WithoutOverlapping())->dontRelease()];
     }
 
     public function handle()
