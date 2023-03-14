@@ -26,8 +26,8 @@ class RestockingReport extends Report
 //            'inventory_id',
 //            'warehouse_id',
             'warehouse_code',
-//            'product_sku',
-//            'product_name',
+            'product_sku',
+            'product_name',
             'quantity_required',
             'quantity_in_stock',
             'quantity_available',
@@ -49,7 +49,7 @@ class RestockingReport extends Report
         $this->allowedIncludes = ['product', 'product.tags'];
 
         $this->baseQuery = Inventory::query()
-//            ->leftJoin('products', 'inventory.product_id', '=', 'products.id')
+            ->leftJoin('products', 'inventory.product_id', '=', 'products.id')
             ->rightJoin('inventory as inventory_source', function (JoinClause $join) {
                 $join->on('inventory_source.product_id', '=', 'inventory.product_id');
                 $join->on('inventory_source.warehouse_id', '=', DB::raw(2));
@@ -59,8 +59,8 @@ class RestockingReport extends Report
         $this->fields = [
             'id'                                 => 'inventory.id',
             'product_id'                         => 'inventory.product_id',
-//            'product_sku'                        => 'products.sku',
-//            'product_name'                       => 'products.name',
+            'product_sku'                        => 'products.sku',
+            'product_name'                       => 'products.name',
             'inventory_id'                       => 'inventory.id',
             'warehouse_id'                       => 'inventory.warehouse_id',
             'warehouse_code'                     => 'inventory.warehouse_code',
