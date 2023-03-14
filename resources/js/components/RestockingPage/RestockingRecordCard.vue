@@ -4,11 +4,11 @@
             <div class="card ml-0 pl-0">
                 <div class="row card-body pt-2 pl-2">
                     <div class="col-lg-4">
-                        <div class="text-primary h5">{{ record['product_name'] }}</div>
+                        <div class="text-primary h5">{{ record['product']['name'] }}</div>
                         <div>
                             sku: <b>
-                            <font-awesome-icon icon="copy" class="fa-xs btn-link" role="button" @click="copyToClipBoard(record['product_sku'])"></font-awesome-icon>
-                            <a target="_blank"  :href="'/products?hide_nav_bar=true&search=' + record['product_sku']">{{ record['product_sku'] }}</a>
+                            <font-awesome-icon icon="copy" class="fa-xs btn-link" role="button" @click="copyToClipBoard(record['product']['sku'])"></font-awesome-icon>
+                            <a target="_blank"  :href="'/products?hide_nav_bar=true&search=' + record['product_sku']">{{ record['product']['sku'] }}</a>
                         </b>
                         </div>
                         <div>

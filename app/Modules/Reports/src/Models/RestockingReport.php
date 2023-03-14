@@ -22,7 +22,7 @@ class RestockingReport extends Report
 
         $this->defaultSelect = implode(',', [
             'inventory_id',
-//            'product_id',
+            'product_id',
 //            'inventory_id',
 //            'warehouse_id',
             'warehouse_code',
@@ -58,7 +58,7 @@ class RestockingReport extends Report
 
         $this->fields = [
             'id'                                 => 'inventory.id',
-//            'product_id'                         => 'products.id',
+            'product_id'                         => 'inventory.product_id',
 //            'product_sku'                        => 'products.sku',
 //            'product_name'                       => 'products.name',
             'inventory_id'                       => 'inventory.id',
