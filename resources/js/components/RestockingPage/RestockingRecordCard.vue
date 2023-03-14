@@ -280,7 +280,7 @@ export default {
             },
 
             showInventoryMovementModal() {
-                this.$emit('showModalMovement', this.record['product_sku'])
+                this.$emit('showModalMovement', this.record['product']['sku'])
             },
         },
     }
