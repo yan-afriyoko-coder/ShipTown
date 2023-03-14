@@ -52,8 +52,8 @@ class RestockingReport extends Report
 //            ->leftJoin('products', 'inventory.product_id', '=', 'products.id')
             ->leftJoin('inventory as inventory_source', function (JoinClause $join) {
                 $join->on('inventory_source.product_id', '=', 'inventory.product_id');
-                $join->where('inventory_source.warehouse_id', '=', DB::raw(2));
-                $join->whereBetween('inventory_source.quantity_available', [0.01, 9999999]);
+                $join->on('inventory_source.warehouse_id', '=', DB::raw(2));
+//                $join->whereBetween('inventory_source.quantity_available', [0.01, 9999999]);
             });
 
         $this->fields = [
