@@ -78,8 +78,7 @@ class RestockingReport extends Report
             'last_received_at'                   => 'inventory.last_received_at',
             'warehouse_quantity'                 => DB::raw('IFNULL(inventory_source.quantity_available, 0)'),
             'warehouse_has_stock'                => DB::raw('ISNULL(inventory_source.quantity_available)'),
-//            'inventory_source_warehouse_code'    => 'inventory_source.warehouse_code',
-//            'quantity_to_ship'                   => DB::raw("CASE WHEN inventory_source.quantity_available < inventory.quantity_required THEN inventory_source.quantity_available ELSE inventory.quantity_required END"),
+            'inventory_source_warehouse_code'    => 'inventory_source.warehouse_code',
         ];
 
         $this->casts = [
