@@ -32,11 +32,11 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
     {
         $this->connection_id = $connection_id;
     }
-//
-//    public function middleware(): array
-//    {
-//        return [(new WithoutOverlapping())->dontRelease()];
-//    }
+
+    public function middleware(): array
+    {
+        return [(new WithoutOverlapping($this->connection_id))->dontRelease()];
+    }
 
     public function handle()
     {
@@ -46,7 +46,7 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
             ->update(['reserved_at' => now(), 'processed_at' => now()]);
 
         $batch_size = 200;
-        $maxRunCount = 1000 / $batch_size;
+        $maxRunCount = 5;
 
         do {
             $this->processImportedRecords($batch_size);
