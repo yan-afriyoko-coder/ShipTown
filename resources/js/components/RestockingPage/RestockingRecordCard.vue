@@ -4,18 +4,7 @@
             <div class="card ml-0 pl-0">
                 <div class="row card-body pt-2 pl-2">
                     <div class="col-lg-4">
-                        <div class="text-primary h5">{{ record['product_name'] }}</div>
-                        <div>
-                            sku: <b>
-                            <font-awesome-icon icon="copy" class="fa-xs btn-link" role="button" @click="copyToClipBoard(record['product_sku'])"></font-awesome-icon>
-                            <a target="_blank"  :href="'/products?hide_nav_bar=true&search=' + record['product_sku']">{{ record['product_sku'] }}</a>
-                        </b>
-                        </div>
-                        <div>
-                            <template v-for="tag in record['tags']">
-                                <a class="badge text-uppercase btn btn-outline-primary" :key="tag.id" @click.prevent="setUrlParameterAngGo('filter[product_has_tags]', tag['name']['en'])"> {{ tag['name']['en'] }} </a>
-                            </template>
-                        </div>
+                        <product-info-card :product="record['product']"/>
                     </div>
                     <div class="col mt-1 mb-1 small">
                         <div @click="expanded = !expanded">location: <b>{{ record['warehouse_code'] }}</b></div>
@@ -92,23 +81,23 @@
                                 </div>
                             </div>
 
-                            <div class="row-col text-center align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">
+                            <div class="row-col text-center align-bottom pb-2 m-0 font-weight-bold text-uppercase small text-secondary">
                                 Incoming
                             </div>
 
-                            <div  v-for="dataCollectionRecord in dataCollectorRecords" :key="dataCollectionRecord['id']">
-                                <div class="d-flex justify-content-between">
-                                    <div class="">
-                                        <div class="text-secondary small">
-                                            <a :href="'/data-collector/' + dataCollectionRecord['data_collection']['id']">
-                                                <small class="small">{{ dataCollectionRecord['data_collection']['name'] }}</small>
-                                            </a>
-                                        </div>
-                                        <div class="text-secondary small">
-                                            <small class="small">
+                            <div v-for="dataCollectionRecord in dataCollectorRecords" :key="dataCollectionRecord['id']">
+                                <div class="row col">
+                                    <div class="text-primary">
+                                        <a :href="'/data-collector/' + dataCollectionRecord['data_collection']['id']">
+                                            {{ dataCollectionRecord['data_collection']['name'] }}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="row col">
+                                    <div class="flex-fill">
+                                        <a class="text-secondary small" :href="'/data-collector/' + dataCollectionRecord['data_collection']['id']">
                                             {{ formatDateTime(dataCollectionRecord['data_collection']['created_at']) }}
-                                            </small>
-                                        </div>
+                                        </a>
                                     </div>
                                     <div class="">
                                         <number-card label="requested" :number="dataCollectionRecord['quantity_requested']"></number-card>
@@ -135,10 +124,16 @@ import loadingOverlay from '../../mixins/loading-overlay';
 import helpers from "../../mixins/helpers";
 import api from "../../mixins/api";
 import url from "../../mixins/url";
+import ProductCard from "../Products/ProductCard";
+import BarcodeInputField from "../SharedComponents/BarcodeInputField";
 
 export default {
         name: "RestockingRecord",
         mixins: [loadingOverlay, url, api, helpers],
+
+        components: {
+
+        },
 
         props: {
             record: null,
@@ -280,7 +275,7 @@ export default {
             },
 
             showInventoryMovementModal() {
-                this.$emit('showModalMovement', this.record['product_sku'])
+                this.$emit('showModalMovement', this.record['product']['sku'])
             },
         },
     }

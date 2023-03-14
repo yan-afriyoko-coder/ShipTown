@@ -19,7 +19,7 @@
                         <!-- Menu Items END -->
                         <div class="dropdown-menu dropdown-menu-right w-100 text-center bg-primary" aria-labelledby="navbarDropdown" >
                             <a class="btn btn-primary d-block" href="{{ route('stocktaking') }}">{{ __('Stocktaking') }}</a>
-                            <a class="btn btn-primary d-block" href="{{ route('reports.restocking' , ['filter[warehouse_quantity_between]' => '0.01,9999999', 'sort' => '-quantity_required', 'cache_name' => 'restocking_page']) }}">{{ __('Restocking') }}</a>
+                            <a class="btn btn-primary d-block" href="{{ route('reports.restocking' , ['sort' => '-quantity_required', 'cache_name' => 'restocking_page']) }}">{{ __('Restocking') }}</a>
                             <a class="btn btn-primary d-block" href="{{ route('data-collector') }}">{{ __('Data Collector') }}</a>
                         </div>
                     </div>
