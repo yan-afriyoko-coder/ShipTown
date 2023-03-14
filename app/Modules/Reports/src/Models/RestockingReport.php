@@ -50,7 +50,7 @@ class RestockingReport extends Report
 
         $this->baseQuery = Inventory::query()
             ->leftJoin('products', 'inventory.product_id', '=', 'products.id')
-            ->rightJoin('inventory as inventory_source', function (JoinClause $join) {
+            ->join('inventory as inventory_source', function (JoinClause $join) {
                 $join->on('inventory_source.product_id', '=', 'inventory.product_id');
                 $join->on('inventory_source.warehouse_id', '=', DB::raw(2));
                 $join->where('inventory_source.quantity_available', '>', 0);
