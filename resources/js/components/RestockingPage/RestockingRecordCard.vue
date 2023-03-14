@@ -97,18 +97,18 @@
                             </div>
 
                             <div  v-for="dataCollectionRecord in dataCollectorRecords" :key="dataCollectionRecord['id']">
-                                <div class="d-flex justify-content-between">
-                                    <div class="">
-                                        <div class="text-secondary small">
-                                            <a :href="'/data-collector/' + dataCollectionRecord['data_collection']['id']">
-                                                <small class="small">{{ dataCollectionRecord['data_collection']['name'] }}</small>
-                                            </a>
-                                        </div>
-                                        <div class="text-secondary small">
-                                            <small class="small">
+                                <div class="row col">
+                                    <div class="text-primary">
+                                        <a :href="'/data-collector/' + dataCollectionRecord['data_collection']['id']">
+                                            {{ dataCollectionRecord['data_collection']['name'] }}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="row col">
+                                    <div class="flex-fill">
+                                        <a class="text-secondary small" :href="'/data-collector/' + dataCollectionRecord['data_collection']['id']">
                                             {{ formatDateTime(dataCollectionRecord['data_collection']['created_at']) }}
-                                            </small>
-                                        </div>
+                                        </a>
                                     </div>
                                     <div class="">
                                         <number-card label="requested" :number="dataCollectionRecord['quantity_requested']"></number-card>
