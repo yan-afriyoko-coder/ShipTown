@@ -4,18 +4,7 @@
             <div class="card ml-0 pl-0">
                 <div class="row card-body pt-2 pl-2">
                     <div class="col-lg-4">
-                        <div class="text-primary h5">{{ record['product']['name'] }}</div>
-                        <div>
-                            sku: <b>
-                            <font-awesome-icon icon="copy" class="fa-xs btn-link" role="button" @click="copyToClipBoard(record['product']['sku'])"></font-awesome-icon>
-                            <a target="_blank"  :href="'/products?hide_nav_bar=true&search=' + record['product_sku']">{{ record['product']['sku'] }}</a>
-                        </b>
-                        </div>
-                        <div>
-                            <template v-for="tag in record['tags']">
-                                <a class="badge text-uppercase btn btn-outline-primary" :key="tag.id" @click.prevent="setUrlParameterAngGo('filter[product_has_tags]', tag['name']['en'])"> {{ tag['name']['en'] }} </a>
-                            </template>
-                        </div>
+                        <product-info-card :product="record['product']"/>
                     </div>
                     <div class="col mt-1 mb-1 small">
                         <div @click="expanded = !expanded">location: <b>{{ record['warehouse_code'] }}</b></div>
@@ -135,10 +124,16 @@ import loadingOverlay from '../../mixins/loading-overlay';
 import helpers from "../../mixins/helpers";
 import api from "../../mixins/api";
 import url from "../../mixins/url";
+import ProductCard from "../Products/ProductCard";
+import BarcodeInputField from "../SharedComponents/BarcodeInputField";
 
 export default {
         name: "RestockingRecord",
         mixins: [loadingOverlay, url, api, helpers],
+
+        components: {
+
+        },
 
         props: {
             record: null,
