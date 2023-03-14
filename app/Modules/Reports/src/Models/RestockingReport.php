@@ -46,7 +46,7 @@ class RestockingReport extends Report
 
         $this->defaultSort = '-quantity_required';
 
-        $this->allowedIncludes = ['product', 'product.tags'];
+        $this->allowedIncludes = ['product', 'product.tags', 'product.prices'];
 
         $this->baseQuery = Inventory::query()
             ->leftJoin('products', 'inventory.product_id', '=', 'products.id')

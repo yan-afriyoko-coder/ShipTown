@@ -8,7 +8,7 @@
                     </div>
                     <div class="col mt-1 mb-1 small">
                         <div @click="expanded = !expanded">location: <b>{{ record['warehouse_code'] }}</b></div>
-                        <div @click="expanded = !expanded">price: <b>{{ record['warehouse_quantity'] }}</b></div>
+                        <div @click="expanded = !expanded">price: <b>{{ record['product']['prices'][currentUser()['warehouse']['code']]['price'] }}</b></div>
                         <div @click="expanded = !expanded">warehouse stock: <b>{{ record['warehouse_quantity'] }}</b></div>
                         <div>
                             <div @click="expanded = !expanded" class="d-inline">last sold at: </div>
