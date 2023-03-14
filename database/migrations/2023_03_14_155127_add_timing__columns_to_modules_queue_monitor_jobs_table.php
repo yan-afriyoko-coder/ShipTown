@@ -12,14 +12,12 @@ class AddTimingColumnsToModulesQueueMonitorJobsTable extends Migration
             $table->unsignedInteger('seconds_dispatching')
                 ->nullable()
                 ->storedAs('TIMESTAMPDIFF(SECOND, dispatched_at, processing_at)')
-                ->comment('TIMESTAMPDIFF(SECOND, dispatched_at, processing_at)')
-                ->after('processed_at');
+                ->comment('TIMESTAMPDIFF(SECOND, dispatched_at, processing_at)');
 
             $table->unsignedInteger('seconds_running')
                 ->nullable()
                 ->storedAs('TIMESTAMPDIFF(SECOND, processing_at, processed_at)')
-                ->comment('TIMESTAMPDIFF(SECOND, processing_at, processed_at)')
-                ->after('processed_at');
+                ->comment('TIMESTAMPDIFF(SECOND, processing_at, processed_at)');
         });
     }
 }
