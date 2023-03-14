@@ -4,6 +4,7 @@ namespace App\Modules\Reports\src\Models;
 
 use App\Models\Inventory;
 use App\Traits\LogsActivityTrait;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 
@@ -38,13 +39,13 @@ class InventoryDashboardReport extends Report
         ];
 
         $this->baseQuery = Inventory::query()
-            ->leftJoin('inventory as inventory_source', function ($join) {
+            ->rightJoin('inventory as inventory_source', function (JoinClause $join) {
                 $join->on('inventory_source.product_id', '=', 'inventory.product_id');
+                $join->on('inventory_source.warehouse_id', '=', DB::raw(2));
+                $join->where('inventory_source.quantity_available', '>', 0);
             })
             ->leftJoin('products as product', 'inventory.product_id', '=', 'product.id')
-            ->rightJoin('warehouses', 'inventory.warehouse_id', '=', 'warehouses.id')
-            ->where('inventory_source.warehouse_code', '=', '99')
-            ->where('inventory_source.quantity_available', '>', 0)
+            ->leftJoin('warehouses', 'inventory.warehouse_id', '=', 'warehouses.id')
             ->whereNotIn('inventory.warehouse_code', ['99','999','100'])
             ->groupBy('warehouses.code', 'warehouses.id');
 
