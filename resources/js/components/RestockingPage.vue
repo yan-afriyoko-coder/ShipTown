@@ -74,7 +74,7 @@ export default {
 
         mounted() {
             this.getUrlFilterOrSet('filter[warehouse_code]', this.currentUser()['warehouse']['code']);
-            this.getUrlFilterOrSet('filter[has_tags]', 'fulfilment');
+            // this.getUrlFilterOrSet('filter[has_tags]', 'fulfilment');
             this.getUrlFilterOrSet('sort', '-warehouse_has_stock,-quantity_required,-quantity_incoming,-warehouse_quantity');
 
             this.loadRestockingRecords();
@@ -101,7 +101,7 @@ export default {
                 params['per_page'] = this.per_page;
                 params['page'] = page;
 
-                params['cache_name'] = page === 1 ? params['cache_name'] : '';
+                // params['cache_name'] = page === 1 ? params['cache_name'] : '';
 
                 this.apiGetRestocking(params)
                     .then((response) => {
