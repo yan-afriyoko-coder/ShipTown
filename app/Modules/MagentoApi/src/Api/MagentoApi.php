@@ -3,6 +3,7 @@
 namespace App\Modules\MagentoApi\src\Api;
 
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Arr;
 
 class MagentoApi extends BaseApi
 {
@@ -41,14 +42,14 @@ class MagentoApi extends BaseApi
     public function postProductsSpecialPriceInformation($sku): Response
     {
         return $this->post('/products/special-price-information', [
-            'skus' => [$sku]
+            'skus' => Arr::wrap($sku)
         ]);
     }
 
     public function postProductsBasePricesInformation($sku): Response
     {
         return $this->post('/products/base-prices-information', [
-            'skus' => [$sku]
+            'skus' => Arr::wrap($sku)
         ]);
     }
 
