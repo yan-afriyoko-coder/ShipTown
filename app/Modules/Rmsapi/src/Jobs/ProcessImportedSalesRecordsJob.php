@@ -5,6 +5,7 @@ namespace App\Modules\Rmsapi\src\Jobs;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use App\Models\Product;
+use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Models\RmsapiSaleImport;
 use App\Services\InventoryService;
 use App\Traits\IsMonitored;
@@ -50,8 +51,19 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
 
         do {
             $this->processImportedRecords($batch_size);
+
+
+            $hasNoRecordsToProcess = ! RmsapiSaleImport::query()
+                ->whereNull('reserved_at')
+                ->whereNull('processed_at')
+                ->exists();
+
+            if ($hasNoRecordsToProcess) {
+                return true;
+            }
+
             $maxRunCount--;
-        } while ($maxRunCount > 0 and RmsapiSaleImport::query()->whereNull('processed_at')->exists());
+        } while ($maxRunCount > 0);
     }
 
     private function processImportedRecords(int $batch_size): void
