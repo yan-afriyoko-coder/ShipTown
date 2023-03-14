@@ -34,7 +34,7 @@ class RestockingReport extends Report
             'quantity_incoming',
             'reorder_point',
             'restock_level',
-//            'warehouse_quantity',
+            'warehouse_quantity',
 //            'warehouse_has_stock',
             'first_sold_at',
             'last_sold_at',
@@ -76,6 +76,10 @@ class RestockingReport extends Report
             'last_counted_at'                    => 'inventory.last_counted_at',
             'first_received_at'                  => 'inventory.first_received_at',
             'last_received_at'                   => 'inventory.last_received_at',
+            'warehouse_quantity'                 => 'inventory_source.quantity_available',
+//            'warehouse_has_stock'                => DB::raw('inventory_source.quantity_available > 0'),
+//            'inventory_source_warehouse_code'    => 'inventory_source.warehouse_code',
+//            'quantity_to_ship'                   => DB::raw("CASE WHEN inventory_source.quantity_available < inventory.quantity_required THEN inventory_source.quantity_available ELSE inventory.quantity_required END"),
         ];
 
         $this->casts = [
