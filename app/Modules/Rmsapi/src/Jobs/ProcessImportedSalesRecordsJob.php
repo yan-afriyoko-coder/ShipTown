@@ -58,40 +58,37 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
     {
         $reservationTime = now();
 
-        // reserve records
-        retry(5, function () use ($batch_size, $reservationTime) {
-            RmsapiSaleImport::query()
-                ->where('connection_id', $this->connection_id)
-                ->where('comment', 'not like', 'PM_OrderProductShipment_%')
-                ->whereNull('reserved_at')
-                ->whereNull('processed_at')
-                ->orderBy('id')
-                ->limit($batch_size)
-                ->update(['reserved_at' => $reservationTime]);
+        RmsapiSaleImport::query()
+            ->whereNull('reserved_at')
+            ->where('connection_id', $this->connection_id)
+            ->whereNull('processed_at')
+            ->where('comment', 'not like', 'PM_OrderProductShipment_%')
+            ->orderBy('id')
+            ->limit($batch_size)
+            ->update(['reserved_at' => $reservationTime]);
 
-            // process records
-            RmsapiSaleImport::query()
-                ->where([
-                    'connection_id' => $this->connection_id,
-                    'reserved_at' => $reservationTime
-                ])
-                ->whereNull('processed_at')
-                ->where('comment', 'not like', 'PM_OrderProductShipment_%')
-                ->orderBy('id')
-                ->get()
-                ->each(function (RmsapiSaleImport $salesRecord) {
-                    try {
-                        retry(3, function () use ($salesRecord) {
-                            DB::transaction(function () use ($salesRecord) {
-                                $this->import($salesRecord);
-                            });
-                        }, 1000);
-                    } catch (Exception $e) {
-                        report($e);
-                        Log::emergency($e->getMessage(), $e->getTrace());
-                    }
-                });
-        }, 1000);
+        // process records
+        RmsapiSaleImport::query()
+            ->where([
+                'connection_id' => $this->connection_id,
+                'reserved_at' => $reservationTime
+            ])
+            ->whereNull('processed_at')
+            ->where('comment', 'not like', 'PM_OrderProductShipment_%')
+            ->orderBy('id')
+            ->get()
+            ->each(function (RmsapiSaleImport $salesRecord) {
+                try {
+                    retry(3, function () use ($salesRecord) {
+                        DB::transaction(function () use ($salesRecord) {
+                            $this->import($salesRecord);
+                        });
+                    }, 1000);
+                } catch (Exception $e) {
+                    report($e);
+                    Log::emergency($e->getMessage(), $e->getTrace());
+                }
+            });
     }
 
     private function import(RmsapiSaleImport $salesRecord)

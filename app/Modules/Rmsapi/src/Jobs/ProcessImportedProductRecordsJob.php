@@ -216,17 +216,17 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
         $reservationTime = now();
 
         RmsapiProductImport::query()
-            ->whereNull('when_processed')
             ->whereNull('reserved_at')
             ->where('connection_id', $this->connection_id)
+            ->whereNull('when_processed')
             ->orderByRaw('id ASC')
             ->limit($batch_size)
             ->update(['reserved_at' => $reservationTime]);
 
         $records = RmsapiProductImport::query()
-            ->whereNull('when_processed')
-            ->where(['reserved_at' => $reservationTime])
             ->where('connection_id', $this->connection_id)
+            ->where(['reserved_at' => $reservationTime])
+            ->whereNull('when_processed')
             ->orderBy('id')
             ->get();
 
