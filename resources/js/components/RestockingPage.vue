@@ -97,7 +97,7 @@ export default {
                 this.showLoading();
 
                 const params = this.$router.currentRoute.query;
-                params['include'] = 'product.tags';
+                params['include'] = 'product,product.tags';
                 params['per_page'] = this.per_page;
                 params['page'] = page;
 

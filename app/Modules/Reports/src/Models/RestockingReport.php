@@ -21,35 +21,40 @@ class RestockingReport extends Report
         $this->view = 'reports.restocking-report';
 
         $this->defaultSelect = implode(',', [
-            'id',
+            'inventory_id',
 //            'product_id',
 //            'inventory_id',
 //            'warehouse_id',
-//            'warehouse_code',
+            'warehouse_code',
 //            'product_sku',
 //            'product_name',
-//            'quantity_required',
-//            'quantity_in_stock',
-//            'quantity_available',
-//            'quantity_incoming',
-//            'reorder_point',
-//            'restock_level',
+            'quantity_required',
+            'quantity_in_stock',
+            'quantity_available',
+            'quantity_incoming',
+            'reorder_point',
+            'restock_level',
 //            'warehouse_quantity',
 //            'warehouse_has_stock',
-//            'last_movement_at',
-//            'last_sold_at',
-//            'first_sold_at',
-//            'last_counted_at',
-//            'first_received_at',
-//            'last_received_at',
+            'first_sold_at',
+            'last_sold_at',
+            'first_received_at',
+            'last_received_at',
+            'last_movement_at',
+            'last_counted_at',
         ]);
 
         $this->defaultSort = '-quantity_required';
 
-        $this->allowedIncludes = ['product.tags'];
+        $this->allowedIncludes = ['product', 'product.tags'];
 
-
-        $this->baseQuery = Inventory::query();
+        $this->baseQuery = Inventory::query()
+//            ->leftJoin('products', 'inventory.product_id', '=', 'products.id')
+            ->leftJoin('inventory as inventory_source', function (JoinClause $join) {
+                $join->on('inventory_source.product_id', '=', 'inventory.product_id');
+                $join->where('inventory_source.warehouse_id', '=', DB::raw(2));
+                $join->whereBetween('inventory_source.quantity_available', [0.01, 9999999]);
+            });
 
         $this->fields = [
             'id'                                 => 'inventory.id',
