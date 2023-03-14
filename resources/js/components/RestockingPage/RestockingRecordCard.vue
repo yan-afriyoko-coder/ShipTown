@@ -92,7 +92,7 @@
                                 </div>
                             </div>
 
-                            <div class="row-col text-center align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">
+                            <div class="row-col text-center align-bottom pb-2 m-0 font-weight-bold text-uppercase small text-secondary">
                                 Incoming
                             </div>
 
