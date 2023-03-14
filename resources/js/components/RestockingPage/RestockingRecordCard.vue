@@ -8,10 +8,8 @@
                     </div>
                     <div class="col mt-1 mb-1 small">
                         <div @click="expanded = !expanded" class="mb-1">warehouse stock: <b>{{ record['warehouse_quantity'] }}</b></div>
-                        <div @click="expanded = !expanded" :class="{ 'bg-warning': isOnSale }">sale price: <b>{{ record['product']['prices'][currentUser()['warehouse']['code']]['sale_price'] }}</b></div>
-                        <div @click="expanded = !expanded">sale start date: <b>{{ formatDateTime(record['product']['prices'][currentUser()['warehouse']['code']]['sale_price_start_date'], 'D MMM Y') }}</b></div>
-                        <div @click="expanded = !expanded" class="mb-1">sale end date: <b>{{ formatDateTime(record['product']['prices'][currentUser()['warehouse']['code']]['sale_price_end_date'], 'D MMM Y') }}</b></div>
-                        <div>
+                        <div @click="expanded = !expanded" :class="{ 'bg-warning': isOnSale, 'bg-info': isSaleComing }">sale price: <b>{{ pricing['sale_price'] }} ({{ formatDateTime(pricing['sale_price_start_date'], 'D MMM Y') }} - {{ formatDateTime(pricing['sale_price_end_date'], 'D MMM Y') }})</b></div>
+                        <div class="mt-1">
                             <div @click="expanded = !expanded" class="d-inline">last sold at: </div>
                             <strong @click="showInventoryMovementModal" class="text-primary cursor-pointer">{{ formatDateTime(record['last_sold_at']) }}</strong>
                         </div>
@@ -27,9 +25,10 @@
                         </template>
                     </div>
                     <div class="col-lg-5">
-                        <div class="row-col text-center" @click="expanded = !expanded">
+                        <div class="row-col text-right" @click="expanded = !expanded">
                             <div class="text-left d-sm-flex d-md-inline">
-                                <number-card label="price" :number="record['reorder_point']" v-bind:class="{'bg-warning' : record['reorder_point'] <= 0 }"></number-card>
+                                <number-card v-if="isOnSale" label="sale price" :number="pricing['sale_price']" class="bg-warning"></number-card>
+                                <number-card :class="{ 'text-secondary': isOnSale }" label="price" :number="pricing['price']"></number-card>
                             </div>
                             <div class="d-none d-md-inline"><number-card label="restock level" :number="record['restock_level']" v-bind:class="{'bg-warning' : record['restock_level'] <= 0 }"></number-card></div>
                             <number-card label="reorder point" :number="record['reorder_point']" v-bind:class="{'bg-warning' : record['reorder_point'] <= 0 }"></number-card>
@@ -172,14 +171,31 @@ export default {
         },
 
         computed: {
+            pricing: {
+                get: function() {
+                    return this.record['product']['prices'][this.currentUser()['warehouse']['code']];
+                },
+            },
             isOnSale: {
                 get: function() {
-                    const salePrice = this.record['product']['prices'][this.currentUser()['warehouse']['code']];
+                    const pricingRecord = this.record['product']['prices'][this.currentUser()['warehouse']['code']];
 
-                    const startDateInPast = moment(salePrice['sale_price_start_date']).isBefore(moment());
-                    const endDateInFuture = moment(salePrice['sale_price_end_date']).isAfter(moment());
+                    const salePriceIsCorrect = pricingRecord['sale_price'] !== null && pricingRecord['sale_price'] < pricingRecord['price'];
+                    const startDateInPast = moment(pricingRecord['sale_price_start_date']).isSameOrBefore(moment());
+                    const endDateInFuture = moment(pricingRecord['sale_price_end_date']).isSameOrAfter(moment().subtract(1, 'day'));
 
-                    return startDateInPast && endDateInFuture;
+                    return salePriceIsCorrect && startDateInPast && endDateInFuture;
+                },
+            },
+
+            isSaleComing: {
+                get: function () {
+                    const pricingRecord = this.record['product']['prices'][this.currentUser()['warehouse']['code']];
+
+                    const startDateInFuture = moment(pricingRecord['sale_price_start_date']).isAfter(moment());
+                    const startDateWithin7Days = moment(pricingRecord['sale_price_start_date']).isBefore(moment().add(7, 'days'));
+
+                    return startDateInFuture && startDateWithin7Days;
                 },
             },
 
