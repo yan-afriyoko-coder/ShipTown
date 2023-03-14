@@ -96,7 +96,7 @@
                                 Incoming
                             </div>
 
-                            <div  v-for="dataCollectionRecord in dataCollectorRecords" :key="dataCollectionRecord['id']">
+                            <div v-for="dataCollectionRecord in dataCollectorRecords" :key="dataCollectionRecord['id']">
                                 <div class="row col">
                                     <div class="text-primary">
                                         <a :href="'/data-collector/' + dataCollectionRecord['data_collection']['id']">
