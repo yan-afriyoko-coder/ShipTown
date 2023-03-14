@@ -18,6 +18,10 @@ class JobProcessingListener
                     ->oldest('dispatched_at')
                     ->first();
 
+                if (!$record) {
+                    return;
+                }
+
                 DB::table('modules_queue_monitor_jobs')
                     ->where('id', $record->id)
                     ->update(['uuid' => $event->job->payload()['uuid'], 'processing_at' => now()]);
