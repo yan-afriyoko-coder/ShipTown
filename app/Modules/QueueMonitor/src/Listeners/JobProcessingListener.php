@@ -11,12 +11,15 @@ class JobProcessingListener
     {
         try {
             if ($event->job->getConnectionName() !== 'sync') {
-                DB::table('modules_queue_monitor_jobs')
+                $record = DB::table('modules_queue_monitor_jobs')
                     ->where([
                         'uuid' => null,
                         'job_class' => $event->job->payload()['displayName']])
                     ->oldest('dispatched_at')
-                    ->first()
+                    ->first();
+
+                DB::table('modules_queue_monitor_jobs')
+                    ->where('id', $record->id)
                     ->update(['uuid' => $event->job->payload()['uuid'], 'processing_at' => now()]);
             } else {
                 DB::table('modules_queue_monitor_jobs')->insert([
