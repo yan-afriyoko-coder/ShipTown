@@ -2,6 +2,7 @@
 
 namespace App\Modules\Reports\src\Models;
 
+use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Warehouse;
 use Illuminate\Database\Query\Builder;
@@ -45,14 +46,14 @@ class RestockingReport extends Report
 
         $this->defaultSort = '-quantity_required';
 
-        $this->allowedIncludes = ['tags'];
+        $this->allowedIncludes = ['product.tags'];
 
         if (request('title')) {
             $this->report_name = request('title').' ('.$this->report_name.')';
         }
 
-        $this->baseQuery = Product::query()
-            ->leftJoin('inventory', 'inventory.product_id', '=', 'products.id')
+        $this->baseQuery = Inventory::query()
+            ->leftJoin('products', 'inventory.product_id', '=', 'products.id')
             ->leftJoin('inventory as inventory_source', function (JoinClause $join) {
                 $join->on('inventory_source.product_id', '=', 'products.id');
                 $join->where('inventory_source.warehouse_id', '=', DB::raw(2));
