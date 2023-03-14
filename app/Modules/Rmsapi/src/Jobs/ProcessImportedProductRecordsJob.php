@@ -49,8 +49,18 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
 
         do {
             $this->processImportedProducts($batch_size);
+
+            $hasNoRecordsToProcess = ! RmsapiProductImport::query()
+                ->whereNull('reserved_at')
+                ->whereNull('when_processed')
+                ->exists();
+
+            if ($hasNoRecordsToProcess) {
+                return true;
+            }
+
             $maxRunCount--;
-        } while ($maxRunCount > 0 and RmsapiProductImport::query()->whereNull('when_processed')->exists());
+        } while ($maxRunCount > 0);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Modules\Reports\src\Models;
 use App\Models\Product;
 use App\Models\Warehouse;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 
@@ -52,7 +53,11 @@ class RestockingReport extends Report
 
         $this->baseQuery = Product::query()
             ->leftJoin('inventory', 'inventory.product_id', '=', 'products.id')
-            ->leftJoin('inventory as inventory_source', 'inventory_source.product_id', '=', 'inventory.product_id');
+            ->leftJoin('inventory as inventory_source', function (JoinClause $join) {
+                $join->on('inventory_source.product_id', '=', 'products.id');
+                $join->where('inventory_source.warehouse_id', '=', DB::raw(2));
+                $join->whereBetween('inventory_source.quantity_available', [0.01, 9999999]);
+            });
 
         $this->fields = [
             'id'                                 => 'products.id',
