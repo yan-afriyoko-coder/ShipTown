@@ -30,7 +30,7 @@ class SyncProductSalePricesJob implements ShouldQueue
     {
         MagentoProductPricesComparisonView::query()
             ->whereRaw('special_prices_fetched_at IS NOT NULL
-            AND expected_sale_price > 0
+
             AND (
                 IFNULL(magento_sale_price, 0) != expected_sale_price
                 OR magento_sale_price_start_date != expected_sale_price_start_date
