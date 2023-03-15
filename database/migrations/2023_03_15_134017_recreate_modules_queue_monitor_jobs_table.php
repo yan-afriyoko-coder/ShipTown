@@ -18,11 +18,11 @@ class RecreateModulesQueueMonitorJobsTable extends Migration
             $table->timestamp('dispatched_at')->default(DB::raw('CURRENT_TIMESTAMP'))->index();
             $table->timestamp('processing_at')->nullable();
             $table->timestamp('processed_at')->nullable();
-            $table->unsignedInteger('seconds_dispatching')
+            $table->bigInteger('seconds_dispatching')
                 ->storedAs('TIMESTAMPDIFF(SECOND, dispatched_at, processing_at)')
                 ->comment('TIMESTAMPDIFF(SECOND, dispatched_at, processing_at)');
 
-            $table->unsignedInteger('seconds_running')
+            $table->bigInteger('seconds_running')
                 ->storedAs('TIMESTAMPDIFF(SECOND, processing_at, processed_at)')
                 ->comment('TIMESTAMPDIFF(SECOND, processing_at, processed_at)');
         });
