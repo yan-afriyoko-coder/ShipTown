@@ -3,7 +3,6 @@
 namespace App\Modules\Reports\src\Models;
 
 use App\Models\Inventory;
-use App\Models\Warehouse;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -50,10 +49,10 @@ class RestockingReport extends Report
 
         $this->baseQuery = Inventory::query()
             ->leftJoin('products', 'inventory.product_id', '=', 'products.id')
-            ->leftJoin('inventory as inventory_source', function (JoinClause $join) {
+            ->join('inventory as inventory_source', function (JoinClause $join) {
                 $join->on('inventory_source.product_id', '=', 'inventory.product_id');
                 $join->on('inventory_source.warehouse_id', '=', DB::raw(2));
-                $join->where('inventory_source.quantity_available', '>', 0);
+                $join->where('inventory_source.is_in_stock', '=', 1);
             });
 
         $this->fields = [
@@ -77,8 +76,9 @@ class RestockingReport extends Report
             'first_received_at'                  => 'inventory.first_received_at',
             'last_received_at'                   => 'inventory.last_received_at',
             'warehouse_quantity'                 => DB::raw('IFNULL(inventory_source.quantity_available, 0)'),
-            'warehouse_has_stock'                => DB::raw('ISNULL(inventory_source.quantity_available)'),
+//            'warehouse_has_stock'                => DB::raw('ISNULL(inventory_source.quantity_available)'),
             'inventory_source_warehouse_code'    => 'inventory_source.warehouse_code',
+            'warehouse_has_stock'    => 'inventory_source.is_in_stock',
         ];
 
         $this->casts = [
