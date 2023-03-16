@@ -35,7 +35,7 @@ class RestockingReport extends Report
             'reorder_point',
             'restock_level',
             'warehouse_quantity',
-//            'warehouse_has_stock',
+            'warehouse_has_stock',
             'first_sold_at',
             'last_sold_at',
             'first_received_at',
@@ -91,10 +91,9 @@ class RestockingReport extends Report
             'quantity_available' => 'float',
             'quantity_incoming'  => 'float',
             'warehouse_quantity' => 'float',
-            'warehouse_has_stock'=> 'boolean',
-//            'quantity_to_ship'   => 'float',
             "last_movement_at"   => 'datetime',
             'last_counted_at'    => 'datetime',
+            'warehouse_has_stock'=> 'boolean',
         ];
 
 //        $this->addFilter(
