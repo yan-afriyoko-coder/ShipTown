@@ -8,7 +8,7 @@ class AddIsInStockColumnToInventoryTable extends Migration
 {
     public function up()
     {
-        Schema::table('stock_column_to_inventory', function (Blueprint $table) {
+        Schema::table('inventory', function (Blueprint $table) {
             $table->boolean('is_in_stock')
                 ->storedAs('quantity_available > 0')
                 ->comment('quantity_available > 0');
