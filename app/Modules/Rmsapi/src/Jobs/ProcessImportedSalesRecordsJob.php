@@ -130,12 +130,21 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
             ->where('warehouse_id', $salesRecord->rmsapiConnection->warehouse_id)
             ->first();
 
-        $inventoryMovement = InventoryService::adjustQuantity(
-            $inventory,
-            $salesRecord->quantity,
-            $salesRecord->type,
-            $unique_reference_id
-        );
+        if ($salesRecord->type === 'rms_sale') {
+            $inventoryMovement = InventoryService::sellProduct(
+                $inventory,
+                $salesRecord->quantity,
+                $salesRecord->type,
+                $unique_reference_id
+            );
+        } else {
+            $inventoryMovement = InventoryService::adjustQuantity(
+                $inventory,
+                $salesRecord->quantity,
+                $salesRecord->type,
+                $unique_reference_id
+            );
+        }
 
         $salesRecord->update([
             'inventory_movement_id' => $inventoryMovement->getKey(),
