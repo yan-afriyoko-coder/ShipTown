@@ -32,6 +32,8 @@ class InventoryMovement extends BaseModel
 {
     use HasFactory;
 
+    const TYPE_SALE = 'sale';
+
     /**
      * @var string[]
      */

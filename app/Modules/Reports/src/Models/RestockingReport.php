@@ -53,7 +53,7 @@ class RestockingReport extends Report
                 $join->on('inventory_source.product_id', '=', 'inventory.product_id');
                 $join->on('inventory_source.warehouse_id', '=', DB::raw(2));
                 $join->where('inventory_source.is_in_stock', '=', 1);
-            });
+            })->withSum('last14daysSales', 'quantity_delta');
 
         $this->fields = [
             'id'                                 => 'inventory.id',
