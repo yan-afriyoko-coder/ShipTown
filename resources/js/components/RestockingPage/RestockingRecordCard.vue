@@ -45,7 +45,7 @@
                                 <div class="col-3">
                                 </div>
                                 <div class="col-3">
-                                    <number-card label="sold 14 days" :number="record['last14days_sales_sum_quantity_delta'] * -1"></number-card>
+                                    <number-card label="sold 7 days" :number="record['last7days_sales_sum_quantity_delta'] * -1"></number-card>
                                 </div>
                                 <div class="col-3">
                                     <number-card label="required" :number="record['quantity_required']" v-if="record['warehouse_quantity'] > 0"></number-card>
