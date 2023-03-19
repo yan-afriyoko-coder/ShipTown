@@ -40,7 +40,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-3">
-<!--                                    <number-card label="days cover" :number="3" v-bind:class="{'bg-warning' : record['reorder_point'] <= 0 }"></number-card>-->
+                                    <number-card label="weeks cover" :number="weeksCover"></number-card>
                                 </div>
                                 <div class="col-3">
                                 </div>
@@ -194,6 +194,16 @@ export default {
         },
 
         computed: {
+            weeksCover: {
+                get: function() {
+                    if (this.record['last7days_sales_sum_quantity_delta'] === null) return 0;
+                    if (this.record['last7days_sales_sum_quantity_delta'] === 0) return 0;
+                    if (this.record['quantity_in_stock'] === 0) return 0;
+
+                    return Math.floor(this.record['quantity_in_stock'] / (this.record['last7days_sales_sum_quantity_delta'] * -1));
+                },
+            },
+
             pricing: {
                 get: function() {
                     return this.record['product']['prices'][this.currentUser()['warehouse']['code']];
