@@ -284,7 +284,7 @@ class Inventory extends BaseModel
 
     public function last7daysSales(): HasMany
     {
-        return $this->hasMany(InventoryMovement::class, 'product_id', 'product_id')
+        return $this->hasMany(InventoryMovement::class, 'inventory_id', 'id')
             ->where('type', InventoryMovement::TYPE_SALE)
             ->whereBetween('created_at', [Carbon::now()->subDays(7), Carbon::now()]);
     }
