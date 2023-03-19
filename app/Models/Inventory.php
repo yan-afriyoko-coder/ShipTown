@@ -281,4 +281,11 @@ class Inventory extends BaseModel
     {
         return $this->hasMany(ProductAlias::class, 'product_id', 'product_id');
     }
+
+    public function last14daysSales(): HasMany
+    {
+        return $this->hasMany(InventoryMovement::class, 'product_id', 'product_id')
+            ->where('type', InventoryMovement::TYPE_SALE)
+            ->whereBetween('created_at', [Carbon::now()->subDays(14), Carbon::now()]);
+    }
 }
