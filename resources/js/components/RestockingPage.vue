@@ -62,13 +62,14 @@ export default {
             return {
                 data: [],
                 per_page: 40,
+                pageScrollPercentage: 70,
                 reachedEnd: false,
                 pagesLoaded: 0,
                 selectedRecord: null,
                 newReorderPoint: null,
                 newRestockLevel: null,
                 newQuantityInStock: null,
-                showMovementSku: null
+                showMovementSku: null,
             };
         },
 
@@ -149,7 +150,7 @@ export default {
                     return;
                 }
 
-                if (! this.isMoreThanPercentageScrolled(70)) {
+                if (! this.isMoreThanPercentageScrolled(this.pageScrollPercentage)) {
                     return;
                 }
 
@@ -164,6 +165,7 @@ export default {
                     this.per_page = this.per_page * 2;
                 }
 
+                this.pageScrollPercentage = 90;
                 this.loadRestockingRecords(++this.pagesLoaded);
             },
 
