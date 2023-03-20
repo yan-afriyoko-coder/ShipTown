@@ -61,7 +61,7 @@ export default {
         data: function() {
             return {
                 data: [],
-                per_page: 20,
+                per_page: 40,
                 reachedEnd: false,
                 pagesLoaded: 0,
                 selectedRecord: null,
