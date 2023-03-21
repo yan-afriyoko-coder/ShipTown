@@ -28,7 +28,7 @@ class OrderProductShipmentCreatedListener
         InventoryService::sellProduct(
             $orderProductShipment->inventory,
             - $orderProductShipment->quantity_shipped,
-            'shipped #'.$event->orderProductShipment->order->order_number,
+            'shipped',
             implode('', [
                 'order_product_shipment_id_',
                 $orderProductShipment->getKey(),
