@@ -12,7 +12,7 @@ use App\Models\OrderProductTotal;
 use App\Models\Product;
 use App\Modules\Rmsapi\src\Api\Client as RmsapiClient;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
-use App\Modules\Rmsapi\src\Models\RmsapiShippingsImport;
+use App\Modules\Rmsapi\src\Models\RmsapiShippingImports;
 use App\Services\InventoryService;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
@@ -67,7 +67,7 @@ class ImportShippingsJob implements ShouldQueue
 
         try {
             $response = RmsapiClient::GET($this->rmsapiConnection, 'api/shippings', $params);
-            RmsapiShippingsImport::query()->create([
+            RmsapiShippingImports::query()->create([
                 'rmsapi_connection_id' => $this->rmsapiConnection->id,
                 'raw_import' => json_encode($response->getResult())
             ]);
