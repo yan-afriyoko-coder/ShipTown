@@ -18,11 +18,11 @@ use Illuminate\Support\Carbon;
  *
  * @mixin Eloquent
  */
-class RmsapiShippingsImport extends Model
+class RmsapiShippingImports extends Model
 {
     use HasFactory;
 
-    protected $table = 'modules_rmsapi_shippings_imports';
+    protected $table = 'modules_rmsapi_shipping_imports';
 
     protected $fillable = [
         'connection_id',
