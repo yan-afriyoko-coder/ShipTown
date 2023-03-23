@@ -59,24 +59,11 @@ class InstallApplication extends Migration
             'group' => 'packlist'
         ]);
 
-
-//        NavigationMenu::query()->create([
-//            'name' => 'Status: picking',
-//            'url' => '/picklist?order.status_code=picking',
-//            'group' => 'picklist'
-//        ]);
-//
-//        NavigationMenu::query()->create([
-//            'name' => 'Status: packing_web',
-//            'url' => '/autopilot/packlist?status=packing_web&sort=order_placed_at',
-//            'group' => 'packlist'
-//        ]);
-//
-//        NavigationMenu::query()->create([
-//            'name' => 'Status: single_line_orders',
-//            'url' => '/autopilot/packlist?status=single_line_orders&sort=order_placed_at',
-//            'group' => 'packlist'
-//        ]);
+        NavigationMenu::query()->create([
+            'name' => 'Status: picked',
+            'url' => '/autopilot/packlist?order.status_code=picked',
+            'group' => 'packlist'
+        ]);
     }
 
     private function createDefaultUserRoles(): void
