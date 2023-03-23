@@ -175,7 +175,8 @@ export default {
                         'filter[product_id]': this.record['product_id'],
                         'filter[warehouse_id]': this.record['warehouse_id'],
                         'per_page': 10,
-                        'include': 'dataCollection'
+                        'include': 'dataCollection',
+                        'sort': '-id',
                     };
 
                     this.apiGetDataCollectorRecords(params)
