@@ -20,12 +20,6 @@ class PaidOrdersSeeder extends Seeder
      */
     public function run()
     {
-        $this->createOrders();
-        $this->createPaidToCompleteAutomation();
-    }
-
-    private function createOrders(): void
-    {
         Order::factory()
             ->count(10)
             ->create(['status_code' => 'paid'])
@@ -59,31 +53,5 @@ class PaidOrdersSeeder extends Seeder
                 $order->total_paid = $order->total;
                 $order->save();
             });
-    }
-
-    private function createPaidToCompleteAutomation(): void
-    {
-        /** @var Automation $automation */
-        $automation = Automation::create([
-            'name' => 'paid to complete',
-            'enabled' => false,
-        ]);
-
-        $automation->conditions()->create([
-            'condition_class' => StatusCodeEqualsCondition::class,
-            'condition_value' => 'paid'
-        ]);
-
-        $automation->conditions()->create([
-            'condition_class' => IsFullyPackedCondition::class,
-            'condition_value' => 'True'
-        ]);
-
-        $automation->actions()->create([
-            'action_class' => SetStatusCodeAction::class,
-            'action_value' => 'complete'
-        ]);
-
-        $automation->update(['enabled' => true]);
     }
 }

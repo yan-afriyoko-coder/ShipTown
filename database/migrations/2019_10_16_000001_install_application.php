@@ -3,6 +3,11 @@
 use App\Models\Configuration;
 use App\Models\MailTemplate;
 use App\Models\NavigationMenu;
+use App\Modules\Automations\src\Actions\Order\SetStatusCodeAction;
+use App\Modules\Automations\src\Conditions\Order\IsFullyPackedCondition;
+use App\Modules\Automations\src\Conditions\Order\IsFullyPickedCondition;
+use App\Modules\Automations\src\Conditions\Order\StatusCodeEqualsCondition;
+use App\Modules\Automations\src\Models\Automation;
 use App\Modules\AutoRestockLevels\src\AutoRestockLevelsServiceProvider;
 use App\Modules\DataCollector\src\DataCollectorServiceProvider;
 use App\Modules\InventoryQuantityIncoming\src\InventoryQuantityIncomingServiceProvider;
@@ -33,6 +38,8 @@ class InstallApplication extends Migration
             $this->createReadyForCollectionNotificationTemplate();
             $this->createDefaultMailTemplateShipmentNotification();
             $this->createDefaultMailTemplateOversoldProduct();
+            $this->createPaidToCompleteAutomation();
+            $this->createPaidToPickedAutomation();
 
             \App\Services\ModulesService::updateModulesTable();
         });
@@ -64,6 +71,58 @@ class InstallApplication extends Migration
             'url' => '/autopilot/packlist?order.status_code=picked',
             'group' => 'packlist'
         ]);
+    }
+
+    private function createPaidToCompleteAutomation(): void
+    {
+        /** @var Automation $automation */
+        $automation = Automation::create([
+            'name' => 'paid to complete',
+            'enabled' => false,
+        ]);
+
+        $automation->conditions()->create([
+            'condition_class' => StatusCodeEqualsCondition::class,
+            'condition_value' => 'paid'
+        ]);
+
+        $automation->conditions()->create([
+            'condition_class' => IsFullyPackedCondition::class,
+            'condition_value' => 'True'
+        ]);
+
+        $automation->actions()->create([
+            'action_class' => SetStatusCodeAction::class,
+            'action_value' => 'complete'
+        ]);
+
+        $automation->update(['enabled' => true]);
+    }
+
+    private function createPaidToPickedAutomation(): void
+    {
+        /** @var Automation $automation */
+        $automation = Automation::create([
+            'name' => 'paid to picked',
+            'enabled' => false,
+        ]);
+
+        $automation->conditions()->create([
+            'condition_class' => StatusCodeEqualsCondition::class,
+            'condition_value' => 'paid'
+        ]);
+
+        $automation->conditions()->create([
+            'condition_class' => IsFullyPickedCondition::class,
+            'condition_value' => 'True'
+        ]);
+
+        $automation->actions()->create([
+            'action_class' => SetStatusCodeAction::class,
+            'action_value' => 'picked'
+        ]);
+
+        $automation->update(['enabled' => true]);
     }
 
     private function createDefaultUserRoles(): void
