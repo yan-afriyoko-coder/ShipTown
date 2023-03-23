@@ -24,7 +24,7 @@ class OrderFactory extends Factory
 
         do {
             try {
-                $dateTime = $this->faker->dateTimeBetween('-7days', now());
+                $dateTime = $this->faker->dateTimeBetween('-4days', now());
                 Carbon::parse($dateTime, new DateTimeZone('UTC'));
             } catch (InvalidFormatException $exception) {
                 report($exception);
