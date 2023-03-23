@@ -72,7 +72,7 @@ class PaidOrdersSeeder extends Seeder
             ],
             [
                 'name' => 'Status: paid',
-                'url' => '/autopilot/packlist?&status=paid&sort=inventory_source_shelf_location,order_placed_at',
+                'url' => '/autopilot/packlist?&status=paid&sort=order_placed_at',
                 'group' => 'packlist'
             ],
         ];
