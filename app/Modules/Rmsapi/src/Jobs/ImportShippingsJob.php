@@ -68,7 +68,7 @@ class ImportShippingsJob implements ShouldQueue
         try {
             $response = RmsapiClient::GET($this->rmsapiConnection, 'api/shippings', $params);
             RmsapiShippingImports::query()->create([
-                'rmsapi_connection_id' => $this->rmsapiConnection->id,
+                'connection_id' => $this->rmsapiConnection->id,
                 'raw_import' => json_encode($response->getResult())
             ]);
         } catch (GuzzleException $e) {
