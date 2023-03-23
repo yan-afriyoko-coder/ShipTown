@@ -2,6 +2,7 @@
 
 namespace App\Modules\QueueMonitor\src\Dispatcher;
 
+use Exception;
 use Illuminate\Bus\Dispatcher;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Guid\Guid;
@@ -17,12 +18,12 @@ class QueueMonitorDispatcher extends Dispatcher
     {
         try {
             DB::table('modules_queue_monitor_jobs')->insert([
-                'uuid' => Guid::uuid4()->toString(),
+                'uuid' => null,
                 'job_class' => get_class($command),
                 'dispatched_at' => now(),
             ]);
-        } catch (\Exception $e) {
-            // do nothing
+        } catch (Exception $e) {
+            report($e);
         }
 
         return parent::dispatchToQueue($command);

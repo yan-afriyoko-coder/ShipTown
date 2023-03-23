@@ -13,7 +13,7 @@
 
         <div class="row pl-2 p-0">
             <div class="col-12 text-left align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">
-                Restocking
+                TOOLS > RESTOCKING
             </div>
         </div>
 
@@ -61,20 +61,21 @@ export default {
         data: function() {
             return {
                 data: [],
-                per_page: 20,
+                per_page: 40,
+                pageScrollPercentage: 70,
                 reachedEnd: false,
                 pagesLoaded: 0,
                 selectedRecord: null,
                 newReorderPoint: null,
                 newRestockLevel: null,
                 newQuantityInStock: null,
-                showMovementSku: null
+                showMovementSku: null,
             };
         },
 
         mounted() {
             this.getUrlFilterOrSet('filter[warehouse_code]', this.currentUser()['warehouse']['code']);
-            this.getUrlFilterOrSet('filter[has_tags]', 'fulfilment');
+            // this.getUrlFilterOrSet('filter[has_tags]', 'fulfilment');
             this.getUrlFilterOrSet('sort', '-warehouse_has_stock,-quantity_required,-quantity_incoming,-warehouse_quantity');
 
             this.loadRestockingRecords();
@@ -97,11 +98,11 @@ export default {
                 this.showLoading();
 
                 const params = this.$router.currentRoute.query;
-                params['include'] = 'tags';
+                params['include'] = 'product,product.tags,product.prices';
                 params['per_page'] = this.per_page;
                 params['page'] = page;
 
-                params['cache_name'] = page === 1 ? params['cache_name'] : '';
+                // params['cache_name'] = page === 1 ? params['cache_name'] : '';
 
                 this.apiGetRestocking(params)
                     .then((response) => {
@@ -149,7 +150,7 @@ export default {
                     return;
                 }
 
-                if (! this.isMoreThanPercentageScrolled(70)) {
+                if (! this.isMoreThanPercentageScrolled(this.pageScrollPercentage)) {
                     return;
                 }
 
@@ -159,11 +160,12 @@ export default {
 
                 // we double per_page every second page load to avoid hitting the API too hard
                 // and we will limit it to 100-ish per_page
-                if ((this.per_page < 100) && (this.pagesLoaded % 2 === 0)) {
+                if ((this.per_page < 160) && (this.pagesLoaded % 2 === 0)) {
                     this.pagesLoaded = this.pagesLoaded / 2;
                     this.per_page = this.per_page * 2;
                 }
 
+                this.pageScrollPercentage = 90;
                 this.loadRestockingRecords(++this.pagesLoaded);
             },
 

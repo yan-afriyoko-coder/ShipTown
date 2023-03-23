@@ -5,6 +5,7 @@ namespace App\Modules\Rmsapi\src\Jobs;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use App\Models\Product;
+use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Models\RmsapiSaleImport;
 use App\Services\InventoryService;
 use App\Traits\IsMonitored;
@@ -13,6 +14,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -32,12 +34,11 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
         $this->connection_id = $connection_id;
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     * @throws Exception
-     */
+    public function middleware(): array
+    {
+        return [(new WithoutOverlapping($this->connection_id))->dontRelease()];
+    }
+
     public function handle()
     {
         RmsapiSaleImport::query()
@@ -46,55 +47,60 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
             ->update(['reserved_at' => now(), 'processed_at' => now()]);
 
         $batch_size = 200;
-        $maxRunCount = 1000 / $batch_size;
+        $maxRunCount = 5;
 
         do {
             $this->processImportedRecords($batch_size);
+
+
+            $hasNoRecordsToProcess = ! RmsapiSaleImport::query()
+                ->whereNull('reserved_at')
+                ->whereNull('processed_at')
+                ->exists();
+
+            if ($hasNoRecordsToProcess) {
+                return true;
+            }
+
             $maxRunCount--;
-        } while ($maxRunCount > 0 and RmsapiSaleImport::query()->whereNull('processed_at')->exists());
+        } while ($maxRunCount > 0);
     }
 
-    /**
-     * @throws Exception
-     */
     private function processImportedRecords(int $batch_size): void
     {
         $reservationTime = now();
 
-        // reserve records
-        retry(5, function () use ($batch_size, $reservationTime) {
-            RmsapiSaleImport::query()
-                ->where('connection_id', $this->connection_id)
-                ->where('comment', 'not like', 'PM_OrderProductShipment_%')
-                ->whereNull('reserved_at')
-                ->whereNull('processed_at')
-                ->orderBy('id')
-                ->limit($batch_size)
-                ->update(['reserved_at' => $reservationTime]);
+        RmsapiSaleImport::query()
+            ->whereNull('reserved_at')
+            ->where('connection_id', $this->connection_id)
+            ->whereNull('processed_at')
+            ->where('comment', 'not like', 'PM_OrderProductShipment_%')
+            ->orderBy('id')
+            ->limit($batch_size)
+            ->update(['reserved_at' => $reservationTime]);
 
-            // process records
-            RmsapiSaleImport::query()
-                ->where([
-                    'connection_id' => $this->connection_id,
-                    'reserved_at' => $reservationTime
-                ])
-                ->whereNull('processed_at')
-                ->where('comment', 'not like', 'PM_OrderProductShipment_%')
-                ->orderBy('id')
-                ->get()
-                ->each(function (RmsapiSaleImport $salesRecord) {
-                    try {
-                        retry(3, function () use ($salesRecord) {
-                            DB::transaction(function () use ($salesRecord) {
-                                $this->import($salesRecord);
-                            });
-                        }, 1000);
-                    } catch (Exception $e) {
-                        report($e);
-                        Log::emergency($e->getMessage(), $e->getTrace());
-                    }
-                });
-        }, 1000);
+        // process records
+        RmsapiSaleImport::query()
+            ->where([
+                'connection_id' => $this->connection_id,
+                'reserved_at' => $reservationTime
+            ])
+            ->whereNull('processed_at')
+            ->where('comment', 'not like', 'PM_OrderProductShipment_%')
+            ->orderBy('id')
+            ->get()
+            ->each(function (RmsapiSaleImport $salesRecord) {
+                try {
+                    retry(3, function () use ($salesRecord) {
+                        DB::transaction(function () use ($salesRecord) {
+                            $this->import($salesRecord);
+                        });
+                    }, 1000);
+                } catch (Exception $e) {
+                    report($e);
+                    Log::emergency($e->getMessage(), $e->getTrace());
+                }
+            });
     }
 
     private function import(RmsapiSaleImport $salesRecord)
@@ -124,12 +130,21 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
             ->where('warehouse_id', $salesRecord->rmsapiConnection->warehouse_id)
             ->first();
 
-        $inventoryMovement = InventoryService::adjustQuantity(
-            $inventory,
-            $salesRecord->quantity,
-            $salesRecord->type,
-            $unique_reference_id
-        );
+        if ($salesRecord->type === 'rms_sale') {
+            $inventoryMovement = InventoryService::sellProduct(
+                $inventory,
+                $salesRecord->quantity,
+                $salesRecord->type,
+                $unique_reference_id
+            );
+        } else {
+            $inventoryMovement = InventoryService::adjustQuantity(
+                $inventory,
+                $salesRecord->quantity,
+                $salesRecord->type,
+                $unique_reference_id
+            );
+        }
 
         $salesRecord->update([
             'inventory_movement_id' => $inventoryMovement->getKey(),

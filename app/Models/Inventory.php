@@ -36,6 +36,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @property Carbon|null $first_sold_at
  * @property Carbon|null $last_sold_at
  * @property Carbon|null $last_counted_at
+ * @property int|null    $last_movement_id
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -92,6 +93,7 @@ class Inventory extends BaseModel
         'restock_level',
         'reorder_point',
         'last_counted_at',
+        'last_movement_id',
     ];
 
     protected $attributes = [
@@ -278,5 +280,12 @@ class Inventory extends BaseModel
     public function productAliases(): HasMany
     {
         return $this->hasMany(ProductAlias::class, 'product_id', 'product_id');
+    }
+
+    public function last7daysSales(): HasMany
+    {
+        return $this->hasMany(InventoryMovement::class, 'inventory_id', 'id')
+            ->where('type', InventoryMovement::TYPE_SALE)
+            ->whereBetween('created_at', [Carbon::now()->subDays(7), Carbon::now()]);
     }
 }

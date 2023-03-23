@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  *
  * @property int id
+ * @property string $type
  * @property string $custom_unique_reference_id
  * @property int inventory_id
  * @property int product_id
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property float quantity_after
  * @property string description
  * @property int user_id
+ * @property int previous_movement_id
  * @property Carbon created_at
  * @property Carbon updated_at
  *
@@ -30,10 +32,13 @@ class InventoryMovement extends BaseModel
 {
     use HasFactory;
 
+    const TYPE_SALE = 'sale';
+
     /**
      * @var string[]
      */
     protected $fillable = [
+        'type',
         'custom_unique_reference_id',
         'inventory_id',
         'product_id',
@@ -43,6 +48,7 @@ class InventoryMovement extends BaseModel
         'quantity_after',
         'description',
         'user_id',
+        'previous_movement_id',
     ];
 
     /**

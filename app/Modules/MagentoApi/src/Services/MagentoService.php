@@ -43,33 +43,34 @@ class MagentoService
     {
         $response = self::api()->postProductsSpecialPriceInformation($magentoProduct->product->sku);
 
-        if ($response->successful()) {
-            $specialPrices = collect($response->json())
-                ->filter(function ($apiSpecialPriceRecord) use ($magentoProduct) {
-                    return $apiSpecialPriceRecord['store_id'] == $magentoProduct->magentoConnection->magento_store_id;
-                });
-
-            // magento sometimes randomly returns multiple special prices for the same store,
-            // so we need to filter them out but only one is valid
-            // randomizing result will match it sometimes, normally 3 special prices are returned,
-            // so we will have statistically 1/3 chance to get the correct one,
-            // it's a quick hack, but it works
-            $specialPrices = $specialPrices->shuffle();
-
-            $specialPrice = $specialPrices->first();
-
-            if ($specialPrice) {
-                $magentoProduct->magento_sale_price = $specialPrice['price'];
-                $magentoProduct->magento_sale_price_start_date = $specialPrice['price_from'];
-                $magentoProduct->magento_sale_price_end_date = $specialPrice['price_to'];
-            }
-
-            $magentoProduct->special_prices_fetched_at = now();
-            $magentoProduct->special_prices_raw_import = $response->json();
-            $magentoProduct->save();
-        } else {
+        if (!$response->successful()) {
             Log::error('Failed to fetch sale prices for product '.$magentoProduct->product->sku);
+            return;
         }
+
+        $specialPrices = collect($response->json())
+            ->filter(function ($apiSpecialPriceRecord) use ($magentoProduct) {
+                return $apiSpecialPriceRecord['store_id'] == $magentoProduct->magentoConnection->magento_store_id;
+            });
+
+        // magento sometimes randomly returns multiple special prices for the same store,
+        // so we need to filter them out but only one is valid
+        // randomizing result will match it sometimes, normally 3 special prices are returned,
+        // so we will have statistically 1/3 chance to get the correct one,
+        // it's a quick hack, but it works
+        $specialPrices = $specialPrices->shuffle();
+
+        $specialPrice = $specialPrices->first();
+
+        if ($specialPrice) {
+            $magentoProduct->magento_sale_price = $specialPrice['price'];
+            $magentoProduct->magento_sale_price_start_date = $specialPrice['price_from'];
+            $magentoProduct->magento_sale_price_end_date = $specialPrice['price_to'];
+        }
+
+        $magentoProduct->special_prices_fetched_at = now();
+        $magentoProduct->special_prices_raw_import = $response->json();
+        $magentoProduct->save();
     }
 
     public static function fetchBasePrices(MagentoProduct $magentoProduct)

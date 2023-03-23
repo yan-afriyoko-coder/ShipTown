@@ -31,6 +31,7 @@ class InventoryUpdatedEventListener
             'quantity' => $totals->quantity,
             'quantity_reserved' => $totals->quantity_reserved,
             'quantity_incoming' => $totals->quantity_incoming,
+            'updated_at' => now(),
         ]);
     }
 }

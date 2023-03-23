@@ -7,6 +7,12 @@
                         <product-info-card :product= "product"></product-info-card>
                     </div>
                     <div class="col-md-6 col-lg-5">
+<!--                        <div class="row col small">-->
+<!--                            <number-card label="price" :number="product['prices'][currentUser()['warehouse']['code']]['price']"></number-card>-->
+<!--                            <number-card label="sale price" :number="product['prices'][currentUser()['warehouse']['code']]['sale_price']"></number-card>-->
+<!--                            <text-card label="start date" :text="formatDateTime(product['prices'][currentUser()['warehouse']['code']]['sale_price_start_date'], 'MMM D')"></text-card>-->
+<!--                            <text-card label="end date" :text="formatDateTime(product['prices'][currentUser()['warehouse']['code']]['sale_price_end_date'], 'MMM D')"></text-card>-->
+<!--                        </div>-->
                         <div class="table-responsive small" @click="toggle">
                             <table class="table table-borderless mb-0 w-100 text-right">
                                <thead>

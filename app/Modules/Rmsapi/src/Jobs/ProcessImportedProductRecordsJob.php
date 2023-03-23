@@ -16,6 +16,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -36,21 +37,30 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
         $this->connection_id = $connection_id;
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     * @throws Exception
-     */
+    public function middleware(): array
+    {
+        return [(new WithoutOverlapping($this->connection_id))->dontRelease()];
+    }
+
     public function handle()
     {
         $batch_size = 200;
-        $maxRunCount = 1000 / $batch_size;
+        $maxRunCount = 5;
 
         do {
             $this->processImportedProducts($batch_size);
+
+            $hasNoRecordsToProcess = ! RmsapiProductImport::query()
+                ->whereNull('reserved_at')
+                ->whereNull('when_processed')
+                ->exists();
+
+            if ($hasNoRecordsToProcess) {
+                return true;
+            }
+
             $maxRunCount--;
-        } while ($maxRunCount > 0 and RmsapiProductImport::query()->whereNull('when_processed')->exists());
+        } while ($maxRunCount > 0);
     }
 
     /**
@@ -211,41 +221,36 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
         }
     }
 
-    /**
-     * @throws Exception
-     */
     private function processImportedProducts(int $batch_size): void
     {
         $reservationTime = now();
 
-        retry(5, function () use ($batch_size, $reservationTime) {
-            RmsapiProductImport::query()
-                ->whereNull('when_processed')
-                ->whereNull('reserved_at')
-                ->where('connection_id', $this->connection_id)
-                ->orderByRaw('id ASC')
-                ->limit($batch_size)
-                ->update(['reserved_at' => $reservationTime]);
+        RmsapiProductImport::query()
+            ->whereNull('reserved_at')
+            ->where('connection_id', $this->connection_id)
+            ->whereNull('when_processed')
+            ->orderByRaw('id ASC')
+            ->limit($batch_size)
+            ->update(['reserved_at' => $reservationTime]);
 
-            $records = RmsapiProductImport::query()
-                ->whereNull('when_processed')
-                ->where(['reserved_at' => $reservationTime])
-                ->where('connection_id', $this->connection_id)
-                ->orderBy('id')
-                ->get();
+        $records = RmsapiProductImport::query()
+            ->where('connection_id', $this->connection_id)
+            ->where(['reserved_at' => $reservationTime])
+            ->whereNull('when_processed')
+            ->orderBy('id')
+            ->get();
 
-            $records->each(function (RmsapiProductImport $productImport) {
-                try {
-                    retry(3, function () use ($productImport) {
-                        DB::transaction(function () use ($productImport) {
-                            $this->import($productImport);
-                        });
-                    }, 1000);
-                } catch (Exception $e) {
-                    report($e);
-                    Log::emergency($e->getMessage(), $e->getTrace());
-                }
-            });
-        }, 1000);
+        $records->each(function (RmsapiProductImport $productImport) {
+            try {
+                retry(3, function () use ($productImport) {
+                    DB::transaction(function () use ($productImport) {
+                        $this->import($productImport);
+                    });
+                }, 1000);
+            } catch (Exception $e) {
+                report($e);
+                Log::emergency($e->getMessage(), $e->getTrace());
+            }
+        });
     }
 }

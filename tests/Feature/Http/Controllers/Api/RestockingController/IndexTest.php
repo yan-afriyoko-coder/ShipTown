@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Api\RestockingController;
 
+use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\User;
@@ -12,9 +13,15 @@ class IndexTest extends TestCase
     /** @test */
     public function test_index_call_returns_ok()
     {
-        Warehouse::factory()->create();
+        ray()->showApp();
+
+        Warehouse::factory()->create(['id' => 2]);
         Product::factory()->create();
+
+        /** @var User $user */
         $user = User::factory()->create();
+
+        Inventory::query()->update(['quantity' => 1]);
 
         $response = $this->actingAs($user, 'api')->getJson(route('api.restocking.index'));
 
@@ -22,7 +29,7 @@ class IndexTest extends TestCase
 
         $response->assertOk();
 
-        $this->assertCount(4, $response->json('data'), 'No records returned');
+        $this->assertCount(2, $response->json('data'));
 
         $response->assertJsonStructure([
             'meta',

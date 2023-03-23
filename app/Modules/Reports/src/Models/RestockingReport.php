@@ -2,9 +2,8 @@
 
 namespace App\Modules\Reports\src\Models;
 
-use App\Models\Product;
-use App\Models\Warehouse;
-use Illuminate\Database\Query\Builder;
+use App\Models\Inventory;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 
@@ -14,15 +13,17 @@ class RestockingReport extends Report
     {
         parent::__construct($attributes);
 
+        $this->report_name = 'Restocking Report';
+        if (request('title')) {
+            $this->report_name = request('title').' ('.$this->report_name.')';
+        }
         $this->view = 'reports.restocking-report';
 
-        $this->report_name = 'Restocking Report';
-
         $this->defaultSelect = implode(',', [
-            'id',
-            'product_id',
             'inventory_id',
-            'warehouse_id',
+            'product_id',
+//            'inventory_id',
+//            'warehouse_id',
             'warehouse_code',
             'product_sku',
             'product_name',
@@ -34,34 +35,34 @@ class RestockingReport extends Report
             'restock_level',
             'warehouse_quantity',
             'warehouse_has_stock',
-            'last_movement_at',
-            'last_sold_at',
             'first_sold_at',
-            'last_counted_at',
+            'last_sold_at',
             'first_received_at',
             'last_received_at',
+            'last_movement_at',
+            'last_counted_at',
         ]);
 
         $this->defaultSort = '-quantity_required';
 
-        $this->allowedIncludes = ['tags'];
+        $this->allowedIncludes = ['product', 'product.tags', 'product.prices'];
 
-        if (request('title')) {
-            $this->report_name = request('title').' ('.$this->report_name.')';
-        }
-
-        $this->baseQuery = Product::query()
-            ->leftJoin('inventory', 'inventory.product_id', '=', 'products.id')
-            ->leftJoin('inventory as inventory_source', 'inventory_source.product_id', '=', 'inventory.product_id');
+        $this->baseQuery = Inventory::query()
+            ->leftJoin('products', 'inventory.product_id', '=', 'products.id')
+            ->join('inventory as inventory_source', function (JoinClause $join) {
+                $join->on('inventory_source.product_id', '=', 'inventory.product_id');
+                $join->on('inventory_source.warehouse_id', '=', DB::raw(2));
+                $join->where('inventory_source.is_in_stock', '=', 1);
+            })->withSum('last7daysSales', 'quantity_delta');
 
         $this->fields = [
-            'id'                                 => 'products.id',
-            'product_id'                         => 'products.id',
+            'id'                                 => 'inventory.id',
+            'product_id'                         => 'inventory.product_id',
+            'product_sku'                        => 'products.sku',
+            'product_name'                       => 'products.name',
             'inventory_id'                       => 'inventory.id',
             'warehouse_id'                       => 'inventory.warehouse_id',
             'warehouse_code'                     => 'inventory.warehouse_code',
-            'product_sku'                        => 'products.sku',
-            'product_name'                       => 'products.name',
             'reorder_point'                      => 'inventory.reorder_point',
             'restock_level'                      => 'inventory.restock_level',
             'quantity_in_stock'                  => 'inventory.quantity',
@@ -74,10 +75,10 @@ class RestockingReport extends Report
             'last_counted_at'                    => 'inventory.last_counted_at',
             'first_received_at'                  => 'inventory.first_received_at',
             'last_received_at'                   => 'inventory.last_received_at',
-            'warehouse_quantity'                 => 'inventory_source.quantity_available',
-            'warehouse_has_stock'                => DB::raw('inventory_source.quantity_available > 0'),
+            'warehouse_quantity'                 => DB::raw('IFNULL(inventory_source.quantity_available, 0)'),
+//            'warehouse_has_stock'                => DB::raw('ISNULL(inventory_source.quantity_available)'),
             'inventory_source_warehouse_code'    => 'inventory_source.warehouse_code',
-            'quantity_to_ship'                   => DB::raw("CASE WHEN inventory_source.quantity_available < inventory.quantity_required THEN inventory_source.quantity_available ELSE inventory.quantity_required END"),
+            'warehouse_has_stock'    => 'inventory_source.is_in_stock',
         ];
 
         $this->casts = [
@@ -90,20 +91,19 @@ class RestockingReport extends Report
             'quantity_available' => 'float',
             'quantity_incoming'  => 'float',
             'warehouse_quantity' => 'float',
-            'warehouse_has_stock'=> 'boolean',
-            'quantity_to_ship'   => 'float',
             "last_movement_at"   => 'datetime',
             'last_counted_at'    => 'datetime',
+            'warehouse_has_stock'=> 'boolean',
         ];
 
-        $this->addFilter(
-            AllowedFilter::callback('has_tags', function ($query, $value) {
-                return $query->whereIn(
-                    'inventory_source.warehouse_id',
-                    Warehouse::withAllTags(explode(',', $value))->pluck('id')
-                );
-            })
-        );
+//        $this->addFilter(
+//            AllowedFilter::callback('has_tags', function ($query, $value) {
+//                return $query->whereIn(
+//                    'inventory_source.warehouse_id',
+//                    Warehouse::withAllTags(explode(',', $value))->pluck('id')
+//                );
+//            })
+//        );
 
         $this->addFilter(
             AllowedFilter::callback('product_has_tags', function ($query, $value) {

@@ -24,10 +24,16 @@ class OrderProductShipmentCreatedListener
             return true;
         }
 
-        InventoryService::adjustQuantity(
+
+        InventoryService::sellProduct(
             $orderProductShipment->inventory,
             - $orderProductShipment->quantity_shipped,
-            'shipped'
+            'shipped',
+            implode('', [
+                'order_product_shipment_id_',
+                $orderProductShipment->getKey(),
+                '_shipped'
+            ])
         );
 
         return true;

@@ -7,12 +7,18 @@ use App\Models\InventoryTotal;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\InventoryTotals\src\InventoryTotalsServiceProvider;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Services\InventoryService;
 use Tests\TestCase;
 
 class BasicModuleTest extends TestCase
 {
-    use RefreshDatabase;
+    public function test_sales_totals()
+    {
+        /** @var Inventory $inventory */
+        $inventory = Inventory::factory()->create();
+
+        InventoryService::sellProduct($inventory, 1, 'sale');
+    }
 
     /** @test */
     public function test_module_basic_functionality()

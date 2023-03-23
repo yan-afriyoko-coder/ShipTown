@@ -35,7 +35,6 @@ class DataCollectorService
                 'type' => DataCollectionTransferOut::class,
                 'currently_running_task' => DataCollectionTransferOut::class
             ]);
-            $dataCollection->delete();
 
             TransferOutJob::dispatch($dataCollection->id);
             return;
@@ -179,27 +178,29 @@ class DataCollectorService
      */
     public static function transferOutRecord(DataCollectionRecord $record): void
     {
-        $custom_unique_reference_id = implode(':', [
-            'data_collection_id' , $record->data_collection_id,
-            'data_collection_record_id' , $record->getKey(),
-            $record->updated_at
-        ]);
+        DB::transaction(function () use ($record) {
+            $inventory = Inventory::firstOrCreate([
+                'warehouse_id' => $record->dataCollection->warehouse_id,
+                'product_id' => $record->product_id
+            ], []);
 
-        $inventory = Inventory::firstOrCreate([
-            'warehouse_id' => $record->dataCollection->warehouse_id,
-            'product_id' => $record->product_id
-        ], []);
+            $custom_unique_reference_id = implode(':', [
+                'data_collection_id' , $record->data_collection_id,
+                'data_collection_record_id' , $record->getKey(),
+                $record->updated_at
+            ]);
 
-        InventoryService::adjustQuantity(
-            $inventory,
-            $record->quantity_scanned * -1,
-            'data collection transfer out',
-            $custom_unique_reference_id
-        );
+            InventoryService::adjustQuantity(
+                $inventory,
+                $record->quantity_scanned * -1,
+                'data collection transfer out',
+                $custom_unique_reference_id
+            );
 
-        $record->update([
-            'total_transferred_out' => $record->total_transferred_out + $record->quantity_scanned,
-            'quantity_scanned' => 0
-        ]);
+            $record->update([
+                'total_transferred_out' => $record->total_transferred_out + $record->quantity_scanned,
+                'quantity_scanned' => 0
+            ]);
+        });
     }
 }
