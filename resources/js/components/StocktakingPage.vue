@@ -13,7 +13,7 @@
                  @hidden="focusOnInputAndReload">
             <stocktake-input></stocktake-input>
             <hr>
-            <button type="button" @click.prevent="downloadStocktakeSuggestion" class="col btn mb-1 btn-primary">Download Stocktake Suggestion</button>
+            <button type="button" @click.prevent="downloadStocktakeSuggestion" class="col btn mb-1 btn-primary">Download Stocktake Suggestions</button>
         </b-modal>
 
         <template v-if="recentStocktakes.data">
@@ -110,6 +110,11 @@
         },
 
         methods: {
+            focusOnInputAndReload() {
+                this.setFocusElementById(100,'stocktake-input', true, true)
+                this.reloadData();
+            },
+
             showModalMovement(product_sku) {
                 this.showMovementSku = product_sku;
                 this.$bvModal.show('show-inventory-movements');
