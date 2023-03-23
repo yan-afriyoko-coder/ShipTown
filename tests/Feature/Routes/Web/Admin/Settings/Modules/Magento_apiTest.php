@@ -9,7 +9,7 @@ use Tests\TestCase;
 /**
  *
  */
-class MagentoApiTest extends TestCase
+class Magento_apiTest extends TestCase
 {
     use RefreshDatabase;
 
