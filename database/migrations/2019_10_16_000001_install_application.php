@@ -99,6 +99,32 @@ class InstallApplication extends Migration
         $automation->update(['enabled' => true]);
     }
 
+    private function createPickedToCompleteAutomation(): void
+    {
+        /** @var Automation $automation */
+        $automation = Automation::create([
+            'name' => 'picked to complete',
+            'enabled' => false,
+        ]);
+
+        $automation->conditions()->create([
+            'condition_class' => StatusCodeEqualsCondition::class,
+            'condition_value' => 'picked'
+        ]);
+
+        $automation->conditions()->create([
+            'condition_class' => IsFullyPackedCondition::class,
+            'condition_value' => 'True'
+        ]);
+
+        $automation->actions()->create([
+            'action_class' => SetStatusCodeAction::class,
+            'action_value' => 'complete'
+        ]);
+
+        $automation->update(['enabled' => true]);
+    }
+
     private function createPaidToPickedAutomation(): void
     {
         /** @var Automation $automation */
