@@ -21,7 +21,6 @@ class PaidOrdersSeeder extends Seeder
     public function run()
     {
         $this->createOrders();
-        $this->createNavigationMenu();
         $this->createPaidToCompleteAutomation();
     }
 
@@ -60,24 +59,6 @@ class PaidOrdersSeeder extends Seeder
                 $order->total_paid = $order->total;
                 $order->save();
             });
-    }
-
-    private function createNavigationMenu(): void
-    {
-        $menu = [
-            [
-                'name' => 'Status: paid',
-                'url' => '/picklist?order.status_code=paid',
-                'group' => 'picklist',
-            ],
-            [
-                'name' => 'Status: paid',
-                'url' => '/autopilot/packlist?&status=paid&sort=order_placed_at',
-                'group' => 'packlist'
-            ],
-        ];
-
-        NavigationMenu::insert($menu);
     }
 
     private function createPaidToCompleteAutomation(): void
