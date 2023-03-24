@@ -84,6 +84,7 @@
 
         mounted() {
             this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
+            this.setUrlParameter('created_between', '-4 months,now');
 
             window.onscroll = () => this.loadMore();
 
@@ -118,6 +119,7 @@
                     'filter[packed_between]': this.getUrlParameter('packed_between'),
                     'filter[packer_user_id]': this.getUrlParameter('packer_user_id'),
                     'filter[shipping_method_code]': this.getUrlParameter('shipping_method'),
+                    'filter[created_between]': this.getUrlParameter('created_between'),
                     'sort': this.getUrlParameter('sort','-order_placed_at'),
                     'per_page': this.getUrlParameter('per_page', 20),
                     'include': 'order_comments,order_comments.user,packer,order_products_totals,tags,shipping_address,order_shipments',
