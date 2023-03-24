@@ -2,9 +2,12 @@
     <div :id="getElementId" class="swiper-container">
         <div class="swiper-wrapper">
 
-            <div class="swiper-slide rounded bg-success text-right">
-                <div class="swipe-action-container swipe-action-container--right">
-                    <div>SHIP THEM ALL</div>
+            <div class="swiper-slide rounded bg-success text-right small">
+                <div class="swipe-action-container swipe-action-container--right small">
+                    <div class="small">
+                        <div class="h3">SHIP ALL</div>
+                        <div class="small border-top">SWIPE RIGHT</div>
+                    </div>
                 </div>
             </div>
 
@@ -18,7 +21,10 @@
 
             <div class="swiper-slide bg-warning rounded">
                 <div class="swipe-action-container swipe-action-container--left text-black-50 font-weight-bold">
-                    <div>SHIP PARTIAL / UNDO</div>
+                    <div class="small">
+                        <div class="h3">PARTIAL / UNDO</div>
+                        <div class="small " style="border-top: 1px solid black">SWIPE LEFT</div>
+                    </div>
                 </div>
             </div>
         </div>

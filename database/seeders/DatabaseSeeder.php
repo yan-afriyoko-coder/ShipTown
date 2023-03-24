@@ -19,8 +19,10 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             Demo\ConfigurationSeeder::class,
+            Demo\OrderStatusesSeeder::class,
             Demo\WarehousesSeeder::class,
             Demo\UsersSeeder::class,
+
             Demo\ProductsSeeder::class,
             Demo\PaidOrdersSeeder::class,
             Demo\TestOrdersSeeder::class,
@@ -38,6 +40,7 @@ class DatabaseSeeder extends Seeder
 //            AutomationsSeeder::class,
 
             PrintNodeClientSeeder::class,
+
 //            DpdIrelandSeeder::class,
 //            ProductAliasSeeder::class,
 //            ProductTagsSeeder::class,

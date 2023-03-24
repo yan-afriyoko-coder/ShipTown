@@ -8,7 +8,7 @@
                         <a :href="'/orders/?search=' + order['order_number']">{{ order['order_number'] }}</a>
                     </h5>
 
-                    <div class="small font-weight-bold">{{ formatDateTime(order['created_at']) }}</div>
+                    <div class="small font-weight-bold">{{ formatDateTime(order['order_placed_at']) }}</div>
                     <div class="small font-weight-bold">{{ order['status_code'] }}</div>
                     <div class="small">{{ order['label_template'] }}</div>
                 </div>
