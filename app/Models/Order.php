@@ -303,12 +303,10 @@ class Order extends BaseModel
      *
      * @return mixed
      */
-    public function scopeWhereHasText($query, $text): mixed
+    public function scopeWhereHasText(Builder $query, $text): mixed
     {
         return $query->whereFullText(['order_number', 'status_code'], $text)
-            ->orWhereHas('orderShipments', function ($query) use ($text) {
-                return $query->whereFullText('shipping_number', $text);
-            });
+            ->orWhereIn('id', OrderShipment::query()->whereFullText('shipping_number', $text)->select('order_id'));
     }
 
     /**
