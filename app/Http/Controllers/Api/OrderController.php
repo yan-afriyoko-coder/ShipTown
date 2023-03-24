@@ -28,9 +28,7 @@ class OrderController extends Controller
     {
         $query = Order::getSpatieQueryBuilder();
 
-        $query->simplePaginate($request->get('per_page', 10));
-
-        return OrderResource::collection($query->get());
+        return OrderResource::collection($this->getPaginatedResult($query));
     }
 
     /**
