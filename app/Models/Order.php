@@ -301,14 +301,13 @@ class Order extends BaseModel
      * @param $query
      * @param $text
      *
-     * @return Builder|mixed
+     * @return mixed
      */
-    public function scopeWhereHasText($query, $text)
+    public function scopeWhereHasText($query, $text): mixed
     {
-        return $query->where('order_number', 'like', '%'.$text.'%')
-            ->orWhere('status_code', '=', $text)
+        return $query->whereFullText(['order_number', 'status_code'], $text)
             ->orWhereHas('orderShipments', function ($query) use ($text) {
-                return $query->where('shipping_number', 'like', '%'.$text.'%');
+                return $query->whereFullText('shipping_number', $text);
             });
     }
 

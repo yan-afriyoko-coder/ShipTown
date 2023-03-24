@@ -22,7 +22,7 @@
             <div class="swiper-slide bg-warning rounded">
                 <div class="swipe-action-container swipe-action-container--left text-black-50 font-weight-bold">
                     <div class="small">
-                        <div class="h3">SHIP PARTIAL / UNDO</div>
+                        <div class="h3">PARTIAL / UNDO</div>
                         <div class="small " style="border-top: 1px solid black">SWIPE LEFT</div>
                     </div>
                 </div>
