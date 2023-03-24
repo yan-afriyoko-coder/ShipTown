@@ -305,8 +305,11 @@ class Order extends BaseModel
      */
     public function scopeWhereHasText($query, $text): mixed
     {
-        return $query->where('order_number', 'like', "%{$text}%")
-            ->orWhere('status_code', 'like', "%{$text}%");
+        return $query->where('order_number', 'like', '%'.$text.'%')
+            ->orWhere('status_code', '=', $text)
+            ->orWhereHas('orderShipments', function ($query) use ($text) {
+                return $query->where('shipping_number', 'like', '%'.$text.'%');
+            });
     }
 
     /**
@@ -339,6 +342,30 @@ class Order extends BaseModel
         }
 
         return $query->whereBetween('packed_at', $dates);
+    }
+
+    /**
+     * @param mixed   $query
+     * @param string  $fromDateTime
+     * @param string  $toDateTime
+     *
+     * @return mixed
+     */
+    public function scopeCreatedBetween(mixed $query, string $fromDateTime, string $toDateTime): mixed
+    {
+        try {
+            $dates = [
+                Carbon::parse($fromDateTime),
+                Carbon::parse($toDateTime),
+            ];
+        } catch (Exception $exception) {
+            $dates = [
+                Carbon::today(),
+                Carbon::now(),
+            ];
+        }
+
+        return $query->whereBetween('created_at', $dates);
     }
 
     /**
@@ -615,6 +642,7 @@ class Order extends BaseModel
                 AllowedFilter::scope('is_packed'),
                 AllowedFilter::scope('is_packing'),
                 AllowedFilter::scope('packed_between'),
+                AllowedFilter::scope('created_between'),
 
                 AllowedFilter::scope('has_packer'),
 
