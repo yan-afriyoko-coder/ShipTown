@@ -101,7 +101,6 @@ export default {
         },
 
         addOrderStatus(orderStatus){
-            this.orderStatuses.push(orderStatus)
             this.loadOrderStatusList();
         },
 

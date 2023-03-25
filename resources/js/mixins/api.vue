@@ -312,8 +312,8 @@ export default {
             },
 
             apiGetOrderStatus: function (params) { return axios.get('/api/orders-statuses', {params: params})},
-            apiPostOrderStatus: function (params) { return axios.post('/api/order-statuses', params);},
-            apiPutOrderStatus: function (id, params) { return axios.put('/api/order-statuses/' + id, params)},
+            apiPostOrderStatus: function (params) { return axios.post('/api/orders-statuses', params);},
+            apiPutOrderStatus: function (id, params) { return axios.put('/api/orders-statuses/' + id, params)},
             apiDeleteOrderStatus: function (id) { return axios.delete('/api/settings/order-statuses/' + id)},
 
             apiGetMailTemplate: function () { return axios.get('/api/mail-templates')},
