@@ -197,17 +197,12 @@ class Order extends BaseModel
         'is_packed',
         'age_in_days',
     ];
-    /**
-     * @return Builder
-     */
+
     public static function active(): Builder
     {
         return self::query()->where(['is_active' => true]);
     }
 
-    /**
-     * @return Builder
-     */
     public static function placedInLast28DaysOrActive(): Builder
     {
         return self::query()->where(function (Builder $query) {
@@ -216,9 +211,6 @@ class Order extends BaseModel
         });
     }
 
-    /**
-     * @return bool
-     */
     public function lockForEditing(): bool
     {
         // this should be used in places where order has to be updated by only single action
@@ -239,9 +231,6 @@ class Order extends BaseModel
         return true;
     }
 
-    /**
-     * @return bool
-     */
     public function unlockFromEditing(): bool
     {
         $recordsUpdated = Order::whereId([$this->getKey()])->update(['is_editing' => false]);
@@ -253,28 +242,6 @@ class Order extends BaseModel
         $this->is_editing = false;
         return true;
     }
-//
-//    /**
-//     * @return OrderStatus
-//     */
-//    public function getOrderStatusAttribute(): OrderStatus
-//    {
-//        return $this->orderStatus()->first;
-//    }
-
-//    /**
-//     * @return OrderStatus
-//     */
-//    public function orderStatus(): OrderStatus
-//    {
-//
-//        return OrderStatus::firstOrCreate([
-//            'code' => $this->status_code
-//        ], [
-//            'name' => $this->status_code,
-//        ]);
-//    }
-
 
     /**
      * @return OrderStatus
@@ -289,12 +256,9 @@ class Order extends BaseModel
         return $this->order_closed_at === null;
     }
 
-    /**
-     * @return bool
-     */
     public function isClosed(): bool
     {
-        return !$this->isOpen();
+        return $this->order_closed_at !== null;
     }
 
     /**
@@ -327,7 +291,7 @@ class Order extends BaseModel
      *
      * @return mixed
      */
-    public function scopePackedBetween($query, string $fromDateTime, string $toDateTime)
+    public function scopePackedBetween(mixed $query, string $fromDateTime, string $toDateTime): mixed
     {
         try {
             $dates = [
@@ -370,11 +334,11 @@ class Order extends BaseModel
 
     /**
      * @param mixed $query
-     * @param int   $age
+     * @param int $age
      *
-     * @return Builder|mixed
+     * @return mixed
      */
-    public function scopeWhereAgeInDays($query, int $age)
+    public function scopeWhereAgeInDays(mixed $query, int $age): mixed
     {
         return $query->whereBetween('order_placed_at', [
             Carbon::now()->subDays($age)->startOfDay(),
@@ -387,7 +351,7 @@ class Order extends BaseModel
      * @param int $warehouse_id
      * @return mixed
      */
-    public function scopeAddInventorySource($query, int $warehouse_id)
+    public function scopeAddInventorySource(mixed $query, int $warehouse_id): mixed
     {
         $source_inventory = OrderProduct::query()
             ->select([
@@ -448,7 +412,7 @@ class Order extends BaseModel
      *
      * @return bool
      */
-    public function isStatusCodeNotIn(array $statusCodes)
+    public function isStatusCodeNotIn(array $statusCodes): bool
     {
         return !$this->isStatusCodeIn($statusCodes);
     }
@@ -458,7 +422,7 @@ class Order extends BaseModel
      *
      * @return bool
      */
-    public function isStatusCodeIn(array $statusCodes)
+    public function isStatusCodeIn(array $statusCodes): bool
     {
         $statusCode = $this->getAttribute('status_code');
 
@@ -471,7 +435,7 @@ class Order extends BaseModel
      *
      * @return mixed
      */
-    public function scopeHasPacker($query, bool $expected)
+    public function scopeHasPacker(mixed $query, bool $expected): mixed
     {
         if ($expected === false) {
             return $query->whereNull('packer_user_id');
@@ -486,7 +450,7 @@ class Order extends BaseModel
      *
      * @return mixed
      */
-    public function scopeIsPicked($query, bool $expected)
+    public function scopeIsPicked(mixed $query, bool $expected): mixed
     {
         if ($expected === true) {
             return $query->whereIsPicked();
@@ -501,7 +465,7 @@ class Order extends BaseModel
      *
      * @return mixed
      */
-    public function scopeIsPacking($query, bool $is_packing)
+    public function scopeIsPacking(mixed $query, bool $is_packing): mixed
     {
         if ($is_packing) {
             return $query->whereNotNull('packer_user_id');
@@ -515,7 +479,7 @@ class Order extends BaseModel
      *
      * @return mixed
      */
-    public function scopeWhereIsPicked($query)
+    public function scopeWhereIsPicked(mixed $query): mixed
     {
         return $query->whereNotNull('picked_at');
     }
@@ -525,7 +489,7 @@ class Order extends BaseModel
      *
      * @return mixed
      */
-    public function scopeWhereIsNotPicked($query)
+    public function scopeWhereIsNotPicked(mixed $query): mixed
     {
         return $query->whereNull('picked_at');
     }
@@ -535,7 +499,7 @@ class Order extends BaseModel
         return $query->whereNull('packed_at');
     }
 
-    public function getIsPackedAttribute()
+    public function getIsPackedAttribute(): bool
     {
         return $this->packed_at !== null;
     }
@@ -545,7 +509,7 @@ class Order extends BaseModel
         $this->packed_at = $value ? now() : null;
     }
 
-    public function getIsPickedAttribute()
+    public function getIsPickedAttribute(): bool
     {
         return $this->picked_at !== null;
     }
@@ -613,9 +577,9 @@ class Order extends BaseModel
     }
 
     /**
-     * @return HasMany | OrderComment
+     * @return HasMany|OrderComment
      */
-    public function orderComments()
+    public function orderComments(): HasMany|OrderComment
     {
         return $this->hasMany(OrderComment::class)->orderByDesc('id');
     }
