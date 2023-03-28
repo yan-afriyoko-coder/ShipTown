@@ -75,6 +75,7 @@ class Pick extends Model
      */
     protected $fillable = [
         'user_id',
+        'warehouse_code',
         'product_id',
         'sku_ordered',
         'name_ordered',
