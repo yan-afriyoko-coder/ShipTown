@@ -12,6 +12,7 @@ use App\Services\InventoryService;
 use App\Traits\IsMonitored;
 use Exception;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -22,7 +23,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class ProcessImportedProductRecordsJob implements ShouldQueue
+class ProcessImportedProductRecordsJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -31,6 +32,13 @@ class ProcessImportedProductRecordsJob implements ShouldQueue
     use IsMonitored;
 
     private int $connection_id;
+
+    public int $uniqueFor = 60;
+
+    public function uniqueId(): string
+    {
+        return implode('-', [get_class($this), $this->connection_id]);
+    }
 
     public function __construct(int $connection_id)
     {
