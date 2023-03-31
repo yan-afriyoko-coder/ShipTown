@@ -29,6 +29,13 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
 
     private int $connection_id;
 
+    public int $uniqueFor = 60;
+
+    public function uniqueId(): string
+    {
+        return implode('-', [get_class($this), $this->connection_id]);
+    }
+
     public function __construct(int $connection_id)
     {
         $this->connection_id = $connection_id;
