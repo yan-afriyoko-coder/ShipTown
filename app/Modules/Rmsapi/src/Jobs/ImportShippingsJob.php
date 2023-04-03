@@ -59,7 +59,7 @@ class ImportShippingsJob implements ShouldQueue
     public function handle(): bool
     {
         $params = [
-            'per_page'            => 100,
+            'per_page'            => 500,
             'order_by'            => 'DBTimeStamp:asc',
             'ShippingCarrierName' => 'PM',
             'min:DBTimeStamp' => $this->rmsapiConnection->shippings_last_timestamp,
