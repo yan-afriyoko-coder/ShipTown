@@ -72,6 +72,10 @@ class ImportShippingsJob implements ShouldQueue
 
             Log::debug('RMSAPI Downloaded Shippings', ['count' => count($records)]);
 
+            if (empty($records)) {
+                return true;
+            }
+
             RmsapiShippingImports::query()->create([
                 'connection_id' => $this->rmsapiConnection->id,
                 'raw_import' => $response->getResult()
