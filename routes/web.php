@@ -53,7 +53,7 @@ Route::group(['as' => 'reports.'], function () {
     Route::resource('reports/stocktake-suggestions', Reports\StocktakeSuggestionsController::class)->only('index');
 
     Route::get('reports/inventory-dashboard', [Reports\InventoryDashboardController::class, 'index'])->name('inventory-dashboard');
-    Route::view('reports/picks', 'reports/picks_report')->name('picks');
+    Route::get('reports/picks', [Reports\PickController::class, 'index'])->name('picks');
     Route::get('reports/shipments', [Reports\ShipmentController::class, 'index'])->name('shipments');
     Route::get('reports/inventory', [Reports\InventoryController::class, 'index'])->name('inventory');
     Route::get('reports/restocking', [Reports\RestockingReportController::class, 'index'])->name('restocking');
