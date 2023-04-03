@@ -59,7 +59,7 @@ class ImportShippingsJob implements ShouldQueue
     public function handle(): bool
     {
         $params = [
-            'per_page'            => 100,
+            'per_page'            => 500,
             'order_by'            => 'DBTimeStamp:asc',
             'ShippingCarrierName' => 'PM',
             'min:DBTimeStamp' => $this->rmsapiConnection->shippings_last_timestamp,
@@ -67,10 +67,21 @@ class ImportShippingsJob implements ShouldQueue
 
         try {
             $response = RmsapiClient::GET($this->rmsapiConnection, 'api/shippings', $params);
+
+            $records = $response->getResult();
+
+            Log::debug('RMSAPI Downloaded Shippings', ['count' => count($records)]);
+
+            if (empty($records)) {
+                return true;
+            }
+
             RmsapiShippingImports::query()->create([
                 'connection_id' => $this->rmsapiConnection->id,
                 'raw_import' => $response->getResult()
             ]);
+
+            $this->importShippingRecords($records);
         } catch (GuzzleException $e) {
             Log::warning('RMSAPI Failed shippings fetch', [
                 'code' => $e->getCode(),
@@ -79,12 +90,6 @@ class ImportShippingsJob implements ShouldQueue
 
             return false;
         }
-
-        $records = $response->getResult();
-
-        Log::debug('RMSAPI Downloaded Shippings', ['count' => count($records)]);
-
-        $this->importShippingRecords($records);
 
         return true;
     }
