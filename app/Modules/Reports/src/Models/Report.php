@@ -289,7 +289,7 @@ class Report extends Model
             })
             ->each(function ($fieldType, $fieldAlias) use (&$allowedFilters) {
                 $filterName = $fieldAlias . '_between';
-                $fieldQuery = $this->fields[$fieldAlias];
+                $fieldQuery = data_get($this->fields, $fieldAlias);
 
                 $allowedFilters[] = AllowedFilter::callback($filterName, function ($query, $value) use ($fieldType, $fieldAlias, $filterName, $fieldQuery) {
                     // we add this to make sure query returns no records if array of two values is not specified
