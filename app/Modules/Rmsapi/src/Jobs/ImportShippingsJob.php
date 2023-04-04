@@ -14,7 +14,6 @@ use App\Modules\Rmsapi\src\Api\Client as RmsapiClient;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiShippingImports;
 use App\Services\InventoryService;
-use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -32,30 +31,17 @@ class ImportShippingsJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    /** @var RmsapiConnection */
-    private $rmsapiConnection;
+    private RmsapiConnection $rmsapiConnection;
 
     private string $batch_uuid;
     private OrderProduct $orderProduct;
 
-    /**
-     * Create a new job instance.
-     *
-     * @param int $rmsapiConnectionId
-     *
-     */
     public function __construct(int $rmsapiConnectionId)
     {
         $this->rmsapiConnection = RmsapiConnection::find($rmsapiConnectionId);
         $this->batch_uuid = Uuid::uuid4()->toString();
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return bool
-     * @throws Exception
-     */
     public function handle(): bool
     {
         $params = [
@@ -70,7 +56,7 @@ class ImportShippingsJob implements ShouldQueue
 
             $records = $response->getResult();
 
-            Log::debug('RMSAPI Downloaded Shippings', ['count' => count($records)]);
+            Log::debug('RMSAPI Downloaded Shippings', ['count' => count($records), 'params' => $params]);
 
             if (empty($records)) {
                 return true;
