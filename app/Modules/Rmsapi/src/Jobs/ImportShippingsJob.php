@@ -16,6 +16,7 @@ use App\Modules\Rmsapi\src\Models\RmsapiShippingImports;
 use App\Services\InventoryService;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -24,7 +25,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
-class ImportShippingsJob implements ShouldQueue
+class ImportShippingsJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -35,6 +36,13 @@ class ImportShippingsJob implements ShouldQueue
 
     private string $batch_uuid;
     private OrderProduct $orderProduct;
+
+    public int $uniqueFor = 120;
+
+    public function uniqueId(): string
+    {
+        return implode('-', [get_class($this), $this->rmsapiConnection->getKey()]);
+    }
 
     public function __construct(int $rmsapiConnectionId)
     {
