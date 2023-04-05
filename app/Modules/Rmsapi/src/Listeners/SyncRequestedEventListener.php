@@ -19,12 +19,9 @@ class SyncRequestedEventListener
     public function handle()
     {
         foreach (RmsapiConnection::all() as $rmsapiConnection) {
-            Bus::chain([
-                new ImportSalesJob($rmsapiConnection->id),
-                new ProcessImportedSalesRecordsJob($rmsapiConnection->id),
-            ])->dispatch();
-
+            ImportSalesJob::dispatch($rmsapiConnection->id);
             ImportShippingsJob::dispatch($rmsapiConnection->id);
+            ProcessImportedSalesRecordsJob::dispatch();
 
             Bus::chain([
                 new ImportProductsJob($rmsapiConnection->id),

@@ -18,14 +18,14 @@ class ProcessImportedSalesRecordsJobTest extends TestCase
         $saleRecord = RmsapiSaleImport::factory()->create();
 
         // execute
-        ProcessImportedSalesRecordsJob::dispatchSync($saleRecord->rmsapiConnection->id);
+        ProcessImportedSalesRecordsJob::dispatchSync();
 
         $saleRecord->update([
             'reserved_at' => null,
             'processed_at' => null,
         ]);
 
-        ProcessImportedSalesRecordsJob::dispatchSync($saleRecord->rmsapiConnection->id);
+        ProcessImportedSalesRecordsJob::dispatchSync();
 
         // assert
         $product = Product::findBySKU($saleRecord->sku);
@@ -51,7 +51,7 @@ class ProcessImportedSalesRecordsJobTest extends TestCase
         $saleRecord = RmsapiSaleImport::factory()->create();
 
         // execute
-        ProcessImportedSalesRecordsJob::dispatchSync($saleRecord->rmsapiConnection->id);
+        ProcessImportedSalesRecordsJob::dispatchSync();
 
         // assert
         $product = Product::findBySKU($saleRecord->sku);
@@ -79,7 +79,7 @@ class ProcessImportedSalesRecordsJobTest extends TestCase
             'comment' => 'PM_OrderProductShipment_1234567890'
         ]);
 
-        ProcessImportedSalesRecordsJob::dispatchSync($rmsapiConnection->id);
+        ProcessImportedSalesRecordsJob::dispatchSync();
 
         $this->assertDatabaseHas('modules_rmsapi_sales_imports', [
             'id' => $saleRecord->id,
