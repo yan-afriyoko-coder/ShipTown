@@ -13,6 +13,7 @@ use Illuminate\Support\Carbon;
  * @property int         $id
  * @property Carbon|null $reserved_at
  * @property int         $connection_id
+ * @property int         $product_id
  * @property Carbon|null $when_processed
  * @property string|null $uuid
  * @property string|null $type
@@ -37,6 +38,7 @@ class RmsapiSaleImport extends BaseModel
 
     protected $fillable = [
         'connection_id',
+        'product_id',
         'inventory_movement_id',
         'reserved_at',
         'processed_at',

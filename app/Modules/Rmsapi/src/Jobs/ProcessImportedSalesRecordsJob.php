@@ -63,6 +63,7 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntil
         RmsapiSaleImport::query()
             ->whereNull('reserved_at')
             ->whereNull('processed_at')
+            ->whereNotNull('product_id')
             ->where('comment', 'not like', 'PM_OrderProductShipment_%')
             ->orderBy('id')
             ->limit($batch_size)
@@ -101,14 +102,8 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntil
             return;
         }
 
-        $product = Product::query()
-            ->whereHas('aliases', function ($join) use ($salesRecord) {
-                $join->where('alias', $salesRecord->sku);
-            })
-            ->first();
-
         $inventory = Inventory::query()
-            ->where('product_id', $product->getKey())
+            ->where('product_id', $salesRecord->product_id)
             ->where('warehouse_id', $salesRecord->rmsapiConnection->warehouse_id)
             ->first();
 
