@@ -8,16 +8,12 @@ use App\Models\ProductAlias;
 use App\Models\ProductPrice;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
-use App\Services\InventoryService;
-use App\Traits\IsMonitored;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +25,6 @@ class ProcessImportedProductRecordsJob implements ShouldQueue, ShouldBeUniqueUnt
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-    use IsMonitored;
 
     private int $connection_id;
 
@@ -43,11 +38,6 @@ class ProcessImportedProductRecordsJob implements ShouldQueue, ShouldBeUniqueUnt
     public function __construct(int $connection_id)
     {
         $this->connection_id = $connection_id;
-    }
-
-    public function middleware(): array
-    {
-        return [(new WithoutOverlapping($this->connection_id))->dontRelease()];
     }
 
     public function handle()
