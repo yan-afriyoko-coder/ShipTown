@@ -47,6 +47,7 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntil
             $this->processImportedRecords($batch_size);
 
             $hasNoRecordsToProcess = ! RmsapiSaleImport::query()
+                ->where('connection_id', $this->connection_id)
                 ->whereNull('reserved_at')
                 ->whereNull('processed_at')
                 ->exists();
