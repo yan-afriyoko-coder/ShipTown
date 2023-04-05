@@ -2,6 +2,8 @@
 
 namespace App\Modules\Rmsapi\src\Jobs;
 
+use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
+use App\Modules\Rmsapi\src\Models\RmsapiSaleImport;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -21,6 +23,8 @@ class UpdateImportedSalesRecordsJob implements ShouldQueue
         $this->updateWarehouseIds();
 
         $this->updateProductIds();
+
+        $this->releaseTimesOutSalesRecords();
 
         return true;
     }
@@ -69,5 +73,13 @@ class UpdateImportedSalesRecordsJob implements ShouldQueue
                 )
             ');
         }, 1000);
+    }
+
+    private function releaseTimesOutSalesRecords(): void
+    {
+        RmsapiSaleImport::query()
+            ->whereNull('processed_at')
+            ->where('reserved_at', '<', now()->subMinutes(5))
+            ->update(['reserved_at' => null]);
     }
 }
