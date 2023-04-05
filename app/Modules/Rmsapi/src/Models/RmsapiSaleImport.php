@@ -3,6 +3,7 @@
 namespace App\Modules\Rmsapi\src\Models;
 
 use App\BaseModel;
+use App\Models\Inventory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -13,6 +14,7 @@ use Illuminate\Support\Carbon;
  * @property int         $id
  * @property Carbon|null $reserved_at
  * @property int         $connection_id
+ * @property int         $warehouse_id
  * @property int         $product_id
  * @property Carbon|null $when_processed
  * @property string|null $uuid
@@ -38,6 +40,7 @@ class RmsapiSaleImport extends BaseModel
 
     protected $fillable = [
         'connection_id',
+        'warehouse_id',
         'product_id',
         'inventory_movement_id',
         'reserved_at',
@@ -69,5 +72,10 @@ class RmsapiSaleImport extends BaseModel
     public function rmsapiConnection(): BelongsTo
     {
         return $this->belongsTo(RmsapiConnection::class, 'connection_id');
+    }
+
+    public function inventory(): BelongsTo
+    {
+        return $this->belongsTo(Inventory::class, 'inventory_movement_id');
     }
 }
