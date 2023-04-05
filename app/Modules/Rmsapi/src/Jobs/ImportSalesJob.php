@@ -99,6 +99,7 @@ class ImportSalesJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
 
             return [
                 'connection_id'         => $this->rmsConnection->getKey(),
+                'warehouse_id'         => $this->rmsConnection->warehouse_id,
                 'uuid'                  => $saleRecord['uuid'],
                 'type'                  => $saleRecord['type'],
                 'sku'                   => $saleRecord['sku'],
