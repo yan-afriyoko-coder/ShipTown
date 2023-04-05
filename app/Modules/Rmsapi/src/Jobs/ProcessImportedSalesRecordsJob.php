@@ -32,7 +32,7 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntil
 
     public function handle()
     {
-        $batch_size = 10;
+        $batch_size = 50;
         $maxRunCount = 100;
 
         do {

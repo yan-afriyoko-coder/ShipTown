@@ -21,6 +21,26 @@ class UpdateProductIdsOnSalesImportsTableJob implements ShouldQueue
         retry(3, function () {
             DB::statement('
                 UPDATE modules_rmsapi_sales_imports
+                LEFT JOIN modules_rmsapi_connections
+                  ON modules_rmsapi_connections.id = modules_rmsapi_sales_imports.connection_id
+
+                SET modules_rmsapi_sales_imports.warehouse_id = modules_rmsapi_connections.warehouse_id
+
+                WHERE modules_rmsapi_sales_imports.warehouse_id IS NULL
+
+                AND modules_rmsapi_sales_imports.id in (
+                    SELECT id FROM (
+                      SELECT ID from modules_rmsapi_sales_imports
+                      WHERE warehouse_id is null and processed_at is null
+                      limit 5000
+                    ) as tbl
+                )
+            ');
+        }, 1000);
+
+        retry(3, function () {
+            DB::statement('
+                UPDATE modules_rmsapi_sales_imports
                 LEFT JOIN products_aliases
                   ON modules_rmsapi_sales_imports.sku = products_aliases.alias
 
