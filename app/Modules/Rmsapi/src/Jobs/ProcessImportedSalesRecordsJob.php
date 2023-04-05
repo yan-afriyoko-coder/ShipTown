@@ -40,13 +40,8 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntil
 
     public function handle()
     {
-        RmsapiSaleImport::query()
-            ->whereNull('processed_at')
-            ->where('comment', 'like', 'PM_OrderProductShipment_%')
-            ->update(['reserved_at' => now(), 'processed_at' => now()]);
-
-        $batch_size = 200;
-        $maxRunCount = 5;
+        $batch_size = 10;
+        $maxRunCount = 100;
 
         do {
             $this->processImportedRecords($batch_size);
