@@ -121,7 +121,6 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntil
         $inventory = Inventory::query()
             ->where('product_id', $product->getKey())
             ->where('warehouse_id', $salesRecord->rmsapiConnection->warehouse_id)
-            ->orderByDesc('id')
             ->first();
 
         if ($salesRecord->type === 'rms_sale') {
