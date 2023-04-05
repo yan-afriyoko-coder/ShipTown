@@ -9,6 +9,7 @@ use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -17,29 +18,24 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
-class ImportProductsJob implements ShouldQueue
+class ImportProductsJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
 {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
 
-    /**
-     * @var RmsapiConnection
-     */
     private RmsapiConnection $rmsConnection;
 
-    /**
-     * @var string
-     */
     public string $batch_uuid;
 
-    /**
-     * Create a new job instance.
-     *
-     * @param int $rmsapiConnectionId
-     *
-     */
+    public int $uniqueFor = 120;
+
+    public function uniqueId(): string
+    {
+        return implode('-', [get_class($this), $this->rmsConnection->getKey()]);
+    }
+
     public function __construct(int $rmsapiConnectionId)
     {
         $this->rmsConnection = RmsapiConnection::find($rmsapiConnectionId);
