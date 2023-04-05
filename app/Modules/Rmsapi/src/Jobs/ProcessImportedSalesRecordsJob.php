@@ -23,18 +23,11 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntil
     use Queueable;
     use SerializesModels;
 
-    private int $connection_id;
-
     public int $uniqueFor = 500;
 
     public function uniqueId(): string
     {
-        return implode('-', [get_class($this), $this->connection_id]);
-    }
-
-    public function __construct(int $connection_id)
-    {
-        $this->connection_id = $connection_id;
+        return implode('-', [get_class($this)]);
     }
 
     public function handle()
@@ -44,7 +37,6 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntil
 
         do {
             Log::info('Processing imported sales records', [
-                'connection_id' => $this->connection_id,
                 'batch_size' => $batch_size,
                 'maxRunCount' => $maxRunCount
             ]);
@@ -52,7 +44,6 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntil
             $this->processImportedRecords($batch_size);
 
             $hasNoRecordsToProcess = ! RmsapiSaleImport::query()
-                ->where('connection_id', $this->connection_id)
                 ->whereNull('reserved_at')
                 ->whereNull('processed_at')
                 ->exists();
@@ -71,7 +62,6 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntil
 
         RmsapiSaleImport::query()
             ->whereNull('reserved_at')
-            ->where('connection_id', $this->connection_id)
             ->whereNull('processed_at')
             ->where('comment', 'not like', 'PM_OrderProductShipment_%')
             ->orderBy('id')
@@ -80,10 +70,7 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntil
 
         // process records
         RmsapiSaleImport::query()
-            ->where([
-                'connection_id' => $this->connection_id,
-                'reserved_at' => $reservationTime
-            ])
+            ->where(['reserved_at' => $reservationTime])
             ->whereNull('processed_at')
             ->where('comment', 'not like', 'PM_OrderProductShipment_%')
             ->orderBy('id')
