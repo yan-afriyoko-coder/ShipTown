@@ -9,7 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
-class UpdateProductIdsOnSalesImportsTableJob implements ShouldQueue
+class PrepareImportedSalesRecordsJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -17,6 +17,15 @@ class UpdateProductIdsOnSalesImportsTableJob implements ShouldQueue
     use SerializesModels;
 
     public function handle(): bool
+    {
+        $this->updateWarehouseIds();
+
+        $this->updateProductIds();
+
+        return true;
+    }
+
+    private function updateWarehouseIds(): void
     {
         retry(3, function () {
             DB::statement('
@@ -37,7 +46,10 @@ class UpdateProductIdsOnSalesImportsTableJob implements ShouldQueue
                 )
             ');
         }, 1000);
+    }
 
+    private function updateProductIds(): void
+    {
         retry(3, function () {
             DB::statement('
                 UPDATE modules_rmsapi_sales_imports
@@ -57,7 +69,5 @@ class UpdateProductIdsOnSalesImportsTableJob implements ShouldQueue
                 )
             ');
         }, 1000);
-
-        return true;
     }
 }
