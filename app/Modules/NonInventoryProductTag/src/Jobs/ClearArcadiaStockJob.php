@@ -6,19 +6,26 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Services\InventoryService;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Spatie\Tags\Tag;
 
-class ClearArcadiaStockJob implements ShouldQueue
+class ClearArcadiaStockJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
 {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
 
+    public int $uniqueFor = 500;
+
+    public function uniqueId(): string
+    {
+        return implode('-', [get_class($this)]);
+    }
 
     public function handle(): bool
     {
