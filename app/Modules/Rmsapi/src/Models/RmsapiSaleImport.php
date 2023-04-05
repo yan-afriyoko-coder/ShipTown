@@ -3,6 +3,7 @@
 namespace App\Modules\Rmsapi\src\Models;
 
 use App\BaseModel;
+use App\Models\Inventory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -71,5 +72,10 @@ class RmsapiSaleImport extends BaseModel
     public function rmsapiConnection(): BelongsTo
     {
         return $this->belongsTo(RmsapiConnection::class, 'connection_id');
+    }
+
+    public function inventory(): BelongsTo
+    {
+        return $this->belongsTo(Inventory::class, 'inventory_movement_id');
     }
 }

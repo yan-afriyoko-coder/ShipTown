@@ -64,6 +64,7 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntil
             ->whereNull('reserved_at')
             ->whereNull('processed_at')
             ->whereNotNull('product_id')
+            ->whereNotNull('warehouse_id')
             ->where('comment', 'not like', 'PM_OrderProductShipment_%')
             ->orderBy('id')
             ->limit($batch_size)
