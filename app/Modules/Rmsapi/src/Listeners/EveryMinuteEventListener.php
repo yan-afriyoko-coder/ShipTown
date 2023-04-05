@@ -5,6 +5,7 @@ namespace App\Modules\Rmsapi\src\Listeners;
 use App\Modules\Rmsapi\src\Jobs\ImportSalesJob;
 use App\Modules\Rmsapi\src\Jobs\ImportShippingsJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedSalesRecordsJob;
+use App\Modules\Rmsapi\src\Jobs\UpdateProductIdsOnSalesImportsTableJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use Illuminate\Support\Facades\Log;
 
@@ -22,6 +23,7 @@ class EveryMinuteEventListener
             ]);
         }
 
+        UpdateProductIdsOnSalesImportsTableJob::dispatch();
         ProcessImportedSalesRecordsJob::dispatch();
     }
 }
