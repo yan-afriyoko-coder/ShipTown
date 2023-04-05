@@ -30,11 +30,6 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntil
         return implode('-', [get_class($this)]);
     }
 
-    public function __construct(int $connection_id)
-    {
-        //
-    }
-
     public function handle()
     {
         $batch_size = 10;
