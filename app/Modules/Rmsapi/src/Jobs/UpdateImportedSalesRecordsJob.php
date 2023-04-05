@@ -9,7 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
-class UpdateProductIdsOnSalesImportsTableJob implements ShouldQueue
+class UpdateImportedSalesRecordsJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -17,6 +17,38 @@ class UpdateProductIdsOnSalesImportsTableJob implements ShouldQueue
     use SerializesModels;
 
     public function handle(): bool
+    {
+        $this->updateWarehouseIds();
+
+        $this->updateProductIds();
+
+        return true;
+    }
+
+    private function updateWarehouseIds(): void
+    {
+        retry(3, function () {
+            DB::statement('
+                UPDATE modules_rmsapi_sales_imports
+                LEFT JOIN modules_rmsapi_connections
+                  ON modules_rmsapi_connections.id = modules_rmsapi_sales_imports.connection_id
+
+                SET modules_rmsapi_sales_imports.warehouse_id = modules_rmsapi_connections.warehouse_id
+
+                WHERE modules_rmsapi_sales_imports.warehouse_id IS NULL
+
+                AND modules_rmsapi_sales_imports.id in (
+                    SELECT id FROM (
+                      SELECT ID from modules_rmsapi_sales_imports
+                      WHERE warehouse_id is null and processed_at is null
+                      limit 5000
+                    ) as tbl
+                )
+            ');
+        }, 1000);
+    }
+
+    private function updateProductIds(): void
     {
         retry(3, function () {
             DB::statement('
@@ -37,7 +69,5 @@ class UpdateProductIdsOnSalesImportsTableJob implements ShouldQueue
                 )
             ');
         }, 1000);
-
-        return true;
     }
 }
