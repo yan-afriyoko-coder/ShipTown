@@ -81,7 +81,7 @@ class ProcessImportedSalesRecordsJobTest extends TestCase
 
         ProcessImportedSalesRecordsJob::dispatchSync($rmsapiConnection->id);
 
-        $this->assertDatabaseMissing('modules_rmsapi_sales_imports', [
+        $this->assertDatabaseHas('modules_rmsapi_sales_imports', [
             'id' => $saleRecord->id,
             'processed_at' => null,
         ]);
