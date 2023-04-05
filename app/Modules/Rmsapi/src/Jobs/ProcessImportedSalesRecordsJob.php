@@ -79,7 +79,9 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntil
             ->get()
             ->each(function (RmsapiSaleImport $salesRecord) {
                 try {
-                    $this->import($salesRecord);
+                    retry(2, function () use ($salesRecord) {
+                        $this->import($salesRecord);
+                    }, 100);
                 } catch (Exception $e) {
                     report($e);
                     Log::emergency($e->getMessage(), $e->getTrace());
@@ -105,7 +107,7 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntil
 
         $inventory = Inventory::query()
             ->where('product_id', $salesRecord->product_id)
-            ->where('warehouse_id', $salesRecord->rmsapiConnection->warehouse_id)
+            ->where('warehouse_id', $salesRecord->warehouse_id)
             ->first();
 
         if ($salesRecord->type === 'rms_sale') {
