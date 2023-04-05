@@ -14,7 +14,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
@@ -44,6 +43,12 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntil
         $maxRunCount = 100;
 
         do {
+            Log::info('Processing imported sales records', [
+                'connection_id' => $this->connection_id,
+                'batch_size' => $batch_size,
+                'maxRunCount' => $maxRunCount
+            ]);
+
             $this->processImportedRecords($batch_size);
 
             $hasNoRecordsToProcess = ! RmsapiSaleImport::query()
