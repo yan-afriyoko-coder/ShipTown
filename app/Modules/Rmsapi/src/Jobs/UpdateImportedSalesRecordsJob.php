@@ -9,7 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
-class PrepareImportedSalesRecordsJob implements ShouldQueue
+class UpdateImportedSalesRecordsJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
