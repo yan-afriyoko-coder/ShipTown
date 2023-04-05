@@ -16,12 +16,9 @@ class EveryMinuteEventListener
     public function handle()
     {
         foreach (RmsapiConnection::all() as $rmsapiConnection) {
-            Bus::chain([
-                new ImportSalesJob($rmsapiConnection->id),
-                new ProcessImportedSalesRecordsJob($rmsapiConnection->id),
-            ])->dispatch();
-
+            ImportSalesJob::dispatch($rmsapiConnection->id);
             ImportShippingsJob::dispatch($rmsapiConnection->id);
+            ProcessImportedSalesRecordsJob::dispatch($rmsapiConnection->id);
 
             Log::debug('RMSAPI Sync jobs dispatched', [
                 'warehouse_code' => $rmsapiConnection->location_id,
