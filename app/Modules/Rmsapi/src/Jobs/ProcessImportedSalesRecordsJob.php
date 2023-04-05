@@ -5,31 +5,28 @@ namespace App\Modules\Rmsapi\src\Jobs;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
 use App\Models\Product;
-use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Models\RmsapiSaleImport;
 use App\Services\InventoryService;
-use App\Traits\IsMonitored;
 use Exception;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class ProcessImportedSalesRecordsJob implements ShouldQueue
+class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
 {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-    use IsMonitored;
 
     private int $connection_id;
 
-    public int $uniqueFor = 60;
+    public int $uniqueFor = 500;
 
     public function uniqueId(): string
     {
@@ -39,11 +36,6 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
     public function __construct(int $connection_id)
     {
         $this->connection_id = $connection_id;
-    }
-
-    public function middleware(): array
-    {
-        return [(new WithoutOverlapping($this->connection_id))->dontRelease()];
     }
 
     public function handle()
@@ -58,7 +50,6 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue
 
         do {
             $this->processImportedRecords($batch_size);
-
 
             $hasNoRecordsToProcess = ! RmsapiSaleImport::query()
                 ->whereNull('reserved_at')
