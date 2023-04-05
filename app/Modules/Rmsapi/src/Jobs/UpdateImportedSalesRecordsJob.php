@@ -2,7 +2,6 @@
 
 namespace App\Modules\Rmsapi\src\Jobs;
 
-use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use App\Modules\Rmsapi\src\Models\RmsapiSaleImport;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
