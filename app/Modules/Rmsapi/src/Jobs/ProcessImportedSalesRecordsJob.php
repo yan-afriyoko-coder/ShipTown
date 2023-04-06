@@ -60,7 +60,7 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntil
     {
         $reservationTime = now();
 
-        RmsapiSaleImport::query()
+        $ids = RmsapiSaleImport::query()
             ->whereNull('reserved_at')
             ->whereNull('processed_at')
             ->whereNotNull('product_id')
@@ -68,13 +68,18 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntil
             ->where('comment', 'not like', 'PM_OrderProductShipment_%')
             ->orderBy('id')
             ->limit($batch_size)
+            ->pluck('id');
+
+        RmsapiSaleImport::query()
+            ->whereIn('id', $ids)
+            ->whereNull('reserved_at')
             ->update(['reserved_at' => $reservationTime]);
 
         // process records
         RmsapiSaleImport::query()
-            ->where(['reserved_at' => $reservationTime])
+            ->whereIn('id', $ids)
+            ->where('reserved_at', $reservationTime)
             ->whereNull('processed_at')
-            ->where('comment', 'not like', 'PM_OrderProductShipment_%')
             ->orderBy('id')
             ->get()
             ->each(function (RmsapiSaleImport $salesRecord) {
@@ -91,10 +96,8 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntil
 
     private function import(RmsapiSaleImport $salesRecord)
     {
-        $unique_reference_id = $salesRecord->uuid;
-
         $inventoryMovement = InventoryMovement::query()
-            ->where('custom_unique_reference_id', $unique_reference_id)
+            ->where('custom_unique_reference_id', $salesRecord->uuid)
             ->first();
 
         if ($inventoryMovement) {
@@ -115,14 +118,14 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntil
                 $inventory,
                 $salesRecord->quantity,
                 $salesRecord->type,
-                $unique_reference_id
+                $salesRecord->uuid
             );
         } else {
             $inventoryMovement = InventoryService::adjustQuantity(
                 $inventory,
                 $salesRecord->quantity,
                 $salesRecord->type,
-                $unique_reference_id
+                $salesRecord->uuid
             );
         }
 
