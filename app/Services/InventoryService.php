@@ -15,7 +15,7 @@ class InventoryService
             $inventoryMovement = InventoryMovement::query()->create([
                 'custom_unique_reference_id' => $unique_reference_id,
                 'type' => 'sale',
-                'previous_movement_id' => $inventory->last_movement_id,
+//                'previous_movement_id' => $inventory->last_movement_id,
                 'inventory_id' => $inventory->id,
                 'product_id' => $inventory->product_id,
                 'warehouse_id' => $inventory->warehouse_id,
@@ -41,7 +41,7 @@ class InventoryService
             $inventoryMovement = InventoryMovement::query()->create([
                 'custom_unique_reference_id' => $unique_reference_id,
                 'type' => 'manual_adjustment',
-                'previous_movement_id' => $inventory->last_movement_id,
+//                'previous_movement_id' => $inventory->last_movement_id,
                 'inventory_id' => $inventory->id,
                 'product_id' => $inventory->product_id,
                 'warehouse_id' => $inventory->warehouse_id,
