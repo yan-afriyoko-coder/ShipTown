@@ -39,14 +39,6 @@ class UpdateImportedSalesRecordsJob implements ShouldQueue
                 SET modules_rmsapi_sales_imports.warehouse_id = modules_rmsapi_connections.warehouse_id
 
                 WHERE modules_rmsapi_sales_imports.warehouse_id IS NULL
-
-                AND modules_rmsapi_sales_imports.id in (
-                    SELECT id FROM (
-                      SELECT ID from modules_rmsapi_sales_imports
-                      WHERE warehouse_id is null and processed_at is null
-                      limit 5000
-                    ) as tbl
-                )
             ');
         }, 1000);
     }
@@ -62,14 +54,6 @@ class UpdateImportedSalesRecordsJob implements ShouldQueue
                 SET modules_rmsapi_sales_imports.product_id = products_aliases.product_id
 
                 WHERE modules_rmsapi_sales_imports.product_id IS NULL
-
-                AND modules_rmsapi_sales_imports.id in (
-                    SELECT id FROM (
-                      SELECT ID from modules_rmsapi_sales_imports
-                      WHERE product_id is null and processed_at is null
-                      limit 5000
-                    ) as tbl
-                )
             ');
         }, 1000);
     }
