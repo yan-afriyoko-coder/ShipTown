@@ -3,9 +3,12 @@
 namespace App\Modules\Reports\src\Models;
 
 use App\Models\Inventory;
+use App\Models\Product;
+use App\Models\Warehouse;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\Tags\Tag;
 
 class RestockingReport extends Report
 {
@@ -22,8 +25,6 @@ class RestockingReport extends Report
         $this->defaultSelect = implode(',', [
             'inventory_id',
             'product_id',
-//            'inventory_id',
-//            'warehouse_id',
             'warehouse_code',
             'product_sku',
             'product_name',
@@ -47,11 +48,13 @@ class RestockingReport extends Report
 
         $this->allowedIncludes = ['product', 'product.tags', 'product.prices'];
 
+        $warehouseIds = Warehouse::withAnyTagsOfAnyType('fulfilment')->get('id');
+
         $this->baseQuery = Inventory::query()
             ->leftJoin('products', 'inventory.product_id', '=', 'products.id')
-            ->join('inventory as inventory_source', function (JoinClause $join) {
+            ->join('inventory as inventory_source', function (JoinClause $join) use ($warehouseIds) {
                 $join->on('inventory_source.product_id', '=', 'inventory.product_id');
-                $join->on('inventory_source.warehouse_id', '=', DB::raw(2));
+                $join->whereIn('inventory_source.warehouse_id', $warehouseIds);
                 $join->where('inventory_source.is_in_stock', '=', 1);
             })->withSum('last7daysSales', 'quantity_delta');
 
@@ -82,6 +85,7 @@ class RestockingReport extends Report
         ];
 
         $this->casts = [
+            'warehouse_id'       => 'integer',
             'product_name'       => 'string',
             'warehouse_code'     => 'string',
             'restock_level'      => 'float',
@@ -96,18 +100,21 @@ class RestockingReport extends Report
             'warehouse_has_stock'=> 'boolean',
         ];
 
-//        $this->addFilter(
-//            AllowedFilter::callback('has_tags', function ($query, $value) {
-//                return $query->whereIn(
-//                    'inventory_source.warehouse_id',
-//                    Warehouse::withAllTags(explode(',', $value))->pluck('id')
-//                );
-//            })
-//        );
+        $this->addFilter(
+            AllowedFilter::callback('product_has_tags_containing', function ($query, $value) {
+                $tags = Tag::containing($value)->get('id');
+
+                $productsQuery = Product::withAnyTags($tags)->select('id');
+                return $query->whereIn('inventory.product_id', $productsQuery);
+            })
+        );
 
         $this->addFilter(
             AllowedFilter::callback('product_has_tags', function ($query, $value) {
-                return $query->hasTags($value);
+                $tags = Tag::findFromStringOfAnyType($value);
+
+                $productsQuery = Product::withAnyTags($tags)->select('id');
+                return $query->whereIn('inventory.product_id', $productsQuery);
             })
         );
 

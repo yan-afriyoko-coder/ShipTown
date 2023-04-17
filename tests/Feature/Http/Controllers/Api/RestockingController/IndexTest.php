@@ -6,16 +6,79 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\User;
+use Spatie\Tags\Tag;
 use Tests\TestCase;
 
 class IndexTest extends TestCase
 {
+    public function test_product_has_tags_containing_filter()
+    {
+        /** @var Warehouse $warehouse */
+        $warehouse = Warehouse::factory()->create();
+        $warehouse->attachTag('fulfilment');
+
+        Product::factory()->create();
+
+        /** @var Product $product */
+        $product = Product::factory()->create();
+        $product->attachTag('test WH');
+
+        /** @var User $user */
+        $user = User::factory()->create();
+
+        Inventory::query()->update(['quantity' => 1]);
+
+        ray()->showApp();
+        ray()->showQueries();
+
+        $response = $this->actingAs($user, 'api')
+            ->getJson(route('api.restocking.index', [
+                'filter[warehouse_id]' => $warehouse->getKey(),
+                'filter[product_has_tags_containing]' => 'WH'
+            ]));
+
+        $this->assertCount(1, $response->json('data'));
+    }
+
+    public function test_product_has_tags_filter()
+    {
+        /** @var Warehouse $warehouse */
+        $warehouse = Warehouse::factory()->create();
+        $warehouse->attachTag('fulfilment');
+
+        Product::factory()->create();
+
+        /** @var Product $product */
+        $product = Product::factory()->create();
+        $product->attachTag('test');
+
+        /** @var User $user */
+        $user = User::factory()->create();
+
+        Inventory::query()->update(['quantity' => 1]);
+
+        ray()->showApp();
+        ray()->showQueries();
+
+        ray($warehouse->getKey());
+        $response = $this->actingAs($user, 'api')
+            ->getJson(route('api.restocking.index', [
+                'filter[warehouse_id]' => $warehouse->getKey(),
+                'filter[product_has_tags]' => 'test'
+            ]));
+
+        $this->assertCount(1, $response->json('data'));
+    }
+
     /** @test */
     public function test_index_call_returns_ok()
     {
         ray()->showApp();
 
-        Warehouse::factory()->create(['id' => 2]);
+        /** @var Warehouse $warehouse */
+        $warehouse = Warehouse::factory()->create(['id' => 2]);
+        $warehouse->attachTag('fulfilment');
+
         Product::factory()->create();
 
         /** @var User $user */

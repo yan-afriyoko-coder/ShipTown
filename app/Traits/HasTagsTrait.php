@@ -5,12 +5,17 @@ namespace App\Traits;
 use ArrayAccess;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\Tags\HasTags;
 use Spatie\Tags\Tag;
 
+/**
+ * App\Models\Product.
+ *
+ * @method static withAnyTags($tags, $type = null)
+ * @method static withAnyTagsOfAnyType($tags)
+ */
 trait HasTagsTrait
 {
     use HasTags {
