@@ -83,8 +83,8 @@
         },
 
         mounted() {
-            this.setUrlParameter('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
-            this.setUrlParameter('created_between', '-4 months,now');
+            this.getUrlFilterOrSet('created_between', '-4 months,now');
+            this.getUrlFilterOrSet('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
 
             window.onscroll = () => this.loadMore();
 
