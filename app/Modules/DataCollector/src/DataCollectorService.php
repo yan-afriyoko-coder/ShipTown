@@ -44,6 +44,7 @@ class DataCollectorService
             DB::transaction(function () use ($dataCollection) {
                 $dataCollection->records()
                     ->whereNotNull('quantity_requested')
+                    ->where('quantity_scanned', 0)
                     ->update(['quantity_scanned' => DB::raw('quantity_to_scan')]);
             });
             return;
