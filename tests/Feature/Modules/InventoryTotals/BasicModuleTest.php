@@ -18,6 +18,11 @@ class BasicModuleTest extends TestCase
         $inventory = Inventory::factory()->create();
 
         InventoryService::sellProduct($inventory, 1, 'sale');
+
+        $this->assertDatabaseHas('inventory_movements', [
+            'product_id' => $inventory->product_id,
+            'quantity_delta' => 1
+        ]);
     }
 
     /** @test */

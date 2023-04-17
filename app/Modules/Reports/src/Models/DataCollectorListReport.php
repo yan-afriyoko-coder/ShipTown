@@ -21,7 +21,7 @@ class DataCollectorListReport extends Report
                 SELECT count(*)
                 FROM data_collection_records
                 WHERE data_collection_records.data_collection_id = data_collections.id
-                AND data_collection_records.quantity_requested != (data_collection_records.total_transferred_in + data_collection_records.total_transferred_out)
+                AND IFNULL(data_collection_records.quantity_requested, 0) != (data_collection_records.total_transferred_in + data_collection_records.total_transferred_out)
             )');
 
         $this->fields = [
