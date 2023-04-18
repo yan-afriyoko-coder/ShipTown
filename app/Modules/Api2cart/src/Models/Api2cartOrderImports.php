@@ -178,6 +178,8 @@ class Api2cartOrderImports extends BaseModel
      */
     public function ordersCreateAt(): Carbon
     {
-        return Carbon::createFromTimeString($this->raw_import['create_at']['value']);
+        $create_at = $this->raw_import['create_at'];
+
+        return Carbon::createFromFormat($create_at['format'], $create_at['value']);
     }
 }
