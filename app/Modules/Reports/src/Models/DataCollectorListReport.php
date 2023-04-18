@@ -19,9 +19,9 @@ class DataCollectorListReport extends Report
 
         $differences_count_subquery = DB::raw('(
                 SELECT count(*)
-                FROM data_collection_records
-                WHERE data_collection_records.data_collection_id = data_collections.id
-                AND IFNULL(data_collection_records.quantity_requested, 0) != (data_collection_records.total_transferred_in + data_collection_records.total_transferred_out)
+                FROM data_collection_records as dcr
+                WHERE dcr.data_collection_id = data_collections.id
+                AND IFNULL(dcr.quantity_requested, 0) != (dcr.total_transferred_in + dcr.total_transferred_out)
             )');
 
         $this->fields = [
