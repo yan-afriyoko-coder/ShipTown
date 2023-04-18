@@ -50,7 +50,7 @@ class ProcessImportedOrdersJob implements ShouldQueue
             'total_paid' => $orderImport->raw_import['total']['total_paid'] ?? 0,
             'shipping_method_code' => $orderImport->shipping_method_code,
             'shipping_method_name' => $orderImport->shipping_method_name,
-            'order_placed_at' => $orderImport->ordersCreateAt(),
+            'order_placed_at' => $orderImport->ordersCreateAt()->tz('UTC'),
             'order_products' => $orderImport->extractOrderProducts(),
             'shipping_address' => $orderImport->extractShippingAddressAttributes(),
             'raw_import' => $orderImport->raw_import,
