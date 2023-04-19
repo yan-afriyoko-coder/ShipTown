@@ -69,13 +69,14 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
             return false;
         }
 
-        $warehouse = Warehouse::firstOrCreate(['code' => '999'], ['name' => '999']);
+        if (Configuration::query()->doesntExist()) {
+            $warehouse = Warehouse::firstOrCreate(['code' => '999'], ['name' => '999']);
 
-        if (Configuration::doesntExist()) {
             Configuration::create([
                 'warehouse_id' => $warehouse->id,
             ]);
         }
+
         return true;
     }
 
