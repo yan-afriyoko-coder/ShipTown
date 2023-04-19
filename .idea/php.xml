@@ -143,7 +143,6 @@
       <path value="$PROJECT_DIR$/vendor/knuckleswtf/scribe" />
       <path value="$PROJECT_DIR$/vendor/rap2hpoutre/laravel-log-viewer" />
       <path value="$PROJECT_DIR$/vendor/swiftmailer/swiftmailer" />
-      <path value="$PROJECT_DIR$/vendor/bpocallaghan/generators" />
       <path value="$PROJECT_DIR$/vendor/http-interop/http-factory-guzzle" />
       <path value="$PROJECT_DIR$/vendor/tijsverkoyen/css-to-inline-styles" />
       <path value="$PROJECT_DIR$/vendor/dragonmantank/cron-expression" />

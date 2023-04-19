@@ -154,7 +154,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/knuckleswtf/scribe" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/rap2hpoutre/laravel-log-viewer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/swiftmailer/swiftmailer" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/bpocallaghan/generators" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/http-interop/http-factory-guzzle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/tijsverkoyen/css-to-inline-styles" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/dragonmantank/cron-expression" />

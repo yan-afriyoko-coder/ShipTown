@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "279879dc41e2d8098f84166677dacfe7",
+    "content-hash": "2cd2fdc9f9c2b9de7bc4f657aa68864c",
     "packages": [
         {
             "name": "arrilot/laravel-widgets",
@@ -10845,74 +10845,6 @@
                 "source": "https://github.com/beyondcode/laravel-query-detector/tree/1.7.0"
             },
             "time": "2023-02-15T10:37:22+00:00"
-        },
-        {
-            "name": "bpocallaghan/generators",
-            "version": "7.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/bpocallaghan/generators.git",
-                "reference": "50204ac64dcdc0209b93baa1a46b3291da730c3b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/bpocallaghan/generators/zipball/50204ac64dcdc0209b93baa1a46b3291da730c3b",
-                "reference": "50204ac64dcdc0209b93baa1a46b3291da730c3b",
-                "shasum": ""
-            },
-            "require": {
-                "laravel/framework": "^8.0",
-                "php": ">=7.3",
-                "symfony/console": "^5.0"
-            },
-            "require-dev": {
-                "orchestra/testbench": "6.*"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Bpocallaghan\\Generators\\GeneratorsServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Bpocallaghan\\Generators\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ben-Piet O'Callaghan",
-                    "email": "bpocallaghan@gmail.com",
-                    "homepage": "http://bpocallaghan.co.za",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Custom Laravel File Generators with config and publishable stubs.",
-            "keywords": [
-                "commands",
-                "config",
-                "customization",
-                "generators",
-                "laravel",
-                "stubs"
-            ],
-            "support": {
-                "issues": "https://github.com/bpocallaghan/generators/issues",
-                "source": "https://github.com/bpocallaghan/generators/tree/7.0.2"
-            },
-            "funding": [
-                {
-                    "url": "https://www.patreon.com/bpocallaghan",
-                    "type": "patreon"
-                }
-            ],
-            "time": "2021-04-01T21:38:31+00:00"
         },
         {
             "name": "composer/class-map-generator",
