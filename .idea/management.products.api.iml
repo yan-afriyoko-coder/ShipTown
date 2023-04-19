@@ -154,7 +154,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/knuckleswtf/scribe" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/rap2hpoutre/laravel-log-viewer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/swiftmailer/swiftmailer" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/bpocallaghan/generators" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/http-interop/http-factory-guzzle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/tijsverkoyen/css-to-inline-styles" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/dragonmantank/cron-expression" />
@@ -210,7 +209,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/beyondcode/laravel-query-detector" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/laravel/forge-sdk" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/blackfire/php-sdk" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/tightenco/ziggy" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/seld/signal-handler" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/paragonie/constant_time_encoding" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/lcobucci/clock" />

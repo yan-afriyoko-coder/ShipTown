@@ -40,19 +40,17 @@
         "spatie/laravel-query-builder": "^4.0",
         "spatie/laravel-ray": "^1.17",
         "spatie/laravel-tags": "^4.3.5",
-        "thomasjohnkane/snooze": "^1.0",
-        "tightenco/ziggy": "^1.5"
+        "thomasjohnkane/snooze": "^1.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",
         "barryvdh/laravel-ide-helper": "2.8.*",
         "beyondcode/laravel-query-detector": "^1.6",
-        "bpocallaghan/generators": "^7.0",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "jasonmccreary/laravel-test-assertions": "^2.0",
         "knuckleswtf/scribe": "^3.23",
-        "laravel/dusk": "^6.13",
+        "laravel/dusk": "*",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^5.10",
         "phpunit/phpunit": "*",

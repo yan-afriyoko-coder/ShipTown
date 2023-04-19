@@ -12,13 +12,6 @@ window.Vue = require('vue').default;
 
 // Vue 2
 import Vue from 'vue'
-
-Vue.mixin({
-    methods: {
-        route: route
-    }
-});
-
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import { BootstrapVue } from 'bootstrap-vue';
