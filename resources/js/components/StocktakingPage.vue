@@ -15,7 +15,7 @@
                     Recent Stocktakes
                 </div>
                 <div class="col-6 text-right">
-                    <a :href="route('reports.inventory-movements', {'filter[description]': 'stocktake'})">See more</a>
+                    <a :href="'/reports/inventory-movements?filter[description]=stocktake'">See more</a>
                 </div>
             </div>
             <div class="text-secondary small text-center" v-if="recentStocktakes.data.length === 0">
