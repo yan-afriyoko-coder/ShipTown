@@ -50,7 +50,7 @@
         "fakerphp/faker": "^1.9.1",
         "jasonmccreary/laravel-test-assertions": "^2.0",
         "knuckleswtf/scribe": "^3.23",
-        "laravel/dusk": "^6.13",
+        "laravel/dusk": "*",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^5.10",
         "phpunit/phpunit": "*",
