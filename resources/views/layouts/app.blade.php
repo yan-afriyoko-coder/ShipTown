@@ -12,8 +12,6 @@
     <meta name="current-user" content="{{ \App\Http\Resources\UserResource::make(Auth::user()->load('warehouse'))->toJson() }}">
     @endauth
 
-    @routes
-
     <title>ship.town @yield('title')</title>
 
     <!-- Scripts -->
