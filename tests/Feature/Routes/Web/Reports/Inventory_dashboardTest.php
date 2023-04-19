@@ -3,6 +3,7 @@
 namespace Tests\Feature\Routes\Web\Reports;
 
 use App\User;
+use App\Modules\InventoryReservations\src\EventServiceProviderBase as InventoryReservationsEventServiceProviderBase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -29,6 +30,9 @@ class Inventory_dashboardTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        InventoryReservationsEventServiceProviderBase::enableModule();
+
         $this->user = User::factory()->create();
     }
 

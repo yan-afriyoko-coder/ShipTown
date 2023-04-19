@@ -1,8 +1,7 @@
 <?php
 
-namespace Tests\Feature\Routes\Web;
+namespace Tests\Feature\Routes\Web\Admin\Settings\Modules;
 
-use App\Modules\InventoryReservations\src\EventServiceProviderBase as InventoryReservationsEventServiceProviderBase;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -10,29 +9,20 @@ use Tests\TestCase;
 /**
  *
  */
-class Inventory_dashboardTest extends TestCase
+class Inventory_reservationsTest extends TestCase
 {
     use RefreshDatabase;
 
     /**
      * @var string
      */
-    protected string $uri = 'inventory-dashboard';
+    protected string $uri = '/admin/settings/modules/inventory-reservations';
 
-    /**
-     * @var User
-     */
-    protected User $user;
+    protected mixed $user;
 
-    /**
-     *
-     */
     protected function setUp(): void
     {
         parent::setUp();
-
-        InventoryReservationsEventServiceProviderBase::enableModule();
-
         $this->user = User::factory()->create();
     }
 
@@ -57,7 +47,7 @@ class Inventory_dashboardTest extends TestCase
 
         $response = $this->get($this->uri);
 
-        $response->assertSuccessful();
+        $response->assertForbidden();
     }
 
     /** @test */
@@ -69,6 +59,6 @@ class Inventory_dashboardTest extends TestCase
 
         $response = $this->get($this->uri);
 
-        $response->assertSuccessful();
+        $response->assertOk();
     }
 }
