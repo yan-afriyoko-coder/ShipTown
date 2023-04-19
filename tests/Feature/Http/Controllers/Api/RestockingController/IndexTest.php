@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers\Api\RestockingController;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Warehouse;
+use App\Modules\InventoryReservations\src\EventServiceProviderBase as InventoryReservationsEventServiceProviderBase;
 use App\User;
 use Spatie\Tags\Tag;
 use Tests\TestCase;
@@ -76,9 +77,10 @@ class IndexTest extends TestCase
         ray()->showApp();
 
         /** @var Warehouse $warehouse */
-        $warehouse = Warehouse::factory()->create(['id' => 2]);
+        $warehouse = Warehouse::factory()->create();
         $warehouse->attachTag('fulfilment');
 
+        InventoryReservationsEventServiceProviderBase::enableModule();
         Product::factory()->create();
 
         /** @var User $user */

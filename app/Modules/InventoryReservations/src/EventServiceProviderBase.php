@@ -9,6 +9,7 @@ use App\Events\OrderProduct\OrderProductCreatedEvent;
 use App\Events\OrderProduct\OrderProductUpdatedEvent;
 use App\Models\Warehouse;
 use App\Modules\BaseModuleServiceProvider;
+use App\Modules\InventoryReservations\src\Models\Configuration;
 
 /**
  * Class EventServiceProviderBase.
@@ -23,12 +24,17 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
     /**
      * @var string
      */
-    public static string $module_description = 'Reserves stock for open orders. Is using location 999';
+    public static string $module_description = 'Reserves stock for active orders.';
+
+    /**
+     * @var string
+     */
+    public static string $settings_link = '/admin/settings/modules/inventory-reservations';
 
     /**
      * @var bool
      */
-    public static bool $autoEnable = true;
+    public static bool $autoEnable = false;
 
     /**
      * The event listener mappings for the application.
@@ -63,7 +69,13 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
             return false;
         }
 
-        Warehouse::firstOrCreate(['code' => '999'], ['name' => '999']);
+        if (Configuration::query()->doesntExist()) {
+            $warehouse = Warehouse::firstOrCreate(['code' => '999'], ['name' => '999']);
+
+            Configuration::create([
+                'warehouse_id' => $warehouse->id,
+            ]);
+        }
 
         return true;
     }
