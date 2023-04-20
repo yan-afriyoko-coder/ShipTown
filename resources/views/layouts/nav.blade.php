@@ -28,7 +28,7 @@
 
             </div>
 
-            <button class="btn btn-primary float-right border-0 btn-primary d-m-block d-md-none " type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+            <button id="navToggleButton" class="btn btn-primary float-right border-0 btn-primary d-m-block d-md-none " type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                 <font-awesome-icon icon="bars" class="fa-lg"></font-awesome-icon>
             </button>
 
