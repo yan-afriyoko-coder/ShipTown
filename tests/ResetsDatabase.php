@@ -28,6 +28,7 @@ use App\Modules\MagentoApi\src\Models\MagentoProduct;
 use App\Modules\PrintNode\src\Models\Client;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Services\ModulesService;
+use App\User;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Tags\Tag;
@@ -59,7 +60,6 @@ trait ResetsDatabase
         Condition::query()->forceDelete();
         Action::query()->forceDelete();
         CacheLock::query()->forceDelete();
-        InventoryMovement::query()->forceDelete();
         Heartbeat::query()->forceDelete();
 
         Module::query()->forceDelete();
@@ -80,6 +80,8 @@ trait ResetsDatabase
         ModulesService::updateModulesTable();
 
         DB::table('modules_queue_monitor_jobs')->delete();
+        InventoryMovement::query()->forceDelete();
+        User::query()->forceDelete();
 
         // now re-register all the roles and permissions (clears cache and reloads relations)
         $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->registerPermissions();

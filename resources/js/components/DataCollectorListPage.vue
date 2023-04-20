@@ -5,7 +5,7 @@
                 <barcode-input-field placeholder="Search"></barcode-input-field>
             </div>
 
-            <button v-b-modal="'new-collection-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="plus" class="fa-lg"></font-awesome-icon></button>
+            <button id="new_data_collection" dusk="new_data_collection" v-b-modal="'new-collection-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="plus" class="fa-lg"></font-awesome-icon></button>
         </div>
 
         <div class="row pl-2 p-0 text-uppercase small text-secondary">
@@ -24,7 +24,7 @@
         <template v-for="record in data">
             <swiping-card :disable-swipe-right="true" :disable-swipe-left="true">
                 <template v-slot:content>
-                    <div role="button" class="row " @click="openDataCollection(record['id'])">
+                    <div role="button" dusk="data_collection_record" class="row" @click="openDataCollection(record['id'])">
                         <div class="col-sm-12 col-lg-6">
                             <div class="text-primary">{{ record['name'] }}</div>
                             <div class="text-secondary small">{{ formatDateTime(record['created_at'], 'dddd - MMM D HH:mm') }}</div>
