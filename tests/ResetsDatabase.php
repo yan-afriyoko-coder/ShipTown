@@ -15,6 +15,7 @@ use App\Models\OrderProductTotal;
 use App\Models\OrderStatus;
 use App\Models\Product;
 use App\Models\ProductAlias;
+use App\Models\Session;
 use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
@@ -51,7 +52,6 @@ trait ResetsDatabase
         Order::query()->forceDelete();
         OrderStatus::query()->forceDelete();
         Configuration::query()->forceDelete();
-        Warehouse::query()->forceDelete();
         Tag::query()->forceDelete();
         OrderProductTotal::query()->forceDelete();
         InventoryMovement::query()->forceDelete();
@@ -82,6 +82,8 @@ trait ResetsDatabase
         DB::table('modules_queue_monitor_jobs')->delete();
         InventoryMovement::query()->forceDelete();
         User::query()->forceDelete();
+        Warehouse::query()->forceDelete();
+        Session::query()->forceDelete();
 
         // now re-register all the roles and permissions (clears cache and reloads relations)
         $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->registerPermissions();

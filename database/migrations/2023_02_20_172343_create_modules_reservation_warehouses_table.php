@@ -18,7 +18,7 @@ class CreateModulesReservationWarehousesTable extends Migration
     {
         Schema::create('modules_inventory_reservations_configurations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('warehouse_id');
+            $table->foreignId('warehouse_id')->nullable();
             $table->timestamps();
 
             $table->foreign('warehouse_id', 'modules_inventory_reservations_warehouse_id_foreign')
@@ -28,7 +28,7 @@ class CreateModulesReservationWarehousesTable extends Migration
             $table->index('warehouse_id', 'modules_inventory_reservations_warehouse_id_index');
         });
 
-        $warehouse = Warehouse::firstOrCreate(['code' => '999'], ['name' => '999']);
+        $warehouse = Warehouse::query()->firstOrCreate(['code' => '999'], ['name' => '999']);
 
         Configuration::create([
             'warehouse_id' => $warehouse->id,

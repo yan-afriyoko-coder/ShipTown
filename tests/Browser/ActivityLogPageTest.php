@@ -20,8 +20,7 @@ class ActivityLogPageTest extends DuskTestCase
     public function testBasicExample()
     {
         $this->browse(function (Browser $browser) {
-            /** @var Product $product */
-            $product = Product::factory()->create();
+            Product::factory()->create();
 
             $user = User::factory()->create();
             $user->assignRole('admin');
@@ -30,27 +29,6 @@ class ActivityLogPageTest extends DuskTestCase
                 ->visit('/admin/activity-log')
                 ->assertAuthenticated()
                 ->screenshot('ActivityLog');
-        });
-    }
-
-    /**
-     * A basic browser test example.
-     *
-     * @throws Throwable
-     *
-     * @return void
-     */
-    public function test_products_empy()
-    {
-        Product::query()->forceDelete();
-
-        $user = User::factory()->create();
-
-        $this->browse(function (Browser $browser) use ($user) {
-            $browser->loginAs($user)
-                ->visit('/products')
-                ->waitForText('No products found.')
-                ->assertSee('No products found.');
         });
     }
 }

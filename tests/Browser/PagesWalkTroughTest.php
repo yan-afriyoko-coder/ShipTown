@@ -17,6 +17,8 @@ class PagesWalkTroughTest extends DuskTestCase
 {
     private Order $order;
     private User $user;
+    private int $shortDelay = 200;
+    private int $longDelay = 1000;
 
     protected function setUp(): void
     {
@@ -28,10 +30,10 @@ class PagesWalkTroughTest extends DuskTestCase
         $this->user = User::factory()->create(['password' => bcrypt('password')]);
         $this->user->warehouse()->associate($warehouse);
 
-        $this->order = Order::factory()->create(['status_code' => 'paid']);
-
         $product1 = Product::factory()->create(['sku' => '111576']);
         $product2 = Product::factory()->create(['sku' => '222957']);
+
+        $this->order = Order::factory()->create(['status_code' => 'paid']);
 
         OrderProduct::factory()->create([
             'order_id' => $this->order->id,
@@ -61,17 +63,9 @@ class PagesWalkTroughTest extends DuskTestCase
             $this->picklist($browser);
             $this->packlist($browser);
             $this->dashboard($browser);
-
-//                 Products
-//                ->mouseover('#products_link')->pause(200)->clickLink('Products')->pause(1000)
-
-//                // Orders
-//                ->mouseover('#orders_link')->pause(200)->clickLink('Orders')->pause(1000)
-
-//                // Restocking
-//                ->mouseover('#tools_link')->pause(200)->clickLink('Tools')->pause(200)
-//                ->mouseover('#restocking_link')->pause(200)->clickLink('Restocking')->pause(1000)
-//
+            $this->products($browser);
+            $this->orders($browser);
+            $this->restocking($browser);
         });
     }
 
@@ -82,12 +76,14 @@ class PagesWalkTroughTest extends DuskTestCase
      */
     private function packlist(Browser $browser): void
     {
-        $browser->mouseover('#navToggleButton')->pause(200)->click('#navToggleButton')->pause(200)
-            ->mouseover('#packlists_link')->pause(200)->clickLink('Packlist')->pause(200)
-            ->pause(200)->clickLink('Status: paid')->pause(1000)
+        $browser->mouseover('#navToggleButton')->pause($this->shortDelay)
+            ->click('#navToggleButton')->pause($this->shortDelay)
+            ->mouseover('#packlists_link')->pause($this->shortDelay)
+            ->clickLink('Packlist')->pause($this->shortDelay)
+            ->clickLink('Status: paid')->pause($this->longDelay)
             ->assertSee('Start AutoPilot Packing')
             ->click('@startAutopilotButton')
-            ->pause(1000);
+            ->pause($this->longDelay);
 
         while ($this->order->orderProducts()->where('quantity_to_ship', '>', 0)->exists()) {
             $orderProduct = $this->order->orderProducts()
@@ -99,7 +95,7 @@ class PagesWalkTroughTest extends DuskTestCase
                 $browser->assertSee($orderProduct->product->sku);
 
                 $browser->driver->getKeyboard()->sendKeys($orderProduct->product->sku);
-                $browser->pause(200)
+                $browser->pause($this->shortDelay)
                     ->keys('#barcodeInput', '{enter}')
                     ->pause(1500);
         }
@@ -107,7 +103,7 @@ class PagesWalkTroughTest extends DuskTestCase
         $browser->pause(2000)
             ->keys('#shipping_number_input', 'CB100023444')->pause(500)
             ->keys('#shipping_number_input', '{enter}')
-            ->pause(1000);
+            ->pause($this->longDelay);
     }
 
     /**
@@ -117,9 +113,9 @@ class PagesWalkTroughTest extends DuskTestCase
     {
         $browser->visit('/')->pause(500)
             ->assertPathIs('/login')
-            ->type('email', $this->user->email)->pause(200)
-            ->type('password', 'password')->pause(200)
-            ->press('Login')->pause(1000)
+            ->type('email', $this->user->email)->pause($this->shortDelay)
+            ->type('password', 'password')->pause($this->shortDelay)
+            ->press('Login')->pause($this->longDelay)
             ->assertPathBeginsWith('/dashboard')
             ->pause(100);
     }
@@ -131,30 +127,32 @@ class PagesWalkTroughTest extends DuskTestCase
      */
     private function transferIn(Browser $browser): void
     {
-        $browser->mouseover('#tools_link')->pause(200)->clickLink('Tools')->pause(200)
-            ->mouseover('#data_collector_link')->pause(200)->clickLink('Data Collector')->pause(1000)
-            ->click('#new_data_collection')->pause(1000)
-            ->typeSlowly('#collection_name_input', 'Stock delivery')->pause(200)
-            ->press('OK')->pause(1000)
+        $browser->mouseover('#tools_link')->pause($this->shortDelay)->clickLink('Tools')->pause($this->shortDelay)
+            ->mouseover('#data_collector_link')->pause($this->shortDelay)->clickLink('Data Collector')->pause($this->longDelay)
+            ->click('#new_data_collection')->pause($this->longDelay)
+            ->typeSlowly('#collection_name_input', 'Stock delivery')->pause($this->shortDelay)
+            ->press('OK')
+            ->pause($this->longDelay)
             ->mouseover('@data_collection_record')->click('@data_collection_record')
-            ->pause(1000);
+            ->pause($this->longDelay);
 
         $this->order->orderProducts()
             ->where('quantity_to_ship', '>', 0)
             ->first()
             ->each(function (OrderProduct $orderProduct) use ($browser) {
-
                 $browser->driver->getKeyboard()->sendKeys($orderProduct->product->sku);
 
-                $browser->keys('#barcodeInput', '{enter}')->pause(2000)
-                    ->typeSlowly('#data-collection-record-quantity-request-input', 12)->pause(200)
+                $browser->keys('#barcodeInput', '{enter}')
+                    ->pause($this->shortDelay)
+                    ->typeSlowly('#data-collection-record-quantity-request-input', 12)->pause($this->shortDelay)
                     ->keys('#data-collection-record-quantity-request-input', '{enter}')
-                    ->pause(1000);
+                    ->pause($this->shortDelay);
             });
 
-        $browser->mouseover('#showConfigurationButton')->pause(200)->click('#showConfigurationButton')->pause(1000)
-            ->mouseover('#transferInButton')->pause(500)->click('#transferInButton')->pause(1000)
-            ->pause(1000);
+        $browser->mouseover('#showConfigurationButton')->pause($this->shortDelay)
+            ->click('#showConfigurationButton')->pause($this->shortDelay)
+            ->mouseover('#transferInButton')->pause(500)->click('#transferInButton')->pause($this->longDelay)
+            ->pause($this->longDelay);
     }
 
     /**
@@ -164,9 +162,9 @@ class PagesWalkTroughTest extends DuskTestCase
      */
     private function picklist(Browser $browser): void
     {
-        $browser->mouseover('#navToggleButton')->pause(200)->click('#navToggleButton')->pause(200)
-            ->mouseover('#picklists_link')->pause(200)->clickLink('Picklist')->pause(200)
-            ->pause(200)->clickLink('Status: paid')->pause(1000);
+        $browser->mouseover('#navToggleButton')->pause($this->shortDelay)->click('#navToggleButton')->pause($this->shortDelay)
+            ->mouseover('#picklists_link')->pause($this->shortDelay)->clickLink('Picklist')->pause($this->shortDelay)
+            ->pause($this->shortDelay)->clickLink('Status: paid')->pause($this->longDelay);
 
         $this->order->orderProducts()
             ->where('quantity_to_pick', '>', 0)
@@ -176,7 +174,7 @@ class PagesWalkTroughTest extends DuskTestCase
                 $browser->driver->getKeyboard()->sendKeys($orderProduct->product->sku);
                 $browser->pause(500)
                     ->keys('#barcodeInput', '{enter}')
-                    ->pause(1000);
+                    ->pause($this->longDelay);
             });
     }
 
@@ -187,9 +185,8 @@ class PagesWalkTroughTest extends DuskTestCase
      */
     private function dashboard(Browser $browser): void
     {
-// Dashboard
-        $browser->mouseover('#dashboard_link')->pause(200)->click('#dashboard_link')->pause(1000)
-            ->pause(1000);
+        $browser->mouseover('#dashboard_link')->pause($this->shortDelay)->click('#dashboard_link')->pause($this->longDelay)
+            ->pause($this->longDelay);
     }
 
     /**
@@ -197,9 +194,33 @@ class PagesWalkTroughTest extends DuskTestCase
      */
     private function stocktaking(Browser $browser): void
     {
-// Stocktaking
-        $browser->mouseover('#tools_link')->pause(200)->clickLink('Tools')->pause(200)
-            ->mouseover('#stocktaking_link')->pause(200)->clickLink('Stocktaking')->pause(200)
-            ->pause(1000);
+        $browser->mouseover('#tools_link')->pause($this->shortDelay)->clickLink('Tools')->pause($this->shortDelay)
+            ->mouseover('#stocktaking_link')->pause($this->shortDelay)->clickLink('Stocktaking')->pause($this->shortDelay)
+            ->pause($this->longDelay);
+    }
+
+    /**
+     * @param Browser $browser
+     */
+    private function products(Browser $browser): void
+    {
+        $browser->mouseover('#products_link')->pause($this->shortDelay)->clickLink('Products')->pause($this->longDelay);
+    }
+
+    /**
+     * @param Browser $browser
+     */
+    private function orders(Browser $browser): void
+    {
+        $browser->mouseover('#orders_link')->pause($this->shortDelay)->clickLink('Orders')->pause($this->longDelay);
+    }
+
+    /**
+     * @param Browser $browser
+     */
+    private function restocking(Browser $browser): void
+    {
+        $browser->mouseover('#tools_link')->pause($this->shortDelay)->clickLink('Tools')->pause($this->shortDelay)
+            ->mouseover('#restocking_link')->pause($this->shortDelay)->clickLink('Restocking')->pause($this->longDelay);
     }
 }
