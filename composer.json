@@ -31,7 +31,6 @@
         "makeabledk/laravel-factory-enhanced": "^2.1|3.*|4.*",
         "milon/barcode": "^9.0",
         "rap2hpoutre/laravel-log-viewer": "^1.7",
-        "romanzipp/laravel-queue-monitor": "2.1.*",
         "sentry/sentry-laravel": "^2.4",
         "spatie/array-to-xml": "^2.15",
         "spatie/laravel-activitylog": "^4.1",

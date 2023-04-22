@@ -44,9 +44,4 @@ Route::prefix('tools')->group(function () {
     // github.com/rap2hpoutre/laravel-log-viewer
     Route::get('log-viewer', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])
         ->name('tools.log-viewer');
-
-    // github.com/romanzipp/Laravel-Queue-Monitor
-    Route::prefix('queue-monitor')->group(function () {
-        Route::queueMonitor();
-    });
 });
