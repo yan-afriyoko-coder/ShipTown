@@ -105,7 +105,6 @@
       <path value="$PROJECT_DIR$/vendor/spatie/laravel-database-mail-templates" />
       <path value="$PROJECT_DIR$/vendor/ralouphie/getallheaders" />
       <path value="$PROJECT_DIR$/vendor/spatie/laravel-tags" />
-      <path value="$PROJECT_DIR$/vendor/romanzipp/laravel-queue-monitor" />
       <path value="$PROJECT_DIR$/vendor/spatie/eloquent-sortable" />
       <path value="$PROJECT_DIR$/vendor/sebastian/comparator" />
       <path value="$PROJECT_DIR$/vendor/spatie/backtrace" />

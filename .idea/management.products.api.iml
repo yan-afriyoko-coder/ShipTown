@@ -116,7 +116,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/spatie/laravel-database-mail-templates" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ralouphie/getallheaders" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/spatie/laravel-tags" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/romanzipp/laravel-queue-monitor" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/spatie/eloquent-sortable" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/comparator" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/spatie/backtrace" />
