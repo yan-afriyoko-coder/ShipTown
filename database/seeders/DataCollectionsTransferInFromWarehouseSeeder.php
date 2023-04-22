@@ -18,11 +18,7 @@ class DataCollectionsTransferInFromWarehouseSeeder extends Seeder
      */
     public function run()
     {
-        $warehouse = Warehouse::query()->firstOrCreate([
-            'code' => 'WHS',
-        ], [
-            'name' => 'Warehouse',
-        ]);
+        $warehouse = Warehouse::query()->firstOrCreate(['code' => 'WHS'], ['name' => 'Warehouse']);
 
         Warehouse::query()
             ->whereNotIn('id', [$warehouse->id])
@@ -32,7 +28,7 @@ class DataCollectionsTransferInFromWarehouseSeeder extends Seeder
                     'warehouse_id' =>  $destinationWarehouse->getKey(),
                     'name' => implode('', [
                         'Transfer from ',
-                        $warehouse->code,
+                        $warehouse->name,
                     ]),
                     'type' => DataCollectionTransferIn::class,
                 ]);

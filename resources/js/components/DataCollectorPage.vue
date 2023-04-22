@@ -8,7 +8,7 @@
             <template v-slot:content>
                     <div class="row setting-list">
                         <div class="col-sm-12 col-lg-6">
-                            <div class="text-primary">{{ dataCollection ? dataCollection['name'] : '' }}</div>
+                            <div id="data_collection_name" class="text-primary">{{ dataCollection ? dataCollection['name'] : '' }}</div>
                             <div class="text-secondary small">{{ formatDateTime(dataCollection ? dataCollection['created_at'] : '', 'dddd - MMM D HH:mm')  }}</div>
                         </div>
                         <div class="col-sm-12 col-lg-6" v-if="dataCollection && dataCollection['deleted_at']">

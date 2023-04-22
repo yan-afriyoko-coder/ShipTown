@@ -9,6 +9,7 @@ use App\Models\Warehouse;
 use App\User;
 use Facebook\WebDriver\Exception\ElementClickInterceptedException;
 use Facebook\WebDriver\Exception\NoSuchElementException;
+use Facebook\WebDriver\Exception\TimeOutException;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
@@ -18,7 +19,7 @@ class PagesWalkTroughTest extends DuskTestCase
     private Order $order;
     private User $user;
     private int $shortDelay = 200;
-    private int $longDelay = 1000;
+    private int $longDelay = 0;
 
     protected function setUp(): void
     {
@@ -73,6 +74,7 @@ class PagesWalkTroughTest extends DuskTestCase
      * @param Browser $browser
      * @throws ElementClickInterceptedException
      * @throws NoSuchElementException
+     * @throws TimeOutException
      */
     private function packlist(Browser $browser): void
     {
@@ -86,18 +88,20 @@ class PagesWalkTroughTest extends DuskTestCase
             ->pause($this->longDelay);
 
         while ($this->order->orderProducts()->where('quantity_to_ship', '>', 0)->exists()) {
+            /** @var OrderProduct $orderProduct */
             $orderProduct = $this->order->orderProducts()
                 ->where('quantity_to_ship', '>', 0)
                 ->orderBy('id')
                 ->get()
                 ->first();
 
-                $browser->assertSee($orderProduct->product->sku);
+            $browser->waitForText($orderProduct->product->sku);
+            $browser->assertSee($orderProduct->product->sku);
 
-                $browser->driver->getKeyboard()->sendKeys($orderProduct->product->sku);
-                $browser->pause($this->shortDelay)
-                    ->keys('#barcodeInput', '{enter}')
-                    ->pause(1500);
+            $browser->driver->getKeyboard()->sendKeys($orderProduct->product->sku);
+            $browser->pause($this->shortDelay)
+                ->keys('#barcodeInput', '{enter}')
+                ->pause(1500);
         }
 
         $browser->pause(2000)
@@ -124,16 +128,25 @@ class PagesWalkTroughTest extends DuskTestCase
      * @param Browser $browser
      * @throws ElementClickInterceptedException
      * @throws NoSuchElementException
+     * @throws TimeOutException
      */
     private function transferIn(Browser $browser): void
     {
-        $browser->mouseover('#tools_link')->pause($this->shortDelay)->clickLink('Tools')->pause($this->shortDelay)
-            ->mouseover('#data_collector_link')->pause($this->shortDelay)->clickLink('Data Collector')->pause($this->longDelay)
+        $browser->mouseover('#tools_link')->pause($this->shortDelay)
+            ->click('#tools_link')->pause($this->shortDelay)
+            ->mouseover('#data_collector_link')->pause($this->shortDelay)
+            ->clickLink('Data Collector')->pause($this->longDelay)
             ->click('#new_data_collection')->pause($this->longDelay)
-            ->typeSlowly('#collection_name_input', 'Stock delivery')->pause($this->shortDelay)
+            ->typeSlowly('#collection_name_input', 'Stock delivery')
             ->press('OK')
+            ->waitUntilMissing('#collection_name_input');
+
+        $browser->waitFor('@data_collection_record')
             ->pause($this->longDelay)
-            ->mouseover('@data_collection_record')->click('@data_collection_record')
+            ->mouseover('@data_collection_record')->pause($this->shortDelay)
+            ->click('@data_collection_record')
+            ->waitUntilMissing('@data_collection_record')
+            ->waitFor('#data_collection_name')
             ->pause($this->longDelay);
 
         $this->order->orderProducts()
@@ -143,6 +156,7 @@ class PagesWalkTroughTest extends DuskTestCase
                 $browser->driver->getKeyboard()->sendKeys($orderProduct->product->sku);
 
                 $browser->keys('#barcodeInput', '{enter}')
+                    ->waitForInput('data-collection-record-quantity-request-input')
                     ->pause($this->shortDelay)
                     ->typeSlowly('#data-collection-record-quantity-request-input', 12)->pause($this->shortDelay)
                     ->keys('#data-collection-record-quantity-request-input', '{enter}')
@@ -170,6 +184,7 @@ class PagesWalkTroughTest extends DuskTestCase
             ->where('quantity_to_pick', '>', 0)
             ->first()
             ->each(function (OrderProduct $orderProduct) use ($browser) {
+                $browser->waitForText($orderProduct->product->sku);
                 $browser->assertSee($orderProduct->product->sku);
                 $browser->driver->getKeyboard()->sendKeys($orderProduct->product->sku);
                 $browser->pause(500)

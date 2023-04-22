@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
 
 //            RestockingReportSeeder::class,
 //            DataCollectionsSeeder::class,
-//            DataCollectionsTransferInFromWarehouseSeeder::class,
+            DataCollectionsTransferInFromWarehouseSeeder::class,
 //            RmsapiConnectionSeeder::class,
 //            StocktakeSuggestionsSeeder::class,
 //            AutomationsSeeder::class,
