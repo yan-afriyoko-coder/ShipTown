@@ -9,7 +9,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
-use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class NegativeWarehouseStockJob implements ShouldQueue
 {
@@ -17,7 +16,6 @@ class NegativeWarehouseStockJob implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-    use IsMonitored;
 
     private int $warehouse_id;
 

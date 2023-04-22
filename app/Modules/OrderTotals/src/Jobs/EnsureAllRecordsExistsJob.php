@@ -2,7 +2,6 @@
 
 namespace App\Modules\OrderTotals\src\Jobs;
 
-use App\Traits\IsMonitored;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -15,8 +14,7 @@ class EnsureAllRecordsExistsJob implements ShouldQueue
     use Dispatchable,
         InteractsWithQueue,
         Queueable,
-        SerializesModels,
-        IsMonitored;
+        SerializesModels;
 
     /**
      * @var string
