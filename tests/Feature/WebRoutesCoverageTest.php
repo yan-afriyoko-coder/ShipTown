@@ -1,13 +1,9 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers;
+namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use PhpParser\Node\Stmt\Return_;
 use Tests\TestCase;
 
 class WebRoutesCoverageTest extends TestCase
