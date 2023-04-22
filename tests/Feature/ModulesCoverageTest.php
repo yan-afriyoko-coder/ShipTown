@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Modules;
+namespace Tests\Feature;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
