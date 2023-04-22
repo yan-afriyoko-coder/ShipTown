@@ -11,8 +11,6 @@ use Tests\TestCase;
 
 class RefillOldOrdersPickingJobTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * A basic feature test example.
      *
@@ -20,6 +18,7 @@ class RefillOldOrdersPickingJobTest extends TestCase
      */
     public function testExample()
     {
+        /** @var Order $order */
         $order = Order::factory()->create([
             'order_placed_at' => Carbon::now()->subDays(100),
             'status_code'     => 'processing',
