@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Widgets;
+namespace Tests\Unit\Widgets;
 
 use App\Models\Order;
 use App\Widgets\NewOrdersCounts;
