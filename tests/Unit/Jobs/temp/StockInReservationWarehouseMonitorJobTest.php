@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Jobs\temp;
+namespace Tests\Unit\Jobs\temp;
 
 use App\Events\HourlyEvent;
 use App\Models\Inventory;
