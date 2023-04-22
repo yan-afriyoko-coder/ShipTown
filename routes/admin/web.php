@@ -39,9 +39,3 @@ Route::prefix('settings')->group(function () {
         Admin\Settings\Modules\Webhooks\SubscriptionController::class, 'index'])
             ->name('webhooks::subscriptions');
 });
-
-Route::prefix('tools')->group(function () {
-    // github.com/rap2hpoutre/laravel-log-viewer
-    Route::get('log-viewer', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])
-        ->name('tools.log-viewer');
-});
