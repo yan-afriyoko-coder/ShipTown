@@ -18,7 +18,7 @@ class PagesWalkTroughTest extends DuskTestCase
 {
     private Order $order;
     private User $user;
-    private int $shortDelay = 0;
+    private int $shortDelay = 50;
     private int $longDelay = 0;
 
     protected function setUp(): void
@@ -156,6 +156,7 @@ class PagesWalkTroughTest extends DuskTestCase
                 $browser->driver->getKeyboard()->sendKeys($orderProduct->product->sku);
 
                 $browser->keys('#barcodeInput', '{enter}')
+                    ->pause($this->shortDelay)
                     ->waitForInput('data-collection-record-quantity-request-input')
                     ->pause($this->shortDelay)
                     ->typeSlowly('#data-collection-record-quantity-request-input', 12)->pause($this->shortDelay)
