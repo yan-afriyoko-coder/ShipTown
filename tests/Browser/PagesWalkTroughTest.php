@@ -18,7 +18,7 @@ class PagesWalkTroughTest extends DuskTestCase
 {
     private Order $order;
     private User $user;
-    private int $shortDelay = 200;
+    private int $shortDelay = 0;
     private int $longDelay = 0;
 
     protected function setUp(): void
