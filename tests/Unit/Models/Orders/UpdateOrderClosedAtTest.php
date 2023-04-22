@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Orders;
+namespace Tests\Unit\Models\Orders;
 
 use App\Models\Order;
 use App\Models\OrderStatus;
