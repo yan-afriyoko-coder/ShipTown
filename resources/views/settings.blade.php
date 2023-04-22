@@ -102,28 +102,7 @@
                         <div class="setting-desc">View and update application API tokens and OAuth clients</div>
                     </div>
                 </a>
-
-                <a href="{{ route('queue-monitor::index') }}" target="_blank" class="setting-list">
-                    <div class="setting-icon">
-                        <font-awesome-icon icon="desktop" class="fa-sm"></font-awesome-icon>
-                    </div>
-                    <div class="setting-body">
-                        <div class="setting-title">Queue Monitor</div>
-                        <div class="setting-desc">Open jobs monitor</div>
-                    </div>
-                </a>
-
-                <a href="{{ route('tools.log-viewer') }}" target="_blank" class="setting-list">
-                    <div class="setting-icon">
-                        <font-awesome-icon icon="clipboard-list" class="fa-sm"></font-awesome-icon>
-                    </div>
-                    <div class="setting-body">
-                        <div class="setting-title">Log Viewer</div>
-                        <div class="setting-desc">View application logs</div>
-                    </div>
-                </a>
             </div>
-
         </div>
     </div>
 </div>
