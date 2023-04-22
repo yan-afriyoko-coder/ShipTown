@@ -18,7 +18,7 @@ class PagesWalkTroughTest extends DuskTestCase
 {
     private Order $order;
     private User $user;
-    private int $shortDelay = 50;
+    private int $shortDelay = 200;
     private int $longDelay = 0;
 
     protected function setUp(): void
@@ -58,6 +58,8 @@ class PagesWalkTroughTest extends DuskTestCase
     public function testExample()
     {
         $this->browse(function (Browser $browser) {
+            $browser->disableFitOnFailure();
+
             $this->login($browser);
             $this->transferIn($browser);
             $this->stocktaking($browser);
@@ -146,18 +148,23 @@ class PagesWalkTroughTest extends DuskTestCase
             ->mouseover('@data_collection_record')->pause($this->shortDelay)
             ->click('@data_collection_record')
             ->waitUntilMissing('@data_collection_record')
-            ->waitFor('#data_collection_name')
-            ->pause($this->longDelay);
+            ->waitFor('#data_collection_name');
 
         $this->order->orderProducts()
             ->where('quantity_to_ship', '>', 0)
             ->first()
             ->each(function (OrderProduct $orderProduct) use ($browser) {
-                $browser->driver->getKeyboard()->sendKeys($orderProduct->product->sku);
+                $browser->pause($this->shortDelay);
 
-                $browser->keys('#barcodeInput', '{enter}')
+                $browser->driver->getKeyboard()->sendKeys($orderProduct->product->sku);
+                $browser->keys('#barcodeInput', '{enter}');
+                $browser->pause($this->shortDelay);
+
+                $browser->screenshot('transferIn');
+
+                $browser->waitForText($orderProduct->product->sku)
                     ->pause($this->shortDelay)
-                    ->waitForInput('data-collection-record-quantity-request-input')
+                    ->waitFor('#data-collection-record-quantity-request-input')
                     ->pause($this->shortDelay)
                     ->typeSlowly('#data-collection-record-quantity-request-input', 12)->pause($this->shortDelay)
                     ->keys('#data-collection-record-quantity-request-input', '{enter}')
