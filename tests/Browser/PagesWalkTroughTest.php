@@ -163,8 +163,9 @@ class PagesWalkTroughTest extends DuskTestCase
                 $browser->screenshot('transferIn');
 
                 $browser->waitForText($orderProduct->product->sku)
-                    ->pause($this->shortDelay)
-                    ->waitFor('#data-collection-record-quantity-request-input')
+                    ->pause($this->shortDelay);
+
+                $browser->waitFor('#data-collection-record-quantity-request-input')
                     ->pause($this->shortDelay)
                     ->typeSlowly('#data-collection-record-quantity-request-input', 12)->pause($this->shortDelay)
                     ->keys('#data-collection-record-quantity-request-input', '{enter}')
