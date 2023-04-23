@@ -210,6 +210,13 @@ export default {
                 });
         },
 
+        deletePick(pick) {
+            return this.apiDeletePick(pick['id'])
+                .catch( error => {
+                    this.$snotify.error('Action failed (Http code  '+ error.response.status+')');
+                });
+        },
+
         removeFromPicklist: function (pick) {
             this.picklist.splice(this.picklist.indexOf(pick), 1);
         },
@@ -217,8 +224,8 @@ export default {
         pickAll(pick) {
             this.current_shelf_location = pick['inventory_source_shelf_location'];
             this.postPick(pick, pick['quantity_required'], 0)
-                .then( () => {
-                    this.displayPickedNotification(pick, pick['quantity_required']);
+                .then( (response) => {
+                    this.displayPickedNotification(response.data['data'][0], pick['quantity_required']);
                     this.beep();
                     this.removeFromPicklist(pick);
                     this.reloadPicks();
@@ -226,7 +233,7 @@ export default {
             this.setFocusOnBarcodeInput();
         },
 
-        deletePick: function (pick) {
+        skipPick: function (pick) {
             this.postPick(pick, 0, pick['quantity_required'])
                 .then(() => {
                     this.$snotify.warning('Pick deleted', {
@@ -260,7 +267,7 @@ export default {
                         text: 'Delete Pick',
                         action: (toast) => {
                             this.$snotify.remove(toast.id)
-                            this.deletePick(pick);
+                            this.skipPick(pick);
                             this.setFocusOnBarcodeInput();
                         }
                     },
@@ -324,18 +331,32 @@ export default {
 
         undoPick(pick, quantity) {
             this.showLoading();
-            this.postPickUpdate(pick, -quantity)
+            // this.deletePick(pick);
+            this.apiDeletePick(pick['id'])
                 .then( () => {
-                    this.reloadPicks()
-                        .then(() => {
-                            this.hideLoading();
-                            this.$snotify.warning('Action reverted', {
-                                timeout: 1500,
-                                icon: false,
-                            });
-                            this.warningBeep();
-                        });
+                    this.reloadPicks();
+                    this.hideLoading();
+                    this.$snotify.warning('Action reverted', {
+                        timeout: 1500,
+                        icon: false,
+                    });
+                    this.warningBeep();
+                })
+                .catch( error => {
+                    this.$snotify.error('Action failed (Http code  '+ error.response.status+')');
                 });
+            // this.postPickUpdate(pick, -quantity)
+            //     .then( () => {
+            //         this.reloadPicks()
+            //             .then(() => {
+            //                 this.hideLoading();
+            //                 this.$snotify.warning('Action reverted', {
+            //                     timeout: 1500,
+            //                     icon: false,
+            //                 });
+            //                 this.warningBeep();
+            //             });
+            //     });
         },
 
         displayPickedNotification: function (pick, quantity) {

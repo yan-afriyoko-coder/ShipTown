@@ -7,7 +7,6 @@ use App\Http\Requests\Picklist\StoreDeletedPickRequest;
 use App\Models\OrderProduct;
 use App\Models\OrderProductPick;
 use App\Models\Pick;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -18,9 +17,9 @@ class PicklistPickController extends Controller
     /**
      * @param StoreDeletedPickRequest $request
      *
-     * @return AnonymousResourceCollection
+     * @return JsonResource
      */
-    public function store(StoreDeletedPickRequest $request): AnonymousResourceCollection
+    public function store(StoreDeletedPickRequest $request): JsonResource
     {
         if ($request->get('quantity_picked', 0) !== 0) {
             $key = 'quantity_picked';
@@ -37,7 +36,8 @@ class PicklistPickController extends Controller
 
         $first = $orderProducts->first();
 
-        $pick = Pick::create([
+        /** @var Pick $pick */
+        $pick = Pick::query()->create([
             'user_id'                  => request()->user()->getKey(),
             'warehouse_code'           => request()->user()->warehouse->code,
             'product_id'               => $first['product_id'],
@@ -66,6 +66,14 @@ class PicklistPickController extends Controller
                 break;
             }
         }
-        return JsonResource::collection($orderProducts);
+
+        return JsonResource::make([$pick]);
+    }
+
+    public function destroy(Pick $pick): JsonResource
+    {
+        $pick->delete();
+
+        return JsonResource::make([$pick]);
     }
 }
