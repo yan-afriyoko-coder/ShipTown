@@ -48,6 +48,7 @@ trait ResetsDatabase
         Product::query()->forceDelete();
         Inventory::query()->forceDelete();
         ProductAlias::query()->forceDelete();
+
         OrderProduct::query()->forceDelete();
         Order::query()->forceDelete();
         OrderStatus::query()->forceDelete();

@@ -17,7 +17,7 @@ class OrderProductPick extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $table = 'picks_order_products';
+    protected $table = 'picks_orders_products';
 
     protected $fillable = [
         'pick_id',
