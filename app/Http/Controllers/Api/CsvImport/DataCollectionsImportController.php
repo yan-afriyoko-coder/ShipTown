@@ -99,7 +99,7 @@ class DataCollectionsImportController extends Controller
                             NOW(),
                             NOW()
 
-                        FROM ' . $tempTableName . ' WHERE IFNULL(`' .$warehouse->code. '`, 0)  > 0
+                        FROM ' . $tempTableName . ' WHERE IFNULL(`' .$warehouse->code. '`, 0) != 0
                     ');
                 }
             });
