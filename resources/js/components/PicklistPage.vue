@@ -37,7 +37,6 @@
             </template>
         </div>
 
-
         <div class="row" v-if="isLoading">
             <div class="col">
                 <div ref="loadingContainerOverride" style="height: 32px"></div>
@@ -162,9 +161,8 @@ export default {
         reloadPicks() {
             this.showLoading();
 
-            this.setFocusOnBarcodeInput(500);
+            this.setFocusOnBarcodeInput(300);
 
-            // this.picklist = [];
             const params = {
                 'include': 'product,product.aliases',
                 'sort': 'inventory_source_shelf_location,sku_ordered',
@@ -329,13 +327,10 @@ export default {
             });
         },
 
-        undoPick(pick, quantity) {
+        undoPick(pick) {
             this.showLoading();
-            // this.deletePick(pick);
             this.apiDeletePick(pick['id'])
                 .then( () => {
-                    this.reloadPicks();
-                    this.hideLoading();
                     this.$snotify.warning('Action reverted', {
                         timeout: 1500,
                         icon: false,
@@ -343,20 +338,12 @@ export default {
                     this.warningBeep();
                 })
                 .catch( error => {
-                    this.$snotify.error('Action failed (Http code  '+ error.response.status+')');
+                    this.displayApiCallError(error);
+                })
+                .then( () => {
+                    this.reloadPicks();
+                    this.hideLoading();
                 });
-            // this.postPickUpdate(pick, -quantity)
-            //     .then( () => {
-            //         this.reloadPicks()
-            //             .then(() => {
-            //                 this.hideLoading();
-            //                 this.$snotify.warning('Action reverted', {
-            //                     timeout: 1500,
-            //                     icon: false,
-            //                 });
-            //                 this.warningBeep();
-            //             });
-            //     });
         },
 
         displayPickedNotification: function (pick, quantity) {
