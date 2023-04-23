@@ -2,21 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\InvalidSelectException;
 use App\Modules\Reports\src\Models\DataCollectionReport;
-use App\Modules\Reports\src\Models\RestockingReport;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
+use Illuminate\Http\Response;
 
 class DataCollectorController extends Controller
 {
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws InvalidSelectException
-     * @throws NotFoundExceptionInterface
-     */
-    public function index(Request $request, $id)
+    public function index(Request $request, $id): Factory|View|Response|Application|ResponseFactory
     {
         if ($request->has('filename')) {
             $report = new DataCollectionReport();

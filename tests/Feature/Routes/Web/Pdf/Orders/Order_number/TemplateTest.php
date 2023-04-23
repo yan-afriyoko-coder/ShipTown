@@ -4,7 +4,6 @@ namespace Tests\Feature\Routes\Web\Pdf\Orders\Order_number;
 
 use App\Models\Order;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
@@ -12,12 +11,10 @@ use Tests\TestCase;
  */
 class TemplateTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * @var string
      */
-    protected string $uri = 'set in setUp() method';
+    protected string $uri = 'this set in setUp() method';
 
     /**
      * @var User

@@ -28,6 +28,7 @@
                 <div class="col-12">
                     <input class="form-control" :placeholder="'quantity to add'" :class="{ 'border-danger': this.quantity < 0, 'border-success': this.quantity > 0}"
                            id="data-collection-record-quantity-request-input"
+                           name="data-collection-record-quantity-request-input"
                            ref="data-collection-record-quantity-request-input"
                            dusk="data-collection-record-quantity-request-input"
                            v-model="quantity"

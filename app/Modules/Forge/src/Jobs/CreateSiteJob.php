@@ -8,7 +8,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Laravel\Forge\Forge;
-use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 /**
  * Class SyncCheckFailedProductsJob.
@@ -20,7 +19,6 @@ class CreateSiteJob implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-    use IsMonitored;
 
     /**
      * @var string

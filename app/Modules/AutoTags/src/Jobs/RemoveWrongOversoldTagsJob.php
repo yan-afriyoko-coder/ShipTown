@@ -9,7 +9,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class RemoveWrongOversoldTagsJob implements ShouldQueue
 {
@@ -17,7 +16,6 @@ class RemoveWrongOversoldTagsJob implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-    use IsMonitored;
 
     /**
      * Execute the job.

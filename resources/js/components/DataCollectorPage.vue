@@ -8,7 +8,7 @@
             <template v-slot:content>
                     <div class="row setting-list">
                         <div class="col-sm-12 col-lg-6">
-                            <div class="text-primary">{{ dataCollection ? dataCollection['name'] : '' }}</div>
+                            <div id="data_collection_name" class="text-primary">{{ dataCollection ? dataCollection['name'] : '' }}</div>
                             <div class="text-secondary small">{{ formatDateTime(dataCollection ? dataCollection['created_at'] : '', 'dddd - MMM D HH:mm')  }}</div>
                         </div>
                         <div class="col-sm-12 col-lg-6" v-if="dataCollection && dataCollection['deleted_at']">
@@ -25,7 +25,7 @@
 
             <barcode-input-field :url_param_name="'filter[shelf_location_greater_than]'" @barcodeScanned="setMinShelfLocation" placeholder="shelf" style="width: 75px" class="text-center ml-2 font-weight-bold"></barcode-input-field>
 
-            <button v-b-modal="'configuration-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
+            <button id="showConfigurationButton" v-b-modal="'configuration-modal'" type="button" class="btn btn-primary ml-2"><font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon></button>
         </div>
 
         <data-collector-quantity-request-modal
@@ -94,7 +94,7 @@
                     <button :disabled="! buttonsEnabled" @click.prevent="autoScanAll" v-b-toggle class="col btn mb-2 btn-primary">AutoScan ALL Records</button>
                     <br>
                     <br>
-                    <button :disabled="! buttonsEnabled" @click.prevent="transferStockIn" v-b-toggle class="col btn mb-2 btn-primary">Transfer In</button>
+                    <button id="transferInButton" :disabled="! buttonsEnabled" @click.prevent="transferStockIn" v-b-toggle class="col btn mb-2 btn-primary">Transfer In</button>
                     <button :disabled="! buttonsEnabled" @click.prevent="transferToWarehouseClick" v-b-toggle class="col btn mb-2 btn-primary">Transfer To...</button>
                     <button :disabled="! buttonsEnabled" @click.prevent="importAsStocktake" v-b-toggle class="col btn mb-2 btn-primary">Import As Stocktake</button>
                     <button :disabled="! buttonsEnabled" @click.prevent="transferStockOut" v-b-toggle class="col btn mb-2 btn-primary">Deduct From Stock</button>

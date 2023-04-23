@@ -7,7 +7,7 @@ use App\Services\ProductService;
 
 class ProductsMergeController extends Controller
 {
-    public function index(ProductsMergeIndexRequest $request)
+    public function index(ProductsMergeIndexRequest $request): string
     {
         ProductService::merge($request->input('sku1'), $request->input('sku2'));
 

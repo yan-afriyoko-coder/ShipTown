@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use App\Models\OrderProduct;
 use App\User;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
@@ -38,7 +37,7 @@ abstract class DuskTestCase extends BaseTestCase
         $options = (new ChromeOptions())->addArguments([
             '--disable-gpu',
             '--headless',
-            '--window-size=350,750',
+            '--window-size=300,900',
         ]);
 
         return RemoteWebDriver::create(

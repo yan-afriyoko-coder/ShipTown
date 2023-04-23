@@ -28,6 +28,26 @@ class StocktakingPageTest extends DuskTestCase
     /**
      * @throws Throwable
      */
+    public function testIfPageDisplaysCorrectly()
+    {
+        $this->browse(function (Browser $browser) {
+            /** @var User $user */
+            $user = User::factory()->create();
+            $warehouse = Warehouse::factory()->create();
+            $user->warehouse()->associate($warehouse);
+
+            $browser->loginAs($user)
+                ->visit($this->uri)
+                ->pause(500)
+                ->assertSee('RECENT STOCKTAKES')
+                ->assertSee('SEE MORE')
+                ->assertSourceMissing('snotify-error')
+                ->assertFocused('#stocktake-input');
+        });
+    }
+    /**
+     * @throws Throwable
+     */
     public function testSuccessfulStocktakeAction()
     {
         $this->browse(function (Browser $browser) {

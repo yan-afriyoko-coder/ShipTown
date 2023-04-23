@@ -3,6 +3,7 @@
 namespace Tests\Browser\Routes;
 
 use App\Models\Product;
+use App\Models\Warehouse;
 use App\User;
 use Exception;
 use Laravel\Dusk\Browser;
@@ -38,6 +39,8 @@ class ProductsMergePageTest extends DuskTestCase
             $user = User::factory()->create();
             $user->assignRole('user');
 
+            $user->warehouse()->associate(Warehouse::factory()->create());
+
             $browser->disableFitOnFailure()
                 ->loginAs($user)
                 ->visit($this->uri.'?sku1=sku1&sku2=sku2')
@@ -57,10 +60,11 @@ class ProductsMergePageTest extends DuskTestCase
             $admin = User::factory()->create();
             $admin->assignRole('admin');
 
-            $browser->disableFitOnFailure()
-                ->loginAs($admin)
-                ->visit($this->uri.'?sku1=sku1&sku2=sku2')
-                ->pause(300)
+            $browser->disableFitOnFailure();
+
+            $browser->loginAs($admin);
+            $browser->visit($this->uri.'?sku1=sku1&sku2=sku2');
+            $browser->assertDontSee('SERVER ERROR')
                 ->assertPathIs($this->uri)
                 ->assertSourceMissing('snotify-error');
         });

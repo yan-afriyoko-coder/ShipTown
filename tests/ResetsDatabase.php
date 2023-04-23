@@ -15,6 +15,7 @@ use App\Models\OrderProductTotal;
 use App\Models\OrderStatus;
 use App\Models\Product;
 use App\Models\ProductAlias;
+use App\Models\Session;
 use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartProductLink;
@@ -28,6 +29,7 @@ use App\Modules\MagentoApi\src\Models\MagentoProduct;
 use App\Modules\PrintNode\src\Models\Client;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Services\ModulesService;
+use App\User;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Tags\Tag;
@@ -50,7 +52,6 @@ trait ResetsDatabase
         Order::query()->forceDelete();
         OrderStatus::query()->forceDelete();
         Configuration::query()->forceDelete();
-        Warehouse::query()->forceDelete();
         Tag::query()->forceDelete();
         OrderProductTotal::query()->forceDelete();
         InventoryMovement::query()->forceDelete();
@@ -59,7 +60,6 @@ trait ResetsDatabase
         Condition::query()->forceDelete();
         Action::query()->forceDelete();
         CacheLock::query()->forceDelete();
-        InventoryMovement::query()->forceDelete();
         Heartbeat::query()->forceDelete();
 
         Module::query()->forceDelete();
@@ -80,6 +80,10 @@ trait ResetsDatabase
         ModulesService::updateModulesTable();
 
         DB::table('modules_queue_monitor_jobs')->delete();
+        InventoryMovement::query()->forceDelete();
+        User::query()->forceDelete();
+        Warehouse::query()->forceDelete();
+        Session::query()->forceDelete();
 
         // now re-register all the roles and permissions (clears cache and reloads relations)
         $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->registerPermissions();

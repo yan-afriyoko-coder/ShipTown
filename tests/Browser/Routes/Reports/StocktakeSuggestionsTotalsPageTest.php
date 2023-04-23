@@ -2,6 +2,7 @@
 
 namespace Tests\Browser\Routes\Reports;
 
+use App\Models\Warehouse;
 use App\User;
 use Exception;
 use Laravel\Dusk\Browser;
@@ -34,6 +35,8 @@ class StocktakeSuggestionsTotalsPageTest extends DuskTestCase
             $user = User::factory()->create();
             $user->assignRole('user');
 
+            $user->warehouse()->associate(Warehouse::factory()->create());
+
             $browser->disableFitOnFailure()
                 ->loginAs($user)
                 ->visit($this->uri)
@@ -49,12 +52,14 @@ class StocktakeSuggestionsTotalsPageTest extends DuskTestCase
     public function testAdminAccess()
     {
         $this->browse(function (Browser $browser) {
-            /** @var User $admin */
-            $admin = User::factory()->create();
-            $admin->assignRole('admin');
+            /** @var User $user */
+            $user = User::factory()->create();
+            $user->assignRole('admin');
+
+            $user->warehouse()->associate(Warehouse::factory()->create());
 
             $browser->disableFitOnFailure()
-                ->loginAs($admin)
+                ->loginAs($user)
                 ->visit($this->uri)
                 ->pause(300)
                 ->assertPathIs($this->uri)

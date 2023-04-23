@@ -10,7 +10,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class AddMissingOutOfStockTagsJob implements ShouldQueue
 {
@@ -18,7 +17,6 @@ class AddMissingOutOfStockTagsJob implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-    use IsMonitored;
 
     /**
      * Execute the job.

@@ -10,7 +10,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
-use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class SendEmailNotification implements ShouldQueue
 {
@@ -18,8 +17,6 @@ class SendEmailNotification implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-    use IsMonitored;
-
 
     private int $product_id;
 
