@@ -55,13 +55,15 @@ class TwoFactorController extends Controller
 
     public function store(TwoFactorStoreRequest $request): RedirectResponse
     {
-        if ($request->input('two_factor_code') !== $request->user()->two_factor_code) {
+        $user = $request->user();
+
+        if ($request->input('two_factor_code') !== $user->two_factor_code) {
             Auth::logoutCurrentDevice();
-            $request->user()->resetTwoFactorCode();
+            $user->resetTwoFactorCode();
             return redirect()->route('login')->withErrors(['two_factor_code' => 'Invalid code']);
         }
 
-        $request->user()->resetTwoFactorCode();
+        $user->resetTwoFactorCode();
 
         return redirect()->home()->withCookie(cookie('device_guid', Guid::uuid4(), $this->lifetimeInMinutes));
     }
