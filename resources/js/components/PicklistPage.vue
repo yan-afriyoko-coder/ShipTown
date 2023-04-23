@@ -37,7 +37,6 @@
             </template>
         </div>
 
-
         <div class="row" v-if="isLoading">
             <div class="col">
                 <div ref="loadingContainerOverride" style="height: 32px"></div>
@@ -162,9 +161,8 @@ export default {
         reloadPicks() {
             this.showLoading();
 
-            this.setFocusOnBarcodeInput(500);
+            this.setFocusOnBarcodeInput(300);
 
-            // this.picklist = [];
             const params = {
                 'include': 'product,product.aliases',
                 'sort': 'inventory_source_shelf_location,sku_ordered',
@@ -210,6 +208,13 @@ export default {
                 });
         },
 
+        deletePick(pick) {
+            return this.apiDeletePick(pick['id'])
+                .catch( error => {
+                    this.$snotify.error('Action failed (Http code  '+ error.response.status+')');
+                });
+        },
+
         removeFromPicklist: function (pick) {
             this.picklist.splice(this.picklist.indexOf(pick), 1);
         },
@@ -217,8 +222,8 @@ export default {
         pickAll(pick) {
             this.current_shelf_location = pick['inventory_source_shelf_location'];
             this.postPick(pick, pick['quantity_required'], 0)
-                .then( () => {
-                    this.displayPickedNotification(pick, pick['quantity_required']);
+                .then( (response) => {
+                    this.displayPickedNotification(response.data['data'][0], pick['quantity_required']);
                     this.beep();
                     this.removeFromPicklist(pick);
                     this.reloadPicks();
@@ -226,7 +231,7 @@ export default {
             this.setFocusOnBarcodeInput();
         },
 
-        deletePick: function (pick) {
+        skipPick: function (pick) {
             this.postPick(pick, 0, pick['quantity_required'])
                 .then(() => {
                     this.$snotify.warning('Pick deleted', {
@@ -260,7 +265,7 @@ export default {
                         text: 'Delete Pick',
                         action: (toast) => {
                             this.$snotify.remove(toast.id)
-                            this.deletePick(pick);
+                            this.skipPick(pick);
                             this.setFocusOnBarcodeInput();
                         }
                     },
@@ -322,19 +327,22 @@ export default {
             });
         },
 
-        undoPick(pick, quantity) {
+        undoPick(pick) {
             this.showLoading();
-            this.postPickUpdate(pick, -quantity)
+            this.apiDeletePick(pick['id'])
                 .then( () => {
-                    this.reloadPicks()
-                        .then(() => {
-                            this.hideLoading();
-                            this.$snotify.warning('Action reverted', {
-                                timeout: 1500,
-                                icon: false,
-                            });
-                            this.warningBeep();
-                        });
+                    this.$snotify.warning('Action reverted', {
+                        timeout: 1500,
+                        icon: false,
+                    });
+                    this.warningBeep();
+                })
+                .catch( error => {
+                    this.displayApiCallError(error);
+                })
+                .then( () => {
+                    this.reloadPicks();
+                    this.hideLoading();
                 });
         },
 

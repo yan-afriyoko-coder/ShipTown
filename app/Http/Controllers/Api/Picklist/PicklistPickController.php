@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Api\Picklist;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PickDestroyRequest;
 use App\Http\Requests\Picklist\StoreDeletedPickRequest;
 use App\Models\OrderProduct;
+use App\Models\OrderProductPick;
 use App\Models\Pick;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -17,9 +18,9 @@ class PicklistPickController extends Controller
     /**
      * @param StoreDeletedPickRequest $request
      *
-     * @return AnonymousResourceCollection
+     * @return JsonResource
      */
-    public function store(StoreDeletedPickRequest $request): AnonymousResourceCollection
+    public function store(StoreDeletedPickRequest $request): JsonResource
     {
         if ($request->get('quantity_picked', 0) !== 0) {
             $key = 'quantity_picked';
@@ -29,25 +30,15 @@ class PicklistPickController extends Controller
             $quantityToDistribute = $request->get('quantity_skipped_picking');
         }
 
-        $orderProducts = OrderProduct::whereIn('id', $request->get('order_product_ids'))
-            ->latest('order_id')
+        $orderProducts = OrderProduct::query()
+            ->whereIn('id', $request->get('order_product_ids'))
+            ->oldest('order_id')
             ->get();
-
-        foreach ($orderProducts as $orderProduct) {
-            $quantity = min($quantityToDistribute, $orderProduct->quantity_to_pick);
-            $orderProduct->fill([
-                $key => $orderProduct->getAttribute($key) + $quantity,
-            ]);
-            $orderProduct->save();
-            $quantityToDistribute -= $quantity;
-            if ($quantityToDistribute <= 0) {
-                break;
-            }
-        }
 
         $first = $orderProducts->first();
 
-        $pick = Pick::create([
+        /** @var Pick $pick */
+        $pick = Pick::query()->create([
             'user_id'                  => request()->user()->getKey(),
             'warehouse_code'           => request()->user()->warehouse->code,
             'product_id'               => $first['product_id'],
@@ -58,6 +49,32 @@ class PicklistPickController extends Controller
             'quantity_required'        => 0,
         ]);
 
-        return JsonResource::collection($orderProducts);
+        foreach ($orderProducts as $orderProduct) {
+            $quantity = min($quantityToDistribute, $orderProduct->quantity_to_pick);
+            $orderProduct->fill([
+                $key => $orderProduct->getAttribute($key) + $quantity,
+            ]);
+            $orderProduct->save();
+
+            OrderProductPick::query()->create([
+                'pick_id'                 => $pick->id,
+                'order_product_id'        => $orderProduct->id,
+                $key                      => $quantity,
+            ]);
+
+            $quantityToDistribute -= $quantity;
+            if ($quantityToDistribute <= 0) {
+                break;
+            }
+        }
+
+        return JsonResource::make([$pick]);
+    }
+
+    public function destroy(PickDestroyRequest $request, Pick $pick): JsonResource
+    {
+        $pick->delete();
+
+        return JsonResource::make([$pick]);
     }
 }

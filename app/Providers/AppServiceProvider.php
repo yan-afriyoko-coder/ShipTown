@@ -11,6 +11,7 @@ use App\Models\OrderProduct;
 use App\Models\OrderProductShipment;
 use App\Models\OrderShipment;
 use App\Models\OrderStatus;
+use App\Models\Pick;
 use App\Models\Product;
 use App\Models\ProductPrice;
 use App\Models\ShippingLabel;
@@ -24,6 +25,7 @@ use App\Observers\OrderProductObserver;
 use App\Observers\OrderProductShipmentObserver;
 use App\Observers\OrderShipmentObserver;
 use App\Observers\OrderStatusObserver;
+use App\Observers\PickObserver;
 use App\Observers\ProductObserver;
 use App\Observers\ProductPriceObserver;
 use App\Observers\ShippingLabelObserver;
@@ -62,9 +64,9 @@ class AppServiceProvider extends ServiceProvider
         Warehouse::observe(WarehouseObserver::class);
         Module::observe(ModuleObserver::class);
         InventoryMovement::observe(InventoryMovementObserver::class);
-
         ShippingLabel::observe(ShippingLabelObserver::class);
         DataCollectionRecord::observe(DataCollectionRecordObserver::class);
+        Pick::observe(PickObserver::class);
     }
 
     private function registerEnabledModules(): void
