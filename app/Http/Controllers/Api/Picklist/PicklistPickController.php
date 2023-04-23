@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Picklist;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PickDestroyRequest;
 use App\Http\Requests\Picklist\StoreDeletedPickRequest;
 use App\Models\OrderProduct;
 use App\Models\OrderProductPick;
@@ -70,7 +71,7 @@ class PicklistPickController extends Controller
         return JsonResource::make([$pick]);
     }
 
-    public function destroy(Pick $pick): JsonResource
+    public function destroy(PickDestroyRequest $request, Pick $pick): JsonResource
     {
         $pick->delete();
 

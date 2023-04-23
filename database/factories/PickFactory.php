@@ -13,7 +13,7 @@ class PickFactory extends Factory
 
     public function definition(): array
     {
-        $product = Product::query()->inRandomOrder()->first() ?? Product::factory();
+        $product = Product::query()->inRandomOrder()->first() ?? Product::factory()->create();
 
         $user = User::query()->inRandomOrder()->first() ?? User::factory()->create();
 
