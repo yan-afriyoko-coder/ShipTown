@@ -36,11 +36,7 @@ class ReportsServiceProvider extends BaseModuleServiceProvider
     /**
      * @var array
      */
-    protected $listen = [
-        HourlyEvent::class => [
-            Listeners\HourlyEventListener::class,
-        ]
-    ];
+    protected $listen = [];
 
     public static function disabling(): bool
     {

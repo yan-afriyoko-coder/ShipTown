@@ -24,7 +24,6 @@ class BasicModuleTest extends TestCase
         AutoPilotServiceProvider::enableModule();
         InventoryReservationsEventServiceProviderBase::enableModule();
 
-
         Bus::fake();
 
         HourlyEvent::dispatch();
