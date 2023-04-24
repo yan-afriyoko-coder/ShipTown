@@ -51,6 +51,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue, ShouldBeUniqueUnt
             $hasNoRecordsToProcess = ! RmsapiProductImport::query()
                 ->whereNull('reserved_at')
                 ->whereNull('when_processed')
+                ->where('connection_id', $this->connection_id)
                 ->exists();
 
             if ($hasNoRecordsToProcess) {
@@ -59,6 +60,39 @@ class ProcessImportedProductRecordsJob implements ShouldQueue, ShouldBeUniqueUnt
 
             $maxRunCount--;
         } while ($maxRunCount > 0);
+    }
+
+    private function processImportedProducts(int $batch_size): void
+    {
+        $reservationTime = now();
+
+        RmsapiProductImport::query()
+            ->whereNull('reserved_at')
+            ->whereNull('when_processed')
+            ->where('connection_id', $this->connection_id)
+            ->orderByRaw('id ASC')
+            ->limit($batch_size)
+            ->update(['reserved_at' => $reservationTime]);
+
+        $records = RmsapiProductImport::query()
+            ->where('connection_id', $this->connection_id)
+            ->where(['reserved_at' => $reservationTime])
+            ->whereNull('when_processed')
+            ->orderBy('id')
+            ->get();
+
+        $records->each(function (RmsapiProductImport $productImport) {
+            try {
+                retry(3, function () use ($productImport) {
+                    DB::transaction(function () use ($productImport) {
+                        $this->import($productImport);
+                    });
+                }, 1000);
+            } catch (Exception $e) {
+                report($e);
+                Log::emergency($e->getMessage(), $e->getTrace());
+            }
+        });
     }
 
     /**
@@ -217,38 +251,5 @@ class ProcessImportedProductRecordsJob implements ShouldQueue, ShouldBeUniqueUnt
         if ($importedProduct->raw_import['sub_description_3']) {
             $product->syncTagByType('rms_sub_description_3', trim($importedProduct->raw_import['sub_description_3']));
         }
-    }
-
-    private function processImportedProducts(int $batch_size): void
-    {
-        $reservationTime = now();
-
-        RmsapiProductImport::query()
-            ->whereNull('reserved_at')
-            ->where('connection_id', $this->connection_id)
-            ->whereNull('when_processed')
-            ->orderByRaw('id ASC')
-            ->limit($batch_size)
-            ->update(['reserved_at' => $reservationTime]);
-
-        $records = RmsapiProductImport::query()
-            ->where('connection_id', $this->connection_id)
-            ->where(['reserved_at' => $reservationTime])
-            ->whereNull('when_processed')
-            ->orderBy('id')
-            ->get();
-
-        $records->each(function (RmsapiProductImport $productImport) {
-            try {
-                retry(3, function () use ($productImport) {
-                    DB::transaction(function () use ($productImport) {
-                        $this->import($productImport);
-                    });
-                }, 1000);
-            } catch (Exception $e) {
-                report($e);
-                Log::emergency($e->getMessage(), $e->getTrace());
-            }
-        });
     }
 }
