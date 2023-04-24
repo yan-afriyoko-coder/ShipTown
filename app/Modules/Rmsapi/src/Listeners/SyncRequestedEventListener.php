@@ -21,7 +21,6 @@ class SyncRequestedEventListener
         foreach (RmsapiConnection::all() as $rmsapiConnection) {
             ImportSalesJob::dispatch($rmsapiConnection->id);
             ImportShippingsJob::dispatch($rmsapiConnection->id);
-            ProcessImportedSalesRecordsJob::dispatch();
 
             Bus::chain([
                 new ImportProductsJob($rmsapiConnection->id),
@@ -33,5 +32,7 @@ class SyncRequestedEventListener
                 'connection_id' => $rmsapiConnection->id
             ]);
         }
+
+        ProcessImportedSalesRecordsJob::dispatch();
     }
 }

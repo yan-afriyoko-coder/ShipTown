@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Modules\Automations\Conditions;
 
-use App\Events\HourlyEvent;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Modules\Automations\src\Jobs\RunEnabledAutomationsJob;
