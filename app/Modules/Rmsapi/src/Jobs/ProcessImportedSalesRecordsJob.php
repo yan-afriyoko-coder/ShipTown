@@ -46,6 +46,9 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntil
             $hasNoRecordsToProcess = ! RmsapiSaleImport::query()
                 ->whereNull('reserved_at')
                 ->whereNull('processed_at')
+                ->whereNotNull('product_id')
+                ->whereNotNull('warehouse_id')
+                ->where('comment', 'not like', 'PM_OrderProductShipment_%')
                 ->exists();
 
             if ($hasNoRecordsToProcess) {
