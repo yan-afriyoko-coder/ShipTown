@@ -2,8 +2,8 @@
 
 namespace App\Modules\InventoryQuantityIncoming\src\Jobs;
 
-use App\Models\DataCollectionTransferIn;
 use App\Models\Inventory;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -65,6 +65,11 @@ class FixIncorrectQuantityIncomingJob implements ShouldQueue
                     ->where('id', $incorrectRecord->id)
                     ->get()
                     ->each(function ($inventory) use ($incorrectRecord) {
+                        report(new Exception('Incorrect quantity_incoming detected', [
+                            'sku'                        => $inventory->product->sku,
+                            'quantity_incoming_expected' => $incorrectRecord->expected_quantity_incoming,
+                            'quantity_incoming_actual'   => $incorrectRecord->actual_quantity_incoming,
+                        ]));
                         $inventory->quantity_incoming = $incorrectRecord->expected_quantity_incoming;
                         $inventory->save();
                     });
