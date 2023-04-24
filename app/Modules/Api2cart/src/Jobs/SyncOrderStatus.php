@@ -4,7 +4,6 @@ namespace App\Modules\Api2cart\src\Jobs;
 
 use App\Models\Order;
 use App\Modules\Api2cart\src\Api\Orders;
-use App\Modules\Api2cart\src\Exceptions\RequestException;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
@@ -52,15 +51,10 @@ class SyncOrderStatus implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @throws GuzzleException|RequestException
+     * @throws GuzzleException
      */
     public function handle(): bool
     {
-        $this->queueData([
-            'order_number' => $this->order->order_number,
-            'status_code' => $this->order->status_code,
-        ]);
-
         $orderImport = Api2cartOrderImports::where(['order_number' => $this->order->order_number])
             ->latest()
             ->first();
