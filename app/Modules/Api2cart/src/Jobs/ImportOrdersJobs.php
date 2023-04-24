@@ -109,14 +109,11 @@ class ImportOrdersJobs implements ShouldQueue
 
         $orders = Orders::get($api2cartConnection->bridge_api_key, $params);
 
-        if (!$orders) {
-            $this->queueData(['count' => 0]);
-            info('Imported Api2cart orders', ['count' => 0]);
+        info('Imported Api2cart orders', ['count' => count($orders)]);
 
+        if (!$orders) {
             return;
         }
-
-        $this->queueData(['fetched_count' => count($orders)]);
 
         $this->saveOrders($api2cartConnection, $orders);
 

@@ -29,14 +29,14 @@ class SyncOrderStatus implements ShouldQueue
      *
      * @var int
      */
-    public int $tries = 20;
+    public int $tries = 5;
 
     /**
      * The number of seconds to wait before retrying the job.
      *
      * @var int
      */
-    public int $retryAfter = 30;
+    public int $retryAfter = 60;
 
     /**
      * Create a new job instance.
