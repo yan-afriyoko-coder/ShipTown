@@ -2,11 +2,10 @@
 
 namespace App\Modules\InventoryQuantityIncoming\src;
 
+use App\Events\DailyEvent;
 use App\Events\DataCollectionRecordCreatedEvent;
 use App\Events\DataCollectionRecordDeletedEvent;
 use App\Events\DataCollectionRecordUpdatedEvent;
-use App\Events\Every10minEvent;
-use App\Events\HourlyEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
@@ -40,8 +39,8 @@ class InventoryQuantityIncomingServiceProvider extends BaseModuleServiceProvider
             Listeners\SyncRequestedEventListener::class,
         ],
 
-        Every10minEvent::class => [
-            Listeners\Every10minEventListener::class,
+        DailyEvent::class => [
+            Listeners\DailyEventListener::class,
         ],
 
         DataCollectionRecordCreatedEvent::class => [

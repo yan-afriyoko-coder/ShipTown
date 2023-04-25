@@ -26,21 +26,14 @@ class ProcessImportedProductRecordsJob implements ShouldQueue, ShouldBeUniqueUnt
     use Queueable;
     use SerializesModels;
 
-    private int $connection_id;
-
-    public int $uniqueFor = 60;
+    public int $uniqueFor = 600;
 
     public function uniqueId(): string
     {
-        return implode('-', [get_class($this), $this->connection_id]);
+        return implode('-', [get_class($this)]);
     }
 
-    public function __construct(int $connection_id)
-    {
-        $this->connection_id = $connection_id;
-    }
-
-    public function handle()
+    public function handle(): bool
     {
         $batch_size = 200;
         $maxRunCount = 5;
@@ -51,7 +44,6 @@ class ProcessImportedProductRecordsJob implements ShouldQueue, ShouldBeUniqueUnt
             $hasNoRecordsToProcess = ! RmsapiProductImport::query()
                 ->whereNull('reserved_at')
                 ->whereNull('when_processed')
-                ->where('connection_id', $this->connection_id)
                 ->exists();
 
             if ($hasNoRecordsToProcess) {
@@ -60,6 +52,8 @@ class ProcessImportedProductRecordsJob implements ShouldQueue, ShouldBeUniqueUnt
 
             $maxRunCount--;
         } while ($maxRunCount > 0);
+
+        return true;
     }
 
     private function processImportedProducts(int $batch_size): void
@@ -69,13 +63,11 @@ class ProcessImportedProductRecordsJob implements ShouldQueue, ShouldBeUniqueUnt
         RmsapiProductImport::query()
             ->whereNull('reserved_at')
             ->whereNull('when_processed')
-            ->where('connection_id', $this->connection_id)
             ->orderByRaw('id ASC')
             ->limit($batch_size)
             ->update(['reserved_at' => $reservationTime]);
 
         $records = RmsapiProductImport::query()
-            ->where('connection_id', $this->connection_id)
             ->where(['reserved_at' => $reservationTime])
             ->whereNull('when_processed')
             ->orderBy('id')
@@ -83,11 +75,9 @@ class ProcessImportedProductRecordsJob implements ShouldQueue, ShouldBeUniqueUnt
 
         $records->each(function (RmsapiProductImport $productImport) {
             try {
-                retry(3, function () use ($productImport) {
-                    DB::transaction(function () use ($productImport) {
-                        $this->import($productImport);
-                    });
-                }, 1000);
+                DB::transaction(function () use ($productImport) {
+                    $this->import($productImport);
+                });
             } catch (Exception $e) {
                 report($e);
                 Log::emergency($e->getMessage(), $e->getTrace());
@@ -106,7 +96,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue, ShouldBeUniqueUnt
         ];
 
         /** @var Product $product */
-        $product = Product::firstOrCreate(['sku' => $attributes['sku']], $attributes);
+        $product = Product::query()->firstOrCreate(['sku' => $attributes['sku']], $attributes);
 
         if ($product->name !== $attributes['name']) {
             Log::debug('RMSAPI updating product name', [

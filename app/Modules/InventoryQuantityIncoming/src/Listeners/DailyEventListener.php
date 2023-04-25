@@ -4,7 +4,7 @@ namespace App\Modules\InventoryQuantityIncoming\src\Listeners;
 
 use App\Modules\InventoryQuantityIncoming\src\Jobs\FixIncorrectQuantityIncomingJob;
 
-class Every10minEventListener
+class DailyEventListener
 {
     public function handle()
     {
