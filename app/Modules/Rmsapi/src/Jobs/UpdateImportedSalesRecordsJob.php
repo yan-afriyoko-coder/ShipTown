@@ -30,32 +30,28 @@ class UpdateImportedSalesRecordsJob implements ShouldQueue
 
     private function updateWarehouseIds(): void
     {
-        retry(3, function () {
-            DB::statement('
-                UPDATE modules_rmsapi_sales_imports
-                LEFT JOIN modules_rmsapi_connections
-                  ON modules_rmsapi_connections.id = modules_rmsapi_sales_imports.connection_id
+        DB::statement('
+            UPDATE modules_rmsapi_sales_imports
+            LEFT JOIN modules_rmsapi_connections
+              ON modules_rmsapi_connections.id = modules_rmsapi_sales_imports.connection_id
 
-                SET modules_rmsapi_sales_imports.warehouse_id = modules_rmsapi_connections.warehouse_id
+            SET modules_rmsapi_sales_imports.warehouse_id = modules_rmsapi_connections.warehouse_id
 
-                WHERE modules_rmsapi_sales_imports.warehouse_id IS NULL
-            ');
-        }, 1000);
+            WHERE modules_rmsapi_sales_imports.warehouse_id IS NULL
+        ');
     }
 
     private function updateProductIds(): void
     {
-        retry(3, function () {
-            DB::statement('
-                UPDATE modules_rmsapi_sales_imports
-                LEFT JOIN products_aliases
-                  ON modules_rmsapi_sales_imports.sku = products_aliases.alias
+        DB::statement('
+            UPDATE modules_rmsapi_sales_imports
+            LEFT JOIN products_aliases
+              ON modules_rmsapi_sales_imports.sku = products_aliases.alias
 
-                SET modules_rmsapi_sales_imports.product_id = products_aliases.product_id
+            SET modules_rmsapi_sales_imports.product_id = products_aliases.product_id
 
-                WHERE modules_rmsapi_sales_imports.product_id IS NULL
-            ');
-        }, 1000);
+            WHERE modules_rmsapi_sales_imports.product_id IS NULL
+        ');
     }
 
     private function releaseTimesOutSalesRecords(): void

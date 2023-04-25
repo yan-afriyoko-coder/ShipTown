@@ -7,7 +7,6 @@ use App\Modules\Rmsapi\src\Jobs\ImportProductsJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use Exception;
-use Illuminate\Support\Facades\Bus;
 
 class Every10minEventListener
 {
@@ -19,10 +18,9 @@ class Every10minEventListener
         CleanupProductsImportTableJob::dispatch();
 
         foreach (RmsapiConnection::all() as $rmsapiConnection) {
-            Bus::chain([
-                new ImportProductsJob($rmsapiConnection->id),
-                new ProcessImportedProductRecordsJob($rmsapiConnection->id),
-            ])->dispatch();
+            new ImportProductsJob($rmsapiConnection->id);
         }
+
+        ProcessImportedProductRecordsJob::dispatch();
     }
 }

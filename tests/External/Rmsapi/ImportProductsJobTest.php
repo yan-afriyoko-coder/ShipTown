@@ -35,7 +35,7 @@ class ImportProductsJobTest extends TestCase
             'password'     => env('TEST_RMSAPI_PASSWORD'),
         ]);
 
-        $job = new ImportProductsJob($connection->id);
+        $job = new ImportProductsJob($connection->getKey());
 
         $job->handle();
 
