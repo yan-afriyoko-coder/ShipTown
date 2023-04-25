@@ -18,6 +18,13 @@ class SetMissingRestockLevels implements ShouldQueue
 
     private ?int $inventory_id;
 
+    public int $uniqueFor = 600;
+
+    public function uniqueId(): string
+    {
+        return implode('-', [get_class($this)]);
+    }
+
     public function __construct(int $inventory_id = null)
     {
         $this->inventory_id = $inventory_id;
@@ -51,7 +58,5 @@ class SetMissingRestockLevels implements ShouldQueue
                 'reorder_point' => $newReorderPoint,
             ]);
         });
-
-        self::dispatch()->delay(5);
     }
 }
