@@ -58,6 +58,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue, ShouldBeUniqueUnt
 
     private function processImportedProducts(int $batch_size): void
     {
+        Log::debug('Processing imported products', ['batch_size' => $batch_size]);
         $reservationTime = now();
 
         RmsapiProductImport::query()
@@ -66,6 +67,8 @@ class ProcessImportedProductRecordsJob implements ShouldQueue, ShouldBeUniqueUnt
             ->orderByRaw('id ASC')
             ->limit($batch_size)
             ->update(['reserved_at' => $reservationTime]);
+
+        Log::debug('Reserved product records', ['reservationTime' => $reservationTime]);
 
         $records = RmsapiProductImport::query()
             ->where(['reserved_at' => $reservationTime])
