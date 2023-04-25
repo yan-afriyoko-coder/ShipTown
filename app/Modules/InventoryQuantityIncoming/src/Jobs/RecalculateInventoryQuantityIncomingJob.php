@@ -2,8 +2,6 @@
 
 namespace App\Modules\InventoryQuantityIncoming\src\Jobs;
 
-use App\Models\DataCollectionTransferIn;
-use App\Models\DataCollectionTransferOut;
 use App\Models\Inventory;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

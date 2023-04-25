@@ -13,7 +13,7 @@ class DataCollectionRecordUpdatedEventListener
         $record = $event->dataCollectionRecord;
 
         if ($record->dataCollection->type === DataCollectionTransferIn::class) {
-            RecalculateInventoryQuantityIncomingJob::dispatchNow(
+            RecalculateInventoryQuantityIncomingJob::dispatchSync(
                 $record->product_id,
                 $record->dataCollection->warehouse_id
             );

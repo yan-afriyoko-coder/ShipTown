@@ -65,11 +65,14 @@ class FixIncorrectQuantityIncomingJob implements ShouldQueue
                     ->where('id', $incorrectRecord->id)
                     ->get()
                     ->each(function ($inventory) use ($incorrectRecord) {
-                        report(new Exception('Incorrect quantity_incoming detected', [
-                            'sku'                        => $inventory->product->sku,
-                            'quantity_incoming_expected' => $incorrectRecord->expected_quantity_incoming,
-                            'quantity_incoming_actual'   => $incorrectRecord->actual_quantity_incoming,
-                        ]));
+                        $msg = implode(' ', ['Incorrect quantity_incoming detected',
+                            'sku',  $inventory->product->sku,
+                            'quantity_incoming_expected', $incorrectRecord->expected_quantity_incoming,
+                            'quantity_incoming_actual', $incorrectRecord->actual_quantity_incoming,
+                        ]);
+
+                        report(new Exception($msg));
+
                         $inventory->quantity_incoming = $incorrectRecord->expected_quantity_incoming;
                         $inventory->save();
                     });
