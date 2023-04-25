@@ -13,18 +13,5 @@ use Illuminate\Support\Facades\DB;
 
 class Every10minEventListener
 {
-    /**
-     * Handle the event.
-     *
-     * @param Every10minEvent $event
-     *
-     * @return void
-     */
-    public function handle(Every10minEvent $event)
-    {
-//        UpdateMissingTypeAndIdJob::dispatch();
-//        FetchSimpleProductsInfoJob::dispatch();
-//        FetchVariantsInfoJob::dispatch();
-//        CheckForOutOfSyncProductsJob::dispatch();
-    }
+
 }
