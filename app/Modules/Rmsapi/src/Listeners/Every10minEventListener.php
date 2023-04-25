@@ -16,11 +16,5 @@ class Every10minEventListener
     public function handle()
     {
         CleanupProductsImportTableJob::dispatch();
-
-        foreach (RmsapiConnection::all() as $rmsapiConnection) {
-            new ImportProductsJob($rmsapiConnection->id);
-        }
-
-        ProcessImportedProductRecordsJob::dispatch();
     }
 }

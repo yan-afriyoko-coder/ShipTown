@@ -7,14 +7,15 @@ use App\Modules\Rmsapi\src\Jobs\ImportSalesJob;
 use App\Modules\Rmsapi\src\Jobs\ImportShippingsJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedSalesRecordsJob;
+use App\Modules\Rmsapi\src\Jobs\UpdateImportedSalesRecordsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
-use Illuminate\Support\Facades\Bus;
+use Exception;
 use Illuminate\Support\Facades\Log;
 
 class SyncRequestedEventListener
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle()
     {
@@ -29,6 +30,7 @@ class SyncRequestedEventListener
             ]);
         }
 
+        UpdateImportedSalesRecordsJob::dispatch();
         ProcessImportedProductRecordsJob::dispatch();
         ProcessImportedSalesRecordsJob::dispatch();
     }

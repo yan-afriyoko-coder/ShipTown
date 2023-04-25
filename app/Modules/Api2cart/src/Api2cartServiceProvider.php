@@ -54,10 +54,6 @@ class Api2cartServiceProvider extends BaseModuleServiceProvider
             Listeners\EveryMinuteEventListener::class
         ],
 
-        Every10minEvent::class => [
-            Listeners\Every10minEventListener::class
-        ],
-
         DailyEvent::class => [
             Listeners\DailyEventListener::class],
 
