@@ -40,6 +40,12 @@ class Orders extends Entity
             return $response->getResult()['order'];
         }
 
+        Log::alert('Failed API call', [
+            'code' => $response->getReturnCode(),
+            'message' => $response->getReturnMessage(),
+            'params' => $params
+        ]);
+
         return null;
     }
 
