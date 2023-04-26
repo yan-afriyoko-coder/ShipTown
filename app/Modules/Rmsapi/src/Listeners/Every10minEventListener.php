@@ -3,7 +3,7 @@
 namespace App\Modules\Rmsapi\src\Listeners;
 
 use App\Modules\Rmsapi\src\Jobs\CleanupProductsImportTableJob;
-use App\Modules\Rmsapi\src\Jobs\ImportProductsJob;
+use App\Modules\Rmsapi\src\Jobs\ImportAllJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use Exception;

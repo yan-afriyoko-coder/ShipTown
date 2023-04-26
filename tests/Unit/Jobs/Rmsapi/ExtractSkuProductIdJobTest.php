@@ -6,7 +6,7 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\Modules\Rmsapi\src\Jobs\ImportSalesJob;
-use App\Modules\Rmsapi\src\Jobs\ImportProductsJob;
+use App\Modules\Rmsapi\src\Jobs\ImportAllJob;
 use App\Modules\Rmsapi\src\Jobs\ImportShippingsJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
