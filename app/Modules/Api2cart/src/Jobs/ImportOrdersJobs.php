@@ -2,6 +2,7 @@
 
 namespace App\Modules\Api2cart\src\Jobs;
 
+use App\Models\Heartbeat;
 use App\Modules\Api2cart\src\Api\Orders;
 use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
@@ -119,14 +120,19 @@ class ImportOrdersJobs implements ShouldQueue
 
         $this->saveOrders($api2cartConnection, $orders);
 
+        Heartbeat::query()->updateOrCreate([
+            'code' => implode('_', ['api2cart', 'ImportOrdersJob', $api2cartConnection->getKey()])
+        ], [
+            'error_message' => 'Web orders not fetched for last hour',
+            'expires_at' => now()->addHour()
+        ]);
+
         // for better performance and no long blocking jobs
         // recursively dispatch another import job
         // if there might be still some more to import
         if (count($orders) >= $batchSize) {
             self::dispatch($api2cartConnection);
         }
-
-        info('Imported Api2cart orders', ['count' => count($orders)]);
     }
 
     /**
