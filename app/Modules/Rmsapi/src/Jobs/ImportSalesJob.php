@@ -41,41 +41,36 @@ class ImportSalesJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
     {
         Log::info('RMSAPI Starting FetchSalesJob', ['rmsapi_connection_id' => $this->rmsConnection->getKey()]);
 
-        $per_page = 500;
-        $roundsLeft = 1000 / $per_page;
+        $per_page = 100;
 
-        do {
-            $this->rmsConnection->refresh();
+        $this->rmsConnection->refresh();
 
-            $params = [
-                'per_page'            => $per_page,
-                'order_by'            => 'db_change_stamp:asc',
-                'min:db_change_stamp' => $this->rmsConnection->sales_last_timestamp,
-            ];
+        $params = [
+            'per_page'            => $per_page,
+            'order_by'            => 'db_change_stamp:asc',
+            'min:db_change_stamp' => $this->rmsConnection->sales_last_timestamp,
+        ];
 
-            try {
-                $response = RmsapiClient::GET($this->rmsConnection, 'api/transaction-entries', $params);
-            } catch (GuzzleException $e) {
-                Log::warning('RMSAPI Failed sales fetch', [
-                    'code' => $e->getCode(),
-                    'message' => $e->getMessage(),
-                ]);
-
-                return false;
-            }
-
-            if ($response->getResult()) {
-                $this->saveImportedRecords($response->getResult());
-            }
-
-            Log::info('RMSAPI Downloaded sales', [
-                'warehouse_code' => $this->rmsConnection->location_id,
-                'count'          => count($response->getResult()),
-                'left'           => $response->asArray()['total'],
+        try {
+            $response = RmsapiClient::GET($this->rmsConnection, 'api/transaction-entries', $params);
+        } catch (GuzzleException $e) {
+            Log::warning('RMSAPI Failed sales fetch', [
+                'code' => $e->getCode(),
+                'message' => $e->getMessage(),
             ]);
 
-            $roundsLeft--;
-        } while ((isset($response->asArray()['next_page_url'])) && ($roundsLeft > 0));
+            return false;
+        }
+
+        if ($response->getResult()) {
+            $this->saveImportedRecords($response->getResult());
+        }
+
+        Log::info('RMSAPI Downloaded sales', [
+            'warehouse_code' => $this->rmsConnection->location_id,
+            'count'          => count($response->getResult()),
+            'left'           => $response->asArray()['total'],
+        ]);
 
         Heartbeat::query()->updateOrCreate([
             'code' => 'modules_rmsapi_successful_sales_fetch_warehouseId_'.$this->rmsConnection->location_id,
@@ -98,7 +93,7 @@ class ImportSalesJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
 
             return [
                 'connection_id'         => $this->rmsConnection->getKey(),
-                'warehouse_id'         => $this->rmsConnection->warehouse_id,
+                'warehouse_id'          => $this->rmsConnection->warehouse_id,
                 'uuid'                  => $saleRecord['uuid'],
                 'type'                  => $saleRecord['type'],
                 'sku'                   => $saleRecord['sku'],
