@@ -46,7 +46,7 @@ class ImportAllJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
         foreach (RmsapiConnection::all() as $rmsapiConnection) {
             ImportSalesJob::dispatchSync($rmsapiConnection->id);
             ImportShippingsJob::dispatchSync($rmsapiConnection->id);
-            ImportAllJob::dispatchSync($rmsapiConnection->id);
+            ImportProductsJob::dispatchSync($rmsapiConnection->id);
 
             Log::debug('RMSAPI Sync jobs dispatched', [
                 'warehouse_code' => $rmsapiConnection->location_id,
