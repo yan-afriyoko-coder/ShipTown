@@ -3,6 +3,7 @@
 namespace Tests\External\Rmsapi;
 
 use App\Modules\Rmsapi\src\Jobs\ImportAllJob;
+use App\Modules\Rmsapi\src\Jobs\ImportSalesJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
@@ -35,7 +36,7 @@ class ImportProductsJobTest extends TestCase
             'password'     => env('TEST_RMSAPI_PASSWORD'),
         ]);
 
-        $job = new ImportAllJob($connection->getKey());
+        $job = new ImportSalesJob($connection->getKey());
 
         $job->handle();
 
