@@ -5,13 +5,9 @@ namespace Tests\Unit\Jobs\Rmsapi;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Warehouse;
-use App\Modules\Rmsapi\src\Jobs\ImportSalesJob;
-use App\Modules\Rmsapi\src\Jobs\ImportAllJob;
-use App\Modules\Rmsapi\src\Jobs\ImportShippingsJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
-use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class ExtractSkuProductIdJobTest extends TestCase
