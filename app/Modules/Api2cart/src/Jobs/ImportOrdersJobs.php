@@ -8,6 +8,7 @@ use App\Modules\Api2cart\src\Models\Api2cartConnection;
 use App\Modules\Api2cart\src\Models\Api2cartOrderImports;
 use Carbon\Carbon;
 use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -47,9 +48,10 @@ class ImportOrdersJobs implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @throws Exception
-     *
      * @return void
+     * @throws GuzzleException
+     *
+     * @throws Exception
      */
     public function handle()
     {
@@ -60,29 +62,9 @@ class ImportOrdersJobs implements ShouldQueue
     }
 
     /**
-     * @param Api2cartConnection $connection
-     * @param $order
-     */
-    private function updateLastSyncedTimestamp(Api2cartConnection $connection, $order)
-    {
-        if (empty($order)) {
-            return;
-        }
-
-        $lastTimeStamp = Carbon::createFromFormat(
-            $order['modified_at']['format'],
-            $order['modified_at']['value']
-        );
-
-        $connection->update([
-            'last_synced_modified_at' => $lastTimeStamp->addSecond(),
-        ]);
-    }
-
-    /**
      * @param Api2cartConnection $api2cartConnection
      *
-     * @throws Exception
+     * @throws Exception|GuzzleException
      */
     private function importOrders(Api2cartConnection $api2cartConnection): void
     {
@@ -116,7 +98,7 @@ class ImportOrdersJobs implements ShouldQueue
             return;
         }
 
-        info('Imported Api2cart orders', ['count' => count($orders)]);
+        info('API2CART: Imported orders', ['count' => count($orders)]);
 
         $this->saveOrders($api2cartConnection, $orders);
 
@@ -149,5 +131,25 @@ class ImportOrdersJobs implements ShouldQueue
 
             $this->updateLastSyncedTimestamp($api2cartConnection, $order);
         }
+    }
+
+    /**
+     * @param Api2cartConnection $connection
+     * @param $order
+     */
+    private function updateLastSyncedTimestamp(Api2cartConnection $connection, $order)
+    {
+        if (empty($order)) {
+            return;
+        }
+
+        $lastTimeStamp = Carbon::createFromFormat(
+            $order['modified_at']['format'],
+            $order['modified_at']['value']
+        );
+
+        $connection->update([
+            'last_synced_modified_at' => $lastTimeStamp->addSecond(),
+        ]);
     }
 }

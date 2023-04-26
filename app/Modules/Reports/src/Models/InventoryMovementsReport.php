@@ -18,8 +18,7 @@ class InventoryMovementsReport extends Report
 
         $this->report_name = 'Stocktakes Report';
 
-        $this->baseQuery = InventoryMovement::query()
-            ->orderBy('inventory_movements.id', 'desc');
+        $this->baseQuery = InventoryMovement::query();
 
         $this->allowedIncludes = [
             'inventory',
