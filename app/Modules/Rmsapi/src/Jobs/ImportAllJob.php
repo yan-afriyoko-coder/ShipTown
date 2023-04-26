@@ -2,19 +2,14 @@
 
 namespace App\Modules\Rmsapi\src\Jobs;
 
-use App\Models\Heartbeat;
-use App\Modules\Rmsapi\src\Api\Client as RmsapiClient;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
-use App\Modules\Rmsapi\src\Models\RmsapiProductImport;
 use Exception;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
@@ -58,5 +53,7 @@ class ImportAllJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
                 'connection_id' => $rmsapiConnection->id
             ]);
         }
+
+        return true;
     }
 }
