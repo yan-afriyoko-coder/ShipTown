@@ -4,7 +4,7 @@ namespace Tests\Feature\Modules\Rmsapi;
 
 use App\Jobs\SyncRequestJob;
 use App\Modules\Rmsapi\src\Jobs\DispatchImportJobs;
-use App\Modules\Rmsapi\src\Jobs\ImportProductsJob;
+use App\Modules\Rmsapi\src\Jobs\ImportAllJob;
 use App\Modules\Rmsapi\src\Jobs\ImportShippingsJob;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\RmsapiModuleServiceProvider;
@@ -26,7 +26,7 @@ class JobsDispatchTests extends TestCase
 
         DispatchImportJobs::dispatchNow();
 
-        Bus::assertDispatched(ImportProductsJob::class);
+        Bus::assertDispatched(ImportAllJob::class);
         Bus::assertDispatched(ImportShippingsJob::class);
     }
 
