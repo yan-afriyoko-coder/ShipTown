@@ -93,7 +93,7 @@ class ImportOrdersJobs implements ShouldQueue
 
         $orders = Orders::get($api2cartConnection->bridge_api_key, $params);
 
-        if (!$orders) {
+        if ($orders === null) {
             Log::alert("API2CART: Could not fetch orders");
             return;
         }
