@@ -13,6 +13,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 class ImportOrdersJobs implements ShouldQueue
 {
@@ -109,11 +110,12 @@ class ImportOrdersJobs implements ShouldQueue
 
         $orders = Orders::get($api2cartConnection->bridge_api_key, $params);
 
-        info('Imported Api2cart orders', ['count' => count($orders)]);
-
         if (!$orders) {
+            Log::alert("API2CART: Could not fetch orders");
             return;
         }
+
+        info('Imported Api2cart orders', ['count' => count($orders)]);
 
         $this->saveOrders($api2cartConnection, $orders);
 
