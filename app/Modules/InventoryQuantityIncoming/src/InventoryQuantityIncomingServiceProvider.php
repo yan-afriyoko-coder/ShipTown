@@ -6,6 +6,7 @@ use App\Events\DailyEvent;
 use App\Events\DataCollectionRecordCreatedEvent;
 use App\Events\DataCollectionRecordDeletedEvent;
 use App\Events\DataCollectionRecordUpdatedEvent;
+use App\Events\HourlyEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
@@ -37,6 +38,10 @@ class InventoryQuantityIncomingServiceProvider extends BaseModuleServiceProvider
     protected $listen = [
         SyncRequestedEvent::class => [
             Listeners\SyncRequestedEventListener::class,
+        ],
+
+        HourlyEvent::class => [
+            Listeners\HourlyEventListener::class,
         ],
 
         DailyEvent::class => [
