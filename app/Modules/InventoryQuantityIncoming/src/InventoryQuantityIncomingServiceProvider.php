@@ -3,6 +3,7 @@
 namespace App\Modules\InventoryQuantityIncoming\src;
 
 use App\Events\DailyEvent;
+use App\Events\DataCollectionDeletedEvent;
 use App\Events\DataCollectionRecordCreatedEvent;
 use App\Events\DataCollectionRecordDeletedEvent;
 use App\Events\DataCollectionRecordUpdatedEvent;
@@ -58,6 +59,10 @@ class InventoryQuantityIncomingServiceProvider extends BaseModuleServiceProvider
 
         DataCollectionRecordDeletedEvent::class => [
             Listeners\DataCollectionRecordDeletedEventListener::class,
+        ],
+
+        DataCollectionDeletedEvent::class => [
+            Listeners\DataCollectionDeletedEventListener::class,
         ],
     ];
 
