@@ -14,6 +14,7 @@ use App\Modules\Rmsapi\src\Api\Client as RmsapiClient;
 use App\Modules\Rmsapi\src\Models\RmsapiConnection;
 use App\Modules\Rmsapi\src\Models\RmsapiShippingImports;
 use App\Services\InventoryService;
+use Carbon\Carbon;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
@@ -117,7 +118,7 @@ class ImportShippingsJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
             'order_number' => $this->rmsapiConnection->location_id. '-TRN-' . $record['TransactionNumber'],
         ], [
             'status_code' => 'imported_rms_shippings',
-            'order_placed_at' => $record['ShippingDateCreated'],
+            'order_placed_at' => Carbon::createFromTimeString($record['ShippingDateCreated'])->subHour(),
             'shipping_method_code' => $record['ShippingServiceName'],
             'shipping_method_name' => $record['ShippingCarrierName'],
         ]);
