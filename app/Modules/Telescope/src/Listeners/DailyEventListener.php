@@ -10,7 +10,7 @@ class DailyEventListener
 {
     public function handle(DailyEvent $event): bool
     {
-        Artisan::call('telescope:prune --hours=48');
+        Artisan::call('telescope:prune', ['--hours' => config('telescope.hours')]);
 
         Log::info('Telescope pruned');
 
