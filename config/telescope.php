@@ -62,7 +62,9 @@ return [
     |
     */
 
-    'enabled' => env('TELESCOPE_ENABLED', true),
+    'enabled'        => env('TELESCOPE_ENABLED', true),
+    'allowed_emails' => env('TELESCOPE_ALLOWED_EMAILS'),
+    'hours'          => env('TELESCOPE_HOURS', 72),
 
     /*
     |--------------------------------------------------------------------------
