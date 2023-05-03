@@ -35,6 +35,8 @@ use App\Observers\WarehouseObserver;
 use Exception;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Passport\Passport;
+use Laravel\Telescope\Telescope;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -42,7 +44,8 @@ class AppServiceProvider extends ServiceProvider
     {
         parent::register();
 
-        \Laravel\Passport\Passport::ignoreMigrations();
+        Passport::ignoreMigrations();
+        Telescope::ignoreMigrations();
     }
 
     /**
