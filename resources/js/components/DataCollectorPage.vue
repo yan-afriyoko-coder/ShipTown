@@ -591,7 +591,7 @@
                 let routeData = this.$router.resolve({
                     path: this.$router.currentRoute.fullPath,
                     query: {
-                        'select': 'product_sku,product_name,quantity_requested,quantity_to_scan,quantity_scanned',
+                        'select': 'product_sku,product_name,quantity_requested,quantity_to_scan,quantity_scanned,product_price,product_sale_price,product_sale_price_start_date,product_sale_price_end_date,product_cost',
                         'filter[data_collection_id]': this.data_collection_id,
                         filename: this.dataCollection['name'] +".csv"
                     }
