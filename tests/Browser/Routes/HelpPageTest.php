@@ -18,9 +18,4 @@ class HelpPageTest extends DuskTestCase
         $this->basicAdminAccessTest($this->uri, true);
         $this->basicGuestAccessTest($this->uri, true);
     }
-
-    public function testIncomplete()
-    {
-        $this->markTestIncomplete('This test has not been implemented yet.');
-    }
 }
