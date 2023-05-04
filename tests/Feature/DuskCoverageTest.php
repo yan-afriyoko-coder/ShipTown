@@ -1,13 +1,9 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers;
+namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use PhpParser\Node\Stmt\Return_;
 use Tests\TestCase;
 
 class DuskCoverageTest extends TestCase
@@ -21,7 +17,7 @@ class DuskCoverageTest extends TestCase
     {
         Artisan::call('route:list --json --env=production');
 
-        $routes = collect(json_decode(Artisan::output()))
+        collect(json_decode(Artisan::output()))
             ->filter(function ($route) {
                 $isNotApiRoute  = !Str::startsWith($route->uri, 'api');
                 $isNotDevRoute  = !Str::startsWith($route->uri, '_');
