@@ -27,7 +27,7 @@ class OrderUpdatedEventListener
             ->distinct()
             ->get()
             ->each(function (OrderProduct $orderProduct) {
-                UpdateInventoryQuantityReservedJob::dispatchNow($orderProduct->product_id);
+                UpdateInventoryQuantityReservedJob::dispatchSync($orderProduct->product_id);
             });
     }
 }

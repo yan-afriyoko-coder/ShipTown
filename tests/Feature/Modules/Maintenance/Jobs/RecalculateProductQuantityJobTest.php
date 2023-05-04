@@ -37,7 +37,7 @@ class RecalculateProductQuantityJobTest extends TestCase
             'quantity' => 0,
         ]);
 
-        RunHourlyJobs::dispatchNow();
+        RunHourlyJobs::dispatchSync();
 
         $this->assertEquals(
             Product::query()->sum('quantity'),

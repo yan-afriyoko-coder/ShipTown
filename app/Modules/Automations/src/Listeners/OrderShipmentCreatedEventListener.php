@@ -12,6 +12,6 @@ class OrderShipmentCreatedEventListener
      */
     public function handle(OrderShipmentCreatedEvent $event)
     {
-        RunEnabledAutomationsOnSpecificOrderJob::dispatchNow($event->orderShipment->order_id);
+        RunEnabledAutomationsOnSpecificOrderJob::dispatchSync($event->orderShipment->order_id);
     }
 }

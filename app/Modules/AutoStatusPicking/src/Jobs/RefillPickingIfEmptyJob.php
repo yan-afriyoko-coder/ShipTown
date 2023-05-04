@@ -38,9 +38,9 @@ class RefillPickingIfEmptyJob implements ShouldQueue
         do {
             $countBefore = Order::query()->whereIn('status_code', ['picking'])->count();
 
-            RefillOldOrdersToPickingJob::dispatchNow();
-            RefillPickingMissingStockJob::dispatchNow();
-            RefillPickingByOldestJob::dispatchNow();
+            RefillOldOrdersToPickingJob::dispatchSync();
+            RefillPickingMissingStockJob::dispatchSync();
+            RefillPickingByOldestJob::dispatchSync();
 
             $countAfter = Order::query()->whereIn('status_code', ['picking'])->count();
         } while (($countAfter < $this->maxAllowed) and ($countBefore !== $countAfter));

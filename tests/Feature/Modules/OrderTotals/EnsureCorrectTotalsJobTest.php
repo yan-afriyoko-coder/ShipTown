@@ -38,11 +38,11 @@ class EnsureCorrectTotalsJobTest extends TestCase
 
         OrderProductTotal::query()->forceDelete();
 
-        EnsureAllRecordsExistsJob::dispatchNow();
+        EnsureAllRecordsExistsJob::dispatchSync();
 
         $this->assertDatabaseCount('orders_products_totals', 2);
 
-        EnsureCorrectTotalsJob::dispatchNow();
+        EnsureCorrectTotalsJob::dispatchSync();
 
         $this->assertDatabaseHas('orders_products_totals', ['order_id' => $orderProduct->order_id]);
         $this->assertDatabaseHas('orders_products_totals', ['count' => 1]);

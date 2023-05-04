@@ -31,7 +31,7 @@ class SyncProductJobTest extends TestCase
 
         Api2cartProductLink::where(['product_id' => $product->getKey()])
             ->each(function (Api2cartProductLink $product_link) {
-                SyncProduct::dispatchNow($product_link);
+                SyncProduct::dispatchSync($product_link);
             });
 
         // no errors, so we are happy :)

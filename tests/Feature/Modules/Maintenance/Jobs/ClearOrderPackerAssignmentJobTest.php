@@ -28,7 +28,7 @@ class ClearOrderPackerAssignmentJobTest extends TestCase
         // act
         Bus::fake();
 
-        ClearPackerIdJob::dispatchNow();
+        ClearPackerIdJob::dispatchSync();
 
         // assert
         $this->assertFalse(
@@ -56,7 +56,7 @@ class ClearOrderPackerAssignmentJobTest extends TestCase
             'updated_at'     => Carbon::now()->subHours(14),
         ]);
 
-        ClearPackerIdJob::dispatchNow();
+        ClearPackerIdJob::dispatchSync();
 
         $this->assertTrue(
             Order::whereNull('packer_user_id')

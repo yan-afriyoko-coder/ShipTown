@@ -32,7 +32,7 @@ class SyncVariantsJob implements ShouldQueue
             ->chunkById(10, function ($variants) {
                 foreach ($variants as $variant) {
                     try {
-                        SyncVariant::dispatchNow($variant);
+                        SyncVariant::dispatchSync($variant);
                     } catch (Exception $exception) {
                         report($exception);
                     }

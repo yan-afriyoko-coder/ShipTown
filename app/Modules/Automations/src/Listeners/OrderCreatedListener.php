@@ -12,6 +12,6 @@ class OrderCreatedListener
      */
     public function handle(OrderCreatedEvent $event)
     {
-        RunEnabledAutomationsOnSpecificOrderJob::dispatchNow($event->order->getKey());
+        RunEnabledAutomationsOnSpecificOrderJob::dispatchSync($event->order->getKey());
     }
 }

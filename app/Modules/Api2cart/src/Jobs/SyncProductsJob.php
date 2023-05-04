@@ -32,7 +32,7 @@ class SyncProductsJob implements ShouldQueue
             ->chunk(10, function ($products) {
                 foreach ($products as $product) {
                     try {
-                        SyncProduct::dispatchNow($product);
+                        SyncProduct::dispatchSync($product);
                     } catch (Exception $exception) {
                         report($exception);
                     }

@@ -77,7 +77,7 @@ class OrderService
             ->firstOrFail();
 
         if (!$order->shipping_address_id) {
-            ImportShippingAddressJob::dispatchNow($order->id);
+            ImportShippingAddressJob::v($order->id);
             $order = $order->refresh();
         }
 
