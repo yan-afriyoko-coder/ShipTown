@@ -26,9 +26,11 @@ class OrderController extends Controller
      */
     public function index(Request $request): AnonymousResourceCollection
     {
-        $query = Order::getSpatieQueryBuilder();
+        $query = Order::getSpatieQueryBuilder()
+            ->simplePaginate(request()->get('per_page', 10))
+            ->appends(request()->query());
 
-        return OrderResource::collection($this->getPaginatedResult($query));
+        return OrderResource::collection($query);
     }
 
     /**

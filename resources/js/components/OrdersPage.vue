@@ -75,8 +75,9 @@
 
         data: function() {
             return {
-                lastPageLoaded: 1,
-                lastPage: 1,
+                per_page: 20,
+                pagesLoaded: 0,
+                reachedEnd: false,
                 searchText: '',
                 orders: [],
             };
@@ -85,6 +86,7 @@
         mounted() {
             this.getUrlFilterOrSet('created_between', '-4 months,now');
             this.getUrlFilterOrSet('warehouse_id', Vue.prototype.$currentUser['warehouse_id']);
+            this.per_page = this.getUrlParameter('per_page', 20);
 
             window.onscroll = () => this.loadMore();
 
@@ -103,10 +105,13 @@
             },
 
             loadOrderList: function(page = 1) {
+                if (page === 1) {
+                    this.orders = [];
+                }
+
                 this.showLoading();
 
                 this.page = page;
-                this.last_page = 1;
 
                 const params = {
                     'filter[status]': this.getUrlParameter('status'),
@@ -121,21 +126,16 @@
                     'filter[shipping_method_code]': this.getUrlParameter('shipping_method'),
                     'filter[created_between]': this.getUrlParameter('created_between'),
                     'sort': this.getUrlParameter('sort','-order_placed_at'),
-                    'per_page': this.getUrlParameter('per_page', 20),
+                    'per_page': this.per_page,
                     'include': 'order_comments,order_comments.user,packer,order_products_totals,tags,shipping_address,order_shipments',
                     'page': page,
                 };
 
                 this.apiGetOrders(params)
                     .then(({ data }) => {
-                        if (page === 1) {
-                            this.orders = data.data;
-                        } else {
-                            this.orders = this.orders.concat(data.data);
-                        }
-
-                        this.lastPage = data.meta.last_page
-                        this.lastPageLoaded = page;
+                        this.orders = this.orders.concat(data.data);
+                        this.reachedEnd = data.data.length === 0;
+                        this.pagesLoaded = page;
                     })
                     .catch((error) => {
                         this.displayApiCallError(error)
@@ -149,12 +149,12 @@
 
             loadMore: function () {
                 if (this.isMoreThanPercentageScrolled(70) && this.hasMorePagesToLoad() && !this.isLoading) {
-                    this.loadOrderList(++this.lastPageLoaded);
+                    this.loadOrderList(++this.pagesLoaded);
                 }
             },
 
             hasMorePagesToLoad: function () {
-                return this.lastPage > this.lastPageLoaded;
+                return this.reachedEnd === false;
             },
         },
     }
