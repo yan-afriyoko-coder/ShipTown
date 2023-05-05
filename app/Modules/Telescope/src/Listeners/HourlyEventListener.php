@@ -2,14 +2,11 @@
 
 namespace App\Modules\Telescope\src\Listeners;
 
-use App\Events\DailyEvent;
 use App\Modules\Telescope\src\Jobs\PruneEntriesJob;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Log;
 
-class HourlyEvenetListener
+class HourlyEventListener
 {
-    public function handle(DailyEvent $event): bool
+    public function handle(): bool
     {
         PruneEntriesJob::dispatch();
 
