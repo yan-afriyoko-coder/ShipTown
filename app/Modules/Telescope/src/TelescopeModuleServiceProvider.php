@@ -10,7 +10,7 @@ class TelescopeModuleServiceProvider extends BaseModuleServiceProvider
 {
     public static string $module_name = 'Telescope';
 
-    public static string $module_description = ' Telescope will help you to debug your application';
+    public static string $module_description = 'Telescope will help you debug your application';
 
     public static string $settings_link = '/telescope';
 
