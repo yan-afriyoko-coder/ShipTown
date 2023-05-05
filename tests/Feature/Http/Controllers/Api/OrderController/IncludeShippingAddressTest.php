@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Routes\Api;
+namespace Tests\Feature\Http\Controllers\Api\OrderController;
 
 use App\Models\Order;
 use App\Models\OrderAddress;
@@ -19,8 +19,10 @@ class IncludeShippingAddressTest extends TestCase
             User::factory()->create()
         );
 
+        /** @var OrderAddress $address */
         $address = OrderAddress::factory()->create();
 
+        /** @var Order $order */
         $order = Order::factory()->create([
             'shipping_address_id' => $address->id,
         ]);

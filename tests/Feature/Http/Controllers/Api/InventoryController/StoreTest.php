@@ -6,6 +6,7 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Warehouse;
 use App\User;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class StoreTest extends TestCase
@@ -51,5 +52,37 @@ class StoreTest extends TestCase
                 ]
             ]
         ]);
+    }
+
+    public function testIfCantPostWithoutData()
+    {
+        $response = $this->postJson(route('api.inventory.store'), []);
+
+        $response->assertStatus(422);
+    }
+
+    public function testQuantityUpdate()
+    {
+        Passport::actingAs(
+            User::factory()->create()
+        );
+
+        /** @var Warehouse $warehouse */
+        $warehouse = Warehouse::factory()->create();
+
+        /** @var Product $product */
+        $product = Product::factory()->create();
+
+        $inventory = Inventory::first();
+
+        $update = [
+            'id'                => $inventory->getKey(),
+            'quantity'          => rand(100, 200),
+            'quantity_reserved' => rand(10, 50),
+        ];
+
+        $response = $this->postJson(route('api.inventory.store'), $update);
+
+        $response->assertStatus(200);
     }
 }

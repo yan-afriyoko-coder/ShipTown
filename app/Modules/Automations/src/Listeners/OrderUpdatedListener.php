@@ -12,6 +12,6 @@ class OrderUpdatedListener
      */
     public function handle(OrderUpdatedEvent $event)
     {
-        RunEnabledAutomationsOnSpecificOrderJob::dispatchNow($event->order->getKey());
+        RunEnabledAutomationsOnSpecificOrderJob::dispatchSync($event->order->getKey());
     }
 }

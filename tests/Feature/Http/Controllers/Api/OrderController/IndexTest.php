@@ -37,7 +37,7 @@ class IndexTest extends TestCase
 
         $response->assertSuccessful();
 
-        $this->assertEquals(1, $response->json()['meta']['total']);
+        $this->assertCount(1, $response->json()['data']);
     }
 
     /**
@@ -58,7 +58,7 @@ class IndexTest extends TestCase
 
         $response = $this->get('api/orders?filter[has_tags]=Test');
 
-        $this->assertEquals(0, $response->json()['meta']['total']);
+        $this->assertCount(0, $response->json('data'));
     }
 
     /** @test */
@@ -73,7 +73,7 @@ class IndexTest extends TestCase
 
         $response->assertOk();
 
-        $this->assertNotEquals(0, $response->json('meta.total'));
+        $this->assertCount(1, $response->json('data'));
 
         $response->assertJsonStructure([
             'meta',

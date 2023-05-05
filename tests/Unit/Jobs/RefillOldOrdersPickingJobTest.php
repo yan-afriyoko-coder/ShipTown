@@ -30,7 +30,7 @@ class RefillOldOrdersPickingJobTest extends TestCase
 
         $order->update(['status_code' => 'paid']);
 
-        RefillPickingIfEmptyJob::dispatchNow();
+        RefillPickingIfEmptyJob::dispatchSync();
 
         $this->assertDatabaseHas('orders', ['status_code' => 'picking']);
     }

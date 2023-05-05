@@ -9,6 +9,6 @@ class OrderProductUpdatedEventListener
 {
     public function handle(OrderProductUpdatedEvent $event)
     {
-        UpdateOrderTotalsJob::dispatchNow($event->orderProduct->order_id);
+        UpdateOrderTotalsJob::dispatchSync($event->orderProduct->order_id);
     }
 }

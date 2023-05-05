@@ -17,8 +17,8 @@ class InventoryUpdatedEventListener
     public function handle(InventoryUpdatedEvent $event)
     {
         if ($event->inventory->isAnyAttributeChanged(['quantity', 'quantity_reserved'])) {
-            UpdateProductQuantityJob::dispatchNow($event->inventory->product_id);
-            UpdateProductQuantityReservedJob::dispatchNow($event->inventory->product_id);
+            UpdateProductQuantityJob::dispatchSync($event->inventory->product_id);
+            UpdateProductQuantityReservedJob::dispatchSync($event->inventory->product_id);
         }
     }
 }

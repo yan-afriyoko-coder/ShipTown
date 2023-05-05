@@ -39,6 +39,6 @@ class BlankDatabaseSeeder extends Seeder
 //            OrderShipmentsSeeder::class,
         ]);
 
-        RunHourlyJobs::dispatchNow();
+        RunHourlyJobs::dispatchSync();
     }
 }

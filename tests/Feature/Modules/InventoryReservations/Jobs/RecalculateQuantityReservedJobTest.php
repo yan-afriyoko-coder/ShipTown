@@ -57,7 +57,7 @@ class RecalculateQuantityReservedJobTest extends TestCase
         Inventory::query()->update(['quantity_reserved' => 0]);
         Product::query()->update(['quantity_reserved' => 0]);
 
-        RecalculateQuantityReservedJob::dispatchNow();
+        RecalculateQuantityReservedJob::dispatchSync();
 
         $this->assertDatabaseHas('inventory', ['quantity_reserved' => $random_quantity]);
         $this->assertDatabaseHas('products', ['quantity_reserved' => $random_quantity]);
@@ -72,7 +72,7 @@ class RecalculateQuantityReservedJobTest extends TestCase
 
         Inventory::query()->where(['warehouse_id' => $inventoryReservationsWarehouseId])->update(['quantity_reserved' => 4]);
 
-        RecalculateQuantityReservedJob::dispatchNow();
+        RecalculateQuantityReservedJob::dispatchSync();
 
         $this->assertDatabaseHas('inventory', ['warehouse_id' => $inventoryReservationsWarehouseId, 'quantity_reserved' => 0]);
         $this->assertDatabaseHas('products', ['quantity_reserved' => 0]);

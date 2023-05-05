@@ -3,6 +3,7 @@
 namespace Tests\Feature\Modules\Telescope;
 
 use App\Events\DailyEvent;
+use App\Events\HourlyEvent;
 use App\Modules\Telescope\src\Jobs\PruneEntriesJob;
 use App\Modules\Telescope\src\TelescopeModuleServiceProvider;
 use Illuminate\Support\Facades\Bus;
@@ -16,7 +17,7 @@ class BasicModuleTest extends TestCase
 
         Bus::fake();
 
-        DailyEvent::dispatch();
+        HourlyEvent::dispatch();
 
         Bus::assertDispatched(PruneEntriesJob::class);
     }

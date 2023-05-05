@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Configuration;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Str;
 
 /**
  * Class ManifestController.

@@ -74,7 +74,7 @@ class RunAutomationsJobTest extends TestCase
     {
         $this->assertCount(5, Order::query()->where(['status_code' => 'paid'])->get());
 
-        RunEnabledAutomationsJob::dispatchNow();
+        RunEnabledAutomationsJob::dispatchSync();
 
         $this->assertCount(5, Order::query()->where(['status_code' => 'new_status'])->get());
     }

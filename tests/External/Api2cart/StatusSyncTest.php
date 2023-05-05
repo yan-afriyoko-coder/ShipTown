@@ -48,7 +48,7 @@ class StatusSyncTest extends TestCase
         ]);
         $api2cartConnection->save();
 
-        DispatchImportOrdersJobs::dispatchNow();
+        DispatchImportOrdersJobs::dispatchSync();
 
         $response = OrderStatus::list($api2cartConnection->bridge_api_key);
 
@@ -100,7 +100,7 @@ class StatusSyncTest extends TestCase
 
         $orderStatusList = $response->getResult()['cart_order_statuses'];
 
-        DispatchImportOrdersJobs::dispatchNow();
+        DispatchImportOrdersJobs::dispatchSync();
         $order = Order::first();
 
         do {

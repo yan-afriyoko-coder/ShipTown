@@ -12,6 +12,6 @@ class ShippingLabelCreatedListener
      */
     public function handle(ShippingLabelCreatedEvent $event)
     {
-        RunEnabledAutomationsOnSpecificOrderJob::dispatchNow($event->shippingLabel->order_id);
+        RunEnabledAutomationsOnSpecificOrderJob::dispatchSync($event->shippingLabel->order_id);
     }
 }

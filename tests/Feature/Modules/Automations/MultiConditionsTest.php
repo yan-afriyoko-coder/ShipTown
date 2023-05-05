@@ -50,7 +50,7 @@ class MultiConditionsTest extends TestCase
 
     public function testExample()
     {
-        RunEnabledAutomationsJob::dispatchNow();
+        RunEnabledAutomationsJob::dispatchSync();
 
         $this->assertCount(1, Order::query()->where(['status_code' => 'new_status'])->get());
 

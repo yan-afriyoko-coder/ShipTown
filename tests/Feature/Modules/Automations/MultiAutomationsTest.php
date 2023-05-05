@@ -66,7 +66,7 @@ class MultiAutomationsTest extends TestCase
 
         Order::query()->update(['status_code' => 'status1']);
 
-        RunEnabledAutomationsJob::dispatchNow();
+        RunEnabledAutomationsJob::dispatchSync();
 
         ray(Order::query()->pluck('status_code')->toArray());
 

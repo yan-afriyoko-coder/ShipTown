@@ -286,7 +286,7 @@
 
                     return this.apiGetOrders(params)
                         .then(({data}) => {
-                            this.order = data.meta.total > 0 ? data.data[0] : null;
+                            this.order = data.data.length > 0 ? data.data[0] : null;
                         })
                         .catch((error) => {
                             this.displayApiCallError(error);
@@ -378,7 +378,7 @@
                     this.setFocusOnBarcodeInput(500);
 
                     this.apiUpdateOrder(this.order['id'], {'status_code': this.order.status_code})
-                        .then((response) => {
+                        .then(() => {
                             this.reloadData();
                             this.notifySuccess('Status changed')
                         })
