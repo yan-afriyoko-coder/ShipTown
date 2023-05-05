@@ -7,7 +7,7 @@ use App\Modules\Telescope\src\Jobs\PruneEntriesJob;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 
-class DailyEventListener
+class HourlyEvenetListener
 {
     public function handle(DailyEvent $event): bool
     {
