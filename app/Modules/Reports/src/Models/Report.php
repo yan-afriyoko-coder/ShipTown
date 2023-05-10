@@ -285,7 +285,7 @@ class Report extends Model
 
         collect($this->casts)
             ->filter(function ($type) {
-                return $type === 'datetime';
+                return in_array($type, ['datetime', 'date']);
             })
             ->each(function ($fieldType, $fieldAlias) use (&$allowedFilters) {
                 $filterName = $fieldAlias . '_between';
