@@ -159,7 +159,7 @@ class PagesWalkTroughTest extends DuskTestCase
                 $browser->type('#barcodeInput', $orderProduct->product->sku);
                 $browser->pause($this->shortDelay);
                 $browser->screenshot('02');
-                $browser->driver->getKeyboard()->sendKeys('{enter}');
+                $browser->keys('#barcodeInput', '{ENTER}');
                 $browser->pause($this->shortDelay);
                 $browser->screenshot('03');
                 $browser->waitForText($orderProduct->product->sku);
@@ -169,7 +169,7 @@ class PagesWalkTroughTest extends DuskTestCase
                     ->pause($this->shortDelay)
                     ->screenshot('04')
                     ->typeSlowly('#data-collection-record-quantity-request-input', 12)->pause($this->shortDelay)
-                    ->keys('#data-collection-record-quantity-request-input', '{enter}')
+                    ->keys('#data-collection-record-quantity-request-input', '{ENTER}')
                     ->pause($this->shortDelay);
             });
 
