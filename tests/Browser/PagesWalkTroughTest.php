@@ -159,6 +159,8 @@ class PagesWalkTroughTest extends DuskTestCase
                 $browser->driver->getKeyboard()->sendKeys($orderProduct->product->sku);
                 $browser->pause($this->shortDelay);
                 $browser->keys('#barcodeInput', '{enter}');
+                $browser->pause($this->shortDelay);
+                $browser->screenshot('problematic');
                 $browser->waitForText($orderProduct->product->sku);
                 $browser->pause($this->shortDelay);
 
