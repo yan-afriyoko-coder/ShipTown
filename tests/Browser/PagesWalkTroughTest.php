@@ -155,18 +155,19 @@ class PagesWalkTroughTest extends DuskTestCase
             ->first()
             ->each(function (OrderProduct $orderProduct) use ($browser) {
                 $browser->pause(210);// wait for input to be focused
+                $browser->screenshot('01');
                 $browser->type('#barcodeInput', $orderProduct->product->sku);
                 $browser->pause($this->shortDelay);
+                $browser->screenshot('02');
                 $browser->keys('#barcodeInput', '{enter}');
                 $browser->pause($this->shortDelay);
-                $browser->screenshot('problematic');
+                $browser->screenshot('03');
                 $browser->waitForText($orderProduct->product->sku);
                 $browser->pause($this->shortDelay);
-
-                $browser->screenshot('transferIn');
-
+                $browser->screenshot('04');
                 $browser->waitFor('#data-collection-record-quantity-request-input')
                     ->pause($this->shortDelay)
+                    ->screenshot('04')
                     ->typeSlowly('#data-collection-record-quantity-request-input', 12)->pause($this->shortDelay)
                     ->keys('#data-collection-record-quantity-request-input', '{enter}')
                     ->pause($this->shortDelay);
