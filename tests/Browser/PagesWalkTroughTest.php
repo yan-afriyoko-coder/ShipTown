@@ -154,9 +154,8 @@ class PagesWalkTroughTest extends DuskTestCase
             ->where('quantity_to_ship', '>', 0)
             ->first()
             ->each(function (OrderProduct $orderProduct) use ($browser) {
-                $browser->pause($this->shortDelay);
-
-                $browser->driver->getKeyboard()->sendKeys($orderProduct->product->sku);
+                $browser->pause(210);// wait for input to be focused
+                $browser->type('#barcodeInput', $orderProduct->product->sku);
                 $browser->pause($this->shortDelay);
                 $browser->keys('#barcodeInput', '{enter}');
                 $browser->pause($this->shortDelay);
@@ -196,7 +195,7 @@ class PagesWalkTroughTest extends DuskTestCase
             ->each(function (OrderProduct $orderProduct) use ($browser) {
                 $browser->waitForText($orderProduct->product->sku);
                 $browser->assertSee($orderProduct->product->sku);
-                $browser->driver->getKeyboard()->sendKeys($orderProduct->product->sku);
+                $browser->type('#barcodeInput', $orderProduct->product->sku);
                 $browser->pause(500)
                     ->keys('#barcodeInput', '{enter}')
                     ->pause($this->longDelay);
