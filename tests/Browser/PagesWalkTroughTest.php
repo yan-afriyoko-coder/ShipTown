@@ -154,20 +154,19 @@ class PagesWalkTroughTest extends DuskTestCase
             ->where('quantity_to_ship', '>', 0)
             ->first()
             ->each(function (OrderProduct $orderProduct) use ($browser) {
+                $browser->pause(210);// wait for input to be focused
+                $browser->screenshot('01');
+                $browser->keys('#barcodeInput', $orderProduct->product->sku, '{ENTER}');
                 $browser->pause($this->shortDelay);
-
-                $browser->driver->getKeyboard()->sendKeys($orderProduct->product->sku);
-                $browser->pause($this->shortDelay);
-                $browser->keys('#barcodeInput', '{enter}');
+                $browser->screenshot('02');
                 $browser->waitForText($orderProduct->product->sku);
                 $browser->pause($this->shortDelay);
-
-                $browser->screenshot('transferIn');
-
+                $browser->screenshot('04');
                 $browser->waitFor('#data-collection-record-quantity-request-input')
                     ->pause($this->shortDelay)
+                    ->screenshot('04')
                     ->typeSlowly('#data-collection-record-quantity-request-input', 12)->pause($this->shortDelay)
-                    ->keys('#data-collection-record-quantity-request-input', '{enter}')
+                    ->keys('#data-collection-record-quantity-request-input', '{ENTER}')
                     ->pause($this->shortDelay);
             });
 
@@ -194,7 +193,7 @@ class PagesWalkTroughTest extends DuskTestCase
             ->each(function (OrderProduct $orderProduct) use ($browser) {
                 $browser->waitForText($orderProduct->product->sku);
                 $browser->assertSee($orderProduct->product->sku);
-                $browser->driver->getKeyboard()->sendKeys($orderProduct->product->sku);
+                $browser->type('#barcodeInput', $orderProduct->product->sku);
                 $browser->pause(500)
                     ->keys('#barcodeInput', '{enter}')
                     ->pause($this->longDelay);
