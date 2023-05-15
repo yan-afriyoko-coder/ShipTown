@@ -23,13 +23,13 @@ class RunAllJobsJob implements ShouldQueue
     {
         BarcodeScannedToQuantityFieldJob::dispatch();
         NegativeWarehouseStockJob::dispatch();
+        NegativeInventoryJob::dispatch();
 
         // for all warehouses
         Warehouse::query()
             ->get('id')
             ->each(function (Warehouse $warehouse) {
                 OutdatedCountsJob::dispatch($warehouse->getKey());
-                NegativeInventoryJob::dispatch($warehouse->getKey());
                 NoMovementJob::dispatch($warehouse->getKey());
             });
 
