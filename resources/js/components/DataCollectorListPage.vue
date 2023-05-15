@@ -9,13 +9,13 @@
         </div>
 
         <div class="row pl-2 p-0 text-uppercase small text-secondary">
-            <div class="col-6 text-left align-bottom pb-0 m-0 font-weight-bold ">
-                Data Collections
+            <div class="col-8 text-nowrap text-left align-bottom pb-0 m-0 font-weight-bold ">
+                Tools > Data Collector
             </div>
-            <div class="col-6 text-nowrap">
+            <div class="col-4 text-nowrap">
                 <div class="custom-control custom-switch m-auto text-right align-bottom">
                     <input type="checkbox" @change="toggleArchivedFilter" class="custom-control-input" id="switch" v-model="showArchived">
-                    <label class="custom-control-label " for="switch">Show Archived</label>
+                    <label class="custom-control-label" for="switch">Archived</label>
                 </div>
             </div>
         </div>
