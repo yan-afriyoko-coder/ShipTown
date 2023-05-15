@@ -17,13 +17,6 @@ class NegativeWarehouseStockJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    private int $warehouse_id;
-
-    public function __construct(int $warehouse_id)
-    {
-        $this->warehouse_id = $warehouse_id;
-    }
-
     public function handle(): bool
     {
         $reason = 'negative warehouse stock';
@@ -36,8 +29,8 @@ class NegativeWarehouseStockJob implements ShouldQueue
             return true;
         }
 
-        $this->insertNewSuggestions($this->warehouse_id, $reason, $points, $fulfilmentWarehousesIDs);
-        $this->deleteIncorrectSuggestions($this->warehouse_id, $reason);
+        $this->insertNewSuggestions($reason, $points, $fulfilmentWarehousesIDs);
+        $this->deleteIncorrectSuggestions($reason);
         $this->deleteSuggestionsForFulfilmentWarehouses($fulfilmentWarehousesIDs, $reason);
 
         return true;
@@ -61,7 +54,7 @@ class NegativeWarehouseStockJob implements ShouldQueue
      * @param int $startingPoints
      * @param string $reason
      */
-    private function insertNewSuggestions(int $warehouse_id, string $reason, int $startingPoints, $fulfilmentWarehousesIDs): void
+    private function insertNewSuggestions(string $reason, int $startingPoints, $fulfilmentWarehousesIDs): void
     {
         DB::statement('
             INSERT INTO stocktake_suggestions (inventory_id, product_id, warehouse_id, points, reason, created_at, updated_at)
@@ -77,30 +70,28 @@ class NegativeWarehouseStockJob implements ShouldQueue
                     ON inventory_fullfilment.product_id = inventory.product_id
                     AND inventory_fullfilment.warehouse_id IN (?)
                     AND inventory_fullfilment.quantity > 0
-                WHERE inventory.warehouse_id = ?
-                    AND inventory.quantity < 0
+                WHERE inventory.quantity < 0
                     AND NOT EXISTS (
                         SELECT NULL
                         FROM stocktake_suggestions
                         WHERE stocktake_suggestions.inventory_id = inventory.id
                         AND stocktake_suggestions.reason = ?
                     )
-        ', [$startingPoints, $reason, $fulfilmentWarehousesIDs->implode(','), $warehouse_id, $reason]);
+        ', [$startingPoints, $reason, $fulfilmentWarehousesIDs->implode(','), $reason]);
     }
 
     /**
      * @param string $reason
      */
-    private function deleteIncorrectSuggestions(int $warehouse_id, string $reason): void
+    private function deleteIncorrectSuggestions(string $reason): void
     {
         DB::statement('
             DELETE stocktake_suggestions
             FROM stocktake_suggestions
             LEFT JOIN inventory
                 ON inventory.id = stocktake_suggestions.inventory_id
-            WHERE stocktake_suggestions.warehouse_id = ?
-            AND stocktake_suggestions.reason = ?
-            AND inventory.quantity = 0
-        ', [$warehouse_id, $reason]);
+            WHERE stocktake_suggestions.reason = ?
+            AND inventory.quantity >= 0
+        ', [$reason]);
     }
 }

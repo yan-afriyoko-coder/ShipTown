@@ -7,7 +7,9 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Jobs\Job;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Bus;
 
 class RunAllJobsJob implements ShouldQueue
 {
@@ -19,12 +21,13 @@ class RunAllJobsJob implements ShouldQueue
 
     public function handle(): bool
     {
+        BarcodeScannedToQuantityFieldJob::dispatch();
+        NegativeWarehouseStockJob::dispatch();
+
         // for all warehouses
         Warehouse::query()
             ->get('id')
             ->each(function (Warehouse $warehouse) {
-                BarcodeScannedToQuantityFieldJob::dispatch($warehouse->getKey());
-                NegativeWarehouseStockJob::dispatch($warehouse->getKey());
                 OutdatedCountsJob::dispatch($warehouse->getKey());
                 NegativeInventoryJob::dispatch($warehouse->getKey());
                 NoMovementJob::dispatch($warehouse->getKey());
