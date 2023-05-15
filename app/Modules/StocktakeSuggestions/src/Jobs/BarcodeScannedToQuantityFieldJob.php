@@ -21,8 +21,8 @@ class BarcodeScannedToQuantityFieldJob implements ShouldQueue
         $reason = 'possible barcode scanned into quantity field';
         $points = 100;
 
-        $this->insertNewSuggestions($warehouse_id, $reason, $points);
-        $this->deleteIncorrectSuggestions($warehouse_id, $reason);
+        $this->insertNewSuggestions($reason, $points);
+        $this->deleteIncorrectSuggestions($reason);
 
         return true;
     }
@@ -30,7 +30,6 @@ class BarcodeScannedToQuantityFieldJob implements ShouldQueue
     /**
      * @param int $points
      * @param string $reason
-     * @param int $warehouse_id
      */
     private function insertNewSuggestions(string $reason, int $points): void
     {
@@ -50,7 +49,6 @@ class BarcodeScannedToQuantityFieldJob implements ShouldQueue
     }
 
     /**
-     * @param int $warehouse_id
      * @param string $reason
      */
     private function deleteIncorrectSuggestions(string $reason): void
