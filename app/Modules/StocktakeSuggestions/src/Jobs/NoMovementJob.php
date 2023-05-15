@@ -40,7 +40,7 @@ class NoMovementJob implements ShouldQueue
             WHERE inventory.quantity > 0
             AND inventory.quantity_available > 100
             AND products_prices.price > 5
-            AND inventory.last_movement_at > ?
+            AND inventory.last_movement_at > '" . now()->subDays(7)->format('Y-m-d H:i:s') ."'
             AND inventory.last_movement_at > inventory.last_counted_at
             AND NOT EXISTS (
                 SELECT NULL
@@ -48,6 +48,6 @@ class NoMovementJob implements ShouldQueue
                 WHERE stocktake_suggestions.inventory_id = inventory.id
                 AND stocktake_suggestions.reason = ?
             )
-        ", [$this->points, $this->reason, Carbon::now()->subDays(7), $this->reason]);
+        ", [$this->points, $this->reason, $this->reason]);
     }
 }

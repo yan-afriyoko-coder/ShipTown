@@ -16,13 +16,6 @@ class OutdatedCountsJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    private int $warehouse_id;
-
-    public function __construct(int $warehouse_id)
-    {
-        $this->warehouse_id = $warehouse_id;
-    }
-
     public function handle(): bool
     {
         if (now()->month !== 1) {
@@ -32,8 +25,8 @@ class OutdatedCountsJob implements ShouldQueue
         $reason = 'never counted';
         $points = 1;
 
-        $this->insertNewSuggestions($this->warehouse_id, $reason, $points);
-        $this->deleteIncorrectSuggestions($this->warehouse_id, $reason);
+        $this->insertNewSuggestions($reason, $points);
+        $this->deleteIncorrectSuggestions($reason);
 
         return true;
     }
@@ -41,16 +34,14 @@ class OutdatedCountsJob implements ShouldQueue
     /**
      * @param int $points
      * @param string $reason
-     * @param int $warehouse_id
      */
-    private function insertNewSuggestions(int $warehouse_id, string $reason, int $points): void
+    private function insertNewSuggestions(string $reason, int $points): void
     {
         DB::statement("
             INSERT INTO stocktake_suggestions (inventory_id, product_id, warehouse_id, points, reason, created_at, updated_at)
             SELECT id, product_id, warehouse_id, ? , ?, NOW(), NOW()
             FROM inventory
-            WHERE warehouse_id = ?
-                AND quantity != 0
+            WHERE quantity != 0
                 AND (
                     last_counted_at IS NULL
                     OR last_counted_at < NOW() - INTERVAL 12 MONTH
@@ -66,14 +57,13 @@ class OutdatedCountsJob implements ShouldQueue
                     WHERE stocktake_suggestions.inventory_id = inventory.id
                     AND stocktake_suggestions.reason = ?
                 )
-        ", [$points, $reason, $warehouse_id, $reason]);
+        ", [$points, $reason, $reason]);
     }
 
     /**
-     * @param int $warehouse_id
      * @param string $reason
      */
-    private function deleteIncorrectSuggestions(int $warehouse_id, string $reason): void
+    private function deleteIncorrectSuggestions(string $reason): void
     {
         DB::statement('
             DELETE stocktake_suggestions
@@ -81,9 +71,8 @@ class OutdatedCountsJob implements ShouldQueue
             INNER JOIN inventory
                 ON inventory.id = stocktake_suggestions.inventory_id
 
-            WHERE stocktake_suggestions.warehouse_id = ?
-            AND stocktake_suggestions.reason = ?
+            WHERE stocktake_suggestions.reason = ?
             AND inventory.quantity = 0
-        ', [$warehouse_id, $reason]);
+        ', [$reason]);
     }
 }
