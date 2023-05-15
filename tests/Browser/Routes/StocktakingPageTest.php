@@ -39,8 +39,9 @@ class StocktakingPageTest extends DuskTestCase
             $browser->loginAs($user)
                 ->visit($this->uri)
                 ->pause(500)
-                ->assertSee('RECENT STOCKTAKES')
+                ->assertSee('TOOLS > STOCKTAKING')
                 ->assertSee('SEE MORE')
+                ->assertSee('STOCKTAKING SUGGESTIONS')
                 ->assertSourceMissing('snotify-error')
                 ->assertFocused('#stocktake-input');
         });

@@ -11,11 +11,11 @@
 
         <template v-if="recentStocktakes.data">
             <div class="row pl-2 p-1 font-weight-bold text-uppercase small text-secondary">
-                <div class="col-6 text-left">
-                    Recent Stocktakes
+                <div class="col-6 text-left text-nowrap">
+                    TOOLS > STOCKTAKING
                 </div>
-                <div class="col-6 text-right">
-                    <a :href="'/reports/inventory-movements?filter[description]=stocktake'">See more</a>
+                <div class="col-6 text-right text-nowrap">
+                    <a :href="'/reports/inventory-movements?filter[description]=stocktake'">SEE MORE</a>
                 </div>
             </div>
             <div class="text-secondary small text-center" v-if="recentStocktakes.data.length === 0">
@@ -34,8 +34,8 @@
         </template>
 
         <div class="d-flex justify-content-between align-items-center mt-2 pl-2 p-1 font-weight-bold text-uppercase small text-secondary">
-            Stocktake suggestions
-            <button class="btn btn-sm btn-primary" @click="downloadStocktakeSuggestion">Download</button>
+            STOCKTAKING SUGGESTIONS
+<!--            <button class="btn btn-sm btn-primary" @click="downloadStocktakeSuggestion">Download</button>-->
         </div>
 
         <div v-if="(stocktakeSuggestions !== null) && (stocktakeSuggestions.length === 0)" class="text-secondary small text-center mt-3">
