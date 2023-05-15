@@ -41,10 +41,6 @@ class StocktakeSuggestionsServiceProvider extends BaseModuleServiceProvider
             Listeners\Every10minEventListener::class,
         ],
 
-        DailyEvent::class => [
-            Listeners\DailyEventListener::class,
-        ],
-
         InventoryUpdatedEvent::class => [
             Listeners\InventoryUpdatedEventListener::class,
         ],
