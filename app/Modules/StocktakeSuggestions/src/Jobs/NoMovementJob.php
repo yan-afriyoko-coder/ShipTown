@@ -70,7 +70,7 @@ class NoMovementJob implements ShouldQueue
             WHERE stocktake_suggestions.reason = ? AND (
                 inventory.quantity_available < 100
                 OR products_prices.price < 5
-                OR inventory.last_sold_at < '" . now()->subDays(7)->format('Y-m-d H:i:s') . "'
+                OR inventory.last_sold_at > '" . now()->subDays(7)->format('Y-m-d H:i:s') . "'
                 OR inventory.last_movement_at < inventory.last_counted_at
             )
         ", [$this->reason]);
