@@ -63,6 +63,10 @@ class NoMovementJob implements ShouldQueue
             INNER JOIN inventory
                 ON inventory.id = stocktake_suggestions.inventory_id
 
+            INNER JOIN products_prices
+                ON products_prices.product_id = inventory.product_id
+                AND products_prices.warehouse_id = inventory.warehouse_id
+
             WHERE stocktake_suggestions.reason = ? AND (
                 inventory.quantity_available < 100
                 OR products_prices.price < 5
