@@ -28,6 +28,12 @@ class NoMovementJob implements ShouldQueue
 
     public function handle()
     {
+        $this->insertNewStocktakeSuggestions();
+        $this->deleteIncorrectSuggestions();
+    }
+
+    private function insertNewStocktakeSuggestions(): void
+    {
         DB::statement("
             INSERT INTO stocktake_suggestions (inventory_id, product_id, warehouse_id, points, reason, created_at, updated_at)
             SELECT inventory.id, inventory.product_id, inventory.warehouse_id, ? , ?, NOW(), NOW()
@@ -40,7 +46,7 @@ class NoMovementJob implements ShouldQueue
             WHERE inventory.quantity > 0
             AND inventory.quantity_available > 100
             AND products_prices.price > 5
-            AND inventory.last_movement_at > '" . now()->subDays(7)->format('Y-m-d H:i:s') ."'
+            AND inventory.last_sold_at < '" . now()->subDays(7)->format('Y-m-d H:i:s') . "'
             AND inventory.last_movement_at > inventory.last_counted_at
             AND NOT EXISTS (
                 SELECT NULL
@@ -49,5 +55,23 @@ class NoMovementJob implements ShouldQueue
                 AND stocktake_suggestions.reason = ?
             )
         ", [$this->points, $this->reason, $this->reason]);
+    }
+
+
+    private function deleteIncorrectSuggestions(string $reason): void
+    {
+        DB::statement("
+            DELETE stocktake_suggestions
+            FROM stocktake_suggestions
+            INNER JOIN inventory
+                ON inventory.id = stocktake_suggestions.inventory_id
+
+            WHERE stocktake_suggestions.reason = ? AND (
+                inventory.quantity_available < 100
+                OR products_prices.price < 5
+                OR inventory.last_sold_at < '" . now()->subDays(7)->format('Y-m-d H:i:s') . "'
+                OR inventory.last_movement_at < inventory.last_counted_at
+            )
+        ", [$reason]);
     }
 }
