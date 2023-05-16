@@ -20,14 +20,11 @@ class NoMovementJob implements ShouldQueue
     private string $reason;
     private int $points;
 
-    public function __construct()
+    public function handle()
     {
         $this->reason = 'quantity>100, price>5 and no movement for 7 days, scan product to verify barcode and stock';
         $this->points = 3;
-    }
 
-    public function handle()
-    {
         $this->insertNewStocktakeSuggestions();
         $this->deleteIncorrectSuggestions();
     }
@@ -58,7 +55,7 @@ class NoMovementJob implements ShouldQueue
     }
 
 
-    private function deleteIncorrectSuggestions(string $reason): void
+    private function deleteIncorrectSuggestions(): void
     {
         DB::statement("
             DELETE stocktake_suggestions
@@ -72,6 +69,6 @@ class NoMovementJob implements ShouldQueue
                 OR inventory.last_sold_at < '" . now()->subDays(7)->format('Y-m-d H:i:s') . "'
                 OR inventory.last_movement_at < inventory.last_counted_at
             )
-        ", [$reason]);
+        ", [$this->reason]);
     }
 }
