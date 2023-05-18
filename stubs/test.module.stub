@@ -1,0 +1,16 @@
+<?php
+
+namespace {{namespaceWithoutApp}};
+
+use App\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class DummyClass extends TestCase
+{
+    /** @test */
+    public function test_module_basic_functionality()
+    {
+        $this->markTestAsIncomplete();
+    }
+}
