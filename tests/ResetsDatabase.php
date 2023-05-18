@@ -23,6 +23,7 @@ use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
 use App\Modules\DpdIreland\src\Models\DpdIreland;
+use App\Modules\InventoryReservations\src\EventServiceProviderBase as InventoryReservationsServiceProvider;
 use App\Modules\InventoryReservations\src\Models\Configuration;
 use App\Modules\MagentoApi\src\Models\MagentoConnection;
 use App\Modules\MagentoApi\src\Models\MagentoProduct;
@@ -91,6 +92,7 @@ trait ResetsDatabase
 
         \App\Models\Configuration::query()->forceDelete();
         \App\Models\Configuration::query()->create();
-        Configuration::query()->create();
+
+        InventoryReservationsServiceProvider::enableModule();
     }
 }

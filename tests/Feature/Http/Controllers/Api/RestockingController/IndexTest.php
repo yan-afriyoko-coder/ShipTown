@@ -81,6 +81,7 @@ class IndexTest extends TestCase
         $warehouse->attachTag('fulfilment');
 
         InventoryReservationsEventServiceProviderBase::enableModule();
+
         Product::factory()->create();
 
         /** @var User $user */
@@ -90,6 +91,7 @@ class IndexTest extends TestCase
 
         $response = $this->actingAs($user, 'api')->getJson(route('api.restocking.index'));
 
+        ray()->showApp();
         ray($response->json());
 
         $response->assertOk();
