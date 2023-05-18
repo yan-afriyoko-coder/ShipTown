@@ -46,8 +46,8 @@ class AppGenerateModulesTests extends Command
 
             $command = 'app:make-test ' . $testName . ' --stub=test.module';
 
-            Artisan::call($command);
             $this->comment($testName);
+            Artisan::call($command);
             $this->info(Artisan::output());
         });
 

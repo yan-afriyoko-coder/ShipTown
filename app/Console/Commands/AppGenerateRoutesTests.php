@@ -51,7 +51,7 @@ class AppGenerateRoutesTests extends Command
         $routes->each(function ($route) {
             $testName = $this->getApiRouteTestName($route);
 
-            Artisan::call('generate:test '.$testName.' --stub=test_controller');
+            Artisan::call('app:make-test '.$testName.' --stub=test.controller');
         });
     }
 
@@ -73,8 +73,9 @@ class AppGenerateRoutesTests extends Command
 
         $routes->each(function ($route) {
             $testName = 'Routes/Web/'.$this->getWebRouteTestName($route);
-
-            Artisan::call('generate:test '.$testName.' --stub=test_web_route');
+            $this->comment($testName);
+            Artisan::call('app:make-test '.$testName.' --stub=test.web_route');
+            $this->info(Artisan::output());
         });
     }
 

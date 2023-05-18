@@ -1,29 +1,25 @@
 <?php
 
-namespace {{namespaceWithoutApp}};
+namespace Tests\Feature\Routes\Web\Quick_connect;
 
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
  *
  */
-class {{class}} extends TestCase
+class MagentoTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * @var string
      */
-    protected string $uri = '';
+    protected string $uri = '/quick-connect/magento';
 
     protected mixed $user;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::factory()->create();
     }
 
     /** @test */
@@ -43,22 +39,28 @@ class {{class}} extends TestCase
     /** @test */
     public function test_user_call()
     {
-        $this->actingAs($this->user, 'web');
+        /** @var User user */
+        $user = User::factory()->create();
+
+        $this->actingAs($user, 'web');
 
         $response = $this->get($this->uri);
 
-        $response->assertForbidden();
+        $response->assertSuccessful();
     }
 
     /** @test */
     public function test_admin_call()
     {
-        $this->user->assignRole('admin');
+        /** @var User user */
+        $user = User::factory()->create();
 
-        $this->actingAs($this->user, 'web');
+        $user->assignRole('admin');
+
+        $this->actingAs($user, 'web');
 
         $response = $this->get($this->uri);
 
-        $response->assertForbidden();
+        $response->assertSuccessful();
     }
 }

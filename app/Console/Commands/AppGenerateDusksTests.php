@@ -57,7 +57,9 @@ class AppGenerateDusksTests extends Command
 
         $routes->each(function ($route) {
             $testName = $this->getWebRouteTestName($route);
+            $this->comment($testName);
             Artisan::call('app:dusk-test ' . $testName . ' --uri=' . $route->uri);
+            $this->info(Artisan::output());
         });
     }
 
