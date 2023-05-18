@@ -75,6 +75,8 @@ class ProductsMergePageTest extends DuskTestCase
      */
     public function testGuestAccess()
     {
+        User::factory()->create();
+
         $this->browse(function (Browser $browser) {
             $browser->disableFitOnFailure()
                 ->logout()

@@ -65,7 +65,7 @@ abstract class DuskTestCase extends BaseTestCase
             $browser->visit($uri);
             $browser->assertDontSee('SERVER ERROR');
 
-            $browser->pause(1000);
+            $browser->pause(500);
             $browser->assertSourceMissing('snotify-error');
 
             if ($allowed) {
@@ -92,7 +92,7 @@ abstract class DuskTestCase extends BaseTestCase
             $browser->visit($uri);
             $browser->assertDontSee('SERVER ERROR');
 
-            $browser->pause(1000);
+            $browser->pause(500);
             $browser->assertSourceMissing('snotify-error');
 
             if ($allowed) {
@@ -108,11 +108,13 @@ abstract class DuskTestCase extends BaseTestCase
      */
     public function basicGuestAccessTest(string $uri, bool $allowed = false)
     {
+        User::factory()->create();
+
         $this->browse(function (Browser $browser) use ($uri, $allowed) {
             $browser->disableFitOnFailure();
             $browser->logout();
             $browser->visit($uri);
-            $browser->pause(1000);
+            $browser->pause(500);
 
             if ($allowed) {
                 $browser->assertPathIs($uri);

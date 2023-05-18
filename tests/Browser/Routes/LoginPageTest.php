@@ -2,6 +2,7 @@
 
 namespace Tests\Browser\Routes;
 
+use App\User;
 use Tests\DuskTestCase;
 use Throwable;
 
@@ -14,6 +15,8 @@ class LoginPageTest extends DuskTestCase
      */
     public function testBasics()
     {
+        User::factory()->create();
+
         $this->basicGuestAccessTest($this->uri, true);
     }
 }
