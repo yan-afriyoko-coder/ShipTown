@@ -77,7 +77,7 @@ class AppDustTest extends GeneratorCommand
         $buildClass = parent::buildClass($name);
 
         if ($this->hasOption('uri')) {
-            $buildClass = str_replace('dummy-uri', $this->option('uri'), $buildClass);
+            $buildClass = str_replace('{{uri}}', $this->option('uri'), $buildClass);
         }
 
         return $buildClass;

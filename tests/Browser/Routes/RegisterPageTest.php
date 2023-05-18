@@ -2,17 +2,33 @@
 
 namespace Tests\Browser\Routes;
 
-use App\Models\Product;
-use App\Models\Warehouse;
 use App\User;
-use Facebook\WebDriver\WebDriverKeys;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
 
 class RegisterPageTest extends DuskTestCase
 {
-    private string $uri = '/products';
+    private string $uri = '/register';
+
+    /**
+     * @throws Throwable
+     */
+    public function testPage()
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $user->assignRole('admin');
+
+        $this->browse(function (Browser $browser) use ($user) {
+            $browser->disableFitOnFailure();
+            $browser->loginAs($user);
+            $browser->visit($this->uri);
+            $browser->assertPathIs($this->uri);
+
+            $this->markTestIncomplete('This test has not been implemented yet.');
+        });
+    }
 
     /**
      * @throws Throwable

@@ -63,7 +63,7 @@ abstract class DuskTestCase extends BaseTestCase
 
             $browser->loginAs($user);
             $browser->visit($uri);
-            $browser->assertDontSee('SERVER ERROR');
+            $browser->assertSourceMissing('Server Error');
 
             $browser->pause(500);
             $browser->assertSourceMissing('snotify-error');
@@ -90,7 +90,7 @@ abstract class DuskTestCase extends BaseTestCase
 
             $browser->loginAs($admin);
             $browser->visit($uri);
-            $browser->assertDontSee('SERVER ERROR');
+            $browser->assertSourceMissing('Server Error');
 
             $browser->pause(500);
             $browser->assertSourceMissing('snotify-error');
@@ -114,6 +114,7 @@ abstract class DuskTestCase extends BaseTestCase
             $browser->disableFitOnFailure();
             $browser->logout();
             $browser->visit($uri);
+            $browser->assertSourceMissing('Server Error');
             $browser->pause(500);
 
             if ($allowed) {

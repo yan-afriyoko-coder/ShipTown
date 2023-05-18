@@ -9,12 +9,12 @@ use Throwable;
 
 class DummyClass extends DuskTestCase
 {
-    private string $uri = '/dummy-uri';
+    private string $uri = '/{{uri}}';
 
     /**
      * @throws Throwable
      */
-    public function testIncomplete()
+    public function testPage()
     {
         /** @var User $user */
         $user = User::factory()->create();
@@ -23,6 +23,9 @@ class DummyClass extends DuskTestCase
         $this->browse(function (Browser $browser) use ($user) {
             $browser->disableFitOnFailure();
             $browser->loginAs($user);
+            $browser->visit($this->uri);
+            $browser->assertPathIs($this->uri);
+            $browser->assertSourceMissing('Server Error');
 
             $this->markTestIncomplete('This test has not been implemented yet.');
         });
