@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Str;
 
-class AppMakeUnitTest extends GeneratorCommand
+class AppMakeTest extends GeneratorCommand
 {
     /**
      * The console command name.

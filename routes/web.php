@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 Route::resource('verify', Auth\TwoFactorController::class)->only(['index', 'store']);
 
 Route::redirect('', 'dashboard');
-Route::redirect('home', 'dashboard')->name('home');
+Route::redirect('home', '')->name('home');
 
 Route::view('quick-connect/magento', 'quick-connect.magento')->name('quick-connect.magento');
 
@@ -33,7 +33,6 @@ Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard'
 Route::get('fulfilment-dashboard', [DashboardController::class, 'index'])->name('fulfilment-dashboard');
 Route::get('inventory-dashboard', [Reports\InventoryDashboardController::class, 'index'])->name('inventory-dashboard');
 Route::get('products-merge', [ProductsMergeController::class, 'index'])->name('products-merge');
-
 Route::view('performance/dashboard', 'performance')->name('performance.dashboard');
 Route::view('products', 'products')->name('products');
 Route::view('picklist', 'picklist')->name('picklist');
@@ -70,12 +69,13 @@ Route::get('csv/products/picked', [Csv\ProductsPickedInWarehouse::class, 'index'
 Route::get('csv/products/shipped', [Csv\ProductsShippedFromWarehouseController::class, 'index'])->name('warehouse_shipped.csv');
 Route::get('csv/boxtop/stock', [Csv\BoxTopStockController::class, 'index'])->name('boxtop-warehouse-stock.csv');
 
-
-// Admin Routes
-Route::prefix('admin')->middleware(['web', 'auth', 'role:admin', 'twofactor'])->group(function () {
-    // Settings
-    Route::prefix('settings')->group(function () {
-        Route::view('modules/magento-api', 'settings/magento-api')->name('settings.modules.magento-api');
-        Route::view('modules/inventory-reservations', 'settings/inventory-reservations')->name('settings.modules.inventory-reservations');
+Route::middleware(['web', 'auth', 'role:admin', 'twofactor'])->group(function () {
+    // Admin Routes
+    Route::prefix('admin')->group(function () {
+        // Settings
+        Route::prefix('settings')->group(function () {
+            Route::view('modules/magento-api', 'settings/magento-api')->name('settings.modules.magento-api');
+            Route::view('modules/inventory-reservations', 'settings/inventory-reservations')->name('settings.modules.inventory-reservations');
+        });
     });
 });

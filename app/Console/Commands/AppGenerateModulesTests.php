@@ -44,10 +44,11 @@ class AppGenerateModulesTests extends Command
         $expectedTestsList->each(function ($route) {
             $testName = $route;
 
-            $command = 'generate:test ' . $testName . ' --stub=test_module';
+            $command = 'app:make-test ' . $testName . ' --stub=test.module';
 
             Artisan::call($command);
-            echo(Artisan::output());
+            $this->comment($testName);
+            $this->info(Artisan::output());
         });
 
         return 0;
