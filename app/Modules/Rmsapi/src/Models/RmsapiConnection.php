@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Crypt;
  * @property int         $sales_last_timestamp
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property string     $priceFieldName
  *
  * @method static Builder|RmsapiConnection newModelQuery()
  * @method static Builder|RmsapiConnection newQuery()
