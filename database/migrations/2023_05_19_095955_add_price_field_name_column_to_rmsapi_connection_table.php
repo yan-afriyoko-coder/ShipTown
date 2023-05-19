@@ -8,7 +8,7 @@ class AddPriceFieldNameColumnToRmsapiConnectionTable extends Migration
 {
     public function up()
     {
-        Schema::table('rmsapi_connection', function (Blueprint $table) {
+        Schema::table('modules_rmsapi_connections', function (Blueprint $table) {
             $table->string('price_field_name')->default('price');
         });
     }
