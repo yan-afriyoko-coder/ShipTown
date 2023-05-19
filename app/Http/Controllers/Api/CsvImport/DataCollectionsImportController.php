@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\CsvImport;
 
 use App\Http\Controllers\Controller;
 use App\Models\DataCollection;
+use App\Models\DataCollectionTransferIn;
 use App\Models\Warehouse;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
@@ -83,6 +84,7 @@ class DataCollectionsImportController extends Controller
                     $dataCollector = DataCollection::create([
                         'warehouse_id' => $warehouse->id,
                         'name' => implode(' ', [$request->get('data_collection_name_prefix'), $warehouse->code]),
+                        'type' => DataCollectionTransferIn::class
                     ]);
 
                     DB::statement('
