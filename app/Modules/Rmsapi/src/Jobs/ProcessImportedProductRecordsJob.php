@@ -192,7 +192,7 @@ class ProcessImportedProductRecordsJob implements ShouldQueue, ShouldBeUniqueUnt
             ->first();
 
         // price, price_a, price_b, price_c
-        $priceFieldName = $importedProduct->rmsapiConnection->priceFieldName;
+        $priceFieldName = $importedProduct->rmsapiConnection->price_field_name;
 
         if ($productPrice->price !== $importedProduct->raw_import[$priceFieldName]
             or $productPrice->cost !== $importedProduct->raw_import['cost']

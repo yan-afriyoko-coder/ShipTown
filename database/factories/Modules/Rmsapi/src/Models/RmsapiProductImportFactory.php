@@ -24,55 +24,55 @@ class RmsapiProductImportFactory extends Factory
         $restock_level      = rand(0, $reorder_point);
 
         return [
-            'connection_id' => $connection->getKey(),
-            'raw_import'    => json_decode('{
-           "id":1,
-           "cost":110.34,
-           "price":'.(rand(1, 100000) / 100).',
-           "active":1,
-           "item_id":1,
-           "price_a":0,
-           "price_b":0,
-           "price_c":0,
-           "item_code":"'. $this->faker->randomNumber(6).'",
-           "sale_price":0,
-           "category_id":9,
-           "description":"R/C Glider",
-           "is_web_item":'.rand(0, 1).',
-           "supplier_id":2,
-           "date_created":"2003-06-03 17:17:23",
-           "department_id":5,
-           "department_name":"'. $random_department .'",
-           "category_name":"'. $random_category .'",
-           "reorder_point":'. $reorder_point .',
-           "restock_level":'. $restock_level .',
-           "sale_end_date":null,
-           "food_stampable":0,
-           "db_change_stamp":'.rand(1000, 100000).',
-           "sale_start_date":null,
-           "quantity_on_hand":'.$quantity_on_hand.',
-           "quantity_on_order":'.rand(10, 20).',
-           "sub_description_1":"",
-           "sub_description_2":"",
-           "sub_description_3":"",
-           "quantity_available":'.$quantity_available.',
-           "quantity_committed":'.$quantity_committed.',
-           "quantity_discount_id":0,
-           "supplier_code":"supplier234",
-           "supplier_name":"ShipTown Ltd",
-           "rmsmobile_shelve_location":"'.Str::upper($this->faker->randomLetter).$this->faker->numberBetween(0, 9).'",
-           "aliases": [
-                {
-                    "id": 1,
-                    "alias": "'. $this->faker->unique()->randomNumber(6) .'-alias",
-                    "item_id": 1
-                },
-                {
-                    "id": 2,
-                    "alias": "'. $this->faker->unique()->randomNumber(6) .'-alias",
-                    "item_id": 1
-                }
-           ]
+            "connection_id" => $connection->getKey(),
+            "raw_import"    => json_decode('{
+            "id":1,
+            "cost":110.34,
+            "price":'.(rand(1, 100000) / 100).',
+            "active":1,
+            "item_id":1,
+            "price_a":'.(rand(1, 100000) / 100).',
+            "price_b":'.(rand(1, 100000) / 100).',
+            "price_c":'.(rand(1, 100000) / 100).',
+            "item_code":"'. $this->faker->randomNumber(6).'",
+            "sale_price":0,
+            "category_id":9,
+            "description":"R/C Glider",
+            "is_web_item":'.rand(0, 1).',
+            "supplier_id":2,
+            "date_created":"2003-06-03 17:17:23",
+            "department_id":5,
+            "department_name":"'. $random_department .'",
+            "category_name":"'. $random_category .'",
+            "reorder_point":'. $reorder_point .',
+            "restock_level":'. $restock_level .',
+            "sale_end_date":null,
+            "food_stampable":0,
+            "db_change_stamp":'.rand(1000, 100000).',
+            "sale_start_date":null,
+            "quantity_on_hand":'.$quantity_on_hand.',
+            "quantity_on_order":'.rand(10, 20).',
+            "sub_description_1":"",
+            "sub_description_2":"",
+            "sub_description_3":"",
+            "quantity_available":'.$quantity_available.',
+            "quantity_committed":'.$quantity_committed.',
+            "quantity_discount_id":0,
+            "supplier_code":"supplier234",
+            "supplier_name":"ShipTown Ltd",
+            "rmsmobile_shelve_location":"'.Str::upper($this->faker->randomLetter).$this->faker->numberBetween(0, 9).'",
+            "aliases": [
+                 {
+                     "id": 1,
+                     "alias": "'. $this->faker->unique()->randomNumber(6) .'-alias",
+                     "item_id": 1
+                 },
+                 {
+                     "id": 2,
+                     "alias": "'. $this->faker->unique()->randomNumber(6) .'-alias",
+                     "item_id": 1
+                 }
+            ]
         }
     '),
         ];
