@@ -27,8 +27,7 @@ class EnsureProductRecordsExistJob implements ShouldQueue
      */
     public function handle()
     {
-        /* @var Tag $tag */
-        $tag = Tag::findFromString('Available Online');
+        $tag = Tag::findOrCreate(['name' => 'Available Online']);
 
         DB::statement("
             INSERT INTO modules_magento2api_products (connection_id, product_id, created_at, updated_at)
@@ -44,6 +43,6 @@ class EnsureProductRecordsExistJob implements ShouldQueue
             AND taggables.taggable_id NOT IN (
                 SELECT product_id FROM modules_magento2api_products
             )
-        ", [$tag->getKey(), \App\Models\Product::class]);
+        ", [$tag->first()->getKey(), \App\Models\Product::class]);
     }
 }

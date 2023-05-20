@@ -7,7 +7,6 @@ use App\Http\Requests\MagentoApiConnectionUpdateRequest;
 use App\Http\Resources\MagentoConnectionResource;
 use App\Modules\MagentoApi\src\Http\Requests\MagentoApiConnectionDestroyRequest;
 use App\Modules\MagentoApi\src\Http\Requests\MagentoApiConnectionIndexRequest;
-use App\Modules\MagentoApi\src\Http\Requests\MagentoApiConnectionSetupRequest;
 use App\Modules\MagentoApi\src\Http\Requests\MagentoApiConnectionStoreRequest;
 use App\Modules\MagentoApi\src\Models\MagentoConnection;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -38,6 +37,7 @@ class MagentoApiConnectionController extends Controller
 
     public function update(MagentoApiConnectionUpdateRequest $request, MagentoConnection $connection)
     {
+
         $connection->fill($request->validated());
         if ($request->tag) {
             $tag = Tag::findOrCreate($request->tag);

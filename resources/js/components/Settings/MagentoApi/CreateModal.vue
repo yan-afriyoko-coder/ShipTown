@@ -66,12 +66,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="access_token_encrypted">Access Token</label>
-                    <ValidationProvider vid="access_token_encrypted" name="access_token_encrypted" v-slot="{ errors }">
-                        <input v-model="config.access_token_encrypted" :class="{
+                    <label class="form-label" for="api_access_token">Access Token</label>
+                    <ValidationProvider vid="api_access_token" name="api_access_token" v-slot="{ errors }">
+                        <input v-model="config.api_access_token" :class="{
                             'form-control': true,
                             'is-invalid': errors.length > 0,
-                        }" id="create-access_token_encrypted" required>
+                        }" id="api_access_token" required>
                         <div class="invalid-feedback">
                             {{ errors[0] }}
                         </div>
@@ -88,13 +88,7 @@
             >
                 Cancel
             </b-button>
-            <b-button
-                variant="primary"
-                class="float-right"
-                @click="submit"
-            >
-                Save
-            </b-button>
+            <b-button @click="submit" variant="primary" class="float-right">Save</b-button>
         </template>
     </b-modal>
 </template>
@@ -121,7 +115,7 @@ export default {
     data() {
         return {
             config: {
-                base_url: location.protocol + '//' + location.host
+                base_url: ''
             },
             warehouses: []
         }
