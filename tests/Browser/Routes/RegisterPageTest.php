@@ -19,8 +19,6 @@ class RegisterPageTest extends DuskTestCase
             $browser->disableFitOnFailure();
             $browser->visit($this->uri);
             $browser->assertPathIs($this->uri);
-
-            $this->markTestIncomplete('This test has not been implemented yet.');
         });
     }
 }
