@@ -7,10 +7,8 @@ use App\Http\Requests\MagentoApiConnectionUpdateRequest;
 use App\Http\Resources\MagentoConnectionResource;
 use App\Modules\MagentoApi\src\Http\Requests\MagentoApiConnectionDestroyRequest;
 use App\Modules\MagentoApi\src\Http\Requests\MagentoApiConnectionIndexRequest;
-use App\Modules\MagentoApi\src\Http\Requests\MagentoApiConnectionSetupRequest;
 use App\Modules\MagentoApi\src\Http\Requests\MagentoApiConnectionStoreRequest;
 use App\Modules\MagentoApi\src\Models\MagentoConnection;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Spatie\Tags\Tag;
 
@@ -22,7 +20,7 @@ class MagentoApiConnectionController extends Controller
         return MagentoConnectionResource::collection($this->getPaginatedResult($query));
     }
 
-    public function store(Request $request): MagentoConnectionResource
+    public function store(MagentoApiConnectionStoreRequest $request): MagentoConnectionResource
     {
         $connection = new MagentoConnection();
         $connection->fill($request->only($connection->getFillable()));

@@ -27,7 +27,7 @@
                             <input v-model="config.base_url" :class="{
                                         'form-control': true,
                                         'is-invalid': errors.length > 0,
-                                    }" id="create-base_url" type="url" required>
+                                    }" id="base_url" type="url" required>
                             <div class="invalid-feedback">
                                 {{ errors[0] }}
                             </div>
@@ -40,7 +40,7 @@
                                 <input v-model="config.magento_store_id" :class="{
                                     'form-control': true,
                                     'is-invalid': errors.length > 0,
-                                }" id="create-magento_store_id" type="number" required>
+                                }" id="magento_store_id" type="number" required>
                                 <div class="invalid-feedback">
                                     {{ errors[0] }}
                                 </div>
@@ -48,21 +48,22 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" for="access_token">Access Token</label>
-                            <ValidationProvider vid="access_token" name="access_token" v-slot="{ errors }">
-                                <input v-model="config.access_token" :class="{
+                            <label class="form-label" for="api_access_token">API Access Token</label>
+                            <ValidationProvider vid="api_access_token" name="api_access_token" v-slot="{ errors }">
+                                <input v-model="config.api_access_token" id="api_access_token" type="text" required :class="{
                                     'form-control': true,
                                     'is-invalid': errors.length > 0,
-                                }" id="create-access_token" type="text" required>
+                                }">
                                 <div class="invalid-feedback">
                                     {{ errors[0] }}
                                 </div>
                             </ValidationProvider>
                         </div>
 
-                        <button class="btn btn-primary btn-block" type="submit">Save</button>
                     </form>
                 </ValidationObserver>
+                <b-button @click="submit" variant="primary" class="btn btn-primary btn-block">Save</b-button>
+<!--                        <button class="btn btn-primary btn-block" type="submit">Save</button>-->
             </div>
         </div>
     </div>
@@ -83,9 +84,6 @@ export default {
         return {
             config: {
                 base_url: '',
-                setup: true,
-                store_id: null,
-                access_token: null
             },
         };
     },
@@ -97,7 +95,6 @@ export default {
                 .then(({ data }) => {
                     this.$snotify.success('Connection created.');
                     window.location.href = '/';
-
                 })
                 .catch((error) => {
                     if (error.response) {

@@ -23,18 +23,28 @@ class MagentoConnection extends BaseModel
 
     protected $fillable = [
         'base_url',
-        'access_token_encrypted',
+        'api_access_token',
         'magento_store_id',
         'inventory_source_warehouse_tag_id',
         'pricing_source_warehouse_id',
     ];
 
-    public function getAccessTokenEncryptedAttribute(): string
+    public function getApiAccessTokenAttribute(): string
     {
         return Crypt::decryptString($this->attributes['access_token_encrypted']);
     }
 
-    public function setAccessTokenEncryptedAttribute($value)
+    public function setApiAccessTokenAttribute($value)
+    {
+        $this->attributes['access_token_encrypted'] = Crypt::encryptString($value);
+    }
+
+    public function getAccessTokenAttribute(): string
+    {
+        return Crypt::decryptString($this->attributes['access_token_encrypted']);
+    }
+
+    public function setAccessTokenAttribute($value)
     {
         $this->attributes['access_token_encrypted'] = Crypt::encryptString($value);
     }
