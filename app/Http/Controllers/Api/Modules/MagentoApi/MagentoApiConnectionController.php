@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Modules\MagentoApi;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MagentoApiConnectionUpdateRequest;
 use App\Http\Resources\MagentoConnectionResource;
 use App\Modules\MagentoApi\src\Http\Requests\MagentoApiConnectionDestroyRequest;
 use App\Modules\MagentoApi\src\Http\Requests\MagentoApiConnectionIndexRequest;
@@ -22,31 +23,34 @@ class MagentoApiConnectionController extends Controller
 
     public function store(MagentoApiConnectionStoreRequest $request): MagentoConnectionResource
     {
-        $config = new MagentoConnection();
-        $config->fill($request->only($config->getFillable()));
-        $config->save();
+        $connection = new MagentoConnection();
+        $connection->fill($request->only($connection->getFillable()));
 
-        $tag = Tag::findOrCreate($request->tag);
-        $config->attachTag($tag);
-        $config->inventory_source_warehouse_tag_id = $tag->id;
-        $config->save();
+        if ($request->has('tag')) {
+            $tag = Tag::findOrCreate($request->get('tag'));
+            $connection->inventory_source_warehouse_tag_id = $tag->getKey();
+        }
 
-        return new MagentoConnectionResource($config);
+        $connection->save();
+
+        return new MagentoConnectionResource($connection);
     }
 
-    public function destroy(MagentoApiConnectionDestroyRequest $request, $id)
+    public function update(MagentoApiConnectionUpdateRequest $request, MagentoConnection $connection)
     {
-        $connection = MagentoConnection::findOrFail($id);
+        $connection->fill($request->validated());
+        if ($request->tag) {
+            $tag = Tag::findOrCreate($request->tag);
+            $connection->inventory_source_warehouse_tag_id = $tag->id;
+            $connection->tags()->sync([$tag->id]);
+        }
+        return new MagentoConnectionResource($connection);
+    }
+
+    public function destroy(MagentoApiConnectionDestroyRequest $request, MagentoConnection $connection)
+    {
         $connection->delete();
+
         return response('ok');
-    }
-
-    public function setup(MagentoApiConnectionSetupRequest $request): MagentoConnectionResource
-    {
-        $config = new MagentoConnection();
-        $config->fill($request->only($config->getFillable()));
-        $config->save();
-
-        return new MagentoConnectionResource($config);
     }
 }
