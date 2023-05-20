@@ -11,7 +11,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 /**
  * @property string $base_url
- * @property string $access_token
+ * @property string $api_access_token
  * @property integer $magento_store_id
  * @property integer inventory_source_warehouse_tag_id
  */
