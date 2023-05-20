@@ -11,9 +11,9 @@ class MagentoApiConnectionStoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return $this->user()->hasRole('admin');
+        return true;
     }
 
     /**
@@ -28,7 +28,7 @@ class MagentoApiConnectionStoreRequest extends FormRequest
             'magento_store_id'              => 'required|numeric',
             'tag'                           => 'nullable',
             'pricing_source_warehouse_id'   => 'nullable|exists:warehouses,id',
-            'access_token_encrypted'        => 'required',
+            'access_token'                  => 'required',
         ];
     }
 }

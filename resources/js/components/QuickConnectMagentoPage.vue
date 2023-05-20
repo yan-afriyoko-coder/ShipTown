@@ -49,11 +49,11 @@
 
                         <div class="form-group">
                             <label class="form-label" for="access_token">Access Token</label>
-                            <ValidationProvider vid="access_token_encrypted" name="access_token_encrypted" v-slot="{ errors }">
-                                <input v-model="config.access_token_encrypted" :class="{
+                            <ValidationProvider vid="access_token" name="access_token" v-slot="{ errors }">
+                                <input v-model="config.access_token" :class="{
                                     'form-control': true,
                                     'is-invalid': errors.length > 0,
-                                }" id="create-access_token_encrypted" type="text" required>
+                                }" id="create-access_token" type="text" required>
                                 <div class="invalid-feedback">
                                     {{ errors[0] }}
                                 </div>
@@ -82,10 +82,10 @@ export default {
     data() {
         return {
             config: {
-                base_url: location.protocol + '//' + location.host,
+                base_url: '',
                 setup: true,
                 store_id: null,
-                access_token_encrypted: null
+                access_token: null
             },
         };
     },
