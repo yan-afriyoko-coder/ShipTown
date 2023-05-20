@@ -22,7 +22,7 @@ class StoreTest extends TestCase
             'magento_store_id'                  => 123456,
             'tag'                               => 'some-tag',
             'pricing_source_warehouse_id'       => $warehouse->id,
-            'access_token_encrypted'            => 'some-token',
+            'api_access_token'            => 'some-token',
         ]);
 
         $response->assertSuccessful();
@@ -43,7 +43,6 @@ class StoreTest extends TestCase
         $response->assertJsonValidationErrors([
             'base_url',
             'magento_store_id',
-            'access_token_encrypted',
         ]);
     }
 }
