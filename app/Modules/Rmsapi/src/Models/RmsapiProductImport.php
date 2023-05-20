@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
@@ -21,6 +22,7 @@ use Illuminate\Support\Carbon;
  * @property array       $raw_import
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property RmsapiConnection $rmsapiConnection
  *
  * @method static Builder|RmsapiProductImport newModelQuery()
  * @method static Builder|RmsapiProductImport newQuery()
@@ -63,4 +65,9 @@ class RmsapiProductImport extends Model
     protected $attributes = [
         'raw_import' => '{}',
     ];
+
+    public function rmsapiConnection(): BelongsTo
+    {
+        return $this->belongsTo(RmsapiConnection::class, 'connection_id', 'id');
+    }
 }

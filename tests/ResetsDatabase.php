@@ -23,6 +23,7 @@ use App\Modules\Automations\src\Models\Action;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Models\Condition;
 use App\Modules\DpdIreland\src\Models\DpdIreland;
+use App\Modules\InventoryReservations\src\EventServiceProviderBase as InventoryReservationsServiceProvider;
 use App\Modules\InventoryReservations\src\Models\Configuration;
 use App\Modules\MagentoApi\src\Models\MagentoConnection;
 use App\Modules\MagentoApi\src\Models\MagentoProduct;
@@ -88,5 +89,10 @@ trait ResetsDatabase
 
         // now re-register all the roles and permissions (clears cache and reloads relations)
         $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->registerPermissions();
+
+        \App\Models\Configuration::query()->forceDelete();
+        \App\Models\Configuration::query()->create();
+
+        InventoryReservationsServiceProvider::enableModule();
     }
 }

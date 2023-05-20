@@ -2,10 +2,7 @@
 
 namespace Tests\Browser\Routes\Reports;
 
-use App\Models\Warehouse;
-use App\User;
 use Exception;
-use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
 
@@ -28,57 +25,11 @@ class StocktakeSuggestionsTotalsPageTest extends DuskTestCase
     /**
      * @throws Throwable
      */
-    public function testUserAccess()
+    public function testBasicsAccess()
     {
-        $this->browse(function (Browser $browser) {
-            /** @var User $user */
-            $user = User::factory()->create();
-            $user->assignRole('user');
-
-            $user->warehouse()->associate(Warehouse::factory()->create());
-
-            $browser->disableFitOnFailure()
-                ->loginAs($user)
-                ->visit($this->uri)
-                ->pause(300)
-                ->assertPathIs($this->uri)
-                ->assertSourceMissing('snotify-error');
-        });
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testAdminAccess()
-    {
-        $this->browse(function (Browser $browser) {
-            /** @var User $user */
-            $user = User::factory()->create();
-            $user->assignRole('admin');
-
-            $user->warehouse()->associate(Warehouse::factory()->create());
-
-            $browser->disableFitOnFailure()
-                ->loginAs($user)
-                ->visit($this->uri)
-                ->pause(300)
-                ->assertPathIs($this->uri)
-                ->assertSourceMissing('snotify-error');
-        });
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testGuestAccess()
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->disableFitOnFailure()
-                ->logout()
-                ->visit($this->uri)
-                ->assertRouteIs('login')
-                ->assertSee('Login');
-        });
+        $this->basicUserAccessTest($this->uri, true);
+        $this->basicAdminAccessTest($this->uri, true);
+        $this->basicGuestAccessTest($this->uri);
     }
 }
 

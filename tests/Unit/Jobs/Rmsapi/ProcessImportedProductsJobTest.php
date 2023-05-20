@@ -15,12 +15,6 @@ class ProcessImportedProductsJobTest extends TestCase
 {
     public function testIfAddsAvailableOnlineTag()
     {
-        // prepare
-        RmsapiProductImport::query()->forceDelete();
-        Product::query()->forceDelete();
-        ProductAlias::query()->forceDelete();
-        Tag::query()->forceDelete();
-
         /** @var RmsapiProductImport $importData */
         $importData = RmsapiProductImport::factory()->create();
 
@@ -30,7 +24,8 @@ class ProcessImportedProductsJobTest extends TestCase
 
         // do
         foreach (RmsapiConnection::all() as $rmsapiConnection) {
-            ProcessImportedProductRecordsJob::dispatch($rmsapiConnection->id);
+            $job = new ProcessImportedProductRecordsJob($rmsapiConnection->id);
+            $job->handle();
         }
 
         // assert

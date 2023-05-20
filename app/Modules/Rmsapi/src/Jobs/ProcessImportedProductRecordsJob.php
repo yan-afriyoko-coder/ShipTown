@@ -178,27 +178,30 @@ class ProcessImportedProductRecordsJob implements ShouldQueue, ShouldBeUniqueUnt
 
     /**
      * @param RmsapiProductImport $importedProduct
-     * @param Product             $product
+     * @param Product             $productPrice
      */
-    private function importPricing(RmsapiProductImport $importedProduct, Product $product): void
+    private function importPricing(RmsapiProductImport $importedProduct, Product $productPrice): void
     {
         $connection = RmsapiConnection::query()->find($importedProduct->connection_id);
 
-        $p = ProductPrice::query()
+        $productPrice = ProductPrice::query()
             ->where([
-                'product_id' => $product->id,
+                'product_id' => $productPrice->id,
                 'warehouse_id' => $connection->warehouse_id,
             ])
             ->first();
 
-        if ($p->price !== $importedProduct->raw_import['price']
-            or $p->cost !== $importedProduct->raw_import['cost']
-            or $p->sale_price !== $importedProduct->raw_import['sale_price']
-            or $p->sale_price_start_date !== $importedProduct->raw_import['sale_price_start_date'] ?? '2000-01-01'
-            or $p->sale_price_end_date !== $importedProduct->raw_import['sale_price_start_date'] ?? '2000-01-01'
+        // price, price_a, price_b, price_c
+        $priceFieldName = $importedProduct->rmsapiConnection->price_field_name;
+
+        if ($productPrice->price !== $importedProduct->raw_import[$priceFieldName]
+            or $productPrice->cost !== $importedProduct->raw_import['cost']
+            or $productPrice->sale_price !== $importedProduct->raw_import['sale_price']
+            or $productPrice->sale_price_start_date !== $importedProduct->raw_import['sale_price_start_date'] ?? '2000-01-01'
+            or $productPrice->sale_price_end_date !== $importedProduct->raw_import['sale_price_start_date'] ?? '2000-01-01'
         ) {
-            $p->update([
-                'price'                 => $importedProduct->raw_import['price'],
+            $productPrice->update([
+                'price'                 => $importedProduct->raw_import[$priceFieldName],
                 'cost'                  => $importedProduct->raw_import['cost'],
                 'sale_price'            => $importedProduct->raw_import['sale_price'],
                 'sale_price_start_date' => $importedProduct->raw_import['sale_start_date'] ?? '2000-01-01',

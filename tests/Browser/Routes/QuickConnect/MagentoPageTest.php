@@ -1,36 +1,28 @@
 <?php
 
-namespace Tests\Browser\Routes\Reports;
+namespace Tests\Browser\Routes\QuickConnect;
 
-use App\Models\Warehouse;
 use App\User;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
 
-class InventoryDashboardPageTest extends DuskTestCase
+class MagentoPageTest extends DuskTestCase
 {
-    private string $uri = '/reports/inventory-dashboard';
+    private string $uri = '/quick-connect/magento';
 
     /**
      * @throws Throwable
      */
-    public function testInventoryDashboardPage()
+    public function testIncomplete()
     {
-        /** @var Warehouse $warehouse */
-        $warehouse = Warehouse::factory()->create();
-
         /** @var User $user */
         $user = User::factory()->create();
         $user->assignRole('admin');
-        $user->update(['warehouse_id' => $warehouse->id]);
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser->disableFitOnFailure();
             $browser->loginAs($user);
-            $browser->visit($this->uri);
-            $browser->assertPathIs($this->uri);
-            $browser->assertSourceMissing('Server Error');
 
             $this->markTestIncomplete('This test has not been implemented yet.');
         });
@@ -39,7 +31,7 @@ class InventoryDashboardPageTest extends DuskTestCase
     /**
      * @throws Throwable
      */
-    public function testBasics()
+    public function testBasicsAccess()
     {
         $this->basicUserAccessTest($this->uri, true);
         $this->basicAdminAccessTest($this->uri, true);

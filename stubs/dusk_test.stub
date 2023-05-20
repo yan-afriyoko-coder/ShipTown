@@ -1,29 +1,24 @@
 <?php
 
-namespace Tests\Browser\Routes\Reports;
+namespace DummyNamespace;
 
-use App\Models\Warehouse;
 use App\User;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Throwable;
 
-class InventoryDashboardPageTest extends DuskTestCase
+class DummyClass extends DuskTestCase
 {
-    private string $uri = '/reports/inventory-dashboard';
+    private string $uri = '/{{uri}}';
 
     /**
      * @throws Throwable
      */
-    public function testInventoryDashboardPage()
+    public function testPage()
     {
-        /** @var Warehouse $warehouse */
-        $warehouse = Warehouse::factory()->create();
-
         /** @var User $user */
         $user = User::factory()->create();
         $user->assignRole('admin');
-        $user->update(['warehouse_id' => $warehouse->id]);
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser->disableFitOnFailure();

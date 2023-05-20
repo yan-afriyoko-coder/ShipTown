@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Crypt;
  * @property int         $sales_last_timestamp
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property string      $price_field_name
  *
  * @method static Builder|RmsapiConnection newModelQuery()
  * @method static Builder|RmsapiConnection newQuery()
@@ -52,6 +53,7 @@ class RmsapiConnection extends BaseModel
         'products_last_timestamp',
         'shippings_last_timestamp',
         'sales_last_timestamp',
+        'price_field_name'
     ];
 
     public function setPasswordAttribute($password)

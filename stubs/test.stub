@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Feature\Modules\Telescope;
+namespace {{ namespace }};
 
 use Tests\TestCase;
 
-class BasicModuleTest extends TestCase
+class {{class}} extends TestCase
 {
     /** @test */
-    public function test_module_basic_functionality()
+    public function {{resourceLowercase}} ()
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
     }
