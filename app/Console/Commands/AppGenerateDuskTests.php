@@ -4,13 +4,12 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 /**
  *
  */
-class AppGenerateDusksTests extends Command
+class AppGenerateDuskTests extends Command
 {
     /**
      * The name and signature of the console command.
@@ -58,7 +57,7 @@ class AppGenerateDusksTests extends Command
         $routes->each(function ($route) {
             $testName = $this->getWebRouteTestName($route);
             $this->comment($testName);
-            Artisan::call('app:dusk-test ' . $testName . ' --uri=' . $route->uri);
+            Artisan::call('app:make-dusk-test ' . $testName . ' --uri=' . $route->uri);
             $this->info(Artisan::output());
         });
     }

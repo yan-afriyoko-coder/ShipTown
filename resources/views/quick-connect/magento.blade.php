@@ -1,5 +1,5 @@
 @extends('layouts.body')
 
 @section('app-content')
-    <setup-magento-page></setup-magento-page>
+    <quick-connect-magento-page></quick-connect-magento-page>
 @endsection

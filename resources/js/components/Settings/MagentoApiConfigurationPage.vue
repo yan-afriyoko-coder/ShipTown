@@ -13,30 +13,26 @@
             </div>
 
             <div class="card-body">
-                <table v-if="connections.length > 0" class="table table-borderless table-responsive mb-0">
+                <table v-if="connections.length > 0" class="table table-hover table-borderless table-responsive mb-0">
                     <thead>
-                        <tr>
-                            <th>URL</th>
-                            <th>Magento Store ID</th>
-                            <th>Connection Tag</th>
-                            <th>Pricing Source</th>
-                            <th></th>
-                        </tr>
+                    <tr>
+                        <th>URL</th>
+                        <th>Magento Store ID</th>
+                        <th>Connection Tag</th>
+                        <th>Pricing Source</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="connection in connections" :key="connection/id">
-                            <td>{{ connection.base_url }}</td>
-                            <td>{{ connection.magento_store_id }}</td>
-                            <td>
-                                <template v-for="tag in connection.tags">
-                                    <a class="badge text-uppercase" :key="tag.id"> {{ tag.name }} </a>
-                                </template>
-                            </td>
-                            <td>{{ connection.warehouse.name }}</td>
-                            <td>
-                                <a @click="confirmDelete(connection.id)" class="action-link text-danger">Delete</a>
-                            </td>
-                        </tr>
+                    <tr v-for="connection in connections" :key="connection.id" @click.prevent="showEditForm(connection)">
+                        <td>{{ connection.base_url }}</td>
+                        <td>{{ connection.magento_store_id }}</td>
+                        <td>
+                            <template v-for="tag in connection.tags">
+                                <a class="badge text-uppercase" :key="tag.id"> {{ tag.name }} </a>
+                            </template>
+                        </td>
+                        <td>{{ connection.warehouse?.name }}</td>
+                    </tr>
                     </tbody>
                 </table>
 
@@ -47,73 +43,78 @@
         </div>
 
         <create-modal @onCreated="getConnections"></create-modal>
+        <edit-modal :connection="selectedConnection" id="editForm" @onUpdated="conncetionUpdatedEvent"></edit-modal>
     </div>
 </template>
 
 <script>
-    import api from "../../mixins/api";
-    import CreateModal from './MagentoApi/CreateModal.vue';
+import api from "../../mixins/api";
+import CreateModal from './MagentoApi/CreateModal.vue';
+import EditModal from './MagentoApi/EditModal.vue';
 
-    export default {
-        components: {
-            CreateModal
-        },
+export default {
+    components: {
+        CreateModal, EditModal
+    },
 
-        mixins: [api],
+    mixins: [api],
 
-        data: () => ({
-            connections: [],
-        }),
+    data: () => ({
+        selectedConnection: null,
+        connections: [],
+    }),
 
-        mounted() {
-            this.getConnections();
-        },
+    mounted() {
+        this.getConnections();
+    },
 
-        methods: {
+    methods: {
 
-            getConnections() {
-                this.apiGetMagentoApiConnections({
-                    'per_page': 100,
-                    'include': 'tags,warehouse'
-                })
+        getConnections() {
+            this.apiGetMagentoApiConnections({
+                'per_page': 100,
+                'include': 'tags,warehouse'
+            })
                 .then(({ data }) => {
                     this.connections = data.data;
                 });
-            },
-
-            showCreateForm() {
-                this.$bvModal.show('modal-create-connection')
-            },
-
-            confirmDelete(connection_id){
-                this.$snotify.confirm('After delete data cannot restored', 'Are you sure?', {
-                    position: 'centerCenter',
-                    buttons: [
-                        {
-                            text: 'Yes',
-                            action: (toast) => {
-                                this.handleDelete(connection_id)
-                                this.$snotify.remove(toast.id);
-                            }
-                        },
-                        {text: 'Cancel'},
-                    ]
-                });
-            },
-
-            handleDelete(connection_id, index) {
-                this.apiDeleteMagentoApiConnection(connection_id)
-                    .then(() => {
-                        this.getConnections()
-                    });
-            }
         },
-    }
+
+        showCreateForm() {
+            this.$bvModal.show('modal-create-connection')
+        },
+
+        confirmDelete(connection_id){
+            this.$snotify.confirm('After delete data cannot restored', 'Are you sure?', {
+                position: 'centerCenter',
+                buttons: [
+                    {
+                        text: 'Yes',
+                        action: (toast) => {
+                            this.handleDelete(connection_id)
+                            this.$snotify.remove(toast.id);
+                        }
+                    },
+                    {text: 'Cancel'},
+                ]
+            });
+        },
+
+        showEditForm(connection) {
+            this.selectedConnection = connection;
+            $('#editForm').modal('show');
+        },
+
+        conncetionUpdatedEvent() {
+            this.getConnections();
+        },
+    },
+}
 
 </script>
 
 <style lang="scss" scoped>
-    .action-link {
-        cursor: pointer;
-    }
+.action-link {
+    cursor: pointer;
+}
 </style>

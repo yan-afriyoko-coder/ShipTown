@@ -5,14 +5,14 @@ namespace App\Console\Commands;
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Str;
 
-class AppDustTest extends GeneratorCommand
+class AppMakeDuskTest extends GeneratorCommand
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $signature = 'app:dusk-test {name : The name of the class} {--uri=: The uri of the route}';
+    protected $signature = 'app:make-dusk-test {name : The name of the class} {--uri=: The uri of the route}';
 
     /**
      * The console command description.

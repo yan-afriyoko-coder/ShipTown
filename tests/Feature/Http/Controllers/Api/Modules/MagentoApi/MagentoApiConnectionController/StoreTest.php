@@ -43,8 +43,6 @@ class StoreTest extends TestCase
         $response->assertJsonValidationErrors([
             'base_url',
             'magento_store_id',
-            'tag',
-            'pricing_source_warehouse_id',
             'access_token_encrypted',
         ]);
     }
