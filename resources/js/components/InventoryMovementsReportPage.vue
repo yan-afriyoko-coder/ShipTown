@@ -13,10 +13,10 @@
         </div>
 
         <div class="row pl-2 p-0">
-            <div class="col-6 text-left align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">
-                Inventory Movements
+            <div class="col-12 col-md-6 col-lg-6 text-nowrap text-left align-bottom pb-0 m-0 font-weight-bold text-uppercase small text-secondary">
+                REPORTS > INVENTORY MOVEMENTS
             </div>
-            <div class="col-6 text-nowrap">
+            <div class="col-12 col-md-6 col-lg-6 text-nowrap">
                 <date-selector-widget :dates="{'url_param_name': 'filter[created_at_between]'}"></date-selector-widget>
             </div>
         </div>

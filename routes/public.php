@@ -16,7 +16,7 @@ use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('manifest.json', [ManifestController::class, 'index']);
+Route::get('manifest.json', [ManifestController::class, 'index'])->name('manifest.json');
 
 Route::view('help', 'help');
 

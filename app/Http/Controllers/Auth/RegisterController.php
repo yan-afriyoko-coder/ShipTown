@@ -28,7 +28,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/dashboard';
+    protected string $redirectTo = '/quick-connect/magento';
 
     /**
      * Create a new controller instance.
