@@ -1,6 +1,6 @@
 <template>
-    <div v-if="dataCollection">
-        <template v-if="dataCollection['currently_running_task'] != null">
+    <div>
+        <template v-if="dataCollection && dataCollection['currently_running_task'] != null">
             <div class="alert alert-danger">Please wait while stock being transferred in</div>
         </template>
 
@@ -329,7 +329,7 @@
             },
 
             loadDataCollectorDetails: function () {
-                this.apiGetDataCollector({'filter[id]': this.data_collection_id, 'filter[archived]': true})
+                this.apiGetDataCollector({'filter[id]': this.data_collection_id, 'filter[with_archived]': true})
                     .then(response => {
                         this.dataCollection = response.data.data[0];
                     });
