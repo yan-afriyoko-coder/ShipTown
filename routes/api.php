@@ -42,7 +42,7 @@ Route::apiResource('settings/widgets', Api\WidgetController::class)->only(['stor
 Route::apiResource('settings/modules/automations/run', Api\Modules\OrderAutomations\RunAutomationController::class, ['as' => 'settings.modules.automations'])->only(['store']);
 Route::apiResource('modules/autostatus/picking/configuration', Api\Modules\AutoStatus\ConfigurationController::class, ['as' => 'modules.autostatus.picking'])->only('index', 'store');
 
-Route::group(['as' => 'api.'], function () {
+Route::name('api.')->group(function () {
     Route::apiResource('configurations', Api\ConfigurationController::class)->only(['index', 'store']);
     Route::apiResource('heartbeats', Api\HeartbeatsController::class)->only(['index']);
     Route::apiResource('inventory', Api\InventoryController::class)->only(['index', 'store']);
@@ -68,7 +68,7 @@ Route::group(['as' => 'api.'], function () {
     Route::apiResource('shipping-labels', Api\ShippingLabelController::class)->only(['store']);
 });
 
-Route::group(['prefix' => 'modules', 'as' => 'api.modules.'], function () {
+Route::prefix('modules')->name('api.modules.')->group(function () {
     Route::apiResource('api2cart/connections', Api\Modules\Api2cart\Api2cartConnectionController::class, ['as' => 'api2cart'])->only(['index', 'store', 'destroy']);
     Route::apiResource('api2cart/products', Api\Modules\Api2cart\ProductsController::class, ['as' => 'api2cart'])->only(['index']);
     Route::apiResource('automations/config', Api\Modules\OrderAutomations\ConfigController::class, ['as' => 'automations'])->only(['index']);
