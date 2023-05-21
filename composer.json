@@ -17,7 +17,6 @@
         "blackfire/php-sdk": "^1.31",
         "doctrine/dbal": "^2.13",
         "dompdf/dompdf": "^1.0",
-        "fruitcake/laravel-cors": "^2.0",
         "grayloon/laravel-magento-api": "^0.12.0",
         "guzzlehttp/guzzle": "^6.3.1|^7.0.1",
         "hulkur/laravel-hasmany-keyby": "^4.0.2",
