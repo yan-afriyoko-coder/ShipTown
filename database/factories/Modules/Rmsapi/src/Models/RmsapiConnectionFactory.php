@@ -17,9 +17,9 @@ class RmsapiConnectionFactory extends Factory
         return [
             'warehouse_id'     => $warehouse->id,
             'location_id'      => $warehouse->code,
-            'url'              => $this->faker->url,
-            'username'         => $this->faker->companyEmail,
-            'password'         => $this->faker->password,
+            'url'              => $this->faker->url(),
+            'username'         => $this->faker->companyEmail(),
+            'password'         => $this->faker->password(),
             'price_field_name' => $this->faker->randomElement(['price', 'price_a', 'price_b', 'price_c']),
         ];
     }

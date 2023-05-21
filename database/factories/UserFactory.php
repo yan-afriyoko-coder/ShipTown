@@ -15,14 +15,14 @@ class UserFactory extends Factory
     {
         $warehouse = Warehouse::query()->inRandomOrder()->first() ?? Warehouse::factory()->create();
 
-        $email = $this->faker->unique()->safeEmail;
+        $email = $this->faker->unique()->safeEmail();
 
         while (User::withTrashed()->where(['email' => $email])->exists()) {
-            $email = $this->faker->unique()->safeEmail;
+            $email = $this->faker->unique()->safeEmail();
         }
 
         return [
-            'name'              => $this->faker->firstName .' '. $this->faker->lastName,
+            'name'              => $this->faker->firstName() .' '. $this->faker->lastName(),
             'warehouse_id'      => $warehouse->getKey(),
             'email'             => $email,
             'email_verified_at' => now(),

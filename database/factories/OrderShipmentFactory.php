@@ -14,8 +14,8 @@ class OrderShipmentFactory extends Factory
     public function definition(): array
     {
         $shipping_number = $this->faker->toUpper(implode('', [
-            $this->faker->randomLetter,
-            $this->faker->randomLetter,
+            $this->faker->randomLetter(),
+            $this->faker->randomLetter(),
             '100',
             $this->faker->randomNumber(8)
         ]));
@@ -27,7 +27,7 @@ class OrderShipmentFactory extends Factory
             'order_id'        => $order->getKey(),
             'carrier'         => $this->faker->randomElement(['DPD', 'UPS', 'SEUR', 'DHL', 'DPD Ireland', 'DPD UK']),
             'shipping_number' => $shipping_number,
-            'tracking_url'    => $this->faker->url,
+            'tracking_url'    => $this->faker->url(),
             'user_id'         => $user->getKey(),
         ];
     }

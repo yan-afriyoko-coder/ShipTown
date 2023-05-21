@@ -20,7 +20,7 @@ class ProductAliasFactory extends Factory
 
         return [
             'product_id' => $product->getKey(),
-            'alias'      => $this->faker->ean13,
+            'alias'      => $this->faker->ean13(),
         ];
     }
 }

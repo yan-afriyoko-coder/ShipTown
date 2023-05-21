@@ -15,7 +15,7 @@ class DataCollectionFactory extends Factory
         $warehouse = Warehouse::first() ?? Warehouse::factory()->create();
         return [
             'warehouse_id' => $warehouse->getKey(),
-            'name' => $this->faker->word,
+            'name' => $this->faker->word(),
         ];
     }
 }

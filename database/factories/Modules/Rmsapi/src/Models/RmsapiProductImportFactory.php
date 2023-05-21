@@ -60,7 +60,7 @@ class RmsapiProductImportFactory extends Factory
             "quantity_discount_id":0,
             "supplier_code":"supplier234",
             "supplier_name":"ShipTown Ltd",
-            "rmsmobile_shelve_location":"'.Str::upper($this->faker->randomLetter).$this->faker->numberBetween(0, 9).'",
+            "rmsmobile_shelve_location":"'.Str::upper($this->faker->randomLetter()).$this->faker->numberBetween(0, 9).'",
             "aliases": [
                  {
                      "id": 1,

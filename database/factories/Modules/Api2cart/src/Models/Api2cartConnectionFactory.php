@@ -20,7 +20,7 @@ class Api2cartConnectionFactory extends Factory
             'pricing_source_warehouse_id'    => $warehouse->getKey(),
             'magento_store_id'               => 0,
             'pricing_location_id'            => $warehouse->code,
-            'bridge_api_key'                 => config('api2cart.api2cart_test_store_key') ?? $this->faker->uuid,
+            'bridge_api_key'                 => config('api2cart.api2cart_test_store_key') ?? $this->faker->uuid(),
         ];
     }
 }

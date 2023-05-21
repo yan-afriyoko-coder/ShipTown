@@ -46,8 +46,8 @@ class OrderStatusFactory extends Factory
         return [
             'code'           => $status,
             'name'           => $status,
-            'order_active'   => $this->faker->boolean,
-            'order_on_hold'  => $this->faker->boolean,
+            'order_active'   => $this->faker->boolean(),
+            'order_on_hold'  => $this->faker->boolean(),
         ];
     }
 }

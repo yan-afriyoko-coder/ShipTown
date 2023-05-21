@@ -27,7 +27,7 @@ class InventoryMovementFactory extends Factory
             'quantity_delta'    => $quantity_delta,
             'quantity_before'   => $inventory->quantity,
             'quantity_after'    => $inventory->quantity + $quantity_delta,
-            'description'       => $this->faker->word,
+            'description'       => $this->faker->word(),
             'user_id'           => $user->getKey(),
         ];
     }
