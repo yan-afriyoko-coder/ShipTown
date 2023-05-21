@@ -54,7 +54,7 @@ class DataCollectorListReport extends Report
         $this->addFilter(
             AllowedFilter::callback('archived', function ($query, $value) {
                 if ($value === true) {
-                    $query->withTrashed();
+                    $query->onlyTrashed();
                 }
             })
         );
