@@ -9,7 +9,7 @@ class SetupController extends Controller
 {
     public function magento()
     {
-        if(MagentoConnection::exists()) {
+        if (MagentoConnection::exists()) {
             return redirect()->route('dashboard');
         }
 

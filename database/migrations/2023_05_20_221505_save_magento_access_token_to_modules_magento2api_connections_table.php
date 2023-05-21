@@ -3,7 +3,7 @@
 use App\Modules\MagentoApi\src\Models\MagentoConnection;
 use Illuminate\Database\Migrations\Migration;
 
-class SaveMagentoAccessTokenToModulesMagento2apiConnectionsTable extends Migration
+return new class extends Migration
 {
     public function up(): void
     {
@@ -13,4 +13,4 @@ class SaveMagentoAccessTokenToModulesMagento2apiConnectionsTable extends Migrati
                 $connection->save();
             });
     }
-}
+};

@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CoreV1 extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -1234,4 +1234,4 @@ class CoreV1 extends Migration
             ->store(config('permission.cache.store') != 'default' ? config('permission.cache.store') : null)
             ->forget(config('permission.cache.key'));
     }
-}
+};

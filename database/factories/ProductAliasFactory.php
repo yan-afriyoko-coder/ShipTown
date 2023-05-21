@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ProductAliasFactory extends Factory
 {
-    protected $model = ProductAlias::class;
-
     public function definition(): array
     {
         $product = Product::query()->inRandomOrder()->first();
@@ -20,7 +18,7 @@ class ProductAliasFactory extends Factory
 
         return [
             'product_id' => $product->getKey(),
-            'alias'      => $this->faker->ean13,
+            'alias'      => $this->faker->ean13(),
         ];
     }
 }

@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\DB;
 
 class OrderProductFactory extends Factory
 {
-    protected $model = OrderProduct::class;
-
     public function definition(): array
     {
         // we will increase number of single line  orders

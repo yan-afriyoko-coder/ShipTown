@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateAccessTokenColumnTypeOnModuleMagento2apiConnectionsTable extends Migration
+return new class extends Migration
 {
     public function up(): void
     {
@@ -12,4 +12,4 @@ class UpdateAccessTokenColumnTypeOnModuleMagento2apiConnectionsTable extends Mig
             $table->longText('access_token_encrypted')->nullable()->change();
         });
     }
-}
+};

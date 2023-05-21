@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class InventoryMovementFactory extends Factory
 {
-    protected $model = InventoryMovement::class;
-
     public function definition(): array
     {
         $user = User::query()->inRandomOrder()->first() ?? User::factory()->create();
@@ -27,7 +25,7 @@ class InventoryMovementFactory extends Factory
             'quantity_delta'    => $quantity_delta,
             'quantity_before'   => $inventory->quantity,
             'quantity_after'    => $inventory->quantity + $quantity_delta,
-            'description'       => $this->faker->word,
+            'description'       => $this->faker->word(),
             'user_id'           => $user->getKey(),
         ];
     }

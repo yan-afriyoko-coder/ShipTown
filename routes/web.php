@@ -49,7 +49,7 @@ Route::view('autopilot/packlist', 'autopilot/packlist')->name('autopilot.packlis
 
 Route::resource('order/packsheet', Order\PacksheetController::class)->only(['show']);
 
-Route::group(['as' => 'reports.'], function () {
+Route::name('reports.')->group(function () {
     Route::resource('reports/stocktake-suggestions', Reports\StocktakeSuggestionsController::class)->only('index');
 
     Route::get('reports/inventory-dashboard', [Reports\InventoryDashboardController::class, 'index'])->name('inventory-dashboard');

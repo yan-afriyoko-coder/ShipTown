@@ -9,13 +9,11 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ShippingLabelFactory extends Factory
 {
-    protected $model = ShippingLabel::class;
-
     public function definition(): array
     {
         $shipping_number = $this->faker->toUpper(implode('', [
-            $this->faker->randomLetter,
-            $this->faker->randomLetter,
+            $this->faker->randomLetter(),
+            $this->faker->randomLetter(),
             '101',
             $this->faker->randomNumber(8)
         ]));
@@ -27,7 +25,7 @@ class ShippingLabelFactory extends Factory
             'order_id'        => $order->getKey(),
             'carrier'         => $this->faker->randomElement(['DPD', 'UPS', 'DHL', 'MRW', 'DPD Ireland', 'DPD UK']),
             'shipping_number' => $shipping_number,
-            'tracking_url'    => $this->faker->url,
+            'tracking_url'    => $this->faker->url(),
             'user_id'         => $user->getKey(),
         ];
     }

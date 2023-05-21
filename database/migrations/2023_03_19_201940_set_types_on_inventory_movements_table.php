@@ -3,7 +3,7 @@
 use App\Models\InventoryMovement;
 use Illuminate\Database\Migrations\Migration;
 
-class SetTypesOnInventoryMovementsTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -34,4 +34,4 @@ class SetTypesOnInventoryMovementsTable extends Migration
             ])
             ->update(['type' => 'transfer']);
     }
-}
+};

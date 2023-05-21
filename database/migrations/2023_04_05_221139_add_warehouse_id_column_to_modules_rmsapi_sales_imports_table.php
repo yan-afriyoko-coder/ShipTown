@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddWarehouseIdColumnToModulesRmsapiSalesImportsTable extends Migration
+return new class extends Migration
 {
     public function up(): void
     {
@@ -16,4 +16,4 @@ class AddWarehouseIdColumnToModulesRmsapiSalesImportsTable extends Migration
             $table->foreignId('warehouse_id')->nullable()->after('connection_id');
         });
     }
-}
+};

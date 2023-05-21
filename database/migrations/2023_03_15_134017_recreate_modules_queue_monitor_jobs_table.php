@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class RecreateModulesQueueMonitorJobsTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -27,4 +27,4 @@ class RecreateModulesQueueMonitorJobsTable extends Migration
                 ->comment('TIMESTAMPDIFF(SECOND, processing_at, processed_at)');
         });
     }
-}
+};

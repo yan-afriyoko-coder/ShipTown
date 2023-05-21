@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class DataCollectionRecordFactory extends Factory
 {
-    protected $model = DataCollectionRecord::class;
-
     public function definition(): array
     {
         $product = Product::query()->inRandomOrder()->first() ?? Product::factory()->create();

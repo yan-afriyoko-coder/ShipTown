@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddLastMovementIdColumnToInventoryTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -12,4 +12,4 @@ class AddLastMovementIdColumnToInventoryTable extends Migration
             $table->unsignedBigInteger('last_movement_id')->nullable()->after('last_counted_at');
         });
     }
-}
+};
