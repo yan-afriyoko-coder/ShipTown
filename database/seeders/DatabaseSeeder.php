@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Jobs\RunHourlyJobs;
 use App\Modules\QueueMonitor\src\QueueMonitorServiceProvider;
 use Illuminate\Database\Seeder;
 
@@ -35,7 +34,8 @@ class DatabaseSeeder extends Seeder
 
 //            RestockingReportSeeder::class,
 //            DataCollectionsSeeder::class,
-            DataCollectionsTransferInFromWarehouseSeeder::class,
+            DataCollections\TransfersFromWarehouseSeeder::class,
+            DataCollections\ArchivedTransfersFromWarehouseSeeder::class,
 //            RmsapiConnectionSeeder::class,
 //            StocktakeSuggestionsSeeder::class,
 //            AutomationsSeeder::class,

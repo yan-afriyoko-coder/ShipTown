@@ -130,7 +130,7 @@
                 }
 
                 this.getUrlFilterOrSet('filter[warehouse_code]', Vue.prototype.$currentUser['warehouse']['code']);
-                this.showArchived = this.getUrlFilterOrSet('filter[archived]', 'false') === 'true';
+                this.showArchived = this.getUrlFilterOrSet('filter[only_archived]', 'false') === 'true';
 
                 window.onscroll = () => this.loadMoreWhenNeeded();
 
@@ -144,7 +144,7 @@
 
             methods: {
                 toggleArchivedFilter(event) {
-                    this.setUrlParameter('filter[archived]', event.target.checked);
+                    this.setUrlParameter('filter[only_archived]', event.target.checked);
                     this.loadData();
                 },
 
