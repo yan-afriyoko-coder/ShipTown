@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFulltextIndexesToOrdersTable extends Migration
+return new class extends Migration
 {
     public function up(): void
     {
@@ -12,4 +12,4 @@ class AddFulltextIndexesToOrdersTable extends Migration
             $table->fullText(['order_number','status_code']);
         });
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdatePricingColumnsOnModulesMagento2apiProductsTable extends Migration
+return new class extends Migration
 {
     public function up(): void
     {
@@ -13,4 +13,4 @@ class UpdatePricingColumnsOnModulesMagento2apiProductsTable extends Migration
             $table->decimal('magento_sale_price', 20)->nullable()->change();
         });
     }
-}
+};
