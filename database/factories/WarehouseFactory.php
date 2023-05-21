@@ -9,8 +9,6 @@ use Illuminate\Support\Str;
 
 class WarehouseFactory extends Factory
 {
-    protected $model = Warehouse::class;
-
     public function definition(): array
     {
         $address_id = OrderAddress::factory()->create();

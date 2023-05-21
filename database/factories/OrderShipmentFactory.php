@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderShipmentFactory extends Factory
 {
-    protected $model = OrderShipment::class;
-
     public function definition(): array
     {
         $shipping_number = $this->faker->toUpper(implode('', [

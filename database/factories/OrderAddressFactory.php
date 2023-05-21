@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderAddressFactory extends Factory
 {
-    protected $model = OrderAddress::class;
-
     public function definition(): array
     {
         return [

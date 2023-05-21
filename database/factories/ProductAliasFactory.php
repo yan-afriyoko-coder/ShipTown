@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ProductAliasFactory extends Factory
 {
-    protected $model = ProductAlias::class;
-
     public function definition(): array
     {
         $product = Product::query()->inRandomOrder()->first();

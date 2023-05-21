@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PickFactory extends Factory
 {
-    protected $model = Pick::class;
-
     public function definition(): array
     {
         $product = Product::query()->inRandomOrder()->first() ?? Product::factory()->create();

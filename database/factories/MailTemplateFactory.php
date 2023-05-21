@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class MailTemplateFactory extends Factory
 {
-    protected $model = MailTemplate::class;
-
     public function definition(): array
     {
         return [

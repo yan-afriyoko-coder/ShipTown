@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class DataCollectionFactory extends Factory
 {
-    protected $model = DataCollection::class;
-
     public function definition(): array
     {
         $warehouse = Warehouse::first() ?? Warehouse::factory()->create();

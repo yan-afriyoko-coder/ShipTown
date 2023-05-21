@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ShippingLabelFactory extends Factory
 {
-    protected $model = ShippingLabel::class;
-
     public function definition(): array
     {
         $shipping_number = $this->faker->toUpper(implode('', [

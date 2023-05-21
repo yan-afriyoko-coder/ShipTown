@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class InventoryFactory extends Factory
 {
-    protected $model = Inventory::class;
-
     public function definition(): array
     {
         /** @var Product $product */
