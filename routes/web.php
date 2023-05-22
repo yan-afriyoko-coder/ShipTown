@@ -24,8 +24,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('verify', Auth\TwoFactorController::class)->only(['index', 'store']);
 
-Route::redirect('', 'dashboard');
-Route::redirect('home', '')->name('home');
+Route::redirect('/', 'dashboard');
+Route::redirect('home', '/')->name('home');
 
 Route::view('quick-connect/magento', 'quick-connect.magento')->name('quick-connect.magento');
 
