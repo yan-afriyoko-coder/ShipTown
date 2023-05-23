@@ -8,6 +8,15 @@ use Tests\TestCase;
 
 class DuskCoverageTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Enable 2FA auth
+        $this->app['config']->set('two_factor_auth.enabled', true);
+        $this->app['config']->set('two_factor_auth.disabled', false);
+    }
+
     /**
      * A basic test to make sure all routes have minimum one test file.
      *
@@ -17,11 +26,11 @@ class DuskCoverageTest extends TestCase
     {
         Artisan::call('route:list --json --env=production');
 
-        collect(json_decode(Artisan::output()))
+        $routesCollection = collect(json_decode(Artisan::output()))
             ->filter(function ($route) {
                 $isNotApiRoute  = !Str::startsWith($route->uri, 'api');
-                $isNotDevRoute  = !Str::startsWith($route->uri, '_');
                 $isGetMethod    = $route->method === 'GET|HEAD';
+                $isNotDevRoute  = !Str::startsWith($route->uri, '_');
 
                 return $isNotApiRoute && $isNotDevRoute && $isGetMethod;
             })
@@ -32,10 +41,13 @@ class DuskCoverageTest extends TestCase
                 $fullFileName .= '.php';
 
                 return $fullFileName;
-            })
-            ->each(function ($fileName) {
-                $this->assertFileExists($fileName, 'run "php artisan app:generate-dusk-tests"');
             });
+
+        ray($routesCollection->toArray());
+
+        $routesCollection->each(function ($fileName) {
+            $this->assertFileExists($fileName, 'run "php artisan app:generate-dusk-tests"');
+        });
     }
 
     /**
