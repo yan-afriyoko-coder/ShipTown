@@ -25,6 +25,7 @@ class VerifyPageTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($user) {
             $browser->disableFitOnFailure();
             $browser->loginAs($user);
+            $browser->deleteCookie('device_guid');
             $browser->visit($this->uri);
             $browser->assertPathIs($this->uri);
             $browser->type('#two_factor_code', '123456');
