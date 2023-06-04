@@ -11,11 +11,19 @@ class VerifyPageTest extends DuskTestCase
 {
     private string $uri = '/verify';
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        self::setEnvironmentValue('DISABLE_2FA', 'FALSE');
+    }
+
     /**
      * @throws Throwable
      */
     public function testPage()
     {
+
         /** @var User $user */
         $user = User::factory()->create();
         $user->assignRole('admin');
