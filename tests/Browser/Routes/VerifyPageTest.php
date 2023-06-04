@@ -18,6 +18,13 @@ class VerifyPageTest extends DuskTestCase
         self::setEnvironmentValue('DISABLE_2FA', 'FALSE');
     }
 
+    protected function tearDown(): void
+    {
+        self::setEnvironmentValue('DISABLE_2FA', 'TRUE');
+
+        parent::tearDown();
+    }
+
     /**
      * @throws Throwable
      */
