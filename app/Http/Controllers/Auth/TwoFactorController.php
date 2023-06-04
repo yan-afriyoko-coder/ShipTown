@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TwoFactorControllerIndexRequest;
 use App\Http\Requests\TwoFactorStoreRequest;
+use App\Models\Configuration;
 use App\Notifications\TwoFactorCode;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -16,12 +17,12 @@ class TwoFactorController extends Controller
 
     public function index(TwoFactorControllerIndexRequest $request): mixed
     {
-        if (config('two_factor_auth.disabled')) {
+        if ($request->cookie('device_guid') !== null) {
             return redirect()->home();
         }
 
-        if ($request->cookie('device_guid') !== null) {
-            return redirect()->home();
+        if (Configuration::first('disable_2fa')->disable_2fa) {
+            return redirect('/');
         }
 
         $user = $request->user();
