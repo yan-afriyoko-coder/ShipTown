@@ -2,6 +2,7 @@
 
 namespace Tests\Browser\Routes;
 
+use App\Models\Configuration;
 use App\User;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
@@ -15,14 +16,7 @@ class VerifyPageTest extends DuskTestCase
     {
         parent::setUp();
 
-        self::setEnvironmentValue('DISABLE_2FA', 'FALSE');
-    }
-
-    protected function tearDown(): void
-    {
-        self::setEnvironmentValue('DISABLE_2FA', 'TRUE');
-
-        parent::tearDown();
+        Configuration::query()->updateOrCreate([], ['disable_2fa' => false]);
     }
 
     /**
