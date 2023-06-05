@@ -91,7 +91,7 @@ trait ResetsDatabase
         $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->registerPermissions();
 
         \App\Models\Configuration::query()->forceDelete();
-        \App\Models\Configuration::query()->create();
+        \App\Models\Configuration::query()->updateOrCreate([], ['disable_2fa' => true]);
 
         InventoryReservationsServiceProvider::enableModule();
     }

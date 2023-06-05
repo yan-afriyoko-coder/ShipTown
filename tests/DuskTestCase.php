@@ -125,4 +125,29 @@ abstract class DuskTestCase extends BaseTestCase
             }
         });
     }
+
+    protected static function setEnvironmentValue($key, $value): void
+    {
+        $path = app()->environmentFilePath();
+
+        if (! file_exists($path)) {
+            return;
+        }
+
+        $str = file_get_contents($path);
+
+        $str .= "\n"; // In case the searched variable is in the last line without \n
+        $keyPosition = strpos($str, "{$key}=");
+        $endOfLinePosition = strpos($str, "\n", $keyPosition);
+        $oldLine = substr($str, $keyPosition, $endOfLinePosition - $keyPosition);
+
+        // If key does not exist, add it
+        if (!$keyPosition || !$endOfLinePosition || !$oldLine) {
+            $str .= "{$key}={$value}\n";
+        } else {
+            $str = str_replace($oldLine, "{$key}={$value}", $str);
+        }
+
+        file_put_contents($path, $str);
+    }
 }

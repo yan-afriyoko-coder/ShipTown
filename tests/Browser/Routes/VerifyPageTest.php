@@ -2,6 +2,7 @@
 
 namespace Tests\Browser\Routes;
 
+use App\Models\Configuration;
 use App\User;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
@@ -11,11 +12,19 @@ class VerifyPageTest extends DuskTestCase
 {
     private string $uri = '/verify';
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Configuration::query()->updateOrCreate([], ['disable_2fa' => false]);
+    }
+
     /**
      * @throws Throwable
      */
     public function testPage()
     {
+
         /** @var User $user */
         $user = User::factory()->create();
         $user->assignRole('admin');

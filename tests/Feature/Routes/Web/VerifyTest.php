@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Routes\Web;
 
+use App\Models\Configuration;
 use App\User;
 use Tests\TestCase;
 
@@ -18,6 +19,8 @@ class VerifyTest extends TestCase
     {
         parent::setUp();
         $this->user = User::factory()->create();
+
+        Configuration::query()->updateOrCreate([], ['disable_2fa' => false]);
     }
 
     /** @test */
@@ -41,7 +44,7 @@ class VerifyTest extends TestCase
 
         $response = $this->get($this->uri);
 
-        $response->assertRedirect('/home');
+        $response->assertSuccessful();
     }
 
     /** @test */
@@ -53,6 +56,6 @@ class VerifyTest extends TestCase
 
         $response = $this->get($this->uri);
 
-        $response->assertRedirect('/home');
+        $response->assertSuccessful();
     }
 }
