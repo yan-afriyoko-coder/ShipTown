@@ -27,9 +27,10 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Product::getSpatieQueryBuilder();
+        $query = Product::getSpatieQueryBuilder()
+            ->simplePaginate(request()->input('per_page', 10));
 
-        return ProductResource::collection($this->getPaginatedResult($query));
+        return ProductResource::collection($query);
     }
 
     /**

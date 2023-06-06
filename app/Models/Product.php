@@ -262,11 +262,13 @@ class Product extends BaseModel
      */
     public function scopeWhereHasText($query, string $text)
     {
-        return $query->where('sku', 'like', '%'.$text.'%')
-            ->orWhere('name', 'like', '%'.$text.'%')
+        return $query->where('sku', $text)
             ->orWhereHas('aliases', function (Builder $query) use ($text) {
-                return $query->where('alias', '=', $text);
-            });
+                return $query->where('alias', '=', $text)
+                    ->orWhere('alias', 'like', '%'.$text.'%');
+            })
+            ->orWhere('sku', 'like', '%'.$text.'%')
+            ->orWhere('name', 'like', '%'.$text.'%');
     }
 
     /**
@@ -315,7 +317,8 @@ class Product extends BaseModel
     }
 
     /**
-     * @return HasMany|ProductPrice
+     * @param string|null $warehouse_code
+     * @return HasMany
      */
     public function prices(string $warehouse_code = null): HasMany
     {
