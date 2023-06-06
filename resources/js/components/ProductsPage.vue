@@ -6,7 +6,7 @@
                     <barcode-input-field placeholder="Search products using name, sku, alias or command"
                                          ref="barcode"
                                          :url_param_name="'search'"
-                                         @refreshRequest="reloadProducts"
+                                         @refreshRequest="reloadProductList"
                                          @barcodeScanned="findText"
                     />
                 </div>
@@ -82,26 +82,26 @@
         mounted() {
             window.onscroll = () => this.loadMore();
 
-            this.loadProductList(1);
+            this.findProductsContaining(1);
         },
 
         methods: {
             findText(search) {
                 this.setUrlParameter('search', search);
-                this.reloadProducts();
+                this.reloadProductList();
             },
 
-            reloadProducts() {
+            reloadProductList() {
                 this.products = null;
-                this.loadProductList();
+                this.findProductsWithSku();
+                this.findProductsContaining();
             },
 
-            loadProductList: function(page = 1) {
+            findProductsContaining: function(page = 1) {
                 this.showLoading();
 
                 const params = this.$router.currentRoute.query;
-                params['filter[sku]'] = this.getUrlParameter('sku') ?? this.getUrlParameter('search');
-                // params['filter[search]'] = this.getUrlParameter('search');
+                params['filter[search]'] = this.getUrlParameter('search');
                 params['filter[has_tags]'] = this.getUrlParameter('has_tags');
                 params['filter[without_tags]'] = this.getUrlParameter('without_tags');
                 params['include'] = 'inventory,tags,prices,aliases,inventory.warehouse';
@@ -111,11 +111,28 @@
 
                 this.apiGetProducts(params)
                     .then(({data}) => {
-                        if (page === 1) {
-                            this.products = data.data;
-                        } else {
-                            this.products = this.products.concat(data.data);
-                        }
+                        this.products = this.products ? this.products.concat(data.data) : data.data
+                        this.reachedEnd = data.data.length === 0;
+                        this.pagesLoadedCount = page;
+                    })
+                    .finally(() => {
+                        this.hideLoading();
+                    });
+                return this;
+            },
+
+            findProductsWithSku: function(page = 1) {
+                this.showLoading();
+
+                const params = this.$router.currentRoute.query;
+                params['filter[sku]'] = this.getUrlParameter('sku') ?? this.getUrlParameter('search');
+                params['include'] = 'inventory,tags,prices,aliases,inventory.warehouse';
+                params['per_page'] = this.per_page;
+                params['page'] = page;
+
+                this.apiGetProducts(params)
+                    .then(({data}) => {
+                        this.products = this.products ? this.products.concat(data.data) : data.data
                         this.reachedEnd = data.data.length === 0;
                         this.pagesLoadedCount = page;
                     })
@@ -127,7 +144,7 @@
 
             loadMore: function () {
                 if (this.isMoreThanPercentageScrolled(70) && this.hasMorePagesToLoad() && !this.isLoading) {
-                    this.loadProductList(++this.pagesLoadedCount);
+                    this.findProductsContaining(++this.pagesLoadedCount);
                 }
             },
 
