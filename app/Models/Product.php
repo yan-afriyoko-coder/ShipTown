@@ -334,7 +334,7 @@ class Product extends BaseModel
      */
     public function aliases(): HasMany
     {
-        return $this->hasMany(ProductAlias::class)->limit(1000);
+        return $this->hasMany(ProductAlias::class);
     }
 
     /**
