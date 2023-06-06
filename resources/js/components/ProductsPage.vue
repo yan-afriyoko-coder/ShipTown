@@ -101,7 +101,7 @@
 
                 const params = this.$router.currentRoute.query;
                 params['filter[sku]'] = this.getUrlParameter('sku');
-                params['filter[search]'] = this.getUrlParameter('search');
+                // params['filter[search]'] = this.getUrlParameter('search');
                 params['filter[has_tags]'] = this.getUrlParameter('has_tags');
                 params['filter[without_tags]'] = this.getUrlParameter('without_tags');
                 params['include'] = 'inventory,tags,prices,aliases,inventory.warehouse';
