@@ -265,12 +265,10 @@ class Product extends BaseModel
         return $query->where('sku', $text)
             ->orWhereHas('aliases', function (Builder $query) use ($text) {
                 return $query->where('alias', '=', $text)
-//                    ->orWhere('alias', 'like', '%'.$text.'%')
-                    ;
+                    ->orWhere('alias', 'like', '%'.$text.'%');
             })
-//            ->orWhere('sku', 'like', '%'.$text.'%')
-//            ->orWhere('name', 'like', '%'.$text.'%')
-        ;
+            ->orWhere('sku', 'like', '%'.$text.'%')
+            ->orWhere('name', 'like', '%'.$text.'%');
     }
 
     /**
