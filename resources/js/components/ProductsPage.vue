@@ -73,9 +73,8 @@
 
         data: function() {
             return {
-                lastPageLoaded: 1,
-                lastPage: 1,
-
+                pagesLoadedCount: 1,
+                reachedEnd: false,
                 products: null,
             };
         },
@@ -89,11 +88,11 @@
         methods: {
             findText(search) {
                 this.setUrlParameter('search', search);
-                this.products = [];
                 this.reloadProducts();
             },
 
             reloadProducts() {
+                this.products = null;
                 this.loadProductList();
             },
 
@@ -117,8 +116,8 @@
                         } else {
                             this.products = this.products.concat(data.data);
                         }
-                        this.lastPage = data.meta.last_page;
-                        this.lastPageLoaded = page;
+                        this.reachedEnd = data.data.length === 0;
+                        this.pagesLoadedCount = page;
                     })
                     .finally(() => {
                         this.hideLoading();
@@ -128,12 +127,12 @@
 
             loadMore: function () {
                 if (this.isMoreThanPercentageScrolled(70) && this.hasMorePagesToLoad() && !this.isLoading) {
-                    this.loadProductList(++this.lastPageLoaded);
+                    this.loadProductList(++this.pagesLoadedCount);
                 }
             },
 
             hasMorePagesToLoad: function () {
-                return this.lastPage > this.lastPageLoaded;
+                return this.reachedEnd === false;
             },
         },
     }
