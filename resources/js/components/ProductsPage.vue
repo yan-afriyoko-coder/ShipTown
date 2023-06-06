@@ -82,7 +82,7 @@
         mounted() {
             window.onscroll = () => this.loadMore();
 
-            this.findProductsContaining(1);
+            this.reloadProductList();
         },
 
         methods: {
@@ -100,7 +100,8 @@
             findProductsContaining: function(page = 1) {
                 this.showLoading();
 
-                const params = this.$router.currentRoute.query;
+                let params = [];
+                params ={ ...this.$router.currentRoute.query};
                 params['filter[search]'] = this.getUrlParameter('search');
                 params['filter[has_tags]'] = this.getUrlParameter('has_tags');
                 params['filter[without_tags]'] = this.getUrlParameter('without_tags');
@@ -124,7 +125,8 @@
             findProductsWithSku: function(page = 1) {
                 this.showLoading();
 
-                const params = this.$router.currentRoute.query;
+                let params = [];
+                params ={ ...this.$router.currentRoute.query};
                 params['filter[sku]'] = this.getUrlParameter('sku') ?? this.getUrlParameter('search');
                 params['include'] = 'inventory,tags,prices,aliases,inventory.warehouse';
                 params['per_page'] = this.per_page;
@@ -132,9 +134,10 @@
 
                 this.apiGetProducts(params)
                     .then(({data}) => {
-                        this.products = this.products ? this.products.concat(data.data) : data.data
-                        this.reachedEnd = data.data.length === 0;
-                        this.pagesLoadedCount = page;
+                        console.log(data.data);
+                        if (data.data) {
+                            this.products = this.products ? this.products.concat(data.data) : data.data
+                        }
                     })
                     .finally(() => {
                         this.hideLoading();
