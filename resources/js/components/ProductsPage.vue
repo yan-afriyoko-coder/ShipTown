@@ -122,8 +122,6 @@
             },
 
             findProductsWithExactSku: function(page = 1) {
-                this.showLoading();
-
                 let params = { ...this.$router.currentRoute.query};
                 params['filter[sku]'] = this.getUrlParameter('sku') ?? this.getUrlParameter('search');
                 params['include'] = 'inventory,tags,prices,aliases,inventory.warehouse';
@@ -137,9 +135,6 @@
                         }
 
                         this.products = this.products ? this.products.concat(data.data) : data.data
-                    })
-                    .finally(() => {
-                        this.hideLoading();
                     });
                 return this;
             },
