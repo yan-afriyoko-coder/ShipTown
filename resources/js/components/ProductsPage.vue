@@ -100,7 +100,7 @@
                 this.showLoading();
 
                 const params = this.$router.currentRoute.query;
-                params['filter[sku]'] = this.getUrlParameter('sku');
+                params['filter[sku]'] = this.getUrlParameter('sku') ?? this.getUrlParameter('search');
                 // params['filter[search]'] = this.getUrlParameter('search');
                 params['filter[has_tags]'] = this.getUrlParameter('has_tags');
                 params['filter[without_tags]'] = this.getUrlParameter('without_tags');
