@@ -93,14 +93,18 @@
 
             reloadProductList() {
                 this.products = null;
-                this.findProductsWithExactSku();
-                this.findProductsContaining();
+
+                if (this.getUrlParameter('search')) {
+                    this.findProductsWithExactSku();
+                }
+
+                this.findProductsContainingSearchText();
             },
 
-            findProductsContaining: function(page = 1) {
+            findProductsContainingSearchText: function(page = 1) {
                 this.showLoading();
 
-                let params = { ...this.$router.currentRoute.query};
+                const params = { ...this.$router.currentRoute.query};
                 params['filter[search]'] = this.getUrlParameter('search');
                 params['filter[has_tags]'] = this.getUrlParameter('has_tags');
                 params['filter[without_tags]'] = this.getUrlParameter('without_tags');
@@ -122,11 +126,9 @@
             },
 
             findProductsWithExactSku: function(page = 1) {
-                let params = { ...this.$router.currentRoute.query};
+                const params = { ...this.$router.currentRoute.query};
                 params['filter[sku]'] = this.getUrlParameter('sku') ?? this.getUrlParameter('search');
                 params['include'] = 'inventory,tags,prices,aliases,inventory.warehouse';
-                params['per_page'] = this.per_page;
-                params['page'] = page;
 
                 this.apiGetProducts(params)
                     .then(({data}) => {
@@ -136,12 +138,11 @@
 
                         this.products = this.products ? this.products.concat(data.data) : data.data
                     });
-                return this;
             },
 
             loadMore: function () {
                 if (this.isMoreThanPercentageScrolled(70) && this.hasMorePagesToLoad() && !this.isLoading) {
-                    this.findProductsContaining(++this.pagesLoadedCount);
+                    this.findProductsContainingSearchText(++this.pagesLoadedCount);
                 }
             },
 
