@@ -76,7 +76,8 @@
                 pagesLoadedCount: 1,
                 reachedEnd: false,
                 products: null,
-                per_page: 10,
+                per_page: 20,
+                scroll_percentage: 70,
             };
         },
 
@@ -120,9 +121,8 @@
                         this.reachedEnd = data.data.length === 0;
                         this.pagesLoadedCount = page;
 
-                        this.per_page = this.products.length;
-                        this.per_page = Math.max(this.per_page, 10);
-                        this.per_page = Math.min(this.per_page, 100);
+                        this.scroll_percentage = (1 - this.per_page  / this.products.length) * 100;
+                        this.scroll_percentage = Math.max(this.scroll_percentage, 70);
                     })
                     .finally(() => {
                         this.hideLoading();
@@ -146,7 +146,7 @@
             },
 
             loadMore: function () {
-                if (this.isMoreThanPercentageScrolled(70) && this.hasMorePagesToLoad() && !this.isLoading) {
+                if (this.isMoreThanPercentageScrolled(this.scroll_percentage) && this.hasMorePagesToLoad() && !this.isLoading) {
                     this.findProductsContainingSearchText(++this.pagesLoadedCount);
                 }
             },
