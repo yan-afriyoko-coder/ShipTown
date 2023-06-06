@@ -93,7 +93,7 @@
 
             reloadProductList() {
                 this.products = null;
-                this.findProductsWithSku();
+                this.findProductsWithExactSku();
                 this.findProductsContaining();
             },
 
@@ -121,7 +121,7 @@
                 return this;
             },
 
-            findProductsWithSku: function(page = 1) {
+            findProductsWithExactSku: function(page = 1) {
                 this.showLoading();
 
                 let params = { ...this.$router.currentRoute.query};
@@ -132,10 +132,11 @@
 
                 this.apiGetProducts(params)
                     .then(({data}) => {
-                        console.log(data.data);
-                        if (data.data) {
-                            this.products = this.products ? this.products.concat(data.data) : data.data
+                        if (data.data.length === 0) {
+                            return;
                         }
+
+                        this.products = this.products ? this.products.concat(data.data) : data.data
                     })
                     .finally(() => {
                         this.hideLoading();
