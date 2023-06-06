@@ -76,6 +76,7 @@
                 pagesLoadedCount: 1,
                 reachedEnd: false,
                 products: null,
+                per_page: 10,
             };
         },
 
@@ -118,6 +119,10 @@
                         this.products = this.products ? this.products.concat(data.data) : data.data
                         this.reachedEnd = data.data.length === 0;
                         this.pagesLoadedCount = page;
+
+                        this.per_page = this.products.length;
+                        this.per_page = Math.max(this.per_page, 10);
+                        this.per_page = Math.min(this.per_page, 100);
                     })
                     .finally(() => {
                         this.hideLoading();
