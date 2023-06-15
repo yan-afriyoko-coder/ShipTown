@@ -25,7 +25,7 @@
         </div>
 
         <div class="d-flex justify-content-end">
-            <a v-if="hasNextPage" :href="productItemMovementLink">See more</a>
+            <a v-if="hasNextPage" :href="productItemMovementLink" target="_blank">See more</a>
         </div>
 
         <template #modal-footer>
