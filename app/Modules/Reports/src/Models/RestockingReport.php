@@ -54,8 +54,8 @@ class RestockingReport extends Report
             ->leftJoin('products', 'inventory.product_id', '=', 'products.id')
             ->join('inventory as inventory_source', function (JoinClause $join) use ($warehouseIds) {
                 $join->on('inventory_source.product_id', '=', 'inventory.product_id');
-                $join->whereIn('inventory_source.warehouse_id', $warehouseIds);
-                $join->where('inventory_source.is_in_stock', '=', 1);
+//                $join->whereIn('inventory_source.warehouse_id', $warehouseIds);
+//                $join->where('inventory_source.is_in_stock', '=', 1);
             })->withSum('last7daysSales', 'quantity_delta');
 
         $this->fields = [
