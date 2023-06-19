@@ -7,7 +7,7 @@
                         <product-info-card :product="record['product']"/>
                     </div>
                     <div class="col mt-1 mb-1 small">
-                        <div @click="expanded = !expanded">warehouse quantity: <b>{{ record['warehouse_quantity'] }}</b></div>
+                        <div :class="{'bg-warning': record['warehouse_quantity'] <= 0 }" @click="expanded = !expanded">warehouse quantity: <b>{{ record['warehouse_quantity'] }}</b></div>
                         <div @click="expanded = !expanded">reorder point: <b>{{ record['reorder_point'] }}</b></div>
                         <div @click="expanded = !expanded">restock level: <b>{{ record['restock_level'] }}</b></div>
                         <div class="mt-1">
