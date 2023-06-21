@@ -80,11 +80,11 @@ return [
             'description' => 'Does not have tags',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\HoursSincePlacedCondition::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\HoursSincePlacedAtCondition::class,
             'description' => 'Hours since placed',
         ],
         [
-            'class' => \App\Modules\Automations\src\Conditions\Order\HoursSinceLastUpdatedCondition::class,
+            'class' => \App\Modules\Automations\src\Conditions\Order\HoursSinceLastUpdatedAtCondition::class,
             'description' => 'Hours since last updated',
         ],
     ],

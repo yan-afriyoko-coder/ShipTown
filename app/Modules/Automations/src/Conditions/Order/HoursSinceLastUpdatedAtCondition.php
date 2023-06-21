@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 /**
  *
  */
-class HoursSinceLastUpdatedCondition extends BaseOrderConditionAbstract
+class HoursSinceLastUpdatedAtCondition extends BaseOrderConditionAbstract
 {
     public static function addQueryScope(Builder $query, $expected_value): Builder
     {
@@ -16,8 +16,13 @@ class HoursSinceLastUpdatedCondition extends BaseOrderConditionAbstract
 
         static::invalidateQueryIf($query, $trimmedValue === '');
 
-        static::invalidateQueryIf($query, is_int($trimmedValue) === false);
+        if (is_int($trimmedValue) === true) {
+            static::invalidateQueryIf($query, true);
+            return $query;
+        }
 
-        return $query->whereDate('order_placed_at', '<=', now()->subHours($trimmedValue)->toDateString());
+        $maxOrderPlacedAtDate = now()->subHours((int)$trimmedValue)->toDateString();
+
+        return $query->whereDate('updated_at', '<=', $maxOrderPlacedAtDate);
     }
 }
