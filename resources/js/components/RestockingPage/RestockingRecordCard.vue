@@ -36,6 +36,7 @@
                                 </div>
                                 <div class="col-3">
                                     <number-card label="required" :number="record['quantity_required']" v-if="record['warehouse_quantity'] > 0"></number-card>
+                                    <text-card class="fa-pull-right" label="required" text="N/A" v-if="Number(record['warehouse_quantity']) === 0"></text-card>
                                 </div>
                             </div>
                             <div class="row">
@@ -54,7 +55,6 @@
 
                             <div class="text-left d-sm-flex d-md-inline">
                             </div>
-                            <text-card class="fa-pull-right" label="required" text="N/A" v-if="Number(record['warehouse_quantity']) === 0"></text-card>
                         </div>
 
                         <div @click="expanded = !expanded" class="text-center text-secondary">
