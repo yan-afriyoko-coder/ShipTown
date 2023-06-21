@@ -79,6 +79,14 @@ return [
             'class' => \App\Modules\Automations\src\Conditions\Order\DoesntHaveTagsCondition::class,
             'description' => 'Does not have tags',
         ],
+        [
+            'class' => \App\Modules\Automations\src\Conditions\Order\HoursSincePlacedAtCondition::class,
+            'description' => 'Hours since placed',
+        ],
+        [
+            'class' => \App\Modules\Automations\src\Conditions\Order\HoursSinceLastUpdatedAtCondition::class,
+            'description' => 'Hours since last updated',
+        ],
     ],
     'actions' => [
         [
