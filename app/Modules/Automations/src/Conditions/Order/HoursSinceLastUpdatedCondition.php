@@ -18,6 +18,6 @@ class HoursSinceLastUpdatedCondition extends BaseOrderConditionAbstract
 
         static::invalidateQueryIf($query, is_int($trimmedValue) === false);
 
-        return $query->whereDate('placed_at', '<=', now()->subHours($trimmedValue)->toDateString());
+        return $query->whereDate('order_placed_at', '<=', now()->subHours($trimmedValue)->toDateString());
     }
 }
