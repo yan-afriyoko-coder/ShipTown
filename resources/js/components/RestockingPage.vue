@@ -171,6 +171,7 @@ export default {
 
             findText() {
                 this.setUrlParameter('filter[warehouse_quantity_between]', '');
+                this.setUrlParameter('filter[warehouse_has_stock]', null);
                 this.setUrlParameter('sort', '-warehouse_quantity');
                 this.data = [];
                 this.loadRestockingRecords();
