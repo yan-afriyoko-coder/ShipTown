@@ -75,7 +75,7 @@ export default {
 
         mounted() {
             this.getUrlFilterOrSet('filter[warehouse_code]', this.currentUser()['warehouse']['code']);
-            // this.getUrlFilterOrSet('filter[has_tags]', 'fulfilment');
+            this.getUrlFilterOrSet('filter[warehouse_has_stock]', true);
             this.getUrlFilterOrSet('sort', '-warehouse_has_stock,-quantity_required,-quantity_incoming,-warehouse_quantity');
 
             this.loadRestockingRecords();
@@ -171,6 +171,7 @@ export default {
 
             findText() {
                 this.setUrlParameter('filter[warehouse_quantity_between]', '');
+                this.setUrlParameter('filter[warehouse_has_stock]', null);
                 this.setUrlParameter('sort', '-warehouse_quantity');
                 this.data = [];
                 this.loadRestockingRecords();

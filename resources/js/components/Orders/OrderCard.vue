@@ -606,7 +606,7 @@ export default {
 
         getProductLink(orderProduct) {
             const searchTerm = orderProduct['product'] ? orderProduct['product']['sku'] : orderProduct['sku_ordered'];
-            return '/products?search=' + searchTerm + '&hide_nav_bar=true';
+            return '/products?filter[sku]=' + searchTerm + '&hide_nav_bar=true';
         },
 
         getProductQuantity(orderProduct) {
