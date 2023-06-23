@@ -21,7 +21,7 @@ class HoursSinceLastUpdatedAtCondition extends BaseOrderConditionAbstract
             return $query;
         }
 
-        $maxOrderPlacedAtDate = now()->subHours((int)$trimmedValue)->toDateString();
+        $maxOrderPlacedAtDate = now()->subHours((int)$trimmedValue)->toDateTimeString();
 
         return $query->whereDate('updated_at', '<=', $maxOrderPlacedAtDate);
     }
