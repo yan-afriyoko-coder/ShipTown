@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             ProductPriceSeeder::class,
 
             InventorySeeder::class,
+            SalesSeeder::class,
             StocktakeSuggestionsSeeder::class,
 
 //            RestockingReportSeeder::class,
@@ -37,7 +38,6 @@ class DatabaseSeeder extends Seeder
             DataCollections\TransfersFromWarehouseSeeder::class,
             DataCollections\ArchivedTransfersFromWarehouseSeeder::class,
 //            RmsapiConnectionSeeder::class,
-//            StocktakeSuggestionsSeeder::class,
 //            AutomationsSeeder::class,
 
             PrintNodeClientSeeder::class,
