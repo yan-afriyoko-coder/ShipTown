@@ -110,7 +110,7 @@
                 params['filter[search]'] = this.getUrlParameter('sku') ?? this.getUrlParameter('search');
                 params['filter[has_tags]'] = this.getUrlParameter('has_tags');
                 params['filter[without_tags]'] = this.getUrlParameter('without_tags');
-                params['include'] = 'inventory,tags,prices,aliases,inventory.warehouse';
+                params['include'] = 'inventory,tags,prices,aliases,inventory.warehouse,inventoryMovementsStatistics';
                 params['per_page'] = this.per_page;
                 params['page'] = page;
                 params['sort'] = this.getUrlParameter('sort', '-quantity');
@@ -124,6 +124,9 @@
                         this.scroll_percentage = (1 - this.per_page  / this.products.length) * 100;
                         this.scroll_percentage = Math.max(this.scroll_percentage, 70);
                     })
+                    .catch((error) => {
+                        this.displayApiCallError(error);
+                    })
                     .finally(() => {
                         this.hideLoading();
                     });
@@ -131,9 +134,11 @@
             },
 
             findProductsWithExactSku: function() {
+                this.showLoading();
+
                 const params = { ...this.$router.currentRoute.query};
                 params['filter[sku]'] = this.getUrlParameter('sku') ?? this.getUrlParameter('search');
-                params['include'] = 'inventory,tags,prices,aliases,inventory.warehouse';
+                params['include'] = 'inventory,tags,prices,aliases,inventory.warehouse,inventoryMovementsStatistics';
 
                 this.apiGetProducts(params)
                     .then(({data}) => {
@@ -142,6 +147,12 @@
                         }
 
                         this.products = this.products ? this.products.concat(data.data) : data.data
+                    })
+                    .catch((error) => {
+                        this.displayApiCallError(error);
+                    })
+                    .finally(() => {
+                        this.hideLoading();
                     });
             },
 
