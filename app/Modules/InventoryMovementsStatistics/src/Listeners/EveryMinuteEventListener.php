@@ -10,6 +10,6 @@ class EveryMinuteEventListener
     public function handle()
     {
         EnsureCorrectLastSoldAtJob::dispatch();
-//        UpdateInventoryMovementsStatisticsTableJob::dispatch();
+        UpdateInventoryMovementsStatisticsTableJob::dispatch();
     }
 }

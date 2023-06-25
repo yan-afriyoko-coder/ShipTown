@@ -2,6 +2,7 @@
 
 namespace App\Modules\InventoryMovementsStatistics\src\Jobs;
 
+use App\Helpers\TemporaryTable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -57,16 +58,31 @@ class UpdateInventoryMovementsStatisticsTableJob implements ShouldQueue
     private function updateStatisticRecords(): void
     {
         DB::statement("
+            CREATE TEMPORARY TABLE tempTable_123 AS (
+                SELECT inventory_movements.inventory_id,
+                    sum(case when inventory_movements.created_at > date_sub(now(), interval 28 day) then -quantity_delta else 0 end) as expected_quantity_sold_last_28_days,
+                    sum(case when inventory_movements.created_at > date_sub(now(), interval 14 day) then -quantity_delta else 0 end) as expected_quantity_sold_last_14_days,
+                    sum(case when inventory_movements.created_at > date_sub(now(), interval 7 day) then -quantity_delta else 0 end) as expected_quantity_sold_last_7_days,
+                    max(inventory_movements_statistics.quantity_sold_last_28_days) as actual_quantity_sold_last_28_days,
+                    max(inventory_movements_statistics.quantity_sold_last_14_days) as actual_quantity_sold_last_14_days,
+                    max(inventory_movements_statistics.quantity_sold_last_7_days) as actual_quantity_sold_last_7_days
+                FROM inventory_movements
+                LEFT JOIN inventory_movements_statistics
+                  ON inventory_movements_statistics.inventory_id = inventory_movements.inventory_id
+                WHERE inventory_movements.created_at > DATE_SUB(now(), INTERVAL 28 DAY)
+                  AND inventory_movements.type = 'sale'
+                GROUP BY inventory_movements.inventory_id
+                HAVING expected_quantity_sold_last_28_days != actual_quantity_sold_last_28_days
+                    or expected_quantity_sold_last_14_days != actual_quantity_sold_last_14_days
+                    or expected_quantity_sold_last_7_days != actual_quantity_sold_last_7_days
+            );
+
             UPDATE inventory_movements_statistics
-
-            LEFT JOIN modules_inventory_movements_statistics_view
-              ON inventory_movements_statistics.inventory_id = modules_inventory_movements_statistics_view.inventory_id
-
-            SET quantity_sold_last_7_days = expected_quantity_sold_last_7_days,
-                quantity_sold_last_14_days = expected_quantity_sold_last_14_days,
-                quantity_sold_last_28_days = expected_quantity_sold_last_28_days,
-
-            WHERE IFNULL(quantity_sold_last_7_days, 0) != expected_quantity_sold_last_7_days
+            RIGHT JOIN tempTable_123
+              ON tempTable_123.inventory_id = inventory_movements_statistics.inventory_id
+            SET inventory_movements_statistics.quantity_sold_last_28_days = tempTable_123.expected_quantity_sold_last_28_days
+                , inventory_movements_statistics.quantity_sold_last_14_days = tempTable_123.expected_quantity_sold_last_14_days
+                , inventory_movements_statistics.quantity_sold_last_7_days = tempTable_123.expected_quantity_sold_last_7_days
         ");
     }
 }
