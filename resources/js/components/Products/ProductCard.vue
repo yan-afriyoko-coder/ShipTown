@@ -31,7 +31,8 @@
                                           <td>{{ toNumberOrDash(inventory['quantity_incoming']) }}</td>
                                           <td class="d-none d-md-table-cell">{{ toNumberOrDash(inventory['quantity_required']) }}</td>
                                           <td class="ml-2">{{ toNumberOrDash(product.prices[inventory['warehouse_code']]['price']) }}</td>
-                                          <td class="ml-2">{{ toNumberOrDash(product['inventoryMovementsStatistics'][inventory['warehouse_code']]['quantity_sold_last_7_days']) }}</td>
+                                          <td class="ml-2"><div v-if="product['inventoryMovementsStatistics'][inventory['warehouse_code']]">{{ toNumberOrDash( product['inventoryMovementsStatistics'][inventory['warehouse_code']]['quantity_sold_last_7_days']) }}</div>
+                                          </td>
                                       </tr>
                                    </template>
                                </tbody>
