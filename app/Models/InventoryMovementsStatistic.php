@@ -29,6 +29,17 @@ class InventoryMovementsStatistic extends Model
         'quantity_sold',
     ];
 
+    protected $casts = [
+        'quantity_sold_last_7_days' => 'double',
+        'quantity_sold_last_14_days' => 'double',
+        'quantity_sold_last_28_days' => 'double',
+        'quantity_sold_this_week' => 'double',
+        'quantity_sold_last_week' => 'double',
+        'quantity_sold_2weeks_ago' => 'double',
+        'quantity_sold_3weeks_ago' => 'double',
+        'quantity_sold_4weeks_ago' => 'double',
+    ];
+
     public function inventory(): BelongsTo
     {
         return $this->belongsTo(Inventory::class);
