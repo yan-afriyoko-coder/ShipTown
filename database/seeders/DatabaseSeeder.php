@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Modules\InventoryMovementsStatistics\src\InventoryMovementsStatisticsServiceProvider;
 use App\Modules\InventoryTotals\src\InventoryTotalsServiceProvider;
 use App\Modules\QueueMonitor\src\QueueMonitorServiceProvider;
 use Illuminate\Database\Seeder;
@@ -16,6 +17,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         QueueMonitorServiceProvider::enableModule();
+        InventoryMovementsStatisticsServiceProvider::enableModule();
         InventoryTotalsServiceProvider::enableModule();
 
         $this->call([
