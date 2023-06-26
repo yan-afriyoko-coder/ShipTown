@@ -46,7 +46,7 @@
                                 <div class="col-3">
                                 </div>
                                 <div class="col-3">
-                                    <number-card label="sold 7 days" :number="record['last7days_sales_sum_quantity_delta'] * -1"></number-card>
+                                    <number-card label="sold 7 days" :number="record['quantity_sold_last_7_days']"></number-card>
                                 </div>
                                 <div class="col-3">
                                     <number-card label="incoming" :number="record['quantity_incoming']"></number-card>
@@ -196,11 +196,19 @@ export default {
         computed: {
             weeksCover: {
                 get: function() {
-                    if (this.record['last7days_sales_sum_quantity_delta'] === null) return 0;
-                    if (this.record['last7days_sales_sum_quantity_delta'] === 0) return 0;
-                    if (this.record['quantity_in_stock'] === 0) return 0;
+                    if (this.record['quantity_sold_last_7_days'] === null) {
+                        return 0;
+                    }
 
-                    return Math.floor(this.record['quantity_in_stock'] / (this.record['last7days_sales_sum_quantity_delta'] * -1));
+                    if (this.record['quantity_sold_last_7_days'] === 0) {
+                        return 0;
+                    }
+
+                    if (this.record['quantity_in_stock'] <= 0) {
+                        return 0;
+                    }
+
+                    return Math.floor(this.record['quantity_in_stock'] / (this.record['quantity_sold_last_7_days']));
                 },
             },
 

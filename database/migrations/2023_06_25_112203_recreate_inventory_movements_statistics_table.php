@@ -2,14 +2,13 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
     public function up(): void
     {
-        Schema::drop('inventory_movements_statistics');
+        Schema::dropIfExists('inventory_movements_statistics');
 
         Schema::create('inventory_movements_statistics', function (Blueprint $table) {
             $table->id();
@@ -28,19 +27,5 @@ return new class extends Migration
             $table->decimal('quantity_sold_4weeks_ago', 10)->index()->nullable();
             $table->timestamps();
         });
-
-        DB::statement("
-            INSERT INTO inventory_movements_statistics (
-                inventory_id, product_id, warehouse_id, warehouse_code, updated_at, created_at
-            )
-            SELECT
-                id as inventory_id,
-                product_id,
-                warehouse_id,
-                warehouse_code,
-                now() as updated_at,
-                now() as created_at
-            FROM `inventory`
-        ");
     }
 };

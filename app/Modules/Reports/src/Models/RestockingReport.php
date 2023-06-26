@@ -38,6 +38,7 @@ class RestockingReport extends Report
             'warehouse_has_stock',
             'first_sold_at',
             'last_sold_at',
+            'quantity_sold_last_7_days',
             'first_received_at',
             'last_received_at',
             'last_movement_at',
@@ -52,11 +53,17 @@ class RestockingReport extends Report
 
         $this->baseQuery = Inventory::query()
             ->leftJoin('products', 'inventory.product_id', '=', 'products.id')
+            ->leftJoin(
+                'inventory_movements_statistics',
+                'inventory.id',
+                '=',
+                'inventory_movements_statistics.inventory_id'
+            )
             ->join('inventory as inventory_source', function (JoinClause $join) use ($warehouseIds) {
                 $join->on('inventory_source.product_id', '=', 'inventory.product_id');
                 $join->whereIn('inventory_source.warehouse_id', $warehouseIds);
 //                $join->where('inventory   _source.is_in_stock', '=', 1);
-            })->withSum('last7daysSales', 'quantity_delta');
+            });
 
         $this->fields = [
             'id'                                 => 'inventory.id',
@@ -78,6 +85,9 @@ class RestockingReport extends Report
             'last_counted_at'                    => 'inventory.last_counted_at',
             'first_received_at'                  => 'inventory.first_received_at',
             'last_received_at'                   => 'inventory.last_received_at',
+            'quantity_sold_last_7_days'          => 'inventory_movements_statistics.quantity_sold_last_7_days',
+            'quantity_sold_last_14_days'         => 'inventory_movements_statistics.quantity_sold_last_14_days',
+            'quantity_sold_last_28_days'         => 'inventory_movements_statistics.quantity_sold_last_28_days',
             'warehouse_quantity'                 => DB::raw('IFNULL(inventory_source.quantity_available, 0)'),
 //            'warehouse_has_stock'                => DB::raw('ISNULL(inventory_source.quantity_available)'),
             'inventory_source_warehouse_code'    => 'inventory_source.warehouse_code',
@@ -85,19 +95,22 @@ class RestockingReport extends Report
         ];
 
         $this->casts = [
-            'warehouse_id'       => 'integer',
-            'product_name'       => 'string',
-            'warehouse_code'     => 'string',
-            'restock_level'      => 'float',
-            'reorder_point'      => 'float',
-            'quantity_required'  => 'float',
-            'quantity_in_stock'  => 'float',
-            'quantity_available' => 'float',
-            'quantity_incoming'  => 'float',
-            'warehouse_quantity' => 'float',
-            "last_movement_at"   => 'datetime',
-            'last_counted_at'    => 'datetime',
-            'warehouse_has_stock'=> 'boolean',
+            'warehouse_id'               => 'integer',
+            'product_name'               => 'string',
+            'warehouse_code'             => 'string',
+            'restock_level'              => 'float',
+            'reorder_point'              => 'float',
+            'quantity_required'          => 'float',
+            'quantity_in_stock'          => 'float',
+            'quantity_available'         => 'float',
+            'quantity_incoming'          => 'float',
+            'warehouse_quantity'         => 'float',
+            'quantity_sold_last_7_days'  => 'float',
+            'quantity_sold_last_14_days' => 'float',
+            'quantity_sold_last_28_days' => 'float',
+            "last_movement_at"           => 'datetime',
+            'last_counted_at'            => 'datetime',
+            'warehouse_has_stock'        => 'boolean',
         ];
 
         $this->addFilter(
