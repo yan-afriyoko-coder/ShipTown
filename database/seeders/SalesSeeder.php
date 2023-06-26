@@ -2,7 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\InventoryMovement;
+use App\Models\Inventory;
+use App\Services\InventoryService;
 use Illuminate\Database\Seeder;
 
 class SalesSeeder extends Seeder
@@ -14,8 +15,8 @@ class SalesSeeder extends Seeder
      */
     public function run()
     {
-        InventoryMovement::factory()->count(600)->create([
-            'type' => InventoryMovement::TYPE_SALE,
-        ]);
+        for ($i=0; $i < 600; $i++) {
+            InventoryService::sellProduct(Inventory::query()->inRandomOrder()->first(), rand(-100, -1), '');
+        }
     }
 }

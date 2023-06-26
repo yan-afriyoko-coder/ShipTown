@@ -7,6 +7,9 @@ use App\Models\InventoryMovement;
 use App\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @mixin InventoryMovement
+ */
 class InventoryMovementFactory extends Factory
 {
     public function definition(): array

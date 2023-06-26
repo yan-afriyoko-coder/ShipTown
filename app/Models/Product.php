@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\BaseModel;
 use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
@@ -13,6 +12,7 @@ use Barryvdh\LaravelIdeHelper\Eloquent;
 use Hulkur\HasManyKeyBy\HasManyKeyByRelationship;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -22,7 +22,6 @@ use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -192,6 +191,7 @@ class Product extends BaseModel
                 'tags',
                 'prices',
                 'inventory.warehouse',
+                'inventoryMovementsStatistics'
             ]);
     }
 
@@ -364,5 +364,14 @@ class Product extends BaseModel
     public function isInStock(): bool
     {
         return $this->quantity_available > 0;
+    }
+
+    public function inventoryMovementsStatistics(string $warehouse_code = null): HasMany
+    {
+        return $this->hasMany(InventoryMovementsStatistic::class)
+            ->when($warehouse_code, function ($query) use ($warehouse_code) {
+                $query->where(['warehouse_code' => $warehouse_code]);
+            })
+            ->keyBy('warehouse_code');
     }
 }

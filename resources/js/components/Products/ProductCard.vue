@@ -7,23 +7,18 @@
                         <product-info-card :product= "product"></product-info-card>
                     </div>
                     <div class="col-md-6 col-lg-5">
-<!--                        <div class="row col small">-->
-<!--                            <number-card label="price" :number="product['prices'][currentUser()['warehouse']['code']]['price']"></number-card>-->
-<!--                            <number-card label="sale price" :number="product['prices'][currentUser()['warehouse']['code']]['sale_price']"></number-card>-->
-<!--                            <text-card label="start date" :text="formatDateTime(product['prices'][currentUser()['warehouse']['code']]['sale_price_start_date'], 'MMM D')"></text-card>-->
-<!--                            <text-card label="end date" :text="formatDateTime(product['prices'][currentUser()['warehouse']['code']]['sale_price_end_date'], 'MMM D')"></text-card>-->
-<!--                        </div>-->
                         <div class="table-responsive small" @click="toggle">
                             <table class="table table-borderless mb-0 w-100 text-right">
                                <thead>
                                   <tr class="small font-weight-bold">
                                       <th class="text-left">Location</th>
                                       <th class="text-left">Shelf</th>
-                                      <th>Available</th>
-                                      <th class="d-none d-md-table-cell">Reserved</th>
-                                      <th>Incoming</th>
-                                      <th class="d-none d-md-table-cell">Required</th>
-                                      <th>Price</th>
+                                      <th class="text-right">Available</th>
+                                      <th class="text-right d-none d-md-table-cell">Reserved</th>
+                                      <th class="text-right">Incoming</th>
+                                      <th class="text-right d-none d-md-table-cell">Required</th>
+                                      <th class="text-right">Price</th>
+                                    <th class="text-right">7 day</th>
                                   </tr>
                                </thead>
                                <tbody>
@@ -36,6 +31,8 @@
                                           <td>{{ toNumberOrDash(inventory['quantity_incoming']) }}</td>
                                           <td class="d-none d-md-table-cell">{{ toNumberOrDash(inventory['quantity_required']) }}</td>
                                           <td class="ml-2">{{ toNumberOrDash(product.prices[inventory['warehouse_code']]['price']) }}</td>
+                                          <td class="ml-2"><div v-if="product['inventoryMovementsStatistics'][inventory['warehouse_code']]">{{ toNumberOrDash( product['inventoryMovementsStatistics'][inventory['warehouse_code']]['quantity_sold_last_7_days']) }}</div>
+                                          </td>
                                       </tr>
                                    </template>
                                </tbody>
@@ -292,7 +289,7 @@
 
             quantityOrdered() {
                 return this.ordered
-            }
+            },
         },
 
         created: function () {
@@ -302,6 +299,16 @@
         },
 
         methods: {
+            soldLast7Days(warehouse_id) {
+              const soldLast7DaysArray = this.product['inventoryMovementsStatistics'][warehouse_id];
+
+              if (soldLast7DaysArray === null) {
+                return 0;
+              }
+
+              return soldLast7DaysArray['quantity_sold']
+            },
+
             hide() {
                 $('#filterConfigurationModal').modal('hide');
             },

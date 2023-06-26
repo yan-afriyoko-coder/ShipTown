@@ -43,6 +43,7 @@ class ProductResource extends JsonResource
             'aliases'                         => ProductAliasResource::collection($this->whenLoaded('aliases')),
             'prices'                          => ProductPriceResource::collection($this->whenLoaded('prices')),
             'tags'                            => TagResource::collection($this->whenLoaded('tags')),
+            'inventoryMovementsStatistics'    => JsonResource::collection($this->whenLoaded('inventoryMovementsStatistics')),
         ];
     }
 }
