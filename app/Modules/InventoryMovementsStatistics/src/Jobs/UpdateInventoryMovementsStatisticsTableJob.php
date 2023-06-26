@@ -27,32 +27,6 @@ class UpdateInventoryMovementsStatisticsTableJob implements ShouldQueue
      */
     public function handle()
     {
-        $this->ensureAllRecordsExist();
-        $this->updateStatisticRecords();
-    }
-
-    private function ensureAllRecordsExist(): void
-    {
-        DB::statement('
-            INSERT INTO inventory_movements_statistics (
-                inventory_id, product_id, warehouse_id, warehouse_code, updated_at, created_at
-            )
-            SELECT
-                id as inventory_id,
-                product_id,
-                warehouse_id,
-                warehouse_code,
-                now() as updated_at,
-                now() as created_at
-            FROM `inventory` i
-            WHERE i.id NOT IN (
-                SELECT inventory_id FROM inventory_movements_statistics
-            )
-        ');
-    }
-
-    private function updateStatisticRecords(): void
-    {
         $tableName = implode('_', ['itemMovementsStatistics', rand(1000000000000, 10000000000000)]);
         DB::statement('
             CREATE TEMPORARY TABLE '. $tableName.' AS (
