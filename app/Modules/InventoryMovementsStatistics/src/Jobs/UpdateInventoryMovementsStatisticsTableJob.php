@@ -53,8 +53,9 @@ class UpdateInventoryMovementsStatisticsTableJob implements ShouldQueue
 
     private function updateStatisticRecords(): void
     {
+        $tableName = implode('_', ['itemMovementsStatistics', rand(1000000000000, 10000000000000)]);
         DB::statement('
-            CREATE TEMPORARY TABLE tempTable_123 AS (
+            CREATE TEMPORARY TABLE ? AS (
             SELECT inventory_movements.inventory_id,
                 sum(case when inventory_movements.created_at > date_sub(now(), interval 28 day) then -quantity_delta else 0 end) as expected_quantity_sold_last_28_days,
                 sum(case when inventory_movements.created_at > date_sub(now(), interval 14 day) then -quantity_delta else 0 end) as expected_quantity_sold_last_14_days,
@@ -72,14 +73,15 @@ class UpdateInventoryMovementsStatisticsTableJob implements ShouldQueue
                 or IFNULL(expected_quantity_sold_last_14_days, 0) != IFNULL(actual_quantity_sold_last_14_days, 0)
                 or IFNULL(expected_quantity_sold_last_7_days, 0) != IFNULL(actual_quantity_sold_last_7_days, 0)
             )
-        ', ['sale']);
+            LIMIT 5000
+        ', [$tableName, 'sale']);
 
         DB::statement('
             UPDATE inventory_movements_statistics
-            INNER JOIN tempTable_123 ON inventory_movements_statistics.inventory_id = tempTable_123.inventory_id
+            INNER JOIN ? as tempTable_123 ON inventory_movements_statistics.inventory_id = tempTable_123.inventory_id
             SET inventory_movements_statistics.quantity_sold_last_28_days = tempTable_123.expected_quantity_sold_last_28_days,
               inventory_movements_statistics.quantity_sold_last_14_days = tempTable_123.expected_quantity_sold_last_14_days,
               inventory_movements_statistics.quantity_sold_last_7_days = tempTable_123.expected_quantity_sold_last_7_days
-        ');
+        ', [$tableName]);
     }
 }
