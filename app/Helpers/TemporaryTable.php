@@ -14,6 +14,8 @@ class TemporaryTable
      */
     public static function create($table_name, $subQuery): bool
     {
+        DB::statement('DROP TEMPORARY TABLE IF EXISTS ' . $table_name);
+
         $finalQuery = sprintf(
             /** @lang text */
             'CREATE TEMPORARY TABLE %s AS (%s)',
