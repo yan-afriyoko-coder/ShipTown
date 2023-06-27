@@ -8,6 +8,7 @@ use App\Events\InventoryMovementCreatedEvent;
 use App\Events\Product\ProductCreatedEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class EventServiceProviderBase.
