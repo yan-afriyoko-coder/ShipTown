@@ -4,7 +4,6 @@ namespace Tests\Feature\Modules\InventoryMovementsStatistics;
 
 use App\Modules\InventoryMovementsStatistics\src\InventoryMovementsStatisticsServiceProvider;
 use App\Modules\InventoryMovementsStatistics\src\Jobs\ClearOutdatedStatisticsJob;
-use App\Modules\InventoryMovementsStatistics\src\Jobs\EnsureCorrectLastSoldAtJob;
 use App\Modules\InventoryMovementsStatistics\src\Jobs\EnsureInventoryMovementsStatisticsRecordsExistJob;
 use App\Modules\InventoryMovementsStatistics\src\Jobs\UpdateInventoryMovementsStatisticsTableJob;
 use Tests\TestCase;
@@ -17,7 +16,6 @@ class BasicModuleTest extends TestCase
         InventoryMovementsStatisticsServiceProvider::enableModule();
 
         ClearOutdatedStatisticsJob::dispatch();
-        EnsureCorrectLastSoldAtJob::dispatch();
         EnsureInventoryMovementsStatisticsRecordsExistJob::dispatch();
         UpdateInventoryMovementsStatisticsTableJob::dispatch();
 
