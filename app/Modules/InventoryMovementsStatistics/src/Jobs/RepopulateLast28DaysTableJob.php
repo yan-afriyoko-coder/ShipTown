@@ -28,9 +28,17 @@ class RepopulateLast28DaysTableJob implements ShouldQueue
     public function handle()
     {
         if (Schema::hasTable('modules_inventory_movements_statistics_last28days_sale_movements')) {
-            DB::table('modules_inventory_movements_statistics_last28days_sale_movements')->truncate();
+            DB::unprepared('
+                UPDATE inventory_movements_statistics
+                SET quantity_sold_last_7_days = 0,
+                    quantity_sold_last_14_days = 0,
+                    quantity_sold_last_28_days = 0
+                WHERE quantity_sold_last_7_days != 0
+                    OR quantity_sold_last_14_days != 0
+                    OR quantity_sold_last_28_days != 0;
 
-            DB::statement('
+                TRUNCATE TABLE modules_inventory_movements_statistics_last28days_sale_movements;
+
                 INSERT INTO modules_inventory_movements_statistics_last28days_sale_movements (
                     inventory_movement_id, sold_at, inventory_id, quantity_sold
                 )
