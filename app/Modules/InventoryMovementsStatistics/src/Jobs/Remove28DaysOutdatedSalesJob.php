@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 /**
  *
  */
-class UpdateInventoryMovementsStatisticsTableJob implements ShouldQueue
+class Remove28DaysOutdatedSalesJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -26,6 +26,14 @@ class UpdateInventoryMovementsStatisticsTableJob implements ShouldQueue
      */
     public function handle()
     {
+        DB::statement("
+            UPDATE inventory_movements_statistics
+            SET quantity_sold_last_28_days = 0,
+                updated_at = now()
+            WHERE last_sold_at < DATE_SUB(now(), INTERVAL 28 DAY)
+            AND IFNULL(quantity_sold_last_28_days, 0) != 0
+        ");
+
         DB::unprepared("
             DROP TEMPORARY TABLE IF EXISTS temp_itemMovementsStatistics_3982179371;
 
@@ -34,8 +42,8 @@ class UpdateInventoryMovementsStatisticsTableJob implements ShouldQueue
                        sum(quantity_sold) as quantity_sold,
                        max(sold_at) as max_sold_at
                 FROM modules_inventory_movements_statistics_last28days_sale_movements
-                WHERE included_in_7days IS NULL
-                  AND sold_at > date_sub(now(), interval 7 day)
+                WHERE included_in_28days = 1
+                  AND sold_at < date_sub(now(), interval 28 day)
                 GROUP BY inventory_id
             );
 
@@ -52,17 +60,13 @@ class UpdateInventoryMovementsStatisticsTableJob implements ShouldQueue
                 RIGHT JOIN temp_itemMovementsStatistics_3982179371 as tempTable
                 ON inventory_movements_statistics.inventory_id = tempTable.inventory_id
             SET
-                quantity_sold_last_7_days = IFNULL(quantity_sold_last_7_days, 0) + quantity_sold,
-                quantity_sold_last_14_days = IFNULL(quantity_sold_last_14_days, 0) + quantity_sold,
-                quantity_sold_last_14_days = IFNULL(quantity_sold_last_28_days, 0) + quantity_sold;
+                quantity_sold_last_28_days = IFNULL(quantity_sold_last_28_days, 0) - quantity_sold;
 
             UPDATE modules_inventory_movements_statistics_last28days_sale_movements
             LEFT JOIN temp_itemMovementsStatistics_3982179371 as tempTable
                 ON tempTable.inventory_id = modules_inventory_movements_statistics_last28days_sale_movements.inventory_id
-            SET included_in_7days = 1,
-                included_in_14days = 1,
-                included_in_28days = 1
-            WHERE included_in_7days IS NULL
+            SET included_in_28days = 0
+            WHERE included_in_28days = 1
               AND modules_inventory_movements_statistics_last28days_sale_movements.sold_at <= tempTable.max_sold_at;
 
             DROP TEMPORARY TABLE IF EXISTS temp_itemMovementsStatistics_3982179371;

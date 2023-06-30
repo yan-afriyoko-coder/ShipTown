@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::table('modules_inventory_movements_statistics_last28days_sale_movements', function (Blueprint $table) {
             $table->boolean('included_in_7days')->nullable()->index('included_in_7days');
-            $table->boolean('included_in_14days')->nullable()->index('included_in_7days');
-            $table->boolean('included_in_28days')->nullable()->index('included_in_7days');
+            $table->boolean('included_in_14days')->nullable()->index('included_in_14days');
+            $table->boolean('included_in_28days')->nullable()->index('included_in_28days');
         });
     }
 };
