@@ -34,7 +34,7 @@ class UpdateInventoryMovementsStatisticsTableJob implements ShouldQueue
                        sum(quantity_sold) as quantity_sold,
                        max(sold_at) as max_sold_at
                 FROM modules_inventory_movements_statistics_last28days_sale_movements
-                WHERE is_within_7days IS NULL
+                WHERE included_in_7days IS NULL
                   AND sold_at > date_sub(now(), interval 7 day)
                 GROUP BY inventory_id
             );
@@ -59,10 +59,10 @@ class UpdateInventoryMovementsStatisticsTableJob implements ShouldQueue
             UPDATE modules_inventory_movements_statistics_last28days_sale_movements
             LEFT JOIN temp_itemMovementsStatistics_3982179371 as tempTable
                 ON tempTable.inventory_id = modules_inventory_movements_statistics_last28days_sale_movements.inventory_id
-            SET is_within_7days = 1,
-                is_within_14days = 1,
-                is_within_28days = 1
-            WHERE is_within_7days IS NULL
+            SET included_in_7days = 1,
+                included_in_14days = 1,
+                included_in_28days = 1
+            WHERE included_in_7days IS NULL
               AND modules_inventory_movements_statistics_last28days_sale_movements.sold_at <= tempTable.max_sold_at;
 
             DROP TEMPORARY TABLE IF EXISTS temp_itemMovementsStatistics_3982179371;
