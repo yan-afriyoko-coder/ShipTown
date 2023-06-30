@@ -27,17 +27,16 @@ class ClearOutdatedStatisticsJob implements ShouldQueue
     public function handle()
     {
         DB::statement("
-            UPDATE `inventory_movements_statistics`
-
+            UPDATE inventory_movements_statistics
             SET quantity_sold_last_7_days = 0,
                 quantity_sold_last_14_days = 0,
                 quantity_sold_last_28_days = 0,
                 updated_at = now()
-            WHERE `last_sold_at` < DATE_SUB(now(), INTERVAL 28 DAY)
+            WHERE last_sold_at < DATE_SUB(now(), INTERVAL 28 DAY)
             AND (
-                IFNULL(`quantity_sold_last_7_days`, 0) != '0'
-                OR IFNULL(`quantity_sold_last_14_days`, 0) != '0'
-                OR IFNULL(`quantity_sold_last_28_days`, 0) != '0'
+                IFNULL(quantity_sold_last_7_days, 0) != 0
+                OR IFNULL(quantity_sold_last_14_days, 0) != 0
+                OR IFNULL(quantity_sold_last_28_days, 0) != 0
             )
         ");
     }
