@@ -49,7 +49,21 @@ class RepopulateLast28DaysTableJob implements ShouldQueue
                     inventory_movements.quantity_delta * -1 as quantity_sold
                 FROM `inventory_movements`
                 WHERE inventory_movements.type = "sale"
-                AND inventory_movements.created_at >= DATE_SUB(NOW(), INTERVAL 28 DAY)
+                AND inventory_movements.created_at >= DATE_SUB(NOW(), INTERVAL 28 DAY);
+
+                UPDATE modules_inventory_movements_statistics_last28days_sale_movements
+                SET included_in_7days = 0
+                WHERE included_in_7days is null
+                AND sold_at < DATE_SUB(NOW(), INTERVAL 7 DAY);
+
+                UPDATE modules_inventory_movements_statistics_last28days_sale_movements
+                SET included_in_14days = 0
+                WHERE included_in_14days is null
+                AND sold_at < DATE_SUB(NOW(), INTERVAL 14 DAY);
+
+                DELETE FROM modules_inventory_movements_statistics_last28days_sale_movements
+                WHERE included_in_28days is null
+                AND sold_at < DATE_SUB(NOW(), INTERVAL 28 DAY);
             ');
         };
     }
