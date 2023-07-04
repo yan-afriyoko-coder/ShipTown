@@ -55,7 +55,7 @@ export default {
     },
 
     data: () => ({
-        defaultPrinter: null,
+        defaultPrinter: 0,
         printers: [],
         errorMessage: null,
     }),
@@ -66,7 +66,7 @@ export default {
                     'printer_id': printerId
                 })
                 .then(({ data }) => {
-                    this.defaultPrinter = data.printer_id;
+                    this.defaultPrinter = data.data.printer_id;
                 })
                 .catch(e => {
                     this.displayApiCallError(e);
@@ -105,7 +105,7 @@ export default {
         },
 
         isDefaultPrinter(printerId) {
-            return printerId === this.defaultPrinter && this.defaultPrinter != null;
+            return this.defaultPrinter != null && printerId === this.defaultPrinter;
         }
     }
 }
