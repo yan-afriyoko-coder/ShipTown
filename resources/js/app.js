@@ -190,7 +190,7 @@ Vue.component('auto-pilot-tuning-section', require('./components/Settings/AutoPi
 Vue.component('maintenance-section', require('./components/Settings/MaintenanceSection.vue').default);
 Vue.component('configuration-section', require('./components/Settings/ConfigurationSection.vue').default);
 Vue.component('module-configuration', require('./components/Settings/ModuleConfiguration.vue').default);
-Vue.component('order-status-table', require('./components/Settings/OrderStatusTable.vue').default);
+Vue.component('order-status-table', require('./components/Settings/OrderStatusPage.vue').default);
 Vue.component('mail-template-table', require('./components/Settings/MailTemplateTable.vue').default);
 Vue.component('navigation-menu-table', require('./components/Settings/NavigationMenuTable.vue').default);
 Vue.component('automation-table', require('./components/Settings/AutomationTable.vue').default);

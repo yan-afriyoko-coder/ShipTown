@@ -16,24 +16,20 @@
                 <table v-if="orderStatuses.length > 0" class="table table-hover table-borderless table-responsive mb-0">
                     <thead>
                         <tr class="small text-center">
-                            <th class="d-none d-sm-block">id</th>
                             <th>Code</th>
                             <th class="d-none d-sm-block">Name</th>
                             <th>Order Active</th>
                             <th>Order On Hold</th>
-                            <th>Hidden</th>
                             <th>Sync Ecommerce</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(orderStatus, i) in orderStatuses" :key="i" @click.prevent="showEditForm(orderStatus)">
-                            <td class="d-none d-sm-block text-center">{{ orderStatus.id }}</td>
                             <td>{{ orderStatus.code }}</td>
                             <td class="d-none d-sm-block">{{ orderStatus.name }}</td>
                             <td class="text-center"><status-icon :status="orderStatus.order_active" /></td>
                             <td class="text-center"><status-icon :status="orderStatus.order_on_hold" /></td>
-                            <td class="text-center"><status-icon :status="orderStatus.hidden" /></td>
                             <td class="text-center"><status-icon :status="orderStatus.sync_ecommerce" /></td>
                         </tr>
                     </tbody>

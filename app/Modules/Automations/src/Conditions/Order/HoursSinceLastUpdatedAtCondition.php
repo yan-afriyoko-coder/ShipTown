@@ -16,13 +16,8 @@ class HoursSinceLastUpdatedAtCondition extends BaseOrderConditionAbstract
 
         static::invalidateQueryIf($query, $trimmedValue === '');
 
-        if (is_int($trimmedValue) === true) {
-            static::invalidateQueryIf($query, true);
-            return $query;
-        }
+        static::invalidateQueryIf($query, is_int($trimmedValue) === false);
 
-        $maxOrderPlacedAtDate = now()->subHours((int)$trimmedValue)->toDateTimeString();
-
-        return $query->whereDate('updated_at', '<=', $maxOrderPlacedAtDate);
+        return $query->whereRaw('TIMESTAMPDIFF(hour, updated_at, now()) > ?', [(int)$trimmedValue]);
     }
 }
