@@ -14,10 +14,10 @@ class HoursSincePlacedAtCondition extends BaseOrderConditionAbstract
     {
         $trimmedValue = trim($expected_value);
 
-        static::invalidateQueryIf($query, $trimmedValue === '');
+        static::invalidateQueryIf($query, $trimmedValue === '', 'Hours since placed at value is empty');
 
-        static::invalidateQueryIf($query, is_int($trimmedValue) === false);
+        static::invalidateQueryIf($query, ! is_numeric($trimmedValue), 'Hours since placed at value is not a number');
 
-        return $query->whereRaw('TIMESTAMPDIFF(hour, order_placed_at, now()) > ?', [(int)$trimmedValue]);
+        return $query->whereRaw('TIMESTAMPDIFF(hour, order_placed_at, now()) > ?', [intval($trimmedValue)]);
     }
 }
