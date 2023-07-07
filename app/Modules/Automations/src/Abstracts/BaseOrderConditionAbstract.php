@@ -28,10 +28,10 @@ abstract class BaseOrderConditionAbstract
         return $query;
     }
 
-    protected static function invalidateQueryIf($query, bool $shouldInvalidate): void
+    protected static function invalidateQueryIf(Builder $query, bool $shouldInvalidate, string $message = '1'): void
     {
         if ($shouldInvalidate) {
-            $query->whereRaw('0 = 1');
+            $query->whereRaw('? = null', [$message]);
         }
     }
 
