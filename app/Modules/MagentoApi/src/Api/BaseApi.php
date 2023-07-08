@@ -8,9 +8,24 @@ use Illuminate\Support\Facades\Log;
 
 class BaseApi extends AbstractApi
 {
-    protected function get($path, $parameters = []): Response
+    protected function get($path, $parameters = []): ?Response
     {
-        $response = parent::get($path, $parameters);
+        try {
+            $response = parent::get($path, $parameters);
+        } catch (\Exception $e) {
+            Log::error(implode(' ', [
+                'MAGENTO2API GET',
+                $path,
+                $e->getMessage()
+            ]), [
+                'response' => $e->getMessage(),
+                'url' => $this->constructRequest() . $path,
+                'path' => $path,
+                'parameters' => $parameters,
+            ]);
+
+            return null;
+        }
 
         if ($response->failed()) {
             Log::error(implode(' ', [
@@ -45,9 +60,25 @@ class BaseApi extends AbstractApi
         return $response;
     }
 
-    protected function post($path, $parameters = []): Response
+    protected function post($path, $parameters = []): ?Response
     {
-        $response = parent::post($path, $parameters);
+        try {
+            $response = parent::post($path, $parameters);
+        } catch (\Exception $e) {
+            Log::error(implode(' ', [
+                'MAGENTO2API POST',
+                $path,
+                $e->getMessage()
+            ]), [
+                'response' => $e->getMessage(),
+                'url' => $this->constructRequest() . $path,
+                'path' => $path,
+                'parameters' => $parameters,
+            ]);
+
+            return null;
+        }
+
 
         if ($response->failed()) {
             Log::error(implode(' ', [
@@ -84,7 +115,22 @@ class BaseApi extends AbstractApi
 
     protected function put($path, $parameters = [])
     {
-        $response = parent::put($path, $parameters);
+        try {
+            $response = parent::put($path, $parameters);
+        } catch (\Exception $e) {
+            Log::error(implode(' ', [
+                'MAGENTO2API PUT',
+                $path,
+                $e->getMessage()
+            ]), [
+                'response' => $e->getMessage(),
+                'url' => $this->constructRequest() . $path,
+                'path' => $path,
+                'parameters' => $parameters,
+            ]);
+
+            return null;
+        }
 
         if ($response->failed()) {
             Log::error(implode(' ', [
@@ -121,7 +167,23 @@ class BaseApi extends AbstractApi
 
     protected function delete($path, $parameters = [])
     {
-        $response = parent::delete($path, $parameters);
+        try {
+            $response = parent::delete($path, $parameters);
+        } catch (\Exception $e) {
+            Log::error(implode(' ', [
+                'MAGENTO2API DELETE',
+                $path,
+                $e->getMessage()
+            ]), [
+                'response' => $e->getMessage(),
+                'url' => $this->constructRequest() . $path,
+                'path' => $path,
+                'parameters' => $parameters,
+            ]);
+
+            return null;
+        }
+
 
         if ($response->failed()) {
             Log::error(implode(' ', [

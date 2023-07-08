@@ -7,12 +7,12 @@ use Illuminate\Support\Arr;
 
 class MagentoApi extends BaseApi
 {
-    public function getOrders(): Response
+    public function getOrders(): ?Response
     {
         return $this->get('/orders');
     }
 
-    public function postProducts($sku, $name): Response
+    public function postProducts($sku, $name): ?Response
     {
         return $this->post('/products', [
             'products' => [
@@ -24,7 +24,7 @@ class MagentoApi extends BaseApi
         ]);
     }
 
-    public function postProductsSpecialPrice($sku, $store_id, $price, $price_from, $price_to): Response
+    public function postProductsSpecialPrice($sku, $store_id, $price, $price_from, $price_to): ?Response
     {
         return $this->post('/products/special-price', [
             'prices' => [
@@ -39,14 +39,14 @@ class MagentoApi extends BaseApi
         ]);
     }
 
-    public function postProductsSpecialPriceInformation($sku): Response
+    public function postProductsSpecialPriceInformation($sku): ?Response
     {
         return $this->post('/products/special-price-information', [
             'skus' => Arr::wrap($sku)
         ]);
     }
 
-    public function postProductsBasePricesInformation($sku): Response
+    public function postProductsBasePricesInformation($sku): ?Response
     {
         return $this->post('/products/base-prices-information', [
             'skus' => Arr::wrap($sku)
@@ -60,12 +60,12 @@ class MagentoApi extends BaseApi
         ]);
     }
 
-    public function getStockItems($sku): Response
+    public function getStockItems($sku): ?Response
     {
         return $this->get('/stockItems/'.$sku);
     }
 
-    public function getInventorySourceItems($sku, $storeCode): Response
+    public function getInventorySourceItems($sku, $storeCode): ?Response
     {
         return $this->get('/inventory/source-items', [
             'searchCriteria' => [
@@ -93,7 +93,7 @@ class MagentoApi extends BaseApi
         ]);
     }
 
-    public function postInventorySourceItems($sku, $storeCode, $quantity): Response
+    public function postInventorySourceItems($sku, $storeCode, $quantity): ?Response
     {
         return $this->post('/inventory/source-items', [
             'sourceItems' => [
@@ -107,7 +107,7 @@ class MagentoApi extends BaseApi
         ]);
     }
 
-    public function postProductsBasePrices(string $sku, float $price, int $store_id): Response
+    public function postProductsBasePrices(string $sku, float $price, int $store_id): ?Response
     {
         return $this->post('/products/base-prices', [
             'prices' => [
