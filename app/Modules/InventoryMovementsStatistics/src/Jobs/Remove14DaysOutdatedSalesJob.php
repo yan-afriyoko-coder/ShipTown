@@ -36,7 +36,9 @@ class Remove14DaysOutdatedSalesJob implements ShouldQueue
 
         DB::unprepared("
             DROP TEMPORARY TABLE IF EXISTS temp_itemMovementsStatistics_39821793714535232142;
+        ");
 
+        DB::unprepared("
             CREATE TEMPORARY TABLE temp_itemMovementsStatistics_39821793714535232142 AS (
                 SELECT inventory_id,
                        sum(quantity_sold) as quantity_sold,
@@ -46,7 +48,9 @@ class Remove14DaysOutdatedSalesJob implements ShouldQueue
                   AND sold_at < date_sub(now(), interval 14 day)
                 GROUP BY inventory_id
             );
+        ");
 
+        DB::unprepared("
             INSERT INTO inventory_movements_statistics (inventory_id, product_id, warehouse_code, warehouse_id, created_at, updated_at)
                 SELECT inventory.id, inventory.product_id, inventory.warehouse_code, inventory.warehouse_id, now(), now()
                 FROM temp_itemMovementsStatistics_39821793714535232142 as tempTable
@@ -55,13 +59,17 @@ class Remove14DaysOutdatedSalesJob implements ShouldQueue
                 LEFT JOIN inventory
                     ON inventory.id = tempTable.inventory_id
                 WHERE inventory_movements_statistics.inventory_id is null;
+        ");
 
+        DB::unprepared("
             UPDATE inventory_movements_statistics
                 RIGHT JOIN temp_itemMovementsStatistics_39821793714535232142 as tempTable
                 ON inventory_movements_statistics.inventory_id = tempTable.inventory_id
             SET
                 quantity_sold_last_14_days = IFNULL(quantity_sold_last_14_days, 0) - quantity_sold;
+        ");
 
+        DB::unprepared("
             UPDATE modules_inventory_movements_statistics_last28days_sale_movements
             LEFT JOIN temp_itemMovementsStatistics_39821793714535232142 as tempTable
                 ON tempTable.inventory_id = modules_inventory_movements_statistics_last28days_sale_movements.inventory_id
