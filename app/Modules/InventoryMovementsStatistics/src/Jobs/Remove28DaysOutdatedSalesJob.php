@@ -36,7 +36,9 @@ class Remove28DaysOutdatedSalesJob implements ShouldQueue
 
         DB::unprepared("
             DROP TEMPORARY TABLE IF EXISTS temp_itemMovementsStatistics_28days_51231244357898;
+        ");
 
+        DB::unprepared("
             CREATE TEMPORARY TABLE temp_itemMovementsStatistics_28days_51231244357898 AS (
                 SELECT inventory_id,
                        sum(quantity_sold) as quantity_sold,
@@ -46,7 +48,9 @@ class Remove28DaysOutdatedSalesJob implements ShouldQueue
                   AND sold_at < date_sub(now(), interval 28 day)
                 GROUP BY inventory_id
             );
+        ");
 
+        DB::unprepared("
             INSERT INTO inventory_movements_statistics (inventory_id, product_id, warehouse_code, warehouse_id, created_at, updated_at)
                 SELECT inventory.id, inventory.product_id, inventory.warehouse_code, inventory.warehouse_id, now(), now()
                 FROM temp_itemMovementsStatistics_28days_51231244357898 as tempTable
@@ -55,7 +59,9 @@ class Remove28DaysOutdatedSalesJob implements ShouldQueue
                 LEFT JOIN inventory
                     ON inventory.id = tempTable.inventory_id
                 WHERE inventory_movements_statistics.inventory_id is null;
+        ");
 
+        DB::unprepared("
             UPDATE inventory_movements_statistics
                 RIGHT JOIN temp_itemMovementsStatistics_28days_51231244357898 as tempTable
                 ON inventory_movements_statistics.inventory_id = tempTable.inventory_id
@@ -68,7 +74,9 @@ class Remove28DaysOutdatedSalesJob implements ShouldQueue
             SET included_in_28days = 0
             WHERE included_in_28days = 1
               AND modules_inventory_movements_statistics_last28days_sale_movements.sold_at <= tempTable.max_sold_at;
+        ");
 
+        DB::unprepared("
             DROP TEMPORARY TABLE IF EXISTS temp_itemMovementsStatistics_28days_51231244357898;
         ");
     }
