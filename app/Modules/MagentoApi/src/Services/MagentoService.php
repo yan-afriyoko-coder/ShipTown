@@ -43,7 +43,7 @@ class MagentoService
     {
         $response = self::api()->postProductsSpecialPriceInformation($magentoProduct->product->sku);
 
-        if (!$response->successful()) {
+        if ($response === null || $response->failed()) {
             Log::error('Failed to fetch sale prices for product '.$magentoProduct->product->sku);
             return;
         }
@@ -77,22 +77,23 @@ class MagentoService
     {
         $response = self::api()->postProductsBasePricesInformation($magentoProduct->product->sku);
 
-        if ($response->successful()) {
-            $magentoProduct->base_prices_fetched_at = now();
-            $magentoProduct->base_prices_raw_import = $response->json();
-
-            collect($response->json())
-                ->filter(function ($item) use ($magentoProduct) {
-                    return $item['store_id'] === $magentoProduct->magentoConnection->magento_store_id;
-                })
-                ->each(function ($item) use ($magentoProduct) {
-                    $magentoProduct->magento_price = $item['price'];
-                });
-
-            $magentoProduct->save();
-        } else {
+        if ($response === null || $response->failed()) {
             Log::error('Failed to fetch base prices for product '.$magentoProduct->product->sku);
+            return;
         }
+
+        $magentoProduct->base_prices_fetched_at = now();
+        $magentoProduct->base_prices_raw_import = $response->json();
+
+        collect($response->json())
+            ->filter(function ($item) use ($magentoProduct) {
+                return $item['store_id'] === $magentoProduct->magentoConnection->magento_store_id;
+            })
+            ->each(function ($item) use ($magentoProduct) {
+                $magentoProduct->magento_price = $item['price'];
+            });
+
+        $magentoProduct->save();
     }
 
     public static function fetchInventory(MagentoProduct $magentoProduct)
@@ -147,6 +148,11 @@ class MagentoService
     {
         $response = self::api()->getStockItems($product->product->sku);
 
+        if ($response === null || $response->failed()) {
+            Log::error('Failed to fetch stock items for product '.$product->product->sku);
+            return;
+        }
+
         $product->stock_items_raw_import    = $response->json();
         $product->stock_items_fetched_at    = now();
         $product->quantity                  = null;
@@ -161,6 +167,11 @@ class MagentoService
     private static function fetchFromInventorySourceItems(MagentoProduct $product)
     {
         $response = self::api()->getInventorySourceItems($product->product->sku, config('magento.store_code'));
+
+        if ($response === null || $response->failed()) {
+            Log::error('Failed to fetch inventory source items for product '.$product->product->sku);
+            return;
+        }
 
         $product->stock_items_fetched_at = now();
         $product->stock_items_raw_import = data_get($response->json(), 'items.0');
