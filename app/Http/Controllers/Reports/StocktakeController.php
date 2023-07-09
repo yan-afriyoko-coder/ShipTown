@@ -14,7 +14,6 @@ class StocktakeController extends Controller
     public function index(Request $request): mixed
     {
         $report = new StocktakesReport();
-        $report->setPerPage($request->get('per_page', 100));
 
         return $report->response($request);
     }
