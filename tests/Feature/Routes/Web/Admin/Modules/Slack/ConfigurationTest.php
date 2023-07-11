@@ -11,8 +11,6 @@ use Tests\TestCase;
  */
 class ConfigurationTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * @var string
      */
