@@ -29,11 +29,6 @@ class SlackServiceProvider extends BaseModuleServiceProvider
 
         $module_filename = 'Slack';
 
-        $this->publishes(
-            [__DIR__. '/../config/' . $module_filename . '.php' => config_path('_SampleModuleStructure.php')],
-            'config'
-        );
-
         $this->loadViewsFrom(__DIR__.'/../resources/views', $module_filename);
 
         if ($this->app->runningInConsole()) {

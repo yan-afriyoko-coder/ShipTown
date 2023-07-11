@@ -1,10 +1,10 @@
 <?php
 
-namespace {{ namespace }};
+namespace Tests\Feature\Modules\Slack;
 
 use Tests\TestCase;
 
-class {{ class }} extends TestCase
+class BasicModuleTest extends TestCase
 {
     /** @test */
     public function testBasicFunctionality()
