@@ -1,21 +1,22 @@
 <?php
 
-namespace {{namespace}};
+namespace Tests\Feature\Http\Controllers\Api\Modules\Slack\ConfigurationController;
 
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class {{class}} extends TestCase
+class StoreTest extends TestCase
 {
-    private string $uri = '';
+    private string $uri = 'api/modules/slack/configuration';
 
     /** @test */
     public function testIfCallReturnsOk()
     {
         $user = User::factory()->create()->assignRole('admin');
 
-        $response = $this->actingAs($user, 'api')->postJson($this->uri, []);
+        $response = $this->actingAs($user, 'api')->postJson($this->uri, [
+            'webhook_url' => 'https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX',
+        ]);
 
         ray($response->json());
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace {{namespace}};
+namespace Tests\Feature\Routes\Web\Admin\Modules\Slack;
 
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -9,12 +9,14 @@ use Tests\TestCase;
 /**
  *
  */
-class {{class}} extends TestCase
+class ConfigurationTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * @var string
      */
-    protected string $uri = '';
+    protected string $uri = 'admin/modules/slack/configuration';
 
     protected mixed $user;
 

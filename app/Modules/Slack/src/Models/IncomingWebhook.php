@@ -9,6 +9,8 @@ class IncomingWebhook extends Model
 {
     use HasFactory;
 
+    protected $table = 'modules_slack_incoming_webhooks';
+
     protected $fillable = [
         'webhook_url',
     ];

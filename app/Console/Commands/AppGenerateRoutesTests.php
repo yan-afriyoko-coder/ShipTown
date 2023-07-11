@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 
@@ -33,7 +34,7 @@ class AppGenerateRoutesTests extends Command
      */
     public function handle(): int
     {
-        $this->generateApiRoutesTestsFiles();
+        $this->generateApiRoutesTestsFiles(['telescope', 'horizon', 'passport']);
         $this->generateWebRoutesTestsFiles();
 
         return 0;
@@ -42,13 +43,16 @@ class AppGenerateRoutesTests extends Command
     /**
      *
      */
-    private function generateApiRoutesTestsFiles(): void
+    private function generateApiRoutesTestsFiles(array $except): void
     {
         Artisan::call('route:list --json --path=api --env=production');
 
         $routes = collect(json_decode(Artisan::output()));
 
-        $routes->each(function ($route) {
+        $routes->filter(function ($route) use ($except) {
+            return Arr::has($except, $route->uri);
+        })
+        ->each(function ($route) {
             $testName = $this->getApiRouteTestName($route);
 
             Artisan::call('app:make-test '.$testName.' --stub=test.controller');
