@@ -69,13 +69,12 @@ Route::get('csv/products/picked', [Csv\ProductsPickedInWarehouse::class, 'index'
 Route::get('csv/products/shipped', [Csv\ProductsShippedFromWarehouseController::class, 'index'])->name('warehouse_shipped.csv');
 Route::get('csv/boxtop/stock', [Csv\BoxTopStockController::class, 'index'])->name('boxtop-warehouse-stock.csv');
 
-Route::middleware(['web', 'auth', 'role:admin', 'twofactor'])->group(function () {
-    // Admin Routes
-    Route::prefix('admin')->group(function () {
-        // Settings
-        Route::prefix('settings')->group(function () {
-            Route::view('modules/magento-api', 'settings/magento-api')->name('settings.modules.magento-api');
-            Route::view('modules/inventory-reservations', 'settings/inventory-reservations')->name('settings.modules.inventory-reservations');
-        });
+Route::prefix('admin')->middleware(['web', 'auth', 'role:admin', 'twofactor'])->group(function () {
+    Route::view('modules/slack/configuration', 'modules/Slack/configuration')->name('modules.slack-configuration    ');
+
+    // Settings
+    Route::prefix('settings')->group(function () {
+        Route::view('modules/magento-api', 'settings/magento-api')->name('settings.modules.magento-api');
+        Route::view('modules/inventory-reservations', 'settings/inventory-reservations')->name('settings.modules.inventory-reservations');
     });
 });

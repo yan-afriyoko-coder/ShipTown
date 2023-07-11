@@ -9,6 +9,10 @@
         @include('layouts.nav')
     @endif
 
+    @if (session('alert-info-message'))
+        <div class="alert alert-inof" role="alert">{{ session('alert-info-message') }}</div>
+    @endif
+
     @if (session('alert-success-message'))
         <div class="alert alert-success" role="alert">{{ session('alert-success-message') }}</div>
     @endif

@@ -271,6 +271,8 @@ export default {
 
             apiGetRmsapiConnections: function (params) { return axios.get('/api/modules/rms_api/connections', {params: params}) },
 
+            apiPostModulesSlackIncomingWebhook: function (data) { return axios.post('/api/modules/slack/configuration', data) },
+
             apiDeleteRmsapiConnection: function (connection_id) { return axios.delete(`/api/modules/rms_api/connections/${connection_id}`) },
 
             apiPostApi2cartConnection: function (data) { return axios.post('/api/modules/api2cart/connections', data) },
