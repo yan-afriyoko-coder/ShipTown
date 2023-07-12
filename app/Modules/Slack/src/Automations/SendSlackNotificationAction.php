@@ -6,6 +6,7 @@ use App\Modules\Automations\src\Abstracts\BaseOrderActionAbstract;
 use App\Modules\Slack\src\Models\SlackConfig;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 
 class SendSlackNotificationAction extends BaseOrderActionAbstract
 {
@@ -47,8 +48,11 @@ class SendSlackNotificationAction extends BaseOrderActionAbstract
                             '',
                             [
 
-                                "<http://demo.products.management.test/orders?search=".$this->order->order_number,
-                                "|Order #".$this->order->order_number.">"
+                                '<',
+                                URL::to('/orders?search='.$this->order->order_number),
+                                "|",
+                                "Order #".$this->order->order_number,
+                                ">"
                             ]
                         )
                     ],
@@ -58,7 +62,7 @@ class SendSlackNotificationAction extends BaseOrderActionAbstract
                             "type" => "plain_text",
                             "text" => "Open Packsheet"
                         ],
-                        "url" => "http://demo.products.management.test/order/packsheet/".$this->order->id,
+                        "url" => URL::to('/order/packsheet/'.$this->order->id),
                         "style" => "primary"
                     ]
                 ]
