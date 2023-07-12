@@ -1,6 +1,6 @@
 <template>
     <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
             <div ref="loadingContainer2" class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Create Automation</h5>
@@ -99,10 +99,10 @@
 
                             <div class="block">
                                 <div class="row" v-for="condition, index in automation.conditions" :key="condition.id">
-                                    <div class="col-md-2">
+                                    <div class="col-md-1">
                                         <div class="block-title" v-if="!index">If</div>
                                     </div>
-                                    <div class="col-md-5">
+                                    <div class="col-md-3">
                                         <ValidationProvider :vid="`conditions.${index}.condition_class`" :name="`conditions.${index}.condition_class`" v-slot="{ errors }">
                                             <select v-model="condition.condition_class" :class="{
                                                     'form-control': true,
@@ -119,7 +119,7 @@
                                             </div>
                                         </ValidationProvider>
                                     </div>
-                                    <div class="col-md-5">
+                                    <div class="col-md-8">
                                         <ValidationProvider :vid="`conditions.${index}.condition_value`" :name="`conditions.${index}.condition_value`" v-slot="{ errors }">
                                             <div class="input-group mb-1">
                                                 <input v-model="condition.condition_value" :class="{
@@ -137,8 +137,8 @@
                                     </div>
                                 </div>
                                 <div class="row mt-2">
-                                    <div class="col-md-2">&nbsp;</div>
-                                    <div class="col-md-10">
+                                    <div class="col-md-1">&nbsp;</div>
+                                    <div class="col-md-11">
                                         <a href="#" @click="addCondition">+ Add Condition</a>
                                     </div>
                                 </div>
@@ -146,10 +146,10 @@
 
                             <div class="block">
                                 <div class="row" v-for="action, index in automation.actions" :key="action.id">
-                                    <div class="col-md-2">
+                                    <div class="col-md-1">
                                         <div class="block-title" v-if="!index">Then</div>
                                     </div>
-                                    <div class="col-md-5">
+                                    <div class="col-md-3">
                                         <ValidationProvider :vid="`actions.${index}.action_class`" :name="`actions.${index}.action_class`" v-slot="{ errors }">
                                             <select v-model="action.action_class" :class="{
                                                     'form-control': true,
@@ -166,7 +166,7 @@
                                             </div>
                                         </ValidationProvider>
                                     </div>
-                                    <div class="col-md-5">
+                                    <div class="col-md-8">
                                         <ValidationProvider :vid="`actions.${index}.action_value`" :name="`actions.${index}.action_value`" v-slot="{ errors }">
                                             <div class="input-group mb-1">
                                                 <input v-model="action.action_value" :class="{
@@ -184,8 +184,8 @@
                                     </div>
                                 </div>
                                 <div class="row mt-2">
-                                    <div class="col-md-2">&nbsp;</div>
-                                    <div class="col-md-10">
+                                    <div class="col-md-1">&nbsp;</div>
+                                    <div class="col-md-11">
                                         <a href="#" @click="addAction">+ Add Action</a>
                                     </div>
                                 </div>
