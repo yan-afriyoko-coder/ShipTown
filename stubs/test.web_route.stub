@@ -11,8 +11,6 @@ use Tests\TestCase;
  */
 class {{class}} extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * @var string
      */
@@ -59,6 +57,6 @@ class {{class}} extends TestCase
 
         $response = $this->get($this->uri);
 
-        $response->assertForbidden();
+        $response->assertSuccessful();
     }
 }

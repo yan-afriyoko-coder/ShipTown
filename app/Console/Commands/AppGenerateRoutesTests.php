@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 
@@ -33,8 +35,9 @@ class AppGenerateRoutesTests extends Command
      */
     public function handle(): int
     {
-        $this->generateApiRoutesTestsFiles();
-        $this->generateWebRoutesTestsFiles();
+        $except = collect(['telescope']);
+        $this->generateApiRoutesTestsFiles($except);
+        $this->generateWebRoutesTestsFiles($except);
 
         return 0;
     }
@@ -42,13 +45,18 @@ class AppGenerateRoutesTests extends Command
     /**
      *
      */
-    private function generateApiRoutesTestsFiles(): void
+    private function generateApiRoutesTestsFiles(Collection $except): void
     {
         Artisan::call('route:list --json --path=api --env=production');
 
         $routes = collect(json_decode(Artisan::output()));
 
-        $routes->each(function ($route) {
+        $routes->filter(function ($route) use ($except) {
+            return $except->every(function ($exceptedRoute) use ($route) {
+                return ! Str::startsWith($route->uri, $exceptedRoute);
+            });
+        })
+        ->each(function ($route) {
             $testName = $this->getApiRouteTestName($route);
 
             Artisan::call('app:make-test '.$testName.' --stub=test.controller');
@@ -58,18 +66,23 @@ class AppGenerateRoutesTests extends Command
     /**
      *
      */
-    private function generateWebRoutesTestsFiles(): void
+    private function generateWebRoutesTestsFiles(Collection $except): void
     {
         Artisan::call('route:list --json --env=production');
 
         $routes = collect(json_decode(Artisan::output()))
-            ->filter(function ($route) {
+            ->filter(function ($route) use ($except) {
+                $isNotExcluded = $except->every(function ($exceptedRoute) use ($route) {
+                    return ! Str::startsWith($route->uri, $exceptedRoute);
+                });
+
                 $isNotApiRoute = ! Str::startsWith($route->uri, 'api');
                 $isGetMethod = $route->method === 'GET|HEAD';
                 $isNotDevRoute = ! Str::startsWith($route->uri, '_');
 
-                return $isNotApiRoute && $isGetMethod && $isNotDevRoute;
+                return $isNotExcluded & $isNotApiRoute && $isGetMethod && $isNotDevRoute;
             });
+
 
         $routes->each(function ($route) {
             $testName = 'Routes/Web/'.$this->getWebRouteTestName($route);

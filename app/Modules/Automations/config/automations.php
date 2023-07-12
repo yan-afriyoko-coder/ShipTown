@@ -133,5 +133,9 @@ return [
             'class' => \App\Modules\Automations\src\Actions\Order\DetachTagsAction::class,
             'description' => 'Detach tags',
         ],
+        [
+            'class' => \App\Modules\Slack\src\Automations\SendSlackNotificationAction::class,
+            'description' => 'Send Slack notification',
+        ],
     ]
 ];

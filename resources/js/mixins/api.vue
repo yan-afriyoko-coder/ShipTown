@@ -28,19 +28,19 @@ export default {
             },
 
             displayApiCallError: function (error) {
-                console.log('API failed call response', error.response);
+                console.log('API failed call response', error);
 
-                if (error.response.status === 400) {
+                if (error.status === 400) {
                     this.notifyError(JSON.stringify(error.response.data));
                     return;
                 }
 
-                if (error.response.status === 422) {
+                if (error.status === 422) {
                     this.notifyError(JSON.stringify(error.response.data));
                     return;
                 }
 
-                this.notifyError('API call failed: ' + error.response.status + ' ' + error.response.statusText);
+                this.notifyError('API call failed: ' + error.status + ' ' + error.data.message);
             },
 
             apiGetUserMe: function () {
@@ -270,6 +270,9 @@ export default {
             apiPostRmsapiConnections: function (data) { return axios.post('/api/modules/rms_api/connections', data) },
 
             apiGetRmsapiConnections: function (params) { return axios.get('/api/modules/rms_api/connections', {params: params}) },
+
+            apiPostModulesSlackConfig: function (data) { return axios.post('/api/modules/slack/config', data) },
+            apiGetModulesSlackIncomingWebhook: function (params) { return axios.get('/api/modules/slack/config', {params: params}) },
 
             apiDeleteRmsapiConnection: function (connection_id) { return axios.delete(`/api/modules/rms_api/connections/${connection_id}`) },
 

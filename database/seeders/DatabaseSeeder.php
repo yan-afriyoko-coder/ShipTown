@@ -45,6 +45,7 @@ class DatabaseSeeder extends Seeder
 //            AutomationsSeeder::class,
 
             PrintNodeClientSeeder::class,
+            Modules\Slack\ConfigurationSeeder::class,
 
 //            DpdIrelandSeeder::class,
 //            ProductAliasSeeder::class,
