@@ -3,7 +3,7 @@
 namespace App\Modules\Slack\src\Automations;
 
 use App\Modules\Automations\src\Abstracts\BaseOrderActionAbstract;
-use App\Modules\Slack\src\Models\IncomingWebhook;
+use App\Modules\Slack\src\Models\SlackConfig;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -21,11 +21,48 @@ class SendSlackNotificationAction extends BaseOrderActionAbstract
             'comment' => $options,
         ]);
 
-        /** @var IncomingWebhook $incomingWebhook */
-        $incomingWebhook = IncomingWebhook::query()->first();
+        /** @var SlackConfig $incomingWebhook */
+        $incomingWebhook = SlackConfig::query()->firstOrCreate();
 
-        Http::post($incomingWebhook->webhook_url, [
-            'text' => $this->order->order_number. ': ' . $options,
+        if (!$incomingWebhook->incoming_webhook_url) {
+            Log::warning('Slack Incoming Webhook URL not configured but "Send Slack notification" action used');
+            return false;
+        }
+
+        Http::post($incomingWebhook->incoming_webhook_url, [
+            'text' => "Order #".$this->order->order_number,
+            "blocks" => [
+                [
+                    "type" => "section",
+                    "text" => [
+                        "type" => "mrkdwn",
+                        "text" => $options
+                    ],
+                ],
+                [
+                    "type" => "section",
+                    "text" => [
+                        "type" => "mrkdwn",
+                        "text" => implode(
+                            '',
+                            [
+
+                                "<http://demo.products.management.test/orders?search=".$this->order->order_number,
+                                "|Order #".$this->order->order_number.">"
+                            ]
+                        )
+                    ],
+                    "accessory" => [
+                        "type" => "button",
+                        "text" => [
+                            "type" => "plain_text",
+                            "text" => "Open Packsheet"
+                        ],
+                        "url" => "http://demo.products.management.test/order/packsheet/".$this->order->id,
+                        "style" => "primary"
+                    ]
+                ]
+            ]
         ]);
 
         return true;

@@ -136,7 +136,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
  * Application mixins
  */
 Vue.component('activity-log-page', require('./components/ActivityLogPage.vue').default);
-Vue.component('admin-modules-slack-configuration-page', require('./components/admin/modules/slack/configuration-page.vue').default);
+Vue.component('admin-modules-slack-config-page', require('./components/admin/modules/slack/config-page.vue').default);
 Vue.component('api', require('./mixins/api.vue').default);
 Vue.component('api2cart-configuration', require('./components/Settings/Api2cartConnections.vue').default);
 Vue.component('apt-configuration-modal', require('./components/Widgets/APT/ConfigurationModal.vue').default);

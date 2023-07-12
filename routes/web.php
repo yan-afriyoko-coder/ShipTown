@@ -70,7 +70,7 @@ Route::get('csv/products/shipped', [Csv\ProductsShippedFromWarehouseController::
 Route::get('csv/boxtop/stock', [Csv\BoxTopStockController::class, 'index'])->name('boxtop-warehouse-stock.csv');
 
 Route::prefix('admin')->middleware(['web', 'auth', 'role:admin', 'twofactor'])->group(function () {
-    Route::view('modules/slack/configuration', 'modules/Slack/configuration')->name('modules.slack-configuration    ');
+    Route::view('modules/slack/config', 'modules/slack/config')->name('modules.slack.config');
 
     // Settings
     Route::prefix('settings')->group(function () {
