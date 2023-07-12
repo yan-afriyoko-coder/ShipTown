@@ -17,9 +17,9 @@ class ConfigurationSeeder extends Seeder
 {
     public function run()
     {
-        if (env('TEST_SLACK_INCOMING_WEBHOOK_URL')) {
+        if (env('TEST_MODULES_SLACK_INCOMING_WEBHOOK_URL')) {
             SlackConfig::query()->firstOrCreate([
-                'incoming_webhook_url' => env('TEST_SLACK_INCOMING_WEBHOOK_URL'),
+                'incoming_webhook_url' => env('TEST_MODULES_SLACK_INCOMING_WEBHOOK_URL'),
             ]);
 
             OrderStatus::query()->firstOrCreate([
