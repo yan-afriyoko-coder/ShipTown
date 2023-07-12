@@ -22,9 +22,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(automation, i) in automations" :key="i" @click.prevent="showEditForm(automation)">
-                            <td> <status-icon :status="automation.enabled" class="small" /> {{ automation.name }}</td>
-                            <td>{{ automation.priority }}</td>
+                        <tr v-for="(automation, i) in automations" :key="i">
+                            <td @click.prevent="showEditForm(automation)"><status-icon :status="automation.enabled" class="small" /> {{ automation.name }}</td>
+                            <td @click.prevent="showEditForm(automation)">{{ automation.priority }}</td>
                             <td class="text-right">
                                 <a @click.prevent="confirmDelete(automation)">
                                     <font-awesome-icon icon="trash"></font-awesome-icon>
