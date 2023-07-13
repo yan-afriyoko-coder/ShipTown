@@ -37,16 +37,8 @@ class InventoryQuantityIncomingServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        SyncRequestedEvent::class => [
-            Listeners\SyncRequestedEventListener::class,
-        ],
-
         HourlyEvent::class => [
             Listeners\HourlyEventListener::class,
-        ],
-
-        DailyEvent::class => [
-            Listeners\DailyEventListener::class,
         ],
 
         DataCollectionRecordCreatedEvent::class => [
