@@ -8,6 +8,6 @@ class DataCollectionDeletedEventListener
 {
     public function handle(): void
     {
-        FixIncorrectQuantityIncomingJob::dispatchSync();
+        FixIncorrectQuantityIncomingJob::dispatchAfterResponse();
     }
 }
