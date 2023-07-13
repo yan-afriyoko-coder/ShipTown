@@ -6,6 +6,7 @@ use App\Modules\InventoryMovementsStatistics\src\Jobs\AccountForNewSalesJob;
 use App\Modules\InventoryMovementsStatistics\src\Jobs\Remove14DaysOutdatedSalesJob;
 use App\Modules\InventoryMovementsStatistics\src\Jobs\Remove28DaysOutdatedSalesJob;
 use App\Modules\InventoryMovementsStatistics\src\Jobs\Remove7DaysOutdatedSalesJob;
+use Illuminate\Support\Facades\Bus;
 
 class EveryMinuteEventListener
 {
@@ -13,8 +14,10 @@ class EveryMinuteEventListener
     {
         AccountForNewSalesJob::dispatch();
 
-        Remove7DaysOutdatedSalesJob::dispatch();
-        Remove14DaysOutdatedSalesJob::dispatch();
-        Remove28DaysOutdatedSalesJob::dispatch();
+        Bus::chain([
+            new Remove7DaysOutdatedSalesJob(),
+            new Remove14DaysOutdatedSalesJob(),
+            new Remove28DaysOutdatedSalesJob(),
+        ])->dispatch();
     }
 }

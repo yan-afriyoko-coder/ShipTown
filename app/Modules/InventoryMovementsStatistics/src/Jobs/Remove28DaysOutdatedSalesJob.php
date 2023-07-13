@@ -78,6 +78,10 @@ class Remove28DaysOutdatedSalesJob implements ShouldQueue
 
         DB::unprepared("
             DROP TEMPORARY TABLE IF EXISTS temp_itemMovementsStatistics_28days_51231244357898;
+
+            DELETE FROM modules_inventory_movements_statistics_last28days_sale_movements
+            WHERE included_in_28days = 0
+            AND sold_at < DATE_SUB(NOW(), INTERVAL 28 DAY);
         ");
     }
 }

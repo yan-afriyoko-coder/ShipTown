@@ -40,12 +40,13 @@ class RepopulateLast28DaysTableJob implements ShouldQueue
                 TRUNCATE TABLE modules_inventory_movements_statistics_last28days_sale_movements;
 
                 INSERT INTO modules_inventory_movements_statistics_last28days_sale_movements (
-                    inventory_movement_id, sold_at, inventory_id, quantity_sold
+                    inventory_movement_id, sold_at, inventory_id, warehouse_id, quantity_sold
                 )
                 SELECT
                     inventory_movements.id as inventory_movement_id,
                     inventory_movements.created_at as sold_at,
                     inventory_movements.inventory_id,
+                    inventory_movements.warehouse_id,
                     inventory_movements.quantity_delta * -1 as quantity_sold
                 FROM `inventory_movements`
                 WHERE inventory_movements.type = "sale"
@@ -60,10 +61,6 @@ class RepopulateLast28DaysTableJob implements ShouldQueue
                 SET included_in_14days = 0
                 WHERE included_in_14days is null
                 AND sold_at < DATE_SUB(NOW(), INTERVAL 14 DAY);
-
-                DELETE FROM modules_inventory_movements_statistics_last28days_sale_movements
-                WHERE included_in_28days is null
-                AND sold_at < DATE_SUB(NOW(), INTERVAL 28 DAY);
             ');
         };
     }
