@@ -14,6 +14,7 @@ class InventoryMovementCreatedEventListener
                 'inventory_movement_id' => $event->inventoryMovement->id,
                 'sold_at' => $event->inventoryMovement->created_at,
                 'inventory_id' => $event->inventoryMovement->inventory_id,
+                'warehouse_id' => $event->inventoryMovement->warehouse_id,
                 'quantity_sold' => $event->inventoryMovement->quantity_delta * -1
             ]);
         }
