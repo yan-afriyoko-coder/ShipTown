@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\EveryHourEvent;
 use App\Events\HourlyEvent;
 use App\Models\Heartbeat;
 use Illuminate\Bus\Queueable;
@@ -31,6 +32,8 @@ class RunHourlyJobs implements ShouldQueue
         Log::debug('Hourly event - dispatching');
 
         HourlyEvent::dispatch();
+
+        EveryHourEvent::dispatch();
 
         Heartbeat::query()->updateOrCreate([
             'code' => self::class,

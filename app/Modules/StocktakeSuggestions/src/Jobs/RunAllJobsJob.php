@@ -20,7 +20,6 @@ class RunAllJobsJob implements ShouldQueue
     {
         BarcodeScannedToQuantityFieldJob::dispatch();
         NegativeInventoryJob::dispatch();
-        NoMovementJob::dispatch();
         OutdatedCountsJob::dispatch();
 
         return true;
