@@ -9,9 +9,10 @@ use Makeable\LaravelFactory\HasFactory;
 /**
  *
  * @property int inventory_id
+ * @property int $product_id
+ * @property int $warehouse_id
  * @property int points
  * @property string reason
- * @property int $product_id
  */
 class StocktakeSuggestion extends BaseModel
 {
@@ -21,6 +22,8 @@ class StocktakeSuggestion extends BaseModel
 
     protected $fillable = [
         'inventory_id',
+        'product_id',
+        'warehouse_id',
         'points',
         'reason',
     ];
