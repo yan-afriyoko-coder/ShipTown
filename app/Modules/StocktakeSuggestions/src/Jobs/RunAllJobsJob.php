@@ -18,8 +18,8 @@ class RunAllJobsJob implements ShouldQueue
 
     public function handle(): bool
     {
+        NoMovementJob::dispatch();
         BarcodeScannedToQuantityFieldJob::dispatch();
-        NegativeInventoryJob::dispatch();
         OutdatedCountsJob::dispatch();
 
         return true;
