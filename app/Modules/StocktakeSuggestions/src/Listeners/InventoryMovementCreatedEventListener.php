@@ -21,6 +21,8 @@ class InventoryMovementCreatedEventListener
                 'points' => $points,
                 'reason' => $reason,
             ]);
+
+            return;
         }
 
         if ($inventoryMovement->quantity_after >= 0 and $inventoryMovement->quantity_before < 0) {
@@ -28,6 +30,8 @@ class InventoryMovementCreatedEventListener
                 'inventory_id' => $inventoryMovement->inventory_id,
                 'reason' => $reason
             ])->delete();
+
+            return;
         }
     }
 }
