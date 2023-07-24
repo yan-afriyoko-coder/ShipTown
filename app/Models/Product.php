@@ -5,6 +5,7 @@ namespace App\Models;
 use App\BaseModel;
 use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
+use App\Modules\InventoryMovementsStatistics\src\Models\InventoryMovementsStatistic;
 use App\Traits\HasTagsTrait;
 use App\Traits\LogsActivityTrait;
 use App\User;

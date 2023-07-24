@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Models\InventoryMovementsStatistic;
+use App\Modules\InventoryMovementsStatistics\src\Models\InventoryMovementsStatistic;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -10,7 +10,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class InventoryMovementsStatisticResource extends JsonResource
 {
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
             'id'                 => $this->id,
