@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Carbon updated_at
  *
  * @property Product $product
+ * @property Warehouse $warehouse
  */
 class InventoryMovement extends BaseModel
 {

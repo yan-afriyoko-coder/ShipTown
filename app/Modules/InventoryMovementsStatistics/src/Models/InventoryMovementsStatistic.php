@@ -17,7 +17,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $inventory_id
  * @property int $warehouse_id
  * @property string $warehouse_code
- * @property double $quantity_sold
+ * @property double $quantity_sold_last_7_days
+ * @property double $quantity_sold_last_14_days
+ * @property double $quantity_sold_last_28_days
  */
 class InventoryMovementsStatistic extends Model
 {
@@ -30,6 +32,9 @@ class InventoryMovementsStatistic extends Model
         'warehouse_id',
         'warehouse_code',
         'quantity_sold',
+        'quantity_sold_last_7_days',
+        'quantity_sold_last_14_days',
+        'quantity_sold_last_28_days'
     ];
 
     protected $casts = [
