@@ -5,7 +5,7 @@ namespace App\Console;
 use App\Jobs\DispatchEveryTenMinutesEventJob;
 use App\Jobs\DispatchEveryFiveMinutesEventJob;
 use App\Jobs\DispatchEveryMinuteEventJob;
-use App\Jobs\RunDailyJobs;
+use App\Jobs\DispatchEveryDayEvenJob;
 use App\Jobs\DispatchEveryHourEventJobs;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new DispatchEveryFiveMinutesEventJob())->everyFiveMinutes();
         $schedule->job(new DispatchEveryTenMinutesEventJob())->everyTenMinutes();
         $schedule->job(new DispatchEveryHourEventJobs())->hourly();
-        $schedule->job(new RunDailyJobs())->dailyAt('22:00');
+        $schedule->job(new DispatchEveryDayEvenJob())->dailyAt('22:00');
     }
 
     /**

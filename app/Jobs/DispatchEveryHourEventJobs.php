@@ -31,14 +31,14 @@ class DispatchEveryHourEventJobs implements ShouldQueue, ShouldBeUniqueUntilProc
 
     public function handle()
     {
-        Log::debug('Every Hourly event - dispatching');
+        Log::debug('Every Hour Event - dispatching');
 
         EveryHourEvent::dispatch();
 
         Heartbeat::query()->updateOrCreate([
             'code' => self::class,
         ], [
-            'error_message' => 'Every Hour Jobs heartbeat missed',
+            'error_message' => 'Every Hour Event heartbeat missed',
             'expires_at' => now()->addHours(2)
         ]);
 

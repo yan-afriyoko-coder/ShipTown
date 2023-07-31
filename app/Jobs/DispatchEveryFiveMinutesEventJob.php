@@ -31,17 +31,17 @@ class DispatchEveryFiveMinutesEventJob implements ShouldQueue, ShouldBeUniqueUnt
 
     public function handle()
     {
-        Log::debug('DispatchEveryFiveMinutesEvent - dispatching');
+        Log::debug('Every Five Minutes Event - dispatching');
 
         EveryFiveMinutesEvent::dispatch();
 
         Heartbeat::query()->updateOrCreate([
             'code' => self::class,
         ], [
-            'error_message' => 'Every 5 Minutes heartbeat missed',
+            'error_message' => 'Every Five Minutes Event heartbeat missed',
             'expires_at' => now()->addHour()
         ]);
 
-        Log::info('DispatchEveryFiveMinutesEvent - dispatched successfully');
+        Log::info('Every Five Minutes Event - dispatched successfully');
     }
 }

@@ -25,7 +25,7 @@ class DispatchEveryMinuteEventJob implements ShouldQueue, ShouldBeUniqueUntilPro
 
     public function handle()
     {
-        Log::debug('DispatchEvery10minEvent - dispatching');
+        Log::debug('Every Minute Event - dispatching');
 
         EveryMinuteEvent::dispatch();
 
@@ -36,6 +36,6 @@ class DispatchEveryMinuteEventJob implements ShouldQueue, ShouldBeUniqueUntilPro
             'expires_at' => now()->addHour(),
         ]);
 
-        Log::info('DispatchEvery10minEvent - dispatched successfully');
+        Log::info('Every Minute Event - dispatched successfully');
     }
 }
