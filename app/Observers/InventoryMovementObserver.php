@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Events\InventoryMovementCreatedEvent;
+use App\Events\InventoryMovement\InventoryMovementCreatedEvent;
 use App\Models\InventoryMovement;
 
 class InventoryMovementObserver

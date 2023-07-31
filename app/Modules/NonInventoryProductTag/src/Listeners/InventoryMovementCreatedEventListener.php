@@ -2,7 +2,7 @@
 
 namespace App\Modules\NonInventoryProductTag\src\Listeners;
 
-use App\Events\InventoryMovementCreatedEvent;
+use App\Events\InventoryMovement\InventoryMovementCreatedEvent;
 
 class InventoryMovementCreatedEventListener
 {

@@ -3,7 +3,7 @@
 namespace App\Modules\InventoryMovementsStatistics\src;
 
 use App\Events\EveryTenMinutesEvent;
-use App\Events\InventoryMovementCreatedEvent;
+use App\Events\InventoryMovement\InventoryMovementCreatedEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
