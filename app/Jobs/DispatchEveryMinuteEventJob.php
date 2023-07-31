@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Events\EveryMinuteEvent;
+use App\Events\Every10MinuteEvent;
 use App\Models\Heartbeat;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -24,7 +24,7 @@ class DispatchEveryMinuteEventJob implements ShouldQueue
     {
         Log::debug('DispatchEvery10minEvent - dispatching');
 
-        EveryMinuteEvent::dispatch();
+        Every10MinuteEvent::dispatch();
 
         Heartbeat::query()->updateOrCreate([
             'code' => self::class,

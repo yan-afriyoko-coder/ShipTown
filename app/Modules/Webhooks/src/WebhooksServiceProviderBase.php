@@ -3,7 +3,7 @@
 namespace App\Modules\Webhooks\src;
 
 use App\Events\DailyEvent;
-use App\Events\EveryMinuteEvent;
+use App\Events\Every10MinuteEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\InventoryMovementCreatedEvent;
 use App\Events\OrderProductShipmentCreatedEvent;
@@ -47,7 +47,7 @@ class WebhooksServiceProviderBase extends BaseModuleServiceProvider
             Listeners\SyncRequestedEventListener::class,
         ],
 
-        EveryMinuteEvent::class => [
+        Every10MinuteEvent::class => [
             Listeners\EveryMinuteEventListener::class,
         ],
 

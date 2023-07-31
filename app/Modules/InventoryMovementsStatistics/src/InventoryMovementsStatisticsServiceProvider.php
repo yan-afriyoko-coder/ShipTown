@@ -2,13 +2,13 @@
 
 namespace App\Modules\InventoryMovementsStatistics\src;
 
-use App\Events\EveryMinuteEvent;
+use App\Events\Every10MinuteEvent;
 use App\Events\HourlyEvent;
 use App\Events\InventoryMovementCreatedEvent;
 use App\Events\Product\ProductCreatedEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
-use App\Modules\InventoryMovementsStatistics\src\Jobs\RepopulateLast28DaysTableJob;
+use App\Modules\InventoryMovementsStatistics\src\Jobs\RepopulateStatisticsTableJob;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -41,23 +41,17 @@ class InventoryMovementsStatisticsServiceProvider extends BaseModuleServiceProvi
             Listeners\SyncRequestedEventListener::class,
         ],
 
-        EveryMinuteEvent::class => [
-            Listeners\EveryMinuteEventListener::class,
+        Every10MinuteEvent::class => [
+            Listeners\Every10MinuteEventListener::class,
         ],
 
         InventoryMovementCreatedEvent::class => [
             Listeners\InventoryMovementCreatedEventListener::class,
         ],
-
-        ProductCreatedEvent::class => [
-            Listeners\ProductCreatedEventListener::class,
-        ],
     ];
 
     public static function enabling(): bool
     {
-        RepopulateLast28DaysTableJob::dispatch();
-
         return parent::enabling();
     }
 

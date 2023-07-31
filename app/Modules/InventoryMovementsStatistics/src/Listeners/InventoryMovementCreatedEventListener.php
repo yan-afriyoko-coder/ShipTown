@@ -10,37 +10,47 @@ class InventoryMovementCreatedEventListener
 {
     public function handle(InventoryMovementCreatedEvent $event)
     {
+        $this->extracted($event);
+    }
+
+    /**
+     * @param InventoryMovementCreatedEvent $event
+     */
+    private function extracted(InventoryMovementCreatedEvent $event): void
+    {
         $inventoryMovement = $event->inventoryMovement;
 
-        if ($inventoryMovement->type === 'sale') {
-            DB::table('modules_inventory_movements_statistics_last28days_sale_movements')->insert([
-                'inventory_movement_id' => $inventoryMovement->id,
-                'sold_at' => $inventoryMovement->created_at,
-                'inventory_id' => $inventoryMovement->inventory_id,
-                'warehouse_id' => $inventoryMovement->warehouse_id,
-                'quantity_sold' => $inventoryMovement->quantity_delta * -1
-            ]);
-
+        DB::transaction(function () use ($inventoryMovement) {
             $recordsUpdated = InventoryMovementsStatistic::query()
                 ->where('inventory_id', $inventoryMovement->inventory_id)
+                ->where('type', $inventoryMovement->type)
                 ->update([
-                    'quantity_sold_last_7_days' => DB::raw('IFNULL(quantity_sold_last_7_days, 0) + ' . $inventoryMovement->quantity_delta * -1),
-                    'quantity_sold_last_14_days' => DB::raw('IFNULL(quantity_sold_last_14_days, 0) + ' . $inventoryMovement->quantity_delta * -1),
-                    'quantity_sold_last_28_days' => DB::raw('IFNULL(quantity_sold_last_28_days, 0) + ' . $inventoryMovement->quantity_delta * -1),
+                    'last7days_quantity_delta' => DB::raw('last7days_quantity_delta + ' . $inventoryMovement->quantity_delta),
+                    'last7days_max_movement_id' => $inventoryMovement->id,
+                    'last14days_quantity_delta' => DB::raw('last14days_quantity_delta + ' . $inventoryMovement->quantity_delta),
+                    'last14days_max_movement_id' => $inventoryMovement->id,
+                    'last28days_quantity_delta' => DB::raw('last28days_quantity_delta + ' . $inventoryMovement->quantity_delta),
+                    'last28days_max_movement_id' => $inventoryMovement->id,
                 ]);
 
             if ($recordsUpdated === 0) {
                 InventoryMovementsStatistic::query()
                     ->create([
-                        'inventory_id'   => $inventoryMovement->inventory_id,
-                        'product_id'     => $inventoryMovement->product_id,
-                        'warehouse_id'   => $inventoryMovement->warehouse_id,
+                        'type' => $inventoryMovement->type,
+                        'inventory_id' => $inventoryMovement->inventory_id,
+                        'product_id' => $inventoryMovement->product_id,
                         'warehouse_code' => $inventoryMovement->warehouse->code,
-                        'quantity_sold_last_7days' => $inventoryMovement->quantity_delta * -1,
-                        'quantity_sold_last_14days' => $inventoryMovement->quantity_delta * -1,
-                        'quantity_sold_last_28days' => $inventoryMovement->quantity_delta * -1,
+                        'last7days_quantity_delta' => $inventoryMovement->quantity_delta,
+                        'last7days_min_movement_id' => $inventoryMovement->id,
+                        'last7days_max_movement_id' => $inventoryMovement->id,
+                        'last14days_quantity_delta' => $inventoryMovement->quantity_delta,
+                        'last14days_min_movement_id' => $inventoryMovement->id,
+                        'last14days_max_movement_id' => $inventoryMovement->id,
+                        'last28days_quantity_delta' => $inventoryMovement->quantity_delta,
+                        'last28days_min_movement_id' => $inventoryMovement->id,
+                        'last28days_max_movement_id' => $inventoryMovement->id,
                     ]);
             }
-        }
+        });
     }
 }

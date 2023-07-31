@@ -11,41 +11,44 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  *
- * @property int $id
- * @property int $description
- * @property int $product_id
+ * @property int $type
  * @property int $inventory_id
- * @property int $warehouse_id
+ * @property int $product_id
  * @property string $warehouse_code
- * @property double $quantity_sold_last_7_days
- * @property double $quantity_sold_last_14_days
- * @property double $quantity_sold_last_28_days
+ * @property double $last7days_quantity_delta
+ * @property int    $last7days_max_movement_id
+ * @property int    $last7days_min_movement_id
+ * @property double $last14days_quantity_delta
+ * @property int    $last14days_max_movement_id
+ * @property int    $last14days_min_movement_id
+ * @property double $last28days_quantity_delta
+ * @property int    $last28days_max_movement_id
+ * @property int    $last28days_min_movement_id
  */
 class InventoryMovementsStatistic extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'description',
+        'type',
         'inventory_id',
         'product_id',
-        'warehouse_id',
         'warehouse_code',
-        'quantity_sold',
-        'quantity_sold_last_7_days',
-        'quantity_sold_last_14_days',
-        'quantity_sold_last_28_days'
+        'last7days_quantity_delta',
+        'last7days_max_movement_id',
+        'last7days_min_movement_id',
+        'last14days_quantity_delta',
+        'last14days_max_movement_id',
+        'last14days_min_movement_id',
+        'last28days_quantity_delta',
+        'last28days_max_movement_id',
+        'last28days_min_movement_id',
     ];
 
     protected $casts = [
-        'quantity_sold_last_7_days' => 'double',
-        'quantity_sold_last_14_days' => 'double',
-        'quantity_sold_last_28_days' => 'double',
-        'quantity_sold_this_week' => 'double',
-        'quantity_sold_last_week' => 'double',
-        'quantity_sold_2weeks_ago' => 'double',
-        'quantity_sold_3weeks_ago' => 'double',
-        'quantity_sold_4weeks_ago' => 'double',
+        'last7days_quantity_delta' => 'double',
+        'last14days_quantity_delta' => 'double',
+        'last28days_quantity_delta' => 'double',
     ];
 
     public function inventory(): BelongsTo
@@ -60,6 +63,6 @@ class InventoryMovementsStatistic extends Model
 
     public function warehouse(): BelongsTo
     {
-        return $this->belongsTo(Warehouse::class);
+        return $this->belongsTo(Warehouse::class, 'warehouse_code');
     }
 }

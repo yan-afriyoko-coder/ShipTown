@@ -4,7 +4,7 @@ namespace App\Modules\Api2cart\src;
 
 use App\Events\DailyEvent;
 use App\Events\Every10minEvent;
-use App\Events\EveryMinuteEvent;
+use App\Events\Every10MinuteEvent;
 use App\Events\HourlyEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
@@ -50,7 +50,7 @@ class Api2cartServiceProvider extends BaseModuleServiceProvider
             Listeners\SyncRequestedEventListener::class,
         ],
 
-        EveryMinuteEvent::class => [
+        Every10MinuteEvent::class => [
             Listeners\EveryMinuteEventListener::class
         ],
 

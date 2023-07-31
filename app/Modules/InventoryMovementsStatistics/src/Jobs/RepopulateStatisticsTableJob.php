@@ -1,0 +1,62 @@
+<?php
+
+namespace App\Modules\InventoryMovementsStatistics\src\Jobs;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
+
+class RepopulateStatisticsTableJob implements ShouldQueue
+{
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+
+    public function handle()
+    {
+        DB::unprepared('
+                TRUNCATE TABLE inventory_movements_statistics;
+                INSERT INTO inventory_movements_statistics (
+                    type,
+                    inventory_id,
+                    product_id,
+                    warehouse_code,
+                    last7days_quantity_delta,
+                    last7days_max_movement_id,
+                    last7days_min_movement_id,
+                    last14days_quantity_delta,
+                    last14days_max_movement_id,
+                    last14days_min_movement_id,
+                    last28days_quantity_delta,
+                    last28days_max_movement_id,
+                    last28days_min_movement_id,
+                    created_at,
+                    updated_at
+                )
+                SELECT
+                    inventory_movements.type,
+                    inventory_movements.inventory_id,
+                    max(inventory_movements.product_id) as product_id,
+                    max(warehouses.code) as warehouse_code,
+                    sum(inventory_movements.quantity_delta) as last7days_quantity_delta,
+                    max(inventory_movements.id) as last7days_max_movement_id,
+                    min(inventory_movements.id) as last7days_min_movement_id,
+                    sum(inventory_movements.quantity_delta) as last14days_quantity_delta,
+                    max(inventory_movements.id) as last14days_max_movement_id,
+                    min(inventory_movements.id) as last14days_min_movement_id,
+                    sum(inventory_movements.quantity_delta) as last28days_quantity_delta,
+                    max(inventory_movements.id) as last28days_max_movement_id,
+                    min(inventory_movements.id) as last28days_min_movement_id,
+                    now() as created_at,
+                    now() as updated_at
+                FROM inventory_movements
+                LEFT JOIN warehouses ON warehouses.id = inventory_movements.warehouse_id
+                WHERE inventory_movements.created_at > date_sub(now(), interval 28 day)
+                GROUP BY inventory_movements.type, inventory_movements.inventory_id
+            ');
+    }
+}
