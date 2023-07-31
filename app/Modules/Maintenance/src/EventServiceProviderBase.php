@@ -2,7 +2,7 @@
 
 namespace App\Modules\Maintenance\src;
 
-use App\Events\DailyEvent;
+use App\Events\EveryDayEvent;
 use App\Events\EveryHourEvent;
 use App\Modules\BaseModuleServiceProvider;
 
@@ -33,7 +33,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
         EveryHourEvent::class => [
             Listeners\HourlyEventListener::class,
         ],
-        DailyEvent::class => [
+        EveryDayEvent::class => [
             Listeners\DailyEvent\RunDailyMaintenanceJobsListener::class,
         ],
     ];

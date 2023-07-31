@@ -2,7 +2,7 @@
 
 namespace App\Modules\Maintenance\src\Listeners\DailyEvent;
 
-use App\Events\DailyEvent;
+use App\Events\EveryDayEvent;
 use App\Modules\Maintenance\src\Jobs\Products\EnsureAllInventoryRecordsExistsJob;
 use App\Modules\Maintenance\src\Jobs\Products\EnsureAllProductPriceRecordsExistsJob;
 use App\Modules\Maintenance\src\Jobs\Products\FixQuantityAvailableJob;
@@ -13,11 +13,11 @@ class RunDailyMaintenanceJobsListener
     /**
      * Handle the event.
      *
-     * @param DailyEvent $event
+     * @param EveryDayEvent $event
      *
      * @return void
      */
-    public function handle(DailyEvent $event)
+    public function handle(EveryDayEvent $event)
     {
         EnsureAllInventoryRecordsExistsJob::dispatchAfterResponse();
         EnsureAllProductPriceRecordsExistsJob::dispatchAfterResponse();

@@ -2,11 +2,11 @@
 
 namespace App\Modules\_SampleModuleStructure\src\Listeners;
 
-use App\Events\DailyEvent;
+use App\Events\EveryDayEvent;
 
 class DailyEventListener
 {
-    public function handle(DailyEvent $event): bool
+    public function handle(EveryDayEvent $event): bool
     {
         //
 

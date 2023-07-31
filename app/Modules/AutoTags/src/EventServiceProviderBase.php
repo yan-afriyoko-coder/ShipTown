@@ -2,7 +2,7 @@
 
 namespace App\Modules\AutoTags\src;
 
-use App\Events\DailyEvent;
+use App\Events\EveryDayEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
@@ -34,7 +34,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        DailyEvent::class => [
+        EveryDayEvent::class => [
             Listeners\DailyEvent\RunDailyMaintenanceJobsListener::class,
         ],
 

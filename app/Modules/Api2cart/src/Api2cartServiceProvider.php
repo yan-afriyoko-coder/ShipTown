@@ -2,7 +2,7 @@
 
 namespace App\Modules\Api2cart\src;
 
-use App\Events\DailyEvent;
+use App\Events\EveryDayEvent;
 use App\Events\EveryFiveMinutesEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
@@ -52,7 +52,7 @@ class Api2cartServiceProvider extends BaseModuleServiceProvider
             Listeners\EveryFiveMinutesEventListener::class
         ],
 
-        DailyEvent::class => [
+        EveryDayEvent::class => [
             Listeners\DailyEventListener::class],
 
         ProductPriceUpdatedEvent::class => [

@@ -2,7 +2,7 @@
 
 namespace App\Modules\AutoTags\src\Listeners\DailyEvent;
 
-use App\Events\DailyEvent;
+use App\Events\EveryDayEvent;
 use App\Modules\AutoTags\src\Jobs\AddMissingOutOfStockTagsJob;
 use App\Modules\AutoTags\src\Jobs\AddMissingOversoldTagsJob;
 use App\Modules\AutoTags\src\Jobs\RemoveWrongOutOfStockTagsJob;
@@ -13,11 +13,11 @@ class RunDailyMaintenanceJobsListener
     /**
      * Handle the event.
      *
-     * @param DailyEvent $event
+     * @param EveryDayEvent $event
      *
      * @return void
      */
-    public function handle(DailyEvent $event)
+    public function handle(EveryDayEvent $event)
     {
         RemoveWrongOutOfStockTagsJob::dispatch();
         AddMissingOutOfStockTagsJob::dispatch();
