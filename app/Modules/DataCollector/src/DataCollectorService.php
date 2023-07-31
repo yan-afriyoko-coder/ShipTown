@@ -160,12 +160,20 @@ class DataCollectorService
                 $record->updated_at
             ]);
 
-            InventoryService::adjustQuantity(
-                $inventory,
-                $record->quantity_scanned,
-                'data collection transfer in',
-                $custom_unique_reference_id
-            );
+            try {
+                InventoryService::adjustQuantity(
+                    $inventory,
+                    $record->quantity_scanned,
+                    'data collection transfer in',
+                    $custom_unique_reference_id
+                );
+            } catch (\Exception $e) {
+                if (InventoryMovement::query()->where('custom_unique_reference_id', $custom_unique_reference_id)->exists()) {
+                    return;
+                }
+                report($e);
+                throw $e;
+            }
 
             $record->update([
                 'total_transferred_in' => $record->total_transferred_in + $record->quantity_scanned,
@@ -191,12 +199,20 @@ class DataCollectorService
                 $record->updated_at
             ]);
 
-            InventoryService::adjustQuantity(
-                $inventory,
-                $record->quantity_scanned * -1,
-                'data collection transfer out',
-                $custom_unique_reference_id
-            );
+            try {
+                InventoryService::adjustQuantity(
+                    $inventory,
+                    $record->quantity_scanned * -1,
+                    'data collection transfer out',
+                    $custom_unique_reference_id
+                );
+            } catch (\Exception $e) {
+                if (InventoryMovement::query()->where('custom_unique_reference_id', $custom_unique_reference_id)->exists()) {
+                    return;
+                }
+                report($e);
+                throw $e;
+            }
 
             $record->update([
                 'total_transferred_out' => $record->total_transferred_out + $record->quantity_scanned,
