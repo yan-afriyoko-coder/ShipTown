@@ -2,7 +2,7 @@
 
 namespace App\Modules\AutoRestockLevels\src;
 
-use App\Events\EveryMinuteEvent;
+use App\Events\Every10MinuteEvent;
 use App\Events\HourlyEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\SyncRequestedEvent;

@@ -3,12 +3,14 @@
 namespace App\Modules\InventoryMovementsStatistics\src\Listeners;
 
 use App\Events\SyncRequestedEvent;
-use App\Modules\InventoryMovementsStatistics\src\Jobs\RepopulateLast28DaysTableJob;
+use App\Modules\InventoryMovementsStatistics\src\Jobs\RemoveOutdatedSalesJob;
+use App\Modules\InventoryMovementsStatistics\src\Jobs\RepopulateStatisticsTableJob;
 
 class SyncRequestedEventListener
 {
     public function handle(SyncRequestedEvent $event)
     {
-        RepopulateLast28DaysTableJob::dispatch();
+        RepopulateStatisticsTableJob::dispatch();
+        RemoveOutdatedSalesJob::dispatch();
     }
 }
