@@ -29,6 +29,7 @@ class AutomationHelper
     public static function runAutomationsOnOrdersQuery(Builder $automationsToRunQuery, Builder $ordersToRunQuery): bool
     {
         return $automationsToRunQuery
+            ->with('conditions', 'actions')
             ->get()
             ->every(function (Automation $automation) use ($ordersToRunQuery) {
                 return self::runAutomation($automation, $ordersToRunQuery);
