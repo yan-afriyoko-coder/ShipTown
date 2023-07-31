@@ -2,18 +2,18 @@
 
 namespace Tests\Feature\Modules\SystemHeartbeats;
 
-use App\Events\DailyEvent;
+use App\Events\EveryDayEvent;
 use App\Events\EveryFiveMinutesEvent;
 use App\Events\EveryHourEvent;
 use App\Events\EveryMinuteEvent;
 use App\Events\EveryTenMinutesEvent;
 use App\Models\Heartbeat;
 use App\Modules\InventoryReservations\src\EventServiceProviderBase as InventoryReservationsEventServiceProviderBase;
-use App\Modules\SystemHeartbeats\src\Listeners\DailyEventListener;
+use App\Modules\SystemHeartbeats\src\Listeners\EveryDayEventListener;
 use App\Modules\SystemHeartbeats\src\Listeners\EveryFiveMinutesEventListener;
 use App\Modules\SystemHeartbeats\src\Listeners\EveryMinuteEventListener;
 use App\Modules\SystemHeartbeats\src\Listeners\EveryTenMinutesEventListener;
-use App\Modules\SystemHeartbeats\src\Listeners\HourlyEventListener;
+use App\Modules\SystemHeartbeats\src\Listeners\EveryHourEventListener;
 use App\Modules\SystemHeartbeats\src\SystemHeartbeatsServiceProvider;
 use Tests\TestCase;
 
@@ -65,17 +65,17 @@ class BasicModuleTest extends TestCase
         EveryHourEvent::dispatch();
 
         $this->assertDatabaseHas('heartbeats', [
-            'code' => HourlyEventListener::class
+            'code' => EveryHourEventListener::class
         ]);
     }
 
     /** @test */
     public function test_dailyEvent_heartbeat()
     {
-        DailyEvent::dispatch();
+        EveryDayEvent::dispatch();
 
         $this->assertDatabaseHas('heartbeats', [
-            'code' => DailyEventListener::class
+            'code' => EveryDayEventListener::class
         ]);
     }
 }

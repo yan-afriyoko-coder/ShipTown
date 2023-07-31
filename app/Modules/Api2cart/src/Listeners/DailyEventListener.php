@@ -2,7 +2,7 @@
 
 namespace App\Modules\Api2cart\src\Listeners;
 
-use App\Events\DailyEvent;
+use App\Events\EveryDayEvent;
 use App\Models\Warehouse;
 use App\Modules\Api2cart\src\Jobs\ResyncLastDayJob;
 use App\Modules\Api2cart\src\Jobs\ResyncSyncErrorsTaggedJob;
@@ -13,11 +13,11 @@ class DailyEventListener
     /**
      * Handle the event.
      *
-     * @param DailyEvent $event
+     * @param EveryDayEvent $event
      *
      * @return void
      */
-    public function handle(DailyEvent $event)
+    public function handle(EveryDayEvent $event)
     {
         ResyncLastDayJob::dispatch();
         ResyncSyncErrorsTaggedJob::dispatch();

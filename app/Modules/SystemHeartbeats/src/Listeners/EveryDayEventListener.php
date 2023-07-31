@@ -5,7 +5,7 @@ namespace App\Modules\SystemHeartbeats\src\Listeners;
 use App\Models\Heartbeat;
 use Illuminate\Support\Facades\Log;
 
-class HourlyEventListener
+class EveryDayEventListener
 {
     public function handle()
     {
@@ -14,8 +14,8 @@ class HourlyEventListener
         Heartbeat::query()->updateOrCreate([
             'code' => self::class,
         ], [
-            'error_message' => 'Every Hour Event heartbeat missed',
-            'expires_at' => now()->addHours(2)
+            'error_message' => 'Every Day heartbeat missed',
+            'expires_at' => now()->addDays(2)
         ]);
     }
 }

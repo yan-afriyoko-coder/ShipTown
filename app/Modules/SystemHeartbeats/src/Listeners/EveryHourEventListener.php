@@ -2,21 +2,20 @@
 
 namespace App\Modules\SystemHeartbeats\src\Listeners;
 
-use App\Events\DailyEvent;
 use App\Models\Heartbeat;
 use Illuminate\Support\Facades\Log;
 
-class DailyEventListener
+class EveryHourEventListener
 {
-    public function handle(DailyEvent $event)
+    public function handle()
     {
         Log::debug('heartbeat', ['event' => self::class]);
 
         Heartbeat::query()->updateOrCreate([
             'code' => self::class,
         ], [
-            'error_message' => 'Daily event heartbeat missed',
-            'expires_at' => now()->addDays(2)
+            'error_message' => 'Every Hour Event heartbeat missed',
+            'expires_at' => now()->addHours(2)
         ]);
     }
 }

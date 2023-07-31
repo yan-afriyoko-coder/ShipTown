@@ -2,7 +2,6 @@
 
 namespace App\Modules\StocktakeSuggestions\src;
 
-use App\Events\EveryMinuteEvent;
 use App\Events\EveryDayEvent;
 use App\Events\EveryTenMinutesEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;

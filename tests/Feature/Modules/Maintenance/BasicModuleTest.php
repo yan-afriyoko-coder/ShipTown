@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Modules\Maintenance;
 
-use App\Events\DailyEvent;
+use App\Events\EveryDayEvent;
 use App\Modules\Maintenance\src\EventServiceProviderBase;
 use App\Modules\Maintenance\src\Jobs\Products\EnsureAllInventoryRecordsExistsJob;
 use App\Modules\Maintenance\src\Jobs\Products\EnsureAllProductPriceRecordsExistsJob;
@@ -22,7 +22,7 @@ class BasicModuleTest extends TestCase
 
         Bus::fake();
 
-        DailyEvent::dispatch();
+        EveryDayEvent::dispatch();
 
         Bus::assertDispatched(EnsureAllInventoryRecordsExistsJob::class);
         Bus::assertDispatched(EnsureAllProductPriceRecordsExistsJob::class);
