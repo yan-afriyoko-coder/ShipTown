@@ -2,7 +2,6 @@
 
 namespace App\Modules\MagentoApi\src\Listeners;
 
-use App\Modules\MagentoApi\src\Jobs\EnsureCorrectRecordsJob;
 use App\Modules\MagentoApi\src\Jobs\EnsureProductRecordsExistJob;
 use App\Modules\MagentoApi\src\Jobs\FetchBasePricesJob;
 use App\Modules\MagentoApi\src\Jobs\FetchOrdersJob;
@@ -12,7 +11,7 @@ use App\Modules\MagentoApi\src\Jobs\SyncProductBasePricesJob;
 use App\Modules\MagentoApi\src\Jobs\SyncProductInventoryJob;
 use App\Modules\MagentoApi\src\Jobs\SyncProductSalePricesJob;
 
-class Every10minEventListener
+class EveryTenMinutesEventListener
 {
     public function handle()
     {

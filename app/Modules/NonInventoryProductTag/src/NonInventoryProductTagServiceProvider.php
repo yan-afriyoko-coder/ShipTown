@@ -2,7 +2,8 @@
 
 namespace App\Modules\NonInventoryProductTag\src;
 
-use App\Events\Every10MinuteEvent;
+use App\Events\EveryMinuteEvent;
+use App\Events\EveryTenMinutesEvent;
 use App\Events\InventoryMovementCreatedEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
@@ -43,13 +44,9 @@ class NonInventoryProductTagServiceProvider extends BaseModuleServiceProvider
             Listeners\SyncRequestedEventListener::class,
         ],
 
-        Every10MinuteEvent::class => [
+        EveryMinuteEvent::class => [
             Listeners\EveryMinuteEventListener::class,
         ],
-
-//        InventoryMovementCreatedEvent::class => [
-//            Listeners\InventoryMovementCreatedEventListener::class,
-//        ],
     ];
 
     /**

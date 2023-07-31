@@ -2,8 +2,9 @@
 
 namespace App\Modules\StocktakeSuggestions\src;
 
-use App\Events\Every10minEvent;
+use App\Events\EveryMinuteEvent;
 use App\Events\EveryDayEvent;
+use App\Events\EveryTenMinutesEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\InventoryMovementCreatedEvent;
 use App\Events\SyncRequestedEvent;
@@ -38,8 +39,8 @@ class StocktakeSuggestionsServiceProvider extends BaseModuleServiceProvider
             Listeners\SyncRequestedEventListener::class,
         ],
 
-        Every10minEvent::class => [
-            Listeners\Every10minEventListener::class,
+        EveryTenMinutesEvent::class => [
+            Listeners\EveryTenMinutesEventListener::class,
         ],
 
         EveryDayEvent::class => [

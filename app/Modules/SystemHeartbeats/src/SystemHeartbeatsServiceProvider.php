@@ -3,7 +3,9 @@
 namespace App\Modules\SystemHeartbeats\src;
 
 use App\Events\DailyEvent;
-use App\Events\Every10minEvent;
+use App\Events\EveryFiveMinutesEvent;
+use App\Events\EveryMinuteEvent;
+use App\Events\EveryTenMinutesEvent;
 use App\Events\HourlyEvent;
 use App\Modules\BaseModuleServiceProvider;
 
@@ -31,8 +33,16 @@ class SystemHeartbeatsServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        Every10minEvent::class => [
-            Listeners\Every10minEventListener::class,
+        EveryMinuteEvent::class => [
+            Listeners\EveryMinuteEventListener::class,
+        ],
+
+        EveryFiveMinutesEvent::class => [
+            Listeners\EveryFiveMinutesEventListener::class,
+        ],
+
+        EveryTenMinutesEvent::class => [
+            Listeners\EveryTenMinutesEventListener::class,
         ],
 
         HourlyEvent::class => [

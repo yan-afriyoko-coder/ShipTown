@@ -3,14 +3,18 @@
 namespace Tests\Feature\Modules\SystemHeartbeats;
 
 use App\Events\DailyEvent;
-use App\Events\Every10minEvent;
+use App\Events\EveryFiveMinutesEvent;
+use App\Events\EveryMinuteEvent;
+use App\Events\EveryTenMinutesEvent;
 use App\Events\HourlyEvent;
 use App\Models\Heartbeat;
+use App\Modules\InventoryReservations\src\EventServiceProviderBase as InventoryReservationsEventServiceProviderBase;
 use App\Modules\SystemHeartbeats\src\Listeners\DailyEventListener;
-use App\Modules\SystemHeartbeats\src\Listeners\Every10minEventListener;
+use App\Modules\SystemHeartbeats\src\Listeners\EveryFiveMinutesEventListener;
+use App\Modules\SystemHeartbeats\src\Listeners\EveryMinuteEventListener;
+use App\Modules\SystemHeartbeats\src\Listeners\EveryTenMinutesEventListener;
 use App\Modules\SystemHeartbeats\src\Listeners\HourlyEventListener;
 use App\Modules\SystemHeartbeats\src\SystemHeartbeatsServiceProvider;
-use App\Modules\InventoryReservations\src\EventServiceProviderBase as InventoryReservationsEventServiceProviderBase;
 use Tests\TestCase;
 
 class BasicModuleTest extends TestCase
@@ -26,12 +30,32 @@ class BasicModuleTest extends TestCase
     }
 
     /** @test */
-    public function test_every10minEvent_heartbeat()
+    public function test_EveryMinuteEvent_heartbeat()
     {
-        Every10minEvent::dispatch();
+        EveryMinuteEvent::dispatch();
 
         $this->assertDatabaseHas('heartbeats', [
-            'code' => Every10minEventListener::class
+            'code' => EveryMinuteEventListener::class
+        ]);
+    }
+
+    /** @test */
+    public function test_FiveMinutesEvent_heartbeat()
+    {
+        EveryFiveMinutesEvent::dispatch();
+
+        $this->assertDatabaseHas('heartbeats', [
+            'code' => EveryFiveMinutesEventListener::class
+        ]);
+    }
+
+    /** @test */
+    public function test_TenMinutesEvent_heartbeat()
+    {
+        EveryTenMinutesEvent::dispatch();
+
+        $this->assertDatabaseHas('heartbeats', [
+            'code' => EveryTenMinutesEventListener::class
         ]);
     }
 

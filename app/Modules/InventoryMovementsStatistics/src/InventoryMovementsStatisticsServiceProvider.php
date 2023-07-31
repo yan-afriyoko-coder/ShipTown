@@ -2,7 +2,7 @@
 
 namespace App\Modules\InventoryMovementsStatistics\src;
 
-use App\Events\Every10MinuteEvent;
+use App\Events\EveryTenMinutesEvent;
 use App\Events\HourlyEvent;
 use App\Events\InventoryMovementCreatedEvent;
 use App\Events\Product\ProductCreatedEvent;
@@ -41,8 +41,8 @@ class InventoryMovementsStatisticsServiceProvider extends BaseModuleServiceProvi
             Listeners\SyncRequestedEventListener::class,
         ],
 
-        Every10MinuteEvent::class => [
-            Listeners\Every10MinuteEventListener::class,
+        EveryTenMinutesEvent::class => [
+            Listeners\EveryTenMinutesEventListener::class,
         ],
 
         InventoryMovementCreatedEvent::class => [
