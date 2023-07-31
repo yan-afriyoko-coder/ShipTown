@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\EveryDayEvent;
 use App\Models\Heartbeat;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -25,8 +26,6 @@ class RunDailyJobs implements ShouldQueue
     public function handle()
     {
         Log::debug('Daily event - dispatching');
-
-        EveryDayEvent::dispatch();
 
         EveryDayEvent::dispatch();
 
