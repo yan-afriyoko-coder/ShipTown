@@ -168,11 +168,10 @@ class DataCollectorService
                     $custom_unique_reference_id
                 );
             } catch (\Exception $e) {
-                if (InventoryMovement::query()->where('custom_unique_reference_id', $custom_unique_reference_id)->exists()) {
-                    return;
+                if (! InventoryMovement::query()->where('custom_unique_reference_id', $custom_unique_reference_id)->exists()) {
+                    report($e);
+                    throw $e;
                 }
-                report($e);
-                throw $e;
             }
 
             $record->update([
@@ -207,11 +206,10 @@ class DataCollectorService
                     $custom_unique_reference_id
                 );
             } catch (\Exception $e) {
-                if (InventoryMovement::query()->where('custom_unique_reference_id', $custom_unique_reference_id)->exists()) {
-                    return;
+                if (! InventoryMovement::query()->where('custom_unique_reference_id', $custom_unique_reference_id)->exists()) {
+                    report($e);
+                    throw $e;
                 }
-                report($e);
-                throw $e;
             }
 
             $record->update([

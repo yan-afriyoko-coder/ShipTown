@@ -12,7 +12,7 @@ class HasAnyShipmentCondition extends BaseOrderConditionAbstract
 {
     public static function addQueryScope(Builder $query, $expected_value): Builder
     {
-        $value = trim($expected_value);
+        $value = trim($expected_value ?? '');
 
         $expectsTrue = $value === '' || filter_var($value, FILTER_VALIDATE_BOOL);
 
