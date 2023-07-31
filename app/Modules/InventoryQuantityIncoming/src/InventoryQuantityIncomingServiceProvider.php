@@ -2,10 +2,10 @@
 
 namespace App\Modules\InventoryQuantityIncoming\src;
 
-use App\Events\DataCollectionDeletedEvent;
-use App\Events\DataCollectionRecordCreatedEvent;
-use App\Events\DataCollectionRecordDeletedEvent;
-use App\Events\DataCollectionRecordUpdatedEvent;
+use App\Events\DataCollection\DataCollectionDeletedEvent;
+use App\Events\DataCollectionRecord\DataCollectionRecordCreatedEvent;
+use App\Events\DataCollectionRecord\DataCollectionRecordDeletedEvent;
+use App\Events\DataCollectionRecord\DataCollectionRecordUpdatedEvent;
 use App\Events\EveryHourEvent;
 use App\Modules\BaseModuleServiceProvider;
 

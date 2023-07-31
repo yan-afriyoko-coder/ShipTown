@@ -2,7 +2,7 @@
 
 namespace App\Modules\InventoryQuantityIncoming\src\Listeners;
 
-use App\Events\DataCollectionRecordUpdatedEvent;
+use App\Events\DataCollectionRecord\DataCollectionRecordUpdatedEvent;
 use App\Models\DataCollectionTransferIn;
 use App\Modules\InventoryQuantityIncoming\src\Jobs\RecalculateInventoryQuantityIncomingJob;
 

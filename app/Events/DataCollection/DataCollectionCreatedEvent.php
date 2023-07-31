@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\DataCollection;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class DataCollectionDeletedEvent
+class DataCollectionCreatedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
