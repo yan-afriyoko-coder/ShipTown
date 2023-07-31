@@ -7,7 +7,7 @@ use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedSalesRecordsJob;
 use App\Modules\Rmsapi\src\Jobs\UpdateImportedSalesRecordsJob;
 
-class EveryMinuteEventListener
+class EveryFiveMinutesEventListener
 {
     public function handle()
     {
