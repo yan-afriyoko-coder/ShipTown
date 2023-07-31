@@ -43,11 +43,7 @@ class TransferOutJob implements ShouldQueue
             ->where('quantity_scanned', '!=', DB::raw(0))
             ->chunkById(100, function ($records) {
                 $records->each(function (DataCollectionRecord $record) {
-                    retry(5, function () use ($record) {
-                        DB::transaction(function () use ($record) {
-                            DataCollectorService::transferOutRecord($record);
-                        });
-                    }, 1000);
+                    DataCollectorService::transferOutRecord($record);
                 });
             });
 
