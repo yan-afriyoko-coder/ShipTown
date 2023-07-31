@@ -5,7 +5,7 @@ namespace App\Modules\StocktakeSuggestions\src;
 use App\Events\EveryDayEvent;
 use App\Events\EveryTenMinutesEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
-use App\Events\InventoryMovementCreatedEvent;
+use App\Events\InventoryMovement\InventoryMovementCreatedEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
 

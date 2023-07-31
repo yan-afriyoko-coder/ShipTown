@@ -2,7 +2,7 @@
 
 namespace App\Modules\InventoryMovementsStatistics\src\Listeners;
 
-use App\Events\InventoryMovementCreatedEvent;
+use App\Events\InventoryMovement\InventoryMovementCreatedEvent;
 use App\Modules\InventoryMovementsStatistics\src\Models\InventoryMovementsStatistic;
 use Illuminate\Support\Facades\DB;
 

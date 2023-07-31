@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\InventoryMovement;
 
 use App\Models\InventoryMovement;
 use Illuminate\Broadcasting\Channel;

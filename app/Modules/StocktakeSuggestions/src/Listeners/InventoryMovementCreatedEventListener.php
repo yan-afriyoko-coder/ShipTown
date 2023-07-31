@@ -2,7 +2,7 @@
 
 namespace App\Modules\StocktakeSuggestions\src\Listeners;
 
-use App\Events\InventoryMovementCreatedEvent;
+use App\Events\InventoryMovement\InventoryMovementCreatedEvent;
 use App\Models\StocktakeSuggestion;
 
 class InventoryMovementCreatedEventListener

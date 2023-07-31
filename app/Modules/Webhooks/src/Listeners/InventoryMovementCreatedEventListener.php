@@ -2,9 +2,8 @@
 
 namespace App\Modules\Webhooks\src\Listeners;
 
-use App\Events\InventoryMovementCreatedEvent;
+use App\Events\InventoryMovement\InventoryMovementCreatedEvent;
 use App\Models\InventoryMovement;
-use App\Modules\Webhooks\src\Jobs\PublishInventoryMovementWebhooksJob;
 use App\Modules\Webhooks\src\Models\PendingWebhook;
 
 class InventoryMovementCreatedEventListener
