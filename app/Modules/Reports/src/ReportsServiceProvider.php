@@ -3,7 +3,6 @@
 
 namespace App\Modules\Reports\src;
 
-use App\Events\HourlyEvent;
 use App\Modules\BaseModuleServiceProvider;
 use Exception;
 

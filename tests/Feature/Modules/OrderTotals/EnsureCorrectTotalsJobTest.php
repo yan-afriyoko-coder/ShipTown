@@ -2,13 +2,13 @@
 
 namespace Tests\Feature\Modules\OrderTotals;
 
-use App\Events\HourlyEvent;
+use App\Events\EveryHourEvent;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\OrderProductTotal;
+use App\Modules\InventoryReservations\src\EventServiceProviderBase as InventoryReservationsEventServiceProviderBase;
 use App\Modules\OrderTotals\src\Jobs\EnsureAllRecordsExistsJob;
 use App\Modules\OrderTotals\src\Jobs\EnsureCorrectTotalsJob;
-use App\Modules\InventoryReservations\src\EventServiceProviderBase as InventoryReservationsEventServiceProviderBase;
 use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
@@ -20,7 +20,7 @@ class EnsureCorrectTotalsJobTest extends TestCase
 
         Bus::fake(EnsureCorrectTotalsJob::class);
 
-        HourlyEvent::dispatch();
+        EveryHourEvent::dispatch();
 
         Bus::assertDispatched(EnsureCorrectTotalsJob::class);
     }

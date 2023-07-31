@@ -2,7 +2,7 @@
 
 namespace App\Modules\AutoPilot\src;
 
-use App\Events\HourlyEvent;
+use App\Events\EveryHourEvent;
 use App\Modules\AutoPilot\src\Listeners\ClearPackerIdListener;
 use App\Modules\BaseModuleServiceProvider;
 
@@ -27,7 +27,7 @@ class AutoPilotServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        HourlyEvent::class => [
+        EveryHourEvent::class => [
             ClearPackerIdListener::class,
         ],
     ];

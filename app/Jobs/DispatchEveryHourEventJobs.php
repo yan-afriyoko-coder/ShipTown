@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Events\EveryHourEvent;
-use App\Events\HourlyEvent;
 use App\Models\Heartbeat;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 /**
  * Class RunHourlyListener.
  */
-class RunHourlyJobs implements ShouldQueue
+class DispatchEveryHourEventJobs implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -29,19 +28,17 @@ class RunHourlyJobs implements ShouldQueue
      */
     public function handle()
     {
-        Log::debug('Hourly event - dispatching');
-
-        HourlyEvent::dispatch();
+        Log::debug('Every Hourly event - dispatching');
 
         EveryHourEvent::dispatch();
 
         Heartbeat::query()->updateOrCreate([
             'code' => self::class,
         ], [
-            'error_message' => 'Hourly jobs heartbeat missed',
+            'error_message' => 'Every Hour Jobs heartbeat missed',
             'expires_at' => now()->addHours(2)
         ]);
 
-        Log::info('Hourly event - dispatched successfully');
+        Log::info('Every Hour event - dispatched successfully');
     }
 }

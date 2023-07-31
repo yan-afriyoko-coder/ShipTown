@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Jobs\Maintenance;
 
-use App\Events\HourlyEvent;
+use App\Events\EveryHourEvent;
 use App\Models\AutoStatusPickingConfiguration;
 use App\Models\Order;
 use App\Models\OrderProduct;
@@ -40,7 +40,7 @@ class RefillWebPickingStatusListJobTest extends TestCase
                     ->create(['order_id' => $order->id]);
             });
 
-        HourlyEvent::dispatch();
+        EveryHourEvent::dispatch();
 
         $this->assertEquals(
             AutoStatusPickingConfiguration::firstOrCreate([], [])->max_batch_size,

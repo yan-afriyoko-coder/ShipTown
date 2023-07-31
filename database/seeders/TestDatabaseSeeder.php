@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Jobs\RunHourlyJobs;
+use App\Jobs\DispatchEveryHourEventJobs;
 use Illuminate\Database\Seeder;
 
 class TestDatabaseSeeder extends Seeder
@@ -47,6 +47,6 @@ class TestDatabaseSeeder extends Seeder
 //            OrderShipmentsSeeder::class,
         ]);
 
-        RunHourlyJobs::dispatchSync();
+        DispatchEveryHourEventJobs::dispatchSync();
     }
 }

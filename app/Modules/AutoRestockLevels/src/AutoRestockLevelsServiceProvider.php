@@ -2,9 +2,7 @@
 
 namespace App\Modules\AutoRestockLevels\src;
 
-use App\Events\EveryTenMinutesEvent;
-use App\Events\HourlyEvent;
-use App\Events\Inventory\InventoryUpdatedEvent;
+use App\Events\EveryHourEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
 
@@ -33,7 +31,7 @@ class AutoRestockLevelsServiceProvider extends BaseModuleServiceProvider
             Listeners\SyncRequestedEventListener::class,
         ],
 
-        HourlyEvent::class => [
+        EveryHourEvent::class => [
             Listeners\HourlyEventListener::class,
         ],
     ];

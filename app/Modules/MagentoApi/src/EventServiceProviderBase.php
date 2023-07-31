@@ -2,9 +2,7 @@
 
 namespace App\Modules\MagentoApi\src;
 
-use App\Events\EveryMinuteEvent;
 use App\Events\EveryTenMinutesEvent;
-use App\Events\HourlyEvent;
 use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
 use App\Events\SyncRequestedEvent;

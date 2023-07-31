@@ -2,10 +2,9 @@
 
 namespace App\Modules\AutoStatusPicking\src;
 
-use App\Events\HourlyEvent;
+use App\Events\EveryHourEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\BaseModuleServiceProvider;
-use PhpParser\Node\Expr\List_;
 
 /**
  * Class AutoStatusPickingServiceProvider.
@@ -31,7 +30,7 @@ class AutoStatusPickingServiceProvider extends BaseModuleServiceProvider
      * @var string[][]
      */
     protected $listen = [
-        HourlyEvent::class => [
+        EveryHourEvent::class => [
             Listeners\HourlyEvent\RefillPickingIfEmpty::class,
         ],
 

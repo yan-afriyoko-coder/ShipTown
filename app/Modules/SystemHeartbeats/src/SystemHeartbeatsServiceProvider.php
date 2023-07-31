@@ -4,9 +4,9 @@ namespace App\Modules\SystemHeartbeats\src;
 
 use App\Events\DailyEvent;
 use App\Events\EveryFiveMinutesEvent;
+use App\Events\EveryHourEvent;
 use App\Events\EveryMinuteEvent;
 use App\Events\EveryTenMinutesEvent;
-use App\Events\HourlyEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
@@ -45,7 +45,7 @@ class SystemHeartbeatsServiceProvider extends BaseModuleServiceProvider
             Listeners\EveryTenMinutesEventListener::class,
         ],
 
-        HourlyEvent::class => [
+        EveryHourEvent::class => [
             Listeners\HourlyEventListener::class,
         ],
 

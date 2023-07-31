@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Modules\AutoStatusPicking;
 
-use App\Events\HourlyEvent;
+use App\Events\EveryHourEvent;
 use App\Modules\AutoStatusPicking\src\AutoStatusPickingServiceProvider;
 use App\Modules\AutoStatusPicking\src\Jobs\RefillPickingIfEmptyJob;
 use App\Modules\InventoryReservations\src\EventServiceProviderBase as InventoryReservationsEventServiceProviderBase;
@@ -26,7 +26,7 @@ class BasicModuleTest extends TestCase
 
         Bus::fake();
 
-        HourlyEvent::dispatch();
+        EveryHourEvent::dispatch();
 
         Bus::assertDispatched(RefillPickingIfEmptyJob::class);
     }

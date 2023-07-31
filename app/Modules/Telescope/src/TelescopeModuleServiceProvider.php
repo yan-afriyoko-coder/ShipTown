@@ -2,8 +2,7 @@
 
 namespace App\Modules\Telescope\src;
 
-use App\Events\DailyEvent;
-use App\Events\HourlyEvent;
+use App\Events\EveryHourEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 class TelescopeModuleServiceProvider extends BaseModuleServiceProvider
@@ -17,7 +16,7 @@ class TelescopeModuleServiceProvider extends BaseModuleServiceProvider
     public static bool $autoEnable = true;
 
     protected $listen = [
-        HourlyEvent::class => [
+        EveryHourEvent::class => [
             Listeners\HourlyEventListener::class
         ],
     ];

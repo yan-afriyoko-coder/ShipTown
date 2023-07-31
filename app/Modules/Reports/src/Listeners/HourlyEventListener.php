@@ -2,12 +2,11 @@
 
 namespace App\Modules\Reports\src\Listeners;
 
-use App\Events\HourlyEvent;
 use App\Modules\Reports\src\Models\InventoryDashboardReport;
 
 class HourlyEventListener
 {
-    public function handle(HourlyEvent $event)
+    public function handle()
     {
         $report = new InventoryDashboardReport();
 
