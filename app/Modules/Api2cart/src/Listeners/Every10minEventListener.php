@@ -2,7 +2,7 @@
 
 namespace App\Modules\Api2cart\src\Listeners;
 
-use App\Events\Every10minEvent;
+use App\Events\EveryMinuteEvent;
 use App\Modules\Api2cart\src\Jobs\CheckForOutOfSyncProductsJob;
 use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
 use App\Modules\Api2cart\src\Jobs\FetchSimpleProductsInfoJob;

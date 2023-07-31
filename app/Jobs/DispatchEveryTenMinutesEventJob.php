@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Events\Every10minEvent;
+use App\Events\EveryTenMinutesEvent;
 use App\Events\SyncRequestedEvent;
 use App\Models\Heartbeat;
 use Illuminate\Bus\Queueable;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Log;
 /**
  * Class RunHourlyListener.
  */
-class DispatchEvery10minEventJob implements ShouldQueue
+class DispatchEveryTenMinutesEventJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -31,12 +32,12 @@ class DispatchEvery10minEventJob implements ShouldQueue
     {
         Log::debug('DispatchEvery10minEvent - dispatching');
 
-        Every10minEvent::dispatch();
+        EveryTenMinutesEvent::dispatch();
 
         Heartbeat::query()->updateOrCreate([
             'code' => self::class,
         ], [
-            'error_message' => 'Every 10 min heartbeat missed',
+            'error_message' => 'Every 10 Minutes heartbeat missed',
             'expires_at' => now()->addHour()
         ]);
 

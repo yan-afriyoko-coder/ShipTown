@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\Run;
 
-use App\Events\Every10minEvent;
+use App\Events\EveryMinuteEvent;
 use App\Events\SyncRequestedEvent;
 use App\Http\Controllers\Controller;
 use App\Jobs\SyncRequestJob;

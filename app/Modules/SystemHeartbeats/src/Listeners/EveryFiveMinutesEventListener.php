@@ -2,13 +2,12 @@
 
 namespace App\Modules\SystemHeartbeats\src\Listeners;
 
-use App\Events\Every10minEvent;
 use App\Models\Heartbeat;
 use Illuminate\Support\Facades\Log;
 
-class Every10minEventListener
+class EveryFiveMinutesEventListener
 {
-    public function handle(Every10minEvent $event)
+    public function handle()
     {
         Log::debug('heartbeat', ['code' => self::class]);
 

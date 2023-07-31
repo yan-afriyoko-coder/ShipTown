@@ -2,7 +2,8 @@
 
 namespace App\Modules\Automations\src;
 
-use App\Events\Every10minEvent;
+use App\Events\EveryMinuteEvent;
+use App\Events\EveryTenMinutesEvent;
 use App\Events\HourlyEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
@@ -31,8 +32,8 @@ class AutomationsServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        Every10minEvent::class => [
-            Listeners\Every10minEventListener::class,
+        EveryTenMinutesEvent::class => [
+            Listeners\EveryTenMinutesEventListener::class,
         ],
 
         HourlyEvent::class => [

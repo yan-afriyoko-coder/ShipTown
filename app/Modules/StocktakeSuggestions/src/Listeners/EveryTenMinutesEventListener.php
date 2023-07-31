@@ -2,12 +2,11 @@
 
 namespace App\Modules\StocktakeSuggestions\src\Listeners;
 
-use App\Events\Every10minEvent;
 use App\Modules\StocktakeSuggestions\src\Jobs\RunAllJobsJob;
 
-class Every10minEventListener
+class EveryTenMinutesEventListener
 {
-    public function handle(Every10minEvent $event)
+    public function handle()
     {
         RunAllJobsJob::dispatch();
     }
