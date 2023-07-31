@@ -2,9 +2,8 @@
 
 namespace App\Modules\Automations\src;
 
-use App\Events\EveryMinuteEvent;
+use App\Events\EveryHourEvent;
 use App\Events\EveryTenMinutesEvent;
-use App\Events\HourlyEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Events\OrderShipment\OrderShipmentCreatedEvent;
@@ -36,7 +35,7 @@ class AutomationsServiceProvider extends BaseModuleServiceProvider
             Listeners\EveryTenMinutesEventListener::class,
         ],
 
-        HourlyEvent::class => [
+        EveryHourEvent::class => [
             Listeners\HourlyEventListener::class,
         ],
 

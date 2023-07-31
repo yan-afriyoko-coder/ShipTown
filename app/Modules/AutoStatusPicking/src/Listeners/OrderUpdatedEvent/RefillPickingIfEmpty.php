@@ -2,7 +2,6 @@
 
 namespace App\Modules\AutoStatusPicking\src\Listeners\OrderUpdatedEvent;
 
-use App\Events\HourlyEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Modules\AutoStatusPicking\src\Jobs\RefillPickingIfEmptyJob;
 

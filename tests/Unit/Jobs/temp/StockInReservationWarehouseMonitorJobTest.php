@@ -2,10 +2,9 @@
 
 namespace Tests\Unit\Jobs\temp;
 
-use App\Events\HourlyEvent;
+use App\Events\EveryHourEvent;
 use App\Models\Inventory;
 use App\Models\Product;
-use App\Models\Warehouse;
 use App\Modules\InventoryReservations\src\EventServiceProviderBase as InventoryReservationsEventServiceProviderBase;
 use App\Modules\InventoryReservations\src\Models\Configuration;
 use App\Modules\Maintenance\src\EventServiceProviderBase;
@@ -34,7 +33,7 @@ class StockInReservationWarehouseMonitorJobTest extends TestCase
         $inventory = $product->inventory->first;
         $inventory->update(['quantity' => 1]);
 
-        HourlyEvent::dispatch();
+        EveryHourEvent::dispatch();
 
         $this->assertNotTrue(
             Inventory::query()

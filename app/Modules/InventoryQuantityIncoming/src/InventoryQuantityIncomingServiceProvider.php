@@ -2,13 +2,11 @@
 
 namespace App\Modules\InventoryQuantityIncoming\src;
 
-use App\Events\DailyEvent;
 use App\Events\DataCollectionDeletedEvent;
 use App\Events\DataCollectionRecordCreatedEvent;
 use App\Events\DataCollectionRecordDeletedEvent;
 use App\Events\DataCollectionRecordUpdatedEvent;
-use App\Events\HourlyEvent;
-use App\Events\SyncRequestedEvent;
+use App\Events\EveryHourEvent;
 use App\Modules\BaseModuleServiceProvider;
 
 /**
@@ -37,7 +35,7 @@ class InventoryQuantityIncomingServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        HourlyEvent::class => [
+        EveryHourEvent::class => [
             Listeners\HourlyEventListener::class,
         ],
 

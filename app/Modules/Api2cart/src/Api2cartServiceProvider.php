@@ -4,9 +4,6 @@ namespace App\Modules\Api2cart\src;
 
 use App\Events\DailyEvent;
 use App\Events\EveryFiveMinutesEvent;
-use App\Events\EveryMinuteEvent;
-use App\Events\EveryTenMinutesEvent;
-use App\Events\HourlyEvent;
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Events\Product\ProductPriceUpdatedEvent;

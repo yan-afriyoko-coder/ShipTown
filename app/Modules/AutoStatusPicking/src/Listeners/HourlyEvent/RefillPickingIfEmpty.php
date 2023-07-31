@@ -2,7 +2,6 @@
 
 namespace App\Modules\AutoStatusPicking\src\Listeners\HourlyEvent;
 
-use App\Events\HourlyEvent;
 use App\Modules\AutoStatusPicking\src\Jobs\RefillPickingIfEmptyJob;
 
 /**
@@ -10,14 +9,7 @@ use App\Modules\AutoStatusPicking\src\Jobs\RefillPickingIfEmptyJob;
  */
 class RefillPickingIfEmpty
 {
-    /**
-     * Handle the event.
-     *
-     * @param HourlyEvent $event
-     *
-     * @return void
-     */
-    public function handle(HourlyEvent $event)
+    public function handle()
     {
         RefillPickingIfEmptyJob::dispatch();
     }

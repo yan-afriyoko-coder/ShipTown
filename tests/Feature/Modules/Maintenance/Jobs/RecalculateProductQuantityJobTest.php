@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Modules\Maintenance\Jobs;
 
-use App\Jobs\RunHourlyJobs;
+use App\Jobs\DispatchEveryHourEventJobs;
 use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderProduct;
@@ -37,7 +37,7 @@ class RecalculateProductQuantityJobTest extends TestCase
             'quantity' => 0,
         ]);
 
-        RunHourlyJobs::dispatchSync();
+        DispatchEveryHourEventJobs::dispatchSync();
 
         $this->assertEquals(
             Product::query()->sum('quantity'),

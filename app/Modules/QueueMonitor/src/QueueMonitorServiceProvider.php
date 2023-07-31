@@ -2,10 +2,9 @@
 
 namespace App\Modules\QueueMonitor\src;
 
-use App\Events\HourlyEvent;
+use App\Events\EveryHourEvent;
 use App\Modules\BaseModuleServiceProvider;
 use App\Modules\QueueMonitor\src\Dispatcher\QueueMonitorDispatcher;
-use Exception;
 use Illuminate\Bus\Dispatcher;
 use Illuminate\Queue\Events\JobProcessed;
 use Illuminate\Queue\Events\JobProcessing;
@@ -49,7 +48,7 @@ class QueueMonitorServiceProvider extends BaseModuleServiceProvider
             Listeners\JobProcessedListener::class,
         ],
 
-        HourlyEvent::class => [
+        EveryHourEvent::class => [
             Listeners\HourlyEventListener::class,
         ],
     ];

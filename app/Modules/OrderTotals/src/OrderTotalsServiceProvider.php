@@ -2,7 +2,7 @@
 
 namespace App\Modules\OrderTotals\src;
 
-use App\Events\HourlyEvent;
+use App\Events\EveryHourEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\OrderProduct\OrderProductCreatedEvent;
 use App\Events\OrderProduct\OrderProductUpdatedEvent;
@@ -35,7 +35,7 @@ class OrderTotalsServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        HourlyEvent::class => [
+        EveryHourEvent::class => [
             Listeners\HourlyEventListener::class
         ],
 
