@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\DataCollectionRecord;
 
 use App\Models\DataCollectionRecord;
 use Illuminate\Broadcasting\Channel;

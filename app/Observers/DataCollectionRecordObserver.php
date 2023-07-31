@@ -2,9 +2,9 @@
 
 namespace App\Observers;
 
-use App\Events\DataCollectionRecordCreatedEvent;
-use App\Events\DataCollectionRecordDeletedEvent;
-use App\Events\DataCollectionRecordUpdatedEvent;
+use App\Events\DataCollectionRecord\DataCollectionRecordCreatedEvent;
+use App\Events\DataCollectionRecord\DataCollectionRecordDeletedEvent;
+use App\Events\DataCollectionRecord\DataCollectionRecordUpdatedEvent;
 use App\Models\DataCollectionRecord;
 
 class DataCollectionRecordObserver
