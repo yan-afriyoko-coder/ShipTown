@@ -3,6 +3,8 @@
 namespace App\Modules\DataCollector\src\Jobs;
 
 use App\Models\DataCollection;
+use App\Models\DataCollectionTransferIn;
+use App\Models\DataCollectionTransferOut;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -10,7 +12,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use Throwable;
 
 /**
  * Class SyncCheckFailedProductsJob.
@@ -25,6 +26,12 @@ class DispatchCollectionsTasksJob implements ShouldQueue
     public function handle()
     {
         Log::debug('EnsureCorrectlyArchived job started');
+
+        DataCollection::query()->where(['currently_running_task' => DataCollectionTransferIn::class])
+            ->update(['currently_running_task' => TransferInJob::class]);
+
+        DataCollection::query()->where(['currently_running_task' => DataCollectionTransferOut::class])
+            ->update(['currently_running_task' => TransferOutJob::class]);
 
         DataCollection::withTrashed()
             ->whereNotNull('currently_running_task')
