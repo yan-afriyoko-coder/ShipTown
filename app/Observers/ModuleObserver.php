@@ -6,13 +6,13 @@ use App\Models\Module;
 
 class ModuleObserver
 {
-    public function saving(Module $module)
+    public function saving(Module $module): bool
     {
         if ($module->isAttributeNotChanged('enabled')) {
             return true;
         }
 
-        if ($module->enabled === true) {
+        if ($module->enabled === false) {
             return $module->service_provider_class::enabling();
         }
 
