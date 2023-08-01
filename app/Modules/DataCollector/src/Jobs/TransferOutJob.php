@@ -4,7 +4,6 @@ namespace App\Modules\DataCollector\src\Jobs;
 
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
-use App\Models\DataCollectionTransferOut;
 use App\Modules\DataCollector\src\Services\DataCollectorService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -24,25 +23,19 @@ class TransferOutJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public int $data_collection_id;
+    public int $dataCollection_id;
 
-    public function __construct(int $data_collection_id = null)
+    public function __construct($dataCollection_id)
     {
-        $this->data_collection_id = $data_collection_id;
+        $this->dataCollection_id = $dataCollection_id;
     }
 
     public function handle()
     {
-        Log::debug('TransferOutJob started', ['data_collection_id' => $this->data_collection_id]);
+        Log::debug('TransferOutJob started', ['data_collection_id' => $this->dataCollection_id]);
 
-        /** @var DataCollection $dataCollection */
-        $dataCollection = DataCollection::withTrashed()->findOrFail($this->data_collection_id);
-        $dataCollection->update([
-            'type' => DataCollectionTransferOut::class,
-            'currently_running_task' => DataCollectionTransferOut::class
-        ]);
-
-        $dataCollection->records()
+        DataCollectionRecord::query()
+            ->where('data_collection_id', $this->dataCollection_id)
             ->where('quantity_scanned', '!=', DB::raw(0))
             ->chunkById(100, function ($records) {
                 $records->each(function (DataCollectionRecord $record) {
@@ -50,18 +43,18 @@ class TransferOutJob implements ShouldQueue
                 });
             });
 
-        if ($dataCollection->records()->where('quantity_scanned', '!=', DB::raw(0))->exists() === false) {
-            $dataCollection->update(['currently_running_task' => null]);
+        if (! DataCollectionRecord::query()->where('quantity_scanned', '!=', 0)->exists()) {
+            DataCollection::query()
+                ->where('id', $this->dataCollection_id)
+                ->update(['currently_running_task' => null]);
         }
 
-        $everythingHasBeenTransferredOut = !$dataCollection->records()
-            ->whereRaw('quantity_requested > total_transferred_out')
-            ->exists();
-
-        if ($everythingHasBeenTransferredOut) {
-            $dataCollection->delete();
+        if (! DataCollectionRecord::query()->where('quantity_to_scan', '!=', 0)->exists()) {
+            DataCollection::query()
+                ->where('id', $this->dataCollection_id)
+                ->delete();
         }
 
-        Log::debug('TransferOutJob finished', ['data_collection_id' => $this->data_collection_id]);
+        Log::debug('TransferOutJob finished', ['data_collection_id' => $this->dataCollection_id]);
     }
 }
