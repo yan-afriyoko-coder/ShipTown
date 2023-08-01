@@ -53,6 +53,10 @@ class TransferOutJob implements ShouldQueue
             ->where('id', $this->dataCollection_id)
             ->update(['currently_running_task' => null]);
 
+        if (DataCollectionRecord::query()->where('quantity_to_scan', '!=', 0)->exists()) {
+            return;
+        }
+
         DataCollection::query()
             ->where('id', $this->dataCollection_id)
             ->delete();
