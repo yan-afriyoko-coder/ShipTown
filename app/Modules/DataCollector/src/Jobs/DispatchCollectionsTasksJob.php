@@ -27,23 +27,23 @@ class DispatchCollectionsTasksJob implements ShouldQueue
 
         DataCollection::withTrashed()
             ->whereNotNull('currently_running_task')
-            ->limit(1)
-            ->get()
-            ->each(function (DataCollection $dataCollection) {
-                if (! $dataCollection->records()->where('quantity_scanned', '!=', 0)->exists()) {
-                    $dataCollection->update(['currently_running_task' => null]);
-                    return;
-                }
+            ->chunkById(1, function ($dataCollections) {
+                $dataCollections->each(function (DataCollection $dataCollection) {
+                    if (! $dataCollection->records()->where('quantity_scanned', '!=', 0)->exists()) {
+                        $dataCollection->update(['currently_running_task' => null]);
+                        return;
+                    }
 
-                try {
-                    /** @var Dispatchable $job */
-                    $job = $dataCollection->currently_running_task;
-                    $job::dispatch($dataCollection->getKey());
-                } catch (Exception $e) {
-                    Log::error($e->getMessage());
-                    report($e);
-                    return;
-                }
+                    try {
+                        /** @var Dispatchable $job */
+                        $job = $dataCollection->currently_running_task;
+                        $job::dispatch($dataCollection->getKey());
+                    } catch (Exception $e) {
+                        Log::error($e->getMessage());
+                        report($e);
+                        return;
+                    }
+                });
             });
 
         Log::info('EnsureCorrectlyArchived job finished');
