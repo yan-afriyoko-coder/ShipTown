@@ -2,11 +2,10 @@
 
 namespace App\Modules\DataCollector\src;
 
-use App\Events\EveryMinuteEvent;
 use App\Events\EveryTenMinutesEvent;
 use App\Events\SyncRequestedEvent;
-use App\Models\ShippingService;
 use App\Modules\BaseModuleServiceProvider;
+use App\Modules\DataCollector\src\Jobs\EnsureCorrectlyArchived;
 
 /**
  * Class EventServiceProviderBase.
@@ -39,12 +38,15 @@ class DataCollectorServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        SyncRequestedEvent::class => [
-            Listeners\SyncRequestedEventListener::class,
-        ],
-
         EveryTenMinutesEvent::class => [
             Listeners\EveryTenMinutesEventListener::class,
         ],
     ];
+
+    public static function enabling(): bool
+    {
+        EnsureCorrectlyArchived::dispatch();
+
+        return parent::enabling();
+    }
 }
