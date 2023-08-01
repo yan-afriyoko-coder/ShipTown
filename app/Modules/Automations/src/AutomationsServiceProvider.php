@@ -8,6 +8,7 @@ use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Events\OrderShipment\OrderShipmentCreatedEvent;
 use App\Events\ShippingLabelCreatedEvent;
+use App\Modules\Automations\src\Jobs\RunEnabledAutomationsJob;
 use App\Modules\BaseModuleServiceProvider;
 
 class AutomationsServiceProvider extends BaseModuleServiceProvider
@@ -55,6 +56,13 @@ class AutomationsServiceProvider extends BaseModuleServiceProvider
             Listeners\OrderShipmentCreatedEventListener::class,
         ],
     ];
+
+    public static function enabling(): bool
+    {
+        RunEnabledAutomationsJob::dispatch();
+
+        return parent::enabling();
+    }
 
     public function boot()
     {

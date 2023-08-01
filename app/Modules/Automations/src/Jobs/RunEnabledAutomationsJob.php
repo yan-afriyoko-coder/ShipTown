@@ -12,9 +12,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-/**
- * @property int|null order_id
- */
 class RunEnabledAutomationsJob implements ShouldQueue
 {
     use Dispatchable;
@@ -24,17 +21,9 @@ class RunEnabledAutomationsJob implements ShouldQueue
 
     public function handle()
     {
-        if (! CacheLock::acquire(self::class)) {
-            return;
-        }
-
-        try {
-            AutomationService::runAutomationsOnOrdersQuery(
-                Automation::enabled(),
-                Order::placedInLast28DaysOrActive()
-            );
-        } finally {
-            CacheLock::release(self::class);
-        }
+        AutomationService::runAutomationsOnOrdersQuery(
+            Automation::enabled(),
+            Order::placedInLast28DaysOrActive()
+        );
     }
 }

@@ -2,11 +2,14 @@
 
 namespace App\Modules\OrderTotals\src;
 
+use App\Events\EveryDayEvent;
 use App\Events\EveryHourEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\OrderProduct\OrderProductCreatedEvent;
 use App\Events\OrderProduct\OrderProductUpdatedEvent;
 use App\Modules\BaseModuleServiceProvider;
+use App\Modules\OrderTotals\src\Jobs\EnsureAllRecordsExistsJob;
+use App\Modules\OrderTotals\src\Jobs\EnsureCorrectTotalsJob;
 
 /**
  * Class ServiceProvider
@@ -35,8 +38,8 @@ class OrderTotalsServiceProvider extends BaseModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        EveryHourEvent::class => [
-            Listeners\HourlyEventListener::class
+        EveryDayEvent::class => [
+            Listeners\EveryDayEventListener::class
         ],
 
         OrderCreatedEvent::class => [
@@ -51,6 +54,13 @@ class OrderTotalsServiceProvider extends BaseModuleServiceProvider
             Listeners\OrderProductUpdatedEventListener::class
         ]
     ];
+    public static function enabling(): bool
+    {
+        EnsureAllRecordsExistsJob::dispatch();
+        EnsureCorrectTotalsJob::dispatch();
+
+        return true;
+    }
 
     public static function disabling(): bool
     {
