@@ -2,12 +2,14 @@
 
 namespace App\Modules\Rmsapi\src;
 
+use App\Events\EveryDayEvent;
 use App\Events\EveryFiveMinutesEvent;
 use App\Events\EveryHourEvent;
 use App\Events\EveryMinuteEvent;
 use App\Events\EveryTenMinutesEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
+use App\Modules\Rmsapi\src\Jobs\CleanupImportTablesJob;
 use App\Modules\Rmsapi\src\Jobs\ImportAllJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
 use App\Modules\Rmsapi\src\Jobs\ProcessImportedSalesRecordsJob;
@@ -49,14 +51,17 @@ class RmsapiModuleServiceProvider extends BaseModuleServiceProvider
             Listeners\EveryFiveMinutesEventListener::class,
         ],
 
-        EveryHourEvent::class => [
-            Listeners\HourlyEventListener::class,
+        EveryDayEvent::class => [
+            Listeners\EveryDayEventListener::class,
         ],
     ];
 
     public static function enabling(): bool
     {
+        CleanupImportTablesJob::dispatch();
+
         ImportAllJob::dispatch();
+
         UpdateImportedSalesRecordsJob::dispatch();
         ProcessImportedProductRecordsJob::dispatch();
         ProcessImportedSalesRecordsJob::dispatch();

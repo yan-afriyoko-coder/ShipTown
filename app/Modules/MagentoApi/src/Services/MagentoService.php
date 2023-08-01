@@ -4,6 +4,7 @@ namespace App\Modules\MagentoApi\src\Services;
 
 use App\Modules\MagentoApi\src\Api\MagentoApi;
 use App\Modules\MagentoApi\src\Models\MagentoProduct;
+use Exception;
 use Grayloon\Magento\Magento;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
@@ -144,13 +145,15 @@ class MagentoService
         ]);
     }
 
+    /**
+     * @throws Exception
+     */
     private static function fetchStockItem(MagentoProduct $product)
     {
         $response = self::api()->getStockItems($product->product->sku);
 
         if ($response === null || $response->failed()) {
-            Log::error('Failed to fetch stock items for product '.$product->product->sku);
-            return;
+            throw new Exception('Failed to fetch stock items for product '.$product->product->sku);
         }
 
         $product->stock_items_raw_import    = $response->json();
@@ -164,13 +167,15 @@ class MagentoService
         $product->save();
     }
 
+    /**
+     * @throws Exception
+     */
     private static function fetchFromInventorySourceItems(MagentoProduct $product)
     {
         $response = self::api()->getInventorySourceItems($product->product->sku, config('magento.store_code'));
 
         if ($response === null || $response->failed()) {
-            Log::error('Failed to fetch inventory source items for product '.$product->product->sku);
-            return;
+            throw new Exception('Failed to fetch stock items for product '.$product->product->sku);
         }
 
         $product->stock_items_fetched_at = now();

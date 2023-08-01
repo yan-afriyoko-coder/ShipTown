@@ -4,7 +4,6 @@ namespace App\Modules\Rmsapi\src\Jobs;
 
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
-use App\Models\Product;
 use App\Modules\Rmsapi\src\Models\RmsapiSaleImport;
 use App\Services\InventoryService;
 use Exception;
@@ -36,12 +35,11 @@ class ProcessImportedSalesRecordsJob implements ShouldQueue, ShouldBeUniqueUntil
         $maxRunCount = 100;
 
         do {
-            Log::info('Processing imported sales records', [
-                'batch_size' => $batch_size,
-                'maxRunCount' => $maxRunCount
-            ]);
-
             $this->processImportedRecords($batch_size);
+
+            Log::info('RMSAPI Processed imported sales records', [
+                'count' => $batch_size,
+            ]);
 
             $hasNoRecordsToProcess = ! RmsapiSaleImport::query()
                 ->whereNull('reserved_at')
