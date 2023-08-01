@@ -3,6 +3,7 @@
 namespace App\Modules\DataCollector\src\Jobs;
 
 use App\Models\DataCollection;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -34,9 +35,15 @@ class DispatchCollectionsTasksJob implements ShouldQueue
                     return;
                 }
 
-                /** @var Dispatchable $job */
-                $job = $dataCollection->currently_running_task;
-                $job::dispatch($dataCollection->getKey());
+                try {
+                    /** @var Dispatchable $job */
+                    $job = $dataCollection->currently_running_task;
+                    $job::dispatch($dataCollection->getKey());
+                } catch (Exception $e) {
+                    Log::error($e->getMessage());
+                    report($e);
+                    return;
+                }
             });
 
         Log::info('EnsureCorrectlyArchived job finished');
