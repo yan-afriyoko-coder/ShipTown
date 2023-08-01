@@ -36,7 +36,7 @@ class TransferInJob implements ShouldQueue
 
         DataCollectionRecord::query()
             ->where('data_collection_id', $this->dataCollection_id)
-            ->where('quantity_scanned', '!=', DB::raw(0))
+            ->where('quantity_scanned', '!=', 0)
             ->chunkById(100, function ($records) {
                 $records->each(function (DataCollectionRecord $record) {
                     DataCollectorService::transferInRecord($record);
@@ -45,7 +45,7 @@ class TransferInJob implements ShouldQueue
 
         Log::debug('TransferInJob finished', ['data_collection_id' => $this->dataCollection_id]);
 
-        if (DataCollectionRecord::query()->whereNot(['quantity_scanned' => 0])->exists()) {
+        if (DataCollectionRecord::query()->where('quantity_scanned', '!=', 0)->exists()) {
             return;
         }
 
