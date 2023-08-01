@@ -8,6 +8,7 @@ use App\Events\DataCollectionRecord\DataCollectionRecordDeletedEvent;
 use App\Events\DataCollectionRecord\DataCollectionRecordUpdatedEvent;
 use App\Events\EveryHourEvent;
 use App\Modules\BaseModuleServiceProvider;
+use App\Modules\InventoryQuantityIncoming\src\Jobs\FixIncorrectQuantityIncomingJob;
 
 /**
  * Class EventServiceProviderBase.
@@ -61,6 +62,8 @@ class InventoryQuantityIncomingServiceProvider extends BaseModuleServiceProvider
         if (! parent::enableModule()) {
             return false;
         }
+
+        FixIncorrectQuantityIncomingJob::dispatch();
 
         return true;
     }
