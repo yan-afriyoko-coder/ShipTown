@@ -27,10 +27,12 @@ class DispatchCollectionsTasksJob implements ShouldQueue
     {
         Log::debug('EnsureCorrectlyArchived job started');
 
-        DataCollection::query()->where(['currently_running_task' => DataCollectionTransferIn::class])
+        DataCollection::withTrashed()
+            ->where(['currently_running_task' => DataCollectionTransferIn::class])
             ->update(['currently_running_task' => TransferInJob::class]);
 
-        DataCollection::query()->where(['currently_running_task' => DataCollectionTransferOut::class])
+        DataCollection::withTrashed()
+            ->where(['currently_running_task' => DataCollectionTransferOut::class])
             ->update(['currently_running_task' => TransferOutJob::class]);
 
         DataCollection::withTrashed()
