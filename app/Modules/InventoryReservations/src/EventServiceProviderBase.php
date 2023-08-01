@@ -10,6 +10,7 @@ use App\Events\OrderProduct\OrderProductCreatedEvent;
 use App\Events\OrderProduct\OrderProductUpdatedEvent;
 use App\Models\Warehouse;
 use App\Modules\BaseModuleServiceProvider;
+use App\Modules\InventoryReservations\src\Jobs\RecalculateQuantityReservedJob;
 use App\Modules\InventoryReservations\src\Models\Configuration;
 
 /**
@@ -73,6 +74,8 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
                 'warehouse_id' => $warehouse->id,
             ]);
         }
+
+        RecalculateQuantityReservedJob::dispatch();
 
         return true;
     }
