@@ -7,7 +7,7 @@ use App\Http\Requests\ApiDataCollectorStoreRequest;
 use App\Http\Requests\ApiDataCollectorUpdateRequest;
 use App\Http\Resources\DataCollectionResource;
 use App\Models\DataCollection;
-use App\Modules\DataCollector\src\DataCollectorService;
+use App\Modules\DataCollector\src\Services\DataCollectorService;
 use App\Modules\Reports\src\Models\DataCollectorListReport;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;

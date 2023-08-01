@@ -4,14 +4,14 @@ namespace App\Modules\DataCollector\src\Jobs;
 
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
-use App\Models\DataCollectionTransferIn;
-use App\Modules\DataCollector\src\DataCollectorService;
+use App\Modules\DataCollector\src\Services\DataCollectorService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class SyncCheckFailedProductsJob.
@@ -23,40 +23,42 @@ class TransferInJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public int $data_collection_id;
+    public int $dataCollection_id;
 
-    public function __construct(int $data_collection_id = null)
+    public function __construct($dataCollection_id)
     {
-        $this->data_collection_id = $data_collection_id;
+        $this->dataCollection_id = $dataCollection_id;
     }
 
     public function handle()
     {
-        /** @var DataCollection $dataCollection */
-        $dataCollection = DataCollection::withTrashed()->findOrFail($this->data_collection_id);
-        $dataCollection->update([
-            'type' => DataCollectionTransferIn::class,
-            'currently_running_task' => DataCollectionTransferIn::class
-        ]);
+        Log::debug('TransferInJob started', ['data_collection_id' => $this->dataCollection_id]);
 
-        $dataCollection->records()
-            ->where('quantity_scanned', '!=', DB::raw(0))
+        DataCollectionRecord::query()
+            ->where('data_collection_id', $this->dataCollection_id)
+            ->where('quantity_scanned', '!=', 0)
             ->chunkById(100, function ($records) {
                 $records->each(function (DataCollectionRecord $record) {
                     DataCollectorService::transferInRecord($record);
                 });
             });
 
-        if ($dataCollection->records()->where('quantity_scanned', '!=', 0)->exists() === false) {
-            $dataCollection->update(['currently_running_task' => null]);
+        Log::debug('TransferInJob finished', ['data_collection_id' => $this->dataCollection_id]);
+
+        if (DataCollectionRecord::query()->where('quantity_scanned', '!=', 0)->exists()) {
+            return;
         }
 
-        $everythingHasBeenTransferredIn = ! $dataCollection->records()
-                ->whereRaw('quantity_requested > total_transferred_in')
-                ->exists();
+        DataCollection::query()
+            ->where('id', $this->dataCollection_id)
+            ->update(['currently_running_task' => null]);
 
-        if ($everythingHasBeenTransferredIn) {
-            $dataCollection->delete();
+        if (DataCollectionRecord::query()->where('quantity_to_scan', '!=', 0)->exists()) {
+            return;
         }
+
+        DataCollection::query()
+            ->where('id', $this->dataCollection_id)
+            ->delete();
     }
 }

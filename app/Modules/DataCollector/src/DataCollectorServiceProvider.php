@@ -5,7 +5,7 @@ namespace App\Modules\DataCollector\src;
 use App\Events\EveryTenMinutesEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
-use App\Modules\DataCollector\src\Jobs\EnsureCorrectlyArchived;
+use App\Modules\DataCollector\src\Jobs\DispatchCollectionsTasksJob;
 
 /**
  * Class EventServiceProviderBase.
@@ -45,7 +45,7 @@ class DataCollectorServiceProvider extends BaseModuleServiceProvider
 
     public static function enabling(): bool
     {
-        EnsureCorrectlyArchived::dispatchAfterResponse();
+        DispatchCollectionsTasksJob::dispatch();
 
         return parent::enabling();
     }
