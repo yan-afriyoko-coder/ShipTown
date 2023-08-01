@@ -28,13 +28,8 @@ class DispatchCollectionsTasksJob implements ShouldQueue
 
         DataCollection::withTrashed()
             ->whereNotNull('currently_running_task')
-            ->chunkById(1, function ($dataCollections) {
-                $dataCollections->each(function (DataCollection $dataCollection) {
-                    if (! $dataCollection->records()->where('quantity_scanned', '!=', 0)->exists()) {
-                        $dataCollection->update(['currently_running_task' => null]);
-                        return;
-                    }
-
+            ->chunkById(1, function ($batch) {
+                $batch->each(function (DataCollection $dataCollection) {
                     try {
                         /** @var Dispatchable $job */
                         $job = $dataCollection->currently_running_task;
@@ -42,11 +37,6 @@ class DispatchCollectionsTasksJob implements ShouldQueue
                     } catch (Exception $e) {
                         Log::error($e->getMessage());
                         report($e);
-                        return;
-                    } catch (Throwable $e) {
-                        Log::error($e->getMessage());
-                        report($e);
-                        return;
                     }
                 });
             });
