@@ -346,7 +346,7 @@ class Product extends BaseModel
     {
         return static::query()->where('sku', '=', $sku)
             ->orWhereHas('aliases', function (Builder $query) use ($sku) {
-                return $query->where('alias', '=', $sku);
+                return $query->select('id')->where('alias', '=', $sku);
             })
             ->first();
     }
