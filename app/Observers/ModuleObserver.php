@@ -3,21 +3,17 @@
 namespace App\Observers;
 
 use App\Models\Module;
+use App\Modules\BaseModuleServiceProvider;
 
 class ModuleObserver
 {
     public function saving(Module $module): bool
     {
-        if ($module->isAttributeNotChanged('enabled')) {
-            return true;
-        }
+        if ($module->isAttributeChanged('enabled')) {
+            /** @var BaseModuleServiceProvider $service */
+            $service = $module->service_provider_class;
 
-        if ($module->enabled === false) {
-            return $module->service_provider_class::enabling();
-        }
-
-        if ($module->enabled === true) {
-            return $module->service_provider_class::disabling();
+            return $module->enabled ? $service::enabling() : $service::disabling();
         }
 
         return true;
