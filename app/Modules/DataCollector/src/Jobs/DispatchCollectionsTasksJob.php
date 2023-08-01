@@ -28,8 +28,9 @@ class DispatchCollectionsTasksJob implements ShouldQueue
             ->whereNotNull('currently_running_task')
             ->get()
             ->each(function (DataCollection $dataCollection) {
-                $job = new $dataCollection->currently_running_task([$dataCollection->getKey()]);
-                dispatch($job);
+                /** @var Dispatchable $job */
+                $job = $dataCollection->currently_running_task;
+                $job::dispatch($dataCollection->getKey());
             });
 
         Log::info('EnsureCorrectlyArchived job finished');
