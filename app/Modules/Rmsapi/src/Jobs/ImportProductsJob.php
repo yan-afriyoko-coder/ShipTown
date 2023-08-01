@@ -82,7 +82,7 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
                 $this->saveImportedProducts($response->getResult());
             }
 
-            Log::info('RMSAPI Downloaded updated products', [
+            Log::info('RMSAPI Downloaded products', [
                 'warehouse_code' => $this->rmsConnection->location_id,
                 'count'          => count($response->getResult()),
                 'left'           => $response->asArray()['total'],

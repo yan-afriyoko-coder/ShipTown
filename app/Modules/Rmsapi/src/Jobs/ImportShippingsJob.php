@@ -65,7 +65,11 @@ class ImportShippingsJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
 
             $records = $response->getResult();
 
-            Log::debug('RMSAPI Downloaded Shippings', ['count' => count($records), 'params' => $params]);
+            Log::info('RMSAPI Downloaded Shippings', [
+                'warehouse_code' => $this->rmsapiConnection->location_id,
+                'count'          => count($response->getResult()),
+                'left'           => $response->asArray()['total'],
+            ]);
 
             if (empty($records)) {
                 return true;
