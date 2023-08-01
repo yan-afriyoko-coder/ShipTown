@@ -2,6 +2,7 @@
 
 namespace App\Modules\DataCollector\src\Jobs;
 
+use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
 use App\Modules\DataCollector\src\Services\DataCollectorService;
 use Illuminate\Bus\Queueable;
@@ -41,6 +42,18 @@ class TransferInJob implements ShouldQueue
                     DataCollectorService::transferInRecord($record);
                 });
             });
+
+        if (! DataCollectionRecord::query()->where('quantity_scanned', '!=', 0)->exists()) {
+            DataCollection::query()
+                ->where('id', $this->dataCollection_id)
+                ->update(['currently_running_task' => null]);
+        }
+
+        if (! DataCollectionRecord::query()->where('quantity_to_scan', '!=', 0)->exists()) {
+            DataCollection::query()
+                ->where('id', $this->dataCollection_id)
+                ->delete();
+        }
 
         Log::debug('TransferInJob finished', ['data_collection_id' => $this->dataCollection_id]);
     }
