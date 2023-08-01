@@ -46,6 +46,8 @@ class RmsapiProductImport extends Model
 
     protected $fillable = [
         'connection_id',
+        'warehouse_code',
+        'warehouse_id',
         'batch_uuid',
         'reserved_at',
         'when_processed',

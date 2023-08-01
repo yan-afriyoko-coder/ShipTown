@@ -39,7 +39,7 @@ class ImportSalesJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
 
     public function handle(): bool
     {
-        Log::info('RMSAPI Starting FetchSalesJob', ['rmsapi_connection_id' => $this->rmsConnection->getKey()]);
+        Log::debug('RMSAPI Starting FetchSalesJob', ['rmsapi_connection_id' => $this->rmsConnection->getKey()]);
 
         $per_page = 100;
 
