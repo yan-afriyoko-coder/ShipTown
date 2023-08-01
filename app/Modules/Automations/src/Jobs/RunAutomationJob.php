@@ -2,7 +2,6 @@
 
 namespace App\Modules\Automations\src\Jobs;
 
-use App\Models\CacheLock;
 use App\Models\Order;
 use App\Modules\Automations\src\Models\Automation;
 use App\Modules\Automations\src\Services\AutomationService;
@@ -30,17 +29,9 @@ class RunAutomationJob implements ShouldQueue
 
     public function handle()
     {
-        if (! CacheLock::acquire(self::class, $this->automation_id, 30)) {
-            return;
-        }
-
-        try {
-            AutomationService::runAutomationsOnOrdersQuery(
-                Automation::whereId($this->automation_id),
-                Order::placedInLast28DaysOrActive()
-            );
-        } finally {
-            CacheLock::release(self::class, $this->automation_id);
-        }
+        AutomationService::runAutomationsOnOrdersQuery(
+            Automation::whereId($this->automation_id),
+            Order::placedInLast28DaysOrActive()
+        );
     }
 }

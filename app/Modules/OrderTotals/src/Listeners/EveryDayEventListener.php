@@ -5,7 +5,7 @@ namespace App\Modules\OrderTotals\src\Listeners;
 use App\Modules\OrderTotals\src\Jobs\EnsureAllRecordsExistsJob;
 use App\Modules\OrderTotals\src\Jobs\EnsureCorrectTotalsJob;
 
-class HourlyEventListener
+class EveryDayEventListener
 {
     public function handle()
     {
