@@ -10,6 +10,8 @@ use App\Events\Product\ProductPriceUpdatedEvent;
 use App\Events\Product\ProductTagAttachedEvent;
 use App\Events\Product\ProductTagDetachedEvent;
 use App\Events\SyncRequestedEvent;
+use App\Modules\Api2cart\src\Jobs\DispatchImportOrdersJobs;
+use App\Modules\Api2cart\src\Jobs\ProcessImportedOrdersJob;
 use App\Modules\BaseModuleServiceProvider;
 use Exception;
 
@@ -75,6 +77,14 @@ class Api2cartServiceProvider extends BaseModuleServiceProvider
             Listeners\OrderUpdatedEventListener::class
         ]
     ];
+
+    public static function enabling(): bool
+    {
+        DispatchImportOrdersJobs::dispatch();
+        ProcessImportedOrdersJob::dispatch();
+
+        return parent::enabling();
+    }
 
     /**
      * @throws Exception
