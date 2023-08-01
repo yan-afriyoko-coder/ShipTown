@@ -35,6 +35,7 @@ class EnsureCorrectlyArchived implements ShouldQueue
             ->where('type', DataCollectionTransferOut::class)
             ->get()
             ->each(function (DataCollection $dataCollection) {
+                Log::debug('EnsureCorrectlyArchived job: ' . $dataCollection->id);
                 TransferOutJob::dispatch($dataCollection->id);
             });
 
@@ -42,6 +43,7 @@ class EnsureCorrectlyArchived implements ShouldQueue
             ->where('currently_running_task', DataCollectionTransferIn::class)
             ->get()
             ->each(function (DataCollection $dataCollection) {
+                Log::debug('EnsureCorrectlyArchived job: ' . $dataCollection->id);
                 TransferInJob::dispatch($dataCollection->id);
             });
 
