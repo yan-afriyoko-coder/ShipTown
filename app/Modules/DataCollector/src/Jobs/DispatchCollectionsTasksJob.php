@@ -29,6 +29,11 @@ class DispatchCollectionsTasksJob implements ShouldQueue
             ->limit(1)
             ->get()
             ->each(function (DataCollection $dataCollection) {
+                if ($dataCollection->records()->where(['quantity_scanned', '!=', 0])->exists()) {
+                    $dataCollection->update(['currently_running_task' => null]);
+                    return;
+                }
+
                 /** @var Dispatchable $job */
                 $job = $dataCollection->currently_running_task;
                 $job::dispatch($dataCollection->getKey());
