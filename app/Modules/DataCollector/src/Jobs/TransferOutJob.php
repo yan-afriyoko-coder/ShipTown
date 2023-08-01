@@ -12,6 +12,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class SyncCheckFailedProductsJob.
@@ -32,6 +33,8 @@ class TransferOutJob implements ShouldQueue
 
     public function handle()
     {
+        Log::debug('TransferOutJob started', ['data_collection_id' => $this->data_collection_id]);
+
         /** @var DataCollection $dataCollection */
         $dataCollection = DataCollection::withTrashed()->findOrFail($this->data_collection_id);
         $dataCollection->update([
@@ -58,5 +61,7 @@ class TransferOutJob implements ShouldQueue
         if ($everythingHasBeenTransferredOut) {
             $dataCollection->delete();
         }
+
+        Log::debug('TransferOutJob finished', ['data_collection_id' => $this->data_collection_id]);
     }
 }
