@@ -24,25 +24,18 @@ class TransferInJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public int $data_collection_id;
+    public DataCollection $dataCollection;
 
-    public function __construct(int $data_collection_id = null)
+    public function __construct($dataCollection)
     {
-        $this->data_collection_id = $data_collection_id;
+        $this->dataCollection = $dataCollection;
     }
 
     public function handle()
     {
-        Log::debug('TransferInJob started', ['data_collection_id' => $this->data_collection_id]);
+        Log::debug('TransferInJob started', ['data_collection_id' => $this->dataCollection]);
 
-        /** @var DataCollection $dataCollection */
-        $dataCollection = DataCollection::withTrashed()->findOrFail($this->data_collection_id);
-        $dataCollection->update([
-            'type' => DataCollectionTransferIn::class,
-            'currently_running_task' => DataCollectionTransferIn::class
-        ]);
-
-        $dataCollection->records()
+        DataCollectionRecord::query()
             ->where('quantity_scanned', '!=', DB::raw(0))
             ->chunkById(100, function ($records) {
                 $records->each(function (DataCollectionRecord $record) {
@@ -50,18 +43,6 @@ class TransferInJob implements ShouldQueue
                 });
             });
 
-        if ($dataCollection->records()->where('quantity_scanned', '!=', 0)->exists() === false) {
-            $dataCollection->update(['currently_running_task' => null]);
-        }
-
-        $everythingHasBeenTransferredIn = ! $dataCollection->records()
-                ->whereRaw('quantity_requested > total_transferred_in')
-                ->exists();
-
-        if ($everythingHasBeenTransferredIn) {
-            $dataCollection->delete();
-        }
-
-        Log::debug('TransferInJob finished', ['data_collection_id' => $this->data_collection_id]);
+        Log::debug('TransferInJob finished', ['data_collection_id' => $this->dataCollection]);
     }
 }

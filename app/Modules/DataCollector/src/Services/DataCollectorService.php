@@ -177,13 +177,13 @@ class DataCollectorService
 
             Log::debug('TransferInJob adjusted quantity', ['inventoryMovement' => $inventoryMovement->toArray()]);
         } catch (\Exception $e) {
-            Log::error('TransferInJob failed to adjust quantity', [$e->getMessage()]);
+            Log::error('TransferInJob failed to adjust quantity (exception)', [$e->getMessage()]);
             if (! InventoryMovement::query()->where('custom_unique_reference_id', $custom_unique_reference_id)->exists()) {
                 report($e);
                 throw $e;
             }
         } catch (\Throwable $e) {
-            Log::error('TransferInJob failed to adjust quantity', [$e->getMessage()]);
+            Log::error('TransferInJob failed to adjust quantity (throwable0', [$e->getMessage()]);
             if (! InventoryMovement::query()->where('custom_unique_reference_id', $custom_unique_reference_id)->exists()) {
                 report($e);
                 throw $e;

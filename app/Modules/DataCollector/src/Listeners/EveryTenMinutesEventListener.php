@@ -2,12 +2,12 @@
 
 namespace App\Modules\DataCollector\src\Listeners;
 
-use App\Modules\DataCollector\src\Jobs\EnsureCorrectlyArchived;
+use App\Modules\DataCollector\src\Jobs\DispatchCollectionsTasksJob;
 
 class EveryTenMinutesEventListener
 {
     public function handle(): void
     {
-        EnsureCorrectlyArchived::dispatch();
+        DispatchCollectionsTasksJob::dispatch();
     }
 }
