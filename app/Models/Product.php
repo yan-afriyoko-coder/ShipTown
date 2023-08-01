@@ -341,18 +341,8 @@ class Product extends BaseModel
     public static function findBySKU(string $sku): Model|Builder|null
     {
         return static::query()
-            ->whereIn('id', function ($query) use ($sku) {
-                return $query->select('product_id')->from('products_aliases')->where('alias', '=', $sku);
-            })
+            ->whereIn('id', ProductAlias::query()->select('product_id')->where(['alias' => $sku]))
             ->first();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isOutOfStock(): bool
-    {
-        return $this->quantity_available <= 0;
     }
 
     /**
