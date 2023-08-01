@@ -24,18 +24,19 @@ class TransferInJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public DataCollection $dataCollection;
+    public int $dataCollection_id;
 
-    public function __construct($dataCollection)
+    public function __construct($dataCollection_id)
     {
-        $this->dataCollection = $dataCollection;
+        $this->dataCollection_id = $dataCollection_id;
     }
 
     public function handle()
     {
-        Log::debug('TransferInJob started', ['data_collection_id' => $this->dataCollection]);
+        Log::debug('TransferInJob started', ['data_collection_id' => $this->dataCollection_id]);
 
         DataCollectionRecord::query()
+            ->where('data_collection_id', $this->dataCollection_id)
             ->where('quantity_scanned', '!=', DB::raw(0))
             ->chunkById(100, function ($records) {
                 $records->each(function (DataCollectionRecord $record) {
@@ -43,6 +44,6 @@ class TransferInJob implements ShouldQueue
                 });
             });
 
-        Log::debug('TransferInJob finished', ['data_collection_id' => $this->dataCollection]);
+        Log::debug('TransferInJob finished', ['data_collection_id' => $this->dataCollection_id]);
     }
 }
