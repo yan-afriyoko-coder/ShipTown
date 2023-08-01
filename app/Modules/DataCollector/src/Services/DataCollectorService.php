@@ -102,7 +102,7 @@ class DataCollectorService
                 'currently_running_task' => TransferOutJob::class,
             ]);
 
-            DispatchCollectionsTasksJob::dispatch();
+            TransferOutJob::dispatch($sourceDataCollection->getKey());
         });
 
         return $destinationDataCollection;
