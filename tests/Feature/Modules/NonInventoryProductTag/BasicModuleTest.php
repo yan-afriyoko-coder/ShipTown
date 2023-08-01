@@ -5,9 +5,8 @@ namespace Tests\Feature\Modules\NonInventoryProductTag;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Warehouse;
+use App\Modules\InventoryTotals\src\InventoryTotalsServiceProvider;
 use App\Modules\NonInventoryProductTag\src\Jobs\ClearArcadiaStockJob;
-use App\Modules\NonInventoryProductTag\src\NonInventoryProductTagServiceProvider;
-use App\Modules\InventoryReservations\src\EventServiceProviderBase as InventoryReservationsEventServiceProviderBase;
 use App\Services\InventoryService;
 use Tests\TestCase;
 
@@ -37,7 +36,7 @@ class BasicModuleTest extends TestCase
 
     public function test_basic()
     {
-        InventoryReservationsEventServiceProviderBase::enableModule();
+        InventoryTotalsServiceProvider::enableModule();
 
         /** @var Warehouse $warehouse */
         $warehouse = Warehouse::factory()->create();

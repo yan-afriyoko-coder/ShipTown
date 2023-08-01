@@ -4,6 +4,7 @@ namespace App\Modules\InventoryTotals\src;
 
 use App\Events\Inventory\InventoryUpdatedEvent;
 use App\Events\Product\ProductCreatedEvent;
+use App\Modules\Api2cart\src\Listeners\DailyEventListener;
 use App\Modules\BaseModuleServiceProvider;
 
 /**

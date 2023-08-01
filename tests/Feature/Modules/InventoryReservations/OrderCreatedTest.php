@@ -2,8 +2,6 @@
 
 namespace Tests\Feature\Modules\InventoryReservations;
 
-use App\Models\Inventory;
-use App\Models\OrderProduct;
 use App\Models\OrderStatus;
 use App\Models\Product;
 use App\Modules\InventoryReservations\src\EventServiceProviderBase;
@@ -59,6 +57,5 @@ class OrderCreatedTest extends TestCase
         $response->assertOk();
 
         $this->assertDatabaseHas('inventory', ['quantity_reserved' => $quantityOrdered]);
-        $this->assertDatabaseHas('products', ['quantity_reserved' => $quantityOrdered]);
     }
 }

@@ -2,14 +2,12 @@
 
 namespace App\Modules\InventoryReservations\src\Listeners;
 
-use App\Modules\InventoryReservations\src\Jobs\DetectAndFixIncorrectQuantityJob;
 use App\Modules\InventoryReservations\src\Jobs\RecalculateQuantityReservedJob;
 
-class HourlyEventListener
+class EveryDayEventListener
 {
     public function handle()
     {
-        DetectAndFixIncorrectQuantityJob::dispatch();
         RecalculateQuantityReservedJob::dispatch();
     }
 }
