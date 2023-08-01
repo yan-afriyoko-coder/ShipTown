@@ -45,7 +45,7 @@ class DataCollectorServiceProvider extends BaseModuleServiceProvider
 
     public static function enabling(): bool
     {
-        EnsureCorrectlyArchived::dispatchAfterResponse();
+        EnsureCorrectlyArchived::dispatch();
 
         return parent::enabling();
     }
