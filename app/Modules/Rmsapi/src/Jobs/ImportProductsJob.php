@@ -115,6 +115,7 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUniqueUntilProcessing
             return [
                 'connection_id'         => $this->rmsConnection->getKey(),
                 'warehouse_id'          => $this->rmsConnection->warehouse_id,
+                'warehouse_code'        => $this->rmsConnection->location_id,
                 'batch_uuid'            => $this->batch_uuid,
                 'sku'                   => $product['item_code'],
                 'quantity_on_hand'      => $product['quantity_on_hand'],
