@@ -6,6 +6,7 @@ use App\Events\EveryHourEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Events\OrderStatus\OrderStatusUpdatedEvent;
 use App\Modules\BaseModuleServiceProvider;
+use App\Modules\OrderStatus\src\Jobs\EnsureCorrectIsActiveAndIsOnHoldJob;
 
 /**
  * Class EventServiceProviderBase.
@@ -43,6 +44,13 @@ class OrderStatusServiceProvider extends BaseModuleServiceProvider
             Listeners\OrderStatusUpdatedEventListener::class,
         ]
     ];
+
+    public static function enabling(): bool
+    {
+        EnsureCorrectIsActiveAndIsOnHoldJob::dispatch();
+
+        return parent::enabling();
+    }
 
     public static function disabling(): bool
     {
