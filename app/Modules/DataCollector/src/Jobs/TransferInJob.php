@@ -2,9 +2,7 @@
 
 namespace App\Modules\DataCollector\src\Jobs;
 
-use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
-use App\Models\DataCollectionTransferIn;
 use App\Modules\DataCollector\src\Services\DataCollectorService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

@@ -26,6 +26,7 @@ class DispatchCollectionsTasksJob implements ShouldQueue
 
         DataCollection::withTrashed()
             ->whereNotNull('currently_running_task')
+            ->limit(1)
             ->get()
             ->each(function (DataCollection $dataCollection) {
                 /** @var Dispatchable $job */
