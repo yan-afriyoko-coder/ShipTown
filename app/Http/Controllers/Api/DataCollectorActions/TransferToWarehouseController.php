@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Api\DataCollectorActions;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DataCollectionResource;
 use App\Models\DataCollection;
-use App\Models\Warehouse;
-use App\Modules\DataCollector\src\DataCollectorService;
+use App\Modules\DataCollector\src\Services\DataCollectorService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

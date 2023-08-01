@@ -11,6 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class SyncCheckFailedProductsJob.
@@ -24,6 +25,8 @@ class EnsureCorrectlyArchived implements ShouldQueue
 
     public function handle()
     {
+        Log::debug('EnsureCorrectlyArchived job started');
+
         DataCollection::onlyTrashed()->distinct()->select('data_collections.id')
             ->rightJoin('data_collection_records', function ($join) {
                 $join->on('data_collection_records.data_collection_id', '=', 'data_collections.id');
@@ -41,5 +44,7 @@ class EnsureCorrectlyArchived implements ShouldQueue
             ->each(function (DataCollection $dataCollection) {
                 TransferInJob::dispatch($dataCollection->id);
             });
+
+        Log::info('EnsureCorrectlyArchived job finished');
     }
 }

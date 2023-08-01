@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\DataCollector\src;
+namespace App\Modules\DataCollector\src\Services;
 
 use App\Models\DataCollection;
 use App\Models\DataCollectionRecord;
@@ -14,7 +14,6 @@ use App\Modules\DataCollector\src\Jobs\TransferOutJob;
 use App\Services\InventoryService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Ramsey\Uuid\Guid\Guid;
 
 class DataCollectorService
 {
