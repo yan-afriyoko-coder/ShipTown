@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Modules\InventoryReservations\src\Jobs;
+namespace App\Modules\InventoryTotals\src\Jobs;
 
 use App\Models\Product;
+use App\Modules\InventoryTotals\src\Services\RecalculationService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -44,6 +45,7 @@ class DetectAndFixIncorrectQuantityJob implements ShouldQueue
                     group by products.id
 
                     having max(products.quantity) != sum(inventory.quantity)
+                    or max(products.quantity_reserved) != sum(inventory.quantity_reserved)
                 )
                 ")
             ->limit(200)
@@ -56,8 +58,7 @@ class DetectAndFixIncorrectQuantityJob implements ShouldQueue
         Log::warning('Found products with incorrect quantity: ', ['count' => $result->count()]);
 
         $result->each(function (Product $product) {
-            UpdateProductQuantityJob::dispatch($product->getKey());
-            UpdateProductQuantityReservedJob::dispatch($product->getKey());
+            RecalculationService::updateProductTotals($product->getKey());
         });
     }
 }

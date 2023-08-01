@@ -58,7 +58,6 @@ class OrderStatusChangedTest extends TestCase
         $response->assertOk();
 
         $this->assertDatabaseHas('inventory', ['quantity_reserved' => $randomQuantity]);
-        $this->assertDatabaseHas('products', ['quantity_reserved' => $randomQuantity]);
 
         $order_id = $response->json('id');
 
@@ -67,6 +66,5 @@ class OrderStatusChangedTest extends TestCase
         $response->assertOk();
 
         $this->assertDatabaseHas('inventory', ['quantity_reserved' => 0]);
-        $this->assertDatabaseHas('products', ['quantity_reserved' => 0]);
     }
 }

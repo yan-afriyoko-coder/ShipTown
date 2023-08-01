@@ -5,7 +5,6 @@ namespace Tests\Feature\Modules\InventoryReservations\Jobs;
 use App\Models\Inventory;
 use App\Models\OrderStatus;
 use App\Models\Product;
-use App\Models\Warehouse;
 use App\Modules\InventoryReservations\src\EventServiceProviderBase;
 use App\Modules\InventoryReservations\src\Jobs\RecalculateQuantityReservedJob;
 use App\Modules\InventoryReservations\src\Models\Configuration;
@@ -60,7 +59,6 @@ class RecalculateQuantityReservedJobTest extends TestCase
         RecalculateQuantityReservedJob::dispatchSync();
 
         $this->assertDatabaseHas('inventory', ['quantity_reserved' => $random_quantity]);
-        $this->assertDatabaseHas('products', ['quantity_reserved' => $random_quantity]);
     }
 
     /** @test */
@@ -75,6 +73,5 @@ class RecalculateQuantityReservedJobTest extends TestCase
         RecalculateQuantityReservedJob::dispatchSync();
 
         $this->assertDatabaseHas('inventory', ['warehouse_id' => $inventoryReservationsWarehouseId, 'quantity_reserved' => 0]);
-        $this->assertDatabaseHas('products', ['quantity_reserved' => 0]);
     }
 }
