@@ -28,6 +28,13 @@ class DispatchCollectionsTasksJob implements ShouldQueue
         Log::debug('EnsureCorrectlyArchived job started');
 
         DataCollection::withTrashed()
+            ->whereNotNull('currently_running_task')
+            ->whereDoesntHave('records', function ($query) {
+                return $query->select('id')->where('quantity_scanned', '!=', 0);
+            })
+            ->update(['currently_running_task' => null]);
+
+        DataCollection::withTrashed()
             ->where(['currently_running_task' => DataCollectionTransferIn::class])
             ->update(['currently_running_task' => TransferInJob::class]);
 
