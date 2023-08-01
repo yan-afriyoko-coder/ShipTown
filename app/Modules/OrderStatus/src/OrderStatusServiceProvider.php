@@ -6,7 +6,6 @@ use App\Events\EveryHourEvent;
 use App\Events\Order\OrderUpdatedEvent;
 use App\Events\OrderStatus\OrderStatusUpdatedEvent;
 use App\Modules\BaseModuleServiceProvider;
-use App\Modules\OrderStatus\src\Observers\OrderObserver;
 
 /**
  * Class EventServiceProviderBase.
