@@ -9,7 +9,6 @@ use App\Models\DataCollectionTransferIn;
 use App\Models\DataCollectionTransferOut;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
-use App\Modules\DataCollector\src\Jobs\DispatchCollectionsTasksJob;
 use App\Modules\DataCollector\src\Jobs\TransferInJob;
 use App\Modules\DataCollector\src\Jobs\TransferOutJob;
 use App\Services\InventoryService;
@@ -24,7 +23,7 @@ class DataCollectorService
         if ($action === 'transfer_in_scanned') {
             $dataCollection->update([
                 'type' => DataCollectionTransferIn::class,
-                'currently_running_task' => DataCollectionTransferIn::class,
+                'currently_running_task' => TransferInJob::class,
             ]);
 
             TransferInJob::dispatch($dataCollection->id);
@@ -34,7 +33,7 @@ class DataCollectorService
         if ($action === 'transfer_out_scanned') {
             $dataCollection->update([
                 'type' => DataCollectionTransferOut::class,
-                'currently_running_task' => DataCollectionTransferOut::class
+                'currently_running_task' => TransferOutJob::class
             ]);
 
             TransferOutJob::dispatch($dataCollection->id);
