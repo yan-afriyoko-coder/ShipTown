@@ -10,6 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 /**
  * Class SyncCheckFailedProductsJob.
@@ -39,6 +40,10 @@ class DispatchCollectionsTasksJob implements ShouldQueue
                         $job = $dataCollection->currently_running_task;
                         $job::dispatch($dataCollection->getKey());
                     } catch (Exception $e) {
+                        Log::error($e->getMessage());
+                        report($e);
+                        return;
+                    } catch (Throwable $e) {
                         Log::error($e->getMessage());
                         report($e);
                         return;
