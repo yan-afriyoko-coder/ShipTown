@@ -14,6 +14,7 @@ use App\Modules\DataCollector\src\Jobs\TransferOutJob;
 use App\Services\InventoryService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class DataCollectorService
 {
@@ -146,6 +147,8 @@ class DataCollectorService
         if ($record->quantity_scanned == 0) {
             return;
         }
+
+        Log::debug('TransferInJob transferring record', [$record->toArray()]);
 
         DB::transaction(function () use ($record) {
             $inventory = Inventory::firstOrCreate([

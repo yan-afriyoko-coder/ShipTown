@@ -46,7 +46,6 @@ class TransferInJob implements ShouldQueue
             ->where('quantity_scanned', '!=', DB::raw(0))
             ->chunkById(100, function ($records) {
                 $records->each(function (DataCollectionRecord $record) {
-                    Log::debug('TransferInJob transferring record', ['record_id' => $record->id]);
                     DataCollectorService::transferInRecord($record);
                 });
             });
