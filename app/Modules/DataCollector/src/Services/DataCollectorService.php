@@ -9,6 +9,7 @@ use App\Models\DataCollectionTransferIn;
 use App\Models\DataCollectionTransferOut;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
+use App\Modules\DataCollector\src\Jobs\DispatchCollectionsTasksJob;
 use App\Modules\DataCollector\src\Jobs\TransferInJob;
 use App\Modules\DataCollector\src\Jobs\TransferOutJob;
 use App\Services\InventoryService;
@@ -96,7 +97,12 @@ class DataCollectorService
                     $destinationDataCollectionRecord->save();
                 });
 
-            TransferOutJob::dispatch($sourceDataCollection->id);
+            $sourceDataCollection->update([
+                'type' => DataCollectionTransferOut::class,
+                'currently_running_task' => TransferOutJob::class,
+            ]);
+
+            DispatchCollectionsTasksJob::dispatch();
         });
 
         return $destinationDataCollection;

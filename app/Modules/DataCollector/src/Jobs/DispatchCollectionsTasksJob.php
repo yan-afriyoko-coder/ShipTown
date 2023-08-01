@@ -43,6 +43,7 @@ class DispatchCollectionsTasksJob implements ShouldQueue
             ->update(['currently_running_task' => TransferOutJob::class]);
 
         DataCollection::withTrashed()
+            ->where('updated_at', '<', now()->subMinute())
             ->whereNotNull('currently_running_task')
             ->chunkById(1, function ($batch) {
                 $batch->each(function (DataCollection $dataCollection) {
