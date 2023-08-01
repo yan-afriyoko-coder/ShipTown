@@ -156,10 +156,17 @@ class DataCollectorService
                 'product_id' => $record->product_id
             ], []);
 
+
             $custom_unique_reference_id = implode(':', [
                 'data_collection_id' , $record->data_collection_id,
                 'data_collection_record_id' , $record->getKey(),
                 $record->updated_at
+            ]);
+
+            Log::debug('TransferInJob adjusting quantity', [
+                'inventory' => $inventory->toArray(),
+                'record' => $record->toArray(),
+                'custom_unique_reference_id' => $custom_unique_reference_id
             ]);
 
             try {
