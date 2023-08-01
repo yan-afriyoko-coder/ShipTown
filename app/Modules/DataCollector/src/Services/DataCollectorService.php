@@ -185,6 +185,7 @@ class DataCollectorService
                 }
             }
 
+            Log::debug('updating record');
             $record->update([
                 'total_transferred_in' => $record->total_transferred_in + $record->quantity_scanned,
                 'quantity_scanned' => 0
