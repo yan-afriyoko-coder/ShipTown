@@ -44,7 +44,7 @@ class BaseApi extends AbstractApi
             return $response;
         }
 
-        Log::error(implode(' ', [
+        Log::debug(implode(' ', [
             'MAGENTO2API GET',
             $path,
             $response->status(),
@@ -97,7 +97,7 @@ class BaseApi extends AbstractApi
             return $response;
         }
 
-        Log::error(implode(' ', [
+        Log::debug(implode(' ', [
             'MAGENTO2API POST',
             $path,
             $response->status(),
@@ -149,7 +149,7 @@ class BaseApi extends AbstractApi
             return $response;
         }
 
-        Log::error(implode(' ', [
+        Log::debug(implode(' ', [
             'MAGENTO2API PUT',
             $path,
             $response->status(),
@@ -202,7 +202,7 @@ class BaseApi extends AbstractApi
             return $response;
         }
 
-        Log::error(implode(' ', [
+        Log::debug(implode(' ', [
             'MAGENTO2API DELETE',
             $path,
             $response->status(),
