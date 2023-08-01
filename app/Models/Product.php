@@ -338,15 +338,11 @@ class Product extends BaseModel
         return $this->hasMany(ProductAlias::class);
     }
 
-    /**
-     * @param string $sku
-     * @return Builder|Model|object|null
-     */
-    public static function findBySKU(string $sku)
+    public static function findBySKU(string $sku): Model|Builder|null
     {
-        return static::query()->where('sku', '=', $sku)
-            ->orWhereHas('aliases', function (Builder $query) use ($sku) {
-                return $query->where('alias', '=', $sku);
+        return static::query()
+            ->whereIn('id', function ($query) use ($sku) {
+                return $query->select('product_id')->from('products_aliases')->where('alias', '=', $sku);
             })
             ->first();
     }

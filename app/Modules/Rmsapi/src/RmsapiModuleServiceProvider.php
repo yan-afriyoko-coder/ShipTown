@@ -8,6 +8,10 @@ use App\Events\EveryMinuteEvent;
 use App\Events\EveryTenMinutesEvent;
 use App\Events\SyncRequestedEvent;
 use App\Modules\BaseModuleServiceProvider;
+use App\Modules\Rmsapi\src\Jobs\ImportAllJob;
+use App\Modules\Rmsapi\src\Jobs\ProcessImportedProductRecordsJob;
+use App\Modules\Rmsapi\src\Jobs\ProcessImportedSalesRecordsJob;
+use App\Modules\Rmsapi\src\Jobs\UpdateImportedSalesRecordsJob;
 
 class RmsapiModuleServiceProvider extends BaseModuleServiceProvider
 {
@@ -45,12 +49,18 @@ class RmsapiModuleServiceProvider extends BaseModuleServiceProvider
             Listeners\EveryFiveMinutesEventListener::class,
         ],
 
-        EveryTenMinutesEvent::class => [
-            Listeners\EveryTenMinutesEventListener::class,
-        ],
-
         EveryHourEvent::class => [
             Listeners\HourlyEventListener::class,
         ],
     ];
+
+    public static function enabling(): bool
+    {
+        ImportAllJob::dispatch();
+        UpdateImportedSalesRecordsJob::dispatch();
+        ProcessImportedProductRecordsJob::dispatch();
+        ProcessImportedSalesRecordsJob::dispatch();
+
+        return parent::enabling();
+    }
 }
