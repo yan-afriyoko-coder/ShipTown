@@ -2,17 +2,28 @@
 
 namespace App\Modules\Webhooks\src\Listeners;
 
-use Illuminate\Support\Facades\DB;
+use App\Modules\Webhooks\src\Models\PendingWebhook;
 
 class DailyEventListener
 {
     public function handle()
     {
-        DB::statement('
-            UPDATE modules_webhooks_pending_webhooks
-            SET reserved_at = null, published_at = null
-            WHERE created_at > DATE_SUB(now(), INTERVAL 1 DAY)
-            and published_at is not null
-        ');
+        do {
+            $recordsUpdated =  PendingWebhook::query()
+                ->whereNotNull('published_at')
+                ->where('created_at', '>', now()->subDay())
+                ->limit(1000)
+                ->update(['published_at' => null, 'reserved_at' => null]);
+            sleep(1);
+        } while ($recordsUpdated > 0);
+
+        do {
+            $recordsUpdated = PendingWebhook::query()
+                ->where('created_at', '<', now()->subDays(7))
+                ->whereNotNull('published_at')
+                ->limit(1000)
+                ->forceDelete();
+            sleep(1);
+        } while ($recordsUpdated > 0);
     }
 }
