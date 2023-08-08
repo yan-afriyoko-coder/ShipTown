@@ -34,7 +34,7 @@
                     <div class="col">
                         <text-card label="location" :text="record['inventory']['warehouse_code']"></text-card>
                         <number-card label="points" :number="record['points']"></number-card>
-                        <text-card label="shelf" :text="record['inventory']['shelf_location']"></text-card>
+                        <text-card label="shelf" :text="record['inventory']['shelve_location']"></text-card>
                     </div>
                 </div>
 
