@@ -216,8 +216,6 @@ class ProcessImportedProductRecordsJob implements ShouldQueue, ShouldBeUniqueUnt
      */
     private function attachTags(RmsapiProductImport $importedProduct, Product $product): void
     {
-        $product->tags()->detach();
-
         if ($importedProduct->raw_import['is_web_item']) {
             $product->attachTag('Available Online');
         } else {
