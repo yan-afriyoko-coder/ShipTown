@@ -65,10 +65,7 @@ class RecalculateQuantityReservedJob implements ShouldQueue
         TemporaryTable::create($table_name, $baseQuery);
     }
 
-    /**
-     * @return Inventory|Builder
-     */
-    private function incorrectInventoryRecordsQuery()
+    private function incorrectInventoryRecordsQuery(): Inventory|Builder
     {
         $inventoryReservationsWarehouseId = Configuration::first()->warehouse_id;
 

@@ -63,10 +63,6 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
 
     public static function enableModule(): bool
     {
-        if (! parent::enableModule()) {
-            return false;
-        }
-
         if (Configuration::query()->doesntExist()) {
             $warehouse = Warehouse::query()->firstOrCreate(['code' => '999'], ['name' => '999']);
 
@@ -77,7 +73,7 @@ class EventServiceProviderBase extends BaseModuleServiceProvider
 
         RecalculateQuantityReservedJob::dispatch();
 
-        return true;
+        return parent::enableModule();
     }
 
     public static function disabling(): bool
